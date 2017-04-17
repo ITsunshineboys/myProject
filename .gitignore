@@ -1,2 +1,6 @@
 *.bak
 runtime
+cache
+uploads
+web/assets
+.idea
