@@ -9,7 +9,6 @@
 namespace app\services;
 
 use Yii;
-use yii\web\HttpException;
 
 class GoodsService
 {
