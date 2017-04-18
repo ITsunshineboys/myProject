@@ -4,10 +4,7 @@ namespace app\controllers;
 
 use app\models\ContactForm;
 use app\models\LoginForm;
-use app\services\EventHandleService;
-use app\services\ExceptionHandleService;
 use app\services\FileService;
-use app\services\NgCache;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -54,9 +51,9 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-//            'error' => [
-//                'class' => 'yii\web\ErrorAction',
-//            ],
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -140,17 +137,6 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    public function actionError()
-    {
-        $exception = Yii::$app->errorHandler->exception;
-        $code = $exception->getCode();
-        echo json_encode(['code' => $code, 'msg' => $exception->getMessage()]);
-        fastcgi_finish_request();
-
-        Yii::$app->session->close();
-        new ExceptionHandleService($code);
     }
 
     public function actionDownload()
