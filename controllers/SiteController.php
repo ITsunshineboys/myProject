@@ -29,10 +29,10 @@ class SiteController extends Controller
                     $code = 403;
                     throw new HttpException(200, $errorCodes[$code], $code);
                 },
-                'only' => ['logout',],
+                'only' => ['logout', 'about'],
                 'rules' => [
                     [
-                        'actions' => ['logout',],
+                        'actions' => ['logout', 'about'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
