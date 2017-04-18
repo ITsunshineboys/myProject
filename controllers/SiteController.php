@@ -27,7 +27,8 @@ class SiteController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     $errorCodes = Yii::$app->params['errorCodes'];
                     $code = 403;
-                    throw new HttpException(200, $errorCodes[$code], $code);
+                    echo json_encode(['code' => $code, 'msg' => $errorCodes[$code]]);
+                    exit;
                 },
                 'only' => ['logout', 'about'],
                 'rules' => [
