@@ -14,12 +14,14 @@ class User extends ActiveRecord implements IdentityInterface
     public $authKey;
     public $accessToken;
 
+    const CACHE_PREFIX = 'user_';
+
     /**
      * @inheritdoc
      */
     public static function findIdentity($id)
     {
-        $key = 'user_' . $id;
+        $key = self::CACHE_PREFIX . $id;
         $cache = Yii::$app->cache;
         $user = $cache->get($key);
         if (!$user) {
@@ -47,7 +49,7 @@ class User extends ActiveRecord implements IdentityInterface
             return null;
         }
 
-        $key = 'user_' . $user['id'];
+        $key = self::CACHE_PREFIX . $user['id'];
         $cache = Yii::$app->cache;
         $cache->set($key, $user);
 
@@ -68,7 +70,7 @@ class User extends ActiveRecord implements IdentityInterface
             return null;
         }
 
-        $key = 'user_' . $user['id'];
+        $key = self::CACHE_PREFIX . $user['id'];
         $cache = Yii::$app->cache;
         $cache->set($key, $user);
 
