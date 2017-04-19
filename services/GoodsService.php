@@ -12,6 +12,12 @@ use Yii;
 
 class GoodsService
 {
+    /**
+     * Get goods categories by pid
+     *
+     * @param int $pid parent id
+     * @return array goods categories
+     */
     public function goodsCategories($pid = 0)
     {
         $cache = Yii::$app->cache;
@@ -24,6 +30,13 @@ class GoodsService
         return $categories;
     }
 
+    /**
+     * Get goods categories by pid
+     *
+     * @access private
+     * @param int $pid parent id
+     * @return array goods categories
+     */
     private function _goodsCategories($pid = 0)
     {
         $db = Yii::$app->db;

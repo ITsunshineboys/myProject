@@ -12,7 +12,7 @@ use Yii;
 
 class EventHandleService
 {
-    /*
+    /**
      * construct function
      *
      * @param mixed $data default null
