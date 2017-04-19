@@ -8,12 +8,6 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
     const CACHE_PREFIX = 'user_';
 
     /**
@@ -78,6 +72,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'user';
+    }
+
+    /**
      * @inheritdoc
      */
     public function getId()
@@ -110,5 +112,20 @@ class User extends ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+    }
+
+    /**
+     * Set cache after updated user model
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $key = self::CACHE_PREFIX . $this->id;
+        $cache = Yii::$app->cache;
+        $cache->set($key, $this);
     }
 }

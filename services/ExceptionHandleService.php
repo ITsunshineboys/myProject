@@ -22,8 +22,7 @@ class ExceptionHandleService
     }
 
     /**
-     * Handle 500 exception
-     *
+     * Handle 500 exception     *
      */
     public function handle500()
     {
