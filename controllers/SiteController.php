@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\ContactForm;
 use app\models\LoginForm;
+use app\models\User;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
 use Yii;
@@ -101,7 +102,7 @@ class SiteController extends Controller
         $userIdentity = Yii::$app->user->getIdentity();
         if ($userIdentity) {
             $cache = Yii::$app->cache;
-            $keyPrefix = 'user_';
+            $keyPrefix = User::CACHE_PREFIX;
             $cache->delete($keyPrefix . $userIdentity->id);
         }
 
