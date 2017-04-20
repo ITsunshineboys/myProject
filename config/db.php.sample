@@ -16,7 +16,7 @@ return [
 
     // list of master configurations
     'masters' => [
-        ['dsn' => 'mysql:host=localhost;dbname=yii2_basic_tests'],
+        ['dsn' => 'mysql:host=localhost;dbname=lhzz'],
 //        ['dsn' => 'dsn for master server 2'],
     ],
 
@@ -33,7 +33,7 @@ return [
 
     // list of master configurations
     'slaves' => [
-        ['dsn' => 'mysql:host=localhost;dbname=yii2_basic_tests'],
+        ['dsn' => 'mysql:host=localhost;dbname=lhzz'],
 //        ['dsn' => 'dsn for slave server 2'],
     ],
 ];
