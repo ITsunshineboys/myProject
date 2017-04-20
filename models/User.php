@@ -19,7 +19,7 @@ class User extends ActiveRecord implements IdentityInterface
         $cache = Yii::$app->cache;
         $user = $cache->get($key);
         if (!$user) {
-            $user = self::find()->where(['id' => $id])->asArray()->one();
+            $user = self::find()->where(['id' => $id])->one();
             if ($user) {
                 $cache->set($key, $user);
             }
@@ -29,7 +29,7 @@ class User extends ActiveRecord implements IdentityInterface
             return null;
         }
 
-        return new static($user);
+        return $user;
     }
 
     /**
@@ -37,7 +37,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        $user = self::find()->where(['accessToken' => $token])->asArray()->one();
+        $user = self::find()->where(['accessToken' => $token])->one();
 
         if (!$user) {
             return null;
@@ -47,7 +47,7 @@ class User extends ActiveRecord implements IdentityInterface
         $cache = Yii::$app->cache;
         $cache->set($key, $user);
 
-        return new static($user);
+        return $user;
     }
 
     /**
@@ -58,7 +58,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        $user = self::find()->where(['username' => $username])->asArray()->one();
+        $user = self::find()->where(['username' => $username])->one();
 
         if (!$user) {
             return null;
@@ -68,7 +68,7 @@ class User extends ActiveRecord implements IdentityInterface
         $cache = Yii::$app->cache;
         $cache->set($key, $user);
 
-        return new static($user);
+        return $user;
     }
 
     /**
