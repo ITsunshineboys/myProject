@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\ContactForm;
 use app\models\LoginForm;
 use app\services\FileService;
+use app\services\ExceptionHandleService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -21,9 +22,8 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'denyCallback' => function ($rule, $action) {
-                    $errorCodes = Yii::$app->params['errorCodes'];
                     $code = 403;
-                    echo json_encode(['code' => $code, 'msg' => $errorCodes[$code]]);
+                    new ExceptionHandleService($code);
                     exit;
                 },
                 'only' => ['logout', 'about'],
