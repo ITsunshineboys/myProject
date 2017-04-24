@@ -6,6 +6,7 @@ return [
         403 => 'Access forbidden',
         500 => 'Internal server error',
         1000 => 'Parameter error',
+        1001 => 'Invalid username/password',
     ],
     'events' => [
         'supplier' => [
