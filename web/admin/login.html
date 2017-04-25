@@ -16,8 +16,8 @@
                 <div class="role_box">
                     <span class="name1">角色</span>
                     <span style="display: inline-block;height: 32px;line-height: 32px">:</span>
-                    <select id="select1" name="role" ng-repeat="n in allrole">
-                        <option value="{{n.id}}" >{{n.name}}</option>
+                    <select id="select1" name="role" >
+                        <option ng-repeat="n in allrole" value="{{n.id}}" >{{n.name}}</option>
                         <!--<option>角色2</option>-->
                         <!--<option>角色3</option>-->
                         <!--<option>角色4</option>-->
