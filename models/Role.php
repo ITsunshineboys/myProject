@@ -14,7 +14,7 @@ class Role extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'roles';
+        return 'role';
     }
 
     /**
