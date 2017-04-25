@@ -28,8 +28,9 @@ class Role extends ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
 
-        $key = self::CACHE_KEY;
         $cache = Yii::$app->cache;
-        $cache->set($key, $this);
+        foreach ([self::CACHE_KEY_APP, self::CACHE_KEY_ALL] as $key) {
+            $cache->delete($key);
+        }
     }
 }
