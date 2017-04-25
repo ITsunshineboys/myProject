@@ -16,12 +16,12 @@
                 <div class="role_box">
                     <span class="name1">角色</span>
                     <span style="display: inline-block;height: 32px;line-height: 32px">:</span>
-                    <select id="select1" name="role">
-                        <option value="1">角色1</option>
-                        <option>角色2</option>
-                        <option>角色3</option>
-                        <option>角色4</option>
-                        <option>角色5</option>
+                    <select id="select1" name="role" ng-repeat="n in allrole">
+                        <option value="{{n.id}}" >{{n.name}}</option>
+                        <!--<option>角色2</option>-->
+                        <!--<option>角色3</option>-->
+                        <!--<option>角色4</option>-->
+                        <!--<option>角色5</option>-->
                     </select>
                 </div>
                 <div class="name_box">
@@ -33,7 +33,7 @@
                 <div class="psw_box">
                     <span class="name1">密  码</span>
                     <span  style="display: inline-block;height: 32px;line-height: 32px">:</span>
-                    <input type="text" ng-blur="psw1()"  name="psw" />
+                    <input type="password" ng-blur="psw1()"  name="psw" />
                 </div>
                 <div class="login" ng-click="login()">登录</div>
             </div>

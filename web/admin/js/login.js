@@ -1,3 +1,4 @@
+var url="http://test.cdlhzz.cn:888/";
 var role="site/all-roles";
 var logout="site/logout"
 app.controller("admin_login",function($scope,$http){
@@ -5,10 +6,10 @@ app.controller("admin_login",function($scope,$http){
 
 
     //获取角色列表
-    //$http.get(url+role)
-    //    .success(function(data){
-    //        $scope.mydata=data;
-    //    })
+    $http.get(url+role)
+        .success(function(data){
+            $scope.allrole=data.data.roles;
+        })
     $scope.name1=function(){
         $scope.name=$("input[name='name1']").val();
         console.log("name==="+ $scope.name)
