@@ -1,1 +1,46 @@
-login.html
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../css/all.css"/>
+    <link rel="stylesheet" href="css/login.css"/>
+</head>
+<body ng-app="app">
+        <div class="login_out">
+            <div class="login_box" ng-controller="admin_login">
+                <div class="login_title">
+                    <div>艾特魔方管理系统</div>
+                    <span class="warm"></span>
+                </div>
+                <div class="role_box">
+                    <span class="name1">角色</span>
+                    <span style="display: inline-block;height: 32px;line-height: 32px">:</span>
+                    <select id="select1" name="role">
+                        <option value="1">角色1</option>
+                        <option>角色2</option>
+                        <option>角色3</option>
+                        <option>角色4</option>
+                        <option>角色5</option>
+                    </select>
+                </div>
+                <div class="name_box">
+                    <span class="name1">用户名</span>
+                    <span style="display: inline-block;height: 32px;line-height: 32px">:</span>
+                    <input type="text" ng-blur="name1()" name="name1" style="display: inline-block" placeholder="请输入手机号/魔方号(纯数字)"/>
+                    <!--<input type="text" ng-blur="name1()" onkeyup="value=value.replace(/[^\d]/g,'') " name="name" style="display: inline-block" placeholder="请输入手机号/魔方号(纯数字)"/>-->
+                </div>
+                <div class="psw_box">
+                    <span class="name1">密  码</span>
+                    <span  style="display: inline-block;height: 32px;line-height: 32px">:</span>
+                    <input type="text" ng-blur="psw1()"  name="psw" />
+                </div>
+                <div class="login" ng-click="login()">登录</div>
+            </div>
+        </div>
+</body>
+<script src="../js/jquery.js"></script>
+<script src="../js/angular.min.js"></script>
+<script src="js/global.js"></script>
+<script src="js/login.js"></script>
+</html>
