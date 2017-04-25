@@ -15,7 +15,7 @@
 }
 .resumes >li a{
     float: left;
-    width: 165px;
+    width: 10rem;
     height: 81px;
     text-align: center;
     position: relative;
@@ -32,7 +32,7 @@
 }
 
 .resumes_content{
-    width: 980px;
+    width: 21.9rem;
     height: auto;
     float: left;
     font-size: 12px;
