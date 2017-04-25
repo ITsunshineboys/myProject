@@ -3,9 +3,10 @@
 return [
     'adminEmail' => 'admin@example.com',
     'errorCodes' => [
-        403 => 'Access forbidden',
-        500 => 'Internal server error',
-        1000 => 'Parameter error',
+        403 => '没有权限',
+        500 => '接口服务器异常',
+        1000 => '请求的参数不正确',
+        1001 => '用户名/密码不正确',
     ],
     'events' => [
         'supplier' => [

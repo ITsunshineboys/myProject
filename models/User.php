@@ -58,13 +58,14 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        $user = self::find()->where(['username' => $username])->one();
+//        $user = self::find()->where(['username' => $username])->one();
+        $user = self::find()->where("mobile = '{$username}' or aite_cube_no = '{$username}'")->one();
 
         if (!$user) {
             return null;
         }
 
-        $key = self::CACHE_PREFIX . $user['id'];
+        $key = self::CACHE_PREFIX . $user->id;
         $cache = Yii::$app->cache;
         $cache->set($key, $user);
 

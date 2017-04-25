@@ -5,12 +5,14 @@ namespace app\controllers;
 use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
+use app\models\Role;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\helpers\Json;
 
 class SiteController extends Controller
 {
@@ -27,10 +29,10 @@ class SiteController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['logout', 'about'],
+                'only' => ['logout', 'roles'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'about'],
+                        'actions' => ['logout', 'roles'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -151,5 +153,45 @@ class SiteController extends Controller
         $filepath = Yii::$app->request->get('filepath');
         $fileService = new FileService($filepath);
         $fileService->show();
+    }
+
+    public function actionRoles()
+    {
+        $key = Role::CACHE_KEY_APP;
+        $cache = Yii::$app->cache;
+        $roles = $cache->get($key);
+        if (!$roles) {
+            $roles = Role::find()->where('id > 1')->asArray()->all();
+            if ($roles) {
+                $cache->set($key, $roles);
+            }
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'roles' => $roles,
+            ],
+        ]);
+    }
+
+    public function actionAllRoles()
+    {
+        $key = Role::CACHE_KEY_ALL;
+        $cache = Yii::$app->cache;
+        $roles = $cache->get($key);
+        if (!$roles) {
+            $roles = Role::find()->where([])->asArray()->all();
+            if ($roles) {
+                $cache->set($key, $roles);
+            }
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'roles' => $roles,
+            ],
+        ]);
     }
 }
