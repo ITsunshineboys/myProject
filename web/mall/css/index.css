@@ -1,0 +1,207 @@
+/*幻灯片开始*/
+.swiper-container {
+    margin:0 auto;
+    position:relative;
+    overflow:hidden;
+    -webkit-backface-visibility:hidden;
+    -moz-backface-visibility:hidden;
+    -ms-backface-visibility:hidden;
+    -o-backface-visibility:hidden;
+    backface-visibility:hidden;
+    /* Fix of Webkit flickering */
+    z-index:1;
+}
+.swiper-wrapper {
+    position:relative;
+    width:100%;
+    -webkit-transition-property:-webkit-transform, left, top;
+    -webkit-transition-duration:0s;
+    -webkit-transform:translate3d(0px,0,0);
+    -webkit-transition-timing-function:ease;
+
+    -moz-transition-property:-moz-transform, left, top;
+    -moz-transition-duration:0s;
+    -moz-transform:translate3d(0px,0,0);
+    -moz-transition-timing-function:ease;
+
+    -o-transition-property:-o-transform, left, top;
+    -o-transition-duration:0s;
+    -o-transform:translate3d(0px,0,0);
+    -o-transition-timing-function:ease;
+    -o-transform:translate(0px,0px);
+
+    -ms-transition-property:-ms-transform, left, top;
+    -ms-transition-duration:0s;
+    -ms-transform:translate3d(0px,0,0);
+    -ms-transition-timing-function:ease;
+
+    transition-property:transform, left, top;
+    transition-duration:0s;
+    transform:translate3d(0px,0,0);
+    transition-timing-function:ease;
+}
+.swiper-free-mode > .swiper-wrapper {
+    -webkit-transition-timing-function: ease-out;
+    -moz-transition-timing-function: ease-out;
+    -ms-transition-timing-function: ease-out;
+    -o-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+    margin: 0 auto;
+}
+.swiper-slide {
+    display: block;
+    width: auto;
+    height: 15rem;
+    float: left;
+
+}
+
+/* IE10 Windows Phone 8 Fixes */
+.swiper-wp8-horizontal {
+    -ms-touch-action: pan-y;
+}
+.swiper-wp8-vertical {
+    -ms-touch-action: pan-x;
+}
+
+/* ===============================================================
+Your custom styles, here you need to specify container's and slide's
+sizes, pagination, etc.
+================================================================*/
+.swiper-container {
+    /* Specify Swiper's Size: */
+
+    /*width:200px;
+    height: 100px;*/
+}
+.swiper-slide {
+    /* Specify Slides's Size: */
+
+    /*width: 100%;
+    height: 100%;*/
+}
+.swiper-slide-active {
+    /* Specific active slide styling: */
+
+}
+.swiper-slide-visible {
+    /* Specific visible slide styling: */
+
+}
+/* ===============================================================
+Pagination Styles
+================================================================*/
+.swiper-pagination-switch {
+    /* Stylize pagination button: */
+
+}
+.swiper-active-switch {
+    /* Specific active button style: */
+
+}
+.swiper-visible-switch {
+    /* Specific visible button style: */
+
+}
+.device {
+    width: auto;
+    height: 15rem;
+    /*padding: 3rem 4rem;*/
+    /*border-radius: 2rem;*/
+    background-color: chartreuse;
+    /*border: 0.3rem solid white;*/
+    /*margin: 0.5rem auto;*/
+    position: relative;
+    /*box-shadow: 0 0 0.5rem #000;*/
+}
+.swiper-slide{
+    position: relative;
+}
+/*向左向右的箭头*/
+/*.device .arrow-left {*/
+    /*background: url(../images/arrows.png) no-repeat left top;*/
+    /*position: absolute;*/
+    /*left: 1rem;*/
+    /*top: 50%;*/
+    /*background-position: 0 ;*/
+    /*margin-top: -1.5rem;*/
+    /*width: 1.7rem;*/
+    /*height: 3rem;*/
+    /*z-index: 101;*/
+/*}*/
+/*.device .arrow-right {*/
+    /*background: url(../images/arrows.png) no-repeat left bottom;*/
+    /*position: absolute;*/
+    /*right: 1rem;*/
+    /*top: 50%;*/
+    /*margin-top: -1.5rem;*/
+    /*width: 1.7rem;*/
+    /*height: 3rem;*/
+/*}*/
+.swiper-container {
+    height: 15rem;
+    width: auto;
+    cursor: pointer;!important;
+}
+.content-slide {
+    padding: 2rem;
+    color: #fff;
+}
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+.pagination {
+    position: absolute;
+    left: 0;
+    text-align: center;
+    bottom:0.5rem;
+    width: 100%;
+    z-index: 100;
+}
+.swiper-pagination-switch {
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 0.6rem;
+    background-image: url("../images/pagination.png");
+    background-size: 1.2rem;
+    /*background: #999;*/
+    /*box-shadow: 0 0.1rem 0.2rem #555 inset;*/
+    margin: 0 0.3rem;
+    cursor: pointer;
+}
+.swiper-active-switch {
+    /*background: #fff;*/
+    background-image: url("../images/active.png");
+    background-size: 1.2rem;
+}
+/*幻灯片结束*/
+
+/*推荐开始*/
+.recommend-ul{
+    width: 100%;
+    height:auto;
+    overflow: hidden;
+    background-color: aqua;
+}
+.recommend-ul>li{
+    float: left;
+    width: 19%;
+    height: 10rem;
+    font-size: 1.5rem;
+    margin-left: 1%;
+    text-align: center;
+    background-color: red;
+    color:white;
+}
+.recommend_more{
+    height: 4rem;
+    font-size: 2rem;
+    line-height: 4rem;
+    text-align: center;
+    border-top: 0.1rem solid #F2F2F2;
+    background-color: #d0ffd4;
+    cursor: pointer;
+    color:#A9A9A9;
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        /*性别*/
+        .sex span.warning {
+            font-size: 1.4rem;
+            color: #ccc;
+        }
+        .sex .male,
+        .sex .female {
+            position: relative;
+            width: 4rem;
+            height: 3.9rem;
+            z-index: 1;
+            line-height: 3.9rem;
+            text-align: center;
+        }
+        .sex .male label,
+        .sex .female label {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 4rem;
+            height: 3.9rem;
+            z-index: 3;
+            opacity: 0;
+            margin: auto;
+            display: inline-block;
+            line-height: 3.9rem;
+            cursor: pointer;
+        }
+        .sex input {
+            display: inline-block;
+            vertical-align: middle;/*让默认的单选样式的圆圈和“男”“女”的文本没有高差，看起来在同一水平线*/
+            height: 2.8rem;
+            line-height: 2.8rem;
+            margin: 0; /*清除浏览器默认的外边距*/
+        }
+        .sex .male span.btn,
+        .sex .female span.btn {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 4rem;
+            height: 2.8rem;
+            z-index: 2;
+            margin: auto;
+            display: inline-block;
+            line-height: 2.6rem;
+            text-align: center;
+            border: .1rem solid #fe5454;
+            color: #fe5454;
+        }
+        .sex .male span {
+            border-top-left-radius: .2rem;
+            border-bottom-left-radius: .2rem;
+        }
+        .sex .female span {
+            border-top-right-radius: .2rem;
+            border-bottom-right-radius: .2rem;
+        }
+        .sex .male span.active,
+        .sex .female span.active {
+            background-color: #fe5454;
+            color: #fff;
+        }
+
+
+        .chk_3 {
+            display: none;
+        }
+
+        /*******STYLE 3*******/
+
+        .chk_3 + label {
+            background-color: #fafbfa;
+            padding: 9px;
+            border-radius: 50px;
+            display: inline-block;
+            position: relative;
+            margin-right: 30px;
+            -webkit-transition: all 0.1s ease-in;
+            transition: all 0.1s ease-in;
+            width: 40px;
+            height: 15px;
+        }
+
+        .chk_3  + label:after {
+            content: ' ';
+            position: absolute;
+            top: 0;
+            -webkit-transition: box-shadow 0.1s ease-in;
+            transition: box-shadow 0.1s ease-in;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 100px;
+            box-shadow: inset 0 0 0 0 #eee, 0 0 1px rgba(0,0,0,0.4);
+        }
+
+        .chk_3  + label:before {
+            content: ' ';
+            position: absolute;
+            background: white;
+            top: 1px;
+            left: 1px;
+            z-index: 999999;
+            width: 31px;
+            -webkit-transition: all 0.1s ease-in;
+            transition: all 0.1s ease-in;
+            height: 31px;
+            border-radius: 100px;
+            box-shadow: 0 3px 1px rgba(0,0,0,0.05), 0 0px 1px rgba(0,0,0,0.3);
+        }
+
+        .chk_3:active + label:after {
+            box-shadow: inset 0 0 0 20px #eee, 0 0 1px #eee;
+        }
+
+        .chk_3:active + label:before {
+            width: 37px;
+        }
+
+        .chk_3:checked:active + label:before {
+            width: 37px;
+            left: 20px;
+        }
+
+        .chk_3  + label:active {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .chk_3:checked + label:before {
+            content: ' ';
+            position: absolute;
+            left: 26px;
+            border-radius: 100px;
+        }
+
+        .chk_3:checked + label:after {
+            content: ' ';
+            font-size: 1.5em;
+            position: absolute;
+            background: #4cda60;
+            box-shadow: 0 0 1px #4cda60;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="sex">
+    <span class="warning fl">性别确定后将不可更改！</span>
+    <div class="select fr">
+        <div class="male fl">
+            <label for="male">
+                <input type="radio" name="sex" id="male" checked>男
+            </label>
+            <span class="btn active">男</span>
+        </div>
+        <div class="female fl">
+            <label for="female">
+                <input type="radio" name="sex" id="female">女
+            </label>
+            <span class="btn">女</span>
+        </div>
+        <div class="female fl">
+            <label for="female1">
+                <input type="radio" name="sex" id="female1">女
+            </label>
+            <span class="btn">女2</span>
+        </div>
+    </div>
+</div>
+
+<div class="wrap" style="width: 180px;">
+    <p>3. 移动端开关</p>
+    <input type="radio" id="checkbox_c1" name="sex1" class="chk_3" />
+    <label for="checkbox_c1"></label>
+    <input type="radio" id="checkbox_c2" name="sex1" class="chk_3" />
+    <label for="checkbox_c2"></label>
+    <input type="radio" id="checkbox_c3" name="sex1" class="chk_3" checked />
+    <label for="checkbox_c3"></label>
+</div>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_m"></div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_m.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<script src="../js/jquery.js"></script>
+<!--<script>-->
+    <!--$(".select label").click(function() {-->
+        <!--$(this).siblings("span").addClass("active");-->
+        <!--$(this).parent().siblings("div").find("span").removeClass("active");-->
+    <!--})-->
+<!--</script>-->
+</body>
+</html>
