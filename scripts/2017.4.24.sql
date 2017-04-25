@@ -1,4 +1,4 @@
-create table roles (
+create table role (
     id int PRIMARY key auto_increment,
     name varchar(24) not null
 ) default charset = utf8;
