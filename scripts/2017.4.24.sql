@@ -3,7 +3,7 @@ create table roles (
     name varchar(24) not null
 ) default charset = utf8;
 
-insert into roles(id, name) values
+insert into role(id, name) values
 (1, '公司后台管理员'),
 (2, '工人'),
 (3, '设计师'),
