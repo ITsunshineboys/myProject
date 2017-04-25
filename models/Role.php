@@ -7,7 +7,8 @@ use yii\db\ActiveRecord;
 
 class Role extends ActiveRecord
 {
-    const CACHE_KEY = 'app_roles';
+    const CACHE_KEY_APP = 'app_roles';
+    const CACHE_KEY_ALL = 'all_roles';
 
     /**
      * @return string 返回该AR类关联的数据表名

@@ -9,6 +9,7 @@
 namespace app\services;
 
 use Yii;
+use yii\helpers\Json;
 
 class ExceptionHandleService
 {
@@ -45,6 +46,6 @@ class ExceptionHandleService
     public function handle403()
     {
         $errorCodes = Yii::$app->params['errorCodes'];
-        echo json_encode(['code' => $this->_code, 'msg' => $errorCodes[$this->_code]]);
+        echo Json::encode(['code' => $this->_code, 'msg' => $errorCodes[$this->_code]]);
     }
 }
