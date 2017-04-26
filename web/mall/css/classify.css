@@ -1,7 +1,15 @@
+body{
+    height: 100%;
+}
+.main{
+    width: auto;
+    height: 100%;
+    background-color: lightgreen;
+}
 /*¼òÀú*/
 .resumes{
     float: left;
-    overflow: hidden;
+    /*overflow: hidden;*/
     width: 10rem;
     height: 100%;
     margin: 0;

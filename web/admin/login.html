@@ -17,11 +17,8 @@
                     <span class="name1">角色</span>
                     <span style="display: inline-block;height: 32px;line-height: 32px">:</span>
                     <select id="select1" name="role" >
-                        <option ng-repeat="n in allrole" value="{{n.id}}" >{{n.name}}</option>
-                        <!--<option>角色2</option>-->
-                        <!--<option>角色3</option>-->
-                        <!--<option>角色4</option>-->
-                        <!--<option>角色5</option>-->
+                        <!--<option value="2">管理员</option>-->
+                        <option ng-controller="itemReaptCtrl" ng-repeat="n in allrole" value="{{n.id}}" name="myrole">{{n.name}}</option>
                     </select>
                 </div>
                 <div class="name_box">
@@ -35,7 +32,7 @@
                     <span  style="display: inline-block;height: 32px;line-height: 32px">:</span>
                     <input type="password" ng-blur="psw1()"  name="psw" />
                 </div>
-                <div class="login" ng-click="login()">登录</div>
+                <div class="login" ng-click="login()">登录</div>{{loginout}}
             </div>
         </div>
 </body>
