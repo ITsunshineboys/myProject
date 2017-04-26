@@ -4,8 +4,6 @@ var role="site/all-roles";
 var logout="site/admin-login"
 app.controller("admin_login",function($scope,$http){
     var num= /^[0-9]*$/;
-
-
     //获取角色列表
     $http.get(url+role)
         .success(function(data){
@@ -14,8 +12,8 @@ app.controller("admin_login",function($scope,$http){
     $scope.name1=function(){
         $scope.name=$("input[name='name1']").val();
         $scope.psw=$("input[name='psw']").val();
-        console.log("name==="+ $scope.name)
-        if(!num.test( $scope.name)){
+        console.log("name==="+ $scope.name.length)
+        if(!num.test( $scope.name)&&$scope.name.length<=5){
             $(".login").css({"background":"rgba(236, 184, 75, 0.44)"})
             $(".warm").text("请输入正确的纯数字的手机号/魔方号!");
         }
@@ -31,7 +29,8 @@ app.controller("admin_login",function($scope,$http){
         $scope.name=$("input[name='name1']").val();
         console.log("psw==="+ $scope.psw)
         console.log("psw22222==="+ $("input[name='psw']").val())
-        console.log("psw_length==="+ $scope.psw.length)
+        console.log("psw_length==="+ $scope.psw.length);
+        window.location.href="index.html";
         if($scope.psw.length>25||$scope.psw.length<6){
             $(".warm").text("请输入6-25位的密码！");
             $(".login").css({"background":"rgba(236, 184, 75, 0.44)"})
@@ -49,7 +48,7 @@ app.controller("admin_login",function($scope,$http){
             $scope.name=$("input[name='name1']").val();
             $scope.psw=$("input[name='psw']").val();
             $scope.myrole=$('#select1').val();
-            if(num.test( $scope.name)&&$scope.psw.length>25||$scope.psw.length<6){
+            if(num.test( $scope.name)&&$scope.name.length>5&&($scope.psw.length>25||$scope.psw.length<6)){
                 $.ajax({
                     url: url+logout,
                     type: 'POST',
@@ -59,7 +58,8 @@ app.controller("admin_login",function($scope,$http){
                     success: function (data) {
                         $scope.loginout=data;
                         if($scope.loginout.code==200){
-                            alert("登录成功！")
+                            //alert("登录成功！");
+                            window.location.href="index.html";
                         }
                     }
                 });
