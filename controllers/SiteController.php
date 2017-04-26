@@ -73,12 +73,7 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
-    /**
-     * Login action.
-     *
-     * @return string
-     */
-    public function actionLogin()
+    public function actionLogina()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -91,6 +86,44 @@ class SiteController extends Controller
         }
         return $this->render('login', [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * Login action.
+     *
+     * @return string
+     */
+    public function actionLogin()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+        if (!$postData) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $modelName = 'LoginForm';
+        if (!isset($postData[$modelName])) {
+            $postData = [
+                $modelName => $postData,
+            ];
+        }
+
+        $model = new LoginForm;
+        if ($model->load($postData) && $model->login()) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => '登录成功',
+            ]);
+        }
+
+        $code = 1001;
+        return Json::encode([
+            'code' => $code,
+            'msg' => Yii::$app->params['errorCodes'][$code],
         ]);
     }
 
@@ -110,7 +143,10 @@ class SiteController extends Controller
 
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return Json::encode([
+            'code' => 200,
+            'msg' => '登出成功',
+        ]);
     }
 
     /**
