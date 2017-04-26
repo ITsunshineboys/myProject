@@ -3,6 +3,7 @@ runtime
 cache
 uploads
 web/assets
+web/.htaccess
 .idea
 config/db.php
 config/web.php
