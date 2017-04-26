@@ -30,7 +30,6 @@ app.controller("admin_login",function($scope,$http){
         console.log("psw==="+ $scope.psw)
         console.log("psw22222==="+ $("input[name='psw']").val())
         console.log("psw_length==="+ $scope.psw.length);
-        window.location.href="index.html";
         if($scope.psw.length>25||$scope.psw.length<6){
             $(".warm").text("请输入6-25位的密码！");
             $(".login").css({"background":"rgba(236, 184, 75, 0.44)"})
