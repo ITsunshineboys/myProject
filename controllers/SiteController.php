@@ -143,7 +143,10 @@ class SiteController extends Controller
 
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return Json::encode([
+            'code' => 200,
+            'msg' => '登出成功',
+        ]);
     }
 
     /**
