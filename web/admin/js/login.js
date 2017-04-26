@@ -41,8 +41,9 @@ app.controller("admin_login",function($scope,$http){
             $scope.myrole=$('#select1').val();
             console.log("$scope.myrole=="+$scope.myrole);
             $.ajax({
-                url: url+logout+"?role_id="+$scope.myrole+"&username="+$scope.name+"&password="+$scope.psw,
+                url: url+logout,
                 type: 'POST',
+                data:{"role_id":$scope.myrole,"username":$scope.name,"password":$scope.psw},
                 dataType: "json",
                 contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                 success: function (data) {
