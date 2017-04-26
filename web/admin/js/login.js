@@ -13,24 +13,34 @@ app.controller("admin_login",function($scope,$http){
         })
     $scope.name1=function(){
         $scope.name=$("input[name='name1']").val();
+        $scope.psw=$("input[name='psw']").val();
         console.log("name==="+ $scope.name)
         if(!num.test( $scope.name)){
+            $(".login").css({"background":"rgba(236, 184, 75, 0.44)"})
             $(".warm").text("请输入正确的纯数字的手机号/魔方号!");
         }
-        else{
+        else {
             $(".warm").text("");
+            if($scope.psw.length>25||$scope.psw.length<6){
+                $(".login").css({"background":"rgba(236, 184, 75, 1)"})
+            }
         }
     };
     $scope.psw1=function(){
         $scope.psw=$("input[name='psw']").val();
+        $scope.name=$("input[name='name1']").val();
         console.log("psw==="+ $scope.psw)
         console.log("psw22222==="+ $("input[name='psw']").val())
         console.log("psw_length==="+ $scope.psw.length)
         if($scope.psw.length>25||$scope.psw.length<6){
             $(".warm").text("请输入6-25位的密码！");
+            $(".login").css({"background":"rgba(236, 184, 75, 0.44)"})
         }
         else{
             $(".warm").text("");
+            if(num.test( $scope.name)){
+                $(".login").css({"background":"rgba(236, 184, 75, 1)"})
+            }
         }
     };
 
@@ -39,35 +49,23 @@ app.controller("admin_login",function($scope,$http){
             $scope.name=$("input[name='name1']").val();
             $scope.psw=$("input[name='psw']").val();
             $scope.myrole=$('#select1').val();
-            console.log("$scope.myrole=="+$scope.myrole);
-            $.ajax({
-                url: url+logout,
-                type: 'POST',
-                data:{"role_id":$scope.myrole,"username":$scope.name,"password":$scope.psw},
-                dataType: "json",
-                contentType:"application/x-www-form-urlencoded;charset=UTF-8",
-                success: function (data) {
-                    $scope.loginout=data;
-                    if($scope.loginout.code==200){
-                        alert("登录成功！")
+            if(num.test( $scope.name)&&$scope.psw.length>25||$scope.psw.length<6){
+                $.ajax({
+                    url: url+logout,
+                    type: 'POST',
+                    data:{"role_id":$scope.myrole,"username":$scope.name,"password":$scope.psw},
+                    dataType: "json",
+                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                    success: function (data) {
+                        $scope.loginout=data;
+                        if($scope.loginout.code==200){
+                            alert("登录成功！")
+                        }
                     }
-                }
-            });
+                });
+            }
+            }
 
-
-
-            //$http.post(url+logout+"?role_id="+$scope.myrole+"&username="+$scope.name+"&password="+$scope.psw)
-            //    .success(function(data){
-            //        $scope.loginout=data;
-            //        if($scope.loginout.code==200){
-            //            alert("登录成功！")
-            //        }
-            //
-            //
-            //    });
-            //alert("你点击了登录按钮")
-
-        }
     });
 });
 app.controller('itemReaptCtrl', ['$scope', function ($scope) {

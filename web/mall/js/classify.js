@@ -24,7 +24,7 @@ function smallTab() {
                 $('.resumes a[name="33"]').css({"color":"#333"});
                 $(this).parent().parent().next("div").find(".11").show();
                 $(this).addClass("current").css({"color":"red"});
-                $(this).find("img").attr({ src: "images/man_1.png" });
+                //$(this).find("img").attr({ src: "images/man_1.png" });
                 $($(this).attr("name")).fadeIn();
             }
             else if ($(this).attr("name") == 22) {

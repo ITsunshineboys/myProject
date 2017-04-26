@@ -15,29 +15,27 @@ body{
     margin: 0;
     padding: 0;
     list-style: none;
-    background-color: #01BEFF;
+    /*background-color: #01BEFF;*/
 }
 .resumes >li{
     width: 10rem;
     height: 81px;
+    margin-top: 0.1rem;
+    background-color: #ECB84B;
 }
-.resumes >li a{
+.resumes >li>a{
     float: left;
     width: 10rem;
-    height: 81px;
+    height: 8rem;
     text-align: center;
     position: relative;
-    line-height: 81px;
-    color: green;
-    font-size: 16px;
+    line-height: 8rem;
+    font-size: 1.6rem;
 }
-.resumes >li a:hover,.resumes >li a:active{
-    text-decoration:none;
-}
-.resumes >li a img{
-    height: 16px;
-    margin-right: 5px;
-}
+/*.resumes >li a:hover,.resumes >li a:active{*/
+    /*text-decoration:none;*/
+    /*color:red;*/
+/*}*/
 
 .resumes_content{
     width: 21.9rem;
