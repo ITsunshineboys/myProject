@@ -13,7 +13,7 @@ app.controller("admin_login",function($scope,$http){
         $scope.name=$("input[name='name1']").val();
         $scope.psw=$("input[name='psw']").val();
         console.log("name==="+ $scope.name.length)
-        if(!num.test( $scope.name)&&$scope.name.length<=5){
+        if(!num.test( $scope.name)||$scope.name.length<=5){
             $(".login").css({"background":"rgba(236, 184, 75, 0.44)"})
             $(".warm").text("请输入正确的纯数字的手机号/魔方号!");
         }
