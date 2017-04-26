@@ -1,7 +1,7 @@
 var url="http://test.cdlhzz.cn:888/";
 //var url="http://localhost:888/";
 var role="site/all-roles";
-var logout="site/logout"
+var logout="site/admin-login"
 app.controller("admin_login",function($scope,$http){
     var num= /^[0-9]*$/;
 
