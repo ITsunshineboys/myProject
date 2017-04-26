@@ -179,24 +179,33 @@
 </div>
 
 <div class="wrap" style="width: 180px;">
-    <p>3. 移动端开关</p>
-    <input type="radio" id="checkbox_c1" name="sex1" class="chk_3" />
-    <label for="checkbox_c1"></label>
-    <input type="radio" id="checkbox_c2" name="sex1" class="chk_3" />
-    <label for="checkbox_c2"></label>
-    <input type="radio" id="checkbox_c3" name="sex1" class="chk_3" checked />
+    <p>移动端开关</p>
+    <div>
+        <span>默认地址</span>
+        <input type="radio" id="checkbox_c1" value="地址1" name="sex1" class="chk_3" />
+        <label for="checkbox_c1"></label>
+    </div>
+    <span>默认地址</span>
+    <input type="radio" id="checkbox_c2" name="sex1" value="地址2" class="chk_3" />
+    <label for="checkbox_c2"></label><br/>
+    <span>默认地址</span>
+    <input type="radio" id="checkbox_c3" name="sex1" value="地址3" class="chk_3" checked />
     <label for="checkbox_c3"></label>
 </div>
+<!--分享开始-->
 <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style_m"></div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_m.js" charset="utf-8"></script>
+<!--<div class="jiathis_style_m"></div>-->
+<!--<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_m.js" charset="utf-8"></script>-->
 <!-- JiaThis Button END -->
+<!--分享结束-->
 <script src="../js/jquery.js"></script>
-<!--<script>-->
-    <!--$(".select label").click(function() {-->
-        <!--$(this).siblings("span").addClass("active");-->
-        <!--$(this).parent().siblings("div").find("span").removeClass("active");-->
-    <!--})-->
-<!--</script>-->
+<script>
+    var val=$('input:radio[name="sex1"]:checked').val();
+    console.log("val=="+val)
+    $(".select label").click(function() {
+        $(this).siblings("span").addClass("active");
+        $(this).parent().siblings("div").find("span").removeClass("active");
+    })
+</script>
 </body>
 </html>

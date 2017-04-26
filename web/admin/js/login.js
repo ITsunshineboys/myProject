@@ -1,7 +1,7 @@
+//var url="http://local.test.cdlhzz.cn/";
 var url="http://test.cdlhzz.cn:888/";
-//var url="http://localhost:888/";
 var role="site/all-roles";
-var logout="site/admin-login"
+var logout="site/admin-login";
 app.controller("admin_login",function($scope,$http){
     var num= /^[0-9]*$/;
     //获取角色列表
@@ -13,7 +13,7 @@ app.controller("admin_login",function($scope,$http){
         $scope.name=$("input[name='name1']").val();
         $scope.psw=$("input[name='psw']").val();
         console.log("name==="+ $scope.name.length)
-        if(!num.test( $scope.name)||$scope.name.length<5){
+        if(!num.test( $scope.name)||$scope.name.length<4){
             $(".login").css({"background":"rgba(236, 184, 75, 0.44)"})
             $(".warm").text("请输入正确的纯数字的手机号/魔方号!");
         }
@@ -30,7 +30,7 @@ app.controller("admin_login",function($scope,$http){
         console.log("psw==="+ $scope.psw)
         console.log("psw22222==="+ $("input[name='psw']").val())
         console.log("psw_length==="+ $scope.psw.length);
-        if($scope.psw.length>25||$scope.psw.length<6){
+        if($scope.psw.length>25||$scope.psw.length<4){
             $(".warm").text("请输入6-25位的密码！");
             $(".login").css({"background":"rgba(236, 184, 75, 0.44)"})
         }
@@ -47,7 +47,7 @@ app.controller("admin_login",function($scope,$http){
             $scope.name=$("input[name='name1']").val();
             $scope.psw=$("input[name='psw']").val();
             $scope.myrole=$('#select1').val();
-            if(num.test( $scope.name)&&$scope.name.length>5&&($scope.psw.length<=25||$scope.psw.length>=6)){
+            if(num.test( $scope.name)&&$scope.name.length>=4&&($scope.psw.length<=25||$scope.psw.length>=4)){
                 $.ajax({
                     url: url+logout,
                     type: 'POST',
@@ -58,12 +58,15 @@ app.controller("admin_login",function($scope,$http){
                         $scope.loginout=data;
                         if($scope.loginout.code==200){
                             window.location.href=$scope.loginout.data.toUrl;
+                            $(".warm").text($scope.loginout.msg);
+                        }
+                        else{
+                            $(".warm").text($scope.loginout.msg);
                         }
                     }
                 });
             }
-            }
-
+        }
     });
 });
 app.controller('itemReaptCtrl', ['$scope', function ($scope) {

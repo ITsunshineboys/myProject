@@ -3,39 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <style>
-        body{
-            position: relative;
-            z-index: 10;
-        }
-        button{
-            position: absolute;
-            top:100px;
-            left:50px;
-            z-index: 100;
-        }
-    </style>
-
-</head>
+  </head>
 <body>
-<button>请点击这里，来切换不同的背景颜色</button>
-<div style=""></div>
-<script type="text/javascript" src="../js/jquery.js"></script>
+<button id="animate" >animate</button>
+<div id="block">Hello World</div>
+
+
+
+<!--<div class="div" style="width: 200px;height: 200px;border:1px solid blue"></div>-->
+<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("button").toggle(
-                function(){
-                    $("body").css("background-color","green");
-                },
-//                    function(){
-//                        $("body").css("background-color","red");
-//                    }
-//                    ,
-                function(){
-                    $("body").css("background-color","yellow");
-                }
-        );
-    });
+$("#animate").click(function(){
+    if(!$(this).hasClass("clicked")) {
+        $(this).addClass("clicked");
+        $("#block").animate(
+                {"font-size": "10em"}, 1000, "linear", function(){
+                    console.log("函数1");
+                });
+        $("#animate").css({"color":"red"})
+
+    } else {
+        $(this).removeClass("clicked");
+        $("#block").animate(
+                {"font-size": "1em"}, 1000, "linear", function(){
+                    console.log("函数2");
+                });
+        $("#animate").css({"color":"green"})
+    }
+});
 </script>
 </body>
 </html>
