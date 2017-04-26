@@ -177,21 +177,54 @@ class SiteController extends Controller
 
     public function actionAllRoles()
     {
-        $key = Role::CACHE_KEY_ALL;
-        $cache = Yii::$app->cache;
-        $roles = $cache->get($key);
-        if (!$roles) {
-            $roles = Role::find()->where([])->asArray()->all();
-            if ($roles) {
-                $cache->set($key, $roles);
-            }
-        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'roles' => $roles,
+                'roles' => Role::allRoles(),
             ],
+        ]);
+    }
+
+    public function actionAdminLogin()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+        if (!$postData) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $role = Role::findOne($postData['role_id']);
+        if (!$role) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $modelName = 'LoginForm';
+        if (!isset($postData[$modelName])) {
+            $postData = [
+                $modelName => $postData,
+            ];
+        }
+
+        $model = new LoginForm;
+        if ($model->load($postData) && $model->login()) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+                'toUrl' => Yii::$app->request->hostInfo . '/admin/' . $role->admin_module,
+            ]);
+        }
+
+        $code = 1001;
+        return Json::encode([
+            'code' => $code,
+            'msg' => Yii::$app->params['errorCodes'][$code],
         ]);
     }
 }
