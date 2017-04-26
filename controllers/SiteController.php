@@ -217,7 +217,9 @@ class SiteController extends Controller
             return Json::encode([
                 'code' => 200,
                 'msg' => 'OK',
-                'toUrl' => Yii::$app->request->hostInfo . '/admin/' . $role->admin_module,
+                'data' => [
+                    'toUrl' => Yii::$app->request->hostInfo . '/admin/' . $role->admin_module,
+                ],
             ]);
         }
 
