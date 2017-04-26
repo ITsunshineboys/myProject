@@ -7,7 +7,6 @@ use yii\db\ActiveRecord;
 
 class Role extends ActiveRecord
 {
-    const CACHE_KEY_APP = 'app_roles';
     const CACHE_KEY_ALL = 'all_roles';
 
     /**
@@ -29,9 +28,7 @@ class Role extends ActiveRecord
         parent::afterSave($insert, $changedAttributes);
 
         $cache = Yii::$app->cache;
-        foreach ([self::CACHE_KEY_APP, self::CACHE_KEY_ALL] as $key) {
-            $cache->delete($key);
-        }
+        $cache->delete(self::CACHE_KEY_ALL);
     }
 
     public static function allRoles()
@@ -40,7 +37,7 @@ class Role extends ActiveRecord
         $cache = Yii::$app->cache;
         $roles = $cache->get($key);
         if (!$roles) {
-            $roles = self::find()->where([])->asArray()->all();
+            $roles = self::find()->where([])->asArray()->orderBy('id')->all();
             if ($roles) {
                 $cache->set($key, $roles);
             }
@@ -64,23 +61,8 @@ class Role extends ActiveRecord
         return false;
     }
 
-    public function appRoles()
+    public static function appRoles()
     {
-        $key = Role::CACHE_KEY_APP;
-        $cache = Yii::$app->cache;
-        $roles = $cache->get($key);
-        if (!$roles) {
-            $roles = Role::find()->where('id > 1')->asArray()->all();
-            if ($roles) {
-                $cache->set($key, $roles);
-            }
-        }
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'roles' => $roles,
-            ],
-        ]);
+        return array_slice(self::allRoles(), 1);
     }
 }

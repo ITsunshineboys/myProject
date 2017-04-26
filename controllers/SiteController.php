@@ -157,20 +157,11 @@ class SiteController extends Controller
 
     public function actionRoles()
     {
-        $key = Role::CACHE_KEY_APP;
-        $cache = Yii::$app->cache;
-        $roles = $cache->get($key);
-        if (!$roles) {
-            $roles = Role::find()->where('id > 1')->asArray()->all();
-            if ($roles) {
-                $cache->set($key, $roles);
-            }
-        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'roles' => $roles,
+                'roles' => Role::appRoles(),
             ],
         ]);
     }
@@ -216,7 +207,7 @@ class SiteController extends Controller
         if ($model->load($postData) && $model->login()) {
             return Json::encode([
                 'code' => 200,
-                'msg' => 'OK',
+                'msg' => '登录成功',
                 'data' => [
                     'toUrl' => Yii::$app->request->hostInfo . '/admin/' . $role->admin_module,
                 ],
