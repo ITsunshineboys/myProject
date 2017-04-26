@@ -58,7 +58,6 @@ app.controller("admin_login",function($scope,$http){
                     success: function (data) {
                         $scope.loginout=data;
                         if($scope.loginout.code==200){
-                            //alert("登录成功！");
                             window.location.href=$scope.loginout.data.toUrl;
                         }
                     }
