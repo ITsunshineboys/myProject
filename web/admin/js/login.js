@@ -40,15 +40,30 @@ app.controller("admin_login",function($scope,$http){
             $scope.psw=$("input[name='psw']").val();
             $scope.myrole=$('#select1').val();
             console.log("$scope.myrole=="+$scope.myrole);
-            $http.post(url+logout+"?role_id="+$scope.myrole+"&username="+$scope.name+"&password="+$scope.psw)
-                .success(function(data){
+            $.ajax({
+                url: url+logout+"?role_id="+$scope.myrole+"&username="+$scope.name+"&password="+$scope.psw,
+                type: 'POST',
+                dataType: "json",
+                contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                success: function (data) {
                     $scope.loginout=data;
                     if($scope.loginout.code==200){
                         alert("登录成功！")
                     }
+                }
+            });
 
 
-                });
+
+            //$http.post(url+logout+"?role_id="+$scope.myrole+"&username="+$scope.name+"&password="+$scope.psw)
+            //    .success(function(data){
+            //        $scope.loginout=data;
+            //        if($scope.loginout.code==200){
+            //            alert("登录成功！")
+            //        }
+            //
+            //
+            //    });
             //alert("你点击了登录按钮")
 
         }
