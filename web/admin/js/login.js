@@ -17,6 +17,9 @@ app.controller("admin_login",function($scope,$http){
         if(!num.test( $scope.name)){
             $(".warm").text("请输入正确的纯数字的手机号/魔方号!");
         }
+        else{
+            $(".warm").text("");
+        }
     };
     $scope.psw1=function(){
         $scope.psw=$("input[name='psw']").val();
@@ -26,6 +29,9 @@ app.controller("admin_login",function($scope,$http){
         if($scope.psw.length>25||$scope.psw.length<6){
             $(".warm").text("请输入6-25位的密码！");
         }
+        else{
+            $(".warm").text("");
+        }
     };
 
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
@@ -33,13 +39,14 @@ app.controller("admin_login",function($scope,$http){
             $scope.name=$("input[name='name1']").val();
             $scope.psw=$("input[name='psw']").val();
             $scope.myrole=$('#select1').val();
-            console.log("$scope.myrole=="+$scope.myrole)
+            console.log("$scope.myrole=="+$scope.myrole);
             $http.post(url+logout+"?role_id="+$scope.myrole+"&username="+$scope.name+"&password="+$scope.psw)
                 .success(function(data){
                     $scope.loginout=data;
                     if($scope.loginout.code==200){
                         alert("登录成功！")
                     }
+
 
                 });
             //alert("你点击了登录按钮")
