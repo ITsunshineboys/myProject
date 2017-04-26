@@ -48,7 +48,7 @@ app.controller("admin_login",function($scope,$http){
             $scope.name=$("input[name='name1']").val();
             $scope.psw=$("input[name='psw']").val();
             $scope.myrole=$('#select1').val();
-            if(num.test( $scope.name)&&$scope.name.length>5&&($scope.psw.length>25||$scope.psw.length<6)){
+            if(num.test( $scope.name)&&$scope.name.length>5&&($scope.psw.length<=25||$scope.psw.length>=6)){
                 $.ajax({
                     url: url+logout,
                     type: 'POST',
@@ -59,7 +59,7 @@ app.controller("admin_login",function($scope,$http){
                         $scope.loginout=data;
                         if($scope.loginout.code==200){
                             //alert("登录成功！");
-                            window.location.href="index.html";
+                            window.location.href=$scope.loginout.data.toUrl;
                         }
                     }
                 });
