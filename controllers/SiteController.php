@@ -8,6 +8,7 @@ use app\models\User;
 use app\models\Role;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -105,7 +106,7 @@ class SiteController extends Controller
             ]);
         }
 
-        $modelName = 'LoginForm';
+        $modelName = StringService::classBasename(LoginForm::className());
         if (!isset($postData[$modelName])) {
             $postData = [
                 $modelName => $postData,
@@ -232,7 +233,7 @@ class SiteController extends Controller
             ]);
         }
 
-        $modelName = 'LoginForm';
+        $modelName = StringService::classBasename(LoginForm::className());
         if (!isset($postData[$modelName])) {
             $postData = [
                 $modelName => $postData,
