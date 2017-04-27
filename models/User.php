@@ -9,6 +9,8 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
     const CACHE_PREFIX = 'user_';
+    const PASSWORD_MIN_LEN = 6;
+    const PASSWORD_MAX_LEN = 25;
 
     /**
      * @return array the validation rules.

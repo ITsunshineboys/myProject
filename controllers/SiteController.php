@@ -149,6 +149,15 @@ class SiteController extends Controller
         $postData = Yii::$app->request->post();
         $code = 1000;
 
+        if (!$postData || empty($postData['mobile'])
+            || strlen(($postData['password'])) <  User::PASSWORD_MIN_LEN
+            || strlen(($postData['password'])) > User::PASSWORD_MAX_LEN) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         // todo: validation code check
 
         $user = new User;
@@ -339,6 +348,69 @@ class SiteController extends Controller
         return Json::encode([
             'code' => $code,
             'msg' => Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+    /**
+     * Forget password action.
+     *
+     * @return string
+     */
+    public function actionForgetPassword()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (!$postData || empty($postData['mobile'])
+            || strlen(($postData['new_password'])) <  User::PASSWORD_MIN_LEN
+            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        // todo: validation code check
+
+        $user = User::find()->where(['mobile' => $postData['mobile']])->one();
+        if (!$user) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user->attributes = $postData;
+        $user->password = Yii::$app->security->generatePasswordHash($user->password);
+
+        if (!$user->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+//        $user->password = $postData['new_password'];
+        $user->password = Yii::$app->security->generatePasswordHash($postData['new_password']);
+        if (!$user->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$user->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '重设密码成功',
         ]);
     }
 }
