@@ -11,6 +11,21 @@ class User extends ActiveRecord implements IdentityInterface
     const CACHE_PREFIX = 'user_';
 
     /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            // mobile and password are both required
+            [['mobile', 'password'], 'required'],
+            ['mobile', 'match', 'pattern' => '/^[0-9]{11}$/'],
+            ['mobile', 'unique'],
+            // password is validated by validatePassword()
+            ['password', 'validatePassword'],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     public static function findIdentity($id)

@@ -6,6 +6,7 @@ use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
 use app\models\Role;
+use app\models\UserRole;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
@@ -115,6 +116,16 @@ class SiteController extends Controller
 
         $model = new LoginForm;
         if ($model->load($postData) && $model->login()) {
+            $user = Yii::$app->user->identity;
+            $user->login_time = time();
+            if (!$user->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             return Json::encode([
                 'code' => 200,
                 'msg' => '登录成功',
@@ -122,6 +133,79 @@ class SiteController extends Controller
         }
 
         $code = 1001;
+        return Json::encode([
+            'code' => $code,
+            'msg' => Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+    /**
+     * Register action.
+     *
+     * @return string
+     */
+    public function actionRegister()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        // todo: validation code check
+
+        $user = new User;
+        $user->attributes = $postData;
+        $user->password = Yii::$app->security->generatePasswordHash($user->password);
+        $user->create_time = $user->login_time = time();
+        $user->login_role_id = Yii::$app->params['owner_role_id'];
+
+        if (!$user->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!$user->save()) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $user->aite_cube_no = $user->id + Yii::$app->params['offset_aite_cube_no'];
+            if (!$user->save()) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $userRole = new UserRole;
+            $userRole->user_id = $user->id;
+            $userRole->role_id = Yii::$app->params['owner_role_id']; // owner
+            if (!$userRole->save()) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $transaction->commit();
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => '注册成功',
+            ]);
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+        }
+
         return Json::encode([
             'code' => $code,
             'msg' => Yii::$app->params['errorCodes'][$code],

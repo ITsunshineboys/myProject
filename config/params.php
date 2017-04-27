@@ -2,6 +2,8 @@
 
 return [
     'adminEmail' => 'admin@example.com',
+    'offset_aite_cube_no' => 10000,
+    'owner_role_id' => 7,
     'errorCodes' => [
         403 => '没有权限',
         500 => '接口服务器异常',
