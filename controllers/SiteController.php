@@ -391,7 +391,6 @@ class SiteController extends Controller
             ]);
         }
 
-//        $user->password = $postData['new_password'];
         $user->password = Yii::$app->security->generatePasswordHash($postData['new_password']);
         if (!$user->validate()) {
             return Json::encode([
