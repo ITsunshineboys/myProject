@@ -418,11 +418,10 @@ class SiteController extends Controller
 
     public function actionValidationCode()
     {
-        $getData = Yii::$app->request->get();
         $postData = Yii::$app->request->post();
         $code = 1000;
 
-        if (empty($getData['type']) || empty($postData['mobile'])) {
+        if (empty($postData['type']) || empty($postData['mobile'])) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -430,7 +429,7 @@ class SiteController extends Controller
         }
 
         try {
-            new SmValidationService($getData['type'], $postData['mobile']);
+            new SmValidationService($postData['type'], $postData['mobile']);
         } catch (\Exception $e) {}
 
         return Json::encode([
