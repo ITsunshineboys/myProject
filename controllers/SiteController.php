@@ -10,6 +10,7 @@ use app\models\UserRole;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
+use app\services\SmValidationService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -150,8 +151,9 @@ class SiteController extends Controller
         $code = 1000;
 
         if (!$postData || empty($postData['mobile'])
-            || strlen(($postData['password'])) <  User::PASSWORD_MIN_LEN
-            || strlen(($postData['password'])) > User::PASSWORD_MAX_LEN) {
+            || strlen(($postData['password'])) < User::PASSWORD_MIN_LEN
+            || strlen(($postData['password'])) > User::PASSWORD_MAX_LEN
+        ) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -362,8 +364,9 @@ class SiteController extends Controller
         $code = 1000;
 
         if (!$postData || empty($postData['mobile'])
-            || strlen(($postData['new_password'])) <  User::PASSWORD_MIN_LEN
-            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN) {
+            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+        ) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -410,6 +413,29 @@ class SiteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '重设密码成功',
+        ]);
+    }
+
+    public function actionValidationCode()
+    {
+        $getData = Yii::$app->request->get();
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (empty($getData['type']) || empty($postData['mobile'])) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        try {
+            new SmValidationService($getData['type'], $postData['mobile']);
+        } catch (\Exception $e) {}
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }

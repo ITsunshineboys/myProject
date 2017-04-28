@@ -24,4 +24,17 @@ return [
     'upload' => [
         'directory' => 'uploads',
     ],
+    'sm' => [
+        'appKey' => '23532528',
+        'appSecret' => 'f589df8c27f634a94df0b908da7339f7',
+        'interval' => 60, // 1m
+        'validationCodeExpire' => 600, // 10m
+        'signName' => '领航装饰设计',
+        'register' => [
+            'templateId' => 'SMS_26070129',
+        ],
+        'resetPassword' => [
+            'templateId' => 'SMS_26070127',
+        ],
+    ],
 ];

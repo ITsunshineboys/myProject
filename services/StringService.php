@@ -24,4 +24,32 @@ class StringService
         }
         return $classname;
     }
+
+    /**
+     * Check if mobile number
+     *
+     * @param $mobile
+     * @return bool
+     */
+    public static function isMobile($mobile)
+    {
+        $mobile = trim($mobile);
+        if (!$mobile) {
+            return false;
+        }
+
+        return preg_match("/^1[34578]{1}\d{9}$/", $mobile);
+    }
+
+    /**
+     * Get class constants
+     *
+     * @param $className
+     * @return array class constants list
+     */
+    public static function classConstants($className)
+    {
+        $reflect = new ReflectionClass($className);
+        return $reflect->getConstants();
+    }
 }
