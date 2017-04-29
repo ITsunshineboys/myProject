@@ -109,6 +109,48 @@ class SmValidationService
     }
 
     /**
+     * 修改密码发送验证码
+     */
+    public function resetPassword()
+    {
+        $cache = Yii::$app->cache;
+
+        // check send interval
+        $intervalKey = self::TYPE_RESET_PASSWORD . '_' . $this->_mobile . '_interval';
+        if ($cache->get($intervalKey)) {
+            return;
+        }
+
+        // generate validation code
+        $validationCodeKey = self::TYPE_RESET_PASSWORD . '_' . $this->_mobile . '_validationCode';
+        if (!($validationCode = $cache->get($validationCodeKey))) {
+            $validationCodeMethod = $this->_validationCodeMethod;
+            $validationCode = $this->$validationCodeMethod();
+            $cache->set($validationCodeKey, $validationCode, $this->_validationCodeExpire);
+        }
+
+        $config = [
+            'app_key' => $this->_appKey,
+            'app_secret' => $this->_appSecret,
+        ];
+
+        $client = new Client(new App($config));
+        $req = new AlibabaAliqinFcSmsNumSend;
+        $req
+            ->setRecNum($this->_mobile) // 手机号码
+            ->setSmsParam(['product' => $this->_signName, 'code' => $validationCode]) // 模版数据
+            ->setSmsFreeSignName($this->_signName) // 短信签名
+            ->setSmsTemplateCode($this->_templateId); // 短信模版ID
+
+        $res = $client->execute($req);
+
+        if (isset($res->result) && $res->result->err_code == 0) {
+            $cache->set($intervalKey, 1, $this->_interval);
+            return true;
+        }
+    }
+
+    /**
      * Check validation code
      *
      * @param $type

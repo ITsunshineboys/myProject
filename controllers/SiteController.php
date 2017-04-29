@@ -381,7 +381,13 @@ class SiteController extends Controller
             ]);
         }
 
-        // todo: validation code check
+        if (!SmValidationService::validCode(SmValidationService::TYPE_RESET_PASSWORD, $postData['mobile'], $postData['validation_code'])) {
+            $code = 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         $user = User::find()->where(['mobile' => $postData['mobile']])->one();
         if (!$user) {
