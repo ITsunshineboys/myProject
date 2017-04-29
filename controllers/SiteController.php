@@ -154,6 +154,7 @@ class SiteController extends Controller
 
         if (empty($postData['mobile'])
             || empty($postData['validation_code'])
+            || empty($postData['password'])
             || strlen(($postData['password'])) < User::PASSWORD_MIN_LEN
             || strlen(($postData['password'])) > User::PASSWORD_MAX_LEN
         ) {
@@ -372,7 +373,9 @@ class SiteController extends Controller
         $postData = Yii::$app->request->post();
         $code = 1000;
 
-        if (!$postData || empty($postData['mobile'])
+        if (empty($postData['mobile'])
+            || empty($postData['validation_code'])
+            || empty($postData['new_password'])
             || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
             || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
         ) {
@@ -482,6 +485,11 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * Get validation code action.
+     *
+     * @return string
+     */
     public function actionValidationCode()
     {
         $postData = Yii::$app->request->post();
