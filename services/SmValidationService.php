@@ -9,10 +9,11 @@
 namespace app\services;
 
 use Yii;
-use app\services\StringService;
+use yii\web\ServerErrorHttpException;
 use Flc\Alidayu\App;
 use Flc\Alidayu\Client;
 use Flc\Alidayu\Requests\AlibabaAliqinFcSmsNumSend;
+use app\services\StringService;
 
 class SmValidationService
 {
@@ -26,29 +27,42 @@ class SmValidationService
     private $_mobile;
     private $_interval;
     private $_validationCodeExpire;
+    private $_validationCodeMethod;
 
     /**
      * SmValidationService constructor.
      *
-     * @param $type valication type
-     * @param $mobile mobile
-     * @throws \InvalidArgumentException
+     * @param $data array
+     *        $data['mobile']  mobile
+     *        $data['type']    validation code type, register | resetPassword
+     * @throws \InvalidArgumentException|ServerErrorHttpException
      */
-    public function __construct($type, $mobile)
+    public function __construct($data)
     {
         $smParams = Yii::$app->params['sm'];
 
-        if (!StringService::isMobile($mobile) || !method_exists($this, $type) || !isset($smParams[$type])) {
+        if (empty($data['type'])
+            || empty($data['mobile'])
+            || !StringService::isMobile($data['mobile'])
+            || !method_exists($this, $data['type'])
+            || !isset($smParams[$data['type']])) {
             throw new \InvalidArgumentException;
         }
 
+        $validationCodeMethod = '_' . $smParams['validationCode']['rule'];
+        if (!method_exists($this, $validationCodeMethod)) {
+            throw new ServerErrorHttpException;
+        }
+
+        $this->_validationCodeMethod = $validationCodeMethod;
         $this->_appKey = $smParams['appKey'];
         $this->_appSecret = $smParams['appSecret'];
         $this->_signName = $smParams['signName'];
-        $this->_templateId = $smParams[$type]['templateId'];
+        $this->_templateId = $smParams[$data['type']]['templateId'];
         $this->_interval = $smParams['interval'];
-        $this->_validationCodeExpire = $smParams['validationCodeExpire'];
-        $this->_mobile = $mobile;
+        $this->_validationCodeExpire = $smParams['validationCode']['expire'];
+        $this->_mobile = $data['mobile'];
+        $type = $data['type'];
         $this->$type();
     }
 
@@ -60,7 +74,7 @@ class SmValidationService
         $cache = Yii::$app->cache;
 
         // check send interval
-        $intervalKey = self::TYPE_REGISTER . '_' . $this->_mobile . '_interval';
+       $intervalKey = self::TYPE_REGISTER . '_' . $this->_mobile . '_interval';
         if ($cache->get($intervalKey)) {
             return;
         }
@@ -68,7 +82,8 @@ class SmValidationService
         // generate validation code
         $validationCodeKey = self::TYPE_REGISTER . '_' . $this->_mobile . '_validationCode';
         if (!($validationCode = $cache->get($validationCodeKey))) {
-            $validationCode = rand(1000, 9999);
+            $validationCodeMethod = $this->_validationCodeMethod;
+            $validationCode = $this->$validationCodeMethod();
             $cache->set($validationCodeKey, $validationCode, $this->_validationCodeExpire);
         }
 
@@ -80,9 +95,9 @@ class SmValidationService
         $client = new Client(new App($config));
         $req = new AlibabaAliqinFcSmsNumSend;
         $req
-            ->setRecNum($this->_mobile)// 手机号码
+            ->setRecNum($this->_mobile) // 手机号码
             ->setSmsParam(['product' => $this->_signName, 'code' => $validationCode]) // 模版数据
-            ->setSmsFreeSignName($this->_signName)// 短信签名
+            ->setSmsFreeSignName($this->_signName) // 短信签名
             ->setSmsTemplateCode($this->_templateId); // 短信模版ID
 
         $res = $client->execute($req);
@@ -91,5 +106,15 @@ class SmValidationService
             $cache->set($intervalKey, 1, $this->_interval);
             return true;
         }
+    }
+
+    /**
+     * Generate random four digits
+     *
+     * @return int
+     */
+    private function _fourDigits()
+    {
+        return rand(1000, 9999);
     }
 }

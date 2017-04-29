@@ -14,8 +14,9 @@ use app\services\SmValidationService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\web\Controller;
 use yii\helpers\Json;
+use yii\web\Controller;
+use yii\web\ServerErrorHttpException;
 
 class SiteController extends Controller
 {
@@ -419,17 +420,21 @@ class SiteController extends Controller
     public function actionValidationCode()
     {
         $postData = Yii::$app->request->post();
-        $code = 1000;
 
-        if (empty($postData['type']) || empty($postData['mobile'])) {
+        try {
+            new SmValidationService($postData);
+        } catch (\InvalidArgumentException $e) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
-        }
-
-        try {
-            new SmValidationService($postData['type'], $postData['mobile']);
+        } catch (ServerErrorHttpException $e) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
         } catch (\Exception $e) {}
 
         return Json::encode([
