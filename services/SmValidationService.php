@@ -124,6 +124,22 @@ class SmValidationService
     }
 
     /**
+     * Delete validation code
+     *
+     * @param int $mobile mobile
+     * @param string $validationCode validation code
+     */
+    public static function deleteCode($mobile, $validationCode)
+    {
+        if (!$mobile || !$validationCode) {
+            return false;
+        }
+
+        $validationCodeKey = $mobile . self::SUFFIX_VALIDATION_CODE;
+        Yii::$app->cache->delete($validationCodeKey);
+    }
+
+    /**
      * Generate random four digits
      *
      * @return int random four digits

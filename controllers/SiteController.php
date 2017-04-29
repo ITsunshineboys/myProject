@@ -219,6 +219,8 @@ class SiteController extends Controller
 
             $transaction->commit();
 
+            SmValidationService::deleteCode($postData['mobile'], $postData['validation_code']);
+
             return Json::encode([
                 'code' => 200,
                 'msg' => '注册成功',
@@ -402,6 +404,15 @@ class SiteController extends Controller
             ]);
         }
 
+        if ($user->validatePassword($postData['new_password'])) {
+            SmValidationService::deleteCode($user->mobile, $postData['validation_code']);
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => '重设密码成功',
+            ]);
+        }
+
         $user->attributes = $postData;
         if (!$user->validate()) {
             return Json::encode([
@@ -418,6 +429,8 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        SmValidationService::deleteCode($postData['mobile'], $postData['validation_code']);
 
         return Json::encode([
             'code' => 200,
@@ -456,6 +469,8 @@ class SiteController extends Controller
         }
 
         if ($user->validatePassword($postData['new_password'])) {
+            SmValidationService::deleteCode($user->mobile, $postData['validation_code']);
+
             return Json::encode([
                 'code' => 200,
                 'msg' => '重设密码成功',
@@ -478,6 +493,8 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        SmValidationService::deleteCode($user->mobile, $postData['validation_code']);
 
         return Json::encode([
             'code' => 200,
