@@ -17,8 +17,8 @@ use app\services\StringService;
 
 class SmValidationService
 {
-    const TYPE_REGISTER = 'register';
-    const TYPE_RESET_PASSWORD = 'resetPassword';
+    const SUFFIX_INTERVAL = '_interval';
+    const SUFFIX_VALIDATION_CODE = '_validationCode';
 
     private $_appKey;
     private $_appSecret;
@@ -72,13 +72,13 @@ class SmValidationService
         $cache = Yii::$app->cache;
 
         // check send interval
-       $intervalKey = $this->_mobile . '_interval';
+       $intervalKey = $this->_mobile . self::SUFFIX_INTERVAL;
         if ($cache->get($intervalKey)) {
             return;
         }
 
         // generate validation code
-        $validationCodeKey = $this->_mobile . '_validationCode';
+        $validationCodeKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE;
         if (!($validationCode = $cache->get($validationCodeKey))) {
             $validationCodeMethod = $this->_validationCodeMethod;
             $validationCode = $this->$validationCodeMethod();
@@ -111,7 +111,7 @@ class SmValidationService
      *
      * @param int $mobile mobile
      * @param string $validationCode validation code
-     * @return bool|mixed
+     * @return bool if valid validation code
      */
     public static function validCode($mobile, $validationCode)
     {
@@ -119,14 +119,14 @@ class SmValidationService
             return false;
         }
 
-        $validationCodeKey = $mobile . '_validationCode';
+        $validationCodeKey = $mobile . self::SUFFIX_VALIDATION_CODE;
         return Yii::$app->cache->get($validationCodeKey);
     }
 
     /**
      * Generate random four digits
      *
-     * @return int
+     * @return int random four digits
      */
     private function _fourDigits()
     {

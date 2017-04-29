@@ -163,7 +163,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode(SmValidationService::TYPE_REGISTER, $postData['mobile'], $postData['validation_code'])) {
+        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
