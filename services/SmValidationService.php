@@ -71,7 +71,7 @@ class SmValidationService
     {
         $cache = Yii::$app->cache;
 
-        // check send interval
+        // check sending interval
        $intervalKey = $this->_mobile . self::SUFFIX_INTERVAL;
         if ($cache->get($intervalKey)) {
             return;
@@ -110,12 +110,11 @@ class SmValidationService
      * Check validation code
      *
      * @param int $mobile mobile
-     * @param string $validationCode validation code
      * @return bool if valid validation code
      */
-    public static function validCode($mobile, $validationCode)
+    public static function validCode($mobile)
     {
-        if (!$mobile || !$validationCode) {
+        if (!$mobile) {
             return false;
         }
 
@@ -127,12 +126,11 @@ class SmValidationService
      * Delete validation code
      *
      * @param int $mobile mobile
-     * @param string $validationCode validation code
      */
-    public static function deleteCode($mobile, $validationCode)
+    public static function deleteCode($mobile)
     {
-        if (!$mobile || !$validationCode) {
-            return false;
+        if (!$mobile) {
+            return;
         }
 
         $validationCodeKey = $mobile . self::SUFFIX_VALIDATION_CODE;

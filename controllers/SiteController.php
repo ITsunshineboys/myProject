@@ -164,7 +164,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
+        if (!SmValidationService::validCode($postData['mobile'])) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
@@ -219,7 +219,7 @@ class SiteController extends Controller
 
             $transaction->commit();
 
-            SmValidationService::deleteCode($postData['mobile'], $postData['validation_code']);
+            SmValidationService::deleteCode($postData['mobile']);
 
             return Json::encode([
                 'code' => 200,
@@ -387,7 +387,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
+        if (!SmValidationService::validCode($postData['mobile'])) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
@@ -405,7 +405,7 @@ class SiteController extends Controller
         }
 
         if ($user->validatePassword($postData['new_password'])) {
-            SmValidationService::deleteCode($user->mobile, $postData['validation_code']);
+            SmValidationService::deleteCode($user->mobile);
 
             return Json::encode([
                 'code' => 200,
@@ -430,7 +430,7 @@ class SiteController extends Controller
             ]);
         }
 
-        SmValidationService::deleteCode($postData['mobile'], $postData['validation_code']);
+        SmValidationService::deleteCode($postData['mobile']);
 
         return Json::encode([
             'code' => 200,
@@ -469,7 +469,7 @@ class SiteController extends Controller
         }
 
         if ($user->validatePassword($postData['new_password'])) {
-            SmValidationService::deleteCode($user->mobile, $postData['validation_code']);
+            SmValidationService::deleteCode($user->mobile);
 
             return Json::encode([
                 'code' => 200,
@@ -477,7 +477,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($user->mobile, $postData['validation_code'])) {
+        if (!SmValidationService::validCode($user->mobile)) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
@@ -494,7 +494,7 @@ class SiteController extends Controller
             ]);
         }
 
-        SmValidationService::deleteCode($user->mobile, $postData['validation_code']);
+        SmValidationService::deleteCode($user->mobile);
 
         return Json::encode([
             'code' => 200,
