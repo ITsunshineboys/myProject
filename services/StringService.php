@@ -49,7 +49,7 @@ class StringService
      */
     public static function classConstants($className)
     {
-        $reflect = new ReflectionClass($className);
+        $reflect = new \ReflectionClass($className);
         return $reflect->getConstants();
     }
 }

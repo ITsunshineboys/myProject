@@ -151,7 +151,8 @@ class SiteController extends Controller
         $postData = Yii::$app->request->post();
         $code = 1000;
 
-        if (!$postData || empty($postData['mobile'])
+        if (empty($postData['mobile'])
+            || empty($postData['validation_code'])
             || strlen(($postData['password'])) < User::PASSWORD_MIN_LEN
             || strlen(($postData['password'])) > User::PASSWORD_MAX_LEN
         ) {
@@ -161,7 +162,13 @@ class SiteController extends Controller
             ]);
         }
 
-        // todo: validation code check
+        if (!SmValidationService::validCode(SmValidationService::TYPE_REGISTER, $postData['mobile'], $postData['validation_code'])) {
+            $code = 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         $user = new User;
         $user->attributes = $postData;

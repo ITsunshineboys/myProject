@@ -109,6 +109,24 @@ class SmValidationService
     }
 
     /**
+     * Check validation code
+     *
+     * @param $type
+     * @param $mobile
+     * @param $validationCode
+     * @return bool|mixed
+     */
+    public static function validCode($type, $mobile, $validationCode)
+    {
+        if (!$type || !$mobile || !$validationCode) {
+            return false;
+        }
+
+        $validationCodeKey = $type . '_' . $mobile . '_validationCode';
+        return Yii::$app->cache->get($validationCodeKey);
+    }
+
+    /**
      * Generate random four digits
      *
      * @return int
