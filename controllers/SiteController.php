@@ -33,10 +33,10 @@ class SiteController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['logout', 'roles'],
+                'only' => ['logout', 'roles', 'reset-password'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'roles'],
+                        'actions' => ['logout', 'roles', 'reset-password'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -46,6 +46,7 @@ class SiteController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post',],
+                    'reset-password' => ['post',],
                 ],
             ],
         ];
@@ -381,7 +382,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode(SmValidationService::TYPE_RESET_PASSWORD, $postData['mobile'], $postData['validation_code'])) {
+        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
@@ -399,8 +400,6 @@ class SiteController extends Controller
         }
 
         $user->attributes = $postData;
-        $user->password = Yii::$app->security->generatePasswordHash($user->password);
-
         if (!$user->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -409,13 +408,66 @@ class SiteController extends Controller
         }
 
         $user->password = Yii::$app->security->generatePasswordHash($postData['new_password']);
-        if (!$user->validate()) {
+        if (!$user->save()) {
+            $code = 500;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
+        return Json::encode([
+            'code' => 200,
+            'msg' => '重设密码成功',
+        ]);
+    }
+
+    /**
+     * Reset password action.
+     *
+     * @return string
+     */
+    public function actionResetPassword()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (empty($postData['new_password'])
+            || empty($postData['validation_code'])
+            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($user->validatePassword($postData['new_password'])) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => '重设密码成功',
+            ]);
+        }
+
+        if (!SmValidationService::validCode($user->mobile, $postData['validation_code'])) {
+            $code = 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user->password = Yii::$app->security->generatePasswordHash($postData['new_password']);
         if (!$user->save()) {
             $code = 500;
             return Json::encode([

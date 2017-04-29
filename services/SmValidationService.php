@@ -44,7 +44,6 @@ class SmValidationService
         if (empty($data['type'])
             || empty($data['mobile'])
             || !StringService::isMobile($data['mobile'])
-            || !method_exists($this, $data['type'])
             || !isset($smParams[$data['type']])) {
             throw new \InvalidArgumentException;
         }
@@ -62,67 +61,24 @@ class SmValidationService
         $this->_interval = $smParams['interval'];
         $this->_validationCodeExpire = $smParams['validationCode']['expire'];
         $this->_mobile = $data['mobile'];
-        $type = $data['type'];
-        $this->$type();
+        $this->send();
     }
 
     /**
-     * 注册发送验证码
+     * 发送验证码
      */
-    public function register()
+    public function send()
     {
         $cache = Yii::$app->cache;
 
         // check send interval
-       $intervalKey = self::TYPE_REGISTER . '_' . $this->_mobile . '_interval';
+       $intervalKey = $this->_mobile . '_interval';
         if ($cache->get($intervalKey)) {
             return;
         }
 
         // generate validation code
-        $validationCodeKey = self::TYPE_REGISTER . '_' . $this->_mobile . '_validationCode';
-        if (!($validationCode = $cache->get($validationCodeKey))) {
-            $validationCodeMethod = $this->_validationCodeMethod;
-            $validationCode = $this->$validationCodeMethod();
-            $cache->set($validationCodeKey, $validationCode, $this->_validationCodeExpire);
-        }
-
-        $config = [
-            'app_key' => $this->_appKey,
-            'app_secret' => $this->_appSecret,
-        ];
-
-        $client = new Client(new App($config));
-        $req = new AlibabaAliqinFcSmsNumSend;
-        $req
-            ->setRecNum($this->_mobile) // 手机号码
-            ->setSmsParam(['product' => $this->_signName, 'code' => $validationCode]) // 模版数据
-            ->setSmsFreeSignName($this->_signName) // 短信签名
-            ->setSmsTemplateCode($this->_templateId); // 短信模版ID
-
-        $res = $client->execute($req);
-
-        if (isset($res->result) && $res->result->err_code == 0) {
-            $cache->set($intervalKey, 1, $this->_interval);
-            return true;
-        }
-    }
-
-    /**
-     * 修改密码发送验证码
-     */
-    public function resetPassword()
-    {
-        $cache = Yii::$app->cache;
-
-        // check send interval
-        $intervalKey = self::TYPE_RESET_PASSWORD . '_' . $this->_mobile . '_interval';
-        if ($cache->get($intervalKey)) {
-            return;
-        }
-
-        // generate validation code
-        $validationCodeKey = self::TYPE_RESET_PASSWORD . '_' . $this->_mobile . '_validationCode';
+        $validationCodeKey = $this->_mobile . '_validationCode';
         if (!($validationCode = $cache->get($validationCodeKey))) {
             $validationCodeMethod = $this->_validationCodeMethod;
             $validationCode = $this->$validationCodeMethod();
@@ -153,18 +109,17 @@ class SmValidationService
     /**
      * Check validation code
      *
-     * @param $type
-     * @param $mobile
-     * @param $validationCode
+     * @param int $mobile mobile
+     * @param string $validationCode validation code
      * @return bool|mixed
      */
-    public static function validCode($type, $mobile, $validationCode)
+    public static function validCode($mobile, $validationCode)
     {
-        if (!$type || !$mobile || !$validationCode) {
+        if (!$mobile || !$validationCode) {
             return false;
         }
 
-        $validationCodeKey = $type . '_' . $mobile . '_validationCode';
+        $validationCodeKey = $mobile . '_validationCode';
         return Yii::$app->cache->get($validationCodeKey);
     }
 
