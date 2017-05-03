@@ -110,16 +110,17 @@ class SmValidationService
      * Check validation code
      *
      * @param int $mobile mobile
+     * @param string $validationCode validation code
      * @return bool if valid validation code
      */
-    public static function validCode($mobile)
+    public static function validCode($mobile, $validationCode)
     {
         if (!$mobile) {
             return false;
         }
 
         $validationCodeKey = $mobile . self::SUFFIX_VALIDATION_CODE;
-        return Yii::$app->cache->get($validationCodeKey);
+        return Yii::$app->cache->get($validationCodeKey) == $validationCode;
     }
 
     /**

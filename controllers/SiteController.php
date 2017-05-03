@@ -164,7 +164,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($postData['mobile'])) {
+        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
@@ -387,7 +387,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($postData['mobile'])) {
+        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
@@ -477,7 +477,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($user->mobile)) {
+        if (!SmValidationService::validCode($user->mobile, $postData['validation_code'])) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
