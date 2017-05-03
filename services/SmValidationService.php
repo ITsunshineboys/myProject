@@ -17,6 +17,10 @@ use app\services\StringService;
 
 class SmValidationService
 {
+    public static $needAuthorizedTypes = [
+        'resetPassword',
+    ];
+
     const SUFFIX_INTERVAL = '_interval';
     const SUFFIX_VALIDATION_CODE = '_validationCode';
 

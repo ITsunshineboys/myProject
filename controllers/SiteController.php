@@ -550,6 +550,16 @@ class SiteController extends Controller
             ]);
         }
 
+        if (in_array($getData['type'], SmValidationService::$needAuthorizedTypes)) {
+            if (!Yii::$app->user->identity) {
+                $code = 403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
         $sendNum = SmValidationService::sendNum($getData['mobile'], $getData['type']);
         $leftNum = Yii::$app->params['sm']['maxSendNumPerDay'] - $sendNum;
         return Json::encode([
