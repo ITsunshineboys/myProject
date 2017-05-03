@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
 class Carousel extends ActiveRecord
 {
     const CACHE_KEY = 'carousel';
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
