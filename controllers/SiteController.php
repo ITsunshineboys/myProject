@@ -164,14 +164,6 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
-            $code = 1002;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $user = new User;
         $user->attributes = $postData;
         $user->password = Yii::$app->security->generatePasswordHash($user->password);
@@ -179,6 +171,14 @@ class SiteController extends Controller
         $user->login_role_id = Yii::$app->params['owner_role_id'];
 
         if (!$user->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
+            $code = 1002;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],

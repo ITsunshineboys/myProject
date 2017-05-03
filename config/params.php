@@ -36,9 +36,15 @@ return [
         'signName' => '领航装饰设计',
         'register' => [
             'templateId' => 'SMS_26070129',
+            'signName' => '用户注册验证码',
         ],
         'resetPassword' => [
             'templateId' => 'SMS_26070127',
+            'signName' => '修改密码验证码',
+        ],
+        'forgetPassword' => [
+            'templateId' => 'SMS_63905689',
+            'signName' => '忘记密码验证码',
         ],
     ],
 ];
