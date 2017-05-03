@@ -1,5 +1,3 @@
-//var url="http://local.test.cdlhzz.cn/";
-var url="http://test.cdlhzz.cn:888/";
 var role="site/all-roles";
 var logout="site/admin-login";
 app.controller("admin_login",function($scope,$http){
