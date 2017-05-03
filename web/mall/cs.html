@@ -5,32 +5,102 @@
     <title></title>
   </head>
 <body>
-<button id="animate" >animate</button>
-<div id="block">Hello World</div>
+<input id="storage" type="text" onblur="local()"/>
+<div id="result"></div>
+<!--<button id="animate" status="0">animate</button>-->
+<!--<div id="block">Hello World</div>-->
 
 
 
 <!--<div class="div" style="width: 200px;height: 200px;border:1px solid blue"></div>-->
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+<!--<script type="text/javascript" src="js/jquery-3.1.1.js"></script>-->
 <script type="text/javascript">
-$("#animate").click(function(){
-    if(!$(this).hasClass("clicked")) {
-        $(this).addClass("clicked");
-        $("#block").animate(
-                {"font-size": "10em"}, 1000, "linear", function(){
-                    console.log("函数1");
-                });
-        $("#animate").css({"color":"red"})
+    var search = [];
+    function local(){
 
-    } else {
-        $(this).removeClass("clicked");
-        $("#block").animate(
-                {"font-size": "1em"}, 1000, "linear", function(){
-                    console.log("函数2");
-                });
-        $("#animate").css({"color":"green"})
+//
+//        alert(search)
+
+//存储，IE6~7 cookie 其他浏览器HTML5本地存储
+//        if (window.localStorage) {
+//            localStorage.setItem("menuTitle", search);
+//        } else {
+//            Cookie.write("menuTitle", search);
+//        }
+        if(typeof(Storage)!=="undefined") {
+
+            if (window.localStorage) {
+                var storage=localStorage.getItem("menuTitle")
+                if(storage!=null){
+                    search=localStorage.getItem("menuTitle").split(',');
+
+                }
+                console.log("search=length="+search.length);
+
+                var val=document.getElementById("storage")
+                myval=val.value;
+//        alert(myval)
+                search.unshift(myval)
+
+                alert(search)
+                if(search.length>5){
+                    search.pop()
+                }
+
+
+                localStorage.setItem("menuTitle", search);
+            }
+            console.log("search==="+search.length)
+//            if (localStorage.clickcount)
+//            {
+//                localStorage.clickcount=myval;
+//            }
+//            else
+//            {
+//                localStorage.clickcount=myval;
+//            }
+            document.getElementById("result").innerHTML=" 你已经点击了按钮 " + localStorage.getItem("menuTitle")+ " 次 ";
+            var arr=new Array();
+            arr=localStorage.getItem("menuTitle").split(',');
+            alert("拆分数组=="+arr.length)
+//            if(search.length>5){
+//                localStorage.removeItem("menuTitle")
+                localStorage.clear()
+////            }
+            console.log("search==="+search.length)
+        }
+        else
+        {
+            document.getElementById("result").innerHTML="对不起，您的浏览器不支持 web 存储。";
+        }
     }
-});
+//$("#animate").click(function(){
+//    if(!$(this).hasClass("clicked")) {
+//        $(this).addClass("clicked");
+//        $("#block").animate(
+//                {"font-size": "10em"}, 1000, "linear", function(){
+//                    console.log("函数1");
+//                });
+//        $("#animate").css({"color":"red"})
+//
+//    } else {
+//        $(this).removeClass("clicked");
+//        $("#block").animate(
+//                {"font-size": "1em"}, 1000, "linear", function(){
+//                    console.log("函数2");
+//                });
+//        $("#animate").css({"color":"green"})
+//    }
+//});
+//$("#animate").click(function(){
+//    if($(this).attr("status") == 0) {
+//        $(this).attr("status", 1);
+//        $("#block").animate({"font-size": "10em"}, 1000, "linear", function(){console.log("complete111111");});
+//    } else {
+//        $(this).attr("status", 0);
+//        $("#block").animate({"font-size": "1em"}, 1000, "linear", function(){console.log("complete000000");});
+//    }
+//});
 </script>
 </body>
 </html>

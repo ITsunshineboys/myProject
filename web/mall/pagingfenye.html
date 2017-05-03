@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>分页</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" type="text/css" href="js/paging.css">
+	</head>
+	<body ng-app="app" ng-controller="fenye">
+		<div >{{mydata}}</div>
+		<div class="jq" style="color: red">{{mydata111}}</div>
+		<div id="pageTool"></div>
+		<div id="pageToolbar"></div>
+		<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+		<script src="js/angular.min.js"></script>
+		<script type="text/javascript" src="js/query.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script>
+			var app=angular.module("app",[]);
+			var url="http://local.test.cdlhzz.cn/";
+			var role="site/all-roles";
+			app.controller("fenye",function($scope,$http) {
+				$http({
+					method: "GET",
+					url: url + role
+				})
+						.success(function (data, status) {
+							$scope.page = 1;
+							$scope.mydata = data.data.roles;
+							//status为返回的状态值
+							$scope.allrole1 = data.data.roles;
+							$scope.mycount = $scope.allrole1.length;
+							console.log("mycount===" + $scope.mycount);
+							//分页的页码数的初始化函数
+							$('#pageTool').Paging({
+								pagesize: $scope.page, count: $scope.mycount, callback: function (page, size, count) {
+									console.log(arguments);
+									//点击页码后重新访问接口获取当前页码的数据
+									$http({
+										method: "GET",
+										url: url + role
+									})
+											.success(function (data, status) {
+												$scope.mydata111 = data.data.roles[page - 1].name;
+											});
+									alert('当前第 ' + page + '页,每页 ' + size + '条,总页数：' + count + '页')
+								}
+							});
+						}).
+						error(function (data, status) {
+							//$scope.data = data || "Request failed";
+							//$scope.status = status;
+						});
+			});
+		$('#pageToolbar').Paging({pagesize:10,count:85,toolbar:true});
+		</script>
+	</body>
+</html>
