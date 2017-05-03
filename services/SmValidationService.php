@@ -32,9 +32,9 @@ class SmValidationService
     /**
      * SmValidationService constructor.
      *
-     * @param $data array
-     *        $data['mobile']  mobile
-     *        $data['type']    validation code type, register | resetPassword
+     * @param array $data
+     *              $data['mobile']  mobile
+     *              $data['type']    validation code type, register|resetPassword|forgetPassword
      * @throws \InvalidArgumentException|ServerErrorHttpException
      */
     public function __construct($data)
@@ -44,7 +44,8 @@ class SmValidationService
         if (empty($data['type'])
             || empty($data['mobile'])
             || !StringService::isMobile($data['mobile'])
-            || !isset($smParams[$data['type']])) {
+            || !isset($smParams[$data['type']])
+        ) {
             throw new \InvalidArgumentException;
         }
 
@@ -72,7 +73,7 @@ class SmValidationService
         $cache = Yii::$app->cache;
 
         // check sending interval
-       $intervalKey = $this->_mobile . self::SUFFIX_INTERVAL;
+        $intervalKey = $this->_mobile . self::SUFFIX_INTERVAL;
         if ($cache->get($intervalKey)) {
             return;
         }
@@ -93,17 +94,53 @@ class SmValidationService
         $client = new Client(new App($config));
         $req = new AlibabaAliqinFcSmsNumSend;
         $req
-            ->setRecNum($this->_mobile) // 手机号码
-            ->setSmsParam(['product' => $this->_signName, 'code' => $validationCode]) // 模版数据
-            ->setSmsFreeSignName($this->_signName) // 短信签名
+            ->setRecNum($this->_mobile)// 手机号码
+            ->setSmsParam(['product' => $this->_signName, 'code' => $validationCode])// 模版数据
+            ->setSmsFreeSignName($this->_signName)// 短信签名
             ->setSmsTemplateCode($this->_templateId); // 短信模版ID
 
         $res = $client->execute($req);
+
+        $this->_setSendNum();
 
         if (isset($res->result) && $res->result->err_code == 0) {
             $cache->set($intervalKey, 1, $this->_interval);
             return true;
         }
+    }
+
+    /**
+     * Increase sent num by 1
+     */
+    private function _setSendNum()
+    {
+        $day = date('Y-m-d');
+        $expireAt = strtotime($day . ' 23:59:59') - time();
+        $key = $this->_mobile . '_' . $this->_templateId . '_' . $day;
+        $cache = Yii::$app->cache;
+        if (($num = $cache->get($key))) {
+            $num++;
+        } else {
+            $num = 1;
+        }
+        $cache->set($key, $num, $expireAt);
+    }
+
+    /**
+     * Get daily sent num
+     *
+     * @param int    $mobile mobile
+     * @param string $type   validation code type, register|resetPassword|forgetPassword
+     * @return int
+     */
+    public static function sendNum($mobile, $type)
+    {
+        if (!$mobile || !$type || !StringService::isMobile($mobile)) {
+            return 0;
+        }
+
+        $key = $mobile . '_' . Yii::$app->params['sm'][$type]['templateId'] . '_' . date('Y-m-d');
+        return (int)Yii::$app->cache->get($key);
     }
 
     /**
@@ -115,7 +152,7 @@ class SmValidationService
      */
     public static function validCode($mobile, $validationCode)
     {
-        if (!$mobile) {
+        if (!$mobile || !StringService::isMobile($mobile)) {
             return false;
         }
 
@@ -130,7 +167,7 @@ class SmValidationService
      */
     public static function deleteCode($mobile)
     {
-        if (!$mobile) {
+        if (!$mobile || !StringService::isMobile($mobile)) {
             return;
         }
 

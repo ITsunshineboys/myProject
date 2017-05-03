@@ -532,4 +532,33 @@ class SiteController extends Controller
             'msg' => 'OK',
         ]);
     }
+
+    /**
+     * Get daily sent num action.
+     *
+     * @return string
+     */
+    public function actionSmSendNum()
+    {
+        $getData = Yii::$app->request->get();
+        $code = 1000;
+
+        if (empty($getData['mobile']) || empty($getData['type'])) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $sendNum = SmValidationService::sendNum($getData['mobile'], $getData['type']);
+        $leftNum = Yii::$app->params['sm']['maxSendNumPerDay'] - $sendNum;
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'sendNum' => $sendNum,
+                'leftNum' => $leftNum >= 0 ? $leftNum : 0,
+            ],
+        ]);
+    }
 }

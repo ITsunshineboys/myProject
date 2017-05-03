@@ -33,6 +33,7 @@ return [
             'expire' => 600, // 10m
             'rule' => 'fourDigits',
         ],
+        'maxSendNumPerDay' => 5,
         'signName' => '领航装饰设计',
         'register' => [
             'templateId' => 'SMS_26070129',
