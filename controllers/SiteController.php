@@ -511,6 +511,16 @@ class SiteController extends Controller
     {
         $postData = Yii::$app->request->post();
 
+        if (in_array($postData['type'], SmValidationService::$needAuthorizedTypes)) {
+            if (!Yii::$app->user->identity) {
+                $code = 403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
         try {
             new SmValidationService($postData);
         } catch (\InvalidArgumentException $e) {
