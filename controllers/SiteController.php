@@ -6,13 +6,17 @@ use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
 use app\models\Role;
+use app\models\UserRole;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
+use app\services\SmValidationService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\web\Controller;
 use yii\helpers\Json;
+use yii\web\Controller;
+use yii\web\ServerErrorHttpException;
 
 class SiteController extends Controller
 {
@@ -29,10 +33,10 @@ class SiteController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['logout', 'roles'],
+                'only' => ['logout', 'roles', 'reset-password'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'roles'],
+                        'actions' => ['logout', 'roles', 'reset-password'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -42,6 +46,7 @@ class SiteController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post',],
+                    'reset-password' => ['post',],
                 ],
             ],
         ];
@@ -105,7 +110,7 @@ class SiteController extends Controller
             ]);
         }
 
-        $modelName = 'LoginForm';
+        $modelName = StringService::classBasename(LoginForm::className());
         if (!isset($postData[$modelName])) {
             $postData = [
                 $modelName => $postData,
@@ -114,6 +119,16 @@ class SiteController extends Controller
 
         $model = new LoginForm;
         if ($model->load($postData) && $model->login()) {
+            $user = Yii::$app->user->identity;
+            $user->login_time = time();
+            if (!$user->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             return Json::encode([
                 'code' => 200,
                 'msg' => '登录成功',
@@ -121,6 +136,99 @@ class SiteController extends Controller
         }
 
         $code = 1001;
+        return Json::encode([
+            'code' => $code,
+            'msg' => Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+    /**
+     * Register action.
+     *
+     * @return string
+     */
+    public function actionRegister()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (empty($postData['mobile'])
+            || empty($postData['validation_code'])
+            || empty($postData['password'])
+            || strlen(($postData['password'])) < User::PASSWORD_MIN_LEN
+            || strlen(($postData['password'])) > User::PASSWORD_MAX_LEN
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = new User;
+        $user->attributes = $postData;
+        $user->password = Yii::$app->security->generatePasswordHash($user->password);
+        $user->create_time = $user->login_time = time();
+        $user->login_role_id = Yii::$app->params['owner_role_id'];
+
+        if (!$user->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
+            $code = 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!$user->save()) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $user->aite_cube_no = $user->id + Yii::$app->params['offset_aite_cube_no'];
+            if (!$user->save()) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $userRole = new UserRole;
+            $userRole->user_id = $user->id;
+            $userRole->role_id = Yii::$app->params['owner_role_id']; // owner
+            if (!$userRole->save()) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $transaction->commit();
+
+            SmValidationService::deleteCode($postData['mobile']);
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => '注册成功',
+            ]);
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+        }
+
         return Json::encode([
             'code' => $code,
             'msg' => Yii::$app->params['errorCodes'][$code],
@@ -232,7 +340,7 @@ class SiteController extends Controller
             ]);
         }
 
-        $modelName = 'LoginForm';
+        $modelName = StringService::classBasename(LoginForm::className());
         if (!isset($postData[$modelName])) {
             $postData = [
                 $modelName => $postData,
@@ -254,6 +362,223 @@ class SiteController extends Controller
         return Json::encode([
             'code' => $code,
             'msg' => Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+    /**
+     * Forget password action.
+     *
+     * @return string
+     */
+    public function actionForgetPassword()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (empty($postData['mobile'])
+            || empty($postData['validation_code'])
+            || empty($postData['new_password'])
+            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
+            $code = 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = User::find()->where(['mobile' => $postData['mobile']])->one();
+        if (!$user) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($user->validatePassword($postData['new_password'])) {
+            SmValidationService::deleteCode($user->mobile);
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => '重设密码成功',
+            ]);
+        }
+
+        $user->attributes = $postData;
+        if (!$user->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user->password = Yii::$app->security->generatePasswordHash($postData['new_password']);
+        if (!$user->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        SmValidationService::deleteCode($postData['mobile']);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '重设密码成功',
+        ]);
+    }
+
+    /**
+     * Reset password action.
+     *
+     * @return string
+     */
+    public function actionResetPassword()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (empty($postData['new_password'])
+            || empty($postData['validation_code'])
+            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($user->validatePassword($postData['new_password'])) {
+            SmValidationService::deleteCode($user->mobile);
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => '重设密码成功',
+            ]);
+        }
+
+        if (!SmValidationService::validCode($user->mobile, $postData['validation_code'])) {
+            $code = 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user->password = Yii::$app->security->generatePasswordHash($postData['new_password']);
+        if (!$user->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        SmValidationService::deleteCode($user->mobile);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '重设密码成功',
+        ]);
+    }
+
+    /**
+     * Get validation code action.
+     *
+     * @return string
+     */
+    public function actionValidationCode()
+    {
+        $postData = Yii::$app->request->post();
+
+        if (in_array($postData['type'], SmValidationService::$needAuthorizedTypes)) {
+            if (!Yii::$app->user->identity) {
+                $code = 403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        try {
+            new SmValidationService($postData);
+        } catch (\InvalidArgumentException $e) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        } catch (ServerErrorHttpException $e) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        } catch (\Exception $e) {}
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Get daily sent num action.
+     *
+     * @return string
+     */
+    public function actionSmSendNum()
+    {
+        $getData = Yii::$app->request->get();
+        $code = 1000;
+
+        if (empty($getData['mobile']) || empty($getData['type'])) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (in_array($getData['type'], SmValidationService::$needAuthorizedTypes)) {
+            if (!Yii::$app->user->identity) {
+                $code = 403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $sendNum = SmValidationService::sendNum($getData['mobile'], $getData['type']);
+        $leftNum = Yii::$app->params['sm']['maxSendNumPerDay'] - $sendNum;
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'sendNum' => $sendNum,
+                'leftNum' => $leftNum >= 0 ? $leftNum : 0,
+            ],
         ]);
     }
 }

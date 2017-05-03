@@ -9,6 +9,23 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
     const CACHE_PREFIX = 'user_';
+    const PASSWORD_MIN_LEN = 6;
+    const PASSWORD_MAX_LEN = 25;
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            // mobile and password are both required
+            [['mobile', 'password'], 'required'],
+            ['mobile', 'match', 'pattern' => '/^[0-9]{11}$/'],
+            ['mobile', 'unique'],
+            // password is validated by validatePassword()
+            ['password', 'validatePassword'],
+        ];
+    }
 
     /**
      * @inheritdoc
