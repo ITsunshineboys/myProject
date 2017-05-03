@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Carousel;
 use app\services\ExceptionHandleService;
+use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -68,7 +69,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'carousel' => Carousel::find()->where([])->asArray()->all(),
+                'carousel' => Carousel::carousel(),
             ],
         ]);
     }
