@@ -97,6 +97,7 @@ CREATE TABLE `worker` (
   `nickname` varchar(25) not null DEFAULT '' COMMENT '工人姓名',
   `identity_no` int(11) unsigned not null DEFAULT 0 COMMENT '个人身份标识',
   `project_manager_id` int(11) unsigned not null DEFAULT 0 COMMENT '项目经理“id”',
+  `work_type_id` int(11) unsigned not null DEFAULT 0 COMMENT '工种类型“id”',
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -105,5 +106,11 @@ create table carousel (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `image` varchar(100) NOT NULL DEFAULT '',
   `link` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table work_type (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
