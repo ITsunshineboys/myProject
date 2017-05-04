@@ -85,91 +85,18 @@
     width: auto;
     height: 15rem;
     float: left;
-
-}
-
-/* IE10 Windows Phone 8 Fixes */
-.swiper-wp8-horizontal {
-    -ms-touch-action: pan-y;
-}
-.swiper-wp8-vertical {
-    -ms-touch-action: pan-x;
-}
-
-/* ===============================================================
-Your custom styles, here you need to specify container's and slide's
-sizes, pagination, etc.
-================================================================*/
-.swiper-container {
-    /* Specify Swiper's Size: */
-
-    /*width:200px;
-    height: 100px;*/
-}
-.swiper-slide {
-    /* Specify Slides's Size: */
-
-    /*width: 100%;
-    height: 100%;*/
-}
-.swiper-slide-active {
-    /* Specific active slide styling: */
-
-}
-.swiper-slide-visible {
-    /* Specific visible slide styling: */
-
 }
 /* ===============================================================
 Pagination Styles
 ================================================================*/
-.swiper-pagination-switch {
-    /* Stylize pagination button: */
-
-}
-.swiper-active-switch {
-    /* Specific active button style: */
-
-}
-.swiper-visible-switch {
-    /* Specific visible button style: */
-
-}
 .device {
     width: auto;
     height: 15rem;
-    /*padding: 3rem 4rem;*/
-    /*border-radius: 2rem;*/
-    background-color: chartreuse;
-    /*border: 0.3rem solid white;*/
-    /*margin: 0.5rem auto;*/
     position: relative;
-    /*box-shadow: 0 0 0.5rem #000;*/
 }
 .swiper-slide{
     position: relative;
 }
-/*向左向右的箭头*/
-/*.device .arrow-left {*/
-    /*background: url(../images/arrows.png) no-repeat left top;*/
-    /*position: absolute;*/
-    /*left: 1rem;*/
-    /*top: 50%;*/
-    /*background-position: 0 ;*/
-    /*margin-top: -1.5rem;*/
-    /*width: 1.7rem;*/
-    /*height: 3rem;*/
-    /*z-index: 101;*/
-/*}*/
-/*.device .arrow-right {*/
-    /*background: url(../images/arrows.png) no-repeat left bottom;*/
-    /*position: absolute;*/
-    /*right: 1rem;*/
-    /*top: 50%;*/
-    /*margin-top: -1.5rem;*/
-    /*width: 1.7rem;*/
-    /*height: 3rem;*/
-/*}*/
 .swiper-container {
     height: 15rem;
     width: auto;
@@ -192,8 +119,6 @@ Pagination Styles
     width: 0.7rem;
     height: 0.7rem;
     border-radius: 0.35rem;
-    /*background-image: url("../images/pagination.png");*/
-    /*background-size: 1.2rem;*/
     background: #fff;
     margin: 0 0.3rem;
     cursor: pointer;
@@ -203,27 +128,18 @@ Pagination Styles
     height: 0.7rem;
     border-radius: 0.35rem;
     background: #53A7F3;
-
 }
 /*幻灯片结束*/
-
 /*推荐开始*/
 .classify-ul{
     width: 100%;
     height:auto;
     overflow: hidden;
-    /*background-color: aqua;*/
-}
-.classify-ul>.li2{
-    /*padding-bottom: 1.7rem;*/
 }
 .classify-ul>li{
     float: left;
     width: 25%;
-    /*height: 6rem;*/
-
     text-align: center;
-    /*background-color: red;*/
     background-color: #fff;
 }
 .classify-ul>li a{
@@ -235,7 +151,6 @@ Pagination Styles
     height:2.4rem ;
 }
 .classify-ul>li a>span {
-    /*padding-top: 0.5rem;*/
     font-size: 1.2rem;
     line-height: 2.5rem;
     display: block;
@@ -248,9 +163,6 @@ Pagination Styles
     padding: 0 1rem;
     margin-top: 1rem;
     background-color: #fff;
-}
-.recommend_box .recommend1_box{
-
 }
 .recommend_box .recommend1_box .title {
     height: 4.5rem;

@@ -15,8 +15,6 @@
   </div>
   <!--banner图开始-->
   <div class="device">
-    <!--<a class="arrow-left" href="#"></a>-->
-    <!--<a class="arrow-right" href="#"></a>-->
     <div class="swiper-container" id="swiper-container" >
       <div class="swiper-wrapper">
         <a ng-controller="itemReaptCtrl" ng-repeat="n in carousel1" href="{{n.link}}" class="swiper-slide" >
@@ -25,18 +23,6 @@
         </div>
         <img src="{{n.image}}" style="width:auto;height: 15.8rem">
       </a>
-        <!--<a href="#" class="swiper-slide">-->
-          <!--<div style="position: absolute;left:1rem;top:1rem;">-->
-            <!--banner2 {{carouse1}}-->
-          <!--</div>-->
-          <!--<img src="images/banner1.png" style="width:auto;height: 15.8rem">-->
-        <!--</a>-->
-        <!--<a class="swiper-slide" href="">-->
-          <!--<div style="position: absolute;left:1rem;top:1rem;">-->
-            <!--banner3-->
-          <!--</div>-->
-          <!--<img src="images/banner1.png" style="width:auto;height: 15.8rem">-->
-        <!--</a>-->
       </div>
     </div>
     <div class="pagination"></div>
@@ -142,18 +128,13 @@
           </li>
         </ul>
       </div>
-
-
   </div>
 </div>
-
-  <!--<div style="width: 1rem;height: 1rem;background-color: red;clear: both">测试</div>-->
-
   <script src="../js/jquery.js"></script>
   <script src="../js/angular.min.js"></script>
   <script src="js/rem.js"></script>
   <script src="js/global.js"></script>
-  <script src="js/dist/idangerous.swiper.js"></script>
+  <script src="js/idangerous.swiper.js"></script>
   <script src="js/index.js"></script>
 </body>
 </html>
