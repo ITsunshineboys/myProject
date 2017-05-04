@@ -347,8 +347,25 @@ class SiteController extends Controller
             ];
         }
 
+        $code = 1001;
         $model = new LoginForm;
         if ($model->load($postData) && $model->login()) {
+            $user = Yii::$app->user->identity;
+            if (!$user) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => $role->id])->one();
+            if (!$userRole) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             return Json::encode([
                 'code' => 200,
                 'msg' => '登录成功',
@@ -358,7 +375,6 @@ class SiteController extends Controller
             ]);
         }
 
-        $code = 1001;
         return Json::encode([
             'code' => $code,
             'msg' => Yii::$app->params['errorCodes'][$code],
