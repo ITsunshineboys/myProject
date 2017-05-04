@@ -215,14 +215,13 @@ Pagination Styles
     /*background-color: aqua;*/
 }
 .classify-ul>.li2{
-    padding-bottom: 1.7rem;
+    /*padding-bottom: 1.7rem;*/
 }
 .classify-ul>li{
     float: left;
     width: 25%;
     /*height: 6rem;*/
-    font-size: 1.2rem;
-    line-height: 1.2rem;
+
     text-align: center;
     /*background-color: red;*/
     background-color: #fff;
@@ -232,12 +231,14 @@ Pagination Styles
 
 }
 .classify-ul>li img{
-    padding-top:1.7rem;
+    padding-top:1.5rem;
     height:2.4rem ;
 }
 .classify-ul>li a>span {
-    padding-top: 0.5rem;
-    display: inline-block;
+    /*padding-top: 0.5rem;*/
+    font-size: 1.2rem;
+    line-height: 2.5rem;
+    display: block;
     color:#9094A1;
 }
 /*ÍÆ¼ö¿ªÊ¼*/

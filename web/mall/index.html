@@ -7,8 +7,8 @@
   <link rel="stylesheet" href="css/all.css"/>
   <link rel="stylesheet" href="css/index.css"/>
 </head>
-<body>
-<div class="main">
+<body ng-app="app" ng-controller="index">
+<div class="main" ng-cloak>
   <div class="search_box">
     <a href="classify.html" class="search">超级无敌地暖片</a>
     <img src="images/message_icon.png" class="massage" alt=""/>
@@ -19,29 +19,24 @@
     <!--<a class="arrow-right" href="#"></a>-->
     <div class="swiper-container" id="swiper-container" >
       <div class="swiper-wrapper">
-        <a href="#" class="swiper-slide" >
+        <a href="{{n.link}}" class="swiper-slide" ng-repeat="n in carousel">
           <div style="position: absolute;left:1rem;top:1rem;">
-            banner1
+            {{n.id}}
           </div>
-          <img src="images/banner1.png" style="width:auto;height: 15.8rem">
+          <img src="{{n.image}}" style="width:auto;height: 15.8rem">
         </a>
-        <a href="#" class="swiper-slide">
-          <div style="position: absolute;left:1rem;top:1rem;">
-            banner2
-          </div>
-          <img src="images/banner1.png" style="width:auto;height: 15.8rem">
-        </a>
-        <a class="swiper-slide">
-          <div style="position: absolute;left:1rem;top:1rem;">
-            banner3
-          </div>
-          <img src="images/banner1.png" style="width:auto;height: 15.8rem">
-
-          <!--<div class="content-slide">-->
-          <!--<p class="title">Slide with HTML</p>-->
-          <!--<p>You can put any HTML inside of slide with any layout, not only images, even another Swiper!</p>-->
+        <!--<a href="#" class="swiper-slide">-->
+          <!--<div style="position: absolute;left:1rem;top:1rem;">-->
+            <!--banner2-->
           <!--</div>-->
-        </a>
+          <!--<img src="images/banner1.png" style="width:auto;height: 15.8rem">-->
+        <!--</a>-->
+        <!--<a class="swiper-slide" href="">-->
+          <!--<div style="position: absolute;left:1rem;top:1rem;">-->
+            <!--banner3-->
+          <!--</div>-->
+          <!--<img src="images/banner1.png" style="width:auto;height: 15.8rem">-->
+        <!--</a>-->
       </div>
     </div>
     <div class="pagination"></div>
@@ -157,6 +152,7 @@
   <script src="../js/jquery.js"></script>
   <script src="../js/angular.min.js"></script>
   <script src="js/rem.js"></script>
+  <script src="js/global.js"></script>
   <script src="js/dist/idangerous.swiper.js"></script>
   <script src="js/index.js"></script>
 </body>
