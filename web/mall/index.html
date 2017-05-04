@@ -19,7 +19,7 @@
     <!--<a class="arrow-right" href="#"></a>-->
     <div class="swiper-container" id="swiper-container" >
       <div class="swiper-wrapper">
-        <a ng-repeat="n in carousel1" href="{{n.link}}" class="swiper-slide" >
+        <a ng-controller="itemReaptCtrl" ng-repeat="n in carousel1" href="{{n.link}}" class="swiper-slide" >
         <div style="position: absolute;left:1rem;top:1rem;">
           {{n.id}}
         </div>
