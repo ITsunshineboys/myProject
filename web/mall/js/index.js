@@ -20,6 +20,6 @@ var mySwiper = new Swiper('#swiper-container',{
 app.controller("index",function($scope,$http){
     $http.get(url+carousel)
         .success(function(data){
-            $scope.carousel=data.data;
+            $scope.carousel1=data.data;
         })
 })

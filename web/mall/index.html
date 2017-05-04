@@ -9,6 +9,7 @@
 </head>
 <body ng-app="app" ng-controller="index">
 <div class="main" ng-cloak>
+  {{carouse1}}
   <div class="search_box">
     <a href="classify.html" class="search">超级无敌地暖片</a>
     <img src="images/message_icon.png" class="massage" alt=""/>
@@ -19,7 +20,7 @@
     <!--<a class="arrow-right" href="#"></a>-->
     <div class="swiper-container" id="swiper-container" >
       <div class="swiper-wrapper">
-        <a href="{{n.link}}" class="swiper-slide" ng-repeat="n in carousel">
+        <a ng-repeat="n in carousel1" href="{{n.link}}" class="swiper-slide" >
           <div style="position: absolute;left:1rem;top:1rem;">
             {{n.id}}
           </div>
