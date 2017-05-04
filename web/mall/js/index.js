@@ -24,7 +24,13 @@ function carousel(){
                 $scope.carousel1=data.data.carousel;
             })
         $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
-            carousel();
+            var mySwiper = new Swiper('#swiper-container',{
+                autoplay: 2000,//可选选项，自动滑动
+                pagination: '.pagination',
+                loop:true,
+                grabCursor: true,
+                paginationClickable: true
+            });
         })
     })
 }
