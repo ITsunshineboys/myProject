@@ -8,6 +8,17 @@ use yii\db\ActiveRecord;
 class Role extends ActiveRecord
 {
     const CACHE_KEY_ALL = 'all_roles';
+    const AUTHENTICATION_STATUS_NO_APPLICATION = 1;
+    const AUTHENTICATION_STATUS_IN_PROCESS = 2;
+    const AUTHENTICATION_STATUS_APPROVED = 3;
+    const AUTHENTICATION_STATUS_REJECTED = 4;
+
+    public static $authenticationStatus = [
+        self::AUTHENTICATION_STATUS_NO_APPLICATION => '未申请',
+        self::AUTHENTICATION_STATUS_IN_PROCESS => '审核中',
+        self::AUTHENTICATION_STATUS_APPROVED => '已通过',
+        self::AUTHENTICATION_STATUS_REJECTED => '不通过',
+    ];
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -31,6 +42,11 @@ class Role extends ActiveRecord
         $cache->delete(self::CACHE_KEY_ALL);
     }
 
+    /**
+     * Get all roles
+     *
+     * @return array|mixed|ActiveRecord[]
+     */
     public static function allRoles()
     {
         $key = self::CACHE_KEY_ALL;
@@ -45,6 +61,12 @@ class Role extends ActiveRecord
         return $roles;
     }
 
+    /**
+     * Check if available role id
+     *
+     * @param int $roleId role id
+     * @return bool
+     */
     public static function activeRole($roleId)
     {
         $roleId = (int) $roleId;
@@ -61,6 +83,11 @@ class Role extends ActiveRecord
         return false;
     }
 
+    /**
+     * Get roles for app
+     *
+     * @return array
+     */
     public static function appRoles()
     {
         return array_slice(self::allRoles(), 1);

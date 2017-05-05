@@ -33,10 +33,10 @@ class SiteController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['logout', 'roles', 'reset-password'],
+                'only' => ['logout', 'roles', 'reset-password', 'roles-status'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'roles', 'reset-password'],
+                        'actions' => ['logout', 'roles', 'reset-password', 'roles-status'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -594,6 +594,22 @@ class SiteController extends Controller
             'data' => [
                 'sendNum' => $sendNum,
                 'leftNum' => $leftNum >= 0 ? $leftNum : 0,
+            ],
+        ]);
+    }
+
+    /**
+     * Get roles status action.
+     *
+     * @return string
+     */
+    public function actionRolesStatus()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'roles_status' => UserRole::rolesStatus(Yii::$app->user->identity->id),
             ],
         ]);
     }
