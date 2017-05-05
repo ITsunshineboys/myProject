@@ -8,7 +8,6 @@
 
 namespace app\models;
 
-use app\models\Goods;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;
@@ -18,6 +17,7 @@ class GoodsRecommend extends ActiveRecord
     const RECOMMEND_GOODS_TYPE_FIRST = 1;
     const RECOMMEND_GOODS_TYPE_SECOND = 2;
     const CACHE_KEY_PREFIX_FIRST = 'recommend_goods_first_';
+    const PAGE_SIZE_DEFAULT = 12;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -50,6 +50,7 @@ class GoodsRecommend extends ActiveRecord
     /**
      * Get recommended goods for type first
      *
+     * @access private
      * @return array
      */
     public static function _first()
@@ -58,7 +59,38 @@ class GoodsRecommend extends ActiveRecord
 
         $goodsRecommend = GoodsRecommend::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_FIRST])->one();
         if ($goodsRecommend) {
-            $goods = Goods::find()->where(['sku' => $goodsRecommend])->one();
+            $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
+            if ($goods) {
+                $link = Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true);
+                $platformPrice = $goods->platform_price;
+                $title = $goodsRecommend->title;
+                $image = $goodsRecommend->image;
+                $description = $goodsRecommend->description;
+                $recommendGoods[] = compact('title', 'image', 'description', 'link', 'platformPrice');
+            }
+        }
+
+        return $recommendGoods;
+    }
+
+    /**
+     * Get recommended goods for type second
+     *
+     * @param int $page page default 1
+     * @param int $size page size default 12
+     * @return array
+     */
+    public static function second($page = 1, $size = self::PAGE_SIZE_DEFAULT)
+    {
+        $page <= 0 && $page = 1;
+        $size <= 0 && $size = self::PAGE_SIZE_DEFAULT;
+
+        $recommendGoods = [];
+
+        $offset = ($page - 1) * $size;
+        $goodsRecommendList = GoodsRecommend::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_SECOND])->offset($offset)->limit($size)->all();
+        foreach ($goodsRecommendList as $goodsRecommend) {
+            $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
             if ($goods) {
                 $link = Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true);
                 $platformPrice = $goods->platform_price;

@@ -90,4 +90,24 @@ class MallController extends Controller
             ],
         ]);
     }
+
+    /**
+     * Recommend goods for type second action.
+     *
+     * @return string
+     */
+    public function actionRecommendSecond()
+    {
+        $getData = Yii::$app->request->get();
+        $page = (int)($getData['page'] ?? 1);
+        $size = (int)($getData['size'] ?? GoodsRecommend::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend-second' => GoodsRecommend::second($page, $size),
+            ],
+        ]);
+    }
 }
