@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Carousel;
+use app\models\GoodsRecommend;
 use app\services\ExceptionHandleService;
 use Yii;
 use yii\filters\AccessControl;
@@ -70,6 +71,22 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'carousel' => Carousel::carousel(),
+            ],
+        ]);
+    }
+
+    /**
+     * Recommend goods for type first action.
+     *
+     * @return string
+     */
+    public function actionRecommendFirst()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend-first' => GoodsRecommend::first(),
             ],
         ]);
     }
