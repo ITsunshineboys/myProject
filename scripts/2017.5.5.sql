@@ -4,7 +4,7 @@ CREATE TABLE `goods` (
   `category_id` int unsigned not null default 0,
   `sku` bigint unsigned not null default 0,
   `title` varchar(100) not null DEFAULT '',
-  `image1` varchar(255) not null DEFAULT comment '封面图',
+  `image1` varchar(255) not null DEFAULT '' comment '封面图',
   `image2` varchar(255) not null DEFAULT '',
   `image3` varchar(255) not null DEFAULT '',
   `image4` varchar(255) not null DEFAULT '',
