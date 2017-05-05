@@ -62,7 +62,7 @@ class GoodsRecommend extends ActiveRecord
             $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
             if ($goods) {
                 $link = Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true);
-                $platformPrice = $goods->platform_price;
+                $platformPrice = $goods->platform_price / 100;
                 $title = $goodsRecommend->title;
                 $image = $goodsRecommend->image;
                 $description = $goodsRecommend->description;
@@ -93,7 +93,7 @@ class GoodsRecommend extends ActiveRecord
             $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
             if ($goods) {
                 $link = Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true);
-                $platformPrice = $goods->platform_price;
+                $platformPrice = $goods->platform_price / 100;
                 $title = $goodsRecommend->title;
                 $image = $goodsRecommend->image;
                 $description = $goodsRecommend->description;
