@@ -114,7 +114,7 @@ class MallController extends Controller
     }
 
     /**
-     * Get top goods categories action.
+     * Get goods categories action.
      *
      * @return string
      */
