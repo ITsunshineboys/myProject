@@ -7,6 +7,7 @@ use app\models\LoginForm;
 use app\models\User;
 use app\models\Role;
 use app\models\UserRole;
+use app\services\BasisDecorationService;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
@@ -612,5 +613,24 @@ class SiteController extends Controller
                 'roles_status' => UserRole::rolesStatus(Yii::$app->user->identity->id),
             ],
         ]);
+    }
+
+    public function actionTest(){
+        $data=array(
+            'joint_screw'=>10,
+            'joint_elbow'=>10,
+            'water_pipe'=>10
+        );
+        $arr=array(
+            'spot'=>4,
+            'labor_price'=>300,
+            'circuit_spot'=>5,
+            'profit'=>30,
+            'standard_spot'=>50
+        );
+        //waterway_remould
+        $b=BasisDecorationService::waterway_remould($data,$arr);
+        echo $b;
+        exit;
     }
 }
