@@ -16,7 +16,8 @@ class GoodsRecommend extends ActiveRecord
 {
     const RECOMMEND_GOODS_TYPE_FIRST = 1;
     const RECOMMEND_GOODS_TYPE_SECOND = 2;
-    const CACHE_KEY_PREFIX_FIRST = 'recommend_goods_first_';
+    const CACHE_KEY_FIRST = 'recommend_goods_first';
+    const CACHE_KEY_SECOND = 'recommend_goods_second';
     const PAGE_SIZE_DEFAULT = 12;
 
     /**
@@ -34,7 +35,7 @@ class GoodsRecommend extends ActiveRecord
      */
     public static function first()
     {
-        $key = self::CACHE_KEY_PREFIX_FIRST;
+        $key = self::CACHE_KEY_FIRST;
         $cache = Yii::$app->cache;
         $recommendGoods = $cache->get($key);
         if (!$recommendGoods) {
@@ -84,11 +85,41 @@ class GoodsRecommend extends ActiveRecord
     {
         $page <= 0 && $page = 1;
         $size <= 0 && $size = self::PAGE_SIZE_DEFAULT;
+        $offset = ($page - 1) * $size;
+        return array_slice(self::secondAll(), $offset, $size);
+    }
 
+    /**
+     * Get all recommended goods for type second
+     *
+     * @return array
+     */
+    public static function secondAll()
+    {
+        $key = self::CACHE_KEY_SECOND;
+        $cache = Yii::$app->cache;
+        $recommendGoods = $cache->get($key);
+        if (!$recommendGoods) {
+            $recommendGoods = self::_secondAll();
+            if ($recommendGoods) {
+                $cache->set($key, $recommendGoods);
+            }
+        }
+
+        return $recommendGoods;
+    }
+
+    /**
+     * Get all recommended goods for type second
+     *
+     * @access private
+     * @return array
+     */
+    private static function _secondAll()
+    {
         $recommendGoods = [];
 
-        $offset = ($page - 1) * $size;
-        $goodsRecommendList = GoodsRecommend::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_SECOND])->offset($offset)->limit($size)->all();
+        $goodsRecommendList = GoodsRecommend::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_SECOND])->all();
         foreach ($goodsRecommendList as $goodsRecommend) {
             $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
             if ($goods) {
