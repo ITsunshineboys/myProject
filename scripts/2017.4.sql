@@ -136,7 +136,8 @@ CREATE TABLE `worker` (
 create table carousel (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `image` varchar(100) NOT NULL DEFAULT '',
-  `link` varchar(100) NOT NULL DEFAULT '',
+  `brand_id` int unsigned not null default 0,
+  `sku` bigint unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
