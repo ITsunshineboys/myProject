@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Carousel;
 use app\models\GoodsRecommend;
+use app\models\GoodsCategory;
 use app\services\ExceptionHandleService;
 use Yii;
 use yii\filters\AccessControl;
@@ -107,6 +108,22 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'recommend-second' => GoodsRecommend::second($page, $size),
+            ],
+        ]);
+    }
+
+    /**
+     * Get top goods categories action.
+     *
+     * @return string
+     */
+    public function actionCategoriesTop()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'categories_top' => GoodsCategory::categoriesByPid(['id', 'title', 'icon'])
             ],
         ]);
     }
