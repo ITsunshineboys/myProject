@@ -4,6 +4,7 @@ CREATE TABLE `goods` (
   `category_id` int unsigned not null default 0,
   `sku` bigint unsigned not null default 0,
   `title` varchar(100) not null DEFAULT '',
+  `subtitle` varchar(100) not null DEFAULT '',
   `image1` varchar(255) not null DEFAULT '' comment '封面图',
   `image2` varchar(255) not null DEFAULT '',
   `image3` varchar(255) not null DEFAULT '',
@@ -37,5 +38,14 @@ CREATE TABLE `goods_category` (
   `path` varchar(50) not null DEFAULT '',
   `icon` varchar(255) not null DEFAULT '',
   `deleted` tinyint(1) not null default 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `goods_brand` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) not null DEFAULT '',
+  `logo` varchar(255) not null DEFAULT '',
+  `certificate` varchar(255) not null DEFAULT '',
+  `supplier_id` int(11) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

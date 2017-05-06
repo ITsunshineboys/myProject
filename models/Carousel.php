@@ -39,7 +39,7 @@ class Carousel extends ActiveRecord
     }
 
     /**
-     * Get carousel
+     * Get carousel list
      *
      * @return array carousel
      */
@@ -49,11 +49,35 @@ class Carousel extends ActiveRecord
         $cache = Yii::$app->cache;
         $carousel = $cache->get($key);
         if (!$carousel) {
-            $carousel = self::find()->where([])->asArray()->all();
+            $carousel = self::_carousel();
             if ($carousel) {
                 $cache->set($key, $carousel);
             }
         }
         return $carousel;
+    }
+
+    /**
+     * Get carousel list
+     *
+     * @access private
+     * @return array carousel
+     */
+    public static function _carousel()
+    {
+        $data = [];
+
+        $carouselList = self::find()->where([])->all();
+        foreach ($carouselList as $carousel) {
+            $goods = Goods::find()->where(['sku' => $carousel->sku])->one();
+            if ($goods) {
+                $data[] = [
+                    'image' => $carousel->image,
+                    'goods_id' => $goods->id,
+                ];
+            }
+        }
+
+        return $data;
     }
 }
