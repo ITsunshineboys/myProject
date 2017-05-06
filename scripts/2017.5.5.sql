@@ -14,7 +14,6 @@ CREATE TABLE `goods` (
   `market_price` bigint not null DEFAULT 0 comment 'unit: fen',
   `sold_number` int unsigned not null default 0 comment '销量',
   `left_number` int unsigned not null default 0 comment '库存',
-  `supplier_id` int unsigned not null default 0,
   `description` varchar(255) not null DEFAULT '',
   `create_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
