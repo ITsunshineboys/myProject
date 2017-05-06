@@ -49,7 +49,27 @@ class StringService
      */
     public static function classConstants($className)
     {
+        if (!$className) {
+            return [];
+        }
+
         $reflect = new \ReflectionClass($className);
         return $reflect->getConstants();
+    }
+
+    /**
+     * Check if class const exists
+     *
+     * @param string $constName const name
+     * @param string $className class name
+     * @return bool
+     */
+    public static function constExists($constName, $className)
+    {
+        if (!$constName || !$className) {
+            return false;
+        }
+
+        return array_key_exists($constName, self::classConstants($className));
     }
 }

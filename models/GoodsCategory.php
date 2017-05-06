@@ -13,7 +13,10 @@ use yii\db\ActiveRecord;
 
 class GoodsCategory extends ActiveRecord
 {
-    const CACHE_TOP = 'goods_categories_top';
+    const CACHE_PREFIX = 'goods_categories_';
+    const LEVEL1 = 1;
+    const LEVEL2 = 2;
+    const LEVEL3 = 3;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -32,7 +35,7 @@ class GoodsCategory extends ActiveRecord
      */
     public static function categoriesByPid($select = [], $parentCategoryId = 0)
     {
-        $key = self::CACHE_TOP;
+        $key = self::CACHE_PREFIX . $parentCategoryId;
         $cache = Yii::$app->cache;
         $categories = $cache->get($key);
         if (!$categories) {

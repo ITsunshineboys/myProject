@@ -6,6 +6,7 @@ use app\models\Carousel;
 use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -117,13 +118,14 @@ class MallController extends Controller
      *
      * @return string
      */
-    public function actionCategoriesTop()
+    public function actionCategories()
     {
+        $pid = (int)Yii::$app->request->get('pid', 0);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'categories_top' => GoodsCategory::categoriesByPid(['id', 'title', 'icon'])
+                'categories' => GoodsCategory::categoriesByPid(['id', 'title', 'icon'], $pid)
             ],
         ]);
     }
