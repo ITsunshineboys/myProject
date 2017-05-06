@@ -62,12 +62,18 @@ class GoodsRecommend extends ActiveRecord
         if ($goodsRecommend) {
             $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
             if ($goods) {
-                $link = Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true);
+                $goodsId = $goods->id;
                 $platformPrice = $goods->platform_price / 100;
                 $title = $goodsRecommend->title;
                 $image = $goodsRecommend->image;
                 $description = $goodsRecommend->description;
-                $recommendGoods[] = compact('title', 'image', 'description', 'link', 'platformPrice');
+                $recommendGoods[] = [
+                    'title' => $title,
+                    'image' => $image,
+                    'description' => $description,
+                    'goods_id' => $goodsId,
+                    'platform_price' => $platformPrice,
+                ];
             }
         }
 
@@ -123,12 +129,18 @@ class GoodsRecommend extends ActiveRecord
         foreach ($goodsRecommendList as $goodsRecommend) {
             $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
             if ($goods) {
-                $link = Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true);
+                $goodsId = $goods->id;
                 $platformPrice = $goods->platform_price / 100;
                 $title = $goodsRecommend->title;
                 $image = $goodsRecommend->image;
                 $description = $goodsRecommend->description;
-                $recommendGoods[] = compact('title', 'image', 'description', 'link', 'platformPrice');
+                $recommendGoods[] = [
+                    'title' => $title,
+                    'image' => $image,
+                    'description' => $description,
+                    'goods_id' => $goodsId,
+                    'platform_price' => $platformPrice,
+                ];
             }
         }
 
