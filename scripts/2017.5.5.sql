@@ -13,10 +13,12 @@ CREATE TABLE `goods` (
   `supplier_price` bigint not null DEFAULT 0 comment 'unit: fen',
   `platform_price` bigint not null DEFAULT 0 comment 'unit: fen',
   `market_price` bigint not null DEFAULT 0 comment 'unit: fen',
+  `purchase_price` bigint not null DEFAULT 0 comment 'unit: fen',
   `sold_number` int unsigned not null default 0 comment '销量',
   `left_number` int unsigned not null default 0 comment '库存',
   `description` varchar(255) not null DEFAULT '',
   `create_time` int not null DEFAULT 0,
+  `status` tinyint(1) not null DEFAULT 0 comment '0: 上架 1: 下架',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
