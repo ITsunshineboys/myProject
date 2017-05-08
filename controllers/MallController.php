@@ -146,12 +146,26 @@ class MallController extends Controller
             ]);
         }
 
+        $orderBy = trim(Yii::$app->request->get('order_by', ''));
+        $orderByArr = [];
+        if ($orderBy) {
+            if (stripos($orderBy, Goods::ORDERBY_SEPARATOR) === false) {
+                $orderByArr[$orderBy] = SORT_DESC;
+            } else {
+                list($field, $direction) = explode(Goods::ORDERBY_SEPARATOR, $orderBy);
+                if ($field) {
+                    $orderByArr[$field] = !empty($direction) ? (int)$direction : SORT_DESC;
+                }
+            }
+        }
+
         $select = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate'];
+        $categoryGoods = $orderByArr ? Goods::findByCategoryId($categoryId, $select, $orderByArr) : Goods::findByCategoryId($categoryId, $select);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category_goods' => Goods::findByCategoryId($categoryId, $select),
+                'category_goods' => $categoryGoods,
             ],
         ]);
     }

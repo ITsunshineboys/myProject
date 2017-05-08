@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
 class Goods extends ActiveRecord
 {
     const GOODS_DETAIL_URL_PREFIX = 'mall/goods?id=';
+    const ORDERBY_SEPARATOR = ':';
 
     /**
      * @return string 返回该AR类关联的数据表名
