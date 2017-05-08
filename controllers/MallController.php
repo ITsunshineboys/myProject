@@ -5,8 +5,8 @@ namespace app\controllers;
 use app\models\Carousel;
 use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
+use app\models\Goods;
 use app\services\ExceptionHandleService;
-use app\services\StringService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -126,6 +126,32 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'categories' => GoodsCategory::categoriesByPid(['id', 'title', 'icon'], $pid)
+            ],
+        ]);
+    }
+
+    /**
+     * Get category goods action.
+     *
+     * @return string
+     */
+    public function actionCategoryGoods()
+    {
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
+        $code = 1000;
+        if (!$categoryId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $select = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate'];
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category_goods' => Goods::findByCategoryId($categoryId, $select),
             ],
         ]);
     }
