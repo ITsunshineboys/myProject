@@ -159,8 +159,12 @@ class MallController extends Controller
             }
         }
 
+        $getData = Yii::$app->request->get();
+        $page = (int)($getData['page'] ?? 1);
+        $size = (int)($getData['size'] ?? Goods::PAGE_SIZE_DEFAULT);
+
         $select = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
-        $categoryGoods = $orderByArr ? Goods::findByCategoryId($categoryId, $select, $orderByArr) : Goods::findByCategoryId($categoryId, $select);
+        $categoryGoods = $orderByArr ? Goods::findByCategoryId($categoryId, $select, $page, $size, $orderByArr) : Goods::findByCategoryId($categoryId, $select, $page, $size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
