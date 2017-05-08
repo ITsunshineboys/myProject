@@ -159,7 +159,7 @@ class MallController extends Controller
             }
         }
 
-        $select = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate'];
+        $select = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
         $categoryGoods = $orderByArr ? Goods::findByCategoryId($categoryId, $select, $orderByArr) : Goods::findByCategoryId($categoryId, $select);
         return Json::encode([
             'code' => 200,
