@@ -53,6 +53,9 @@ class Goods extends ActiveRecord
         ) {
             foreach ($goodsList as &$goods) {
                 isset($goods['platform_price']) && $goods['platform_price'] = $goods['platform_price'] / 100;
+                isset($goods['supplier_price']) && $goods['supplier_price'] = $goods['supplier_price'] / 100;
+                isset($goods['market_price']) && $goods['market_price'] = $goods['market_price'] / 100;
+                isset($goods['purchase_price']) && $goods['purchase_price'] = $goods['purchase_price'] / 100;
             }
         }
         return $goodsList;
