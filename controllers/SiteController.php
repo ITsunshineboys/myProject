@@ -616,21 +616,17 @@ class SiteController extends Controller
     }
 
     public function actionTest(){
-        $data=array(
-            'joint_screw'=>10,
-            'joint_elbow'=>10,
-            'water_pipe'=>10
+        $quantity =array(
+            1,2,3,4,5);
+        $unitPrice =array(1,2,3,4,5);
+        $arr = array(
+            'day_price'=>300,
+            'day_standard'=>5,
+            'profit'=>15,
+            'total_standard'=>300
         );
-        $arr=array(
-            'spot'=>4,
-            'labor_price'=>300,
-            'circuit_spot'=>5,
-            'profit'=>30,
-            'standard_spot'=>50
-        );
-        //waterway_remould
-        $b=BasisDecorationService::waterway_remould($data,$arr);
-        echo $b;
-        exit;
+        $b = BasisDecorationService::formula($arr,$quantity,$unitPrice);
+
+        var_dump($b) ;
     }
 }
