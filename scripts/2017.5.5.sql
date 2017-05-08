@@ -1,6 +1,7 @@
 CREATE TABLE `goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` int unsigned not null default 0,
+  `brand_id` int unsigned not null default 0,
   `category_id` int unsigned not null default 0,
   `sku` bigint unsigned not null default 0,
   `title` varchar(100) not null DEFAULT '',
