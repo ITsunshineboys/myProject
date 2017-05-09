@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Carousel;
+use app\models\GoodsBrand;
 use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\models\Goods;
@@ -100,9 +101,8 @@ class MallController extends Controller
      */
     public function actionRecommendSecond()
     {
-        $getData = Yii::$app->request->get();
-        $page = (int)($getData['page'] ?? 1);
-        $size = (int)($getData['size'] ?? GoodsRecommend::PAGE_SIZE_DEFAULT);
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT);
 
         return Json::encode([
             'code' => 200,
@@ -159,10 +159,8 @@ class MallController extends Controller
             }
         }
 
-        $getData = Yii::$app->request->get();
-        $page = (int)($getData['page'] ?? 1);
-        $size = (int)($getData['size'] ?? Goods::PAGE_SIZE_DEFAULT);
-
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
         $select = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
         $categoryGoods = $orderByArr ? Goods::findByCategoryId($categoryId, $select, $page, $size, $orderByArr) : Goods::findByCategoryId($categoryId, $select, $page, $size);
         return Json::encode([
@@ -170,6 +168,71 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'category_goods' => $categoryGoods,
+            ],
+        ]);
+    }
+
+    /**
+     * Search brands action.
+     *
+     * @return string
+     */
+    public function actionSearchBrand()
+    {
+        $brands = [];
+
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        if ($keyword) {
+            $brands = GoodsBrand::findByName($keyword);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'brands' => $brands,
+            ],
+        ]);
+    }
+
+    /**
+     * Search brands action.
+     *
+     * @return string
+     */
+    public function actionBrandGoods()
+    {
+        $brandId = (int)Yii::$app->request->get('brand_id', 0);
+        $code = 1000;
+        if (!$brandId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $orderBy = trim(Yii::$app->request->get('order_by', ''));
+        $orderByArr = [];
+        if ($orderBy) {
+            if (stripos($orderBy, Goods::ORDERBY_SEPARATOR) === false) {
+                $orderByArr[$orderBy] = SORT_DESC;
+            } else {
+                list($field, $direction) = explode(Goods::ORDERBY_SEPARATOR, $orderBy);
+                if ($field) {
+                    $orderByArr[$field] = !empty($direction) ? (int)$direction : SORT_DESC;
+                }
+            }
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
+        $select = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
+        $goods = $orderByArr ? Goods::findByBrandId($brandId, $select, $page, $size, $orderByArr) : Goods::findByBrandId($brandId, $select, $page, $size);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'brand_goods' => $goods,
             ],
         ]);
     }

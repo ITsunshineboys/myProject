@@ -36,10 +36,53 @@ class Goods extends ActiveRecord
      */
     public static function findByCategoryId($categoryId, $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['sold_number' => SORT_DESC])
     {
+        $categoryId = (int)$categoryId;
+        if ($categoryId <= 0) {
+            return [];
+        }
+
         $offset = ($page - 1) * $size;
         $goodsList = self::find()
             ->select($select)
             ->where(['category_id' => $categoryId])
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        if (!$select
+            || in_array('platform_price', $select)
+            || in_array('supplier_price', $select)
+            || in_array('market_price', $select)
+            || in_array('purchase_price', $select)
+        ) {
+            foreach ($goodsList as &$goods) {
+                isset($goods['platform_price']) && $goods['platform_price'] = $goods['platform_price'] / 100;
+                isset($goods['supplier_price']) && $goods['supplier_price'] = $goods['supplier_price'] / 100;
+                isset($goods['market_price']) && $goods['market_price'] = $goods['market_price'] / 100;
+                isset($goods['purchase_price']) && $goods['purchase_price'] = $goods['purchase_price'] / 100;
+            }
+        }
+        return $goodsList;
+    }
+
+    /**
+     * Get goods by brand id
+     *
+     * @param int $brandId brand id
+     * @return array
+     */
+    public static function findByBrandId($brandId, $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['sold_number' => SORT_DESC])
+    {
+        $brandId = (int)$brandId;
+        if ($brandId <= 0) {
+            return [];
+        }
+
+        $offset = ($page - 1) * $size;
+        $goodsList = self::find()
+            ->select($select)
+            ->where(['brand_id' => $brandId])
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
