@@ -38,7 +38,8 @@ CREATE TABLE `goods_recommend` (
   `offline_time` int not null DEFAULT 0,
   `online_time` int not null DEFAULT 0,
   `delete_time` int not null DEFAULT 0,
-  `status` tinyint(1) not null DEFAULT 0 comment '0: 停用 1: 启用 2: 删除',
+  `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
+  `deleted` tinyint(1) not null DEFAULT 0 comment '0: 未删除 1: 已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
