@@ -196,7 +196,7 @@ class MallController extends Controller
     }
 
     /**
-     * Search brands action.
+     * Brand goods action.
      *
      * @return string
      */
