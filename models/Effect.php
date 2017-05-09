@@ -18,4 +18,18 @@ class Effect extends ActiveRecord
     {
         return 'effect';
     }
+
+    /**
+     * @param $toponymy
+     * @param $street
+     * @return array|ActiveRecord[]
+     */
+    public function districtSearch($search = '')
+    {
+        if (!empty($search))
+        {
+            $detail = $this->find()->where( ['or',['like','toponymy',$search],['like','street',$search]])->all() ;
+        }
+        return $detail;
+    }
 }
