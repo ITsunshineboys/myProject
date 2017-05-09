@@ -177,7 +177,7 @@ class MallController extends Controller
      *
      * @return string
      */
-    public function actionSearchBrand()
+    public function actionSearch()
     {
         $brands = [];
 
