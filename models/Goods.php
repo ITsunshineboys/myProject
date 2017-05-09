@@ -41,35 +41,17 @@ class Goods extends ActiveRecord
             return [];
         }
 
-        $offset = ($page - 1) * $size;
-        $goodsList = self::find()
-            ->select($select)
-            ->where(['category_id' => $categoryId])
-            ->orderBy($orderBy)
-            ->offset($offset)
-            ->limit($size)
-            ->asArray()
-            ->all();
-        if (!$select
-            || in_array('platform_price', $select)
-            || in_array('supplier_price', $select)
-            || in_array('market_price', $select)
-            || in_array('purchase_price', $select)
-        ) {
-            foreach ($goodsList as &$goods) {
-                isset($goods['platform_price']) && $goods['platform_price'] = $goods['platform_price'] / 100;
-                isset($goods['supplier_price']) && $goods['supplier_price'] = $goods['supplier_price'] / 100;
-                isset($goods['market_price']) && $goods['market_price'] = $goods['market_price'] / 100;
-                isset($goods['purchase_price']) && $goods['purchase_price'] = $goods['purchase_price'] / 100;
-            }
-        }
-        return $goodsList;
+        return self::pagination(['category_id' => $categoryId], $select, $page, $size, $orderBy);
     }
 
     /**
-     * Get goods by brand id
+     * Get goods list by brand id
      *
-     * @param int $brandId brand id
+     * @param  int   $brandId brand id
+     * @param  array $select  select fields default all fields
+     * @param  int   $page    page number default 1
+     * @param  int   $size    page size default 12
+     * @param  array $orderBy order by fields default sold_number desc
      * @return array
      */
     public static function findByBrandId($brandId, $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['sold_number' => SORT_DESC])
@@ -79,10 +61,25 @@ class Goods extends ActiveRecord
             return [];
         }
 
+        return self::pagination(['brand_id' => $brandId], $select, $page, $size, $orderBy);
+    }
+
+    /**
+     * Get goods list
+     *
+     * @param  array $where   search condition
+     * @param  array $select  select fields default all fields
+     * @param  int   $page    page number default 1
+     * @param  int   $size    page size default 12
+     * @param  array $orderBy order by fields default sold_number desc
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['sold_number' => SORT_DESC])
+    {
         $offset = ($page - 1) * $size;
         $goodsList = self::find()
             ->select($select)
-            ->where(['brand_id' => $brandId])
+            ->where($where)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
