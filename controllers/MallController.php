@@ -183,7 +183,7 @@ class MallController extends Controller
 
         $keyword = trim(Yii::$app->request->get('keyword', ''));
         if ($keyword) {
-            $brands = GoodsBrand::findByName($keyword);
+            $brands = GoodsBrand::findByName($keyword, ['id', 'name', 'logo']);
         }
 
         return Json::encode([

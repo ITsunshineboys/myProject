@@ -26,13 +26,13 @@ class GoodsBrand extends ActiveRecord
      * @param string $brandName brand name
      * @return array
      */
-    public static function findByName($brandName)
+    public static function findByName($brandName, $select = [])
     {
         if (!$brandName) {
             return [];
         }
 
         $where = "name like '%{$brandName}%'";
-        return self::find()->where($where)->all();
+        return self::find()->select($select)->where($where)->all();
     }
 }
