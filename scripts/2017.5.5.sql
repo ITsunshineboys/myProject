@@ -18,6 +18,7 @@ CREATE TABLE `goods` (
   `sold_number` int unsigned not null default 0 comment '销量',
   `left_number` int unsigned not null default 0 comment '库存',
   `comment_number` int unsigned not null default 0 comment '评价数',
+  `viewed_number` int unsigned not null default 0 comment '浏览量',
   `favourable_comment_rate` tinyint unsigned not null default 0 comment '好评率',
   `description` varchar(255) not null DEFAULT '',
   `create_time` int not null DEFAULT 0,
@@ -31,7 +32,10 @@ CREATE TABLE `goods_recommend` (
   `title` varchar(100) not null DEFAULT '',
   `image` varchar(255) not null DEFAULT '',
   `description` varchar(255) not null DEFAULT '',
-  `type` tinyint(1) not null default 0 comment '1: first 2: second',
+  `type` tinyint(1) not null default 2 comment '1: first 2: second',
+  `from_type` tinyint(1) not null default 0 comment '1: mall 2: link',
+  `create_time` int not null DEFAULT 0,
+  `status` tinyint(1) not null DEFAULT 0 comment '0: 停用 1: 启用',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
