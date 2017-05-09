@@ -10,6 +10,8 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
+use app\models\Goods;
 
 class Carousel extends ActiveRecord
 {
@@ -73,7 +75,7 @@ class Carousel extends ActiveRecord
             if ($goods) {
                 $data[] = [
                     'image' => $carousel->image,
-                    'goods_id' => $goods->id,
+                    'url' => Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true),
                 ];
             }
         }
