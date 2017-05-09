@@ -19,6 +19,26 @@ class GoodsRecommend extends ActiveRecord
     const CACHE_KEY_FIRST = 'recommend_goods_first';
     const CACHE_KEY_SECOND = 'recommend_goods_second';
     const PAGE_SIZE_DEFAULT = 12;
+    const FROM_TYPE_MALL = 1;
+    const FROM_TYPE_LINK = 2;
+    const STATUS_ONLINE = 1;
+    const STATUS_OFFLINE = 2;
+
+    /**
+     * @var array from types
+     */
+    public static $fromTypes = [
+        self::FROM_TYPE_MALL => '商铺',
+        self::FROM_TYPE_LINK => '链接',
+    ];
+
+    /**
+     * @var array online status list
+     */
+    public static $statuses = [
+        self::STATUS_ONLINE => '启用',
+        self::STATUS_OFFLINE => '禁用',
+    ];
 
     /**
      * @return string 返回该AR类关联的数据表名
