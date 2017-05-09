@@ -21,8 +21,9 @@ class GoodsRecommend extends ActiveRecord
     const PAGE_SIZE_DEFAULT = 12;
     const FROM_TYPE_MALL = 1;
     const FROM_TYPE_LINK = 2;
+    const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
-    const STATUS_OFFLINE = 2;
+    const STATUS_DELETE = 2;
 
     /**
      * @var array from types
@@ -36,8 +37,9 @@ class GoodsRecommend extends ActiveRecord
      * @var array online status list
      */
     public static $statuses = [
+        self::STATUS_OFFLINE => '停用',
         self::STATUS_ONLINE => '启用',
-        self::STATUS_OFFLINE => '禁用',
+        self::STATUS_DELETE => '删除',
     ];
 
     /**

@@ -35,7 +35,10 @@ CREATE TABLE `goods_recommend` (
   `type` tinyint(1) not null default 2 comment '1: first 2: second',
   `from_type` tinyint(1) not null default 0 comment '1: mall 2: link',
   `create_time` int not null DEFAULT 0,
-  `status` tinyint(1) not null DEFAULT 0 comment '0: 停用 1: 启用',
+  `offline_time` int not null DEFAULT 0,
+  `online_time` int not null DEFAULT 0,
+  `delete_time` int not null DEFAULT 0,
+  `status` tinyint(1) not null DEFAULT 0 comment '0: 停用 1: 启用 2: 删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
