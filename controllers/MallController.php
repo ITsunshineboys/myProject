@@ -29,10 +29,10 @@ class MallController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['set-banner-status'],
+                'only' => ['set-banner-status', 'delete-banner'],
                 'rules' => [
                     [
-                        'actions' => ['set-banner-status'],
+                        'actions' => ['set-banner-status', 'delete-banner'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -42,6 +42,7 @@ class MallController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'set-banner-status' => ['post',],
+                    'delete-banner' => ['post',],
                 ],
             ],
         ];
