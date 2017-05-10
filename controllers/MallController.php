@@ -311,14 +311,15 @@ class MallController extends Controller
             ]);
         }
 
-        if ($banner->deleted == GoodsRecommend::STATUS_DELETED) {
+        if ($banner->status != GoodsRecommend::STATUS_OFFLINE) {
+            $code = 1003;
             return Json::encode([
-                'code' => 200,
-                'msg' => 'OK'
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $banner->deleted = GoodsRecommend::STATUS_DELETED;
+        $banner->delete_time = time();
         if (!$banner->save()) {
             $code = 500;
             return Json::encode([
@@ -330,6 +331,35 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
+        ]);
+    }
+
+    public function actionBannerHistory()
+    {
+        $startTime = (int)Yii::$app->request->get('start_time', 0);
+        $endTime = (int)Yii::$app->request->get('end_time', 0);
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
+
+        $where = 'delete_time > 0';
+        if ($startTime) {
+            $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $where .= " and create_time <= {$endTime}";
+        }
+
+        $select = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'status', 'create_time', 'image'];
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'banner-history' => [
+                    'total' => (int)GoodsRecommend::find()->where($where)->asArray()->count(),
+                    'details' => GoodsRecommend::history(0, 0, $select, $page, $size)
+                ]
+            ],
         ]);
     }
 }

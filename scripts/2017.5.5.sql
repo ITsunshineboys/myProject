@@ -29,17 +29,16 @@ CREATE TABLE `goods` (
 CREATE TABLE `goods_recommend` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sku` bigint unsigned not null default 0,
+  `supplier_id` int unsigned not null DEFAULT 0,
+  `supplier_name` varchar(50) not null DEFAULT '',
   `title` varchar(100) not null DEFAULT '',
   `image` varchar(255) not null DEFAULT '',
   `description` varchar(255) not null DEFAULT '',
   `type` tinyint(1) not null default 2 comment '1: first 2: second',
   `from_type` tinyint(1) not null default 0 comment '1: mall 2: link',
   `create_time` int not null DEFAULT 0,
-  `offline_time` int not null DEFAULT 0,
-  `online_time` int not null DEFAULT 0,
   `delete_time` int not null DEFAULT 0,
   `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
-  `deleted` tinyint(1) not null DEFAULT 0 comment '0: 未删除 1: 已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -63,7 +62,7 @@ CREATE TABLE `goods_brand` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `banner_goods_view_log` (
+CREATE TABLE `goods_recommend_view_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `banner` int unsigned not null default 0,
   `create_time` int not null DEFAULT 0,

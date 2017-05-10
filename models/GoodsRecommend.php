@@ -10,7 +10,6 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\helpers\Url;
 
 class GoodsRecommend extends ActiveRecord
 {
@@ -23,8 +22,7 @@ class GoodsRecommend extends ActiveRecord
     const FROM_TYPE_LINK = 2;
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
-    const STATUS_NOT_DELETED = 0;
-    const STATUS_DELETED = 1;
+    const CACHE_KEY_PREFIX_VIEWED_NUMBER = 'recommend_goods_viewed_number_';
 
     /**
      * @var array from types
@@ -40,14 +38,6 @@ class GoodsRecommend extends ActiveRecord
     public static $statuses = [
         self::STATUS_OFFLINE => '停用',
         self::STATUS_ONLINE => '启用',
-    ];
-
-    /**
-     * @var array deleted status list
-     */
-    public static $deletedStatuses = [
-        self::STATUS_NOT_DELETED => '未删除',
-        self::STATUS_DELETED => '已删除',
     ];
 
     /**
@@ -175,5 +165,139 @@ class GoodsRecommend extends ActiveRecord
         }
 
         return $recommendGoods;
+    }
+
+    /**
+     * Get banner history
+     *
+     * @param  int $startTime search start time default 0
+     * @param  int $endTime search end time default 0
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  array $orderBy order by fields default sold_number desc
+     * @return array
+     */
+    public static function history($startTime = 0, $endTime = 0, $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
+    {
+        $startTime = (int)$startTime;
+        $endTime = (int)$endTime;
+
+        $where = 'delete_time > 0';
+        if ($startTime) {
+            $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $where .= " and create_time <= {$endTime}";
+        }
+
+        return self::pagination($where, $select, $page, $size, $orderBy);
+    }
+
+    /**
+     * Get banner list
+     *
+     * @param  array $where search condition
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  array $orderBy order by fields default sold_number desc
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
+    {
+        if (in_array('from_type', $select)) {
+            $select[] = 'supplier_name';
+        }
+
+        if (in_array('viewed_number', $select)) {
+            $select[] = 'delete_time';
+            $hasViewedNumber = true;
+            unset($select[array_search('viewed_number', $select)]);
+        }
+
+        $offset = ($page - 1) * $size;
+        $bannerList = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        if (!$select
+            || in_array('create_time', $select)
+            || in_array('delete_time', $select)
+            || in_array('from_type', $select)
+            || in_array('status', $select)
+            || $hasViewedNumber
+        ) {
+            foreach ($bannerList as &$banner) {
+                if (isset($banner['create_time'])) {
+                    if (!empty($banner['create_time'])) {
+                        $banner['create_time'] = date('Y-m-d H:i', $banner['create_time']);
+                    }
+                }
+
+                if (isset($banner['delete_time'])) {
+                    if (!empty($banner['delete_time'])) {
+                        $banner['delete_time'] = date('Y-m-d H:i', $banner['delete_time']);
+                    }
+                }
+
+                if (isset($banner['from_type'])) {
+                    if ($banner['from_type'] == self::FROM_TYPE_MALL) {
+                        $banner['from_type'] = $banner['supplier_name'];
+                    } elseif ($banner['from_type'] == self::FROM_TYPE_LINK) {
+                        $banner['from_type'] = self::$fromTypes[$banner['from_type']];
+                    }
+                }
+
+                isset($banner['status']) && $banner['status'] = self::$statuses[$banner['status']];
+                $hasViewedNumber && $banner['viewed_number'] = self::viewedNumber($banner['create_time'], $banner['delete_time']);
+            }
+        }
+
+        return $bannerList;
+    }
+
+    /**
+     * Get viewed number
+     *
+     * @param int $createTime banner create time default 0
+     * @param int $deleteTime banner delete time default 0
+     * @return int
+     */
+    public static function viewedNumber($createTime = 0, $deleteTime = 0)
+    {
+        $createTime = (int)$createTime;
+        $deleteTime = (int)$deleteTime;
+        if (!$createTime || !$deleteTime) {
+            return 0;
+        }
+
+        $key = self::CACHE_KEY_PREFIX_VIEWED_NUMBER . $createTime . '_' . $deleteTime;
+        $cache = Yii::$app->cache;
+        $viewedNumber = $cache->get($key);
+        if ($viewedNumber === false) {
+            $viewedNumber = self::_viewedNumber($createTime, $deleteTime);
+            $cache->set($key, $viewedNumber);
+        }
+
+        return $viewedNumber;
+    }
+
+    /**
+     * Get viewed number
+     *
+     * @access private
+     * @param int $createTime banner create time
+     * @param int $deleteTime banner delete time
+     * @return int
+     */
+    public static function _viewedNumber($createTime, $deleteTime)
+    {
+        $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
+        return (int)GoodsRecommendViewLog::find()->where($where)->asArray()->count();
     }
 }
