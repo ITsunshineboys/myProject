@@ -62,3 +62,10 @@ CREATE TABLE `goods_brand` (
   `supplier_id` int(11) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `banner_goods_view_log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `banner` int unsigned not null default 0,
+  `create_time` int not null DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

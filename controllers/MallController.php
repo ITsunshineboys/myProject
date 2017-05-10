@@ -29,10 +29,10 @@ class MallController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => [''],
+                'only' => ['set-banner-status'],
                 'rules' => [
                     [
-                        'actions' => [''],
+                        'actions' => ['set-banner-status'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -41,6 +41,7 @@ class MallController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
+                    'set-banner-status' => ['post',],
                 ],
             ],
         ];
@@ -234,6 +235,62 @@ class MallController extends Controller
             'data' => [
                 'brand_goods' => $goods,
             ],
+        ]);
+    }
+
+    /**
+     * Set banner status action.
+     *
+     * @return string
+     */
+    public function actionSetBannerStatus()
+    {
+        $bannerId = (int)Yii::$app->request->post('banner_id', 0);
+        $status = (int)Yii::$app->request->post('status', 0);
+
+        $code = 1000;
+
+        if (!$bannerId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!in_array($status, array_keys(GoodsRecommend::$statuses))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $banner = GoodsRecommend::findOne($bannerId);
+        if (!$banner) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($banner->status == $status) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $banner->status = $status;
+        if (!$banner->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
         ]);
     }
 }
