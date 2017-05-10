@@ -239,25 +239,17 @@ class MallController extends Controller
     }
 
     /**
-     * Set banner status action.
+     * Toggle banner status action.
      *
      * @return string
      */
-    public function actionSetBannerStatus()
+    public function actionToggleBannerStatus()
     {
         $bannerId = (int)Yii::$app->request->post('banner_id', 0);
-        $status = (int)Yii::$app->request->post('status', 0);
 
         $code = 1000;
 
         if (!$bannerId) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if (!in_array($status, array_keys(GoodsRecommend::$statuses))) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -272,14 +264,60 @@ class MallController extends Controller
             ]);
         }
 
-        if ($banner->status == $status) {
+        if ($banner->status == GoodsRecommend::STATUS_ONLINE) {
+            $banner->status = GoodsRecommend::STATUS_OFFLINE;
+        } else {
+            $banner->status = GoodsRecommend::STATUS_ONLINE;
+        }
+
+        if (!$banner->save()) {
+            $code = 500;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $banner->status = $status;
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Delete banner action.
+     *
+     * @return string
+     */
+    public function actionDeleteBanner()
+    {
+        $bannerId = (int)Yii::$app->request->post('banner_id', 0);
+
+        $code = 1000;
+
+        if (!$bannerId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $banner = GoodsRecommend::findOne($bannerId);
+        if (!$banner) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($banner->deleted == GoodsRecommend::STATUS_DELETED) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK'
+            ]);
+        }
+
+        $banner->deleted = GoodsRecommend::STATUS_DELETED;
         if (!$banner->save()) {
             $code = 500;
             return Json::encode([

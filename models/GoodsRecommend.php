@@ -23,6 +23,8 @@ class GoodsRecommend extends ActiveRecord
     const FROM_TYPE_LINK = 2;
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
+    const STATUS_NOT_DELETED = 0;
+    const STATUS_DELETED = 1;
 
     /**
      * @var array from types
@@ -38,6 +40,14 @@ class GoodsRecommend extends ActiveRecord
     public static $statuses = [
         self::STATUS_OFFLINE => '停用',
         self::STATUS_ONLINE => '启用',
+    ];
+
+    /**
+     * @var array deleted status list
+     */
+    public static $deletedStatuses = [
+        self::STATUS_NOT_DELETED => '未删除',
+        self::STATUS_DELETED => '已删除',
     ];
 
     /**
