@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\models\Carousel;
 use app\models\GoodsBrand;
 use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
@@ -29,10 +28,10 @@ class MallController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['toggle-banner-status', 'delete-banner', 'banner-history'],
+                'only' => ['toggle-banner-status', 'delete-banner', 'banner-history', 'recommend-second-admin', 'carousel-admin'],
                 'rules' => [
                     [
-                        'actions' => ['toggle-banner-status', 'delete-banner', 'banner-history'],
+                        'actions' => ['toggle-banner-status', 'delete-banner', 'banner-history', 'recommend-second-admin', 'carousel-admin'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -75,7 +74,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'carousel' => Carousel::carousel(),
+                'carousel' => GoodsRecommend::carousel(),
             ],
         ]);
     }
@@ -111,6 +110,38 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'recommend-second' => GoodsRecommend::second($page, $size),
+            ],
+        ]);
+    }
+
+    /**
+     * Recommend goods for type second action(admin).
+     *
+     * @return string
+     */
+    public function actionRecommendSecondAdmin()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend-second-admin' => GoodsRecommend::find()->select([])->where(['type' => GoodsRecommend::RECOMMEND_GOODS_TYPE_SECOND, 'delete_time' => 0])->asArray()->all()
+            ],
+        ]);
+    }
+
+    /**
+     * Get carousel action(admin).
+     *
+     * @return string
+     */
+    public function actionCarouselAdmin()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'carousel-admin' => GoodsRecommend::find()->select([])->where(['type' => GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL, 'delete_time' => 0])->asArray()->all()
             ],
         ]);
     }

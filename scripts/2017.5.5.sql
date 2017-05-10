@@ -29,6 +29,8 @@ CREATE TABLE `goods` (
 CREATE TABLE `goods_recommend` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sku` bigint unsigned not null default 0,
+  `platform_price` bigint not null DEFAULT 0 comment 'unit: fen',
+  `url` varchar(255) not null DEFAULT '',
   `supplier_id` int unsigned not null DEFAULT 0,
   `supplier_name` varchar(50) not null DEFAULT '',
   `title` varchar(100) not null DEFAULT '',
@@ -39,6 +41,7 @@ CREATE TABLE `goods_recommend` (
   `create_time` int not null DEFAULT 0,
   `delete_time` int not null DEFAULT 0,
   `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
+  `sorting_number` int unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -13,16 +13,31 @@ use yii\db\ActiveRecord;
 
 class GoodsRecommend extends ActiveRecord
 {
+    const RECOMMEND_GOODS_TYPE_CAROUSEL = 0;
     const RECOMMEND_GOODS_TYPE_FIRST = 1;
     const RECOMMEND_GOODS_TYPE_SECOND = 2;
     const CACHE_KEY_FIRST = 'recommend_goods_first';
     const CACHE_KEY_SECOND = 'recommend_goods_second';
-    const PAGE_SIZE_DEFAULT = 12;
+    const CACHE_KEY_CAROUSEL = 'recommend_goods_carousel';
+    const PAGE_SIZE_DEFAULT = 1000;
     const FROM_TYPE_MALL = 1;
     const FROM_TYPE_LINK = 2;
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const CACHE_KEY_PREFIX_VIEWED_NUMBER = 'recommend_goods_viewed_number_';
+
+    /**
+     * @var array app fields
+     */
+    private static $appFields = ['id', 'title', 'image', 'description', 'platform_price', 'url'];
+
+    /**
+     * @var array cache keys
+     */
+    private static $cacheKeys = [
+        self::CACHE_KEY_CAROUSEL,
+        self::CACHE_KEY_SECOND
+    ];
 
     /**
      * @var array from types
@@ -78,7 +93,7 @@ class GoodsRecommend extends ActiveRecord
     {
         $recommendGoods = [];
 
-        $goodsRecommend = GoodsRecommend::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_FIRST])->one();
+        $goodsRecommend = GoodsRecommend::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_FIRST, 'status' => self::STATUS_ONLINE])->one();
         if ($goodsRecommend) {
             $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
             if ($goods) {
@@ -116,6 +131,39 @@ class GoodsRecommend extends ActiveRecord
     }
 
     /**
+     * Get carousel
+     *
+     * @return array
+     */
+    public static function carousel()
+    {
+        $key = self::CACHE_KEY_CAROUSEL;
+        $cache = Yii::$app->cache;
+        $recommendGoods = $cache->get($key);
+        if (!$recommendGoods) {
+            $recommendGoods = self::_carousel(self::$appFields);
+            if ($recommendGoods) {
+                $cache->set($key, $recommendGoods);
+            }
+        }
+
+        return $recommendGoods;
+    }
+
+    /**
+     * Get carousel
+     *
+     * @access private
+     * @param  array   $select  select fields default all fields
+     * @param  array   $orderBy order by fields default sorting_number asc
+     * @return array
+     */
+    private static function _carousel($select = [], $orderBy = ['sorting_number' => SORT_ASC])
+    {
+        return self::find()->select($select)->where(['type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL, 'status' => self::STATUS_ONLINE])->orderBy($orderBy)->all();
+    }
+
+    /**
      * Get all recommended goods for type second
      *
      * @return array
@@ -126,7 +174,7 @@ class GoodsRecommend extends ActiveRecord
         $cache = Yii::$app->cache;
         $recommendGoods = $cache->get($key);
         if (!$recommendGoods) {
-            $recommendGoods = self::_secondAll();
+            $recommendGoods = self::_secondAll(self::$appFields);
             if ($recommendGoods) {
                 $cache->set($key, $recommendGoods);
             }
@@ -139,32 +187,12 @@ class GoodsRecommend extends ActiveRecord
      * Get all recommended goods for type second
      *
      * @access private
+     * @param  array   $select select fields default all fields
      * @return array
      */
-    private static function _secondAll()
+    private static function _secondAll($select = [])
     {
-        $recommendGoods = [];
-
-        $goodsRecommendList = GoodsRecommend::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_SECOND])->all();
-        foreach ($goodsRecommendList as $goodsRecommend) {
-            $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
-            if ($goods) {
-                $goodsId = $goods->id;
-                $platformPrice = $goods->platform_price / 100;
-                $title = $goodsRecommend->title;
-                $image = $goodsRecommend->image;
-                $description = $goodsRecommend->description;
-                $recommendGoods[] = [
-                    'title' => $title,
-                    'image' => $image,
-                    'description' => $description,
-                    'goods_id' => $goodsId,
-                    'platform_price' => $platformPrice,
-                ];
-            }
-        }
-
-        return $recommendGoods;
+        return self::find()->select($select)->where(['type' => self::RECOMMEND_GOODS_TYPE_SECOND, 'status' => self::STATUS_ONLINE])->all();
     }
 
     /**
@@ -299,5 +327,21 @@ class GoodsRecommend extends ActiveRecord
     {
         $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
         return (int)GoodsRecommendViewLog::find()->where($where)->asArray()->count();
+    }
+
+    /**
+     * Set cache after updated model
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $cache = Yii::$app->cache;
+        foreach (self::$cacheKeys as $key) {
+            $cache->delete($key);
+        }
     }
 }
