@@ -55,7 +55,7 @@ class UserRole extends ActiveRecord
     {
         $rolesStatus = [];
 
-        $userRoles = self::find()->where("user_id = {$userId} and role_id <> " . Yii::$app->params['owner_role_id'])->all();
+        $userRoles = self::find()->where("user_id = {$userId} and role_id <> " . Yii::$app->params['ownerRoleId'])->all();
         $db = Yii::$app->db;
         $roleIds = [];
         foreach ($userRoles as $userRole) {
@@ -88,7 +88,7 @@ class UserRole extends ActiveRecord
         }
 
         foreach (Role::appRoles() as $role) {
-            if ($role['id'] != Yii::$app->params['owner_role_id'] && !in_array($role['id'], $roleIds)) {
+            if ($role['id'] != Yii::$app->params['ownerRoleId'] && !in_array($role['id'], $roleIds)) {
                 $status = Role::AUTHENTICATION_STATUS_NO_APPLICATION;
                 $rolesStatus[] = [
                     'role_id' => $role['id'],

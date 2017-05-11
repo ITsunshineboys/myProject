@@ -7,6 +7,7 @@ use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\models\Goods;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -340,14 +341,18 @@ class MallController extends Controller
      */
     public function actionRecommendHistory()
     {
-        $startTime = (int)Yii::$app->request->get('start_time', 0);
-        $endTime = (int)Yii::$app->request->get('end_time', 0);
-        $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
-        $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
+        $code = 1000;
 
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        if ($timeType && !in_array($timeType, Yii::$app->params['timeTypes'])) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
         if (!in_array($type, GoodsRecommend::$types)) {
-            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -355,12 +360,25 @@ class MallController extends Controller
         }
 
         $where = 'delete_time > 0 and type = ' . $type;
+
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+        }
+
         if ($startTime) {
+            $startTime = strtotime($startTime);
             $where .= " and create_time >= {$startTime}";
         }
         if ($endTime) {
+            $endTime = strtotime($endTime);
             $where .= " and create_time <= {$endTime}";
         }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
 
         return Json::encode([
             'code' => 200,

@@ -169,7 +169,7 @@ class SiteController extends Controller
         $user->attributes = $postData;
         $user->password = Yii::$app->security->generatePasswordHash($user->password);
         $user->create_time = $user->login_time = time();
-        $user->login_role_id = Yii::$app->params['owner_role_id'];
+        $user->login_role_id = Yii::$app->params['ownerRoleId'];
 
         if (!$user->validate()) {
             return Json::encode([
@@ -196,7 +196,7 @@ class SiteController extends Controller
                 ]);
             }
 
-            $user->aite_cube_no = $user->id + Yii::$app->params['offset_aite_cube_no'];
+            $user->aite_cube_no = $user->id + Yii::$app->params['offsetAiteCubeNo'];
             if (!$user->save()) {
                 $transaction->rollBack();
 
@@ -208,7 +208,7 @@ class SiteController extends Controller
 
             $userRole = new UserRole;
             $userRole->user_id = $user->id;
-            $userRole->role_id = Yii::$app->params['owner_role_id']; // owner
+            $userRole->role_id = Yii::$app->params['ownerRoleId']; // owner
             if (!$userRole->save()) {
                 $transaction->rollBack();
 

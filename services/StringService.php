@@ -72,4 +72,38 @@ class StringService
 
         return array_key_exists($constName, self::classConstants($className));
     }
+
+    /**
+     * Get start and ent time of some time type defined in params['timeTypes']
+     *
+     * @param string $timeType time type
+     * @return array
+     */
+    public static function startEndDate($timeType)
+    {
+        $startTime = $endTime = '';
+
+        $yearMonthDay = date('Y-m-d');
+        list($year, $month, $day) = explode('-', $yearMonthDay);
+        switch ($timeType) {
+            case 'today':
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day, $year));
+                break;
+            case 'week':
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day - date('w') + 1, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day - date('w') + 7, $year));
+                break;
+            case 'month':
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, 1, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, date('t'), $year));
+                break;
+            case 'year':
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, 1, 1, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, 12, 31, $year));
+                break;
+        }
+
+        return [$startTime, $endTime];
+    }
 }
