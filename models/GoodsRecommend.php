@@ -31,7 +31,7 @@ class GoodsRecommend extends ActiveRecord
     /**
      * @var array app fields
      */
-    private static $appFields = ['id', 'title', 'image', 'description', 'platform_price', 'url'];
+    private static $appFields = ['title', 'image', 'description', 'platform_price', 'url'];
 
     /**
      * @var array admin fields
