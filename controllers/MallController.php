@@ -16,6 +16,15 @@ use yii\web\Controller;
 
 class MallController extends Controller
 {
+    private const ACCESS_LOGGED_IN_USER = [
+        'toggle-banner-status',
+        'delete-banner',
+        'recommend-history',
+        'recommend-second-admin',
+        'recommend-delete-batch',
+        'carousel-admin',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -29,10 +38,10 @@ class MallController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['toggle-banner-status', 'delete-banner', 'recommend-history', 'recommend-second-admin', 'carousel-admin'],
+                'only' => self::ACCESS_LOGGED_IN_USER,
                 'rules' => [
                     [
-                        'actions' => ['toggle-banner-status', 'delete-banner', 'recommend-history', 'recommend-second-admin', 'carousel-admin'],
+                        'actions' => self::ACCESS_LOGGED_IN_USER,
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -321,6 +330,84 @@ class MallController extends Controller
 
         $banner->delete_time = time();
         if (!$banner->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Delete recommend records in batches action.
+     *
+     * @return string
+     */
+    public function actionRecommendDeleteBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!GoodsRecommend::canDelete($ids)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        if (!GoodsRecommend::updateAll([
+            'delete_time' => time()
+        ], $where)) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Disable recommend records in batches action.
+     *
+     * @return string
+     */
+    public function actionRecommendDisableBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        if (!GoodsRecommend::updateAll([
+            'status' => GoodsRecommend::STATUS_OFFLINE,
+        ], $where)) {
             $code = 500;
             return Json::encode([
                 'code' => $code,

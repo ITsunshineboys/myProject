@@ -361,6 +361,34 @@ class GoodsRecommend extends ActiveRecord
     }
 
     /**
+     * Check if can delete recommend records
+     *
+     * @param string $ids recommend record ids separated by commas
+     * @return bool
+     */
+    public static function canDelete($ids)
+    {
+        $ids = trim($ids);
+        $ids = trim($ids, ',');
+
+        if (!$ids) {
+            return false;
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        if (self::find()->where($where)->count() != count(explode(',', $ids))) {
+            return false;
+        }
+
+        if (self::find()->where('delete_time > 0 and ' . $where)->count()) {
+            return false;
+        }
+
+        return self::find()->where('status = ' . self::STATUS_ONLINE . ' and ' . $where)->count() == 0;
+    }
+
+    /**
      * Set cache after updated model
      *
      * @param bool $insert
