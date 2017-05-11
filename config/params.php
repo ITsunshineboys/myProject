@@ -50,10 +50,11 @@ return [
         ],
     ],
     'timeTypes' => [
-        'today',
-        'week',
-        'month',
-        'year',
-        'custom',
+        'all' => '全部时间',
+        'today' => '今天',
+        'week' => '本周',
+        'month' => '本月',
+        'year' => '本年',
+        'custom' => '自定义',
     ],
 ];

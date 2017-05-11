@@ -34,10 +34,10 @@ class SiteController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['logout', 'roles', 'reset-password', 'roles-status'],
+                'only' => ['logout', 'roles', 'reset-password', 'roles-status', 'time-types'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'roles', 'reset-password', 'roles-status'],
+                        'actions' => ['logout', 'roles', 'reset-password', 'roles-status', 'time-types'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -611,6 +611,22 @@ class SiteController extends Controller
             'msg' => 'OK',
             'data' => [
                 'roles_status' => UserRole::rolesStatus(Yii::$app->user->identity->id),
+            ],
+        ]);
+    }
+
+    /**
+     * Get time types action
+     *
+     * @return string
+     */
+    public function actionTimeTypes()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'time-types' => Yii::$app->params['timeTypes']
             ],
         ]);
     }

@@ -344,7 +344,7 @@ class MallController extends Controller
         $code = 1000;
 
         $timeType = trim(Yii::$app->request->get('time_type', ''));
-        if ($timeType && !in_array($timeType, Yii::$app->params['timeTypes'])) {
+        if ($timeType && !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
