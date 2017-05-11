@@ -378,7 +378,7 @@ class MallController extends Controller
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
+        $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT);
 
         return Json::encode([
             'code' => 200,
