@@ -362,7 +362,14 @@ class MallController extends Controller
             ]);
         }
 
-        if (!GoodsRecommend::canDelete($ids)) {
+        $canDelete = GoodsRecommend::canDelete($ids);
+        if (false === $canDelete) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        } elseif (-1 === $canDelete) {
+            $code = 1003;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],

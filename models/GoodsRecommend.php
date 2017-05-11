@@ -364,7 +364,7 @@ class GoodsRecommend extends ActiveRecord
      * Check if can delete recommend records
      *
      * @param string $ids recommend record ids separated by commas
-     * @return bool
+     * @return mixed bool|int
      */
     public static function canDelete($ids)
     {
@@ -385,7 +385,11 @@ class GoodsRecommend extends ActiveRecord
             return false;
         }
 
-        return self::find()->where('status = ' . self::STATUS_ONLINE . ' and ' . $where)->count() == 0;
+        if (self::find()->where('status = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
+            return -1;
+        }
+
+        return true;
     }
 
     /**
