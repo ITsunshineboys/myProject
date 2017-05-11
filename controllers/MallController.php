@@ -28,10 +28,10 @@ class MallController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['toggle-banner-status', 'delete-banner', 'banner-history', 'recommend-second-admin', 'carousel-admin'],
+                'only' => ['toggle-banner-status', 'delete-banner', 'recommend-history', 'recommend-second-admin', 'carousel-admin'],
                 'rules' => [
                     [
-                        'actions' => ['toggle-banner-status', 'delete-banner', 'banner-history', 'recommend-second-admin', 'carousel-admin'],
+                        'actions' => ['toggle-banner-status', 'delete-banner', 'recommend-history', 'recommend-second-admin', 'carousel-admin'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -365,7 +365,12 @@ class MallController extends Controller
         ]);
     }
 
-    public function actionBannerHistory()
+    /**
+     * Recommend history action
+     *
+     * @return string
+     */
+    public function actionRecommendHistory()
     {
         $startTime = (int)Yii::$app->request->get('start_time', 0);
         $endTime = (int)Yii::$app->request->get('end_time', 0);

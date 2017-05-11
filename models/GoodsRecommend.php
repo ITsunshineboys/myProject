@@ -19,7 +19,8 @@ class GoodsRecommend extends ActiveRecord
     const CACHE_KEY_FIRST = 'recommend_goods_first';
     const CACHE_KEY_SECOND = 'recommend_goods_second';
     const CACHE_KEY_CAROUSEL = 'recommend_goods_carousel';
-    const PAGE_SIZE_DEFAULT = 1000;
+    const PAGE_SIZE_DEFAULT = 12;
+    const PAGE_SIZE_DEFAULT_ADMIN = 1000;
     const FROM_TYPE_MALL = 1;
     const FROM_TYPE_LINK = 2;
     const STATUS_OFFLINE = 0;
@@ -30,6 +31,11 @@ class GoodsRecommend extends ActiveRecord
      * @var array app fields
      */
     private static $appFields = ['id', 'title', 'image', 'description', 'platform_price', 'url'];
+
+    /**
+     * @var array admin fields
+     */
+    public static $adminFields = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'status', 'create_time', 'image'];
 
     /**
      * @var array cache keys
