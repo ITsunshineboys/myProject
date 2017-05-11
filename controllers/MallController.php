@@ -90,7 +90,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'recommend-first' => GoodsRecommend::first(),
+                'recommend_first' => GoodsRecommend::first(),
             ],
         ]);
     }
@@ -109,39 +109,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'recommend-second' => GoodsRecommend::second($page, $size),
-            ],
-        ]);
-    }
-
-    /**
-     * Recommend goods for type second action(admin).
-     *
-     * @return string
-     */
-    public function actionRecommendSecondAdmin()
-    {
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'recommend-second-admin' => GoodsRecommend::find()->select([])->where(['type' => GoodsRecommend::RECOMMEND_GOODS_TYPE_SECOND, 'delete_time' => 0])->asArray()->all()
-            ],
-        ]);
-    }
-
-    /**
-     * Get carousel action(admin).
-     *
-     * @return string
-     */
-    public function actionCarouselAdmin()
-    {
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'carousel-admin' => GoodsRecommend::find()->select([])->where(['type' => GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL, 'delete_time' => 0])->asArray()->all()
+                'recommend_second' => GoodsRecommend::second($page, $size),
             ],
         ]);
     }
@@ -366,7 +334,7 @@ class MallController extends Controller
     }
 
     /**
-     * Recommend history action
+     * Recommend history action(admin)
      *
      * @return string
      */
@@ -376,8 +344,17 @@ class MallController extends Controller
         $endTime = (int)Yii::$app->request->get('end_time', 0);
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
+        $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
 
-        $where = 'delete_time > 0';
+        if (!in_array($type, GoodsRecommend::$types)) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'delete_time > 0 and type = ' . $type;
         if ($startTime) {
             $where .= " and create_time >= {$startTime}";
         }
@@ -385,15 +362,43 @@ class MallController extends Controller
             $where .= " and create_time <= {$endTime}";
         }
 
-        $select = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'sold_number', 'status', 'create_time', 'image'];
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend_history' => [
+                    'total' => (int)GoodsRecommend::find()->where($where)->asArray()->count(),
+                    'details' => GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, $page, $size)
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Recommend index action(admin)
+     *
+     * @return string
+     */
+    public function actionRecommendAdminIndex()
+    {
+        $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
+
+        if (!in_array($type, GoodsRecommend::$types)) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'delete_time = 0 and type = ' . $type;
 
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'banner-history' => [
-                    'total' => (int)GoodsRecommend::find()->where($where)->asArray()->count(),
-                    'details' => GoodsRecommend::history($startTime, $endTime, $select, $page, $size)
+                'recommend_admin_index' => [
+                    'details' => GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, 1, GoodsRecommend::PAGE_SIZE_DEFAULT_ADMIN_INDEX)
                 ]
             ],
         ]);

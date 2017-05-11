@@ -19,6 +19,7 @@ class GoodsRecommend extends ActiveRecord
     const CACHE_KEY_FIRST = 'recommend_goods_first';
     const CACHE_KEY_SECOND = 'recommend_goods_second';
     const CACHE_KEY_CAROUSEL = 'recommend_goods_carousel';
+    const PAGE_SIZE_DEFAULT_ADMIN_INDEX = 1000;
     const PAGE_SIZE_DEFAULT = 12;
     const FROM_TYPE_MALL = 1;
     const FROM_TYPE_LINK = 2;
@@ -35,7 +36,7 @@ class GoodsRecommend extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'status', 'create_time', 'image'];
+    public static $adminFields = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'sold_number', 'status', 'create_time', 'image'];
 
     /**
      * @var array cache keys
@@ -51,6 +52,14 @@ class GoodsRecommend extends ActiveRecord
     public static $fromTypes = [
         self::FROM_TYPE_MALL => '商铺',
         self::FROM_TYPE_LINK => '链接',
+    ];
+
+    /**
+     * @var array recommend types(banner|list)
+     */
+    public static $types = [
+        self::RECOMMEND_GOODS_TYPE_CAROUSEL,
+        self::RECOMMEND_GOODS_TYPE_SECOND,
     ];
 
     /**
@@ -202,33 +211,6 @@ class GoodsRecommend extends ActiveRecord
     }
 
     /**
-     * Get banner history
-     *
-     * @param  int $startTime search start time default 0
-     * @param  int $endTime search end time default 0
-     * @param  array $select select fields default all fields
-     * @param  int $page page number default 1
-     * @param  int $size page size default 12
-     * @param  array $orderBy order by fields default sold_number desc
-     * @return array
-     */
-    public static function history($startTime = 0, $endTime = 0, $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
-    {
-        $startTime = (int)$startTime;
-        $endTime = (int)$endTime;
-
-        $where = 'delete_time > 0';
-        if ($startTime) {
-            $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $where .= " and create_time <= {$endTime}";
-        }
-
-        return self::pagination($where, $select, $page, $size, $orderBy);
-    }
-
-    /**
      * Get banner list
      *
      * @param  array $where search condition
@@ -290,14 +272,7 @@ class GoodsRecommend extends ActiveRecord
                     }
                 }
 
-                if (isset($banner['from_type'])) {
-                    if ($banner['from_type'] == self::FROM_TYPE_MALL) {
-                        $banner['from_type'] = $banner['supplier_name'];
-                    } elseif ($banner['from_type'] == self::FROM_TYPE_LINK) {
-                        $banner['from_type'] = self::$fromTypes[$banner['from_type']];
-                    }
-                }
-
+                isset($banner['from_type']) && $banner['from_type'] = self::$fromTypes[$banner['from_type']];
                 isset($banner['status']) && $banner['status'] = self::$statuses[$banner['status']];
             }
         }

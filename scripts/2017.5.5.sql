@@ -36,7 +36,7 @@ CREATE TABLE `goods_recommend` (
   `title` varchar(100) not null DEFAULT '',
   `image` varchar(255) not null DEFAULT '',
   `description` varchar(255) not null DEFAULT '',
-  `type` tinyint(1) not null default 2 comment '1: first 2: second',
+  `type` tinyint(1) not null default 0 comment '0: banner 2: second',
   `from_type` tinyint(1) not null default 0 comment '1: mall 2: link',
   `create_time` int not null DEFAULT 0,
   `delete_time` int not null DEFAULT 0,
