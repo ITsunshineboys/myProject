@@ -20,12 +20,12 @@ class GoodsRecommend extends ActiveRecord
     const CACHE_KEY_SECOND = 'recommend_goods_second';
     const CACHE_KEY_CAROUSEL = 'recommend_goods_carousel';
     const PAGE_SIZE_DEFAULT = 12;
-    const PAGE_SIZE_DEFAULT_ADMIN = 1000;
     const FROM_TYPE_MALL = 1;
     const FROM_TYPE_LINK = 2;
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const CACHE_KEY_PREFIX_VIEWED_NUMBER = 'recommend_goods_viewed_number_';
+    const CACHE_KEY_PREFIX_SOLD_NUMBER = 'recommend_goods_sold_number_';
 
     /**
      * @var array app fields
@@ -250,6 +250,13 @@ class GoodsRecommend extends ActiveRecord
             unset($select[array_search('viewed_number', $select)]);
         }
 
+        if (in_array('sold_number', $select)) {
+            $field = 'delete_time';
+            !in_array($field, $select) && $select[] = $field;
+            $hasSoldNumber = true;
+            unset($select[array_search('sold_number', $select)]);
+        }
+
         $offset = ($page - 1) * $size;
         $bannerList = self::find()
             ->select($select)
@@ -265,8 +272,12 @@ class GoodsRecommend extends ActiveRecord
             || in_array('from_type', $select)
             || in_array('status', $select)
             || $hasViewedNumber
+            || $hasSoldNumber
         ) {
             foreach ($bannerList as &$banner) {
+                $hasViewedNumber && $banner['viewed_number'] = self::viewedNumber($banner['create_time'], $banner['delete_time']);
+                $hasSoldNumber && $banner['sold_number'] = self::soldNumber($banner['create_time'], $banner['delete_time']);
+
                 if (isset($banner['create_time'])) {
                     if (!empty($banner['create_time'])) {
                         $banner['create_time'] = date('Y-m-d H:i', $banner['create_time']);
@@ -288,7 +299,6 @@ class GoodsRecommend extends ActiveRecord
                 }
 
                 isset($banner['status']) && $banner['status'] = self::$statuses[$banner['status']];
-                $hasViewedNumber && $banner['viewed_number'] = self::viewedNumber($banner['create_time'], $banner['delete_time']);
             }
         }
 
@@ -336,6 +346,46 @@ class GoodsRecommend extends ActiveRecord
     }
 
     /**
+     * Get sold number
+     *
+     * @param int $createTime banner create time default 0
+     * @param int $deleteTime banner delete time default 0
+     * @return int
+     */
+    public static function soldNumber($createTime = 0, $deleteTime = 0)
+    {
+        $createTime = (int)$createTime;
+        $deleteTime = (int)$deleteTime;
+        if (!$createTime || !$deleteTime) {
+            return 0;
+        }
+
+        $key = self::CACHE_KEY_PREFIX_SOLD_NUMBER . $createTime . '_' . $deleteTime;
+        $cache = Yii::$app->cache;
+        $viewedNumber = $cache->get($key);
+        if ($viewedNumber === false) {
+            $viewedNumber = self::_soldNumber($createTime, $deleteTime);
+            $cache->set($key, $viewedNumber);
+        }
+
+        return $viewedNumber;
+    }
+
+    /**
+     * Get sold number
+     *
+     * @access private
+     * @param int $createTime banner create time
+     * @param int $deleteTime banner delete time
+     * @return int
+     */
+    public static function _soldNumber($createTime, $deleteTime)
+    {
+        $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
+        return (int)GoodsRecommendSaleLog::find()->where($where)->asArray()->count();
+    }
+
+    /**
      * Set cache after updated model
      *
      * @param bool $insert
@@ -346,8 +396,10 @@ class GoodsRecommend extends ActiveRecord
         parent::afterSave($insert, $changedAttributes);
 
         $cache = Yii::$app->cache;
-        foreach (self::$cacheKeys as $key) {
-            $cache->delete($key);
+        if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
+            $cache->delete(self::CACHE_KEY_CAROUSEL);
+        } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
+            $cache->delete(self::CACHE_KEY_SECOND);
         }
     }
 }

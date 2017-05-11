@@ -385,7 +385,7 @@ class MallController extends Controller
             $where .= " and create_time <= {$endTime}";
         }
 
-        $select = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'status', 'create_time', 'image'];
+        $select = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'sold_number', 'status', 'create_time', 'image'];
 
         return Json::encode([
             'code' => 200,
@@ -393,7 +393,7 @@ class MallController extends Controller
             'data' => [
                 'banner-history' => [
                     'total' => (int)GoodsRecommend::find()->where($where)->asArray()->count(),
-                    'details' => GoodsRecommend::history(0, 0, $select, $page, $size)
+                    'details' => GoodsRecommend::history($startTime, $endTime, $select, $page, $size)
                 ]
             ],
         ]);
