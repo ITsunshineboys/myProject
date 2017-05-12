@@ -22,6 +22,17 @@ use yii\web\ServerErrorHttpException;
 class SiteController extends Controller
 {
     /**
+     * Actions accessed by logged-in users
+     */
+    private const ACCESS_LOGGED_IN_USER = [
+        'logout',
+        'roles',
+        'reset-password',
+        'roles-status',
+        'time-types',
+    ];
+
+    /**
      * @inheritdoc
      */
     public function behaviors()
@@ -34,10 +45,10 @@ class SiteController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['logout', 'roles', 'reset-password', 'roles-status', 'time-types'],
+                'only' => self::ACCESS_LOGGED_IN_USER,
                 'rules' => [
                     [
-                        'actions' => ['logout', 'roles', 'reset-password', 'roles-status', 'time-types'],
+                        'actions' => self::ACCESS_LOGGED_IN_USER,
                         'allow' => true,
                         'roles' => ['@'],
                     ],
