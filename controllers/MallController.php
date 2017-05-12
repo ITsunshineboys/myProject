@@ -496,11 +496,11 @@ class MallController extends Controller
 
         if ($startTime) {
             $startTime = strtotime($startTime);
-            $where .= " and create_time >= {$startTime}";
+            $startTime && $where .= " and create_time >= {$startTime}";
         }
         if ($endTime) {
             $endTime = strtotime($endTime);
-            $where .= " and create_time <= {$endTime}";
+            $endTime && $where .= " and create_time <= {$endTime}";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);

@@ -120,6 +120,7 @@ class StringService
                 'options' => [
                     'regexp' => '/^\d{4}-\d{1,2}-\d{1,2}$/',
                 ]
-            ]);
+            ]
+        );
     }
 }
