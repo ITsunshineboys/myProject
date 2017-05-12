@@ -17,8 +17,11 @@ use yii\web\Controller;
 class MallController extends Controller
 {
     private const ACCESS_LOGGED_IN_USER = [
-        'toggle-banner-status',
-        'delete-banner',
+        'recommend-admin-index',
+        'recommend-disable-batch',
+        'recommend-delete-batch',
+        'recommend-status-toggle',
+//        'delete-banner',
         'recommend-history',
         'recommend-second-admin',
         'recommend-delete-batch',
@@ -249,38 +252,38 @@ class MallController extends Controller
     }
 
     /**
-     * Toggle banner status action.
+     * Toggle recommend status action.
      *
      * @return string
      */
-    public function actionToggleBannerStatus()
+    public function actionRecommendStatusToggle()
     {
-        $bannerId = (int)Yii::$app->request->post('banner_id', 0);
+        $id = (int)Yii::$app->request->post('id', 0);
 
         $code = 1000;
 
-        if (!$bannerId) {
+        if (!$id) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $banner = GoodsRecommend::findOne($bannerId);
-        if (!$banner) {
+        $recommend = GoodsRecommend::findOne($id);
+        if (!$recommend) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if ($banner->status == GoodsRecommend::STATUS_ONLINE) {
-            $banner->status = GoodsRecommend::STATUS_OFFLINE;
+        if ($recommend->status == GoodsRecommend::STATUS_ONLINE) {
+            $recommend->status = GoodsRecommend::STATUS_OFFLINE;
         } else {
-            $banner->status = GoodsRecommend::STATUS_ONLINE;
+            $recommend->status = GoodsRecommend::STATUS_ONLINE;
         }
 
-        if (!$banner->save()) {
+        if (!$recommend->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -401,10 +404,19 @@ class MallController extends Controller
     public function actionRecommendDisableBatch()
     {
         $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
 
         $code = 1000;
 
         if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canDisable = GoodsRecommend::canDisable($ids);
+        if (!$canDisable) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
