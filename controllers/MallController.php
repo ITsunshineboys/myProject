@@ -20,11 +20,10 @@ class MallController extends Controller
         'recommend-admin-index',
         'recommend-disable-batch',
         'recommend-delete-batch',
+        'recommend-delete',
         'recommend-status-toggle',
-//        'delete-banner',
         'recommend-history',
         'recommend-second-admin',
-        'recommend-delete-batch',
         'carousel-admin',
     ];
 
@@ -298,32 +297,39 @@ class MallController extends Controller
     }
 
     /**
-     * Delete banner action.
+     * Delete recommend record action.
      *
      * @return string
      */
-    public function actionDeleteBanner()
+    public function actionRecommendDelete()
     {
-        $bannerId = (int)Yii::$app->request->post('banner_id', 0);
+        $id = (int)Yii::$app->request->post('id', 0);
 
         $code = 1000;
 
-        if (!$bannerId) {
+        if (!$id) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $banner = GoodsRecommend::findOne($bannerId);
-        if (!$banner) {
+        $recommend = GoodsRecommend::findOne($id);
+        if (!$recommend) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if ($banner->status != GoodsRecommend::STATUS_OFFLINE) {
+        if ($recommend->delete_time > 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($recommend->status != GoodsRecommend::STATUS_OFFLINE) {
             $code = 1003;
             return Json::encode([
                 'code' => $code,
@@ -331,8 +337,8 @@ class MallController extends Controller
             ]);
         }
 
-        $banner->delete_time = time();
-        if (!$banner->save()) {
+        $recommend->delete_time = time();
+        if (!$recommend->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
