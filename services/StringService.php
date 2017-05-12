@@ -42,22 +42,6 @@ class StringService
     }
 
     /**
-     * Get class constants
-     *
-     * @param $className
-     * @return array class constants list
-     */
-    public static function classConstants($className)
-    {
-        if (!$className) {
-            return [];
-        }
-
-        $reflect = new \ReflectionClass($className);
-        return $reflect->getConstants();
-    }
-
-    /**
      * Check if class const exists
      *
      * @param string $constName const name
@@ -71,6 +55,22 @@ class StringService
         }
 
         return array_key_exists($constName, self::classConstants($className));
+    }
+
+    /**
+     * Get class constants
+     *
+     * @param $className
+     * @return array class constants list
+     */
+    public static function classConstants($className)
+    {
+        if (!$className) {
+            return [];
+        }
+
+        $reflect = new \ReflectionClass($className);
+        return $reflect->getConstants();
     }
 
     /**
@@ -105,5 +105,21 @@ class StringService
         }
 
         return [$startTime, $endTime];
+    }
+
+    /**
+     * Check if valid date, both YYYY-mm-dd and YYYY-m-d are valid
+     *
+     * @param string $date date
+     * @return bool
+     */
+    public static function checkDate($date)
+    {
+        return filter_var($date, FILTER_VALIDATE_REGEXP,
+            [
+                'options' => [
+                    'regexp' => '/^\d{4}-\d{1,2}-\d{1,2}$/',
+                ]
+            ]);
     }
 }
