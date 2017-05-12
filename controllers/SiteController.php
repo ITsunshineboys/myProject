@@ -633,11 +633,19 @@ class SiteController extends Controller
      */
     public function actionTimeTypes()
     {
+        $timeTypes = [];
+        foreach (Yii::$app->params['timeTypes'] as $value => $name) {
+            $timeTypes[] = [
+                'value' => $value,
+                'name' => $name,
+            ];
+        }
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'time-types' => Yii::$app->params['timeTypes']
+                'time-types' => $timeTypes,
             ],
         ]);
     }
