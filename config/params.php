@@ -27,7 +27,7 @@ return [
         'directory' => 'uploads',
     ],
     'uploadPublic' => [
-        'directory' => 'web/images',
+        'directory' => 'web/uploads',
     ],
     'sm' => [
         'appKey' => '23532528',

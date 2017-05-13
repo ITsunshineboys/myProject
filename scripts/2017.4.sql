@@ -133,13 +133,6 @@ CREATE TABLE `worker` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-create table carousel (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `image` varchar(100) NOT NULL DEFAULT '',
-  `sku` bigint unsigned not null default 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 create table work_type (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL DEFAULT '',
