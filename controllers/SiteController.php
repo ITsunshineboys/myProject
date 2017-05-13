@@ -669,7 +669,10 @@ class SiteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
-            'data' => $uploadRet,
+            'data' => [
+                'file_relative_path' => $uploadRet['fileRelativePath'],
+                'file_url' => $uploadRet['fileUrl'],
+            ],
         ]);
     }
 

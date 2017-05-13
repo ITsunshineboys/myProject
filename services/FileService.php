@@ -90,7 +90,7 @@ class FileService
             $code = 500;
             return $code;
         }
-print_r($model->file);
+
         return [
             'fileRelativePath' => $ymdDirs . '/' . $file,
             'fileUrl' => Url::to(self::uploadUrlDir() . '/' . $ymdDirs . '/' . $file, true),
