@@ -60,7 +60,7 @@ class SiteController extends Controller
                 'actions' => [
                     'logout' => ['post',],
                     'reset-password' => ['post',],
-                    'upload' => ['post', 'get',]
+                    'upload' => ['post',]
                 ],
             ],
         ];
