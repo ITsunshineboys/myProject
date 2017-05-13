@@ -11,6 +11,7 @@ return [
         1001 => '用户名/密码不正确',
         1002 => '验证码不正确',
         1003 => '请先停用再删除',
+        1004 => '上传文件大小不能超过5M',
     ],
     'events' => [
         'supplier' => [
@@ -28,6 +29,7 @@ return [
     ],
     'uploadPublic' => [
         'directory' => 'web/uploads',
+        'maxSize' => 5 * 1024 * 1024 , // 5M
     ],
     'sm' => [
         'appKey' => '23532528',

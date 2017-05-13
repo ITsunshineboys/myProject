@@ -66,6 +66,11 @@ class FileService
             return $code;
         }
 
+        if ($model->file->size > Yii::$app->params['uploadPublic']['maxSize']) {
+            $code = 1004;
+            return $code;
+        }
+
         $ymdDirs = self::makeYmdDirs();
         if (!$ymdDirs) {
             $code = 500;
@@ -85,7 +90,7 @@ class FileService
             $code = 500;
             return $code;
         }
-
+print_r($model->file);
         return [
             'fileRelativePath' => $ymdDirs . '/' . $file,
             'fileUrl' => Url::to(self::uploadUrlDir() . '/' . $ymdDirs . '/' . $file, true),
