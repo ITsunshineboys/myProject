@@ -8,8 +8,10 @@
 
 namespace app\models;
 
+use app\services\FileService;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 
 class GoodsRecommend extends ActiveRecord
 {
@@ -27,6 +29,9 @@ class GoodsRecommend extends ActiveRecord
     const STATUS_ONLINE = 1;
     const CACHE_KEY_PREFIX_VIEWED_NUMBER = 'recommend_goods_viewed_number_';
     const CACHE_KEY_PREFIX_SOLD_NUMBER = 'recommend_goods_sold_number_';
+
+    public $viewed_number;
+    public $sold_number;
 
     /**
      * @var array app fields
@@ -77,6 +82,11 @@ class GoodsRecommend extends ActiveRecord
     {
         return 'goods_recommend';
     }
+
+//    public function attributes()
+//    {
+//        return array_merge(array_keys(static::getTableSchema()->columns), ['viewed_number']);
+//    }
 
     /**
      * Get recommended goods for type first
@@ -240,7 +250,7 @@ class GoodsRecommend extends ActiveRecord
         }
 
         $offset = ($page - 1) * $size;
-        $bannerList = self::find()
+        $recommendList = self::find()
             ->select($select)
             ->where($where)
             ->orderBy($orderBy)
@@ -256,28 +266,29 @@ class GoodsRecommend extends ActiveRecord
             || $hasViewedNumber
             || $hasSoldNumber
         ) {
-            foreach ($bannerList as &$banner) {
-                $hasViewedNumber && $banner['viewed_number'] = self::viewedNumber($banner['create_time'], $banner['delete_time']);
-                $hasSoldNumber && $banner['sold_number'] = self::soldNumber($banner['create_time'], $banner['delete_time']);
+            foreach ($recommendList as &$recommend) {
+                $hasViewedNumber && $recommend['viewed_number'] = self::viewedNumber($recommend['create_time'], $recommend['delete_time']);
+                $hasSoldNumber && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time']);
 
-                if (isset($banner['create_time'])) {
-                    if (!empty($banner['create_time'])) {
-                        $banner['create_time'] = date('Y-m-d H:i', $banner['create_time']);
+                if (isset($recommend['create_time'])) {
+                    if (!empty($recommend['create_time'])) {
+                        $recommend['create_time'] = date('Y-m-d H:i', $recommend['create_time']);
                     }
                 }
 
-                if (isset($banner['delete_time'])) {
-                    if (!empty($banner['delete_time'])) {
-                        $banner['delete_time'] = date('Y-m-d H:i', $banner['delete_time']);
+                if (isset($recommend['delete_time'])) {
+                    if (!empty($recommend['delete_time'])) {
+                        $recommend['delete_time'] = date('Y-m-d H:i', $recommend['delete_time']);
                     }
                 }
 
-                isset($banner['from_type']) && $banner['from_type'] = self::$fromTypes[$banner['from_type']];
-                isset($banner['status']) && $banner['status'] = self::$statuses[$banner['status']];
+                isset($recommend['from_type']) && $recommend['from_type'] = self::$fromTypes[$recommend['from_type']];
+                isset($recommend['status']) && $recommend['status'] = self::$statuses[$recommend['status']];
+                isset($recommend['image']) && $recommend['image'] = Url::to(FileService::uploadUrlDir() . '/' . $recommend['image'], true);
             }
         }
 
-        return $bannerList;
+        return $recommendList;
     }
 
     /**
@@ -436,5 +447,15 @@ class GoodsRecommend extends ActiveRecord
         } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
             $cache->delete(self::CACHE_KEY_SECOND);
         }
+    }
+
+    /**
+     * Construct image uri
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        $this->image = Url::to(FileService::uploadUrlDir() . '/' . $this->image, true);
     }
 }
