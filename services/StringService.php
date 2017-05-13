@@ -8,6 +8,8 @@
 
 namespace app\services;
 
+use Yii;
+
 class StringService
 {
     /**

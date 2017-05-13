@@ -30,6 +30,7 @@ class SiteController extends Controller
         'reset-password',
         'roles-status',
         'time-types',
+        'upload',
     ];
 
     /**
@@ -59,6 +60,7 @@ class SiteController extends Controller
                 'actions' => [
                     'logout' => ['post',],
                     'reset-password' => ['post',],
+                    'upload' => ['post', 'get',]
                 ],
             ],
         ];
@@ -647,6 +649,27 @@ class SiteController extends Controller
             'data' => [
                 'time-types' => $timeTypes,
             ],
+        ]);
+    }
+
+    /**
+     * Upload file action
+     */
+    public function actionUpload()
+    {
+       $uploadRet = FileService::upload();
+
+       if (is_int($uploadRet)) {
+           return Json::encode([
+               'code' => $uploadRet,
+               'msg' => Yii::$app->params['errorCodes'][$uploadRet],
+           ]);
+       }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => $uploadRet,
         ]);
     }
 

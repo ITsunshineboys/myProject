@@ -26,6 +26,9 @@ return [
     'upload' => [
         'directory' => 'uploads',
     ],
+    'uploadPublic' => [
+        'directory' => 'web/images',
+    ],
     'sm' => [
         'appKey' => '23532528',
         'appSecret' => 'f589df8c27f634a94df0b908da7339f7',
