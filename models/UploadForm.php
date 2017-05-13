@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -27,7 +28,7 @@ class UploadForm extends Model
     public function rules()
     {
         return [
-            [['file'], 'file'],
+            [['file'], 'file', 'extensions' => ['png', 'jpg', 'gif',], 'maxSize' => Yii::$app->params['uploadPublic']['maxSize']],
         ];
     }
 }

@@ -62,12 +62,7 @@ class FileService
 
         $code = 1000;
 
-        if (!$model->file || !$model->validate()) {
-            return $code;
-        }
-
-        if ($model->file->size > Yii::$app->params['uploadPublic']['maxSize']) {
-            $code = 1004;
+        if (!$model->file || !$model->file->extension || !$model->validate()) {
             return $code;
         }
 
