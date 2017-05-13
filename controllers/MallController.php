@@ -28,6 +28,7 @@ class MallController extends Controller
         'recommend-status-toggle',
         'recommend-history',
         'recommend-second-admin',
+        'recommend-by-sku',
         'carousel-admin',
     ];
 
@@ -392,7 +393,8 @@ class MallController extends Controller
         $where = 'id in(' . $ids . ')';
         if (!GoodsRecommend::updateAll([
             'delete_time' => time()
-        ], $where)) {
+        ], $where)
+        ) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -436,7 +438,8 @@ class MallController extends Controller
         $where = 'id in(' . $ids . ')';
         if (!GoodsRecommend::updateAll([
             'status' => GoodsRecommend::STATUS_OFFLINE,
-        ], $where)) {
+        ], $where)
+        ) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -547,5 +550,42 @@ class MallController extends Controller
                 ]
             ],
         ]);
+    }
+
+    /**
+     * Get recommend by sku action
+     *
+     * @return string
+     */
+    public function actionRecommendBySku()
+    {
+        $code = 1000;
+
+        $sku = (int)Yii::$app->request->get('sku', '');
+
+        if (!$sku) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [],
+        ];
+
+        $goods = Goods::findBySku($sku, ['id', 'title',]);
+        if ($goods) {
+            $ret['data'] = [
+                'detail' => [
+                    'title' => $goods->title,
+                    'url' => Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id]),
+                ],
+            ];
+        }
+
+        return Json::encode($ret);
     }
 }

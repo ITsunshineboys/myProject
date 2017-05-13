@@ -65,6 +65,22 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * Get recommend by sku
+     *
+     * @param int    $sku       sku
+     * @param array  $select    recommend fields default all fields
+     * @return mixed array|bool
+     */
+    public static function findBySku($sku, $select = [])
+    {
+        if (!$sku) {
+            return false;
+        }
+
+        return self::find()->select($select)->where(['sku' => $sku])->one();
+    }
+
+    /**
      * Get goods list
      *
      * @param  array $where   search condition
