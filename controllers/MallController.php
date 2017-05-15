@@ -6,6 +6,7 @@ use app\models\GoodsBrand;
 use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\models\Goods;
+use app\models\Supplier;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use Yii;
@@ -602,19 +603,34 @@ class MallController extends Controller
     {
         $recommend = new GoodsRecommend;
         $recommend->attributes = Yii::$app->request->post();
-        print_r($recommend->validateSku());die;
+
         $code = 1000;
 
-        $type = Yii::$app->request->post('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
-        if (!in_array($type, GoodsRecommend::$types)) {
+        if (!$recommend->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$type) {
-
+        if ($recommend->sku) {
+            $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
+            $supplier = Supplier::findOne($goods->supplier_id);
+            $recommend->supplier_id = $supplier->id;
+            $recommend->supplier_name = $supplier->nickname;
         }
+
+        if (!$recommend->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
     }
 }

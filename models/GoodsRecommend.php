@@ -27,6 +27,7 @@ class GoodsRecommend extends ActiveRecord
     const STATUS_ONLINE = 1;
     const CACHE_KEY_PREFIX_VIEWED_NUMBER = 'recommend_goods_viewed_number_';
     const CACHE_KEY_PREFIX_SOLD_NUMBER = 'recommend_goods_sold_number_';
+
     /**
      * @var array admin fields
      */
@@ -55,10 +56,12 @@ class GoodsRecommend extends ActiveRecord
         self::STATUS_OFFLINE => '停用',
         self::STATUS_ONLINE => '启用',
     ];
+
     /**
      * @var array app fields
      */
     private static $appFields = ['title', 'image', 'description', 'platform_price', 'url'];
+
     /**
      * @var array cache keys
      */
@@ -66,8 +69,6 @@ class GoodsRecommend extends ActiveRecord
         self::CACHE_KEY_CAROUSEL,
         self::CACHE_KEY_SECOND
     ];
-    public $viewed_number;
-    public $sold_number;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -426,33 +427,86 @@ class GoodsRecommend extends ActiveRecord
     {
         return [
             [['url', 'title', 'image', 'from_type'], 'required'],
-            ['status', 'in', 'range' => self::$statuses],
+            ['status', 'in', 'range' => array_keys(self::$statuses)],
             ['type', 'in', 'range' => self::$types],
             ['from_type', 'in', 'range' => array_keys(self::$fromTypes)],
-            ['sku', 'validateSku'],
+            ['sku', 'number', 'integerOnly' => true],
+            ['sku', 'validateSku', 'skipOnEmpty' => false],
+            ['description', 'validateDescription', 'skipOnEmpty' => false],
+            ['platform_price', 'validatePlatformPrice', 'skipOnEmpty' => false],
         ];
+    }
+
+    /**
+     * Validates description
+     *
+     * @param string $attribute description to validate
+     * @return bool
+     */
+    public function validateDescription($attribute)
+    {
+        if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
+            return true;
+        }
+
+        if (empty($this->$attribute)) {
+            $this->addError($attribute);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates platform price
+     *
+     * @param string $attribute platform price to validate
+     * @return bool
+     */
+    public function validatePlatformPrice($attribute)
+    {
+        if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
+            return true;
+        }
+
+        if (empty($this->$attribute)) {
+            $this->addError($attribute);
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Validates sku
      *
+     * @param string $attribute sku to validate
      * @return bool
      */
-    public function validateSku()
+    public function validateSku($attribute)
     {
         if ($this->from_type == self::FROM_TYPE_LINK) {
             return true;
         }
 
-        if (!$this->sku) {
+        if (!$this->$attribute) {
+            $this->addError($attribute);
             return false;
         }
 
-        if (Goods::find()->where(['sku' => $this->sku])->exists()) {
-            return true;
+        $goods = Goods::find()->where([$attribute => $this->$attribute])->one();
+        if (!$goods) {
+            $this->addError($attribute);
+            return false;
         }
 
-        return false;
+        $supplier = Supplier::findOne($goods->supplier_id);
+        if (!$supplier) {
+            $this->addError($attribute);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -470,6 +524,24 @@ class GoodsRecommend extends ActiveRecord
             $cache->delete(self::CACHE_KEY_CAROUSEL);
         } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
             $cache->delete(self::CACHE_KEY_SECOND);
+        }
+    }
+
+    /**
+     * Do some ops before insertion
+     *
+     * @param bool $insert if is a new record
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->create_time = time();
+            }
+            return true;
+        } else {
+            return false;
         }
     }
 }
