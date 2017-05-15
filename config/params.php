@@ -27,7 +27,6 @@ return [
         'directory' => 'uploads',
     ],
     'uploadPublic' => [
-        'directory' => 'web/uploads',
         'maxSize' => 5 * 1024 * 1024 , // 5M
     ],
     'sm' => [

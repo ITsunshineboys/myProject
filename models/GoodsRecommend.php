@@ -8,10 +8,8 @@
 
 namespace app\models;
 
-use app\services\FileService;
 use Yii;
 use yii\db\ActiveRecord;
-use yii\helpers\Url;
 
 class GoodsRecommend extends ActiveRecord
 {
@@ -29,27 +27,10 @@ class GoodsRecommend extends ActiveRecord
     const STATUS_ONLINE = 1;
     const CACHE_KEY_PREFIX_VIEWED_NUMBER = 'recommend_goods_viewed_number_';
     const CACHE_KEY_PREFIX_SOLD_NUMBER = 'recommend_goods_sold_number_';
-
-    public $viewed_number;
-    public $sold_number;
-
-    /**
-     * @var array app fields
-     */
-    private static $appFields = ['title', 'image', 'description', 'platform_price', 'url'];
-
     /**
      * @var array admin fields
      */
     public static $adminFields = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'sold_number', 'status', 'create_time', 'image'];
-
-    /**
-     * @var array cache keys
-     */
-    private static $cacheKeys = [
-        self::CACHE_KEY_CAROUSEL,
-        self::CACHE_KEY_SECOND
-    ];
 
     /**
      * @var array from types
@@ -74,6 +55,19 @@ class GoodsRecommend extends ActiveRecord
         self::STATUS_OFFLINE => '停用',
         self::STATUS_ONLINE => '启用',
     ];
+    /**
+     * @var array app fields
+     */
+    private static $appFields = ['title', 'image', 'description', 'platform_price', 'url'];
+    /**
+     * @var array cache keys
+     */
+    private static $cacheKeys = [
+        self::CACHE_KEY_CAROUSEL,
+        self::CACHE_KEY_SECOND
+    ];
+    public $viewed_number;
+    public $sold_number;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -82,11 +76,6 @@ class GoodsRecommend extends ActiveRecord
     {
         return 'goods_recommend';
     }
-
-//    public function attributes()
-//    {
-//        return array_merge(array_keys(static::getTableSchema()->columns), ['viewed_number']);
-//    }
 
     /**
      * Get recommended goods for type first
@@ -156,39 +145,6 @@ class GoodsRecommend extends ActiveRecord
     }
 
     /**
-     * Get carousel
-     *
-     * @return array
-     */
-    public static function carousel()
-    {
-        $key = self::CACHE_KEY_CAROUSEL;
-        $cache = Yii::$app->cache;
-        $recommendGoods = $cache->get($key);
-        if (!$recommendGoods) {
-            $recommendGoods = self::_carousel(self::$appFields);
-            if ($recommendGoods) {
-                $cache->set($key, $recommendGoods);
-            }
-        }
-
-        return $recommendGoods;
-    }
-
-    /**
-     * Get carousel
-     *
-     * @access private
-     * @param  array   $select  select fields default all fields
-     * @param  array   $orderBy order by fields default sorting_number asc
-     * @return array
-     */
-    private static function _carousel($select = [], $orderBy = ['sorting_number' => SORT_ASC])
-    {
-        return self::find()->select($select)->where(['type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL, 'status' => self::STATUS_ONLINE])->orderBy($orderBy)->all();
-    }
-
-    /**
      * Get all recommended goods for type second
      *
      * @return array
@@ -212,12 +168,45 @@ class GoodsRecommend extends ActiveRecord
      * Get all recommended goods for type second
      *
      * @access private
-     * @param  array   $select select fields default all fields
+     * @param  array $select select fields default all fields
      * @return array
      */
     private static function _secondAll($select = [])
     {
         return self::find()->select($select)->where(['type' => self::RECOMMEND_GOODS_TYPE_SECOND, 'status' => self::STATUS_ONLINE])->all();
+    }
+
+    /**
+     * Get carousel
+     *
+     * @return array
+     */
+    public static function carousel()
+    {
+        $key = self::CACHE_KEY_CAROUSEL;
+        $cache = Yii::$app->cache;
+        $recommendGoods = $cache->get($key);
+        if (!$recommendGoods) {
+            $recommendGoods = self::_carousel(self::$appFields);
+            if ($recommendGoods) {
+                $cache->set($key, $recommendGoods);
+            }
+        }
+
+        return $recommendGoods;
+    }
+
+    /**
+     * Get carousel
+     *
+     * @access private
+     * @param  array $select select fields default all fields
+     * @param  array $orderBy order by fields default sorting_number asc
+     * @return array
+     */
+    private static function _carousel($select = [], $orderBy = ['sorting_number' => SORT_ASC])
+    {
+        return self::find()->select($select)->where(['type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL, 'status' => self::STATUS_ONLINE])->orderBy($orderBy)->all();
     }
 
     /**
@@ -284,7 +273,6 @@ class GoodsRecommend extends ActiveRecord
 
                 isset($recommend['from_type']) && $recommend['from_type'] = self::$fromTypes[$recommend['from_type']];
                 isset($recommend['status']) && $recommend['status'] = self::$statuses[$recommend['status']];
-                isset($recommend['image']) && $recommend['image'] = Url::to(FileService::uploadUrlDir() . '/' . $recommend['image'], true);
             }
         }
 
@@ -432,6 +420,42 @@ class GoodsRecommend extends ActiveRecord
     }
 
     /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [['url', 'title', 'image', 'from_type'], 'required'],
+            ['status', 'in', 'range' => self::$statuses],
+            ['type', 'in', 'range' => self::$types],
+            ['from_type', 'in', 'range' => array_keys(self::$fromTypes)],
+            ['sku', 'validateSku'],
+        ];
+    }
+
+    /**
+     * Validates sku
+     *
+     * @return bool
+     */
+    public function validateSku()
+    {
+        if ($this->from_type == self::FROM_TYPE_LINK) {
+            return true;
+        }
+
+        if (!$this->sku) {
+            return false;
+        }
+
+        if (Goods::find()->where(['sku' => $this->sku])->exists()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Set cache after updated model
      *
      * @param bool $insert
@@ -447,15 +471,5 @@ class GoodsRecommend extends ActiveRecord
         } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
             $cache->delete(self::CACHE_KEY_SECOND);
         }
-    }
-
-    /**
-     * Construct image uri
-     */
-    public function afterFind()
-    {
-        parent::afterFind();
-
-        $this->image = Url::to(FileService::uploadUrlDir() . '/' . $this->image, true);
     }
 }

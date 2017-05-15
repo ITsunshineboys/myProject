@@ -565,7 +565,8 @@ class SiteController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return Json::encode([
             'code' => 200,
@@ -657,37 +658,37 @@ class SiteController extends Controller
      */
     public function actionUpload()
     {
-       $uploadRet = FileService::upload();
+        $uploadRet = FileService::upload();
 
-       if (is_int($uploadRet)) {
-           return Json::encode([
-               'code' => $uploadRet,
-               'msg' => Yii::$app->params['errorCodes'][$uploadRet],
-           ]);
-       }
+        if (is_int($uploadRet)) {
+            return Json::encode([
+                'code' => $uploadRet,
+                'msg' => Yii::$app->params['errorCodes'][$uploadRet],
+            ]);
+        }
 
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'file_relative_path' => $uploadRet['fileRelativePath'],
-                'file_url' => $uploadRet['fileUrl'],
+                'file_path' => $uploadRet,
             ],
         ]);
     }
 
-    public function actionTest(){
-        $quantity =array(
-            1,2,3,4,5);
-        $unitPrice =array(1,2,3,4,5);
+    public function actionTest()
+    {
+        $quantity = array(
+            1, 2, 3, 4, 5);
+        $unitPrice = array(1, 2, 3, 4, 5);
         $arr = array(
-            'day_price'=>300,
-            'day_standard'=>5,
-            'profit'=>15,
-            'total_standard'=>300
+            'day_price' => 300,
+            'day_standard' => 5,
+            'profit' => 15,
+            'total_standard' => 300
         );
-        $b = BasisDecorationService::formula($arr,$quantity,$unitPrice);
+        $b = BasisDecorationService::formula($arr, $quantity, $unitPrice);
 
-        var_dump($b) ;
+        var_dump($b);
     }
 }

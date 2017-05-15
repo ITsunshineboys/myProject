@@ -72,7 +72,7 @@ class FileService
             return $code;
         }
 
-        $directory = Yii::$app->basePath . '/' . Yii::$app->params['uploadPublic']['directory'] . '/' . $ymdDirs;
+        $directory = Yii::getAlias('@webroot') . '/' . UploadForm::DIR_PUBLIC . '/' . $ymdDirs;
 
         $filename = self::generateFilename($directory);
         if ($filename === false) {
@@ -86,10 +86,7 @@ class FileService
             return $code;
         }
 
-        return [
-            'fileRelativePath' => $ymdDirs . '/' . $file,
-            'fileUrl' => Url::to(self::uploadUrlDir() . '/' . $ymdDirs . '/' . $file, true),
-        ];
+        return UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
     }
 
     /**
@@ -101,7 +98,7 @@ class FileService
     {
         $ymd = date('Y-m-d');
         list($year, $month, $day) = explode('-', $ymd);
-        $imagePath = Yii::$app->basePath . '/' . Yii::$app->params['uploadPublic']['directory'];
+        $imagePath = Yii::getAlias('@webroot') . '/' . UploadForm::DIR_PUBLIC;
         $ymdDirs = $year . '/' . $month . '/' . $day;
         $directory = $imagePath . '/' . $ymdDirs;
 
@@ -132,17 +129,6 @@ class FileService
                 return $filename;
             }
         }
-    }
-
-    /**
-     * Get upload url directory
-     *
-     * @return string
-     */
-    public static function uploadUrlDir()
-    {
-        list($_, $urlDir) = explode('/', Yii::$app->params['uploadPublic']['directory']);
-        return $urlDir;
     }
 
     /**

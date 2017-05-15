@@ -29,6 +29,7 @@ class MallController extends Controller
         'recommend-history',
         'recommend-second-admin',
         'recommend-by-sku',
+        'recommend-add',
         'carousel-admin',
     ];
 
@@ -59,6 +60,7 @@ class MallController extends Controller
                 'actions' => [
                     'toggle-banner-status' => ['post',],
                     'delete-banner' => ['post',],
+                    'recommend-add' => ['post',],
                 ],
             ],
         ];
@@ -576,16 +578,43 @@ class MallController extends Controller
             'data' => [],
         ];
 
-        $goods = Goods::findBySku($sku, ['id', 'title',]);
+        $goods = Goods::findBySku($sku, ['id', 'title', 'subtitle', 'platform_price']);
         if ($goods) {
             $ret['data'] = [
                 'detail' => [
                     'title' => $goods->title,
-                    'url' => Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id]),
+                    'subtitle' => $goods->subtitle,
+                    'platform_price' => $goods->platform_price,
+                    'url' => Goods::GOODS_DETAIL_URL_PREFIX . $goods->id,
                 ],
             ];
         }
 
         return Json::encode($ret);
+    }
+
+    /**
+     * Add recommend action
+     *
+     * @return string
+     */
+    public function actionRecommendAdd()
+    {
+        $recommend = new GoodsRecommend;
+        $recommend->attributes = Yii::$app->request->post();
+        print_r($recommend->validateSku());die;
+        $code = 1000;
+
+        $type = Yii::$app->request->post('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
+        if (!in_array($type, GoodsRecommend::$types)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$type) {
+
+        }
     }
 }

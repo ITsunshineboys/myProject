@@ -17,6 +17,8 @@ use yii\web\UploadedFile;
  */
 class UploadForm extends Model
 {
+    const DIR_PUBLIC = 'uploads';
+
     /**
      * @var UploadedFile file attribute
      */

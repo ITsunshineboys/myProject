@@ -108,12 +108,25 @@ class Goods extends ActiveRecord
             || in_array('purchase_price', $select)
         ) {
             foreach ($goodsList as &$goods) {
-                isset($goods['platform_price']) && $goods['platform_price'] = $goods['platform_price'] / 100;
-                isset($goods['supplier_price']) && $goods['supplier_price'] = $goods['supplier_price'] / 100;
-                isset($goods['market_price']) && $goods['market_price'] = $goods['market_price'] / 100;
-                isset($goods['purchase_price']) && $goods['purchase_price'] = $goods['purchase_price'] / 100;
+                isset($goods['platform_price']) && $goods['platform_price'] /= 100;
+                isset($goods['supplier_price']) && $goods['supplier_price'] /= 100;
+                isset($goods['market_price']) && $goods['market_price'] /= 100;
+                isset($goods['purchase_price']) && $goods['purchase_price'] /= 100;
             }
         }
         return $goodsList;
+    }
+
+    /**
+     * Convert price
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        isset($this->platform_price) && $this->platform_price /= 100;
+        isset($this->supplier_price) && $this->supplier_price /= 100;
+        isset($this->market_price) && $this->market_price /= 100;
+        isset($this->purchase_price) && $this->purchase_price /= 100;
     }
 }
