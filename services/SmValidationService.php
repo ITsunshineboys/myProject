@@ -13,7 +13,6 @@ use yii\web\ServerErrorHttpException;
 use Flc\Alidayu\App;
 use Flc\Alidayu\Client;
 use Flc\Alidayu\Requests\AlibabaAliqinFcSmsNumSend;
-use app\services\StringService;
 
 class SmValidationService
 {

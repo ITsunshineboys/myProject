@@ -4,6 +4,7 @@ cache
 uploads
 web/assets
 web/.htaccess
+web/uploads
 .idea
 config/db.php
 config/web.php

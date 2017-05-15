@@ -2,14 +2,15 @@
 
 return [
     'adminEmail' => 'admin@example.com',
-    'offset_aite_cube_no' => 10000,
-    'owner_role_id' => 7,
+    'offsetAiteCubeNo' => 10000,
+    'ownerRoleId' => 7,
     'errorCodes' => [
         403 => '没有权限',
         500 => '接口服务器异常',
         1000 => '请求的参数不正确',
         1001 => '用户名/密码不正确',
         1002 => '验证码不正确',
+        1003 => '请先停用再删除',
     ],
     'events' => [
         'supplier' => [
@@ -24,6 +25,9 @@ return [
     ],
     'upload' => [
         'directory' => 'uploads',
+    ],
+    'uploadPublic' => [
+        'maxSize' => 5 * 1024 * 1024 , // 5M
     ],
     'sm' => [
         'appKey' => '23532528',
@@ -47,5 +51,13 @@ return [
             'templateId' => 'SMS_63905689',
             'signName' => '忘记密码验证码',
         ],
+    ],
+    'timeTypes' => [
+        'all' => '全部时间',
+        'today' => '今天',
+        'week' => '本周',
+        'month' => '本月',
+        'year' => '本年',
+        'custom' => '自定义',
     ],
 ];

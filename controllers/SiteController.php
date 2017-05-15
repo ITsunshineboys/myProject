@@ -7,6 +7,7 @@ use app\models\LoginForm;
 use app\models\User;
 use app\models\Role;
 use app\models\UserRole;
+use app\services\BasisDecorationService;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
@@ -21,6 +22,18 @@ use yii\web\ServerErrorHttpException;
 class SiteController extends Controller
 {
     /**
+     * Actions accessed by logged-in users
+     */
+    private const ACCESS_LOGGED_IN_USER = [
+        'logout',
+        'roles',
+        'reset-password',
+        'roles-status',
+        'time-types',
+        'upload',
+    ];
+
+    /**
      * @inheritdoc
      */
     public function behaviors()
@@ -33,10 +46,10 @@ class SiteController extends Controller
                     new ExceptionHandleService($code);
                     exit;
                 },
-                'only' => ['logout', 'roles', 'reset-password'],
+                'only' => self::ACCESS_LOGGED_IN_USER,
                 'rules' => [
                     [
-                        'actions' => ['logout', 'roles', 'reset-password'],
+                        'actions' => self::ACCESS_LOGGED_IN_USER,
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -47,6 +60,7 @@ class SiteController extends Controller
                 'actions' => [
                     'logout' => ['post',],
                     'reset-password' => ['post',],
+                    'upload' => ['post',]
                 ],
             ],
         ];
@@ -168,7 +182,7 @@ class SiteController extends Controller
         $user->attributes = $postData;
         $user->password = Yii::$app->security->generatePasswordHash($user->password);
         $user->create_time = $user->login_time = time();
-        $user->login_role_id = Yii::$app->params['owner_role_id'];
+        $user->login_role_id = Yii::$app->params['ownerRoleId'];
 
         if (!$user->validate()) {
             return Json::encode([
@@ -195,7 +209,7 @@ class SiteController extends Controller
                 ]);
             }
 
-            $user->aite_cube_no = $user->id + Yii::$app->params['offset_aite_cube_no'];
+            $user->aite_cube_no = $user->id + Yii::$app->params['offsetAiteCubeNo'];
             if (!$user->save()) {
                 $transaction->rollBack();
 
@@ -207,7 +221,7 @@ class SiteController extends Controller
 
             $userRole = new UserRole;
             $userRole->user_id = $user->id;
-            $userRole->role_id = Yii::$app->params['owner_role_id']; // owner
+            $userRole->role_id = Yii::$app->params['ownerRoleId']; // owner
             if (!$userRole->save()) {
                 $transaction->rollBack();
 
@@ -347,8 +361,25 @@ class SiteController extends Controller
             ];
         }
 
+        $code = 1001;
         $model = new LoginForm;
         if ($model->load($postData) && $model->login()) {
+            $user = Yii::$app->user->identity;
+            if (!$user) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => $role->id])->one();
+            if (!$userRole) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             return Json::encode([
                 'code' => 200,
                 'msg' => '登录成功',
@@ -358,7 +389,6 @@ class SiteController extends Controller
             ]);
         }
 
-        $code = 1001;
         return Json::encode([
             'code' => $code,
             'msg' => Yii::$app->params['errorCodes'][$code],
@@ -535,7 +565,8 @@ class SiteController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return Json::encode([
             'code' => 200,
@@ -580,5 +611,84 @@ class SiteController extends Controller
                 'leftNum' => $leftNum >= 0 ? $leftNum : 0,
             ],
         ]);
+    }
+
+    /**
+     * Get roles status action.
+     *
+     * @return string
+     */
+    public function actionRolesStatus()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'roles_status' => UserRole::rolesStatus(Yii::$app->user->identity->id),
+            ],
+        ]);
+    }
+
+    /**
+     * Get time types action
+     *
+     * @return string
+     */
+    public function actionTimeTypes()
+    {
+        $timeTypes = [];
+        foreach (Yii::$app->params['timeTypes'] as $value => $name) {
+            $timeTypes[] = [
+                'value' => $value,
+                'name' => $name,
+            ];
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'time-types' => $timeTypes,
+            ],
+        ]);
+    }
+
+    /**
+     * Upload file action
+     */
+    public function actionUpload()
+    {
+        $uploadRet = FileService::upload();
+
+        if (is_int($uploadRet)) {
+            return Json::encode([
+                'code' => $uploadRet,
+                'msg' => Yii::$app->params['errorCodes'][$uploadRet],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'file_path' => $uploadRet,
+            ],
+        ]);
+    }
+
+    public function actionTest()
+    {
+        $quantity = array(
+            1, 2, 3, 4, 5);
+        $unitPrice = array(1, 2, 3, 4, 5);
+        $arr = array(
+            'day_price' => 300,
+            'day_standard' => 5,
+            'profit' => 15,
+            'total_standard' => 300
+        );
+        $b = BasisDecorationService::formula($arr, $quantity, $unitPrice);
+
+        var_dump($b);
     }
 }

@@ -8,6 +8,8 @@
 
 namespace app\services;
 
+use Yii;
+
 class StringService
 {
     /**
@@ -42,6 +44,22 @@ class StringService
     }
 
     /**
+     * Check if class const exists
+     *
+     * @param string $constName const name
+     * @param string $className class name
+     * @return bool
+     */
+    public static function constExists($constName, $className)
+    {
+        if (!$constName || !$className) {
+            return false;
+        }
+
+        return array_key_exists($constName, self::classConstants($className));
+    }
+
+    /**
      * Get class constants
      *
      * @param $className
@@ -49,7 +67,62 @@ class StringService
      */
     public static function classConstants($className)
     {
+        if (!$className) {
+            return [];
+        }
+
         $reflect = new \ReflectionClass($className);
         return $reflect->getConstants();
+    }
+
+    /**
+     * Get start and ent time of some time type defined in params['timeTypes']
+     *
+     * @param string $timeType time type
+     * @return array
+     */
+    public static function startEndDate($timeType)
+    {
+        $startTime = $endTime = '';
+
+        $yearMonthDay = date('Y-m-d');
+        list($year, $month, $day) = explode('-', $yearMonthDay);
+        switch ($timeType) {
+            case 'today':
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day, $year));
+                break;
+            case 'week':
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day - date('w') + 1, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day - date('w') + 7, $year));
+                break;
+            case 'month':
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, 1, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, date('t'), $year));
+                break;
+            case 'year':
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, 1, 1, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, 12, 31, $year));
+                break;
+        }
+
+        return [$startTime, $endTime];
+    }
+
+    /**
+     * Check if valid date, both YYYY-mm-dd and YYYY-m-d are valid
+     *
+     * @param string $date date
+     * @return bool
+     */
+    public static function checkDate($date)
+    {
+        return filter_var($date, FILTER_VALIDATE_REGEXP,
+            [
+                'options' => [
+                    'regexp' => '/^\d{4}-\d{1,2}-\d{1,2}$/',
+                ]
+            ]
+        );
     }
 }
