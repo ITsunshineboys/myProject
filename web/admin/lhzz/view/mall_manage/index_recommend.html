@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../../../../css/all.css"/>
+    <link rel="stylesheet" href="../../css/global.css"/>
+    <link rel="stylesheet" href="../../css/index_recommend.css"/>
+</head>
+<body ng-app="app" ng-controller="index_recommend" ng-cloak>
+
+    <div class="main">
+        <!--弹窗开始-->
+        <div class="popup hide" >
+            <div class="box1">
+                <!--调整顺序-->
+                <div class="order_save hide">
+                    <div class="warm_title">保存</div>
+                    <div class="warm_word1">确认保存</div>
+                    <div class="sure_box">
+                        <div>
+                            <span class="save_sure sure_left" ng-click="save_sure()">确认</span>
+                            <span class="save_cancel" ng-click="save_cancel()">取消</span>
+                        </div>
+                    </div>
+                </div>
+                <!--添加-->
+                <div class="add1 hide" >
+                    <div class="warm_title">banner添加</div>
+                    <ul class="adds1">
+                        <li><a href="#" name=".tab1_1">banner</a></li>
+                        <li><a href="#" name=".tab1_2">推荐</a></li>
+                    </ul>
+                    <div class="content">
+                        <div class="tab tab1_1">111</div>
+                        <div class="tab tab1_2">2222</div>
+                    </div>
+                    <div class="sure_box">
+                        <div>
+                            <span class="add_sure sure_left" ng-click="add_sure()">提交</span>
+                            <span class="add_cancel" ng-click="add_cancel()">取消</span>
+                        </div>
+                    </div>
+                </div>
+                <!--删除-->
+                <div class="delete1 hide">
+                    <!--删除和停用无处理操作的的提示框-->
+                    <div class="not_stop hide" >
+                        <div class="warm_title">提示</div>
+                        <div class="warm_word1">确认停用</div>
+                        <div class="sure_box">
+                            <div>
+                                <span class="save_cancel" ng-click="del_close1()">取消</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="is_stop hide">
+                        <div class="warm_title">删除</div>
+                        <div class="warm_word1">确认删除</div>
+                        <div class="sure_box">
+                            <div>
+                                <span class="del_sure sure_left" ng-click="del_sure()">确认删除</span>
+                                <span class="del_cancel" ng-click="del_cancel()">取消</span>
+                            </div>
+
+                        </div>
+                       <!--<div class="del_sure" ng-click="del_sure()">确认删除</div>-->
+                       <!--<div class="del_cancel" ng-click="del_cancel()">取消</div>-->
+                    </div>
+                </div>
+                <!--停用-->
+                <div class="stop1 hide">
+                    <div class="is_stop hide">
+                        <div class="warm_title">停用</div>
+                        <div class="warm_word1">确认停用</div>
+                        <div class="sure_box">
+                            <div>
+                                <span class="save_sure sure_left" ng-click="stop_sure()">确认停用</span>
+                                <span class="save_cancel" ng-click="stop_cancel()">取消</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="edit1 hide">
+
+                    <div class="is_edit hide">
+                        <div class="warm_title">编辑banner</div>
+                        <div class="sure_box">
+                            <div>
+                                <span class="edit_sure sure_left" ng-click="edit_sure()">确认编辑</span>
+                                <span class="edit_cancel" ng-click="edit_cancel()">取消</span>
+                            </div>
+
+                        </div>
+                        <!--<div class="edit_sure" ng-click="edit_sure()">确认编辑</div>-->
+                        <!--<div class="edit_cancel" ng-click="edit_cancel()">取消</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--弹窗结束-->
+        <div class="nav_box ">
+            <div class="logo">
+                <img src="../../images/logo.png" alt=""/>
+            </div>
+            <dl >
+                <dt onClick="changeImage()" ><img src="../../images/select1.png">首页</dt>
+
+            </dl>
+
+            <dl >
+                <dt onClick="changeImage()"><img src="../../images/select1.png">用户管理</dt>
+                <dd ><a href="">上架商品</a></dd>
+                <dd><a href="">活动商品</a></dd>
+            </dl>
+
+            <dl>
+                <dt><img src="../../images/select1.png">系统管理</dt>
+                <dd ><a href="" >管理员列表</a></dd>
+                <dd><a href="">角色管理</a></dd>
+                <dd><a href="">权限管理</a></dd>
+            </dl>
+
+            <dl class="mall">
+                <dt onClick="changeImage()" class="on"><img src="../../images/select1.png">商城管理</dt>
+                <dd ><a href="index_recommend.html" class="dd_on">首页推荐</a></dd>
+                <dd><a href="merchant_manage.html">商家管理</a></dd>
+                <dd><a href="#">商品管理</a></dd>
+            </dl>
+        </div>
+
+        <div class="my_container">
+            <div class="header_box">
+                <div class="header_left">
+                    <a href=""><img src="../../images/select1.png" alt=""/>返回首页</a>
+                </div>
+                <div class="header_right">
+                    <div class="fl">
+                        <a href=""><img src="../../images/news.png" alt=""/>站内信</a>
+                    </div>
+                    <div class="fl">|</div>
+                    <div class="fl">
+                        <a href="">个人面板<img style="height:40px" src="../../images/center.png" alt=""/></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="tabs">
+                    <li><a href="#" name=".tab1_1">banner</a></li>
+                    <li><a href="#" name=".tab1_2">推荐</a></li>
+                </ul>
+                <div class="content">
+                    <div class="tab tab1_1">
+                        <div class="operate_box">
+                            <div class="btn1 fl" ng-click="save1()">保存</div>
+                            <div class="btn1 fl" ng-click="add()">添加</div>
+                            <label class="btn1 fl" for="all">全选</label>
+                            <input type="checkbox" class="choose_all1" id="all" ng-click="all()" style="display: none"/>
+                            <div class="btn1 fl" ng-click="delete()">删除</div>
+                            <div class="btn1 fl" ng-click="stop()">停用</div>
+                            <div class="fl"><a href="">历史数据</a></div>
+                            <div class="btn1 screen"  style="position:absolute;top:30px;right:40px"><img src="../../images/cell_icon.jpg" alt=""/></div>
+                            <div id="cells_box" style="position: absolute;top:52px;right:40px;background-color: #288df0">
+                                <ul id="cells" class="hide" style="">
+                                    <li>
+                                        <input type="checkbox" name="cell" checked value="order" ng-click="cell1()"/>
+                                        <span>序号</span>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="cell" checked value="tb_name" ng-click="cell1()"/>
+                                        <span>名称</span>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="cell" checked value="manage_qx" ng-click="cell1()"/>
+                                        <span>管理权限</span>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="cell" checked value="action" ng-click="cell1"()/>
+                                        <span>操作</span>
+                                    </li>
+                                </ul>
+                                <!--<div><input type="checkbox"/><span></span></div>-->
+                                <!--<select name="" id="cells">-->
+
+                                <!--</select>-->
+                            </div>
+                        </div>
+                        <div class="table_box">
+                            <table width="800" border="1">
+                                <thead>
+                                <th class="choose">
+                                    <!--<input type="checkbox" ng-click="all()" class="choose_all"/>-->
+                                </th>
+                                <th class="order">序号:</th>
+                                <th class="tb_name">名称:</th>
+                                <th class="manage_qx">管理权限:</th>
+                                <th class="action">操作：</th>
+                                </thead>
+                                <tbody >
+                                <tr ng-repeat="n in mydata" ng-controller="itemReaptCtrl" class="{{n.id}}"  name="{{n.id}}">
+                                    <td class="choose"> <input type="checkbox" value="{{n.id}}" name="item" class="choose" ng-click="choose(n.id)"/></td>
+                                    <td class="order">{{n.id}}</td>
+                                    <td class="tb_name">{{n.name}}</td>
+                                    <td class="manage_qx">{{n.admin_module}}</td>
+                                    <td class="action">
+                                        <span ng-click="stop_one(n.id)" class="stop">启用</span>
+                                        <span ng-click="edit(n.id)">编辑</span>
+                                        <span ng-click="dele(n.id)">删除</span>
+                                    </td>
+                                </tr>
+                                <!--<tr>-->
+                                    <!--<td class="choose"> <input type="checkbox" value="888" name="item" class="choose" ng-click="choose(n.id)"/></td>-->
+                                    <!--<td class="order">88888</td>-->
+                                    <!--<td class="tb_name">名字3333</td>-->
+                                    <!--<td class="manage_qx">哈哈丰东股份 </td>-->
+                                    <!--<td class="action">-->
+                                        <!--<span ng-click="stop(n.id)" class="stop">启用</span>-->
+                                        <!--<span ng-click="edit($index)">编辑</span>-->
+                                        <!--<span ng-click="dele(n.id)">删除</span>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab tab1_2">
+
+                        TAB1_2
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="../../../../js/jquery.js"></script>
+    <script src="../../../../js/angular.min.js"></script>
+    <script src="../../js/jquery_ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../js/paging/query.js"></script>
+    <script type="text/javascript" src="../../js/paging/paging.js"></script>
+    <script src="../../../js/global.js"></script>
+    <script src="../../js/index_recommend.js"></script>
+
+</body>
+</html>

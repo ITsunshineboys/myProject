@@ -1,4 +1,11 @@
-var carousel="carousel";
+//轮播接口
+var carousel1="carousel";
+//商品分类
+var classify="categories";
+//特殊推荐
+//var recommend="recommend-first";
+//推荐列表接口
+var recommend_list="recommend-second";
 //轮播设置开始
 function carousel() {
     var mySwiper = new Swiper('#swiper-container', {
@@ -9,21 +16,27 @@ function carousel() {
         paginationClickable: true
     });
 }
-//左右箭头事件
-//$('.arrow-left').on('click', function(e){
-//    e.preventDefault();
-//    mySwiper.swipePrev()
-//});
-//$('.arrow-right').on('click', function(e){
-//    e.preventDefault();
-//    mySwiper.swipeNext()
-//});
 //轮播设置结束
 app.controller("index",function($scope,$http){
-        $http.get(url+carousel)
+        //轮播数据
+        $http.get(url+carousel1)
             .success(function(data){
                 $scope.carousel1=data.data.carousel;
-            })
+            });
+        $http.get(url+classify)
+            .success(function(data){
+                $scope.class_list=data.data.categories
+            });
+        ////特殊推荐    暂时先注释
+        //$http.get(url+recommend)
+        //    .success(function(data){
+        //        $scope.recommend=data.data;
+        //    })
+        //推荐列表数据
+        $http.get(url+recommend_list)
+            .success(function(data){
+                $scope.recommend_list=data.data;
+            });
         $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
             var mySwiper = new Swiper('#swiper-container',{
                 autoplay: 2000,//可选选项，自动滑动

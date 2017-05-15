@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style type="text/css"></style>
+<body>
+<!--=====双向绑定======-->
+<!--<input type="text" ng-model="myname"/>-->
+<!--<div>{{myname}}</div>-->
+<!--<div>{{6+2}}</div>-->
+
+<!--=====controller======-->
+<div ng-controller="HiCon">
+    {{heW}}
+    <h4 ng-bind="heW"></h4>
+    <input type="text" ng-model="heW"/>
+</div>
+<div ng-controller="repeatCtrl">
+    <div ng-repeat="n in food | orderBy:order1" class="mydiv">
+        <input type="checkbox"/>
+        食物名称：{{n.foodname}},价格{{n.foodprice}}
+        <button ng-click="removeFood($index)">删除</button>
+    </div>
+</div>
+
+<xiaosongsong></xiaosongsong>
+<div xiaosongsong></div>
+<div class="xiaosongsong"></div>
+<!-- directive:xiaosongsong --><!--必须是要写directive 并且前后需要后空格才会出现-->
+
+</body>
+<script src="../../js/jquery.js"></script>
+<script src="../../js/angular.min.js"></script>
+<script type="text/javascript">
+    var myapp=angular.module("myapp",[]);//定义一个模块
+    //[],模块依赖的组件，如果没有设置为空数组
+    myapp.controller("HiCon",function($scope){//定义控制器
+        $scope.heW="Hello World!";
+    });
+   myapp.controller("repeatCtrl",function($scope){
+
+       $scope.food=[
+           {foodname:"苹果",foodprice:"15元"},
+           {foodname:"香蕉",foodprice:"10元"},
+           {foodname:"桃子",foodprice:"18元"},
+           {foodname:"葡萄",foodprice:"20元"}
+       ];
+       $scope.order1="-foodname";
+       $scope.removeFood=function(i){
+           $scope.food.splice(i,0,{foodname:"苹果",foodprice:"10元"});
+           console.log($(".mydiv").eq(i).text()+"====="+i);
+       }
+   });
+    myapp.directive("xiaosongsong",function(){
+        return{
+            restrict:"EACM",//E-元素标签 A-标签属性 C-类 M-注释
+            template:"<div>大家好~我是小松松</div>",
+            replace:true
+
+        }
+    })
+</script>
+</html>

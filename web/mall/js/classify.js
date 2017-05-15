@@ -1,49 +1,63 @@
+//        $("#p").text(GetQueryString("txt"));
+$("#p").text(decodeURI(GetQueryString('txt')));
+console.log("url上带的值=="+decodeURI(GetQueryString('txt')));
 //tab
+//tab页面的动态初始化
+function int(obj,now_class){
+    if(now_class==null||now_class==0){
+        now_class=11;
+    }
+    var my_class=String("."+now_class);
+    obj.next("div").find(my_class).show();
+    obj.find(".categorys_li").find('a[name="'+now_class+'"]').addClass("current");
+
+}
+//点击的样式变化函数
+function  Curve(obj,name){
+    var mykind=String("."+name);
+    console.log("mykind=="+mykind)
+    if (obj.attr("name") == name) {
+        obj.parent().parent().find("a").removeClass("current");
+        obj.parent().parent().next("div").find(mykind).show();
+        obj.addClass("current");
+        $(obj.attr("name")).fadeIn();
+    }
+}
 function smallTab() {
-    $(".resumes_content > .tab2").hide();
-    $(".resumes").each(function () {
-        $(this).next("div").find(".11").show();
-        $(this).find("li:first a").addClass("current").css({"color":"red"});
-        $('.resumes a[name="22"]').css({"color":"#333"});
-        $('.resumes a[name="33"]').css({"color":"#333"});
+
+    $(".categorys_content > .tab2").hide();
+    $(".categorys").each(function () {
+        var obj=$(this);
+        var my_class=decodeURI(GetQueryString('txt'));
+        int(obj,my_class);
+        //var aa="."+"11";
+        //var cc=22;
+        //$(this).next("div").find(aa).show();
+        //$(this).find(".categorys_li").find('a[name="'+cc+'"]').addClass("current");
 
     });
     $(".content").each(function () {
         $(this).find("div:first").fadeIn();
     });
-    $(".resumes a").on("click", function (e) {
+    $(".categorys a").on("click", function (e) {
+
         e.preventDefault();
         $(this).parent().parent().next("div").find(".tab2").hide();
         $(this).parent().parent().find("a").removeClass("current");
-        if ($(this).attr("class") == "current"&&$(this)==$(".resumes").find("li:first a")) {
+        if ($(this).attr("class") == "current"&&$(this)==$(".categorys").find("li:first a")) {
             return;
         }
         else {
-            if ($(this).attr("name") == 11) {
-                $('.resumes a[name="22"]').css({"color":"#333"});
-                $('.resumes a[name="33"]').css({"color":"#333"});
-                $(this).parent().parent().next("div").find(".11").show();
-                $(this).addClass("current").css({"color":"red"});
-                //$(this).find("img").attr({ src: "images/man_1.png" });
-                $($(this).attr("name")).fadeIn();
-            }
-            else if ($(this).attr("name") == 22) {
-                $('.resumes a[name="11"]').css({"color":"#333"});
-                $('.resumes a[name="33"]').css({"color":"#333"});
-                $(this).parent().parent().next("div").find(".22").show();
-                $(this).addClass("current").css({"color":"red"});
-                $($(this).attr("name")).fadeIn();
-            }
-            else if ($(this).attr("name") == 33) {
-                $('.resumes a[name="11"]').css({"color":"#333"});
-                $('.resumes a[name="22"]').css({"color":"#333"});
-                $(this).parent().parent().next("div").find(".33").show();
-                $(this).addClass("current").css({"color":"red"});
-                $($(this).attr("name")).fadeIn();
-            }
+            var obj=$(this);
+            var myname=$(this).attr("name");
+            //console.log("myname==="+myname)
+            Curve(obj, myname)
         }
     });
 }
 $(function(){
     smallTab();
 });
+app.controller("classify",function($http,$scope){
+
+})

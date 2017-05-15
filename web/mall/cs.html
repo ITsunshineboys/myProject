@@ -7,13 +7,13 @@
 <body>
 <input id="storage" type="text" onblur="local()"/>
 <div id="result"></div>
-<!--<button id="animate" status="0">animate</button>-->
-<!--<div id="block">Hello World</div>-->
+<button id="animate" status="0">animate</button>
+<div id="block">Hello World</div>
 
 
 
 <!--<div class="div" style="width: 200px;height: 200px;border:1px solid blue"></div>-->
-<!--<script type="text/javascript" src="js/jquery-3.1.1.js"></script>-->
+<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
 <script type="text/javascript">
     var search = [];
     function local(){
@@ -74,24 +74,24 @@
             document.getElementById("result").innerHTML="对不起，您的浏览器不支持 web 存储。";
         }
     }
-//$("#animate").click(function(){
-//    if(!$(this).hasClass("clicked")) {
-//        $(this).addClass("clicked");
-//        $("#block").animate(
-//                {"font-size": "10em"}, 1000, "linear", function(){
-//                    console.log("函数1");
-//                });
-//        $("#animate").css({"color":"red"})
-//
-//    } else {
-//        $(this).removeClass("clicked");
-//        $("#block").animate(
-//                {"font-size": "1em"}, 1000, "linear", function(){
-//                    console.log("函数2");
-//                });
-//        $("#animate").css({"color":"green"})
-//    }
-//});
+$("#animate").click(function(){
+    if(!$(this).hasClass("clicked")) {
+        $(this).addClass("clicked");
+        $("#block").animate(
+                {"font-size": "10em"}, 1000, "linear", function(){
+                    console.log("函数1");
+                });
+        $("#animate").css({"color":"red"})
+
+    } else {
+        $(this).removeClass("clicked");
+        $("#block").animate(
+                {"font-size": "1em"}, 1000, "linear", function(){
+                    console.log("函数2");
+                });
+        $("#animate").css({"color":"green"})
+    }
+});
 //$("#animate").click(function(){
 //    if($(this).attr("status") == 0) {
 //        $(this).attr("status", 1);
