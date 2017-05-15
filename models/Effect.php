@@ -11,18 +11,7 @@ use yii\db\ActiveRecord;
 
 class Effect extends ActiveRecord
 {
-    public $province;
-    public $city;
-    public $district;
-    public $street;
-    public $toponymy;
-    public $area;
-    public $high;
-    public $room;
-    public $hall;
-    public $toilet;
-    public $kitchen;
-    public $window;
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -53,7 +42,6 @@ class Effect extends ActiveRecord
             echo '传入的值有错';
             exit;
         }
-
         return $detail;
     }
 }

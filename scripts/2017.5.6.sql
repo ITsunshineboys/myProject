@@ -60,3 +60,82 @@ CREATE TABLE `effect` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `labor_cost` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `province` varchar(20) DEFAULT NULL COMMENT '省份',
+  `city` varchar(20) DEFAULT NULL COMMENT '市',
+  `district` varchar(20) DEFAULT NULL COMMENT '区县',
+  `univalence` bigint(10) NOT NULL COMMENT '工人单价',
+  `worker_kind` varchar(20) DEFAULT NULL COMMENT '工人种类',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `decoration_list` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `series_id` int(11) DEFAULT NULL,
+  `style_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `main_ materials` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_list_id` int(11) DEFAULT NULL,
+  `goods_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `fixation_furniture` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_list_id` int(11) DEFAULT NULL,
+  `goods_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `move_furniture` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_list_id` int(11) DEFAULT NULL,
+  `goods_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `appliances_assort` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_list_id` int(11) DEFAULT NULL,
+  `goods_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `soft_outfit_assort` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_list_id` int(11) DEFAULT NULL,
+  `goods_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `intelligence_assort` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_list_id` int(11) DEFAULT NULL,
+  `goods_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `life_assort` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_list_id` int(11) DEFAULT NULL,
+  `goods_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `basis_decoration` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(100) DEFAULT NULL COMMENT 'l类型',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `basis_material` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `basis_decoration_id` int(11) DEFAULT NULL,
+  `goods_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+

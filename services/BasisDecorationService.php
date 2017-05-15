@@ -30,16 +30,10 @@ class BasisDecorationService
             //单价
             $waterway_price = ($labor_cost + $materials_expenses) / $arr['profit'];
             //价格
-            $waterway_remould_price = $arr['total_standard'] * $waterway_price;
-            return $waterway_remould_price;
+//            $waterway_remould_price = $arr['total_standard'] * $waterway_price;
+            return $waterway_price;
         }
         echo '请输入正确的值';
         exit;
     }
-
-    public function backman($data = [] )
-    {
-
-    }
-
 }
