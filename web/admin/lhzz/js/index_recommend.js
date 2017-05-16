@@ -1,36 +1,35 @@
 var role="site/all-roles";
+//文件上传
+var upload1="site/upload";
+//单个改变是否停用
+var stop_status="mall/recommend-status-toggle";
+//批量改变是否停用接口
+var  stops_status="mall/recommend-disable-batch";
+//批量删除
+var  recommend_deletes="mall/recommend-delete-batch";
+//删除推荐接口
+var recommend_delete="mall/recommend-delete";
+//推荐排序
+var recommend_sort="mall/recommend-sort"
 app.controller("index_recommend",function($scope,$http){
-    $http({
-        method: "GET",
-        url: url + role
-    })
-        .success(function (data, status) {
-            $scope.page = 1;
-            $scope.mydata = data.data.roles;
-            //status为返回的状态值
-            $scope.allrole1 = data.data.roles;
-            $scope.mycount = $scope.allrole1.length;
-            //console.log("mycount===" + $scope.mycount);
-            //分页的页码数的初始化函数
-            $('#pageTool').Paging({
-                pagesize: $scope.page, count: $scope.mycount, callback: function (page, size, count) {
-                    console.log(arguments);
-                    //点击页码后重新访问接口获取当前页码的数据
-                    $http({
-                        method: "GET",
-                        url: url + role
-                    })
-                        .success(function (data, status) {
-                            $scope.mydata111 = data.data.roles[page - 1].name;
-                        });
-                    alert('当前第 ' + page + '页,每页 ' + size + '条,总页数：' + count + '页')
-                }
+    //加载页面表格数据函数
+    $scope.table_data1=function(){
+        $http({
+            method: "GET",
+            url: url + role
+        })
+            .success(function (data, status) {
+                $scope.page = 1;
+                $scope.mydata = data.data.roles;
+
+            }).
+            error(function (data, status) {
+                //$scope.data = data || "Request failed";
+                //$scope.status = status;
             });
-        }).
-        error(function (data, status) {
-            //$scope.data = data || "Request failed";
-            //$scope.status = status;
-        });
+    };
+    //页面初始加载数据
+    $scope.table_data1();
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
         //排序操作处理
         $scope.order_alter=function(){
@@ -69,30 +68,29 @@ app.controller("index_recommend",function($scope,$http){
             //})
         };
         $scope.order_alter();
-        //单个删除事件的控制
+        //数据已连接====单个删除事件的控制
         $scope.dele=function(id){
             var del_id1="."+id;
-            $scope.del_id=$("tbody").find(del_id1).find(".order").text()
-            $scope.del_name=$("tbody").find(del_id1).find(".tb_name").text()
-            $scope.manage_qx=$("tbody").find(del_id1).find(".manage_qx").text()
+            $scope.del_id=id;
+            //$scope.del_name=$("tbody").find(del_id1).find(".tb_name").text()
+            //$scope.manage_qx=$("tbody").find(del_id1).find(".manage_qx").text()
             $scope.del_stop=$("tbody").find(del_id1).find(".action").find(".stop").text()
             console.log("i===="+del_id1);
             console.log("$scope.del_id===="+$scope.del_id);
-            console.log("$scope.tb_name===="+$scope.del_name);
+            //console.log("$scope.tb_name===="+$scope.del_name);
             console.log("$scope.del_stop===="+$scope.del_stop);
             if($scope.del_stop=="停用"){
                 //弹窗的显示
                 $(".popup").addClass('show').removeClass("hide");
                 $(".popup .delete1").addClass('show').removeClass("hide");
                 $(".popup .delete1 .not_stop").addClass('show').removeClass("hide");
-                $(".popup .delete1 .not_stop .warm_word").text('请先停用后删除');
+                $(".popup .delete1 .not_stop .warm_word1").text('请先停用后删除');
                 //没有停用的删除的关闭按钮
                 $scope.del_close1=function(){
                     //弹窗的隐藏
                     $(".popup").addClass('hide').removeClass("show");
                     $(".popup .delete1").addClass('hide').removeClass("show");
                     $(".popup .delete1 .not_stop").addClass('hide').removeClass("show");
-                    //alert("请先停用"+$scope.del_name)
                 }
             }
             else if($scope.del_stop=="启用"){
@@ -100,11 +98,24 @@ app.controller("index_recommend",function($scope,$http){
                 $(".popup .delete1").addClass('show').removeClass("hide");
                 $(".popup .delete1 .is_stop").addClass('show').removeClass("hide");
                 $scope.del_sure=function(){
+                    $.ajax({
+                        url: url+recommend_delete,
+                        type: 'POST',
+                        data:{"id":$scope.del_id},
+                        dataType: "json",
+                        contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                        success: function (data) {
+                            $scope.loginout=data;
+                            if($scope.loginout.code==200){
+                                $scope.table_data1();
+                            }
+
+                        }
+                    });
                     $(".popup").addClass('hide').removeClass("show");
                     $(".popup .delete1").addClass('hide').removeClass("show");
                     $(".popup .delete1 .is_stop").addClass('hide').removeClass("show");
-                    $("tbody").find(del_id1).remove()
-                    alert("删除的确认事件")
+                    $("tbody").find(del_id1).remove();
                 };
                 $scope.del_cancel=function(){
                     alert("删除的取消事件")
@@ -114,7 +125,7 @@ app.controller("index_recommend",function($scope,$http){
                 }
             }
         };
-        //单个停用事件的控制
+        //数据已连接=====单个停用事件的控制
         $scope.stop_one=function(obj){
             $scope.stop_id=obj;
             $(".popup").addClass('show').removeClass("hide");
@@ -125,14 +136,28 @@ app.controller("index_recommend",function($scope,$http){
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .stop1").addClass('hide').removeClass("show");
                 $(".popup .stop1 .is_stop").addClass('hide').removeClass("show");
-            }
+            };
             $scope.stop_sure=function() {
+                //单个确认停用的数据交互
+                $.ajax({
+                    url: url+stop_status,
+                    type: 'POST',
+                    data:{"id":$scope.stop_id},
+                    dataType: "json",
+                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                    success: function (data) {
+                        $scope.loginout=data;
+                        if($scope.loginout.code==200){
+                            $scope.table_data1();
+                        }
 
+                    }
+                });
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .stop1").addClass('hide').removeClass("show");
                 $(".popup .stop1 .is_stop").addClass('hide').removeClass("show");
             }
-        }
+        };
         //全选事件的控制
         $scope.all=function(){
             if($(".choose_all1").is(':checked')){
@@ -152,10 +177,12 @@ app.controller("index_recommend",function($scope,$http){
             //console.log(obj.length)
             //alert(obj[0].id)
         };
-        //批量删除事件的处理
+        //数据已连接====批量删除事件的处理
+
         $scope.delete=function(){
             $scope.is_stop=true;
             var text=[];
+            var pitch_text=[];
             $("input[name=item]").each(function() {
                 if ($(this).prop("checked") == true) {
                     console.log($(this).val());
@@ -164,15 +191,17 @@ app.controller("index_recommend",function($scope,$http){
                     console.log($(cal).find(".action").find(".stop").text());
                     if($scope.now_stop=="停用"){
                         $scope.is_stop=false;
+                        text.push($(this).val());
                     }
-                    text.push($(this).val());
+                    pitch_text.push($(this).val());
+
                 }
             });
             if(text==""){
                 $(".popup").addClass('show').removeClass("hide");
                 $(".popup .delete1").addClass('show').removeClass("hide");
                 $(".popup .delete1 .not_stop").addClass('show').removeClass("hide");
-                $(".popup .delete1 .not_stop .warm_word").text('请先选择后删除');
+                $(".popup .delete1 .not_stop .warm_word1").text('请先选择后删除');
                 //没有停用的没有选择删除对象的关闭按钮
                 $scope.del_close1=function(){
                     //弹窗的隐藏
@@ -182,13 +211,13 @@ app.controller("index_recommend",function($scope,$http){
                 }
             }
             else{
-                $scope.del2=text.join(",");
+                $scope.del_ids=text.join(",");
                 if( $scope.is_stop==false){
                     //alert("请先停用再删除")
                     $(".popup").addClass('show').removeClass("hide");
                     $(".popup .delete1").addClass('show').removeClass("hide");
                     $(".popup .delete1 .not_stop").addClass('show').removeClass("hide");
-                    $(".popup .delete1 .not_stop .warm_word").text('请先停用后删除');
+                    $(".popup .delete1 .not_stop .warm_word1").text('请先停用后删除');
                     //没有停用的没有选择删除对象的关闭按钮
                     $scope.del_close1=function(){
                         //弹窗的隐藏
@@ -207,8 +236,22 @@ app.controller("index_recommend",function($scope,$http){
                         $(".popup .delete1").addClass('hide').removeClass("show");
                         $(".popup .delete1 .is_stop").addClass('hide').removeClass("show");
                         console.log("text.length====="+text.length)
-                        for(var a=0;a<text.length;a++){
-                            $scope.del_class="."+text[a]
+                        $.ajax({
+                            url: url+recommend_deletes,
+                            type: 'POST',
+                            data:{"id":$scope.del_ids},
+                            dataType: "json",
+                            contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                            success: function (data) {
+                                $scope.loginout=data;
+                                if($scope.loginout.code==200){
+                                    $scope.table_data1();
+                                }
+
+                            }
+                        });
+                        for(var a=0;a<pitch_text.length;a++){
+                            $scope.del_class="."+pitch_text[a]
                             $("tbody").find( $scope.del_class).remove()
                         }
                     };
@@ -221,7 +264,7 @@ app.controller("index_recommend",function($scope,$http){
             }
 
         };
-        //批量停用事件的处理
+        //数据已连接====批量停用事件的处理
         $scope.stop=function(){
             //$scope.is_stop=true;
             var text=[];
@@ -243,7 +286,7 @@ app.controller("index_recommend",function($scope,$http){
                 $(".popup").addClass('show').removeClass("hide");
                 $(".popup .delete1").addClass('show').removeClass("hide");
                 $(".popup .delete1 .not_stop").addClass('show').removeClass("hide");
-                $(".popup .delete1 .not_stop .warm_word").text('请先选择后停用');
+                $(".popup .delete1 .not_stop .warm_word1").text('请先选择后停用');
                 //没有停用的没有选择删除对象的关闭按钮
                 $scope.del_close1=function(){
                     //弹窗的隐藏
@@ -261,9 +304,23 @@ app.controller("index_recommend",function($scope,$http){
                     $(".popup").addClass('hide').removeClass("show");
                     $(".popup .stop1").addClass('hide').removeClass("show");
                     $(".popup .stop1 .is_stop").addClass('hide').removeClass("show");
-                }
+                };
                 $scope.stop_sure=function(){
-                    console.log("text==="+stops.join(","))
+                    $scope.stop_ids=stops.join(",");
+                    console.log("text==="+$scope.stop_ids);
+                    $.ajax({
+                        url: url+stops_status,
+                        type: 'POST',
+                        data:{"id":$scope.stop_ids},
+                        dataType: "json",
+                        contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                        success: function (data) {
+                            $scope.loginout=data;
+                            if($scope.loginout.code==200){
+                                $scope.table_data1();
+                            }
+                        }
+                    });
                     $(".popup").addClass('hide').removeClass("show");
                     $(".popup .stop1").addClass('hide').removeClass("show");
                     $(".popup .stop1 .is_stop").addClass('hide').removeClass("show");
@@ -272,7 +329,7 @@ app.controller("index_recommend",function($scope,$http){
 
                 };
             }
-        }
+        };
         //添加事件的处理
         $scope.add=function(){
             $(".popup").addClass('show').removeClass("hide");
@@ -286,9 +343,55 @@ app.controller("index_recommend",function($scope,$http){
                 $(".popup .add1").addClass('hide').removeClass("show");
             };
         };
+        //上传文件
+        $scope.doUpload=function (load) {
+            var formData = new FormData($( ".uploadForm" )[0]);
+            $.ajax({
+                url: url+upload1 ,
+                type: 'POST',
+                data: formData,
+                dataType: "json",
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if(load==1){
+                        $scope.load1=data.data;
+                        alert( "1111成功");
+                    }
+                    else if(load==2){
+                        $scope.load2=data.data;
+                        alert( "222222成功");
+                    }
+                    else if(load==3){
+                        $scope.load3=data.data;
+                        alert( "3333成功");
+                    }
+                    else if(load==4){
+                        $scope.load4=data.data;
+                        alert( "444444成功");
+                    }
+
+
+                },
+                error: function (returndata) {
+                    alert(returndata);
+                }
+            });
+        };
         //编辑事件处理
         $scope.edit=function(obj){
             $scope.edit_id=obj;
+            alert($scope.edit_id)
+            if($scope.edit_id=="链接"){
+                $(".popup .edit1 .is_edit .Product_box").addClass('show').removeClass("hide");
+                $(".popup .edit1 .is_edit .link_box").addClass('hide').removeClass("show");
+            }
+            else{
+                $(".popup .edit1 .is_edit .link_box").addClass('show').removeClass("hide");
+                $(".popup .edit1 .is_edit .Product_box").addClass('hide').removeClass("show");
+            }
             $(".popup").addClass('show').removeClass("hide");
             $(".popup .edit1").addClass('show').removeClass("hide");
             $(".popup .edit1 .is_edit").addClass('show').removeClass("hide");
@@ -312,11 +415,9 @@ app.controller("index_recommend",function($scope,$http){
         $scope.save1=function(){
             var order2=$("tbody tr ");
             var save_id=[]
-            //alert("order2==="+order2.length)
             for(var c=0;c<order2.length;c++){
                 console.log(order2.eq(c).attr("name"))
                 save_id.push(order2.eq(c).attr("name"))
-                //alert(order2.length)
             }
             $(".popup").addClass('show').removeClass("hide");
             $(".popup .order_save").addClass('show').removeClass("hide");
@@ -324,15 +425,27 @@ app.controller("index_recommend",function($scope,$http){
             //取消保存
             $scope.save_cancel=function(){
                 //弹窗的隐藏
-                //alert("取消保存")
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .order_save").addClass('hide').removeClass("show");
             };
             //确认保存
             $scope.save_sure=function() {
-                var save1=save_id.join(",");
+                $scope.save1=save_id.join(",");
+                $.ajax({
+                    url: url+recommend_sort,
+                    type: 'POST',
+                    data:{"id":$scope.save1},
+                    dataType: "json",
+                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                    success: function (data) {
+                        $scope.loginout=data;
+                        if($scope.loginout.code==200){
+                            $scope.table_data1();
+                        }
+                    }
+                });
 
-                //alert(save1)
+                console.log($scope.save1)
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .order_save").addClass('hide').removeClass("show");
             }
@@ -341,24 +454,22 @@ app.controller("index_recommend",function($scope,$http){
         $(".screen").click(function(){
             if(!$(this).hasClass("clicked")) {
                 $(this).addClass("clicked");
-                $("#cells").addClass("show").removeClass("hide")
+                $("#cells_box").addClass("show").removeClass("hide")
             } else {
                 $(this).removeClass("clicked");
-                $("#cells").addClass("hide").removeClass("show")
+                $("#cells_box").addClass("hide").removeClass("show")
             }
         });
         $("input[name=cell]").on("click",function() {
                 if ($(this).prop("checked") == true) {
-                    console.log($(this).val());
-                    console.log("进入input的点击函数");
                     var cell_name="."+$(this).val();
-                    $(cell_name).addClass("show").removeClass("hide");
+                    $(cell_name).show();
 
                 }
                 else if($(this).prop("checked") != true){
                     var cell_name1="."+$(this).val();
                     //alert("没有选中")
-                    $(cell_name1).addClass("hide").removeClass("show");
+                    $(cell_name1).hide();
 
                 }
 
@@ -427,10 +538,6 @@ $(function(){
 
 });
 //弹窗的tab页面
-function resetTabs1(obj) {
-    $(obj).parent().parent().next("div").find(".tab1").hide();
-    $(obj).parent().parent().find("a").removeClass("current1");
-}
 function loadTab1() {
     $(".content1 > div").hide();
     $(".adds1").each(function () {
@@ -444,16 +551,57 @@ function loadTab1() {
         if ($(this).attr("class") == "current1") {
             return;
         } else {
-            resetTabs1(this);
-            $(this).addClass("current1");
-            $($(this).attr("name")).fadeIn();
+            if($(this).attr("name")==1){
+                alert("dsdsds")
+                $(this).addClass("current1");
+                $($(this).attr("name")).fadeIn();
+            }
+            //resetTabs1(this);
+
         }
     });
 }
 $(function(){
     loadTab1();
 });
+//弹窗tab页面
+function smallTab() {
 
+    $(".content1 > .tab2").hide();
+    $(".adds1").each(function () {
+        $(this).next("div").find(".add_tab1").show();
+        $(this).find("li").find('a[name="add_tab1"]').addClass("current");
+    });
+    $(".content1").each(function () {
+        $(this).find("div:first").fadeIn();
+    });
+    $(".adds1 a").on("click", function (e) {
+
+        e.preventDefault();
+        $(this).parent().parent().next("div").find(".tab2").hide();
+        $(this).parent().parent().find("a").removeClass("current1");
+        if ($(this).attr("class") == "current1"&&$(this)==$(".categorys").find("li:first a")) {
+            return;
+        }
+        else {
+            if ($(this).attr("name") == "add_tab1") {
+                $(this).parent().parent().find("a").removeClass("current1");
+                $(this).parent().parent().next("div").find(".add_tab1").show();
+                $(this).addClass("current1");
+                $( $(this).attr("name")).fadeIn();
+            }
+            else if($(this).attr("name") == "add_tab2"){
+                $(this).parent().parent().find("a").removeClass("current1");
+                $(this).parent().parent().next("div").find(".add_tab2").show();
+                $(this).addClass("current1");
+                $( $(this).attr("name")).fadeIn();
+            }
+        }
+    });
+}
+$(function(){
+    smallTab();
+});
 
 
 

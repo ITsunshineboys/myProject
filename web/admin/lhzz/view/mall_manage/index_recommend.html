@@ -19,8 +19,8 @@
                     <div class="warm_word1">确认保存</div>
                     <div class="sure_box">
                         <div>
-                            <span class="save_sure sure_left" ng-click="save_sure()">确认</span>
-                            <span class="save_cancel" ng-click="save_cancel()">取消</span>
+                            <span class="btn2 save_sure sure_left" ng-click="save_sure()">确认</span>
+                            <span class="btn2 save_cancel" ng-click="save_cancel()">取消</span>
                         </div>
                     </div>
                 </div>
@@ -28,18 +28,231 @@
                 <div class="add1  hide" >
                     <div class="warm_title">banner添加</div>
                     <ul class="adds1">
-                        <li><a href="#" class="current1" name=".tab1_1">商家</a></li>
-                        <li><a href="#" name=".tab1_2">链接</a></li>
+                        <li><a href="#" class="current1" name="add_tab1">商家</a></li>
+                        <li><a href="#" name="add_tab2">链接</a></li>
                     </ul>
                     <div class="content1">
-                        <div class="tab1 tab1_1">111</div>
-                        <div class="tab1 tab1_2">2222</div>
-                    </div>
-                    <div class="sure_box">
-                        <div>
-                            <span class="add_sure sure_left" ng-click="add_sure()">提交</span>
-                            <span class="add_cancel" ng-click="add_cancel()">取消</span>
+                        <div class="tab2 add_tab1">
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品编号
+                                </div>
+                                <div class="line_right ">
+                                    <input class="gain_input text_input" type="text"/>
+                                    <div class="gain_btn " style="margin-left: 0">获取</div>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品名称
+                                </div>
+                                <div class="line_right ">
+                                    <input  class="text_input" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品链接
+                                </div>
+                                <div class="line_right ">
+                                    <input  type="text" class="text_input"  disabled="disabled"/>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品链接
+                                </div>
+                                <div class="line_right ">
+                                    <label for="yes1">是</label>
+                                    <input  type="radio"  name="sex1" id="yes1"/>
+                                    <label for="no1">否</label>
+                                    <input  type="radio"  name="sex1" id="no1" checked/>
+                                </div>
+                            </div>
+                            <ul class="map_box">
+                                <li class="map_left fl">
+                                    <div>图片：</div>
+                                    <div>375×185,5M内</div>
+                                </li>
+                                <li class="map_right fl">
+                                    <form  class="uploadForm" enctype="multipart/form-data" >
+                                        <input name="button" type="button"  id="btn1" onclick="myfile1.click();" ng-click="doUpload(1)" value="上传" />
+                                        <input type="file" id="myfile1" name="file1" value="" style="display:none" accept="image/*">
+                                        <span>{{load1.file_path}}</span>
+                                    </form>
+                                </li>
+                            </ul>
+                            <div class="sure_box " >
+                                <div>
+                                    <span class="btn2 add_sure sure_left " ng-click="add_sure()">提交</span>
+                                    <span class="btn2 add_cancel" ng-click="add_cancel()">取消</span>
+                                </div>
+                            </div>
                         </div>
+                        <div class="tab2 add_tab2">
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品名称
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    链接
+                                </div>
+                                <div class="line_right ">
+                                    <input  type="text" class="text_input" disabled="disabled"/>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品链接
+                                </div>
+                                <div class="line_right ">
+                                    <label for="yes2">是</label>
+                                    <input  type="radio"  name="sex2" id="yes2"/>
+                                    <label for="no2">否</label>
+                                    <input  type="radio"  name="sex2" id="no2" checked/>
+                                </div>
+                            </div>
+                            <ul class="map_box">
+                                <li class="map_left fl">
+                                    <div>图片：</div>
+                                    <div>375×185,5M内</div>
+                                </li>
+                                <li class="map_right fl">
+                                    <img src="../../images/bed.png" alt=""/><br/>
+                                    <form  class="uploadForm" enctype="multipart/form-data" >
+                                        <input name="button" type="button"  id="btn2" onclick="myfile2.click();" ng-click="doUpload(2)" value="上传" />
+                                        <input type="file" id="myfile2" name="file1" value="" style="display:none" accept="image/*">
+                                        <span>{{load2.file_path}}</span>
+                                    </form>
+                                </li>
+                            </ul>
+                            <div class="sure_box " >
+                                <div>
+                                    <span class="btn2 add_sure sure_left " ng-click="add_sure()">提交</span>
+                                    <span class="btn2 add_cancel" ng-click="add_cancel()">取消</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--编辑-->
+                <div class="edit1 hide">
+                    <div class="is_edit hide">
+                        <div class="warm_title">编辑banner</div>
+                        <div class="Product_box hide">
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品编号
+                                </div>
+                                <div class="line_right ">
+                                    <input class="gain_input text_input" type="text"/>
+                                    <div class="gain_btn " style="margin-left: 0">获取</div>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品名称
+                                </div>
+                                <div class="line_right ">
+                                    <input  class="text_input" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品链接
+                                </div>
+                                <div class="line_right ">
+                                    <input  type="text" class="text_input"  disabled="disabled"/>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品链接
+                                </div>
+                                <div class="line_right ">
+                                    <label for="yes3">是</label>
+                                    <input  type="radio"  name="sex3" id="yes3"/>
+                                    <label for="no3">否</label>
+                                    <input  type="radio"  name="sex3" id="no3" checked/>
+                                </div>
+                            </div>
+                            <ul class="map_box">
+                                <li class="map_left fl">
+                                    <div>图片：</div>
+                                    <div>375×185,5M内</div>
+                                </li>
+                                <li class="map_right fl">
+                                    <form  class="uploadForm" enctype="multipart/form-data" >
+                                        <input name="button" type="button"  id="btn3" onclick="myfile3.click();" ng-click="doUpload(3)" value="上传" />
+                                        <input type="file" id="myfile3" name="file1" value="" style="display:none" accept="image/*">
+                                        <span>{{load3.file_path}}</span>
+                                    </form>
+                                </li>
+                            </ul>
+                            <div class="sure_box">
+                                <div>
+                                    <span class="btn2 edit_sure sure_left" ng-click="edit_sure()">确认编辑</span>
+                                    <span class="btn2 edit_cancel" ng-click="edit_cancel()">取消</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="link_box hide">
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品名称
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    链接
+                                </div>
+                                <div class="line_right ">
+                                    <input  type="text" class="text_input" disabled="disabled"/>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    商品链接
+                                </div>
+                                <div class="line_right ">
+                                    <label for="yes4">是</label>
+                                    <input  type="radio"  name="sex4" id="yes4"/>
+                                    <label for="no4">否</label>
+                                    <input  type="radio"  name="sex4" id="no4" checked/>
+                                </div>
+                            </div>
+                            <ul class="map_box">
+                                <li class="map_left fl">
+                                    <div>图片：</div>
+                                    <div>375×185,5M内</div>
+                                </li>
+                                <li class="map_right fl">
+                                    <img src="../../images/bed.png" alt=""/><br/>
+                                    <form  class="uploadForm" enctype="multipart/form-data" >
+                                        <input name="button" type="button"  id="btn4" onclick="myfile4.click();" ng-click="doUpload(4)" value="上传" />
+                                        <input type="file" id="myfile4" name="file1" value="" style="display:none" accept="image/*">
+                                        <span>{{load4.file_path}}</span>
+                                    </form>
+                                </li>
+                            </ul>
+                            <div class="sure_box">
+                                <div>
+                                    <span class="btn2 edit_sure sure_left" ng-click="edit_sure()">确认编辑</span>
+                                    <span class="btn2 edit_cancel" ng-click="edit_cancel()">取消</span>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <!--删除-->
@@ -50,7 +263,7 @@
                         <div class="warm_word1">确认停用</div>
                         <div class="sure_box">
                             <div>
-                                <span class="save_cancel" ng-click="del_close1()">取消</span>
+                                <span class="btn2 save_cancel" ng-click="del_close1()">取消</span>
                             </div>
                         </div>
                     </div>
@@ -59,13 +272,11 @@
                         <div class="warm_word1">确认删除</div>
                         <div class="sure_box">
                             <div>
-                                <span class="del_sure sure_left" ng-click="del_sure()">确认删除</span>
-                                <span class="del_cancel" ng-click="del_cancel()">取消</span>
+                                <span class="btn2 del_sure sure_left" ng-click="del_sure()">确认删除</span>
+                                <span class="btn2 del_cancel" ng-click="del_cancel()">取消</span>
                             </div>
 
                         </div>
-                       <!--<div class="del_sure" ng-click="del_sure()">确认删除</div>-->
-                       <!--<div class="del_cancel" ng-click="del_cancel()">取消</div>-->
                     </div>
                 </div>
                 <!--停用-->
@@ -75,26 +286,14 @@
                         <div class="warm_word1">确认停用</div>
                         <div class="sure_box">
                             <div>
-                                <span class="save_sure sure_left" ng-click="stop_sure()">确认停用</span>
-                                <span class="save_cancel" ng-click="stop_cancel()">取消</span>
+                                <span class="btn2 save_sure sure_left" ng-click="stop_sure()">确认停用</span>
+                                <span class="btn2 save_cancel" ng-click="stop_cancel()">取消</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="edit1 hide">
-                    <div class="is_edit hide">
-                        <div class="warm_title">编辑banner</div>
-                        <div class="sure_box">
-                            <div>
-                                <span class="edit_sure sure_left" ng-click="edit_sure()">确认编辑</span>
-                                <span class="edit_cancel" ng-click="edit_cancel()">取消</span>
-                            </div>
 
-                        </div>
-                        <!--<div class="edit_sure" ng-click="edit_sure()">确认编辑</div>-->
-                        <!--<div class="edit_cancel" ng-click="edit_cancel()">取消</div>-->
-                    </div>
-                </div>
+            </div>
             </div>
         </div>
         <!--弹窗结束-->
@@ -159,8 +358,8 @@
                             <div class="btn1 fl" ng-click="stop()">停用</div>
                             <div class="fl"><a href="">历史数据</a></div>
                             <div class="btn1 screen"  style="position:absolute;top:30px;right:40px"><img src="../../images/cell_icon.jpg" alt=""/></div>
-                            <div id="cells_box" style="position: absolute;top:52px;right:40px;background-color: #288df0">
-                                <ul id="cells" class="hide" style="">
+                            <div id="cells_box" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333">
+                                <ul id="cells"  style="">
                                     <li>
                                         <input type="checkbox" name="cell" checked value="order" ng-click="cell1()"/>
                                         <span>序号</span>
@@ -173,15 +372,11 @@
                                         <input type="checkbox" name="cell" checked value="manage_qx" ng-click="cell1()"/>
                                         <span>管理权限</span>
                                     </li>
-                                    <li>
-                                        <input type="checkbox" name="cell" checked value="action" ng-click="cell1"()/>
-                                        <span>操作</span>
-                                    </li>
+                                    <!--<li>-->
+                                    <!--<input type="checkbox" name="cell" checked value="action" ng-click="cell1"()/>-->
+                                    <!--<span>操作</span>-->
+                                     <!--</li>-->
                                 </ul>
-                                <!--<div><input type="checkbox"/><span></span></div>-->
-                                <!--<select name="" id="cells">-->
-
-                                <!--</select>-->
                             </div>
                         </div>
                         <div class="table_box">
@@ -202,8 +397,8 @@
                                     <td class="tb_name">{{n.name}}</td>
                                     <td class="manage_qx">{{n.admin_module}}</td>
                                     <td class="action">
-                                        <span ng-click="stop_one(n.id)" class="stop">启用</span>
-                                        <span ng-click="edit(n.id)">编辑</span>
+                                        <span ng-click="stop_one(n.id)" class="stop">停用</span>
+                                        <span ng-click="edit('链接')">编辑</span>
                                         <span ng-click="dele(n.id)">删除</span>
                                     </td>
                                 </tr>
