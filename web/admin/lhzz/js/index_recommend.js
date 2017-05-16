@@ -363,15 +363,6 @@ app.controller("index_recommend",function($scope,$http){
                 }
 
             });
-        //$scope.cell1=function(){
-        //    //$("input[name=item]")
-        //    if ($(this).prop("checked") == true) {
-        //        alert(11)
-        //        console.log($(this).val());
-        //        var cell_name="."+$(this).val()
-        //        $(cell_name).css({"display":"none"});
-        //    }
-        //}
     });
 });
 app.controller('itemReaptCtrl', ['$scope', function ($scope) {
@@ -435,33 +426,32 @@ $(function(){
     loadTab();
 
 });
+//弹窗的tab页面
 function resetTabs1(obj) {
-    $(obj).parent().parent().next("div").find(".tab").hide();
-    $(obj).parent().parent().find("a").removeClass("current");
+    $(obj).parent().parent().next("div").find(".tab1").hide();
+    $(obj).parent().parent().find("a").removeClass("current1");
 }
 function loadTab1() {
-    $(".content > div").hide();
+    $(".content1 > div").hide();
     $(".adds1").each(function () {
-        $(this).find("li:first a").addClass("current");
+        $(this).find("li:first a").addClass("current1");
     });
-    $(".content").each(function () {
+    $(".content1").each(function () {
         $(this).find("div:first").fadeIn();
     });
     $(".adds1 a").on("click", function (e) {
         e.preventDefault();
-        if ($(this).attr("class") == "current") {
+        if ($(this).attr("class") == "current1") {
             return;
         } else {
             resetTabs1(this);
-            $(this).addClass("current");
+            $(this).addClass("current1");
             $($(this).attr("name")).fadeIn();
         }
     });
 }
 $(function(){
-
     loadTab1();
-
 });
 
 
