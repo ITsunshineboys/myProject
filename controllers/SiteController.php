@@ -24,7 +24,7 @@ class SiteController extends Controller
     /**
      * Actions accessed by logged-in users
      */
-    private const ACCESS_LOGGED_IN_USER = [
+    const ACCESS_LOGGED_IN_USER = [
         'logout',
         'roles',
         'reset-password',
