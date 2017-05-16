@@ -36,4 +36,16 @@ class BasisDecorationService
         echo '请输入正确的值';
         exit;
     }
+
+    /**
+     * @param string $str
+     */
+    public static function wire($str = '')
+    {
+        //电线单位换算
+        if(!$str == null){
+            $wire = $str / 100;
+        }
+        return $wire;
+    }
 }
