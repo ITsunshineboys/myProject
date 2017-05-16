@@ -31,6 +31,7 @@ class MallController extends Controller
         'recommend-second-admin',
         'recommend-by-sku',
         'recommend-add',
+        'recommend-sort',
         'carousel-admin',
     ];
 
@@ -62,6 +63,7 @@ class MallController extends Controller
                     'toggle-banner-status' => ['post',],
                     'delete-banner' => ['post',],
                     'recommend-add' => ['post',],
+                    'recommend-sort' => ['post',],
                 ],
             ],
         ];
@@ -631,6 +633,25 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Sort recommend action
+     *
+     * @return string
+     */
+    public function actionRecommendSort()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $idArr = explode(',', $ids);
+        $code = GoodsRecommend::sort($idArr);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 200 == $code ? 'OK' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
 }
