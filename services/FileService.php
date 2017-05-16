@@ -58,7 +58,7 @@ class FileService
      */
     public static function checkUploadSize(UploadForm $model)
     {
-        return $model->file->size > Yii::$app->params['uploadPublic']['maxSize'];
+        return $model->file->size <= Yii::$app->params['uploadPublic']['maxSize'];
     }
 
     /**
