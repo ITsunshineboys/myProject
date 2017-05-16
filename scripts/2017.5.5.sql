@@ -68,6 +68,7 @@ CREATE TABLE `goods_brand` (
 CREATE TABLE `goods_recommend_view_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `banner_id` int unsigned not null default 0,
+  `ip` int unsigned not null default 0,
   `create_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
