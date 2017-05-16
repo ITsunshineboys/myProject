@@ -31,6 +31,7 @@ class MallController extends Controller
         'recommend-second-admin',
         'recommend-by-sku',
         'recommend-add',
+        'recommend-edit',
         'recommend-sort',
         'carousel-admin',
     ];
@@ -63,6 +64,7 @@ class MallController extends Controller
                     'toggle-banner-status' => ['post',],
                     'delete-banner' => ['post',],
                     'recommend-add' => ['post',],
+                    'recommend-edit' => ['post',],
                     'recommend-sort' => ['post',],
                 ],
             ],
