@@ -21,7 +21,7 @@ class MallController extends Controller
     /**
      * Actions accessed by logged-in users
      */
-    private const ACCESS_LOGGED_IN_USER = [
+    const ACCESS_LOGGED_IN_USER = [
         'recommend-admin-index',
         'recommend-disable-batch',
         'recommend-delete-batch',
