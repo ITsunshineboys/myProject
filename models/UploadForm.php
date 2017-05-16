@@ -30,7 +30,7 @@ class UploadForm extends Model
     public function rules()
     {
         return [
-            [['file'], 'file', 'extensions' => ['png', 'jpg', 'gif',], 'maxSize' => Yii::$app->params['uploadPublic']['maxSize']],
+            [['file'], 'file', 'extensions' => Yii::$app->params['uploadPublic']['extensions'], 'maxSize' => Yii::$app->params['uploadPublic']['maxSize']],
         ];
     }
 }

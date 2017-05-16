@@ -2,11 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\BasisMaterial;
 use app\models\Effect;
 use app\models\EffectPicture;
 use app\models\Goods;
 use app\models\GoodsBrand;
 use app\models\GoodsCategory;
+use app\models\IntelligenceAssort;
 use app\models\LaborCost;
 use app\models\Series;
 use app\models\Style;
@@ -194,23 +196,10 @@ class OwnerController extends Controller
         ]);
     }
 
-    public function actionMaterialChoice()
+    public function actionBasisDecoration()
     {
         //基础装修
-        $post = [
-            'room' => 3,
-            'hall' => 1,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'area' => 80,
-            'high' =>2.8,
-            'window'=> 2,
-            'style' =>'欧式',
-            'series' =>'齐家',
-            'province' => '四川',
-            'city' => '成都',
-            'district' => '成华',
-        ];
+        $post = \Yii::$app->request->post();
         $arr = [];
         //每天水电完成点位
         $arr['day_standard'] = 5;
@@ -218,33 +207,48 @@ class OwnerController extends Controller
         $arr['worker_kind'] = '水电';
         //人工一天价格
         $arr['day_price'] = LaborCost::univalence($post['province'],$post['city'],$arr['worker_kind']);
-        $arr['weak_current'] = '';
-        //一个房间弱电价格
-        $weak_current = BasisDecorationService::formula($arr);
-        //主材料
-        //固定家具
-        //移动家具
-        //家电配套
-        //软装配套
-        //智能配套 noopsyche_assort
-        $noopsyche_assort = [];
-        $quantity = 1;
+        //查询出材料单价
+        $material_id = BasisMaterial::material(1);
+        $goods_price = Goods::priceDetail($material_id);
+        $goods_brand = GoodsBrand::findById($goods_price);
+        //电线单价
+        $wire['wire_price'] = BasisDecorationService::wire($goods_price[0]['platform_price']);
+        //所有材料单价
+        $all_material = [];
+        $all_material[] = $wire['wire_price'];
+        $all_material[] = $goods_price[0]['platform_price'];
 
-        $goods_category = new GoodsCategory();
-        $category = $goods_category->find()->where(['title' => '智能配套'])->one();
-        $noopsyche_assort['category'] = $category['title'];
+        //所有弱电的点位
+        $weak_location =[5,5,5];
+        //所有的强电点位
+        $powerful_location =[5,5,5];
+        //基础装修
+        $weak_current = BasisDecorationService::formula($arr,$weak_location,$all_material);
+        $powerful_current = BasisDecorationService::formula($arr,$powerful_location,$all_material);
 
-        $goods = new Goods();
-        $price = $goods->find()->where(['category_id' => $category['id']])->all();
-        $noopsyche_assort['platform_price'] = $price['platform_price'];
-
-        $goods_brand = new GoodsBrand();
-        $brand = $goods_brand->find()->where(['id' => $price['brand_id'] ])->all();
-        $noopsyche_assort['brand'] = $brand['name'];
-        $noopsyche_assort['quantity'] = $quantity;
-
-        var_dump($noopsyche_assort);
-        exit;
-        //生活配套
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'weak_current_price' => $weak_current,
+                'powerful_current_price' => $powerful_current,
+            ]
+        ]);
     }
+
+    public function actionMainMaterials()
+    {
+
+    }
+
+    public function actionIntelligenceAssort()
+    {
+        $Intelligence = new IntelligenceAssort();
+        $all = $Intelligence->find()->all();
+//        $orders = Customer::find()->joinWith('orders')->where(['customer.id' => '1'])->all();
+        $goods = Goods::find()->joinWith('orders')->where(['goods.brand_id'=> 1])->all();
+        var_dump($goods);
+        exit;
+    }
+
 }

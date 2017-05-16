@@ -35,4 +35,21 @@ class GoodsBrand extends ActiveRecord
         $where = "name like '%{$brandName}%'";
         return self::find()->select($select)->where($where)->all();
     }
+
+    /**
+     * @param array $brandIds
+     * @return array|ActiveRecord[]
+     */
+    public static function findById($brandIds = [])
+    {
+        if(empty($brandIds))
+        {
+            return [];
+        }else{
+            foreach ($brandIds as $brandId){
+                $id [] = $brandId['brand_id'];
+            }
+        }
+        return self::find()->where(['in','id',$id])->all();
+    }
 }

@@ -129,4 +129,25 @@ class Goods extends ActiveRecord
         isset($this->market_price) && $this->market_price /= 100;
         isset($this->purchase_price) && $this->purchase_price /= 100;
     }
+
+    public function getOrders()
+    {
+        return $this->hasMany(GoodsBrand::className(), ['brand_id' => 'id']);
+    }
+
+    /**
+     * @param array $arr
+     * @return array|ActiveRecord[]
+     */
+    public static function priceDetail($arr = [])
+    {
+        if(empty($arr))
+        {
+            echo '请正确输入值';
+            exit;
+        }else{
+            $sql ="brand_id,platform_price ";
+        }
+        return Goods::find()->select($sql)->where(['in','id',$arr])->all();
+    }
 }

@@ -11,7 +11,6 @@ namespace app\services;
 use app\models\UploadForm;
 use Yii;
 use yii\web\UploadedFile;
-use yii\helpers\Url;
 
 class FileService
 {
@@ -51,6 +50,17 @@ class FileService
     }
 
     /**
+     * Check upload size
+     *
+     * @param UploadForm $model upload model
+     * @return bool
+     */
+    public static function checkUploadSize(UploadForm $model)
+    {
+        return $model->file->size <= Yii::$app->params['uploadPublic']['maxSize'];
+    }
+
+    /**
      * Upload file
      *
      * @return mixed int|array
@@ -62,7 +72,16 @@ class FileService
 
         $code = 1000;
 
-        if (!$model->file || !$model->file->extension || !$model->validate()) {
+        if (!$model->file || !$model->file->extension) {
+            return $code;
+        }
+
+        if (!$model->validate()) {
+            if (!self::checkUploadSize($model)) {
+                $code = 1004;
+                return $code;
+            }
+
             return $code;
         }
 
@@ -129,6 +148,17 @@ class FileService
                 return $filename;
             }
         }
+    }
+
+    /**
+     * Check upload file existence
+     *
+     * @param string $filepath upload file path
+     * @return bool
+     */
+    public static function existUploadFile($filepath)
+    {
+        return file_exists(Yii::getAlias('@webroot') . '/' . $filepath);
     }
 
     /**

@@ -10,6 +10,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 
 class GoodsRecommend extends ActiveRecord
 {
@@ -31,7 +32,7 @@ class GoodsRecommend extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'sold_number', 'status', 'create_time', 'image'];
+    public static $adminFields = ['id', 'sku', 'title', 'from_type', 'viewed_number', 'sold_number', 'status', 'create_time', 'image', 'url'];
 
     /**
      * @var array from types
@@ -60,7 +61,7 @@ class GoodsRecommend extends ActiveRecord
     /**
      * @var array app fields
      */
-    private static $appFields = ['title', 'image', 'description', 'platform_price', 'url'];
+    private static $appFields = ['id', 'title', 'image', 'description', 'platform_price', 'url'];
 
     /**
      * @var array cache keys
@@ -507,6 +508,51 @@ class GoodsRecommend extends ActiveRecord
         }
 
         return true;
+    }
+
+    /**
+     * Sort recommend list
+     *
+     * @param  array $ids recommend id list
+     * @return int
+     */
+    public static function sort($ids)
+    {
+        $code = 1000;
+
+        if (!$ids) {
+            return $code;
+        }
+
+        $idArr = $ids;
+        $ids = implode(',', $ids);
+        $where = 'id in (' . $ids . ')';
+        try {
+            $recommendList = self::find()->where($where)->all();
+        } catch (Exception $dbException) {
+            return $code;
+        }
+
+        if (!$recommendList || count($recommendList) != count($idArr)) {
+            return $code;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        foreach ($recommendList as $recommend) {
+            $recommend->sorting_number = array_search($recommend->id, $idArr) + 1;
+            if (!$recommend->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
+        }
+
+        $transaction->commit();
+
+        $code = 200;
+        return $code;
     }
 
     /**

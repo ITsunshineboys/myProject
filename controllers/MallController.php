@@ -21,7 +21,7 @@ class MallController extends Controller
     /**
      * Actions accessed by logged-in users
      */
-    private const ACCESS_LOGGED_IN_USER = [
+    const ACCESS_LOGGED_IN_USER = [
         'recommend-admin-index',
         'recommend-disable-batch',
         'recommend-delete-batch',
@@ -31,6 +31,8 @@ class MallController extends Controller
         'recommend-second-admin',
         'recommend-by-sku',
         'recommend-add',
+        'recommend-edit',
+        'recommend-sort',
         'carousel-admin',
     ];
 
@@ -62,6 +64,8 @@ class MallController extends Controller
                     'toggle-banner-status' => ['post',],
                     'delete-banner' => ['post',],
                     'recommend-add' => ['post',],
+                    'recommend-edit' => ['post',],
+                    'recommend-sort' => ['post',],
                 ],
             ],
         ];
@@ -618,6 +622,7 @@ class MallController extends Controller
             $supplier = Supplier::findOne($goods->supplier_id);
             $recommend->supplier_id = $supplier->id;
             $recommend->supplier_name = $supplier->nickname;
+            $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
         }
 
         if (!$recommend->save()) {
@@ -631,6 +636,87 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Edit recommend action
+     *
+     * @return string
+     */
+    public function actionRecommendEdit()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $recommend = GoodsRecommend::findOne($id);
+        if (!$recommend) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $postData = Yii::$app->request->post();
+        if (isset($postData['id'])) {
+            unset($postData['id']);
+        }
+        if (isset($postData['supplier_id'])) {
+            unset($postData['supplier_id']);
+        }
+        if (isset($postData['supplier_name'])) {
+            unset($postData['supplier_name']);
+        }
+        if (isset($postData['url'])) {
+            unset($postData['url']);
+        }
+        $recommend->attributes = $postData;
+
+        if (!empty($postData['sku'])) {
+            $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
+            $supplier = Supplier::findOne($goods->supplier_id);
+            $recommend->supplier_id = $supplier->id;
+            $recommend->supplier_name = $supplier->nickname;
+            $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
+        }
+
+        if (!$recommend->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$recommend->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Sort recommend action
+     *
+     * @return string
+     */
+    public function actionRecommendSort()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $idArr = explode(',', $ids);
+        $code = GoodsRecommend::sort($idArr);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 200 == $code ? 'OK' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
 }

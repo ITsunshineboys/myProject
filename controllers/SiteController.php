@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\ContactForm;
 use app\models\LoginForm;
+use app\models\UploadForm;
 use app\models\User;
 use app\models\Role;
 use app\models\UserRole;
@@ -12,6 +13,8 @@ use app\services\FileService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\SmValidationService;
+use Codeception\Module\Filesystem;
+use Faker\Provider\File;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -31,6 +34,7 @@ class SiteController extends Controller
         'roles-status',
         'time-types',
         'upload',
+        'upload-delete',
     ];
 
     /**
@@ -60,7 +64,8 @@ class SiteController extends Controller
                 'actions' => [
                     'logout' => ['post',],
                     'reset-password' => ['post',],
-                    'upload' => ['post',]
+                    'upload' => ['post',],
+                    'upload-delete' => ['post',]
                 ],
             ],
         ];
@@ -673,6 +678,35 @@ class SiteController extends Controller
             'data' => [
                 'file_path' => $uploadRet,
             ],
+        ]);
+    }
+
+    /**
+     * Delete upload file action
+     */
+    public function actionUploadDelete()
+    {
+        $code = 1000;
+
+        $filePath = trim(Yii::$app->request->post('file_path', ''));
+        if (!$filePath || !FileService::existUploadFile($filePath)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!@unlink($filePath)) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
         ]);
     }
 
