@@ -11,7 +11,6 @@ namespace app\services;
 use app\models\UploadForm;
 use Yii;
 use yii\web\UploadedFile;
-use yii\helpers\Url;
 
 class FileService
 {
@@ -149,6 +148,17 @@ class FileService
                 return $filename;
             }
         }
+    }
+
+    /**
+     * Check upload file existence
+     *
+     * @param string $filepath upload file path
+     * @return bool
+     */
+    public static function existUploadFile($filepath)
+    {
+        return file_exists(Yii::getAlias('@webroot') . '/' . $filepath);
     }
 
     /**
