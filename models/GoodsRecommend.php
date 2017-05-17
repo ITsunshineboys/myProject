@@ -263,13 +263,13 @@ class GoodsRecommend extends ActiveRecord
 
                 if (isset($recommend['create_time'])) {
                     if (!empty($recommend['create_time'])) {
-                        $recommend['create_time'] = date('Y-m-d H:i', $recommend['create_time']);
+                        $recommend['create_time'] = date('Y-m-d', $recommend['create_time']);
                     }
                 }
 
                 if (isset($recommend['delete_time'])) {
                     if (!empty($recommend['delete_time'])) {
-                        $recommend['delete_time'] = date('Y-m-d H:i', $recommend['delete_time']);
+                        $recommend['delete_time'] = date('Y-m-d', $recommend['delete_time']);
                     }
                 }
 
