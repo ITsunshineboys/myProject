@@ -258,8 +258,8 @@ class GoodsRecommend extends ActiveRecord
             || $hasSoldNumber
         ) {
             foreach ($recommendList as &$recommend) {
-                $hasViewedNumber && $recommend['viewed_number'] = self::viewedNumber($recommend['create_time'], $recommend['delete_time']);
-                $hasSoldNumber && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time']);
+                $hasViewedNumber && $recommend['viewed_number'] = self::viewedNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
+                $hasSoldNumber && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
 
                 if (isset($recommend['create_time'])) {
                     if (!empty($recommend['create_time'])) {
@@ -288,7 +288,7 @@ class GoodsRecommend extends ActiveRecord
      * @param int $deleteTime banner delete time default 0
      * @return int
      */
-    public static function viewedNumber($createTime = 0, $deleteTime = 0)
+    public static function viewedNumber($createTime = 0, $deleteTime = 0, $recommendId = 0)
     {
         $createTime = (int)$createTime;
         $deleteTime = (int)$deleteTime;
@@ -300,7 +300,7 @@ class GoodsRecommend extends ActiveRecord
         $cache = Yii::$app->cache;
         $viewedNumber = $cache->get($key);
         if ($viewedNumber === false) {
-            $viewedNumber = self::_viewedNumber($createTime, $deleteTime);
+            $viewedNumber = self::_viewedNumber($createTime, $deleteTime, $recommendId);
             $cache->set($key, $viewedNumber);
         }
 
@@ -311,13 +311,16 @@ class GoodsRecommend extends ActiveRecord
      * Get viewed number
      *
      * @access private
-     * @param int $createTime banner create time
-     * @param int $deleteTime banner delete time
+     * @param int $createTime  banner create time
+     * @param int $deleteTime  banner delete time
+     * @param int $recommendId recommend id default 0
      * @return int
      */
-    public static function _viewedNumber($createTime, $deleteTime)
+    public static function _viewedNumber($createTime, $deleteTime, $recommendId = 0)
     {
         $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
+        $recommendId = (int)$recommendId;
+        $recommendId && $where .= " and recommend_id = {$recommendId}";
         return (int)GoodsRecommendViewLog::find()->where($where)->asArray()->count();
     }
 
@@ -328,7 +331,7 @@ class GoodsRecommend extends ActiveRecord
      * @param int $deleteTime banner delete time default 0
      * @return int
      */
-    public static function soldNumber($createTime = 0, $deleteTime = 0)
+    public static function soldNumber($createTime = 0, $deleteTime = 0, $recommendId = 0)
     {
         $createTime = (int)$createTime;
         $deleteTime = (int)$deleteTime;
@@ -340,7 +343,7 @@ class GoodsRecommend extends ActiveRecord
         $cache = Yii::$app->cache;
         $viewedNumber = $cache->get($key);
         if ($viewedNumber === false) {
-            $viewedNumber = self::_soldNumber($createTime, $deleteTime);
+            $viewedNumber = self::_soldNumber($createTime, $deleteTime, $recommendId);
             $cache->set($key, $viewedNumber);
         }
 
@@ -355,9 +358,11 @@ class GoodsRecommend extends ActiveRecord
      * @param int $deleteTime banner delete time
      * @return int
      */
-    public static function _soldNumber($createTime, $deleteTime)
+    public static function _soldNumber($createTime, $deleteTime, $recommendId = 0)
     {
         $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
+        $recommendId = (int)$recommendId;
+        $recommendId && $where .= " and recommend_id = {$recommendId}";
         return (int)GoodsRecommendSaleLog::find()->where($where)->asArray()->count();
     }
 
