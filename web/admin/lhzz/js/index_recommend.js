@@ -1,4 +1,4 @@
-var role="site/all-roles";
+var recommend_list="mall/recommend-admin-index";
 //文件上传
 var upload1="site/upload";
 //单个改变是否停用
@@ -10,17 +10,17 @@ var  recommend_deletes="mall/recommend-delete-batch";
 //删除推荐接口
 var recommend_delete="mall/recommend-delete";
 //推荐排序
-var recommend_sort="mall/recommend-sort"
+var recommend_sort="mall/recommend-sort";
 app.controller("index_recommend",function($scope,$http){
     //加载页面表格数据函数
     $scope.table_data1=function(){
         $http({
             method: "GET",
-            url: url + role
+            url: url + recommend_list
         })
             .success(function (data, status) {
-                $scope.page = 1;
-                $scope.mydata = data.data.roles;
+                //$scope.page = 1;
+                $scope.mydata = data.data.recommend_admin_index.details;
 
             }).
             error(function (data, status) {
