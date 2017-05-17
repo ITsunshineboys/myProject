@@ -71,4 +71,14 @@ class TestController extends Controller
         $key = trim(Yii::$app->request->get('key', ''));
         return Yii::$app->cache->delete($key);
     }
+
+    /**
+     * Delete all cache action.
+     *
+     * @return string
+     */
+    public function actionCacheDeleteAll()
+    {
+        return Yii::$app->cache->flush();
+    }
 }

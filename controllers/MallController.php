@@ -6,6 +6,7 @@ use app\models\GoodsBrand;
 use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\models\Goods;
+use app\models\GoodsRecommendViewLog;
 use app\models\Supplier;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
@@ -33,6 +34,7 @@ class MallController extends Controller
         'recommend-add',
         'recommend-edit',
         'recommend-sort',
+        'recommend-click-record',
         'carousel-admin',
     ];
 
@@ -66,6 +68,7 @@ class MallController extends Controller
                     'recommend-add' => ['post',],
                     'recommend-edit' => ['post',],
                     'recommend-sort' => ['post',],
+                    'recommend-click-record' => ['post',],
                 ],
             ],
         ];
@@ -717,6 +720,40 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 200 == $code ? 'OK' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+    /**
+     * Log recommend click action
+     *
+     * @return string
+     */
+    public function actionRecommendClickRecord()
+    {
+        $code = 1000;
+
+        $recommendViewLog = new GoodsRecommendViewLog;
+        $recommendViewLog->attributes = Yii::$app->request->post();
+        $recommendViewLog->ip = ip2long(Yii::$app->request->userIP);
+
+        if (!$recommendViewLog->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$recommendViewLog->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }
