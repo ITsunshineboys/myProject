@@ -12,6 +12,7 @@ var recommend_delete="mall/recommend-delete";
 //推荐排序
 var recommend_sort="mall/recommend-sort";
 app.controller("index_recommend",function($scope,$http){
+    $scope.url=url;
     //加载页面表格数据函数
     $scope.table_data1=function(){
         $http({
@@ -20,8 +21,8 @@ app.controller("index_recommend",function($scope,$http){
         })
             .success(function (data, status) {
                 //$scope.page = 1;
-                $scope.mydata = data.data;
-                //$scope.mydata = data.data.recommend_admin_index.details[0];
+                //$scope.mydata = data.data;
+                $scope.mydata = data.data.recommend_admin_index.details;
 
             }).
             error(function (data, status) {
@@ -32,6 +33,7 @@ app.controller("index_recommend",function($scope,$http){
     //页面初始加载数据
     $scope.table_data1();
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
+
         //排序操作处理
         $scope.order_alter=function(){
             var fixHelper = function(e, ui) {
@@ -382,16 +384,24 @@ app.controller("index_recommend",function($scope,$http){
             });
         };
         //编辑事件处理
-        $scope.edit=function(obj){
-            $scope.edit_id=obj;
-            alert($scope.edit_id)
-            if($scope.edit_id=="链接"){
-                $(".popup .edit1 .is_edit .Product_box").addClass('show').removeClass("hide");
-                $(".popup .edit1 .is_edit .link_box").addClass('hide').removeClass("show");
+        $scope.edit=function(edit_id,edit_name1,edit_sku1,edit_supplier,edit_url2,edit_status2,edit_image2){
+            $scope.edit_id=edit_id;
+            $scope.edit_name=edit_name1;
+            $scope.edit_sku=edit_sku1;
+            $scope.edit_supplier=edit_supplier;
+            $scope.edit_url=edit_url2;
+            $scope.edit_status=edit_status2;
+            $scope.edit_image2=edit_image2;
+            if($scope.edit_status=="停用"){
+
             }
-            else{
+            if($scope.edit_supplier=="链接"){
                 $(".popup .edit1 .is_edit .link_box").addClass('show').removeClass("hide");
                 $(".popup .edit1 .is_edit .Product_box").addClass('hide').removeClass("show");
+            }
+            else{
+                $(".popup .edit1 .is_edit .Product_box").addClass('show').removeClass("hide");
+                $(".popup .edit1 .is_edit .link_box").addClass('hide').removeClass("show");
             }
             $(".popup").addClass('show').removeClass("hide");
             $(".popup .edit1").addClass('show').removeClass("hide");
@@ -399,17 +409,17 @@ app.controller("index_recommend",function($scope,$http){
             //取消编辑
             $scope.edit_cancel=function(){
                 //弹窗的隐藏
-                alert("取消编辑")
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .edit1").addClass('hide').removeClass("show");
                 $(".popup .edit1 .is_edit").addClass('hide').removeClass("show");
             };
             //确认编辑
             $scope.edit_sure=function() {
-                alert("确认编辑")
+
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .edit1").addClass('hide').removeClass("show");
                 $(".popup .edit1 .is_edit").addClass('hide').removeClass("show");
+
             }
         };
         //顺序更换保存

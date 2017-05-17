@@ -60,7 +60,7 @@
                             </div>
                             <div class="line_box">
                                 <div class="line_left ">
-                                    商品链接
+                                    是否启用
                                 </div>
                                 <div class="line_right ">
                                     <label for="yes1">是</label>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="line_box">
                                 <div class="line_left ">
-                                    商品链接
+                                    是否启用
                                 </div>
                                 <div class="line_right ">
                                     <label for="yes2">是</label>
@@ -150,7 +150,7 @@
                                     商品编号
                                 </div>
                                 <div class="line_right ">
-                                    <input class="gain_input text_input" type="text"/>
+                                    <input class="gain_input text_input" ng-model="edit_sku" type="text"/>
                                     <div class="gain_btn " style="margin-left: 0">获取</div>
                                 </div>
                             </div>
@@ -159,7 +159,7 @@
                                     商品名称
                                 </div>
                                 <div class="line_right ">
-                                    <input  class="text_input" type="text"/>
+                                    <input  class="text_input" ng-model="edit_name" type="text"/>
                                 </div>
                             </div>
                             <div class="line_box">
@@ -167,18 +167,18 @@
                                     商品链接
                                 </div>
                                 <div class="line_right ">
-                                    <input  type="text" class="text_input"  disabled="disabled"/>
+                                    <input  type="text" class="text_input" ng-model="edit_url" disabled="disabled"/>
                                 </div>
                             </div>
                             <div class="line_box">
                                 <div class="line_left ">
-                                    商品链接
+                                    是否停用
                                 </div>
                                 <div class="line_right ">
                                     <label for="yes3">是</label>
                                     <input  type="radio"  name="sex3" id="yes3"/>
                                     <label for="no3">否</label>
-                                    <input  type="radio"  name="sex3" id="no3" checked/>
+                                    <input  type="radio"  name="sex3" id="no3" />
                                 </div>
                             </div>
                             <ul class="map_box">
@@ -187,6 +187,7 @@
                                     <div>375×185,5M内</div>
                                 </li>
                                 <li class="map_right fl">
+                                    <img src="{{url}}{{edit_image2}}"  alt=""/>
                                     <form  class="uploadForm" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn3" onclick="myfile3.click();" ng-click="doUpload(3)" value="上传" />
                                         <input type="file" id="myfile3" name="file1" value="" style="display:none" accept="image/*">
@@ -221,7 +222,7 @@
                             </div>
                             <div class="line_box">
                                 <div class="line_left ">
-                                    商品链接
+                                    是否停用
                                 </div>
                                 <div class="line_right ">
                                     <label for="yes4">是</label>
@@ -380,39 +381,40 @@
                             </div>
                         </div>
                         <div class="table_box">
-                            <table width="800" border="1">
+                            <table  border="1">
                                 <thead>
                                 <th class="choose">
                                     <!--<input type="checkbox" ng-click="all()" class="choose_all"/>-->
                                 </th>
-                                <th class="order">序号:</th>
-                                <th class="tb_name">名称:</th>
-                                <th class="manage_qx">管理权限:</th>
+                                <th class="tb_name">名称</th>
+                                <th class="tb_type">类型</th>
+                                <th class="tb_sku">商品编号</th>
+                                <th class="tb_supplier_name">来源商家</th>
+                                <th class="tb_viewed_number">上架浏览</th>
+                                <th class="tb_sold_number">上架销量</th>
+                                <th class="tb_status">是否停用</th>
+                                <th class="tb_create_time">创建时间</th>
+                                <th class="tb_image">图片</th>
                                 <th class="action">操作：</th>
                                 </thead>
                                 <tbody >
-                                <tr ng-repeat="n in mydata" ng-controller="itemReaptCtrl" class="{{n.id}}"  name="{{n.id}}">
-                                    <td class="choose"> <input type="checkbox" value="{{n.id}}" name="item" class="choose" ng-click="choose(n.id)"/></td>
-                                    <td class="order">{{n.id}}</td>
-                                    <td class="tb_name">{{n.name}}</td>
-                                    <td class="manage_qx">{{n.admin_module}}</td>
+                                <tr ng-repeat="n in mydata" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
+                                    <td class="choose"> <input type="checkbox" value="{{n.id}}" name="item" class="choose"/></td>
+                                    <td class="tb_name">{{n.title}}</td>
+                                    <td class="tb_type">{{n.from_type}}</td>
+                                    <td class="tb_sku">{{n.sku}}</td>
+                                    <td class="tb_supplier_name"><a href="{{n.url}}"  target="_blank">{{n.supplier_name}}</a></td>
+                                    <td class="tb_viewed_number">{{n.viewed_number}}</td>
+                                    <td class="tb_sold_number">{{n.sold_number}}</td>
+                                    <td class="tb_status">{{n.status}}</td>
+                                    <td class="tb_create_time">{{n.create_time}} </td>
+                                    <td class="tb_image"><img src="{{url}}{{n.image}}" alt=""/>{{n.image}}</td>
                                     <td class="action">
-                                        <span ng-click="stop_one(n.id)" class="stop">停用</span>
-                                        <span ng-click="edit('链接')">编辑</span>
+                                        <span ng-click="stop_one(n.id)" class="stop">{{n.status}}</span>
+                                        <span ng-click="edit(n.id,n.title,n.sku,n.supplier_name,n.url,n.status,n.image)">编辑</span>
                                         <span ng-click="dele(n.id)">删除</span>
                                     </td>
                                 </tr>
-                                <!--<tr>-->
-                                    <!--<td class="choose"> <input type="checkbox" value="888" name="item" class="choose" ng-click="choose(n.id)"/></td>-->
-                                    <!--<td class="order">88888</td>-->
-                                    <!--<td class="tb_name">名字3333</td>-->
-                                    <!--<td class="manage_qx">哈哈丰东股份 </td>-->
-                                    <!--<td class="action">-->
-                                        <!--<span ng-click="stop(n.id)" class="stop">启用</span>-->
-                                        <!--<span ng-click="edit($index)">编辑</span>-->
-                                        <!--<span ng-click="dele(n.id)">删除</span>-->
-                                    <!--</td>-->
-                                <!--</tr>-->
                                 </tbody>
                             </table>
                         </div>
