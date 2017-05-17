@@ -69,6 +69,7 @@ CREATE TABLE `goods_recommend_view_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `recommend_id` int(11) unsigned not null default 0,
   `ip` int(11) unsigned not null default 0,
+  `log_ip_number` tinyint(1) unsigned not null default 0,
   `create_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
