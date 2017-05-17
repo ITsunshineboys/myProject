@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use yii\db\ActiveRecord;
 
 class GoodsRecommendViewLog extends ActiveRecord
@@ -29,6 +30,8 @@ class GoodsRecommendViewLog extends ActiveRecord
             [['recommend_id'], 'required'],
             ['recommend_id', 'number', 'integerOnly' => true, 'min' => 1],
             ['recommend_id', 'validateRecommendId', 'skipOnEmpty' => false],
+            ['ip', 'number', 'integerOnly' => true],
+            ['ip', 'validateIp', 'skipOnEmpty' => false]
         ];
     }
 
@@ -41,6 +44,30 @@ class GoodsRecommendViewLog extends ActiveRecord
     public function validateRecommendId($attribute)
     {
         if (!GoodsRecommend::findOne($this->$attribute)) {
+            $this->addError($attribute);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates ip
+     *
+     * @param string $attribute ip to validate
+     * @return bool
+     */
+    public function validateIp($attribute)
+    {
+        list($startTime, $endTime) = StringService::startEndDate('today');
+        $startTime = strtotime($startTime);
+        $endTime = strtotime($endTime);
+
+        $where = "create_time >= {$startTime} and create_time <= {$endTime}";
+        $where .= " and {$attribute} = {$this->$attribute}";
+        $where .= " and recommend_id = {$this->recommend_id}";
+
+        if (self::find()->where($where)->exists()) {
             $this->addError($attribute);
             return false;
         }
