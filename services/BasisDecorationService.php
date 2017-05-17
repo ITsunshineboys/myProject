@@ -44,8 +44,14 @@ class BasisDecorationService
     {
         //电线单位换算
         if(!$str == null){
-            $wire = $str / 100;
+            $wire = ($str / 100)*10;
         }
         return $wire;
     }
+
+    public static function pointsCalculate()
+    {
+
+    }
+
 }

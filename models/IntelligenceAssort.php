@@ -16,4 +16,17 @@ class IntelligenceAssort extends ActiveRecord
         return 'intelligence_assort';
     }
 
+    public function findById($id = '')
+    {
+        $arr_id = [];
+        if(!$id == null){
+            $array = self::find()->where(['decoration_list_id' => $id])->all();
+            foreach ($array as $arr)
+            {
+                $arr_id[] = $arr['goods_id'];
+            }
+        }
+        return $arr_id;
+    }
+
 }

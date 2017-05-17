@@ -23,7 +23,7 @@ class BasisMaterial extends ActiveRecord
     {
         $arr_id = [];
         if(!$id == null){
-            $array = self::find()->where(['goods_id' => $id])->all();
+            $array = self::find()->where(['basis_decoration_id' => $id])->all();
             foreach ($array as $arr)
             {
                 $arr_id[] = $arr['goods_id'];
