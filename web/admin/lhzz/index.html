@@ -3,9 +3,9 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" href="../../../../css/all.css"/>
-    <link rel="stylesheet" href="../../css/global.css"/>
-    <link rel="stylesheet" href="../../css/index_recommend.css"/>
+    <link rel="stylesheet" href="../../css/all.css"/>
+    <link rel="stylesheet" href="css/global.css"/>
+    <link rel="stylesheet" href="css/index_recommend.css"/>
 </head>
 <body ng-app="app" ng-controller="index_recommend" ng-cloak>
 
@@ -123,7 +123,7 @@
                                     <div>375×185,5M内</div>
                                 </li>
                                 <li class="map_right fl">
-                                    <img src="../../images/bed.png" alt=""/><br/>
+                                    <img src="images/bed.png" alt=""/><br/>
                                     <form  class="uploadForm" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn2" onclick="myfile2.click();" ng-click="doUpload(2)" value="上传" />
                                         <input type="file" id="myfile2" name="file1" value="" style="display:none" accept="image/*">
@@ -236,7 +236,7 @@
                                     <div>375×185,5M内</div>
                                 </li>
                                 <li class="map_right fl">
-                                    <img src="../../images/bed.png" alt=""/><br/>
+                                    <img src="images/bed.png" alt=""/><br/>
                                     <form  class="uploadForm" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn4" onclick="myfile4.click();" ng-click="doUpload(4)" value="上传" />
                                         <input type="file" id="myfile4" name="file1" value="" style="display:none" accept="image/*">
@@ -299,30 +299,30 @@
         <!--弹窗结束-->
         <div class="nav_box ">
             <div class="logo">
-                <img src="../../images/logo.png" alt=""/>
+                <img src="images/logo.png" alt=""/>
             </div>
             <dl >
-                <dt onClick="changeImage()" ><img src="../../images/select1.png">首页</dt>
+                <dt onClick="changeImage()" ><img src="images/select1.png">首页</dt>
 
             </dl>
 
             <dl >
-                <dt onClick="changeImage()"><img src="../../images/select1.png">用户管理</dt>
+                <dt onClick="changeImage()"><img src="images/select1.png">用户管理</dt>
                 <dd ><a href="">上架商品</a></dd>
                 <dd><a href="">活动商品</a></dd>
             </dl>
 
             <dl>
-                <dt><img src="../../images/select1.png">系统管理</dt>
+                <dt><img src="images/select1.png">系统管理</dt>
                 <dd ><a href="" >管理员列表</a></dd>
                 <dd><a href="">角色管理</a></dd>
                 <dd><a href="">权限管理</a></dd>
             </dl>
 
             <dl class="mall">
-                <dt onClick="changeImage()" class="on"><img src="../../images/select1.png">商城管理</dt>
-                <dd ><a href="index_recommend.html" class="dd_on">首页推荐</a></dd>
-                <dd><a href="merchant_manage.html">商家管理</a></dd>
+                <dt onClick="changeImage()" class="on"><img src="images/select1.png">商城管理</dt>
+                <dd ><a href="index.html" class="dd_on">首页推荐</a></dd>
+                <dd><a href="view/mall_manage/merchant_manage.html">商家管理</a></dd>
                 <dd><a href="#">商品管理</a></dd>
             </dl>
         </div>
@@ -330,15 +330,15 @@
         <div class="my_container">
             <div class="header_box">
                 <div class="header_left">
-                    <a href=""><img src="../../images/select1.png" alt=""/>返回首页</a>
+                    <a href=""><img src="images/select1.png" alt=""/>返回首页</a>
                 </div>
                 <div class="header_right">
                     <div class="fl">
-                        <a href=""><img src="../../images/news.png" alt=""/>站内信</a>
+                        <a href=""><img src="images/news.png" alt=""/>站内信</a>
                     </div>
                     <div class="fl">|</div>
                     <div class="fl">
-                        <a href="">个人面板<img style="height:40px" src="../../images/center.png" alt=""/></a>
+                        <a href="">个人面板<img style="height:40px" src="images/center.png" alt=""/></a>
                     </div>
                 </div>
             </div>
@@ -348,7 +348,7 @@
                     <li><a href="#" name=".tab1_2">推荐</a></li>
                 </ul>
                 <div class="content">
-                    <div class="tab tab1_1">
+                    <div class="tab tab1_1">{{mydata}}
                         <div class="operate_box">
                             <div class="btn1 fl" ng-click="save1()">保存</div>
                             <div class="btn1 fl" ng-click="add()">添加</div>
@@ -357,7 +357,7 @@
                             <div class="btn1 fl" ng-click="delete()">删除</div>
                             <div class="btn1 fl" ng-click="stop()">停用</div>
                             <div class="fl"><a href="">历史数据</a></div>
-                            <div class="btn1 screen"  style="position:absolute;top:30px;right:40px"><img src="../../images/cell_icon.jpg" alt=""/></div>
+                            <div class="btn1 screen"  style="position:absolute;top:30px;right:40px"><img src="images/cell_icon.jpg" alt=""/></div>
                             <div id="cells_box" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333">
                                 <ul id="cells"  style="">
                                     <li>
@@ -379,7 +379,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="table_box">{{mydata}}
+                        <div class="table_box">
                             <table width="800" border="1">
                                 <thead>
                                 <th class="choose">
@@ -430,13 +430,13 @@
 
         </div>
     </div>
-    <script src="../../../../js/jquery.js"></script>
-    <script src="../../../../js/angular.min.js"></script>
-    <script src="../../js/jquery_ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../../js/paging/query.js"></script>
-    <script type="text/javascript" src="../../js/paging/paging.js"></script>
-    <script src="../../../js/global.js"></script>
-    <script src="../../js/index_recommend.js"></script>
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/angular.min.js"></script>
+    <script src="js/jquery_ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/paging/query.js"></script>
+    <script type="text/javascript" src="js/paging/paging.js"></script>
+    <script src="../js/global.js"></script>
+    <script src="js/index_recommend.js"></script>
 
 </body>
 </html>

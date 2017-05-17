@@ -20,7 +20,8 @@ app.controller("index_recommend",function($scope,$http){
         })
             .success(function (data, status) {
                 //$scope.page = 1;
-                $scope.mydata = data.data.recommend_admin_index.details;
+                $scope.mydata = data.data;
+                //$scope.mydata = data.data.recommend_admin_index.details[0];
 
             }).
             error(function (data, status) {
