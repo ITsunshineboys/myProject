@@ -62,4 +62,9 @@ return [
         'year' => '本年',
         'custom' => '自定义',
     ],
+    'category' => [
+        'admin' => [
+            'currentName' => '当前',
+        ],
+    ],
 ];
