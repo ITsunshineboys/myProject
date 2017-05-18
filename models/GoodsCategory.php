@@ -17,6 +17,8 @@ class GoodsCategory extends ActiveRecord
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
+    const CUSTOM_CATEGORY_APPROVE = 1;
+    const CUSTOM_CATEGORY_REJECT = 0;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -84,5 +86,40 @@ class GoodsCategory extends ActiveRecord
             $arr[] = $category; // 组合数组
         }
         return $arr;
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            ['approve_time', 'number', 'integerOnly' => true],
+            [['reason'], 'string']
+        ];
+    }
+
+    /**
+     * Do some ops before insertion
+     *
+     * @param bool $insert if is a new record
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if (!$insert) {
+                if ($this->approve_time > 0) {
+                    $this->approve_time = time();
+                    $this->reject_time = 0;
+                } else {
+                    $this->approve_time = 0;
+                    $this->reject_time = time();
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

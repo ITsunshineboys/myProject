@@ -47,11 +47,15 @@ CREATE TABLE `goods_recommend` (
 
 CREATE TABLE `goods_category` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) unsigned not null default 0,
   `title` varchar(50) not null DEFAULT '',
   `pid` int(11) unsigned not null default 0,
   `level` tinyint(1) unsigned not null default 0,
   `path` varchar(50) not null DEFAULT '',
   `icon` varchar(255) not null DEFAULT '',
+  `approve_time` int unsigned not null DEFAULT 0,
+  `reject_time` int unsigned not null DEFAULT 0,
+  `reason` varchar(100) not null DEFAULT '' comment '原因',
   `deleted` tinyint(1) not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

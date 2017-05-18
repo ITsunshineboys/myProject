@@ -36,6 +36,7 @@ class MallController extends Controller
         'recommend-sort',
         'recommend-click-record',
         'carousel-admin',
+        'review-supplier-category',
     ];
 
     /**
@@ -69,6 +70,7 @@ class MallController extends Controller
                     'recommend-edit' => ['post',],
                     'recommend-sort' => ['post',],
                     'recommend-click-record' => ['post',],
+                    'review-supplier-category' => ['post',],
                 ],
             ],
         ];
@@ -754,6 +756,53 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Review supplier category action.
+     *
+     * @return string
+     */
+    public function actionReviewSupplierCategory()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $goodsCategory = GoodsCategory::findOne($id);
+        if (!$goodsCategory
+            || ($goodsCategory->approve_time > 0 || $goodsCategory->reject_time > 0)
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $postData = Yii::$app->request->post();
+        if (isset($postData['id'])) {
+            unset($postData['id']);
+        }
+
+        $goodsCategory->attributes = $postData;
+        if (!$goodsCategory->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goodsCategory->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
         ]);
     }
 }
