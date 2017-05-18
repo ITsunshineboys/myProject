@@ -18,8 +18,6 @@ class GoodsCategory extends ActiveRecord
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
-    const CUSTOM_CATEGORY_APPROVE = 1;
-    const CUSTOM_CATEGORY_REJECT = 0;
 
     /**
      * @return string 返回该AR类关联的数据表名
