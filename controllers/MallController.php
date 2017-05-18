@@ -771,6 +771,7 @@ class MallController extends Controller
         $id = (int)Yii::$app->request->post('id', 0);
         $goodsCategory = GoodsCategory::findOne($id);
         if (!$goodsCategory
+            || $goodsCategory->supplier_id == 0
             || ($goodsCategory->approve_time > 0 || $goodsCategory->reject_time > 0)
         ) {
             return Json::encode([
