@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
 class GoodsCategory extends ActiveRecord
 {
     const CACHE_PREFIX = 'goods_categories_';
+    const CACHE_SUB_CATE_PREFIX = 'goods_category_';
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
@@ -41,7 +42,9 @@ class GoodsCategory extends ActiveRecord
         $cache = Yii::$app->cache;
         $categories = $cache->get($key);
         if (!$categories) {
-            $categories = self::find()->select($select)->where(['pid' => $parentCategoryId])->asArray()->all();
+            $where = "pid = {$parentCategoryId}";
+            $where .= " and deleted = 0 and (supplier_id = 0 or approve_time > 0)";
+            $categories = self::find()->select($select)->where($where)->asArray()->all();
             if ($categories) {
                 $cache->set($key, $categories);
             }
@@ -59,7 +62,7 @@ class GoodsCategory extends ActiveRecord
     public function categories($pid = 0)
     {
         $cache = Yii::$app->cache;
-        $key = 'goods_category_' . $pid;
+        $key = self::CACHE_SUB_CATE_PREFIX . $pid;
         $categories = $cache->get($key);
         if (!$categories) {
             $categories = $this->_categories($pid);
