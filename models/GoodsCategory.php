@@ -18,6 +18,12 @@ class GoodsCategory extends ActiveRecord
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
+    const CURRENT_CATEGORY = [
+        'id' => 0,
+        'title' => '当前',
+        'icon' => ''
+    ];
+    const APP_FIELDS = ['id', 'title', 'icon'];
 
     /**
      * @return string 返回该AR类关联的数据表名
