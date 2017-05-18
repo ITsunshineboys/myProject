@@ -139,3 +139,21 @@ CREATE TABLE `basis_material` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `points` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_list_id` int(11) DEFAULT NULL,
+  `place` varchar(20) DEFAULT NULL COMMENT '位置',
+  `weak_current_points` int(5) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `points_details` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `place_id` int(11) DEFAULT NULL,
+  `details` varchar(50) DEFAULT NULL COMMENT '简介详情',
+  `points_quantity` int(10) unsigned DEFAULT NULL COMMENT '点位数量',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+

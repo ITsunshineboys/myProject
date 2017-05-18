@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\AppliancesAssort;
+use app\models\BasisDecoration;
 use app\models\BasisMaterial;
 use app\models\Effect;
 use app\models\EffectPicture;
@@ -13,6 +14,8 @@ use app\models\IntelligenceAssort;
 use app\models\LaborCost;
 use app\models\LifeAssort;
 use app\models\MoveFurniture;
+use app\models\Points;
+use app\models\PointsDetails;
 use app\models\Series;
 use app\models\SoftOutfitAssort;
 use app\models\Style;
@@ -203,17 +206,38 @@ class OwnerController extends Controller
     public function actionBasisDecoration()
     {
         //基础装修
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post =[
+            'effect_id'=>1,
+            'room'=>1,
+            'hall'=>1,
+            'window'=>2,
+            'high'=>2.8,
+            'area'=>62,
+            'toilet'=>1,
+            'kitchen'=>1,
+            'style'=>1,
+            'series'=>1,
+            'province'=>'四川',
+            'city'=>'成都'
+        ];
+
         $arr = [];
         //每天水电完成点位
-        $arr['day_standard'] = 5;
-        $arr['profit'] = 0.7;
+        $arr['day_standard'] = $post['0'] ?? 5;
+        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水电';
+
+        //所有基础装修类型
+        $basis_decoration = BasisDecoration::find()->all();
+
         //人工一天价格
-//        $arr['day_price'] = LaborCost::univalence($post['province'],$post['city'],$arr['worker_kind']);
+        $arr['day_price'] = LaborCost::univalence($post['province'],$post['city'],$arr['worker_kind']);
+
         //查询出材料单价
-        $material_id = BasisMaterial::material(1);
+        $material_id = BasisMaterial::material($basis_decoration[0]['id']);
         $goods_price = Goods::priceDetail($material_id);
+
         //电线单价
         foreach ($goods_price as $name){
             if($name['name'] == '电线'){
@@ -222,19 +246,29 @@ class OwnerController extends Controller
                 $goods_price['0']['platform_price'] = $wire['wire_price'] ;
             }
         }
-        //所有弱电的点位
-        $weak_location = 1;
-        //所有的强电点位
-        $powerful_location =[5,5,5];
-        //基础装修
-        $weak_current = BasisDecorationService::formula($arr,$weak_location,$goods_price);
+
+        $effect_id = Effect::find()->where(['id'=>$post['effect_id']])->all();
+
+        //弱电 价格
+        $weak_location = Points::weakLocation($effect_id[0]['id']);
+        $weak_current_price = BasisDecorationService::formula($arr,$weak_location,$goods_price);
+
+        //强电 价格
+        $all_place =  Points::find()->where($effect_id[0]['id'])->all();
+        $powerful_location = PointsDetails::AllQuantity($all_place);
         $powerful_current = BasisDecorationService::formula($arr,$powerful_location,$goods_price);
+
+        //防水 价格
+        //水路 价格
+        //木作 价格
+        //乳胶漆 价格
+        //泥作 价格
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'weak_current_price' => $weak_current,
+                'weak_current_price' => $weak_current_price,
                 'powerful_current_price' => $powerful_current,
             ]
         ]);

@@ -21,9 +21,9 @@ class BasisDecorationService
         {
             // 材料费
             $materials_expenses =  0;
-            foreach ($unitPrice as $k => $v)
+            foreach ($unitPrice as $k=>$v)
             {
-                $materials_expenses += $k * $quantity[$k];
+                $materials_expenses += $v['platform_price'] * $quantity;
             }
             //人工费
             $labor_cost = $arr['day_price'] / $arr['day_standard'];
