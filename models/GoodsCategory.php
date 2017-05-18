@@ -96,7 +96,8 @@ class GoodsCategory extends ActiveRecord
     {
         return [
             ['approve_time', 'number', 'integerOnly' => true],
-            [['reason'], 'string']
+            [['reason'], 'string'],
+            ['description', 'safe']
         ];
     }
 

@@ -53,9 +53,11 @@ CREATE TABLE `goods_category` (
   `level` tinyint(1) unsigned not null default 0,
   `path` varchar(50) not null DEFAULT '',
   `icon` varchar(255) not null DEFAULT '',
+  `description` text not null,
   `approve_time` int unsigned not null DEFAULT 0,
   `reject_time` int unsigned not null DEFAULT 0,
   `reason` varchar(100) not null DEFAULT '' comment '原因',
+  `create_time` int unsigned not null DEFAULT 0,
   `deleted` tinyint(1) not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
