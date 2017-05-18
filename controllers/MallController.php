@@ -37,6 +37,7 @@ class MallController extends Controller
         'recommend-click-record',
         'carousel-admin',
         'review-supplier-category',
+        'categories-admin',
     ];
 
     /**
@@ -151,12 +152,27 @@ class MallController extends Controller
     public function actionCategories()
     {
         $pid = (int)Yii::$app->request->get('pid', 0);
-        $fromAdmin = (int)Yii::$app->request->get('from_admin', 0);
         $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS, $pid);
 
-        if ($fromAdmin) {
-            array_unshift($categories, GoodsCategory::CURRENT_CATEGORY);
-        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'categories' => $categories
+            ],
+        ]);
+    }
+
+    /**
+     * Get goods categories action(admin).
+     *
+     * @return string
+     */
+    public function actionCategoriesAdmin()
+    {
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS, $pid);
+        $categories && array_unshift($categories, GoodsCategory::CURRENT_CATEGORY);
 
         return Json::encode([
             'code' => 200,
