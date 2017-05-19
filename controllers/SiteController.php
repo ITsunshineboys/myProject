@@ -656,7 +656,7 @@ class SiteController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'time-types' => $timeTypes,
+                'time_types' => $timeTypes,
             ],
         ]);
     }
