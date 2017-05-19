@@ -21,8 +21,6 @@ class PointsDetails extends ActiveRecord
 
     public static function AllQuantity($allId = [])
     {
-//        var_dump($allId);
-//        exit;
         $all_id = [];
         foreach ($allId as $all)
         {
