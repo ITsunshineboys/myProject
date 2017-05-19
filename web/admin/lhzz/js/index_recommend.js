@@ -67,7 +67,7 @@ app.controller("index_recommend",function($scope,$http){
             url:url+time_types
         })
             .success(function(data,status){
-            $scope.time_kind=data.data.time-types;
+            $scope.time_kind=data.data.time_types;
             })
     }
     $scope.time_type()
