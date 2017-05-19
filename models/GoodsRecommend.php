@@ -32,7 +32,7 @@ class GoodsRecommend extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'sku', 'title', 'description', 'from_type', 'viewed_number', 'sold_number', 'status', 'create_time', 'image', 'url'];
+    public static $adminFields = ['id', 'sku', 'title', 'description', 'from_type', 'viewed_number', 'sold_number', 'status', 'create_time', 'image', 'url', 'platform_price'];
 
     /**
      * @var array from types

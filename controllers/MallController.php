@@ -38,6 +38,7 @@ class MallController extends Controller
         'carousel-admin',
         'review-supplier-category',
         'categories-admin',
+        'category-admin',
     ];
 
     /**
@@ -72,6 +73,7 @@ class MallController extends Controller
                     'recommend-sort' => ['post',],
                     'recommend-click-record' => ['post',],
                     'review-supplier-category' => ['post',],
+                    'category-add' => ['post',],
                 ],
             ],
         ];
@@ -827,6 +829,39 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Add category action
+     *
+     * @return string
+     */
+    public function actionCategoryAdd()
+    {
+        $category = new GoodsCategory;
+        $category->attributes = Yii::$app->request->post();
+
+        $code = 1000;
+
+        if (!$category->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$category->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }

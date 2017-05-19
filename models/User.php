@@ -146,4 +146,16 @@ class User extends ActiveRecord implements IdentityInterface
         $cache = Yii::$app->cache;
         $cache->set($key, $this);
     }
+
+    /**
+     * Do some ops after login
+     *
+     * @return bool
+     */
+    public function afterLogin(Role $role)
+    {
+        $this->login_time = time();
+        $this->login_role_id = $role->id;
+        return $this->save();
+    }
 }
