@@ -13,6 +13,9 @@ use yii\db\ActiveRecord;
 
 class GoodsRecommendViewLog extends ActiveRecord
 {
+    const CAN_LOG_IP_NUMBER = 1;
+    const CANNOT_LOG_IP_NUMBER = 0;
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -30,8 +33,7 @@ class GoodsRecommendViewLog extends ActiveRecord
             [['recommend_id'], 'required'],
             ['recommend_id', 'number', 'integerOnly' => true, 'min' => 1],
             ['recommend_id', 'validateRecommendId', 'skipOnEmpty' => false],
-            ['ip', 'number', 'integerOnly' => true],
-            ['ip', 'validateIp', 'skipOnEmpty' => false]
+            ['ip', 'number', 'integerOnly' => true]
         ];
     }
 
@@ -52,30 +54,6 @@ class GoodsRecommendViewLog extends ActiveRecord
     }
 
     /**
-     * Validates ip
-     *
-     * @param string $attribute ip to validate
-     * @return bool
-     */
-    public function validateIp($attribute)
-    {
-        list($startTime, $endTime) = StringService::startEndDate('today');
-        $startTime = strtotime($startTime);
-        $endTime = strtotime($endTime);
-
-        $where = "create_time >= {$startTime} and create_time <= {$endTime}";
-        $where .= " and {$attribute} = {$this->$attribute}";
-        $where .= " and recommend_id = {$this->recommend_id}";
-
-        if (self::find()->where($where)->exists()) {
-            $this->addError($attribute);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Do some ops before insertion
      *
      * @param bool $insert if is a new record
@@ -86,10 +64,39 @@ class GoodsRecommendViewLog extends ActiveRecord
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->create_time = time();
+
+                if (self::canLogIpNumber()) {
+                    $this->log_ip_number = self::CAN_LOG_IP_NUMBER;
+                } else {
+                    $this->log_ip_number = self::CANNOT_LOG_IP_NUMBER;
+                }
             }
+
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Check if can log ip number.
+     *
+     * The same recommend could be viewed by the same remote ip once per day.
+     *
+     * @return bool
+     */
+    public function canLogIpNumber()
+    {
+        $attribute = 'ip';
+
+        list($startTime, $endTime) = StringService::startEndDate('today');
+        $startTime = strtotime($startTime);
+        $endTime = strtotime($endTime);
+
+        $where = "create_time >= {$startTime} and create_time <= {$endTime}";
+        $where .= " and {$attribute} = {$this->$attribute}";
+        $where .= " and recommend_id = {$this->recommend_id}";
+
+        return !self::find()->where($where)->exists();
     }
 }

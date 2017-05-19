@@ -132,7 +132,7 @@ class Goods extends ActiveRecord
 
     public function getOrders()
     {
-        return $this->hasMany(GoodsBrand::className(), ['brand_id' => 'id']);
+        return $this->hasOne(GoodsBrand::className(), ['id' => 'brand_id']);
     }
 
     /**
@@ -141,13 +141,16 @@ class Goods extends ActiveRecord
      */
     public static function priceDetail($arr = [])
     {
+        $string = implode(',',$arr);
         if(empty($arr))
         {
             echo '请正确输入值';
             exit;
         }else{
-            $sql ="brand_id,platform_price ";
+            $db = \Yii::$app->db;
+            $sql ="SELECT goods_brand.name,goods.platform_price  FROM goods,goods_brand WHERE goods.brand_id = goods_brand.id and goods.id in "."($string)";
+            $a = $db->createCommand($sql)->queryAll();
         }
-        return Goods::find()->select($sql)->where(['in','id',$arr])->all();
+        return $a;
     }
 }

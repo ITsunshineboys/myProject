@@ -2,18 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: Administrator
- * Date: 2017/5/16 0016
- * Time: 下午 16:42
+ * Date: 2017/5/17 0017
+ * Time: 下午 17:37
  */
 namespace app\models;
-
 use yii\db\ActiveRecord;
 
-class IntelligenceAssort extends ActiveRecord
+class FixationFurniture extends ActiveRecord
 {
     public static function tableName()
     {
-        return 'intelligence_assort';
+        return 'fixation_furniture';
     }
 
     public function findById($id = '')
@@ -28,5 +27,4 @@ class IntelligenceAssort extends ActiveRecord
         }
         return $arr_id;
     }
-
 }

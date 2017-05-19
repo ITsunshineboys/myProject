@@ -2,15 +2,22 @@
 
 namespace app\controllers;
 
+use app\models\AppliancesAssort;
+use app\models\BasisDecoration;
 use app\models\BasisMaterial;
 use app\models\Effect;
 use app\models\EffectPicture;
+use app\models\FixationFurniture;
 use app\models\Goods;
 use app\models\GoodsBrand;
-use app\models\GoodsCategory;
 use app\models\IntelligenceAssort;
 use app\models\LaborCost;
+use app\models\LifeAssort;
+use app\models\MoveFurniture;
+use app\models\Points;
+use app\models\PointsDetails;
 use app\models\Series;
+use app\models\SoftOutfitAssort;
 use app\models\Style;
 use app\models\StylePicture;
 use app\services\BasisDecorationService;
@@ -199,56 +206,186 @@ class OwnerController extends Controller
     public function actionBasisDecoration()
     {
         //基础装修
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post =[
+            'effect_id'=>1,
+            'room'=>1,
+            'hall'=>1,
+            'window'=>2,
+            'high'=>2.8,
+            'area'=>62,
+            'toilet'=>1,
+            'kitchen'=>1,
+            'style'=>1,
+            'series'=>1,
+            'province'=>'四川',
+            'city'=>'成都'
+        ];
+
         $arr = [];
         //每天水电完成点位
-        $arr['day_standard'] = 5;
-        $arr['profit'] = 0.7;
+        $arr['day_standard'] = $post['0'] ?? 5;
+        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水电';
+
+        //所有基础装修类型
+        $basis_decoration = BasisDecoration::find()->all();
+
         //人工一天价格
         $arr['day_price'] = LaborCost::univalence($post['province'],$post['city'],$arr['worker_kind']);
-        //查询出材料单价
-        $material_id = BasisMaterial::material(1);
-        $goods_price = Goods::priceDetail($material_id);
-        $goods_brand = GoodsBrand::findById($goods_price);
-        //电线单价
-        $wire['wire_price'] = BasisDecorationService::wire($goods_price[0]['platform_price']);
-        //所有材料单价
-        $all_material = [];
-        $all_material[] = $wire['wire_price'];
-        $all_material[] = $goods_price[0]['platform_price'];
 
-        //所有弱电的点位
-        $weak_location =[5,5,5];
-        //所有的强电点位
-        $powerful_location =[5,5,5];
-        //基础装修
-        $weak_current = BasisDecorationService::formula($arr,$weak_location,$all_material);
-        $powerful_current = BasisDecorationService::formula($arr,$powerful_location,$all_material);
+        //查询出材料单价
+        $material_id = BasisMaterial::material($basis_decoration[0]['id']);
+        $goods_price = Goods::priceDetail($material_id);
+
+        //电线单价
+        foreach ($goods_price as $name){
+            if($name['name'] == '电线'){
+                $wire['wire_price'] = BasisDecorationService::wire($name['platform_price']);
+                //所有商品单价
+                $goods_price['0']['platform_price'] = $wire['wire_price'] ;
+            }
+        }
+
+        $effect_id = Effect::find()->where(['id'=>$post['effect_id']])->all();
+
+        //弱电 价格
+        $weak_location = Points::weakLocation($effect_id[0]['id']);
+        $weak_current_price = BasisDecorationService::formula($arr,$weak_location,$goods_price);
+
+        //强电 价格
+        $all_place =  Points::find()->where($effect_id[0]['id'])->all();
+        $powerful_location = PointsDetails::AllQuantity($all_place);
+        $powerful_current = BasisDecorationService::formula($arr,$powerful_location,$goods_price);
+
+        //防水 价格
+        //水路 价格
+        //木作 价格
+        //乳胶漆 价格
+        //泥作 价格
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'weak_current_price' => $weak_current,
+                'weak_current_price' => $weak_current_price,
                 'powerful_current_price' => $powerful_current,
             ]
         ]);
     }
 
-    public function actionMainMaterials()
+    /**
+     * 软装配套
+     * @return string
+     */
+    public function actionSoftOutfitAssort()
     {
-
+        $soft_outfit = new SoftOutfitAssort();
+        $all_id = $soft_outfit->findById(1);
+        $goods_price = Goods::priceDetail($all_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' =>[
+                'SoftOutfit_goods' =>$goods_price,
+                'quantity' => 1
+            ]
+        ]);
     }
 
+    /**
+     * 固定家具
+     * @return string
+     */
+    public function actionFixationFurniture()
+    {
+        $fixation_furniture = new FixationFurniture();
+        $all_id = $fixation_furniture->findById(1);
+        $goods_price = Goods::priceDetail($all_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' =>[
+                'appliances_goods' =>$goods_price,
+                'quantity' => 1
+            ]
+        ]);
+    }
+
+    /**
+     * 移动家具
+     * @return string
+     */
+    public function actionMoveFurniture()
+    {
+        $move_furniture = new MoveFurniture();
+        $all_id = $move_furniture->findById(1);
+        $goods_price = Goods::priceDetail($all_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' =>[
+                'appliances_goods' =>$goods_price,
+                'quantity' => 1
+            ]
+        ]);
+    }
+
+    /**
+     * 家电配套
+     * @return string
+     */
+    public function actionAppliancesAssort()
+    {
+        $appliances = new AppliancesAssort();
+        $all_id = $appliances->findById(1);
+        $goods_price = Goods::priceDetail($all_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' =>[
+                'appliances_goods' =>$goods_price,
+                'quantity' => 1
+            ]
+        ]);
+    }
+
+    /**
+     * 生活配套
+     * @return string
+     */
+    public function actionLifeAssort()
+    {
+        $life = new LifeAssort();
+        $all_id = $life->findById(1);
+        $goods_price = Goods::priceDetail($all_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' =>[
+                'Life_goods' =>$goods_price,
+                'quantity' => 1
+            ]
+        ]);
+    }
+
+    /**
+     * 智能配套
+     * @return string
+     */
     public function actionIntelligenceAssort()
     {
         $Intelligence = new IntelligenceAssort();
-        $all = $Intelligence->find()->all();
-//        $orders = Customer::find()->joinWith('orders')->where(['customer.id' => '1'])->all();
-        $goods = Goods::find()->joinWith('orders')->where(['goods.brand_id'=> 1])->all();
-        var_dump($goods);
-        exit;
+        $all_id = $Intelligence->findById(1);
+        $goods_price = Goods::priceDetail($all_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' =>[
+                'intelligence_goods' =>$goods_price,
+                'quantity' => 1
+            ]
+        ]);
     }
 
 }

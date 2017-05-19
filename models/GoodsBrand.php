@@ -40,7 +40,7 @@ class GoodsBrand extends ActiveRecord
      * @param array $brandIds
      * @return array|ActiveRecord[]
      */
-    public static function findById($brandIds = [])
+    public static function findByIds($brandIds = [])
     {
         if(empty($brandIds))
         {

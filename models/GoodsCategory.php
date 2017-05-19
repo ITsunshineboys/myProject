@@ -14,9 +14,25 @@ use yii\db\ActiveRecord;
 class GoodsCategory extends ActiveRecord
 {
     const CACHE_PREFIX = 'goods_categories_';
+    const CACHE_SUB_CATE_PREFIX = 'goods_category_';
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
+    const APP_FIELDS = ['id', 'title', 'icon'];
+
+    /**
+     * Get current category
+     *
+     * @return array
+     */
+    public static function current()
+    {
+        return [
+            'id' => 0,
+            'title' => Yii::$app->params['category']['admin']['currentName'],
+            'icon' => ''
+        ];
+    }
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -39,7 +55,9 @@ class GoodsCategory extends ActiveRecord
         $cache = Yii::$app->cache;
         $categories = $cache->get($key);
         if (!$categories) {
-            $categories = self::find()->select($select)->where(['pid' => $parentCategoryId])->asArray()->all();
+            $where = "pid = {$parentCategoryId}";
+            $where .= " and deleted = 0 and (supplier_id = 0 or approve_time > 0)";
+            $categories = self::find()->select($select)->where($where)->asArray()->all();
             if ($categories) {
                 $cache->set($key, $categories);
             }
@@ -57,7 +75,7 @@ class GoodsCategory extends ActiveRecord
     public function categories($pid = 0)
     {
         $cache = Yii::$app->cache;
-        $key = 'goods_category_' . $pid;
+        $key = self::CACHE_SUB_CATE_PREFIX . $pid;
         $categories = $cache->get($key);
         if (!$categories) {
             $categories = $this->_categories($pid);
@@ -84,5 +102,41 @@ class GoodsCategory extends ActiveRecord
             $arr[] = $category; // 组合数组
         }
         return $arr;
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            ['approve_time', 'number', 'integerOnly' => true],
+            [['reason'], 'string'],
+            ['description', 'safe']
+        ];
+    }
+
+    /**
+     * Do some ops before insertion
+     *
+     * @param bool $insert if is a new record
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if (!$insert) {
+                if ($this->approve_time > 0) {
+                    $this->approve_time = time();
+                    $this->reject_time = 0;
+                } else {
+                    $this->approve_time = 0;
+                    $this->reject_time = time();
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }
