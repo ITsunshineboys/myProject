@@ -174,7 +174,13 @@ class MallController extends Controller
     {
         $pid = (int)Yii::$app->request->get('pid', 0);
         $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS, $pid);
-        $categories && array_unshift($categories, GoodsCategory::current());
+
+        $user = Yii::$app->user->identity;
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId'] && $pid > 0) {
+            array_unshift($categories, GoodsCategory::current());
+        } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            array_unshift($categories, GoodsCategory::current());
+        }
 
         return Json::encode([
             'code' => 200,

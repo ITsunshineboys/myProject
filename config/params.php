@@ -5,6 +5,7 @@ return [
     'offsetAiteCubeNo' => 10000,
     'ownerRoleId' => 7,
     'supplierRoleId' => 6,
+    'lhzzRoleId' => 1,
     'errorCodes' => [
         403 => '没有权限',
         500 => '接口服务器异常',

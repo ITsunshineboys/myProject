@@ -15,10 +15,29 @@ class GoodsCategory extends ActiveRecord
 {
     const CACHE_PREFIX = 'goods_categories_';
     const CACHE_SUB_CATE_PREFIX = 'goods_category_';
+    const STATUS_OFFLINE = 0;
+    const STATUS_ONLINE = 1;
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
     const APP_FIELDS = ['id', 'title', 'icon'];
+
+    /**
+     * @var array online status list
+     */
+    public static $statuses = [
+        self::STATUS_OFFLINE => '已下架',
+        self::STATUS_ONLINE => '已上架',
+    ];
+
+    /**
+     * @var array level list
+     */
+    public static $levels = [
+        self::LEVEL1 => '一级',
+        self::LEVEL2 => '二级',
+        self::LEVEL3 => '三级',
+    ];
 
     /**
      * Get current category
@@ -151,6 +170,7 @@ class GoodsCategory extends ActiveRecord
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->create_time = time();
+                $this->deleted = self::STATUS_ONLINE;
 
                 $user = Yii::$app->user->identity;
                 if (!$user) {
@@ -158,7 +178,13 @@ class GoodsCategory extends ActiveRecord
                 }
 
                 if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-                    $this->supplier_id = $user->id;
+                    $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+                    if (!$supplier) {
+                        return false;
+                    }
+
+                    $this->supplier_id = $supplier->id;
+                    $this->supplier_name = $supplier->nickname;
                 }
             }
 
