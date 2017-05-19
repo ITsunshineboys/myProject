@@ -140,6 +140,7 @@ class SiteController extends Controller
         if ($model->load($postData) && $model->login()) {
             $user = Yii::$app->user->identity;
             $user->login_time = time();
+            $user->login_role_id = Yii::$app->params['ownerRoleId'];
             if (!$user->save()) {
                 $code = 500;
                 return Json::encode([
@@ -384,6 +385,8 @@ class SiteController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
+
+            $user->afterLogin($role);
 
             return Json::encode([
                 'code' => 200,

@@ -110,10 +110,34 @@ class GoodsCategory extends ActiveRecord
     public function rules()
     {
         return [
-            ['approve_time', 'number', 'integerOnly' => true],
+            [['title'], 'required'],
+            [['title'], 'unique'],
+            [['pid', 'approve_time'], 'number', 'integerOnly' => true, 'min' => 0],
+            ['pid', 'validatePid'],
             [['reason'], 'string'],
-            ['description', 'safe']
+            ['description', 'safe'],
+            ['description', 'default', 'value' => ''],
         ];
+    }
+
+    /**
+     * Validates pid
+     *
+     * @param string $attribute pid to validate
+     * @return bool
+     */
+    public function validatePid($attribute)
+    {
+        if ($this->$attribute == 0) {
+            return true;
+        }
+
+        if (self::findOne($this->$attribute)) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
     }
 
     /**
@@ -125,18 +149,32 @@ class GoodsCategory extends ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if (!$insert) {
-                if ($this->approve_time > 0) {
-                    $this->approve_time = time();
-                    $this->reject_time = 0;
-                } else {
-                    $this->approve_time = 0;
-                    $this->reject_time = time();
-                }
+            if ($insert) {
+                $this->create_time = time();
             }
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Do some ops after insertion
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($insert && $this->pid) {
+            $parentCategory = self::findOne($this->pid);
+            $this->level = $parentCategory->level + 1;
+            $this->path = $parentCategory->path . $this->id . ',';
+            if (!($this->validate() && $this->save())) {
+                $this->delete();
+            }
         }
     }
 }
