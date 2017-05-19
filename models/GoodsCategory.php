@@ -143,7 +143,7 @@ class GoodsCategory extends ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['title', 'icon'], 'required'],
             [['title'], 'unique'],
             [['pid', 'approve_time'], 'number', 'integerOnly' => true, 'min' => 0],
             ['pid', 'validatePid'],
