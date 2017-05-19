@@ -339,7 +339,7 @@
                     <div ng-click="loadTab(kind_type)" id="nav_2" class="fl color1_8d">
                         >首页推荐
                     </div>
-                    <div class="fl color1_8d history" ng-if="kind_type!=1" ><img src="images/select1.png" alt=""/>历史数据</div>
+                    <div class="fl color1_8d history"  ><img src="images/select1.png" alt=""/>历史数据</div>
                 </div>
                 <div class="header_right">
                     <div class="fl">
@@ -357,7 +357,7 @@
                     <li class="kind_li"><a href="#" name="2">推荐</a></li>
                 </ul>
                 <div class="content">
-                    <div class="tab 0">{{mydata}}
+                    <div class="tab 0">{{mydata1}}
                         <div class="operate_box">
                             <div class="btn1 fl" ng-click="save1()">保存</div>
                             <div class="btn1 fl" ng-click="add(0)">添加</div>
@@ -371,7 +371,7 @@
                                 <ul   style="">
                                     <li>
                                         <input type="checkbox" name="cell" checked value="tb_name" ng-click="cell1()"/>
-                                        <span>名称</span>
+                                        <span>标题</span>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="cell" checked value="tb_type" ng-click="cell1()"/>
@@ -414,7 +414,7 @@
                                 <th class="choose1">
                                     <!--<input type="checkbox" ng-click="all()" class="choose_all"/>-->
                                 </th>
-                                <th class="tb_name">名称</th>
+                                <th class="tb_name">标题</th>
                                 <th class="tb_type">类型</th>
                                 <th class="tb_sku">商品编号</th>
                                 <th class="tb_supplier_name">来源商家</th>
@@ -426,7 +426,7 @@
                                 <th class="action">操作：</th>
                                 </thead>
                                 <tbody >
-                                <tr ng-repeat="n in mydata" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
+                                <tr ng-repeat="n in mydata1" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
                                     <td class="choose1">
                                         <input type="checkbox" value="{{n.id}}" name="item" class="choose1"/>
                                     </td>
@@ -474,7 +474,11 @@
                                 <ul   style="">
                                     <li>
                                         <input type="checkbox" name="cell" checked value="tb_name1" ng-click="cell1()"/>
-                                        <span>名称</span>
+                                        <span>标题</span>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="cell" checked value="tb_description1" ng-click="cell1()"/>
+                                        <span>副标题</span>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="cell" checked value="tb_type1" ng-click="cell1()"/>
@@ -517,7 +521,8 @@
                                 <th class="choose">
                                     <!--<input type="checkbox" ng-click="all()" class="choose_all"/>-->
                                 </th>
-                                <th class="tb_name1">名称</th>
+                                <th class="tb_name1">标题</th>
+                                <th class="tb_description1">副标题</th>
                                 <th class="tb_type1">类型</th>
                                 <th class="tb_sku1">商品编号</th>
                                 <th class="tb_supplier_name1">来源商家</th>
@@ -529,11 +534,12 @@
                                 <th class="action1">操作：</th>
                                 </thead>
                                 <tbody >
-                                <tr ng-repeat="n in mydata" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
+                                <tr ng-repeat="n in mydata2" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
                                     <td class="choose">
                                         <input type="checkbox" value="{{n.id}}" name="item" class="choose2"/>
                                     </td>
                                     <td class="tb_name1">{{n.title}}</td>
+                                    <td class="tb_description1">{{n.description}}</td>
                                     <td class="tb_type1">{{n.from_type}}</td>
                                     <td class="tb_sku1">{{n.sku}}
                                         <span ng-if="n.sku==''">无</span>
@@ -566,15 +572,109 @@
                     </div>
                 </div>
             </div>
-            <div class="history_box">
-                <select name="" id="" class="fl selects">
-                    <option value="all">全部</option>
-                    <option value="all">全部</option>
-                    <option value="all">全部</option>
-                    <option value="all">全部</option>
-                </select>
-                <div id="start" class="  fl test1" >开始时间</div>
-                <div id="end" class="  fl test1" >结束时间</div>
+            <div class="history_box hide">{{time_kind}}
+                <div class="history_header">
+                    <select name="" id="" class="fl selects">
+                        <option value="all">全部</option>
+                        <option value="all">全部</option>
+                        <option value="all">全部</option>
+                        <option value="all">全部</option>
+                    </select>
+                    <div id="start" class="  fl test1" >开始时间</div>
+                    <div id="end" class="  fl test1" >结束时间</div>
+                    <div class="btn1 screen2"  ng-click="screen('cells_box2','screen2')"style="position:absolute;top:30px;right:40px"><img src="images/cell_icon.jpg" alt=""/></div>
+                    <div id="cells_box2" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333">
+                        <ul   style="">
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_name1" ng-click="cell1()"/>
+                                <span>标题</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_description1" ng-click="cell1()"/>
+                                <span>副标题</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_type1" ng-click="cell1()"/>
+                                <span>类型</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_sku1" ng-click="cell1()"/>
+                                <span>商品编号</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_supplier_name1" ng-click="cell1()"/>
+                                <span>来源商家</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_viewed_number1" ng-click="cell1()"/>
+                                <span>上架浏览</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_sold_number1" ng-click="cell1()"/>
+                                <span>上架销量</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_status1" ng-click="cell1()"/>
+                                <span>是否停用</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_create_time1" ng-click="cell1()"/>
+                                <span>创建时间</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="cell" checked value="tb_image1" ng-click="cell1()"/>
+                                <span>图片</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="table_box">
+                    <table  border="1">
+                        <thead>
+                        <th class="choose">
+                            <!--<input type="checkbox" ng-click="all()" class="choose_all"/>-->
+                        </th>
+                        <th class="tb_name1">标题</th>
+                        <th class="tb_description1">副标题</th>
+                        <th class="tb_type1">类型</th>
+                        <th class="tb_sku1">商品编号</th>
+                        <th class="tb_supplier_name1">来源商家</th>
+                        <th class="tb_viewed_number1">上架浏览</th>
+                        <th class="tb_sold_number1">上架销量</th>
+                        <th class="tb_status1">是否停用</th>
+                        <th class="tb_create_time1">创建时间</th>
+                        <th class="tb_delete_time1">删除时间</th>
+                        <th class="tb_image1">图片</th>
+                        </thead>
+                        <tbody >
+                        <tr ng-repeat="n in history_data" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
+                            <td class="choose">
+                                <input type="checkbox" value="{{n.id}}" name="item" class="choose2"/>
+                            </td>
+                            <td class="tb_name1">{{n.title}}</td>
+                            <td class="tb_description1">{{n.description}}</td>
+                            <td class="tb_type1">{{n.from_type}}</td>
+                            <td class="tb_sku1">{{n.sku}}
+                                <span ng-if="n.sku==''">无</span>
+                            </td>
+                            <td class="tb_supplier_name1">
+                                <a href="{{n.url}}"  target="_blank">
+                                    {{n.supplier_name}}
+                                </a>
+                            </td>
+                            <td class="tb_viewed_number1">{{n.viewed_number}}</td>
+                            <td class="tb_sold_number1">{{n.sold_number}}</td>
+                            <td class="tb_status1">{{n.status}}</td>
+                            <td class="tb_create_time1">{{n.create_time}} </td>
+                            <td class="tb_delete_time1">{{n.delete_time}} </td>
+                            <td class="tb_image1">
+                                <img src="{{url}}{{n.image}}" alt=""/>{{n.image}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

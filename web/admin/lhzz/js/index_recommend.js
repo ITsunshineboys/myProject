@@ -15,6 +15,10 @@ var recommend_sort="mall/recommend-sort";
 var recommend_edit="mall/recommend-edit";
 //添加接口
 var recommend_add="mall/recommend-add";
+//历史数据接口
+var recommend_history="mall/recommend-history";
+//获取事件类型列表
+var time_types="site/time-types";
 var data1,data2;
 //日历
 var start = {
@@ -43,6 +47,7 @@ laydate(end);
 app.controller("index_recommend",function($scope,$http){
     $scope.url=url;
     $scope.kind_type=0;
+    //右边内容宽度自适应
     $scope.zishiy=function (){
         var browser_width1=window.innerWidth-$(".nav_box").width();
         $(".my_container").css("width",browser_width1);
@@ -55,10 +60,39 @@ app.controller("index_recommend",function($scope,$http){
         });
     };
     $scope.zishiy();
+    //获取时间类型列表的数据
+    $scope.time_type= function () {
+        $http({
+            method:"GET",
+            url:url+time_types
+        })
+            .success(function(data,status){
+            $scope.time_kind=data.data.time-types;
+            })
+    }
+    $scope.time_type()
+    //点击历史数据按钮事件
     $scope.history=function(kind){
         $scope.kind_type=kind;
+
+        $http({
+            method: "GET",
+            url: url + recommend_history+"?type="+$scope.kind_type+"&time_type=all"
+        })
+            .success(function (data, status) {
+                    $scope.history_data = data.data.recommend_history.details;
+                    //$scope.history_data = data
+
+
+
+
+            }).
+            error(function (data, status) {
+                $scope.data = data || "Request failed";
+                $scope.status = status;
+            });
         $(".tb_big_box").hide();
-        $(".history_box").show();
+        $(".history_box").addClass("show").removeClass("hide");
         $(".history").addClass("show").removeClass("hide");
         $("#nav_2").removeClass("color1_8d").addClass("color_2f");
         console.log("history== $scope.kind_type"+ $scope.kind_type)
@@ -95,7 +129,8 @@ app.controller("index_recommend",function($scope,$http){
         //开始===点击首页推荐的页面内容显示的控制
         $("#nav_2").removeClass("color_2f").addClass("color1_8d");
         $(".tb_big_box").show();
-        $(".history_box").hide();
+        $(".history_box").addClass("hide").removeClass("show");
+        $(".history").addClass("hide").removeClass("show");
         //结束===点击首页推荐的页面内容显示的控制
         $(".content > div").hide();
         $(".tabs").each(function () {
@@ -128,15 +163,22 @@ app.controller("index_recommend",function($scope,$http){
     //tab页面的结束
 
     //加载页面表格数据函数
-    $scope.table_data1=function(){
+    $scope.table_data1=function(data_type){
         $http({
             method: "GET",
-            url: url + recommend_list
+            url: url + recommend_list+"?type="+data_type
         })
             .success(function (data, status) {
                 //$scope.page = 1;
                 //$scope.mydata = [{"id":"1","sku":"12310002","title":"t","from_type":"商铺","status":"启用","create_time":"2017-04-01","image":"uploads/2017/05/13/1494649348.jpg","url":"mall/goods?id=2","supplier_name":"链接","delete_time":"0","viewed_number":0,"sold_number":0},{"id":"3","sku":"12310002","title":"t","from_type":"商铺","status":"停用","create_time":"2017-05-15","image":"uploads/2017/05/13/1494649348.jpg","url":"http://www.baidu.com","supplier_name":"supplier 1","delete_time":"0","viewed_number":0,"sold_number":0},{"id":"4","sku":"12310001","title":"t","from_type":"商铺","status":"停用","create_time":"2017-05-15","image":"uploads/2017/05/13/1494649348.jpg","url":"http://www.baidu.com","supplier_name":"supplier 1","delete_time":"0","viewed_number":0,"sold_number":0}]
-    $scope.mydata = data.data.recommend_admin_index.details;
+               if(data_type==0){
+                   $scope.mydata1 = data.data.recommend_admin_index.details;
+               }
+                else if(data_type==2){
+                   $scope.mydata2 = data.data.recommend_admin_index.details;
+
+               }
+
 
             }).
             error(function (data, status) {
@@ -145,8 +187,10 @@ app.controller("index_recommend",function($scope,$http){
             });
     };
     //页面初始加载数据
-    $scope.table_data1();
-
+    //banner的数据初始化
+    $scope.table_data1(0);
+    //推荐商品数据的初始化
+    $scope.table_data1(2);
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
 
         //排序操作处理

@@ -187,6 +187,12 @@ body{
     height: 12px;
 }
 /*历史数据的样式*/
+.history_header{
+    width: 100%;
+    height: 36px;
+    padding: 20px 0;
+    position: relative;
+}
 /*日历的样式*/
 .test1{
     width: 125px;
