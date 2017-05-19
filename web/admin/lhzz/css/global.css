@@ -78,10 +78,74 @@
     position: absolute;
     left: 200px;
     top:0;
-    /*margin-left: 15%;*/
     background-color: #fff;
     z-index: 0;
 }
+/*弹窗的公共样式*/
+.popup{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 203;
+    /*background-color: #06BE04;*/
+}
+.popup .box1{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content:center;
+    align-items:Center;
+    background-color: rgba(0,0,0,0.25);
+}
+/*弹窗的宽度及padding的设置*/
+.popup .box1>div{
+    width: 570px;
+    min-height: 24px;
+    height: auto;
+    padding: 30px;
+    position: relative;
+    background-color: #fff;
+    color:#666F80;
+}
+/*弹窗内容样式的设置*/
+.popup .box1>div .warm_title{
+    width: auto;
+    height:40px;
+    font-size: 16px;
+    line-height: 40px;
+    font-weight: 600;
+    border-bottom: 1px solid #E6E9F0 ;
+    color:#2F3033;
+}
+.popup .box1>div .warm_word1 {
+    height:80px;
+    line-height: 80px;
+}
+.popup .box1>div .sure_box{
+    height: 54px;
+    position: relative;
+    clear: both;
+}
+.popup .box1>div .sure_box>div{
+    position:absolute;
+    bottom: 5px;
+    right:30px;
+}
+/*确认及取消等页面按钮*/
+.btn2{
+    padding: 5px 15px;
+    font-size: 14px;
+    margin-left: 20px;
+    border-radius: 3px;
+    border:1px solid #333;
+}
+.popup .box1>div .sure_box>div>.sure_left{
+    color:#487AF8;
+    border:1px solid #487AF8;
+}
+
 .show{
     display: block;
 }

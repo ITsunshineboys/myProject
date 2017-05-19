@@ -18,6 +18,7 @@ function  Curve(obj,name){
     console.log("mykind=="+mykind)
     if (obj.attr("name") == name) {
         obj.parent().parent().find("a").removeClass("current");
+        obj.parent().parent().next("div").find("div").hide();
         obj.parent().parent().next("div").find(mykind).show();
         obj.addClass("current");
         $(obj.attr("name")).fadeIn();

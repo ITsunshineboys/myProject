@@ -11,8 +11,122 @@ var  recommend_deletes="mall/recommend-delete-batch";
 var recommend_delete="mall/recommend-delete";
 //推荐排序
 var recommend_sort="mall/recommend-sort";
+//编辑接口
+var recommend_edit="mall/recommend-edit";
+//添加接口
+var recommend_add="mall/recommend-add";
+var data1,data2;
+//日历
+var start = {
+    elem: '#start',
+    format: 'YYYY-MM-DD ',
+    //min: laydate.now(), //设定最小日期为当前日期
+    max: laydate.now(), //最大日期
+    istoday: true,
+    choose: function(datas){
+        end.min = datas; //开始日选好后，重置结束日的最小日期
+        end.start = datas; //将结束日的初始值设定为开始日
+    }
+};
+var end = {
+    elem: '#end',
+    format: 'YYYY-MM-DD ',
+    //min: laydate.now(),
+    max:laydate.now(),
+    istoday: true,
+    choose: function(datas){
+        start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+};
+laydate(start);
+laydate(end);
 app.controller("index_recommend",function($scope,$http){
     $scope.url=url;
+    $scope.kind_type=0;
+    $scope.zishiy=function (){
+        var browser_width1=window.innerWidth-$(".nav_box").width();
+        $(".my_container").css("width",browser_width1);
+        $(".header_box").css("width",browser_width1);
+        //浏览器大小变化的监听
+        $(window).resize(function() {
+            var browser_width1=window.innerWidth-$(".nav_box").width();
+            $(".my_container").css("width",browser_width1);
+            $(".header_box").css("width",browser_width1);
+        });
+    };
+    $scope.zishiy();
+    $scope.history=function(kind){
+        $scope.kind_type=kind;
+        $(".tb_big_box").hide();
+        $(".history_box").show();
+        $(".history").addClass("show").removeClass("hide");
+        $("#nav_2").removeClass("color1_8d").addClass("color_2f");
+        console.log("history== $scope.kind_type"+ $scope.kind_type)
+    };
+    //teb页面开始
+    //tab页面的动态初始化
+    $scope.int=function (obj,now_class){
+        //if(now_class==null||now_class==0){
+        //    now_class=11;
+        //}
+        var my_class=String("."+now_class);
+        obj.next("div").find(my_class).show();
+        obj.find(".kind_li").find("a").removeClass("current");
+        obj.find(".kind_li").find('a[name="'+now_class+'"]').addClass("current");
+
+    };
+    //点击的样式变化函数
+    $scope.Curve=function  (obj,name){
+        $scope.kind_type=name;
+        var mykind=String("."+name);
+
+        console.log(" 点击tab页面后$scope.kind_type=="+ $scope.kind_type)
+        if (obj.attr("name") == name) {
+            obj.parent().parent().find("a").removeClass("current");
+            obj.parent().parent().next("div").find(".tab").hide();
+            obj.parent().parent().next("div").find(mykind).show();
+            obj.addClass("current");
+            $(obj.attr("name")).fadeIn();
+        }
+    };
+    $scope.loadTab=function (type) {
+        $scope.kind_type=type;
+        $scope.zishiy();
+        //开始===点击首页推荐的页面内容显示的控制
+        $("#nav_2").removeClass("color_2f").addClass("color1_8d");
+        $(".tb_big_box").show();
+        $(".history_box").hide();
+        //结束===点击首页推荐的页面内容显示的控制
+        $(".content > div").hide();
+        $(".tabs").each(function () {
+            var obj=$(this);
+            $scope.int(obj,type);
+        });
+        $(".content").each(function () {
+            var mytype="."+type;
+            $(this).find(mytype).fadeIn();
+        });
+        $(".tabs a").on("click", function (e) {
+
+            e.preventDefault();
+            $(this).parent().parent().next("div").find(".tab2").hide();
+            $(this).parent().parent().find("a").removeClass("current");
+            if ($(this).attr("class") == "current"&&$(this)==$(".categorys").find("li:first a")) {
+                return;
+            }
+            else {
+                var obj=$(this);
+                var  myname=$(this).attr("name");
+                console.log("myname==="+myname)
+                $scope.Curve(obj, myname)
+            }
+        });
+    };
+    $(function(){
+        $scope.loadTab(0);
+    });
+    //tab页面的结束
+
     //加载页面表格数据函数
     $scope.table_data1=function(){
         $http({
@@ -21,17 +135,18 @@ app.controller("index_recommend",function($scope,$http){
         })
             .success(function (data, status) {
                 //$scope.page = 1;
-                //$scope.mydata = data.data;
-                $scope.mydata = data.data.recommend_admin_index.details;
+                //$scope.mydata = [{"id":"1","sku":"12310002","title":"t","from_type":"商铺","status":"启用","create_time":"2017-04-01","image":"uploads/2017/05/13/1494649348.jpg","url":"mall/goods?id=2","supplier_name":"链接","delete_time":"0","viewed_number":0,"sold_number":0},{"id":"3","sku":"12310002","title":"t","from_type":"商铺","status":"停用","create_time":"2017-05-15","image":"uploads/2017/05/13/1494649348.jpg","url":"http://www.baidu.com","supplier_name":"supplier 1","delete_time":"0","viewed_number":0,"sold_number":0},{"id":"4","sku":"12310001","title":"t","from_type":"商铺","status":"停用","create_time":"2017-05-15","image":"uploads/2017/05/13/1494649348.jpg","url":"http://www.baidu.com","supplier_name":"supplier 1","delete_time":"0","viewed_number":0,"sold_number":0}]
+    $scope.mydata = data.data.recommend_admin_index.details;
 
             }).
             error(function (data, status) {
-                //$scope.data = data || "Request failed";
-                //$scope.status = status;
+                $scope.data = data || "Request failed";
+                $scope.status = status;
             });
     };
     //页面初始加载数据
     $scope.table_data1();
+
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
 
         //排序操作处理
@@ -162,14 +277,17 @@ app.controller("index_recommend",function($scope,$http){
             }
         };
         //全选事件的控制
-        $scope.all=function(){
+        $scope.all=function(choose){
+            var now_choose="."+choose;
+            console.log("choose=="+choose)
+            console.log("now_choose=="+now_choose)
             if($(".choose_all1").is(':checked')){
                 alert("选中");
-                $(".choose").prop("checked", true);
+                $(now_choose).prop("checked", true);
                 //$('.choose').attr('checked', 'checked');
             }
             else if(!$(".choose_all1").is(':checked')){
-                $(".choose").prop("checked",false);
+                $(now_choose).prop("checked",false);
                 //$(".choose").prop("checked") == false
 
 
@@ -375,8 +493,6 @@ app.controller("index_recommend",function($scope,$http){
                         $scope.load4=data.data;
                         alert( "444444成功");
                     }
-
-
                 },
                 error: function (returndata) {
                     alert(returndata);
@@ -392,9 +508,20 @@ app.controller("index_recommend",function($scope,$http){
             $scope.edit_url=edit_url2;
             $scope.edit_status=edit_status2;
             $scope.edit_image2=edit_image2;
+            console.log("$scope.edit_supplier=="+$scope.edit_supplier)
             if($scope.edit_status=="停用"){
-
+                //alert("停用")
+                $("#yes3").attr('checked', 'checked');
+                $("#yes4").attr('checked', 'checked');
             }
+            else if($scope.edit_status=="启用"){
+                //alert("启用")
+                $("#no3").attr('checked', 'checked');
+                $("#no4").attr('checked', 'checked');
+            }
+            $(".popup").addClass('show').removeClass("hide");
+            $(".popup .edit1").addClass('show').removeClass("hide");
+            $(".popup .edit1 .is_edit").addClass('show').removeClass("hide");
             if($scope.edit_supplier=="链接"){
                 $(".popup .edit1 .is_edit .link_box").addClass('show').removeClass("hide");
                 $(".popup .edit1 .is_edit .Product_box").addClass('hide').removeClass("show");
@@ -403,9 +530,6 @@ app.controller("index_recommend",function($scope,$http){
                 $(".popup .edit1 .is_edit .Product_box").addClass('show').removeClass("hide");
                 $(".popup .edit1 .is_edit .link_box").addClass('hide').removeClass("show");
             }
-            $(".popup").addClass('show').removeClass("hide");
-            $(".popup .edit1").addClass('show').removeClass("hide");
-            $(".popup .edit1 .is_edit").addClass('show').removeClass("hide");
             //取消编辑
             $scope.edit_cancel=function(){
                 //弹窗的隐藏
@@ -414,7 +538,29 @@ app.controller("index_recommend",function($scope,$http){
                 $(".popup .edit1 .is_edit").addClass('hide').removeClass("show");
             };
             //确认编辑
-            $scope.edit_sure=function() {
+            //商品的是否停用的值得获取
+            $('input[name=sex3]').click(function(){
+                $scope.sex3_val=$(this).val()
+                console.log("非非点击确认外===链接的val==="+$(this).val())
+            });
+            //链接的是否停用的值得获取
+            $('input[name=sex4]').click(function(){
+                $scope.sex4_val=$(this).val()
+                console.log("非非点击确认外===链接的val==="+$(this).val())
+            });
+            $scope.edit_sure=function(obj) {
+                console.log("类型==="+obj);
+                if(obj=="链接"){
+                    $scope.from_type=2;
+                    console.log("链接的val==="+$('input:radio[name="sex4"]:checked').val())
+                }
+                else{
+                    $scope.from_type=1;
+                    $('input[name=sex3]').click(function(){
+                        console.log("非非点击===链接的val==="+$(this).val())
+                    });
+                    console.log("非非链接的val==="+$('input[name=sex3][checked]').val()   )
+                }
 
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .edit1").addClass('hide').removeClass("show");
@@ -422,10 +568,17 @@ app.controller("index_recommend",function($scope,$http){
 
             }
         };
+        //查看事件
+        $scope.look=function(url){
+            console.log("我的url=="+url);
+            window.open($scope.url+url);
+            //window.open("http://www.baidu.com");
+
+        };
         //顺序更换保存
         $scope.save1=function(){
             var order2=$("tbody tr ");
-            var save_id=[]
+            var save_id=[];
             for(var c=0;c<order2.length;c++){
                 console.log(order2.eq(c).attr("name"))
                 save_id.push(order2.eq(c).attr("name"))
@@ -462,15 +615,18 @@ app.controller("index_recommend",function($scope,$http){
             }
         };
         //筛选事件的实现
-        $(".screen").click(function(){
-            if(!$(this).hasClass("clicked")) {
-                $(this).addClass("clicked");
-                $("#cells_box").addClass("show").removeClass("hide")
+        $scope.screen=function(now_id,now_classs){
+            var this_id="#"+now_id;
+            var this_class="."+now_classs;
+            if(!$(this_class).hasClass("clicked")){
+                $(this_class).addClass("clicked");
+                $(this_id).addClass("show").removeClass("hide")
             } else {
-                $(this).removeClass("clicked");
-                $("#cells_box").addClass("hide").removeClass("show")
+                $(this_class).removeClass("clicked");
+                $(this_id).addClass("hide").removeClass("show")
             }
-        });
+        }
+        //控制哪些列显示哪些不显示
         $("input[name=cell]").on("click",function() {
                 if ($(this).prop("checked") == true) {
                     var cell_name="."+$(this).val();
@@ -518,36 +674,89 @@ $(function(){
             $(this).find("a").addClass("dd_on");
         })
     });
-})
-//teb页面
-function resetTabs(obj) {
-    $(obj).parent().parent().next("div").find(".tab").hide();
-    $(obj).parent().parent().find("a").removeClass("current");
-}
-function loadTab() {
-    $(".content > div").hide();
-    $(".tabs").each(function () {
-        $(this).find("li:first a").addClass("current");
-    });
-    $(".content").each(function () {
-        $(this).find("div:first").fadeIn();
-    });
-    $(".tabs a").on("click", function (e) {
-        e.preventDefault();
-        if ($(this).attr("class") == "current") {
-            return;
-        } else {
-            resetTabs(this);
-            $(this).addClass("current");
-            $($(this).attr("name")).fadeIn();
-        }
-    });
-}
-$(function(){
-
-    loadTab();
-
 });
+////teb页面
+////tab页面的动态初始化
+//function int(obj,now_class){
+//    if(now_class==null||now_class==0){
+//        now_class=11;
+//    }
+//    var my_class=String("."+now_class);
+//    obj.next("div").find(my_class).show();
+//    obj.find(".categorys_li").find('a[name="'+now_class+'"]').addClass("current");
+//
+//}
+////点击的样式变化函数
+//function  Curve(obj,name){
+//    var mykind=String("."+name);
+//    console.log("mykind=="+mykind)
+//    if (obj.attr("name") == name) {
+//        obj.parent().parent().find("a").removeClass("current");
+//        obj.parent().parent().next("div").find("div").hide();
+//        obj.parent().parent().next("div").find(mykind).show();
+//        obj.addClass("current");
+//        $(obj.attr("name")).fadeIn();
+//    }
+//}
+//function loadTab(type) {
+//
+//    $(".content > div").hide();
+//    $(".tabs").each(function () {
+//        var obj=$(this);
+//        var my_class=type;
+//        int(obj,my_class);
+//        //$(this).find("li:first a").addClass("current");
+//    });
+//    $(".content").each(function () {
+//        $(this).find("div:first").fadeIn();
+//    });
+//    $(".tabs a").on("click", function (e) {
+//
+//        e.preventDefault();
+//        $(this).parent().parent().next("div").find(".tab2").hide();
+//        $(this).parent().parent().find("a").removeClass("current");
+//        if ($(this).attr("class") == "current"&&$(this)==$(".categorys").find("li:first a")) {
+//            return;
+//        }
+//        else {
+//            var obj=$(this);
+//            var  myname=$(this).attr("name");
+//            console.log("myname==="+myname)
+//            Curve(obj, myname)
+//        }
+//    });
+//}
+//$(function(){
+//    loadTab(0);
+//});
+//function resetTabs(obj) {
+//    $(obj).parent().parent().next("div").find(".tab").hide();
+//    $(obj).parent().parent().find("a").removeClass("current");
+//}
+//function loadTab() {
+//    $(".content > div").hide();
+//    $(".tabs").each(function () {
+//        $(this).find("li:first a").addClass("current");
+//    });
+//    $(".content").each(function () {
+//        $(this).find("div:first").fadeIn();
+//    });
+//    $(".tabs a").on("click", function (e) {
+//        e.preventDefault();
+//        if ($(this).attr("class") == "current") {
+//            return;
+//        } else {
+//            resetTabs(this);
+//            $(this).addClass("current");
+//            $($(this).attr("name")).fadeIn();
+//        }
+//    });
+//}
+//$(function(){
+//
+//    loadTab();
+//
+//});
 //弹窗的tab页面
 function loadTab1() {
     $(".content1 > div").hide();
