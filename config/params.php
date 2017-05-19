@@ -4,6 +4,7 @@ return [
     'adminEmail' => 'admin@example.com',
     'offsetAiteCubeNo' => 10000,
     'ownerRoleId' => 7,
+    'supplierRoleId' => 6,
     'errorCodes' => [
         403 => '没有权限',
         500 => '接口服务器异常',

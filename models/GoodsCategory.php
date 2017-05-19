@@ -151,7 +151,17 @@ class GoodsCategory extends ActiveRecord
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->create_time = time();
+
+                $user = Yii::$app->user->identity;
+                if (!$user) {
+                    return false;
+                }
+
+                if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+                    $this->supplier_id = $user->id;
+                }
             }
+
             return true;
         } else {
             return false;
