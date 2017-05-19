@@ -40,7 +40,7 @@ class GoodsCategory extends ActiveRecord
     ];
 
     /**
-     * Get current category
+     * Get "current category"
      *
      * @return array
      */
@@ -49,6 +49,20 @@ class GoodsCategory extends ActiveRecord
         return [
             'id' => 0,
             'title' => Yii::$app->params['category']['admin']['currentName'],
+            'icon' => ''
+        ];
+    }
+
+    /**
+     * Get "all category"
+     *
+     * @return array
+     */
+    public static function all()
+    {
+        return [
+            'id' => 0,
+            'title' => Yii::$app->params['category']['admin']['allName'],
             'icon' => ''
         ];
     }

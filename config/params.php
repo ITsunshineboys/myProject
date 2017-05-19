@@ -67,6 +67,7 @@ return [
     'category' => [
         'admin' => [
             'currentName' => '当前',
+            'allName' => '全部分类',
         ],
     ],
 ];
