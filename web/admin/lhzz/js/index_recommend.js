@@ -1,6 +1,8 @@
 var recommend_list="mall/recommend-admin-index";
 //文件上传
 var upload1="site/upload";
+//删除文件
+var upload_delete="site/upload-delete";
 //单个改变是否停用
 var stop_status="mall/recommend-status-toggle";
 //批量改变是否停用接口
@@ -19,6 +21,8 @@ var recommend_add="mall/recommend-add";
 var recommend_history="mall/recommend-history";
 //获取事件类型列表
 var time_types="site/time-types";
+//根据sku获取推荐信息
+var gain_sku="mall/recommend-by-sku";
 var data1,data2;
 //日历
 var start = {
@@ -46,6 +50,7 @@ laydate(start);
 laydate(end);
 app.controller("index_recommend",function($scope,$http){
     $scope.url=url;
+    //
     $scope.kind_type=0;
     //右边内容宽度自适应
     $scope.zishiy=function (){
@@ -69,23 +74,68 @@ app.controller("index_recommend",function($scope,$http){
             .success(function(data,status){
             $scope.time_kind=data.data.time_types;
             })
-    }
-    $scope.time_type()
+    };
+    $scope.time_type();
+    //搜索时间类型的变化获取新的历史数据
+    $(document).on("change","#time_kind",function(){
+        $scope.time_type1=$(this).val();
+        if($scope.time_type1=="custom"){
+            $(".custom").addClass("show").removeClass("hide")
+        }
+        else{
+            $(".custom").addClass("hide").removeClass("show")
+        }
+        $scope.history($scope.kind_type,$scope.time_type1,"","");
+        alert('value：'+$(this).val());//获取value
+        alert('text：'+$(this).find("option:selected").text());//获取选中文本
+    });
+    //自定义搜索时间范围的搜索事件
+    $scope.search=function(){
+        $scope.start_time=$("#start").text();
+        $scope.end_time=$("#end").text();
+        if($scope.start_time=="开始时间"){
+            //弹窗的显示
+            $(".popup").addClass('show').removeClass("hide");
+            $(".popup .delete1").addClass('show').removeClass("hide");
+            $(".popup .delete1 .not_stop").addClass('show').removeClass("hide");
+            $(".popup .delete1 .not_stop .warm_word1").text('请先输入开始时间');
+            //没有填入开始时间的关闭按钮
+            $scope.del_close1=function(){
+                //弹窗的隐藏
+                $(".popup").addClass('hide').removeClass("show");
+                $(".popup .delete1").addClass('hide').removeClass("show");
+                $(".popup .delete1 .not_stop").addClass('hide').removeClass("show");
+            }
+        }
+        else if($scope.start_time!="开始时间"&& $scope.end_time=="结束时间"){
+            //弹窗的显示
+            $(".popup").addClass('show').removeClass("hide");
+            $(".popup .delete1").addClass('show').removeClass("hide");
+            $(".popup .delete1 .not_stop").addClass('show').removeClass("hide");
+            $(".popup .delete1 .not_stop .warm_word1").text('请先输入结束时间');
+            //没有填入开始时间的关闭按钮
+            $scope.del_close1=function(){
+                //弹窗的隐藏
+                $(".popup").addClass('hide').removeClass("show");
+                $(".popup .delete1").addClass('hide').removeClass("show");
+                $(".popup .delete1 .not_stop").addClass('hide').removeClass("show");
+            }
+        }else if($scope.start_time!="开始时间"&& $scope.end_time!="结束时间"){
+            $scope.history($scope.kind_type,$scope.time_type1,$scope.start_time, $scope.end_time);
+        }
+        console.log("$scope.start_time"+$scope.start_time);
+        console.log("$scope.end_time"+$scope.end_time);
+    };
     //点击历史数据按钮事件
-    $scope.history=function(kind){
+    $scope.history=function(kind,time_kind1,start_time,end_time){
         $scope.kind_type=kind;
-
         $http({
             method: "GET",
-            url: url + recommend_history+"?type="+$scope.kind_type+"&time_type=all"
+            url: url + recommend_history+"?type="+$scope.kind_type+"&time_type="+time_kind1+"&start_time="+start_time+"&end_time="+end_time
         })
             .success(function (data, status) {
                     $scope.history_data = data.data.recommend_history.details;
-                    //$scope.history_data = data
-
-
-
-
+                    $scope.history_total = data.data.recommend_history.total;
             }).
             error(function (data, status) {
                 $scope.data = data || "Request failed";
@@ -176,7 +226,6 @@ app.controller("index_recommend",function($scope,$http){
                }
                 else if(data_type==2){
                    $scope.mydata2 = data.data.recommend_admin_index.details;
-
                }
 
 
@@ -187,47 +236,41 @@ app.controller("index_recommend",function($scope,$http){
             });
     };
     //页面初始加载数据
-    //banner的数据初始化
+    //banner的数据初始化==传的值代表0代表banner，2代表推荐产品
     $scope.table_data1(0);
     //推荐商品数据的初始化
     $scope.table_data1(2);
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
 
+        //表格显示列的初始化控制
+        $(".tb_description1").hide();
+        $(".tb_platform_price1").hide();
+        $(".tb_description2").hide();
+        $(".tb_status2").hide();
+        $(".tb_delete_time2").hide();
         //排序操作处理
         $scope.order_alter=function(){
             var fixHelper = function(e, ui) {
-                //console.log(ui)
                 ui.children().each(function() {
                     $(this).width($(this).width());     //在拖动时，拖动行的cell（单元格）宽度会发生改变。在这里做了处理就没问题了
                 });
                 return ui;
             };
-            //jQuery(function(){
+            jQuery(function(){
             $(" tbody").sortable({                //这里是talbe tbody，绑定 了sortable
                 helper: fixHelper,                  //调用fixHelper
                 axis:"y",
                 start:function(e, ui){
                     //ui.helper.css({"background":"red"})     //拖动时的行，要用ui.helper
-//					alert(ui.helper.attr('class'))
-
                     return ui;
                 },
                 stop:function(e, ui){
                     //拖拽完成事件
-
-                    //改变序列号
-
-
-
-                    //}
-                    //alert(ui.item.attr('name'))
-                    //alert(ui.item.find(".order").text())
-
-                    //ui.item.removeClass("ui-state-highlight"); //释放鼠标时，要用ui.item才是释放的行
+                   //释放鼠标时，要用ui.item才是释放的行
                     return ui;
                 }
             }).disableSelection();
-            //})
+            })
         };
         $scope.order_alter();
         //数据已连接====单个删除事件的控制
@@ -351,7 +394,7 @@ app.controller("index_recommend",function($scope,$http){
             $("input[name=item]").each(function() {
                 if ($(this).prop("checked") == true) {
                     console.log($(this).val());
-                    var cal="."+$(this).val()
+                    var cal="."+$(this).val();
                     $scope.now_stop=$(cal).find(".action").find(".stop").text()
                     console.log($(cal).find(".action").find(".stop").text());
                     if($scope.now_stop=="停用"){
@@ -433,7 +476,7 @@ app.controller("index_recommend",function($scope,$http){
         $scope.stop=function(){
             //$scope.is_stop=true;
             var text=[];
-            var stops=[]
+            var stops=[];
             $("input[name=item]").each(function() {
                 if ($(this).prop("checked") == true) {
                     console.log($(this).val());
@@ -495,22 +538,10 @@ app.controller("index_recommend",function($scope,$http){
                 };
             }
         };
-        //添加事件的处理
-        $scope.add=function(){
-            $(".popup").addClass('show').removeClass("hide");
-            $(".popup .add1").addClass('show').removeClass("hide");
-            $scope.add_sure=function(){
-                $(".popup").addClass('hide').removeClass("show");
-                $(".popup .add1").addClass('hide').removeClass("show");
-            };
-            $scope.add_cancel=function(){
-                $(".popup").addClass('hide').removeClass("show");
-                $(".popup .add1").addClass('hide').removeClass("show");
-            };
-        };
         //上传文件
         $scope.doUpload=function (load) {
-            var formData = new FormData($( ".uploadForm" )[0]);
+            var form_id1="#uploadForm"+load;
+            var formData = new FormData($( form_id1 )[0]);
             $.ajax({
                 url: url+upload1 ,
                 type: 'POST',
@@ -522,19 +553,19 @@ app.controller("index_recommend",function($scope,$http){
                 processData: false,
                 success: function (data) {
                     if(load==1){
-                        $scope.load1=data.data;
+                        $scope.add_image2=data.data;
                         alert( "1111成功");
                     }
                     else if(load==2){
-                        $scope.load2=data.data;
-                        alert( "222222成功");
+                        $scope.add_image2=data.data.file_path;
+                        alert( "222222成功"+$scope.load2);
                     }
                     else if(load==3){
-                        $scope.load3=data.data;
+                        $scope.edit_image2=data.data.file_path;
                         alert( "3333成功");
                     }
                     else if(load==4){
-                        $scope.load4=data.data;
+                        $scope.edit_image2=data.data.file_path;
                         alert( "444444成功");
                     }
                 },
@@ -543,25 +574,130 @@ app.controller("index_recommend",function($scope,$http){
                 }
             });
         };
+        //删除文件事件处理
+        $scope.del_photo=function(obj){
+            $.ajax({
+                url: url+ upload_delete,
+                type: 'POST',
+                data:{"file_path":obj},
+                dataType: "json",
+                contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                success: function (data) {
+                    //$scope.loginout=data;
+                    alert("删除文件成功");
+
+                }
+            });
+        };
+        //根据sku获取推荐信息
+        $scope.gain_recommend=function(sku,sku_type){
+            $scope.sku1=sku;
+
+            $http({
+                method: "GET",
+                url: url + gain_sku+"?sku="+$scope.sku1
+            })
+                .success(function (data, status) {
+                    if(sku_type=="添加"){
+                        $scope.add_url=data.data.detail;
+                        if($scope.add_url=""){
+                            alert("空值");
+                        }
+
+                    }
+                })
+
+        };
+        //添加事件的处理
+        $scope.add=function(obj){
+            $scope.add_sku="";
+            $scope.add_url="";
+            $scope.add_name="";
+            $scope.add_description="";
+            $scope.add_price="";
+            $scope.add_image2="";
+            $scope.add_form_type=obj;
+            //if( $scope.add_form_type==1){
+            //    $scope.add_image2=$scope.load1.file_path;
+            //}
+            //else if($scope.add_form_type==2){
+            //    $scope.add_image2=$scope.load2.file_path;
+            //}
+            console.log("添加的$scope.kind_type"+$scope.kind_type)
+            $(".popup").addClass('show').removeClass("hide");
+            $(".popup .add1").addClass('show').removeClass("hide");
+            $('input[name=sex1]').click(function(){
+                $scope.add_statu=$(this).val();
+
+                console.log("非非点击确认外===链接的val==="+$(this).val())
+            });
+            //链接的是否停用的值得获取
+            $('input[name=sex2]').click(function(){
+                $scope.add_statu=$(this).val()
+                console.log("非非点击确认外===链接的val==="+$(this).val())
+            });
+            $scope.add_sure=function(){
+
+                $.ajax({
+                    url: url+ recommend_add,
+                    type: 'POST',
+                    data:{"url":$scope.add_url,"title":$scope.add_name,"image":
+                        $scope.add_image2,"from_type":$scope.add_form_type,"status":$scope.add_statu,
+                        "type":$scope.kind_type,"sku":$scope.add_sku,"description":$scope.add_description,
+                        "platform_price":$scope.add_price},
+                    dataType: "json",
+                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                    success: function (data) {
+                        //$scope.loginout=data;
+                        alert("添加成功");
+                    }
+                });
+
+                $(".popup").addClass('hide').removeClass("show");
+                $(".popup .add1").addClass('hide').removeClass("show");
+            };
+            $scope.add_cancel=function(){
+                $scope.del_photo($scope.add_image2);
+                $(".popup").addClass('hide').removeClass("show");
+                $(".popup .add1").addClass('hide').removeClass("show");
+            };
+        };
+
         //编辑事件处理
-        $scope.edit=function(edit_id,edit_name1,edit_sku1,edit_supplier,edit_url2,edit_status2,edit_image2){
+        $scope.edit=function(edit_id,edit_name1,edit_description,edit_sku1,edit_supplier,edit_url2,edit_status2,edit_image2,edit_price,edit_from_type,edit_type){
             $scope.edit_id=edit_id;
             $scope.edit_name=edit_name1;
+            $scope.edit_description=edit_description;
             $scope.edit_sku=edit_sku1;
             $scope.edit_supplier=edit_supplier;
             $scope.edit_url=edit_url2;
             $scope.edit_status=edit_status2;
             $scope.edit_image2=edit_image2;
-            console.log("$scope.edit_supplier=="+$scope.edit_supplier)
+            $scope.edit_price=edit_price;
+            $scope.edit_from_type=edit_from_type;
+            $scope.edit_type=edit_type;
+            console.log("$scope.edit_supplier=="+$scope.edit_supplier);
             if($scope.edit_status=="停用"){
                 //alert("停用")
+                $scope.edit_statu=0;
                 $("#yes3").attr('checked', 'checked');
                 $("#yes4").attr('checked', 'checked');
             }
             else if($scope.edit_status=="启用"){
                 //alert("启用")
+                $scope.edit_statu=1;
                 $("#no3").attr('checked', 'checked');
                 $("#no4").attr('checked', 'checked');
+            }
+            if($scope.edit_from_type=="链接"){
+                $scope.from_type=2;
+                //$scope.add_image2=$scope.load4.file_path;
+                console.log("链接的val==="+$('input:radio[name="sex4"]:checked').val())
+            }
+            else{
+                $scope.from_type=1;
+                //$scope.add_image2=$scope.load3.file_path;
+                console.log("非非链接的val==="+$('input[name=sex3][checked]').val()   )
             }
             $(".popup").addClass('show').removeClass("hide");
             $(".popup .edit1").addClass('show').removeClass("hide");
@@ -577,35 +713,42 @@ app.controller("index_recommend",function($scope,$http){
             //取消编辑
             $scope.edit_cancel=function(){
                 //弹窗的隐藏
+                $scope.del_photo($scope.edit_image2);
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .edit1").addClass('hide').removeClass("show");
                 $(".popup .edit1 .is_edit").addClass('hide').removeClass("show");
             };
             //确认编辑
             //商品的是否停用的值得获取
+
             $('input[name=sex3]').click(function(){
-                $scope.sex3_val=$(this).val()
+                $scope.edit_statu=$(this).val()
+
                 console.log("非非点击确认外===链接的val==="+$(this).val())
             });
             //链接的是否停用的值得获取
             $('input[name=sex4]').click(function(){
-                $scope.sex4_val=$(this).val()
+                $scope.edit_statu=$(this).val();
                 console.log("非非点击确认外===链接的val==="+$(this).val())
             });
-            $scope.edit_sure=function(obj) {
-                console.log("类型==="+obj);
-                if(obj=="链接"){
-                    $scope.from_type=2;
-                    console.log("链接的val==="+$('input:radio[name="sex4"]:checked').val())
-                }
-                else{
-                    $scope.from_type=1;
-                    $('input[name=sex3]').click(function(){
-                        console.log("非非点击===链接的val==="+$(this).val())
-                    });
-                    console.log("非非链接的val==="+$('input[name=sex3][checked]').val()   )
-                }
+            $scope.edit_sure=function() {
+                console.log("是banner还是推荐==="+$scope.edit_type);
 
+                $.ajax({
+                    url: url+recommend_edit,
+                    type: 'POST',
+                    data:{"id":$scope.edit_id,"url":$scope.edit_url,"title":$scope.edit_name,"image":
+                        $scope.edit_image2,"from_type":$scope.from_type,"status":$scope.edit_statu,
+                    "type":$scope.edit_type,"sku":$scope.edit_sku,"description":$scope.edit_description,
+                    "platform_price":$scope.edit_price},
+                    dataType: "json",
+                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                    success: function (data) {
+                        //$scope.loginout=data;
+                        alert("编辑成功");
+
+                    }
+                });
                 $(".popup").addClass('hide').removeClass("show");
                 $(".popup .edit1").addClass('hide').removeClass("show");
                 $(".popup .edit1 .is_edit").addClass('hide').removeClass("show");
@@ -669,9 +812,10 @@ app.controller("index_recommend",function($scope,$http){
                 $(this_class).removeClass("clicked");
                 $(this_id).addClass("hide").removeClass("show")
             }
-        }
+        };
         //控制哪些列显示哪些不显示
         $("input[name=cell]").on("click",function() {
+            console.log("$(this).val()"+$(this).val())
                 if ($(this).prop("checked") == true) {
                     var cell_name="."+$(this).val();
                     $(cell_name).show();
@@ -679,7 +823,6 @@ app.controller("index_recommend",function($scope,$http){
                 }
                 else if($(this).prop("checked") != true){
                     var cell_name1="."+$(this).val();
-                    //alert("没有选中")
                     $(cell_name1).hide();
 
                 }

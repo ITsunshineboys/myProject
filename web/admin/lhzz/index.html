@@ -38,16 +38,8 @@
                                     商品编号
                                 </div>
                                 <div class="line_right ">
-                                    <input class="gain_input text_input" type="text"/>
-                                    <div class="gain_btn " style="margin-left: 0">获取</div>
-                                </div>
-                            </div>
-                            <div class="line_box">
-                                <div class="line_left ">
-                                    商品名称
-                                </div>
-                                <div class="line_right ">
-                                    <input  class="text_input" type="text"/>
+                                    <input class="gain_input text_input" ng-model="add_sku" type="text"/>
+                                    <div class="gain_btn " style="margin-left: 0" ng-click="gain_recommend(add_sku,'添加')">获取</div>
                                 </div>
                             </div>
                             <div class="line_box">
@@ -55,7 +47,33 @@
                                     商品链接
                                 </div>
                                 <div class="line_right ">
-                                    <input  type="text" class="text_input"  disabled="disabled"/>
+                                    <input  type="text" class="text_input" ng-model="add_url" disabled="disabled"/>
+                                    <a class="gain_btn " href="{{add_url}} " target="_blank" style="margin-left: 0">查看</a>
+                                </div>
+                            </div>
+                            <div ng-if="add_url==''"></div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    标题
+                                </div>
+                                <div class="line_right ">
+                                    <input  class="text_input" ng-model="add_name" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box"  ng-if="kind_type==2">
+                                <div class="line_left ">
+                                    副标题
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" ng-model="add_description" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box" ng-if="kind_type==2">
+                                <div class="line_left ">
+                                    显示价格
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" ng-model="add_price" type="text"/>
                                 </div>
                             </div>
                             <div class="line_box">
@@ -75,16 +93,17 @@
                                     <div>375×185,5M内</div>
                                 </li>
                                 <li class="map_right fl">
-                                    <form  class="uploadForm" enctype="multipart/form-data" >
+                                    <img src="{{url}}{{add_image2}}"  alt=""/>
+                                    <form  id="uploadForm1" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn1" onclick="myfile1.click();" ng-click="doUpload(1)" value="上传" />
                                         <input type="file" id="myfile1" name="file1" value="" style="display:none" accept="image/*">
-                                        <span>{{load1.file_path}}</span>
+                                        <span>{{add_image2}}</span>
                                     </form>
                                 </li>
                             </ul>
                             <div class="sure_box " >
                                 <div>
-                                    <span class="btn2 add_sure sure_left " ng-click="add_sure()">提交</span>
+                                    <span class="btn2 add_sure sure_left " ng-click="add_sure(1)">提交</span>
                                     <span class="btn2 add_cancel" ng-click="add_cancel()">取消</span>
                                 </div>
                             </div>
@@ -92,18 +111,35 @@
                         <div class="tab2 add_tab2">
                             <div class="line_box">
                                 <div class="line_left ">
-                                    商品名称
+                                    链接
                                 </div>
                                 <div class="line_right ">
-                                    <input class="text_input" type="text"/>
+                                    <input class="text_input" ng-model="add_url" type="text"/>
+                                    <a class="gain_btn " href="{{add_url}}" target="_blank" style="margin-left: 0">查看</a>
                                 </div>
                             </div>
                             <div class="line_box">
                                 <div class="line_left ">
-                                    链接
+                                    标题
                                 </div>
                                 <div class="line_right ">
-                                    <input  type="text" class="text_input" disabled="disabled"/>
+                                    <input  type="text" ng-model="add_name" class="text_input" />
+                                </div>
+                            </div>
+                            <div class="line_box"  ng-if="kind_type==2">
+                                <div class="line_left ">
+                                    副标题
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" ng-model="add_description" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box" ng-if="kind_type==2">
+                                <div class="line_left ">
+                                    显示价格
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" ng-model="add_price" type="text"/>
                                 </div>
                             </div>
                             <div class="line_box">
@@ -123,17 +159,17 @@
                                     <div>375×185,5M内</div>
                                 </li>
                                 <li class="map_right fl">
-                                    <img src="images/bed.png" alt=""/><br/>
-                                    <form  class="uploadForm" enctype="multipart/form-data" >
+                                    <img src="{{url}}{{add_image2}}" alt=""/><br/>
+                                    <form  id="uploadForm2" enctype="multipart/form-data" method="post">
                                         <input name="button" type="button"  id="btn2" onclick="myfile2.click();" ng-click="doUpload(2)" value="上传" />
-                                        <input type="file" id="myfile2" name="file1" value="" style="display:none" accept="image/*">
-                                        <span>{{load2.file_path}}</span>
+                                        <input type="file" id="myfile2" name="UploadForm[file]" value="" style="display:none" accept="image/*">
+                                        <span>{{add_image2}}</span>
                                     </form>
                                 </li>
                             </ul>
                             <div class="sure_box " >
                                 <div>
-                                    <span class="btn2 add_sure sure_left " ng-click="add_sure()">提交</span>
+                                    <span class="btn2 add_sure sure_left " ng-click="add_sure(2)">提交</span>
                                     <span class="btn2 add_cancel" ng-click="add_cancel()">取消</span>
                                 </div>
                             </div>
@@ -156,19 +192,35 @@
                             </div>
                             <div class="line_box">
                                 <div class="line_left ">
-                                    商品名称
-                                </div>
-                                <div class="line_right ">
-                                    <input  class="text_input" ng-model="edit_name" type="text"/>
-                                </div>
-                            </div>
-                            <div class="line_box">
-                                <div class="line_left ">
                                     商品链接
                                 </div>
                                 <div class="line_right ">
                                     <input  type="text" class="text_input" ng-model="edit_url" disabled="disabled"/>
                                     <a class="gain_btn " href="{{edit_url}}" target="_blank" style="margin-left: 0">查看</a>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    标题
+                                </div>
+                                <div class="line_right ">
+                                    <input  class="text_input" ng-model="edit_name" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box"  ng-if="kind_type==2">
+                                <div class="line_left ">
+                                    副标题
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" ng-model="edit_description" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box" ng-if="kind_type==2">
+                                <div class="line_left ">
+                                    显示价格
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" ng-model="edit_price" type="text"/>
                                 </div>
                             </div>
                             <div class="line_box">
@@ -189,16 +241,16 @@
                                 </li>
                                 <li class="map_right fl">
                                     <img src="{{url}}{{edit_image2}}"  alt=""/>
-                                    <form  class="uploadForm" enctype="multipart/form-data" >
+                                    <form  id="uploadForm3" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn3" onclick="myfile3.click();" ng-click="doUpload(3)" value="上传" />
                                         <input type="file" id="myfile3" name="file1" value="" style="display:none" accept="image/*">
-                                        <span>{{load3.file_path}}</span>
+                                        <span>{{edit_image2}}</span>
                                     </form>
                                 </li>
                             </ul>
                             <div class="sure_box">
                                 <div>
-                                    <span class="btn2 edit_sure sure_left" ng-click="edit_sure(edit_supplier)">确认编辑</span>
+                                    <span class="btn2 edit_sure sure_left" ng-click="edit_sure()">确认编辑</span>
                                     <span class="btn2 edit_cancel" ng-click="edit_cancel()">取消</span>
                                 </div>
 
@@ -207,19 +259,35 @@
                         <div class="link_box hide">
                             <div class="line_box">
                                 <div class="line_left ">
-                                    商品名称
+                                    链接
+                                </div>
+                                <div class="line_right ">
+                                    <input  type="text" class="text_input" ng-model="edit_url" disabled="disabled"/>
+                                    <a class="gain_btn " href="{{edit_url}}" target="_blank" style="margin-left: 0">查看</a>
+                                </div>
+                            </div>
+                            <div class="line_box">
+                                <div class="line_left ">
+                                    标题
                                 </div>
                                 <div class="line_right ">
                                     <input class="text_input" ng-model="edit_name" type="text"/>
                                 </div>
                             </div>
-                            <div class="line_box">
+                            <div class="line_box"  ng-if="kind_type==2">
                                 <div class="line_left ">
-                                    链接
+                                    副标题
                                 </div>
                                 <div class="line_right ">
-                                    <input  type="text" class="text_input" ng-model="edit_url" disabled="disabled"/>
-                                    <div class="gain_btn " style="margin-left: 0" ng-click="look(edit_url)">查看</div>
+                                    <input class="text_input" ng-model="edit_description" type="text"/>
+                                </div>
+                            </div>
+                            <div class="line_box" ng-if="kind_type==2">
+                                <div class="line_left ">
+                                    显示价格
+                                </div>
+                                <div class="line_right ">
+                                    <input class="text_input" ng-model="edit_price" type="text"/>
                                 </div>
                             </div>
                             <div class="line_box">
@@ -239,17 +307,17 @@
                                     <div>750×370,5M内</div>
                                 </li>
                                 <li class="map_right fl">
-                                    <img src="images/bed.png" alt=""/><br/>
-                                    <form  class="uploadForm" enctype="multipart/form-data" >
+                                    <img src="{{url}}{{edit_image2}}" alt=""/><br/>
+                                    <form  id="uploadForm4" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn4" onclick="myfile4.click();" ng-click="doUpload(4)" value="上传" />
                                         <input type="file" id="myfile4" name="file1" value="" style="display:none" accept="image/*">
-                                        <span>{{load4.file_path}}</span>
+                                        <span>{{edit_image2}}</span>
                                     </form>
                                 </li>
                             </ul>
                             <div class="sure_box">
                                 <div>
-                                    <span class="btn2 edit_sure sure_left" ng-click="edit_sure(edit_supplier)">确认编辑</span>
+                                    <span class="btn2 edit_sure sure_left" ng-click="edit_sure()">确认编辑</span>
                                     <span class="btn2 edit_cancel" ng-click="edit_cancel()">取消</span>
                                 </div>
 
@@ -266,7 +334,7 @@
                         <div class="warm_word1">确认停用</div>
                         <div class="sure_box">
                             <div>
-                                <span class="btn2 save_cancel" ng-click="del_close1()">取消</span>
+                                <span class="btn2 save_cancel" ng-click="del_close1()">关闭</span>
                             </div>
                         </div>
                     </div>
@@ -365,44 +433,44 @@
                             <input type="checkbox" class="choose_all1" id="all1" ng-click="all('choose1')" style="display: none"/>
                             <div class="btn1 fl" ng-click="delete()">删除</div>
                             <div class="btn1 fl" ng-click="stop()">停用</div>
-                            <div class="fl" ng-click="history(0)">历史数据</div>
+                            <div class="fl" ng-click="history(0,'all','','')">历史数据</div>
                             <div class="btn1 screen" ng-click="screen('cells_box','screen')" style="position:absolute;top:30px;right:40px"><img src="images/cell_icon.jpg" alt=""/></div>
                             <div id="cells_box" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333">
                                 <ul   style="">
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_name" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_name" />
                                         <span>标题</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_type" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_type" />
                                         <span>类型</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_sku" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_sku" />
                                         <span>商品编号</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_supplier_name" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_supplier_name" />
                                         <span>来源商家</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_viewed_number" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_viewed_number" />
                                         <span>上架浏览</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_sold_number" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_sold_number" />
                                         <span>上架销量</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_status" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_status" />
                                         <span>是否停用</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_create_time" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_create_time" />
                                         <span>创建时间</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_image" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_image" />
                                         <span>图片</span>
                                     </li>
                                 </ul>
@@ -452,7 +520,7 @@
                                             <span ng-if="n.status=='停用'">启用</span>
                                             <span ng-if="n.status=='启用'">停用</span>
                                         </span>
-                                        <span ng-click="edit(n.id,n.title,n.sku,n.supplier_name,n.url,n.status,n.image)">编辑</span>
+                                        <span ng-click="edit(n.id,n.title,n.description,n.sku,n.supplier_name,n.url,n.status,n.image,n.platform_price,n.from_type,0)">编辑</span>
                                         <span ng-click="dele(n.id)">删除</span>
                                     </td>
                                 </tr>
@@ -465,51 +533,55 @@
                             <div class="btn1 fl" ng-click="save1()">保存</div>
                             <div class="btn1 fl" ng-click="add(2)">添加</div>
                             <label class="btn1 fl" for="all2">全选</label>
-                            <input type="checkbox" class="choose_all1" id="all2" ng-click="all('choose2')" style="display: none"/>
+                            <input type="checkbox" class="choose_all1" id="all2" ng-click="all('choose1')" style="display: none"/>
                             <div class="btn1 fl" ng-click="delete()">删除</div>
                             <div class="btn1 fl" ng-click="stop()">停用</div>
-                            <div class="fl" ng-click="history(2)">历史数据</div>
-                            <div class="btn1 screen1"  ng-click="screen('cells_box1','screen1')"style="position:absolute;top:30px;right:40px"><img src="images/cell_icon.jpg" alt=""/></div>
+                            <div class="fl" ng-click="history(2,'all','','')">历史数据</div>
+                            <div class="btn1 screen1"  ng-click="screen('cells_box1','screen1')" style="position:absolute;top:30px;right:40px"><img src="images/cell_icon.jpg" alt=""/></div>
                             <div id="cells_box1" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333">
                                 <ul   style="">
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_name1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_name1" />
                                         <span>标题</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_description1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" value="tb_description1" />
                                         <span>副标题</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_type1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" value="tb_platform_price1" />
+                                        <span>价格</span>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_type1" />
                                         <span>类型</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_sku1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_sku1" />
                                         <span>商品编号</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_supplier_name1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_supplier_name1" />
                                         <span>来源商家</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_viewed_number1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_viewed_number1" />
                                         <span>上架浏览</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_sold_number1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_sold_number1" />
                                         <span>上架销量</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_status1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_status1" />
                                         <span>是否停用</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_create_time1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_create_time1" />
                                         <span>创建时间</span>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="cell" checked value="tb_image1" ng-click="cell1()"/>
+                                        <input type="checkbox" name="cell" checked="checked" value="tb_image1"/>
                                         <span>图片</span>
                                     </li>
                                 </ul>
@@ -522,7 +594,8 @@
                                     <!--<input type="checkbox" ng-click="all()" class="choose_all"/>-->
                                 </th>
                                 <th class="tb_name1">标题</th>
-                                <th class="tb_description1">副标题</th>
+                                <th class="tb_description1" >副标题</th>
+                                <th class="tb_platform_price1" >价格</th>
                                 <th class="tb_type1">类型</th>
                                 <th class="tb_sku1">商品编号</th>
                                 <th class="tb_supplier_name1">来源商家</th>
@@ -536,10 +609,11 @@
                                 <tbody >
                                 <tr ng-repeat="n in mydata2" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
                                     <td class="choose">
-                                        <input type="checkbox" value="{{n.id}}" name="item" class="choose2"/>
+                                        <input type="checkbox" value="{{n.id}}" name="item" class="choose1"/>
                                     </td>
                                     <td class="tb_name1">{{n.title}}</td>
-                                    <td class="tb_description1">{{n.description}}</td>
+                                    <td class="tb_description1" >{{n.description}}</td>
+                                    <td class="tb_platform_price1" >{{n.platform_price}}</td>
                                     <td class="tb_type1">{{n.from_type}}</td>
                                     <td class="tb_sku1">{{n.sku}}
                                         <span ng-if="n.sku==''">无</span>
@@ -556,12 +630,12 @@
                                     <td class="tb_image1">
                                         <img src="{{url}}{{n.image}}" alt=""/>{{n.image}}
                                     </td>
-                                    <td class="action">
+                                    <td class="action1">
                                         <span ng-click="stop_one(n.id)" class="stop">
                                             <span ng-if="n.status=='停用'">启用</span>
                                             <span ng-if="n.status=='启用'">停用</span>
                                         </span>
-                                        <span ng-click="edit(n.id,n.title,n.sku,n.supplier_name,n.url,n.status,n.image)">编辑</span>
+                                        <span ng-click="edit(n.id,n.title,n.description,n.sku,n.supplier_name,n.url,n.status,n.image,n.platform_price,2)">编辑</span>
                                         <span ng-click="dele(n.id)">删除</span>
                                     </td>
                                 </tr>
@@ -574,55 +648,63 @@
             </div>
             <div class="history_box hide">{{time_kind}}
                 <div class="history_header">
-                    <select name="" id="" class="fl selects">
-                        <option value="all">全部</option>
-                        <option value="all">全部</option>
-                        <option value="all">全部</option>
-                        <option value="all">全部</option>
+                    <select name="" id="time_kind" class="fl selects">
+                        <option value="{{a.value}}"  ng-repeat="a in time_kind">{{a.name}}</option>
+                        <!--<option value="all">全部</option>-->
+                        <!--<option value="all">全部</option>-->
+                        <!--<option value="all">全部</option>-->
                     </select>
-                    <div id="start" class="  fl test1" >开始时间</div>
-                    <div id="end" class="  fl test1" >结束时间</div>
-                    <div class="btn1 screen2"  ng-click="screen('cells_box2','screen2')"style="position:absolute;top:30px;right:40px"><img src="images/cell_icon.jpg" alt=""/></div>
+                    <ul class="custom hide">
+                        <li id="start" class="  fl test1" >开始时间</li>
+                        <li id="end" class="  fl test1" >结束时间</li>
+                        <li class="btn1 search fl" ng-click="search()">搜索</li>
+                    </ul>
+
+                    <div class="btn1 screen2"  ng-click="screen('cells_box2','screen2')" style="position:absolute;top:30px;right:40px"><img src="images/cell_icon.jpg" alt=""/></div>
                     <div id="cells_box2" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333">
                         <ul   style="">
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_name1" ng-click="cell1()"/>
+                                <input type="checkbox" name="cell" checked="checked" value="tb_name2" />
                                 <span>标题</span>
                             </li>
-                            <li>
-                                <input type="checkbox" name="cell" checked value="tb_description1" ng-click="cell1()"/>
+                            <li >
+                                <input type="checkbox" name="cell"  value="tb_description2"/>
                                 <span>副标题</span>
                             </li>
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_type1" ng-click="cell1()"/>
+                                <input type="checkbox" name="cell" checked="checked" value="tb_type2" />
                                 <span>类型</span>
                             </li>
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_sku1" ng-click="cell1()"/>
+                                <input type="checkbox" name="cell" checked="checked" value="tb_sku2" />
                                 <span>商品编号</span>
                             </li>
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_supplier_name1" ng-click="cell1()"/>
+                                <input type="checkbox" name="cell" checked="checked" value="tb_supplier_name2" />
                                 <span>来源商家</span>
                             </li>
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_viewed_number1" ng-click="cell1()"/>
+                                <input type="checkbox" name="cell" checked="checked" value="tb_viewed_number2" />
                                 <span>上架浏览</span>
                             </li>
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_sold_number1" ng-click="cell1()"/>
+                                <input type="checkbox" name="cell" checked="checked" value="tb_sold_number2" />
                                 <span>上架销量</span>
                             </li>
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_status1" ng-click="cell1()"/>
+                                <input type="checkbox"  name="cell"  value="tb_status2" />
                                 <span>是否停用</span>
                             </li>
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_create_time1" ng-click="cell1()"/>
+                                <input type="checkbox" name="cell" checked="checked" value="tb_create_time2" />
                                 <span>创建时间</span>
                             </li>
+                            <li >
+                                <input type="checkbox" name="cell"  value="tb_delete_time2" />
+                                <span>删除时间</span>
+                            </li>
                             <li>
-                                <input type="checkbox" name="cell" checked value="tb_image1" ng-click="cell1()"/>
+                                <input type="checkbox" name="cell" checked="checked" value="tb_image2" />
                                 <span>图片</span>
                             </li>
                         </ul>
@@ -632,53 +714,49 @@
                 <div class="table_box">
                     <table  border="1">
                         <thead>
-                        <th class="choose">
-                            <!--<input type="checkbox" ng-click="all()" class="choose_all"/>-->
-                        </th>
-                        <th class="tb_name1">标题</th>
-                        <th class="tb_description1">副标题</th>
-                        <th class="tb_type1">类型</th>
-                        <th class="tb_sku1">商品编号</th>
-                        <th class="tb_supplier_name1">来源商家</th>
-                        <th class="tb_viewed_number1">上架浏览</th>
-                        <th class="tb_sold_number1">上架销量</th>
-                        <th class="tb_status1">是否停用</th>
-                        <th class="tb_create_time1">创建时间</th>
-                        <th class="tb_delete_time1">删除时间</th>
-                        <th class="tb_image1">图片</th>
+                        <th class="tb_name2">标题</th>
+                        <th class="tb_description2" >副标题</th>
+                        <th class="tb_type2">类型</th>
+                        <th class="tb_sku2">商品编号</th>
+                        <th class="tb_supplier_name2">来源商家</th>
+                        <th class="tb_viewed_number2">上架浏览</th>
+                        <th class="tb_sold_number2">上架销量</th>
+                        <th class="tb_status2" >是否停用</th>
+                        <th class="tb_create_time2">创建时间</th>
+                        <th class="tb_delete_time2" >删除时间</th>
+                        <th class="tb_image2">图片</th>
                         </thead>
                         <tbody >
                         <tr ng-repeat="n in history_data" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
-                            <td class="choose">
-                                <input type="checkbox" value="{{n.id}}" name="item" class="choose2"/>
-                            </td>
-                            <td class="tb_name1">{{n.title}}</td>
-                            <td class="tb_description1">{{n.description}}</td>
-                            <td class="tb_type1">{{n.from_type}}</td>
-                            <td class="tb_sku1">{{n.sku}}
+                            <td class="tb_name2">{{n.title}}</td>
+                            <td class="tb_description2" >{{n.description}}</td>
+                            <td class="tb_type2">{{n.from_type}}</td>
+                            <td class="tb_sku2">{{n.sku}}
                                 <span ng-if="n.sku==''">无</span>
                             </td>
-                            <td class="tb_supplier_name1">
+                            <td class="tb_supplier_name2">
                                 <a href="{{n.url}}"  target="_blank">
                                     {{n.supplier_name}}
                                 </a>
                             </td>
-                            <td class="tb_viewed_number1">{{n.viewed_number}}</td>
-                            <td class="tb_sold_number1">{{n.sold_number}}</td>
-                            <td class="tb_status1">{{n.status}}</td>
-                            <td class="tb_create_time1">{{n.create_time}} </td>
-                            <td class="tb_delete_time1">{{n.delete_time}} </td>
-                            <td class="tb_image1">
+                            <td class="tb_viewed_number2">{{n.viewed_number}}</td>
+                            <td class="tb_sold_number2">{{n.sold_number}}</td>
+                            <td class="tb_status2">{{n.status}}</td>
+                            <td class="tb_create_time2">{{n.create_time}} </td>
+                            <td class="tb_delete_time2" >{{n.delete_time}} </td>
+                            <td class="tb_image2">
                                 <img src="{{url}}{{n.image}}" alt=""/>{{n.image}}
                             </td>
                         </tr>
                         </tbody>
                     </table>
+                    <div id="pageTool"></div>
+                    <div id="pageToolbar"></div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="../../js/jquery.js"></script>
+    <script src="../../js/jquery-3.1.1.js"></script>
     <script src="../../js/angular.min.js"></script>
     <script src="js/data_js/laydate.js"></script>
     <script src="js/jquery_ui/jquery-ui.min.js"></script>

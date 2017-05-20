@@ -33,7 +33,7 @@
 							console.log("mycount===" + $scope.mycount);
 							//分页的页码数的初始化函数
 							$('#pageTool').Paging({
-								pagesize: $scope.page, count: $scope.mycount, callback: function (page, size, count) {
+								pagesize: $scope.page, count: $scope.mycount,toolbar:true, callback: function (page, size, count) {
 									console.log(arguments);
 									//点击页码后重新访问接口获取当前页码的数据
 									$http({
