@@ -10,6 +10,7 @@ use app\models\GoodsRecommendViewLog;
 use app\models\Supplier;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
+use app\services\EventHandleService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -972,6 +973,9 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        new EventHandleService();
+        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
 
         return Json::encode([
             'code' => 200,

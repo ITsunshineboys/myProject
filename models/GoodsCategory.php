@@ -15,6 +15,7 @@ class GoodsCategory extends ActiveRecord
 {
     const CACHE_PREFIX = 'goods_categories_';
     const CACHE_SUB_CATE_PREFIX = 'goods_category_';
+    const CACHE_PREFIX_KEY_LIST = 'goods_category_cache_key_list';
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const LEVEL1 = 1;
@@ -98,7 +99,17 @@ class GoodsCategory extends ActiveRecord
             $where .= " and deleted = 0 and (supplier_id = 0 or review_status = {$reviewApproveStatus})";
             $categories = self::find()->select($select)->where($where)->asArray()->all();
             if ($categories) {
-                $cache->set($key, $categories);
+                if ($cache->set($key, $categories)) {
+                    $keys = $cache->get(self::CACHE_PREFIX_KEY_LIST);
+                    if (!$keys) {
+                        $keys= [];
+                    }
+
+                    if ($key && !in_array($key, $keys)) {
+                        $keys[] = $key;
+                        $cache->set(self::CACHE_PREFIX_KEY_LIST, $keys);
+                    }
+                }
             }
         }
 
@@ -369,5 +380,8 @@ class GoodsCategory extends ActiveRecord
                 $this->delete();
             }
         }
+
+        $key = self::CACHE_PREFIX . $this->pid;
+        Yii::$app->cache->delete($key);
     }
 }
