@@ -624,7 +624,9 @@ class MallController extends Controller
         $ret = [
             'code' => 200,
             'msg' => 'OK',
-            'data' => [],
+            'data' => [
+                'detail' => [],
+            ],
         ];
 
         $goods = Goods::findBySku($sku, ['id', 'title', 'subtitle', 'platform_price']);
