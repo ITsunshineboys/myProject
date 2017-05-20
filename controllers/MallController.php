@@ -39,6 +39,7 @@ class MallController extends Controller
         'review-supplier-category',
         'categories-admin',
         'category-admin',
+        'category-status-toggle',
     ];
 
     /**
@@ -74,6 +75,7 @@ class MallController extends Controller
                     'recommend-click-record' => ['post',],
                     'review-supplier-category' => ['post',],
                     'category-add' => ['post',],
+                    'category-status-toggle' => ['post',],
                 ],
             ],
         ];
@@ -797,6 +799,15 @@ class MallController extends Controller
      */
     public function actionReviewSupplierCategory()
     {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -808,16 +819,9 @@ class MallController extends Controller
             ]);
         }
 
-        $postData = Yii::$app->request->post();
-        if (isset($postData['id'])) {
-            unset($postData['id']);
-        }
-        if (isset($postData['approve_time'])) {
-            unset($postData['approve_time']);
-        }
-
-        $goodsCategory->attributes = $postData;
-        $goodsCategory->scenario = 'review';
+        $goodsCategory->reason = trim(Yii::$app->request->post('reason', ''));
+        $goodsCategory->review_status = (int)Yii::$app->request->post('review_status');
+        $goodsCategory->scenario = GoodsCategory::SCENARIO_REVIEW;
         if (!$goodsCategory->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -873,12 +877,61 @@ class MallController extends Controller
     }
 
     /**
+     * Toggle category status action.
+     *
+     * @return string
+     */
+    public function actionCategoryStatusToggle()
+    {
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $code = 1000;
+
+        if (!$id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $model = GoodsCategory::findOne($id);
+        if (!$model) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $now = time();
+        if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
+            $model->deleted = GoodsCategory::STATUS_OFFLINE;
+            $model->online_time = $now;
+        } else {
+            $model->deleted = GoodsCategory::STATUS_ONLINE;
+            $model->offline_time = $now;
+        }
+
+        if (!$model->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
      * Admin category list action
      *
      * @return string
      */
     public function actionCategoryListAdmin()
-    {
+    {// todo
         $code = 1000;
 
         $timeType = trim(Yii::$app->request->get('time_type', ''));

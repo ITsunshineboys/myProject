@@ -61,6 +61,8 @@ CREATE TABLE `goods_category` (
   `create_time` int unsigned not null DEFAULT 0,
   `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
   `deleted` tinyint(1) not null default 0,
+  `online_time` int unsigned not null DEFAULT 0,
+  `offline_time` int unsigned not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

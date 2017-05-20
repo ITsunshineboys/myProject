@@ -24,6 +24,8 @@ class GoodsCategory extends ActiveRecord
     const PAGE_SIZE_DEFAULT = 12;
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
+    const SCENARIO_REVIEW = 'review';
+    const SCENARIO_TOGGLE_STATUS = 'toggle';
 
     /**
      * @var array online status list
@@ -186,9 +188,9 @@ class GoodsCategory extends ActiveRecord
             ['description', 'safe'],
             ['description', 'default', 'value' => ''],
             ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses'])],
-            ['review_status', 'validateReviewStatus', 'on' => 'review'],
-            ['supplier_id', 'validateSupplierId', 'on' => 'review'],
-            ['approve_time', 'validateApproveTime', 'on' => 'review'],
+            ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
+            ['supplier_id', 'validateSupplierId', 'on' => self::SCENARIO_REVIEW],
+            ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
         ];
     }
 
@@ -281,9 +283,12 @@ class GoodsCategory extends ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
+            $now = time();
+
             if ($insert) {
-                $this->create_time = time();
+                $this->create_time = $now;
                 $this->deleted = self::STATUS_ONLINE;
+                $this->offline_time = $now;
 
                 $user = Yii::$app->user->identity;
                 if (!$user) {
@@ -300,13 +305,14 @@ class GoodsCategory extends ActiveRecord
                     $this->supplier_name = $supplier->nickname;
                 }
             } else {
-                $now = time();
-                if ($this->review_status == self::REVIEW_STATUS_REJECT) {
-                    $this->reject_time = $now;
-                    $this->approve_time = 0;
-                } elseif ($this->review_status == self::REVIEW_STATUS_APPROVE) {
-                    $this->approve_time = $now;
-                    $this->reject_time = 0;
+                if ($this->scenario == self::SCENARIO_REVIEW) {
+                    if ($this->review_status == self::REVIEW_STATUS_REJECT) {
+                        $this->reject_time = $now;
+                        $this->approve_time = 0;
+                    } elseif ($this->review_status == self::REVIEW_STATUS_APPROVE) {
+                        $this->approve_time = $now;
+                        $this->reject_time = 0;
+                    }
                 }
             }
 
@@ -330,7 +336,7 @@ class GoodsCategory extends ActiveRecord
             $parentCategory = self::findOne($this->pid);
             $this->level = $parentCategory->level + 1;
             $this->path = $parentCategory->path . $this->id . ',';
-            if (!($this->validate() && $this->save())) {
+            if (!$this->save()) {
                 $this->delete();
             }
         }
