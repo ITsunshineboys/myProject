@@ -275,6 +275,34 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Check if can disable category records
+     *
+     * @param string $ids category record ids separated by commas
+     * @return mixed bool
+     */
+    public static function canDisable($ids)
+    {
+        $ids = trim($ids);
+        $ids = trim($ids, ',');
+
+        if (!$ids) {
+            return false;
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        if (self::find()->where($where)->count() != count(explode(',', $ids))) {
+            return false;
+        }
+
+        if (self::find()->where('deleted = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Do some ops before insertion
      *
      * @param bool $insert if is a new record

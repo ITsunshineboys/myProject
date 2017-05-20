@@ -40,6 +40,7 @@ class MallController extends Controller
         'categories-admin',
         'category-admin',
         'category-status-toggle',
+        'category-disable-batch',
     ];
 
     /**
@@ -72,10 +73,15 @@ class MallController extends Controller
                     'recommend-add' => ['post',],
                     'recommend-edit' => ['post',],
                     'recommend-sort' => ['post',],
+                    'recommend-delete-batch' => ['post',],
+                    'recommend-delete' => ['post',],
+                    'recommend-status-toggle' => ['post',],
                     'recommend-click-record' => ['post',],
+                    'recommend-disable-batch' => ['post',],
                     'review-supplier-category' => ['post',],
                     'category-add' => ['post',],
                     'category-status-toggle' => ['post',],
+                    'category-disable-batch' => ['post',],
                 ],
             ],
         ];
@@ -912,6 +918,52 @@ class MallController extends Controller
         }
 
         if (!$model->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Disable category records in batches action.
+     *
+     * @return string
+     */
+    public function actionCategoryDisableBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canDisable = GoodsCategory::canDisable($ids);
+        if (!$canDisable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        if (!GoodsCategory::updateAll([
+            'deleted' => GoodsCategory::STATUS_ONLINE,
+            'offline_time' => time()
+        ], $where)
+        ) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
