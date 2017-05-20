@@ -21,6 +21,9 @@ class GoodsCategory extends ActiveRecord
     const LEVEL2 = 2;
     const LEVEL3 = 3;
     const APP_FIELDS = ['id', 'title', 'icon'];
+    const PAGE_SIZE_DEFAULT = 12;
+    const REVIEW_STATUS_APPROVE = 2;
+    const REVIEW_STATUS_REJECT = 1;
 
     /**
      * @var array online status list
@@ -44,7 +47,7 @@ class GoodsCategory extends ActiveRecord
      *
      * @return array
      */
-    public static function current()
+    public static function forCurrent()
     {
         return [
             'id' => 0,
@@ -58,7 +61,7 @@ class GoodsCategory extends ActiveRecord
      *
      * @return array
      */
-    public static function all()
+    public static function forAll()
     {
         return [
             'id' => 0,
@@ -78,8 +81,8 @@ class GoodsCategory extends ActiveRecord
     /**
      * Get direct goods categories by pid
      *
-     * @param array $select           category fields default empty
-     * @param int   $parentCategoryId parent category id default 0
+     * @param array $select category fields default empty
+     * @param int $parentCategoryId parent category id default 0
      * @return array
      */
     public static function categoriesByPid($select = [], $parentCategoryId = 0)
@@ -97,6 +100,38 @@ class GoodsCategory extends ActiveRecord
         }
 
         return $categories;
+    }
+
+    /**
+     * Get category list
+     *
+     * @param  array $where search condition
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  array $orderBy order by fields default sold_number desc
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
+    {
+        $offset = ($page - 1) * $size;
+        $recommendList = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        foreach ($recommendList as &$recommend) {
+            if (isset($recommend['create_time'])) {
+                if (!empty($recommend['create_time'])) {
+                    $recommend['create_time'] = date('Y-m-d', $recommend['create_time']);
+                }
+            }
+        }
+
+        return $recommendList;
     }
 
     /**
@@ -145,12 +180,67 @@ class GoodsCategory extends ActiveRecord
         return [
             [['title', 'icon'], 'required'],
             [['title'], 'unique'],
-            [['pid', 'approve_time'], 'number', 'integerOnly' => true, 'min' => 0],
+            [['pid', 'approve_time', 'review_status', 'supplier_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['pid', 'validatePid'],
             [['reason'], 'string'],
             ['description', 'safe'],
             ['description', 'default', 'value' => ''],
+            ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses'])],
+            ['review_status', 'validateReviewStatus', 'on' => 'review'],
+            ['supplier_id', 'validateSupplierId', 'on' => 'review'],
+            ['approve_time', 'validateApproveTime', 'on' => 'review'],
         ];
+    }
+
+    /**
+     * Could review only once
+     *
+     * @param string $attribute approve_time and reject_time to validate
+     * @return bool
+     */
+    public function validateApproveTime($attribute)
+    {
+        if ($this->$attribute > 0 || $this->reject_time > 0) {
+            $this->addError($attribute);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates review_status
+     *
+     * @param string $attribute review_status to validate
+     * @return bool
+     */
+    public function validateReviewStatus($attribute)
+    {
+        if (in_array($this->$attribute, [
+            self::REVIEW_STATUS_REJECT,
+            self::REVIEW_STATUS_APPROVE
+        ])) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates supplier_id
+     *
+     * @param string $attribute supplier_id to validate
+     * @return bool
+     */
+    public function validateSupplierId($attribute)
+    {
+        if ($this->$attribute > 0) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
     }
 
     /**
@@ -199,6 +289,15 @@ class GoodsCategory extends ActiveRecord
 
                     $this->supplier_id = $supplier->id;
                     $this->supplier_name = $supplier->nickname;
+                }
+            } else {
+                $now = time();
+                if ($this->review_status == self::REVIEW_STATUS_REJECT) {
+                    $this->reject_time = $now;
+                    $this->approve_time = 0;
+                } elseif ($this->review_status == self::REVIEW_STATUS_APPROVE) {
+                    $this->approve_time = $now;
+                    $this->reject_time = 0;
                 }
             }
 

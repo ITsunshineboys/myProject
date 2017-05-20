@@ -155,7 +155,7 @@ class MallController extends Controller
     {
         $pid = (int)Yii::$app->request->get('pid', 0);
         $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS, $pid);
-        $pid == 0 && array_unshift($categories, GoodsCategory::all());
+        $pid == 0 && array_unshift($categories, GoodsCategory::forAll());
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -177,9 +177,9 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
         if ($user->login_role_id == Yii::$app->params['supplierRoleId'] && $pid > 0) {
-            array_unshift($categories, GoodsCategory::current());
+            array_unshift($categories, GoodsCategory::forCurrent());
         } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
-            array_unshift($categories, GoodsCategory::current());
+            array_unshift($categories, GoodsCategory::forCurrent());
         }
 
         return Json::encode([
@@ -801,10 +801,7 @@ class MallController extends Controller
 
         $id = (int)Yii::$app->request->post('id', 0);
         $goodsCategory = GoodsCategory::findOne($id);
-        if (!$goodsCategory
-            || $goodsCategory->supplier_id == 0
-            || ($goodsCategory->approve_time > 0 || $goodsCategory->reject_time > 0)
-        ) {
+        if (!$goodsCategory) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -815,8 +812,12 @@ class MallController extends Controller
         if (isset($postData['id'])) {
             unset($postData['id']);
         }
+        if (isset($postData['approve_time'])) {
+            unset($postData['approve_time']);
+        }
 
         $goodsCategory->attributes = $postData;
+        $goodsCategory->scenario = 'review';
         if (!$goodsCategory->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -868,6 +869,75 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Admin category list action
+     *
+     * @return string
+     */
+    public function actionCategoryListAdmin()
+    {
+        $code = 1000;
+
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
+        if (!in_array($type, GoodsRecommend::$types)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'delete_time > 0 and type = ' . $type;
+
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $endTime && $endTime .= ' 23:59:59';
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+        }
+
+        if ($startTime) {
+            $startTime = strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend_history' => [
+                    'total' => (int)GoodsRecommend::find()->where($where)->asArray()->count(),
+                    'details' => GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, $page, $size)
+                ]
+            ],
         ]);
     }
 }
