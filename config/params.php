@@ -5,6 +5,7 @@ return [
     'offsetAiteCubeNo' => 10000,
     'ownerRoleId' => 7,
     'supplierRoleId' => 6,
+    'lhzzRoleId' => 1,
     'errorCodes' => [
         403 => '没有权限',
         500 => '接口服务器异常',
@@ -66,6 +67,12 @@ return [
     'category' => [
         'admin' => [
             'currentName' => '当前',
+            'allName' => '全部分类',
         ],
+    ],
+    'reviewStatuses' => [
+        '0' => '待审核',
+        '1' => '审核不通过',
+        '2' => '审核通过',
     ],
 ];

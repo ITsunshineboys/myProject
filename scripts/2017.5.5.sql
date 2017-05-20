@@ -48,6 +48,7 @@ CREATE TABLE `goods_recommend` (
 CREATE TABLE `goods_category` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) unsigned not null default 0,
+  `supplier_name` varchar(25) not null DEFAULT '' COMMENT '供应商',
   `title` varchar(50) not null DEFAULT '',
   `pid` int(11) unsigned not null default 0,
   `level` tinyint(1) unsigned not null default 0,
@@ -58,7 +59,10 @@ CREATE TABLE `goods_category` (
   `reject_time` int unsigned not null DEFAULT 0,
   `reason` varchar(100) not null DEFAULT '' comment '原因',
   `create_time` int unsigned not null DEFAULT 0,
+  `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
   `deleted` tinyint(1) not null default 0,
+  `online_time` int unsigned not null DEFAULT 0,
+  `offline_time` int unsigned not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

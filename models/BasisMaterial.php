@@ -19,11 +19,11 @@ class BasisMaterial extends ActiveRecord
         return 'basis_material';
     }
 
-    public static function material($id = '')
+    public static function material($decoration_list_id='',$decoration_id = '')
     {
         $arr_id = [];
-        if(!$id == null){
-            $array = self::find()->where(['basis_decoration_id' => $id])->all();
+        if(!$decoration_id == null){
+            $array = self::find()->where(['and',['decoration_list_id'=>$decoration_list_id],['basis_decoration_id' => $decoration_id]])->all();
             foreach ($array as $arr)
             {
                 $arr_id[] = $arr['goods_id'];

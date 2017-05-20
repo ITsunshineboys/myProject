@@ -33,15 +33,42 @@ class Effect extends ActiveRecord
      * @param $street
      * @return array|ActiveRecord[]
      */
-    public function districtSearch($search = '')
+    public static function districtSearch($search = '')
     {
         if (!empty($search))
         {
-            $detail = $this->find()->where( ['or',['like','toponymy',$search],['like','street',$search]])->all() ;
+            $detail = self::find()->where( ['or',['like','toponymy',$search],['like','street',$search]])->all() ;
         }else{
             echo '传入的值有错';
             exit;
         }
         return $detail;
+    }
+
+    public static function conditionQuery($arr = [])
+    {
+        $basis_condition = [];
+        if($arr){
+            $basis_condition ['room'] = $arr['room'];
+            $basis_condition ['hall'] = $arr['hall'];
+            $basis_condition ['toilet'] = $arr['toilet'];
+            $basis_condition ['kitchen'] = $arr['kitchen'];
+            $basis_condition ['area'] = $arr['area'];
+            $basis_condition ['high'] = $arr['high'];
+            $basis_condition ['window'] = $arr['window'];
+            $basis_condition ['series_id'] = $arr['series'];
+            $basis_condition ['style_id'] = $arr['style'];
+
+            $effect = self::find()->where(['and','room'=> $basis_condition ['room'],
+                'hall'=> $basis_condition ['hall'],
+                'toilet'=> $basis_condition ['toilet'],
+                'kitchen'=> $basis_condition ['kitchen'],
+                'high'=> $basis_condition ['high'],
+                'window'=> $basis_condition ['window'],
+                'series'=> $basis_condition ['series_id'],
+                'style'=> $basis_condition ['style_id']])->one();
+        }
+
+            return $effect;
     }
 }

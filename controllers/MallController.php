@@ -39,6 +39,8 @@ class MallController extends Controller
         'review-supplier-category',
         'categories-admin',
         'category-admin',
+        'category-status-toggle',
+        'category-disable-batch',
     ];
 
     /**
@@ -71,9 +73,15 @@ class MallController extends Controller
                     'recommend-add' => ['post',],
                     'recommend-edit' => ['post',],
                     'recommend-sort' => ['post',],
+                    'recommend-delete-batch' => ['post',],
+                    'recommend-delete' => ['post',],
+                    'recommend-status-toggle' => ['post',],
                     'recommend-click-record' => ['post',],
+                    'recommend-disable-batch' => ['post',],
                     'review-supplier-category' => ['post',],
                     'category-add' => ['post',],
+                    'category-status-toggle' => ['post',],
+                    'category-disable-batch' => ['post',],
                 ],
             ],
         ];
@@ -155,7 +163,7 @@ class MallController extends Controller
     {
         $pid = (int)Yii::$app->request->get('pid', 0);
         $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS, $pid);
-
+        $pid == 0 && array_unshift($categories, GoodsCategory::forAll());
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -174,7 +182,13 @@ class MallController extends Controller
     {
         $pid = (int)Yii::$app->request->get('pid', 0);
         $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS, $pid);
-        $categories && array_unshift($categories, GoodsCategory::current());
+
+        $user = Yii::$app->user->identity;
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId'] && $pid > 0) {
+            array_unshift($categories, GoodsCategory::forCurrent());
+        } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            array_unshift($categories, GoodsCategory::forCurrent());
+        }
 
         return Json::encode([
             'code' => 200,
@@ -610,7 +624,9 @@ class MallController extends Controller
         $ret = [
             'code' => 200,
             'msg' => 'OK',
-            'data' => [],
+            'data' => [
+                'detail' => [],
+            ],
         ];
 
         $goods = Goods::findBySku($sku, ['id', 'title', 'subtitle', 'platform_price']);
@@ -791,26 +807,29 @@ class MallController extends Controller
      */
     public function actionReviewSupplierCategory()
     {
-        $code = 1000;
-
-        $id = (int)Yii::$app->request->post('id', 0);
-        $goodsCategory = GoodsCategory::findOne($id);
-        if (!$goodsCategory
-            || $goodsCategory->supplier_id == 0
-            || ($goodsCategory->approve_time > 0 || $goodsCategory->reject_time > 0)
-        ) {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $postData = Yii::$app->request->post();
-        if (isset($postData['id'])) {
-            unset($postData['id']);
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $goodsCategory = GoodsCategory::findOne($id);
+        if (!$goodsCategory) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
         }
 
-        $goodsCategory->attributes = $postData;
+        $goodsCategory->reason = trim(Yii::$app->request->post('reason', ''));
+        $goodsCategory->review_status = (int)Yii::$app->request->post('review_status');
+        $goodsCategory->scenario = GoodsCategory::SCENARIO_REVIEW;
         if (!$goodsCategory->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -862,6 +881,170 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Toggle category status action.
+     *
+     * @return string
+     */
+    public function actionCategoryStatusToggle()
+    {
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $code = 1000;
+
+        if (!$id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $model = GoodsCategory::findOne($id);
+        if (!$model) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $now = time();
+        if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
+            $model->deleted = GoodsCategory::STATUS_OFFLINE;
+            $model->online_time = $now;
+        } else {
+            $model->deleted = GoodsCategory::STATUS_ONLINE;
+            $model->offline_time = $now;
+        }
+
+        if (!$model->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Disable category records in batches action.
+     *
+     * @return string
+     */
+    public function actionCategoryDisableBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canDisable = GoodsCategory::canDisable($ids);
+        if (!$canDisable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        if (!GoodsCategory::updateAll([
+            'deleted' => GoodsCategory::STATUS_ONLINE,
+            'offline_time' => time()
+        ], $where)
+        ) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Admin category list action
+     *
+     * @return string
+     */
+    public function actionCategoryListAdmin()
+    {// todo
+        $code = 1000;
+
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
+        if (!in_array($type, GoodsRecommend::$types)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'delete_time > 0 and type = ' . $type;
+
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $endTime && $endTime .= ' 23:59:59';
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+        }
+
+        if ($startTime) {
+            $startTime = strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend_history' => [
+                    'total' => (int)GoodsRecommend::find()->where($where)->asArray()->count(),
+                    'details' => GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, $page, $size)
+                ]
+            ],
         ]);
     }
 }
