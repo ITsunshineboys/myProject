@@ -94,7 +94,8 @@ class GoodsCategory extends ActiveRecord
         $categories = $cache->get($key);
         if (!$categories) {
             $where = "pid = {$parentCategoryId}";
-            $where .= " and deleted = 0 and (supplier_id = 0 or approve_time > 0)";
+            $reviewApproveStatus = self::REVIEW_STATUS_APPROVE;
+            $where .= " and deleted = 0 and (supplier_id = 0 or review_status = {$reviewApproveStatus})";
             $categories = self::find()->select($select)->where($where)->asArray()->all();
             if ($categories) {
                 $cache->set($key, $categories);
