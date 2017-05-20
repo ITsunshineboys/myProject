@@ -178,11 +178,11 @@ class GoodsCategory extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'icon'], 'required'],
+            [['title', 'icon', 'pid'], 'required'],
             [['title'], 'unique'],
             [['pid', 'approve_time', 'review_status', 'supplier_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['pid', 'validatePid'],
-            [['reason'], 'string'],
+            [['reason', 'description', 'icon'], 'string'],
             ['description', 'safe'],
             ['description', 'default', 'value' => ''],
             ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses'])],
@@ -251,11 +251,20 @@ class GoodsCategory extends ActiveRecord
      */
     public function validatePid($attribute)
     {
-        if ($this->$attribute == 0) {
-            return true;
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $this->addError($attribute);
+            return false;
         }
 
-        if (self::findOne($this->$attribute)) {
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            if ($this->$attribute == 0) {
+                $this->addError($attribute);
+                return false;
+            }
+        }
+
+        if ($this->$attribute == 0 || self::findOne($this->$attribute)) {
             return true;
         }
 
