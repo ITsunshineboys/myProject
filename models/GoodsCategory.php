@@ -147,9 +147,15 @@ class GoodsCategory extends ActiveRecord
             ->all();
         foreach ($categoryList as &$category) {
             if (isset($category['create_time'])) {
-                if (!empty($category['create_time'])) {
-                    $category['create_time'] = date('Y-m-d', $category['create_time']);
-                }
+                $category['create_time'] = date('Y-m-d', $category['create_time']);
+            }
+
+            if (isset($category['level'])) {
+                $category['level'] = self::$levels[$category['level']];
+            }
+
+            if (isset($category['review_status'])) {
+                $category['review_status'] = Yii::$app->params['reviewStatuses'][$category['review_status']];
             }
         }
 
