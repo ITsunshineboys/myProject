@@ -191,6 +191,34 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Check if can enable category records
+     *
+     * @param string $ids category record ids separated by commas
+     * @return mixed bool
+     */
+    public static function canEnable($ids)
+    {
+        $ids = trim($ids);
+        $ids = trim($ids, ',');
+
+        if (!$ids) {
+            return false;
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        if (self::find()->where($where)->count() != count(explode(',', $ids))) {
+            return false;
+        }
+
+        if (self::find()->where('deleted = ' . self::STATUS_OFFLINE . ' and ' . $where)->count()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Get goods categories(including subcategories) by pid
      *
      * @param int $pid parent id

@@ -42,6 +42,7 @@ class MallController extends Controller
         'category-admin',
         'category-status-toggle',
         'category-disable-batch',
+        'category-enable-batch',
         'category-list-admin',
     ];
 
@@ -84,6 +85,7 @@ class MallController extends Controller
                     'category-add' => ['post',],
                     'category-status-toggle' => ['post',],
                     'category-disable-batch' => ['post',],
+                    'category-enable-batch' => ['post',],
                 ],
             ],
         ];
@@ -1052,6 +1054,64 @@ class MallController extends Controller
         }
 
         Goods::disableGoodsByCategoryIds(explode(',', $ids));
+
+        new EventHandleService();
+        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Enable category records in batches action.
+     *
+     * @return string
+     */
+    public function actionCategoryEnableBatch()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canEnable = GoodsCategory::canEnable($ids);
+        if (!$canEnable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        if (!GoodsCategory::updateAll([
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'online_time' => time()
+        ], $where)
+        ) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         new EventHandleService();
         Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
