@@ -864,6 +864,53 @@ class MallController extends Controller
 
         $code = 1000;
 
+        $category->scenario = GoodsCategory::SCENARIO_ADD;
+        if (!$category->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$category->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Add category action
+     *
+     * @return string
+     */
+    public function actionCategoryEdit()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $category = GoodsCategory::findOne($id);
+        if (!$category) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $category->title = trim(Yii::$app->request->post('title', ''));
+        $category->icon = trim(Yii::$app->request->post('icon', ''));
+        $pid = (int)Yii::$app->request->post('pid', '');
+        $category->setLevelPath($pid);
+        $category->pid = $pid;
+
+        $category->scenario = GoodsCategory::SCENARIO_EDIT;
         if (!$category->validate()) {
             return Json::encode([
                 'code' => $code,

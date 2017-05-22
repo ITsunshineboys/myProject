@@ -25,6 +25,8 @@ class GoodsCategory extends ActiveRecord
     const PAGE_SIZE_DEFAULT = 12;
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
+    const SCENARIO_ADD = 'add';
+    const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
     const SCENARIO_TOGGLE_STATUS = 'toggle';
 
@@ -102,7 +104,7 @@ class GoodsCategory extends ActiveRecord
                 if ($cache->set($key, $categories)) {
                     $keys = $cache->get(self::CACHE_PREFIX_KEY_LIST);
                     if (!$keys) {
-                        $keys= [];
+                        $keys = [];
                     }
 
                     if ($key && !in_array($key, $keys)) {
@@ -146,6 +148,34 @@ class GoodsCategory extends ActiveRecord
         }
 
         return $recommendList;
+    }
+
+    /**
+     * Check if can disable category records
+     *
+     * @param string $ids category record ids separated by commas
+     * @return mixed bool
+     */
+    public static function canDisable($ids)
+    {
+        $ids = trim($ids);
+        $ids = trim($ids, ',');
+
+        if (!$ids) {
+            return false;
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        if (self::find()->where($where)->count() != count(explode(',', $ids))) {
+            return false;
+        }
+
+        if (self::find()->where('deleted = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -193,7 +223,8 @@ class GoodsCategory extends ActiveRecord
     {
         return [
             [['title', 'icon', 'pid'], 'required'],
-            [['title'], 'unique'],
+            [['title'], 'unique', 'on' => self::SCENARIO_ADD],
+            [['title'], 'validateTitle', 'on' => self::SCENARIO_EDIT],
             [['pid', 'approve_time', 'review_status', 'supplier_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['pid', 'validatePid'],
             [['reason', 'description', 'icon'], 'string'],
@@ -204,6 +235,24 @@ class GoodsCategory extends ActiveRecord
             ['supplier_id', 'validateSupplierId', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
         ];
+    }
+
+    /**
+     * Validates title when edit category
+     *
+     * @param string $attribute title to validate
+     * @return bool
+     */
+    public function validateTitle($attribute)
+    {
+        if (!$this->isNewRecord && $this->isAttributeChanged($attribute)) {
+            if (self::find()->where([$attribute => $this->$attribute])->exists()) {
+                $this->addError($attribute);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -287,34 +336,6 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
-     * Check if can disable category records
-     *
-     * @param string $ids category record ids separated by commas
-     * @return mixed bool
-     */
-    public static function canDisable($ids)
-    {
-        $ids = trim($ids);
-        $ids = trim($ids, ',');
-
-        if (!$ids) {
-            return false;
-        }
-
-        $where = 'id in(' . $ids . ')';
-
-        if (self::find()->where($where)->count() != count(explode(',', $ids))) {
-            return false;
-        }
-
-        if (self::find()->where('deleted = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Do some ops before insertion
      *
      * @param bool $insert if is a new record
@@ -373,14 +394,8 @@ class GoodsCategory extends ActiveRecord
         parent::afterSave($insert, $changedAttributes);
 
         if ($insert) {
-            if ($this->pid) {
-                $parentCategory = self::findOne($this->pid);
-                $this->level = $parentCategory->level + 1;
-                $this->path = $parentCategory->path . $this->id . ',';
-            } else {
-                $this->level = self::LEVEL1;
-                $this->path = $this->id . ',';
-            }
+            $pid = $this->pid + 1;
+            $this->setLevelPath($pid);
 
             if (!$this->save()) {
                 $this->delete();
@@ -389,5 +404,24 @@ class GoodsCategory extends ActiveRecord
 
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
+    }
+
+    /**
+     * Set level and path by pid
+     *
+     * @param $pid
+     */
+    public function setLevelPath($pid)
+    {
+        if ($pid != $this->pid) {
+            if ($this->pid) {
+                $parentCategory = self::findOne($this->pid);
+                $this->level = $parentCategory->level + 1;
+                $this->path = $parentCategory->path . $this->id . ',';
+            } else {
+                $this->level = self::LEVEL1;
+                $this->path = $this->id . ',';
+            }
+        }
     }
 }
