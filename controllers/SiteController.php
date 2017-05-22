@@ -662,6 +662,30 @@ class SiteController extends Controller
     }
 
     /**
+     * Get review statuses action
+     *
+     * @return string
+     */
+    public function actionReviewStatuses()
+    {
+        $reviewStatuses = [];
+        foreach (Yii::$app->params['reviewStatuses'] as $value => $name) {
+            $reviewStatuses[] = [
+                'value' => $value,
+                'name' => $name,
+            ];
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'review_statuses' => $reviewStatuses,
+            ],
+        ]);
+    }
+
+    /**
      * Upload file action
      */
     public function actionUpload()
