@@ -35,6 +35,7 @@ class SiteController extends Controller
         'time-types',
         'upload',
         'upload-delete',
+        'review-statuses'
     ];
 
     /**
