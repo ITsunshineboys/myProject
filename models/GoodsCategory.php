@@ -372,10 +372,16 @@ class GoodsCategory extends ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
 
-        if ($insert && $this->pid) {
-            $parentCategory = self::findOne($this->pid);
-            $this->level = $parentCategory->level + 1;
-            $this->path = $parentCategory->path . $this->id . ',';
+        if ($insert) {
+            if ($this->pid) {
+                $parentCategory = self::findOne($this->pid);
+                $this->level = $parentCategory->level + 1;
+                $this->path = $parentCategory->path . $this->id . ',';
+            } else {
+                $this->level = self::LEVEL1;
+                $this->path = $this->id . ',';
+            }
+
             if (!$this->save()) {
                 $this->delete();
             }
