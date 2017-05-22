@@ -42,6 +42,7 @@ class MallController extends Controller
         'category-admin',
         'category-status-toggle',
         'category-disable-batch',
+        'category-list-admin',
     ];
 
     /**
@@ -887,12 +888,21 @@ class MallController extends Controller
     }
 
     /**
-     * Add category action
+     * Edit category action
      *
      * @return string
      */
     public function actionCategoryEdit()
     {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1040,52 +1050,30 @@ class MallController extends Controller
      * @return string
      */
     public function actionCategoryListAdmin()
-    {// todo
+    {
         $code = 1000;
 
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
-        if (!in_array($type, GoodsRecommend::$types)) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        $where = '1';
 
-        $where = 'delete_time > 0 and type = ' . $type;
-
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+            if (!$supplier) {
+                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
 
-            $endTime && $endTime .= ' 23:59:59';
-        } else {
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-        }
-
-        if ($startTime) {
-            $startTime = strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
+            $where .= " and supplier_id = {$supplier->id}";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
@@ -1095,9 +1083,9 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'recommend_history' => [
-                    'total' => (int)GoodsRecommend::find()->where($where)->asArray()->count(),
-                    'details' => GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, $page, $size)
+                'category_supplier_admin' => [
+                    'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
+                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size)
                 ]
             ],
         ]);

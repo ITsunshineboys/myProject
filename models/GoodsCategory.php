@@ -31,6 +31,12 @@ class GoodsCategory extends ActiveRecord
     const SCENARIO_TOGGLE_STATUS = 'toggle';
 
     /**
+     * @var array admin fields
+     */
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'level', 'create_time', 'review_status', 'reason', 'description'];
+
+
+    /**
      * @var array online status list
      */
     public static $statuses = [
@@ -131,7 +137,7 @@ class GoodsCategory extends ActiveRecord
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
     {
         $offset = ($page - 1) * $size;
-        $recommendList = self::find()
+        $categoryList = self::find()
             ->select($select)
             ->where($where)
             ->orderBy($orderBy)
@@ -139,15 +145,15 @@ class GoodsCategory extends ActiveRecord
             ->limit($size)
             ->asArray()
             ->all();
-        foreach ($recommendList as &$recommend) {
-            if (isset($recommend['create_time'])) {
-                if (!empty($recommend['create_time'])) {
-                    $recommend['create_time'] = date('Y-m-d', $recommend['create_time']);
+        foreach ($categoryList as &$category) {
+            if (isset($category['create_time'])) {
+                if (!empty($category['create_time'])) {
+                    $category['create_time'] = date('Y-m-d', $category['create_time']);
                 }
             }
         }
 
-        return $recommendList;
+        return $categoryList;
     }
 
     /**
@@ -364,6 +370,9 @@ class GoodsCategory extends ActiveRecord
 
                     $this->supplier_id = $supplier->id;
                     $this->supplier_name = $supplier->nickname;
+
+                    $parent = self::findOne($this->pid);
+                    $this->parent_title = $parent->title;
                 }
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
@@ -373,6 +382,15 @@ class GoodsCategory extends ActiveRecord
                     } elseif ($this->review_status == self::REVIEW_STATUS_APPROVE) {
                         $this->approve_time = $now;
                         $this->reject_time = 0;
+                    }
+                } elseif ($this->scenario == self::SCENARIO_EDIT) {
+                    $attribute = 'pid';
+                    if ($this->isAttributeChanged($attribute)) {
+                        $parent = self::findOne($this->pid);
+                        $this->parent_title = $parent->title;
+
+                        $pid = $this->pid + 1;
+                        $this->setLevelPath($pid);
                     }
                 }
             }
