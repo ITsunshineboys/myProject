@@ -928,6 +928,8 @@ class MallController extends Controller
             ]);
         }
 
+        Goods::disableGoodsByCategoryId($model->id);
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
@@ -973,6 +975,8 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        Goods::disableGoodsByCategoryIds(explode(',', $ids));
 
         new EventHandleService();
         Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
