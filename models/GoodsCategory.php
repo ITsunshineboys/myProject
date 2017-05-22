@@ -33,7 +33,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'level', 'create_time', 'review_status', 'reason', 'description'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'review_status', 'reason', 'description'];
 
 
     /**

@@ -949,6 +949,15 @@ class MallController extends Controller
      */
     public function actionCategoryStatusToggle()
     {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $id = (int)Yii::$app->request->post('id', 0);
 
         $code = 1000;
@@ -1000,6 +1009,15 @@ class MallController extends Controller
      */
     public function actionCategoryDisableBatch()
     {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
 
