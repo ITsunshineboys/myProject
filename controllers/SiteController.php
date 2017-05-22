@@ -35,6 +35,7 @@ class SiteController extends Controller
         'time-types',
         'upload',
         'upload-delete',
+        'review-statuses'
     ];
 
     /**
@@ -657,6 +658,30 @@ class SiteController extends Controller
             'msg' => 'OK',
             'data' => [
                 'time_types' => $timeTypes,
+            ],
+        ]);
+    }
+
+    /**
+     * Get review statuses action
+     *
+     * @return string
+     */
+    public function actionReviewStatuses()
+    {
+        $reviewStatuses = [];
+        foreach (Yii::$app->params['reviewStatuses'] as $value => $name) {
+            $reviewStatuses[] = [
+                'value' => $value,
+                'name' => $name,
+            ];
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'review_statuses' => $reviewStatuses,
             ],
         ]);
     }

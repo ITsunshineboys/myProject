@@ -9,6 +9,7 @@
 namespace app\services;
 
 use Yii;
+use app\models\GoodsCategory;
 
 class EventHandleService
 {
@@ -20,6 +21,14 @@ class EventHandleService
     public function __construct($data = null)
     {
         $events = Yii::$app->params['events'];
+
+        Yii::$app->on($events['mall']['category']['updateBatch'], function () use ($data) {
+            $cache = Yii::$app->cache;
+            $keys = (array)$cache->get(GoodsCategory::CACHE_PREFIX_KEY_LIST);
+            foreach ($keys as $key) {
+                $key && Yii::$app->cache->delete($key);
+            }
+        });
 
         // supplier login
         Yii::$app->on($events['supplier']['login'], function () use ($data) {

@@ -3,6 +3,8 @@ CREATE TABLE `goods` (
   `supplier_id` int unsigned not null default 0,
   `brand_id` int unsigned not null default 0,
   `category_id` int unsigned not null default 0,
+  `series_id` int(11) unsigned not null default 0,
+  `style_id` int(11) unsigned not null default 0,
   `sku` bigint unsigned not null default 0,
   `title` varchar(100) not null DEFAULT '',
   `subtitle` varchar(100) not null DEFAULT '',
@@ -22,7 +24,10 @@ CREATE TABLE `goods` (
   `favourable_comment_rate` tinyint unsigned not null default 0 comment '好评率',
   `description` varchar(255) not null DEFAULT '',
   `create_time` int not null DEFAULT 0,
-  `status` tinyint(1) not null DEFAULT 0 comment '0: 上架 1: 下架',
+  `offline_time` int not null DEFAULT 0,
+  `online_time` int not null DEFAULT 0,
+  `delete_time` int not null DEFAULT 0,
+  `status` tinyint(1) not null DEFAULT 0 comment '0：已下架, 1：等待上架, 2：已上架, 3：已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

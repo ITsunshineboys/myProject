@@ -20,6 +20,11 @@ return [
             'login' => 'supplier_login',
             'logout' => 'supplier_logout',
         ],
+        'mall' => [
+            'category' => [
+                'updateBatch' => 'mall_category_update_batch',
+            ],
+        ],
     ],
     'download' => [
         'directory' => 'down',
