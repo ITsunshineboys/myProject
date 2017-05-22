@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="css/index_recommend.css"/>
 </head>
 <body ng-app="app" ng-controller="index_recommend" ng-cloak>
-
+<div> {{add_data4}}</div>
     <div class="main">
         <!--弹窗开始-->
         <div class="popup hide" >
             <div class="box1">
+
                 <!--调整顺序-->
                 <div class="order_save hide">
                     <div class="warm_title">保存</div>
@@ -42,6 +43,7 @@
                                     <div class="gain_btn " style="margin-left: 0" ng-click="gain_recommend(add_sku,'添加')">获取</div>
                                 </div>
                             </div>
+                            <div  ng-if="add_url1==''" style="color:red;text-align: center">该sku没有推荐信息</div>
                             <div class="line_box">
                                 <div class="line_left ">
                                     商品链接
@@ -51,7 +53,6 @@
                                     <a class="gain_btn " href="{{add_url}} " target="_blank" style="margin-left: 0">查看</a>
                                 </div>
                             </div>
-                            <div ng-if="add_url==''"></div>
                             <div class="line_box">
                                 <div class="line_left ">
                                     标题
@@ -96,7 +97,7 @@
                                     <img src="{{url}}{{add_image2}}"  alt=""/>
                                     <form  id="uploadForm1" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn1" onclick="myfile1.click();" ng-click="doUpload(1)" value="上传" />
-                                        <input type="file" id="myfile1" name="file1" value="" style="display:none" accept="image/*">
+                                        <input type="file" id="myfile1" name="UploadForm[file]" value="" style="display:none" accept="image/*">
                                         <span>{{add_image2}}</span>
                                     </form>
                                 </li>
@@ -178,6 +179,7 @@
                 </div>
                 <!--编辑-->
                 <div class="edit1 hide">
+                    <div>{{up_data}}</div>
                     <div class="is_edit hide">
                         <div class="warm_title">编辑banner</div>
                         <div class="Product_box hide">
@@ -187,9 +189,10 @@
                                 </div>
                                 <div class="line_right ">
                                     <input class="gain_input text_input" ng-model="edit_sku" type="text"/>
-                                    <div class="gain_btn " style="margin-left: 0">获取</div>
+                                    <div class="gain_btn " style="margin-left: 0" ng-click="gain_recommend(edit_sku,'编辑')">获取</div>
                                 </div>
                             </div>
+                            <div  ng-if="edit_url1==''" style="color:red;text-align: center">该sku没有推荐信息</div>
                             <div class="line_box">
                                 <div class="line_left ">
                                     商品链接
@@ -243,7 +246,7 @@
                                     <img src="{{url}}{{edit_image2}}"  alt=""/>
                                     <form  id="uploadForm3" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn3" onclick="myfile3.click();" ng-click="doUpload(3)" value="上传" />
-                                        <input type="file" id="myfile3" name="file1" value="" style="display:none" accept="image/*">
+                                        <input type="file" id="myfile3" name="UploadForm[file]" value="" style="display:none" accept="image/*">
                                         <span>{{edit_image2}}</span>
                                     </form>
                                 </li>
@@ -310,7 +313,7 @@
                                     <img src="{{url}}{{edit_image2}}" alt=""/><br/>
                                     <form  id="uploadForm4" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn4" onclick="myfile4.click();" ng-click="doUpload(4)" value="上传" />
-                                        <input type="file" id="myfile4" name="file1" value="" style="display:none" accept="image/*">
+                                        <input type="file" id="myfile4" name="UploadForm[file]" value="" style="display:none" accept="image/*">
                                         <span>{{edit_image2}}</span>
                                     </form>
                                 </li>
@@ -425,10 +428,10 @@
                     <li class="kind_li"><a href="#" name="2">推荐</a></li>
                 </ul>
                 <div class="content">
-                    <div class="tab 0">{{mydata1}}
+                    <div class="tab 0">
                         <div class="operate_box">
                             <div class="btn1 fl" ng-click="save1()">保存</div>
-                            <div class="btn1 fl" ng-click="add(0)">添加</div>
+                            <div class="btn1 fl" ng-click="add()">添加</div>
                             <label class="btn1 fl" for="all1">全选</label>
                             <input type="checkbox" class="choose_all1" id="all1" ng-click="all('choose1')" style="display: none"/>
                             <div class="btn1 fl" ng-click="delete()">删除</div>
@@ -494,7 +497,7 @@
                                 <th class="action">操作：</th>
                                 </thead>
                                 <tbody >
-                                <tr ng-repeat="n in mydata1" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
+                                <tr ng-repeat="n in mydata1" ng-controller="itemReaptCtrl" class="{{n.id}}"  name="{{n.id}}">
                                     <td class="choose1">
                                         <input type="checkbox" value="{{n.id}}" name="item" class="choose1"/>
                                     </td>
@@ -510,7 +513,7 @@
                                     </td>
                                     <td class="tb_viewed_number">{{n.viewed_number}}</td>
                                     <td class="tb_sold_number">{{n.sold_number}}</td>
-                                    <td class="tb_status">{{n.status}}</td>
+                                    <td class="tb_status status">{{n.status}}</td>
                                     <td class="tb_create_time">{{n.create_time}} </td>
                                     <td class="tb_image">
                                         <img src="{{url}}{{n.image}}" alt=""/>{{n.image}}
@@ -520,7 +523,7 @@
                                             <span ng-if="n.status=='停用'">启用</span>
                                             <span ng-if="n.status=='启用'">停用</span>
                                         </span>
-                                        <span ng-click="edit(n.id,n.title,n.description,n.sku,n.supplier_name,n.url,n.status,n.image,n.platform_price,n.from_type,0)">编辑</span>
+                                        <span ng-click="edit(n.id,n.title,n.description,n.sku,n.supplier_name,n.url,n.status,n.image,n.platform_price,n.from_type)">编辑</span>
                                         <span ng-click="dele(n.id)">删除</span>
                                     </td>
                                 </tr>
@@ -529,9 +532,11 @@
                         </div>
                     </div>
                     <div class="tab 2">
+                        <div>{{save_data}}</div>
+                        <div>{{edit_data}}</div>
                         <div class="operate_box">
                             <div class="btn1 fl" ng-click="save1()">保存</div>
-                            <div class="btn1 fl" ng-click="add(2)">添加</div>
+                            <div class="btn1 fl" ng-click="add()">添加</div>
                             <label class="btn1 fl" for="all2">全选</label>
                             <input type="checkbox" class="choose_all1" id="all2" ng-click="all('choose1')" style="display: none"/>
                             <div class="btn1 fl" ng-click="delete()">删除</div>
@@ -601,13 +606,13 @@
                                 <th class="tb_supplier_name1">来源商家</th>
                                 <th class="tb_viewed_number1">上架浏览</th>
                                 <th class="tb_sold_number1">上架销量</th>
-                                <th class="tb_status1">是否停用</th>
+                                <th class="tb_status1 status">是否停用</th>
                                 <th class="tb_create_time1">创建时间</th>
                                 <th class="tb_image1">图片</th>
                                 <th class="action1">操作：</th>
                                 </thead>
-                                <tbody >
-                                <tr ng-repeat="n in mydata2" ng-controller="itemReaptCtrl" class="{{n.id}}"  >
+                                <tbody class="order_tbody">
+                                <tr ng-repeat="n in mydata2" ng-controller="itemReaptCtrl" class="{{n.id}}" name="{{n.id}}" >
                                     <td class="choose">
                                         <input type="checkbox" value="{{n.id}}" name="item" class="choose1"/>
                                     </td>
@@ -625,7 +630,7 @@
                                     </td>
                                     <td class="tb_viewed_number1">{{n.viewed_number}}</td>
                                     <td class="tb_sold_number1">{{n.sold_number}}</td>
-                                    <td class="tb_status1">{{n.status}}</td>
+                                    <td class="tb_status1 status">{{n.status}}</td>
                                     <td class="tb_create_time1">{{n.create_time}} </td>
                                     <td class="tb_image1">
                                         <img src="{{url}}{{n.image}}" alt=""/>{{n.image}}
@@ -635,7 +640,7 @@
                                             <span ng-if="n.status=='停用'">启用</span>
                                             <span ng-if="n.status=='启用'">停用</span>
                                         </span>
-                                        <span ng-click="edit(n.id,n.title,n.description,n.sku,n.supplier_name,n.url,n.status,n.image,n.platform_price,2)">编辑</span>
+                                        <span ng-click="edit(n.id,n.title,n.description,n.sku,n.supplier_name,n.url,n.status,n.image,n.platform_price)">编辑</span>
                                         <span ng-click="dele(n.id)">删除</span>
                                     </td>
                                 </tr>
@@ -646,7 +651,7 @@
                     </div>
                 </div>
             </div>
-            <div class="history_box hide">{{time_kind}}
+            <div class="history_box hide">{{history_data}}
                 <div class="history_header">
                     <select name="" id="time_kind" class="fl selects">
                         <option value="{{a.value}}"  ng-repeat="a in time_kind">{{a.name}}</option>
