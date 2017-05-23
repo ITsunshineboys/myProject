@@ -467,6 +467,9 @@ class GoodsCategory extends ActiveRecord
 
                     $parent = self::findOne($this->pid);
                     $this->parent_title = $parent->title;
+                } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+                    $this->deleted = self::STATUS_ONLINE;
+                    $this->offline_time = $now;
                 }
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
