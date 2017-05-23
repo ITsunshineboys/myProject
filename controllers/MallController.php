@@ -1191,7 +1191,7 @@ class MallController extends Controller
 
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
-                $ids = GoodsCategory::level3Ids($pid);
+                $ids = GoodsCategory::level23Ids($pid);
                 if (!$ids) {
                     $where .= ' and 0';
                 } else {
@@ -1209,7 +1209,7 @@ class MallController extends Controller
             'data' => [
                 'category_supplier_admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
-                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size)
+                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, ['level' => SORT_ASC])
                 ]
             ],
         ]);

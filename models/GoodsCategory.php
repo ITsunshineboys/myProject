@@ -245,12 +245,12 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
-     * Get all level 3 category ids
+     * Get all level 2 and 3 category ids
      *
      * @param  int $pid parent category id
      * @return array
      */
-    public static function level3Ids($pid)
+    public static function level23Ids($pid)
     {
         $pid = (int)$pid;
         if ($pid <= 0) {
@@ -272,7 +272,7 @@ class GoodsCategory extends ActiveRecord
                 $ret = array_merge($ret, $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn());
             }
 
-            return array_unique($ret);
+            return array_unique(array_merge($ret, $pids));
         }
 
         return [];
