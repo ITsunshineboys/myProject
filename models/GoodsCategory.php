@@ -33,7 +33,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'review_status', 'reason', 'description'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'description', 'supplier_name', 'deleted'];
 
 
     /**
@@ -164,12 +164,24 @@ class GoodsCategory extends ActiveRecord
                 $category['create_time'] = date('Y-m-d', $category['create_time']);
             }
 
+            if (isset($category['online_time'])) {
+                $category['online_time'] = date('Y-m-d', $category['online_time']);
+            }
+
+            if (isset($category['offline_time'])) {
+                $category['offline_time'] = date('Y-m-d', $category['offline_time']);
+            }
+
             if (isset($category['level'])) {
                 $category['level'] = self::$levels[$category['level']];
             }
 
             if (isset($category['review_status'])) {
                 $category['review_status'] = Yii::$app->params['reviewStatuses'][$category['review_status']];
+            }
+
+            if (isset($category['deleted'])) {
+                $category['deleted'] = self::$statuses[1 - $category['deleted']];
             }
         }
 

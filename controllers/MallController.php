@@ -1187,7 +1187,7 @@ class MallController extends Controller
             }
 
             $deleted = 1 - $status;
-            $where .= " and deleted = {$deleted}";
+            $where .= " and supplier_id = 0 and deleted = {$deleted}";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
