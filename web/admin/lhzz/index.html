@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/index_recommend.css"/>
 </head>
 <body ng-app="app" ng-controller="index_recommend" ng-cloak>
-<div> {{add_data4}}</div>
+
     <div class="main">
         <!--弹窗开始-->
         <div class="popup hide" >
@@ -43,7 +43,7 @@
                                     <div class="gain_btn " style="margin-left: 0" ng-click="gain_recommend(add_sku,'添加')">获取</div>
                                 </div>
                             </div>
-                            <div  ng-if="add_url1==''" style="color:red;text-align: center">该sku没有推荐信息</div>
+                            <div  ng-show="add_url1==''" style="color:red;text-align: center">该sku没有推荐信息</div>
                             <div class="line_box">
                                 <div class="line_left ">
                                     商品链接
@@ -61,7 +61,7 @@
                                     <input  class="text_input" ng-model="add_name" type="text"/>
                                 </div>
                             </div>
-                            <div class="line_box"  ng-if="kind_type==2">
+                            <div class="line_box"  ng-show="kind_type==2">
                                 <div class="line_left ">
                                     副标题
                                 </div>
@@ -69,7 +69,7 @@
                                     <input class="text_input" ng-model="add_description" type="text"/>
                                 </div>
                             </div>
-                            <div class="line_box" ng-if="kind_type==2">
+                            <div class="line_box" ng-show="kind_type==2">
                                 <div class="line_left ">
                                     显示价格
                                 </div>
@@ -94,11 +94,12 @@
                                     <div>375×185,5M内</div>
                                 </li>
                                 <li class="map_right fl">
-                                    <img src="{{url}}{{add_image2}}"  alt=""/>
+                                    <img src="{{url}}{{add_image1}}"  alt=""/>
                                     <form  id="uploadForm1" enctype="multipart/form-data" >
                                         <input name="button" type="button"  id="btn1" onclick="myfile1.click();" ng-click="doUpload(1)" value="上传" />
                                         <input type="file" id="myfile1" name="UploadForm[file]" value="" style="display:none" accept="image/*">
-                                        <span>{{add_image2}}</span>
+                                        <span>{{add_image1}}</span>
+
                                     </form>
                                 </li>
                             </ul>
@@ -127,7 +128,7 @@
                                     <input  type="text" ng-model="add_name" class="text_input" />
                                 </div>
                             </div>
-                            <div class="line_box"  ng-if="kind_type==2">
+                            <div class="line_box"  ng-show="kind_type==2">
                                 <div class="line_left ">
                                     副标题
                                 </div>
@@ -135,7 +136,7 @@
                                     <input class="text_input" ng-model="add_description" type="text"/>
                                 </div>
                             </div>
-                            <div class="line_box" ng-if="kind_type==2">
+                            <div class="line_box" ng-show="kind_type==2">
                                 <div class="line_left ">
                                     显示价格
                                 </div>
@@ -179,7 +180,7 @@
                 </div>
                 <!--编辑-->
                 <div class="edit1 hide">
-                    <div>{{up_data}}</div>
+
                     <div class="is_edit hide">
                         <div class="warm_title">编辑banner</div>
                         <div class="Product_box hide">
@@ -192,7 +193,7 @@
                                     <div class="gain_btn " style="margin-left: 0" ng-click="gain_recommend(edit_sku,'编辑')">获取</div>
                                 </div>
                             </div>
-                            <div  ng-if="edit_url1==''" style="color:red;text-align: center">该sku没有推荐信息</div>
+                            <div  ng-show="edit_url1==''" style="color:red;text-align: center">该sku没有推荐信息</div>
                             <div class="line_box">
                                 <div class="line_left ">
                                     商品链接
@@ -210,7 +211,7 @@
                                     <input  class="text_input" ng-model="edit_name" type="text"/>
                                 </div>
                             </div>
-                            <div class="line_box"  ng-if="kind_type==2">
+                            <div class="line_box"  ng-show="kind_type==2">
                                 <div class="line_left ">
                                     副标题
                                 </div>
@@ -218,7 +219,7 @@
                                     <input class="text_input" ng-model="edit_description" type="text"/>
                                 </div>
                             </div>
-                            <div class="line_box" ng-if="kind_type==2">
+                            <div class="line_box" ng-show="kind_type==2">
                                 <div class="line_left ">
                                     显示价格
                                 </div>
@@ -277,7 +278,7 @@
                                     <input class="text_input" ng-model="edit_name" type="text"/>
                                 </div>
                             </div>
-                            <div class="line_box"  ng-if="kind_type==2">
+                            <div class="line_box"  ng-show="kind_type==2">
                                 <div class="line_left ">
                                     副标题
                                 </div>
@@ -285,7 +286,7 @@
                                     <input class="text_input" ng-model="edit_description" type="text"/>
                                 </div>
                             </div>
-                            <div class="line_box" ng-if="kind_type==2">
+                            <div class="line_box" ng-show="kind_type==2">
                                 <div class="line_left ">
                                     显示价格
                                 </div>
@@ -504,7 +505,7 @@
                                     <td class="tb_name">{{n.title}}</td>
                                     <td class="tb_type">{{n.from_type}}</td>
                                     <td class="tb_sku">{{n.sku}}
-                                        <span ng-if="n.sku==''">无</span>
+                                        <span ng-show="n.sku==''">无</span>
                                     </td>
                                     <td class="tb_supplier_name">
                                         <a href="{{n.url}}"  target="_blank">
@@ -520,8 +521,8 @@
                                     </td>
                                     <td class="action">
                                         <span ng-click="stop_one(n.id)" class="stop">
-                                            <span ng-if="n.status=='停用'">启用</span>
-                                            <span ng-if="n.status=='启用'">停用</span>
+                                            <span ng-show="n.status=='停用'">启用</span>
+                                            <span ng-show="n.status=='启用'">停用</span>
                                         </span>
                                         <span ng-click="edit(n.id,n.title,n.description,n.sku,n.supplier_name,n.url,n.status,n.image,n.platform_price,n.from_type)">编辑</span>
                                         <span ng-click="dele(n.id)">删除</span>
@@ -621,7 +622,7 @@
                                     <td class="tb_platform_price1" >{{n.platform_price}}</td>
                                     <td class="tb_type1">{{n.from_type}}</td>
                                     <td class="tb_sku1">{{n.sku}}
-                                        <span ng-if="n.sku==''">无</span>
+                                        <span ng-show="n.sku==''">无</span>
                                     </td>
                                     <td class="tb_supplier_name1">
                                         <a href="{{n.url}}"  target="_blank">
@@ -637,8 +638,8 @@
                                     </td>
                                     <td class="action1">
                                         <span ng-click="stop_one(n.id)" class="stop">
-                                            <span ng-if="n.status=='停用'">启用</span>
-                                            <span ng-if="n.status=='启用'">停用</span>
+                                            <span ng-show="n.status=='停用'">启用</span>
+                                            <span ng-show="n.status=='启用'">停用</span>
                                         </span>
                                         <span ng-click="edit(n.id,n.title,n.description,n.sku,n.supplier_name,n.url,n.status,n.image,n.platform_price)">编辑</span>
                                         <span ng-click="dele(n.id)">删除</span>
@@ -737,7 +738,7 @@
                             <td class="tb_description2" >{{n.description}}</td>
                             <td class="tb_type2">{{n.from_type}}</td>
                             <td class="tb_sku2">{{n.sku}}
-                                <span ng-if="n.sku==''">无</span>
+                                <span ng-show="n.sku==''">无</span>
                             </td>
                             <td class="tb_supplier_name2">
                                 <a href="{{n.url}}"  target="_blank">

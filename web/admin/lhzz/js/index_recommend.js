@@ -552,45 +552,45 @@ app.controller("index_recommend",function($scope,$http){
         };
         //上传文件
         $scope.doUpload=function (load) {
-            //alert(33);
-            //$(document).on("change","#time_kind",function(){
-            //
-            //})
+            var file_id="#myfile"+load;
             var form_id1="#uploadForm"+load;
             console.log("form_id1=="+form_id1);
+            $(document).on("change",file_id,function(){
+                $scope.doUpload(load)
+            });
             var formData = new FormData($( form_id1 )[0]);
             $.ajax({
-                url: url+upload1 ,
-                type: 'POST',
-                data: formData,
-                dataType: "json",
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                    $scope.up_data=data;
-                    if(load==1){
-                        $scope.add_image2=data.data.file_path;
-                        console.log( "1111成功");
+                    url: url+upload1 ,
+                    type: 'POST',
+                    data: formData,
+                    dataType: "json",
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        $scope.up_data=data;
+                        if(load==1){
+                            $scope.add_image1=data.data.file_path;
+                            console.log( "1111成功");
+                        }
+                        else if(load==2){
+                            $scope.add_image2=data.data.file_path;
+                            console.log( "222222成功"+$scope.load2);
+                        }
+                        else if(load==3){
+                            $scope.edit_image2=data.data.file_path;
+                            console.log( "3333成功");
+                            console.log( "3333成功 $scope.edit_image2="+ $scope.edit_image2);
+                        }
+                        else if(load==4){
+                            $scope.edit_image2=data.data.file_path;
+                            console.log( "444444成功 $scope.edit_image2="+ $scope.edit_image2);
+                        }
+                    },
+                    error: function (returndata) {
+                        alert(returndata);
                     }
-                    else if(load==2){
-                        $scope.add_image2=data.data.file_path;
-                        console.log( "222222成功"+$scope.load2);
-                    }
-                    else if(load==3){
-                        $scope.edit_image2=data.data.file_path;
-                        console.log( "3333成功");
-                        console.log( "3333成功 $scope.edit_image2="+ $scope.edit_image2);
-                    }
-                    else if(load==4){
-                        $scope.edit_image2=data.data.file_path;
-                        console.log( "444444成功 $scope.edit_image2="+ $scope.edit_image2);
-                    }
-                },
-                error: function (returndata) {
-                    alert(returndata);
-                }
             });
         };
         //删除文件事件处理
@@ -637,6 +637,8 @@ app.controller("index_recommend",function($scope,$http){
             $scope.add_statu=0;
             $scope.add_description="";
             $scope.add_price="";
+            $scope.add_image="";
+            $scope.add_image1="";
             $scope.add_image2="";
 
             $(".popup").addClass('show').removeClass("hide");
@@ -653,10 +655,16 @@ app.controller("index_recommend",function($scope,$http){
             });
             $scope.add_sure=function(obj){
                 $scope.add_form_type=obj;
+                if($scope.add_form_type==1){
+                    $scope.add_image=$scope.add_image1;
+                }
+                else if($scope.add_form_type==2){
+                    $scope.add_image=$scope.add_image2;
+                }
                 console.log("是banner还是推荐==="+$scope.kind_type);
                 console.log("编辑$scope.add_url==="+$scope.add_url);
                 console.log("编辑$scope.add_name==="+$scope.add_name);
-                console.log("编辑$scope.add_image2==="+$scope.add_image2);
+                console.log("编辑$scope.add_image==="+$scope.add_image);
                 console.log("编辑$scope.add_form_type==="+$scope.add_form_type);
                 console.log("编辑$scope.add_statu==="+$scope.add_statu);
                 //console.log("编辑$scope.edit_type==="+$scope.edit_type);
@@ -667,7 +675,7 @@ app.controller("index_recommend",function($scope,$http){
                     url: url+ recommend_add,
                     type: 'POST',
                     data:{"url":$scope.add_url,"title":$scope.add_name,"image":
-                        $scope.add_image2,"from_type":$scope.add_form_type,"status":$scope.add_statu,
+                        $scope.add_image,"from_type":$scope.add_form_type,"status":$scope.add_statu,
                         "type":$scope.kind_type,"sku":$scope.add_sku,"description":$scope.add_description,
                         "platform_price":$scope.add_price},
                     dataType: "json",
