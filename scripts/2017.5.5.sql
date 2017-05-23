@@ -54,6 +54,8 @@ CREATE TABLE `goods_category` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) unsigned not null default 0,
   `supplier_name` varchar(25) not null DEFAULT '' COMMENT '供应商',
+  `user_id` int(11) unsigned not null DEFAULT 0,
+  `user_name` varchar(20) not null DEFAULT '',
   `title` varchar(50) not null DEFAULT '',
   `pid` int(11) unsigned not null default 0,
   `parent_title` varchar(50) not null DEFAULT '',

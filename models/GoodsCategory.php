@@ -33,7 +33,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'description', 'supplier_name', 'deleted'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'description', 'supplier_name', 'user_name', 'deleted'];
 
 
     /**
@@ -470,6 +470,16 @@ class GoodsCategory extends ActiveRecord
                 } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
                     $this->deleted = self::STATUS_ONLINE;
                     $this->offline_time = $now;
+
+                    $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+                    if (!$lhzz) {
+                        return false;
+                    }
+
+                    $this->user_id = $lhzz->id;
+                    $this->user_name = $lhzz->nickname;
+                    $this->review_status = self::REVIEW_STATUS_APPROVE;
+                    $this->approve_time = $now;
                 }
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
