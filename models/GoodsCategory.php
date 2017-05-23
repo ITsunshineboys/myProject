@@ -476,6 +476,8 @@ class GoodsCategory extends ActiveRecord
                     } elseif ($this->review_status == self::REVIEW_STATUS_APPROVE) {
                         $this->approve_time = $now;
                         $this->reject_time = 0;
+                        $this->deleted = self::STATUS_OFFLINE;
+                        $this->online_time = $now;
                     }
                 } elseif ($this->scenario == self::SCENARIO_EDIT) {
                     if ($this->isAttributeChanged('pid')) {
