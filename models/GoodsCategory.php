@@ -477,6 +477,11 @@ class GoodsCategory extends ActiveRecord
                         $this->approve_time = $now;
                         $this->reject_time = 0;
                     }
+                } elseif ($this->scenario == self::SCENARIO_EDIT) {
+                    if ($this->isAttributeChanged('pid')) {
+                        $pid = $this->pid + 1;
+                        $this->setLevelPath($pid);
+                    }
                 }
             }
 
