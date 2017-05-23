@@ -1164,7 +1164,7 @@ class MallController extends Controller
             ]);
         }
 
-        $where = '1';
+        $where = 'review_status = ' . GoodsCategory::REVIEW_STATUS_APPROVE;
 
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
             $supplier = Supplier::find()->where(['uid' => $user->id])->one();
