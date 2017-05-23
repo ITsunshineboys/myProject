@@ -68,6 +68,20 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Get "all category" for lhzz admin
+     *
+     * @return array
+     */
+    public static function forAll2()
+    {
+        return [
+            'id' => 0,
+            'title' => Yii::$app->params['category']['admin']['all'],
+            'icon' => ''
+        ];
+    }
+
+    /**
      * Get "all category"
      *
      * @return array

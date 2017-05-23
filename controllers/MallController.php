@@ -44,6 +44,7 @@ class MallController extends Controller
         'category-disable-batch',
         'category-enable-batch',
         'category-list-admin',
+        'categories-manage-admin',
     ];
 
     /**
@@ -192,6 +193,30 @@ class MallController extends Controller
             array_unshift($categories, GoodsCategory::forCurrent());
         } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
             array_unshift($categories, GoodsCategory::forCurrent());
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'categories' => $categories
+            ],
+        ]);
+    }
+
+    /**
+     * Get goods categories action(lhzz admin).
+     *
+     * @return string
+     */
+    public function actionCategoriesManageAdmin()
+    {
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS, $pid);
+
+        $user = Yii::$app->user->identity;
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            array_unshift($categories, GoodsCategory::forAll2());
         }
 
         return Json::encode([
@@ -1152,6 +1177,17 @@ class MallController extends Controller
             }
 
             $where .= " and supplier_id = {$supplier->id}";
+        } else {
+            $status = (int)Yii::$app->request->get('status', GoodsCategory::STATUS_ONLINE);
+            if (!in_array($status, array_keys(GoodsCategory::$statuses))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $deleted = 1 - $status;
+            $where .= " and deleted = {$deleted}";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);

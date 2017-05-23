@@ -73,6 +73,7 @@ return [
         'admin' => [
             'currentName' => '当前',
             'allName' => '全部分类',
+            'all' => '全部',
         ],
     ],
     'reviewStatuses' => [
