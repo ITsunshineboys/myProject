@@ -245,6 +245,40 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Get all level 3 category ids
+     *
+     * @param  int $pid parent category id
+     * @return array
+     */
+    public static function level3Ids($pid)
+    {
+        $pid = (int)$pid;
+        if ($pid <= 0) {
+            return [];
+        }
+
+        $category = self::findOne($pid);
+        if (!$category) {
+            return [];
+        }
+
+        $db = Yii::$app->db;
+        if ($category->level == self::LEVEL2) {
+            return $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn();
+        } elseif ($category->level == self::LEVEL1) {
+            $pids = $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn();
+            $ret = [];
+            foreach ($pids as $pid) {
+                $ret = array_merge($ret, $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn());
+            }
+
+            return array_unique($ret);
+        }
+
+        return [];
+    }
+
+    /**
      * Get goods categories(including subcategories) by pid
      *
      * @param int $pid parent id
