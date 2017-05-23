@@ -25,6 +25,7 @@ class GoodsCategory extends ActiveRecord
     const PAGE_SIZE_DEFAULT = 12;
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
+    const REVIEW_STATUS_NOT_REVIEWED = 0;
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
@@ -34,7 +35,6 @@ class GoodsCategory extends ActiveRecord
      * @var array admin fields
      */
     public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'description', 'supplier_name', 'user_name', 'deleted'];
-
 
     /**
      * @var array online status list

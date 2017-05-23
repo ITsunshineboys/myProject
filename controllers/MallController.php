@@ -1207,7 +1207,50 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category_supplier_admin' => [
+                'category_list_admin' => [
+                    'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
+                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, ['level' => SORT_ASC])
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Category review list action
+     *
+     * @return string
+     */
+    public function actionCategoryReviewList()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = 1000;
+
+        $reviewStatus = (int)Yii::$app->request->get('review_status', GoodsCategory::REVIEW_STATUS_NOT_REVIEWED);
+        if (!in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = "review_status = {$reviewStatus}";
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category_review_list' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
                     'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, ['level' => SORT_ASC])
                 ]
