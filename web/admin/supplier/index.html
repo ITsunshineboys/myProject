@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../css/all.css"/>
+    <link rel="stylesheet" href="css/global.css"/>
+    <link rel="stylesheet" href="css/sort_management.css"/>
+</head>
+<body ng-app="app" ng-controller="sort_management" ng-cloak>
+    <!--导航栏开始-->
+    <div class="nav_box ">
+        <div class="logo">
+            <img src="images/logo.png" alt=""/>
+        </div>
+        <dl >
+            <dt ><i class="font2 fl">&#xe600;</i>商品管理</dt>
+        </dl>
+        <dl >
+            <dt ><i class="font2 fl">&#xe600;</i>订单管理</dt>
+            <dd ><a href="">上架商品</a></dd>
+            <dd><a href="">活动商品</a></dd>
+        </dl>
+
+        <dl class="dl_on">
+            <dt class="on"><i class="font2 fl">&#xe600;</i>品牌分类添加</dt>
+            <dd><a href="">品牌管理</a></dd>
+            <dd><a href="index.html" class="dd_on">分类管理</a></dd>
+        </dl>
+
+        <dl >
+            <dt ><i class="font2 fl">&#xe734;</i>资质管理</dt>
+            <dd ><a href="#" >首页推荐</a></dd>
+            <dd><a href="#">商家管理</a></dd>
+            <dd><a href="#">商品管理</a></dd>
+        </dl>
+    </div>
+<!--导航栏结束-->
+    <!--右边内容开始-->
+    <div class="my_container ">
+        <div class="header_box">
+            <div class="header_left">
+                <div ng-click="header_show(1)" class="fl color_2f">
+                    <img src="images/select1.png" alt=""/>商城管理
+                </div>
+                <div ng-click="header_show(2)" ng_show="header_display!=1" id="nav_2" class="fl color1_8d">
+                    >分类管理
+                </div>
+                <div class="fl color1_8d history"  >
+                    <span ng-show="header_display==4">>分类详情</span>
+                    <span ng-show="header_display==3">>添加分类</span></div>
+            </div>
+            <div class="header_right">
+                <div class="fl">
+                    <a href=""><img src="images/news.png" alt=""/>站内信</a>
+                </div>
+                <div class="fl">|</div>
+                <div class="fl">
+                    <a href="">个人面板<img style="height:30px" src="images/center.png" alt=""/></a>
+                </div>
+            </div>
+        </div>
+
+        <!--分类管理列表开始-->
+        <div class="operate_box" ng_show="header_display==2">
+            <div class="btn2 fl" ng-click="header_show(3)">
+                <div class="font1 fl">&#xe600;</div>
+                <div class="fl">添加</div>
+            </div>
+            {{first}}
+            <div class="btn1 screen1"  ng-click="screen('cells_box1','screen1')" style="position:absolute;top:30px;right:40px;margin-right: 0"><div class="font3 fl">&#xe734;</div></div>
+            <div id="cells_box1" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333;z-index: 100;background-color:#fff ">
+                <ul   style="">
+                    <li>
+                        <input type="checkbox" name="cell" checked="checked" value="tb_parent_title" />
+                        <span>所属分类</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="cell" checked="checked" value="tb_image" />
+                        <span>分类图片</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="cell" checked="checked" value="tb_title" />
+                        <span>分类名称</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="cell" checked="checked" value="tb_level" />
+                        <span>分类级别</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="cell" checked="checked" value="tb_create_time" />
+                        <span>申请时间</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="cell" checked="checked" value="tb_review_status" />
+                        <span>状态</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" name="cell" checked="checked" value="tb_description" />
+                        <span>审核备注</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="table_box" ng_show="header_display==2">
+            <table   cellpadding="0" cellspacing="0" >
+                <thead>
+                    <tr>
+                        <th class="tb_parent_title " >所属分类</th>
+                        <th class="tb_image">分类图片</th>
+                        <th class="tb_title">分类名称</th>
+                        <th class="tb_level">分类级别</th>
+                        <th class="tb_create_time">申请时间</th>
+                        <th class="tb_review_status">状态</th>
+                        <th class="tb_description">审核备注</th>
+                        <th class="action">详情</th>
+                    </tr>
+                </thead>
+                <tbody class="order_tbody">
+                    <tr ng-repeat="n in sort_list" ng-controller="itemReaptCtrl" class="{{n.id}}"  name="{{n.id}}">
+                        <td class="tb_name " >{{n.parent_title}}</td>
+                        <td class="tb_image">
+                            <img src="{{url}}{{n.icon}}" alt=""/>
+                            <!--{{n.icon}}-->
+                        </td>
+                        <td class="tb_title">{{n.title}}
+                            <!--<span ng-show="n.sku==''">无</span>-->
+                        </td>
+                        <td class="tb_level">{{n.level}}</td>
+                        <td class="tb_create_time">{{n.create_time}}</td>
+                        <td class="tb_review_status">{{n.review_status}}</td>
+                        <td class="tb_description">{{n.description}}</td>
+                        <td class="action">
+                            <span class="check_btn" ng-click="check_btn(4,n.id,n.title,n.icon,n.pid,n.parent_title,n.level,n.create_time,n.online_time,n.offline_time,n.review_status,n.reason,n.description,n.supplier_name,n.user_name,n.deleted)">查看</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="pageTool" ></div>
+        </div>
+        <!--分类管理列表结束-->
+        <!--分类管的分类理详情页面开始-->
+        <div ng_show="header_display==4">
+
+        </div>
+        <!--分类管理的分类详情页面结束-->
+        <div ng_show="header_display==3" class="color_2f">
+            <ul class="row1_box">
+                <li class="row1_left fl" style="line-height: 32px">
+                    <span class="must">*</span>分类名称
+                </li>
+                <li class="row1_right fl">
+                    <input type="text" class="class_name" ng-model="title" placeholder="请输入分类名称"/>
+                </li>
+            </ul>
+            <ul class="row1_box">
+                <li class="row1_left fl" style="line-height: 32px">
+                    <span class="must">*</span>分类所属
+                </li>
+                <li class="row1_right fl">
+                    <div class="fl first_box">
+                        <div class="level_title">一级分类</div>
+                        <select name="" id="first_level" class="fl selects">
+                            <option value="{{a.id}}"  ng-repeat="a in first_level">{{a.title}}</option>
+                        </select>
+                    </div>
+                    <div class="second_box fl">
+                        <div class="level_title">二级分类</div>
+                        <select name="" id="second_level" class="fl selects">
+                            <option value="{{a.id}}"  ng-repeat="a in second_level">{{a.title}}</option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <ul class="row1_box">
+                <li class="row1_left fl" style="line-height: 32px">
+                    <span class="must">*</span>上传图标
+                </li>
+                <li class="row1_right fl">
+                    <div class="sort_img_box">
+                        <img class="sort_img" src="http://local.test.cdlhzz.cn/uploads/2017/05/27/1495877820.jpg" alt=""/>
+                        <!--<img class="sort_img" src="{{url}}{{add_image1 || 'uploads/2017/05/27/1495858857.png'}} " alt=""/>-->
+                    </div>
+                    <div>图片大小120×120,5M内，支持JPG,PNG，JPGE</div>
+                    <form  id="uploadForm1" enctype="multipart/form-data" >
+                        <input name="button" type="button"  id="btn1" onclick="myfile1.click();" ng-click="doUpload()" value="上传" />
+                        <input type="file" id="myfile1" name="UploadForm[file]" value="" style="display:none" accept="image/*">
+                        <span>{{icon}}</span>
+                    </form>
+                </li>
+            </ul>
+            <ul class="row1_box" style="border: none">
+                <li class="row1_left fl" style="line-height: 32px">
+                    分类描述
+                </li>
+                <li class="row1_right fl">
+                    <script id="editor" type="text/plain" style="width:750px;min-height:200px;"></script>
+                </li>
+            </ul>
+            <div class="btn_box">
+               <span class="btn3 sure_left" ng-click="add()">确认</span>
+               <span class="btn3">返回</span>
+            </div>
+        </div>
+        <!--分类管理添加分类页面结束-->
+
+    </div>
+    <script src="../../js/jquery-3.1.1.js"></script>
+    <script src="../../js/angular.min.js"></script>
+    <!--ueditor插件引用开始-->
+    <script type="text/javascript" charset="utf-8" src="js/edit/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/edit/ueditor.all.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="js/edit/lang/zh-cn/zh-cn.js"></script>
+    <!--ueditor插件引用结束-->
+    <script type="text/javascript" src="js/paging/query.js"></script>
+    <script type="text/javascript" src="js/paging/paging.js"></script>
+    <script src="js/global.js"></script>
+    <script src="js/sort_management.js"></script>
+</body>
+</html>

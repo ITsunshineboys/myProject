@@ -1,3 +1,4 @@
+//推荐列表数据接口
 var recommend_list="mall/recommend-admin-index";
 //文件上传
 var upload1="site/upload";
@@ -48,24 +49,42 @@ var end = {
 };
 laydate(start);
 laydate(end);
+//城市选择
+$(function () {
+    'use strict';
+    $('#distpicker1').distpicker();
+});
 app.controller("index_recommend",function($scope,$http){
     $scope.url=url;
     //
     $scope.kind_type=0;
     //右边内容宽度自适应
     $scope.zishiy=function (){
-        var browser_width1=window.innerWidth-$(".nav_box").width();
+        var browser_width1=$(document).width()-$(".nav_box").width();
         $(".my_container").css("width",browser_width1);
         $(".header_box").css("width",browser_width1);
+
         //浏览器大小变化的监听
         $(window).resize(function() {
-            var browser_width1=window.innerWidth-$(".nav_box").width();
+            var browser_width1=$(document).width()-$(".nav_box").width();
+            //console.log("$(document).width()="+$(document).width())
+            //console.log("browser_width1="+browser_width1)
             $(".my_container").css("width",browser_width1);
             $(".header_box").css("width",browser_width1);
         });
     };
     $scope.zishiy();
-    //获取时间类型列表的数据
+    //搜索区域选择数据的获取事件
+    //区域的原始数据
+    $(document).on("change","#province2",function(){
+        $scope.district_code=$("#city2").val();
+        console.log("$scope.city_code="+$scope.district_code)
+    });
+    $(document).on("change","#city2",function(){
+        $scope.district_code=$(this).val();
+        console.log('city_code：'+$(this).val());//获取value
+        console.log('city_name：'+$(this).find("option:selected").text());//获取选中文本
+    });
     $scope.time_type= function () {
         $http({
             method:"GET",
@@ -83,17 +102,15 @@ app.controller("index_recommend",function($scope,$http){
             $(".custom").addClass("show").removeClass("hide")
         }
         else{
+            $scope.history($scope.kind_type,$scope.time_type1,"","");
             $(".custom").addClass("hide").removeClass("show")
         }
-        $scope.history($scope.kind_type,$scope.time_type1,"","");
-        alert('value：'+$(this).val());//获取value
-        alert('text：'+$(this).find("option:selected").text());//获取选中文本
     });
     //自定义搜索时间范围的搜索事件
     $scope.search=function(){
         $scope.start_time=$("#start").text();
         $scope.end_time=$("#end").text();
-        if($scope.start_time=="开始时间"){
+        if($scope.start_time=="开始时间" || $scope.start_time==""){
             //弹窗的显示
             $(".popup").addClass('show').removeClass("hide");
             $(".popup .delete1").addClass('show').removeClass("hide");
@@ -107,7 +124,7 @@ app.controller("index_recommend",function($scope,$http){
                 $(".popup .delete1 .not_stop").addClass('hide').removeClass("show");
             }
         }
-        else if($scope.start_time!="开始时间"&& $scope.end_time=="结束时间"){
+        else if(($scope.start_time!="开始时间" && $scope.start_time!="")&& ($scope.end_time=="结束时间" || $scope.end_time=="") ){
             //弹窗的显示
             $(".popup").addClass('show').removeClass("hide");
             $(".popup .delete1").addClass('show').removeClass("hide");
@@ -129,11 +146,13 @@ app.controller("index_recommend",function($scope,$http){
     //点击历史数据按钮事件
     $scope.history=function(kind,time_kind1,start_time,end_time){
         $scope.page = 1;
-        $scope.page_size = 1;
+        $scope.page_size = 12;
         $scope.kind_type=kind;
+        //清空上一次分页的数据
+        $('#pageTool').text("");
         $http({
             method: "GET",
-            url: url + recommend_history+"?type="+$scope.kind_type+
+            url: url + recommend_history+"?type="+$scope.kind_type+"&district_code="+$scope.district_code+
             "&time_type="+time_kind1+"&start_time="+start_time+
             "&end_time="+end_time+"&page="+ $scope.page+"&size="+ $scope.page_size
         })
@@ -141,21 +160,21 @@ app.controller("index_recommend",function($scope,$http){
                 $scope.history_data = data.data.recommend_history.details;
                 $scope.history_total = data.data.recommend_history.total;
                 console.log(" $scope.history_total="+ $scope.history_total);
-                $scope.page_count=$scope.history_total/1;
+                $scope.page_count=$scope.history_total/$scope.page_size;
                 $('#pageTool').Paging({
-                    pagesize: $scope.page, count: $scope.page_count,toolbar:true, callback: function (page, size, count) {
+                    pagesize: $scope.page, count: $scope.page_count,toolbar:true,ellipseTpl:". . .",  callback: function (page, size, count) {
                         console.log(arguments);
                         //点击页码后重新访问接口获取当前页码的数据
                         $scope.page=page;
                         $http({
                             method: "GET",
-                            url: url + recommend_history+"?type="+$scope.kind_type+"&time_type="+time_kind1+"&start_time="+start_time+"&end_time="+end_time+"&page="+ $scope.page+"&size="+ $scope.page_size
+                            url: url + recommend_history+"?type="+$scope.kind_type+"&district_code="+$scope.district_code+"&time_type="+time_kind1+"&start_time="+start_time+"&end_time="+end_time+"&page="+ $scope.page+"&size="+ $scope.page_size
                         })
                             .success(function (data, status) {
                                 $scope.history_data = data.data.recommend_history.details;
                              });
 
-                        alert('当前第 ' + page + '页,每页 ' + size + '条,总页数：' + count + '页')
+                        console.log('当前第 ' + page + '页,每页 ' + size + '条,总页数：' + count + '页')
                     }
                 });
             }).
@@ -238,7 +257,7 @@ app.controller("index_recommend",function($scope,$http){
     $scope.table_data1=function(data_type){
         $http({
             method: "GET",
-            url: url + recommend_list+"?type="+data_type
+            url: url + recommend_list+"?type="+data_type+"&district_code="+$scope.district_code
         })
             .success(function (data, status) {
                 //$scope.page = 1;
@@ -265,11 +284,48 @@ app.controller("index_recommend",function($scope,$http){
     $scope.table_data1(2);
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
         //表格显示列的初始化控制
+        //banner的表格显示初始化
+        $(".tb_stock").hide();
+        $(".tb_supplier_price").hide();
+        $(".tb_platform_price").hide();
+        $(".tb_market_price").hide();
+        //商城首页的推荐表格显示的初始化
         $(".tb_description1").hide();
+        $(".tb_stock1").hide();
+        $(".tb_supplier_price1").hide();
         $(".tb_platform_price1").hide();
-        $(".tb_description2").hide();
+        $(".tb_market_price1").hide();
+        $(".tb_show_price1").hide();
+        //历史数据的表格显示的初始化
         $(".tb_status2").hide();
         $(".tb_delete_time2").hide();
+        $(".tb_description2").hide();
+        $(".tb_stock2").hide();
+        $(".tb_supplier_price2").hide();
+        $(".tb_platform_price2").hide();
+        $(".tb_market_price2").hide();
+        $(".tb_show_price2").hide();
+        //列的文字显示的处理
+        $(".tb_overflow").each(function(){
+            var maxwidth=6;
+            if($(this).text().length>maxwidth){
+                $(this).text($(this).text().substring(0,maxwidth));
+                $(this).html($(this).html()+'…');
+            }
+        });
+        //文字超长列的鼠标移入效果
+        $(".tb_overflow").hover(function(e){
+            $scope.word=$(this).attr("name")
+            //console.log($(this).find(".all_name").text())
+            $("#warn").text($scope.word) .css({"top":(e.pageY -10) + "px","left":(e.pageX +20) + "px","display":"block"})
+        });
+        $(".tb_overflow").mousemove(function(e){
+            $("#warn").css({"top":(e.pageY -10) + "px","left":(e.pageX +20) + "px","display":"block","transition":"all .3s linear"});
+        });
+        $(".tb_overflow").mouseout(function(e){
+            $("#warn").css({"top":(100) + "px","left":(100) + "px","display":"none"})
+            ;
+        });
         //排序操作处理
         $scope.order_alter=function(){
             var fixHelper = function(e, ui) {
@@ -339,7 +395,7 @@ app.controller("index_recommend",function($scope,$http){
                     $("tbody").find(del_id1).remove();
                 };
                 $scope.del_cancel=function(){
-                    alert("删除的取消事件")
+                    console.log("删除的取消事件")
                     $(".popup").addClass('hide').removeClass("show");
                     $(".popup .delete1").addClass('hide').removeClass("show");
                     $(".popup .delete1 .is_stop").addClass('hide').removeClass("show");
@@ -347,8 +403,10 @@ app.controller("index_recommend",function($scope,$http){
             }
         };
         //数据已连接=====单个停用事件的控制
-        $scope.stop_one=function(obj){
+        $scope.stop_one=function(obj,status){
             $scope.stop_id=obj;
+            $scope.stop_status=status;
+            $scope.stop_count=1;
             $(".popup").addClass('show').removeClass("hide");
             $(".popup .stop1").addClass('show').removeClass("hide");
             $(".popup .stop1 .is_stop").addClass('show').removeClass("hide");
@@ -383,10 +441,10 @@ app.controller("index_recommend",function($scope,$http){
         //全选事件的控制
         $scope.all=function(choose){
             var now_choose="."+choose;
-            console.log("choose=="+choose)
-            console.log("now_choose=="+now_choose)
+            console.log("choose=="+choose);
+            console.log("now_choose=="+now_choose);
             if($(".choose_all1").is(':checked')){
-                alert("选中");
+               console.log("选中");
                 $(now_choose).prop("checked", true);
                 //$('.choose').attr('checked', 'checked');
             }
@@ -396,7 +454,7 @@ app.controller("index_recommend",function($scope,$http){
 
 
                 //$(".choose").attr("checked",false)//未选中
-                alert("没有选中")
+                console.log("没有选中")
             }
 
             //console.log(obj.length)
@@ -497,11 +555,13 @@ app.controller("index_recommend",function($scope,$http){
                     var cal="."+$(this).val();
                     $scope.now_stop=$(cal).find(".status").text();
                     if($scope.now_stop=="启用"){
+                        $scope.stop_status="启用";
                         stops.push($(this).val());
                     }
                     text.push($(this).val());
                 }
             });
+            $scope.stop_count=text.length;
             if(text==""){
                 $(".popup").addClass('show').removeClass("hide");
                 $(".popup .delete1").addClass('show').removeClass("hide");
@@ -589,7 +649,7 @@ app.controller("index_recommend",function($scope,$http){
                         }
                     },
                     error: function (returndata) {
-                        alert(returndata);
+                        console.log(returndata);
                     }
             });
         };
@@ -603,7 +663,7 @@ app.controller("index_recommend",function($scope,$http){
                 contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                 success: function (data) {
                     //$scope.loginout=data;
-                    alert("删除文件成功");
+                    console.log("删除文件成功");
 
                 }
             });
@@ -620,11 +680,23 @@ app.controller("index_recommend",function($scope,$http){
                         $scope.add_url=data.data.detail.url;
                         $scope.add_name=data.data.detail.title;
                         $scope.add_url1=data.data.detail;
+                        $scope.add_description=data.data.subtitle;
+                        $scope.add_price=data.data.platform_price;
+                        console.log("获取的 $scope.add_url"+ $scope.add_url)
+                        console.log("获取的 $scope.add_name"+ $scope.add_name)
+                        console.log("获取的 $scope.add_price"+ $scope.add_price)
+                        console.log("获取的 $scope.add_description"+ $scope.add_description)
                     }
                     else  if(sku_type=="编辑"){
                         $scope.edit_url=data.data.detail.url;
                         $scope.edit_name=data.data.detail.title;
                         $scope.edit_url1=data.data.detail;
+                        $scope.edit_description=data.data.subtitle;
+                        $scope.edit_price=data.data.platform_price;
+                        console.log("获取的 $scope.edit_url"+ $scope.edit_url)
+                        console.log("获取的 $scope.edit_name"+ $scope.edit_name)
+                        console.log("获取的 $scope.edit_price"+ $scope.edit_price)
+                        console.log("获取的 $scope.edit_description"+ $scope.edit_description)
                     }
                 })
 
@@ -677,16 +749,16 @@ app.controller("index_recommend",function($scope,$http){
                     data:{"url":$scope.add_url,"title":$scope.add_name,"image":
                         $scope.add_image,"from_type":$scope.add_form_type,"status":$scope.add_statu,
                         "type":$scope.kind_type,"sku":$scope.add_sku,"description":$scope.add_description,
-                        "platform_price":$scope.add_price},
+                        "platform_price":$scope.add_price,"district_code":$scope.district_code},
                     dataType: "json",
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                     success: function (data) {
                         $scope.add_data3=data;
-                        alert("添加成功");
+                        console.log("添加成功");
                         $scope.table_data1($scope.kind_type);
                     },
                     error: function (returndata) {
-                        alert("错误=="+returndata);
+                        console.log("错误=="+returndata);
                         $scope.add_data4=returndata;
                     }
                 });
@@ -700,7 +772,34 @@ app.controller("index_recommend",function($scope,$http){
                 $(".popup .add1").addClass('hide').removeClass("show");
             };
         };
+        //查看事件处理
+        $scope.check_btn=function(viewed_number,sold_number,check_create_time,check_from_type,check_id,check_name1,check_description, check_sku1,check_supplier,check_url2, check_status2,check_image2, check_supplier_price, check_platform_price, check_market_price,check_show_price, check_left_number){
+            $scope.check_viewed_number=viewed_number;
+            $scope.check_sold_number=sold_number;
+            $scope.check_from_type=check_from_type;
+            $scope.check_create_time=check_create_time;
+            $scope.check_id=check_id;
+            $scope.check_name=check_name1;
+            $scope.check_description=check_description;
+            $scope.check_sku=check_sku1;
+            $scope.check_supplier=check_supplier;
+            $scope.check_url=check_url2;
+            $scope.check_status=check_status2;
+            $scope.check_image2=check_image2;
+            $scope.check_supplier_price=check_supplier_price;
+            $scope.check_platform_price=check_platform_price;
+            $scope.check_market_price=check_market_price;
+            $scope.check_show_price=check_show_price;
+            //库存
+            $scope.check_left_number=check_left_number;
+            $(".popup").addClass('show').removeClass("hide");
+            $(".popup .details_pop").addClass('show').removeClass("hide");
+            $scope.details_close1=function(){
+                $(".popup").addClass('hide').removeClass("show");
+                $(".popup .details_pop").addClass('hide').removeClass("show");
+            }
 
+        };
         //编辑事件处理
         $scope.edit=function(edit_id,edit_name1,edit_description,edit_sku1,edit_supplier,edit_url2,edit_status2,edit_image2,edit_price,edit_from_type){
             $scope.edit_id=edit_id;
@@ -792,7 +891,7 @@ app.controller("index_recommend",function($scope,$http){
                     contentType:"application/x-www-form-urlencoded;charset=UTF-8",
                     success: function (data) {
                         $scope.edit_data=data;
-                        alert("编辑成功");
+                        console.log("编辑成功");
                         $scope.table_data1($scope.kind_type);
 
                     }
@@ -894,10 +993,10 @@ $(".nav_box dt img").attr("src","images/select1.png");
 $(function(){
     $(".nav_box dd").hide();
     //初始该显示的dd
-    $(".nav_box .mall>dd").show();
+    $(".nav_box .dl_on>dd").show();
     $(".nav_box dt").click(function(){
         $(".nav_box dt").css({"background-color":"#F5F7FA","color":"#ABABAB"});
-        $(this).css({"background-color": "#E6E9F0","color":"#5677FC"});
+        $(this).css({"background-color": " #E6E9F0;","color":"#5677FC"});
         $(this).parent().find('dd').removeClass("menu_chioce");
         $(this).parent().parent().find('dd').find("a").removeClass("dd_on");
         $(".nav_box dt img").attr("src","../../images/select1.png");
@@ -1008,7 +1107,6 @@ function loadTab1() {
             return;
         } else {
             if($(this).attr("name")==1){
-                alert("dsdsds")
                 $(this).addClass("current1");
                 $($(this).attr("name")).fadeIn();
             }

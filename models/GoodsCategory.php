@@ -31,6 +31,12 @@ class GoodsCategory extends ActiveRecord
     const SCENARIO_TOGGLE_STATUS = 'toggle';
 
     /**
+     * @var array admin fields
+     */
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'review_status', 'reason', 'description'];
+
+
+    /**
      * @var array online status list
      */
     public static $statuses = [
@@ -131,7 +137,7 @@ class GoodsCategory extends ActiveRecord
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
     {
         $offset = ($page - 1) * $size;
-        $recommendList = self::find()
+        $categoryList = self::find()
             ->select($select)
             ->where($where)
             ->orderBy($orderBy)
@@ -139,15 +145,21 @@ class GoodsCategory extends ActiveRecord
             ->limit($size)
             ->asArray()
             ->all();
-        foreach ($recommendList as &$recommend) {
-            if (isset($recommend['create_time'])) {
-                if (!empty($recommend['create_time'])) {
-                    $recommend['create_time'] = date('Y-m-d', $recommend['create_time']);
-                }
+        foreach ($categoryList as &$category) {
+            if (isset($category['create_time'])) {
+                $category['create_time'] = date('Y-m-d', $category['create_time']);
+            }
+
+            if (isset($category['level'])) {
+                $category['level'] = self::$levels[$category['level']];
+            }
+
+            if (isset($category['review_status'])) {
+                $category['review_status'] = Yii::$app->params['reviewStatuses'][$category['review_status']];
             }
         }
 
-        return $recommendList;
+        return $categoryList;
     }
 
     /**
@@ -172,6 +184,34 @@ class GoodsCategory extends ActiveRecord
         }
 
         if (self::find()->where('deleted = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if can enable category records
+     *
+     * @param string $ids category record ids separated by commas
+     * @return mixed bool
+     */
+    public static function canEnable($ids)
+    {
+        $ids = trim($ids);
+        $ids = trim($ids, ',');
+
+        if (!$ids) {
+            return false;
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        if (self::find()->where($where)->count() != count(explode(',', $ids))) {
+            return false;
+        }
+
+        if (self::find()->where('deleted = ' . self::STATUS_OFFLINE . ' and ' . $where)->count()) {
             return false;
         }
 
@@ -364,6 +404,9 @@ class GoodsCategory extends ActiveRecord
 
                     $this->supplier_id = $supplier->id;
                     $this->supplier_name = $supplier->nickname;
+
+                    $parent = self::findOne($this->pid);
+                    $this->parent_title = $parent->title;
                 }
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {

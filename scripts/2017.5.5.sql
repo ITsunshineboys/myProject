@@ -56,6 +56,7 @@ CREATE TABLE `goods_category` (
   `supplier_name` varchar(25) not null DEFAULT '' COMMENT '供应商',
   `title` varchar(50) not null DEFAULT '',
   `pid` int(11) unsigned not null default 0,
+  `parent_title` varchar(50) not null DEFAULT '',
   `level` tinyint(1) unsigned not null default 0,
   `path` varchar(50) not null DEFAULT '',
   `icon` varchar(255) not null DEFAULT '',

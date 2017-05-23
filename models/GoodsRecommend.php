@@ -472,6 +472,9 @@ class GoodsRecommend extends ActiveRecord
     public function validatePlatformPrice($attribute)
     {
         if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
+            if (isset($this->$attribute)) {
+                unset($this->$attribute);
+            }
             return true;
         }
 
@@ -492,6 +495,9 @@ class GoodsRecommend extends ActiveRecord
     public function validateSku($attribute)
     {
         if ($this->from_type == self::FROM_TYPE_LINK) {
+            if (isset($this->$attribute)) {
+                unset($this->$attribute);
+            }
             return true;
         }
 
