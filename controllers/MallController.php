@@ -45,6 +45,7 @@ class MallController extends Controller
         'category-enable-batch',
         'category-list-admin',
         'categories-manage-admin',
+        'brand-add',
     ];
 
     /**
@@ -87,6 +88,7 @@ class MallController extends Controller
                     'category-status-toggle' => ['post',],
                     'category-disable-batch' => ['post',],
                     'category-enable-batch' => ['post',],
+                    'brand-add' => ['post',],
                 ],
             ],
         ];
@@ -1013,6 +1015,7 @@ class MallController extends Controller
         } else {
             $model->deleted = GoodsCategory::STATUS_ONLINE;
             $model->offline_time = $now;
+            $model->offline_reason = Yii::$app->request->post('offline_reason', '');
         }
 
         if (!$model->save()) {
@@ -1070,7 +1073,8 @@ class MallController extends Controller
         $where = 'id in(' . $ids . ')';
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_ONLINE,
-            'offline_time' => time()
+            'offline_time' => time(),
+            'offline_reason' => Yii::$app->request->post('offline_reason', '')
         ], $where)
         ) {
             $code = 500;
@@ -1280,6 +1284,40 @@ class MallController extends Controller
                     'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, ['level' => SORT_ASC])
                 ]
             ],
+        ]);
+    }
+
+    /**
+     * Add brand action
+     *
+     * @return string
+     */
+    public function actionBrandAdd()
+    {
+        $category = new GoodsCategory;
+        $category->attributes = Yii::$app->request->post();
+
+        $code = 1000;
+
+        $category->scenario = GoodsCategory::SCENARIO_ADD;
+        if (!$category->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$category->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }
