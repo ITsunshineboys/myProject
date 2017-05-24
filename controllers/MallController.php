@@ -943,6 +943,7 @@ class MallController extends Controller
 
         $category->title = trim(Yii::$app->request->post('title', ''));
         $category->icon = trim(Yii::$app->request->post('icon', ''));
+        $category->description = trim(Yii::$app->request->post('description', ''));
         $pid = (int)Yii::$app->request->post('pid', '');
         $category->setLevelPath($pid);
         $category->pid = $pid;

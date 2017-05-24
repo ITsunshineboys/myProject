@@ -21,6 +21,27 @@ class GoodsBrand extends ActiveRecord
     }
 
     /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [['name', 'certificate', 'logo', 'category_id'], 'required'],
+            [['name'], 'unique', 'on' => self::SCENARIO_ADD],
+            [['title'], 'validateTitle', 'on' => self::SCENARIO_EDIT],
+            [['pid', 'approve_time', 'review_status', 'supplier_id'], 'number', 'integerOnly' => true, 'min' => 0],
+            ['pid', 'validatePid'],
+            [['reason', 'description', 'icon'], 'string'],
+            ['description', 'safe'],
+            ['description', 'default', 'value' => ''],
+            ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses'])],
+            ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
+            ['supplier_id', 'validateSupplierId', 'on' => self::SCENARIO_REVIEW],
+            ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
+        ];
+    }
+
+    /**
      * Get brands by brand name
      *
      * @param string $brandName brand name
