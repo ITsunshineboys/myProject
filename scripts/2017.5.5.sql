@@ -3,6 +3,7 @@ CREATE TABLE `goods` (
   `supplier_id` int unsigned not null default 0,
   `brand_id` int unsigned not null default 0,
   `category_id` int unsigned not null default 0,
+  `area_id` int(11) NOT NULL,
   `series_id` int(11) unsigned not null default 0,
   `style_id` int(11) unsigned not null default 0,
   `sku` bigint unsigned not null default 0,
@@ -108,3 +109,13 @@ CREATE TABLE `goods_recommend_sale_log` (
   `create_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `goods_area` (
+  `id` int(11) NOT NULL,
+  `express_area` varchar(255) DEFAULT NULL COMMENT '快递区域',
+  `delivery_door_area` varchar(255) DEFAULT NULL COMMENT '送货上门区域',
+  `piece` int(10) DEFAULT NULL COMMENT '件数',
+  `price` bigint(20) NOT NULL COMMENT '价格',
+  `mounting_cost` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
