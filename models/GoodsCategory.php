@@ -34,7 +34,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'description', 'supplier_name', 'user_name', 'deleted'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'user_name', 'deleted'];
 
     /**
      * @var array online status list
