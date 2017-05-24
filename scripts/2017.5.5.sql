@@ -80,6 +80,7 @@ CREATE TABLE `goods_brand` (
   `logo` varchar(255) not null DEFAULT '',
   `certificate` varchar(255) not null DEFAULT '',
   `supplier_id` int(11) unsigned not null default 0,
+  `category_id` int(11) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
