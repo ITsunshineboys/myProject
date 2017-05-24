@@ -959,6 +959,14 @@ class MallController extends Controller
             ]);
         }
 
+        $checkSameLevelResult = $category->checkSameLevelByPid($pid);
+        if ($checkSameLevelResult != 200) {
+            return Json::encode([
+                'code' => $checkSameLevelResult,
+                'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
+            ]);
+        }
+
         if (!$category->save()) {
             $code = 500;
             return Json::encode([

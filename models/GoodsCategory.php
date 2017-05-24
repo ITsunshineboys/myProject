@@ -436,6 +436,35 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Check if of different level
+     *
+     * @param  int $newPid new parent category id
+     * @return int
+     */
+    public function checkSameLevelByPid($newPid)
+    {
+        $newPid = (int)$newPid;
+        if ($newPid == 0) {
+            if ($this->level != self::LEVEL1) {
+                return 1005;
+            }
+        } elseif ($newPid > 0) {
+            $newParentCategory = self::findOne($newPid);
+            if (!$newParentCategory) {
+                return 1000;
+            }
+
+            if ($newParentCategory->level + 1 != $this->level) {
+                return 1005;
+            }
+        } else {
+            return 1000;
+        }
+
+        return 200;
+    }
+
+    /**
      * Do some ops before insertion
      *
      * @param bool $insert if is a new record
@@ -507,6 +536,25 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Set level and path by pid
+     *
+     * @param $pid
+     */
+    public function setLevelPath($pid)
+    {
+        if ($pid != $this->pid) {
+            if ($this->pid) {
+                $parentCategory = self::findOne($this->pid);
+                $this->level = $parentCategory->level + 1;
+                $this->path = $parentCategory->path . $this->id . ',';
+            } else {
+                $this->level = self::LEVEL1;
+                $this->path = $this->id . ',';
+            }
+        }
+    }
+
+    /**
      * Do some ops after insertion
      *
      * @param bool $insert
@@ -527,24 +575,5 @@ class GoodsCategory extends ActiveRecord
 
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
-    }
-
-    /**
-     * Set level and path by pid
-     *
-     * @param $pid
-     */
-    public function setLevelPath($pid)
-    {
-        if ($pid != $this->pid) {
-            if ($this->pid) {
-                $parentCategory = self::findOne($this->pid);
-                $this->level = $parentCategory->level + 1;
-                $this->path = $parentCategory->path . $this->id . ',';
-            } else {
-                $this->level = self::LEVEL1;
-                $this->path = $this->id . ',';
-            }
-        }
     }
 }
