@@ -254,6 +254,8 @@ class GoodsRecommend extends ActiveRecord
             || in_array('delete_time', $select)
             || in_array('from_type', $select)
             || in_array('status', $select)
+            || in_array('platform_price', $select)
+            || in_array('sku', $select)
             || $hasViewedNumber
             || $hasSoldNumber
         ) {
@@ -263,18 +265,32 @@ class GoodsRecommend extends ActiveRecord
 
                 if (isset($recommend['create_time'])) {
                     if (!empty($recommend['create_time'])) {
-                        $recommend['create_time'] = date('Y-m-d', $recommend['create_time']);
+                        $recommend['create_time'] = date('Y-m-d H:i', $recommend['create_time']);
                     }
                 }
 
                 if (isset($recommend['delete_time'])) {
                     if (!empty($recommend['delete_time'])) {
-                        $recommend['delete_time'] = date('Y-m-d', $recommend['delete_time']);
+                        $recommend['delete_time'] = date('Y-m-d H:i', $recommend['delete_time']);
                     }
                 }
 
                 isset($recommend['from_type']) && $recommend['from_type'] = self::$fromTypes[$recommend['from_type']];
                 isset($recommend['status']) && $recommend['status'] = self::$statuses[$recommend['status']];
+
+                if (isset($recommend['platform_price'])) {
+                    $recommend['show_price'] = $recommend['platform_price'];
+                    unset($recommend['platform_price']);
+                }
+
+                if (!empty($recommend['sku'])) {
+                    $goods = Goods::find()->where(['sku' => $recommend['sku']])->one();
+                    if ($goods) {
+                        $recommend['platform_price'] = $goods->platform_price;
+                        $recommend['market_price'] = $goods->market_price;
+                        $recommend['supplier_price'] = $goods->supplier_price;
+                    }
+                }
             }
         }
 
