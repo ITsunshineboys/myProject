@@ -80,7 +80,15 @@ CREATE TABLE `goods_brand` (
   `logo` varchar(255) not null DEFAULT '',
   `certificate` varchar(255) not null DEFAULT '',
   `supplier_id` int(11) unsigned not null default 0,
+  `supplier_name` varchar(25) not null DEFAULT '',
   `category_id` int(11) unsigned not null default 0,
+  `approve_time` int unsigned not null DEFAULT 0,
+  `reject_time` int unsigned not null DEFAULT 0,
+  `create_time` int unsigned not null DEFAULT 0,
+  `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
+  `status` tinyint(1) not null default 0,
+  `online_time` int unsigned not null DEFAULT 0,
+  `offline_time` int unsigned not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
