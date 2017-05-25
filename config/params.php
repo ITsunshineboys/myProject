@@ -1,5 +1,7 @@
 <?php
 
+$districts = require(__DIR__ . '/districts.php');
+
 return [
     'adminEmail' => 'admin@example.com',
     'offsetAiteCubeNo' => 10000,
@@ -82,4 +84,5 @@ return [
         '1' => '审核不通过',
         '2' => '审核通过',
     ],
+    'districts' => $districts,
 ];
