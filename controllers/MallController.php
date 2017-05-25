@@ -877,6 +877,11 @@ class MallController extends Controller
             ]);
         }
 
+        if ($goodsCategory->review_status == GoodsCategory::REVIEW_STATUS_APPROVE) {
+            new EventHandleService();
+            Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+        }
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
@@ -1034,8 +1039,18 @@ class MallController extends Controller
             ]);
         }
 
-        $categoryIds = $model->level == GoodsCategory::LEVEL3 ? [$model->id] : GoodsCategory::level23Ids($model->id);
-        Goods::disableGoodsByCategoryIds($categoryIds);
+        if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
+            if ($model->level == GoodsCategory::LEVEL3) {
+                $categoryIds = [$model->id];
+            } else {
+                $categoryIds = GoodsCategory::level23Ids($model->id);
+                GoodsCategory::disableByIds($categoryIds);
+            }
+            Goods::disableGoodsByCategoryIds($categoryIds);
+        }
+
+        new EventHandleService();
+        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
 
         return Json::encode([
             'code' => 200,
@@ -1095,6 +1110,7 @@ class MallController extends Controller
         }
 
         $categoryIds = array_unique(array_merge($idsArr, GoodsCategory::level23IdsByPids($idsArr)));
+        GoodsCategory::disableByIds($categoryIds);
         Goods::disableGoodsByCategoryIds($categoryIds);
 
         new EventHandleService();

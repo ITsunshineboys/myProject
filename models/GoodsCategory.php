@@ -591,4 +591,21 @@ class GoodsCategory extends ActiveRecord
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
     }
+
+    /**
+     * Disable categories by ids
+     *
+     * @param int $ids category ids
+     */
+    public static function disableByIds(array $ids)
+    {
+        if ($ids) {
+            $ids = implode(',', $ids);
+            $where = 'id in(' . $ids . ')';
+            self::updateAll([
+                'deleted' => self::STATUS_ONLINE,
+                'offline_time' => time()
+            ], $where);
+        }
+    }
 }
