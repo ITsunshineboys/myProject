@@ -136,7 +136,7 @@ class StringService
     {
         $codeLen = 6;
         $parentCodeLastCodes = '0000';
-        
+
         $code = trim($code);
         if (!$code || strlen($code) != $codeLen) {
             return false;
@@ -144,10 +144,6 @@ class StringService
 
         $parentCode = substr($code, 0, 2) . $parentCodeLastCodes;
         $codes = Yii::$app->params['districts'][0];
-        if (empty($codes[$parentCode][$code])) {
-            return false;
-        }
-
-        return true;
+        return !empty($codes[$parentCode][$code]);
     }
 }
