@@ -1034,7 +1034,8 @@ class MallController extends Controller
             ]);
         }
 
-        Goods::disableGoodsByCategoryId($model->id);
+        $categoryIds = $model->level == GoodsCategory::LEVEL3 ? [$model->id] : GoodsCategory::level23Ids($model->id);
+        Goods::disableGoodsByCategoryIds($categoryIds);
 
         return Json::encode([
             'code' => 200,
