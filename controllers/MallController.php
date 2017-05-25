@@ -1061,6 +1061,7 @@ class MallController extends Controller
 
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
+        $idsArr = explode(',', $ids);
 
         $code = 1000;
 
@@ -1093,7 +1094,8 @@ class MallController extends Controller
             ]);
         }
 
-        Goods::disableGoodsByCategoryIds(explode(',', $ids));
+        $categoryIds = array_unique(array_merge($idsArr, GoodsCategory::level23IdsByPids($idsArr)));
+        Goods::disableGoodsByCategoryIds($categoryIds);
 
         new EventHandleService();
         Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);

@@ -245,7 +245,22 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
-     * Get all level 2 and 3 category ids
+     * Get all level 2 and 3 category ids by pids
+     *
+     * @param  array $pids pids
+     * @return array
+     */
+    public static function level23IdsByPids(array $pids)
+    {
+        $ids = [];
+        foreach ($pids as $pid) {
+            $ids = array_merge($ids, self::level23Ids($pid));
+        }
+        return array_unique($ids);
+    }
+
+    /**
+     * Get all level 2 and 3 category ids by pid
      *
      * @param  int $pid parent category id
      * @return array
