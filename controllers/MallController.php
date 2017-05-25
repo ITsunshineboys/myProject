@@ -685,9 +685,11 @@ class MallController extends Controller
     {
         $recommend = new GoodsRecommend;
         $recommend->attributes = Yii::$app->request->post();
+        $recommend->district_code = trim(Yii::$app->request->post('district_code', ''));
 
         $code = 1000;
 
+        $recommend->scenario = GoodsRecommend::SCENARIO_ADD;
         if (!$recommend->validate()) {
             return Json::encode([
                 'code' => $code,

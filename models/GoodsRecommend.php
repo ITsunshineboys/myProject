@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
@@ -28,6 +29,7 @@ class GoodsRecommend extends ActiveRecord
     const STATUS_ONLINE = 1;
     const CACHE_KEY_PREFIX_VIEWED_NUMBER = 'recommend_goods_viewed_number_';
     const CACHE_KEY_PREFIX_SOLD_NUMBER = 'recommend_goods_sold_number_';
+    const SCENARIO_ADD = 'add';
 
     /**
      * @var array admin fields
@@ -327,8 +329,8 @@ class GoodsRecommend extends ActiveRecord
      * Get viewed number
      *
      * @access private
-     * @param int $createTime  banner create time
-     * @param int $deleteTime  banner delete time
+     * @param int $createTime banner create time
+     * @param int $deleteTime banner delete time
      * @param int $recommendId recommend id default 0
      * @return int
      */
@@ -443,6 +445,51 @@ class GoodsRecommend extends ActiveRecord
     }
 
     /**
+     * Sort recommend list
+     *
+     * @param  array $ids recommend id list
+     * @return int
+     */
+    public static function sort($ids)
+    {
+        $code = 1000;
+
+        if (!$ids) {
+            return $code;
+        }
+
+        $idArr = $ids;
+        $ids = implode(',', $ids);
+        $where = 'id in (' . $ids . ')';
+        try {
+            $recommendList = self::find()->where($where)->all();
+        } catch (Exception $dbException) {
+            return $code;
+        }
+
+        if (!$recommendList || count($recommendList) != count($idArr)) {
+            return $code;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        foreach ($recommendList as $recommend) {
+            $recommend->sorting_number = array_search($recommend->id, $idArr) + 1;
+            if (!$recommend->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
+        }
+
+        $transaction->commit();
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
@@ -456,7 +503,24 @@ class GoodsRecommend extends ActiveRecord
             ['sku', 'validateSku', 'skipOnEmpty' => false],
             ['description', 'validateDescription', 'skipOnEmpty' => false],
             ['platform_price', 'validatePlatformPrice', 'skipOnEmpty' => false],
+            ['district_code', 'validateDistrictCode', 'skipOnEmpty' => false, 'on' => self::SCENARIO_ADD],
         ];
+    }
+
+    /**
+     * Validates district_code
+     *
+     * @param string $attribute district_code to validate
+     * @return bool
+     */
+    public function validateDistrictCode($attribute)
+    {
+        if (!StringService::checkDistrict($this->$attribute)) {
+            $this->addError($attribute);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -535,51 +599,6 @@ class GoodsRecommend extends ActiveRecord
         }
 
         return true;
-    }
-
-    /**
-     * Sort recommend list
-     *
-     * @param  array $ids recommend id list
-     * @return int
-     */
-    public static function sort($ids)
-    {
-        $code = 1000;
-
-        if (!$ids) {
-            return $code;
-        }
-
-        $idArr = $ids;
-        $ids = implode(',', $ids);
-        $where = 'id in (' . $ids . ')';
-        try {
-            $recommendList = self::find()->where($where)->all();
-        } catch (Exception $dbException) {
-            return $code;
-        }
-
-        if (!$recommendList || count($recommendList) != count($idArr)) {
-            return $code;
-        }
-
-        $transaction = Yii::$app->db->beginTransaction();
-
-        foreach ($recommendList as $recommend) {
-            $recommend->sorting_number = array_search($recommend->id, $idArr) + 1;
-            if (!$recommend->save()) {
-                $transaction->rollBack();
-
-                $code = 500;
-                return $code;
-            }
-        }
-
-        $transaction->commit();
-
-        $code = 200;
-        return $code;
     }
 
     /**

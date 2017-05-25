@@ -48,6 +48,7 @@ CREATE TABLE `goods_recommend` (
   `delete_time` int not null DEFAULT 0,
   `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
   `sorting_number` int unsigned not null default 0,
+  `district_code` int(6) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
