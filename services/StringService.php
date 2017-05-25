@@ -125,4 +125,27 @@ class StringService
             ]
         );
     }
+
+    /**
+     * Check if valid district code
+     *
+     * @param  string $code strict code
+     * @return bool
+     */
+    public static function checkDistrict($code)
+    {
+        $codeLen = 6;
+        $code = trim($code);
+        if (!$code || strlen($code) != $codeLen) {
+            return false;
+        }
+
+        $parentCode = substr($code, 0, 2) . '0000';
+        $codes = Yii::$app->params['districts'][0];
+        if (empty($codes[$parentCode][$code])) {
+            return false;
+        }
+
+        return true;
+    }
 }
