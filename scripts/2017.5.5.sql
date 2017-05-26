@@ -84,7 +84,6 @@ CREATE TABLE `goods_brand` (
   `certificate` varchar(255) not null DEFAULT '',
   `supplier_id` int(11) unsigned not null default 0,
   `supplier_name` varchar(25) not null DEFAULT '',
-  `category_id` int(11) unsigned not null default 0,
   `approve_time` int unsigned not null DEFAULT 0,
   `reject_time` int unsigned not null DEFAULT 0,
   `create_time` int unsigned not null DEFAULT 0,
@@ -120,3 +119,10 @@ CREATE TABLE `goods_area` (
   `mounting_cost` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+create table brand_category (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `brand_id` int(11) NOT NULL DEFAULT 0,
+  `category_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

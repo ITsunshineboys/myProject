@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 class GoodsBrand extends ActiveRecord
@@ -62,7 +63,7 @@ class GoodsBrand extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'certificate', 'logo', 'category_id'], 'required'],
+            [['name', 'certificate', 'logo'], 'required'],
             [['name'], 'unique', 'on' => self::SCENARIO_ADD],
         ];
     }
@@ -96,9 +97,6 @@ class GoodsBrand extends ActiveRecord
 
                     $this->supplier_id = $supplier->id;
                     $this->supplier_name = $supplier->nickname;
-
-                    $parent = self::findOne($this->pid);
-                    $this->parent_title = $parent->title;
                 } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
                     $this->deleted = self::STATUS_ONLINE;
                     $this->offline_time = $now;

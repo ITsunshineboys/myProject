@@ -1,0 +1,73 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: hj
+ * Date: 4/27/17
+ * Time: 2:08 PM
+ */
+
+namespace app\models;
+
+use yii\db\ActiveRecord;
+
+class BrandCategory extends ActiveRecord
+{
+    const SCENARIO_ADD = 'add';
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'brand_category';
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [['brand_id', 'category_id'], 'required'],
+            [['brand_id'], 'validateBrandId', 'on' => self::SCENARIO_ADD],
+            [['category_id'], 'validateCategoryId', 'on' => self::SCENARIO_ADD],
+        ];
+    }
+
+    /**
+     * Validates brand_id
+     *
+     * @param string $attribute brand_id to validate
+     * @return bool
+     */
+    public function validateBrandId($attribute)
+    {
+        if ($this->$attribute > 0
+            && GoodsBrand::findOne($this->$attribute)
+            && !self::find()->where([$attribute => $this->$attribute, 'category_id' => $this->category_id])->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates category_id
+     *
+     * @param string $attribute category_id to validate
+     * @return bool
+     */
+    public function validateCategoryId($attribute)
+    {
+        if ($this->$attribute > 0
+            && GoodsCategory::find()->where(['id' => $this->$attribute, 'deleted' => GoodsCategory::STATUS_OFFLINE])->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+}

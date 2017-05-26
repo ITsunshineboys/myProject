@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\BrandCategory;
 use app\models\GoodsBrand;
 use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
@@ -1338,28 +1339,70 @@ class MallController extends Controller
      *
      * @return string
      */
+
     public function actionBrandAdd()
     {
-        $category = new GoodsCategory;
-        $category->attributes = Yii::$app->request->post();
-
         $code = 1000;
 
-        $category->scenario = GoodsCategory::SCENARIO_ADD;
-        if (!$category->validate()) {
+        $brand = new GoodsBrand;
+        $brand->attributes = Yii::$app->request->post();
+        $categoryIds = trim(Yii::$app->request->post('category_ids', ''));
+        $categoryIds = trim($categoryIds, ',');
+        if (!$categoryIds) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$category->save()) {
+        $brand->scenario = GoodsBrand::SCENARIO_ADD;
+        if (!$brand->validate()) {print_r($brand->errors);
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$brand->save()) {
+            $transaction->rollBack();
+
             $code = 500;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        $categoryIdsArr = explode(',', $categoryIds);
+        foreach ($categoryIdsArr as $categoryId) {
+            $brandCategory = new BrandCategory;
+            $brandCategory->brand_id = $brand->id;
+            $brandCategory->category_id = $categoryId;
+
+            $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
+            if (!$brandCategory->validate()) {print_r($brandCategory->errors);
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$brandCategory->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $transaction->commit();
 
         return Json::encode([
             'code' => 200,
