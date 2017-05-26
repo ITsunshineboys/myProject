@@ -1509,6 +1509,10 @@ class MallController extends Controller
             $brand->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
         }
 
+        $brand->name = trim(Yii::$app->request->post('name', ''));
+        $brand->certificate = trim(Yii::$app->request->post('certificate', ''));
+        $brand->logo = trim(Yii::$app->request->post('logo', ''));
+
         $brand->scenario = GoodsBrand::SCENARIO_EDIT;
         if (!$brand->validate()) {
             return Json::encode([

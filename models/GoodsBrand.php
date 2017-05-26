@@ -70,11 +70,30 @@ class GoodsBrand extends ActiveRecord
         return [
             [['name', 'certificate', 'logo'], 'required'],
             [['name'], 'unique', 'on' => self::SCENARIO_ADD],
+            [['name'], 'validateName', 'on' => self::SCENARIO_EDIT],
             ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses']), 'on' => self::SCENARIO_REVIEW],
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
             ['review_status', 'validateReviewStatusEdit', 'on' => self::SCENARIO_EDIT],
         ];
+    }
+
+    /**
+     * Validates name when edit
+     *
+     * @param string $attribute name to validate
+     * @return bool
+     */
+    public function validateName($attribute)
+    {
+        if (!$this->isNewRecord && $this->isAttributeChanged($attribute)) {
+            if (self::find()->where([$attribute => $this->$attribute])->exists()) {
+                $this->addError($attribute);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
