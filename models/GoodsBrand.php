@@ -73,6 +73,7 @@ class GoodsBrand extends ActiveRecord
             ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses']), 'on' => self::SCENARIO_REVIEW],
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
+            ['review_status', 'validateReviewStatusEdit', 'on' => self::SCENARIO_EDIT],
         ];
     }
 
@@ -88,6 +89,22 @@ class GoodsBrand extends ActiveRecord
             self::REVIEW_STATUS_REJECT,
             self::REVIEW_STATUS_APPROVE
         ])) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates review_status when edit
+     *
+     * @param string $attribute review_status to validate
+     * @return bool
+     */
+    public function validateReviewStatusEdit($attribute)
+    {
+        if ($this->$attribute == self::REVIEW_STATUS_APPROVE) {
             return true;
         }
 

@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 class BrandCategory extends ActiveRecord
@@ -20,6 +21,24 @@ class BrandCategory extends ActiveRecord
     public static function tableName()
     {
         return 'brand_category';
+    }
+
+    /**
+     * Get category ids by brand id
+     *
+     * @param  int   $brandId brand id
+     * @return array
+     */
+    public static function categoryIdsByBrandId($brandId)
+    {
+        $brandId = (int)$brandId;
+        if ($brandId <=0 ) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select category_id from {{%brand_category}} where brand_id = {$brandId}")
+            ->queryColumn();
     }
 
     /**

@@ -46,7 +46,10 @@ class MallController extends Controller
         'category-enable-batch',
         'category-list-admin',
         'categories-manage-admin',
+        'category-add',
+        'category-edit',
         'brand-add',
+        'brand-review',
     ];
 
     /**
@@ -86,10 +89,12 @@ class MallController extends Controller
                     'recommend-disable-batch' => ['post',],
                     'review-supplier-category' => ['post',],
                     'category-add' => ['post',],
+                    'category-edit' => ['post',],
                     'category-status-toggle' => ['post',],
                     'category-disable-batch' => ['post',],
                     'category-enable-batch' => ['post',],
                     'brand-add' => ['post',],
+                    'brand-review' => ['post',],
                 ],
             ],
         ];
@@ -1356,7 +1361,7 @@ class MallController extends Controller
         }
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
-        if (!$brand->validate()) {print_r($brand->errors);
+        if (!$brand->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1382,7 +1387,7 @@ class MallController extends Controller
             $brandCategory->category_id = $categoryId;
 
             $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
-            if (!$brandCategory->validate()) {print_r($brandCategory->errors);
+            if (!$brandCategory->validate()) {
                 $transaction->rollBack();
 
                 return Json::encode([
@@ -1455,6 +1460,122 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Edit brand action
+     *
+     * @return string
+     */
+    public function actionBrandEdit()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $brand = GoodsBrand::findOne($id);
+        if (!$brand) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $categoryIds = trim(Yii::$app->request->post('category_ids', ''));
+        $categoryIds = trim($categoryIds, ',');
+        if (!$categoryIds) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($brand->status == GoodsBrand::STATUS_OFFLINE) {
+            $brand->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
+        }
+
+        $brand->scenario = GoodsBrand::SCENARIO_EDIT;
+        if (!$brand->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$brand->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $categoryIdsArr = explode(',', $categoryIds);
+        $categoryIdsArrOld = BrandCategory::categoryIdsByBrandId($brand->id);
+        if (count(array_diff($categoryIdsArrOld, $categoryIdsArr)) != 0
+            || count(array_diff($categoryIdsArr, $categoryIdsArrOld)) != 0
+        ) {
+            $deletedNum = BrandCategory::deleteAll(
+                [
+                    'brand_id' => $brand->id,
+                ]
+            );
+
+            if ($deletedNum == 0) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            foreach ($categoryIdsArr as $categoryId) {
+                $brandCategory = new BrandCategory;
+                $brandCategory->brand_id = $brand->id;
+                $brandCategory->category_id = $categoryId;
+
+                $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
+                if (!$brandCategory->validate()) {
+                    $transaction->rollBack();
+
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!$brandCategory->save()) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }
+        }
+
+        $transaction->commit();
 
         return Json::encode([
             'code' => 200,
