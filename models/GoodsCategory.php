@@ -30,6 +30,7 @@ class GoodsCategory extends ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
     const SCENARIO_TOGGLE_STATUS = 'toggle';
+    const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
 
     /**
      * @var array admin fields
@@ -294,6 +295,23 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Disable categories by ids
+     *
+     * @param int $ids category ids
+     */
+    public static function disableByIds(array $ids)
+    {
+        if ($ids) {
+            $ids = implode(',', $ids);
+            $where = 'id in(' . $ids . ')';
+            self::updateAll([
+                'deleted' => self::STATUS_ONLINE,
+                'offline_time' => time()
+            ], $where);
+        }
+    }
+
+    /**
      * Get goods categories(including subcategories) by pid
      *
      * @param int $pid parent id
@@ -349,7 +367,24 @@ class GoodsCategory extends ActiveRecord
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
             ['supplier_id', 'validateSupplierId', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
+            ['review_status', 'validateReviewStatusEdit', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_RESET_OFFLINE_REASON]],
         ];
+    }
+
+    /**
+     * Validates review_status when edit
+     *
+     * @param string $attribute review_status to validate
+     * @return bool
+     */
+    public function validateReviewStatusEdit($attribute)
+    {
+        if ($this->$attribute == self::REVIEW_STATUS_APPROVE) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
     }
 
     /**
@@ -590,22 +625,5 @@ class GoodsCategory extends ActiveRecord
 
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
-    }
-
-    /**
-     * Disable categories by ids
-     *
-     * @param int $ids category ids
-     */
-    public static function disableByIds(array $ids)
-    {
-        if ($ids) {
-            $ids = implode(',', $ids);
-            $where = 'id in(' . $ids . ')';
-            self::updateAll([
-                'deleted' => self::STATUS_ONLINE,
-                'offline_time' => time()
-            ], $where);
-        }
     }
 }

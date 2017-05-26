@@ -48,9 +48,11 @@ class MallController extends Controller
         'categories-manage-admin',
         'category-add',
         'category-edit',
+        'category-offline-reason-reset',
         'brand-add',
         'brand-review',
         'brand-edit',
+        'brand-offline-reason-reset',
     ];
 
     /**
@@ -97,6 +99,8 @@ class MallController extends Controller
                     'brand-add' => ['post',],
                     'brand-review' => ['post',],
                     'brand-edit' => ['post',],
+                    'brand-offline-reason-reset' => ['post',],
+                    'category-offline-reason-reset' => ['post',],
                 ],
             ],
         ];
@@ -1627,6 +1631,57 @@ class MallController extends Controller
         }
 
         if (!$brand->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Reset category offline reason action
+     *
+     * @return string
+     */
+    public function actionCategoryOfflineReasonReset()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $category = GoodsCategory::findOne($id);
+        if (!$category) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $category->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
+
+        $category->scenario = GoodsCategory::SCENARIO_RESET_OFFLINE_REASON;
+        if (!$category->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$category->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
