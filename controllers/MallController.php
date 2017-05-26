@@ -612,6 +612,7 @@ class MallController extends Controller
     public function actionRecommendAdminIndex()
     {
         $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
+        $districtCode = (int)Yii::$app->request->get('district_code', 0);
 
         if (!in_array($type, GoodsRecommend::$types)) {
             $code = 1000;
@@ -621,7 +622,15 @@ class MallController extends Controller
             ]);
         }
 
-        $where = 'delete_time = 0 and type = ' . $type;
+        if (!StringService::checkDistrict($districtCode)) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'delete_time = 0 and type = ' . $type . ' and district_code = ' . $districtCode;
 
         return Json::encode([
             'code' => 200,
