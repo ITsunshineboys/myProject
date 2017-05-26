@@ -1409,4 +1409,56 @@ class MallController extends Controller
             'msg' => 'OK',
         ]);
     }
+
+    /**
+     * Review brand action
+     *
+     * @return string
+     */
+    public function actionBrandReview()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $brand = GoodsBrand::findOne($id);
+        if (!$brand) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $brand->review_status = (int)Yii::$app->request->post('review_status', 0);
+        $brand->reason = trim(Yii::$app->request->post('reason', ''));
+
+        $brand->scenario = GoodsBrand::SCENARIO_REVIEW;
+        if (!$brand->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$brand->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
 }

@@ -14,8 +14,13 @@ use yii\db\ActiveRecord;
 class GoodsBrand extends ActiveRecord
 {
     const SCENARIO_ADD = 'add';
+    const SCENARIO_EDIT = 'edit';
+    const SCENARIO_REVIEW = 'review';
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
+    const REVIEW_STATUS_APPROVE = 2;
+    const REVIEW_STATUS_REJECT = 1;
+    const REVIEW_STATUS_NOT_REVIEWED = 0;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -65,7 +70,45 @@ class GoodsBrand extends ActiveRecord
         return [
             [['name', 'certificate', 'logo'], 'required'],
             [['name'], 'unique', 'on' => self::SCENARIO_ADD],
+            ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses']), 'on' => self::SCENARIO_REVIEW],
+            ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
+            ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
         ];
+    }
+
+    /**
+     * Validates review_status
+     *
+     * @param string $attribute review_status to validate
+     * @return bool
+     */
+    public function validateReviewStatus($attribute)
+    {
+        if (in_array($this->$attribute, [
+            self::REVIEW_STATUS_REJECT,
+            self::REVIEW_STATUS_APPROVE
+        ])) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Could review only once
+     *
+     * @param string $attribute approve_time and reject_time to validate
+     * @return bool
+     */
+    public function validateApproveTime($attribute)
+    {
+        if ($this->$attribute > 0 || $this->reject_time > 0) {
+            $this->addError($attribute);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -110,6 +153,19 @@ class GoodsBrand extends ActiveRecord
                     $this->user_name = $lhzz->nickname;
                     $this->review_status = self::REVIEW_STATUS_APPROVE;
                     $this->approve_time = $now;
+                }
+            } else {
+                if ($this->scenario == self::SCENARIO_REVIEW) {
+                    if ($this->review_status == self::REVIEW_STATUS_REJECT) {
+                        $this->reject_time = $now;
+                        $this->approve_time = 0;
+                    } elseif ($this->review_status == self::REVIEW_STATUS_APPROVE) {
+                        $this->approve_time = $now;
+                        $this->reject_time = 0;
+                        $this->status = self::STATUS_ONLINE;
+                        $this->online_time = $now;
+                    }
+                } elseif ($this->scenario == self::SCENARIO_EDIT) {
                 }
             }
 
