@@ -21,6 +21,8 @@ class Goods extends ActiveRecord
     const STATUS_ONLINE = 2;
     const STATUS_DELETED = 3;
 
+    const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
+
     /**
      * @var array online status list
      */
