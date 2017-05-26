@@ -50,6 +50,7 @@ class MallController extends Controller
         'category-edit',
         'brand-add',
         'brand-review',
+        'brand-edit',
     ];
 
     /**
@@ -95,6 +96,7 @@ class MallController extends Controller
                     'category-enable-batch' => ['post',],
                     'brand-add' => ['post',],
                     'brand-review' => ['post',],
+                    'brand-edit' => ['post',],
                 ],
             ],
         ];
