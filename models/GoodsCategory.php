@@ -214,6 +214,10 @@ class GoodsCategory extends ActiveRecord
             return false;
         }
 
+        if (self::find()->where('review_status <> ' . self::REVIEW_STATUS_APPROVE . ' and ' . $where)->count()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -239,6 +243,10 @@ class GoodsCategory extends ActiveRecord
         }
 
         if (self::find()->where('deleted = ' . self::STATUS_OFFLINE . ' and ' . $where)->count()) {
+            return false;
+        }
+
+        if (self::find()->where('review_status <> ' . self::REVIEW_STATUS_APPROVE . ' and ' . $where)->count()) {
             return false;
         }
 
@@ -367,7 +375,7 @@ class GoodsCategory extends ActiveRecord
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
             ['supplier_id', 'validateSupplierId', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
-            ['review_status', 'validateReviewStatusEdit', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_RESET_OFFLINE_REASON]],
+            ['review_status', 'validateReviewStatusEdit', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_RESET_OFFLINE_REASON, self::SCENARIO_TOGGLE_STATUS]],
         ];
     }
 

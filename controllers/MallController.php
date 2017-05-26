@@ -1062,6 +1062,14 @@ class MallController extends Controller
             $model->offline_reason = Yii::$app->request->post('offline_reason', '');
         }
 
+        $model->scenario = GoodsCategory::SCENARIO_TOGGLE_STATUS;
+        if (!$model->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         if (!$model->save()) {
             $code = 500;
             return Json::encode([
