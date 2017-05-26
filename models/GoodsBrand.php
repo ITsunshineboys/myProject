@@ -16,6 +16,7 @@ class GoodsBrand extends ActiveRecord
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
+    const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const REVIEW_STATUS_APPROVE = 2;
@@ -74,7 +75,7 @@ class GoodsBrand extends ActiveRecord
             ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses']), 'on' => self::SCENARIO_REVIEW],
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
-            ['review_status', 'validateReviewStatusEdit', 'on' => self::SCENARIO_EDIT],
+            ['review_status', 'validateReviewStatusEdit', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_RESET_OFFLINE_REASON]],
         ];
     }
 
