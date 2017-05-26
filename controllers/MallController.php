@@ -560,7 +560,23 @@ class MallController extends Controller
             ]);
         }
 
-        $where = 'delete_time > 0 and type = ' . $type;
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend_history' => [
+                    'total' => 0,
+                    'details' => []
+                ]
+            ],
+        ];
+
+        $districtCode = (int)Yii::$app->request->get('district_code', 0);
+        if (!StringService::checkDistrict($districtCode)) {
+            return Json::encode($ret);
+        }
+
+        $where = 'delete_time = 0 and type = ' . $type . ' and district_code = ' . $districtCode;
 
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -592,16 +608,9 @@ class MallController extends Controller
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT);
 
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'recommend_history' => [
-                    'total' => (int)GoodsRecommend::find()->where($where)->asArray()->count(),
-                    'details' => GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, $page, $size)
-                ]
-            ],
-        ]);
+        $ret['data']['recommend_history']['total'] = (int)GoodsRecommend::find()->where($where)->asArray()->count();
+        $ret['data']['recommend_history']['details'] = GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, $page, $size);
+        return Json::encode($ret);
     }
 
     /**
@@ -622,25 +631,24 @@ class MallController extends Controller
             ]);
         }
 
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend_history' => [
+                    'details' => []
+                ]
+            ],
+        ];
+
         if (!StringService::checkDistrict($districtCode)) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            return Json::encode($ret);
         }
 
         $where = 'delete_time = 0 and type = ' . $type . ' and district_code = ' . $districtCode;
 
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'recommend_admin_index' => [
-                    'details' => GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, 1, GoodsRecommend::PAGE_SIZE_DEFAULT_ADMIN_INDEX)
-                ]
-            ],
-        ]);
+        $ret['data']['recommend_history']['details'] = GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, 1, GoodsRecommend::PAGE_SIZE_DEFAULT_ADMIN_INDEX);
+        return Json::encode($ret);
     }
 
     /**
