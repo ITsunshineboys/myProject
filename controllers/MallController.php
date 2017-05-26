@@ -53,6 +53,7 @@ class MallController extends Controller
         'brand-review',
         'brand-edit',
         'brand-offline-reason-reset',
+        'brand-status-toggle',
     ];
 
     /**
@@ -96,11 +97,12 @@ class MallController extends Controller
                     'category-status-toggle' => ['post',],
                     'category-disable-batch' => ['post',],
                     'category-enable-batch' => ['post',],
+                    'category-offline-reason-reset' => ['post',],
                     'brand-add' => ['post',],
                     'brand-review' => ['post',],
                     'brand-edit' => ['post',],
                     'brand-offline-reason-reset' => ['post',],
-                    'category-offline-reason-reset' => ['post',],
+                    'brand-status-toggle' => ['post',],
                 ],
             ],
         ];
@@ -1700,6 +1702,73 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Toggle brand status action.
+     *
+     * @return string
+     */
+    public function actionBrandStatusToggle()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $code = 1000;
+
+        if (!$id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $model = GoodsBrand::findOne($id);
+        if (!$model) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $now = time();
+        if ($model->status == GoodsBrand::STATUS_OFFLINE) {
+            $model->status = GoodsBrand::STATUS_ONLINE;
+            $model->online_time = $now;
+        } else {
+            $model->status = GoodsBrand::STATUS_OFFLINE;
+            $model->offline_time = $now;
+            $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+        }
+
+        $model->scenario = GoodsBrand::SCENARIO_TOGGLE_STATUS;
+        if (!$model->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$model->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
         ]);
     }
 }
