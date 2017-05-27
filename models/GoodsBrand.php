@@ -28,7 +28,7 @@ class GoodsBrand extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'name', 'logo', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'user_name', 'status'];
+    public static $adminFields = ['id', 'name', 'logo', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'user_name', 'status'];
 
     /**
      * @var array online status list
@@ -165,15 +165,15 @@ class GoodsBrand extends ActiveRecord
             ->all();
         foreach ($brandList as &$brand) {
             if (isset($brand['create_time'])) {
-                $brand['create_time'] = date('Y-m-d', $brand['create_time']);
+                $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
             }
 
             if (isset($brand['online_time'])) {
-                $brand['online_time'] = date('Y-m-d', $brand['online_time']);
+                $brand['online_time'] = date('Y-m-d H:i', $brand['online_time']);
             }
 
             if (isset($brand['offline_time'])) {
-                $brand['offline_time'] = date('Y-m-d', $brand['offline_time']);
+                $brand['offline_time'] = date('Y-m-d H:i', $brand['offline_time']);
             }
 
             if (isset($brand['review_status'])) {
@@ -182,6 +182,20 @@ class GoodsBrand extends ActiveRecord
 
             if (isset($brand['status'])) {
                 $brand['status'] = self::$statuses[$brand['status']];
+            }
+
+            if (isset($brand['approve_time']) || isset($brand['reject_time'])) {
+                $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
+            }
+
+            if (isset($brand['supplier_name']) || isset($brand['user_name'])) {
+                $brand['applicant'] = $brand['supplier_name']  ?? $brand['user_name'];
+                if (isset($brand['supplier_name'])) {
+                    unset($brand['supplier_name']);
+                }
+                if (isset($brand['user_name'])) {
+                    unset($brand['user_name']);
+                }
             }
         }
 

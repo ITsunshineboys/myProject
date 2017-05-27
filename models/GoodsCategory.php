@@ -162,15 +162,15 @@ class GoodsCategory extends ActiveRecord
             ->all();
         foreach ($categoryList as &$category) {
             if (isset($category['create_time'])) {
-                $category['create_time'] = date('Y-m-d', $category['create_time']);
+                $category['create_time'] = date('Y-m-d H:i', $category['create_time']);
             }
 
             if (isset($category['online_time'])) {
-                $category['online_time'] = date('Y-m-d', $category['online_time']);
+                $category['online_time'] = date('Y-m-d H:i', $category['online_time']);
             }
 
             if (isset($category['offline_time'])) {
-                $category['offline_time'] = date('Y-m-d', $category['offline_time']);
+                $category['offline_time'] = date('Y-m-d H:i', $category['offline_time']);
             }
 
             if (isset($category['level'])) {
@@ -187,7 +187,7 @@ class GoodsCategory extends ActiveRecord
             }
 
             if (isset($category['approve_time']) || isset($category['reject_time'])) {
-                $category['review_time'] = date('Y-m-d', $category['approve_time'] > 0 ? $category['approve_time'] : $category['reject_time']);
+                $category['review_time'] = date('Y-m-d H:i', $category['approve_time'] > 0 ? $category['approve_time'] : $category['reject_time']);
             }
 
             if (isset($category['supplier_name']) || isset($category['user_name'])) {
