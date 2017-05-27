@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\AppliancesAssort;
 use app\models\BasisDecoration;
 use app\models\BasisMaterial;
+use app\models\CircuitryReconstruction;
 use app\models\DecorationList;
 use app\models\Effect;
 use app\models\EffectPicture;
@@ -21,6 +22,8 @@ use app\models\Series;
 use app\models\SoftOutfitAssort;
 use app\models\Style;
 use app\models\StylePicture;
+use app\models\WaterproofReconstruction;
+use app\models\WaterwayReconstruction;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
@@ -204,12 +207,16 @@ class OwnerController extends Controller
         ]);
     }
 
+    /**
+     * 弱电价格
+     * @return string
+     */
     public function actionWeakCurrent()
     {
         //基础装修
 //        $post = \Yii::$app->request->post();
         $post = [
-            'effect_id' => 1,
+//            'effect_id' => 1,
             'room' => 1,
             'hall' => 1,
             'window' => 2,
@@ -232,31 +239,75 @@ class OwnerController extends Controller
         $basis_decoration = BasisDecoration::find()->all();
         //人工一天价格
         $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
-        //查询弱电所需要材料
-        $electric_wire = '电线';
-        $weak_current = [];
-        $wire = Goods::priceDetail(3, $electric_wire);
-        $weak_current['wire'] = BasisDecorationService::wire($wire['platform_price']);
-        $pipe = '线管';
-        $wire_pipe = Goods::priceDetail(3, $pipe);
-        $weak_current['pipe'] = BasisDecorationService::wire($wire_pipe['platform_price']);
-        $box = '底盒';
-        $wire_box = Goods::priceDetail(3, $box);
-        $weak_current['box'] = $wire_box['platform_price'];
-
-        //弱电 价格
-        if (!empty($post['effect_id'])) {
+        if(empty($post['effect_id'])){
+            //查询弱电所需要材料
+            $electric_wire = '电线';
+            $weak_current = [];
+            $wire = Goods::priceDetail(3, $electric_wire);
+            $weak_current [] = BasisDecorationService::wire($wire['platform_price']);
+            $pipe = '线管';
+            $wire_pipe = Goods::priceDetail(3, $pipe);
+            $weak_current [] = BasisDecorationService::wire($wire_pipe['platform_price']);
+            $box = '底盒';
+            $wire_box = Goods::priceDetail(3, $box);
+            $weak_current [] = $wire_box['platform_price'];
+        }else{
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $weak = CircuitryReconstruction::findByAll($decoration_list);
+            $weak_current = [];
+            $goods = Goods::findQueryAll($weak);
+            foreach ($weak as $single)
+            {
+               if($single['material'] == '电线')
+               {
+                   foreach ($goods as $unit_price)
+                   {
+                       if($single['goods_id'] == $unit_price['id']){
+                           $electric_wire = BasisDecorationService::wire($unit_price['platform_price']);
+                           $weak_current [] = $electric_wire;
+                       }
+                   }
+               }elseif ($single['material'] == '线管')
+               {
+                   foreach ($goods as $unit_price)
+                   {
+                       if($single['goods_id'] == $unit_price['id']){
+                           $electric_wire = BasisDecorationService::wire($unit_price['platform_price']);
+                           $weak_current [] = $electric_wire;
+                       }
+                   }
+               }elseif ($single['material'] == '底盒'){
+                   foreach ($goods as $unit_price)
+                   {
+                       if($single['goods_id'] == $unit_price['id']){
+                           $weak_current [] = $unit_price['platform_price'];
+                       }
+                   }
+               }elseif ($single['material'] !== '底盒' && $single['material'] !== '线管' && $single['material'] !== '电线')
+               {
+                   foreach ($goods as $unit_price)
+                   {
+                       if($single['goods_id'] == $unit_price['id'])
+                       {
+                           $weak_current [] = $unit_price['platform_price'];
+                       }
+                   }
+               }
+            }
+        }
+        if (!empty($post['effect_id']))
+        {
             //查询所有弱电点位
-            $effect_id = Effect::find()->where(['id' => $post['effect_id']])->all();
-            $points = Points::weakLocation($effect_id[0]['id']);
+            $effect_id = Effect::find()->where(['id' => $post['effect_id']])->one();
+            $points = Points::weakLocation($effect_id['id']);
         } else {
-            $effect = Effect::conditionQuery($post);
             //查询所有弱电点位
+            $effect = Effect::conditionQuery($post);
             $points = Points::weakLocation($effect['id']);
         }
 
         //基础弱电总价格
-        $weak_current_price = ceil(BasisDecorationService::formula($arr, $points, $weak_current));
+        $weak_current_price = ceil(BasisDecorationService::formula($arr, $points,$weak_current));
 
         return Json::encode([
             'code' => 200,
@@ -267,12 +318,16 @@ class OwnerController extends Controller
         ]);
     }
 
+    /**
+     * 强电价格
+     * @return string
+     */
     public function actionStrongCurrent()
     {
         //基础装修
 //        $post = \Yii::$app->request->post();
         $post = [
-//            'effect_id' => 1,
+            'effect_id' => 1,
             'room' => 1,
             'hall' => 1,
             'window' => 2,
@@ -298,27 +353,55 @@ class OwnerController extends Controller
             $electric_wire = '电线';
             $strong_current = [];
             $strong = Goods::priceDetail(3, $electric_wire);
-            $strong_current['wire'] = BasisDecorationService::wire($strong['platform_price']);
+            $strong_current [] = BasisDecorationService::wire($strong['platform_price']);
             $pipe = '线管';
             $wire_pipe = Goods::priceDetail(3, $pipe);
-            $strong_current['pipe'] = BasisDecorationService::wire($wire_pipe['platform_price']);
+            $strong_current [] = BasisDecorationService::wire($wire_pipe['platform_price']);
             $box = '底盒';
             $strong_box = Goods::priceDetail(3, $box);
-            $strong_current['box'] = $strong_box['platform_price'];
+            $strong_current [] = $strong_box['platform_price'];
         }else{
-            $basis_decoration = BasisDecoration::find()->all();
-            $decoration_list = DecorationList::findByIds($post['series'],$post['style']);
-            $basis_material  = BasisMaterial::material($decoration_list['id'],$basis_decoration[1]['id']);
-            $strong_current = Goods::findQueryAll($basis_material,$post['city']);
-            foreach ($strong_current as $unit_price)
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $weak = CircuitryReconstruction::findByAll($decoration_list);
+            $strong_current = [];
+            $goods = Goods::findQueryAll($weak);
+            foreach ($weak as $single)
             {
-                    if($unit_price['title'] == '电线' ){
-                        $electric_wire = BasisDecorationService::wire($unit_price['platform_price']);
-                        $strong_current[1]['platform_price'] = $electric_wire;
-                    }elseif($unit_price['title'] == '线管' ){
-                        $electric_wire = BasisDecorationService::wire($unit_price['platform_price']);
-                        $strong_current[2]['platform_price'] = $electric_wire;
+                if($single['material'] == '电线')
+                {
+                    foreach ($goods as $unit_price)
+                    {
+                        if($single['goods_id'] == $unit_price['id']){
+                            $electric_wire = BasisDecorationService::wire($unit_price['platform_price']);
+                            $strong_current [] = $electric_wire;
+                        }
                     }
+                }elseif ($single['material'] == '线管')
+                {
+                    foreach ($goods as $unit_price)
+                    {
+                        if($single['goods_id'] == $unit_price['id']){
+                            $electric_wire = BasisDecorationService::wire($unit_price['platform_price']);
+                            $strong_current [] = $electric_wire;
+                        }
+                    }
+                }elseif ($single['material'] == '底盒'){
+                    foreach ($goods as $unit_price)
+                    {
+                        if($single['goods_id'] == $unit_price['id']){
+                            $strong_current [] = $unit_price['platform_price'];
+                        }
+                    }
+                }elseif ($single['material'] !== '底盒' && $single['material'] !== '线管' && $single['material'] !== '电线')
+                {
+                    foreach ($goods as $unit_price)
+                    {
+                        if($single['goods_id'] == $unit_price['id'])
+                        {
+                            $strong_current [] = $unit_price['platform_price'];
+                        }
+                    }
+                }
             }
         }
         if (!empty($post['effect_id'])) {
@@ -332,8 +415,9 @@ class OwnerController extends Controller
             $all_place = Points::find()->where($effect['id'])->all();
             $powerful_location = PointsDetails::AllQuantity($all_place);
         }
+
         //强电总价格
-        $powerful_current = ceil(BasisDecorationService::formula($arr, $powerful_location, $strong_current));
+        $powerful_current = ceil(BasisDecorationService::formula($arr, $powerful_location,$strong_current));
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
@@ -343,12 +427,12 @@ class OwnerController extends Controller
         ]);
     }
 
-    public function actionWaterproof()
+    public function actionWaterway()
     {
         //基础装修
 //        $post = \Yii::$app->request->post();
         $post = [
-            'effect_id' => 1,
+//            'effect_id' => 1,
             'room' => 1,
             'hall' => 1,
             'window' => 2,
@@ -361,7 +445,102 @@ class OwnerController extends Controller
             'province' => '四川',
             'city' => '成都'
         ];
+        $arr = [];
+        //每天水电完成点位
+        $arr['day_standard'] = $post['0'] ?? 5;
+        $arr['profit'] = $post['1'] ?? 0.7;
+        $arr['worker_kind'] = '水电';
+        //人工一天价格
+        $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        //查询水路所需要材料
+        if(empty($post['effect_id']))
+        {
+            //ppr热水管
+            $pipe = 'PPR热水管';
+            $waterway = [];
+            $ppr = Goods::priceDetail(3,$pipe);
+            $waterway [] = BasisDecorationService::wire($ppr['platform_price'],4,0.5);
+            //pvc管
+            $pvc_pipe ='pvc管';
+            $pvc = Goods::priceDetail(3,$pvc_pipe);
+            $waterway [] = BasisDecorationService::wire($pvc['platform_price'],4,0.5);
+        }else{
 
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $weak = WaterwayReconstruction::findByAll($decoration_list);
+            $waterway = [];
+            $goods = Goods::findQueryAll($weak);
+            foreach ($weak as $single)
+            {
+                if($single['material'] == 'PPR热水管')
+                {
+                    foreach ($goods as $unit_price)
+                    {
+                        if ($single['goods_id'] == $unit_price['id'])
+                        {
+                            $electric_wire = BasisDecorationService::wire($unit_price['platform_price'],4,0.5);
+                            $waterway [] = $electric_wire;
+                        }
+                    }
+                }elseif ($single['material'] == 'pvc管')
+                {
+                    foreach ($goods as $unit_price)
+                    {
+                        if ($single['goods_id'] == $unit_price['id'])
+                        {
+
+                            $electric_wire = BasisDecorationService::wire($unit_price['platform_price'],4,0.5);
+                            $waterway [] = $electric_wire;
+                        }
+                    }
+                }elseif ($single['material'] !== 'PPR热水管' && $single['material'] !== 'pvc管')
+                {
+                    foreach ($goods as $unit_price)
+                    {
+                        if($single['goods_id'] == $unit_price['id'])
+                        {
+                            $waterway [] = $unit_price['platform_price'];
+                        }
+                    }
+                }
+            }
+        }
+        if (!empty($post['effect_id'])) {
+            //查询所有水路点位
+            $effect_id = Effect::find()->where(['id' => $post['effect_id']])->all();
+            $points = Points::waterwayPoints($effect_id);
+        } else {
+            $effect = Effect::conditionQuery($post);
+            $points = Points::waterwayPoints($effect['id']);
+        }
+
+        $waterway_remould = ceil(BasisDecorationService::formula($arr,$points,$waterway));
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'waterway_remould_price' => $waterway_remould,
+            ]
+        ]);
+    }
+
+    public function actionWaterproof()
+    {
+//        $post = \Yii::$app->request->post();
+        $post = [
+//            'effect_id' => 1,
+            'room' => 1,
+            'hall' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 62,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 1,
+            'series' => 1,
+            'province' => '四川',
+            'city' => '成都'
+        ];
         $arr = [];
         //每天水电完成点位
         $arr['day_standard'] = $post['0'] ?? 40;
@@ -370,26 +549,22 @@ class OwnerController extends Controller
         //人工一天价格
         $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
 
-//        //水路 价格
-//        if(!empty($post['effect_id'])){
-//            //查询水路所需要材料
-//            $decoration_list = DecorationList::findByIds($post['series'],$post['style']);
-//            $basis_material  = BasisMaterial::material($decoration_list['id'],$basis_decoration[3]['id']);
-//
-//            //查询水路所需点位
-//            $effect = Effect::find()->where(['id'=>$post['effect_id']])->all();
-//            $points = Points::waterwayPoints($effect[0]['id']);
-//        }else{
-//            //查询水路所需要材料
-//            $effect = Effect::conditionQuery($post);
-//            $decoration_list = DecorationList::findByIds($effect['series_id'],$effect['style_id']);
-//            $basis_material  = BasisMaterial::material($decoration_list['id'],$basis_decoration[3]['id']);
-//
-//            //查询水路所需点位
-//            $points = Points::waterwayPoints($effect['id']);
-//        }
-//            $water_goods = Goods::priceDetail($basis_material);
-//            $water_total = ceil(BasisDecorationService::formula($arr,$points,$water_goods));
+        //防水所需材料
+        if(!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $weak = WaterproofReconstruction::findByAll($decoration_list);
+            $waterproof = Goods::findQueryAll($weak);
+        }else{
+            //ppr热水管
+            $pipe = '防水';
+            $goods = Goods::priceDetail(3,$pipe);
+            $waterproof = BasisDecorationService::wire($goods['platform_price'],25,1.25);
+        }
+
+        //防水所需面积
+        if(empty($post['effect_id'])){
+
+        }
     }
 
     /**

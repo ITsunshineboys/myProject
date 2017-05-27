@@ -19,9 +19,15 @@ class BasisDecorationService
     {
         if (!empty($arr))
         {
+            $unit_price = [];
+
+            foreach ($unitPrice as $price)
+            {
+                $unit_price [] = $price;
+            }
             // 材料费
             $materials_expenses =  0;
-            foreach ($unitPrice as $k=>$v)
+            foreach ($unit_price as $k=>$v)
             {
                 $materials_expenses += $v * $quantity;
             }
@@ -45,8 +51,9 @@ class BasisDecorationService
         //电线单位换算
         if(!$str == null){
             $wire = ($str / $norms)*$dot;
+            $int = (int)$wire;
         }
-        return $wire;
+        return $int;
     }
 
     public static function pointsCalculate()

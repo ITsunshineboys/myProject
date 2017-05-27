@@ -18,10 +18,11 @@ class DecorationList extends ActiveRecord
         return 'decoration_list';
     }
 
-    public static function findByIds($series ='',$style = '')
+    public static function findById($id = '')
     {
-        if ($series && $style){
-            $decoration_list = self::find()->where(['and',['series_id'=>$series],['style_id'=>$style]])->one();
+        if ($id){
+            $decoration = self::find()->where(['effect_id'=>$id])->one();
+            $decoration_list  = $decoration['id'];
         }
         return $decoration_list;
     }
