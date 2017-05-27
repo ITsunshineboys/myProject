@@ -54,6 +54,7 @@ class MallController extends Controller
         'brand-edit',
         'brand-offline-reason-reset',
         'brand-status-toggle',
+        'brand-disable-batch',
     ];
 
     /**
@@ -103,6 +104,7 @@ class MallController extends Controller
                     'brand-edit' => ['post',],
                     'brand-offline-reason-reset' => ['post',],
                     'brand-status-toggle' => ['post',],
+                    'brand-disable-batch' => ['post',],
                 ],
             ],
         ];
@@ -1360,7 +1362,6 @@ class MallController extends Controller
      *
      * @return string
      */
-
     public function actionBrandAdd()
     {
         $code = 1000;
@@ -1759,6 +1760,62 @@ class MallController extends Controller
         }
 
         if (!$model->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Disable brand records in batches action.
+     *
+     * @return string
+     */
+    public function actionBrandDisableBatch()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canDisable = GoodsBrand::canDisable($ids);
+        if (!$canDisable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        if (!GoodsBrand::updateAll([
+            'status' => GoodsBrand::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_reason' => Yii::$app->request->post('offline_reason', '')
+        ], $where)
+        ) {
             $code = 500;
             return Json::encode([
                 'code' => $code,

@@ -65,6 +65,38 @@ class GoodsBrand extends ActiveRecord
     }
 
     /**
+     * Check if can disable brand records
+     *
+     * @param  string $ids brand record ids separated by commas
+     * @return bool
+     */
+    public static function canDisable($ids)
+    {
+        $ids = trim($ids);
+        $ids = trim($ids, ',');
+
+        if (!$ids) {
+            return false;
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        if (self::find()->where($where)->count() != count(explode(',', $ids))) {
+            return false;
+        }
+
+        if (self::find()->where('status = ' . self::STATUS_OFFLINE . ' and ' . $where)->count()) {
+            return false;
+        }
+
+        if (self::find()->where('review_status <> ' . self::REVIEW_STATUS_APPROVE . ' and ' . $where)->count()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
