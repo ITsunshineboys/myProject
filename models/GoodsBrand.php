@@ -23,6 +23,20 @@ class GoodsBrand extends ActiveRecord
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
     const REVIEW_STATUS_NOT_REVIEWED = 0;
+    const PAGE_SIZE_DEFAULT = 12;
+
+    /**
+     * @var array admin fields
+     */
+    public static $adminFields = ['id', 'name', 'logo', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'user_name', 'status'];
+
+    /**
+     * @var array online status list
+     */
+    public static $statuses = [
+        self::STATUS_OFFLINE => '已下架',
+        self::STATUS_ONLINE => '已上架',
+    ];
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -126,6 +140,52 @@ class GoodsBrand extends ActiveRecord
         }
 
         return true;
+    }
+
+    /**
+     * Get brand list
+     *
+     * @param  array $where search condition
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  array $orderBy order by fields default sold_number desc
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
+    {
+        $offset = ($page - 1) * $size;
+        $brandList = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        foreach ($brandList as &$brand) {
+            if (isset($brand['create_time'])) {
+                $brand['create_time'] = date('Y-m-d', $brand['create_time']);
+            }
+
+            if (isset($brand['online_time'])) {
+                $brand['online_time'] = date('Y-m-d', $brand['online_time']);
+            }
+
+            if (isset($brand['offline_time'])) {
+                $brand['offline_time'] = date('Y-m-d', $brand['offline_time']);
+            }
+
+            if (isset($brand['review_status'])) {
+                $brand['review_status'] = Yii::$app->params['reviewStatuses'][$brand['review_status']];
+            }
+
+            if (isset($brand['status'])) {
+                $brand['status'] = self::$statuses[$brand['status']];
+            }
+        }
+
+        return $brandList;
     }
 
     /**
@@ -243,7 +303,7 @@ class GoodsBrand extends ActiveRecord
                     $this->supplier_id = $supplier->id;
                     $this->supplier_name = $supplier->nickname;
                 } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
-                    $this->deleted = self::STATUS_ONLINE;
+                    $this->status = self::STATUS_OFFLINE;
                     $this->offline_time = $now;
 
                     $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();

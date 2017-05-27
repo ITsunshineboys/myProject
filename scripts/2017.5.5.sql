@@ -84,6 +84,8 @@ CREATE TABLE `goods_brand` (
   `certificate` varchar(255) not null DEFAULT '',
   `supplier_id` int(11) unsigned not null default 0,
   `supplier_name` varchar(25) not null DEFAULT '',
+  `user_id` int(11) unsigned not null DEFAULT 0,
+  `user_name` varchar(20) not null DEFAULT '',
   `approve_time` int unsigned not null DEFAULT 0,
   `reject_time` int unsigned not null DEFAULT 0,
   `reason` varchar(100) not null DEFAULT '' comment '审核原因',

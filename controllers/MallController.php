@@ -56,6 +56,7 @@ class MallController extends Controller
         'brand-status-toggle',
         'brand-disable-batch',
         'brand-enable-batch',
+        'brand-review-list',
     ];
 
     /**
@@ -1883,6 +1884,72 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Brand review list action
+     *
+     * @return string
+     */
+    public function actionBrandReviewList()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = 1000;
+
+        $reviewStatus = (int)Yii::$app->request->get('review_status', GoodsCategory::REVIEW_STATUS_NOT_REVIEWED);
+        if (!in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = "review_status = {$reviewStatus}";
+
+        $startTime = trim(Yii::$app->request->get('start_time', ''));
+        $endTime = trim(Yii::$app->request->get('end_time', ''));
+
+        if (($startTime && !StringService::checkDate($startTime))
+            || ($endTime && !StringService::checkDate($endTime))
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $endTime && $endTime .= ' 23:59:59';
+
+        if ($startTime) {
+            $startTime = strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsBrand::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category_review_list' => [
+                    'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
+                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size)
+                ]
+            ],
         ]);
     }
 }
