@@ -55,6 +55,7 @@ class MallController extends Controller
         'brand-offline-reason-reset',
         'brand-status-toggle',
         'brand-disable-batch',
+        'brand-enable-batch',
     ];
 
     /**
@@ -105,6 +106,7 @@ class MallController extends Controller
                     'brand-offline-reason-reset' => ['post',],
                     'brand-status-toggle' => ['post',],
                     'brand-disable-batch' => ['post',],
+                    'brand-enable-batch' => ['post',],
                 ],
             ],
         ];
