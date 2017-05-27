@@ -35,7 +35,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'user_name', 'deleted'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'user_name', 'deleted'];
 
     /**
      * @var array online status list
@@ -182,7 +182,22 @@ class GoodsCategory extends ActiveRecord
             }
 
             if (isset($category['deleted'])) {
-                $category['deleted'] = self::$statuses[1 - $category['deleted']];
+                $category['status'] = self::$statuses[1 - $category['deleted']];
+                unset($category['deleted']);
+            }
+
+            if (isset($category['approve_time']) || isset($category['reject_time'])) {
+                $category['review_time'] = date('Y-m-d', $category['approve_time'] > 0 ? $category['approve_time'] : $category['reject_time']);
+            }
+
+            if (isset($category['supplier_name']) || isset($category['user_name'])) {
+                $category['applicant'] = $category['supplier_name']  ?? $category['user_name'];
+                if (isset($category['supplier_name'])) {
+                    unset($category['supplier_name']);
+                }
+                if (isset($category['user_name'])) {
+                    unset($category['user_name']);
+                }
             }
         }
 
