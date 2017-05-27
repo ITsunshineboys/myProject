@@ -58,6 +58,7 @@ class MallController extends Controller
         'brand-disable-batch',
         'brand-enable-batch',
         'brand-review-list',
+        'brand-list-admin',
     ];
 
     /**
@@ -1947,6 +1948,74 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'brand_review_list' => [
+                    'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
+                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size)
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Admin brand list action
+     *
+     * @return string
+     */
+    public function actionBrandListAdmin()
+    {
+        $code = 1000;
+
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'review_status = ' . GoodsBrand::REVIEW_STATUS_APPROVE;
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+            if (!$supplier) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $where .= " and supplier_id = {$supplier->id}";
+        } else {
+            $status = (int)Yii::$app->request->get('status', GoodsBrand::STATUS_ONLINE);
+            if (!in_array($status, array_keys(GoodsBrand::$statuses))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $where .= " and supplier_id = 0 and status = {$status}";
+
+            $pid = (int)Yii::$app->request->get('pid', 0);
+            if ($pid > 0) {
+                $categoryIds = GoodsCategory::level23Ids($pid);
+                if (!$categoryIds) {
+                    $where .= ' and 0';
+                } else {
+                    $ids = BrandCategory::brandIdsByCategoryIds($categoryIds);
+                    $where .= ' and id in (' . implode(',', $ids) . ')';
+                }
+            }
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsBrand::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'brand_list_admin' => [
                     'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
                     'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size)
                 ]

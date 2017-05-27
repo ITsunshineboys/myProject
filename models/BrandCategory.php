@@ -42,6 +42,39 @@ class BrandCategory extends ActiveRecord
     }
 
     /**
+     * Get brand ids by category ids
+     *
+     * @param  array $categoryIds category ids
+     * @return array
+     */
+    public static function brandIdsByCategoryIds(array $categoryIds)
+    {
+        $brandIds = [];
+        foreach ($categoryIds as $categoryId) {
+            $brandIds = array_merge($brandIds, self::brandIdsByCategoryId($categoryId));
+        }
+        return array_unique($brandIds);
+    }
+
+    /**
+     * Get brand ids by category id
+     *
+     * @param  int   $categoryId category id
+     * @return array
+     */
+    public static function brandIdsByCategoryId($categoryId)
+    {
+        $categoryId = (int)$categoryId;
+        if ($categoryId <=0 ) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select brand_id from {{%brand_category}} where category_id = {$categoryId}")
+            ->queryColumn();
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
