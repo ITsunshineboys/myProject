@@ -192,8 +192,8 @@ class GoodsCategory extends ActiveRecord
     /**
      * Check if can disable category records
      *
-     * @param string $ids category record ids separated by commas
-     * @return mixed bool
+     * @param  string $ids category record ids separated by commas
+     * @return bool
      */
     public static function canDisable($ids)
     {
@@ -224,8 +224,8 @@ class GoodsCategory extends ActiveRecord
     /**
      * Check if can enable category records
      *
-     * @param string $ids category record ids separated by commas
-     * @return mixed bool
+     * @param  string $ids category record ids separated by commas
+     * @return bool
      */
     public static function canEnable($ids)
     {
