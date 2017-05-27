@@ -1828,4 +1828,59 @@ class MallController extends Controller
             'msg' => 'OK'
         ]);
     }
+
+    /**
+     * Enable brand records in batches action.
+     *
+     * @return string
+     */
+    public function actionBrandEnableBatch()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canEnable = GoodsBrand::canEnable($ids);
+        if (!$canEnable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        if (!GoodsBrand::updateAll([
+            'status' => GoodsBrand::STATUS_ONLINE,
+            'online_time' => time()
+        ], $where)
+        ) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
 }
