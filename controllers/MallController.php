@@ -1946,7 +1946,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category_review_list' => [
+                'brand_review_list' => [
                     'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
                     'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size)
                 ]
