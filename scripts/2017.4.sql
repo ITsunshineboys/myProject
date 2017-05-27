@@ -6,7 +6,7 @@ create table role (
 ) default charset = utf8;
 
 insert into role(id, name, admin_module, detail_table) values
-(1, '公司后台管理员', 'lhzz', ''),
+(1, '公司后台管理员', 'lhzz', 'lhzz'),
 (2, '工人', 'worker', 'worker'),
 (3, '设计师', 'designer', 'designer'),
 (4, '项目经理', 'manager', 'project_manager'),
@@ -138,3 +138,10 @@ create table work_type (
   `name` varchar(25) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `lhzz` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned not null default 0,
+  `nickname` varchar(25) not null DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -25,16 +25,17 @@ class GoodsCategory extends ActiveRecord
     const PAGE_SIZE_DEFAULT = 12;
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
+    const REVIEW_STATUS_NOT_REVIEWED = 0;
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
     const SCENARIO_TOGGLE_STATUS = 'toggle';
+    const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
 
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'review_status', 'reason', 'description'];
-
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'user_name', 'deleted'];
 
     /**
      * @var array online status list
@@ -63,6 +64,20 @@ class GoodsCategory extends ActiveRecord
         return [
             'id' => 0,
             'title' => Yii::$app->params['category']['admin']['currentName'],
+            'icon' => ''
+        ];
+    }
+
+    /**
+     * Get "all category" for lhzz admin
+     *
+     * @return array
+     */
+    public static function forAll2()
+    {
+        return [
+            'id' => 0,
+            'title' => Yii::$app->params['category']['admin']['all'],
             'icon' => ''
         ];
     }
@@ -147,7 +162,15 @@ class GoodsCategory extends ActiveRecord
             ->all();
         foreach ($categoryList as &$category) {
             if (isset($category['create_time'])) {
-                $category['create_time'] = date('Y-m-d', $category['create_time']);
+                $category['create_time'] = date('Y-m-d H:i', $category['create_time']);
+            }
+
+            if (isset($category['online_time'])) {
+                $category['online_time'] = date('Y-m-d H:i', $category['online_time']);
+            }
+
+            if (isset($category['offline_time'])) {
+                $category['offline_time'] = date('Y-m-d H:i', $category['offline_time']);
             }
 
             if (isset($category['level'])) {
@@ -157,6 +180,31 @@ class GoodsCategory extends ActiveRecord
             if (isset($category['review_status'])) {
                 $category['review_status'] = Yii::$app->params['reviewStatuses'][$category['review_status']];
             }
+
+            if (isset($category['deleted'])) {
+                $category['status'] = self::$statuses[1 - $category['deleted']];
+                unset($category['deleted']);
+            }
+
+            if (isset($category['approve_time']) || isset($category['reject_time'])) {
+                $category['review_time'] = date('Y-m-d H:i', $category['approve_time'] > 0 ? $category['approve_time'] : $category['reject_time']);
+                if (isset($category['approve_time'])) {
+                    unset($category['approve_time']);
+                }
+                if (isset($category['reject_time'])) {
+                    unset($category['reject_time']);
+                }
+            }
+
+            if (isset($category['supplier_name']) || isset($category['user_name'])) {
+                $category['applicant'] = $category['supplier_name']  ?? $category['user_name'];
+                if (isset($category['supplier_name'])) {
+                    unset($category['supplier_name']);
+                }
+                if (isset($category['user_name'])) {
+                    unset($category['user_name']);
+                }
+            }
         }
 
         return $categoryList;
@@ -165,8 +213,8 @@ class GoodsCategory extends ActiveRecord
     /**
      * Check if can disable category records
      *
-     * @param string $ids category record ids separated by commas
-     * @return mixed bool
+     * @param  string $ids category record ids separated by commas
+     * @return bool
      */
     public static function canDisable($ids)
     {
@@ -187,14 +235,18 @@ class GoodsCategory extends ActiveRecord
             return false;
         }
 
+        if (self::find()->where('review_status <> ' . self::REVIEW_STATUS_APPROVE . ' and ' . $where)->count()) {
+            return false;
+        }
+
         return true;
     }
 
     /**
      * Check if can enable category records
      *
-     * @param string $ids category record ids separated by commas
-     * @return mixed bool
+     * @param  string $ids category record ids separated by commas
+     * @return bool
      */
     public static function canEnable($ids)
     {
@@ -215,7 +267,77 @@ class GoodsCategory extends ActiveRecord
             return false;
         }
 
+        if (self::find()->where('review_status <> ' . self::REVIEW_STATUS_APPROVE . ' and ' . $where)->count()) {
+            return false;
+        }
+
         return true;
+    }
+
+    /**
+     * Get all level 2 and 3 category ids by pids
+     *
+     * @param  array $pids pids
+     * @return array
+     */
+    public static function level23IdsByPids(array $pids)
+    {
+        $ids = [];
+        foreach ($pids as $pid) {
+            $ids = array_merge($ids, self::level23Ids($pid));
+        }
+        return array_unique($ids);
+    }
+
+    /**
+     * Get all level 2 and 3 category ids by pid
+     *
+     * @param  int $pid parent category id
+     * @return array
+     */
+    public static function level23Ids($pid)
+    {
+        $pid = (int)$pid;
+        if ($pid <= 0) {
+            return [];
+        }
+
+        $category = self::findOne($pid);
+        if (!$category) {
+            return [];
+        }
+
+        $db = Yii::$app->db;
+        if ($category->level == self::LEVEL2) {
+            return $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn();
+        } elseif ($category->level == self::LEVEL1) {
+            $pids = $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn();
+            $ret = [];
+            foreach ($pids as $pid) {
+                $ret = array_merge($ret, $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn());
+            }
+
+            return array_unique(array_merge($ret, $pids));
+        }
+
+        return [];
+    }
+
+    /**
+     * Disable categories by ids
+     *
+     * @param int $ids category ids
+     */
+    public static function disableByIds(array $ids)
+    {
+        if ($ids) {
+            $ids = implode(',', $ids);
+            $where = 'id in(' . $ids . ')';
+            self::updateAll([
+                'deleted' => self::STATUS_ONLINE,
+                'offline_time' => time()
+            ], $where);
+        }
     }
 
     /**
@@ -274,7 +396,24 @@ class GoodsCategory extends ActiveRecord
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
             ['supplier_id', 'validateSupplierId', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
+            ['review_status', 'validateReviewStatusEdit', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_RESET_OFFLINE_REASON, self::SCENARIO_TOGGLE_STATUS]],
         ];
+    }
+
+    /**
+     * Validates review_status when edit
+     *
+     * @param string $attribute review_status to validate
+     * @return bool
+     */
+    public function validateReviewStatusEdit($attribute)
+    {
+        if ($this->$attribute == self::REVIEW_STATUS_APPROVE) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
     }
 
     /**
@@ -376,6 +515,35 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Check if of different level
+     *
+     * @param  int $newPid new parent category id
+     * @return int
+     */
+    public function checkSameLevelByPid($newPid)
+    {
+        $newPid = (int)$newPid;
+        if ($newPid == 0) {
+            if ($this->level != self::LEVEL1) {
+                return 1005;
+            }
+        } elseif ($newPid > 0) {
+            $newParentCategory = self::findOne($newPid);
+            if (!$newParentCategory) {
+                return 1000;
+            }
+
+            if ($newParentCategory->level + 1 != $this->level) {
+                return 1005;
+            }
+        } else {
+            return 1000;
+        }
+
+        return 200;
+    }
+
+    /**
      * Do some ops before insertion
      *
      * @param bool $insert if is a new record
@@ -407,6 +575,19 @@ class GoodsCategory extends ActiveRecord
 
                     $parent = self::findOne($this->pid);
                     $this->parent_title = $parent->title;
+                } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+                    $this->deleted = self::STATUS_ONLINE;
+                    $this->offline_time = $now;
+
+                    $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+                    if (!$lhzz) {
+                        return false;
+                    }
+
+                    $this->user_id = $lhzz->id;
+                    $this->user_name = $lhzz->nickname;
+                    $this->review_status = self::REVIEW_STATUS_APPROVE;
+                    $this->approve_time = $now;
                 }
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
@@ -416,6 +597,13 @@ class GoodsCategory extends ActiveRecord
                     } elseif ($this->review_status == self::REVIEW_STATUS_APPROVE) {
                         $this->approve_time = $now;
                         $this->reject_time = 0;
+                        $this->deleted = self::STATUS_OFFLINE;
+                        $this->online_time = $now;
+                    }
+                } elseif ($this->scenario == self::SCENARIO_EDIT) {
+                    if ($this->isAttributeChanged('pid')) {
+                        $pid = $this->pid + 1;
+                        $this->setLevelPath($pid);
                     }
                 }
             }
@@ -423,6 +611,25 @@ class GoodsCategory extends ActiveRecord
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Set level and path by pid
+     *
+     * @param $pid
+     */
+    public function setLevelPath($pid)
+    {
+        if ($pid != $this->pid) {
+            if ($this->pid) {
+                $parentCategory = self::findOne($this->pid);
+                $this->level = $parentCategory->level + 1;
+                $this->path = $parentCategory->path . $this->id . ',';
+            } else {
+                $this->level = self::LEVEL1;
+                $this->path = $this->id . ',';
+            }
         }
     }
 
@@ -447,24 +654,5 @@ class GoodsCategory extends ActiveRecord
 
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
-    }
-
-    /**
-     * Set level and path by pid
-     *
-     * @param $pid
-     */
-    public function setLevelPath($pid)
-    {
-        if ($pid != $this->pid) {
-            if ($this->pid) {
-                $parentCategory = self::findOne($this->pid);
-                $this->level = $parentCategory->level + 1;
-                $this->path = $parentCategory->path . $this->id . ',';
-            } else {
-                $this->level = self::LEVEL1;
-                $this->path = $this->id . ',';
-            }
-        }
     }
 }

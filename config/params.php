@@ -1,5 +1,7 @@
 <?php
 
+$districts = require(__DIR__ . '/districts.php');
+
 return [
     'adminEmail' => 'admin@example.com',
     'offsetAiteCubeNo' => 10000,
@@ -14,6 +16,7 @@ return [
         1002 => '验证码不正确',
         1003 => '请先停用再删除',
         1004 => '上传文件大小不能超过5M',
+        1005 => '编辑商品分类不能跨级',
     ],
     'events' => [
         'supplier' => [
@@ -73,6 +76,7 @@ return [
         'admin' => [
             'currentName' => '当前',
             'allName' => '全部分类',
+            'all' => '全部',
         ],
     ],
     'reviewStatuses' => [
@@ -80,4 +84,5 @@ return [
         '1' => '审核不通过',
         '2' => '审核通过',
     ],
+    'districts' => $districts,
 ];

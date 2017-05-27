@@ -21,6 +21,8 @@ class Goods extends ActiveRecord
     const STATUS_ONLINE = 2;
     const STATUS_DELETED = 3;
 
+    const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
+
     /**
      * @var array online status list
      */
@@ -116,6 +118,11 @@ class Goods extends ActiveRecord
         return self::pagination(['brand_id' => $brandId], $select, $page, $size, $orderBy);
     }
 
+    /**
+     * Disable goods by category ids
+     *
+     * @param array $categoryIds
+     */
     public static function disableGoodsByCategoryIds(array $categoryIds)
     {
         foreach ($categoryIds as $categoryId) {
@@ -123,6 +130,11 @@ class Goods extends ActiveRecord
         }
     }
 
+    /**
+     * Disable goods by category id
+     *
+     * @param int $categoryId category id
+     */
     public static function disableGoodsByCategoryId($categoryId)
     {
         $goodsIds = self::findIdsByCategoryId($categoryId);
@@ -136,6 +148,12 @@ class Goods extends ActiveRecord
         }
     }
 
+    /**
+     * Get goods ids by category id
+     *
+     * @param  init  $categoryId category id
+     * @return array
+     */
     public static function findIdsByCategoryId($categoryId)
     {
         $categoryId = (int)$categoryId;
@@ -168,18 +186,36 @@ class Goods extends ActiveRecord
      * @param array $arr
      * @return array|ActiveRecord[]
      */
-    public static function priceDetail($arr = [])
+    public static function priceDetail($level = '', $title = '')
     {
-        $string = implode(',', $arr);
-        if (empty($arr)) {
+        if (empty($level) && empty($title)) {
             echo '请正确输入值';
             exit;
         } else {
             $db = \Yii::$app->db;
-            $sql = "SELECT goods_brand.name,goods.platform_price  FROM goods,goods_brand WHERE goods.brand_id = goods_brand.id and goods.id in " . "($string)";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_brand. name,goods_category.title FROM goods,goods_brand,goods_category WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods_category.`level` = " . $level . " AND goods_category.title LIKE " . "'%$title%'";
             $a = $db->createCommand($sql)->queryAll();
         }
-        return $a;
+        foreach ($a as $v => $k) {
+            $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+            $max = array_search(max($c), $c);
+        }
+        return $a[$max];
+    }
+
+    /**
+     * @param array $id
+     */
+    public static function findQueryAll($id = [], $area = '成都')
+    {
+        if ($id && $area) {
+            $str = implode(',', $id);
+            $db = \Yii::$app->db;
+            $sql = "SELECT goods.id,goods.platform_price,goods_brand. name,goods_category.title,goods_area.express_area,goods_area.delivery_door_area FROM goods,goods_brand,goods_category,goods_area WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods.area_id = goods_area.id  AND goods.id IN " . "({$str})" . "AND (goods_area.delivery_door_area LIKE " . "'%$area%'" . " OR goods_area.express_area LIKE " . "'%$area%'" . ")";
+            $all_goods = $db->createCommand($sql)->queryAll();
+        }
+
+        return $all_goods;
     }
 
     /**

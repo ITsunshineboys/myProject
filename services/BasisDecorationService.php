@@ -23,10 +23,10 @@ class BasisDecorationService
             $materials_expenses =  0;
             foreach ($unitPrice as $k=>$v)
             {
-                $materials_expenses += $v['platform_price'] * $quantity;
+                $materials_expenses += $v * $quantity;
             }
             //人工费
-            $labor_cost = $arr['day_price'] / $arr['day_standard'];
+            $labor_cost = $arr['day_price'] *(ceil($quantity / $arr['day_standard']));
             //单价
             $waterway_price = ($labor_cost + $materials_expenses) / $arr['profit'];
             //价格
@@ -40,11 +40,11 @@ class BasisDecorationService
     /**
      * @param string $str
      */
-    public static function wire($str = '')
+    public static function wire($str = '',$norms = '100',$dot = '10')
     {
         //电线单位换算
         if(!$str == null){
-            $wire = ($str / 100)*10;
+            $wire = ($str / $norms)*$dot;
         }
         return $wire;
     }

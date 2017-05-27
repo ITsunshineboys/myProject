@@ -3,6 +3,7 @@ CREATE TABLE `goods` (
   `supplier_id` int unsigned not null default 0,
   `brand_id` int unsigned not null default 0,
   `category_id` int unsigned not null default 0,
+  `area_id` int(11) NOT NULL,
   `series_id` int(11) unsigned not null default 0,
   `style_id` int(11) unsigned not null default 0,
   `sku` bigint unsigned not null default 0,
@@ -47,6 +48,7 @@ CREATE TABLE `goods_recommend` (
   `delete_time` int not null DEFAULT 0,
   `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
   `sorting_number` int unsigned not null default 0,
+  `district_code` int(6) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -54,6 +56,8 @@ CREATE TABLE `goods_category` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) unsigned not null default 0,
   `supplier_name` varchar(25) not null DEFAULT '' COMMENT '供应商',
+  `user_id` int(11) unsigned not null DEFAULT 0,
+  `user_name` varchar(20) not null DEFAULT '',
   `title` varchar(50) not null DEFAULT '',
   `pid` int(11) unsigned not null default 0,
   `parent_title` varchar(50) not null DEFAULT '',
@@ -64,6 +68,7 @@ CREATE TABLE `goods_category` (
   `approve_time` int unsigned not null DEFAULT 0,
   `reject_time` int unsigned not null DEFAULT 0,
   `reason` varchar(100) not null DEFAULT '' comment '原因',
+  `offline_reason` varchar(100) not null DEFAULT '' comment '下架原因',
   `create_time` int unsigned not null DEFAULT 0,
   `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
   `deleted` tinyint(1) not null default 0,
@@ -78,6 +83,18 @@ CREATE TABLE `goods_brand` (
   `logo` varchar(255) not null DEFAULT '',
   `certificate` varchar(255) not null DEFAULT '',
   `supplier_id` int(11) unsigned not null default 0,
+  `supplier_name` varchar(25) not null DEFAULT '',
+  `user_id` int(11) unsigned not null DEFAULT 0,
+  `user_name` varchar(20) not null DEFAULT '',
+  `approve_time` int unsigned not null DEFAULT 0,
+  `reject_time` int unsigned not null DEFAULT 0,
+  `reason` varchar(100) not null DEFAULT '' comment '审核原因',
+  `offline_reason` varchar(100) not null DEFAULT '' comment '下架原因',
+  `create_time` int unsigned not null DEFAULT 0,
+  `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
+  `status` tinyint(1) not null default 0,
+  `online_time` int unsigned not null DEFAULT 0,
+  `offline_time` int unsigned not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -94,5 +111,22 @@ CREATE TABLE `goods_recommend_sale_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `recommend_id` int unsigned not null default 0,
   `create_time` int not null DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `goods_area` (
+  `id` int(11) NOT NULL,
+  `express_area` varchar(255) DEFAULT NULL COMMENT '快递区域',
+  `delivery_door_area` varchar(255) DEFAULT NULL COMMENT '送货上门区域',
+  `piece` int(10) DEFAULT NULL COMMENT '件数',
+  `price` bigint(20) NOT NULL COMMENT '价格',
+  `mounting_cost` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+create table brand_category (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `brand_id` int(11) NOT NULL DEFAULT 0,
+  `category_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

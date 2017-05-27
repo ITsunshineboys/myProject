@@ -34,4 +34,16 @@ class Points extends ActiveRecord
         }
         return $weak_current;
     }
+
+    public static function waterwayPoints($id)
+    {
+        $sql = "place,waterway_points";
+        $all = self::find()->select($sql)->where(['effect_id'=>$id])->all();
+        $waterway_points = 0;
+        foreach ($all as $number)
+        {
+            $waterway_points += $number['waterway_points'];
+        }
+        return $waterway_points;
+    }
 }
