@@ -188,6 +188,12 @@ class GoodsCategory extends ActiveRecord
 
             if (isset($category['approve_time']) || isset($category['reject_time'])) {
                 $category['review_time'] = date('Y-m-d H:i', $category['approve_time'] > 0 ? $category['approve_time'] : $category['reject_time']);
+                if (isset($category['approve_time'])) {
+                    unset($category['approve_time']);
+                }
+                if (isset($category['reject_time'])) {
+                    unset($category['reject_time']);
+                }
             }
 
             if (isset($category['supplier_name']) || isset($category['user_name'])) {

@@ -186,6 +186,12 @@ class GoodsBrand extends ActiveRecord
 
             if (isset($brand['approve_time']) || isset($brand['reject_time'])) {
                 $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
+                if (isset($brand['approve_time'])) {
+                    unset($brand['approve_time']);
+                }
+                if (isset($brand['reject_time'])) {
+                    unset($brand['reject_time']);
+                }
             }
 
             if (isset($brand['supplier_name']) || isset($brand['user_name'])) {
