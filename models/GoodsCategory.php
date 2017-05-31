@@ -175,6 +175,9 @@ class GoodsCategory extends ActiveRecord
 
             if (isset($category['level'])) {
                 $category['level'] = self::$levels[$category['level']];
+                if ($category['level'] == self::LEVEL3) {
+
+                }
             }
 
             if (isset($category['review_status'])) {
@@ -572,9 +575,6 @@ class GoodsCategory extends ActiveRecord
 
                     $this->supplier_id = $supplier->id;
                     $this->supplier_name = $supplier->nickname;
-
-                    $parent = self::findOne($this->pid);
-                    $this->parent_title = $parent->title;
                 } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
                     $this->deleted = self::STATUS_ONLINE;
                     $this->offline_time = $now;
@@ -589,6 +589,9 @@ class GoodsCategory extends ActiveRecord
                     $this->review_status = self::REVIEW_STATUS_APPROVE;
                     $this->approve_time = $now;
                 }
+
+                $pid = $this->pid + 1;
+                $this->setLevelPath($pid);
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
                     if ($this->review_status == self::REVIEW_STATUS_REJECT) {
@@ -626,9 +629,11 @@ class GoodsCategory extends ActiveRecord
                 $parentCategory = self::findOne($this->pid);
                 $this->level = $parentCategory->level + 1;
                 $this->path = $parentCategory->path . $this->id . ',';
+                $this->parent_title = $parentCategory->title;
             } else {
                 $this->level = self::LEVEL1;
                 $this->path = $this->id . ',';
+                $this->parent_title = '';
             }
         }
     }
