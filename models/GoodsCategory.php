@@ -223,7 +223,7 @@ class GoodsCategory extends ActiveRecord
             }
 
             if (isset($category['supplier_name']) || isset($category['user_name'])) {
-                $category['applicant'] = $category['supplier_name']  ?? $category['user_name'];
+                $category['applicant'] = $category['supplier_name'] ? $category['supplier_name'] : $category['user_name'];
                 if (isset($category['supplier_name'])) {
                     unset($category['supplier_name']);
                 }
