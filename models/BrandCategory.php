@@ -26,18 +26,18 @@ class BrandCategory extends ActiveRecord
     /**
      * Get category ids by brand id
      *
-     * @param  int   $brandId brand id
+     * @param  int $brandId brand id
      * @return array
      */
     public static function categoryIdsByBrandId($brandId)
     {
         $brandId = (int)$brandId;
-        if ($brandId <=0 ) {
+        if ($brandId <= 0) {
             return [];
         }
 
         return Yii::$app->db
-            ->createCommand("select category_id from {{%brand_category}} where brand_id = {$brandId}")
+            ->createCommand("select category_id from {{%brand_category}} where brand_id = {$brandId} order by category_id_level2 asc")
             ->queryColumn();
     }
 
@@ -59,19 +59,72 @@ class BrandCategory extends ActiveRecord
     /**
      * Get brand ids by category id
      *
-     * @param  int   $categoryId category id
+     * @param  int $categoryId category id
      * @return array
      */
     public static function brandIdsByCategoryId($categoryId)
     {
         $categoryId = (int)$categoryId;
-        if ($categoryId <=0 ) {
+        if ($categoryId <= 0) {
             return [];
         }
 
         return Yii::$app->db
             ->createCommand("select brand_id from {{%brand_category}} where category_id = {$categoryId}")
             ->queryColumn();
+    }
+
+    /**
+     * Get category names by brand id for details page
+     *
+     * @param  int   $brandId brand id
+     * @return array
+     */
+    public static function categoryNamesByBrandId($brandId)
+    {
+        $brandId = (int)$brandId;
+        if ($brandId <= 0) {
+            return [];
+        }
+
+        $categories = Yii::$app->db
+            ->createCommand("select category_id, category_id_level1, category_id_level2 from {{%brand_category}} where brand_id = {$brandId} order by category_id_level2 asc")
+            ->queryAll();
+
+        $rows = [];
+        foreach ($categories as $category) {
+            $rows[$category['category_id_level2']][] = $category;
+        }
+
+        $ret = [];
+        $rootIds = [];
+        foreach ($rows as $k => $row) {
+            $level3CategoryNames = [];
+            $rootId = 0;
+
+            foreach ($row as $v) {
+                $level3CategoryNames[] = GoodsCategory::findOne($v['category_id'])->title;
+                $rootId = $v['category_id_level1'];
+            }
+
+            if (!in_array($rootId, $rootIds)) {
+                $rootIds[] = $rootId;
+
+                $ret[] = [
+                    'root_category_title' => GoodsCategory::findOne($rootId)->title,
+                    'parent_category_title' => GoodsCategory::findOne($k)->title,
+                    'level3_category_titles' => implode(',', $level3CategoryNames),
+                ];
+            } else {
+                $ret[] = [
+                    'root_category_title' => '',
+                    'parent_category_title' => GoodsCategory::findOne($k)->title,
+                    'level3_category_titles' => implode(',', $level3CategoryNames),
+                ];
+            }
+        }
+
+        return $ret;
     }
 
     /**
