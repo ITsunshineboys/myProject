@@ -60,14 +60,13 @@
                 </div>
             </div>
         </div>
-
+        {{sort_list}}
         <!--分类管理列表开始-->
         <div class="operate_box" ng_show="header_display==2">
             <div class="btn2 fl" ng-click="header_show(3)">
                 <div class="font1 fl">&#xe600;</div>
                 <div class="fl">添加</div>
             </div>
-            {{first}}
             <div class="btn1 screen1"  ng-click="screen('cells_box1','screen1')" style="position:absolute;top:30px;right:40px;margin-right: 0"><div class="font3 fl">&#xe734;</div></div>
             <div id="cells_box1" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333;z-index: 100;background-color:#fff ">
                 <ul   style="">
@@ -102,7 +101,7 @@
                 </ul>
             </div>
         </div>
-        <div class="table_box" ng_show="header_display==2">山东省规划的鬼斧神工={{sort_list}}
+        <div class="table_box" ng_show="header_display==2">
             <table   cellpadding="0" cellspacing="0" >
                 <thead>
                     <tr>
@@ -131,7 +130,7 @@
                         <td class="tb_review_status">{{n.review_status}}</td>
                         <td class="tb_description">{{n.description}}</td>
                         <td class="action">
-                            <span class="check_btn" ng-click="check_btn(4,n.id,n.title,n.icon,n.pid,n.parent_title,n.level,n.create_time,n.online_time,n.offline_time,n.review_status,n.reason,n.description,n.supplier_name,n.user_name,n.deleted)">查看</span>
+                            <span class="check_btn" ng-click="check_btn(4,n.title,n.icon,n.review_time,n.review_status,n.reason,n.description,n.titles)">查看</span>
                         </td>
                     </tr>
                 </tbody>
@@ -174,8 +173,18 @@
                     <div></div>
                 </li>
             </ul>
+            <ul class="row1_box">
+                <li class="row1_left fl" style="line-height: 32px">
+                    分类描述
+                </li>
+                <li class="row1_right fl">
+                    <span>{{check_description}}</span>
+                    <div></div>
+                </li>
+            </ul>
         </div>
         <!--分类管理的分类详情页面结束-->
+        <!--分类管理添加分类页面开始-->
         <div ng_show="header_display==3" class="color_2f">
             <ul class="row1_box">
                 <li class="row1_left fl" style="line-height: 32px">
@@ -218,6 +227,7 @@
                         <input name="button" type="button"  id="btn1" onclick="myfile1.click();" ng-click="doUpload()" value="上传" />
                         <input type="file" id="myfile1" name="UploadForm[file]" value="" style="display:none" accept="image/*">
                         <span>{{icon}}</span>
+                        <div></div>
                     </form>
                 </li>
             </ul>

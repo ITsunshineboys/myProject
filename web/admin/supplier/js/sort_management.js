@@ -10,8 +10,6 @@ var category_add="mall/category-add";
 var category_review_list="mall/category-review-list";
 app.controller("sort_management",function($http,$scope){
     $scope.url=url;
-    $scope.page = 1;
-    $scope.page_size = 1;
     //控制页头的显示及样式
     $scope.header_display=2;
     $scope.sort_pid=0;
@@ -50,17 +48,15 @@ app.controller("sort_management",function($http,$scope){
     //后台管理的一二级分类的列表数据的获取
     //获取一级分类的列表数据
     $scope.gain_fist=function(){
-
         $http({
             method:"GET",
             url:url+categories_admin
         })
             .success(function(data,status){
-                alert("进入获取一级函数")
                 $scope.first_level=data.data.categories;
                 //$scope.first_level= [{"id":"3","title":"材料","icon":""},{"id":"5","title":"title5","icon":""},{"id":"6","title":"title2","icon":""}]
                 $scope.second= $scope.first_level[0].id;
-                //$scope.gain_second()
+                $scope.gain_second()
             });
     };
     $scope.gain_fist();
@@ -81,48 +77,57 @@ app.controller("sort_management",function($http,$scope){
     });
     $(document).on("change","#second_level",function(){
         $scope.sort_pid=$(this).val();
+        console.log("$scope.sort_pid" +$scope.sort_pid)
     });
+    //获取分类列表数据事件
+    $scope.data_list=function(){
+        $scope.page = 1;
+        $scope.page_size = 12;
+        //清空上一次分页的数据
+        $('#pageTool').text("");
+        $http({
+            method:"GET",
+            url:url+category_list_admin+"?page="+$scope.page+"&size="+ $scope.page_size
+        })
+            .success(function(data,status){
+                $scope.sort_list=data.data.category_list_admin.details;
+                $scope.sort_total=data.data.category_list_admin.total;
+                $scope.page_count=$scope.sort_total/$scope.page_size;
+                console.log("$scope.page_count"+$scope.page_count);
+                $('#pageTool').Paging({
+                    pagesize: $scope.page, count: $scope.page_count,toolbar:true,ellipseTpl:". . .",  callback: function (page, size, count) {
+                        //console.log(arguments);
+                        //点击页码后重新访问接口获取当前页码的数据
+                        $scope.page=page;
+                        $http({
+                            method: "GET",
+                            url:url+category_list_admin+"?page="+$scope.page+"&size="+ $scope.page_size
+                        })
+                            .success(function (data, status) {
+                                $scope.sort_list=data.data.category_list_admin.details;
+                            });
 
-
-    $http({
-        method:"GET",
-        url:url+category_list_admin+"?page="+$scope.page+"&size="+ $scope.page_size
-    })
-        .success(function(data,status){
-            $scope.sort_list=data;
-            $scope.sort_list=data.data.category_supplier_admin.details;
-            $scope.sort_total=data.data.category_supplier_admin.total;
-            $scope.page_count=$scope.sort_total/$scope.page_size;
-            console.log("$scope.page_count"+$scope.page_count);
-            $('#pageTool').Paging({
-                pagesize: $scope.page, count: $scope.page_count,toolbar:true,ellipseTpl:". . .",  callback: function (page, size, count) {
-                    console.log(arguments);
-                    //点击页码后重新访问接口获取当前页码的数据
-                    $scope.page=page;
-                    $http({
-                        method: "GET",
-                        url:url+category_list_admin+"?page="+$scope.page+"&size="+ $scope.page_size
-                    })
-                        .success(function (data, status) {
-                            $scope.sort_list=data.data.category_supplier_admin.details;
-                        });
-
-                    alert('当前第 ' + page + '页,每页 ' + size + '条,总页数：' + count + '页')
-                }
+                        //alert('当前第 ' + page + '页,每页 ' + size + '条,总页数：' + count + '页')
+                    }
+                });
             });
-        });
+    };
+    //列表数据初始化
+    $scope.data_list();
+
     //添加的确认事件
     var ue = UE.getEditor('editor');
-    $scope.add=function () {
+    $scope.add= function () {
         var arr = [];
-        //arr.push("使用editor.getContent()方法可以获得编辑器的内容");
-        //arr.push("内容为：");
         arr.push(UE.getEditor('editor').getContent());
-        console.log(arr.join("\n"));
-        //$scope.sort_pid
-        //$scope.icon=
-        $scope.title="";
+
+        //$scope.title="";
         $scope.description=arr.join("\n");
+        //$scope.description="dfhdjhjfdhjhjfh";
+        console.log("$scope.description"+arr.join("\n"));
+        console.log("$scope.title"+$scope.title);
+        console.log("$scope.icon"+$scope.icon);
+        console.log("$scope.sort_pid"+$scope.sort_pid);
         $.ajax({
             url: url+ category_add,
             type: 'POST',
@@ -130,16 +135,16 @@ app.controller("sort_management",function($http,$scope){
             dataType: "json",
             contentType:"application/x-www-form-urlencoded;charset=UTF-8",
             success: function (data) {
-                //$scope.loginout=data;
-                console.log("添加分类成功");
-                $scope.header_display=2;
-                $http({
-                    method:"GET",
-                    url:url+category_review_list
-                })
-                    .success(function(data,status){
-                        $scope.first=data;
-                    });
+                $scope.first=data;
+                if(data.code==200){
+                    console.log("添加分类成功");
+                }
+                else{
+                    console.log("上传失败");
+                }
+
+                //$scope.header_display=2;
+                $scope.data_list();
             }
         });
     };
@@ -150,35 +155,14 @@ app.controller("sort_management",function($http,$scope){
 
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
         //查看事件的处理
-        $scope.check_btn=function(header_show,check_id,check_name,
-                                  check_icon,
-                                  check_pid,
-                                  check_parent_title,
-                                  check_level,
-                                  check_create_time,
-                                  check_online_time,
-                                  check_offline_time,
-                                  check_review_status,
-                                  check_reason,
-                                  check_description,
-                                  check_supplier_name,
-                                  check_user_name,
-                                  check_deleted){
-            $scope.check_id=check_id;
+        $scope.check_btn=function(header_show, check_name, check_icon, check_review_time, check_review_status, check_reason, check_description, check_titles){
             $scope.check_name=check_name;
             $scope.check_icon=check_icon;
-            $scope.check_pid=check_pid;
-            $scope.check_parent_title=check_parent_title;
-            $scope.check_level=check_level;
-            $scope.check_create_time=check_create_time;
-            $scope.check_online_time=check_online_time;
-            $scope.check_offline_time=check_offline_time;
+            $scope.check_review_time=check_review_time;
+            $scope.check_parent_title=check_titles;
             $scope.check_review_status=check_review_status;
             $scope.check_reason=check_reason;
             $scope.check_description=check_description;
-            $scope.check_supplier_name=check_supplier_name;
-            $scope.check_user_name=check_user_name;
-            $scope.check_deleted=check_deleted;
             $scope.header_display=header_show;
             alert("进入查看函数")
             $scope.header_show1()
@@ -201,7 +185,6 @@ app.controller("sort_management",function($http,$scope){
             if ($(this).prop("checked") == true) {
                 var cell_name="."+$(this).val();
                 $(cell_name).show();
-
             }
             else if($(this).prop("checked") != true){
                 var cell_name1="."+$(this).val();
