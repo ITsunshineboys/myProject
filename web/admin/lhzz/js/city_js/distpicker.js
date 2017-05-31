@@ -197,13 +197,13 @@
     }
   };
 //第一个的提示
-  Distpicker.DEFAULTS = {
-    autoSelect: true,
-    placeholder: true,
-    province: '四川省',
-    city: '成都市'
-    //district: '—— 区 ——'
-  };
+//  Distpicker.DEFAULTS = {
+//    autoSelect: true,
+//    placeholder: true,
+//    province: '四川省',
+//    city: '成都市'
+//    //district: '—— 区 ——'
+//  };
 
   Distpicker.setDefaults = function (options) {
     $.extend(Distpicker.DEFAULTS, options);
@@ -247,6 +247,12 @@
   };
 
   $(function () {
-    $('[data-toggle="distpicker"]').distpicker();
+
+    $('[data-toggle="distpicker"]').distpicker({
+      //第一个显示值得修改
+      province: '四川省',
+      city: '成都市'
+      //district: '西湖区'
+    });
   });
 });

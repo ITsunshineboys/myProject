@@ -7,7 +7,7 @@ var upload1="site/upload";
 //分类添加接口
 var category_add="mall/category-add";
 //分类审核接口
-var category_review_list="mall/category-review-list"
+var category_review_list="mall/category-review-list";
 app.controller("sort_management",function($http,$scope){
     $scope.url=url;
     $scope.page = 1;
@@ -113,7 +113,7 @@ app.controller("sort_management",function($http,$scope){
         });
     //添加的确认事件
     var ue = UE.getEditor('editor');
-    $scope.add= function () {
+    $scope.add=function () {
         var arr = [];
         //arr.push("使用editor.getContent()方法可以获得编辑器的内容");
         //arr.push("内容为：");

@@ -80,10 +80,14 @@ app.controller("index_recommend",function($scope,$http){
     //区域的原始数据
     $(document).on("change","#province2",function(){
         $scope.district_code=$("#city2").val();
+        $scope.table_data1($scope.kind_type);
+
         console.log("$scope.city_code="+$scope.district_code)
     });
     $(document).on("change","#city2",function(){
         $scope.district_code=$(this).val();
+        $scope.table_data1($scope.kind_type);
+
         console.log('city_code：'+$(this).val());//获取value
         console.log('city_name：'+$(this).find("option:selected").text());//获取选中文本
     });
