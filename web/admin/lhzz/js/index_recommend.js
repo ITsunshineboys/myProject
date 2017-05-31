@@ -58,6 +58,8 @@ app.controller("index_recommend",function($scope,$http){
     $scope.url=url;
     //
     $scope.kind_type=0;
+    //默认城市的code
+    $scope.district_code=510100;
     //右边内容宽度自适应
     $scope.zishiy=function (){
         var browser_width1=$(document).width()-$(".nav_box").width();

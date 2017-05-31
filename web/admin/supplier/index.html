@@ -102,7 +102,7 @@
                 </ul>
             </div>
         </div>
-        <div class="table_box" ng_show="header_display==2">
+        <div class="table_box" ng_show="header_display==2">山东省规划的鬼斧神工={{sort_list}}
             <table   cellpadding="0" cellspacing="0" >
                 <thead>
                     <tr>
@@ -141,7 +141,39 @@
         <!--分类管理列表结束-->
         <!--分类管的分类理详情页面开始-->
         <div ng_show="header_display==4">
-
+            <ul class="row1_box">
+                <li class="row1_left fl" style="line-height: 32px">
+                    分类名称
+                </li>
+                <li class="row1_right fl">
+                    {{check_name}}==香蕉水
+                </li>
+            </ul>
+            <ul class="row1_box">
+                <li class="row1_left fl" style="line-height: 32px">
+                    分类所属
+                </li>
+                <li class="row1_right fl">
+                    {{check_parent_title}}==香蕉水
+                </li>
+            </ul>
+            <ul class="row1_box">
+                <li class="row1_left fl" style="line-height: 32px">
+                    分类图片
+                </li>
+                <li class="row1_right fl">
+                    <img src="{{url}}{{check_icon}}" alt=""/><span>{{check_icon}}</span>
+                </li>
+            </ul>
+            <ul class="row1_box">
+                <li class="row1_left fl" style="line-height: 32px">
+                    分类描述
+                </li>
+                <li class="row1_right fl">
+                    <span>{{check_description}}</span>
+                    <div></div>
+                </li>
+            </ul>
         </div>
         <!--分类管理的分类详情页面结束-->
         <div ng_show="header_display==3" class="color_2f">
@@ -199,7 +231,7 @@
             </ul>
             <div class="btn_box">
                <span class="btn3 sure_left" ng-click="add()">确认</span>
-               <span class="btn3">返回</span>
+               <span class="btn3" ng-click="add_return()">返回</span>
             </div>
         </div>
         <!--分类管理添加分类页面结束-->
