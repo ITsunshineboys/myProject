@@ -1387,6 +1387,10 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
         if (!$brand->validate()) {
+            if (isset($brand->errors['name'])) {
+                $code = 1007;
+            }
+
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
