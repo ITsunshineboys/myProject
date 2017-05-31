@@ -942,6 +942,10 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_ADD;
         if (!$category->validate()) {
+            if (isset($category->errors['title'])) {
+                $code = 1006;
+            }
+
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
