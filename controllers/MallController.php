@@ -656,7 +656,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'recommend_history' => [
+                'recommend_admin_index' => [
                     'details' => []
                 ]
             ],
@@ -668,7 +668,7 @@ class MallController extends Controller
 
         $where = 'delete_time = 0 and type = ' . $type . ' and district_code = ' . $districtCode;
 
-        $ret['data']['recommend_history']['details'] = GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, 1, GoodsRecommend::PAGE_SIZE_DEFAULT_ADMIN_INDEX);
+        $ret['data']['recommend_admin_index']['details'] = GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, 1, GoodsRecommend::PAGE_SIZE_DEFAULT_ADMIN_INDEX);
         return Json::encode($ret);
     }
 
