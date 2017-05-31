@@ -195,13 +195,17 @@ class GoodsBrand extends ActiveRecord
             }
 
             if (isset($brand['supplier_name']) || isset($brand['user_name'])) {
-                $brand['applicant'] = $brand['supplier_name']  ?? $brand['user_name'];
+                $brand['applicant'] = $brand['supplier_name'] ? $brand['supplier_name'] : $brand['user_name'];
                 if (isset($brand['supplier_name'])) {
                     unset($brand['supplier_name']);
                 }
                 if (isset($brand['user_name'])) {
                     unset($brand['user_name']);
                 }
+            }
+
+            if (isset($brand['id'])) {
+                $brand['category_titles'] = BrandCategory::categoryNamesByBrandId($brand['id']);
             }
         }
 

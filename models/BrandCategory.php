@@ -75,12 +75,12 @@ class BrandCategory extends ActiveRecord
     }
 
     /**
-     * Get category ids by brand id
+     * Get category names by brand id for details page
      *
-     * @param  int $brandId brand id
+     * @param  int   $brandId brand id
      * @return array
      */
-    public static function categoriesByBrandId($brandId)
+    public static function categoryNamesByBrandId($brandId)
     {
         $brandId = (int)$brandId;
         if ($brandId <= 0) {
@@ -111,15 +111,15 @@ class BrandCategory extends ActiveRecord
                 $rootIds[] = $rootId;
 
                 $ret[] = [
-                    'root_category_name' => GoodsCategory::findOne($rootId)->title,
-                    'parent_category_name' => GoodsCategory::findOne($k)->title,
-                    'level3_category_names' => implode(',', $level3CategoryNames),
+                    'root_category_title' => GoodsCategory::findOne($rootId)->title,
+                    'parent_category_title' => GoodsCategory::findOne($k)->title,
+                    'level3_category_titles' => implode(',', $level3CategoryNames),
                 ];
             } else {
                 $ret[] = [
-                    'root_category_name' => '',
-                    'parent_category_name' => GoodsCategory::findOne($k)->title,
-                    'level3_category_names' => implode(',', $level3CategoryNames),
+                    'root_category_title' => '',
+                    'parent_category_title' => GoodsCategory::findOne($k)->title,
+                    'level3_category_titles' => implode(',', $level3CategoryNames),
                 ];
             }
         }
