@@ -197,13 +197,13 @@
     }
   };
 //第一个的提示
-  //Distpicker.DEFAULTS = {
-  //  autoSelect: true,
-  //  placeholder: true,
-  //  province: '—— 省 ——',
-  //  city: '—— 市 ——',
-  //  district: '—— 区 ——'
-  //};
+  Distpicker.DEFAULTS = {
+    autoSelect: true,
+    placeholder: true,
+    province: '四川省',
+    city: '成都市'
+    //district: '—— 区 ——'
+  };
 
   Distpicker.setDefaults = function (options) {
     $.extend(Distpicker.DEFAULTS, options);

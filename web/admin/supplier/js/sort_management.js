@@ -11,7 +11,7 @@ var category_review_list="mall/category-review-list"
 app.controller("sort_management",function($http,$scope){
     $scope.url=url;
     $scope.page = 1;
-    $scope.page_size = 12;
+    $scope.page_size = 1;
     //控制页头的显示及样式
     $scope.header_display=2;
     $scope.sort_pid=0;
@@ -49,16 +49,22 @@ app.controller("sort_management",function($http,$scope){
     $scope.zishiy();
     //后台管理的一二级分类的列表数据的获取
     //获取一级分类的列表数据
-    $http({
-        method:"GET",
-        url:url+categories_admin
-    })
-        .success(function(data,status){
-            $scope.first_level=data.data.categories;
-            //$scope.first_level= [{"id":"3","title":"材料","icon":""},{"id":"5","title":"title5","icon":""},{"id":"6","title":"title2","icon":""}]
-            $scope.second= $scope.first_level[0].id;
-            $scope.gain_second()
-        });
+    $scope.gain_fist=function(){
+
+        $http({
+            method:"GET",
+            url:url+categories_admin
+        })
+            .success(function(data,status){
+                alert("进入获取一级函数")
+                $scope.first_level=data.data.categories;
+                //$scope.first_level= [{"id":"3","title":"材料","icon":""},{"id":"5","title":"title5","icon":""},{"id":"6","title":"title2","icon":""}]
+                $scope.second= $scope.first_level[0].id;
+                //$scope.gain_second()
+            });
+    };
+    $scope.gain_fist();
+
     //获取二级列表数据函数
     $scope.gain_second=function(){
         $http({
@@ -83,6 +89,7 @@ app.controller("sort_management",function($http,$scope){
         url:url+category_list_admin+"?page="+$scope.page+"&size="+ $scope.page_size
     })
         .success(function(data,status){
+            $scope.sort_list=data;
             $scope.sort_list=data.data.category_supplier_admin.details;
             $scope.sort_total=data.data.category_supplier_admin.total;
             $scope.page_count=$scope.sort_total/$scope.page_size;
@@ -104,7 +111,43 @@ app.controller("sort_management",function($http,$scope){
                 }
             });
         });
-      var ue = UE.getEditor('editor');
+    //添加的确认事件
+    var ue = UE.getEditor('editor');
+    $scope.add= function () {
+        var arr = [];
+        //arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        //arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getContent());
+        console.log(arr.join("\n"));
+        //$scope.sort_pid
+        //$scope.icon=
+        $scope.title="";
+        $scope.description=arr.join("\n");
+        $.ajax({
+            url: url+ category_add,
+            type: 'POST',
+            data:{"title": $scope.title,"pid":$scope.sort_pid,"icon":$scope.icon,"description":$scope.description},
+            dataType: "json",
+            contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+            success: function (data) {
+                //$scope.loginout=data;
+                console.log("添加分类成功");
+                $scope.header_display=2;
+                $http({
+                    method:"GET",
+                    url:url+category_review_list
+                })
+                    .success(function(data,status){
+                        $scope.first=data;
+                    });
+            }
+        });
+    };
+    $scope.add_return= function () {
+        $scope.header_display=2;
+        alert("dshshsjhdhs")
+    };
+
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
         //查看事件的处理
         $scope.check_btn=function(header_show,check_id,check_name,
@@ -218,36 +261,7 @@ app.controller("sort_management",function($http,$scope){
             });
 
         //
-        $scope.add= function () {
-            var arr = [];
-            //arr.push("使用editor.getContent()方法可以获得编辑器的内容");
-            //arr.push("内容为：");
-            arr.push(UE.getEditor('editor').getContent());
-            console.log(arr.join("\n"));
-            //$scope.sort_pid
-            //$scope.icon=
-            $scope.title="";
-            $scope.description=arr.join("\n");
-            $.ajax({
-                url: url+ category_add,
-                type: 'POST',
-                data:{"title": $scope.title,"pid":$scope.sort_pid,"icon":$scope.icon,"description":$scope.description},
-                dataType: "json",
-                contentType:"application/x-www-form-urlencoded;charset=UTF-8",
-                success: function (data) {
-                    //$scope.loginout=data;
-                    console.log("添加分类成功");
-                    $scope.header_display=2;
-                    $http({
-                        method:"GET",
-                        url:url+category_review_list
-                    })
-                        .success(function(data,status){
-                            $scope.first=data;
-                        });
-                }
-            });
-        }
+
     });
 });
 app.controller('itemReaptCtrl', ['$scope', function ($scope) {
