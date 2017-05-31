@@ -6,7 +6,9 @@ use app\models\AppliancesAssort;
 use app\models\BasisDecoration;
 use app\models\BasisMaterial;
 use app\models\CircuitryReconstruction;
+use app\models\DecorationAdd;
 use app\models\DecorationList;
+use app\models\DecorationParticulars;
 use app\models\Effect;
 use app\models\EffectPicture;
 use app\models\FixationFurniture;
@@ -307,7 +309,9 @@ class OwnerController extends Controller
         }
 
         //基础弱电总价格
-        $weak_current_price = ceil(BasisDecorationService::formula($arr, $points,$weak_current));
+        $weak_price = ceil(BasisDecorationService::formula($arr, $points,$weak_current));
+        $add_price = DecorationAdd::findByAll('弱电',$post['area']);
+        $weak_current_price = $weak_price + $add_price;
 
         return Json::encode([
             'code' => 200,
@@ -418,15 +422,21 @@ class OwnerController extends Controller
 
         //强电总价格
         $powerful_current = ceil(BasisDecorationService::formula($arr, $powerful_location,$strong_current));
+        $add_price = DecorationAdd::findByAll('强电',$post['area']);
+        $powerful_current_price = $powerful_current + $add_price;
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'strong_current_price' => $powerful_current,
+                'strong_current_price' => $powerful_current_price,
             ]
         ]);
     }
 
+    /**
+     * 水路
+     * @return string
+     */
     public function actionWaterway()
     {
         //基础装修
@@ -515,25 +525,31 @@ class OwnerController extends Controller
         }
 
         $waterway_remould = ceil(BasisDecorationService::formula($arr,$points,$waterway));
+        $add_price = DecorationAdd::findByAll('水路',$post['area']);
+        $waterway_remould_price = $waterway_remould + $add_price;
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'waterway_remould_price' => $waterway_remould,
+                'waterway_remould_price' => $waterway_remould_price,
             ]
         ]);
     }
 
+    /**
+     * 防水
+     * @return string
+     */
     public function actionWaterproof()
     {
 //        $post = \Yii::$app->request->post();
         $post = [
-//            'effect_id' => 1,
+            'effect_id' => 1,
             'room' => 1,
             'hall' => 1,
             'window' => 2,
             'high' => 2.8,
-            'area' => 62,
+            'area' => 40,
             'toilet' => 1,
             'kitchen' => 1,
             'style' => 1,
@@ -553,19 +569,99 @@ class OwnerController extends Controller
         if(!empty($post['effect_id'])){
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterproofReconstruction::findByAll($decoration_list);
-            $waterproof = Goods::findQueryAll($weak);
+            $waterproof = [];
+            $goods = Goods::findQueryAll($weak);
+            $waterproof [] = BasisDecorationService::wire($goods['platform_price'],25,1.25);
         }else{
             //ppr热水管
             $pipe = '防水';
             $goods = Goods::priceDetail(3,$pipe);
-            $waterproof = BasisDecorationService::wire($goods['platform_price'],25,1.25);
+            $waterproof = [];
+            $waterproof [] = BasisDecorationService::wire($goods['platform_price'],25,1.25);
         }
 
         //防水所需面积
-        if(empty($post['effect_id'])){
+        if(!empty($post['effect_id'])){
+            $effect = DecorationList::findById($post['effect_id']);
+            $area = DecorationParticulars::findByOne($effect);
+            //地面面积
+            $ground_total_area = BasisDecorationService::groundArea($area);
+            //墙面周长
+            $wall_space_total_perimeter = BasisDecorationService::wallSpace($area);
+            $total_area_float = $ground_total_area + $wall_space_total_perimeter;
+            //总面积
+            $total_area = intval($total_area_float);
+        }else{
+            $kitchen_percent = $post['12'] ?? 0.3;
+            $kitchen_high = $post['13'] ?? 0.3;
+            //厨房地面面积
+            $kitchen_ground_area = $kitchen_percent * $post['area'];
+            //厨房墙面面积
+            $kitchen_wall_space_area = sqrt($kitchen_ground_area) * $kitchen_high;
+            $kitchen_wall_space_perimeter = round($kitchen_wall_space_area,2);
+            //厨房面积
+            $kitchen_area = $kitchen_ground_area + $kitchen_wall_space_perimeter;
+
+            $toilet_percent = $post['14'] ?? 0.3;
+            $toilet_high = $post['13'] ?? 1.8;
+            //卫生间地面面积
+            $toilet_ground_area = $toilet_percent * $post['area'];
+            //卫生间强面面积
+            $toilet_wall_space_area = sqrt($toilet_ground_area) * $toilet_high;
+            $toilet_wall_space_perimeter = round($toilet_wall_space_area,2);
+            //卫生间面积
+            $toilet_area = $toilet_ground_area + $toilet_wall_space_perimeter;
+            //总面积
+            $total_area = $kitchen_area + $toilet_area;
+        }
+
+        //防水价格
+        $waterproof = ceil(BasisDecorationService::formula($arr,$total_area,$waterproof));
+        $add_price = DecorationAdd::findByAll('防水',$post['area']);
+        $waterproof_price = $waterproof + $add_price;
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'waterproof_price' => $waterproof_price,
+            ]
+        ]);
+    }
+
+    /**
+     * 木作
+     */
+    public function actionCarpentry()
+    {
+        //        $post = \Yii::$app->request->post();
+        $post = [
+            'effect_id' => 1,
+            'room' => 1,
+            'hall' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 40,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 1,
+            'series' => 1,
+            'province' => '四川',
+            'city' => '成都'
+        ];
+        $arr = [];
+        //每天水电完成点位
+        $arr['day_standard'] = $post['0'] ?? 40;
+        $arr['profit'] = $post['1'] ?? 0.7;
+        $arr['worker_kind'] = '木工';
+        //人工一天价格
+        $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+
+        if(!empty($post['effect_id']))
+        {
 
         }
     }
+
 
     /**
      * 软装配套

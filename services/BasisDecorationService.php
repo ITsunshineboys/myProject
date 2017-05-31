@@ -17,10 +17,12 @@ class BasisDecorationService
      */
     public static function  formula($arr = [],$quantity= [],$unitPrice=[])
     {
+//        var_dump($arr);
+//        var_dump($quantity);
+//        var_dump($unitPrice);
         if (!empty($arr))
         {
             $unit_price = [];
-
             foreach ($unitPrice as $price)
             {
                 $unit_price [] = $price;
@@ -56,9 +58,50 @@ class BasisDecorationService
         return $int;
     }
 
-    public static function pointsCalculate()
+    public static function groundArea($arr = [])
     {
+        $all_area = [];
+        if($arr)
+        {
+            //总面积
+            $all_area ['hostToilet_area'] =  $arr ['hostToilet_area'];
+            $all_area ['kitchen_area'] =  $arr ['kitchen_area'];
+            $all_area ['toilet_balcony_area'] =  $arr ['toilet_balcony_area'];
+            $all_area ['kitchen_balcony_area'] =  $arr ['kitchen_balcony_area'];
+            $area = 0;
+            foreach ($all_area as $v=>$k)
+            {
+                $area += $k;
+            }
+        }
+        return $area;
+    }
 
+    public static function wallSpace($arr = [])
+    {
+        $all_area = [];
+        if($arr)
+        {
+            $toilet_wall_space_high = '1.8';
+            $kitchen_wall_space_high = '0.3';
+
+            //总周长
+            $all_area ['toilet_perimeter'] =  $arr ['toilet_perimeter'];
+            $all_area ['kitchen_perimeter'] =  $arr ['kitchen_perimeter'];
+            $all_area ['toilet_balcony_perimeter'] =  $arr ['toilet_balcony_perimeter'];
+            $all_area ['kitchen_balcony_perimeter'] =  $arr ['kitchen_balcony_perimeter'];
+            $area_all = [];
+            $area_all[] = $all_area ['toilet_perimeter'] * $toilet_wall_space_high;
+            $area_all[] = $all_area ['toilet_balcony_perimeter'] * $toilet_wall_space_high;
+            $area_all[] = $all_area ['kitchen_perimeter'] * $kitchen_wall_space_high;
+            $area_all[] = $all_area ['kitchen_balcony_perimeter'] * $kitchen_wall_space_high;
+            $area = 0;
+            foreach ($area_all as $v=>$k)
+            {
+                $area += $k;
+            }
+        }
+        return $area;
     }
 
 }
