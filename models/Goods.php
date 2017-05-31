@@ -206,15 +206,16 @@ class Goods extends ActiveRecord
     /**
      * @param array $id
      */
-    public static function findQueryAll($id = [], $area = '成都')
+    public static function findQueryAll($all = [])
     {
-        if ($id && $area) {
-            $str = implode(',', $id);
-            $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods_brand. name,goods_category.title,goods_area.express_area,goods_area.delivery_door_area FROM goods,goods_brand,goods_category,goods_area WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods.area_id = goods_area.id  AND goods.id IN " . "({$str})" . "AND (goods_area.delivery_door_area LIKE " . "'%$area%'" . " OR goods_area.express_area LIKE " . "'%$area%'" . ")";
-            $all_goods = $db->createCommand($sql)->queryAll();
+        if($all){
+            $id = [];
+            foreach ($all as $single)
+            {
+                $id [] = $single['goods_id'];
+            }
+            $all_goods = self::find()->asArray()->where(['in','id',$id])->all();
         }
-
         return $all_goods;
     }
 

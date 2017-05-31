@@ -72,10 +72,18 @@ CREATE TABLE `labor_cost` (
 
 CREATE TABLE `decoration_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `series_id` int(11) DEFAULT NULL,
-  `style_id` int(11) DEFAULT NULL,
+  `effect_id` int(11) DEFAULT NULL COMMENT '效果图',
+  `decoration_company_id` int(11) DEFAULT NULL COMMENT '装修公司',
+  `project_manager_id` int(11) DEFAULT NULL COMMENT '项目经理',
+  `majordomo` varchar(50) DEFAULT NULL COMMENT '总监',
+  `hardcover_manager` varchar(50) DEFAULT NULL COMMENT '精装经理',
+  `monitor` varchar(50) DEFAULT NULL COMMENT '监察',
+  `user_id` int(11) DEFAULT NULL COMMENT '业主',
+  `project_name` varchar(255) DEFAULT NULL COMMENT '工程名称',
+  `begin_time` datetime DEFAULT NULL COMMENT '开工时间',
+  `end_time` datetime DEFAULT NULL COMMENT '竣工时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `main_ materials` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

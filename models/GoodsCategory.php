@@ -31,11 +31,12 @@ class GoodsCategory extends ActiveRecord
     const SCENARIO_REVIEW = 'review';
     const SCENARIO_TOGGLE_STATUS = 'toggle';
     const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
+    const SEPARATOR_TITLES = ' - ';
 
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'user_name', 'deleted'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'user_name', 'deleted', 'path'];
 
     /**
      * @var array online status list
@@ -174,7 +175,32 @@ class GoodsCategory extends ActiveRecord
             }
 
             if (isset($category['level'])) {
+                $category['titles'] = '';
+                if ($category['level'] == self::LEVEL3) {
+                    $path = trim($category['path'], ',');
+                    list($rootId, $parentId, $id) = explode(',', $path);
+                    $rootCategory = self::findOne($rootId);
+                    $category['titles'] = $rootCategory->title
+                        . self::SEPARATOR_TITLES
+                        . $category['parent_title']
+                        . self::SEPARATOR_TITLES
+                        . $category['title']
+                    ;
+                } elseif ($category['level'] == self::LEVEL2) {
+                    $category['titles'] = $category['parent_title']
+                        . self::SEPARATOR_TITLES
+                        . $category['title']
+                    ;
+                } elseif ($category['level'] == self::LEVEL1) {
+                    $category['titles'] = $category['title']
+                    ;
+                }
+
                 $category['level'] = self::$levels[$category['level']];
+
+                if (isset($category['path'])) {
+                    unset($category['path']);
+                }
             }
 
             if (isset($category['review_status'])) {
@@ -572,9 +598,6 @@ class GoodsCategory extends ActiveRecord
 
                     $this->supplier_id = $supplier->id;
                     $this->supplier_name = $supplier->nickname;
-
-                    $parent = self::findOne($this->pid);
-                    $this->parent_title = $parent->title;
                 } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
                     $this->deleted = self::STATUS_ONLINE;
                     $this->offline_time = $now;
@@ -589,6 +612,9 @@ class GoodsCategory extends ActiveRecord
                     $this->review_status = self::REVIEW_STATUS_APPROVE;
                     $this->approve_time = $now;
                 }
+
+                $pid = $this->pid + 1;
+                $this->setLevelPath($pid);
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
                     if ($this->review_status == self::REVIEW_STATUS_REJECT) {
@@ -626,9 +652,11 @@ class GoodsCategory extends ActiveRecord
                 $parentCategory = self::findOne($this->pid);
                 $this->level = $parentCategory->level + 1;
                 $this->path = $parentCategory->path . $this->id . ',';
+                $this->parent_title = $parentCategory->title;
             } else {
                 $this->level = self::LEVEL1;
                 $this->path = $this->id . ',';
+                $this->parent_title = '';
             }
         }
     }

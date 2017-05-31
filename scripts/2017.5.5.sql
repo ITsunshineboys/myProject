@@ -128,5 +128,10 @@ create table brand_category (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `brand_id` int(11) NOT NULL DEFAULT 0,
   `category_id` int(11) NOT NULL DEFAULT 0,
+  `category_id_level1` int(11) NOT NULL DEFAULT 0,
+  `category_id_level2` int(11) NOT NULL DEFAULT 0,
+  `category_title` varchar(50) not null DEFAULT '',
+  `category_title_level1` varchar(50) not null DEFAULT '',
+  `category_title_level2` varchar(50) not null DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
