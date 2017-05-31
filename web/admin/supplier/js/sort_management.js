@@ -117,13 +117,10 @@ app.controller("sort_management",function($http,$scope){
 
     //添加的确认事件
     var ue = UE.getEditor('editor');
-    $scope.add= function () {
+    $scope.add=function () {
         var arr = [];
         arr.push(UE.getEditor('editor').getContent());
-
-        //$scope.title="";
         $scope.description=arr.join("\n");
-        //$scope.description="dfhdjhjfdhjhjfh";
         console.log("$scope.description"+arr.join("\n"));
         console.log("$scope.title"+$scope.title);
         console.log("$scope.icon"+$scope.icon);
@@ -137,21 +134,42 @@ app.controller("sort_management",function($http,$scope){
             success: function (data) {
                 $scope.first=data;
                 if(data.code==200){
-                    console.log("添加分类成功");
+                    console.log("添加分类成功=="+data.code);
+                    $scope.data_list();
+                }
+                else if(data.code==1006){
+                    console.log("商品分类名称不能重复=="+data.code);
                 }
                 else{
-                    console.log("上传失败");
+                    console.log("添加失败=="+data.code);
                 }
 
                 //$scope.header_display=2;
-                $scope.data_list();
+
             }
         });
     };
+    //添加的返回事件
     $scope.add_return= function () {
         $scope.header_display=2;
-        alert("dshshsjhdhs")
     };
+    //查看的返回事件
+    $scope.check_return= function () {
+        $scope.header_display=2;
+    };
+    //分类详情的图标的大小及居中控制
+    $scope.img_size=function(){
+        $(".sort_img1").css({"width":"100%","height":"auto"});
+        $scope.img_width= $(".sort_img1").width();
+        $scope.img_height= $(".sort_img1").height();
+        if($scope.img_width>=$scope.img_height){
+            $(".sort_img1").css({"width":"100%","height":"auto"})
+        }
+        else{
+            $(".sort_img1").css({"width":"auto","height":"100%"})
+        }
+    }
+    $scope.img_size();
 
     $scope.$on('ngRepeatFinished', function (data) { //接收广播，一旦repeat结束就会执行
         //查看事件的处理
@@ -165,6 +183,7 @@ app.controller("sort_management",function($http,$scope){
             $scope.check_description=check_description;
             $scope.header_display=header_show;
             alert("进入查看函数")
+            $(".sort_description").html($scope.check_description);
             $scope.header_show1()
         };
         //筛选事件的实现

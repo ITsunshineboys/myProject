@@ -60,7 +60,6 @@
                 </div>
             </div>
         </div>
-        {{sort_list}}
         <!--分类管理列表开始-->
         <div class="operate_box" ng_show="header_display==2">
             <div class="btn2 fl" ng-click="header_show(3)">
@@ -128,7 +127,7 @@
                         <td class="tb_level">{{n.level}}</td>
                         <td class="tb_create_time">{{n.create_time}}</td>
                         <td class="tb_review_status">{{n.review_status}}</td>
-                        <td class="tb_description">{{n.description}}</td>
+                        <td class="tb_description">{{n.reason}}</td>
                         <td class="action">
                             <span class="check_btn" ng-click="check_btn(4,n.title,n.icon,n.review_time,n.review_status,n.reason,n.description,n.titles)">查看</span>
                         </td>
@@ -141,7 +140,7 @@
         <!--分类管的分类理详情页面开始-->
         <div ng_show="header_display==4">
             <ul class="row1_box">
-                <li class="row1_left fl" style="line-height: 32px">
+                <li class="row1_left fl" >
                     分类名称
                 </li>
                 <li class="row1_right fl">
@@ -149,7 +148,7 @@
                 </li>
             </ul>
             <ul class="row1_box">
-                <li class="row1_left fl" style="line-height: 32px">
+                <li class="row1_left fl" >
                     分类所属
                 </li>
                 <li class="row1_right fl">
@@ -157,45 +156,64 @@
                 </li>
             </ul>
             <ul class="row1_box">
-                <li class="row1_left fl" style="line-height: 32px">
+                <li class="row1_left fl" >
                     分类图片
                 </li>
                 <li class="row1_right fl">
-                    <img src="{{url}}{{check_icon}}" alt=""/><span>{{check_icon}}</span>
+                    <div class="sort_img_box">
+                        <img class="sort_img1" src="{{url}}{{check_icon}}" alt=""/>
+                    </div>
                 </li>
             </ul>
             <ul class="row1_box">
-                <li class="row1_left fl" style="line-height: 32px">
-                    分类描述
+                <li class="row1_left fl" >
+                    <p>分类描述</p>
                 </li>
-                <li class="row1_right fl">
-                    <span>{{check_description}}</span>
-                    <div></div>
+                <li class="row1_right fl sort_description">
                 </li>
             </ul>
-            <ul class="row1_box">
-                <li class="row1_left fl" style="line-height: 32px">
-                    分类描述
+            <ul class="row1_box" style="border: none">
+                <li class="row1_left fl" >
+                    审核状态
                 </li>
                 <li class="row1_right fl">
-                    <span>{{check_description}}</span>
-                    <div></div>
+                    {{check_review_status}}
                 </li>
             </ul>
+            <ul class="row1_box" style="border: none">
+                <li class="row1_left fl" >
+                    审核时间
+                </li>
+                <li class="row1_right fl">
+                    {{check_review_time}}
+                </li>
+            </ul>
+            <ul class="row1_box" style="border: none">
+                <li class="row1_left fl" >
+                    审核时间
+                </li>
+                <li class="row1_right fl">
+                    {{check_reason}}
+                </li>
+            </ul>
+            <div class="btn_box">
+                <span class="btn3" ng-click="check_return()">返回</span>
+            </div>
         </div>
         <!--分类管理的分类详情页面结束-->
         <!--分类管理添加分类页面开始-->
         <div ng_show="header_display==3" class="color_2f">
             <ul class="row1_box">
-                <li class="row1_left fl" style="line-height: 32px">
+                <li class="row1_left fl" >
                     <span class="must">*</span>分类名称
                 </li>
                 <li class="row1_right fl">
                     <input type="text" class="class_name" ng-model="title" placeholder="请输入分类名称"/>
                 </li>
             </ul>
+            {{first}}
             <ul class="row1_box">
-                <li class="row1_left fl" style="line-height: 32px">
+                <li class="row1_left fl">
                     <span class="must">*</span>分类所属
                 </li>
                 <li class="row1_right fl">
@@ -214,7 +232,7 @@
                 </li>
             </ul>
             <ul class="row1_box">
-                <li class="row1_left fl" style="line-height: 32px">
+                <li class="row1_left fl" >
                     <span class="must">*</span>上传图标
                 </li>
                 <li class="row1_right fl">
@@ -232,11 +250,11 @@
                 </li>
             </ul>
             <ul class="row1_box" style="border: none">
-                <li class="row1_left fl" style="line-height: 32px">
+                <li class="row1_left fl" >
                     分类描述
                 </li>
                 <li class="row1_right fl">
-                    <script id="editor" type="text/plain" style="width:750px;min-height:200px;"></script>
+                    <script id="editor" type="text/plain" style="width:750px;min-height:300px;"></script>
                 </li>
             </ul>
             <div class="btn_box">
