@@ -1415,9 +1415,23 @@ class MallController extends Controller
 
         $categoryIdsArr = explode(',', $categoryIds);
         foreach ($categoryIdsArr as $categoryId) {
+            $category = GoodsCategory::findOne($categoryId);
+            if (!$category) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             $brandCategory = new BrandCategory;
             $brandCategory->brand_id = $brand->id;
             $brandCategory->category_id = $categoryId;
+            list($rootCategoryId, $parentCategoryId, $categoryId) = explode(',', $category->path);
+            $brandCategory->category_id_level1 = $rootCategoryId;
+            $brandCategory->category_id_level2 = $parentCategoryId;
 
             $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
             if (!$brandCategory->validate()) {
