@@ -10,6 +10,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\HtmlPurifier;
 
 class GoodsCategory extends ActiveRecord
 {
@@ -638,6 +639,8 @@ class GoodsCategory extends ActiveRecord
 
                 $pid = $this->pid + 1;
                 $this->setLevelPath($pid);
+
+                $this->description && $this->description = HtmlPurifier::process($this->description);
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
                     if ($this->review_status == self::REVIEW_STATUS_REJECT) {
@@ -653,6 +656,8 @@ class GoodsCategory extends ActiveRecord
                     if ($this->isAttributeChanged('pid')) {
                         $pid = $this->pid + 1;
                         $this->setLevelPath($pid);
+                    } elseif ($this->isAttributeChanged('description')) {
+                        $this->description = HtmlPurifier::process($this->description);
                     }
                 }
             }
