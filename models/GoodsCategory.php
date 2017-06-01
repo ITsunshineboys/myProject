@@ -611,6 +611,7 @@ class GoodsCategory extends ActiveRecord
                     $this->user_name = $lhzz->nickname;
                     $this->review_status = self::REVIEW_STATUS_APPROVE;
                     $this->approve_time = $now;
+                    $this->offline_person = $lhzz->nickname;
                 }
 
                 $pid = $this->pid + 1;

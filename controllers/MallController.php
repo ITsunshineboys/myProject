@@ -9,6 +9,7 @@ use app\models\GoodsCategory;
 use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\Supplier;
+use app\models\Lhzz;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\EventHandleService;
@@ -1070,13 +1071,16 @@ class MallController extends Controller
         }
 
         $now = time();
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
             $model->deleted = GoodsCategory::STATUS_OFFLINE;
             $model->online_time = $now;
+            $model->online_person = $lhzz->nickname;
         } else {
             $model->deleted = GoodsCategory::STATUS_ONLINE;
             $model->offline_time = $now;
             $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            $model->offline_person = $lhzz->nickname;
         }
 
         $model->scenario = GoodsCategory::SCENARIO_TOGGLE_STATUS;
@@ -1155,7 +1159,8 @@ class MallController extends Controller
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_ONLINE,
             'offline_time' => time(),
-            'offline_reason' => Yii::$app->request->post('offline_reason', '')
+            'offline_reason' => Yii::$app->request->post('offline_reason', ''),
+            'offline_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
         ], $where)
         ) {
             $code = 500;
@@ -1217,7 +1222,8 @@ class MallController extends Controller
         $where = 'id in(' . $ids . ')';
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_OFFLINE,
-            'online_time' => time()
+            'online_time' => time(),
+            'online_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
         ], $where)
         ) {
             $code = 500;

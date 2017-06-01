@@ -69,6 +69,8 @@ CREATE TABLE `goods_category` (
   `reject_time` int unsigned not null DEFAULT 0,
   `reason` varchar(100) not null DEFAULT '' comment '原因',
   `offline_reason` varchar(100) not null DEFAULT '' comment '下架原因',
+  `offline_person` varchar(20) not null DEFAULT '' comment '下架人',
+  `online_person` varchar(20) not null DEFAULT '' comment '上架人',
   `create_time` int unsigned not null DEFAULT 0,
   `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
   `deleted` tinyint(1) not null default 0,
