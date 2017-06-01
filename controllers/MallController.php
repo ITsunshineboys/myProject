@@ -2012,8 +2012,6 @@ class MallController extends Controller
             ]);
         }
 
-        $where = 'review_status = ' . GoodsBrand::REVIEW_STATUS_APPROVE;
-
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
             $supplier = Supplier::find()->where(['uid' => $user->id])->one();
             if (!$supplier) {
@@ -2024,7 +2022,7 @@ class MallController extends Controller
                 ]);
             }
 
-            $where .= " and supplier_id = {$supplier->id}";
+            $where = "supplier_id = {$supplier->id}";
         } else {
             $status = (int)Yii::$app->request->get('status', GoodsBrand::STATUS_ONLINE);
             if (!in_array($status, array_keys(GoodsBrand::$statuses))) {
@@ -2034,6 +2032,7 @@ class MallController extends Controller
                 ]);
             }
 
+            $where = 'review_status = ' . GoodsBrand::REVIEW_STATUS_APPROVE;
             $where .= " and supplier_id = 0 and status = {$status}";
 
             $pid = (int)Yii::$app->request->get('pid', 0);
