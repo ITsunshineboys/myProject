@@ -1782,13 +1782,16 @@ class MallController extends Controller
         }
 
         $now = time();
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         if ($model->status == GoodsBrand::STATUS_OFFLINE) {
             $model->status = GoodsBrand::STATUS_ONLINE;
             $model->online_time = $now;
+            $model->online_person = $lhzz->nickname;
         } else {
             $model->status = GoodsBrand::STATUS_OFFLINE;
             $model->offline_time = $now;
             $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            $model->offline_person = $lhzz->nickname;
         }
 
         $model->scenario = GoodsBrand::SCENARIO_TOGGLE_STATUS;
@@ -1853,7 +1856,8 @@ class MallController extends Controller
         if (!GoodsBrand::updateAll([
             'status' => GoodsBrand::STATUS_OFFLINE,
             'offline_time' => time(),
-            'offline_reason' => Yii::$app->request->post('offline_reason', '')
+            'offline_reason' => Yii::$app->request->post('offline_reason', ''),
+            'offline_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
         ], $where)
         ) {
             $code = 500;
@@ -1908,7 +1912,8 @@ class MallController extends Controller
         $where = 'id in(' . $ids . ')';
         if (!GoodsBrand::updateAll([
             'status' => GoodsBrand::STATUS_ONLINE,
-            'online_time' => time()
+            'online_time' => time(),
+            'online_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
         ], $where)
         ) {
             $code = 500;

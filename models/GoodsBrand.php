@@ -339,6 +339,7 @@ class GoodsBrand extends ActiveRecord
                     $this->user_name = $lhzz->nickname;
                     $this->review_status = self::REVIEW_STATUS_APPROVE;
                     $this->approve_time = $now;
+                    $this->offline_person = $lhzz->nickname;
                 }
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
