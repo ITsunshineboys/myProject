@@ -28,7 +28,7 @@ class GoodsBrand extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'name', 'logo', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'status'];
+    public static $adminFields = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'status'];
 
     /**
      * @var array online status list
