@@ -942,7 +942,7 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_ADD;
         if (!$category->validate()) {
-            if (isset($category->errors['title'])) {
+            if ($category->title && isset($category->errors['title'])) {
                 $code = 1006;
             }
 
@@ -1002,7 +1002,7 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_EDIT;
         if (!$category->validate()) {
-            if (isset($category->errors['title'])) {
+            if ($category->title && isset($category->errors['title'])) {
                 $code = 1006;
             }
 
@@ -1391,7 +1391,7 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
         if (!$brand->validate()) {
-            if (isset($brand->errors['name'])) {
+            if ($brand->name && isset($brand->errors['name'])) {
                 $code = 1007;
             }
 
@@ -1560,7 +1560,7 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_EDIT;
         if (!$brand->validate()) {
-            if (isset($brand->errors['name'])) {
+            if ($brand->name && isset($brand->errors['name'])) {
                 $code = 1007;
             }
 
