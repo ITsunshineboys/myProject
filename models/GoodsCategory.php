@@ -114,6 +114,21 @@ class GoodsCategory extends ActiveRecord
      */
     public static function categoriesByPid($select = [], $parentCategoryId = 0)
     {
+        $where = "pid = {$parentCategoryId}";
+        $reviewApproveStatus = self::REVIEW_STATUS_APPROVE;
+        $where .= " and deleted = 0 and (supplier_id = 0 or review_status = {$reviewApproveStatus})";
+        return self::find()->select($select)->where($where)->asArray()->all();
+    }
+
+    /**
+     * Get direct goods categories by pid
+     *
+     * @param array $select category fields default empty
+     * @param int $parentCategoryId parent category id default 0
+     * @return array
+     */
+    public static function categoriesByPidWithCache($select = [], $parentCategoryId = 0)
+    {
         $key = self::CACHE_PREFIX . $parentCategoryId;
         $cache = Yii::$app->cache;
         $categories = $cache->get($key);

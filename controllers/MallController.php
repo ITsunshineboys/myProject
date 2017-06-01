@@ -17,7 +17,6 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
-use yii\helpers\Url;
 use yii\web\Controller;
 
 class MallController extends Controller
@@ -1109,8 +1108,8 @@ class MallController extends Controller
             Goods::disableGoodsByCategoryIds($categoryIds);
         }
 
-        new EventHandleService();
-        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+//        new EventHandleService();
+//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
 
         return Json::encode([
             'code' => 200,
@@ -1174,8 +1173,8 @@ class MallController extends Controller
         GoodsCategory::disableByIds($categoryIds);
         Goods::disableGoodsByCategoryIds($categoryIds);
 
-        new EventHandleService();
-        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+//        new EventHandleService();
+//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
 
         return Json::encode([
             'code' => 200,
@@ -1233,8 +1232,8 @@ class MallController extends Controller
             ]);
         }
 
-        new EventHandleService();
-        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+//        new EventHandleService();
+//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
 
         return Json::encode([
             'code' => 200,
