@@ -28,7 +28,7 @@ class GoodsBrand extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'name', 'logo', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'user_name', 'status'];
+    public static $adminFields = ['id', 'name', 'logo', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'status'];
 
     /**
      * @var array online status list
@@ -180,10 +180,6 @@ class GoodsBrand extends ActiveRecord
                 $brand['review_status'] = Yii::$app->params['reviewStatuses'][$brand['review_status']];
             }
 
-            if (isset($brand['status'])) {
-                $brand['status'] = self::$statuses[$brand['status']];
-            }
-
             if (isset($brand['approve_time']) || isset($brand['reject_time'])) {
                 $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
                 if (isset($brand['approve_time'])) {
@@ -194,14 +190,25 @@ class GoodsBrand extends ActiveRecord
                 }
             }
 
-            if (isset($brand['supplier_name']) || isset($brand['user_name'])) {
-                $brand['applicant'] = $brand['supplier_name'] ? $brand['supplier_name'] : $brand['user_name'];
-                if (isset($brand['supplier_name'])) {
-                    unset($brand['supplier_name']);
+            if (!empty($brand['supplier_name'])) {
+                $brand['applicant'] = $brand['supplier_name'];
+            } else {
+                if ($brand['status'] == self::STATUS_ONLINE) {
+                    $brand['applicant'] = $brand['online_person'];
+                } else {
+                    $brand['applicant'] = $brand['offline_person'];
                 }
-                if (isset($brand['user_name'])) {
-                    unset($brand['user_name']);
-                }
+            }
+
+            if (isset($brand['status'])) {
+                $brand['status'] = self::$statuses[$brand['status']];
+            }
+
+            if (isset($brand['offline_person'])) {
+                unset($brand['offline_person']);
+            }
+            if (isset($brand['online_person'])) {
+                unset($brand['online_person']);
             }
 
             if (isset($brand['id'])) {
