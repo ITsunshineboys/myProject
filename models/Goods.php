@@ -151,7 +151,7 @@ class Goods extends ActiveRecord
     /**
      * Get goods ids by category id
      *
-     * @param  init  $categoryId category id
+     * @param  init $categoryId category id
      * @return array
      */
     public static function findIdsByCategoryId($categoryId)
@@ -163,6 +163,54 @@ class Goods extends ActiveRecord
 
         return Yii::$app->db
             ->createCommand("select id from {{%goods}} where category_id = {$categoryId}")
+            ->queryColumn();
+    }
+
+    /**
+     * Disable goods by brand ids
+     *
+     * @param array $brandIds
+     */
+    public static function disableGoodsByBrandIds(array $brandIds)
+    {
+        foreach ($brandIds as $brandId) {
+            self::disableGoodsByBrandId($brandId);
+        }
+    }
+
+    /**
+     * Disable goods by brand id
+     *
+     * @param int $brandId brand id
+     */
+    public static function disableGoodsByBrandId($brandId)
+    {
+        $goodsIds = self::findIdsByBrandId($brandId);
+        if ($goodsIds) {
+            $goodsIds = implode(',', $goodsIds);
+            $where = 'id in(' . $goodsIds . ')';
+            self::updateAll([
+                'status' => self::STATUS_OFFLINE,
+                'offline_time' => time()
+            ], $where);
+        }
+    }
+
+    /**
+     * Get goods ids by brand id
+     *
+     * @param  init $brandId brand id
+     * @return array
+     */
+    public static function findIdsByBrandId($brandId)
+    {
+        $brandId = (int)$brandId;
+        if ($brandId <= 0) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select id from {{%goods}} where brand_id = {$brandId}")
             ->queryColumn();
     }
 
@@ -208,13 +256,12 @@ class Goods extends ActiveRecord
      */
     public static function findQueryAll($all = [])
     {
-        if($all){
+        if ($all) {
             $id = [];
-            foreach ($all as $single)
-            {
+            foreach ($all as $single) {
                 $id [] = $single['goods_id'];
             }
-            $all_goods = self::find()->asArray()->where(['in','id',$id])->all();
+            $all_goods = self::find()->asArray()->where(['in', 'id', $id])->all();
         }
         return $all_goods;
     }

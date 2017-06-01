@@ -1810,6 +1810,10 @@ class MallController extends Controller
             ]);
         }
 
+        if ($model->status == GoodsBrand::STATUS_OFFLINE) {
+            Goods::disableGoodsByBrandId($model->id);
+        }
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
@@ -1866,6 +1870,8 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        Goods::disableGoodsByBrandIds(explode(',', $ids));
 
         return Json::encode([
             'code' => 200,
