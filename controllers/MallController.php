@@ -12,7 +12,7 @@ use app\models\Supplier;
 use app\models\Lhzz;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
-use app\services\EventHandleService;
+use app\services\ModelService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -1258,6 +1258,15 @@ class MallController extends Controller
             ]);
         }
 
+        $sort = Yii::$app->request->get('sort', '');
+        $orderBy = ModelService::sortFields(new GoodsCategory, $sort);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
             $supplier = Supplier::find()->where(['uid' => $user->id])->one();
             if (!$supplier) {
@@ -1302,7 +1311,7 @@ class MallController extends Controller
             'data' => [
                 'category_list_admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
-                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, ['level' => SORT_ASC])
+                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, $orderBy)
                 ]
             ],
         ]);
