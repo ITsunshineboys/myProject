@@ -136,3 +136,12 @@ create table brand_category (
   `category_id_level2` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table logistics_template (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) not null DEFAULT '',
+  `delivery_method` tinyint(1) NOT NULL DEFAULT 0 comment '0：快递物流，1：送货上门',
+  `delivery_cost_default` bigint NOT NULL DEFAULT 0 comment '默认运费, 单位：分',
+  `delivery_cost_delta` bigint NOT NULL DEFAULT 0 comment '增加件运费, 单位：分',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
