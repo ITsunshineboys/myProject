@@ -228,7 +228,7 @@ class MallController extends Controller
     }
 
     /**
-     * Get goods categories action(lhzz admin).
+     * Get goods categories action.
      *
      * @return string
      */
