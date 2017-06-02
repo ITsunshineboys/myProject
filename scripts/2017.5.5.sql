@@ -146,3 +146,11 @@ create table logistics_template (
   `delivery_cost_delta` bigint NOT NULL DEFAULT 0 comment '增加件运费, 单位：分',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table logistics_district (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `template_id` int(11) not null default 0,
+  `district_code` int(6) unsigned not null default 0,
+  `district_name` varchar(100) not null DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
