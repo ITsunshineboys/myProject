@@ -1336,8 +1336,9 @@ class MallController extends Controller
 
         $code = 1000;
 
-        $sort = Yii::$app->request->get('sort', '');
-        $orderBy = ModelService::sortFields(new GoodsCategory, $sort);
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsCategory;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
         if ($orderBy === false) {
             return Json::encode([
                 'code' => $code,
@@ -1387,7 +1388,7 @@ class MallController extends Controller
             'data' => [
                 'category_review_list' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
-                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, ['level' => SORT_ASC])
+                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, $orderBy)
                 ]
             ],
         ]);
