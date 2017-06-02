@@ -139,6 +139,7 @@ create table brand_category (
 
 create table logistics_template (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) not null default 0,
   `name` varchar(50) not null DEFAULT '',
   `delivery_method` tinyint(1) NOT NULL DEFAULT 0 comment '0：快递物流，1：送货上门',
   `delivery_cost_default` bigint NOT NULL DEFAULT 0 comment '默认运费, 单位：分',
