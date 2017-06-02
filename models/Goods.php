@@ -42,6 +42,16 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id'], 'required'],
+        ];
+    }
+
+    /**
      * Get goods list by category id
      *
      * @param  int $categoryId category id
