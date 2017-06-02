@@ -25,7 +25,7 @@ class ModelService
      * @param  array        $sort  sorting fields with direction
      * @return bool|string
      */
-    public static function sortFields(ActiveRecord $model, array $sort = ['id:' . self::SORT_DIRECTIONS[SORT_DESC]])
+    public static function sortFields(ActiveRecord $model, array $sort = ['id:' . SORT_DESC])
     {
         $attributes = $model->getAttributes();
         $orderBy = [];
