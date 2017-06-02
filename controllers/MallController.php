@@ -1972,6 +1972,16 @@ class MallController extends Controller
 
         $code = 1000;
 
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsBrand;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $reviewStatus = (int)Yii::$app->request->get('review_status', GoodsCategory::REVIEW_STATUS_NOT_REVIEWED);
         if (!in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
             return Json::encode([
@@ -2014,7 +2024,7 @@ class MallController extends Controller
             'data' => [
                 'brand_review_list' => [
                     'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
-                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size)
+                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size, $orderBy)
                 ]
             ],
         ]);
@@ -2031,6 +2041,16 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
         if (!$user) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsBrand;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2081,7 +2101,7 @@ class MallController extends Controller
             'data' => [
                 'brand_list_admin' => [
                     'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
-                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size)
+                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size, $orderBy)
                 ]
             ],
         ]);
