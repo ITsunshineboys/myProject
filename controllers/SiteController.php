@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\ContactForm;
 use app\models\LoginForm;
-use app\models\UploadForm;
 use app\models\User;
 use app\models\Role;
 use app\models\UserRole;
@@ -13,8 +12,6 @@ use app\services\FileService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\SmValidationService;
-use Codeception\Module\Filesystem;
-use Faker\Provider\File;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -735,6 +732,41 @@ class SiteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Check admin module access
+     *
+     * @return string
+     */
+    public function actionCheckAccessAdmin()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = 1000;
+
+        $module = trim(Yii::$app->request->get('module', ''));
+        if (!$module) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'can_access' => Role::find()->where(['id' => $user->login_role_id, 'admin_module' => $module])->exists()
+            ],
         ]);
     }
 
