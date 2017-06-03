@@ -39,11 +39,11 @@ class LogisticsTemplate extends ActiveRecord
     {
         return [
             [['name', 'delivery_method'], 'required'],
-            [['name'], 'validateName', 'on' => self::SCENARIO_ADD],
+            [['name'], 'validateName'],
             [['delivery_method', 'delivery_cost_default', 'delivery_number_default', 'delivery_cost_delta', 'delivery_number_delta'], 'number', 'integerOnly' => true, 'min' => 0],
-            ['delivery_method', 'in', 'range' => array_keys(self::DELIVERY_METHOD), 'on' => self::SCENARIO_ADD],
-            ['delivery_method', 'validateDeliveryMethod', 'on' => self::SCENARIO_ADD],
-            [['delivery_cost_default', 'delivery_number_default', 'delivery_cost_delta', 'delivery_number_delta'], 'default', 'value' => 0, 'on' => self::SCENARIO_ADD]
+            ['delivery_method', 'in', 'range' => array_keys(self::DELIVERY_METHOD)],
+            ['delivery_method', 'validateDeliveryMethod'],
+            [['delivery_cost_default', 'delivery_number_default', 'delivery_cost_delta', 'delivery_number_delta'], 'default', 'value' => 0]
         ];
     }
 
@@ -99,9 +99,18 @@ class LogisticsTemplate extends ActiveRecord
             return false;
         }
 
-        if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-            $this->addError($attribute);
-            return false;
+        if ($this->isNewRecord) {
+            if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
+                $this->addError($attribute);
+                return false;
+            }
+        } else {
+            if ($this->isAttributeChanged($attribute)) {
+                if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
+                    $this->addError($attribute);
+                    return false;
+                }
+            }
         }
 
         return true;
@@ -135,6 +144,8 @@ class LogisticsTemplate extends ActiveRecord
 
                 return true;
             }
+
+            return true;
         }
     }
 }

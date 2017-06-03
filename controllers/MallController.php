@@ -2139,8 +2139,88 @@ class MallController extends Controller
             unset($logisticsTemplate->delivery_number_delta);
         }
 
-        $logisticsTemplate->scenario = LogisticsTemplate::SCENARIO_ADD;
         if (!$logisticsTemplate->validate()) {
+            if ($logisticsTemplate->name && isset($logisticsTemplate->errors['name'])) {
+                $code = 1008;
+            }
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$logisticsTemplate->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = LogisticsDistrict::insertByTemplateIdAndDistrictCodes($logisticsTemplate->id,
+            explode(',', $districtCodes));
+        if ($code != 200) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Edit logistis template action
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplateEdit()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $logisticsTemplate = LogisticsTemplate::findOne($id);
+        if (!$logisticsTemplate) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $logisticsTemplate->attributes = Yii::$app->request->post();
+        $districtCodes = trim(Yii::$app->request->post('district_codes', ''));
+        $districtCodes = trim($districtCodes, ',');
+        if (!$districtCodes) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($logisticsTemplate->delivery_method == LogisticsTemplate::DELIVERY_METHOD_HOME) {
+            unset($logisticsTemplate->delivery_cost_default);
+            unset($logisticsTemplate->delivery_cost_delta);
+            unset($logisticsTemplate->delivery_number_default);
+            unset($logisticsTemplate->delivery_number_delta);
+        }
+
+        if (!$logisticsTemplate->validate()) {
+            if ($logisticsTemplate->name && isset($logisticsTemplate->errors['name'])) {
+                $code = 1008;
+            }
+
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2160,36 +2240,30 @@ class MallController extends Controller
         }
 
         $districtCodesArr = explode(',', $districtCodes);
-        foreach ($districtCodesArr as $districtCode) {
-            $districtName = StringService::checkDistrict($districtCode);
-            if ($districtName === false) {
-                $transaction->rollBack();
+        $districtCodesArrOld = LogisticsDistrict::districtCodesByTemplateId($logisticsTemplate->id);
+        if (count(array_diff($districtCodesArr, $districtCodesArrOld)) != 0
+            || count(array_diff($districtCodesArrOld, $districtCodesArr)) != 0
+        ) {
+            $deletedNum = LogisticsDistrict::deleteAll(
+                [
+                    'template_id' => $logisticsTemplate->id,
+                ]
+            );
 
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            $logisticsDistrict = new LogisticsDistrict;
-            $logisticsDistrict->template_id = $logisticsTemplate->id;
-            $logisticsDistrict->district_code = $districtCode;
-            $logisticsDistrict->district_name = $districtName;
-
-            $logisticsDistrict->scenario = LogisticsDistrict::SCENARIO_ADD;
-            if (!$logisticsDistrict->validate()) {
-                $transaction->rollBack();
-
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$logisticsDistrict->save()) {
+            if ($deletedNum == 0) {
                 $transaction->rollBack();
 
                 $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $code = LogisticsDistrict::insertByTemplateIdAndDistrictCodes($logisticsTemplate->id, $districtCodesArr);
+            if ($code != 200) {
+                $transaction->rollBack();
+
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
