@@ -883,15 +883,6 @@ class MallController extends Controller
      */
     public function actionCategoryReview()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -977,15 +968,6 @@ class MallController extends Controller
      */
     public function actionCategoryEdit()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1045,15 +1027,6 @@ class MallController extends Controller
      */
     public function actionCategoryStatusToggle()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $id = (int)Yii::$app->request->post('id', 0);
 
         $code = 1000;
@@ -1128,15 +1101,6 @@ class MallController extends Controller
      */
     public function actionCategoryDisableBatch()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
         $idsArr = explode(',', $ids);
@@ -1193,15 +1157,6 @@ class MallController extends Controller
      */
     public function actionCategoryEnableBatch()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
 
@@ -1329,15 +1284,6 @@ class MallController extends Controller
      */
     public function actionCategoryReviewList()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $sort = Yii::$app->request->get('sort', []);
@@ -1725,15 +1671,6 @@ class MallController extends Controller
      */
     public function actionCategoryOfflineReasonReset()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
