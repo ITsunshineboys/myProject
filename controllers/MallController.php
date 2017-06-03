@@ -10,10 +10,13 @@ use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\Supplier;
 use app\models\Lhzz;
+use app\models\LogisticsTemplate;
+use app\models\LogisticsDistrict;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
 use Yii;
+use yii\debug\models\search\Log;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -59,6 +62,7 @@ class MallController extends Controller
         'brand-enable-batch',
         'brand-review-list',
         'brand-list-admin',
+        'logistics-template-add',
     ];
 
     /**
@@ -110,6 +114,7 @@ class MallController extends Controller
                     'brand-status-toggle' => ['post',],
                     'brand-disable-batch' => ['post',],
                     'brand-enable-batch' => ['post',],
+                    'logistics-template-add' => ['post',],
                 ],
             ],
         ];
@@ -2104,6 +2109,99 @@ class MallController extends Controller
                     'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size, $orderBy)
                 ]
             ],
+        ]);
+    }
+
+    /**
+     * Add logistics template action
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplateAdd()
+    {
+        $code = 1000;
+
+        $logisticsTemplate = new LogisticsTemplate;
+        $logisticsTemplate->attributes = Yii::$app->request->post();
+        $districtCodes = trim(Yii::$app->request->post('district_codes', ''));
+        $districtCodes = trim($districtCodes, ',');
+        if (!$districtCodes) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($logisticsTemplate->delivery_method == LogisticsTemplate::DELIVERY_METHOD_HOME) {
+            unset($logisticsTemplate->delivery_cost_default);
+            unset($logisticsTemplate->delivery_cost_delta);
+            unset($logisticsTemplate->delivery_number_default);
+            unset($logisticsTemplate->delivery_number_delta);
+        }
+
+        $logisticsTemplate->scenario = LogisticsTemplate::SCENARIO_ADD;
+        if (!$logisticsTemplate->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$logisticsTemplate->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $districtCodesArr = explode(',', $districtCodes);
+        foreach ($districtCodesArr as $districtCode) {
+            $districtName = StringService::checkDistrict($districtCode);
+            if ($districtName === false) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $logisticsDistrict = new LogisticsDistrict;
+            $logisticsDistrict->template_id = $logisticsTemplate->id;
+            $logisticsDistrict->district_code = $districtCode;
+            $logisticsDistrict->district_name = $districtName;
+
+            $logisticsDistrict->scenario = LogisticsDistrict::SCENARIO_ADD;
+            if (!$logisticsDistrict->validate()) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$logisticsDistrict->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }
