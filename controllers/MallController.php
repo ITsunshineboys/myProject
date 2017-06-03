@@ -62,6 +62,7 @@ class MallController extends Controller
         'brand-review-list',
         'brand-list-admin',
         'logistics-template-add',
+        'logistics-template-edit',
     ];
 
     /**
@@ -114,6 +115,7 @@ class MallController extends Controller
                     'brand-disable-batch' => ['post',],
                     'brand-enable-batch' => ['post',],
                     'logistics-template-add' => ['post',],
+                    'logistics-template-edit' => ['post',],
                 ],
             ],
         ];
@@ -1444,15 +1446,6 @@ class MallController extends Controller
      */
     public function actionBrandReview()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1496,15 +1489,6 @@ class MallController extends Controller
      */
     public function actionBrandEdit()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1620,15 +1604,6 @@ class MallController extends Controller
      */
     public function actionBrandOfflineReasonReset()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1713,15 +1688,6 @@ class MallController extends Controller
      */
     public function actionBrandStatusToggle()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $id = (int)Yii::$app->request->post('id', 0);
 
         $code = 1000;
@@ -1787,15 +1753,6 @@ class MallController extends Controller
      */
     public function actionBrandDisableBatch()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
 
@@ -1846,15 +1803,6 @@ class MallController extends Controller
      */
     public function actionBrandEnableBatch()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
 
@@ -1902,15 +1850,6 @@ class MallController extends Controller
      */
     public function actionBrandReviewList()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $sort = Yii::$app->request->get('sort', []);

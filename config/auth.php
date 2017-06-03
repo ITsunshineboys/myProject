@@ -7,6 +7,7 @@
  */
 
 return [
+    // recommend
     'recommend-admin-index' => [1],
     'recommend-disable-batch' => [1],
     'recommend-delete-batch' => [1],
@@ -19,6 +20,8 @@ return [
     'recommend-edit' => [1],
     'recommend-sort' => [1],
 //    'recommend-click-record',
+
+    // category
     'category-review' => [1],
     'categories-admin' => [1, 6],
     'category-status-toggle' => [1],
@@ -30,4 +33,19 @@ return [
     'category-edit' => [1],
     'category-offline-reason-reset' => [1],
     'category-review-list' => [1],
+
+    // brand
+    'brand-add' => [1, 6],
+    'brand-review' => [1],
+    'brand-edit' => [1],
+    'brand-offline-reason-reset' => [1],
+    'brand-status-toggle' => [1],
+    'brand-disable-batch' => [1],
+    'brand-enable-batch' => [1],
+    'brand-review-list' => [1],
+    'brand-list-admin' => [1, 6],
+
+    // logistics template
+    'logistics-template-add' => [6],
+    'logistics-template-edit' => [6],
 ];
