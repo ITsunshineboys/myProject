@@ -40,8 +40,7 @@ class MallController extends Controller
         'recommend-edit',
         'recommend-sort',
         'recommend-click-record',
-        'carousel-admin',
-        'review-supplier-category',
+        'category-review',
         'categories-admin',
         'category-admin',
         'category-status-toggle',
@@ -100,7 +99,7 @@ class MallController extends Controller
                     'recommend-status-toggle' => ['post',],
                     'recommend-click-record' => ['post',],
                     'recommend-disable-batch' => ['post',],
-                    'review-supplier-category' => ['post',],
+                    'category-review' => ['post',],
                     'category-add' => ['post',],
                     'category-edit' => ['post',],
                     'category-status-toggle' => ['post',],
@@ -882,7 +881,7 @@ class MallController extends Controller
      *
      * @return string
      */
-    public function actionReviewSupplierCategory()
+    public function actionCategoryReview()
     {
         $user = Yii::$app->user->identity;
         if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
