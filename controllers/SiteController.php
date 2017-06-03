@@ -33,7 +33,6 @@ class SiteController extends Controller
         'upload',
         'upload-delete',
         'review-statuses',
-        'check-access-admin'
     ];
 
     /**
@@ -743,23 +742,22 @@ class SiteController extends Controller
      */
     public function actionCheckAccessAdmin()
     {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'can_access' => false
+            ],
+        ];
+
         $user = Yii::$app->user->identity;
         if (!$user) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            return Json::encode($ret);
         }
-
-        $code = 1000;
 
         $module = trim(Yii::$app->request->get('module', ''));
         if (!$module) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            return Json::encode($ret);
         }
 
         return Json::encode([
