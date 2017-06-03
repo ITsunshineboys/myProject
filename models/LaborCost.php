@@ -24,18 +24,10 @@ class LaborCost extends ActiveRecord
      * @param string $toponymy
      */
     public static function univalence($province ='',$toponymy = '',$worker_kind = ''){
-        if(!$province == null && !$toponymy == null)
-        {
-            $labors = self::find()->where(['and',['province' => $province],['city' => $toponymy ],['worker_kind' =>$worker_kind]])->all();
-            foreach ($labors as $labor){
-                $labor_price = $labor['univalence'];
-            }
-        }else{
-            echo '输入错误';
-            exit;
+        if(!$province == null && !$toponymy == null) {
+            $labors = self::find()->where(['and', ['province' => $province], ['city' => $toponymy], ['worker_kind' => $worker_kind]])->all();
         }
-        return $labor_price;
+        return $labors;
     }
-
 }
 

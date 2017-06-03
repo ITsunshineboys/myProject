@@ -68,7 +68,7 @@ class UserRole extends ActiveRecord
             $status = Role::AUTHENTICATION_STATUS_NO_APPLICATION;
             if ($detail) {
                 $detail = (object)$detail;
-                if (!$detail->approve_reason && !$detail->reject_reason) {
+                if (empty($detail->approve_reason) && empty($detail->reject_reason)) {
                     $status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
                 } elseif ($detail->approve_reason) {
                     $status = Role::AUTHENTICATION_STATUS_APPROVED;

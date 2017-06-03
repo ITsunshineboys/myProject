@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\ContactForm;
 use app\models\LoginForm;
-use app\models\UploadForm;
 use app\models\User;
 use app\models\Role;
 use app\models\UserRole;
@@ -13,8 +12,6 @@ use app\services\FileService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\SmValidationService;
-use Codeception\Module\Filesystem;
-use Faker\Provider\File;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -35,7 +32,7 @@ class SiteController extends Controller
         'time-types',
         'upload',
         'upload-delete',
-        'review-statuses'
+        'review-statuses',
     ];
 
     /**
@@ -736,6 +733,35 @@ class SiteController extends Controller
             'code' => 200,
             'msg' => 'OK'
         ]);
+    }
+
+    /**
+     * Check admin module access
+     *
+     * @return string
+     */
+    public function actionCheckAccessAdmin()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'can_access' => false
+            ],
+        ];
+
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            return Json::encode($ret);
+        }
+
+        $module = trim(Yii::$app->request->get('module', ''));
+        if (!$module) {
+            return Json::encode($ret);
+        }
+
+        $ret['data']['can_access'] = Role::find()->where(['id' => $user->login_role_id, 'admin_module' => $module])->exists();
+        return Json::encode($ret);
     }
 
     public function actionTest()

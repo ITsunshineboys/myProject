@@ -69,6 +69,8 @@ CREATE TABLE `goods_category` (
   `reject_time` int unsigned not null DEFAULT 0,
   `reason` varchar(100) not null DEFAULT '' comment '原因',
   `offline_reason` varchar(100) not null DEFAULT '' comment '下架原因',
+  `offline_person` varchar(20) not null DEFAULT '' comment '下架人',
+  `online_person` varchar(20) not null DEFAULT '' comment '上架人',
   `create_time` int unsigned not null DEFAULT 0,
   `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
   `deleted` tinyint(1) not null default 0,
@@ -90,6 +92,8 @@ CREATE TABLE `goods_brand` (
   `reject_time` int unsigned not null DEFAULT 0,
   `reason` varchar(100) not null DEFAULT '' comment '审核原因',
   `offline_reason` varchar(100) not null DEFAULT '' comment '下架原因',
+  `offline_person` varchar(20) not null DEFAULT '' comment '下架人',
+  `online_person` varchar(20) not null DEFAULT '' comment '上架人',
   `create_time` int unsigned not null DEFAULT 0,
   `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
   `status` tinyint(1) not null default 0,
@@ -130,5 +134,26 @@ create table brand_category (
   `category_id` int(11) NOT NULL DEFAULT 0,
   `category_id_level1` int(11) NOT NULL DEFAULT 0,
   `category_id_level2` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table logistics_template (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) not null default 0,
+  `name` varchar(50) not null DEFAULT '',
+  `delivery_method` tinyint(1) NOT NULL DEFAULT 0 comment '0：快递物流，1：送货上门',
+  `delivery_cost_default` bigint NOT NULL DEFAULT 0 comment '默认运费, 单位：分',
+  `delivery_number_default` int(11) NOT NULL DEFAULT 0 comment '默认运费对应商品数量',
+  `delivery_cost_delta` bigint NOT NULL DEFAULT 0 comment '增加件运费, 单位：分',
+  `delivery_number_delta` int(11) NOT NULL DEFAULT 0 comment '增加件运费对应商品数量',
+  `status` tinyint(1) not null default 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table logistics_district (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `template_id` int(11) not null default 0,
+  `district_code` int(6) unsigned not null default 0,
+  `district_name` varchar(100) not null DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

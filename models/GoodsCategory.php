@@ -10,6 +10,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\HtmlPurifier;
 
 class GoodsCategory extends ActiveRecord
 {
@@ -36,7 +37,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'user_name', 'deleted', 'path'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'online_person', 'offline_person', 'deleted', 'path'];
 
     /**
      * @var array online status list
@@ -114,6 +115,21 @@ class GoodsCategory extends ActiveRecord
      */
     public static function categoriesByPid($select = [], $parentCategoryId = 0)
     {
+        $where = "pid = {$parentCategoryId}";
+        $reviewApproveStatus = self::REVIEW_STATUS_APPROVE;
+        $where .= " and deleted = 0 and (supplier_id = 0 or review_status = {$reviewApproveStatus})";
+        return self::find()->select($select)->where($where)->asArray()->all();
+    }
+
+    /**
+     * Get direct goods categories by pid
+     *
+     * @param array $select category fields default empty
+     * @param int $parentCategoryId parent category id default 0
+     * @return array
+     */
+    public static function categoriesByPidWithCache($select = [], $parentCategoryId = 0)
+    {
         $key = self::CACHE_PREFIX . $parentCategoryId;
         $cache = Yii::$app->cache;
         $categories = $cache->get($key);
@@ -147,10 +163,10 @@ class GoodsCategory extends ActiveRecord
      * @param  array $select select fields default all fields
      * @param  int $page page number default 1
      * @param  int $size page size default 12
-     * @param  array $orderBy order by fields default sold_number desc
+     * @param  string $orderBy order by fields default id desc
      * @return array
      */
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
         $offset = ($page - 1) * $size;
         $categoryList = self::find()
@@ -207,11 +223,6 @@ class GoodsCategory extends ActiveRecord
                 $category['review_status'] = Yii::$app->params['reviewStatuses'][$category['review_status']];
             }
 
-            if (isset($category['deleted'])) {
-                $category['status'] = self::$statuses[1 - $category['deleted']];
-                unset($category['deleted']);
-            }
-
             if (isset($category['approve_time']) || isset($category['reject_time'])) {
                 $category['review_time'] = date('Y-m-d H:i', $category['approve_time'] > 0 ? $category['approve_time'] : $category['reject_time']);
                 if (isset($category['approve_time'])) {
@@ -222,14 +233,26 @@ class GoodsCategory extends ActiveRecord
                 }
             }
 
-            if (isset($category['supplier_name']) || isset($category['user_name'])) {
-                $category['applicant'] = $category['supplier_name'] ? $category['supplier_name'] : $category['user_name'];
-                if (isset($category['supplier_name'])) {
-                    unset($category['supplier_name']);
+            if (!empty($category['supplier_name'])) {
+                $category['applicant'] = $category['supplier_name'];
+            } else {
+                if ($category['deleted'] == self::STATUS_ONLINE) {
+                    $category['applicant'] = $category['offline_person'];
+                } else {
+                    $category['applicant'] = $category['online_person'];
                 }
-                if (isset($category['user_name'])) {
-                    unset($category['user_name']);
-                }
+            }
+
+            if (isset($category['deleted'])) {
+                $category['status'] = self::$statuses[1 - $category['deleted']];
+                unset($category['deleted']);
+            }
+
+            if (isset($category['offline_person'])) {
+                unset($category['offline_person']);
+            }
+            if (isset($category['online_person'])) {
+                unset($category['online_person']);
             }
         }
 
@@ -611,10 +634,13 @@ class GoodsCategory extends ActiveRecord
                     $this->user_name = $lhzz->nickname;
                     $this->review_status = self::REVIEW_STATUS_APPROVE;
                     $this->approve_time = $now;
+                    $this->offline_person = $lhzz->nickname;
                 }
 
                 $pid = $this->pid + 1;
                 $this->setLevelPath($pid);
+
+                $this->description && $this->description = HtmlPurifier::process($this->description);
             } else {
                 if ($this->scenario == self::SCENARIO_REVIEW) {
                     if ($this->review_status == self::REVIEW_STATUS_REJECT) {
@@ -630,6 +656,8 @@ class GoodsCategory extends ActiveRecord
                     if ($this->isAttributeChanged('pid')) {
                         $pid = $this->pid + 1;
                         $this->setLevelPath($pid);
+                    } elseif ($this->isAttributeChanged('description')) {
+                        $this->description = HtmlPurifier::process($this->description);
                     }
                 }
             }

@@ -130,7 +130,7 @@ class StringService
      * Check if valid district code
      *
      * @param  string $code strict code
-     * @return bool
+     * @return bool|int
      */
     public static function checkDistrict($code)
     {
@@ -144,6 +144,10 @@ class StringService
 
         $parentCode = substr($code, 0, 2) . $parentCodeLastCodes;
         $codes = Yii::$app->params['districts'][0];
-        return !empty($codes[$parentCode][$code]);
+        if (empty($codes[$parentCode][$code])) {
+            return false;
+        }
+
+        return $codes[$parentCode][$code];
     }
 }

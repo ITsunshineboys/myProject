@@ -9,14 +9,17 @@ use app\models\GoodsCategory;
 use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\Supplier;
+use app\models\Lhzz;
+use app\models\LogisticsTemplate;
+use app\models\LogisticsDistrict;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
-use app\services\EventHandleService;
+use app\services\ModelService;
+use app\services\AdminAuthService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
-use yii\helpers\Url;
 use yii\web\Controller;
 
 class MallController extends Controller
@@ -37,8 +40,7 @@ class MallController extends Controller
         'recommend-edit',
         'recommend-sort',
         'recommend-click-record',
-        'carousel-admin',
-        'review-supplier-category',
+        'category-review',
         'categories-admin',
         'category-admin',
         'category-status-toggle',
@@ -59,6 +61,8 @@ class MallController extends Controller
         'brand-enable-batch',
         'brand-review-list',
         'brand-list-admin',
+        'logistics-template-add',
+        'logistics-template-edit',
     ];
 
     /**
@@ -68,7 +72,7 @@ class MallController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AdminAuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     $code = 403;
                     new ExceptionHandleService($code);
@@ -96,7 +100,7 @@ class MallController extends Controller
                     'recommend-status-toggle' => ['post',],
                     'recommend-click-record' => ['post',],
                     'recommend-disable-batch' => ['post',],
-                    'review-supplier-category' => ['post',],
+                    'category-review' => ['post',],
                     'category-add' => ['post',],
                     'category-edit' => ['post',],
                     'category-status-toggle' => ['post',],
@@ -110,6 +114,8 @@ class MallController extends Controller
                     'brand-status-toggle' => ['post',],
                     'brand-disable-batch' => ['post',],
                     'brand-enable-batch' => ['post',],
+                    'logistics-template-add' => ['post',],
+                    'logistics-template-edit' => ['post',],
                 ],
             ],
         ];
@@ -228,7 +234,7 @@ class MallController extends Controller
     }
 
     /**
-     * Get goods categories action(lhzz admin).
+     * Get goods categories action.
      *
      * @return string
      */
@@ -877,17 +883,8 @@ class MallController extends Controller
      *
      * @return string
      */
-    public function actionReviewSupplierCategory()
+    public function actionCategoryReview()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -917,10 +914,10 @@ class MallController extends Controller
             ]);
         }
 
-        if ($goodsCategory->review_status == GoodsCategory::REVIEW_STATUS_APPROVE) {
-            new EventHandleService();
-            Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
-        }
+//        if ($goodsCategory->review_status == GoodsCategory::REVIEW_STATUS_APPROVE) {
+//            new EventHandleService();
+//            Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+//        }
 
         return Json::encode([
             'code' => 200,
@@ -942,7 +939,7 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_ADD;
         if (!$category->validate()) {
-            if (isset($category->errors['title'])) {
+            if ($category->title && isset($category->errors['title'])) {
                 $code = 1006;
             }
 
@@ -973,15 +970,6 @@ class MallController extends Controller
      */
     public function actionCategoryEdit()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1002,6 +990,10 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_EDIT;
         if (!$category->validate()) {
+            if ($category->title && isset($category->errors['title'])) {
+                $code = 1006;
+            }
+
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1037,15 +1029,6 @@ class MallController extends Controller
      */
     public function actionCategoryStatusToggle()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $id = (int)Yii::$app->request->post('id', 0);
 
         $code = 1000;
@@ -1066,13 +1049,16 @@ class MallController extends Controller
         }
 
         $now = time();
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
             $model->deleted = GoodsCategory::STATUS_OFFLINE;
             $model->online_time = $now;
+            $model->online_person = $lhzz->nickname;
         } else {
             $model->deleted = GoodsCategory::STATUS_ONLINE;
             $model->offline_time = $now;
             $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            $model->offline_person = $lhzz->nickname;
         }
 
         $model->scenario = GoodsCategory::SCENARIO_TOGGLE_STATUS;
@@ -1101,8 +1087,8 @@ class MallController extends Controller
             Goods::disableGoodsByCategoryIds($categoryIds);
         }
 
-        new EventHandleService();
-        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+//        new EventHandleService();
+//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
 
         return Json::encode([
             'code' => 200,
@@ -1117,15 +1103,6 @@ class MallController extends Controller
      */
     public function actionCategoryDisableBatch()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
         $idsArr = explode(',', $ids);
@@ -1151,7 +1128,8 @@ class MallController extends Controller
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_ONLINE,
             'offline_time' => time(),
-            'offline_reason' => Yii::$app->request->post('offline_reason', '')
+            'offline_reason' => Yii::$app->request->post('offline_reason', ''),
+            'offline_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
         ], $where)
         ) {
             $code = 500;
@@ -1165,8 +1143,8 @@ class MallController extends Controller
         GoodsCategory::disableByIds($categoryIds);
         Goods::disableGoodsByCategoryIds($categoryIds);
 
-        new EventHandleService();
-        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+//        new EventHandleService();
+//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
 
         return Json::encode([
             'code' => 200,
@@ -1181,15 +1159,6 @@ class MallController extends Controller
      */
     public function actionCategoryEnableBatch()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
 
@@ -1213,7 +1182,8 @@ class MallController extends Controller
         $where = 'id in(' . $ids . ')';
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_OFFLINE,
-            'online_time' => time()
+            'online_time' => time(),
+            'online_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
         ], $where)
         ) {
             $code = 500;
@@ -1223,8 +1193,8 @@ class MallController extends Controller
             ]);
         }
 
-        new EventHandleService();
-        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
+//        new EventHandleService();
+//        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
 
         return Json::encode([
             'code' => 200,
@@ -1243,6 +1213,16 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
         if (!$user) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsCategory;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1293,7 +1273,7 @@ class MallController extends Controller
             'data' => [
                 'category_list_admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
-                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, ['level' => SORT_ASC])
+                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, $orderBy)
                 ]
             ],
         ]);
@@ -1306,16 +1286,17 @@ class MallController extends Controller
      */
     public function actionCategoryReviewList()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
+        $code = 1000;
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsCategory;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        $code = 1000;
 
         $reviewStatus = (int)Yii::$app->request->get('review_status', GoodsCategory::REVIEW_STATUS_NOT_REVIEWED);
         if (!in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
@@ -1359,7 +1340,7 @@ class MallController extends Controller
             'data' => [
                 'category_review_list' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
-                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, ['level' => SORT_ASC])
+                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, $orderBy)
                 ]
             ],
         ]);
@@ -1387,7 +1368,7 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
         if (!$brand->validate()) {
-            if (isset($brand->errors['name'])) {
+            if ($brand->name && isset($brand->errors['name'])) {
                 $code = 1007;
             }
 
@@ -1411,9 +1392,23 @@ class MallController extends Controller
 
         $categoryIdsArr = explode(',', $categoryIds);
         foreach ($categoryIdsArr as $categoryId) {
+            $category = GoodsCategory::findOne($categoryId);
+            if (!$category) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             $brandCategory = new BrandCategory;
             $brandCategory->brand_id = $brand->id;
             $brandCategory->category_id = $categoryId;
+            list($rootCategoryId, $parentCategoryId, $categoryId) = explode(',', $category->path);
+            $brandCategory->category_id_level1 = $rootCategoryId;
+            $brandCategory->category_id_level2 = $parentCategoryId;
 
             $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
             if (!$brandCategory->validate()) {
@@ -1451,15 +1446,6 @@ class MallController extends Controller
      */
     public function actionBrandReview()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1503,15 +1489,6 @@ class MallController extends Controller
      */
     public function actionBrandEdit()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1542,6 +1519,10 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_EDIT;
         if (!$brand->validate()) {
+            if ($brand->name && isset($brand->errors['name'])) {
+                $code = 1007;
+            }
+
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1623,15 +1604,6 @@ class MallController extends Controller
      */
     public function actionBrandOfflineReasonReset()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1674,15 +1646,6 @@ class MallController extends Controller
      */
     public function actionCategoryOfflineReasonReset()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1725,15 +1688,6 @@ class MallController extends Controller
      */
     public function actionBrandStatusToggle()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $id = (int)Yii::$app->request->post('id', 0);
 
         $code = 1000;
@@ -1754,13 +1708,16 @@ class MallController extends Controller
         }
 
         $now = time();
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         if ($model->status == GoodsBrand::STATUS_OFFLINE) {
             $model->status = GoodsBrand::STATUS_ONLINE;
             $model->online_time = $now;
+            $model->online_person = $lhzz->nickname;
         } else {
             $model->status = GoodsBrand::STATUS_OFFLINE;
             $model->offline_time = $now;
             $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            $model->offline_person = $lhzz->nickname;
         }
 
         $model->scenario = GoodsBrand::SCENARIO_TOGGLE_STATUS;
@@ -1779,6 +1736,10 @@ class MallController extends Controller
             ]);
         }
 
+        if ($model->status == GoodsBrand::STATUS_OFFLINE) {
+            Goods::disableGoodsByBrandId($model->id);
+        }
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
@@ -1792,15 +1753,6 @@ class MallController extends Controller
      */
     public function actionBrandDisableBatch()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
 
@@ -1825,7 +1777,8 @@ class MallController extends Controller
         if (!GoodsBrand::updateAll([
             'status' => GoodsBrand::STATUS_OFFLINE,
             'offline_time' => time(),
-            'offline_reason' => Yii::$app->request->post('offline_reason', '')
+            'offline_reason' => Yii::$app->request->post('offline_reason', ''),
+            'offline_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
         ], $where)
         ) {
             $code = 500;
@@ -1834,6 +1787,8 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        Goods::disableGoodsByBrandIds(explode(',', $ids));
 
         return Json::encode([
             'code' => 200,
@@ -1848,15 +1803,6 @@ class MallController extends Controller
      */
     public function actionBrandEnableBatch()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $ids = trim(Yii::$app->request->post('ids', ''));
         $ids = trim($ids, ',');
 
@@ -1880,7 +1826,8 @@ class MallController extends Controller
         $where = 'id in(' . $ids . ')';
         if (!GoodsBrand::updateAll([
             'status' => GoodsBrand::STATUS_ONLINE,
-            'online_time' => time()
+            'online_time' => time(),
+            'online_person' => Lhzz::find()->where(['uid' => $user->id])->one()->nickname
         ], $where)
         ) {
             $code = 500;
@@ -1903,16 +1850,17 @@ class MallController extends Controller
      */
     public function actionBrandReviewList()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user || $user->login_role_id != Yii::$app->params['lhzzRoleId']) {
-            $code = 403;
+        $code = 1000;
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsBrand;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        $code = 1000;
 
         $reviewStatus = (int)Yii::$app->request->get('review_status', GoodsCategory::REVIEW_STATUS_NOT_REVIEWED);
         if (!in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
@@ -1956,7 +1904,7 @@ class MallController extends Controller
             'data' => [
                 'brand_review_list' => [
                     'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
-                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size)
+                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size, $orderBy)
                 ]
             ],
         ]);
@@ -1979,7 +1927,15 @@ class MallController extends Controller
             ]);
         }
 
-        $where = 'review_status = ' . GoodsBrand::REVIEW_STATUS_APPROVE;
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsBrand;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
             $supplier = Supplier::find()->where(['uid' => $user->id])->one();
@@ -1991,7 +1947,7 @@ class MallController extends Controller
                 ]);
             }
 
-            $where .= " and supplier_id = {$supplier->id}";
+            $where = "supplier_id = {$supplier->id}";
         } else {
             $status = (int)Yii::$app->request->get('status', GoodsBrand::STATUS_ONLINE);
             if (!in_array($status, array_keys(GoodsBrand::$statuses))) {
@@ -2001,6 +1957,7 @@ class MallController extends Controller
                 ]);
             }
 
+            $where = 'review_status = ' . GoodsBrand::REVIEW_STATUS_APPROVE;
             $where .= " and supplier_id = 0 and status = {$status}";
 
             $pid = (int)Yii::$app->request->get('pid', 0);
@@ -2024,9 +1981,176 @@ class MallController extends Controller
             'data' => [
                 'brand_list_admin' => [
                     'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
-                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size)
+                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size, $orderBy)
                 ]
             ],
+        ]);
+    }
+
+    /**
+     * Add logistics template action
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplateAdd()
+    {
+        $code = 1000;
+
+        $logisticsTemplate = new LogisticsTemplate;
+        $logisticsTemplate->attributes = Yii::$app->request->post();
+        $districtCodes = trim(Yii::$app->request->post('district_codes', ''));
+        $districtCodes = trim($districtCodes, ',');
+        if (!$districtCodes) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($logisticsTemplate->delivery_method == LogisticsTemplate::DELIVERY_METHOD_HOME) {
+            unset($logisticsTemplate->delivery_cost_default);
+            unset($logisticsTemplate->delivery_cost_delta);
+            unset($logisticsTemplate->delivery_number_default);
+            unset($logisticsTemplate->delivery_number_delta);
+        }
+
+        if (!$logisticsTemplate->validate()) {
+            if ($logisticsTemplate->name && isset($logisticsTemplate->errors['name'])) {
+                $code = 1008;
+            }
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$logisticsTemplate->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = LogisticsDistrict::insertByTemplateIdAndDistrictCodes($logisticsTemplate->id,
+            explode(',', $districtCodes));
+        if ($code != 200) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Edit logistis template action
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplateEdit()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $logisticsTemplate = LogisticsTemplate::findOne($id);
+        if (!$logisticsTemplate) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $logisticsTemplate->attributes = Yii::$app->request->post();
+        $districtCodes = trim(Yii::$app->request->post('district_codes', ''));
+        $districtCodes = trim($districtCodes, ',');
+        if (!$districtCodes) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($logisticsTemplate->delivery_method == LogisticsTemplate::DELIVERY_METHOD_HOME) {
+            unset($logisticsTemplate->delivery_cost_default);
+            unset($logisticsTemplate->delivery_cost_delta);
+            unset($logisticsTemplate->delivery_number_default);
+            unset($logisticsTemplate->delivery_number_delta);
+        }
+
+        if (!$logisticsTemplate->validate()) {
+            if ($logisticsTemplate->name && isset($logisticsTemplate->errors['name'])) {
+                $code = 1008;
+            }
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$logisticsTemplate->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $districtCodesArr = explode(',', $districtCodes);
+        $districtCodesArrOld = LogisticsDistrict::districtCodesByTemplateId($logisticsTemplate->id);
+        if (count(array_diff($districtCodesArr, $districtCodesArrOld)) != 0
+            || count(array_diff($districtCodesArrOld, $districtCodesArr)) != 0
+        ) {
+            $deletedNum = LogisticsDistrict::deleteAll(
+                [
+                    'template_id' => $logisticsTemplate->id,
+                ]
+            );
+
+            if ($deletedNum == 0) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $code = LogisticsDistrict::insertByTemplateIdAndDistrictCodes($logisticsTemplate->id, $districtCodesArr);
+            if ($code != 200) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }

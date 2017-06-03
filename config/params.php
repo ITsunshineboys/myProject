@@ -1,6 +1,7 @@
 <?php
 
 $districts = require(__DIR__ . '/districts.php');
+$auth = require(__DIR__ . '/auth.php');
 
 return [
     'adminEmail' => 'admin@example.com',
@@ -19,6 +20,7 @@ return [
         1005 => '编辑商品分类不能跨级',
         1006 => '商品分类名称不能重复',
         1007 => '商品品牌名称不能重复',
+        1008 => '物流模板名称不能重复',
     ],
     'events' => [
         'supplier' => [
@@ -87,4 +89,5 @@ return [
         '2' => '审核通过',
     ],
     'districts' => $districts,
+    'auth' => $auth,
 ];

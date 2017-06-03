@@ -42,6 +42,16 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id'], 'required'],
+        ];
+    }
+
+    /**
      * Get goods list by category id
      *
      * @param  int $categoryId category id
@@ -151,7 +161,7 @@ class Goods extends ActiveRecord
     /**
      * Get goods ids by category id
      *
-     * @param  init  $categoryId category id
+     * @param  init $categoryId category id
      * @return array
      */
     public static function findIdsByCategoryId($categoryId)
@@ -163,6 +173,54 @@ class Goods extends ActiveRecord
 
         return Yii::$app->db
             ->createCommand("select id from {{%goods}} where category_id = {$categoryId}")
+            ->queryColumn();
+    }
+
+    /**
+     * Disable goods by brand ids
+     *
+     * @param array $brandIds
+     */
+    public static function disableGoodsByBrandIds(array $brandIds)
+    {
+        foreach ($brandIds as $brandId) {
+            self::disableGoodsByBrandId($brandId);
+        }
+    }
+
+    /**
+     * Disable goods by brand id
+     *
+     * @param int $brandId brand id
+     */
+    public static function disableGoodsByBrandId($brandId)
+    {
+        $goodsIds = self::findIdsByBrandId($brandId);
+        if ($goodsIds) {
+            $goodsIds = implode(',', $goodsIds);
+            $where = 'id in(' . $goodsIds . ')';
+            self::updateAll([
+                'status' => self::STATUS_OFFLINE,
+                'offline_time' => time()
+            ], $where);
+        }
+    }
+
+    /**
+     * Get goods ids by brand id
+     *
+     * @param  init $brandId brand id
+     * @return array
+     */
+    public static function findIdsByBrandId($brandId)
+    {
+        $brandId = (int)$brandId;
+        if ($brandId <= 0) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select id from {{%goods}} where brand_id = {$brandId}")
             ->queryColumn();
     }
 
@@ -203,18 +261,31 @@ class Goods extends ActiveRecord
         return $a[$max];
     }
 
+    public static function findByIdAll($level = '', $title = '',$series = '1',$style = '2')
+    {
+        if (empty($level) && empty($title)) {
+            echo '请正确输入值';
+            exit;
+        } else {
+            $db = \Yii::$app->db;
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_brand. name,goods_category.title FROM goods,goods_brand,goods_category WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods_category.`level` = " . $level . " AND goods_category.title LIKE " . "'%$title%' AND goods.series_id =".$series ." AND goods.style_id =".$style;
+            $all = $db->createCommand($sql)->queryAll();
+        }
+        return $all;
+    }
+
+
     /**
      * @param array $id
      */
     public static function findQueryAll($all = [])
     {
-        if($all){
+        if ($all) {
             $id = [];
-            foreach ($all as $single)
-            {
+            foreach ($all as $single) {
                 $id [] = $single['goods_id'];
             }
-            $all_goods = self::find()->asArray()->where(['in','id',$id])->all();
+            $all_goods = self::find()->asArray()->where(['in', 'id', $id])->all();
         }
         return $all_goods;
     }
