@@ -261,6 +261,20 @@ class Goods extends ActiveRecord
         return $a[$max];
     }
 
+    public static function findByIdAll($level = '', $title = '',$series = '1',$style = '2')
+    {
+        if (empty($level) && empty($title)) {
+            echo '请正确输入值';
+            exit;
+        } else {
+            $db = \Yii::$app->db;
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_brand. name,goods_category.title FROM goods,goods_brand,goods_category WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods_category.`level` = " . $level . " AND goods_category.title LIKE " . "'%$title%' AND goods.series_id =".$series ." AND goods.style_id =".$style;
+            $all = $db->createCommand($sql)->queryAll();
+        }
+        return $all;
+    }
+
+
     /**
      * @param array $id
      */

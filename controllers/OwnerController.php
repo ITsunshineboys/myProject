@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\models\AppliancesAssort;
 use app\models\BasisDecoration;
-use app\models\BasisMaterial;
+use app\models\CarpentryReconstruction;
 use app\models\CircuitryReconstruction;
 use app\models\DecorationAdd;
 use app\models\DecorationList;
@@ -13,7 +13,6 @@ use app\models\Effect;
 use app\models\EffectPicture;
 use app\models\FixationFurniture;
 use app\models\Goods;
-use app\models\GoodsBrand;
 use app\models\IntelligenceAssort;
 use app\models\LaborCost;
 use app\models\LifeAssort;
@@ -88,7 +87,8 @@ class OwnerController extends Controller
      */
     public function actionHaveInformation()
     {
-        $post = \Yii::$app->request->post();
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
         if(!empty($post)){
             // 搜索框
             $search_condition = new Effect();
@@ -160,7 +160,8 @@ class OwnerController extends Controller
      */
     public function actionNullInformation()
     {
-        $post = \Yii::$app->request->post();
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
         $null_information = new Effect();
         if($null_information->load($post) && $null_information->validate())
         {
@@ -216,7 +217,8 @@ class OwnerController extends Controller
     public function actionWeakCurrent()
     {
         //基础装修
-//        $post = \Yii::$app->request->post();
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
         $post = [
 //            'effect_id' => 1,
             'room' => 1,
@@ -231,16 +233,15 @@ class OwnerController extends Controller
             'province' => '四川',
             'city' => '成都'
         ];
-
         $arr = [];
-        //每天水电完成点位
-        $arr['day_standard'] = $post['0'] ?? 5;
         $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水电';
-        //所有基础装修类型
-        $basis_decoration = BasisDecoration::find()->all();
+
         //人工一天价格
-        $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $arr['day_standard'] = $worker[0]['day_points'];
+        $arr['day_price'] = $worker[0]['univalence'];
+
         if(empty($post['effect_id'])){
             //查询弱电所需要材料
             $electric_wire = '电线';
@@ -297,6 +298,7 @@ class OwnerController extends Controller
                }
             }
         }
+
         if (!empty($post['effect_id']))
         {
             //查询所有弱电点位
@@ -329,7 +331,8 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         //基础装修
-//        $post = \Yii::$app->request->post();
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
         $post = [
             'effect_id' => 1,
             'room' => 1,
@@ -346,12 +349,13 @@ class OwnerController extends Controller
         ];
 
         $arr = [];
-        //每天水电完成点位
-        $arr['day_standard'] = $post['0'] ?? 5;
         $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水电';
+
         //人工一天价格
-        $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $arr['day_standard'] = $worker[0]['day_points'];
+        $arr['day_price'] = $worker[0]['univalence'];
         //查询弱电所需要材料
         if(empty($post['effect_id'])){
             $electric_wire = '电线';
@@ -440,7 +444,8 @@ class OwnerController extends Controller
     public function actionWaterway()
     {
         //基础装修
-//        $post = \Yii::$app->request->post();
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
         $post = [
 //            'effect_id' => 1,
             'room' => 1,
@@ -456,12 +461,14 @@ class OwnerController extends Controller
             'city' => '成都'
         ];
         $arr = [];
-        //每天水电完成点位
-        $arr['day_standard'] = $post['0'] ?? 5;
         $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水电';
+
         //人工一天价格
-        $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $arr['day_standard'] = $worker[0]['day_points'];
+        $arr['day_price'] = $worker[0]['univalence'];
+
         //查询水路所需要材料
         if(empty($post['effect_id']))
         {
@@ -542,7 +549,8 @@ class OwnerController extends Controller
      */
     public function actionWaterproof()
     {
-//        $post = \Yii::$app->request->post();
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
         $post = [
             'effect_id' => 1,
             'room' => 1,
@@ -558,12 +566,13 @@ class OwnerController extends Controller
             'city' => '成都'
         ];
         $arr = [];
-        //每天水电完成点位
-        $arr['day_standard'] = $post['0'] ?? 40;
         $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水电';
+
         //人工一天价格
-        $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $arr['day_standard'] = $worker[0]['day_area'];
+        $arr['day_price'] = $worker[0]['univalence'];
 
         //防水所需材料
         if(!empty($post['effect_id'])){
@@ -633,7 +642,8 @@ class OwnerController extends Controller
      */
     public function actionCarpentry()
     {
-        //        $post = \Yii::$app->request->post();
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
         $post = [
             'effect_id' => 1,
             'room' => 1,
@@ -649,16 +659,32 @@ class OwnerController extends Controller
             'city' => '成都'
         ];
         $arr = [];
-        //每天水电完成点位
-        $arr['day_standard'] = $post['0'] ?? 40;
         $arr['profit'] = $post['1'] ?? 0.7;
-        $arr['worker_kind'] = '木工';
-        //人工一天价格
-        $arr['day_price'] = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $arr['worker_kind'] = '木作';
 
+        //人工一天价格
+        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $arr['day_standard'] = $worker[0]['day_area'];
+        $arr['day_price'] = $worker[0]['univalence'];
+
+        //木工材料费
         if(!empty($post['effect_id']))
         {
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $carpentry_reconstruction = CarpentryReconstruction::find()->where(['decoration_list_id' => $decoration_list])->all();
+            $goods_price = Goods::findQueryAll($carpentry_reconstruction);
+        }else{
+            $material = '木作';
+            $goods_price = Goods::priceDetail(3,$material);
+        }
 
+        //木工面积计算
+        if(!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $required_area = [];
+            $decoration_particulars = DecorationParticulars::findByOne($decoration_list);
+            $required_area[] =
+            var_dump($decoration_particulars);exit;
         }
     }
 
@@ -669,14 +695,51 @@ class OwnerController extends Controller
      */
     public function actionSoftOutfitAssort()
     {
-        $soft_outfit = new SoftOutfitAssort();
-        $all_id = $soft_outfit->findById(1);
-        $goods_price = Goods::priceDetail($all_id);
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
+        $post = [
+//            'effect_id' => 1,
+            'room' => 1,
+            'hall' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 40,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 2,
+            'series' => 1,
+            'province' => '四川',
+            'city' => '成都'
+        ];
+        if(!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $soft_outfit_assort = SoftOutfitAssort::find()->where(['decoration_list_id'=>$decoration_list])->one();
+            $goods_price = Goods::find()->where(['category_id'=>$soft_outfit_assort])->all();
+        }else{
+            $mating = '软装配套';
+            $goods = Goods::findByIdAll(1,$mating,$post['series'],$post['style']);
+            $goods_price = [];
+            foreach ($goods as $v=>$k)
+            {
+                if($k['name'] == '快乐酒吧'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_pub_price = $goods[$max];
+                }elseif ($k['name'] == '窗帘'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_curtain_price = $goods[$max];
+                }
+            }
+            $goods_price [] = $max_pub_price;
+            $goods_price [] = $max_curtain_price;
+        }
+
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-                'SoftOutfit_goods' =>$goods_price,
+                'appliances_goods' =>$goods_price,
                 'quantity' => 1
             ]
         ]);
@@ -688,9 +751,50 @@ class OwnerController extends Controller
      */
     public function actionFixationFurniture()
     {
-        $fixation_furniture = new FixationFurniture();
-        $all_id = $fixation_furniture->findById(1);
-        $goods_price = Goods::priceDetail($all_id);
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
+        $post = [
+//            'effect_id' => 1,
+            'room' => 1,
+            'hall' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 40,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 2,
+            'series' => 1,
+            'province' => '四川',
+            'city' => '成都'
+        ];
+        if(!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $soft_outfit_assort = FixationFurniture::find()->where(['decoration_list_id'=>$decoration_list])->one();
+            $goods_price = Goods::find()->where(['category_id'=>$soft_outfit_assort])->all();
+        }else{
+            $mating = '固定家具';
+            $goods = Goods::findByIdAll(1,$mating,$post['series'],$post['style']);
+            $goods_price = [];
+            foreach ($goods as $v=>$k)
+            {
+                if($k['name'] == '书柜'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_bookcase_price = $goods[$max];
+                }elseif ($k['name'] == '衣柜'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_chest_price = $goods[$max];
+                }elseif ($k['name'] == '衣柜'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_cabinet_price = $goods[$max];
+                }
+            }
+            $goods_price [] = $max_bookcase_price;
+            $goods_price [] = $max_chest_price;
+            $goods_price [] = $max_cabinet_price;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
@@ -707,9 +811,50 @@ class OwnerController extends Controller
      */
     public function actionMoveFurniture()
     {
-        $move_furniture = new MoveFurniture();
-        $all_id = $move_furniture->findById(1);
-        $goods_price = Goods::priceDetail($all_id);
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
+        $post = [
+//            'effect_id' => 1,
+            'room' => 1,
+            'hall' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 40,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 2,
+            'series' => 1,
+            'province' => '四川',
+            'city' => '成都'
+        ];
+        if(!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $soft_outfit_assort = MoveFurniture::find()->where(['decoration_list_id'=>$decoration_list])->one();
+            $goods_price = Goods::find()->where(['category_id'=>$soft_outfit_assort])->all();
+        }else{
+            $mating = '移动家具';
+            $goods = Goods::findByIdAll(1,$mating,$post['series'],$post['style']);
+            $goods_price = [];
+            foreach ($goods as $v=>$k)
+            {
+                if($k['name'] == '沙发'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_sofa_price = $goods[$max];
+                }elseif ($k['name'] == '床'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_bed_price = $goods[$max];
+                }elseif ($k['name'] == '茶几'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_tea_table_price = $goods[$max];
+                }
+            }
+            $goods_price [] = $max_sofa_price;
+            $goods_price [] = $max_bed_price;
+            $goods_price [] = $max_tea_table_price;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
@@ -726,9 +871,55 @@ class OwnerController extends Controller
      */
     public function actionAppliancesAssort()
     {
-        $appliances = new AppliancesAssort();
-        $all_id = $appliances->findById(1);
-        $goods_price = Goods::priceDetail($all_id);
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
+        $post = [
+//            'effect_id' => 1,
+            'room' => 1,
+            'hall' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 40,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 2,
+            'series' => 1,
+            'province' => '四川',
+            'city' => '成都'
+        ];
+        if(!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $soft_outfit_assort = AppliancesAssort::find()->where(['decoration_list_id'=>$decoration_list])->one();
+            $goods_price = Goods::find()->where(['category_id'=>$soft_outfit_assort])->all();
+        }else{
+            $mating = '家电配套';
+            $goods = Goods::findByIdAll(1,$mating,$post['series'],$post['style']);
+            $goods_price = [];
+            foreach ($goods as $v=>$k)
+            {
+                if($k['name'] == '电视'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_television_price = $goods[$max];
+                }elseif ($k['name'] == '洗衣机'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_washing_price = $goods[$max];
+                }elseif ($k['name'] == '冰箱'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_refrigerator_price = $goods[$max];
+                }elseif ($k['name'] == '空调'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_air_conditioners_price = $goods[$max];
+                }
+            }
+            $goods_price [] = $max_television_price;
+            $goods_price [] = $max_washing_price;
+            $goods_price [] = $max_refrigerator_price;
+            $goods_price [] = $max_air_conditioners_price;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
@@ -745,14 +936,55 @@ class OwnerController extends Controller
      */
     public function actionLifeAssort()
     {
-        $life = new LifeAssort();
-        $all_id = $life->findById(1);
-        $goods_price = Goods::priceDetail($all_id);
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
+        $post = [
+//            'effect_id' => 1,
+            'room' => 1,
+            'hall' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 40,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 2,
+            'series' => 1,
+            'province' => '四川',
+            'city' => '成都'
+        ];
+        if(!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $soft_outfit_assort = LifeAssort::find()->where(['decoration_list_id'=>$decoration_list])->one();
+            $goods_price = Goods::find()->where(['category_id'=>$soft_outfit_assort])->all();
+        }else{
+            $mating = '生活配套';
+            $goods = Goods::findByIdAll(1,$mating,$post['series'],$post['style']);
+            $goods_price = [];
+            foreach ($goods as $v=>$k)
+            {
+                if($k['name'] == '沙发'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_sofa_price = $goods[$max];
+                }elseif ($k['name'] == '床'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_bed_price = $goods[$max];
+                }elseif ($k['name'] == '茶几'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_tea_table_price = $goods[$max];
+                }
+            }
+            $goods_price [] = $max_sofa_price;
+            $goods_price [] = $max_bed_price;
+            $goods_price [] = $max_tea_table_price;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-                'Life_goods' =>$goods_price,
+                'appliances_goods' =>$goods_price,
                 'quantity' => 1
             ]
         ]);
@@ -764,17 +996,63 @@ class OwnerController extends Controller
      */
     public function actionIntelligenceAssort()
     {
-        $Intelligence = new IntelligenceAssort();
-        $all_id = $Intelligence->findById(1);
-        $goods_price = Goods::priceDetail($all_id);
+        $receive = \Yii::$app->request->post();
+        $post = Json::decode($receive);
+        $post = [
+//            'effect_id' => 1,
+            'room' => 1,
+            'hall' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 40,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 2,
+            'series' => 1,
+            'province' => '四川',
+            'city' => '成都'
+        ];
+        if(!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $soft_outfit_assort = IntelligenceAssort::find()->where(['decoration_list_id'=>$decoration_list])->one();
+            $goods_price = Goods::find()->where(['category_id'=>$soft_outfit_assort])->all();
+        }else{
+            $mating = '智能配套';
+            $goods = Goods::findByIdAll(1,$mating,$post['series'],$post['style']);
+            $goods_price = [];
+            foreach ($goods as $v=>$k)
+            {
+                if($k['name'] == '沙发'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_sofa_price = $goods[$max];
+                }elseif ($k['name'] == '床'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_bed_price = $goods[$max];
+                }elseif ($k['name'] == '茶几'){
+                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                    $max = array_search(max($c), $c);
+                    $max_tea_table_price = $goods[$max];
+                }
+            }
+            $goods_price [] = $max_sofa_price;
+            $goods_price [] = $max_bed_price;
+            $goods_price [] = $max_tea_table_price;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-                'intelligence_goods' =>$goods_price,
+                'appliances_goods' =>$goods_price,
                 'quantity' => 1
             ]
         ]);
+    }
+
+    public function actionBasisList()
+    {
+
     }
 
 }
