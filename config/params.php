@@ -1,6 +1,7 @@
 <?php
 
 $districts = require(__DIR__ . '/districts.php');
+$auth = require(__DIR__ . '/auth.php');
 
 return [
     'adminEmail' => 'admin@example.com',
@@ -88,4 +89,5 @@ return [
         '2' => '审核通过',
     ],
     'districts' => $districts,
+    'auth' => $auth,
 ];
