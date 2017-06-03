@@ -760,13 +760,8 @@ class SiteController extends Controller
             return Json::encode($ret);
         }
 
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'can_access' => Role::find()->where(['id' => $user->login_role_id, 'admin_module' => $module])->exists()
-            ],
-        ]);
+        $ret['data']['can_access'] = Role::find()->where(['id' => $user->login_role_id, 'admin_module' => $module])->exists();
+        return Json::encode($ret);
     }
 
     public function actionTest()
