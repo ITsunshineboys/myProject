@@ -5,9 +5,9 @@
     <title></title>
     <link rel="stylesheet" href="../css/all.css"/>
     <link rel="stylesheet" href="css/global.css"/>
-    <link rel="stylesheet" href="css/sort_management.css"/>
+    <link rel="stylesheet" href="css/brand_management.css"/>
 </head>
-<body ng-app="app" ng-controller="sort_management" ng-cloak>
+<body ng-app="app" ng-controller="brand_management" ng-cloak>
     <div class="main">
         <!--弹窗开始-->
         <div class="popup hide" >
@@ -15,15 +15,15 @@
                 <div class="add_save hide">
                     <!--添加添加操作的的提示框-->
                     <!--<div class="not_stop hide" >-->
-                        <div class="warm_title">提示</div>
-                        <div class="warm_word1" >
-                            未添加成功，请重新添加
+                    <div class="warm_title">提示</div>
+                    <div class="warm_word1" >
+                        未添加成功，请重新添加
+                    </div>
+                    <div class="sure_box">
+                        <div>
+                            <span class="btn3 save_cancel" ng-click="add_close1()">确认</span>
                         </div>
-                        <div class="sure_box">
-                            <div>
-                                <span class="btn3 save_cancel" ng-click="add_close1()">确认</span>
-                            </div>
-                        </div>
+                    </div>
                     <!--</div>-->
                 </div>
             </div>
@@ -76,16 +76,16 @@
                     </a>
                 </dt>
             </dl>
-            <dl >
-                <dt >
-                    <a href="brand_goods.html">
+            <dl class="dl_on">
+                <dt class="on">
+                    <a href="">
                         <i class="font2 fl">&#xe600;</i>品牌管理
                     </a>
                 </dt>
             </dl>
-            <dl class="dl_on">
-                <dt class="on">
-                    <a href=""  >
+            <dl >
+                <dt >
+                    <a href="index.html"  >
                         <i class="font2 fl">&#xe600;</i>
                         分类管理
                     </a>
@@ -105,11 +105,11 @@
             <div class="header_box">
                 <div class="header_left">
                     <div ng-click="header_show(2)" ng_show="header_display!=1" id="nav_2" class="fl color_2f">
-                        <i class="font1 ">&#xe600;</i>分类管理
+                        <i class="font1 ">&#xe600;</i>品牌管理
                     </div>
                     <div class="fl color1_8d history"  >
-                        <span ng-show="header_display==4">>分类详情</span>
-                        <span ng-show="header_display==3">>添加分类</span></div>
+                        <span ng-show="header_display==4">>品牌详情</span>
+                        <span ng-show="header_display==3">>添加品牌</span></div>
                 </div>
                 <div class="header_right">
                     <div class="fl">
@@ -121,7 +121,7 @@
                     </div>
                 </div>
             </div>
-            <!--分类管理列表开始-->
+            <!--品牌管理列表开始-->
             <div class="operate_box" ng_show="header_display==2">
                 <div class="btn2 fl" ng-click="header_show(3)">
                     <div class="font1 fl">&#xe600;</div>
@@ -131,20 +131,12 @@
                 <div id="cells_box1" class="hide" style="position: absolute;top:59px;right:40px;border:1px solid #333;z-index: 100;background-color:#fff ">
                     <ul   style="">
                         <li>
-                            <input type="checkbox" name="cell" checked="checked" value="tb_parent_title" />
-                            <span>所属分类</span>
-                        </li>
-                        <li>
                             <input type="checkbox" name="cell" checked="checked" value="tb_image" />
-                            <span>分类图片</span>
+                            <span>品牌LOGO</span>
                         </li>
                         <li>
                             <input type="checkbox" name="cell" checked="checked" value="tb_title" />
-                            <span>分类名称</span>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="cell" checked="checked" value="tb_level" />
-                            <span>分类级别</span>
+                            <span>品牌名称</span>
                         </li>
                         <li>
                             <input type="checkbox" name="cell" checked="checked" value="tb_create_time" />
@@ -165,10 +157,8 @@
                 <table   cellpadding="0" cellspacing="0" >
                     <thead>
                     <tr>
-                        <th class="tb_parent_title " >所属分类</th>
-                        <th class="tb_image">分类图片</th>
-                        <th class="tb_title">分类名称</th>
-                        <th class="tb_level">分类级别</th>
+                        <th class="tb_image">品牌LOGO</th>
+                        <th class="tb_title">品牌名称</th>
                         <th class="tb_create_time">
                             <span class="fl order_on" >申请时间</span>
                             <div id="order_btn" class="fl" ng-click="order_btn()" style="width: 10px;height:22px;margin-top:-5px;margin-left:8px;line-height: 12px;">
@@ -182,33 +172,32 @@
                     </tr>
                     </thead>
                     <tbody class="order_tbody">
-                    <tr ng-repeat="n in sort_list | orderBy:order1" ng-controller="itemReaptCtrl" class="{{n.id}}"  name="{{n.id}}">
-                        <td class="tb_name " >{{n.parent_title}}</td>
+                    <tr ng-repeat="n in brand_list" ng-controller="itemReaptCtrl" class="{{n.id}}"  name="{{n.id}}">
                         <td class="tb_image">
-                            <img src="{{url}}{{n.icon}}" alt=""/>
-                            <!--{{n.icon}}-->
+                            <img src="{{url}}{{n.logo}}" alt=""/>
+                            {{n.logo}}
                         </td>
-                        <td class="tb_title">{{n.title}}
+                        <td class="tb_title">
+                            {{n.name}}
                             <!--<span ng-show="n.sku==''">无</span>-->
                         </td>
-                        <td class="tb_level">{{n.level}}</td>
                         <td class="tb_create_time">{{n.create_time}}</td>
                         <td class="tb_review_status">{{n.review_status}}</td>
                         <td class="tb_description">{{n.reason}}</td>
                         <td class="action">
-                            <span class="check_btn" ng-click="check_btn(4,n.title,n.icon,n.review_time,n.review_status,n.reason,n.description,n.titles)">查看</span>
+                            <span class="check_btn" ng-click="check_btn(4,n.name,n.icon,n.logo,n.category_titles,n.review_time,n.review_status,n.reason)">查看</span>
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 <div id="pageTool" ></div>
             </div>
-            <!--分类管理列表结束-->
-            <!--分类管的分类理详情页面开始-->
+            <!--品牌管理列表结束-->
+            <!--品牌管理的品牌理详情页面开始-->
             <div ng_show="header_display==4">
                 <ul class="row1_box">
                     <li class="row1_left fl" >
-                        分类名称
+                        品牌名称
                     </li>
                     <li class="row1_right fl">
                         {{check_name}}
@@ -216,27 +205,43 @@
                 </ul>
                 <ul class="row1_box">
                     <li class="row1_left fl" >
-                        分类所属
+                        商标注册证
                     </li>
                     <li class="row1_right fl">
-                        {{check_parent_title}}
+                        <!--<img class="brand_icon" src="{{url}}{{check_icon}}" alt=""/><br/>-->
+                        <img class="brand_icon" src="http://local.test.cdlhzz.cn/uploads/2017/06/02/1496374952.png" alt=""/><br/>
+                        <a class="btn1" href="{{url}}{{check_icon}}" target="_blank">查看原图</a>
+                        <!--<a class="" href="http://local.test.cdlhzz.cn/uploads/2017/06/02/1496380702.jpg" target="_blank">查看原图</a>-->
+
                     </li>
                 </ul>
                 <ul class="row1_box">
                     <li class="row1_left fl" >
-                        分类图片
+                        品牌LOGO
                     </li>
                     <li class="row1_right fl">
                         <div class="sort_img_box">
-                            <img class="sort_img1" src="{{url}}{{check_icon}}" alt=""/>
+                            <!--<img class="sort_img1" src="{{url}}{{check_logo}}" alt=""/>-->
+                            <img class="sort_img" src="http://local.test.cdlhzz.cn/uploads/2017/06/02/1496380702.jpg" alt=""/>
                         </div>
                     </li>
                 </ul>
                 <ul class="row1_box">
                     <li class="row1_left fl" >
-                        <p>分类描述</p>
+                        <p>品牌所在分类</p>
                     </li>
-                    <li class="row1_right fl sort_description">
+                    <li class="row1_right fl ">
+                        <ul class="now_sort_box">
+                            <li class="now_sort fl">一级分类</li>
+                            <li class="now_sort fl">二级分类</li>
+                            <li class="now_sort fl">三级分类</li>
+                        </ul>
+                        <ul class="now_sort_box" ng-repeat="n in check_category_titles">
+                            <li class="now_sort_line fl" ng-show="n.root_category_title!=''"></li>
+                            <li class="now_sort fl">{{n.root_category_title}} <div ng-show="n.root_category_title==''">&nbsp;</div></li>
+                            <li class="now_sort fl">{{n.parent_category_title}}</li>
+                            <li class="now_sort fl">{{n.level3_category_titles}}</li>
+                        </ul>
                     </li>
                 </ul>
                 <ul class="row1_box" style="border: none">
@@ -267,60 +272,72 @@
                     <span class="btn3" ng-click="check_return()">返回</span>
                 </div>
             </div>
-            <!--分类管理的分类详情页面结束-->
-            <!--分类管理添加分类页面开始-->
+            <!--品牌管理的品牌详情页面结束-->
+            <!--品牌管理添加品牌页面开始-->
             <div ng_show="header_display==3" class="color_2f">
                 <ul class="row1_box">
                     <li class="row1_left fl" >
                         <span class="must">*</span>分类名称
                     </li>
                     <li class="row1_right fl">
-                        <input type="text" class="class_name" ng-model="title" maxlength="10" placeholder="1~10个字(不含特殊符号)"/>
-                    </li>
-                </ul>
-                <ul class="row1_box">
-                    <li class="row1_left fl">
-                        <span class="must">*</span>分类所属
-                    </li>
-                    <li class="row1_right fl">
-                        <div class="fl first_box">
-                            <div class="level_title">一级分类</div>
-                            <select name="" id="first_level" class="fl selects">
-                                <option value="{{a.id}}"  ng-repeat="a in first_level">{{a.title}}</option>
-                            </select>
-                        </div>
-                        <div class="second_box fl">
-                            <div class="level_title">二级分类</div>
-                            <select name="" id="second_level" class="fl selects">
-                                <option value="{{a.id}}"  ng-repeat="a in second_level">{{a.title}}</option>
-                            </select>
-                        </div>
+                        <input type="text" class="class_name" ng-model="title" maxlength="20" placeholder="1~20个字"/>
                     </li>
                 </ul>
                 <ul class="row1_box">
                     <li class="row1_left fl" >
-                        <span class="must">*</span>上传图标
+                        <span class="must">*</span>上传商标注册证
                     </li>
                     <li class="row1_right fl">
                         <div class="sort_img_box">
-                            <img class="sort_img " src="images/up_icon.png" alt=""/>
+                            <img class="sort_img1" src="images/up_icon.png" alt=""/>
                             <!--<img class="sort_img" src="{{url}}{{add_image1 || 'uploads/2017/05/27/1495858857.png'}} " alt=""/>-->
                         </div>
                         <div>图片大小120×120,5M内，支持JPG,PNG，JPGE</div>
                         <form  id="uploadForm1" enctype="multipart/form-data" >
                             <input name="button" type="button"  id="btn1" onclick="myfile1.click();" value="上传" />
                             <input type="file" id="myfile1" name="UploadForm[file]" value="" style="display:none" accept="image/*">
-                            <span>{{icon}}</span><br/>
-                            <span class="img_warn" style="font-size: 12px;color:#E61C23;"></span>
+                            <span>{{icon1}}</span><br/>
+                            <span class="img_warn1" style="font-size: 12px;color:#E61C23;"></span>
+                        </form>
+                    </li>
+                </ul>
+                <ul class="row1_box">
+                    <li class="row1_left fl" >
+                        <span class="must">*</span>上传品牌LOGO
+                    </li>
+                    <li class="row1_right fl">
+                        <div class="sort_img_box">
+                            <img class="sort_img2" src="images/up_icon.png" alt=""/>
+                            <!--<img class="sort_img" src="{{url}}{{add_image1 || 'uploads/2017/05/27/1495858857.png'}} " alt=""/>-->
+                        </div>
+                        <div>图片大小120×120,5M内，支持JPG,PNG，JPGE</div>
+                        <form  id="uploadForm2" enctype="multipart/form-data" >
+                            <input name="button" type="button"  id="btn2" onclick="myfile2.click();" value="上传" />
+                            <input type="file" id="myfile2" name="UploadForm[file]" value="" style="display:none" accept="image/*">
+                            <span>{{icon2}}</span><br/>
+                            <span class="img_warn2" style="font-size: 12px;color:#E61C23;"></span>
                         </form>
                     </li>
                 </ul>
                 <ul class="row1_box" style="border: none">
                     <li class="row1_left fl" >
-                        分类描述
+                        <span class="must">*</span>选择品牌所在分类
                     </li>
                     <li class="row1_right fl">
-                        <script id="editor" type="text/plain" style="width:750px;min-height:300px;"></script>
+                        <div class="brand_outbox fl">
+                            <div class="rank_first" name="{{n.id}}" ng-repeat="n in rank_list1" ng-controller="itemReaptCtrl">{{n.title}}</div>
+                        </div>
+                        <div class="brand_outbox fl">
+                            <div class="rank_second" name="{{n.id}}" ng-repeat="n in rank_list2" ng-controller="itemReaptCtrl">{{n.title}}</div>
+                        </div>
+                        <div class="three_brand_outbox fl">
+                            <div class="rank_three" name="{{n.id}}" ng-repeat="n in rank_list3" ng-controller="itemReaptCtrl">
+                                <input class="choose {{n.id}}" type="checkbox" value="{{n.id}}" name="choose" title1="{{n.title}}" ng-click="choose(n.id,n.title)"/>
+                                {{n.title}}
+                            </div>
+                        </div>
+                        <div class="brand_outbox  selected fl">
+                        </div>
                     </li>
                 </ul>
                 <div class="btn_box">
@@ -328,23 +345,15 @@
                     <span class="btn3" ng-click="add_return()">返回</span>
                 </div>
             </div>
-            <!--分类管理添加分类页面结束-->
+            <!--品牌管理添加品牌页面结束-->
         </div>
     </div>
-
     <script src="../../js/jquery-3.1.1.js"></script>
     <script src="../../js/angular.min.js"></script>
-    <!--ueditor插件引用开始-->
-    <script type="text/javascript" charset="utf-8" src="js/edit/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="js/edit/ueditor.all.min.js"> </script>
-    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
-    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-    <script type="text/javascript" charset="utf-8" src="js/edit/lang/zh-cn/zh-cn.js"></script>
-    <!--ueditor插件引用结束-->
-    <!--分页插件的js-->
+    <!--分页插件js-->
     <script type="text/javascript" src="js/paging/query.js"></script>
     <script type="text/javascript" src="js/paging/paging.js"></script>
     <script src="js/global.js"></script>
-    <script src="js/sort_management.js"></script>
+    <script src="js/brand_management.js"></script>
 </body>
 </html>

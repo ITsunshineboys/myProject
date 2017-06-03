@@ -69,8 +69,6 @@ app.controller("index_recommend",function($scope,$http){
         //浏览器大小变化的监听
         $(window).resize(function() {
             var browser_width1=$(document).width()-$(".nav_box").width();
-            //console.log("$(document).width()="+$(document).width())
-            //console.log("browser_width1="+browser_width1)
             $(".my_container").css("width",browser_width1);
             $(".header_box").css("width",browser_width1);
         });

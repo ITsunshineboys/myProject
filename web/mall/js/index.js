@@ -46,7 +46,7 @@ app.controller("index",function($scope,$http){
                 paginationClickable: true
             });
         })
-})
+});
 
 
 

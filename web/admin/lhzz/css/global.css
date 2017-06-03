@@ -203,6 +203,7 @@ tr>td>img{
     font-size: 12px;
     line-height: 20px;
     border-radius: 3px;
+    cursor: pointer;
     color:#666F80;
     border:1px solid #A9A9A9;
     background-color: #fff;
@@ -221,6 +222,7 @@ tr>td>img{
     font-size: 12px;
     line-height: 20px;
     border-radius: 3px;
+    cursor: pointer;
     color:#3F94F6;
     border:1px solid  #89C0FF;
     background-color: #EFF7FF;
@@ -244,6 +246,7 @@ tr>td>img{
     line-height: 20px;
     margin-left: 20px;
     border-radius: 3px;
+    cursor: pointer;
     color:#666F80;
     border:1px solid #BFC0C2;
 }
@@ -255,6 +258,7 @@ tr>td>img{
     -o-transition: all 1s linear;
 }
 .sure_left{
+    cursor: pointer;
     color:#3F94F6;
     border:1px solid #89C0FF;
     background-color:  #EFF7FF;;
@@ -269,7 +273,7 @@ tr>td>img{
     -o-transition: all 1s linear;
 }
 .history_btn{
-
+    cursor: pointer;
     line-height: 32px;
     color:#3F94F6;
 
@@ -372,6 +376,7 @@ tr>td>img{
     top:0;
     right: 0;
     text-align: center;
+    cursor: pointer;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     line-height: 32px;

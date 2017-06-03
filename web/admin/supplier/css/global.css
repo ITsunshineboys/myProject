@@ -65,6 +65,9 @@
 table{
     width: 100%;
 }
+thead>tr>th{
+    text-align: left;
+}
 tr>th,tr>td{
     height: 42px;
     text-align: left;
@@ -90,6 +93,10 @@ tr>td>img{
     height: 24px;
     border-radius: 3px;
 }
+/*表格正逆序的表头的字体样式*/
+.order_on{
+   color:#5677FC;
+}
 /*表格的公共样式结束==*/
 /*导航栏开始*/
 .nav_box{
@@ -108,9 +115,11 @@ tr>td>img{
     text-align: center;
     line-height: 150px;
 }
-.nav_box dl{
+.nav_box dl {
     height: auto;
     margin: 0;
+}
+.nav_box dl a{
     color: #ABABAB;
 }
 .nav_box dt{
@@ -124,9 +133,12 @@ tr>td>img{
     background-color: #F5F7FA;;
 }
 /*一级导航栏的hover和当前页面的样式*/
-.nav_box dt:hover,.nav_box .on{
+.nav_box .on{
     color: #5677FC;
     background-color: #E6E9F0;
+}
+.nav_box dt>a:hover,.nav_box .on>a{
+    color: #5677FC;
 }
 .nav_box dd{
     margin: 0;
@@ -207,6 +219,7 @@ tr>td>img{
     font-size: 12px;
     line-height: 20px;
     border-radius: 3px;
+    cursor: pointer;
     color:#666F80;
     border:1px solid #A9A9A9;
     background-color: #fff;
@@ -225,6 +238,7 @@ tr>td>img{
     font-size: 12px;
     line-height: 20px;
     border-radius: 3px;
+    cursor: pointer;
     color:#3F94F6;
     border:1px solid  #89C0FF;
     background-color: #EFF7FF;
@@ -248,6 +262,7 @@ tr>td>img{
     line-height: 20px;
     margin-left: 20px;
     border-radius: 3px;
+    cursor: pointer;
     color:#666F80;
     border:1px solid #BFC0C2;
 }
@@ -259,6 +274,7 @@ tr>td>img{
     -o-transition: all 1s linear;
 }
 .sure_left{
+    cursor: pointer;
     color:#3F94F6;
     border:1px solid #89C0FF;
     background-color:  #EFF7FF;;
@@ -273,6 +289,7 @@ tr>td>img{
     -o-transition: all 1s linear;
 }
 .history_btn{
+    cursor: pointer;
     line-height: 32px;
     color:#3F94F6;
 
@@ -377,6 +394,7 @@ tr>td>img{
     top:0;
     right: 0;
     text-align: center;
+    cursor: pointer;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     line-height: 32px;
@@ -468,6 +486,12 @@ tr>td>img{
 .hide{
     display: none;
 }
+.visible{
+    visibility: visible;
+}
+.hidden{
+    visibility: hidden;
+}
 /*select的公共样式开始*/
 .selects{
     min-width: 188px;
@@ -503,13 +527,6 @@ tr>td>img{
 .selects option:last-child{
     margin-bottom: 6px;
 }
-.row1_right .first_box{
-    margin-right: 15px;
-}
-.row1_right .level_title{
-    height: 30px;
-    line-height: 30px;
-}
 /*select的公共样式结束*/
 
 /*左边窄，右边宽，页面左边为说明右边为内容样式开始*/
@@ -519,11 +536,12 @@ tr>td>img{
     padding: 15px 40px;
     height: auto;
     overflow: hidden;
+    font-size: 14px;
     /*background-color: #0000cc;*/
     border-bottom:1px solid  #E6E9F0;
 }
 .row1_box .row1_left{
-    width: 100px;
+    width: 130px;
     height: auto;
     /*background-color: #009900;*/
 }
@@ -533,7 +551,7 @@ tr>td>img{
     /*background-color: #1094fa;*/
 }
 .row1_box .row1_right>.class_name{
-    width: 145px;
+    width: 180px;
     height: 28px;
     padding-left:5px;
     border-radius: 3px;
@@ -544,4 +562,28 @@ tr>td>img{
     color:#E61C23;
     margin-right: 3px;
 }
+.row1_right .first_box{
+    margin-right: 15px;
+}
+.row1_right .level_title{
+    height: 30px;
+    line-height: 30px;
+}
+/*分类图片和品牌LOGO的图片居中的样式*/
+.sort_img_box{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: table-cell;
+
+    vertical-align:middle;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #E6E9F0 ;
+}
+.sort_img,.sort_img1,.sort_img2{
+    width: 100%;
+    vertical-align:middle
+}
+
 /*左边窄，右边宽，页面左边为说明右边为内容样式结束*/

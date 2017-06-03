@@ -6,40 +6,24 @@ var categories_admin="mall/categories-admin";
 var upload1="site/upload";
 //分类添加接口
 var category_add="mall/category-add";
-//分类审核接口
-var category_review_list="mall/category-review-list";
 app.controller("sort_management",function($http,$scope){
     $scope.url=url;
     //控制页头的显示及样式
     $scope.header_display=2;
     $scope.sort_pid=0;
-    $scope.header_show1=function(){
-        if($scope.header_display==3||$scope.header_display==4){
-            $("#nav_2").removeClass("color1_8d").addClass("color_2f");
-        }
-        else{
-            $("#nav_2").removeClass("color_2f").addClass("color1_8d");
-        }
-    };
+    $scope.title="";
+    $scope.icon="";
     $scope.header_show=function(obj){
         $scope.header_display=obj;
-        $scope.header_show1();
-        if($scope.header_display==1){
-            window.location.href = "index2.html";
-        }
-    }
+    };
     //右边内容宽度自适应
     $scope.zishiy=function (){
         var browser_width1=$(document).width()-$(".nav_box").width();
-        //console.log("$(document).width()="+$(document).width())
-        //console.log("browser_width1="+browser_width1)
         $(".my_container").css("width",browser_width1);
         $(".header_box").css("width",browser_width1);
         //浏览器大小变化的监听
         $(window).resize(function() {
             var browser_width1=$(document).width()-$(".nav_box").width();
-            //console.log("$(document).width()实时="+$(document).width())
-            //console.log("browser_width1实时="+browser_width1)
             $(".my_container").css("width",browser_width1);
             $(".header_box").css("width",browser_width1);
         });
@@ -54,7 +38,6 @@ app.controller("sort_management",function($http,$scope){
         })
             .success(function(data,status){
                 $scope.first_level=data.data.categories;
-                //$scope.first_level= [{"id":"3","title":"材料","icon":""},{"id":"5","title":"title5","icon":""},{"id":"6","title":"title2","icon":""}]
                 $scope.second= $scope.first_level[0].id;
                 $scope.gain_second()
             });
@@ -77,9 +60,9 @@ app.controller("sort_management",function($http,$scope){
     });
     $(document).on("change","#second_level",function(){
         $scope.sort_pid=$(this).val();
-        console.log("$scope.sort_pid" +$scope.sort_pid)
     });
     //获取分类列表数据事件
+    $scope.order1="";
     $scope.data_list=function(){
         $scope.page = 1;
         $scope.page_size = 12;
@@ -93,6 +76,7 @@ app.controller("sort_management",function($http,$scope){
                 $scope.sort_list=data.data.category_list_admin.details;
                 $scope.sort_total=data.data.category_list_admin.total;
                 $scope.page_count=$scope.sort_total/$scope.page_size;
+
                 console.log("$scope.page_count"+$scope.page_count);
                 $('#pageTool').Paging({
                     pagesize: $scope.page, count: $scope.page_count,toolbar:true,ellipseTpl:". . .",  callback: function (page, size, count) {
@@ -106,48 +90,149 @@ app.controller("sort_management",function($http,$scope){
                             .success(function (data, status) {
                                 $scope.sort_list=data.data.category_list_admin.details;
                             });
-
-                        //alert('当前第 ' + page + '页,每页 ' + size + '条,总页数：' + count + '页')
                     }
                 });
             });
     };
     //列表数据初始化
     $scope.data_list();
+    //列表的升降序事件
+    $scope.order_btn=function(){
+        if(!$("#order_btn").hasClass("clicked")) {
+            $("#order_btn").addClass("clicked");
+            $(".to_top").removeClass("order_on");
+            $(".to_bottom").addClass("order_on");
+            $scope.order1="create_time";
+        } else {
+            $("#order_btn").removeClass("clicked");
+            $(".to_bottom").removeClass("order_on");
+            $(".to_top").addClass("order_on");
+            $scope.order1="-create_time";
+        }
+
+    };
+//上传图标图片
+    $scope.add_image1="";
+    $scope.getImageWidthAndHeight=function(id, callback) {
+        var _URL = window.URL || window.webkitURL;
+        $("#" + id).change(function (e) {
+            var file, img;
+            if ((file = this.files[0])) {
+                img = new Image();
+                img.onload = function () {
+                    callback && callback({"width": this.width, "height": this.height, "filesize": file.size});
+                };
+                img.src = _URL.createObjectURL(file);
+            }
+        });
+    };
+    $scope.getImageWidthAndHeight('myfile1', function (obj) {
+        console.log('width:'+obj.width+'-----height:'+obj.height);
+        $scope.img_width1=obj.width;
+        $scope.img_height1=obj.height;
+    });
+    $(document).on("change","#myfile1",function(){
+        var formData = new FormData($( "#uploadForm1" )[0]);
+        $.ajax({
+            url: url+upload1 ,
+            type: 'POST',
+            data: formData,
+            dataType: "json",
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                $scope.up_code=data.code;
+                console.log(" $scope.up_code"+ $scope.up_code)
+                if($scope.up_code==200){
+                    $scope.icon=data.data.file_path;
+                    $(".sort_img").attr({src:$scope.url+$scope.icon})
+                    console.log("$scope.img_width11111111="+$scope.img_width1)
+                    console.log("$scope.img_height1111111111="+$scope.img_height1)
+                    if($scope.img_width1>=$scope.img_height1){
+                        $(".sort_img").css({"width":"100%","height":"auto"})
+                    }
+                    else{
+                        $(".sort_img").css({"width":"auto","height":"100%"})
+                    }
+                }
+                else{
+                   $("#uploadForm1 .img_warn").text("* 上传图片的格式不正确或尺寸不匹配，请重新上传")
+                }
+
+            },
+            error: function (returndata) {
+                console.log(returndata);
+            }
+        });
+    });
+
+    //
 
     //添加的确认事件
     var ue = UE.getEditor('editor');
     $scope.add=function () {
         var arr = [];
+        var pattern = new RegExp("[`~!@#$%^&*()-+_=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|《》{}【】‘；：”“'。，、？]");
         arr.push(UE.getEditor('editor').getContent());
         $scope.description=arr.join("\n");
-        console.log("$scope.description"+arr.join("\n"));
-        console.log("$scope.title"+$scope.title);
-        console.log("$scope.icon"+$scope.icon);
-        console.log("$scope.sort_pid"+$scope.sort_pid);
-        $.ajax({
-            url: url+ category_add,
-            type: 'POST',
-            data:{"title": $scope.title,"pid":$scope.sort_pid,"icon":$scope.icon,"description":$scope.description},
-            dataType: "json",
-            contentType:"application/x-www-form-urlencoded;charset=UTF-8",
-            success: function (data) {
-                $scope.first=data;
-                if(data.code==200){
-                    console.log("添加分类成功=="+data.code);
-                    $scope.data_list();
-                }
-                else if(data.code==1006){
-                    console.log("商品分类名称不能重复=="+data.code);
-                }
-                else{
-                    console.log("添加失败=="+data.code);
-                }
+        if($scope.title=="" || $scope.title=="undefined"){
+            $(".popup").addClass('show').removeClass("hide");
+            $(".popup .add_save").addClass('show').removeClass("hide");
+            $(".popup .add_save  .warm_word1").text('分类名称不能为空');
 
-                //$scope.header_display=2;
+        }
+        else if($scope.title!=""&&pattern.test($scope.title)){
+            $(".popup").addClass('show').removeClass("hide");
+            $(".popup .add_save").addClass('show').removeClass("hide");
+            $(".popup .add_save  .warm_word1").text('分类名称格式不正确，请重新填写');
+        }
+        else if($scope.title!=""&&$scope.icon==""){
+            $(".popup").addClass('show').removeClass("hide");
+            $(".popup .add_save").addClass('show').removeClass("hide");
+            $(".popup .add_save  .warm_word1").text('请上传图片');
+        }
+        else{
+            $.ajax({
+                url: url+ category_add,
+                type: 'POST',
+                data:{"title": $scope.title,"pid":$scope.sort_pid,"icon":$scope.icon,"description":$scope.description},
+                dataType: "json",
+                contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                success: function (data) {
+                    $scope.first=data.code;
+                    if($scope.first==200){
+                        $(".popup").addClass('show').removeClass("hide");
+                        $(".popup .add_save").addClass('show').removeClass("hide");
+                        $(".popup .add_save  .warm_word1").text('添加成功');
+                        console.log("添加分类成功=="+data.code);
+                        $scope.data_list();
+                    }
+                    else if($scope.first==1006){
+                        $(".popup").addClass('show').removeClass("hide");
+                        $(".popup .add_save").addClass('show').removeClass("hide");
+                        $(".popup .add_save  .warm_word1").text('该分类名称已存在，请重新填写');
+                        console.log("商品分类名称不能重复=="+data.code);
+                    }
+                    else{
+                        $(".popup").addClass('show').removeClass("hide");
+                        $(".popup .add_save").addClass('show').removeClass("hide");
+                        $(".popup .add_save  .warm_word1").text('未添加成功，请重新添加');
 
-            }
-        });
+                        console.log("添加失败=="+data.code);
+                    }
+                }
+            });
+        }
+
+    };
+    $scope.add_close1= function () {
+        $(".popup").addClass('hide').removeClass("show");
+        $(".popup .add_save").addClass('hide').removeClass("show");
+        if($scope.first==200){
+            $scope.header_display=2;
+        }
     };
     //添加的返回事件
     $scope.add_return= function () {
@@ -184,7 +269,6 @@ app.controller("sort_management",function($http,$scope){
             $scope.header_display=header_show;
             alert("进入查看函数")
             $(".sort_description").html($scope.check_description);
-            $scope.header_show1()
         };
         //筛选事件的实现
         $scope.screen=function(now_id,now_classs){
@@ -212,57 +296,6 @@ app.controller("sort_management",function($http,$scope){
             }
 
         });
-        //上传图标图片
-        $scope.add_image1="";
-        $scope.getImageWidthAndHeight=function(id, callback) {
-            var _URL = window.URL || window.webkitURL;
-            $("#" + id).change(function (e) {
-                var file, img;
-                if ((file = this.files[0])) {
-                    img = new Image();
-                    img.onload = function () {
-                        callback && callback({"width": this.width, "height": this.height, "filesize": file.size});
-                    };
-                    img.src = _URL.createObjectURL(file);
-                }
-            });
-        };
-        $scope.getImageWidthAndHeight('myfile1', function (obj) {
-            console.log('width:'+obj.width+'-----height:'+obj.height);
-            $scope.img_width1=obj.width;
-            $scope.img_height1=obj.height;
-        });
-        //$scope.doUpload=function () {
-            $(document).on("change","#myfile1",function(){
-                var formData = new FormData($( "#uploadForm1" )[0]);
-                $.ajax({
-                    url: url+upload1 ,
-                    type: 'POST',
-                    data: formData,
-                    dataType: "json",
-                    async: false,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-                        $scope.icon=data.data.file_path;
-                        $(".sort_img").attr({src:$scope.url+$scope.icon})
-                        console.log("$scope.img_width11111111="+$scope.img_width1)
-                        console.log("$scope.img_height1111111111="+$scope.img_height1)
-                        if($scope.img_width1>=$scope.img_height1){
-                            $(".sort_img").css({"width":"100%","height":"auto"})
-                        }
-                        else{
-                            $(".sort_img").css({"width":"auto","height":"100%"})
-                        }
-                    },
-                    error: function (returndata) {
-                        console.log(returndata);
-                    }
-                });
-            });
-
-        //
 
     });
 });
