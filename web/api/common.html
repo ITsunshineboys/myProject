@@ -1,0 +1,653 @@
+<head> 
+<meta charset="gb2312"> 
+<title>Common Api</title> 
+</head>
+
+<span id="top"></span>
+* 标明“(admin)”的接口只是针对后台系统，App不用管</br>
+* 返回结果格式都是JSON</br>
+* 登录成功后会发送名为PHPSESSID的Cookie，之后的每次请求都需要带上这个Cookie</br>
+* 排序传参格式：字段名:排序方向，升序：4，降序：3，比如按销量降序排序，这样传参：sold_number:3；排序方向不传的话为3，即降序</br>
+* 错误码
+<table border="1">
+  <th>code</th>
+  <th>msg</th>
+  <tr>
+    <td align="middle">403</td>
+    <td align="middle">没有权限</td>
+  </tr>
+  <tr>
+    <td align="middle">500</td>
+    <td align="middle">接口服务器异常</td>
+  </tr>
+  <tr>
+    <td align="middle">1000</td>
+    <td align="middle">请求的参数不正确</td>
+  </tr>
+  <tr>
+    <td align="middle">1001</td>
+    <td align="middle">用户名/密码不正确</td>
+  </tr>
+  <tr>
+    <td align="middle">1002</td>
+    <td align="middle">验证码不正确</td>
+  </tr>
+  <tr>
+    <td align="middle">1003</td>
+    <td align="middle">请先停用再删除</td>
+  </tr>
+  <tr>
+    <td align="middle">1004</td>
+    <td align="middle">上传文件大小不能超过5M</td>
+  </tr>
+  <tr>
+    <td align="middle">1005</td>
+    <td align="middle">编辑商品分类不能跨级</td>
+  </tr>
+  <tr>
+    <td align="middle">1006</td>
+    <td align="middle">商品分类名称不能重复</td>
+  </tr>
+  <tr>
+    <td align="middle">1007</td>
+    <td align="middle">商品品牌名称不能重复</td>
+  </tr>
+  <tr>
+    <td align="middle">1008</td>
+    <td align="middle">物流模板名称不能重复</td>
+  </tr>
+</table>
+
+<h3>1. 获取角色列表<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：登录用户</p>
+<p>Http方法：GET</p>
+<p>Url：http://test.cdlhzz.cn:888/site/roles</p>
+<p>参数列表：无</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+    "roles":
+    [
+      {
+        "id":2,
+        "name":"工人"
+      },
+      {
+        "id":3,
+        "name":"设计师"
+      },
+      {
+        "id":4,
+        "name":"项目经理"
+      },
+      {
+        "id":5,
+        "name":"装修公司"
+      },
+      {
+        "id":6,
+        "name":"供应商"
+      },
+      {
+        "id":7,
+        "name":"业主"
+      }
+    ]
+  }
+}
+</pre>
+</p>
+
+<h3>2. 获取验证码<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：所有用户（resetPassword：登录用户）</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/validation-code</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <th>desc</th>
+  <tr>
+    <td align="middle">type</td>
+    <td align="middle">y</td>
+    <td align="middle">string</td>
+    <td align="middle">-</td>
+    <td align="middle">register|resetPassword|forgetPassword</td>
+  </tr>
+  <tr>
+    <td align="middle">mobile</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">11</td>
+    <td align="middle">-</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK"
+}
+</pre>
+</p>
+
+<h3>3. 用户注册<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：所有用户</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/register</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <tr>
+    <td align="middle">mobile</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">11</td>
+  </tr>
+  <tr>
+    <td align="middle">password</td>
+    <td align="middle">y</td>
+    <td align="middle">string</td>
+    <td align="middle">6-25</td>
+  </tr>
+  <tr>
+    <td align="middle">validation_code</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">4</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"注册成功"
+}
+</pre>
+</p>
+
+<h3>4. 修改密码<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：登录用户</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/reset-password</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <tr>
+    <td align="middle">new_password</td>
+    <td align="middle">y</td>
+    <td align="middle">string</td>
+    <td align="middle">6-25</td>
+  </tr>
+  <tr>
+    <td align="middle">validation_code</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">4</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"重设密码成功"
+}
+</pre>
+</p>
+
+<h3>5. 忘记密码<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：注册用户</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/forget-password</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <tr>
+    <td align="middle">mobile</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">11</td>
+  </tr>
+  <tr>
+    <td align="middle">new_password</td>
+    <td align="middle">y</td>
+    <td align="middle">string</ttd>
+    <td align="middle">6-25</td>
+  </tr>
+  <tr>
+    <td align="middle">validation_code</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">4</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"重设密码成功"
+}
+</pre>
+</p>
+
+<h3>6. 用户登录<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：所有用户</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/login</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <tr>
+    <td align="middle">username</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">-</td>
+  </tr>
+  <tr>
+    <td align="middle">password</td>
+    <td align="middle">y</td>
+    <td align="middle">string</ttd>
+    <td align="middle">6-25</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK"
+}
+</pre>
+</p>
+
+<h3>7. 用户登出<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：登录用户</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/logout</p>
+<p>参数列表：无
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK"
+}
+</pre>
+</p>
+</p>
+
+
+<h3>8. 获取每日验证码发送及剩余次数<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：所有用户（resetPassword：登录用户）</p>
+<p>Http方法：GET</p>
+<p>Url：http://test.cdlhzz.cn:888/site/sm-send-num</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <th>desc</th>
+  <tr>
+    <td align="middle">type</td>
+    <td align="middle">y</td>
+    <td align="middle">string</td>
+    <td align="middle">-</td>
+    <td align="middle">register|resetPassword|forgetPassword</td>
+  </tr>
+  <tr>
+    <td align="middle">mobile</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">11</td>
+    <td align="middle">-</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+    "sendNum":0,
+    "leftNum":5
+  }
+}
+</pre>
+</p>
+
+<h3>9. 获取角色状态<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：登录用户</p>
+<p>Http方法：GET</p>
+<p>Url：http://test.cdlhzz.cn:888/site/roles-status
+</p>
+<p>参数列表：无
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+    "roles_status":
+    [
+      {
+        "role_id":2,
+        "role_name":"工人",
+        "status":1,
+        "status_desc":"未认证"
+      },
+      {
+        "role_id":3,
+        "role_name":"设计师",
+        "status":2,
+        "status_desc":"审核中"
+      },
+      {
+        "role_id":4,
+        "role_name":"项目经理",
+        "status":3,
+       "status_desc":"已通过"
+      },
+      {
+        "role_id":5,
+        "role_name":"装修公司",
+        "status":4,
+        "status_desc":"不通过"
+      },
+      {
+        "role_id":6,
+        "role_name":"供应商",
+        "status":1,
+        "status_desc":"未认证"
+      }
+    ]
+  }
+}
+</pre>
+</p>
+
+<h3>10. 获取所有角色列表(admin)<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：所有用户</p>
+<p>Http方法：GET</p>
+<p>Url：http://test.cdlhzz.cn:888/site/all-roles</p>
+<p>参数列表：无</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+    "roles":
+    [
+      {
+        "id":1,
+        "name":"公司后台管理员"
+      },
+      {
+        "id":2,
+        "name":"工人"
+      },
+      {
+        "id":3,
+        "name":"设计师"
+      },
+      {
+        "id":4,
+        "name":"项目经理"
+      },
+      {
+        "id":5,
+        "name":"装修公司"
+      },
+      {
+        "id":6,
+        "name":"供应商"
+      },
+      {
+        "id":7,
+        "name":"业主"
+      }
+    ]
+  }
+}
+</pre>
+</p>
+
+<h3>11. 用户登录(admin)<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：所有用户</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/admin-login</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <tr>
+    <td align="middle">role_id</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">-</td>
+  </tr>
+  <tr>
+    <td align="middle">username</td>
+    <td align="middle">y</td>
+    <td align="middle">int</td>
+    <td align="middle">-</td>
+  </tr>
+  <tr>
+    <td align="middle">password</td>
+    <td align="middle">y</td>
+    <td align="middle">string</ttd>
+    <td align="middle">6-25</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"登录成功", 
+  "data":
+  {
+    "toUrl": "http://test.cdlhzz.cn:888/admin/lhzz" 
+  }
+}
+</pre>
+</p>
+
+<h3>12. 获取时间类型列表<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：登录用户</p>
+<p>Http方法：GET</p>
+<p>Url：http://test.cdlhzz.cn:888/site/time-types</p>
+<p>参数列表：无</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+    "time_types":
+    [
+      {
+        "value":"all",
+        "name":"全部时间"
+      },
+      {
+        "value":"today",
+        "name":"今天"
+      },
+      {
+        "value":"week",
+        "name":"本周"
+      },
+      {
+        "value":"month",
+        "name":"本月"
+      },
+      {
+        "value":"year",
+        "name":"本年"
+      },
+      {
+        "value":"custom",
+        "name":"自定义"
+      }
+    ]
+  }
+}
+</pre>
+</p>
+
+<h3>13. 上传文件<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：登录用户</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/upload</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <th>desc</th>
+  <tr>
+    <td align="middle">UploadForm[file]</td>
+    <td align="middle">y</td>
+    <td align="middle">binary streams</td>
+    <td align="middle">-</td>
+    <td align="middle">比如h5 form enctype="multipart/form-data"</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+	"file_path":"uploads/2017/05/13/1494667639.jpg"
+  }
+}
+</pre>
+</p>
+
+<h3>14. 删除上传文件<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：登录用户</p>
+<p>Http方法：POST</p>
+<p>Url：http://test.cdlhzz.cn:888/site/upload-delete</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <tr>
+    <td align="middle">file_path</td>
+    <td align="middle">y</td>
+    <td align="middle">string</td>
+    <td align="middle">-</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK"
+}
+</pre>
+</p>
+
+<h3>15. 获取审核状态列表<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：登录用户</p>
+<p>Http方法：GET</p>
+<p>Url：http://test.cdlhzz.cn:888/site/review-statuses</p>
+<p>参数列表：无</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+    "review_statuses":
+    [
+      {
+        "value":"0",
+        "name":"待审核"
+      },
+      {
+        "value":"1",
+        "name":"审核不通过"
+      },
+      {
+        "value":"2",
+        "name":"审核通过"
+      }
+    ]
+  }
+}
+</pre>
+</p>
+
+<h3>40. 检测后台模块访问权限(admin)<span style="margin-left: 50px;"><a href="#top">返回顶部<a/></span></h3>
+<p>访问权限：所有用户</p>
+<p>Http方法：GET</p>
+<p>Url：http://test.cdlhzz.cn:888/mall/check-access-admin</p>
+<p>参数列表：
+<table border="1">
+  <th>item</th>
+  <th>required</th>
+  <th>type</th>
+  <th>length</th>
+  <th>desc</th>
+  <tr>
+    <td align="middle">module</td>
+    <td align="middle">y</td>
+    <td align="middle">string</td>
+    <td align="middle">-</td>
+    <td align="middle">公司后台:lhzz, 工人:worker, 设计师:designer, 项目经理:manager, 装修公司:decoration_company, 供应商:supplier, 业主:owner</td>
+  </tr>
+</table>
+</p>
+<p>返回：
+<pre>
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+    "can_access":false
+  }
+}
+</pre>
+</p>
