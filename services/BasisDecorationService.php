@@ -46,6 +46,7 @@ class BasisDecorationService
     }
 
     /**
+     * 电线计算公式
      * @param string $str
      */
     public static function wire($str = '',$norms = '100',$dot = '10')
@@ -58,6 +59,11 @@ class BasisDecorationService
         return $int;
     }
 
+    /**
+     * 地面面积计算公式
+     * @param array $arr
+     * @return int|mixed
+     */
     public static function groundArea($arr = [])
     {
         $all_area = [];
@@ -77,6 +83,11 @@ class BasisDecorationService
         return $area;
     }
 
+    /**
+     * 墙面空间计算
+     * @param array $arr
+     * @return int|mixed
+     */
     public static function wallSpace($arr = [])
     {
         $all_area = [];
@@ -102,6 +113,181 @@ class BasisDecorationService
             }
         }
         return $area;
+    }
+
+    /**
+     * 木作人工计算公式
+     * @param array $arr
+     * @param string $modelling
+     * @param string $area
+     * @param string $television_walls
+     * @return float|int
+     */
+    public static function carpentryLabor($arr = [],$modelling = '20',$area = '4',$television_walls = '1')
+    {
+       if($arr){
+           //人工费：（造型天数+平顶天数+【1】天）×【工人每天费用】
+           $day_cost = 0;
+           $modelling_length = 0;
+           $flat_area = 0;
+           foreach ($arr as $one)
+           {
+               $day_cost = $one['univalence'];
+               $modelling_length = $one['day_sculpt_length'];
+               $flat_area = $one['day_area'];
+           }
+           $artificial_fee = ($modelling / $modelling_length + $area / $flat_area + $television_walls) * $day_cost;
+       }
+       return $artificial_fee;
+    }
+
+    /**
+     * 木作造型长度计算
+     * @param array $arr
+     * @param array $coefficient_all
+     * @param string $series
+     * @return mixed
+     */
+    public static function  carpentryModellingLength($arr = [],$coefficient_all = [],$series = '1')
+    {
+        switch ($series)
+        {
+            case  1:
+                $series = '齐家';
+                break;
+            case  2:
+                $series = '享家';
+                break;
+            case  3:
+                $series = '享家+';
+                break;
+            case  4:
+                $series = '智家';
+                break;
+            case  5:
+                $series = '智家+';
+                break;
+            default:
+                echo "请输入正确1-5的值";
+        }
+        $length = 0;
+        if($coefficient_all && $arr){
+            $length = $arr['modelling_length'];
+            foreach ($coefficient_all as $coefficient_one)
+            {
+                if( $coefficient_one['series'] == $series){
+                    //造型长度 = 木作添加项 *  系数
+                    $modelling_length = $coefficient_one ['modelling_length_coefficient'] * $length;
+                }
+            }
+        }
+        return $modelling_length;
+    }
+
+    /**
+     * 造型天数计算公式
+     * @param string $modelling
+     * @param string $day_modelling
+     * @param string $series_all
+     * @param string $style_all
+     * @param int $series
+     * @param int $style
+     * @return float|int
+     */
+    public static function carpentryModellingDay($modelling = '',$day_modelling = '',$series_all='',$style_all ='',$series =5,$style =5)
+    {
+        switch ($series)
+        {
+            case  1:
+                $series = '齐家';
+                break;
+            case  2:
+                $series = '享家';
+                break;
+            case  3:
+                $series = '享家+';
+                break;
+            case  4:
+                $series = '智家';
+                break;
+            case  5:
+                $series = '智家+';
+                break;
+            default:
+                echo "请输入正确1-5的值";
+        }
+
+        switch ($style)
+        {
+            case  1:
+                $style = '美式田园';
+                break;
+            case  2:
+                $style = '欧式';
+                break;
+            case  3:
+                $style = '日式';
+                break;
+            case  4:
+                $style = '现代简约';
+                break;
+            case  5:
+                $style = '中国风';
+                break;
+            default:
+                echo "请输入正确1-5的值";
+        }
+
+        if(!empty($modelling) && !empty($day_modelling) && !empty($series_all) && !empty($style_all))
+        {
+            $series_find = [];
+            $enjoy_family = 0;
+            $wisdom_family = 0;
+            foreach ($series_all as $series_one)
+            {
+                if($series_one['series'] == '享家+')
+                {
+                    $enjoy_family = $series_one['modelling_day_coefficient'];
+                }elseif ($series_one['series'] == '智家')
+                {
+                    $wisdom_family = $series_one['modelling_day_coefficient'];
+                }
+
+                if($series_one['series'] == $series)
+                {
+                    $series_find = $series_one;
+                }
+            }
+            $family = $enjoy_family * $wisdom_family;
+
+            $style_find = [];
+            foreach ($style_all as $style_one)
+            {
+                if($style_one['style'] == $style)
+                {
+                    $style_find = $style_one;
+                }
+            }
+//            齐家，享家：【1】
+//            享家+：【1.2】
+//            智家：享家+×【1.2】
+//            智家+：智家×【1.2】
+            $series_coefficient = 0;
+            if($series_find['series'] == '齐家' || $series_find['series'] == '享家'){
+                $series_coefficient = $series_find['modelling_day_coefficient'];
+            }elseif ($series_find['series'] == '享家+'){
+                $series_coefficient = $series_find['modelling_day_coefficient'];
+            }elseif ($series_find['series'] == '智家'){
+                $series_coefficient = $enjoy_family * $series_find['modelling_day_coefficient'];
+            }elseif ($series_find['series'] == '智家+'){
+                $series_coefficient = $family *  $series_find['modelling_day_coefficient'];
+            }
+
+//            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
+            $modelling_day = $modelling / $day_modelling * $series_coefficient * $style_find['modelling_day_coefficient'];
+
+        }
+        return $modelling_day;
     }
 
 }

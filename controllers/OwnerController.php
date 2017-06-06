@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\AppliancesAssort;
 use app\models\BasisDecoration;
+use app\models\CarpentryAdd;
 use app\models\CarpentryReconstruction;
 use app\models\CircuitryReconstruction;
 use app\models\DecorationAdd;
@@ -642,8 +643,8 @@ class OwnerController extends Controller
      */
     public function actionCarpentry()
     {
-        $receive = \Yii::$app->request->post();
-        $post = Json::decode($receive);
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
         $post = [
             'effect_id' => 1,
             'room' => 1,
@@ -660,43 +661,61 @@ class OwnerController extends Controller
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
-        $arr['worker_kind'] = '木作';
-
+        $arr['worker_kind'] = '木工';
         //人工一天价格
-        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
-        $arr['day_standard'] = $worker[0]['day_area'];
-        $arr['day_price'] = $worker[0]['univalence'];
+        $labor_cost = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $series_all = Series::find()->all();
+        $style_all =Style::find()->all();
+        $carpentry_add = CarpentryAdd::findByStipulate($post['series'],$post['style']);
+        // 造型长度
+        $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$series_all,$post['series']);
+        //造型天数
+        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length,$labor_cost['day_sculpt_length'],$series_all,$style_all);
+        //平顶天数
+        $flat_day =
 
         //木工材料费
         if(!empty($post['effect_id']))
         {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $carpentry_reconstruction = CarpentryReconstruction::find()->where(['decoration_list_id' => $decoration_list])->all();
-            $goods_price = Goods::findQueryAll($carpentry_reconstruction);
+            var_dump($carpentry_reconstruction);exit;
+            $goods = Goods::findQueryAll($carpentry_reconstruction);
+            var_dump($goods);exit;
         }else{
-            $material = '木作';
-            $goods_price = Goods::priceDetail(3,$material);
-        }
-
-        //木工面积计算
-        if(!empty($post['effect_id'])){
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $required_area = [];
-            $decoration_particulars = DecorationParticulars::findByOne($decoration_list);
-            $required_area[] =
-            var_dump($decoration_particulars);exit;
+            $plasterboard = '石膏板';
+            $goods_price = [];
+            $plasterboard_price = Goods::priceDetail(3,$plasterboard);
+            $keel = '龙骨';
+            $keel_price = Goods::priceDetail(3,$keel);
+            $screw = '丝杆';
+            $screw_price = Goods::priceDetail(3,$screw);
         }
     }
 
+    /**
+     * 乳胶漆
+     */
+    public function actionCoating()
+    {
 
+    }
+
+    /**
+     * 泥作
+     */
+    public function actionMudMake()
+    {
+
+    }
     /**
      * 软装配套
      * @return string
      */
     public function actionSoftOutfitAssort()
     {
-        $receive = \Yii::$app->request->post();
-        $post = Json::decode($receive);
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
         $post = [
 //            'effect_id' => 1,
             'room' => 1,
