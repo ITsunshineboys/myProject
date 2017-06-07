@@ -119,6 +119,14 @@ class LogisticsTemplate extends ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findOnline()
+    {
+        return parent::find()->where(['status' => self::STATUS_ONLINE]);
+    }
+
+    /**
      * Do some ops before insertion
      *
      * @param bool $insert if is a new record
@@ -149,5 +157,16 @@ class LogisticsTemplate extends ActiveRecord
 
             return true;
         }
+    }
+
+    /**
+     * Convert price
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        isset($this->delivery_cost_default) && $this->delivery_cost_default /= 100;
+        isset($this->delivery_cost_delta) && $this->delivery_cost_delta /= 100;
     }
 }

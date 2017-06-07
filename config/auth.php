@@ -48,4 +48,5 @@ return [
     // logistics template
     'logistics-template-add' => [6],
     'logistics-template-edit' => [6],
+    'logistics-template-view' => [6],
 ];

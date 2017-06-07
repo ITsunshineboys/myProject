@@ -63,6 +63,7 @@ class MallController extends Controller
         'brand-list-admin',
         'logistics-template-add',
         'logistics-template-edit',
+        'logistics-template-view',
     ];
 
     /**
@@ -2151,6 +2152,43 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * View logistis template action
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplateView()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->get('id', 0);
+        $logisticsTemplate = LogisticsTemplate::findOnline()->andWhere(['id' => $id ])->one();
+        if (!$logisticsTemplate) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $logisticsTemplate = (object)$logisticsTemplate->attributes;
+        $logisticsTemplate->delivery_method = LogisticsTemplate::DELIVERY_METHOD[$logisticsTemplate->delivery_method];
+        $districtCodes = LogisticsDistrict::districtCodesByTemplateId($logisticsTemplate->id);
+        $logisticsTemplate->district_codes = StringService::districtNamesByCodes($districtCodes);
+
+        unset($logisticsTemplate->id);
+        unset($logisticsTemplate->supplier_id);
+        unset($logisticsTemplate->name);
+        unset($logisticsTemplate->status);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'logistics-template' => $logisticsTemplate
+            ],
         ]);
     }
 }

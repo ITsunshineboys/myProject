@@ -127,6 +127,21 @@ class StringService
     }
 
     /**
+     * Get district names
+     *
+     * @param  array $codes strict code list
+     * @return array
+     */
+    public static function districtNamesByCodes($codes)
+    {
+        foreach ($codes as &$districtCode) {
+            $districtCode = (string)self::checkDistrict($districtCode);
+        }
+
+        return $codes;
+    }
+
+    /**
      * Check if valid district code
      *
      * @param  string $code strict code
