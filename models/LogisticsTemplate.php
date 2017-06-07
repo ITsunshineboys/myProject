@@ -26,6 +26,32 @@ class LogisticsTemplate extends ActiveRecord
     const POSTFIX_EXISTS = '_exists';
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findOnline()
+    {
+        return parent::find()->where(['status' => self::STATUS_ONLINE]);
+    }
+
+    /**
+     * Get template list by supplier id
+     *
+     * @param  int $supplierId supplier id
+     * @return array
+     */
+    public static function findBySupplierId($supplierId)
+    {
+        $supplierId = (int)$supplierId;
+        if ($supplierId <= 0) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select id, name from {{%" . self::tableName() . "}} where supplier_id = {$supplierId}")
+            ->queryAll();
+    }
+
+    /**
      * @return string 返回该AR类关联的数据表名
      */
     public static function tableName()
@@ -116,14 +142,6 @@ class LogisticsTemplate extends ActiveRecord
         }
 
         return true;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public static function findOnline()
-    {
-        return parent::find()->where(['status' => self::STATUS_ONLINE]);
     }
 
     /**

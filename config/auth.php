@@ -49,4 +49,5 @@ return [
     'logistics-template-add' => [6],
     'logistics-template-edit' => [6],
     'logistics-template-view' => [6],
+    'logistics-templates-supplier' => [6],
 ];

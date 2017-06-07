@@ -64,6 +64,7 @@ class MallController extends Controller
         'logistics-template-add',
         'logistics-template-edit',
         'logistics-template-view',
+        'logistics-templates-supplier',
     ];
 
     /**
@@ -2188,6 +2189,24 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'logistics-template' => $logisticsTemplate
+            ],
+        ]);
+    }
+
+    /**
+     * Supplier logistis templates action
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplatesSupplier()
+    {
+        $user = Yii::$app->user->identity;
+        $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'logistics-templates-supplier' => LogisticsTemplate::findBySupplierId($supplier->id)
             ],
         ]);
     }
