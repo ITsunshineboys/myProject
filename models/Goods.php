@@ -23,6 +23,14 @@ class Goods extends ActiveRecord
 
     const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
 
+    const AFTER_SALE_SERVICES = [
+        '提供发票',
+        '退货',
+        '换货',
+        '上门维修',
+        '上门安装'
+    ];
+
     /**
      * @var array online status list
      */
@@ -39,16 +47,6 @@ class Goods extends ActiveRecord
     public static function tableName()
     {
         return 'goods';
-    }
-
-    /**
-     * @return array the validation rules.
-     */
-    public function rules()
-    {
-        return [
-            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id'], 'required'],
-        ];
     }
 
     /**
@@ -261,19 +259,18 @@ class Goods extends ActiveRecord
         return $a[$max];
     }
 
-    public static function findByIdAll($level = '', $title = '',$series = '1',$style = '2')
+    public static function findByIdAll($level = '', $title = '', $series = '1', $style = '2')
     {
         if (empty($level) && empty($title)) {
             echo '请正确输入值';
             exit;
         } else {
             $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_brand. name,goods_category.title FROM goods,goods_brand,goods_category WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods_category.`level` = " . $level . " AND goods_category.title LIKE " . "'%$title%' AND goods.series_id =".$series ." AND goods.style_id =".$style;
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_brand. name,goods_category.title FROM goods,goods_brand,goods_category WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods_category.`level` = " . $level . " AND goods_category.title LIKE " . "'%$title%' AND goods.series_id =" . $series . " AND goods.style_id =" . $style;
             $all = $db->createCommand($sql)->queryAll();
         }
         return $all;
     }
-
 
     /**
      * @param array $id
@@ -288,6 +285,58 @@ class Goods extends ActiveRecord
             $all_goods = self::find()->asArray()->where(['in', 'id', $id])->all();
         }
         return $all_goods;
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required'],
+            [['title', 'subtitle', 'string', 'length' => [1, 16]]],
+            [['supplier_price', 'platform_price', 'market_price', 'left_number'], 'number', 'integerOnly' => true, 'min' => 0],
+            ['supplier_price', 'validateSupplierPrice'],
+            ['after_sale_services', 'validateAfterSaleServices']
+        ];
+    }
+
+    /**
+     * Validates after_sale_services
+     *
+     * @param string $attribute after_sale_services to validate
+     * @return bool
+     */
+    public function validateAfterSaleServices($attribute)
+    {
+        $afterSaleServices = explode(',', $this->$attribute);
+        $serviceIds = array_keys(self::AFTER_SALE_SERVICES);
+        foreach ($afterSaleServices as $afterSaleService) {
+            if (!in_array($afterSaleService, $serviceIds)) {
+                $this->addError($attribute);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates prices
+     *
+     * @param string $attribute supplier_price, platform_price, market_price to validate
+     * @return bool
+     */
+    public function validateSupplierPrice($attribute)
+    {
+        if ($this->$attribute <= $this->platform_price
+            && $this->platform_price <= $this->market_price
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
     }
 
     /**
