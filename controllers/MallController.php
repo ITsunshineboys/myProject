@@ -2015,7 +2015,7 @@ class MallController extends Controller
         }
 
         if (!$logisticsTemplate->validate()) {
-            if ($logisticsTemplate->name && isset($logisticsTemplate->errors['name'])) {
+            if (isset($logisticsTemplate->errors['name' . LogisticsTemplate::POSTFIX_EXISTS])) {
                 $code = 1008;
             }
 
@@ -2092,7 +2092,7 @@ class MallController extends Controller
         }
 
         if (!$logisticsTemplate->validate()) {
-            if ($logisticsTemplate->name && isset($logisticsTemplate->errors['name'])) {
+            if (isset($logisticsTemplate->errors['name' . LogisticsTemplate::POSTFIX_EXISTS])) {
                 $code = 1008;
             }
 

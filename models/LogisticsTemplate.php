@@ -23,6 +23,7 @@ class LogisticsTemplate extends ActiveRecord
     ];
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
+    const POSTFIX_EXISTS = '_exists';
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -39,6 +40,7 @@ class LogisticsTemplate extends ActiveRecord
     {
         return [
             [['name', 'delivery_method'], 'required'],
+            ['name', 'string', 'length' => [1, 10]],
             [['name'], 'validateName'],
             [['delivery_method', 'delivery_cost_default', 'delivery_number_default', 'delivery_cost_delta', 'delivery_number_delta'], 'number', 'integerOnly' => true, 'min' => 0],
             ['delivery_method', 'in', 'range' => array_keys(self::DELIVERY_METHOD)],
@@ -101,13 +103,13 @@ class LogisticsTemplate extends ActiveRecord
 
         if ($this->isNewRecord) {
             if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute);
+                $this->addError($attribute . self::POSTFIX_EXISTS);
                 return false;
             }
         } else {
             if ($this->isAttributeChanged($attribute)) {
                 if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                    $this->addError($attribute);
+                    $this->addError($attribute . self::POSTFIX_EXISTS);
                     return false;
                 }
             }
