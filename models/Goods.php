@@ -294,7 +294,7 @@ class Goods extends ActiveRecord
     {
         return [
             [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required'],
-            [['title', 'subtitle', 'string', 'length' => [1, 16]]],
+            [['title', 'subtitle'], 'string', 'length' => [1, 16]],
             [['supplier_price', 'platform_price', 'market_price', 'left_number'], 'number', 'integerOnly' => true, 'min' => 0],
             ['supplier_price', 'validateSupplierPrice'],
             ['after_sale_services', 'validateAfterSaleServices']
