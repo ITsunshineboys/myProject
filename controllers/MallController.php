@@ -2177,7 +2177,8 @@ class MallController extends Controller
         $logisticsTemplate = (object)$logisticsTemplate->attributes;
         $logisticsTemplate->delivery_method = LogisticsTemplate::DELIVERY_METHOD[$logisticsTemplate->delivery_method];
         $districtCodes = LogisticsDistrict::districtCodesByTemplateId($logisticsTemplate->id);
-        $logisticsTemplate->district_codes = StringService::districtNamesByCodes($districtCodes);
+        $logisticsTemplate->district_codes = $districtCodes;
+        $logisticsTemplate->district_names = StringService::districtNamesByCodes($districtCodes);
 
         unset($logisticsTemplate->id);
         unset($logisticsTemplate->supplier_id);
