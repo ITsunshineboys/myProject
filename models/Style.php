@@ -19,4 +19,11 @@ class Style extends ActiveRecord
     {
         return 'style';
     }
+
+    public static function findByAll()
+    {
+        $select = 'style.id,style.style,style.intro,style.theme';
+        $series = self::find()->asArray()->select($select)->all();
+        return $series;
+    }
 }

@@ -19,6 +19,12 @@ class DecorationAdd extends ActiveRecord
         return 'decoration_add';
     }
 
+    /**
+     * 防水查询
+     * @param string $str
+     * @param string $all_area
+     * @return int|mixed
+     */
     public static function findByAll($str = '',$all_area ='')
     {
         if($str)
@@ -30,6 +36,19 @@ class DecorationAdd extends ActiveRecord
                 if($one['max_area']>= $all_area && $one['min_area'] <= $all_area){
                     $add_price = $one['price'];
                 }
+            }
+        }
+        return $add_price;
+    }
+
+    public static function CarpentryAddAll($str = '',$series = '',$style = '')
+    {
+        if($str){
+            $add = self::find()->where(['and',['project'=>$str],['series_id'=>$series],['style_id'=>$style]])->all();
+            $add_price = 0;
+            foreach ($add as $one)
+            {
+                $add_price += $one['price'];
             }
         }
         return $add_price;

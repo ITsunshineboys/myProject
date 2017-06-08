@@ -83,130 +83,39 @@ class OwnerController extends Controller
     }
 
     /**
-     * 有资料
-     * @return string
+     * 系列和风格
      */
-    public function actionHaveInformation()
+    public function actionSeriesAndStyle()
     {
-        $receive = \Yii::$app->request->post();
-        $post = Json::decode($receive);
-        if(!empty($post)){
-            // 搜索框
-            $search_condition = new Effect();
-            $lists = $search_condition->districtSearch($post);
-            foreach ($lists as $list){
-                $search_picture = new EffectPicture();
-                $list_picture = $search_picture->find()->where(['effect_id' =>$list['id']])->all();
-            }
-
-            // 系列列表
-            $series = new Series();
-            $series_list = $series->find()->all();
-
-            // 风格列表
-            $style = new Style();
-            $style_list = $style ->find()->all();
-            foreach ($style_list as $s){
-                $style_picture = new StylePicture();
-                $style_picture_list = $style_picture->find()->where(['style_id'=>$s['id']])->all();
-            }
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'OK',
-                'data' => [
-                    'list' => $lists,
-                    'list_picture' => $list_picture,
-                    'series_list' => $series_list,
-                    'style_list' => $style_list,
-                    'style_picture_list' => $style_picture_list,
-                ]
-            ]);
-        }else{
-            $search_condition = new Effect();
-            $lists = $search_condition->find()->where(['id' => 1])->one();
-
-            $search_picture = new EffectPicture();
-            $list_picture = $search_picture->find()->where(['effect_id' =>$lists['id']])->all();
-
-            // 系列列表
-            $series = new Series();
-            $series_list = $series->find()->where(['id' => $lists['id']])->one();
-
-            // 风格列表
-            $style = new Style();
-            $style_list = $style ->find()->where(['id' =>$lists['id']])->all();
-            foreach ($style_list as $s){
-                $style_picture = new StylePicture();
-                $style_picture_list = $style_picture->find()->where(['style_id'=>$s['id']])->all();
-            }
-
-            return Json::encode([
-                     'code' => 200,
-                     'msg' => 'OK',
-                     'data' => [
-                         'list' => $lists,
-                         'list_picture' => $list_picture,
-                         'series_list' => $series_list,
-                         'style_list' => $style_list,
-                         'style_picture_list' => $style_picture_list,
-                     ]
-            ]);
-        }
-
+        $series = Series::findByAll();
+        $style = Style::findByAll();
+        $style_picture = StylePicture::findById($style);
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'series' => $series,
+                'style' => $style,
+                'style_picture' => $style_picture,
+            ]
+        ]);
     }
 
     /**
-     * 无资料
+     * 搜索界面
      * @return string
      */
-    public function actionNullInformation()
+    public function actionSearch()
     {
-        $receive = \Yii::$app->request->post();
-        $post = Json::decode($receive);
-        $null_information = new Effect();
-        if($null_information->load($post) && $null_information->validate())
-        {
-            if(!$null_information->save()){
-                $errors = $null_information->errors;
-                return Json::encode([
-                            'code'=> 500,
-                            'msg' => '填写有误',
-                            'data' =>[
-                                'errors' => $errors
-                            ]
-                ]);
-            }
-        }else{
-            $errors = $null_information->errors;
-            return Json::encode([
-                    'code' => 500,
-                    'msg' => '填写有误',
-                    'data' => [
-                        'errors'=> $errors
-                        ]
-            ]);
-        }
-        $list = $null_information->find()->where(['and','toponymy' => $post['toponymy'],'street' => $post['street']])->one();
-        // 系列列表
-        $series = new Series();
-        $series_list = $series->find()->all();
-
-        // 风格列表
-        $style = new Style();
-        $style_list = $style ->find()->all();
-        foreach ($style_list as $s){
-            $style_picture = new StylePicture();
-            $style_picture_list = $style_picture->find()->where(['style_id'=>$s['id']])->all();
-        }
+        $post = \Yii::$app->request->post();
+        $string = $post ?? '花好月圆';
+        $effect = Effect::districtSearch($string);
 
         return Json::encode([
-           'code' => 200,
+            'code' => 200,
             'msg' => '成功',
             'data' => [
-                'series_list' => $series_list,
-                'style_list' => $style_list,
-                'style_picture_list' => $style_picture_list,
-                'list' => $list
+                'effect' => $effect,
             ]
         ]);
     }
@@ -359,8 +268,8 @@ class OwnerController extends Controller
         $arr['day_price'] = $worker[0]['univalence'];
         //查询弱电所需要材料
         if(empty($post['effect_id'])){
-            $electric_wire = '电线';
             $strong_current = [];
+            $electric_wire = '电线';
             $strong = Goods::priceDetail(3, $electric_wire);
             $strong_current [] = BasisDecorationService::wire($strong['platform_price']);
             $pipe = '线管';
@@ -413,6 +322,7 @@ class OwnerController extends Controller
                 }
             }
         }
+
         if (!empty($post['effect_id'])) {
             //查询所有强电点位
             $effect_id = Effect::find()->where(['id' => $post['effect_id']])->all();
@@ -646,7 +556,7 @@ class OwnerController extends Controller
 //        $receive = \Yii::$app->request->post();
 //        $post = Json::decode($receive);
         $post = [
-            'effect_id' => 1,
+//            'effect_id' => 1,
             'room' => 1,
             'hall' => 1,
             'window' => 2,
@@ -672,25 +582,45 @@ class OwnerController extends Controller
         //造型天数
         $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length,$labor_cost['day_sculpt_length'],$series_all,$style_all);
         //平顶天数
-        $flat_day =
+        $flat_day = BasisDecorationService::flatDay($carpentry_add,$labor_cost['day_area'],$series_all,$style_all);
+        //人工费
+        $labour_charges = BasisDecorationService::carpentryLabor($modelling_day,$flat_day,1,$labor_cost['univalence']);
 
         //木工材料费
         if(!empty($post['effect_id']))
         {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $carpentry_reconstruction = CarpentryReconstruction::find()->where(['decoration_list_id' => $decoration_list])->all();
-            var_dump($carpentry_reconstruction);exit;
-            $goods = Goods::findQueryAll($carpentry_reconstruction);
-            var_dump($goods);exit;
+            $goods_price = Goods::findQueryAll($carpentry_reconstruction);
+            var_dump($goods_price);exit;
         }else{
             $plasterboard = '石膏板';
             $goods_price = [];
-            $plasterboard_price = Goods::priceDetail(3,$plasterboard);
+            $goods_price [] = Goods::priceDetail(3,$plasterboard);
             $keel = '龙骨';
-            $keel_price = Goods::priceDetail(3,$keel);
+            $goods_price [] = Goods::priceDetail(3,$keel);
             $screw = '丝杆';
-            $screw_price = Goods::priceDetail(3,$screw);
+            $goods_price [] = Goods::priceDetail(3,$screw);
         }
+        //石膏板费用
+        $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length,$labor_cost['day_area'],2.5,2.5,$goods_price);
+        //龙骨费用
+        $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length,$labor_cost['day_area'],1.5,1.5,$goods_price);
+        //丝杆费用
+        $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length,$labor_cost['day_area'],2,2,$goods_price);
+        //材料费用
+        $material_cost = ($keel_cost + $plasterboard_cost + $pole_cost) / 0.7;
+        $carpentry_cost = ceil($material_cost + $labour_charges);
+        $add = DecorationAdd::CarpentryAddAll('木作',$post['series'],$post['style']);
+        $carpentry_price = $carpentry_cost + $add;
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'carpentry_price' => $carpentry_price,
+            ]
+        ]);
     }
 
     /**

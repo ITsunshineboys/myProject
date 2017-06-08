@@ -18,4 +18,11 @@
      {
          return 'series';
      }
+
+     public static function findByAll()
+     {
+         $select = 'series.id,series.series,series.intro,series.theme';
+         $series = self::find()->asArray()->select($select)->all();
+         return $series;
+     }
  }

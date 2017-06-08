@@ -123,21 +123,13 @@ class BasisDecorationService
      * @param string $television_walls
      * @return float|int
      */
-    public static function carpentryLabor($arr = [],$modelling = '20',$area = '4',$television_walls = '1')
+    public static function carpentryLabor($modelling_day = '',$flat_day = '',$video_wall = 1,$worker_day_cost = '')
     {
-       if($arr){
-           //人工费：（造型天数+平顶天数+【1】天）×【工人每天费用】
-           $day_cost = 0;
-           $modelling_length = 0;
-           $flat_area = 0;
-           foreach ($arr as $one)
-           {
-               $day_cost = $one['univalence'];
-               $modelling_length = $one['day_sculpt_length'];
-               $flat_area = $one['day_area'];
-           }
-           $artificial_fee = ($modelling / $modelling_length + $area / $flat_area + $television_walls) * $day_cost;
-       }
+        if(!empty($modelling_day) && !empty($flat_day) )
+        {
+            //人工费：（造型天数+平顶天数+【1】天）×【工人每天费用】
+            $artificial_fee = ceil($modelling_day + $flat_day + $video_wall) * $worker_day_cost;
+        }
        return $artificial_fee;
     }
 
@@ -290,4 +282,218 @@ class BasisDecorationService
         return $modelling_day;
     }
 
+    /**
+     * 平顶天数计算公式
+     * @param array $area
+     * @param array $day_area
+     * @param string $series_all
+     * @param string $style_all
+     * @param int $series
+     * @param int $style
+     */
+    public static function flatDay($area = [],$day_area = '',$series_all = '',$style_all = '',$series = 1,$style = 5)
+    {
+        switch ($series)
+        {
+            case  1:
+                $series = '齐家';
+                break;
+            case  2:
+                $series = '享家';
+                break;
+            case  3:
+                $series = '享家+';
+                break;
+            case  4:
+                $series = '智家';
+                break;
+            case  5:
+                $series = '智家+';
+                break;
+            default:
+                echo "请输入正确1-5的值";
+        }
+
+        switch ($style)
+        {
+            case  1:
+                $style = '美式田园';
+                break;
+            case  2:
+                $style = '欧式';
+                break;
+            case  3:
+                $style = '日式';
+                break;
+            case  4:
+                $style = '现代简约';
+                break;
+            case  5:
+                $style = '中国风';
+                break;
+            default:
+                echo "请输入正确1-5的值";
+        }
+        if($area && $day_area)
+        {
+            //平顶面积
+            $flat_area = $area['flat_area'];
+
+            $series_find = [];
+            $neat_family = 0;
+            $enjoy_family = 0;
+            $enjoy_family_plus = 0;
+            $wisdom_family = 0;
+            $wisdom_family_plus = 0;
+
+            foreach ($series_all as $series_one)
+           {
+               if($series_one['series'] == $series){
+                   $series_find = $series_one;
+               }
+
+               if($series_one['series'] == '齐家')
+               {
+                   $neat_family = $series_one['flat_day_coefficient'];
+               }elseif ($series_one['series'] == '享家')
+               {
+                   $enjoy_family = $series_one['flat_day_coefficient'];
+               }elseif ($series_one['series'] == '享家+')
+               {
+                   $enjoy_family_plus = $series_one['flat_day_coefficient'];
+               }elseif ($series_one['series'] == '智家')
+               {
+                   $wisdom_family = $series_one['flat_day_coefficient'];
+               }elseif ($series_one['series'] == '智家+')
+               {
+                   $wisdom_family_plus = $series_one['flat_day_coefficient'];
+               }
+           }
+            $style_find = [];
+            foreach ($style_all as $style_one)
+            {
+                if($style_one['style'] == $style)
+                {
+                     $style_find = $style_one;
+                }
+            }
+//            齐家：【1】
+//            享家：齐家×【1.2】
+//            享家+：享家×【1.2】
+//            智家：享家+×【1.2】
+//            智家+：智家×【1.2】
+            $series_coefficient = 0;
+            if($series_find['series'] == '齐家')
+            {
+                $series_coefficient = $series_find['flat_day_coefficient'];
+            }elseif ($series_find['series'] == '享家')
+            {
+                $series_coefficient = $neat_family * $series_find['flat_day_coefficient'];
+            }elseif ($series_find['series'] == '享家+')
+            {
+                $series_coefficient = $neat_family * $enjoy_family * $series_find['flat_day_coefficient'];
+            }elseif ($series_find['series'] == '智家')
+            {
+                $series_coefficient = $neat_family * $enjoy_family * $enjoy_family_plus * $series_find['flat_day_coefficient'];
+            }elseif ($series_find['series'] == '智家+')
+            {
+                $series_coefficient = $neat_family * $enjoy_family * $enjoy_family_plus * $wisdom_family * $series_find['flat_day_coefficient'];
+            }
+
+            //平顶天数=平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
+            $flat_day = $flat_area / $day_area * $series_coefficient * $style_find['flat_day_coefficient'];
+        }
+
+        return $flat_day;
+    }
+
+    /**
+     * 木作石膏板计算公式
+     * @param string $modelling_length
+     * @param string $flat_area
+     * @param float $meter
+     * @param array $goods
+     * @param int $video_wall
+     * @return float
+     */
+    public static function carpentryPlasterboardCost($modelling_length = '',$flat_area = '',$modelling_meter = 2.5,$flat_meter=2.5,$goods = [],$video_wall = 1)
+    {
+        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)){
+//            石膏板费用：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）×商品价格
+            $plasterboard = [];
+            foreach ($goods as $goods_price ){
+                if($goods_price['name'] == '石膏板'){
+                    $plasterboard = $goods_price;
+                }
+            }
+            $modelling_cost = ceil (($modelling_length / $modelling_meter + $flat_area / $flat_meter + $video_wall )) * $plasterboard['platform_price'] ;
+        }
+        return $modelling_cost;
+    }
+
+    /**
+     * 木作石膏板计算公式
+     * @param string $modelling_length
+     * @param string $flat_area
+     * @param float $modelling_meter
+     * @param float $flat_meter
+     * @param array $goods
+     * @return float
+     */
+    public static function carpentryKeelCost($modelling_length = '',$flat_area = '',$modelling_meter = 1.5,$flat_meter =1.5,$goods = [])
+    {
+//        龙骨费用：造型费用+平顶费用
+//        ①造型费用：主龙骨费用+副龙骨费用
+//        主龙骨费用=每米费用×造型长度
+//        副龙骨费用=每米费用×造型长度
+//        每米费用：商品价格÷【1.5】m
+//        ②平顶费用：主龙骨费用+副龙骨费用
+//        主龙骨费用=每平米费用×平顶面积
+//        副龙骨费用=每平米费用×平顶面积
+//        每米费用：商品价格÷【1.5】m²
+        if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods)){
+            $goods_price = [];
+            foreach ($goods as $price)
+            {
+                if($price['name'] == '龙骨'){
+                    $goods_price = $price;
+                }
+            }
+            //每米费用
+            $modelling_per_meter_cost = $goods_price['platform_price'] / $modelling_meter;
+            $flat_per_meter_cost = $goods_price['platform_price'] / $flat_meter;
+            //造型费用
+            $modelling_cost = ceil(($modelling_per_meter_cost * $modelling_length) + ($modelling_per_meter_cost * $modelling_length));
+            //平顶费用
+            $flat_cost = ceil(($flat_per_meter_cost * $modelling_length) + ($flat_per_meter_cost * $modelling_length));
+            //龙骨费用
+            $keel_cost = $modelling_cost + $flat_cost;
+        }
+        return $keel_cost;
+    }
+
+    public static function carpentryPoleCost($modelling_length = '',$flat_area = '',$modelling_meter = 2,$flat_meter =2,$goods = [])
+    {
+        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)){
+            $goods_price = [];
+            foreach ($goods as $price)
+            {
+                if($price['name'] == '丝杆'){
+                    $goods_price = $price;
+                }
+            }
+            //        丝杆费用：造型费用+平顶费用
+            //        ①造型费用：每米费用×造型长度
+            //        每米费用：商品价格÷【2】m
+            //        ②平顶费用：每平米费用×平顶面积
+            //        每米费用：商品价格÷【2】m²
+            //每米费用
+            $modelling_per_meter_cost = $goods_price['platform_price'] / $modelling_meter;
+            $flat_per_meter_cost = $goods_price['platform_price'] / $flat_meter;
+            $modelling_cost = ceil($modelling_per_meter_cost * $modelling_length);
+            $flat_cost = ceil($flat_per_meter_cost * $flat_area);
+            $pole_cost = $modelling_cost + $flat_cost;
+        }
+        return $pole_cost;
+    }
 }

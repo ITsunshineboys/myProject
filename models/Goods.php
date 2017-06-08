@@ -251,7 +251,7 @@ class Goods extends ActiveRecord
             exit;
         } else {
             $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_brand. name,goods_category.title FROM goods,goods_brand,goods_category WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods_category.`level` = " . $level . " AND goods_category.title LIKE " . "'%$title%'";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.norms,goods_brand. name,goods_category.title FROM goods,goods_brand,goods_category WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods_category.`level` = " . $level . " AND goods_category.title LIKE " . "'%$title%'";
             $a = $db->createCommand($sql)->queryAll();
         }
         foreach ($a as $v => $k) {
@@ -281,11 +281,14 @@ class Goods extends ActiveRecord
     public static function findQueryAll($all = [])
     {
         if ($all) {
-            $id = [];
+            $goods_id = [];
             foreach ($all as $single) {
-                $id [] = $single['goods_id'];
+                $goods_id [] = $single['goods_id'];
             }
-            $all_goods = self::find()->asArray()->where(['in', 'id', $id])->all();
+            $id = implode(',',$goods_id);
+            $db = \Yii::$app->db;
+            $sql = "SELECT goods.supplier_price,goods.platform_price,goods.norms,goods_brand.name FROM goods,goods_brand WHERE goods.brand_id = goods_brand.id AND goods.id IN (".$id .")";
+            $all_goods = $db->createCommand($sql)->queryAll();
         }
         return $all_goods;
     }

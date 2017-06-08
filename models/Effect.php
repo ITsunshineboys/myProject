@@ -37,10 +37,7 @@ class Effect extends ActiveRecord
     {
         if (!empty($search))
         {
-            $detail = self::find()->where( ['or',['like','toponymy',$search],['like','street',$search]])->all() ;
-        }else{
-            echo '传入的值有错';
-            exit;
+            $detail = self::find()->where(['like','toponymy',$search])->all();
         }
         return $detail;
     }
