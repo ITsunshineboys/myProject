@@ -2206,7 +2206,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'logistics-templates-supplier' => LogisticsTemplate::findBySupplierId($supplier->id)
+                'logistics-templates-supplier' => LogisticsTemplate::findBySupplierId($supplier->id, ['id', 'name'])
             ],
         ]);
     }

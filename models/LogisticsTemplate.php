@@ -39,15 +39,17 @@ class LogisticsTemplate extends ActiveRecord
      * @param  int $supplierId supplier id
      * @return array
      */
-    public static function findBySupplierId($supplierId)
+    public static function findBySupplierId($supplierId, $select = [])
     {
         $supplierId = (int)$supplierId;
         if ($supplierId <= 0) {
             return [];
         }
 
+        $select = $select ? implode(',', $select) : '*';
+
         return Yii::$app->db
-            ->createCommand("select id, name from {{%" . self::tableName() . "}} where supplier_id = {$supplierId}")
+            ->createCommand("select {$select} from {{%" . self::tableName() . "}} where supplier_id = {$supplierId}")
             ->queryAll();
     }
 
