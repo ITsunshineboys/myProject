@@ -156,5 +156,6 @@ create table logistics_district (
   `template_id` int(11) not null default 0,
   `district_code` int(6) unsigned not null default 0,
   `district_name` varchar(100) not null DEFAULT '',
+  `goods_id` int(11) not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
