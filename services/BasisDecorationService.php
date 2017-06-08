@@ -9,40 +9,10 @@ namespace app\services;
 
 class BasisDecorationService
 {
-    /**
-     * @carpentry  装修公式
-     * @param array $arr
-     * @param array $quantity
-     * @param array $unitPrice
-     */
-    public static function  formula($arr = [],$quantity= [],$unitPrice=[])
+
+    public static function  laborFormula()
     {
-//        var_dump($arr);
-//        var_dump($quantity);
-//        var_dump($unitPrice);
-        if (!empty($arr))
-        {
-            $unit_price = [];
-            foreach ($unitPrice as $price)
-            {
-                $unit_price [] = $price;
-            }
-            // 材料费
-            $materials_expenses =  0;
-            foreach ($unit_price as $k=>$v)
-            {
-                $materials_expenses += $v * $quantity;
-            }
-            //人工费
-            $labor_cost = $arr['day_price'] *(ceil($quantity / $arr['day_standard']));
-            //单价
-            $waterway_price = ($labor_cost + $materials_expenses) / $arr['profit'];
-            //价格
-//            $waterway_remould_price = $arr['total_standard'] * $waterway_price;
-            return $waterway_price;
-        }
-        echo '请输入正确的值';
-        exit;
+
     }
 
     /**
