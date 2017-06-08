@@ -700,10 +700,10 @@ class OwnerController extends Controller
      */
     public function actionFixationFurniture()
     {
-        $receive = \Yii::$app->request->post();
-        $post = Json::decode($receive);
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
         $post = [
-//            'effect_id' => 1,
+            'effect_id' => 1,
             'room' => 1,
             'hall' => 1,
             'window' => 2,
@@ -711,38 +711,16 @@ class OwnerController extends Controller
             'area' => 40,
             'toilet' => 1,
             'kitchen' => 1,
-            'style' => 2,
+            'style' => 1,
             'series' => 1,
-            'province' => '四川',
-            'city' => '成都'
+            'province' => 510000,
+            'city' => 510100
         ];
-        if(!empty($post['effect_id'])){
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $soft_outfit_assort = FixationFurniture::find()->where(['decoration_list_id'=>$decoration_list])->one();
-            $goods_price = Goods::find()->where(['category_id'=>$soft_outfit_assort])->all();
-        }else{
-            $mating = '固定家具';
-            $goods = Goods::findByIdAll(1,$mating,$post['series'],$post['style']);
-            $goods_price = [];
-            foreach ($goods as $v=>$k)
-            {
-                if($k['name'] == '书柜'){
-                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
-                    $max = array_search(max($c), $c);
-                    $max_bookcase_price = $goods[$max];
-                }elseif ($k['name'] == '衣柜'){
-                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
-                    $max = array_search(max($c), $c);
-                    $max_chest_price = $goods[$max];
-                }elseif ($k['name'] == '衣柜'){
-                    $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
-                    $max = array_search(max($c), $c);
-                    $max_cabinet_price = $goods[$max];
-                }
-            }
-            $goods_price [] = $max_bookcase_price;
-            $goods_price [] = $max_chest_price;
-            $goods_price [] = $max_cabinet_price;
+        if(!empty($post['effect_id']))
+        {
+            $fixation_furniture = FixationFurniture::findById($post);
+            $goods = Goods::findByConditionInquire($fixation_furniture);
+            exit;
         }
         return Json::encode([
             'code' => 200,
