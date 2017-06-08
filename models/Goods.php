@@ -314,11 +314,10 @@ class Goods extends ActiveRecord
     {
         $afterSaleServices = explode(',', $this->$attribute);
         $serviceIds = array_keys(self::AFTER_SALE_SERVICES);
-        foreach ($afterSaleServices as $afterSaleService) {
-            if (!in_array($afterSaleService, $serviceIds)) {
-                $this->addError($attribute);
-                return false;
-            }
+
+        if (array_diff($afterSaleServices, $serviceIds)) {
+            $this->addError($attribute);
+            return false;
         }
 
         return true;
