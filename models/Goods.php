@@ -10,6 +10,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\HtmlPurifier;
 
 class Goods extends ActiveRecord
 {
@@ -298,9 +299,10 @@ class Goods extends ActiveRecord
         return [
             [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required'],
             [['title', 'subtitle'], 'string', 'length' => [1, 16]],
-            [['supplier_price', 'platform_price', 'market_price', 'left_number'], 'number', 'integerOnly' => true, 'min' => 0],
+            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['supplier_price', 'validateSupplierPrice'],
-            ['after_sale_services', 'validateAfterSaleServices']
+            ['after_sale_services', 'validateAfterSaleServices'],
+            ['description', 'safe']
         ];
     }
 
@@ -352,6 +354,44 @@ class Goods extends ActiveRecord
         isset($this->supplier_price) && $this->supplier_price /= 100;
         isset($this->market_price) && $this->market_price /= 100;
         isset($this->purchase_price) && $this->purchase_price /= 100;
+    }
+
+    /**
+     * Do some ops before insertion
+     *
+     * @param bool $insert if is a new record
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $now = time();
+
+            if ($insert) {
+                $this->create_time = $now;
+                $this->status = self::STATUS_WAIT_ONLINE;
+
+                $user = Yii::$app->user->identity;
+                if (!$user) {
+                    return false;
+                }
+
+                if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+                    $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+                    if (!$supplier) {
+                        return false;
+                    }
+
+                    $this->supplier_id = $supplier->id;
+                }
+
+                $this->description && $this->description = HtmlPurifier::process($this->description);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function getOrders()
