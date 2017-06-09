@@ -159,3 +159,13 @@ create table logistics_district (
   `goods_id` int(11) not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table goods_attr (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) not null default '',
+  `value` varchar(50) not null default '',
+  `unit` tinyint(1) not null DEFAULT 0 comment '0: 无, 1: L, 2: M, 3: M^2, 4: Kg',
+  `addition_type` tinyint(1) not null default 0 comment '0: 下拉框添加, 1: 普通添加',
+  `goods_id` int(11) not null default 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
