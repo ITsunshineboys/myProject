@@ -14,6 +14,9 @@ use yii\db\ActiveRecord;
 
 class GoodsAttr extends ActiveRecord
 {
+    const ADDITION_TYPE_NORMAL = 0;
+    const ADDITION_TYPE_DROPDOWN_LIST = 1;
+
     const UNITS = [
         '无',
         'L',
@@ -23,8 +26,8 @@ class GoodsAttr extends ActiveRecord
     ];
 
     const ADDITION_TYPES = [
-        '普通添加',
-        '下拉框添加'
+        self::ADDITION_TYPE_NORMAL => '普通添加',
+        self::ADDITION_TYPE_DROPDOWN_LIST => '下拉框添加'
     ];
 
     /**
@@ -84,7 +87,7 @@ class GoodsAttr extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'value', 'unit', 'category_id'], 'required'],
+            [['name', 'unit', 'category_id'], 'required'],
             ['name', 'validateName'],
             ['category_id', 'validateCategoryId'],
             ['unit', 'in', 'range' => array_keys(self::UNITS)],
