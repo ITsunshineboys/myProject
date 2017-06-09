@@ -12,12 +12,12 @@ use app\models\Supplier;
 use app\models\Lhzz;
 use app\models\LogisticsTemplate;
 use app\models\LogisticsDistrict;
+use app\models\GoodsAttr;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
 use app\services\AdminAuthService;
 use Yii;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -65,6 +65,7 @@ class MallController extends Controller
         'logistics-template-edit',
         'logistics-template-view',
         'logistics-templates-supplier',
+        'goods-attr-add',
     ];
 
     /**
@@ -118,6 +119,7 @@ class MallController extends Controller
                     'brand-enable-batch' => ['post',],
                     'logistics-template-add' => ['post',],
                     'logistics-template-edit' => ['post',],
+                    'goods-attr-add' => ['post',],
                 ],
             ],
         ];
@@ -2209,6 +2211,82 @@ class MallController extends Controller
             'data' => [
                 'logistics-templates-supplier' => LogisticsTemplate::findBySupplierId($supplier->id, ['id', 'name'])
             ],
+        ]);
+    }
+
+    /**
+     * Add goods attributes action
+     *
+     * @return string
+     */
+    public function actionGoodsAttrAdd()
+    {
+        $code = 1000;
+
+        $names = Yii::$app->request->post('names', []);
+        $values = Yii::$app->request->post('values', []);
+        $units = Yii::$app->request->post('units', []);
+        $additionTypes = Yii::$app->request->post('addition_types', []);
+        $categoryId = Yii::$app->request->post('category_id', []);
+
+        $attrCnt = count($names);
+        if (!$names
+            || !$values
+            || !$units
+            || !$additionTypes
+            || !($attrCnt == count($values) && $attrCnt == count($units) && $attrCnt == count($additionTypes))
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!GoodsAttr::validateNames($names)) {
+            $code = 1009;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        foreach ($names as $i => $name) {
+            $goodsAttr = new GoodsAttr;
+            $goodsAttr->name = $name;
+            $goodsAttr->value = $values[$i];
+            $goodsAttr->unit = $units[$i];
+            $goodsAttr->addition_type = $additionTypes[$i];
+            $goodsAttr->category_id = $categoryId;
+
+            if (!$goodsAttr->validate()) {
+                $transaction->rollBack();
+
+                if (isset($goodsAttr->errors['name' . ModelService::POSTFIX_EXISTS])) {
+                    $code = 1009;
+                }
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$goodsAttr->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }
