@@ -50,4 +50,7 @@ return [
     'logistics-template-edit' => [6],
     'logistics-template-view' => [6],
     'logistics-templates-supplier' => [6],
+
+    // goods attribute
+    'goods-attr-add' => [1],
 ];

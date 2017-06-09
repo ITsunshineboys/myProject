@@ -165,4 +165,15 @@ class StringService
 
         return $codes[$parentCode][$code];
     }
+
+    /**
+     * Check if has repeated element in a list
+     *
+     * @param array $elements elments to check
+     * @return bool
+     */
+    public static function checkRepeatedElement(array $elements)
+    {
+        return count($elements) != count(array_unique($elements));
+    }
 }
