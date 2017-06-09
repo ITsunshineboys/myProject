@@ -344,7 +344,7 @@ class GoodsCategory extends ActiveRecord
      * @param  int $pid parent category id
      * @return array
      */
-    public static function level23Ids($pid)
+    public static function level23Ids($pid, $onlyLevel3 = false)
     {
         $pid = (int)$pid;
         if ($pid <= 0) {
@@ -357,16 +357,17 @@ class GoodsCategory extends ActiveRecord
         }
 
         $db = Yii::$app->db;
+        $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid} and deleted = 0";
         if ($category->level == self::LEVEL2) {
-            return $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn();
+            return $db->createCommand()->queryColumn();
         } elseif ($category->level == self::LEVEL1) {
-            $pids = $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn();
+            $pids = $db->createCommand($sql)->queryColumn();
             $ret = [];
             foreach ($pids as $pid) {
-                $ret = array_merge($ret, $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn());
+                $ret = array_merge($ret, $db->createCommand($sql)->queryColumn());
             }
 
-            return array_unique(array_merge($ret, $pids));
+            return array_unique($onlyLevel3 ? $pids : array_merge($ret, $pids));
         }
 
         return [];
