@@ -37,7 +37,12 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'online_person', 'offline_person', 'deleted', 'path'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'online_person', 'offline_person', 'deleted', 'path', 'attr_op_time', 'attr_op_username', 'attr_number'];
+
+    /**
+     * @var array admin fields
+     */
+    public static $attrAdminFields = ['id', 'title', 'parent_title', 'attr_op_time', 'attr_op_username', 'attr_number'];
 
     /**
      * @var array online status list
@@ -222,13 +227,15 @@ class GoodsCategory extends ActiveRecord
                 }
             }
 
-            if (!empty($category['supplier_name'])) {
-                $category['applicant'] = $category['supplier_name'];
-            } else {
-                if ($category['deleted'] == self::STATUS_ONLINE) {
-                    $category['applicant'] = $category['offline_person'];
+            if (isset($category['supplier_name'])) {
+                if (!empty($category['supplier_name'])) {
+                    $category['applicant'] = $category['supplier_name'];
                 } else {
-                    $category['applicant'] = $category['online_person'];
+                    if ($category['deleted'] == self::STATUS_ONLINE) {
+                        $category['applicant'] = $category['offline_person'];
+                    } else {
+                        $category['applicant'] = $category['online_person'];
+                    }
                 }
             }
 
@@ -242,6 +249,12 @@ class GoodsCategory extends ActiveRecord
             }
             if (isset($category['online_person'])) {
                 unset($category['online_person']);
+            }
+
+            if (isset($category['attr_op_time'])) {
+                $category['attr_op_time'] = $category['attr_op_time'] > 0
+                    ? date('Y-m-d H:i', $category['attr_op_time'])
+                    : '';
             }
         }
 
@@ -321,7 +334,7 @@ class GoodsCategory extends ActiveRecord
     {
         $db = Yii::$app->db;
         $sql = "select id from {{%" . self::tableName() . "}} where pid = 0";
-        $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = '. self::REVIEW_STATUS_APPROVE;
+        $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
         $rootIds = $db->createCommand($sql)->queryColumn();
         return self::level23IdsByPids($rootIds, true, $onlyOnline);
     }
@@ -372,7 +385,7 @@ class GoodsCategory extends ActiveRecord
         $db = Yii::$app->db;
 
         $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
-        $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = '. self::REVIEW_STATUS_APPROVE;
+        $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
         if ($category->level == self::LEVEL2) {
             return $db->createCommand()->queryColumn();
         } elseif ($category->level == self::LEVEL1) {
@@ -380,7 +393,7 @@ class GoodsCategory extends ActiveRecord
             $ret = [];
             foreach ($pids as $pid) {
                 $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
-                $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = '. self::REVIEW_STATUS_APPROVE;
+                $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
                 $ret = array_merge($ret, $db->createCommand($sql)->queryColumn());
             }
 

@@ -2361,7 +2361,7 @@ class MallController extends Controller
             'data' => [
                 'category_list_admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
-                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, $orderBy)
+                    'details' => GoodsCategory::pagination($where, GoodsCategory::$attrAdminFields, $page, $size, $orderBy)
                 ]
             ],
         ]);
