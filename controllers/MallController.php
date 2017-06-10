@@ -2345,13 +2345,18 @@ class MallController extends Controller
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
 
+        $details = GoodsCategory::pagination($where, GoodsCategory::$attrAdminFields, $page, $size, $orderBy);
+        foreach ($details as &$detail) {
+            $detail['attrs'] = GoodsAttr::detailsByCategoryId($detail['id']);
+        }
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
                 'category_list_admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
-                    'details' => GoodsCategory::pagination($where, GoodsCategory::$attrAdminFields, $page, $size, $orderBy)
+                    'details' => $details
                 ]
             ],
         ]);

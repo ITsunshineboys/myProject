@@ -10,6 +10,7 @@ namespace app\models;
 
 use app\services\ModelService;
 use app\services\StringService;
+use Yii;
 use yii\db\ActiveRecord;
 
 class GoodsAttr extends ActiveRecord
@@ -29,14 +30,6 @@ class GoodsAttr extends ActiveRecord
         self::ADDITION_TYPE_NORMAL => '普通添加',
         self::ADDITION_TYPE_DROPDOWN_LIST => '下拉框添加'
     ];
-
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'goods_attr';
-    }
 
     /**
      * Check if has the same attribute name of some goods
@@ -69,6 +62,46 @@ class GoodsAttr extends ActiveRecord
         }
 
         return true;
+    }
+
+    /**
+     * Get attributes by category id
+     *
+     * @param int $categoryId category id
+     * @param bool $isLhzzAdmin if operator is lhzz admin
+     * @return array
+     */
+    public static function detailsByCategoryId($categoryId, $isLhzzAdmin = true)
+    {
+        $categoryId = (int)$categoryId;
+        if ($categoryId <= 0) {
+            return [];
+        }
+
+        $sql = "select name, value, unit, addition_type"
+            . " from {{%" . self::tableName() . "}}"
+            . " where category_id = {$categoryId}";
+        $isLhzzAdmin && $sql .= ' and goods_id = 0';
+
+        $attrs = Yii::$app->db
+            ->createCommand($sql)
+            ->queryAll();
+
+        foreach ($attrs as &$attr) {
+            $attr['unit'] = self::UNITS[$attr['unit']];
+            $attr['addition_type'] == self::ADDITION_TYPE_DROPDOWN_LIST
+            && $attr['value'] = explode(',', $attr['value']);
+        }
+
+        return $attrs;
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'goods_attr';
     }
 
     /**
