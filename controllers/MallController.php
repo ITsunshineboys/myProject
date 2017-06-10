@@ -2216,7 +2216,7 @@ class MallController extends Controller
     }
 
     /**
-     * Add goods attributes action
+     * Add/edit goods attributes action
      *
      * @return string
      */
@@ -2231,37 +2231,61 @@ class MallController extends Controller
         $categoryId = Yii::$app->request->post('category_id', []);
 
         $attrCnt = count($names);
-        if (!$names
-            || !$values
-            || !$units
-            || !$additionTypes
-            || !($attrCnt == count($values) && $attrCnt == count($units) && $attrCnt == count($additionTypes))
-        ) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        if ($attrCnt > 0) {
+            if (!($attrCnt == count($values) && $attrCnt == count($units) && $attrCnt == count($additionTypes))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
 
-        if (!GoodsAttr::validateNames($names)) {
-            $code = 1009;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+            if (!GoodsAttr::validateNames($names)) {
+                $code = 1009;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
 
-        if (!GoodsAttr::validateValues($values)) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            if (!GoodsAttr::validateValues($values)) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
 
         $user = Yii::$app->user->identity;
         $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+        $category = GoodsCategory::findOne($categoryId);
+        $category->attr_op_uid = $lhzz->id;
+        $category->attr_op_username = $lhzz->nickname;
+        $category->attr_op_time = time();
+        $category->attr_number = $attrCnt;
 
         $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$category->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($attrCnt == 0) {
+            if (GoodsAttr::deleteAll(['category_id' => $categoryId]) == 0) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
 
         foreach ($names as $i => $name) {
             $goodsAttr = new GoodsAttr;
@@ -2270,9 +2294,6 @@ class MallController extends Controller
             $goodsAttr->addition_type = $additionTypes[$i];
             $goodsAttr->category_id = $categoryId;
             $goodsAttr->addition_type == GoodsAttr::ADDITION_TYPE_DROPDOWN_LIST && $goodsAttr->value = $values[$i];
-            $goodsAttr->user_id = $lhzz->id;
-            $goodsAttr->user_name = $lhzz->nickname;
-            $goodsAttr->op_time = time();
 
             if (!$goodsAttr->validate()) {
                 $transaction->rollBack();

@@ -79,6 +79,10 @@ CREATE TABLE `goods_category` (
   `deleted` tinyint(1) not null default 0,
   `online_time` int unsigned not null DEFAULT 0,
   `offline_time` int unsigned not null DEFAULT 0,
+  `attr_op_uid` int(11) unsigned not null DEFAULT 0,
+  `attr_op_username` varchar(20) not null DEFAULT '',
+  `attr_op_time` int not null DEFAULT 0,
+  `attr_number` int(11) not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -170,8 +174,5 @@ create table goods_attr (
   `addition_type` tinyint(1) not null default 0 comment '0: 普通添加, 1: 下拉框添加',
   `goods_id` int(11) not null default 0,
   `category_id` int(11) not null default 0,
-  `user_id` int(11) unsigned not null DEFAULT 0,
-  `user_name` varchar(20) not null DEFAULT '',
-  `op_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
