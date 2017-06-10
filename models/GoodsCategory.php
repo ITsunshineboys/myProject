@@ -99,14 +99,6 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'goods_category';
-    }
-
-    /**
      * Get direct goods categories by pid
      *
      * @param array $select category fields default empty
@@ -200,16 +192,13 @@ class GoodsCategory extends ActiveRecord
                         . self::SEPARATOR_TITLES
                         . $category['parent_title']
                         . self::SEPARATOR_TITLES
-                        . $category['title']
-                    ;
+                        . $category['title'];
                 } elseif ($category['level'] == self::LEVEL2) {
                     $category['titles'] = $category['parent_title']
                         . self::SEPARATOR_TITLES
-                        . $category['title']
-                    ;
+                        . $category['title'];
                 } elseif ($category['level'] == self::LEVEL1) {
-                    $category['titles'] = $category['title']
-                    ;
+                    $category['titles'] = $category['title'];
                 }
 
                 $category['level'] = self::$levels[$category['level']];
@@ -324,16 +313,38 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Get all level3 category ids
+     *
+     * @return array
+     */
+    public static function allLevel3CategoryIds()
+    {
+        $db = Yii::$app->db;
+        $sql = "select id from {{%" . self::tableName() . "}} where pid = 0 and deleted = 0";
+        $rootIds = $db->createCommand($sql)->queryColumn();
+        return self::level23IdsByPids($rootIds, true);
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'goods_category';
+    }
+
+    /**
      * Get all level 2 and 3 category ids by pids
      *
      * @param  array $pids pids
+     * @param int $onlyLevel3 if only get level3 categories
      * @return array
      */
-    public static function level23IdsByPids(array $pids)
+    public static function level23IdsByPids(array $pids, $onlyLevel3 = false)
     {
         $ids = [];
         foreach ($pids as $pid) {
-            $ids = array_merge($ids, self::level23Ids($pid));
+            $ids = array_merge($ids, self::level23Ids($pid, $onlyLevel3));
         }
         return array_unique($ids);
     }
@@ -342,6 +353,7 @@ class GoodsCategory extends ActiveRecord
      * Get all level 2 and 3 category ids by pid
      *
      * @param  int $pid parent category id
+     * @param int $onlyLevel3 if only get level3 categories
      * @return array
      */
     public static function level23Ids($pid, $onlyLevel3 = false)
@@ -364,10 +376,11 @@ class GoodsCategory extends ActiveRecord
             $pids = $db->createCommand($sql)->queryColumn();
             $ret = [];
             foreach ($pids as $pid) {
+                $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid} and deleted = 0";
                 $ret = array_merge($ret, $db->createCommand($sql)->queryColumn());
             }
 
-            return array_unique($onlyLevel3 ? $pids : array_merge($ret, $pids));
+            return array_unique($onlyLevel3 ? $ret : array_merge($ret, $pids));
         }
 
         return [];

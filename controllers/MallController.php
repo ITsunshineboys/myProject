@@ -2251,6 +2251,13 @@ class MallController extends Controller
             ]);
         }
 
+        if (!GoodsAttr::validateValues($values)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $transaction = Yii::$app->db->beginTransaction();
 
         foreach ($names as $i => $name) {
@@ -2261,7 +2268,7 @@ class MallController extends Controller
             $goodsAttr->category_id = $categoryId;
             $goodsAttr->addition_type == GoodsAttr::ADDITION_TYPE_DROPDOWN_LIST && $goodsAttr->value = $values[$i];
 
-            if (!$goodsAttr->validate()) {print_r($goodsAttr->errors);
+            if (!$goodsAttr->validate()) {
                 $transaction->rollBack();
 
                 if (isset($goodsAttr->errors['name' . ModelService::POSTFIX_EXISTS])) {

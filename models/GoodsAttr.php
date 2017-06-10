@@ -50,6 +50,28 @@ class GoodsAttr extends ActiveRecord
     }
 
     /**
+     * Check if has the repeated attribute value of some attribute
+     *
+     * @param array $values values to validate
+     * @return bool
+     */
+    public static function validateValues($values)
+    {
+        foreach ($values as $row) {
+            $row = explode(',', trim($row, ','));
+
+            if (StringService::checkRepeatedElement($row)
+                || StringService::checkEmptyElement($row)
+                || !StringService::checkIntList($row)
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Validates name when add goods attribute
      *
      * @param string $attribute name to validate
