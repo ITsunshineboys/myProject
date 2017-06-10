@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\HtmlPurifier;
@@ -465,6 +466,7 @@ class GoodsCategory extends ActiveRecord
     {
         return [
             [['title', 'icon', 'pid'], 'required'],
+            ['title', 'string', 'length' => [1, 10]],
             [['title'], 'unique', 'on' => self::SCENARIO_ADD],
             [['title'], 'validateTitle', 'on' => self::SCENARIO_EDIT],
             [['pid', 'approve_time', 'review_status', 'supplier_id'], 'number', 'integerOnly' => true, 'min' => 0],
@@ -506,7 +508,7 @@ class GoodsCategory extends ActiveRecord
     {
         if (!$this->isNewRecord && $this->isAttributeChanged($attribute)) {
             if (self::find()->where([$attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute);
+                $this->addError($attribute . ModelService::POSTFIX_EXISTS);
                 return false;
             }
         }

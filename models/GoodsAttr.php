@@ -143,6 +143,7 @@ class GoodsAttr extends ActiveRecord
     {
         return [
             [['name', 'unit', 'category_id'], 'required'],
+            ['name', 'string', 'length' => [1, 6]],
             ['name', 'validateName'],
             ['category_id', 'validateCategoryId'],
             ['unit', 'in', 'range' => array_keys(self::UNITS)],

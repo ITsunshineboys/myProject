@@ -944,7 +944,7 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_ADD;
         if (!$category->validate()) {
-            if ($category->title && isset($category->errors['title'])) {
+            if (isset($category->errors['title' . ModelService::POSTFIX_EXISTS])) {
                 $code = 1006;
             }
 
@@ -995,7 +995,7 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_EDIT;
         if (!$category->validate()) {
-            if ($category->title && isset($category->errors['title'])) {
+            if (isset($category->errors['title' . ModelService::POSTFIX_EXISTS])) {
                 $code = 1006;
             }
 
@@ -1373,7 +1373,7 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
         if (!$brand->validate()) {
-            if ($brand->name && isset($brand->errors['name'])) {
+            if (isset($brand->errors['name' . ModelService::POSTFIX_EXISTS])) {
                 $code = 1007;
             }
 
@@ -1524,7 +1524,7 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_EDIT;
         if (!$brand->validate()) {
-            if ($brand->name && isset($brand->errors['name'])) {
+            if (isset($brand->errors['name' . ModelService::POSTFIX_EXISTS])) {
                 $code = 1007;
             }
 

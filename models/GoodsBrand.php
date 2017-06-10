@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -226,6 +227,7 @@ class GoodsBrand extends ActiveRecord
     {
         return [
             [['name', 'certificate', 'logo'], 'required'],
+            ['name', 'string', 'length' => [1, 16]],
             [['name'], 'unique', 'on' => self::SCENARIO_ADD],
             [['name'], 'validateName', 'on' => self::SCENARIO_EDIT],
             ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses']), 'on' => self::SCENARIO_REVIEW],
@@ -245,7 +247,7 @@ class GoodsBrand extends ActiveRecord
     {
         if (!$this->isNewRecord && $this->isAttributeChanged($attribute)) {
             if (self::find()->where([$attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute);
+                $this->addError($attribute . ModelService::POSTFIX_EXISTS);
                 return false;
             }
         }
