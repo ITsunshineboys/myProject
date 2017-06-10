@@ -2258,6 +2258,9 @@ class MallController extends Controller
             ]);
         }
 
+        $user = Yii::$app->user->identity;
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+
         $transaction = Yii::$app->db->beginTransaction();
 
         foreach ($names as $i => $name) {
@@ -2267,6 +2270,9 @@ class MallController extends Controller
             $goodsAttr->addition_type = $additionTypes[$i];
             $goodsAttr->category_id = $categoryId;
             $goodsAttr->addition_type == GoodsAttr::ADDITION_TYPE_DROPDOWN_LIST && $goodsAttr->value = $values[$i];
+            $goodsAttr->user_id = $lhzz->id;
+            $goodsAttr->user_name = $lhzz->nickname;
+            $goodsAttr->op_time = time();
 
             if (!$goodsAttr->validate()) {
                 $transaction->rollBack();
@@ -2307,14 +2313,6 @@ class MallController extends Controller
     {
         $code = 1000;
 
-        $user = Yii::$app->user->identity;
-        if (!$user) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $sort = Yii::$app->request->get('sort', []);
         $model = new GoodsCategory;
         $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
@@ -2325,40 +2323,13 @@ class MallController extends Controller
             ]);
         }
 
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            $supplier = Supplier::find()->where(['uid' => $user->id])->one();
-            if (!$supplier) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        $where = 'review_status = ' . GoodsCategory::REVIEW_STATUS_APPROVE;
 
-            $where = "supplier_id = {$supplier->id}";
-        } else {
-            $status = (int)Yii::$app->request->get('status', GoodsCategory::STATUS_ONLINE);
-            if (!in_array($status, array_keys(GoodsCategory::$statuses))) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            $deleted = 1 - $status;
-            $where = 'review_status = ' . GoodsCategory::REVIEW_STATUS_APPROVE;
-            $where .= " and supplier_id = 0 and deleted = {$deleted}";
-
-            $pid = (int)Yii::$app->request->get('pid', 0);
-            if ($pid > 0) {
-                $ids = GoodsCategory::level23Ids($pid);
-                if (!$ids) {
-                    $where .= ' and 0';
-                } else {
-                    $where .= ' and id in (' . implode(',', $ids) . ')';
-                }
-            }
-        }
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        $ids = $pid > 0
+            ? GoodsCategory::level23Ids($pid, true, false)
+            : GoodsCategory::allLevel3CategoryIds(false);
+        $where .= !$ids ? ' and 0' : ' and id in (' . implode(',', $ids) . ')';
 
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);

@@ -317,12 +317,13 @@ class GoodsCategory extends ActiveRecord
      *
      * @return array
      */
-    public static function allLevel3CategoryIds()
+    public static function allLevel3CategoryIds($onlyOnline = true)
     {
         $db = Yii::$app->db;
-        $sql = "select id from {{%" . self::tableName() . "}} where pid = 0 and deleted = 0";
+        $sql = "select id from {{%" . self::tableName() . "}} where pid = 0";
+        $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = '. self::REVIEW_STATUS_APPROVE;
         $rootIds = $db->createCommand($sql)->queryColumn();
-        return self::level23IdsByPids($rootIds, true);
+        return self::level23IdsByPids($rootIds, true, $onlyOnline);
     }
 
     /**
@@ -340,11 +341,11 @@ class GoodsCategory extends ActiveRecord
      * @param int $onlyLevel3 if only get level3 categories
      * @return array
      */
-    public static function level23IdsByPids(array $pids, $onlyLevel3 = false)
+    public static function level23IdsByPids(array $pids, $onlyLevel3 = false, $onlyOnline = true)
     {
         $ids = [];
         foreach ($pids as $pid) {
-            $ids = array_merge($ids, self::level23Ids($pid, $onlyLevel3));
+            $ids = array_merge($ids, self::level23Ids($pid, $onlyLevel3, $onlyOnline));
         }
         return array_unique($ids);
     }
@@ -356,7 +357,7 @@ class GoodsCategory extends ActiveRecord
      * @param int $onlyLevel3 if only get level3 categories
      * @return array
      */
-    public static function level23Ids($pid, $onlyLevel3 = false)
+    public static function level23Ids($pid, $onlyLevel3 = false, $onlyOnline = true)
     {
         $pid = (int)$pid;
         if ($pid <= 0) {
@@ -369,14 +370,17 @@ class GoodsCategory extends ActiveRecord
         }
 
         $db = Yii::$app->db;
-        $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid} and deleted = 0";
+
+        $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
+        $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = '. self::REVIEW_STATUS_APPROVE;
         if ($category->level == self::LEVEL2) {
             return $db->createCommand()->queryColumn();
         } elseif ($category->level == self::LEVEL1) {
             $pids = $db->createCommand($sql)->queryColumn();
             $ret = [];
             foreach ($pids as $pid) {
-                $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid} and deleted = 0";
+                $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
+                $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = '. self::REVIEW_STATUS_APPROVE;
                 $ret = array_merge($ret, $db->createCommand($sql)->queryColumn());
             }
 

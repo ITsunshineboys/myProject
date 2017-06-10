@@ -170,5 +170,8 @@ create table goods_attr (
   `addition_type` tinyint(1) not null default 0 comment '0: 普通添加, 1: 下拉框添加',
   `goods_id` int(11) not null default 0,
   `category_id` int(11) not null default 0,
+  `user_id` int(11) unsigned not null DEFAULT 0,
+  `user_name` varchar(20) not null DEFAULT '',
+  `op_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
