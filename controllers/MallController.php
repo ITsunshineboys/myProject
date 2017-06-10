@@ -2275,17 +2275,7 @@ class MallController extends Controller
             ]);
         }
 
-        if ($attrCnt == 0) {
-            if (GoodsAttr::deleteAll(['category_id' => $categoryId]) == 0) {
-                $transaction->rollBack();
-
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }
+        GoodsAttr::deleteAll(['category_id' => $categoryId]);
 
         foreach ($names as $i => $name) {
             $goodsAttr = new GoodsAttr;

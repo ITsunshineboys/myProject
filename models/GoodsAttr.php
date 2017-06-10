@@ -58,7 +58,7 @@ class GoodsAttr extends ActiveRecord
     public static function validateValues($values)
     {
         foreach ($values as $row) {
-            $row = explode(',', trim($row, ','));
+            $row = explode(',', $row);
 
             if (StringService::checkRepeatedElement($row)
                 || StringService::checkEmptyElement($row)
