@@ -18,12 +18,11 @@ class EngineeringStandardCraft  extends ActiveRecord
         return 'engineering_standard_craft';
     }
 
-    public static function findByOne($project='',$district =510100)
+    public static function findByAll($project='',$district =510100)
     {
-        if($project){
-            $craft = self::find()->asArray()->where(['and',['district_code'=>$district],['project'=>$project]])->one();
-            $craft_material = $craft['material'];
+        if($project) {
+            $craft = self::find()->asArray()->where(['and', ['district_code' => $district], ['project' => $project]])->all();
         }
-        return $craft_material;
+        return $craft;
     }
 }

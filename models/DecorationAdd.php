@@ -25,7 +25,7 @@ class DecorationAdd extends ActiveRecord
      * @param string $all_area
      * @return int|mixed
      */
-    public static function findByAll($str = '',$all_area ='')
+    public static function findByAll($str = '',$all_area ='',$city= '510100')
     {
         if($str)
         {
