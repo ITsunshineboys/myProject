@@ -239,25 +239,27 @@ class Goods extends ActiveRecord
         return self::find()->select($select)->where(['sku' => $sku])->one();
     }
 
-    /**
-     * @param array $arr
-     * @return array|ActiveRecord[]
-     */
-    public static function priceDetail($level = '', $title = '')
+    //**
+* @param array $arr
+* @return array|ActiveRecord[]
+*/
+    public static function priceDetail($level = '', $title = '',$city = 510100)
     {
         if (empty($level) && empty($title)) {
             echo '请正确输入值';
             exit;
         } else {
-            $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.norms,goods_brand. name,goods_category.title FROM goods,goods_brand,goods_category WHERE goods.brand_id = goods_brand.id AND goods.category_id = goods_category.id AND goods_category.`level` = " . $level . " AND goods_category.title LIKE " . "'%$title%'";
+            $db = Yii::$app->db;
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = ".$city."  AND goods_category.`level` = ".$level." AND goods_category.title LIKE '".$title."'";
             $a = $db->createCommand($sql)->queryAll();
         }
-        foreach ($a as $v => $k) {
-            $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
-            $max = array_search(max($c), $c);
+        if(!empty($a)){
+            foreach ($a as $v => $k) {
+                $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                $max = array_search(max($c), $c);
+            }
+            return $a[$max];
         }
-        return $a[$max];
     }
 
     public static function findByIdAll($level = '', $title = '', $series = '1', $style = '2')
@@ -276,16 +278,17 @@ class Goods extends ActiveRecord
     /**
      * @param array $id
      */
-    public static function findQueryAll($all = [])
+    public static function findQueryAll($all = [],$city =510100)
     {
         if ($all) {
             $goods_id = [];
             foreach ($all as $single) {
                 $goods_id [] = $single['goods_id'];
             }
-            $id = implode(',', $goods_id);
+            $id = implode(',',$goods_id);
             $db = \Yii::$app->db;
-            $sql = "SELECT goods.supplier_price,goods.platform_price,goods.norms,goods_brand.name FROM goods,goods_brand WHERE goods.brand_id = goods_brand.id AND goods.id IN (" . $id . ")";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id  WHERE logistics_district.district_code = ".$city."
+AND goods.id IN (".$id .")";
             $all_goods = $db->createCommand($sql)->queryAll();
         }
         return $all_goods;

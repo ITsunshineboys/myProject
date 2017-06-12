@@ -9,54 +9,44 @@ namespace app\services;
 
 class BasisDecorationService
 {
+
     /**
-     * @carpentry  装修公式
-     * @param array $arr
-     * @param array $quantity
-     * @param array $unitPrice
+     * 人工费
+     * @param string $points
+     * @param array $labor
+     * @return float
+     *
      */
-    public static function  formula($arr = [],$quantity= [],$unitPrice=[])
+    public static function  laborFormula($points = '',$labor = [])
     {
-//        var_dump($arr);
-//        var_dump($quantity);
-//        var_dump($unitPrice);
-        if (!empty($arr))
-        {
-            $unit_price = [];
-            foreach ($unitPrice as $price)
-            {
-                $unit_price [] = $price;
-            }
-            // 材料费
-            $materials_expenses =  0;
-            foreach ($unit_price as $k=>$v)
-            {
-                $materials_expenses += $v * $quantity;
-            }
-            //人工费
-            $labor_cost = $arr['day_price'] *(ceil($quantity / $arr['day_standard']));
-            //单价
-            $waterway_price = ($labor_cost + $materials_expenses) / $arr['profit'];
-            //价格
-//            $waterway_remould_price = $arr['total_standard'] * $waterway_price;
-            return $waterway_price;
+        if($points && $labor){
+            //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
+            $labor_formula = ceil(($points / $labor['day_points'])) * $labor['univalence'];
         }
-        echo '请输入正确的值';
-        exit;
+        return $labor_formula;
     }
 
     /**
-     * 电线计算公式
+     * 电线个数计算公式
      * @param string $str
      */
-    public static function wire($str = '',$norms = '100',$dot = '10')
+    public static function quantity($points = '',$goods = [],$craft= '')
     {
-        //电线单位换算
-        if(!$str == null){
-            $wire = ($str / $norms)*$dot;
-            $int = (int)$wire;
+    //        电线费用：个数1×抓取的商品价格
+    //        网线费用：个数2×抓取的商品价格
+    //        个数1：（强电点位×【10m】÷抓取的商品的长度）
+    //        个数2：（弱电点位×【10m】÷抓取的商品的长度）
+        if($goods !== null && $points !== null){
+            $goods_value = 0;
+            foreach ($goods as $one){
+
+            }
+            exit;
+
+//            $wire_quantity = $points * $craft /
+//            $int = (int)$wire;
         }
-        return $int;
+//      return $int;
     }
 
     /**

@@ -12,6 +12,7 @@ use app\models\DecorationList;
 use app\models\DecorationParticulars;
 use app\models\Effect;
 use app\models\EffectPicture;
+use app\models\EngineeringStandardCraft;
 use app\models\FixationFurniture;
 use app\models\Goods;
 use app\models\IntelligenceAssort;
@@ -126,13 +127,14 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-        //基础装修
 //        $receive = \Yii::$app->request->post();
 //        $post = Json::decode($receive);
         $post = [
 //            'effect_id' => 1,
-            'room' => 1,
-            'hall' => 1,
+            'master_bedroom' => 1,
+            'secondary_bedroom' => 1,
+            'sitting_room' => 1,
+            'dining_room' => 1,
             'window' => 2,
             'high' => 2.8,
             'area' => 62,
@@ -140,87 +142,62 @@ class OwnerController extends Controller
             'kitchen' => 1,
             'style' => 1,
             'series' => 1,
-            'province' => '四川',
-            'city' => '成都'
+            'province' => 510000,
+            'city' => 510100
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水电';
 
-        //人工一天价格
-        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
-        $arr['day_standard'] = $worker[0]['day_points'];
-        $arr['day_price'] = $worker[0]['univalence'];
+        //人工价格
+        $worker = LaborCost::univalence($post,$arr['worker_kind']);
+
+        //点位查询
+        if (!empty($post['effect_id']))
+        {
+            $weak_points = Points::weakPoints($post['effect_id']);
+        }else{
+            $weak_points = 0;
+            $effect = Effect::find()->where(['id'=>1])->one();
+            $points = Points::find()->where(['effect_id'=>$effect['id']])->all();
+            foreach ($points as $one){
+               if($one['weak_current_points'] !== 0 )
+               {
+                   $weak_current_place []  = $one['place'];
+                   $weak_current_points [] = $one['weak_current_points'];
+               }
+            }
+            $weak_current_all = array_combine($weak_current_place,$weak_current_points);
+            $sitting_room = $weak_current_all['客厅'] * $post['sitting_room'];
+            $master_bedroom = $weak_current_all['主卧'] * $post['master_bedroom'];
+            $secondary_bedroom = $weak_current_all['次卧'] * $post['secondary_bedroom'];
+            $weak_points = $sitting_room + $master_bedroom + $secondary_bedroom;
+        }
 
         if(empty($post['effect_id'])){
             //查询弱电所需要材料
-            $electric_wire = '电线';
             $weak_current = [];
-            $wire = Goods::priceDetail(3, $electric_wire);
-            $weak_current [] = BasisDecorationService::wire($wire['platform_price']);
+            $electric_wire = '电线';
+            $weak_current [] = Goods::priceDetail(3, $electric_wire);
             $pipe = '线管';
-            $wire_pipe = Goods::priceDetail(3, $pipe);
-            $weak_current [] = BasisDecorationService::wire($wire_pipe['platform_price']);
+            $weak_current [] = Goods::priceDetail(3, $pipe);
             $box = '底盒';
-            $wire_box = Goods::priceDetail(3, $box);
-            $weak_current [] = $wire_box['platform_price'];
+            $weak_current [] = Goods::priceDetail(3, $box);
         }else{
             $decoration_list = DecorationList::findById($post['effect_id']);
-            $weak = CircuitryReconstruction::findByAll($decoration_list);
-            $weak_current = [];
-            $goods = Goods::findQueryAll($weak);
-            foreach ($weak as $single)
-            {
-               if($single['material'] == '电线')
-               {
-                   foreach ($goods as $unit_price)
-                   {
-                       if($single['goods_id'] == $unit_price['id']){
-                           $electric_wire = BasisDecorationService::wire($unit_price['platform_price']);
-                           $weak_current [] = $electric_wire;
-                       }
-                   }
-               }elseif ($single['material'] == '线管')
-               {
-                   foreach ($goods as $unit_price)
-                   {
-                       if($single['goods_id'] == $unit_price['id']){
-                           $electric_wire = BasisDecorationService::wire($unit_price['platform_price']);
-                           $weak_current [] = $electric_wire;
-                       }
-                   }
-               }elseif ($single['material'] == '底盒'){
-                   foreach ($goods as $unit_price)
-                   {
-                       if($single['goods_id'] == $unit_price['id']){
-                           $weak_current [] = $unit_price['platform_price'];
-                       }
-                   }
-               }elseif ($single['material'] !== '底盒' && $single['material'] !== '线管' && $single['material'] !== '电线')
-               {
-                   foreach ($goods as $unit_price)
-                   {
-                       if($single['goods_id'] == $unit_price['id'])
-                       {
-                           $weak_current [] = $unit_price['platform_price'];
-                       }
-                   }
-               }
-            }
+            $weak = CircuitryReconstruction::findByAll($decoration_list,'弱电');
+            $weak_current = Goods::findQueryAll($weak,$post['city']);
         }
 
-        if (!empty($post['effect_id']))
-        {
-            //查询所有弱电点位
-            $effect_id = Effect::find()->where(['id' => $post['effect_id']])->one();
-            $points = Points::weakLocation($effect_id['id']);
-        } else {
-            //查询所有弱电点位
-            $effect = Effect::conditionQuery($post);
-            $points = Points::weakLocation($effect['id']);
-        }
+        //当地工艺 $post['city']
+        $craft = EngineeringStandardCraft::findByOne('弱电',$post['city']);
 
-        //基础弱电总价格
+        //人工总费用
+        $labor_all_cost = BasisDecorationService::laborFormula($weak_points,$worker);
+        //个数计算公式
+        $quantity = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
+        var_dump($labor_all_cost);exit;
+        //材料总费用
         $weak_price = ceil(BasisDecorationService::formula($arr, $points,$weak_current));
         $add_price = DecorationAdd::findByAll('弱电',$post['area']);
         $weak_current_price = $weak_price + $add_price;
@@ -719,7 +696,7 @@ class OwnerController extends Controller
         if(!empty($post['effect_id']))
         {
             $fixation_furniture = FixationFurniture::findById($post);
-            $goods = Goods::findByConditionInquire($fixation_furniture);
+//            $goods = Goods::findByConditionInquire($fixation_furniture);
             exit;
         }
         return Json::encode([
