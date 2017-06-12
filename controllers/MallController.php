@@ -944,8 +944,11 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_ADD;
         if (!$category->validate()) {
-            if (isset($category->errors['title' . ModelService::POSTFIX_EXISTS])) {
-                $code = 1006;
+            if (isset($category->errors['title'])) {
+                $customErrCode = ModelService::customErrCode($category->errors['title'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -995,8 +998,11 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_EDIT;
         if (!$category->validate()) {
-            if (isset($category->errors['title' . ModelService::POSTFIX_EXISTS])) {
-                $code = 1006;
+            if (isset($category->errors['title'])) {
+                $customErrCode = ModelService::customErrCode($category->errors['title'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([

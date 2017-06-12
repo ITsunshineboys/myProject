@@ -34,6 +34,7 @@ class GoodsCategory extends ActiveRecord
     const SCENARIO_TOGGLE_STATUS = 'toggle';
     const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
     const SEPARATOR_TITLES = ' - ';
+    const ERROR_CODE_SAME_NAME = 1006;
 
     /**
      * @var array admin fields
@@ -467,7 +468,7 @@ class GoodsCategory extends ActiveRecord
         return [
             [['title', 'icon', 'pid'], 'required'],
             ['title', 'string', 'length' => [1, 10]],
-            [['title'], 'unique', 'on' => self::SCENARIO_ADD],
+            [['title'], 'unique', 'on' => self::SCENARIO_ADD, 'message' => self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]],
             [['title'], 'validateTitle', 'on' => self::SCENARIO_EDIT],
             [['pid', 'approve_time', 'review_status', 'supplier_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['pid', 'validatePid'],
@@ -508,7 +509,7 @@ class GoodsCategory extends ActiveRecord
     {
         if (!$this->isNewRecord && $this->isAttributeChanged($attribute)) {
             if (self::find()->where([$attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute . ModelService::POSTFIX_EXISTS);
+                $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
                 return false;
             }
         }
