@@ -194,6 +194,7 @@ class OwnerController extends Controller
 
         //人工总费用
         $labor_all_cost = BasisDecorationService::laborFormula($weak_points,$worker);
+        var_dump($labor_all_cost);exit;
         //个数计算公式
         $quantity = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
         var_dump($labor_all_cost);exit;
