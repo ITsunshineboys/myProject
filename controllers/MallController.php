@@ -2046,8 +2046,11 @@ class MallController extends Controller
         }
 
         if (!$logisticsTemplate->validate()) {
-            if (isset($logisticsTemplate->errors['name' . ModelService::POSTFIX_EXISTS])) {
-                $code = 1008;
+            if (isset($logisticsTemplate->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($logisticsTemplate->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -2123,8 +2126,11 @@ class MallController extends Controller
         }
 
         if (!$logisticsTemplate->validate()) {
-            if (isset($logisticsTemplate->errors['name' . ModelService::POSTFIX_EXISTS])) {
-                $code = 1008;
+            if (isset($logisticsTemplate->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($logisticsTemplate->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([

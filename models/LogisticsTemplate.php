@@ -24,6 +24,7 @@ class LogisticsTemplate extends ActiveRecord
     ];
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
+    const ERROR_CODE_SAME_NAME = 1008;
 
     /**
      * @return \yii\db\ActiveQuery
@@ -131,13 +132,13 @@ class LogisticsTemplate extends ActiveRecord
 
         if ($this->isNewRecord) {
             if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute . ModelService::POSTFIX_EXISTS);
+                $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
                 return false;
             }
         } else {
             if ($this->isAttributeChanged($attribute)) {
                 if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                    $this->addError($attribute . ModelService::POSTFIX_EXISTS);
+                    $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
                     return false;
                 }
             }
