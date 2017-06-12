@@ -338,7 +338,7 @@ class Goods extends ActiveRecord
             && $this->purchase_price_manager <= $this->platform_price
             && $this->purchase_price_decoration_company <= $this->purchase_price_designer
             && $this->purchase_price_designer <= $this->platform_price
-            && $this->platform_price <= $this->market_price)
+            && $this->platform_price <= $this->market_price
         ) {
             return true;
         }
