@@ -10,23 +10,43 @@ namespace app\services;
 class BasisDecorationService
 {
 
-    public static function  laborFormula()
+    /**
+     * 人工费
+     * @param string $points
+     * @param array $labor
+     * @return float
+     *
+     */
+    public static function  laborFormula($points = '',$labor = [])
     {
-
+        if($points && $labor){
+            //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
+            $labor_formula = ceil(($points / $labor['day_points'])) * $labor['univalence'];
+        }
+        return $labor_formula;
     }
 
     /**
-     * 电线计算公式
+     * 电线个数计算公式
      * @param string $str
      */
-    public static function wire($str = '',$norms = '100',$dot = '10')
+    public static function quantity($points = '',$goods = [],$craft= '')
     {
-        //电线单位换算
-        if(!$str == null){
-            $wire = ($str / $norms)*$dot;
-            $int = (int)$wire;
+    //        电线费用：个数1×抓取的商品价格
+    //        网线费用：个数2×抓取的商品价格
+    //        个数1：（强电点位×【10m】÷抓取的商品的长度）
+    //        个数2：（弱电点位×【10m】÷抓取的商品的长度）
+        if($goods !== null && $points !== null){
+            $goods_value = 0;
+            foreach ($goods as $one){
+
+            }
+            exit;
+
+//            $wire_quantity = $points * $craft /
+//            $int = (int)$wire;
         }
-        return $int;
+//      return $int;
     }
 
     /**

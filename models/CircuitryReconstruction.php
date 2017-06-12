@@ -22,15 +22,7 @@ class CircuitryReconstruction extends ActiveRecord
     {
         $project_id = 0;
         if($id){
-            $circuitry = self::find()->where(['and',['decoration_list_id'=>$id],['project'=>$project]])->all();
-            foreach ($circuitry as $one)
-            {
-                if($one['points_id'] == ){
-                    $project_id = $one['points_id'];
-                }
-
-            }
-            var_dump($project_id);exit;
+            $circuitry = self::find()->asArray()->where(['and',['decoration_list_id'=>$id],['project'=>$project]])->all();
         }
             return $circuitry;
     }
