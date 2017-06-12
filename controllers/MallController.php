@@ -52,6 +52,7 @@ class MallController extends Controller
         'category-edit',
         'category-offline-reason-reset',
         'category-review-list',
+        'category-brands',
         'brand-add',
         'brand-review',
         'brand-edit',
@@ -1060,6 +1061,7 @@ class MallController extends Controller
         }
 
         $now = time();
+        $user = Yii::$app->user->identity;
         $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
             $model->deleted = GoodsCategory::STATUS_OFFLINE;
@@ -1136,6 +1138,7 @@ class MallController extends Controller
         }
 
         $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_ONLINE,
             'offline_time' => time(),
@@ -1191,6 +1194,7 @@ class MallController extends Controller
         }
 
         $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_OFFLINE,
             'online_time' => time(),
@@ -1739,6 +1743,7 @@ class MallController extends Controller
         }
 
         $now = time();
+        $user = Yii::$app->user->identity;
         $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         if ($model->status == GoodsBrand::STATUS_OFFLINE) {
             $model->status = GoodsBrand::STATUS_ONLINE;
@@ -1805,6 +1810,7 @@ class MallController extends Controller
         }
 
         $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
         if (!GoodsBrand::updateAll([
             'status' => GoodsBrand::STATUS_OFFLINE,
             'offline_time' => time(),
@@ -1855,6 +1861,7 @@ class MallController extends Controller
         }
 
         $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
         if (!GoodsBrand::updateAll([
             'status' => GoodsBrand::STATUS_ONLINE,
             'online_time' => time(),
@@ -2409,5 +2416,25 @@ class MallController extends Controller
                 ]
             ],
         ]);
+    }
+
+    /**
+     * Category brands action
+     *
+     * @return string
+     */
+    public function actionCategoryBrands()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category-brands' => []
+            ],
+        ];
+
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
+        $categoryId > 0 && $ret['data']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
+        return Json::encode($ret);
     }
 }
