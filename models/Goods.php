@@ -239,10 +239,12 @@ class Goods extends ActiveRecord
         return self::find()->select($select)->where(['sku' => $sku])->one();
     }
 
-    //**
-* @param array $arr
-* @return array|ActiveRecord[]
-*/
+    /**
+     * @param string $level
+     * @param string $title
+     * @param int $city
+     * @return mixed
+     */
     public static function priceDetail($level = '', $title = '',$city = 510100)
     {
         if (empty($level) && empty($title)) {
