@@ -17,6 +17,7 @@ class GoodsAttr extends ActiveRecord
 {
     const ADDITION_TYPE_NORMAL = 0;
     const ADDITION_TYPE_DROPDOWN_LIST = 1;
+    const ERROR_CODE_SAME_NAME = 1009;
 
     const UNITS = [
         '无',
@@ -46,11 +47,16 @@ class GoodsAttr extends ActiveRecord
      * Check if has the repeated attribute value of some attribute
      *
      * @param array $values values to validate
+     * @param array $additionTypes addition types
      * @return bool
      */
-    public static function validateValues($values)
+    public static function validateValues($values, $additionTypes)
     {
-        foreach ($values as $row) {
+        foreach ($values as $i => $row) {
+            if ($additionTypes[$i] == self::ADDITION_TYPE_NORMAL) {
+                continue;
+            }
+
             $row = explode(',', $row);
 
             if (StringService::checkRepeatedElement($row)
@@ -113,7 +119,7 @@ class GoodsAttr extends ActiveRecord
     public function validateName($attribute)
     {
         if (self::find()->where(['goods_id' => 0, $attribute => $this->$attribute])->exists()) {
-            $this->addError($attribute . ModelService::POSTFIX_EXISTS);
+            $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
             return false;
         }
 
@@ -128,7 +134,7 @@ class GoodsAttr extends ActiveRecord
      */
     public function validateCategoryId($attribute)
     {
-        if (!GoodsCategory::findOne($this->$attribute)) {
+        if (!GoodsCategory::find()->where(['id' => $this->$attribute, 'level' => GoodsCategory::LEVEL3])->one()) {
             $this->addError($attribute);
             return false;
         }

@@ -2260,7 +2260,14 @@ class MallController extends Controller
         $values = Yii::$app->request->post('values', []);
         $units = Yii::$app->request->post('units', []);
         $additionTypes = Yii::$app->request->post('addition_types', []);
-        $categoryId = Yii::$app->request->post('category_id', []);
+        $categoryId = (int)Yii::$app->request->post('category_id', 0);
+
+        if ($categoryId <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         $attrCnt = count($names);
         if ($attrCnt > 0) {
@@ -2279,7 +2286,7 @@ class MallController extends Controller
                 ]);
             }
 
-            if (!GoodsAttr::validateValues($values)) {
+            if (!GoodsAttr::validateValues($values, $additionTypes)) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2289,7 +2296,14 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
         $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
-        $category = GoodsCategory::findOne($categoryId);
+        $category = GoodsCategory::find()->where(['id' => $categoryId, 'level' => GoodsCategory::LEVEL3])->one();
+        if (!$category) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $category->attr_op_uid = $lhzz->id;
         $category->attr_op_username = $lhzz->nickname;
         $category->attr_op_time = time();
@@ -2320,8 +2334,11 @@ class MallController extends Controller
             if (!$goodsAttr->validate()) {
                 $transaction->rollBack();
 
-                if (isset($goodsAttr->errors['name' . ModelService::POSTFIX_EXISTS])) {
-                    $code = 1009;
+                if (isset($goodsAttr->errors['name'])) {
+                    $customErrCode = ModelService::customErrCode($goodsAttr->errors['name'][0]);
+                    if ($customErrCode !== false) {
+                        $code = $customErrCode;
+                    }
                 }
 
                 return Json::encode([
