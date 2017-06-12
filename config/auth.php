@@ -53,4 +53,5 @@ return [
 
     // goods attribute
     'goods-attr-add' => [1],
+    'goods-attr-list-admin' => [1],
 ];

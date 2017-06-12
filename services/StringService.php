@@ -176,4 +176,38 @@ class StringService
     {
         return count($elements) != count(array_unique($elements));
     }
+
+    /**
+     * Check if has empty element in a list
+     *
+     * @param array $elements elments to check
+     * @return bool
+     */
+    public static function checkEmptyElement(array $elements)
+    {
+        foreach ($elements as $element) {
+            if (!$element) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if list composed of int numbers
+     *
+     * @param array $elements elments to check
+     * @return bool
+     */
+    public static function checkIntList(array $elements)
+    {
+        foreach ($elements as $element) {
+            if (!is_numeric($element)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

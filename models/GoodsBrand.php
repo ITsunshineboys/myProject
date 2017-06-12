@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -24,6 +25,7 @@ class GoodsBrand extends ActiveRecord
     const REVIEW_STATUS_REJECT = 1;
     const REVIEW_STATUS_NOT_REVIEWED = 0;
     const PAGE_SIZE_DEFAULT = 12;
+    const ERROR_CODE_SAME_NAME = 1007;
 
     /**
      * @var array admin fields
@@ -226,7 +228,8 @@ class GoodsBrand extends ActiveRecord
     {
         return [
             [['name', 'certificate', 'logo'], 'required'],
-            [['name'], 'unique', 'on' => self::SCENARIO_ADD],
+            ['name', 'string', 'length' => [1, 16]],
+            [['name'], 'unique', 'on' => self::SCENARIO_ADD, 'message' => self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]],
             [['name'], 'validateName', 'on' => self::SCENARIO_EDIT],
             ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses']), 'on' => self::SCENARIO_REVIEW],
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
@@ -245,7 +248,7 @@ class GoodsBrand extends ActiveRecord
     {
         if (!$this->isNewRecord && $this->isAttributeChanged($attribute)) {
             if (self::find()->where([$attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute);
+                $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
                 return false;
             }
         }

@@ -79,6 +79,10 @@ CREATE TABLE `goods_category` (
   `deleted` tinyint(1) not null default 0,
   `online_time` int unsigned not null DEFAULT 0,
   `offline_time` int unsigned not null DEFAULT 0,
+  `attr_op_uid` int(11) unsigned not null DEFAULT 0,
+  `attr_op_username` varchar(20) not null DEFAULT '',
+  `attr_op_time` int not null DEFAULT 0,
+  `attr_number` int(11) not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

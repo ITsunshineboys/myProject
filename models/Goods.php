@@ -283,9 +283,9 @@ class Goods extends ActiveRecord
             foreach ($all as $single) {
                 $goods_id [] = $single['goods_id'];
             }
-            $id = implode(',',$goods_id);
+            $id = implode(',', $goods_id);
             $db = \Yii::$app->db;
-            $sql = "SELECT goods.supplier_price,goods.platform_price,goods.norms,goods_brand.name FROM goods,goods_brand WHERE goods.brand_id = goods_brand.id AND goods.id IN (".$id .")";
+            $sql = "SELECT goods.supplier_price,goods.platform_price,goods.norms,goods_brand.name FROM goods,goods_brand WHERE goods.brand_id = goods_brand.id AND goods.id IN (" . $id . ")";
             $all_goods = $db->createCommand($sql)->queryAll();
         }
         return $all_goods;
@@ -297,9 +297,9 @@ class Goods extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required'],
+            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required'],
             [['title', 'subtitle'], 'string', 'length' => [1, 16]],
-            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id'], 'number', 'integerOnly' => true, 'min' => 0],
+            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['supplier_price', 'validateSupplierPrice'],
             ['after_sale_services', 'validateAfterSaleServices'],
             ['description', 'safe']
@@ -333,8 +333,12 @@ class Goods extends ActiveRecord
      */
     public function validateSupplierPrice($attribute)
     {
-        if ($this->$attribute <= $this->platform_price
-            && $this->platform_price <= $this->market_price
+        if ($this->$attribute <= $this->purchase_price_decoration_company
+            && $this->purchase_price_decoration_company <= $this->purchase_price_manager
+            && $this->purchase_price_manager <= $this->platform_price
+            && $this->purchase_price_decoration_company <= $this->purchase_price_designer
+            && $this->purchase_price_designer <= $this->platform_price
+            && $this->platform_price <= $this->market_price)
         ) {
             return true;
         }

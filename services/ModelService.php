@@ -18,12 +18,13 @@ class ModelService
         SORT_ASC => 'ASC',
     ];
     const POSTFIX_EXISTS = '_exists';
+    const SEPARATOR_ERRCODE_ERRMSG = ':';
 
     /**
      * Generate sorting statements for query
      *
      * @param  ActiveRecord $model active record model
-     * @param  array        $sort  sorting fields with direction
+     * @param  array $sort sorting fields with direction
      * @return bool|string
      */
     public static function sortFields(ActiveRecord $model, array $sort = ['id:' . SORT_DESC])
@@ -50,10 +51,25 @@ class ModelService
         }
 
         $orderByStr = '';
-        foreach  ($orderBy as $filed => $direction) {
+        foreach ($orderBy as $filed => $direction) {
             $orderByStr .= ',' . $filed . ' ' . $direction;
         }
 
         return trim($orderByStr, ',');
+    }
+
+    /**
+     * Get custom error code by error message
+     *
+     * @param string $errMsg error message
+     * @return bool|int
+     */
+    public static function customErrCode($errMsg)
+    {
+        if (preg_match('/\d+' . self::SEPARATOR_ERRCODE_ERRMSG . '/', $errMsg, $matches)) {
+            return str_replace(self::SEPARATOR_ERRCODE_ERRMSG, '', $matches[0]);
+        }
+
+        return false;
     }
 }

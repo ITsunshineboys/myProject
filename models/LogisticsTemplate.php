@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -23,7 +24,6 @@ class LogisticsTemplate extends ActiveRecord
     ];
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
-    const POSTFIX_EXISTS = '_exists';
 
     /**
      * @return \yii\db\ActiveQuery
@@ -131,13 +131,13 @@ class LogisticsTemplate extends ActiveRecord
 
         if ($this->isNewRecord) {
             if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute . self::POSTFIX_EXISTS);
+                $this->addError($attribute . ModelService::POSTFIX_EXISTS);
                 return false;
             }
         } else {
             if ($this->isAttributeChanged($attribute)) {
                 if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                    $this->addError($attribute . self::POSTFIX_EXISTS);
+                    $this->addError($attribute . ModelService::POSTFIX_EXISTS);
                     return false;
                 }
             }

@@ -66,6 +66,7 @@ class MallController extends Controller
         'logistics-template-view',
         'logistics-templates-supplier',
         'goods-attr-add',
+        'goods-attr-list-admin',
     ];
 
     /**
@@ -943,7 +944,7 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_ADD;
         if (!$category->validate()) {
-            if ($category->title && isset($category->errors['title'])) {
+            if (isset($category->errors['title' . ModelService::POSTFIX_EXISTS])) {
                 $code = 1006;
             }
 
@@ -994,7 +995,7 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_EDIT;
         if (!$category->validate()) {
-            if ($category->title && isset($category->errors['title'])) {
+            if (isset($category->errors['title' . ModelService::POSTFIX_EXISTS])) {
                 $code = 1006;
             }
 
@@ -1372,8 +1373,11 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
         if (!$brand->validate()) {
-            if ($brand->name && isset($brand->errors['name'])) {
-                $code = 1007;
+            if (isset($brand->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -1397,7 +1401,7 @@ class MallController extends Controller
         $categoryIdsArr = explode(',', $categoryIds);
         foreach ($categoryIdsArr as $categoryId) {
             $category = GoodsCategory::findOne($categoryId);
-            if (!$category) {
+            if (!$category || $category->level != GoodsCategory::LEVEL3) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -1523,8 +1527,11 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_EDIT;
         if (!$brand->validate()) {
-            if ($brand->name && isset($brand->errors['name'])) {
-                $code = 1007;
+            if (isset($brand->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -1567,9 +1574,23 @@ class MallController extends Controller
             }
 
             foreach ($categoryIdsArr as $categoryId) {
+                $category = GoodsCategory::findOne($categoryId);
+                if (!$category || $category->level != GoodsCategory::LEVEL3) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
                 $brandCategory = new BrandCategory;
                 $brandCategory->brand_id = $brand->id;
                 $brandCategory->category_id = $categoryId;
+                list($rootCategoryId, $parentCategoryId, $categoryId) = explode(',', $category->path);
+                $brandCategory->category_id_level1 = $rootCategoryId;
+                $brandCategory->category_id_level2 = $parentCategoryId;
 
                 $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
                 if (!$brandCategory->validate()) {
@@ -2019,7 +2040,7 @@ class MallController extends Controller
         }
 
         if (!$logisticsTemplate->validate()) {
-            if (isset($logisticsTemplate->errors['name' . LogisticsTemplate::POSTFIX_EXISTS])) {
+            if (isset($logisticsTemplate->errors['name' . ModelService::POSTFIX_EXISTS])) {
                 $code = 1008;
             }
 
@@ -2096,7 +2117,7 @@ class MallController extends Controller
         }
 
         if (!$logisticsTemplate->validate()) {
-            if (isset($logisticsTemplate->errors['name' . LogisticsTemplate::POSTFIX_EXISTS])) {
+            if (isset($logisticsTemplate->errors['name' . ModelService::POSTFIX_EXISTS])) {
                 $code = 1008;
             }
 
@@ -2215,7 +2236,7 @@ class MallController extends Controller
     }
 
     /**
-     * Add goods attributes action
+     * Add/edit goods attributes action
      *
      * @return string
      */
@@ -2230,35 +2251,59 @@ class MallController extends Controller
         $categoryId = Yii::$app->request->post('category_id', []);
 
         $attrCnt = count($names);
-        if (!$names
-            || !$values
-            || !$units
-            || !$additionTypes
-            || !($attrCnt == count($values) && $attrCnt == count($units) && $attrCnt == count($additionTypes))
-        ) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        if ($attrCnt > 0) {
+            if (!($attrCnt == count($values) && $attrCnt == count($units) && $attrCnt == count($additionTypes))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!GoodsAttr::validateNames($names)) {
+                $code = 1009;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!GoodsAttr::validateValues($values)) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
 
-        if (!GoodsAttr::validateNames($names)) {
-            $code = 1009;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        $user = Yii::$app->user->identity;
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+        $category = GoodsCategory::findOne($categoryId);
+        $category->attr_op_uid = $lhzz->id;
+        $category->attr_op_username = $lhzz->nickname;
+        $category->attr_op_time = time();
+        $category->attr_number = $attrCnt;
 
         $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$category->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        GoodsAttr::deleteAll(['category_id' => $categoryId]);
 
         foreach ($names as $i => $name) {
             $goodsAttr = new GoodsAttr;
             $goodsAttr->name = $name;
-            $goodsAttr->value = $values[$i];
             $goodsAttr->unit = $units[$i];
             $goodsAttr->addition_type = $additionTypes[$i];
             $goodsAttr->category_id = $categoryId;
+            $goodsAttr->addition_type == GoodsAttr::ADDITION_TYPE_DROPDOWN_LIST && $goodsAttr->value = $values[$i];
 
             if (!$goodsAttr->validate()) {
                 $transaction->rollBack();
@@ -2287,6 +2332,53 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Goods attributes list action
+     *
+     * @return string
+     */
+    public function actionGoodsAttrListAdmin()
+    {
+        $code = 1000;
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsCategory;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'review_status = ' . GoodsCategory::REVIEW_STATUS_APPROVE;
+
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        $ids = $pid > 0
+            ? GoodsCategory::level23Ids($pid, true, false)
+            : GoodsCategory::allLevel3CategoryIds(false);
+        $where .= !$ids ? ' and 0' : ' and id in (' . implode(',', $ids) . ')';
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
+
+        $details = GoodsCategory::pagination($where, GoodsCategory::$attrAdminFields, $page, $size, $orderBy);
+        foreach ($details as &$detail) {
+            $detail['attrs'] = GoodsAttr::detailsByCategoryId($detail['id']);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category_list_admin' => [
+                    'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
+                    'details' => $details
+                ]
+            ],
         ]);
     }
 }
