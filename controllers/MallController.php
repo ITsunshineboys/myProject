@@ -1373,8 +1373,11 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
         if (!$brand->validate()) {
-            if (isset($brand->errors['name' . ModelService::POSTFIX_EXISTS])) {
-                $code = 1007;
+            if (isset($brand->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -1416,7 +1419,7 @@ class MallController extends Controller
             $brandCategory->category_id_level2 = $parentCategoryId;
 
             $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
-            if (!$brandCategory->validate()) {echo 'aaa';print_r($brandCategory->errors);
+            if (!$brandCategory->validate()) {
                 $transaction->rollBack();
 
                 return Json::encode([
@@ -1524,8 +1527,11 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_EDIT;
         if (!$brand->validate()) {
-            if (isset($brand->errors['name' . ModelService::POSTFIX_EXISTS])) {
-                $code = 1007;
+            if (isset($brand->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -1568,9 +1574,23 @@ class MallController extends Controller
             }
 
             foreach ($categoryIdsArr as $categoryId) {
+                $category = GoodsCategory::findOne($categoryId);
+                if (!$category || $category->level != GoodsCategory::LEVEL3) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
                 $brandCategory = new BrandCategory;
                 $brandCategory->brand_id = $brand->id;
                 $brandCategory->category_id = $categoryId;
+                list($rootCategoryId, $parentCategoryId, $categoryId) = explode(',', $category->path);
+                $brandCategory->category_id_level1 = $rootCategoryId;
+                $brandCategory->category_id_level2 = $parentCategoryId;
 
                 $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
                 if (!$brandCategory->validate()) {

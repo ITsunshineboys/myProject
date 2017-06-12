@@ -166,8 +166,14 @@ class BrandCategory extends ActiveRecord
      */
     public function validateCategoryId($attribute)
     {
+        $where = [
+            'id' => $this->$attribute,
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'level' => GoodsCategory::LEVEL3
+        ];
+
         if ($this->$attribute > 0
-            && GoodsCategory::find()->where(['id' => $this->$attribute, 'deleted' => GoodsCategory::STATUS_OFFLINE])->exists()
+            && GoodsCategory::find()->where($where)->exists()
         ) {
             return true;
         }
