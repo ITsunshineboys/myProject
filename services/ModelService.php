@@ -17,7 +17,6 @@ class ModelService
         SORT_DESC => 'DESC',
         SORT_ASC => 'ASC',
     ];
-    const POSTFIX_EXISTS = '_exists';
     const SEPARATOR_ERRCODE_ERRMSG = ':';
 
     /**
