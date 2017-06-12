@@ -1398,7 +1398,7 @@ class MallController extends Controller
         $categoryIdsArr = explode(',', $categoryIds);
         foreach ($categoryIdsArr as $categoryId) {
             $category = GoodsCategory::findOne($categoryId);
-            if (!$category) {
+            if (!$category || $category->level != GoodsCategory::LEVEL3) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -1416,7 +1416,7 @@ class MallController extends Controller
             $brandCategory->category_id_level2 = $parentCategoryId;
 
             $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
-            if (!$brandCategory->validate()) {
+            if (!$brandCategory->validate()) {echo 'aaa';print_r($brandCategory->errors);
                 $transaction->rollBack();
 
                 return Json::encode([
