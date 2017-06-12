@@ -34,6 +34,7 @@ return [
     'category-offline-reason-reset' => [1],
     'category-review-list' => [1],
     'category-brands' => [6],
+    'category-attrs' => [6],
 
     // brand
     'brand-add' => [1, 6],

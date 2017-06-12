@@ -53,6 +53,7 @@ class MallController extends Controller
         'category-offline-reason-reset',
         'category-review-list',
         'category-brands',
+        'category-attrs',
         'brand-add',
         'brand-review',
         'brand-edit',
@@ -2435,6 +2436,26 @@ class MallController extends Controller
 
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
         $categoryId > 0 && $ret['data']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
+        return Json::encode($ret);
+    }
+
+    /**
+     * Category attributes action
+     *
+     * @return string
+     */
+    public function actionCategoryAttrs()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category-attrs' => []
+            ],
+        ];
+
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
+        $categoryId > 0 && $ret['data']['category-attrs'] = GoodsAttr::detailsByCategoryId($categoryId);
         return Json::encode($ret);
     }
 }
