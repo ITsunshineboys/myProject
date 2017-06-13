@@ -71,6 +71,7 @@ class MallController extends Controller
         'goods-attr-add',
         'goods-attr-list-admin',
         'goods-add',
+        'goods-edit',
     ];
 
     /**
@@ -126,6 +127,7 @@ class MallController extends Controller
                     'logistics-template-edit' => ['post',],
                     'goods-attr-add' => ['post',],
                     'goods-add' => ['post',],
+                    'goods-edit' => ['post',],
                 ],
             ],
         ];

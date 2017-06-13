@@ -59,4 +59,5 @@ return [
 
     // goods
     'goods-add' => [6],
+    'goods-edit' => [1, 6],
 ];
