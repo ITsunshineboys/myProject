@@ -9,11 +9,7 @@ CREATE TABLE `goods` (
   `sku` bigint unsigned not null default 0,
   `title` varchar(100) not null DEFAULT '',
   `subtitle` varchar(100) not null DEFAULT '',
-  `image1` varchar(255) not null DEFAULT '' comment '封面图',
-  `image2` varchar(255) not null DEFAULT '',
-  `image3` varchar(255) not null DEFAULT '',
-  `image4` varchar(255) not null DEFAULT '',
-  `image5` varchar(255) not null DEFAULT '',
+  `cover_image` varchar(255) not null DEFAULT '' comment '封面图',
   `supplier_price` bigint not null DEFAULT 0 comment 'unit: fen',
   `platform_price` bigint not null DEFAULT 0 comment 'unit: fen',
   `market_price` bigint not null DEFAULT 0 comment 'unit: fen',
@@ -174,5 +170,12 @@ create table goods_attr (
   `addition_type` tinyint(1) not null default 0 comment '0: 普通添加, 1: 下拉框添加',
   `goods_id` int(11) not null default 0,
   `category_id` int(11) not null default 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table goods_image (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) unsigned not null default 0,
+  `image` varchar(255) not null DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

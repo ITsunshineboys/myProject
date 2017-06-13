@@ -139,4 +139,22 @@ class GoodsAttr extends ActiveRecord
             ['addition_type', 'in', 'range' => array_keys(self::ADDITION_TYPES)]
         ];
     }
+
+    /**
+     * Get attribute names by goods id
+     *
+     * @param  int $goodsId goods id
+     * @return array
+     */
+    public static function namesByCategoryId($goodsId)
+    {
+        $goodsId = (int)$goodsId;
+        if ($goodsId <= 0) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select name from {{%" . self::tableName() . "}} where goods_id = {$goodsId}")
+            ->queryColumn();
+    }
 }

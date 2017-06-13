@@ -26,7 +26,7 @@ class Goods extends ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
 
-    const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
+    const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'cover_image'];
 
     const AFTER_SALE_SERVICES = [
         '提供发票',
@@ -306,10 +306,10 @@ AND goods.id IN (" . $id . ")";
     public function rules()
     {
         return [
-            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_REVIEW],
-            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_ADD],
+            [['title', 'subtitle', 'category_id', 'brand_id', 'cover_image', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_REVIEW],
+            [['title', 'subtitle', 'category_id', 'brand_id', 'cover_image', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_ADD],
             [['title', 'subtitle'], 'string', 'length' => [1, 16]],
-            [['image1', 'image2', 'image3', 'image4', 'image5'], 'string'],
+            [['cover_image'], 'string'],
             [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['supplier_price', 'validateSupplierPrice', 'on' => self::SCENARIO_REVIEW],
             ['platform_price', 'validatePlatformPrice', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
@@ -450,6 +450,27 @@ AND goods.id IN (" . $id . ")";
 
         $this->addError($attribute);
         return false;
+    }
+
+    public function sanitize(ActiveRecord $user, array &$postData)
+    {
+        if (isset($postData['category_id'])) {
+            unset($postData['category_id']);
+        }
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            if ($this->status == self::STATUS_WAIT_ONLINE) {
+                if (isset($postData['purchase_price_decoration_company'])) {
+                    unset($postData['purchase_price_decoration_company']);
+                }
+                if (isset($postData['purchase_price_manager'])) {
+                    unset($postData['purchase_price_manager']);
+                }
+                if (isset($postData['purchase_price_designer'])) {
+                    unset($postData['purchase_price_designer']);
+                }
+            }
+        }
     }
 
     /**

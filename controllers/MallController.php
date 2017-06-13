@@ -13,6 +13,7 @@ use app\models\Lhzz;
 use app\models\LogisticsTemplate;
 use app\models\LogisticsDistrict;
 use app\models\GoodsAttr;
+use app\models\GoodsImage;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
@@ -2472,6 +2473,136 @@ class MallController extends Controller
 
         $goods = new Goods;
         $goods->attributes = Yii::$app->request->post();
+
+        $goods->scenario = Goods::SCENARIO_ADD;
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$goods->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods->sku = $goods->category_id . $goods->id;
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $names = Yii::$app->request->post('names', []);
+        $values = Yii::$app->request->post('values', []);
+
+        $attrCnt = count($names);
+        if ($attrCnt > 0) {
+            if ($attrCnt != count($values)) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!GoodsAttr::validateNames($names)) {
+                $code = 1009;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        foreach ($names as $i => $name) {
+            $goodsAttr = new GoodsAttr;
+            $goodsAttr->name = $name;
+            $goodsAttr->value = $values[$i];
+            $goodsAttr->goods_id = $goods->id;
+            $goodsAttr->category_id = $goods->category_id;
+
+            if (!$goodsAttr->validate()) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$goodsAttr->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $images = Yii::$app->request->post('images', []);
+        foreach ($images as $image) {
+            $goodsImage = new GoodsImage;
+            $goodsImage->goods_id = $goods->id;
+            $goodsImage->image = $image;
+
+            if (!$goodsImage->validate()) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$goodsImage->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Edit goods action
+     *
+     * @return string
+     */
+    public function actionGoodsEdit()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods = Goods::findOne($id);
+        $postData = Yii::$app->request->post();
+        $user = Yii::$app->user->identity;
+        $goods->sanitize($user, $postData);
+        $goods->attributes = $postData;
 
         $goods->scenario = Goods::SCENARIO_ADD;
         if (!$goods->validate()) {
