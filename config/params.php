@@ -93,4 +93,7 @@ return [
     'districts' => $districts,
     'pinyin'=>$pinyin,
     'auth' => $auth,
+    'goods' => [
+        'maxImagesCnt' => 5,
+    ],
 ];

@@ -210,4 +210,22 @@ class StringService
 
         return true;
     }
+
+    /**
+     * Check if two lists have same elements
+     *
+     * @param array $arr1 one array to check
+     * @param array $arr2 the other array check
+     * @return bool
+     */
+    public static function checkArrayIdentity(array $arr1, array $arr2)
+    {
+        if (count(array_diff($arr1, $arr2)) == 0
+            && count(array_diff($arr2, $arr1)) == 0
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }

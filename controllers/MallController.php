@@ -1568,9 +1568,7 @@ class MallController extends Controller
 
         $categoryIdsArr = explode(',', $categoryIds);
         $categoryIdsArrOld = BrandCategory::categoryIdsByBrandId($brand->id);
-        if (count(array_diff($categoryIdsArrOld, $categoryIdsArr)) != 0
-            || count(array_diff($categoryIdsArr, $categoryIdsArrOld)) != 0
-        ) {
+        if (!StringService::checkArrayIdentity($categoryIdsArrOld, $categoryIdsArr)) {
             $deletedNum = BrandCategory::deleteAll(
                 [
                     'brand_id' => $brand->id,
@@ -2164,9 +2162,7 @@ class MallController extends Controller
 
         $districtCodesArr = explode(',', $districtCodes);
         $districtCodesArrOld = LogisticsDistrict::districtCodesByTemplateId($logisticsTemplate->id);
-        if (count(array_diff($districtCodesArr, $districtCodesArrOld)) != 0
-            || count(array_diff($districtCodesArrOld, $districtCodesArr)) != 0
-        ) {
+        if (StringService::checkArrayIdentity($districtCodesArr, $districtCodesArrOld)) {
             $deletedNum = LogisticsDistrict::deleteAll(
                 [
                     'template_id' => $logisticsTemplate->id,
@@ -2473,9 +2469,12 @@ class MallController extends Controller
 
         $goods = new Goods;
         $goods->attributes = Yii::$app->request->post();
+        $images = Yii::$app->request->post('images', []);
 
         $goods->scenario = Goods::SCENARIO_ADD;
-        if (!$goods->validate()) {
+        if (!$goods->validate()
+            || !GoodsImage::validateImages($images)
+        ) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2549,7 +2548,6 @@ class MallController extends Controller
             }
         }
 
-        $images = Yii::$app->request->post('images', []);
         foreach ($images as $image) {
             $goodsImage = new GoodsImage;
             $goodsImage->goods_id = $goods->id;
@@ -2591,6 +2589,7 @@ class MallController extends Controller
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
+        $images = Yii::$app->request->post('images', []);
         if ($id <= 0) {
             return Json::encode([
                 'code' => $code,
@@ -2599,8 +2598,16 @@ class MallController extends Controller
         }
 
         $goods = Goods::findOne($id);
-        $postData = Yii::$app->request->post();
         $user = Yii::$app->user->identity;
+
+        if (!$goods->validateImages($user, $images)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $postData = Yii::$app->request->post();
         $goods->sanitize($user, $postData);
         $goods->attributes = $postData;
 
@@ -2626,47 +2633,83 @@ class MallController extends Controller
 
         $names = Yii::$app->request->post('names', []);
         $values = Yii::$app->request->post('values', []);
+        if (GoodsAttr::changedAttr($id, $names, $values)) {
+            GoodsAttr::deleteAll([
+                'goods_id' => $id
+            ]);
 
-        $attrCnt = count($names);
-        if ($attrCnt > 0) {
-            if ($attrCnt != count($values)) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
+            $attrCnt = count($names);
+            if ($attrCnt > 0) {
+                if ($attrCnt != count($values)) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!GoodsAttr::validateNames($names)) {
+                    $code = 1009;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
             }
 
-            if (!GoodsAttr::validateNames($names)) {
-                $code = 1009;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
+            foreach ($names as $i => $name) {
+                $goodsAttr = new GoodsAttr;
+                $goodsAttr->name = $name;
+                $goodsAttr->value = $values[$i];
+                $goodsAttr->goods_id = $goods->id;
+                $goodsAttr->category_id = $goods->category_id;
+
+                if (!$goodsAttr->validate()) {
+                    $transaction->rollBack();
+
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!$goodsAttr->save()) {
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
             }
         }
 
-        foreach ($names as $i => $name) {
-            $goodsAttr = new GoodsAttr;
-            $goodsAttr->name = $name;
-            $goodsAttr->value = $values[$i];
-            $goodsAttr->goods_id = $goods->id;
-            $goodsAttr->category_id = $goods->category_id;
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']
+            && in_array($goods->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE])
+        ) {
+            GoodsImage::deleteAll([
+                'goods_id' => $id
+            ]);
 
-            if (!$goodsAttr->validate()) {
-                $transaction->rollBack();
+            foreach ($images as $image) {
+                $goodsImage = new GoodsImage;
+                $goodsImage->goods_id = $goods->id;
+                $goodsImage->image = $image;
 
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+                if (!$goodsImage->validate()) {
+                    $transaction->rollBack();
 
-            if (!$goodsAttr->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!$goodsImage->save()) {
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
             }
         }
 

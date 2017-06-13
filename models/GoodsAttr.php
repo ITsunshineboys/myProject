@@ -146,7 +146,7 @@ class GoodsAttr extends ActiveRecord
      * @param  int $goodsId goods id
      * @return array
      */
-    public static function namesByCategoryId($goodsId)
+    public static function namesByGoodsId($goodsId)
     {
         $goodsId = (int)$goodsId;
         if ($goodsId <= 0) {
@@ -156,5 +156,42 @@ class GoodsAttr extends ActiveRecord
         return Yii::$app->db
             ->createCommand("select name from {{%" . self::tableName() . "}} where goods_id = {$goodsId}")
             ->queryColumn();
+    }
+
+    /**
+     * Get attribute values by goods id
+     *
+     * @param  int $goodsId goods id
+     * @return array
+     */
+    public static function valuesByGoodsId($goodsId)
+    {
+        $goodsId = (int)$goodsId;
+        if ($goodsId <= 0) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select value from {{%" . self::tableName() . "}} where goods_id = {$goodsId}")
+            ->queryColumn();
+    }
+
+    /**
+     * Check if goods attributes changed
+     *
+     * @param int $goodsId goods id
+     * @param $names array names
+     * @param $values array values
+     * @return bool
+     */
+    public static function changedAttr($goodsId, array $names, array $values)
+    {
+        if (!StringService::checkArrayIdentity($names, self::namesByGoodsId($goodsId))
+            || !StringService::checkArrayIdentity($values, self::valuesByGoodsId($goodsId))
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

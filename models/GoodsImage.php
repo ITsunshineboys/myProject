@@ -8,8 +8,6 @@
 
 namespace app\models;
 
-use app\services\ModelService;
-use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -31,5 +29,16 @@ class GoodsImage extends ActiveRecord
         return [
             [['goods_id', 'image'], 'required']
         ];
+    }
+
+    /**
+     * Check goods images number
+     *
+     * @param array $images
+     * @return bool
+     */
+    public static function validateImages(array $images)
+    {
+        return count($images) <= Yii::$app->params['goods']['maxImagesCnt'];
     }
 }

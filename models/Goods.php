@@ -452,6 +452,12 @@ AND goods.id IN (" . $id . ")";
         return false;
     }
 
+    /**
+     * Sanitize post data
+     *
+     * @param ActiveRecord $user user model
+     * @param array $postData post data
+     */
     public function sanitize(ActiveRecord $user, array &$postData)
     {
         if (isset($postData['category_id'])) {
@@ -459,18 +465,39 @@ AND goods.id IN (" . $id . ")";
         }
 
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            if ($this->status == self::STATUS_WAIT_ONLINE) {
-                if (isset($postData['purchase_price_decoration_company'])) {
-                    unset($postData['purchase_price_decoration_company']);
-                }
-                if (isset($postData['purchase_price_manager'])) {
-                    unset($postData['purchase_price_manager']);
-                }
-                if (isset($postData['purchase_price_designer'])) {
-                    unset($postData['purchase_price_designer']);
+            if (isset($postData['purchase_price_decoration_company'])) {
+                unset($postData['purchase_price_decoration_company']);
+            }
+            if (isset($postData['purchase_price_manager'])) {
+                unset($postData['purchase_price_manager']);
+            }
+            if (isset($postData['purchase_price_designer'])) {
+                unset($postData['purchase_price_designer']);
+            }
+        }
+    }
+
+    /**
+     * Sanitize post data
+     *
+     * @param ActiveRecord $user user model
+     * @param array $postData post data
+     * @return bool
+     */
+    public function validateImages(ActiveRecord $user, array $images)
+    {
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            if (in_array($this->status, [
+                self::STATUS_WAIT_ONLINE,
+                self::STATUS_ONLINE
+            ])) {
+                if (!GoodsImage::validateImages($images)) {
+                    return false;
                 }
             }
         }
+
+        return true;
     }
 
     /**
