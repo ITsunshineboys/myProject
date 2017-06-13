@@ -69,6 +69,7 @@ class MallController extends Controller
         'logistics-templates-supplier',
         'goods-attr-add',
         'goods-attr-list-admin',
+        'goods-add',
     ];
 
     /**
@@ -123,6 +124,7 @@ class MallController extends Controller
                     'logistics-template-add' => ['post',],
                     'logistics-template-edit' => ['post',],
                     'goods-attr-add' => ['post',],
+                    'goods-add' => ['post',],
                 ],
             ],
         ];
@@ -2457,5 +2459,91 @@ class MallController extends Controller
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
         $categoryId > 0 && $ret['data']['category-attrs'] = GoodsAttr::detailsByCategoryId($categoryId);
         return Json::encode($ret);
+    }
+
+    /**
+     * Add goods action
+     *
+     * @return string
+     */
+    public function actionGoodsAdd()
+    {
+        $code = 1000;
+
+        $goods = new Goods;
+        $goods->attributes = Yii::$app->request->post();
+
+        $goods->scenario = Goods::SCENARIO_ADD;
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$goods->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $names = Yii::$app->request->post('names', []);
+        $values = Yii::$app->request->post('values', []);
+
+        $attrCnt = count($names);
+        if ($attrCnt > 0) {
+            if ($attrCnt != count($values)) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!GoodsAttr::validateNames($names)) {
+                $code = 1009;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        foreach ($names as $i => $name) {
+            $goodsAttr = new GoodsAttr;
+            $goodsAttr->name = $name;
+            $goodsAttr->value = $values[$i];
+            $goodsAttr->goods_id = $goods->id;
+            $goodsAttr->category_id = $goods->category_id;
+
+            if (!$goodsAttr->validate()) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$goodsAttr->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
     }
 }

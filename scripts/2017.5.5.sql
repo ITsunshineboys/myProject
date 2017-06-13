@@ -32,6 +32,7 @@ CREATE TABLE `goods` (
   `delete_time` int not null DEFAULT 0,
   `status` tinyint(1) not null DEFAULT 0 comment '0：已下架, 1：等待上架, 2：已上架, 3：已删除',
   `after_sale_services` set('0', '1', '2', '3', '4') not null DEFAULT '0' comment '0：提供发票, 1：退货, 2：换货, 3：上门维修, 4:上门安装',
+  `logistics_template_id` int(11) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -162,7 +163,6 @@ create table logistics_district (
   `template_id` int(11) not null default 0,
   `district_code` int(6) unsigned not null default 0,
   `district_name` varchar(100) not null DEFAULT '',
-  `goods_id` int(11) not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

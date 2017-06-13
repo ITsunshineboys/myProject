@@ -21,6 +21,10 @@ class Goods extends ActiveRecord
     const STATUS_WAIT_ONLINE = 1;
     const STATUS_ONLINE = 2;
     const STATUS_DELETED = 3;
+    const AFTER_SALE_SERVICE_NECESSARY = 0;
+    const SCENARIO_ADD = 'add';
+    const SCENARIO_EDIT = 'edit';
+    const SCENARIO_REVIEW = 'review';
 
     const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
 
@@ -245,17 +249,17 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level = '', $title = '',$city = 510100)
+    public static function priceDetail($level = '', $title = '', $city = 510100)
     {
         if (empty($level) && empty($title)) {
             echo '请正确输入值';
             exit;
         } else {
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = ".$city."  AND goods_category.`level` = ".$level." AND goods_category.title LIKE '".$title."'";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = " . $city . "  AND goods_category.`level` = " . $level . " AND goods_category.title LIKE '" . $title . "'";
             $a = $db->createCommand($sql)->queryAll();
         }
-        if(!empty($a)){
+        if (!empty($a)) {
             foreach ($a as $v => $k) {
                 $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
                 $max = array_search(max($c), $c);
@@ -280,17 +284,17 @@ class Goods extends ActiveRecord
     /**
      * @param array $id
      */
-    public static function findQueryAll($all = [],$city =510100)
+    public static function findQueryAll($all = [], $city = 510100)
     {
         if ($all) {
             $goods_id = [];
             foreach ($all as $single) {
                 $goods_id [] = $single['goods_id'];
             }
-            $id = implode(',',$goods_id);
+            $id = implode(',', $goods_id);
             $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id  WHERE logistics_district.district_code = ".$city."
-AND goods.id IN (".$id .")";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id  WHERE logistics_district.district_code = " . $city . "
+AND goods.id IN (" . $id . ")";
             $all_goods = $db->createCommand($sql)->queryAll();
         }
         return $all_goods;
@@ -302,11 +306,17 @@ AND goods.id IN (".$id .")";
     public function rules()
     {
         return [
-            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required'],
+            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_REVIEW],
+            [['title', 'subtitle', 'category_id', 'brand_id', 'image1', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_ADD],
             [['title', 'subtitle'], 'string', 'length' => [1, 16]],
+            [['image1', 'image2', 'image3', 'image4', 'image5'], 'string'],
             [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id'], 'number', 'integerOnly' => true, 'min' => 0],
-            ['supplier_price', 'validateSupplierPrice'],
+            ['supplier_price', 'validateSupplierPrice', 'on' => self::SCENARIO_REVIEW],
+            ['platform_price', 'validatePlatformPrice', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             ['after_sale_services', 'validateAfterSaleServices'],
+            [['category_id'], 'validateCategoryId'],
+            [['brand_id'], 'validateBrandId'],
+            [['logistics_template_id'], 'validateLogisticsTemplateId'],
             ['description', 'safe']
         ];
     }
@@ -322,7 +332,9 @@ AND goods.id IN (".$id .")";
         $afterSaleServices = explode(',', $this->$attribute);
         $serviceIds = array_keys(self::AFTER_SALE_SERVICES);
 
-        if (array_diff($afterSaleServices, $serviceIds)) {
+        if (array_diff($afterSaleServices, $serviceIds)
+            || !in_array(self::AFTER_SALE_SERVICE_NECESSARY, $serviceIds)
+        ) {
             $this->addError($attribute);
             return false;
         }
@@ -333,7 +345,7 @@ AND goods.id IN (".$id .")";
     /**
      * Validates prices
      *
-     * @param string $attribute supplier_price, platform_price, market_price to validate
+     * @param string $attribute supplier_price, platform_price, market_price and purchase prices to validate
      * @return bool
      */
     public function validateSupplierPrice($attribute)
@@ -344,6 +356,94 @@ AND goods.id IN (".$id .")";
             && $this->purchase_price_decoration_company <= $this->purchase_price_designer
             && $this->purchase_price_designer <= $this->platform_price
             && $this->platform_price <= $this->market_price
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates prices
+     *
+     * @param string $attribute supplier_price, platform_price, market_price to validate
+     * @return bool
+     */
+    public function validatePlatformPrice($attribute)
+    {
+        if ($this->supplier_price <= $this->$attribute
+            && $this->$attribute <= $this->market_price
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates category_id
+     *
+     * @param string $attribute category_id to validate
+     * @return bool
+     */
+    public function validateCategoryId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'level' => GoodsCategory::LEVEL3
+        ];
+
+        if ($this->$attribute > 0
+            && GoodsCategory::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates brand_id
+     *
+     * @param string $attribute brand_id to validate
+     * @return bool
+     */
+    public function validateBrandId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'status' => GoodsBrand::STATUS_ONLINE,
+        ];
+
+        if ($this->$attribute > 0
+            && GoodsBrand::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates logistics_template_id
+     *
+     * @param string $attribute logistics_template_id to validate
+     * @return bool
+     */
+    public function validateLogisticsTemplateId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'status' => LogisticsTemplate::STATUS_ONLINE,
+        ];
+
+        if ($this->$attribute > 0
+            && LogisticsTemplate::find()->where($where)->exists()
         ) {
             return true;
         }

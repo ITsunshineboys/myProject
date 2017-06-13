@@ -111,22 +111,6 @@ class GoodsAttr extends ActiveRecord
     }
 
     /**
-     * Validates name when add goods attribute
-     *
-     * @param string $attribute name to validate
-     * @return bool
-     */
-    public function validateName($attribute)
-    {
-        if (self::find()->where(['goods_id' => 0, $attribute => $this->$attribute])->exists()) {
-            $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Validates category_id
      *
      * @param string $attribute category_id to validate
@@ -148,9 +132,8 @@ class GoodsAttr extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'unit', 'category_id'], 'required'],
+            [['name', 'category_id'], 'required'],
             ['name', 'string', 'length' => [1, 6]],
-            ['name', 'validateName'],
             ['category_id', 'validateCategoryId'],
             ['unit', 'in', 'range' => array_keys(self::UNITS)],
             ['addition_type', 'in', 'range' => array_keys(self::ADDITION_TYPES)]
