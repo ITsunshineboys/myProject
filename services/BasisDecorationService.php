@@ -84,6 +84,57 @@ class BasisDecorationService
      return $cost;
     }
 
+    public static function waterwayGoods($points = '',$goods = [],$crafts= '')
+    {
+        if ($points && $goods)
+       {
+            $pvc_value = 0;
+            $pvc_price = 0;
+            $ppr_value = 0;
+            $ppr_price = 0;
+            foreach ($goods as $one)
+            {
+                if($one['title'] == 'PVC')
+                {
+                    $pvc_value = $one['value'];
+                    $pvc_price = $one['platform_price'];
+                }
+                if($one['title'] == 'PPR')
+                {
+                    $ppr_value = $one['value'];
+                    $ppr_price = $one['platform_price'];
+                }
+
+            }
+            $ppr = 0;
+            $pvc = 0;
+            foreach ($crafts as $craft)
+            {
+                if($craft['project_details'] == 'PPR')
+                {
+                    $ppr = $craft['material'];
+                }
+
+                if($craft['project_details'] == 'PVC')
+                {
+                    $pvc =  $craft['material'];
+                }
+            }
+           //             PPR费用：个数×抓取的商品价格
+//            个数：（水路总点位×【2m】÷抓取的商品的长度）
+//            PVC费用：个数×抓取的商品价格
+//            个数：（水路总点位×【2m】÷抓取的商品的长度）
+            $ppr_quantity = ceil($points * $ppr / $ppr_value);
+            //PPR费用
+            $ppr_cost = $ppr_quantity * $ppr_price;
+            $pvc_quantity = ceil($points * $ppr / $pvc_value);
+            $pvc_cost = $pvc_quantity * $pvc_price;
+            $cost = $ppr_cost + $pvc_cost;
+
+       }
+        return $cost;
+    }
+
 
     /**
      * 地面面积计算公式

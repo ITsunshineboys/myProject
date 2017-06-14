@@ -37,7 +37,7 @@ class Points extends ActiveRecord
     }
 
     /**
-     * 防水点位
+     * 水路点位
      * @param $id
      * @return int|mixed
      */
@@ -63,5 +63,13 @@ class Points extends ActiveRecord
         }
 
         return $strong_id;
+    }
+
+    public static function strongPointsAll($id)
+    {
+        if($id){
+            $all = self::find()->asArray()->where(['effect_id'=>$id])->all();
+        }
+        return $all;
     }
 }

@@ -29,15 +29,16 @@ class DecorationAdd extends ActiveRecord
     {
         if($str)
         {
-            $add = self::find()->where(['project'=>$str])->all();
-            $add_price = 0;
+            $add = self::find()->asArray()->where(['and',['project'=>$str],['district_code'=>$city]])->all();
+            $add_prices = [];
             foreach ($add as $one)
             {
-                if($one['max_area']>= $all_area && $one['min_area'] <= $all_area){
-                    $add_price = $one['price'];
+                if($one['max_area'] >= $all_area && $one['min_area'] <= $all_area){
+                    $add_prices [] = $one['price'];
                 }
             }
         }
+        $add_price = array_sum($add_prices);
         return $add_price;
     }
 

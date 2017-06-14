@@ -21,8 +21,10 @@ use app\models\LifeAssort;
 use app\models\MoveFurniture;
 use app\models\Points;
 use app\models\PointsDetails;
+use app\models\PointsTotal;
 use app\models\Series;
 use app\models\SoftOutfitAssort;
+use app\models\StairsDetails;
 use app\models\Style;
 use app\models\StylePicture;
 use app\models\WaterproofReconstruction;
@@ -84,10 +86,11 @@ class OwnerController extends Controller
     }
 
     /**
-     * 系列和风格
+     * 系列、风格、楼梯
      */
     public function actionSeriesAndStyle()
     {
+        $stairs_details = StairsDetails::find()->all();
         $series = Series::findByAll();
         $style = Style::findByAll();
         $style_picture = StylePicture::findById($style);
@@ -95,6 +98,7 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' => [
+                'stairs_details' =>$stairs_details,
                 'series' => $series,
                 'style' => $style,
                 'style_picture' => $style_picture,
@@ -249,43 +253,71 @@ class OwnerController extends Controller
         }else{
             $strong_points = 0;
             $effect = Effect::find()->where(['id'=>1])->one();
-            $points = Points::find()->where(['effect_id'=>$effect['id']])->all();
-            foreach ($points as $one){
-                if($one['weak_current_points'] !== 0 )
-                {
-                    $weak_current_place []  = $one['place'];
-                    $weak_current_points [] = $one['weak_current_points'];
+            $points = Points::strongPointsAll($effect);
+            $points_total = PointsTotal::findByAll($points);
+            $points_places = [];
+            foreach ($points_total as $one){
+                if($one['place'] == '客厅'){
+                    $sitting_room =  $one['points_total'] *  $post['sitting_room'];
+                    $sitting_room = $sitting_room ?? 0;
+                    $points_places [] = $sitting_room;
+                }elseif ($one['place'] == '主卧'){
+                    $master_bedroom = $one['points_total'] * $post['master_bedroom'];
+                    $master_bedroom = $master_bedroom ?? 0;
+                    $points_places [] = $master_bedroom;
+                }elseif ($one['place'] == '次卧'){
+                    $secondary_bedroom = $one['points_total'] * $post['secondary_bedroom'];
+                    $secondary_bedroom = $secondary_bedroom ?? 0;
+                    $points_places [] = $secondary_bedroom;
+                }elseif ($one['place'] == '餐厅'){
+                    $dining_room = $one['points_total'] * $post['dining_room'];
+                    $dining_room = $dining_room ?? 0;
+                    $points_places [] = $dining_room;
+                }elseif ($one['place'] == '厨房'){
+                    $kitchen = $one['points_total'] * $post['kitchen'];
+                    $kitchen = $kitchen ?? 0;
+                    $points_places [] = $kitchen;
+                }elseif ($one['place'] == '卫生间'){
+                    $toilet = $one['points_total'] * $post['toilet'];
+                    $toilet = $toilet ?? 0;
+                    $points_places [] = $toilet;
+                }elseif ($one['place'] !== '卫生间'  && $one['place'] !== '客厅' && $one['place'] !== '主卧' && $one['place'] !== '次卧' && $one['place'] !== '餐厅' && $one['place'] !== '厨房' && $one['place'] !== '卫生间' ){
+                    $other [] = $one;
                 }
             }
-            $weak_current_all = array_combine($weak_current_place,$weak_current_points);
-            $sitting_room = $weak_current_all['客厅'] * $post['sitting_room'];
-            $master_bedroom = $weak_current_all['主卧'] * $post['master_bedroom'];
-            $secondary_bedroom = $weak_current_all['次卧'] * $post['secondary_bedroom'];
-            $strong_points = $sitting_room + $master_bedroom + $secondary_bedroom;
+            $other_points = 0;
+            foreach ($other as $other_one)
+            {
+                $other_points += $other_one['points_total'];
+                $points_places [] = $other_points;
+            }
+            $points_details = array_sum($points_places);
         }
 
+        //材料查询
         if(empty($post['effect_id'])){
             //查询弱电所需要材料
-            $weak_current = [];
+            $strong_current = [];
             $electric_wire = '电线';
-            $weak_current [] = Goods::priceDetail(3, $electric_wire);
+            $strong_current [] = Goods::priceDetail(3, $electric_wire);
             $pipe = '线管';
-            $weak_current [] = Goods::priceDetail(3, $pipe);
+            $strong_current [] = Goods::priceDetail(3, $pipe);
             $box = '底盒';
-            $weak_current [] = Goods::priceDetail(3, $box);
+            $strong_current [] = Goods::priceDetail(3, $box);
         }else{
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list,'强电');
-            $weak_current = Goods::findQueryAll($weak,$post['city']);
+            $strong_current = Goods::findQueryAll($weak,$post['city']);
         }
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('强电',$post['city']);
 
         //人工总费用
-        $labor_all_cost = BasisDecorationService::laborFormula($strong_points,$worker);
+        $labor_all_cost = BasisDecorationService::laborFormula($points_details,$worker);
+
         //材料总费用
-        $material_price = BasisDecorationService::quantity($strong_points,$weak_current,$craft);
+        $material_price = BasisDecorationService::quantity($points_details,$strong_current,$craft);
         $add_price = DecorationAdd::findByAll('强电',$post['area'],$post['city']);
 
         return Json::encode([
@@ -305,104 +337,89 @@ class OwnerController extends Controller
      */
     public function actionWaterway()
     {
-        //基础装修
-        $receive = \Yii::$app->request->post();
-        $post = Json::decode($receive);
-        $post = [
-//            'effect_id' => 1,
-            'room' => 1,
-            'hall' => 1,
-            'window' => 2,
-            'high' => 2.8,
-            'area' => 62,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'style' => 1,
-            'series' => 1,
-            'province' => '四川',
-            'city' => '成都'
-        ];
-        $arr = [];
-        $arr['profit'] = $post['1'] ?? 0.7;
-        $arr['worker_kind'] = '水电';
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
+            $post = [
+                'effect_id' => 1,
+                'master_bedroom' => 1,
+                'secondary_bedroom' => 1,
+                'sitting_room' => 1,
+                'dining_room' => 1,
+                'window' => 2,
+                'high' => 2.8,
+                'area' => 62,
+                'toilet' => 1,
+                'kitchen' => 1,
+                'style' => 1,
+                'series' => 1,
+                'province' => 510000,
+                'city' => 510100
+            ];
+            $arr = [];
+            $arr['profit'] = $post['1'] ?? 0.7;
+            $arr['worker_kind'] = '水电';
 
-        //人工一天价格
-        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
-        $arr['day_standard'] = $worker[0]['day_points'];
-        $arr['day_price'] = $worker[0]['univalence'];
+            //人工价格
+            $worker = LaborCost::univalence($post,$arr['worker_kind']);
 
-        //查询水路所需要材料
-        if(empty($post['effect_id']))
-        {
-            //ppr热水管
-            $pipe = 'PPR热水管';
-            $waterway = [];
-            $ppr = Goods::priceDetail(3,$pipe);
-            $waterway [] = BasisDecorationService::wire($ppr['platform_price'],4,0.5);
-            //pvc管
-            $pvc_pipe ='pvc管';
-            $pvc = Goods::priceDetail(3,$pvc_pipe);
-            $waterway [] = BasisDecorationService::wire($pvc['platform_price'],4,0.5);
-        }else{
-
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $weak = WaterwayReconstruction::findByAll($decoration_list);
-            $waterway = [];
-            $goods = Goods::findQueryAll($weak);
-            foreach ($weak as $single)
+            //点位查询
+            if (!empty($post['effect_id']))
             {
-                if($single['material'] == 'PPR热水管')
-                {
-                    foreach ($goods as $unit_price)
+                $waterway_points = Points::waterwayPoints($post['effect_id']);
+            }else{
+                $waterway_points = 0;
+                $effect = Effect::find()->where(['id'=>1])->one();
+                $points = Points::find()->where(['effect_id'=>$effect['id']])->all();
+                $other = 0;
+                foreach ($points as $one){
+                    if($one['waterway_points'] !== 0 )
                     {
-                        if ($single['goods_id'] == $unit_price['id'])
-                        {
-                            $electric_wire = BasisDecorationService::wire($unit_price['platform_price'],4,0.5);
-                            $waterway [] = $electric_wire;
-                        }
+                        $waterway_current_place []  = $one['place'];
+                        $waterway_current_points [] = $one['waterway_points'];
                     }
-                }elseif ($single['material'] == 'pvc管')
-                {
-                    foreach ($goods as $unit_price)
-                    {
-                        if ($single['goods_id'] == $unit_price['id'])
-                        {
 
-                            $electric_wire = BasisDecorationService::wire($unit_price['platform_price'],4,0.5);
-                            $waterway [] = $electric_wire;
-                        }
-                    }
-                }elseif ($single['material'] !== 'PPR热水管' && $single['material'] !== 'pvc管')
-                {
-                    foreach ($goods as $unit_price)
-                    {
-                        if($single['goods_id'] == $unit_price['id'])
-                        {
-                            $waterway [] = $unit_price['platform_price'];
-                        }
+                    if($one['place'] !== '厨房' && $one['place'] !== '卫生间'){
+                        $other += $one['waterway_points'];
                     }
                 }
+                $waterway_current_all = array_combine($waterway_current_place,$waterway_current_points);
+                $kitchen = $waterway_current_all['厨房'] * $post['kitchen'];
+                $toilet = $waterway_current_all['卫生间'] * $post['toilet'];
+                $waterway_points = $kitchen + $toilet + $other;
             }
-        }
-        if (!empty($post['effect_id'])) {
-            //查询所有水路点位
-            $effect_id = Effect::find()->where(['id' => $post['effect_id']])->all();
-            $points = Points::waterwayPoints($effect_id);
-        } else {
-            $effect = Effect::conditionQuery($post);
-            $points = Points::waterwayPoints($effect['id']);
-        }
 
-        $waterway_remould = ceil(BasisDecorationService::formula($arr,$points,$waterway));
-        $add_price = DecorationAdd::findByAll('水路',$post['area']);
-        $waterway_remould_price = $waterway_remould + $add_price;
-        return Json::encode([
-            'code' => 200,
-            'msg' => '成功',
-            'data' => [
-                'waterway_remould_price' => $waterway_remould_price,
-            ]
-        ]);
+            if(empty($post['effect_id'])){
+                //查询弱电所需要材料
+                $waterway_current = [];
+                $electric_wire = 'PPR';
+                $waterway_current [] = Goods::priceDetail(3, $electric_wire);
+                $pipe = 'PVC';
+                $waterway_current [] = Goods::priceDetail(3, $pipe);
+            }else{
+                $decoration_list = DecorationList::findById($post['effect_id']);
+                $weak = WaterwayReconstruction::findByAll($decoration_list);
+                $waterway_current = Goods::findQueryAll($weak,$post['city']);
+            }
+
+            //当地工艺
+            $craft = EngineeringStandardCraft::findByAll('水路',$post['city']);
+
+            //人工总费用
+            $labor_all_cost = BasisDecorationService::laborFormula($waterway_points,$worker);
+            //材料总费用
+            $material_price = BasisDecorationService::waterwayGoods($waterway_points,$waterway_current,$craft);
+            //添加材料费用
+            $add_price = DecorationAdd::findByAll('水路',$post['area'],$post['city']);
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => '成功',
+                'data' => [
+                    'waterway_labor_price' => $labor_all_cost,
+                    'waterway_material_price' => $material_price,
+                    'waterway_add_price' => $add_price,
+                ]
+            ]);
     }
 
     /**
@@ -411,44 +428,42 @@ class OwnerController extends Controller
      */
     public function actionWaterproof()
     {
-        $receive = \Yii::$app->request->post();
-        $post = Json::decode($receive);
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
         $post = [
             'effect_id' => 1,
-            'room' => 1,
-            'hall' => 1,
+            'master_bedroom' => 1,
+            'secondary_bedroom' => 1,
+            'sitting_room' => 1,
+            'dining_room' => 1,
             'window' => 2,
             'high' => 2.8,
-            'area' => 40,
+            'area' => 62,
             'toilet' => 1,
             'kitchen' => 1,
             'style' => 1,
             'series' => 1,
-            'province' => '四川',
-            'city' => '成都'
+            'province' => 510000,
+            'city' => 510100
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水电';
 
-        //人工一天价格
-        $worker = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
-        $arr['day_standard'] = $worker[0]['day_area'];
-        $arr['day_price'] = $worker[0]['univalence'];
+        //人工价格
+        $worker = LaborCost::univalence($post,$arr['worker_kind']);
 
         //防水所需材料
-        if(!empty($post['effect_id'])){
+
+        if(empty($post['effect_id'])){
+            //查询弱电所需要材料
+            $waterproof = [];
+            $electric_wire = '防水涂剂';
+            $waterproof [] = Goods::priceDetail(3, $electric_wire);
+        }else{
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterproofReconstruction::findByAll($decoration_list);
-            $waterproof = [];
-            $goods = Goods::findQueryAll($weak);
-            $waterproof [] = BasisDecorationService::wire($goods['platform_price'],25,1.25);
-        }else{
-            //ppr热水管
-            $pipe = '防水';
-            $goods = Goods::priceDetail(3,$pipe);
-            $waterproof = [];
-            $waterproof [] = BasisDecorationService::wire($goods['platform_price'],25,1.25);
+            $waterproof [] = Goods::findQueryAll($weak,$post['city']);
         }
 
         //防水所需面积
@@ -463,8 +478,8 @@ class OwnerController extends Controller
             //总面积
             $total_area = intval($total_area_float);
         }else{
-            $kitchen_percent = $post['12'] ?? 0.3;
-            $kitchen_high = $post['13'] ?? 0.3;
+//            $kitchen_percent = $post['area'] / ;
+//            $kitchen_high = $post['13'] ?? 0.3;
             //厨房地面面积
             $kitchen_ground_area = $kitchen_percent * $post['area'];
             //厨房墙面面积
