@@ -478,29 +478,6 @@ AND goods.id IN (" . $id . ")";
     }
 
     /**
-     * Sanitize post data
-     *
-     * @param ActiveRecord $user user model
-     * @param array $postData post data
-     * @return bool
-     */
-    public function validateImages(ActiveRecord $user, array $images)
-    {
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            if (in_array($this->status, [
-                self::STATUS_WAIT_ONLINE,
-                self::STATUS_ONLINE
-            ])) {
-                if (!GoodsImage::validateImages($images)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Check if can edit goods
      *
      * @param ActiveRecord $user user model
@@ -514,11 +491,17 @@ AND goods.id IN (" . $id . ")";
             self::STATUS_OFFLINE
         ];
 
-        if (in_array($this->status, $statuses)) {
-            return true;
+        if (!in_array($this->status, $statuses)) {
+            return false;
         }
 
-        return false;
+        if ($this->status == self::STATUS_OFFLINE
+            && $user->login_role_id == Yii::$app->params['supplierRoleId']
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

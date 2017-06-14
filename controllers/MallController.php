@@ -2595,7 +2595,9 @@ class MallController extends Controller
         $goods = Goods::findOne($id);
         $user = Yii::$app->user->identity;
 
-        if (!$goods->validateImages($user, $images)) {
+        if (!GoodsImage::validateImages($images)
+            || !$goods->canEdit($user)
+        ) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
