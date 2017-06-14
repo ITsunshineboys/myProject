@@ -530,21 +530,6 @@ AND goods.id IN (" . $id . ")";
     }
 
     /**
-     * Convert price
-     */
-    public function afterFind()
-    {
-        parent::afterFind();
-
-        isset($this->platform_price) && $this->platform_price /= 100;
-        isset($this->supplier_price) && $this->supplier_price /= 100;
-        isset($this->market_price) && $this->market_price /= 100;
-        isset($this->purchase_price_decoration_company) && $this->purchase_price_decoration_company /= 100;
-        isset($this->purchase_price_manager) && $this->purchase_price_manager /= 100;
-        isset($this->purchase_price_designer) && $this->purchase_price_designer /= 100;
-    }
-
-    /**
      * Do some ops before insertion
      *
      * @param bool $insert if is a new record
@@ -557,12 +542,6 @@ AND goods.id IN (" . $id . ")";
             $user = Yii::$app->user->identity;
 
             $this->description && $this->description = HtmlPurifier::process($this->description);
-            $this->platform_price && $this->platform_price *= 100;
-            $this->supplier_price && $this->supplier_price *= 100;
-            $this->market_price && $this->market_price *= 100;
-            $this->purchase_price_decoration_company && $this->purchase_price_decoration_company *= 100;
-            $this->purchase_price_manager && $this->purchase_price_manager *= 100;
-            $this->purchase_price_designer && $this->purchase_price_designer *= 100;
 
             if ($insert) {
                 $this->create_time = $now;
