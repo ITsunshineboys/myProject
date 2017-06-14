@@ -474,6 +474,19 @@ AND goods.id IN (" . $id . ")";
             if (isset($postData['purchase_price_designer'])) {
                 unset($postData['purchase_price_designer']);
             }
+        } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            if (in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE])) {
+                $cleanData = [];
+                if (isset($postData['purchase_price_decoration_company'])) {
+                    $cleanData['purchase_price_decoration_company'] = $postData['purchase_price_decoration_company'];
+                }
+                if (isset($postData['purchase_price_manager'])) {
+                    $cleanData['purchase_price_manager'] = $postData['purchase_price_manager'];
+                }
+                if (isset($postData['purchase_price_designer'])) {
+                    $cleanData['purchase_price_designer'] = $postData['purchase_price_designer'];
+                }
+            }
         }
     }
 

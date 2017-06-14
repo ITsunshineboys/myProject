@@ -2608,7 +2608,12 @@ class MallController extends Controller
         $goods->sanitize($user, $postData);
         $goods->attributes = $postData;
 
-        $goods->scenario = Goods::SCENARIO_ADD;
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $goods->scenario = Goods::SCENARIO_ADD;
+        } elseif ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $goods->scenario = Goods::SCENARIO_REVIEW;
+        }
+
         if (!$goods->validate()) {
             return Json::encode([
                 'code' => $code,
