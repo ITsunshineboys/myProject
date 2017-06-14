@@ -309,8 +309,8 @@ AND goods.id IN (" . $id . ")";
             [['title', 'subtitle', 'category_id', 'brand_id', 'cover_image', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_REVIEW],
             [['title', 'subtitle', 'category_id', 'brand_id', 'cover_image', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_ADD],
             [['title', 'subtitle'], 'string', 'length' => [1, 16]],
-            [['cover_image'], 'string'],
-            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id'], 'number', 'integerOnly' => true, 'min' => 0],
+            [['cover_image', 'offline_reason', 'reason'], 'string'],
+            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id'], 'number', 'min' => 0],
             ['supplier_price', 'validateSupplierPrice', 'on' => self::SCENARIO_REVIEW],
             ['platform_price', 'validatePlatformPrice', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             ['after_sale_services', 'validateAfterSaleServices'],
@@ -474,9 +474,13 @@ AND goods.id IN (" . $id . ")";
             if (isset($postData['purchase_price_designer'])) {
                 unset($postData['purchase_price_designer']);
             }
+            if (isset($postData['offline_reason'])) {
+                unset($postData['offline_reason']);
+            }
         } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
-            if (in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE])) {
+            if (in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE, self::STATUS_WAIT_ONLINE])) {
                 $cleanData = [];
+
                 if (isset($postData['purchase_price_decoration_company'])) {
                     $cleanData['purchase_price_decoration_company'] = $postData['purchase_price_decoration_company'];
                 }
@@ -486,6 +490,14 @@ AND goods.id IN (" . $id . ")";
                 if (isset($postData['purchase_price_designer'])) {
                     $cleanData['purchase_price_designer'] = $postData['purchase_price_designer'];
                 }
+                if ($this->status == self::STATUS_OFFLINE && isset($postData['offline_reason'])) {
+                    $cleanData['offline_reason'] = $postData['offline_reason'];
+                }
+                if ($this->status == self::STATUS_WAIT_ONLINE && isset($postData['reason'])) {
+                    $cleanData['reason'] = $postData['reason'];
+                }
+
+                $postData = $cleanData;
             }
         }
     }
@@ -527,7 +539,9 @@ AND goods.id IN (" . $id . ")";
         isset($this->platform_price) && $this->platform_price /= 100;
         isset($this->supplier_price) && $this->supplier_price /= 100;
         isset($this->market_price) && $this->market_price /= 100;
-        isset($this->purchase_price) && $this->purchase_price /= 100;
+        isset($this->purchase_price_decoration_company) && $this->purchase_price_decoration_company /= 100;
+        isset($this->purchase_price_manager) && $this->purchase_price_manager /= 100;
+        isset($this->purchase_price_designer) && $this->purchase_price_designer /= 100;
     }
 
     /**
@@ -540,15 +554,19 @@ AND goods.id IN (" . $id . ")";
     {
         if (parent::beforeSave($insert)) {
             $now = time();
+            $user = Yii::$app->user->identity;
+
+            $this->description && $this->description = HtmlPurifier::process($this->description);
+            $this->platform_price && $this->platform_price *= 100;
+            $this->supplier_price && $this->supplier_price *= 100;
+            $this->market_price && $this->market_price *= 100;
+            $this->purchase_price_decoration_company && $this->purchase_price_decoration_company *= 100;
+            $this->purchase_price_manager && $this->purchase_price_manager *= 100;
+            $this->purchase_price_designer && $this->purchase_price_designer *= 100;
 
             if ($insert) {
                 $this->create_time = $now;
                 $this->status = self::STATUS_WAIT_ONLINE;
-
-                $user = Yii::$app->user->identity;
-                if (!$user) {
-                    return false;
-                }
 
                 if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
                     $supplier = Supplier::find()->where(['uid' => $user->id])->one();
@@ -558,8 +576,6 @@ AND goods.id IN (" . $id . ")";
 
                     $this->supplier_id = $supplier->id;
                 }
-
-                $this->description && $this->description = HtmlPurifier::process($this->description);
             }
 
             return true;

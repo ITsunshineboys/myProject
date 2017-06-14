@@ -32,6 +32,7 @@ CREATE TABLE `goods` (
   `offline_reason` varchar(100) not null DEFAULT '' comment '下架原因',
   `offline_person` varchar(20) not null DEFAULT '' comment '下架人',
   `offline_uid` int(11) unsigned not null DEFAULT 0,
+  `reason` varchar(100) not null DEFAULT '' comment '审核原因',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

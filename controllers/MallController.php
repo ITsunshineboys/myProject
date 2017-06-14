@@ -72,6 +72,7 @@ class MallController extends Controller
         'goods-attr-list-admin',
         'goods-add',
         'goods-edit',
+        'goods-edit-lhzz',
         'goods-attrs-admin',
     ];
 
@@ -2596,6 +2597,7 @@ class MallController extends Controller
         $user = Yii::$app->user->identity;
 
         if (!GoodsImage::validateImages($images)
+            || !$goods
             || !$goods->canEdit($user)
         ) {
             return Json::encode([
@@ -2608,11 +2610,7 @@ class MallController extends Controller
         $goods->sanitize($user, $postData);
         $goods->attributes = $postData;
 
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            $goods->scenario = Goods::SCENARIO_ADD;
-        } elseif ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            $goods->scenario = Goods::SCENARIO_REVIEW;
-        }
+        $goods->scenario = Goods::SCENARIO_ADD;
 
         if (!$goods->validate()) {
             return Json::encode([
@@ -2688,6 +2686,62 @@ class MallController extends Controller
         }
 
         $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Lhzz edit goods action
+     *
+     * @return string
+     */
+    public function actionGoodsEditLhzz()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods = Goods::findOne($id);
+        $user = Yii::$app->user->identity;
+
+        if (!$goods
+            || !$goods->canEdit($user)
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $postData = Yii::$app->request->post();
+        $goods->sanitize($user, $postData);
+        $goods->attributes = $postData;
+
+        $goods->scenario = Goods::SCENARIO_REVIEW;
+
+        if (!$goods->validate()) {print_r($goods->errors);
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         return Json::encode([
             'code' => 200,

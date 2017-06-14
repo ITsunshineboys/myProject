@@ -60,5 +60,6 @@ return [
     // goods
     'goods-add' => [6],
     'goods-edit' => [1, 6],
+    'goods-edit-lhzz' => [1],
     'goods-attrs-admin' => [6],
 ];
