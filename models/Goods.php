@@ -501,6 +501,27 @@ AND goods.id IN (" . $id . ")";
     }
 
     /**
+     * Check if can edit goods
+     *
+     * @param ActiveRecord $user user model
+     * @return bool
+     */
+    public function canEdit(ActiveRecord $user)
+    {
+        $statuses = [
+            self::STATUS_WAIT_ONLINE,
+            self::STATUS_ONLINE,
+            self::STATUS_OFFLINE
+        ];
+
+        if (in_array($this->status, $statuses)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Convert price
      */
     public function afterFind()

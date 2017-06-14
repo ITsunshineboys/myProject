@@ -18,6 +18,8 @@ class GoodsAttr extends ActiveRecord
     const ADDITION_TYPE_NORMAL = 0;
     const ADDITION_TYPE_DROPDOWN_LIST = 1;
     const ERROR_CODE_SAME_NAME = 1009;
+    const FROM_TYPE_LHZZ = 0;
+    const FROM_TYPE_SUPPLIER = 1;
 
     const UNITS = [
         '无',
@@ -71,13 +73,12 @@ class GoodsAttr extends ActiveRecord
     }
 
     /**
-     * Get attributes by category id
+     * Get attributes(set by lhzz admin) by category id
      *
      * @param int $categoryId category id
-     * @param bool $isLhzzAdmin if operator is lhzz admin
      * @return array
      */
-    public static function detailsByCategoryId($categoryId, $isLhzzAdmin = true)
+    public static function detailsByCategoryId($categoryId)
     {
         $categoryId = (int)$categoryId;
         if ($categoryId <= 0) {
@@ -86,8 +87,7 @@ class GoodsAttr extends ActiveRecord
 
         $sql = "select name, value, unit, addition_type"
             . " from {{%" . self::tableName() . "}}"
-            . " where category_id = {$categoryId}";
-        $isLhzzAdmin && $sql .= ' and goods_id = 0';
+            . " where category_id = {$categoryId} and goods_id = 0";
 
         $attrs = Yii::$app->db
             ->createCommand($sql)
@@ -111,33 +111,70 @@ class GoodsAttr extends ActiveRecord
     }
 
     /**
-     * Validates category_id
+     * Get attributes(set by supplier) by category id
      *
-     * @param string $attribute category_id to validate
-     * @return bool
+     * @param int $goodsId goods id
+     * @return array
      */
-    public function validateCategoryId($attribute)
+    public static function detailsByGoodsId($goodsId)
     {
-        if (!GoodsCategory::find()->where(['id' => $this->$attribute, 'level' => GoodsCategory::LEVEL3])->one()) {
-            $this->addError($attribute);
-            return false;
+        $goodsId = (int)$goodsId;
+        if ($goodsId <= 0) {
+            return [];
         }
 
-        return true;
+        $sql = "select name, value, unit, addition_type, category_id"
+            . " from {{%" . self::tableName() . "}}"
+            . " where goods_id = {$goodsId}";
+
+        $attrs = Yii::$app->db
+            ->createCommand($sql)
+            ->queryAll();
+
+        foreach ($attrs as &$attr) {
+            $lhzzAttr = self::find()->where([
+                'goods_id' => 0,
+                'name' => $attr['name'],
+                'category_id' => $attr['category_id']
+            ])->one();
+
+            if ($lhzzAttr) {
+                $attr['from_type'] = self::FROM_TYPE_LHZZ;
+                $attr['unit'] = self::UNITS[$lhzzAttr->unit];
+                $attr['addition_type'] = $lhzzAttr->addition_type;
+                if ($lhzzAttr->addition_type == self::ADDITION_TYPE_DROPDOWN_LIST) {
+                    $attr['selected'] = $attr['value'];
+                    $attr['value'] = explode(',', $lhzzAttr->value);
+                }
+            } else {
+                $attr['from_type'] = self::FROM_TYPE_SUPPLIER;
+                unset($attr['unit']);
+                unset($attr['addition_type']);
+            }
+
+            unset($attr['category_id']);
+        }
+
+        return $attrs;
     }
 
     /**
-     * @return array the validation rules.
+     * Check if goods attributes changed
+     *
+     * @param int $goodsId goods id
+     * @param $names array names
+     * @param $values array values
+     * @return bool
      */
-    public function rules()
+    public static function changedAttr($goodsId, array $names, array $values)
     {
-        return [
-            [['name', 'category_id'], 'required'],
-            ['name', 'string', 'length' => [1, 6]],
-            ['category_id', 'validateCategoryId'],
-            ['unit', 'in', 'range' => array_keys(self::UNITS)],
-            ['addition_type', 'in', 'range' => array_keys(self::ADDITION_TYPES)]
-        ];
+        if (!StringService::checkArrayIdentity($names, self::namesByGoodsId($goodsId))
+            || !StringService::checkArrayIdentity($values, self::valuesByGoodsId($goodsId))
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -177,21 +214,32 @@ class GoodsAttr extends ActiveRecord
     }
 
     /**
-     * Check if goods attributes changed
+     * Validates category_id
      *
-     * @param int $goodsId goods id
-     * @param $names array names
-     * @param $values array values
+     * @param string $attribute category_id to validate
      * @return bool
      */
-    public static function changedAttr($goodsId, array $names, array $values)
+    public function validateCategoryId($attribute)
     {
-        if (!StringService::checkArrayIdentity($names, self::namesByGoodsId($goodsId))
-            || !StringService::checkArrayIdentity($values, self::valuesByGoodsId($goodsId))
-        ) {
-            return true;
+        if (!GoodsCategory::find()->where(['id' => $this->$attribute, 'level' => GoodsCategory::LEVEL3])->one()) {
+            $this->addError($attribute);
+            return false;
         }
 
-        return false;
+        return true;
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [['name', 'category_id'], 'required'],
+            ['name', 'string', 'length' => [1, 6]],
+            ['category_id', 'validateCategoryId'],
+            ['unit', 'in', 'range' => array_keys(self::UNITS)],
+            ['addition_type', 'in', 'range' => array_keys(self::ADDITION_TYPES)]
+        ];
     }
 }

@@ -72,6 +72,7 @@ class MallController extends Controller
         'goods-attr-list-admin',
         'goods-add',
         'goods-edit',
+        'goods-attrs-admin',
     ];
 
     /**
@@ -2457,6 +2458,26 @@ class MallController extends Controller
 
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
         $categoryId > 0 && $ret['data']['category-attrs'] = GoodsAttr::detailsByCategoryId($categoryId);
+        return Json::encode($ret);
+    }
+
+    /**
+     * Goods attributes action(admin)
+     *
+     * @return string
+     */
+    public function actionGoodsAttrsAdmin()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods-attrs' => []
+            ],
+        ];
+
+        $goodsId = (int)Yii::$app->request->get('goods_id', 0);
+        $goodsId > 0 && $ret['data']['goods-attrs'] = GoodsAttr::detailsByGoodsId($goodsId);
         return Json::encode($ret);
     }
 
