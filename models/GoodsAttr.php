@@ -214,6 +214,54 @@ class GoodsAttr extends ActiveRecord
     }
 
     /**
+     * Add goods attributes by names, values etc.
+     *
+     * @param ActiveRecord $goods goods model
+     * @param array $names names
+     * @param array $values values
+     * @return int
+     */
+    public static function addByAttrs(ActiveRecord $goods, array $names, array $values)
+    {
+        $code = 1000;
+
+        foreach ($names as $i => $name) {
+            $goodsAttr = new self;
+            $goodsAttr->name = $name;
+            $goodsAttr->value = $values[$i];
+            $goodsAttr->goods_id = $goods->id;
+            $goodsAttr->category_id = $goods->category_id;
+
+            $lhzzAttr = self::find()->where([
+                'goods_id' => 0,
+                'name' => $name,
+                'category_id' => $goods->category_id
+            ])->one();
+            if ($lhzzAttr) {
+                $goodsAttr->unit = $lhzzAttr->unit;
+                $goodsAttr->addition_type = $lhzzAttr->addition_type;
+                if ($goodsAttr->addition_type == self::ADDITION_TYPE_DROPDOWN_LIST
+                    && !is_numeric($goodsAttr->value)
+                ) {
+                    return $code;
+                }
+            }
+
+            if (!$goodsAttr->validate()) {
+                return $code;
+            }
+
+            if (!$goodsAttr->save()) {
+                $code = 500;
+                return $code;
+            }
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
      * Validates category_id
      *
      * @param string $attribute category_id to validate

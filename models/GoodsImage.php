@@ -22,16 +22,6 @@ class GoodsImage extends ActiveRecord
     }
 
     /**
-     * @return array the validation rules.
-     */
-    public function rules()
-    {
-        return [
-            [['goods_id', 'image'], 'required']
-        ];
-    }
-
-    /**
      * Check goods images number
      *
      * @param array $images
@@ -40,5 +30,45 @@ class GoodsImage extends ActiveRecord
     public static function validateImages(array $images)
     {
         return count($images) <= Yii::$app->params['goods']['maxImagesCnt'];
+    }
+
+    /**
+     * Add goods images by images etc.
+     *
+     * @param ActiveRecord $goods goods model
+     * @param array $images images
+     * @return int
+     */
+    public static function addByAttrs(ActiveRecord $goods, array $images)
+    {
+        $code = 1000;
+
+        foreach ($images as $image) {
+            $goodsImage = new self;
+            $goodsImage->goods_id = $goods->id;
+            $goodsImage->image = $image;
+
+            if (!$goodsImage->validate()) {
+                return $code;
+            }
+
+            if (!$goodsImage->save()) {
+                $code = 500;
+                return $code;
+            }
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [['goods_id', 'image'], 'required']
+        ];
     }
 }

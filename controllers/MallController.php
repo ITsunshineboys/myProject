@@ -2546,52 +2546,24 @@ class MallController extends Controller
             }
         }
 
-        foreach ($names as $i => $name) {
-            $goodsAttr = new GoodsAttr;
-            $goodsAttr->name = $name;
-            $goodsAttr->value = $values[$i];
-            $goodsAttr->goods_id = $goods->id;
-            $goodsAttr->category_id = $goods->category_id;
+        $code = GoodsAttr::addByAttrs($goods, $names, $values);
+        if (200 != $code) {
+            $transaction->rollBack();
 
-            if (!$goodsAttr->validate()) {
-                $transaction->rollBack();
-
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$goodsAttr->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
         }
 
-        foreach ($images as $image) {
-            $goodsImage = new GoodsImage;
-            $goodsImage->goods_id = $goods->id;
-            $goodsImage->image = $image;
+        $code = GoodsImage::addByAttrs($goods, $images);
+        if (200 != $code) {
+            $transaction->rollBack();
 
-            if (!$goodsImage->validate()) {
-                $transaction->rollBack();
-
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$goodsImage->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
         }
 
         $transaction->commit();
@@ -2679,29 +2651,14 @@ class MallController extends Controller
                 }
             }
 
-            foreach ($names as $i => $name) {
-                $goodsAttr = new GoodsAttr;
-                $goodsAttr->name = $name;
-                $goodsAttr->value = $values[$i];
-                $goodsAttr->goods_id = $goods->id;
-                $goodsAttr->category_id = $goods->category_id;
+            $code = GoodsAttr::addByAttrs($goods, $names, $values);
+            if (200 != $code) {
+                $transaction->rollBack();
 
-                if (!$goodsAttr->validate()) {
-                    $transaction->rollBack();
-
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-
-                if (!$goodsAttr->save()) {
-                    $code = 500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
             }
         }
 
@@ -2712,27 +2669,14 @@ class MallController extends Controller
                 'goods_id' => $id
             ]);
 
-            foreach ($images as $image) {
-                $goodsImage = new GoodsImage;
-                $goodsImage->goods_id = $goods->id;
-                $goodsImage->image = $image;
+            $code = GoodsImage::addByAttrs($goods, $images);
+            if (200 != $code) {
+                $transaction->rollBack();
 
-                if (!$goodsImage->validate()) {
-                    $transaction->rollBack();
-
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-
-                if (!$goodsImage->save()) {
-                    $code = 500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
             }
         }
 
