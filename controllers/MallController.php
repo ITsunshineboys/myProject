@@ -2214,7 +2214,7 @@ class MallController extends Controller
         $code = 1000;
 
         $id = (int)Yii::$app->request->get('id', 0);
-        $logisticsTemplate = LogisticsTemplate::findOnline()->andWhere(['id' => $id ])->one();
+        $logisticsTemplate = LogisticsTemplate::findOnline()->andWhere(['id' => $id])->one();
         if (!$logisticsTemplate) {
             return Json::encode([
                 'code' => $code,
@@ -2804,7 +2804,8 @@ class MallController extends Controller
         $user = Yii::$app->user->identity;
 
         if ($model->status != Goods::STATUS_ONLINE
-            && !$model->canOnline($user)) {
+            && !$model->canOnline($user)
+        ) {
             $code = 403;
             return Json::encode([
                 'code' => $code,
@@ -2830,7 +2831,8 @@ class MallController extends Controller
             $model->offline_time = $now;
             $model->offline_uid = $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0;
             $model->offline_person = $operator->nickname;
-            $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            $user->login_role_id == Yii::$app->params['lhzzRoleId']
+            && $model->offline_reason = Yii::$app->request->post('offline_reason', '');
         }
 
         if (!$model->validate()) {
