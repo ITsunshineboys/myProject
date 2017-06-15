@@ -100,4 +100,7 @@ return [
     'brand' => [
         'offline_reason' => '品牌下架',
     ],
+    'supplier' => [
+        'offline_reason' => '闭店下架',
+    ],
 ];
