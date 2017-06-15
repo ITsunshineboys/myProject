@@ -1779,7 +1779,7 @@ class MallController extends Controller
         }
 
         if ($model->status == GoodsBrand::STATUS_OFFLINE) {
-            Goods::disableGoodsByBrandId($model->id);
+            Goods::disableGoodsByBrandIds([$model->id], Lhzz::findByUser(Yii::$app->user->identity));
         }
 
         return Json::encode([
@@ -1831,7 +1831,7 @@ class MallController extends Controller
             ]);
         }
 
-        Goods::disableGoodsByBrandIds(explode(',', $ids));
+        Goods::disableGoodsByBrandIds(explode(',', $ids), Lhzz::findByUser(Yii::$app->user->identity));
 
         return Json::encode([
             'code' => 200,

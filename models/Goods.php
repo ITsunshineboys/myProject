@@ -134,7 +134,8 @@ class Goods extends ActiveRecord
     /**
      * Disable goods by category ids
      *
-     * @param array $categoryIds
+     * @param array $categoryIds category ids
+     * @param ActiveRecord $lhzz lhzz model
      */
     public static function disableGoodsByCategoryIds(array $categoryIds, ActiveRecord $lhzz)
     {
@@ -147,8 +148,9 @@ class Goods extends ActiveRecord
      * Disable goods by category id
      *
      * @param int $categoryId category id
+     * @param ActiveRecord $lhzz lhzz model
      */
-    public static function disableGoodsByCategoryId($categoryId, $lhzz)
+    public static function disableGoodsByCategoryId($categoryId, ActiveRecord $lhzz)
     {
         $goodsIds = self::findIdsByCategoryId($categoryId);
         if ($goodsIds) {
@@ -185,12 +187,13 @@ class Goods extends ActiveRecord
     /**
      * Disable goods by brand ids
      *
-     * @param array $brandIds
+     * @param array $brandIds brand ids
+     * @param ActiveRecord $lhzz lhzz model
      */
-    public static function disableGoodsByBrandIds(array $brandIds)
+    public static function disableGoodsByBrandIds(array $brandIds, ActiveRecord $lhzz)
     {
         foreach ($brandIds as $brandId) {
-            self::disableGoodsByBrandId($brandId);
+            self::disableGoodsByBrandId($brandId, $lhzz);
         }
     }
 
@@ -198,8 +201,9 @@ class Goods extends ActiveRecord
      * Disable goods by brand id
      *
      * @param int $brandId brand id
+     * @param ActiveRecord $lhzz lhzz model
      */
-    public static function disableGoodsByBrandId($brandId)
+    public static function disableGoodsByBrandId($brandId, ActiveRecord $lhzz)
     {
         $goodsIds = self::findIdsByBrandId($brandId);
         if ($goodsIds) {
@@ -207,7 +211,10 @@ class Goods extends ActiveRecord
             $where = 'id in(' . $goodsIds . ')';
             self::updateAll([
                 'status' => self::STATUS_OFFLINE,
-                'offline_time' => time()
+                'offline_time' => time(),
+                'offline_reason' => Yii::$app->params['brand']['offline_reason'],
+                'offline_uid' => $lhzz->id,
+                'offline_person' => $lhzz->nickname,
             ], $where);
         }
     }

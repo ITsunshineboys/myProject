@@ -97,4 +97,7 @@ return [
     'goods' => [
         'maxImagesCnt' => 5,
     ],
+    'brand' => [
+        'offline_reason' => '品牌下架',
+    ],
 ];
