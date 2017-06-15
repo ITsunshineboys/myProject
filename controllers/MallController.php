@@ -2632,6 +2632,10 @@ class MallController extends Controller
         $goods->sanitize($user, $postData);
         $goods->attributes = $postData;
 
+        if ($goods->needSetStatusToWait()) {
+            $goods->status = Goods::STATUS_WAIT_ONLINE;
+        }
+
         $goods->scenario = Goods::SCENARIO_ADD;
 
         if (!$goods->validate()) {
@@ -2750,7 +2754,7 @@ class MallController extends Controller
 
         $goods->scenario = Goods::SCENARIO_REVIEW;
 
-        if (!$goods->validate()) {print_r($goods->errors);
+        if (!$goods->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],

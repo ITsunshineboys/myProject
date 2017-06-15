@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\HtmlPurifier;
@@ -25,6 +26,9 @@ class Goods extends ActiveRecord
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
+    const EXCEPT_FIELDS_WHEN_CHANGE_ONLINE_TO_WAIT = [
+        'left_number',
+    ];
 
     const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'cover_image'];
 
@@ -583,6 +587,25 @@ AND goods.id IN (" . $id . ")";
         }
 
         $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Check if need to set status to STATUS_WAIT_ONLINE
+     *
+     * @return bool
+     */
+    public function needSetStatusToWait()
+    {
+        $changedAttrs = $this->getDirtyAttributes();
+        if ($this->status == self::STATUS_ONLINE
+            && $changedAttrs
+            && !StringService::checkArrayIdentity(self::EXCEPT_FIELDS_WHEN_CHANGE_ONLINE_TO_WAIT,
+                array_keys($changedAttrs))
+        ) {
+            return true;
+        }
+
         return false;
     }
 
