@@ -13,6 +13,7 @@ use app\models\DecorationParticulars;
 use app\models\Effect;
 use app\models\EffectPicture;
 use app\models\EngineeringStandardCraft;
+use app\models\EngineeringUniversalCriterion;
 use app\models\FixationFurniture;
 use app\models\Goods;
 use app\models\IntelligenceAssort;
@@ -431,7 +432,7 @@ class OwnerController extends Controller
 //        $receive = \Yii::$app->request->post();
 //        $post = Json::decode($receive);
         $post = [
-            'effect_id' => 1,
+//            'effect_id' => 1,
             'master_bedroom' => 1,
             'secondary_bedroom' => 1,
             'sitting_room' => 1,
@@ -478,38 +479,33 @@ class OwnerController extends Controller
             //总面积
             $total_area = intval($total_area_float);
         }else{
-//            $kitchen_percent = $post['area'] / ;
-//            $kitchen_high = $post['13'] ?? 0.3;
-            //厨房地面面积
-            $kitchen_ground_area = $kitchen_percent * $post['area'];
-            //厨房墙面面积
-            $kitchen_wall_space_area = sqrt($kitchen_ground_area) * $kitchen_high;
-            $kitchen_wall_space_perimeter = round($kitchen_wall_space_area,2);
-            //厨房面积
-            $kitchen_area = $kitchen_ground_area + $kitchen_wall_space_perimeter;
-
-            $toilet_percent = $post['14'] ?? 0.3;
-            $toilet_high = $post['13'] ?? 1.8;
-            //卫生间地面面积
-            $toilet_ground_area = $toilet_percent * $post['area'];
-            //卫生间强面面积
-            $toilet_wall_space_area = sqrt($toilet_ground_area) * $toilet_high;
-            $toilet_wall_space_perimeter = round($toilet_wall_space_area,2);
-            //卫生间面积
-            $toilet_area = $toilet_ground_area + $toilet_wall_space_perimeter;
+            //厨房
+            $kitchen = EngineeringUniversalCriterion::findByAll('厨房');
+            $kitchen_area = BasisDecorationService::waterproofArea($kitchen,$post['area'],$post['kitchen']);
+            //卫生间
+            $toilet = EngineeringUniversalCriterion::findByAll('卫生间');
+            $toilet_area = BasisDecorationService::waterproofArea($toilet,$post['area'],$post['kitchen']);
             //总面积
-            $total_area = $kitchen_area + $toilet_area;
+            $total_area = intval($kitchen_area + $toilet_area);
         }
 
-        //防水价格
-        $waterproof = ceil(BasisDecorationService::formula($arr,$total_area,$waterproof));
-        $add_price = DecorationAdd::findByAll('防水',$post['area']);
-        $waterproof_price = $waterproof + $add_price;
+        //当地工艺
+        $craft = EngineeringStandardCraft::findByAll('防水',$post['city']);
+
+        //人工总费用
+        $labor_all_cost = BasisDecorationService::laborFormula($total_area,$worker);
+        //材料总费用
+        $material_price = BasisDecorationService::waterproofGoods($total_area,$waterproof,$craft);
+        //添加材料费用
+        $add_price = DecorationAdd::findByAll('防水',$post['area'],$post['city']);
+
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'waterproof_price' => $waterproof_price,
+                'waterproof_labor_price' => $labor_all_cost,
+                'waterproof_material_price' => $material_price,
+                'waterproof_add_price' => $add_price,
             ]
         ]);
     }
@@ -532,14 +528,14 @@ class OwnerController extends Controller
             'kitchen' => 1,
             'style' => 1,
             'series' => 1,
-            'province' => '四川',
-            'city' => '成都'
+            'province' => 510000,
+            'city' => 510100
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '木工';
         //人工一天价格
-        $labor_cost = LaborCost::univalence($post['province'], $post['city'], $arr['worker_kind']);
+        $labor_cost = LaborCost::univalence($post['city'], $arr['worker_kind']);
         $series_all = Series::find()->all();
         $style_all =Style::find()->all();
         $carpentry_add = CarpentryAdd::findByStipulate($post['series'],$post['style']);
@@ -558,7 +554,6 @@ class OwnerController extends Controller
             $decoration_list = DecorationList::findById($post['effect_id']);
             $carpentry_reconstruction = CarpentryReconstruction::find()->where(['decoration_list_id' => $decoration_list])->all();
             $goods_price = Goods::findQueryAll($carpentry_reconstruction);
-            var_dump($goods_price);exit;
         }else{
             $plasterboard = '石膏板';
             $goods_price = [];
@@ -568,23 +563,28 @@ class OwnerController extends Controller
             $screw = '丝杆';
             $goods_price [] = Goods::priceDetail(3,$screw);
         }
+
+        //当地工艺
+        $craft = EngineeringStandardCraft::findByAll('木作',$post['city']);
+
         //石膏板费用
-        $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length,$labor_cost['day_area'],2.5,2.5,$goods_price);
+        $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length,$carpentry_add['flat_area'],$goods_price,$craft);
         //龙骨费用
-        $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length,$labor_cost['day_area'],1.5,1.5,$goods_price);
+        $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length,$carpentry_add['flat_area'],$goods_price,$craft);
         //丝杆费用
-        $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length,$labor_cost['day_area'],2,2,$goods_price);
+        $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length,$carpentry_add['flat_area'],$goods_price,$craft);
         //材料费用
-        $material_cost = ($keel_cost + $plasterboard_cost + $pole_cost) / 0.7;
-        $carpentry_cost = ceil($material_cost + $labour_charges);
-        $add = DecorationAdd::CarpentryAddAll('木作',$post['series'],$post['style']);
-        $carpentry_price = $carpentry_cost + $add;
+        $material_cost = ($keel_cost + $plasterboard_cost + $pole_cost);
+//      总费用
+        $carpentry_add = DecorationAdd::CarpentryAddAll('木作',$post['series'],$post['style']);
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'carpentry_price' => $carpentry_price,
+                'carpentry_labor_price' => $labour_charges,
+                'carpentry_material_price' => $material_cost,
+                'carpentry_add_price' => $carpentry_add,
             ]
         ]);
     }

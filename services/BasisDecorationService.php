@@ -84,6 +84,13 @@ class BasisDecorationService
      return $cost;
     }
 
+    /**
+     * 水路商品
+     * @param string $points
+     * @param array $goods
+     * @param string $crafts
+     * @return float
+     */
     public static function waterwayGoods($points = '',$goods = [],$crafts= '')
     {
         if ($points && $goods)
@@ -135,7 +142,59 @@ class BasisDecorationService
         return $cost;
     }
 
+    /**
+     * 防水面积计算
+     * @param array $arr
+     * @param string $house_area
+     * @param int $quantity
+     * @return float
+     */
+    public static  function waterproofArea($arr =[],$house_area ='',$quantity = 1)
+    {
+        if ($arr){
+            foreach ($arr as $one)
+            {
+                if($one['project_particulars'] == '厨房面积' || $one['project_particulars'] == '卫生间面积'){
+                       $area = $one;
+                }
+                if ($one['project_particulars'] == '厨房防水' || $one['project_particulars'] == '卫生间防水'){
+                        $height = $one;
+                }
+            }
+//            厨房地面面积：【x】%×（房屋面积)
+            $ground = $area['project_value'] * $house_area;
+//            厨房墙面积：（厨房地面积÷厨房个数）开平方×【0.3m】×4 ×厨房个数
+            $sqrt = sqrt($ground);
+            $wall_space = $sqrt * $height['project_value'] * 4 * $quantity;
+//            厨房防水面积：厨房地面积+厨房墙面积
+            $all_area = $ground + $wall_space;
+            $total_area = round($all_area,2);
+        }
+        return $total_area;
+    }
 
+    public static function waterproofGoods($points = '',$goods = [],$crafts= '')
+    {
+        if ($points && $goods){
+            $material = 0;
+            foreach ($crafts as $craft)
+            {
+                $material = $craft['material'];
+            }
+            $goods_value = 0;
+            $goods_platform_price = 0;
+            foreach ($goods as $one){
+                $goods_value = $one['value'];
+                $goods_platform_price = $one['platform_price'];
+            }
+
+//            个数：（防水总面积×【1.25】÷抓取的商品的KG）
+            $quantity = ceil($points * $material /$goods_value);
+//            防水涂剂费用：个数×抓取的商品价格
+            $cost = $quantity * $goods_platform_price;
+        }
+        return $cost;
+    }
     /**
      * 地面面积计算公式
      * @param array $arr
@@ -493,23 +552,31 @@ class BasisDecorationService
      * @param int $video_wall
      * @return float
      */
-    public static function carpentryPlasterboardCost($modelling_length = '',$flat_area = '',$modelling_meter = 2.5,$flat_meter=2.5,$goods = [],$video_wall = 1)
+    public static function carpentryPlasterboardCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '',$video_wall = 1)
     {
-        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)){
-//            石膏板费用：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）×商品价格
+        if(!empty($modelling_length) && !empty($flat_area)){
             $plasterboard = [];
             foreach ($goods as $goods_price ){
                 if($goods_price['name'] == '石膏板'){
                     $plasterboard = $goods_price;
                 }
             }
-            $modelling_cost = ceil (($modelling_length / $modelling_meter + $flat_area / $flat_meter + $video_wall )) * $plasterboard['platform_price'] ;
+            $plasterboard_material = 0;
+            foreach ($crafts as $craft){
+                if($craft['project_details'] == '石膏板'){
+                    $plasterboard_material = $craft['material'];
+                }
+            }
+//            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
+            $plasterboard_quantity = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material +$video_wall);
+//            石膏板费用：个数×商品价格
+            $plasterboard_cost = $plasterboard_quantity * $plasterboard['platform_price'];
         }
-        return $modelling_cost;
+        return $plasterboard_cost;
     }
 
     /**
-     * 木作石膏板计算公式
+     * 木作龙骨计算公式
      * @param string $modelling_length
      * @param string $flat_area
      * @param float $modelling_meter
@@ -517,17 +584,8 @@ class BasisDecorationService
      * @param array $goods
      * @return float
      */
-    public static function carpentryKeelCost($modelling_length = '',$flat_area = '',$modelling_meter = 1.5,$flat_meter =1.5,$goods = [])
+    public static function carpentryKeelCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '')
     {
-//        龙骨费用：造型费用+平顶费用
-//        ①造型费用：主龙骨费用+副龙骨费用
-//        主龙骨费用=每米费用×造型长度
-//        副龙骨费用=每米费用×造型长度
-//        每米费用：商品价格÷【1.5】m
-//        ②平顶费用：主龙骨费用+副龙骨费用
-//        主龙骨费用=每平米费用×平顶面积
-//        副龙骨费用=每平米费用×平顶面积
-//        每米费用：商品价格÷【1.5】m²
         if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods)){
             $goods_price = [];
             foreach ($goods as $price)
@@ -536,20 +594,32 @@ class BasisDecorationService
                     $goods_price = $price;
                 }
             }
-            //每米费用
-            $modelling_per_meter_cost = $goods_price['platform_price'] / $modelling_meter;
-            $flat_per_meter_cost = $goods_price['platform_price'] / $flat_meter;
-            //造型费用
-            $modelling_cost = ceil(($modelling_per_meter_cost * $modelling_length) + ($modelling_per_meter_cost * $modelling_length));
-            //平顶费用
-            $flat_cost = ceil(($flat_per_meter_cost * $modelling_length) + ($flat_per_meter_cost * $modelling_length));
-            //龙骨费用
-            $keel_cost = $modelling_cost + $flat_cost;
+            $plasterboard_material = 0;
+            foreach ($crafts as $craft){
+                if($craft['project_details'] == '龙骨'){
+                    $plasterboard_material = $craft['material'];
+                }
+            }
+//          个数=个数1+个数2
+//          个数1：（造型长度÷【1.5m】）
+//          个数2：（平顶面积÷【1.5m²】）
+            $main_keel_quantity = ceil($modelling_length / $plasterboard_material + $flat_area /$plasterboard_material);
+//          主龙骨费用：个数×商品价格
+            $keel_cost = $main_keel_quantity * $goods_price['platform_price'];
+
         }
         return $keel_cost;
     }
 
-    public static function carpentryPoleCost($modelling_length = '',$flat_area = '',$modelling_meter = 2,$flat_meter =2,$goods = [])
+    /**
+     * @param string $modelling_length
+     * @param string $flat_area
+     * @param int $modelling_meter
+     * @param int $flat_meter
+     * @param array $goods
+     * @return float
+     */
+    public static function carpentryPoleCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '')
     {
         if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)){
             $goods_price = [];
@@ -559,17 +629,19 @@ class BasisDecorationService
                     $goods_price = $price;
                 }
             }
-            //        丝杆费用：造型费用+平顶费用
-            //        ①造型费用：每米费用×造型长度
-            //        每米费用：商品价格÷【2】m
-            //        ②平顶费用：每平米费用×平顶面积
-            //        每米费用：商品价格÷【2】m²
-            //每米费用
-            $modelling_per_meter_cost = $goods_price['platform_price'] / $modelling_meter;
-            $flat_per_meter_cost = $goods_price['platform_price'] / $flat_meter;
-            $modelling_cost = ceil($modelling_per_meter_cost * $modelling_length);
-            $flat_cost = ceil($flat_per_meter_cost * $flat_area);
-            $pole_cost = $modelling_cost + $flat_cost;
+            $plasterboard_material = 0;
+            foreach ($crafts as $craft){
+                if($craft['project_details'] == '丝杆'){
+                    $plasterboard_material = $craft['material'];
+                }
+            }
+
+//            个数=个数1+个数2
+//            个数1：（造型长度÷【2m】）
+//            个数2：（平顶面积÷【2m²】
+            $lead_screw_quantity = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
+//            丝杆费用：个数×抓取的商品价格
+            $pole_cost = $lead_screw_quantity * $goods_price['platform_price'];
         }
         return $pole_cost;
     }
