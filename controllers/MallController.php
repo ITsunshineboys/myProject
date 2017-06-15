@@ -74,6 +74,7 @@ class MallController extends Controller
         'goods-edit',
         'goods-edit-lhzz',
         'goods-attrs-admin',
+        'goods-status-toggle',
     ];
 
     /**
@@ -130,6 +131,7 @@ class MallController extends Controller
                     'goods-attr-add' => ['post',],
                     'goods-add' => ['post',],
                     'goods-edit' => ['post',],
+                    'goods-status-toggle' => ['post',],
                 ],
             ],
         ];
@@ -2766,6 +2768,79 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Toggle goods status action.
+     *
+     * @return string
+     */
+    public function actionGoodsStatusToggle()
+    {
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $code = 1000;
+
+        if (!$id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $model = Goods::findOne($id);
+        if (!$model) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+
+        if (!$model->canOnline($user)) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $now = time();
+
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+        if ($model->status == Goods::STATUS_OFFLINE) {
+            $model->status = Goods::STATUS_ONLINE;
+            $model->online_time = $now;
+            $model->online_uid = $lhzz->id;
+            $model->online_person = $lhzz->nickname;
+        } else {
+            $model->status = Goods::STATUS_OFFLINE;
+            $model->offline_time = $now;
+            $model->offline_uid = $lhzz->id;
+            $model->offline_person = $lhzz->nickname;
+            $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+        }
+
+        if (!$model->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$model->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
         ]);
     }
 }

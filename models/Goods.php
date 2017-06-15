@@ -393,53 +393,6 @@ AND goods.id IN (" . $id . ")";
     }
 
     /**
-     * Validates category_id
-     *
-     * @param string $attribute category_id to validate
-     * @return bool
-     */
-    public function validateCategoryId($attribute)
-    {
-        $where = [
-            'id' => $this->$attribute,
-            'deleted' => GoodsCategory::STATUS_OFFLINE,
-            'level' => GoodsCategory::LEVEL3
-        ];
-
-        if ($this->$attribute > 0
-            && GoodsCategory::find()->where($where)->exists()
-        ) {
-            return true;
-        }
-
-        $this->addError($attribute);
-        return false;
-    }
-
-    /**
-     * Validates brand_id
-     *
-     * @param string $attribute brand_id to validate
-     * @return bool
-     */
-    public function validateBrandId($attribute)
-    {
-        $where = [
-            'id' => $this->$attribute,
-            'status' => GoodsBrand::STATUS_ONLINE,
-        ];
-
-        if ($this->$attribute > 0
-            && GoodsBrand::find()->where($where)->exists()
-        ) {
-            return true;
-        }
-
-        $this->addError($attribute);
-        return false;
-    }
-
-    /**
      * Validates logistics_template_id
      *
      * @param string $attribute logistics_template_id to validate
@@ -537,6 +490,100 @@ AND goods.id IN (" . $id . ")";
         }
 
         return true;
+    }
+
+    /**
+     * Check if can enable goods
+     *
+     * @param ActiveRecord $user user model
+     * @return bool
+     */
+    public function canOnline(ActiveRecord $user)
+    {
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            if ($this->offline_uid == 0) {
+                return true;
+            }
+        } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            if ($this->validateCategoryId('category_id')
+                && $this->validateBrandId('brand_id')
+                && $this->validateSupplierId('supplier_id')
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Validates category_id
+     *
+     * @param string $attribute category_id to validate
+     * @return bool
+     */
+    public function validateCategoryId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'level' => GoodsCategory::LEVEL3
+        ];
+
+        if ($this->$attribute > 0
+            && GoodsCategory::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates brand_id
+     *
+     * @param string $attribute brand_id to validate
+     * @return bool
+     */
+    public function validateBrandId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'status' => GoodsBrand::STATUS_ONLINE,
+        ];
+
+        if ($this->$attribute > 0
+            && GoodsBrand::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates supplier_id
+     *
+     * @param string $attribute supplier_id to validate
+     * @return bool
+     */
+    public function validateSupplierId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'status' => Supplier::STATUS_ONLINE,
+        ];
+
+        if ($this->$attribute > 0
+            && Supplier::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
     }
 
     /**
