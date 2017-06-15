@@ -159,6 +159,36 @@ class GoodsAttr extends ActiveRecord
     }
 
     /**
+     * Get attributes(set by supplier) by category id
+     *
+     * @param int $goodsId goods id
+     * @return array
+     */
+    public static function frontDetailsByGoodsId($goodsId)
+    {
+        $goodsId = (int)$goodsId;
+        if ($goodsId <= 0) {
+            return [];
+        }
+
+        $sql = "select name, value, unit"
+            . " from {{%" . self::tableName() . "}}"
+            . " where goods_id = {$goodsId}";
+
+        $attrs = Yii::$app->db
+            ->createCommand($sql)
+            ->queryAll();
+
+        foreach ($attrs as &$attr) {
+            if ($attr['unit'] > 0) {
+                $attr['value'] .= self::UNITS[$attr['unit']];
+            }
+            unset($attr['unit']);
+        }
+        return $attrs;
+    }
+
+    /**
      * Check if goods attributes changed
      *
      * @param int $goodsId goods id
