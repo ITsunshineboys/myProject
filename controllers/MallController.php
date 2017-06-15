@@ -1105,7 +1105,7 @@ class MallController extends Controller
                 $categoryIds = GoodsCategory::level23Ids($model->id);
                 GoodsCategory::disableByIds($categoryIds);
             }
-            Goods::disableGoodsByCategoryIds($categoryIds);
+            Goods::disableGoodsByCategoryIds($categoryIds, Lhzz::findByUser(Yii::$app->user->identity));
         }
 
 //        new EventHandleService();
@@ -1163,7 +1163,7 @@ class MallController extends Controller
 
         $categoryIds = array_unique(array_merge($idsArr, GoodsCategory::level23IdsByPids($idsArr)));
         GoodsCategory::disableByIds($categoryIds);
-        Goods::disableGoodsByCategoryIds($categoryIds);
+        Goods::disableGoodsByCategoryIds($categoryIds, Lhzz::findByUser(Yii::$app->user->identity));
 
 //        new EventHandleService();
 //        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);

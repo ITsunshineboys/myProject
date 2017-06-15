@@ -84,6 +84,7 @@ return [
             'allName' => '全部分类',
             'all' => '全部',
         ],
+        'offline_reason' => '分类下架',
     ],
     'reviewStatuses' => [
         '0' => '待审核',

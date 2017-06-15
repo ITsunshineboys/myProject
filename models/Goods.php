@@ -136,10 +136,10 @@ class Goods extends ActiveRecord
      *
      * @param array $categoryIds
      */
-    public static function disableGoodsByCategoryIds(array $categoryIds)
+    public static function disableGoodsByCategoryIds(array $categoryIds, ActiveRecord $lhzz)
     {
         foreach ($categoryIds as $categoryId) {
-            self::disableGoodsByCategoryId($categoryId);
+            self::disableGoodsByCategoryId($categoryId, $lhzz);
         }
     }
 
@@ -148,7 +148,7 @@ class Goods extends ActiveRecord
      *
      * @param int $categoryId category id
      */
-    public static function disableGoodsByCategoryId($categoryId)
+    public static function disableGoodsByCategoryId($categoryId, $lhzz)
     {
         $goodsIds = self::findIdsByCategoryId($categoryId);
         if ($goodsIds) {
@@ -156,7 +156,10 @@ class Goods extends ActiveRecord
             $where = 'id in(' . $goodsIds . ')';
             self::updateAll([
                 'status' => self::STATUS_OFFLINE,
-                'offline_time' => time()
+                'offline_time' => time(),
+                'offline_reason' => Yii::$app->params['category']['offline_reason'],
+                'offline_uid' => $lhzz->id,
+                'offline_person' => $lhzz->nickname,
             ], $where);
         }
     }
