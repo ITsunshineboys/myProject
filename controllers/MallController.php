@@ -2799,7 +2799,8 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
 
-        if (!$model->canOnline($user)) {
+        if ($model->status != Goods::STATUS_ONLINE
+            && !$model->canOnline($user)) {
             $code = 403;
             return Json::encode([
                 'code' => $code,
@@ -2809,17 +2810,22 @@ class MallController extends Controller
 
         $now = time();
 
-        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $operator = Supplier::find()->where(['uid' => $user->id])->one();
+        } else {
+            $operator = Lhzz::find()->where(['uid' => $user->id])->one();
+        }
+
         if ($model->status == Goods::STATUS_OFFLINE) {
             $model->status = Goods::STATUS_ONLINE;
             $model->online_time = $now;
-            $model->online_uid = $lhzz->id;
-            $model->online_person = $lhzz->nickname;
+            $model->online_uid = $operator->id;
+            $model->online_person = $operator->nickname;
         } else {
             $model->status = Goods::STATUS_OFFLINE;
             $model->offline_time = $now;
-            $model->offline_uid = $lhzz->id;
-            $model->offline_person = $lhzz->nickname;
+            $model->offline_uid = $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0;
+            $model->offline_person = $operator->nickname;
             $model->offline_reason = Yii::$app->request->post('offline_reason', '');
         }
 
