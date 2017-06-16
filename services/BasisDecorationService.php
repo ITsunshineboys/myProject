@@ -173,6 +173,13 @@ class BasisDecorationService
         return $total_area;
     }
 
+    /**
+     * 防水商品
+     * @param string $points
+     * @param array $goods
+     * @param string $crafts
+     * @return float
+     */
     public static function waterproofGoods($points = '',$goods = [],$crafts= '')
     {
         if ($points && $goods){
@@ -195,6 +202,7 @@ class BasisDecorationService
         }
         return $cost;
     }
+
     /**
      * 地面面积计算公式
      * @param array $arr
@@ -644,5 +652,28 @@ class BasisDecorationService
             $pole_cost = $lead_screw_quantity * $goods_price['platform_price'];
         }
         return $pole_cost;
+    }
+
+    public static function paintedArea($area = [],$house_area = '',$bedroom = '',$tall = 2.8,$wall = 4)
+    {
+        if ($area && $house_area && $bedroom)
+        {
+            if ($area <= 1){
+//        卧室地面积：【z】%×（房屋面积）
+                $ground_area = $area * $house_area;
+//        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
+                $wall_space_area =  sqrt($ground_area / $bedroom) * $tall * $wall * $bedroom;
+//        卧室底漆面积=卧室地面积+卧室墙面积
+                $total_area =    $ground_area + $wall_space_area;
+            }else{
+//        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
+                $wall_space_area = sqrt($area / $bedroom)* $tall * $wall * $bedroom;
+//        卧室底漆面积=卧室地面积+卧室墙面积
+                $total_area =    $area + $wall_space_area;
+            }
+        }else{
+            return '错误信息';
+        }
+        return $total_area;
     }
 }

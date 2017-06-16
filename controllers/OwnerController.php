@@ -594,7 +594,81 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
+        $post = [
+            'effect_id' => 1,
+            'master_bedroom' => 1,
+            'secondary_bedroom' => 1,
+            'sitting_room' => 1,
+            'dining_room' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 62,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 1,
+            'series' => 1,
+            'province' => 510000,
+            'city' => 510100
+        ];
+        $arr = [];
+        $arr['profit'] = $post['1'] ?? 0.7;
+        $arr['worker_kind'] = '油漆工';
+        //工人一天单价
+        $labor_costs = LaborCost::univalence($post['city'], $arr['worker_kind']);
+        $primer = 0;
+        $finishing_coat = 0;
+        foreach ($labor_costs as $labor_cost)
+        {
+            if ($labor_cost['worker_kind_details'] == '乳胶漆底漆'){
+                $primer = $labor_cost['day_area'];
+            }
+            if ($labor_cost['worker_kind_details'] == '乳胶漆面漆'){
+                $finishing_coat = $labor_cost['day_area'];
+            }
+        }
 
+        if (!empty($post['effect_id'])){
+           $decoration_list = DecorationList::findById($post['effect_id']);
+           $area = DecorationParticulars::findByOne($decoration_list);
+           $tall = $tall ?? 2.8;
+        }else{
+            $project = '油漆';
+            $areas  = EngineeringUniversalCriterion::findByAll($project);
+            $area['masterBedroom_area'] = 0;
+            $area['sittingRoom_diningRoom_area'] = 0;
+            $tall = 0;
+            foreach ($areas as $one){
+                if ($one['project_particulars'] == '卧室面积'){
+                    $area['masterBedroom_area'] = $one['project_value'];
+                    $tall = $one['particular'];
+                }elseif ($one['project_particulars'] == '客厅面积'){
+                    $area['sittingRoom_diningRoom_area'] = $one['project_value'];
+                    $tall = $one['particular'];
+                }
+            }
+        }
+        //卧室底漆面积
+        $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'],$post['area'],$tall,$post['master_bedroom']);
+        //客餐厅底漆面积
+        $drawing_room_primer_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'],$post['area'],$tall,$post['sitting_room'],3);
+//        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
+        $primer_area = $bedroom_primer_area + $drawing_room_primer_area;
+//        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
+        $primer_day = $primer_area / $primer;
+
+        //卧室面漆面积
+        $bedroom_finishing_coat_area = BasisDecorationService::paintedArea($area['masterBedroom_area'],$post['area'],$tall,$post['master_bedroom']);
+        //客餐厅面漆面积
+        $drawing_room_finishing_coat_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'],$post['area'],$tall,$post['sitting_room'],3);
+        //乳胶漆面漆面积
+        $finishing_coat_area = $bedroom_finishing_coat_area + $drawing_room_finishing_coat_area;
+//        乳胶漆面漆天数：乳胶漆面漆面积÷【每天做乳胶漆面漆面积】
+        $finishing_coat_day = $finishing_coat_area / $finishing_coat;
+
+//        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
+        $bedroom_primer_perimeter = 0;
     }
 
     /**
