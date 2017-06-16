@@ -42,6 +42,7 @@ return [
     'brand-review' => [1],
     'brand-edit' => [1],
     'brand-offline-reason-reset' => [1],
+    'brand-reason-reset' => [1],
     'brand-status-toggle' => [1],
     'brand-disable-batch' => [1],
     'brand-enable-batch' => [1],

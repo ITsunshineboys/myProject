@@ -60,6 +60,7 @@ class MallController extends Controller
         'brand-review',
         'brand-edit',
         'brand-offline-reason-reset',
+        'brand-reason-reset',
         'brand-status-toggle',
         'brand-disable-batch',
         'brand-enable-batch',
@@ -127,6 +128,7 @@ class MallController extends Controller
                     'brand-review' => ['post',],
                     'brand-edit' => ['post',],
                     'brand-offline-reason-reset' => ['post',],
+                    'brand-reason-reset' => ['post',],
                     'brand-status-toggle' => ['post',],
                     'brand-disable-batch' => ['post',],
                     'brand-enable-batch' => ['post',],
@@ -1675,6 +1677,55 @@ class MallController extends Controller
         }
 
         if (!$brand->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Reset brand review reason action
+     *
+     * @return string
+     */
+    public function actionBrandReasonReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $goodsBrand = GoodsBrand::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'review_status', [
+                GoodsBrand::REVIEW_STATUS_APPROVE,
+                GoodsBrand::REVIEW_STATUS_REJECT,
+            ]])
+            ->one();
+
+        if (!$goodsBrand) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goodsBrand->reason = trim(Yii::$app->request->post('reason', ''));
+
+        if (!$goodsBrand->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goodsBrand->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
