@@ -76,6 +76,7 @@ class MallController extends Controller
         'goods-attrs-admin',
         'goods-status-toggle',
         'goods-disable-batch',
+        'goods-offline-reason-reset',
     ];
 
     /**
@@ -134,6 +135,7 @@ class MallController extends Controller
                     'goods-edit' => ['post',],
                     'goods-status-toggle' => ['post',],
                     'goods-disable-batch' => ['post',],
+                    'goods-offline-reason-reset' => ['post',],
                 ],
             ],
         ];
@@ -2921,6 +2923,47 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Reset goods offline reason action
+     *
+     * @return string
+     */
+    public function actionGoodsOfflineReasonReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $goods = Goods::find()->where(['id' => $id, 'status' => Goods::STATUS_OFFLINE])->one();
+        if (!$goods) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
+
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }
