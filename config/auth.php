@@ -63,4 +63,5 @@ return [
     'goods-edit-lhzz' => [1],
     'goods-attrs-admin' => [6],
     'goods-status-toggle' => [1, 6],
+    'goods-disable-batch' => [1, 6],
 ];

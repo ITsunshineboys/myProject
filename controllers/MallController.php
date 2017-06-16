@@ -75,6 +75,7 @@ class MallController extends Controller
         'goods-edit-lhzz',
         'goods-attrs-admin',
         'goods-status-toggle',
+        'goods-disable-batch',
     ];
 
     /**
@@ -132,6 +133,7 @@ class MallController extends Controller
                     'goods-add' => ['post',],
                     'goods-edit' => ['post',],
                     'goods-status-toggle' => ['post',],
+                    'goods-disable-batch' => ['post',],
                 ],
             ],
         ];
@@ -2849,6 +2851,64 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Disable goods records in batches action.
+     *
+     * @return string
+     */
+    public function actionGoodsDisableBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $operator = Supplier::find()->where(['uid' => $user->id])->one();
+        } else {
+            $operator = Lhzz::find()->where(['uid' => $user->id])->one();
+        }
+
+        $updates = [
+            'status' => Goods::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_uid' => $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0,
+            'offline_person' => $operator->nickname
+        ];
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            $updates['offline_reason'] = Yii::$app->request->post('offline_reason', '');
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (Goods::updateAll($updates, $where) != count(explode(',', $ids))) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
 
         return Json::encode([
             'code' => 200,
