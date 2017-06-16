@@ -3144,6 +3144,16 @@ class MallController extends Controller
             ]);
         }
 
+        $status = (int)Yii::$app->request->get('status', Goods::STATUS_ONLINE);
+        if (!in_array($status, array_keys(Goods::$statuses))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = "status = {$status}";
+
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
             $supplier = Supplier::find()->where(['uid' => $user->id])->one();
             if (!$supplier) {
@@ -3154,21 +3164,12 @@ class MallController extends Controller
                 ]);
             }
 
-            $where = "supplier_id = {$supplier->id}";
-        } else {
-            $status = (int)Yii::$app->request->get('status', GoodsCategory::STATUS_ONLINE);
-            if (!in_array($status, array_keys(GoodsCategory::$statuses))) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            $where = "supplier_id = 0 and status = {$status}";
+            $where .= " and supplier_id = {$supplier->id}";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
+        $fromLhzz = $user->login_role_id == Yii::$app->params['lhzzRoleId'];
 
         return Json::encode([
             'code' => 200,
@@ -3176,7 +3177,7 @@ class MallController extends Controller
             'data' => [
                 'goods_list_admin' => [
                     'total' => (int)Goods::find()->where($where)->asArray()->count(),
-                    'details' => Goods::pagination($where, Goods::FIELDS_ADMIN, $page, $size, $orderBy)
+                    'details' => Goods::pagination($where, Goods::FIELDS_ADMIN, $page, $size, $orderBy, $fromLhzz)
                 ]
             ],
         ]);

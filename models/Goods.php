@@ -61,6 +61,7 @@ class Goods extends ActiveRecord
         'reason',
         'offline_reason',
         'offline_person',
+        'offline_uid',
     ];
 
     /**
@@ -111,7 +112,7 @@ class Goods extends ActiveRecord
      * @param  array $orderBy order by fields default sold_number desc
      * @return array
      */
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['sold_number' => SORT_DESC])
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['sold_number' => SORT_DESC], $fromLhzz = false)
     {
         $offset = ($page - 1) * $size;
         $goodsList = self::find()
@@ -143,8 +144,6 @@ class Goods extends ActiveRecord
                 isset($goods['purchase_price_manager']) && $goods['purchase_price_manager'] /= 100;
                 isset($goods['purchase_price_designer']) && $goods['purchase_price_designer'] /= 100;
 
-                isset($goods['status']) && $goods['status'] = self::$statuses[$goods['status']];
-
                 if (isset($goods['create_time'])) {
                     $goods['create_time'] = $goods['create_time']
                         ? date('Y-m-d H:i', $goods['create_time'])
@@ -168,6 +167,37 @@ class Goods extends ActiveRecord
                         ? date('Y-m-d H:i', $goods['delete_time'])
                         : '';
                 }
+
+                if ($fromLhzz) {
+                    if (isset($goods['status'])) {
+                        if ($goods['status'] == self::STATUS_OFFLINE) {
+                            $goods['operator'] = $goods['offline_person'];
+                        } elseif ($goods['status'] == self::STATUS_ONLINE) {
+                            $goods['operator'] = $goods['online_person'];
+                        }
+                    }
+                } else {
+                    if (isset($goods['offline_person'])
+                        && isset($goods['status'])
+                        && $goods['status'] == self::STATUS_OFFLINE
+                    ) {
+                        $goods['operator'] = $goods['offline_uid'] > 0 ? '系统下架' : $goods['offline_person'];
+                    }
+                }
+
+                if (isset($goods['offline_uid'])) {
+                    unset($goods['offline_uid']);
+                }
+
+                if (isset($goods['offline_person'])) {
+                    unset($goods['offline_person']);
+                }
+
+                if (isset($goods['online_person'])) {
+                    unset($goods['online_person']);
+                }
+
+                isset($goods['status']) && $goods['status'] = self::$statuses[$goods['status']];
             }
         }
         return $goodsList;
