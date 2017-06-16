@@ -284,7 +284,9 @@ class GoodsCategory extends ActiveRecord
             return false;
         }
 
-        if (self::find()->where('deleted = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
+        if (self::find()->where('deleted = 0 and ' . $where)->count()
+            != count(explode(',', $ids))
+        ) {
             return false;
         }
 

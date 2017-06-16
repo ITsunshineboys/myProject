@@ -2877,6 +2877,14 @@ class MallController extends Controller
             ]);
         }
 
+        $canDisable = Goods::canDisable($ids);
+        if (!$canDisable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $where = 'id in(' . $ids . ')';
         $user = Yii::$app->user->identity;
 
