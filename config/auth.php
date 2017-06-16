@@ -67,4 +67,5 @@ return [
     'goods-status-toggle' => [1, 6],
     'goods-disable-batch' => [1, 6],
     'goods-offline-reason-reset' => [1],
+    'goods-reason-reset' => [1],
 ];
