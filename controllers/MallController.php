@@ -80,6 +80,7 @@ class MallController extends Controller
         'goods-disable-batch',
         'goods-offline-reason-reset',
         'goods-reason-reset',
+        'goods-list-admin',
     ];
 
     /**
@@ -2911,7 +2912,7 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
 
-        if ($model->status != Goods::STATUS_ONLINE
+        if ($model->status == Goods::STATUS_WAIT_ONLINE
             && !$model->canOnline($user)
         ) {
             $code = 403;
@@ -3113,6 +3114,71 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Admin goods list action
+     *
+     * @return string
+     */
+    public function actionGoodsListAdmin()
+    {
+        $code = 1000;
+
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new Goods;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+            if (!$supplier) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $where = "supplier_id = {$supplier->id}";
+        } else {
+            $status = (int)Yii::$app->request->get('status', GoodsCategory::STATUS_ONLINE);
+            if (!in_array($status, array_keys(GoodsCategory::$statuses))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $where = "supplier_id = 0 and status = {$status}";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods_list_admin' => [
+                    'total' => (int)Goods::find()->where($where)->asArray()->count(),
+                    'details' => Goods::pagination($where, Goods::FIELDS_ADMIN, $page, $size, $orderBy)
+                ]
+            ],
         ]);
     }
 }

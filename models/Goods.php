@@ -40,6 +40,29 @@ class Goods extends ActiveRecord
         '上门安装'
     ];
 
+    const FIELDS_ADMIN = [
+        'id',
+        'sku',
+        'title',
+        'supplier_price',
+        'platform_price',
+        'market_price',
+        'purchase_price_decoration_company',
+        'purchase_price_manager',
+        'purchase_price_designer',
+        'left_number',
+        'sold_number',
+        'status',
+        'create_time',
+        'online_time',
+        'offline_time',
+        'delete_time',
+        'description',
+        'reason',
+        'offline_reason',
+        'offline_person',
+    ];
+
     /**
      * @var array online status list
      */
@@ -103,13 +126,48 @@ class Goods extends ActiveRecord
             || in_array('platform_price', $select)
             || in_array('supplier_price', $select)
             || in_array('market_price', $select)
-            || in_array('purchase_price', $select)
+            || in_array('purchase_price_decoration_company', $select)
+            || in_array('purchase_price_manager', $select)
+            || in_array('purchase_price_designer', $select)
+            || in_array('create_time', $select)
+            || in_array('online_time', $select)
+            || in_array('offline_time', $select)
+            || in_array('delete_time', $select)
+            || in_array('status', $select)
         ) {
             foreach ($goodsList as &$goods) {
                 isset($goods['platform_price']) && $goods['platform_price'] /= 100;
                 isset($goods['supplier_price']) && $goods['supplier_price'] /= 100;
                 isset($goods['market_price']) && $goods['market_price'] /= 100;
-                isset($goods['purchase_price']) && $goods['purchase_price'] /= 100;
+                isset($goods['purchase_price_decoration_company']) && $goods['purchase_price_decoration_company'] /= 100;
+                isset($goods['purchase_price_manager']) && $goods['purchase_price_manager'] /= 100;
+                isset($goods['purchase_price_designer']) && $goods['purchase_price_designer'] /= 100;
+
+                isset($goods['status']) && $goods['status'] = self::$statuses[$goods['status']];
+
+                if (isset($goods['create_time'])) {
+                    $goods['create_time'] = $goods['create_time']
+                        ? date('Y-m-d H:i', $goods['create_time'])
+                        : '';
+                }
+
+                if (isset($goods['online_time'])) {
+                    $goods['online_time'] = $goods['online_time']
+                        ? date('Y-m-d H:i', $goods['online_time'])
+                        : '';
+                }
+
+                if (isset($goods['offline_time'])) {
+                    $goods['offline_time'] = $goods['offline_time']
+                        ? date('Y-m-d H:i', $goods['offline_time'])
+                        : '';
+                }
+
+                if (isset($goods['delete_time'])) {
+                    $goods['delete_time'] = $goods['delete_time']
+                        ? date('Y-m-d H:i', $goods['delete_time'])
+                        : '';
+                }
             }
         }
         return $goodsList;
@@ -534,11 +592,7 @@ AND goods.id IN (" . $id . ")";
      */
     public function canOnline(ActiveRecord $user)
     {
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            if ($this->offline_uid == 0) {
-                return true;
-            }
-        } elseif ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
             if ($this->validateCategoryId('category_id')
                 && $this->validateBrandId('brand_id')
                 && $this->validateSupplierId('supplier_id')
