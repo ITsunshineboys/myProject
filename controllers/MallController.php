@@ -52,6 +52,7 @@ class MallController extends Controller
         'category-add',
         'category-edit',
         'category-offline-reason-reset',
+        'category-reason-reset',
         'category-review-list',
         'category-brands',
         'category-attrs',
@@ -121,6 +122,7 @@ class MallController extends Controller
                     'category-disable-batch' => ['post',],
                     'category-enable-batch' => ['post',],
                     'category-offline-reason-reset' => ['post',],
+                    'category-reason-reset' => ['post',],
                     'brand-add' => ['post',],
                     'brand-review' => ['post',],
                     'brand-edit' => ['post',],
@@ -1715,6 +1717,55 @@ class MallController extends Controller
         }
 
         if (!$category->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Reset category review reason action
+     *
+     * @return string
+     */
+    public function actionCategoryReasonReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $goodsCategory = GoodsCategory::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'review_status', [
+                GoodsCategory::REVIEW_STATUS_APPROVE,
+                GoodsCategory::REVIEW_STATUS_REJECT,
+            ]])
+            ->one();
+
+        if (!$goodsCategory) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goodsCategory->reason = trim(Yii::$app->request->post('reason', ''));
+
+        if (!$goodsCategory->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goodsCategory->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,

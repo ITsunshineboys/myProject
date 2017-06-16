@@ -32,6 +32,7 @@ return [
     'category-add' => [1, 6],
     'category-edit' => [1],
     'category-offline-reason-reset' => [1],
+    'category-reason-reset' => [1],
     'category-review-list' => [1],
     'category-brands' => [6],
     'category-attrs' => [6],
