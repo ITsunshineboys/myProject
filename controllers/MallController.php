@@ -2912,6 +2912,7 @@ class MallController extends Controller
             ->where(['id' => $id])
             ->andWhere(['in', 'status', [Goods::STATUS_OFFLINE, Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE]])
             ->one();
+
         if (!$model) {
             return Json::encode([
                 'code' => $code,
@@ -2921,14 +2922,22 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
 
-        if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])
-            && !$model->canOnline($user)
-        ) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            if (!$model->canOnline($user)) {
+                $code = 403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        } else {
+            if (!in_array($model->status, [Goods::STATUS_ONLINE, Goods::STATUS_OFFLINE])) {
+                $code = 403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
 
         $now = time();
@@ -2940,17 +2949,22 @@ class MallController extends Controller
         }
 
         if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])) {
-            $model->status = Goods::STATUS_ONLINE;
-            $model->online_time = $now;
-            $model->online_uid = $operator->id;
-            $model->online_person = $operator->nickname;
+            if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+                $model->status = Goods::STATUS_ONLINE;
+                $model->online_time = $now;
+                $model->online_uid = $operator->id;
+                $model->online_person = $operator->nickname;
+            } else {
+                $model->status = Goods::STATUS_WAIT_ONLINE;
+            }
         } else {
             $model->status = Goods::STATUS_OFFLINE;
             $model->offline_time = $now;
             $model->offline_uid = $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0;
             $model->offline_person = $operator->nickname;
-            $user->login_role_id == Yii::$app->params['lhzzRoleId']
-            && $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+                $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            }
         }
 
         if (!$model->validate()) {
