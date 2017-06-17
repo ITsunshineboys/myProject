@@ -78,6 +78,7 @@ class MallController extends Controller
         'goods-attrs-admin',
         'goods-status-toggle',
         'goods-disable-batch',
+        'goods-delete-batch',
         'goods-enable-batch',
         'goods-offline-reason-reset',
         'goods-reason-reset',
@@ -142,6 +143,8 @@ class MallController extends Controller
                     'goods-edit' => ['post',],
                     'goods-status-toggle' => ['post',],
                     'goods-disable-batch' => ['post',],
+                    'goods-delete-batch' => ['post',],
+                    'goods-enable-batch' => ['post',],
                     'goods-offline-reason-reset' => ['post',],
                     'goods-reason-reset' => ['post',],
                 ],
@@ -3071,6 +3074,60 @@ class MallController extends Controller
             'online_time' => time(),
             'online_uid' => $operator->id,
             'online_person' => $operator->nickname
+        ];
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (Goods::updateAll($updates, $where) != count(explode(',', $ids))) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Delete goods records in batches action.
+     *
+     * @return string
+     */
+    public function actionGoodsDeleteBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canDelete = Goods::canDelete($ids);
+        if (!$canDelete) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        $updates = [
+            'status' => Goods::STATUS_DELETED,
+            'delete_time' => time(),
         ];
 
         $transaction = Yii::$app->db->beginTransaction();

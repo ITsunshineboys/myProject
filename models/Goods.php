@@ -433,6 +433,36 @@ AND goods.id IN (" . $id . ")";
     }
 
     /**
+     * Check if can delete goods records
+     *
+     * @param  string $ids goods record ids separated by commas
+     * @return bool
+     */
+    public static function canDelete($ids)
+    {
+        $ids = trim($ids);
+        $ids = trim($ids, ',');
+
+        if (!$ids) {
+            return false;
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        if (self::find()->where($where)->count() != count(explode(',', $ids))) {
+            return false;
+        }
+
+        if (self::find()->where('offline_uid = 0 and status = ' . self::STATUS_OFFLINE . ' and ' . $where)->count()
+            != count(explode(',', $ids))
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Check if can enable goods records
      *
      * @param  string $ids goods record ids separated by commas

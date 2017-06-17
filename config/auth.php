@@ -66,6 +66,7 @@ return [
     'goods-attrs-admin' => [6],
     'goods-status-toggle' => [1, 6],
     'goods-disable-batch' => [1, 6],
+    'goods-delete-batch' => [6],
     'goods-enable-batch' => [1],
     'goods-offline-reason-reset' => [1],
     'goods-reason-reset' => [1],
