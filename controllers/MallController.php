@@ -3335,6 +3335,10 @@ class MallController extends Controller
         }
 
         $where = "status = {$status}";
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        if ($keyword) {
+            $where .= " and (sku like '{$keyword}%' or title like '{$keyword}%')";
+        }
 
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
             $supplier = Supplier::find()->where(['uid' => $user->id])->one();
