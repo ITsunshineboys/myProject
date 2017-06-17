@@ -83,6 +83,7 @@ class MallController extends Controller
         'goods-offline-reason-reset',
         'goods-reason-reset',
         'goods-list-admin',
+        'goods-inventory-reset',
     ];
 
     /**
@@ -147,6 +148,7 @@ class MallController extends Controller
                     'goods-enable-batch' => ['post',],
                     'goods-offline-reason-reset' => ['post',],
                     'goods-reason-reset' => ['post',],
+                    'goods-inventory-reset' => ['post',],
                 ],
             ],
         ];
@@ -3169,6 +3171,52 @@ class MallController extends Controller
         }
 
         $goods->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
+
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Reset goods inventory action
+     *
+     * @return string
+     */
+    public function actionGoodsInventoryReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $goods = Goods::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'status', [Goods::STATUS_OFFLINE, Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE]])
+            ->one();
+
+        if (!$goods) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods->left_number = (int)Yii::$app->request->post('left_number', 0);
 
         if (!$goods->validate()) {
             return Json::encode([

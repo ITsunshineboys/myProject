@@ -71,4 +71,5 @@ return [
     'goods-offline-reason-reset' => [1],
     'goods-reason-reset' => [1],
     'goods-list-admin' => [1, 6],
+    'goods-inventory-reset' => [6],
 ];
