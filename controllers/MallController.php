@@ -54,7 +54,7 @@ class MallController extends Controller
         'category-offline-reason-reset',
         'category-reason-reset',
         'category-review-list',
-        'category-brands',
+//        'category-brands',
         'category-attrs',
         'brand-add',
         'brand-review',
