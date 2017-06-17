@@ -622,7 +622,9 @@ AND goods.id IN (" . $id . ")";
      */
     public function canOnline(ActiveRecord $user)
     {
-        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']
+            && in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE])
+        ) {
             if ($this->validateCategoryId('category_id')
                 && $this->validateBrandId('brand_id')
                 && $this->validateSupplierId('supplier_id')

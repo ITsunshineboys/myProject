@@ -2902,7 +2902,10 @@ class MallController extends Controller
             ]);
         }
 
-        $model = Goods::findOne($id);
+        $model = Goods::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'status', [Goods::STATUS_OFFLINE, Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE]])
+            ->one();
         if (!$model) {
             return Json::encode([
                 'code' => $code,
@@ -2912,7 +2915,7 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
 
-        if ($model->status == Goods::STATUS_WAIT_ONLINE
+        if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])
             && !$model->canOnline($user)
         ) {
             $code = 403;
@@ -2930,7 +2933,7 @@ class MallController extends Controller
             $operator = Lhzz::find()->where(['uid' => $user->id])->one();
         }
 
-        if ($model->status == Goods::STATUS_OFFLINE) {
+        if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])) {
             $model->status = Goods::STATUS_ONLINE;
             $model->online_time = $now;
             $model->online_uid = $operator->id;
