@@ -433,6 +433,39 @@ AND goods.id IN (" . $id . ")";
     }
 
     /**
+     * Check if can enable goods records
+     *
+     * @param  string $ids goods record ids separated by commas
+     * @return bool
+     */
+    public static function canEnable($ids)
+    {
+        $ids = trim($ids);
+        $ids = trim($ids, ',');
+
+        if (!$ids) {
+            return false;
+        }
+
+        $where = 'id in(' . $ids . ')';
+        $idsArr = explode(',', $ids);
+
+        if (self::find()->where($where)->count() != count($idsArr)) {
+            return false;
+        }
+
+        if ((self::find()->where('status = ' . self::STATUS_OFFLINE . ' and ' . $where)->count()
+                == count($idsArr))
+            || (self::find()->where('status = ' . self::STATUS_WAIT_ONLINE . ' and ' . $where)->count()
+                == count($idsArr))
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

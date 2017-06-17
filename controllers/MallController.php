@@ -78,6 +78,7 @@ class MallController extends Controller
         'goods-attrs-admin',
         'goods-status-toggle',
         'goods-disable-batch',
+        'goods-enable-batch',
         'goods-offline-reason-reset',
         'goods-reason-reset',
         'goods-list-admin',
@@ -3013,6 +3014,64 @@ class MallController extends Controller
         if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
             $updates['offline_reason'] = Yii::$app->request->post('offline_reason', '');
         }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (Goods::updateAll($updates, $where) != count(explode(',', $ids))) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Enable goods records in batches action.
+     *
+     * @return string
+     */
+    public function actionGoodsEnableBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canEnable = Goods::canEnable($ids);
+        if (!$canEnable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
+        $operator = Lhzz::find()->where(['uid' => $user->id])->one();
+
+        $updates = [
+            'status' => Goods::STATUS_ONLINE,
+            'online_time' => time(),
+            'online_uid' => $operator->id,
+            'online_person' => $operator->nickname
+        ];
 
         $transaction = Yii::$app->db->beginTransaction();
 
