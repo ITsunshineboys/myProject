@@ -32,10 +32,6 @@ class BasisDecorationService
      */
     public static function quantity($points = '',$goods = [],$crafts= '')
     {
-    //        电线费用：个数1×抓取的商品价格
-    //        网线费用：个数2×抓取的商品价格
-    //        个数1：（强电点位×【10m】÷抓取的商品的长度）
-    //        个数2：（弱电点位×【10m】÷抓取的商品的长度）
         if($goods !== null && $points !== null){
             $material = 0;
             $spool = 0;
@@ -70,18 +66,18 @@ class BasisDecorationService
                 }
             }
             //个数计算
-            $quantity = ceil($points * $material / $goods_value);
+            $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
             //费用计算
-            $string = $quantity * $goods_price;
+            $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
             //个数计算
-            $spool_quantity = ceil($points * $spool / $spool_value);
+            $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
             //费用计算
-            $spool = $spool_quantity * $spool_price;
-            $bottom_case = $points * $bottom_case;
+            $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
+            $electricity['bottom_case'] = $points * $bottom_case;
             //总费用
-            $cost = $string + $spool + $bottom_case;
+            $electricity['total_cost'] =  $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_case'];
         }
-     return $cost;
+     return  $electricity;
     }
 
     /**
@@ -131,15 +127,15 @@ class BasisDecorationService
 //            个数：（水路总点位×【2m】÷抓取的商品的长度）
 //            PVC费用：个数×抓取的商品价格
 //            个数：（水路总点位×【2m】÷抓取的商品的长度）
-            $ppr_quantity = ceil($points * $ppr / $ppr_value);
+            $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
+            $waterway['ppr_cost'] = $waterway['ppr_quantity'] * $ppr_price;
             //PPR费用
-            $ppr_cost = $ppr_quantity * $ppr_price;
-            $pvc_quantity = ceil($points * $ppr / $pvc_value);
-            $pvc_cost = $pvc_quantity * $pvc_price;
-            $cost = $ppr_cost + $pvc_cost;
+            $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
+            $waterway['pvc_cost'] = $waterway['pvc_quantity'] * $pvc_price;
+            $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
 
        }
-        return $cost;
+        return $waterway;
     }
 
     /**
@@ -196,11 +192,11 @@ class BasisDecorationService
             }
 
 //            个数：（防水总面积×【1.25】÷抓取的商品的KG）
-            $quantity = ceil($points * $material /$goods_value);
+            $waterproof['quantity'] = ceil($points * $material /$goods_value);
 //            防水涂剂费用：个数×抓取的商品价格
-            $cost = $quantity * $goods_platform_price;
+            $waterproof['cost'] =  $waterproof['quantity'] * $goods_platform_price;
         }
-        return $cost;
+        return $waterproof;
     }
 
     /**
@@ -576,9 +572,9 @@ class BasisDecorationService
                 }
             }
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
-            $plasterboard_quantity = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material +$video_wall);
+            $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material +$video_wall);
 //            石膏板费用：个数×商品价格
-            $plasterboard_cost = $plasterboard_quantity * $plasterboard['platform_price'];
+            $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
         }
         return $plasterboard_cost;
     }
@@ -611,15 +607,16 @@ class BasisDecorationService
 //          个数=个数1+个数2
 //          个数1：（造型长度÷【1.5m】）
 //          个数2：（平顶面积÷【1.5m²】）
-            $main_keel_quantity = ceil($modelling_length / $plasterboard_material + $flat_area /$plasterboard_material);
+            $keel_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area /$plasterboard_material);
 //          主龙骨费用：个数×商品价格
-            $keel_cost = $main_keel_quantity * $goods_price['platform_price'];
+            $keel_cost['cost'] = $keel_cost['quantity'] * $goods_price['platform_price'];
 
         }
         return $keel_cost;
     }
 
     /**
+     * 木作丝杆计算公式
      * @param string $modelling_length
      * @param string $flat_area
      * @param int $modelling_meter
@@ -647,13 +644,22 @@ class BasisDecorationService
 //            个数=个数1+个数2
 //            个数1：（造型长度÷【2m】）
 //            个数2：（平顶面积÷【2m²】
-            $lead_screw_quantity = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
+            $pole_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
 //            丝杆费用：个数×抓取的商品价格
-            $pole_cost = $lead_screw_quantity * $goods_price['platform_price'];
+            $pole_cost['cost'] = $pole_cost['quantity'] * $goods_price['platform_price'];
         }
         return $pole_cost;
     }
 
+    /**
+     * 乳胶漆面积计算公式
+     * @param array $area
+     * @param string $house_area
+     * @param string $bedroom
+     * @param float $tall
+     * @param int $wall
+     * @return array|string
+     */
     public static function paintedArea($area = [],$house_area = '',$bedroom = '',$tall = 2.8,$wall = 4)
     {
         if ($area && $house_area && $bedroom)
@@ -676,4 +682,50 @@ class BasisDecorationService
         }
         return $total_area;
     }
+
+    /**
+     * 乳胶漆周长计算公式
+     * @param array $area
+     * @param string $house_area
+     * @param string $bedroom
+     * @param int $wall
+     * @return float|string
+     */
+    public  static function paintedPerimeter($area = [],$house_area = '',$bedroom = '',$wall = 4)
+    {
+        if ($area && $house_area){
+            if ($area <= 1){
+                //        卧室地面积：【z】%×（房屋面积）
+                $ground_area =  $area * $house_area;
+                //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
+                $wall_space_perimeter = sqrt($ground_area / $bedroom) * $wall * $bedroom;
+            }else{
+                //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
+                $wall_space_perimeter = sqrt($area / $bedroom) * $wall * $bedroom;
+            }
+        }else{
+            return '错误信息';
+        }
+        return $wall_space_perimeter;
+    }
+
+    /**
+     * 乳胶漆 费用计算公式
+     * @param array $goods
+     * @param array $crafts
+     * @param array $area
+     * @return int
+     */
+    public static function paintedCost($goods = [],$craft = [],$area = [])
+    {
+        if ($goods && $craft && $area){
+
+//        个数：（腻子面积×【0.33kg】÷抓取的商品的规格重量）
+            $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods['value']);
+//        腻子费用：个数×商品价格
+            $putty_cost ['cost']  =  $putty_cost['quantity'] * $goods['platform_price'];
+        }
+        return $putty_cost;
+    }
+
 }
