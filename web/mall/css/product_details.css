@@ -44,6 +44,7 @@
     line-height: 3rem;
     font-size: 1.4rem;
     background-color: #fff;
+    /*border: 1px solid #666;*/
 }
 .main .standard >div:nth-child(1){
     position: absolute;
@@ -84,4 +85,51 @@
     display: inline-block;
     line-height: 3rem;
     background-color: #a94442;
+}
+.comment{
+    height: 3rem;
+    margin-top: 1rem;
+    background-color: white;
+    line-height: 3rem;
+    border-bottom:1px solid #666 ;
+}
+.comment span{
+    font-size: 1rem;
+    margin-left: 1rem;
+}
+
+.comment_list{
+    position: relative;
+    height: 10rem ;
+    background-color: white;
+    /*margin-left: 1rem;*/
+}
+.comment_list img{
+    width: 3rem;
+    border-radius:50% ;
+}
+.comment_list p{
+    margin-left: 0.3rem;
+    font-size: 1rem;
+}
+.user_comment{
+    position: absolute;
+    margin-left: 2rem;
+    margin-top: .6rem;
+    font-size: 1rem;
+}
+.comment_time{
+    position: absolute;
+    margin-left: 21rem;
+    margin-top: .6rem;
+    font-size: 1rem;
+}
+.all_comment{
+    height: 3rem;
+    background-color: white;
+    border-bottom: 1px solid #666;
+    border-top: 1px solid #666;
+    text-align: center;
+    line-height: 3rem;
+    font-size: 1rem;
 }

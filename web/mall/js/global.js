@@ -1,4 +1,4 @@
-var url="http://test.cdlhzz.cn:888/mall/";
+//var url="http://test.cdlhzz.cn:888/mall/";
 //var url="http://local.test.cdlhzz.cn/mall/";
 var app=angular.module("app",[]);
 //获取url中的？号后面的内容

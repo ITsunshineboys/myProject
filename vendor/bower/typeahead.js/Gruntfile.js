@@ -32,7 +32,7 @@ var semver = require('semver'),
 
 module.exports = function(grunt) {
   grunt.initConfig({
-    version: grunt.file.readJSON('package.json').version,
+    version: grunt.file.readJSON('commodity.json').version,
 
     tempDir: 'dist_temp',
     buildDir: 'dist',
@@ -262,7 +262,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('manifests', 'Update manifests.', function(version) {
     var _ = grunt.util._,
-        pkg = grunt.file.readJSON('package.json'),
+        pkg = grunt.file.readJSON('commodity.json'),
         bower = grunt.file.readJSON('bower.json'),
         jqueryPlugin = grunt.file.readJSON('typeahead.js.jquery.json');
 
@@ -287,7 +287,7 @@ module.exports = function(grunt) {
       version: version
     }), null, 2);
 
-    grunt.file.write('package.json', pkg);
+    grunt.file.write('commodity.json', pkg);
     grunt.file.write('bower.json', bower);
     grunt.file.write('typeahead.js.jquery.json', jqueryPlugin);
   });
