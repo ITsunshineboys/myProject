@@ -92,6 +92,8 @@ class BrandCategory extends ActiveRecord
             and bc.category_id = {$categoryId}"
         ;
         $sql .= $where;
+        $orderBy = " order by convert(b.name using gbk) asc";
+        $sql .= $orderBy;
 
         return Yii::$app->db
             ->createCommand($sql)
