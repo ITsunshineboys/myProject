@@ -84,6 +84,7 @@ class MallController extends Controller
         'goods-reason-reset',
         'goods-list-admin',
         'goods-inventory-reset',
+        'goods-images',
     ];
 
     /**
@@ -3362,5 +3363,25 @@ class MallController extends Controller
                 ]
             ],
         ]);
+    }
+
+    /**
+     * Goods images action
+     *
+     * @return string
+     */
+    public function actionGoodsImages()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods-images' => []
+            ],
+        ];
+
+        $goodsId = (int)Yii::$app->request->get('goods_id', 0);
+        $goodsId > 0 && $ret['data']['goods-images'] = GoodsImage::imagesByGoodsId($goodsId);
+        return Json::encode($ret);
     }
 }

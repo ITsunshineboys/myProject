@@ -14,14 +14,6 @@ use yii\db\ActiveRecord;
 class GoodsImage extends ActiveRecord
 {
     /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'goods_image';
-    }
-
-    /**
      * Check goods images number
      *
      * @param array $images
@@ -60,6 +52,32 @@ class GoodsImage extends ActiveRecord
 
         $code = 200;
         return $code;
+    }
+
+    /**
+     * Get images by goods id
+     *
+     * @param int $goodsId goods id
+     * @return array
+     */
+    public static function imagesByGoodsId($goodsId)
+    {
+        $goodsId = (int)$goodsId;
+        if ($goodsId <= 0) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select image from {{%" . self::tableName() . "}} where goods_id = {$goodsId}")
+            ->queryColumn();
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'goods_image';
     }
 
     /**
