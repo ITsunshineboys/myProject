@@ -8,6 +8,7 @@ use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
+use app\models\Style;
 use app\models\Supplier;
 use app\models\Lhzz;
 use app\models\LogisticsTemplate;
@@ -2562,22 +2563,30 @@ class MallController extends Controller
     }
 
     /**
-     * Category brands action
+     * Category brands, styles and series action
      *
      * @return string
      */
-    public function actionCategoryBrands()
+    public function actionCategoryBrandsStylesSeries()
     {
         $ret = [
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category-brands' => []
+                'category-brands-styles-series' => [
+                    'category-brands' => [],
+                    'category-styles' => [],
+                    'category-series' => [],
+                ]
             ],
         ];
 
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
-        $categoryId > 0 && $ret['data']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
+        if ($categoryId > 0) {
+            $ret['data']['category-brands-styles-series']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
+            $ret['data']['category-brands-styles-series']['category-styles'] = Style::stylesByCategoryId($categoryId);
+//            $ret['data']['category-brands-styles-series']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
+        }
         return Json::encode($ret);
     }
 

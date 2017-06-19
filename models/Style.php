@@ -26,4 +26,20 @@ class Style extends ActiveRecord
         $series = self::find()->asArray()->select($select)->all();
         return $series;
     }
+
+    /**
+     * Get styles by category id
+     *
+     * @param  int $categoryId category id
+     * @return array
+     */
+    public static function stylesByCategoryId($categoryId)
+    {
+        $categoryId = (int)$categoryId;
+        if ($categoryId <= 0) {
+            return [];
+        }
+
+        return self::find()->where(['category_id' => $categoryId])->select(['id', 'style'])->asArray()->all();
+    }
 }

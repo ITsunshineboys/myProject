@@ -35,7 +35,7 @@ CREATE TABLE `style` (
   `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
   `category_id` int(11) DEFAULT NULL default 0 COMMENT '分类id',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `series` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -48,7 +48,7 @@ CREATE TABLE `series` (
   `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
   `category_id` int(11) DEFAULT NULL default 0 COMMENT '分类id',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `effect_ picture` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -78,7 +78,7 @@ CREATE TABLE `labor_cost` (
   `univalence` bigint(10) NOT NULL COMMENT '工人单价',
   `worker_kind` varchar(20) DEFAULT NULL COMMENT '工人种类',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `decoration_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -93,7 +93,7 @@ CREATE TABLE `decoration_list` (
   `begin_time` datetime DEFAULT NULL COMMENT '开工时间',
   `end_time` datetime DEFAULT NULL COMMENT '竣工时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `main_ materials` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
