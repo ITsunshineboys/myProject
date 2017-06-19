@@ -326,12 +326,19 @@ class MallController extends Controller
             }
         }
 
+        $platformPriceMin = (int)Yii::$app->request->get('platform_price_min', 0);
+        $platformPriceMax = (int)Yii::$app->request->get('platform_price_max', 0);
+
+        $where =  "category_id = {$categoryId}";
+        $platformPriceMin && $where .= " and platform_price >= {$platformPriceMin}";
+        $platformPriceMax && $where .= " and platform_price <= {$platformPriceMax}";
+
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
         $select = Goods::CATEGORY_GOODS_APP;
         $categoryGoods = $sort
-            ? Goods::findByCategoryId($categoryId, $select, $page, $size, $orderBy)
-            : Goods::findByCategoryId($categoryId, $select, $page, $size);
+            ? Goods::pagination($where, $select, $page, $size, $orderBy)
+            : Goods::pagination($where, $select, $page, $size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
