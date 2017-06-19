@@ -310,7 +310,7 @@ class MallController extends Controller
         $sort = Yii::$app->request->get('sort', []);
         if ($sort) {
             foreach ($sort as &$v) {
-                if (stripos($sort[0], 'sold_number') !== false) {
+                if (stripos($v, 'sold_number') !== false) {
                     $v = 'sold_number:' .SORT_DESC;
                     break;
                 }
