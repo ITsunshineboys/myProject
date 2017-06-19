@@ -31,15 +31,16 @@ class Style extends ActiveRecord
      * Get styles by category id
      *
      * @param  int $categoryId category id
+     * @param array $select select fields default id and style
      * @return array
      */
-    public static function stylesByCategoryId($categoryId)
+    public static function stylesByCategoryId($categoryId, $select = ['id', 'style'])
     {
         $categoryId = (int)$categoryId;
         if ($categoryId <= 0) {
             return [];
         }
 
-        return self::find()->where(['category_id' => $categoryId])->select(['id', 'style'])->asArray()->all();
+        return self::find()->where(['category_id' => $categoryId])->select($select)->asArray()->all();
     }
 }
