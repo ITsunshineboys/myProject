@@ -270,11 +270,12 @@ class GoodsAttr extends ActiveRecord
             if ($lhzzAttr) {
                 $goodsAttr->unit = $lhzzAttr->unit;
                 $goodsAttr->addition_type = $lhzzAttr->addition_type;
-                if ($goodsAttr->addition_type == self::ADDITION_TYPE_DROPDOWN_LIST
-                    && !is_numeric($goodsAttr->value)
-                ) {
-                    return $code;
-                }
+                // cancel value check
+//                if ($goodsAttr->addition_type == self::ADDITION_TYPE_DROPDOWN_LIST
+//                    && !is_numeric($goodsAttr->value)
+//                ) {
+//                    return $code;
+//                }
             }
 
             if (!$goodsAttr->validate()) {
