@@ -308,19 +308,30 @@ class MallController extends Controller
         }
 
         $sort = Yii::$app->request->get('sort', []);
-        $model = new Goods;
-        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
-        if ($orderBy === false) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        if ($sort) {
+            foreach ($sort as &$v) {
+                if (stripos($sort[0], 'sold_number') !== false) {
+                    $v = 'sold_number:' .SORT_DESC;
+                    break;
+                }
+            }
+
+            $model = new Goods;
+            $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+            if ($orderBy === false) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
         $select = Goods::CATEGORY_GOODS_APP;
-        $categoryGoods = Goods::findByCategoryId($categoryId, $select, $page, $size, $orderBy);
+        $categoryGoods = $sort
+            ? Goods::findByCategoryId($categoryId, $select, $page, $size, $orderBy)
+            : Goods::findByCategoryId($categoryId, $select, $page, $size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
