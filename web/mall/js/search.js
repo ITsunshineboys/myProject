@@ -1,7 +1,7 @@
 /**
  * Created by xl on 2017/6/17 0017.
  */
-$(".search").on("click",function () {
+$(".search").keyup(function () {
     var input_value =$(".search").val();
     if(input_value ==""){
         $(".tab_none").show();

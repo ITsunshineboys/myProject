@@ -39,7 +39,7 @@
 }
 .main .standard{
     height: 3rem;
-    margin-top: 1rem;
+    margin-top: .6rem;
     position: relative;
     line-height: 3rem;
     font-size: 1.4rem;
@@ -88,7 +88,7 @@
 }
 .comment{
     height: 3rem;
-    margin-top: 1rem;
+    margin-top: .8rem;
     background-color: white;
     line-height: 3rem;
     border-bottom:1px solid #666 ;
@@ -132,4 +132,18 @@
     text-align: center;
     line-height: 3rem;
     font-size: 1rem;
+}
+.shop_header{
+    height: 15rem;
+    width: auto;
+    background-color: white;
+}
+.shop_header_child img{
+    padding-left: 1rem;
+}
+.shop_header_child span{
+    position: relative;
+    top:-2rem;
+    font-size:1.2rem;
+    margin-left: 1rem;
 }

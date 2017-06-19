@@ -2,54 +2,50 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <!-- meta使用viewport以确保页面可自由缩放 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
-    <link rel="stylesheet" href="../css/all.css"/>
-    <link rel="stylesheet" href="css/rem.css"/>
+    <link rel="stylesheet" href="css/rem.css">
+    <link rel="stylesheet" href="css/all.css"/>
+    <link rel="stylesheet" href="css/inteligent_details.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/commodity_details.css"/>
     <link rel="stylesheet" href="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <!--<script src="https://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>-->
     <script src="js/jquery-1.11.2.js"></script>
     <script src="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
-<body ng-app="myApp">
+<body>
 <header>
-    <!--搜索框-->
-    <div class="search_box">
-        <span class="return_arrow"><</span>
-        <input href="search.html" class="search" placeholder="请输入想购买的商品"/>
-        <span class="massage">...</span>
+    <div>
+        <span><</span>
+        <sapn class="span_center">欧式板</sapn>
     </div>
 </header>
-<section ng-controller="comment_controller">
+<section>
     <!--便签栏-->
     <div class="memo_pad">
-        <li ng-click="sort('comment_number')" >销量优先</li>
-        <li ng-click="sort('platform_price')">价格</li>
-        <li ng-click="sort('favourable_comment_rate')">好评率</li>
+        <li ng-click="sales_priority($index)" ng-click="myFilter.comment_number">销量优先</li>
+        <li>价格</li>
+        <li>好评率</li>
         <li data-toggle="modal" data-target="#myModal">筛选</li>
     </div>
     <!--商品展示列表-->
     <div class="mall_list">
-        <div class="flex_div" >
-               <div class=" item_commodity"  ng-repeat="n in message |limitTo:myFilter.limit ">
-                   <div class="item_commodity_divimg">
-                      <img src="{{n.image1}}" alt="" class="img_item " />
-                   </div>
-                   <div class="item_commodity_comment">
-                       <p class="comment_one">{{n.title}}</p>
-                       <p class="comment_two">{{n.subtitle}}</p>
-                       <span class="comment_span">销量数：{{n.comment_number}}&nbsp;&nbsp;</span>
-                       <span class="comment_span_two">{{n.favourable_comment_rate}}%好评</span>
-                       <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">￥{{n.platform_price}}</p>
-                   </div>
-               </div>
+        <div class="flex_div" ng-controller="comment_controller">
+            <div class=" item_commodity"  ng-repeat="n in message |limitTo:myFilter.limit | filter:{comment_number:myFilter.comment_number}:returnMore | orderBy:'platform_price':true">
+                <div class="item_commodity_divimg">
+                    <img src="{{n.image1}}" alt="" class="img_item " />
+                </div>
+                <div class="item_commodity_comment">
+                    <p class="comment_one">{{n.title}}</p>
+                    <p class="comment_two">{{n.subtitle}}</p>
+                    <span class="comment_span">销量数：{{n.comment_number}}&nbsp;&nbsp;</span>
+                    <span class="comment_span_two">{{n.favourable_comment_rate}}%好评</span>
+                    <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">￥{{n.platform_price}}</p>
+                </div>
+            </div>
         </div>
-   </div>
+    </div>
 
-       <!--筛选框-->
+    <!--筛选框-->
     <div class="popup_screen">
         <div class="style_popup">
             <!-- Modal -->
@@ -157,16 +153,16 @@
                                                 </div>
 
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default back_btn" data-dismiss="modal">返回</button>
-                                                <button type="button" class="btn btn-primary back_btn">确认</button>
+                                            <div class="footer_div_btn">
+                                                    <button type="button" class="btn btn-default back_btn" data-dismiss="modal">返回</button>
+                                                    <button type="button" class="btn btn-primary back_btn">确认</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="footer_div">
                             <button type="button" class="btn btn-default reset_btn" data-dismiss="modal">重置</button>
                             <button type="button" class="btn btn-primary reset_btn">完成</button>
                         </div>
@@ -177,17 +173,11 @@
 
     </div>
 </section>
-
-
 <script src="../js/jquery.js"></script>
 <script src="../js/angular.min.js"></script>
 <script src="js/rem.js"></script>
 <script src="js/global.js"></script>
-
 <script src="js/bootstrap.min.js"></script>
-<script src="js/commodity_details.js"></script>
-<script>
-
-</script>
+<script src="js/inteligent_details.js"></script>
 </body>
 </html>

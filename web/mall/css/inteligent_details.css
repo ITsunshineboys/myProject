@@ -1,81 +1,67 @@
-.search_box{
-     height: 4.1rem;
-     background-color: white;
-     border: 1px solid #666;
- }
-.search{
-    width: 23rem;
-    height: 2.6rem;
-    line-height: 2.6rem;
+body{
+    background-color: white;
+}
+header div{
+    height: 4rem;
+    width: auto;
+    background-color: white;
+    border-bottom:4px solid #999 ;
+}
+header div span{
+    line-height: 4rem;
     font-size: 1.2rem;
-    border-radius: 1.2rem;
-    position: absolute;
-    top: 0.85rem;
-    left:1.2rem;
-    margin-left:2rem;
-    padding-left: 2.4rem;
-    background-image: url("../images/search.png");
-    background-size:1rem;
-    background-repeat: no-repeat;
-    background-position: 1rem 0.7rem;
-    /*background-color: rgba(255, 255, 255, 0.3);*/
-    border:1px solid #666;
-    /*color:#fff;*/
 }
- .massage{
-    width: 1.6rem;
-    height: 1.6rem;
-    position: absolute;
-    /*top:1.5rem;*/
-    font-size: 2.4rem;
-    right:1.8rem;
+header div:last-child span{
+    padding-left: .5rem;
 }
- .return_arrow{
-     position: absolute;
-     top:1rem;
-     font-size: 2rem;
-     margin-left: .4rem;
- }
- .memo_pad{
-     background-color: white;
-     height:4.1rem;
-     line-height:4.1rem ;
- }
- .memo_pad li{
-     font-size: 1rem;
-     margin-left: 3.6rem;
-     display: inline-block;
+.span_center{
+    margin-left: 13rem;
+    font-size: 1.2rem;
+}
+.memo_pad{
+    background-color: white;
+    height:4.1rem;
+    line-height:4.1rem ;
+}
+.memo_pad li{
+    font-size: 1rem;
+    margin-left: 3.6rem;
+    display: inline-block;
 
- }
- .mall_list{
-     background-color: white;
-     /*height: 12rem;*/
- }
+}
+.mall_list{
+    background-color: white;
+    /*height: 12rem;*/
+}
 .flex_div{
-     /*position: relative;*/
+    /*position: relative;*/
     /*top:1rem;*/
 }
+/*.item_li{*/
+    /*background-color: white;*/
+/*}*/
 .item_commodity div{
-   display: inline-block;
+    display: inline-block;
 }
 .item_commodity_divimg {
-   /*position: relative;*/
+    /*position: relative;*/
     margin-left: 1rem;
 }
 .item_commodity_divimg img {
-   position: relative;
-   top:-3.2rem;
+    position: relative;
+    top:-3.2rem;
 }
 .item_commodity_comment{
     margin-left: 1rem;
 }
 .item_commodity p,span{
-     font-size: 1.2rem;
+    font-size: 1.2rem;
 }
 .img_item{
-     width: 9rem;
-     /*margin-top: 2rem;*/
-     margin-left: .6rem;
+    width: 9rem;
+    /*margin-top: 2rem;*/
+    margin-left: .6rem;
+
 }
 #myModal .modal-dialog{
     width: 28rem;
@@ -100,12 +86,12 @@
 
 }
 .well{
-    background-color: white;
-    border: none;
-}
-.well{
+    background-color: white!important;
+    border: none!important;
     padding: 0.1rem;
+
 }
+
 .well ul li{
     width: 6rem;
     height: 2.4rem;
@@ -141,12 +127,14 @@
 }
 .reset_btn{
     width: 12rem;
-    font-: 1.2rem;
+    height: 3rem;
+   font-size: 1.2rem!important;
 }
-.modal-footer {
-     padding: 1rem;
-     text-align: center;
-     border-top: 1px solid #e5e5e5;
+.footer_div {
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid #e5e5e5;
+    font-size: 1.2rem;
 }
 .modal_body_height{
     height: 30rem;
@@ -171,5 +159,14 @@
 }
 .back_btn{
     width: 10rem;
-    margin-left: -4.2rem;
+    height: 3rem;
+    font-size: 1.2rem!important;
+    margin-left: 1rem;
+}
+.footer_div_btn{
+    /*margin-left: -2rem;*/
+    padding: 1rem 0;
+}
+a{
+    font-size: 1rem!important;
 }
