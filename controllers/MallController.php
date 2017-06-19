@@ -8,6 +8,7 @@ use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
+use app\models\Series;
 use app\models\Style;
 use app\models\Supplier;
 use app\models\Lhzz;
@@ -2585,7 +2586,7 @@ class MallController extends Controller
         if ($categoryId > 0) {
             $ret['data']['category-brands-styles-series']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
             $ret['data']['category-brands-styles-series']['category-styles'] = Style::stylesByCategoryId($categoryId);
-//            $ret['data']['category-brands-styles-series']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
+            $ret['data']['category-brands-styles-series']['category-series'] = Series::seriesByCategoryId($categoryId);
         }
         return Json::encode($ret);
     }
