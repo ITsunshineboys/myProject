@@ -21,6 +21,7 @@ use app\models\LaborCost;
 use app\models\LifeAssort;
 use app\models\MoveFurniture;
 use app\models\PaintReconstruction;
+use app\models\PlasteringReconstruction;
 use app\models\Points;
 use app\models\PointsDetails;
 use app\models\PointsTotal;
@@ -835,7 +836,99 @@ class OwnerController extends Controller
      */
     public function actionMudMake()
     {
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
+        $post = [
+            'effect_id' => 1,
+            'master_bedroom' => 1,
+            'secondary_bedroom' => 1,
+            'sitting_room' => 1,
+            'dining_room' => 1,
+            'window' => 2,
+            'high' => 2.8,
+            'area' => 62,
+            'toilet' => 1,
+            'kitchen' => 1,
+            'style' => 1,
+            'series' => 1,
+            'province' => 510000,
+            'city' => 510100,
+            'waterproof_total_area'=>50
+        ];
+        $arr = [];
+        $arr['profit'] = $post['1'] ?? 0.7;
+        $arr['worker_kind'] = '泥工';
+        //工人一天单价
+        $labor_costs = LaborCost::univalence($post['city'], $arr['worker_kind']);
+        $labor_day_cost = 0;
+        foreach ($labor_costs as $labor_cost){
+            if ($labor_cost['worker_kind_details'] == '保护层'){
+                $covering_layer_day_area = $labor_cost['day_area'];
+                $labor_day_cost = $labor_cost['univalence'];
+            }
+            if ($labor_cost['worker_kind_details'] == '贴砖'){
+                $tiling_day_area = $labor_cost['day_area'];
+            }
+        }
 
+        //泥作面积
+        if (!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $decoration_particulars = DecorationParticulars::findByOne($decoration_list);
+            //卫生间面积
+            $toilet_area = $decoration_particulars['hostToilet_area'];
+            //厨房面积
+            $kitchen_area = $decoration_particulars['kitchen_area'];
+            //客餐厅面积
+            $drawing_room_area = $decoration_particulars['sittingRoom_diningRoom_area'];
+        }else{
+            //厨房面积
+            $kitchen_particulars = EngineeringUniversalCriterion::mudMakeArea('厨房','厨房面积');
+            $kitchen_area = $post['area'] * $kitchen_particulars['project_value'];
+            //卫生间面积
+            $toilet_particulars = EngineeringUniversalCriterion::mudMakeArea('卫生间','卫生间面积');
+            $toilet_area = $post['area'] * $toilet_particulars['project_value'];
+            //客餐厅面积
+            $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea('客厅','客厅面积');
+            $drawing_room_area = $post['area'] * $drawing_room_particulars['project_value'];
+        }
+
+        //墙面高度
+        $wall_height = EngineeringStandardCraft::findByAll('泥工',$post['city']);
+
+//        保护层面积=防水总面积
+        $covering_layer_area = $post['waterproof_total_area'];
+//        保护层天数：保护层面积÷【每天做保护层面积】
+        $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
+
+//        卫生间墙面积
+        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area,$wall_height[0]['material'],$post['toilet']);
+//        厨房墙面积
+        $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area,$wall_height[0]['material'],$post['kitchen'],3);
+//        墙砖面积
+        $wall_area = $toilet_wall_area + $kitchen_wall_area;
+//        墙砖天数
+        $wall_day = $wall_area / $tiling_day_area;
+//        地砖面积
+        $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area;
+//        地砖天数
+        $floor_tile_day = $floor_tile_area / $tiling_day_area;
+//        贴砖天数
+        $tiling_day = $floor_tile_day + $wall_day;
+//        总天数：保护层天数+贴砖天数
+        $total_day = ceil($tiling_day + $covering_layer_day);
+        //总的人工费
+        $total_labor_cost= $total_day * $labor_day_cost;
+
+        //材料费
+        if (!empty($post['effect_id'])){
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $plastering_reconstruction = PlasteringReconstruction::findById($decoration_list);
+            var_dump($plastering_reconstruction);
+            exit;
+        }else{
+            echo 1111;exit;
+        }
     }
     /**
      * 软装配套

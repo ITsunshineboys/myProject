@@ -29,16 +29,24 @@ CREATE TABLE `style` (
   `style` varchar(50) DEFAULT '' COMMENT '风格',
   `intro` varchar(255) DEFAULT '' COMMENT '风格介绍',
   `theme` varchar(50) DEFAULT '' COMMENT '风格主题',
+  `modelling_length_coefficient` float(10,1) DEFAULT NULL COMMENT '造型长度系数',
+  `modelling_day_coefficient` float(10,1) DEFAULT NULL COMMENT '造型天数系数',
+  `flat_area_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶面积系数',
+  `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `series` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `series` varchar(50) DEFAULT '' COMMENT '系列',
   `intro` varchar(255) DEFAULT '' COMMENT '系列介绍',
   `theme` varchar(50) DEFAULT '' COMMENT '系列主题',
+  `modelling_length_coefficient` float(10,1) DEFAULT NULL COMMENT '造型长度系数',
+  `modelling_day_coefficient` float(10,1) DEFAULT NULL COMMENT '造型天数系数',
+  `flat_area_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶面积系数',
+  `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `effect_ picture` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

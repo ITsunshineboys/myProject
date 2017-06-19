@@ -26,4 +26,13 @@ EngineeringUniversalCriterion extends ActiveRecord
         }
         return $all;
     }
+
+    public static function mudMakeArea($str = '',$area = '')
+    {
+        if ($str)
+        {
+            $one =self::find()->asArray()->where(['and',['project'=>$str],['project_particulars'=>$area]])->one();
+        }
+        return $one;
+    }
 }

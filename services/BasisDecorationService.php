@@ -728,4 +728,15 @@ class BasisDecorationService
         return $putty_cost;
     }
 
+    public static function mudMakeArea($ground_area = [],$craft = [],$quantity = 1,$wall = 4)
+    {
+        if ($ground_area && $craft)
+        {
+            //        （卫生间地面积÷卫生间个数）开平方×【2.4m】×4 ×卫生间个数
+            $sqrt= sqrt($ground_area / $quantity);
+            $wall_area = $sqrt * $craft * $wall * $quantity;
+
+        }
+        return $wall_area;
+    }
 }
