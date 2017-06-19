@@ -33,6 +33,7 @@ CREATE TABLE `style` (
   `modelling_day_coefficient` float(10,1) DEFAULT NULL COMMENT '造型天数系数',
   `flat_area_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶面积系数',
   `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
+  `category_id` int(11) DEFAULT NULL default 0 COMMENT '分类id',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
@@ -45,6 +46,7 @@ CREATE TABLE `series` (
   `modelling_day_coefficient` float(10,1) DEFAULT NULL COMMENT '造型天数系数',
   `flat_area_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶面积系数',
   `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
+  `category_id` int(11) DEFAULT NULL default 0 COMMENT '分类id',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
