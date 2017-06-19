@@ -34,10 +34,12 @@ class Goods extends ActiveRecord
 
     const AFTER_SALE_SERVICES = [
         '提供发票',
+        '上门安装',
+        '上门维修',
+        '上门退货',
+        '上门换货',
         '退货',
         '换货',
-        '上门维修',
-        '上门安装'
     ];
 
     const FIELDS_ADMIN = [
