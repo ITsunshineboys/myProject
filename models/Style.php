@@ -30,7 +30,7 @@ class Style extends ActiveRecord
     /**
      * Get styles by category id
      *
-     * @param  int $categoryId category id
+     * @param int $categoryId category id
      * @param array $select select fields default id and style
      * @return array
      */

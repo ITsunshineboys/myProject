@@ -30,7 +30,7 @@ class Series extends ActiveRecord
     /**
      * Get series by category id
      *
-     * @param  int $categoryId category id
+     * @param int $categoryId category id
      * @param array $select select fields default id and series
      * @return array
      */
