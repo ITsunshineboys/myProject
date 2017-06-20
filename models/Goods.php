@@ -513,6 +513,8 @@ AND goods.id IN (" . $id . ")";
             ['after_sale_services', 'validateAfterSaleServices'],
             [['category_id'], 'validateCategoryId'],
             [['brand_id'], 'validateBrandId'],
+            [['style_id'], 'validateStyleId'],
+            [['series_id'], 'validateSeriesId'],
             [['logistics_template_id'], 'validateLogisticsTemplateId'],
             ['description', 'safe']
         ];
@@ -763,6 +765,52 @@ AND goods.id IN (" . $id . ")";
 
         if ($this->$attribute > 0
             && Supplier::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates style_id
+     *
+     * @param string $attribute style_id to validate
+     * @return bool
+     */
+    public function validateStyleId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'status' => Style::STATUS_ONLINE,
+        ];
+
+        if ($this->$attribute > 0
+            && Style::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates series_id
+     *
+     * @param string $attribute series_id to validate
+     * @return bool
+     */
+    public function validateSeriesId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'status' => Series::STATUS_ONLINE,
+        ];
+
+        if ($this->$attribute > 0
+            && Series::find()->where($where)->exists()
         ) {
             return true;
         }
