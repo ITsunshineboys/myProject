@@ -804,7 +804,10 @@ AND goods.id IN (" . $id . ")";
             'cover_image' => $this->cover_image,
             'platform_price' => $this->platform_price,
             'description' => $this->description,
+            'sku' => $this->sku,
+            'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
+            'images' => GoodsImage::imagesByGoodsId($this->id),
         ];
     }
 
