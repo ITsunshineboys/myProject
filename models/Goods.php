@@ -854,6 +854,8 @@ AND goods.id IN (" . $id . ")";
             'description' => $this->description,
             'sku' => $this->sku,
             'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
+            'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
+            'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
         ];
