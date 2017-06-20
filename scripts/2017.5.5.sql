@@ -185,3 +185,21 @@ create table goods_image (
   `image` varchar(255) not null DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table goods_comment (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned not null default 0,
+  `role_id` int(11) unsigned not null default 0,
+  `name` varchar(25) not null default '',
+  `content` varchar(255) not null default '',
+  `score` tinyint(2) not null default 0,
+  `create_time` int not null DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table comment_image (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comment_id` int(11) unsigned not null default 0,
+  `image` varchar(255) not null DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
