@@ -1,6 +1,7 @@
 <?php
 
 $districts = require(__DIR__ . '/districts.php');
+$pinyin = require(__DIR__ . '/pinyin.php');
 $auth = require(__DIR__ . '/auth.php');
 
 return [
@@ -21,6 +22,7 @@ return [
         1006 => '商品分类名称不能重复',
         1007 => '商品品牌名称不能重复',
         1008 => '物流模板名称不能重复',
+        1009 => '商品属性名称不能重复',
     ],
     'events' => [
         'supplier' => [
@@ -82,6 +84,7 @@ return [
             'allName' => '全部分类',
             'all' => '全部',
         ],
+        'offline_reason' => '分类下架',
     ],
     'reviewStatuses' => [
         '0' => '待审核',
@@ -89,5 +92,15 @@ return [
         '2' => '审核通过',
     ],
     'districts' => $districts,
+    'pinyin'=>$pinyin,
     'auth' => $auth,
+    'goods' => [
+        'maxImagesCnt' => 5,
+    ],
+    'brand' => [
+        'offline_reason' => '品牌下架',
+    ],
+    'supplier' => [
+        'offline_reason' => '闭店下架',
+    ],
 ];

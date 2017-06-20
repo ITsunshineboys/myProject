@@ -20,10 +20,11 @@ class Points extends ActiveRecord
     }
 
     /**
+     * 弱电点位
      * @param $id
      * @return int|mixed
      */
-    public static function weakLocation($id)
+    public static function weakPoints($id)
     {
         $sql = "place,weak_current_points";
         $all = self::find()->select($sql)->where(['effect_id'=>$id])->all();
@@ -35,6 +36,11 @@ class Points extends ActiveRecord
         return $weak_current;
     }
 
+    /**
+     * 水路点位
+     * @param $id
+     * @return int|mixed
+     */
     public static function waterwayPoints($id)
     {
         $sql = "place,waterway_points";
@@ -45,5 +51,25 @@ class Points extends ActiveRecord
             $waterway_points += $number['waterway_points'];
         }
         return $waterway_points;
+    }
+
+    public static function strongPoints($id)
+    {
+        $strong_id = [];
+        $all = self::find()->where(['effect_id'=>$id])->all();
+        foreach ($all as $one)
+        {
+            $strong_id [] = $one['id'];
+        }
+
+        return $strong_id;
+    }
+
+    public static function strongPointsAll($id)
+    {
+        if($id){
+            $all = self::find()->asArray()->where(['effect_id'=>$id])->all();
+        }
+        return $all;
     }
 }

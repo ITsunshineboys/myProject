@@ -16,14 +16,6 @@ class BrandCategory extends ActiveRecord
     const SCENARIO_ADD = 'add';
 
     /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'brand_category';
-    }
-
-    /**
      * Get category ids by brand id
      *
      * @param  int $brandId brand id
@@ -75,9 +67,51 @@ class BrandCategory extends ActiveRecord
     }
 
     /**
+     * Get brands by category id
+     *
+     * @param  int $categoryId category id
+     * @return array
+     */
+    public static function brandsByCategoryId($categoryId)
+    {
+        $categoryId = (int)$categoryId;
+        if ($categoryId <= 0) {
+            return [];
+        }
+
+        $sql = "select b.id, b.name";
+        $from = " from {{%" . self::tableName() . "}} bc
+            ,{{%" . GoodsBrand::tableName() . "}} b
+            ,{{%" . GoodsCategory::tableName() . "}} c"
+        ;
+        $sql .= $from;
+        $where = " where bc.brand_id = b.id 
+            and bc.category_id = c.id 
+            and b.status = " . GoodsBrand::STATUS_ONLINE . " 
+            and c.deleted = 0
+            and bc.category_id = {$categoryId}"
+        ;
+        $sql .= $where;
+        $orderBy = " order by convert(b.name using gbk) asc";
+        $sql .= $orderBy;
+
+        return Yii::$app->db
+            ->createCommand($sql)
+            ->queryAll();
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'brand_category';
+    }
+
+    /**
      * Get category names by brand id for details page
      *
-     * @param  int   $brandId brand id
+     * @param  int $brandId brand id
      * @return array
      */
     public static function categoryNamesByBrandId($brandId)
@@ -166,8 +200,14 @@ class BrandCategory extends ActiveRecord
      */
     public function validateCategoryId($attribute)
     {
+        $where = [
+            'id' => $this->$attribute,
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'level' => GoodsCategory::LEVEL3
+        ];
+
         if ($this->$attribute > 0
-            && GoodsCategory::find()->where(['id' => $this->$attribute, 'deleted' => GoodsCategory::STATUS_OFFLINE])->exists()
+            && GoodsCategory::find()->where($where)->exists()
         ) {
             return true;
         }

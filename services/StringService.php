@@ -127,6 +127,21 @@ class StringService
     }
 
     /**
+     * Get district names
+     *
+     * @param  array $codes strict code list
+     * @return array
+     */
+    public static function districtNamesByCodes($codes)
+    {
+        foreach ($codes as &$districtCode) {
+            $districtCode = (string)self::checkDistrict($districtCode);
+        }
+
+        return $codes;
+    }
+
+    /**
      * Check if valid district code
      *
      * @param  string $code strict code
@@ -149,5 +164,68 @@ class StringService
         }
 
         return $codes[$parentCode][$code];
+    }
+
+    /**
+     * Check if has repeated element in a list
+     *
+     * @param array $elements elments to check
+     * @return bool
+     */
+    public static function checkRepeatedElement(array $elements)
+    {
+        return count($elements) != count(array_unique($elements));
+    }
+
+    /**
+     * Check if has empty element in a list
+     *
+     * @param array $elements elments to check
+     * @return bool
+     */
+    public static function checkEmptyElement(array $elements)
+    {
+        foreach ($elements as $element) {
+            if (!$element) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if list composed of int numbers
+     *
+     * @param array $elements elments to check
+     * @return bool
+     */
+    public static function checkIntList(array $elements)
+    {
+        foreach ($elements as $element) {
+            if (!is_numeric($element)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if two lists have same elements
+     *
+     * @param array $arr1 one array to check
+     * @param array $arr2 the other array check
+     * @return bool
+     */
+    public static function checkArrayIdentity(array $arr1, array $arr2)
+    {
+        if (count(array_diff($arr1, $arr2)) == 0
+            && count(array_diff($arr2, $arr1)) == 0
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -23,6 +24,35 @@ class LogisticsTemplate extends ActiveRecord
     ];
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
+    const ERROR_CODE_SAME_NAME = 1008;
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findOnline()
+    {
+        return parent::find()->where(['status' => self::STATUS_ONLINE]);
+    }
+
+    /**
+     * Get template list by supplier id
+     *
+     * @param  int $supplierId supplier id
+     * @return array
+     */
+    public static function findBySupplierId($supplierId, $select = [])
+    {
+        $supplierId = (int)$supplierId;
+        if ($supplierId <= 0) {
+            return [];
+        }
+
+        $select = $select ? implode(',', $select) : '*';
+
+        return Yii::$app->db
+            ->createCommand("select {$select} from {{%" . self::tableName() . "}} where supplier_id = {$supplierId}")
+            ->queryAll();
+    }
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -39,6 +69,7 @@ class LogisticsTemplate extends ActiveRecord
     {
         return [
             [['name', 'delivery_method'], 'required'],
+            ['name', 'string', 'length' => [1, 10]],
             [['name'], 'validateName'],
             [['delivery_method', 'delivery_cost_default', 'delivery_number_default', 'delivery_cost_delta', 'delivery_number_delta'], 'number', 'integerOnly' => true, 'min' => 0],
             ['delivery_method', 'in', 'range' => array_keys(self::DELIVERY_METHOD)],
@@ -101,13 +132,13 @@ class LogisticsTemplate extends ActiveRecord
 
         if ($this->isNewRecord) {
             if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute);
+                $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
                 return false;
             }
         } else {
             if ($this->isAttributeChanged($attribute)) {
                 if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                    $this->addError($attribute);
+                    $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
                     return false;
                 }
             }
@@ -147,5 +178,16 @@ class LogisticsTemplate extends ActiveRecord
 
             return true;
         }
+    }
+
+    /**
+     * Convert price
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        isset($this->delivery_cost_default) && $this->delivery_cost_default /= 100;
+        isset($this->delivery_cost_delta) && $this->delivery_cost_delta /= 100;
     }
 }

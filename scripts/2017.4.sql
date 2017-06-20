@@ -106,6 +106,7 @@ CREATE TABLE `supplier` (
   `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
+  `status` tinyint(1) not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -120,6 +121,7 @@ CREATE TABLE `project` (
 
 CREATE TABLE `worker` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned not null default 0,
   `nickname` varchar(25) not null DEFAULT '' COMMENT '工人姓名',
   `identity_no` int(11) unsigned not null DEFAULT 0 COMMENT '个人身份标识',
   `project_manager_id` int(11) unsigned not null DEFAULT 0 COMMENT '项目经理“id”',

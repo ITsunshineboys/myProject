@@ -1,25 +1,20 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: hj
- * Date: 5/5/17
- * Time: 2:25 PM
+ * User: Administrator
+ * Date: 2017/6/13 0013
+ * Time: 上午 10:58
  */
-
 namespace app\models;
-
 use yii\db\ActiveRecord;
 
-class Supplier extends ActiveRecord
+class StairsDetails extends ActiveRecord
 {
-    const STATUS_OFFLINE = 0;
-    const STATUS_ONLINE = 1;
-
     /**
      * @return string 返回该AR类关联的数据表名
      */
     public static function tableName()
     {
-        return 'supplier';
+        return 'stairs_details';
     }
 }

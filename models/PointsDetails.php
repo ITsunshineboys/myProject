@@ -7,6 +7,7 @@
  */
 namespace app\models;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use yii\db\ActiveRecord;
 
 class PointsDetails extends ActiveRecord
@@ -21,13 +22,8 @@ class PointsDetails extends ActiveRecord
 
     public static function AllQuantity($allId = [])
     {
-        $all_id = [];
-        foreach ($allId as $all)
-        {
-            $all_id [] = $all['id'];
-        }
         $sql = "points_quantity";
-        $all_quantity = self::find()->select($sql)->where(['in','place_id',$all_id])->all();
+        $all_quantity = self::find()->asArray()->select($sql)->where(['in','place_id',$allId])->all();
         $powerful_points = 0;
         foreach ($all_quantity as $quantity)
         {

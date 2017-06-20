@@ -22,7 +22,7 @@ class DecorationParticulars extends ActiveRecord
     {
         if($id)
         {
-            $area = self::find()->where(['decoration_list_id' => $id])->one();
+            $area = self::find()->asArray()->where(['decoration_list_id' => $id])->one();
         }
         return $area;
     }

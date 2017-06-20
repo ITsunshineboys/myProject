@@ -437,7 +437,9 @@ class GoodsRecommend extends ActiveRecord
             return false;
         }
 
-        if (self::find()->where('status = ' . self::STATUS_OFFLINE . ' and ' . $where)->count()) {
+        if (self::find()->where('status = ' . self::STATUS_ONLINE . ' and ' . $where)->count()
+            != count(explode(',', $ids))
+        ) {
             return false;
         }
 

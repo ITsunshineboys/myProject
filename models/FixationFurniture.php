@@ -15,16 +15,17 @@ class FixationFurniture extends ActiveRecord
         return 'fixation_furniture';
     }
 
-    public function findById($id = '')
+    public static function findById($arr = [])
     {
-        $arr_id = [];
-        if(!$id == null){
-            $array = self::find()->where(['decoration_list_id' => $id])->all();
-            foreach ($array as $arr)
-            {
-                $arr_id[] = $arr['goods_id'];
-            }
+        if(!$arr == null){
+            $id = $arr['effect_id'];
+            $province = $arr['province']??510000;
+            $city = $arr['city']??510100;
+            $series_id = $arr['series'];
+            $style_id = $arr['style'];
+            $fixation_furniture = self::find()->asArray()->where(['and',['effect_id'=>$id],['city'=>$city],['province'=>$province],['series_id'=>$series_id],['style_id'=>$style_id]])->all();
+
         }
-        return $arr_id;
+        return $fixation_furniture;
     }
 }

@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\HtmlPurifier;
@@ -33,11 +34,17 @@ class GoodsCategory extends ActiveRecord
     const SCENARIO_TOGGLE_STATUS = 'toggle';
     const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
     const SEPARATOR_TITLES = ' - ';
+    const ERROR_CODE_SAME_NAME = 1006;
 
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'online_person', 'offline_person', 'deleted', 'path'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'online_person', 'offline_person', 'deleted', 'path', 'attr_op_time', 'attr_op_username', 'attr_number'];
+
+    /**
+     * @var array admin fields
+     */
+    public static $attrAdminFields = ['id', 'title', 'parent_title', 'attr_op_time', 'attr_op_username', 'attr_number'];
 
     /**
      * @var array online status list
@@ -96,14 +103,6 @@ class GoodsCategory extends ActiveRecord
             'title' => Yii::$app->params['category']['admin']['allName'],
             'icon' => ''
         ];
-    }
-
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'goods_category';
     }
 
     /**
@@ -200,16 +199,13 @@ class GoodsCategory extends ActiveRecord
                         . self::SEPARATOR_TITLES
                         . $category['parent_title']
                         . self::SEPARATOR_TITLES
-                        . $category['title']
-                    ;
+                        . $category['title'];
                 } elseif ($category['level'] == self::LEVEL2) {
                     $category['titles'] = $category['parent_title']
                         . self::SEPARATOR_TITLES
-                        . $category['title']
-                    ;
+                        . $category['title'];
                 } elseif ($category['level'] == self::LEVEL1) {
-                    $category['titles'] = $category['title']
-                    ;
+                    $category['titles'] = $category['title'];
                 }
 
                 $category['level'] = self::$levels[$category['level']];
@@ -233,13 +229,15 @@ class GoodsCategory extends ActiveRecord
                 }
             }
 
-            if (!empty($category['supplier_name'])) {
-                $category['applicant'] = $category['supplier_name'];
-            } else {
-                if ($category['deleted'] == self::STATUS_ONLINE) {
-                    $category['applicant'] = $category['offline_person'];
+            if (isset($category['supplier_name'])) {
+                if (!empty($category['supplier_name'])) {
+                    $category['applicant'] = $category['supplier_name'];
                 } else {
-                    $category['applicant'] = $category['online_person'];
+                    if ($category['deleted'] == self::STATUS_ONLINE) {
+                        $category['applicant'] = $category['offline_person'];
+                    } else {
+                        $category['applicant'] = $category['online_person'];
+                    }
                 }
             }
 
@@ -253,6 +251,12 @@ class GoodsCategory extends ActiveRecord
             }
             if (isset($category['online_person'])) {
                 unset($category['online_person']);
+            }
+
+            if (isset($category['attr_op_time'])) {
+                $category['attr_op_time'] = $category['attr_op_time'] > 0
+                    ? date('Y-m-d H:i', $category['attr_op_time'])
+                    : '';
             }
         }
 
@@ -280,7 +284,9 @@ class GoodsCategory extends ActiveRecord
             return false;
         }
 
-        if (self::find()->where('deleted = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
+        if (self::find()->where('deleted = 0 and ' . $where)->count()
+            != count(explode(',', $ids))
+        ) {
             return false;
         }
 
@@ -324,16 +330,39 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Get all level3 category ids
+     *
+     * @return array
+     */
+    public static function allLevel3CategoryIds($onlyOnline = true)
+    {
+        $db = Yii::$app->db;
+        $sql = "select id from {{%" . self::tableName() . "}} where pid = 0";
+        $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
+        $rootIds = $db->createCommand($sql)->queryColumn();
+        return self::level23IdsByPids($rootIds, true, $onlyOnline);
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'goods_category';
+    }
+
+    /**
      * Get all level 2 and 3 category ids by pids
      *
      * @param  array $pids pids
+     * @param int $onlyLevel3 if only get level3 categories
      * @return array
      */
-    public static function level23IdsByPids(array $pids)
+    public static function level23IdsByPids(array $pids, $onlyLevel3 = false, $onlyOnline = true)
     {
         $ids = [];
         foreach ($pids as $pid) {
-            $ids = array_merge($ids, self::level23Ids($pid));
+            $ids = array_merge($ids, self::level23Ids($pid, $onlyLevel3, $onlyOnline));
         }
         return array_unique($ids);
     }
@@ -342,9 +371,10 @@ class GoodsCategory extends ActiveRecord
      * Get all level 2 and 3 category ids by pid
      *
      * @param  int $pid parent category id
+     * @param int $onlyLevel3 if only get level3 categories
      * @return array
      */
-    public static function level23Ids($pid)
+    public static function level23Ids($pid, $onlyLevel3 = false, $onlyOnline = true)
     {
         $pid = (int)$pid;
         if ($pid <= 0) {
@@ -357,16 +387,21 @@ class GoodsCategory extends ActiveRecord
         }
 
         $db = Yii::$app->db;
+
+        $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
+        $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
         if ($category->level == self::LEVEL2) {
-            return $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn();
+            return $db->createCommand()->queryColumn();
         } elseif ($category->level == self::LEVEL1) {
-            $pids = $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn();
+            $pids = $db->createCommand($sql)->queryColumn();
             $ret = [];
             foreach ($pids as $pid) {
-                $ret = array_merge($ret, $db->createCommand("select id from {{%goods_category}} where pid = {$pid}")->queryColumn());
+                $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
+                $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
+                $ret = array_merge($ret, $db->createCommand($sql)->queryColumn());
             }
 
-            return array_unique(array_merge($ret, $pids));
+            return array_unique($onlyLevel3 ? $ret : array_merge($ret, $pids));
         }
 
         return [];
@@ -434,7 +469,8 @@ class GoodsCategory extends ActiveRecord
     {
         return [
             [['title', 'icon', 'pid'], 'required'],
-            [['title'], 'unique', 'on' => self::SCENARIO_ADD],
+            ['title', 'string', 'length' => [1, 10]],
+            [['title'], 'unique', 'on' => self::SCENARIO_ADD, 'message' => self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]],
             [['title'], 'validateTitle', 'on' => self::SCENARIO_EDIT],
             [['pid', 'approve_time', 'review_status', 'supplier_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['pid', 'validatePid'],
@@ -475,7 +511,7 @@ class GoodsCategory extends ActiveRecord
     {
         if (!$this->isNewRecord && $this->isAttributeChanged($attribute)) {
             if (self::find()->where([$attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute);
+                $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
                 return false;
             }
         }

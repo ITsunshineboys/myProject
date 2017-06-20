@@ -23,9 +23,13 @@ class LaborCost extends ActiveRecord
      * 根据地名查询单价
      * @param string $toponymy
      */
-    public static function univalence($province ='',$toponymy = '',$worker_kind = ''){
-        if(!$province == null && !$toponymy == null) {
-            $labors = self::find()->where(['and', ['province' => $province], ['city' => $toponymy], ['worker_kind' => $worker_kind]])->all();
+    public static function univalence($arr = [],$jobs= '',$rank = '银')
+    {
+        if(!$arr == null && !$jobs == null) {
+            $province = $arr['province'] ?? 510000;
+            $city = $arr['city'] ?? 510100;
+
+            $labors = self::find()->asArray()->where(['and', ['province_code' => $province], ['city_code' => $city], ['worker_kind' => $jobs],['rank'=>$rank]])->all();
         }
         return $labors;
     }

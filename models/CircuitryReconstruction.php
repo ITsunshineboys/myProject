@@ -18,10 +18,11 @@ class CircuitryReconstruction extends ActiveRecord
         return 'circuitry_reconstruction';
     }
 
-    public static function findByAll($id = '')
+    public static function findByAll($id = '',$project ='')
     {
+        $project_id = 0;
         if($id){
-            $circuitry = self::find()->where(['decoration_list_id'=>$id])->all();
+            $circuitry = self::find()->asArray()->where(['and',['decoration_list_id'=>$id],['project'=>$project]])->all();
         }
             return $circuitry;
     }

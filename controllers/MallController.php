@@ -8,16 +8,19 @@ use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
+use app\models\Series;
+use app\models\Style;
 use app\models\Supplier;
 use app\models\Lhzz;
 use app\models\LogisticsTemplate;
 use app\models\LogisticsDistrict;
+use app\models\GoodsAttr;
+use app\models\GoodsImage;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
 use app\services\AdminAuthService;
 use Yii;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -51,11 +54,15 @@ class MallController extends Controller
         'category-add',
         'category-edit',
         'category-offline-reason-reset',
+        'category-reason-reset',
         'category-review-list',
+//        'category-brands',
+        'category-attrs',
         'brand-add',
         'brand-review',
         'brand-edit',
         'brand-offline-reason-reset',
+        'brand-reason-reset',
         'brand-status-toggle',
         'brand-disable-batch',
         'brand-enable-batch',
@@ -63,6 +70,23 @@ class MallController extends Controller
         'brand-list-admin',
         'logistics-template-add',
         'logistics-template-edit',
+        'logistics-template-view',
+        'logistics-templates-supplier',
+        'goods-attr-add',
+        'goods-attr-list-admin',
+        'goods-add',
+        'goods-edit',
+        'goods-edit-lhzz',
+        'goods-attrs-admin',
+        'goods-status-toggle',
+        'goods-disable-batch',
+        'goods-delete-batch',
+        'goods-enable-batch',
+        'goods-offline-reason-reset',
+        'goods-reason-reset',
+        'goods-list-admin',
+        'goods-inventory-reset',
+        'goods-images',
     ];
 
     /**
@@ -107,15 +131,27 @@ class MallController extends Controller
                     'category-disable-batch' => ['post',],
                     'category-enable-batch' => ['post',],
                     'category-offline-reason-reset' => ['post',],
+                    'category-reason-reset' => ['post',],
                     'brand-add' => ['post',],
                     'brand-review' => ['post',],
                     'brand-edit' => ['post',],
                     'brand-offline-reason-reset' => ['post',],
+                    'brand-reason-reset' => ['post',],
                     'brand-status-toggle' => ['post',],
                     'brand-disable-batch' => ['post',],
                     'brand-enable-batch' => ['post',],
                     'logistics-template-add' => ['post',],
                     'logistics-template-edit' => ['post',],
+                    'goods-attr-add' => ['post',],
+                    'goods-add' => ['post',],
+                    'goods-edit' => ['post',],
+                    'goods-status-toggle' => ['post',],
+                    'goods-disable-batch' => ['post',],
+                    'goods-delete-batch' => ['post',],
+                    'goods-enable-batch' => ['post',],
+                    'goods-offline-reason-reset' => ['post',],
+                    'goods-reason-reset' => ['post',],
+                    'goods-inventory-reset' => ['post',],
                 ],
             ],
         ];
@@ -273,23 +309,44 @@ class MallController extends Controller
             ]);
         }
 
-        $orderBy = trim(Yii::$app->request->get('order_by', ''));
-        $orderByArr = [];
-        if ($orderBy) {
-            if (stripos($orderBy, Goods::ORDERBY_SEPARATOR) === false) {
-                $orderByArr[$orderBy] = SORT_DESC;
-            } else {
-                list($field, $direction) = explode(Goods::ORDERBY_SEPARATOR, $orderBy);
-                if ($field) {
-                    $orderByArr[$field] = !empty($direction) ? (int)$direction : SORT_DESC;
+        $sort = Yii::$app->request->get('sort', []);
+        if ($sort) {
+            foreach ($sort as &$v) {
+                if (stripos($v, 'sold_number') !== false) {
+                    $v = 'sold_number:' .SORT_DESC;
+                    break;
                 }
             }
+
+            $model = new Goods;
+            $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+            if ($orderBy === false) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
+
+        $platformPriceMin = (int)Yii::$app->request->get('platform_price_min', 0);
+        $platformPriceMax = (int)Yii::$app->request->get('platform_price_max', 0);
+        $brandId = (int)Yii::$app->request->get('brand_id', 0);
+        $styleId = (int)Yii::$app->request->get('style_id', 0);
+        $seriesId = (int)Yii::$app->request->get('series_id', 0);
+
+        $where =  "category_id = {$categoryId}";
+        $platformPriceMin && $where .= " and platform_price >= {$platformPriceMin}";
+        $platformPriceMax && $where .= " and platform_price <= {$platformPriceMax}";
+        $brandId && $where .= " and brand_id = {$brandId}";
+        $styleId && $where .= " and style_id = {$styleId}";
+        $seriesId && $where .= " and series_id = {$seriesId}";
 
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
         $select = Goods::CATEGORY_GOODS_APP;
-        $categoryGoods = $orderByArr ? Goods::findByCategoryId($categoryId, $select, $page, $size, $orderByArr) : Goods::findByCategoryId($categoryId, $select, $page, $size);
+        $categoryGoods = $sort
+            ? Goods::pagination($where, $select, $page, $size, $orderBy)
+            : Goods::pagination($where, $select, $page, $size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -939,8 +996,11 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_ADD;
         if (!$category->validate()) {
-            if ($category->title && isset($category->errors['title'])) {
-                $code = 1006;
+            if (isset($category->errors['title'])) {
+                $customErrCode = ModelService::customErrCode($category->errors['title'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -990,8 +1050,11 @@ class MallController extends Controller
 
         $category->scenario = GoodsCategory::SCENARIO_EDIT;
         if (!$category->validate()) {
-            if ($category->title && isset($category->errors['title'])) {
-                $code = 1006;
+            if (isset($category->errors['title'])) {
+                $customErrCode = ModelService::customErrCode($category->errors['title'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -1049,6 +1112,7 @@ class MallController extends Controller
         }
 
         $now = time();
+        $user = Yii::$app->user->identity;
         $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
             $model->deleted = GoodsCategory::STATUS_OFFLINE;
@@ -1084,7 +1148,7 @@ class MallController extends Controller
                 $categoryIds = GoodsCategory::level23Ids($model->id);
                 GoodsCategory::disableByIds($categoryIds);
             }
-            Goods::disableGoodsByCategoryIds($categoryIds);
+            Goods::disableGoodsByCategoryIds($categoryIds, Lhzz::findByUser(Yii::$app->user->identity));
         }
 
 //        new EventHandleService();
@@ -1125,6 +1189,7 @@ class MallController extends Controller
         }
 
         $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_ONLINE,
             'offline_time' => time(),
@@ -1141,7 +1206,7 @@ class MallController extends Controller
 
         $categoryIds = array_unique(array_merge($idsArr, GoodsCategory::level23IdsByPids($idsArr)));
         GoodsCategory::disableByIds($categoryIds);
-        Goods::disableGoodsByCategoryIds($categoryIds);
+        Goods::disableGoodsByCategoryIds($categoryIds, Lhzz::findByUser(Yii::$app->user->identity));
 
 //        new EventHandleService();
 //        Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
@@ -1180,6 +1245,7 @@ class MallController extends Controller
         }
 
         $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
         if (!GoodsCategory::updateAll([
             'deleted' => GoodsCategory::STATUS_OFFLINE,
             'online_time' => time(),
@@ -1368,8 +1434,11 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
         if (!$brand->validate()) {
-            if ($brand->name && isset($brand->errors['name'])) {
-                $code = 1007;
+            if (isset($brand->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -1393,7 +1462,7 @@ class MallController extends Controller
         $categoryIdsArr = explode(',', $categoryIds);
         foreach ($categoryIdsArr as $categoryId) {
             $category = GoodsCategory::findOne($categoryId);
-            if (!$category) {
+            if (!$category || $category->level != GoodsCategory::LEVEL3) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -1519,8 +1588,11 @@ class MallController extends Controller
 
         $brand->scenario = GoodsBrand::SCENARIO_EDIT;
         if (!$brand->validate()) {
-            if ($brand->name && isset($brand->errors['name'])) {
-                $code = 1007;
+            if (isset($brand->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -1543,9 +1615,7 @@ class MallController extends Controller
 
         $categoryIdsArr = explode(',', $categoryIds);
         $categoryIdsArrOld = BrandCategory::categoryIdsByBrandId($brand->id);
-        if (count(array_diff($categoryIdsArrOld, $categoryIdsArr)) != 0
-            || count(array_diff($categoryIdsArr, $categoryIdsArrOld)) != 0
-        ) {
+        if (!StringService::checkArrayIdentity($categoryIdsArrOld, $categoryIdsArr)) {
             $deletedNum = BrandCategory::deleteAll(
                 [
                     'brand_id' => $brand->id,
@@ -1563,9 +1633,23 @@ class MallController extends Controller
             }
 
             foreach ($categoryIdsArr as $categoryId) {
+                $category = GoodsCategory::findOne($categoryId);
+                if (!$category || $category->level != GoodsCategory::LEVEL3) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
                 $brandCategory = new BrandCategory;
                 $brandCategory->brand_id = $brand->id;
                 $brandCategory->category_id = $categoryId;
+                list($rootCategoryId, $parentCategoryId, $categoryId) = explode(',', $category->path);
+                $brandCategory->category_id_level1 = $rootCategoryId;
+                $brandCategory->category_id_level2 = $parentCategoryId;
 
                 $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
                 if (!$brandCategory->validate()) {
@@ -1640,6 +1724,55 @@ class MallController extends Controller
     }
 
     /**
+     * Reset brand review reason action
+     *
+     * @return string
+     */
+    public function actionBrandReasonReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $goodsBrand = GoodsBrand::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'review_status', [
+                GoodsBrand::REVIEW_STATUS_APPROVE,
+                GoodsBrand::REVIEW_STATUS_REJECT,
+            ]])
+            ->one();
+
+        if (!$goodsBrand) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goodsBrand->reason = trim(Yii::$app->request->post('reason', ''));
+
+        if (!$goodsBrand->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goodsBrand->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
      * Reset category offline reason action
      *
      * @return string
@@ -1682,6 +1815,55 @@ class MallController extends Controller
     }
 
     /**
+     * Reset category review reason action
+     *
+     * @return string
+     */
+    public function actionCategoryReasonReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $goodsCategory = GoodsCategory::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'review_status', [
+                GoodsCategory::REVIEW_STATUS_APPROVE,
+                GoodsCategory::REVIEW_STATUS_REJECT,
+            ]])
+            ->one();
+
+        if (!$goodsCategory) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goodsCategory->reason = trim(Yii::$app->request->post('reason', ''));
+
+        if (!$goodsCategory->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goodsCategory->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
      * Toggle brand status action.
      *
      * @return string
@@ -1708,6 +1890,7 @@ class MallController extends Controller
         }
 
         $now = time();
+        $user = Yii::$app->user->identity;
         $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         if ($model->status == GoodsBrand::STATUS_OFFLINE) {
             $model->status = GoodsBrand::STATUS_ONLINE;
@@ -1737,7 +1920,7 @@ class MallController extends Controller
         }
 
         if ($model->status == GoodsBrand::STATUS_OFFLINE) {
-            Goods::disableGoodsByBrandId($model->id);
+            Goods::disableGoodsByBrandIds([$model->id], Lhzz::findByUser(Yii::$app->user->identity));
         }
 
         return Json::encode([
@@ -1774,6 +1957,7 @@ class MallController extends Controller
         }
 
         $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
         if (!GoodsBrand::updateAll([
             'status' => GoodsBrand::STATUS_OFFLINE,
             'offline_time' => time(),
@@ -1788,7 +1972,7 @@ class MallController extends Controller
             ]);
         }
 
-        Goods::disableGoodsByBrandIds(explode(',', $ids));
+        Goods::disableGoodsByBrandIds(explode(',', $ids), Lhzz::findByUser(Yii::$app->user->identity));
 
         return Json::encode([
             'code' => 200,
@@ -1824,6 +2008,7 @@ class MallController extends Controller
         }
 
         $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
         if (!GoodsBrand::updateAll([
             'status' => GoodsBrand::STATUS_ONLINE,
             'online_time' => time(),
@@ -2015,8 +2200,11 @@ class MallController extends Controller
         }
 
         if (!$logisticsTemplate->validate()) {
-            if ($logisticsTemplate->name && isset($logisticsTemplate->errors['name'])) {
-                $code = 1008;
+            if (isset($logisticsTemplate->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($logisticsTemplate->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -2092,8 +2280,11 @@ class MallController extends Controller
         }
 
         if (!$logisticsTemplate->validate()) {
-            if ($logisticsTemplate->name && isset($logisticsTemplate->errors['name'])) {
-                $code = 1008;
+            if (isset($logisticsTemplate->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($logisticsTemplate->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
             }
 
             return Json::encode([
@@ -2116,9 +2307,7 @@ class MallController extends Controller
 
         $districtCodesArr = explode(',', $districtCodes);
         $districtCodesArrOld = LogisticsDistrict::districtCodesByTemplateId($logisticsTemplate->id);
-        if (count(array_diff($districtCodesArr, $districtCodesArrOld)) != 0
-            || count(array_diff($districtCodesArrOld, $districtCodesArr)) != 0
-        ) {
+        if (StringService::checkArrayIdentity($districtCodesArr, $districtCodesArrOld)) {
             $deletedNum = LogisticsDistrict::deleteAll(
                 [
                     'template_id' => $logisticsTemplate->id,
@@ -2152,5 +2341,1082 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
         ]);
+    }
+
+    /**
+     * View logistis template action
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplateView()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->get('id', 0);
+        $logisticsTemplate = LogisticsTemplate::findOnline()->andWhere(['id' => $id])->one();
+        if (!$logisticsTemplate) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $logisticsTemplate = (object)$logisticsTemplate->attributes;
+        $logisticsTemplate->delivery_method = LogisticsTemplate::DELIVERY_METHOD[$logisticsTemplate->delivery_method];
+        $districtCodes = LogisticsDistrict::districtCodesByTemplateId($logisticsTemplate->id);
+        $logisticsTemplate->district_codes = $districtCodes;
+        $logisticsTemplate->district_names = StringService::districtNamesByCodes($districtCodes);
+
+        unset($logisticsTemplate->id);
+        unset($logisticsTemplate->supplier_id);
+        unset($logisticsTemplate->name);
+        unset($logisticsTemplate->status);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'logistics-template' => $logisticsTemplate
+            ],
+        ]);
+    }
+
+    /**
+     * Supplier logistis templates action
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplatesSupplier()
+    {
+        $user = Yii::$app->user->identity;
+        $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'logistics-templates-supplier' => LogisticsTemplate::findBySupplierId($supplier->id, ['id', 'name'])
+            ],
+        ]);
+    }
+
+    /**
+     * Add/edit goods attributes action
+     *
+     * @return string
+     */
+    public function actionGoodsAttrAdd()
+    {
+        $code = 1000;
+
+        $names = Yii::$app->request->post('names', []);
+        $values = Yii::$app->request->post('values', []);
+        $units = Yii::$app->request->post('units', []);
+        $additionTypes = Yii::$app->request->post('addition_types', []);
+        $categoryId = (int)Yii::$app->request->post('category_id', 0);
+
+        if ($categoryId <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $attrCnt = count($names);
+        if ($attrCnt > 0) {
+            if (!($attrCnt == count($values) && $attrCnt == count($units) && $attrCnt == count($additionTypes))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!GoodsAttr::validateNames($names)) {
+                $code = 1009;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!GoodsAttr::validateValues($values, $additionTypes)) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $user = Yii::$app->user->identity;
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+        $category = GoodsCategory::find()->where(['id' => $categoryId, 'level' => GoodsCategory::LEVEL3])->one();
+        if (!$category) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $category->attr_op_uid = $lhzz->id;
+        $category->attr_op_username = $lhzz->nickname;
+        $category->attr_op_time = time();
+        $category->attr_number = $attrCnt;
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$category->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        GoodsAttr::deleteAll(['category_id' => $categoryId]);
+
+        foreach ($names as $i => $name) {
+            $goodsAttr = new GoodsAttr;
+            $goodsAttr->name = $name;
+            $goodsAttr->unit = $units[$i];
+            $goodsAttr->addition_type = $additionTypes[$i];
+            $goodsAttr->category_id = $categoryId;
+            $goodsAttr->addition_type == GoodsAttr::ADDITION_TYPE_DROPDOWN_LIST && $goodsAttr->value = $values[$i];
+
+            if (!$goodsAttr->validate()) {
+                $transaction->rollBack();
+
+                if (isset($goodsAttr->errors['name'])) {
+                    $customErrCode = ModelService::customErrCode($goodsAttr->errors['name'][0]);
+                    if ($customErrCode !== false) {
+                        $code = $customErrCode;
+                    }
+                }
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$goodsAttr->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Goods attributes list action
+     *
+     * @return string
+     */
+    public function actionGoodsAttrListAdmin()
+    {
+        $code = 1000;
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsCategory;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'review_status = ' . GoodsCategory::REVIEW_STATUS_APPROVE;
+
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        $ids = $pid > 0
+            ? GoodsCategory::level23Ids($pid, true, false)
+            : GoodsCategory::allLevel3CategoryIds(false);
+        $where .= !$ids ? ' and 0' : ' and id in (' . implode(',', $ids) . ')';
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
+
+        $details = GoodsCategory::pagination($where, GoodsCategory::$attrAdminFields, $page, $size, $orderBy);
+        foreach ($details as &$detail) {
+            $detail['attrs'] = GoodsAttr::detailsByCategoryId($detail['id']);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category_list_admin' => [
+                    'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
+                    'details' => $details
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Category brands, styles and series action
+     *
+     * @return string
+     */
+    public function actionCategoryBrandsStylesSeries()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category-brands-styles-series' => [
+                    'category-brands' => [],
+                    'category-styles' => [],
+                    'category-series' => [],
+                ]
+            ],
+        ];
+
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
+        if ($categoryId > 0) {
+            $ret['data']['category-brands-styles-series']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
+            $ret['data']['category-brands-styles-series']['category-styles'] = Style::stylesByCategoryId($categoryId);
+            $ret['data']['category-brands-styles-series']['category-series'] = Series::seriesByCategoryId($categoryId);
+        }
+        return Json::encode($ret);
+    }
+
+    /**
+     * Category attributes action
+     *
+     * @return string
+     */
+    public function actionCategoryAttrs()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category-attrs' => []
+            ],
+        ];
+
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
+        $categoryId > 0 && $ret['data']['category-attrs'] = GoodsAttr::detailsByCategoryId($categoryId);
+        return Json::encode($ret);
+    }
+
+    /**
+     * Goods attributes action(admin)
+     *
+     * @return string
+     */
+    public function actionGoodsAttrsAdmin()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods-attrs-admin' => []
+            ],
+        ];
+
+        $goodsId = (int)Yii::$app->request->get('goods_id', 0);
+        $goodsId > 0 && $ret['data']['goods-attrs-admin'] = GoodsAttr::detailsByGoodsId($goodsId);
+        return Json::encode($ret);
+    }
+
+    /**
+     * Goods attributes action
+     *
+     * @return string
+     */
+    public function actionGoodsAttrs()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods-attrs' => []
+            ],
+        ];
+
+        $goodsId = (int)Yii::$app->request->get('goods_id', 0);
+        $goodsId > 0 && $ret['data']['goods-attrs'] = GoodsAttr::frontDetailsByGoodsId($goodsId);
+        return Json::encode($ret);
+    }
+
+    /**
+     * Add goods action
+     *
+     * @return string
+     */
+    public function actionGoodsAdd()
+    {
+        $code = 1000;
+
+        $goods = new Goods;
+        $goods->attributes = Yii::$app->request->post();
+        $images = Yii::$app->request->post('images', []);
+
+        $goods->scenario = Goods::SCENARIO_ADD;
+        if (!$goods->validate()
+            || !GoodsImage::validateImages($images)
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$goods->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods->sku = $goods->category_id . $goods->id;
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $names = Yii::$app->request->post('names', []);
+        $values = Yii::$app->request->post('values', []);
+
+        $attrCnt = count($names);
+        if ($attrCnt > 0) {
+            if ($attrCnt != count($values)) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!GoodsAttr::validateNames($names)) {
+                $code = 1009;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $code = GoodsAttr::addByAttrs($goods, $names, $values);
+        if (200 != $code) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = GoodsImage::addByAttrs($goods, $images);
+        if (200 != $code) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Edit goods action
+     *
+     * @return string
+     */
+    public function actionGoodsEdit()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $images = Yii::$app->request->post('images', []);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods = Goods::findOne($id);
+        $user = Yii::$app->user->identity;
+
+        if (!GoodsImage::validateImages($images)
+            || !$goods
+            || !$goods->canEdit($user)
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $postData = Yii::$app->request->post();
+        $goods->sanitize($user, $postData);
+        $goods->attributes = $postData;
+
+        if ($goods->needSetStatusToWait()) {
+            $goods->status = Goods::STATUS_WAIT_ONLINE;
+        }
+
+        $goods->scenario = Goods::SCENARIO_ADD;
+
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$goods->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $names = Yii::$app->request->post('names', []);
+        $values = Yii::$app->request->post('values', []);
+        if (GoodsAttr::changedAttr($id, $names, $values)) {
+            GoodsAttr::deleteAll([
+                'goods_id' => $id
+            ]);
+
+            $attrCnt = count($names);
+            if ($attrCnt > 0) {
+                if ($attrCnt != count($values)) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!GoodsAttr::validateNames($names)) {
+                    $code = 1009;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }
+
+            $code = GoodsAttr::addByAttrs($goods, $names, $values);
+            if (200 != $code) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']
+            && in_array($goods->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE])
+        ) {
+            GoodsImage::deleteAll([
+                'goods_id' => $id
+            ]);
+
+            $code = GoodsImage::addByAttrs($goods, $images);
+            if (200 != $code) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Lhzz edit goods action
+     *
+     * @return string
+     */
+    public function actionGoodsEditLhzz()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods = Goods::findOne($id);
+        $user = Yii::$app->user->identity;
+
+        if (!$goods
+            || !$goods->canEdit($user)
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $postData = Yii::$app->request->post();
+        $goods->sanitize($user, $postData);
+        $goods->attributes = $postData;
+
+        $goods->scenario = Goods::SCENARIO_REVIEW;
+
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Toggle goods status action.
+     *
+     * @return string
+     */
+    public function actionGoodsStatusToggle()
+    {
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $code = 1000;
+
+        if (!$id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $model = Goods::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'status', [Goods::STATUS_OFFLINE, Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE]])
+            ->one();
+
+        if (!$model) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            if (!$model->canOnline($user)) {
+                $code = 403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        } else {
+            if (!in_array($model->status, [Goods::STATUS_ONLINE, Goods::STATUS_OFFLINE])) {
+                $code = 403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $now = time();
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $operator = Supplier::find()->where(['uid' => $user->id])->one();
+        } else {
+            $operator = Lhzz::find()->where(['uid' => $user->id])->one();
+        }
+
+        if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])) {
+            if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+                $model->status = Goods::STATUS_ONLINE;
+                $model->online_time = $now;
+                $model->online_uid = $operator->id;
+                $model->online_person = $operator->nickname;
+            } else {
+                $model->status = Goods::STATUS_WAIT_ONLINE;
+            }
+        } else {
+            $model->status = Goods::STATUS_OFFLINE;
+            $model->offline_time = $now;
+            $model->offline_uid = $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0;
+            $model->offline_person = $operator->nickname;
+            if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+                $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            }
+        }
+
+        if (!$model->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$model->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Disable goods records in batches action.
+     *
+     * @return string
+     */
+    public function actionGoodsDisableBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canDisable = Goods::canDisable($ids);
+        if (!$canDisable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $operator = Supplier::find()->where(['uid' => $user->id])->one();
+        } else {
+            $operator = Lhzz::find()->where(['uid' => $user->id])->one();
+        }
+
+        $updates = [
+            'status' => Goods::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_uid' => $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0,
+            'offline_person' => $operator->nickname
+        ];
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            $updates['offline_reason'] = Yii::$app->request->post('offline_reason', '');
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (Goods::updateAll($updates, $where) != count(explode(',', $ids))) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Enable goods records in batches action.
+     *
+     * @return string
+     */
+    public function actionGoodsEnableBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canEnable = Goods::canEnable($ids);
+        if (!$canEnable) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        $user = Yii::$app->user->identity;
+        $operator = Lhzz::find()->where(['uid' => $user->id])->one();
+
+        $updates = [
+            'status' => Goods::STATUS_ONLINE,
+            'online_time' => time(),
+            'online_uid' => $operator->id,
+            'online_person' => $operator->nickname
+        ];
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (Goods::updateAll($updates, $where) != count(explode(',', $ids))) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Delete goods records in batches action.
+     *
+     * @return string
+     */
+    public function actionGoodsDeleteBatch()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canDelete = Goods::canDelete($ids);
+        if (!$canDelete) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+
+        $updates = [
+            'status' => Goods::STATUS_DELETED,
+            'delete_time' => time(),
+        ];
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (Goods::updateAll($updates, $where) != count(explode(',', $ids))) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Reset goods offline reason action
+     *
+     * @return string
+     */
+    public function actionGoodsOfflineReasonReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $goods = Goods::find()->where(['id' => $id, 'status' => Goods::STATUS_OFFLINE])->one();
+        if (!$goods) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
+
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Reset goods inventory action
+     *
+     * @return string
+     */
+    public function actionGoodsInventoryReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $goods = Goods::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'status', [Goods::STATUS_OFFLINE, Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE]])
+            ->one();
+
+        if (!$goods) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods->left_number = (int)Yii::$app->request->post('left_number', 0);
+
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Reset goods review reason action
+     *
+     * @return string
+     */
+    public function actionGoodsReasonReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $goods = Goods::find()
+            ->where(['id' => $id, 'status' => Goods::STATUS_WAIT_ONLINE])
+            ->one();
+
+        if (!$goods) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods->reason = trim(Yii::$app->request->post('reason', ''));
+
+        if (!$goods->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$goods->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Admin goods list action
+     *
+     * @return string
+     */
+    public function actionGoodsListAdmin()
+    {
+        $code = 1000;
+
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new Goods;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $status = (int)Yii::$app->request->get('status', Goods::STATUS_ONLINE);
+        if (!in_array($status, array_keys(Goods::$statuses))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = "status = {$status}";
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        if ($keyword) {
+            $where .= " and (sku like '{$keyword}%' or title like '{$keyword}%')";
+        }
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+            if (!$supplier) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $where .= " and supplier_id = {$supplier->id}";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
+        $fromLhzz = $user->login_role_id == Yii::$app->params['lhzzRoleId'];
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods_list_admin' => [
+                    'total' => (int)Goods::find()->where($where)->asArray()->count(),
+                    'details' => Goods::pagination($where, Goods::FIELDS_ADMIN, $page, $size, $orderBy, $fromLhzz)
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Goods images action
+     *
+     * @return string
+     */
+    public function actionGoodsImages()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods-images' => []
+            ],
+        ];
+
+        $goodsId = (int)Yii::$app->request->get('goods_id', 0);
+        $goodsId > 0 && $ret['data']['goods-images'] = GoodsImage::imagesByGoodsId($goodsId);
+        return Json::encode($ret);
     }
 }

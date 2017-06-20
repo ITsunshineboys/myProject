@@ -9,15 +9,13 @@ CREATE TABLE `goods` (
   `sku` bigint unsigned not null default 0,
   `title` varchar(100) not null DEFAULT '',
   `subtitle` varchar(100) not null DEFAULT '',
-  `image1` varchar(255) not null DEFAULT '' comment '封面图',
-  `image2` varchar(255) not null DEFAULT '',
-  `image3` varchar(255) not null DEFAULT '',
-  `image4` varchar(255) not null DEFAULT '',
-  `image5` varchar(255) not null DEFAULT '',
+  `cover_image` varchar(255) not null DEFAULT '' comment '封面图',
   `supplier_price` bigint not null DEFAULT 0 comment 'unit: fen',
   `platform_price` bigint not null DEFAULT 0 comment 'unit: fen',
   `market_price` bigint not null DEFAULT 0 comment 'unit: fen',
-  `purchase_price` bigint not null DEFAULT 0 comment 'unit: fen',
+  `purchase_price_decoration_company` bigint not null DEFAULT 0 comment 'unit: fen',
+  `purchase_price_manager` bigint not null DEFAULT 0 comment 'unit: fen',
+  `purchase_price_designer` bigint not null DEFAULT 0 comment 'unit: fen',
   `sold_number` int unsigned not null default 0 comment '销量',
   `left_number` int unsigned not null default 0 comment '库存',
   `comment_number` int unsigned not null default 0 comment '评价数',
@@ -29,6 +27,14 @@ CREATE TABLE `goods` (
   `online_time` int not null DEFAULT 0,
   `delete_time` int not null DEFAULT 0,
   `status` tinyint(1) not null DEFAULT 0 comment '0：已下架, 1：等待上架, 2：已上架, 3：已删除',
+  `after_sale_services` set('0', '1', '2', '3', '4') not null DEFAULT '0' comment '0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货',
+  `logistics_template_id` int(11) unsigned not null default 0,
+  `offline_reason` varchar(100) not null DEFAULT '' comment '下架原因',
+  `offline_person` varchar(20) not null DEFAULT '' comment '下架人',
+  `offline_uid` int(11) unsigned not null DEFAULT 0,
+  `reason` varchar(100) not null DEFAULT '' comment '审核原因',
+  `online_person` varchar(20) not null DEFAULT '' comment '上架人',
+  `online_uid` int(11) unsigned not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -76,6 +82,10 @@ CREATE TABLE `goods_category` (
   `deleted` tinyint(1) not null default 0,
   `online_time` int unsigned not null DEFAULT 0,
   `offline_time` int unsigned not null DEFAULT 0,
+  `attr_op_uid` int(11) unsigned not null DEFAULT 0,
+  `attr_op_username` varchar(20) not null DEFAULT '',
+  `attr_op_time` int not null DEFAULT 0,
+  `attr_number` int(11) not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -155,5 +165,23 @@ create table logistics_district (
   `template_id` int(11) not null default 0,
   `district_code` int(6) unsigned not null default 0,
   `district_name` varchar(100) not null DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table goods_attr (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) not null default '',
+  `value` varchar(50) not null default '',
+  `unit` tinyint(1) not null DEFAULT 0 comment '0: 无, 1: L, 2: M, 3: M^2, 4: Kg',
+  `addition_type` tinyint(1) not null default 0 comment '0: 普通添加, 1: 下拉框添加',
+  `goods_id` int(11) not null default 0,
+  `category_id` int(11) not null default 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table goods_image (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) unsigned not null default 0,
+  `image` varchar(255) not null DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

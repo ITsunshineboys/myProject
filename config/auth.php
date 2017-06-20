@@ -32,13 +32,17 @@ return [
     'category-add' => [1, 6],
     'category-edit' => [1],
     'category-offline-reason-reset' => [1],
+    'category-reason-reset' => [1],
     'category-review-list' => [1],
+//    'category-brands' => [6],
+    'category-attrs' => [6],
 
     // brand
     'brand-add' => [1, 6],
     'brand-review' => [1],
     'brand-edit' => [1],
     'brand-offline-reason-reset' => [1],
+    'brand-reason-reset' => [1],
     'brand-status-toggle' => [1],
     'brand-disable-batch' => [1],
     'brand-enable-batch' => [1],
@@ -48,4 +52,25 @@ return [
     // logistics template
     'logistics-template-add' => [6],
     'logistics-template-edit' => [6],
+    'logistics-template-view' => [6],
+    'logistics-templates-supplier' => [6],
+
+    // goods attribute
+    'goods-attr-add' => [1],
+    'goods-attr-list-admin' => [1],
+
+    // goods
+    'goods-add' => [6],
+    'goods-edit' => [1, 6],
+    'goods-edit-lhzz' => [1],
+    'goods-attrs-admin' => [6],
+    'goods-status-toggle' => [1, 6],
+    'goods-disable-batch' => [1, 6],
+    'goods-delete-batch' => [6],
+    'goods-enable-batch' => [1],
+    'goods-offline-reason-reset' => [1],
+    'goods-reason-reset' => [1],
+    'goods-list-admin' => [1, 6],
+    'goods-inventory-reset' => [6],
+    'goods-images' => [1, 6],
 ];

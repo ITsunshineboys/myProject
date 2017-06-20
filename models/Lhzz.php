@@ -19,4 +19,15 @@ class Lhzz extends ActiveRecord
     {
         return 'lhzz';
     }
+
+    /**
+     * Get lhzz instance by user model
+     *
+     * @param ActiveRecord $user user model
+     * @return ActiveRecord
+     */
+    public static function findByUser(ActiveRecord $user)
+    {
+        return self::find()->where(['uid' => $user->id])->one();
+    }
 }

@@ -17,4 +17,17 @@
      {
          return 'style_picture';
      }
+
+     public static function findById($arr= [])
+     {
+         if($arr){
+            $style_id = [];
+            foreach ($arr as $one)
+            {
+                $style_id [] = $one['id'];
+            }
+            $style_picture = self::find()->where(['in','style_id',$style_id])->asArray()->all();
+         }
+         return $style_picture;
+     }
  }
