@@ -791,6 +791,24 @@ AND goods.id IN (" . $id . ")";
     }
 
     /**
+     * Get view data
+     *
+     * @return array
+     */
+    public function view()
+    {
+        return $goodsView = [
+            'id' => $this->id,
+            'title' => $this->title,
+            'subtitle' => $this->subtitle,
+            'cover_image' => $this->cover_image,
+            'platform_price' => $this->platform_price,
+            'description' => $this->description,
+            'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
+        ];
+    }
+
+    /**
      * Do some ops before insertion
      *
      * @param bool $insert if is a new record

@@ -23,6 +23,7 @@ use app\services\AdminAuthService;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use yii\helpers\HtmlPurifier;
 use yii\web\Controller;
 
 class MallController extends Controller
@@ -3418,5 +3419,42 @@ class MallController extends Controller
         $goodsId = (int)Yii::$app->request->get('goods_id', 0);
         $goodsId > 0 && $ret['data']['goods-images'] = GoodsImage::imagesByGoodsId($goodsId);
         return Json::encode($ret);
+    }
+
+    /**
+     * View goods action
+     *
+     * @return string
+     */
+    public function actionGoodsView()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->get('id', 0);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $goods = Goods::find()
+            ->where(['id' => $id, 'status' => Goods::STATUS_ONLINE])
+            ->one();
+
+        if (!$goods) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods-view' => $goods->view(),
+            ],
+        ]);
     }
 }
