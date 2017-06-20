@@ -15,7 +15,7 @@ use yii\helpers\HtmlPurifier;
 
 class Goods extends ActiveRecord
 {
-    const GOODS_DETAIL_URL_PREFIX = 'mall/goods?id=';
+    const GOODS_DETAIL_URL_PREFIX = 'mall/product_details.html?id=';
     const ORDERBY_SEPARATOR = ':';
     const PAGE_SIZE_DEFAULT = 12;
     const STATUS_OFFLINE = 0;
@@ -845,6 +845,9 @@ AND goods.id IN (" . $id . ")";
      */
     public function view()
     {
+        $supplier = Supplier::findOne($this->supplier_id);
+        $user = User::findOne($supplier->uid);
+
         return $goodsView = [
             'id' => $this->id,
             'title' => $this->title,
@@ -858,6 +861,17 @@ AND goods.id IN (" . $id . ")";
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
+            'supplier' => [
+                'id' => $supplier->id,
+                'name' => $supplier->nickname,
+                'icon' => $supplier->icon,
+                'goods_number' => self::find()
+                    ->where(['supplier_id' => $this->supplier_id, 'status' => self::STATUS_ONLINE])
+                    ->count(),
+                'follower_number' => $supplier->follower_number,
+                'comprehensive_score' => $supplier->comprehensive_score,
+                'mobile' => $user->mobile,
+            ],
         ];
     }
 
