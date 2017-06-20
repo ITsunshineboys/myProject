@@ -848,7 +848,7 @@ AND goods.id IN (" . $id . ")";
         $supplier = Supplier::findOne($this->supplier_id);
         $user = User::findOne($supplier->uid);
 
-        return $goodsView = [
+        return [
             'id' => $this->id,
             'title' => $this->title,
             'subtitle' => $this->subtitle,
@@ -856,11 +856,14 @@ AND goods.id IN (" . $id . ")";
             'platform_price' => $this->platform_price,
             'description' => $this->description,
             'sku' => $this->sku,
+            'left_number' => $this->left_number,
             'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
             'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
+            'online_time' => date('Y-m-d', $this->online_time),
+            'after_sale_services' => $this->afterSaleServicesReadable(),
             'supplier' => [
                 'id' => $supplier->id,
                 'name' => $supplier->nickname,
@@ -873,6 +876,21 @@ AND goods.id IN (" . $id . ")";
                 'mobile' => $user->mobile,
             ],
         ];
+    }
+
+    /**
+     * Get readable after sale services
+     *
+     * @return array
+     */
+    public function afterSaleServicesReadable()
+    {
+        $readableServices = [];
+        $services = explode(',', $this->after_sale_services);
+        foreach ($services as $service) {
+            $readableServices[] = self::AFTER_SALE_SERVICES[$service];
+        }
+        return $readableServices;
     }
 
     /**
