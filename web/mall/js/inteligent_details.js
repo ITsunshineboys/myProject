@@ -8,9 +8,9 @@ myApp.controller("comment_controller",function($scope, $http,$filter){
         method: 'get',
         url: 'commodity.json'
     }).then(function successCallback(response) {
-        $scope.message = response.data.data.category_goods;
+        $scope.message = response.data.data;
         $scope.myFilter={
-            limit:3
+            limit:4
         };
 
         //$scope.returnMore=function(a,b){

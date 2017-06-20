@@ -8,19 +8,20 @@
     <link rel="stylesheet" href="css/movefurniture.css"/>
     <!--<link rel="stylesheet" href="css/bootstrap.min.css"/>-->
 </head>
-<body>
+<body ng-app="myapp">
 <header>
     <div>
         <span><</span>
         <sapn class="span_center">移动家具</sapn>
     </div>
 </header>
-<section>
+<section ng-controller="commentCtrl">
     <div class="list_comment">
-        <ul class="ul_item">
+        <ul class="ul_item" ng-controller="n in message ">
             <li class="li_item">
-                <img src="images/bed.png" alt=""/><br/>
-                <span>沙发</span>
+                <a href="product_details.html"> <img src="images/bed.png" alt=""/><br/>
+                    <span>沙发</span>
+                </a>
             </li>
             <li  class="li_item">
                 <img src="images/bed.png" alt=""/><br/>
@@ -45,5 +46,6 @@
 <script src="../js/angular.min.js"></script>
 <script src="js/rem.js"></script>
 <script src="js/global.js"></script>
+<script src="js/movefurniture.js"></script>
 </body>
 </html>

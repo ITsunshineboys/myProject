@@ -28,8 +28,11 @@ header div:last-child span{
 }
 .li_item{
     display:inline-block;
-    margin-left: 2rem;
+    margin-left: 3rem;
     margin-bottom: 1rem;
+}
+.li_item img{
+    width: 6rem;
 }
 .li_item span{
     margin-left: 1rem;

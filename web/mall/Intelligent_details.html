@@ -12,27 +12,27 @@
     <script src="js/jquery-1.11.2.js"></script>
     <script src="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
-<body>
+<body ng-app="maApp">
 <header>
     <div>
         <span><</span>
         <sapn class="span_center">欧式板</sapn>
     </div>
 </header>
-<section>
+<section ng-controller="comment_controller">
     <!--便签栏-->
     <div class="memo_pad">
-        <li ng-click="sales_priority($index)" ng-click="myFilter.comment_number">销量优先</li>
-        <li>价格</li>
-        <li>好评率</li>
+        <li ng-click="sort('comment_number')" >销量优先</li>
+        <li ng-click="sort('platform_price')">价格</li>
+        <li ng-click="sort('favourable_comment_rate')">好评率</li>
         <li data-toggle="modal" data-target="#myModal">筛选</li>
     </div>
     <!--商品展示列表-->
     <div class="mall_list">
-        <div class="flex_div" ng-controller="comment_controller">
-            <div class=" item_commodity"  ng-repeat="n in message |limitTo:myFilter.limit | filter:{comment_number:myFilter.comment_number}:returnMore | orderBy:'platform_price':true">
+        <div class="flex_div" >
+            <div class=" item_commodity"  ng-repeat="n in message |limitTo:myFilter.limit ">
                 <div class="item_commodity_divimg">
-                    <img src="{{n.image1}}" alt="" class="img_item " />
+                    <img src="{{n.image}}" alt="" class="img_item " />
                 </div>
                 <div class="item_commodity_comment">
                     <p class="comment_one">{{n.title}}</p>
@@ -153,16 +153,16 @@
                                                 </div>
 
                                             </div>
-                                            <div class="footer_div_btn">
-                                                    <button type="button" class="btn btn-default back_btn" data-dismiss="modal">返回</button>
-                                                    <button type="button" class="btn btn-primary back_btn">确认</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default back_btn" data-dismiss="modal">返回</button>
+                                                <button type="button" class="btn btn-primary back_btn">确认</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="footer_div">
+                        <div class="modal-footer">
                             <button type="button" class="btn btn-default reset_btn" data-dismiss="modal">重置</button>
                             <button type="button" class="btn btn-primary reset_btn">完成</button>
                         </div>

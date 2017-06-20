@@ -5,6 +5,7 @@
     <title></title>
     <link rel="stylesheet" href="css/rem.css">
     <link rel="stylesheet" href="css/all.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/product_details.css"/>
 </head>
 <body>
@@ -52,22 +53,63 @@
                 <img src="images/bed.png" alt=""/>
                 <span>合金压缩旗舰店</span>
             </div>
-            <div>
+            <div class="shop_number">
                 <ul>
                     <li>
-                        <span>66</span> <br/>
+                        <span class="num_shop">66</span> <br/>
                         <span>商品数量</span>
+                        <div class="line"></div>
                     </li>
                     <li>
-                        <span>666</span> <br/>
+                        <span class="num_shop">666</span> <br/>
                         <span>关注人数</span>
+                        <div class="line"></div>
                     </li>
                     <li>
-                        <span>6.6</span> <br/>
+                        <span class="num_shop">6.6</span> <br/>
                         <span>好评率</span>
+                        <div class="line" style="visibility: hidden"></div>
                     </li>
                 </ul>
             </div>
+        </div>
+        <!--图文详情和参数-->
+        <div class="pic_comment">
+            <div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs pic_tabs active" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">图文详情</a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">产品参数</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <!--图文详情-->
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <div class="tab_one">
+                            <img src="images/banner1.png" alt=""/>
+                            <p>哈哈哈啊哈哈哈哈哈哈哈哈哈哈</p>
+                        </div>
+                    </div>
+                    <!--产品参数-->
+                    <div role="tabpanel" class="tab-pane" id="profile">
+                      <div class="shop_two">
+                          <ul>
+                              <li><span>产品参数</span><span class="comment_num">25446556</span></li>
+                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
+                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
+                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
+                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
+                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
+                          </ul>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+
+
         </div>
     </div>
     <div style="height: 10rem;"></div>
@@ -76,6 +118,7 @@
 <script src="../js/angular.min.js"></script>
 <script src="js/rem.js"></script>
 <script src="js/global.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="js/details.js"></script>
 
 </body>

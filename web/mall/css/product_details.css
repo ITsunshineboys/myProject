@@ -138,12 +138,59 @@
     width: auto;
     background-color: white;
 }
+.shop_header_child{
+    margin-top: 1rem;
+}
 .shop_header_child img{
     padding-left: 1rem;
+    margin-top: .8rem;
 }
 .shop_header_child span{
     position: relative;
-    top:-2rem;
+    /*top:-2rem;*/
     font-size:1.2rem;
     margin-left: 1rem;
+}
+.shop_number ul{
+    margin-left: .6rem;
+}
+.shop_number ul li {
+    display: inline-block;
+    font-size: 1.2rem;
+    margin-left: 3rem;
+}
+.num_shop {
+    color: #5677FC;
+    margin-left: 1.3rem;
+}
+.line{
+    display: inline-block;
+    height: 2.2rem;
+    width: .1rem;
+    background-color: #666;
+    margin-left: 1.4rem;
+}
+.pic_tabs li a{
+    width:15rem!important;
+    height: 3rem;
+    font-size: 1.2rem;
+    text-align: center;
+}
+.active{
+    /*background-color:#738FFE;*/
+    /*color: white;*/
+}
+.tab_one img{
+    width: 100%;
+}
+.tab_one p {
+    font-size: 1.2rem;
+    padding-left: 1rem;
+}
+.shop_two ul li{
+    font-size: 1.2rem;
+    padding-left: 1.2rem;
+}
+.comment_num {
+  margin-left: 18rem;
 }
