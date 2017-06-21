@@ -728,6 +728,14 @@ class BasisDecorationService
         return $putty_cost;
     }
 
+    /**
+     * 泥作面积
+     * @param array $ground_area
+     * @param array $craft
+     * @param int $quantity
+     * @param int $wall
+     * @return float
+     */
     public static function mudMakeArea($ground_area = [],$craft = [],$quantity = 1,$wall = 4)
     {
         if ($ground_area && $craft)
@@ -738,5 +746,26 @@ class BasisDecorationService
 
         }
         return $wall_area;
+    }
+
+    public static function mudMakeCost($area = 1,$goods = [],$craft = 1,$project = '')
+    {
+        if ($goods && $craft)
+        {
+            $goods_price = 0;
+            $goods_value = 0;
+            foreach ($goods as $one){
+               if ($one['title'] == $project)
+               {
+                   $goods_price = $one['platform_price'];
+                   $goods_value = $one['value'];
+               }
+            }
+            //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
+           $mud_make['quantity'] = ceil($area * $craft / $goods_value);
+            //        水泥费用:个数×抓取的商品价格
+            $mud_make['cost'] = $mud_make['quantity'] * $goods_price;
+        }
+        return $mud_make;
     }
 }

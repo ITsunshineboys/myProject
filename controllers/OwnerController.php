@@ -16,6 +16,7 @@ use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
 use app\models\FixationFurniture;
 use app\models\Goods;
+use app\models\GoodsCategory;
 use app\models\IntelligenceAssort;
 use app\models\LaborCost;
 use app\models\LifeAssort;
@@ -94,10 +95,11 @@ class OwnerController extends Controller
      */
     public function actionSeriesAndStyle()
     {
-        $stairs_details = StairsDetails::find()->all();
+        $stairs_details = StairsDetails::find()->asArray()->all();
         $series = Series::findByAll();
         $style = Style::findByAll();
         $style_picture = StylePicture::findById($style);
+
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
@@ -105,7 +107,7 @@ class OwnerController extends Controller
                 'stairs_details' =>$stairs_details,
                 'series' => $series,
                 'style' => $style,
-                'style_picture' => $style_picture,
+                'style_picture' => $style_picture
             ]
         ]);
     }
@@ -223,6 +225,7 @@ class OwnerController extends Controller
                 'weak_current_spool_cost' => $material_price['spool_cost'],
                 'weak_current_bottom_case' => $material_price['bottom_case'],
                 'weak_current_add_price' => $add_price,
+                'weak_current'=>$weak_current
             ]
         ]);
     }
@@ -352,6 +355,7 @@ class OwnerController extends Controller
                 'strong_current_spool_cost' => $material_price['spool_cost'],
                 'strong_current_bottom_case' => $material_price['bottom_case'],
                 'strong_current_add_price' => $add_price,
+                'strong_current'=>$strong_current
             ]
         ]);
     }
@@ -451,6 +455,7 @@ class OwnerController extends Controller
                     'waterway_pvc_quantity' => $material_price['pvc_quantity'],
                     'waterway_pvc_cost' => $material_price['pvc_cost'],
                     'waterway_add_price' => $add_price,
+                    'waterway_current'=>$waterway_current
                 ]
             ]);
     }
@@ -544,6 +549,7 @@ class OwnerController extends Controller
                 'waterproof_material_price' => $material_price['cost'],
                 'waterproof_material_quantity' => $material_price['quantity'],
                 'waterproof_add_price' => $add_price,
+                'waterproof'=>$waterproof
             ]
         ]);
     }
@@ -627,6 +633,7 @@ class OwnerController extends Controller
                 'keel_cost' => $keel_cost,
                 'pole_cost' => $pole_cost,
                 'carpentry_add_price' => $carpentry_add,
+                'goods_price'=>$goods_price
             ]
         ]);
     }
@@ -827,6 +834,7 @@ class OwnerController extends Controller
                 'concave_line_cost' => $concave_line_cost,
                 'gypsum_powder_cost' => $gypsum_powder_cost,
                 'carpentry_add_price' => $carpentry_add,
+                'goods_price' => $goods_price
             ]
         ]);
     }
@@ -839,7 +847,7 @@ class OwnerController extends Controller
 //        $receive = \Yii::$app->request->post();
 //        $post = Json::decode($receive);
         $post = [
-            'effect_id' => 1,
+//            'effect_id' => 1,
             'master_bedroom' => 1,
             'secondary_bedroom' => 1,
             'sitting_room' => 1,
@@ -893,18 +901,36 @@ class OwnerController extends Controller
             $drawing_room_area = $post['area'] * $drawing_room_particulars['project_value'];
         }
 
-        //墙面高度
-        $wall_height = EngineeringStandardCraft::findByAll('泥工',$post['city']);
-
-//        保护层面积=防水总面积
+        //当地工艺
+        $craft = EngineeringStandardCraft::findByAll('泥工',$post['city']);
+        foreach ($craft as $local_craft){
+            if ($local_craft['project_details'] == '贴砖')
+            {
+                $wall_height = $local_craft['material'];
+            }
+            if ($local_craft['project_details'] == '水泥')
+            {
+                $cement_craft = $local_craft['material'];
+            }
+            if ($local_craft['project_details'] == '自流平')
+            {
+                $self_leveling_craft = $local_craft['material'];
+            }
+            if ($local_craft['project_details'] == '河沙')
+            {
+                $river_sand_craft = $local_craft['material'];
+            }
+        }
+//        var_dump($self_leveling_craft);exit;
+//        保护层面积
         $covering_layer_area = $post['waterproof_total_area'];
 //        保护层天数：保护层面积÷【每天做保护层面积】
         $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
 
 //        卫生间墙面积
-        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area,$wall_height[0]['material'],$post['toilet']);
+        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area,$wall_height,$post['toilet']);
 //        厨房墙面积
-        $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area,$wall_height[0]['material'],$post['kitchen'],3);
+        $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area,$wall_height,$post['kitchen'],3);
 //        墙砖面积
         $wall_area = $toilet_wall_area + $kitchen_wall_area;
 //        墙砖天数
@@ -924,12 +950,122 @@ class OwnerController extends Controller
         if (!empty($post['effect_id'])){
             $decoration_list = DecorationList::findById($post['effect_id']);
             $plastering_reconstruction = PlasteringReconstruction::findById($decoration_list);
-            var_dump($plastering_reconstruction);
-            exit;
+            $goods_price = Goods::findQueryAll($plastering_reconstruction,$post['city']);
+            $wall_brick_value = 0;
+            $wall_brick_price = 0;
+            $floor_tile_value = 0;
+            $floor_tile_price = 0;
+            $drawing_room_price = 0;
+            $drawing_room_value = 0;
+            foreach ($goods_price as $goods_brick_area)
+            {
+                if ($goods_brick_area['title'] == '墙砖')
+                {
+                    $wall_brick_value = $goods_brick_area['value'];
+                    $wall_brick_price = $goods_brick_area['platform_price'];
+                }
+                if ($goods_brick_area['title'] == '地砖')
+                {
+                    $floor_tile_value = $goods_brick_area['value'];
+                    $floor_tile_price = $goods_brick_area['platform_price'];
+                }
+                if ($goods_brick_area['title'] == '客厅地砖')
+                {
+                    $drawing_room_price =  $goods_brick_area['platform_price'];
+                    $drawing_room_value = $goods_brick_area['value'];
+                }
+            }
         }else{
-            echo 1111;exit;
+            $cement = '水泥';
+            $goods_price = [];
+            $goods_price [] = Goods::priceDetail(3,$cement);
+            $self_leveling = '自流平';
+            $goods_price [] = Goods::priceDetail(3,$self_leveling);
+            $wall_brick = '墙砖';
+            $goods_price [] = Goods::priceDetail(3,$wall_brick);
+            $floor_tile = '地砖';
+            $goods_price [] = Goods::priceDetail(3,$floor_tile);
+            $river_sand = '河沙';
+            $goods_price [] = Goods::priceDetail(3,$river_sand);
+            $river_sand = '客厅地砖';
+            $goods_price [] = Goods::priceDetail(3,$river_sand);
+            $wall_brick_value = 0;
+            $wall_brick_price = 0;
+            $floor_tile_value = 0;
+            $floor_tile_price = 0;
+            $drawing_room_price = 0;
+            $drawing_room_value = 0;
+            foreach ($goods_price as $goods_brick_area)
+            {
+                if ($goods_brick_area['title'] == '墙砖')
+                {
+                    $wall_brick_value = $goods_brick_area['value'];
+                    $wall_brick_price = $goods_brick_area['platform_price'];
+                }
+                if ($goods_brick_area['title'] == '地砖')
+                {
+                    $floor_tile_value = $goods_brick_area['value'];
+                    $floor_tile_price = $goods_brick_area['platform_price'];
+                }
+                if ($goods_brick_area['title'] == '客厅地砖')
+                {
+                    $drawing_room_price =  $goods_brick_area['platform_price'];
+                    $drawing_room_value = $goods_brick_area['value'];
+                }
+            }
         }
+//        水泥面积=保护层面积+ 地砖面积+墙砖面积
+        $cement_area = $covering_layer_area + $floor_tile_area + $floor_tile_area;
+//        水泥费用
+        $cement_cost = BasisDecorationService::mudMakeCost($cement_area,$goods_price,$cement_craft,'水泥');
+//        自流平面积
+        $self_leveling_area = $drawing_room_area;
+//        自流平费用
+        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area,$goods_price,$self_leveling_craft,'自流平');
+//        个数：（墙砖面积÷抓取墙砖面积）
+        $wall_brick_area = ($wall_brick_value / 1000) * ($wall_brick_value / 1000);
+        $wall_brick_cost ['quantity'] = ceil($wall_area / $wall_brick_area);
+//        墙砖费用
+        $wall_brick_cost['cost'] = $wall_brick_cost ['quantity'] * $wall_brick_price;
+//        河沙费用
+        $river_sand_cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
+        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area,$goods_price,$river_sand_craft,'河沙');
+
+//        厨房/卫生间地砖费用
+        $kitchen_and_toilet_floor_tile_area = ($floor_tile_value / 1000) *  ($floor_tile_value / 1000);
+        $kitchen_and_toilet['quantity'] = ceil(($kitchen_area + $toilet_area) / $kitchen_and_toilet_floor_tile_area);
+        $kitchen_and_toilet['cost'] = $kitchen_and_toilet['quantity'] * $floor_tile_price;
+//        客厅地砖费用
+        $drawing_room_floor_tile_area = ($drawing_room_value / 1000) * ($drawing_room_value / 1000);
+        $drawing_room_cost['quantity'] =  ceil($drawing_room_area * $drawing_room_floor_tile_area);
+        $drawing_room_cost['cost'] = $drawing_room_cost['quantity'] * $drawing_room_price;
+        //        地砖费用
+        $floor_tile_cost =  $kitchen_and_toilet['cost'] + $drawing_room_cost['cost'];
+        //材料总费用
+        $material_cost_total = $floor_tile_cost['cost'] + $river_sand_cost['cost'] + $cement_cost['cost'] + $self_leveling_cost['cost'] + $wall_brick_cost['cost'];
+
+        //添加材料费用
+        $carpentry_add = DecorationAdd::CarpentryAddAll('泥工',$post['series'],$post['style']);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'mud_make_labor_price' => $total_labor_cost,
+                'mud_make_material_price' => $material_cost_total,
+                'cement_cost' => $cement_cost,
+                'self_leveling_cost' => $self_leveling_cost,
+                'wall_brick_cost' => $wall_brick_cost,
+                'river_sand_cost' => $river_sand_cost,
+                'kitchen_and_toilet_floor_tile' => $kitchen_and_toilet,
+                'drawing_room_cost' => $drawing_room_cost,
+                'carpentry_add' => $carpentry_add,
+                'goods_price'=> $goods_price
+            ]
+        ]);
     }
+
+
     /**
      * 软装配套
      * @return string
@@ -995,30 +1131,64 @@ class OwnerController extends Controller
 //        $receive = \Yii::$app->request->post();
 //        $post = Json::decode($receive);
         $post = [
-            'effect_id' => 1,
-            'room' => 1,
-            'hall' => 1,
+//            'effect_id' => 1,
+            'master_bedroom' => 2,
+            'secondary_bedroom' => 1,
+            'sitting_room' => 1,
+            'dining_room' => 1,
             'window' => 2,
             'high' => 2.8,
-            'area' => 40,
+            'area' => 62,
             'toilet' => 1,
             'kitchen' => 1,
             'style' => 1,
             'series' => 1,
             'province' => 510000,
-            'city' => 510100
+            'city' => 510100,
+            'waterproof_total_area'=>50
         ];
-        if(!empty($post['effect_id']))
+        $fitment = '固定家具';
+        $fixation_furniture = GoodsCategory::find()->asArray()->where(['and',['title'=>$fitment],['level'=>1]])->one();
+        $goods_category = GoodsCategory::find()->asArray()->where(['pid'=>$fixation_furniture['id']])->all();
+        $goods = Goods::categoryById($goods_category,$post['series'],$post['style'],510100);
+        $chest = $post['master_bedroom'];
+        foreach ($goods as $one_goods)
         {
-            $fixation_furniture = FixationFurniture::findById($post);
-//            $goods = Goods::findByConditionInquire($fixation_furniture);
-            exit;
+            //                酒柜，橱柜，吊柜，鞋柜
+            if ($one_goods['title'] == '衣柜')
+            {
+                $chest_goods = $one_goods;
+                $chest_goods['platform_price'] = $one_goods['platform_price'] * $chest;
+                $chest_goods['number'] = $chest;
+            }
+            if ($one_goods['title'] == '酒柜')
+            {
+                $wine_cabinet_goods = $one_goods;
+                $wine_cabinet_goods['number'] = 1;
+            }
+            if ($one_goods['title'] == '橱柜')
+            {
+                $cabinet_goods = $one_goods;
+                $cabinet_goods['number'] = 1;
+            }
+            if ($one_goods['title'] == '吊柜')
+            {
+                $wall_cupboard_goods = $one_goods;
+                $wall_cupboard_goods['number'] = 1;
+            }
+            if ($one_goods['title'] == '鞋柜')
+            {
+                $shoe_cabinet_goods = $one_goods;
+                $shoe_cabinet_goods['number'] = 1;
+            }
         }
+
+        var_dump($chest_goods);exit;
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-                'appliances_goods' =>$goods_price,
+                'fitment' =>$one_goods,
                 'quantity' => 1
             ]
         ]);
