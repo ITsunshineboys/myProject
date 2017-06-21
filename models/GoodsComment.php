@@ -15,10 +15,15 @@ class GoodsComment extends ActiveRecord
     const FIELDS_APP = ['id', 'name', 'icon', 'create_time', 'content', 'score', 'images'];
     const SCORE_GOOD = [8, 10];
     const SCORE_MEDIUM = [4, 6];
-    const SCORE_POOR = [2];
+    const SCORE_POOR = [0, 2];
     const DESC_SCORE_GOOD = '好评';
     const DESC_SCORE_MEDIUM = '中评';
     const DESC_SCORE_POOR = '差评';
+    const LEVELS_SCORE = [
+        'good' => self::SCORE_GOOD,
+        'medium' => self::SCORE_MEDIUM,
+        'poor' => self::SCORE_POOR
+    ];
     const MAX_LEN_CONTENT = 70;
     const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_EXTRA = ['images'];

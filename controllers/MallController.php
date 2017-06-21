@@ -3473,9 +3473,31 @@ class MallController extends Controller
             ],
         ];
 
+        $levelScore = trim(Yii::$app->request->get('level_score', ''));
         $goodsId = (int)Yii::$app->request->get('id', 0);
-        $goodsId > 0 && $ret['data']['goods-comments'] = GoodsComment::pagination(['goods_id' => $goodsId],
-            GoodsComment::FIELDS_APP);
+
+        $where = '1';
+
+        if ($levelScore && !in_array($levelScore, array_keys(GoodsComment::LEVELS_SCORE))) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($goodsId <= 0) {
+            return Json::encode($ret);
+        }
+
+        $where .= " and goods_id = {$goodsId}";
+
+        if ($levelScore) {
+            list($min, $max) = GoodsComment::LEVELS_SCORE[$levelScore];
+            $where .= " and score >= {$min} and score <= {$max}";
+        }
+
+        $ret['data']['goods-comments'] = GoodsComment::pagination($where,GoodsComment::FIELDS_APP);
         return Json::encode($ret);
     }
 }
