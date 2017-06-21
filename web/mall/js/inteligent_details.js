@@ -6,12 +6,13 @@ var myApp = angular.module("myApp",[]);
 myApp.controller("comment_controller",function($scope, $http,$filter){
     $http({
         method: 'get',
-        url: 'commodity.json'
+        url: "commodity.json"
     }).then(function successCallback(response) {
-        $scope.message = response.data.data;
+        $scope.message = response.data.data.category_goods;
         $scope.myFilter={
             limit:4
         };
+        alert(message);
 
         //$scope.returnMore=function(a,b){
         //    return a>=b

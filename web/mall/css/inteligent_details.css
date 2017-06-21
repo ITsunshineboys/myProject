@@ -83,13 +83,11 @@ header div:last-child span{
     margin-left: 18rem;
     /*margin-top: -2rem*/
     position: absolute;
-
 }
 .well{
     background-color: white!important;
     border: none!important;
     padding: 0.1rem;
-
 }
 
 .well ul li{
@@ -105,8 +103,6 @@ header div:last-child span{
     margin-left: .2rem;
     margin-bottom: .7rem;
     margin-top: .7rem;
-
-
 }
 .price_range{
     margin: 1.2rem 0;
@@ -128,7 +124,8 @@ header div:last-child span{
 .reset_btn{
     width: 12rem;
     height: 3rem;
-   font-size: 1.2rem!important;
+    font-size: 1.2rem!important;
+    margin-left: 1rem;
 }
 .footer_div {
     padding: 1rem;

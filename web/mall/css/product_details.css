@@ -194,3 +194,95 @@
 .comment_num {
   margin-left: 18rem;
 }
+.foot_tab{
+    margin-top: 2rem;
+}
+.foot_tab ul li{
+    display: inline-block;
+    font-size: 1.2rem;
+    margin-left: 3rem;
+}
+.foot_tab ul li img {
+    width: 2rem;
+}
+.li_cart{
+    padding: .5rem;
+    text-align: center;
+    background-color: #FAC62D;
+    color: white;
+    margin-left: 2rem!important;
+    width: 8rem;
+}
+.li_span{
+    padding: .5rem;
+    background-color:#F55122 ;
+    color: white;
+    width: 8rem;
+    text-align: center;
+    margin-left:2rem!important;
+}
+#myModal{
+    margin-top: 30rem;
+}
+.size_model ,.modal-dialog{
+    width: 29.8rem;
+    margin-left: .8rem;
+}
+.modal-header{
+    font-size: 1.2rem;
+    height: 2rem;
+}
+.modal-header p span{
+    font-size: 1.2rem;
+    margin-left: -2rem;
+}
+.add_cart{
+    display: inline-block;
+}
+.modal-body span{
+    font-size: 1.2rem;
+    margin-left: 1rem;
+}
+.sl input {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+}
+.input_div{
+    margin-left: 14rem;
+    display: inline-block;
+}
+
+.modal-footer_div{
+    border-top:1px solid #999;
+    height: 4rem;
+}
+.modal-footer_div  button{
+    width: 14.4rem;
+    height: 4rem;
+    line-height: 4rem;
+    font-size: 1.2rem;
+}
+.resct_btn_one{
+    background-color: #FAC62D;
+    color: white;
+    border: none;
+}
+.resct_btn_two {
+    background-color:#F55122;
+    color: white;
+    border:none;
+    width: 14.6rem;
+}
+#myModalP{
+    width: 20rem;
+    margin-left: 5rem;
+    margin-top: 22rem;
+}
+.modal-body_success{
+    padding: 3rem;
+    font-size: 1.2rem;
+}
+.modal-body_success p{
+    padding-left: 2rem;
+}
