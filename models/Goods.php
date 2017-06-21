@@ -876,7 +876,7 @@ AND goods.id IN (" . $id . ")";
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'cover_image' => $this->cover_image,
-            'platform_price' => $this->platform_price,
+            'platform_price' => $this->platform_price / 100,
             'description' => $this->description,
             'sku' => $this->sku,
             'left_number' => $this->left_number,
