@@ -16,6 +16,7 @@ use app\models\LogisticsTemplate;
 use app\models\LogisticsDistrict;
 use app\models\GoodsAttr;
 use app\models\GoodsImage;
+use app\models\GoodsComment;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
@@ -23,7 +24,6 @@ use app\services\AdminAuthService;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
-use yii\helpers\HtmlPurifier;
 use yii\web\Controller;
 
 class MallController extends Controller
@@ -314,7 +314,7 @@ class MallController extends Controller
         if ($sort) {
             foreach ($sort as &$v) {
                 if (stripos($v, 'sold_number') !== false) {
-                    $v = 'sold_number:' .SORT_DESC;
+                    $v = 'sold_number:' . SORT_DESC;
                     break;
                 }
             }
@@ -335,7 +335,7 @@ class MallController extends Controller
         $styleId = (int)Yii::$app->request->get('style_id', 0);
         $seriesId = (int)Yii::$app->request->get('series_id', 0);
 
-        $where =  "category_id = {$categoryId}";
+        $where = "category_id = {$categoryId}";
         $platformPriceMin && $where .= " and platform_price >= {$platformPriceMin}";
         $platformPriceMax && $where .= " and platform_price <= {$platformPriceMax}";
         $brandId && $where .= " and brand_id = {$brandId}";
@@ -3456,5 +3456,26 @@ class MallController extends Controller
                 'goods-view' => $goods->view(),
             ],
         ]);
+    }
+
+    /**
+     * View goods comments action
+     *
+     * @return string
+     */
+    public function actionGoodsComments()
+    {
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods-comments' => []
+            ],
+        ];
+
+        $goodsId = (int)Yii::$app->request->get('goods_id', 0);
+        $goodsId > 0 && $ret['data']['goods-comments'] = GoodsComment::pagination(['goods_id' => $goodsId],
+            GoodsComment::FIELDS_APP);
+        return Json::encode($ret);
     }
 }
