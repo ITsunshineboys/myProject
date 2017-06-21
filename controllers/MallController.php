@@ -87,7 +87,7 @@ class MallController extends Controller
         'goods-reason-reset',
         'goods-list-admin',
         'goods-inventory-reset',
-        'goods-images',
+//        'goods-images',
     ];
 
     /**

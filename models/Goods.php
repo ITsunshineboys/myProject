@@ -873,7 +873,6 @@ AND goods.id IN (" . $id . ")";
         }
 
         return [
-            'id' => $this->id,
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'cover_image' => $this->cover_image,
