@@ -3473,7 +3473,7 @@ class MallController extends Controller
             ],
         ];
 
-        $goodsId = (int)Yii::$app->request->get('goods_id', 0);
+        $goodsId = (int)Yii::$app->request->get('id', 0);
         $goodsId > 0 && $ret['data']['goods-comments'] = GoodsComment::pagination(['goods_id' => $goodsId],
             GoodsComment::FIELDS_APP);
         return Json::encode($ret);
