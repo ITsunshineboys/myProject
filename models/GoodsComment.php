@@ -68,11 +68,7 @@ class GoodsComment extends ActiveRecord
                 }
 
                 if (in_array('images', $selectOld)) {
-                    $comment['images'] = CommentImage::find()
-                        ->select(['image'])
-                        ->where(['comment_id' => $comment['id']])
-                        ->asArray()
-                        ->all();
+                    $comment['images'] = CommentImage::findImagesByCommentId($comment['id']);
                 }
 
                 if (isset($comment['score'])) {
