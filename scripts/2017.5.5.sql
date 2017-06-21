@@ -205,3 +205,10 @@ create table comment_image (
   `image` varchar(255) not null DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table comment_reply (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comment_id` int(11) unsigned not null default 0,
+  `content` varchar(255) not null default '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
