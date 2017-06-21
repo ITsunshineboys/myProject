@@ -94,4 +94,25 @@ class GoodsComment extends ActiveRecord
 
         return $commentList;
     }
+
+    /**
+     * Get statistics by goods id
+     *
+     * @param int $goodsId goods id
+     * @return array
+     */
+    public static function statByGoodsId($goodsId)
+    {
+        $stat = [];
+
+        foreach (self::LEVELS_SCORE as $level => $score) {
+            $stat[$level] = self::find()
+                ->where(['goods_id' => $goodsId])
+                ->andWhere(['>=', 'score', $score[0]])
+                ->andWhere(['<=', 'score', $score[1]])
+                ->count();
+        }
+
+        return $stat;
+    }
 }

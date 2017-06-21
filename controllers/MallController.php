@@ -3469,12 +3469,17 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'goods-comments' => []
+                'goods-comments' => [
+                    'stat' => [],
+                    'details' => []
+                ],
             ],
         ];
 
         $levelScore = trim(Yii::$app->request->get('level_score', ''));
         $goodsId = (int)Yii::$app->request->get('id', 0);
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsComment::PAGE_SIZE_DEFAULT);
 
         $where = '1';
 
@@ -3497,7 +3502,8 @@ class MallController extends Controller
             $where .= " and score >= {$min} and score <= {$max}";
         }
 
-        $ret['data']['goods-comments'] = GoodsComment::pagination($where,GoodsComment::FIELDS_APP);
+        $ret['data']['goods-comments']['stat'] = GoodsComment::statByGoodsId($goodsId);
+        $ret['data']['goods-comments']['details'] = GoodsComment::pagination($where, GoodsComment::FIELDS_APP, $page, $size);
         return Json::encode($ret);
     }
 }
