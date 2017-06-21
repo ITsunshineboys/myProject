@@ -404,23 +404,21 @@ AND goods.id IN (" . $id . ")";
         return $all_goods;
     }
 
-    public static function categoryById($all = [],$series = 1,$style = 1,$city = 510100)
+    public static function categoryById($all = [], $series = 1, $style = 1, $city = 510100)
     {
-        if ($all)
-        {
+        if ($all) {
             $category_id = [];
-            foreach ($all as $one)
-            {
+            foreach ($all as $one) {
                 $category_id [] = $one['id'];
             }
-            $id = implode(',',$category_id);
+            $id = implode(',', $category_id);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = ".$city. " AND goods_category.`id` in (".$id . ") AND goods.series_id = ".$series." AND goods.style_id =" .$style ;
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`id` in (" . $id . ") AND goods.series_id = " . $series . " AND goods.style_id =" . $style;
             $all_goods = $db->createCommand($sql)->queryAll();
         }
         return $all_goods;
     }
-    
+
     /**
      * Check if can disable goods records
      *
@@ -865,6 +863,15 @@ AND goods.id IN (" . $id . ")";
         $supplier = Supplier::findOne($this->supplier_id);
         $user = User::findOne($supplier->uid);
 
+        if ($goodsComment = GoodsComment::find()
+            ->select(GoodsComment::FIELDS_APP)
+            ->where(['goods_id' => $this->id])
+            ->orderBy(['id' => SORT_DESC])
+            ->one()
+        ) {
+            $goodsComment->create_time = date('Y-m-d');
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -891,6 +898,10 @@ AND goods.id IN (" . $id . ")";
                 'follower_number' => $supplier->follower_number,
                 'comprehensive_score' => $supplier->comprehensive_score,
                 'mobile' => $user->mobile,
+            ],
+            'comments' => [
+                'total' => GoodsComment::find()->where(['goods_id' => $this->id])->count(),
+                'latest' => $goodsComment ? $goodsComment : new \stdClass,
             ],
         ];
     }

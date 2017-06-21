@@ -191,9 +191,11 @@ create table goods_comment (
   `uid` int(11) unsigned not null default 0,
   `role_id` int(11) unsigned not null default 0,
   `name` varchar(25) not null default '',
+  `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
   `content` varchar(255) not null default '',
   `score` tinyint(2) not null default 0,
   `create_time` int not null DEFAULT 0,
+  `goods_id` int(11) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
