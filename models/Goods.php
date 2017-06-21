@@ -885,7 +885,6 @@ AND goods.id IN (" . $id . ")";
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
-            'online_time' => date('Y-m-d', $this->online_time),
             'after_sale_services' => $this->afterSaleServicesReadable(),
             'supplier' => [
                 'id' => $supplier->id,
