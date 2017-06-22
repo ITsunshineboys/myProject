@@ -51,8 +51,6 @@ class LoginForm extends Model
                 $this->addError($attribute, 'Incorrect username or password.');
             }
         }
-
-        // if mobile as username, should add mobile validation here. If failed, call addError.
     }
 
     /**

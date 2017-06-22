@@ -17,6 +17,7 @@ use app\models\LogisticsDistrict;
 use app\models\GoodsAttr;
 use app\models\GoodsImage;
 use app\models\GoodsComment;
+use app\models\User;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
@@ -88,6 +89,7 @@ class MallController extends Controller
         'goods-list-admin',
         'goods-inventory-reset',
 //        'goods-images',
+        'supplier-add',
     ];
 
     /**
@@ -153,6 +155,7 @@ class MallController extends Controller
                     'goods-offline-reason-reset' => ['post',],
                     'goods-reason-reset' => ['post',],
                     'goods-inventory-reset' => ['post',],
+                    'supplier-add' => ['post',],
                 ],
             ],
         ];
@@ -3505,5 +3508,73 @@ class MallController extends Controller
         $ret['data']['goods-comments']['stat'] = GoodsComment::statByGoodsId($goodsId);
         $ret['data']['goods-comments']['details'] = GoodsComment::pagination($where, GoodsComment::FIELDS_APP, $page, $size);
         return Json::encode($ret);
+    }
+
+    /**
+     * Add supplier action
+     *
+     * @return string
+     */
+    public function actionSupplierAdd()
+    {
+        $code = 1000;
+
+        $supplier = new Supplier;
+        $supplier->attributes = Yii::$app->request->post();
+
+        $supplier->scenario = Supplier::SCENARIO_ADD;
+        if (!$supplier->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$supplier->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $userData = [
+            'mobile' => User::PREFIX_DEFAULT_MOBILE . rand(10000, 99999) . rand(10000, 99999),
+            'password' => User::DEFAULT_PWD,
+        ];
+        $regUserRes = User::register($userData, false);
+        if (!is_array($regUserRes)) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $regUserRes,
+                'msg' => Yii::$app->params['errorCodes'][$regUserRes],
+            ]);
+        }
+
+        $supplier->shop_no = $supplier->id
+            + Yii::$app->params['offsetGeneral']
+            + Yii::$app->params['supplierRoleId'];
+        $supplier->uid = $regUserRes['id'];
+        if (!$supplier->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
     }
 }

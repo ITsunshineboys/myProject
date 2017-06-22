@@ -2,30 +2,20 @@
 
 namespace app\models;
 
+use app\services\StringService;
+use app\services\SmValidationService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\helpers\Json;
 
 class User extends ActiveRecord implements IdentityInterface
 {
     const CACHE_PREFIX = 'user_';
     const PASSWORD_MIN_LEN = 6;
     const PASSWORD_MAX_LEN = 25;
-
-    /**
-     * @return array the validation rules.
-     */
-    public function rules()
-    {
-        return [
-            // mobile and password are both required
-            [['mobile', 'password'], 'required'],
-            ['mobile', 'match', 'pattern' => '/^[0-9]{11}$/'],
-            ['mobile', 'unique'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
-        ];
-    }
+    const PREFIX_DEFAULT_MOBILE = '8';
+    const DEFAULT_PWD = '888888';
 
     /**
      * @inheritdoc
@@ -95,6 +85,125 @@ class User extends ActiveRecord implements IdentityInterface
     public static function tableName()
     {
         return 'user';
+    }
+
+    /**
+     * Register user
+     *
+     * @param array $data data
+     * @param bool $checkValidationCode if check validation code
+     * @return int|array
+     */
+    public static function register(array $data, $checkValidationCode = true, $external = true)
+    {
+        $code = 1000;
+
+        if (empty($data['mobile'])
+            || empty($data['password'])
+            || strlen(($data['password'])) < self::PASSWORD_MIN_LEN
+            || strlen(($data['password'])) > self::PASSWORD_MAX_LEN
+        ) {
+            return $code;
+        }
+
+        if ($checkValidationCode) {
+            if (empty($data['validation_code'])) {
+                return $code;
+            }
+
+            if (!SmValidationService::validCode($data['mobile'], $data['validation_code'])) {
+                $code = 1002;
+                return $code;
+            }
+        }
+
+        $user = new self;
+        $user->attributes = $data;
+        $user->password = Yii::$app->security->generatePasswordHash($user->password);
+        $user->create_time = $user->login_time = time();
+        $user->login_role_id = Yii::$app->params['ownerRoleId'];
+
+        if (!$user->validate()) {
+            return $code;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!$user->save()) {
+                $transaction->rollBack();
+                return $code;
+            }
+
+            $offset = $external ? Yii::$app->params['offsetAiteCubeNo'] : Yii::$app->params['offsetAiteCubeNoInternal'];
+            $user->aite_cube_no = $user->id + $offset;
+            if (!$user->save()) {
+                $transaction->rollBack();
+                return $code;
+            }
+
+            $userRole = new UserRole;
+            $userRole->user_id = $user->id;
+            $userRole->role_id = Yii::$app->params['ownerRoleId']; // owner
+            if (!$userRole->save()) {
+                $transaction->rollBack();
+                return $code;
+            }
+
+            $transaction->commit();
+
+            if ($checkValidationCode && !empty($data['validation_code'])) {
+                SmValidationService::deleteCode($data['mobile']);
+            }
+
+            $code = 200;
+            return [
+                'code' => $code,
+                'id' => $user->id
+            ];
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return $code;
+        }
+    }
+
+    public static function addByMobileAndPwd($mobile, $pwd)
+    {
+        $code = 1000;
+
+        if (!StringService::isMobile($mobile)) {
+            return $code;
+        }
+
+        $user = new self;
+        $user->mobile = $mobile;
+        $user->password = Yii::$app->getSecurity()->generatePasswordHash($pwd);
+        if (!$user->validate()) {
+            return $code;
+        }
+
+        if (!$user->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            // mobile and password are both required
+            [['mobile', 'password'], 'required'],
+            ['mobile', 'match', 'pattern' => '/^[0-9]{11}$/'],
+            ['mobile', 'unique'],
+            // password is validated by validatePassword()
+            ['password', 'validatePassword'],
+        ];
     }
 
     /**

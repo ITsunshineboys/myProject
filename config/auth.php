@@ -73,4 +73,7 @@ return [
     'goods-list-admin' => [1, 6],
     'goods-inventory-reset' => [6],
 //    'goods-images' => [1, 6],
+
+    // supplier
+    'supplier-add' => [1],
 ];

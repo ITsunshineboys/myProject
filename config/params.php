@@ -6,7 +6,9 @@ $auth = require(__DIR__ . '/auth.php');
 
 return [
     'adminEmail' => 'admin@example.com',
-    'offsetAiteCubeNo' => 10000,
+    'offsetAiteCubeNo' => 10001,
+    'offsetAiteCubeNoInternal' => 1,
+    'offsetGeneral' => 10000,
     'ownerRoleId' => 7,
     'supplierRoleId' => 6,
     'lhzzRoleId' => 1,
