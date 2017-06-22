@@ -14,7 +14,6 @@ class Series extends ActiveRecord
 {
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
-
     /**
      * @return string 返回该AR类关联的数据表名
      */

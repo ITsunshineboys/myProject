@@ -1368,74 +1368,15 @@ class OwnerController extends Controller
             'city' => 510100,
             'waterproof_total_area'=>50
          ];
-        //刀具,菜板,碗碟套装,勺铲套装,整理箱,洁厕液,纸巾盒,不锈钢洗菜盆带龙头,马桶刷,马桶,蹲便器,浴柜,花洒套装,淋浴隔断
-        //三角阀,高压管,拖布池,拖布池龙头,洗衣机地漏
-        $cutter = '刀具';
-        $cutter_goods = Goods::priceDetail(3,$cutter,$post['city'],$post['series'],$post['style']);
-        $cutter_goods ['show_price'] = $cutter_goods['platform_price'] * 1;
-        $cutter_goods ['show_quantity'] = 1;
 
-        $chopping_board = '菜板';
-        $chopping_board_goods = Goods::priceDetail(3,$chopping_board,$post['city'],$post['series'],$post['style']);
-        $chopping_board_goods ['show_price'] = $chopping_board_goods['platform_price'] * 1;
-        $chopping_board_goods ['show_quantity'] = 1;
-
-        $bowl_and_dish = '碗碟套装';
-        $bowl_and_dish_goods = Goods::priceDetail(3,$bowl_and_dish,$post['city'],$post['series'],$post['style']);
-        $bowl_and_dish_goods ['show_price'] = $bowl_and_dish_goods['platform_price'] * 1;
-        $bowl_and_dish_goods ['show_quantity'] = 1;
-
-        $spoon = '勺铲套装';
-        $spoon_goods = Goods::priceDetail(3,$spoon,$post['city'],$post['series'],$post['style']);
-        $spoon_goods ['show_price'] = $spoon_goods['platform_price'] * 1;
-        $spoon_goods ['show_quantity'] = 1;
-
-        $sorting_box = '整理箱';
-        $sorting_box_goods = Goods::priceDetail(3,$sorting_box,$post['city'],$post['series'],$post['style']);
-        $sorting_box_goods ['show_price'] = $sorting_box_goods['platform_price'] * 1;
-        $sorting_box_goods ['show_quantity'] = 1;
-
-        $toilet_cleaner = '洁厕液';
-        $toilet_cleaner_goods = Goods::priceDetail(3,$toilet_cleaner,$post['city'],$post['series'],$post['style']);
-        $toilet_cleaner_goods ['show_price'] = $toilet_cleaner_goods['platform_price'] * 1;
-        $toilet_cleaner_goods ['show_quantity'] = 1;
-
-        $tissue_box = '纸巾盒';
-        $tissue_box_goods = Goods::priceDetail(3,$tissue_box,$post['city'],$post['series'],$post['style']);
-        $tissue_box_goods ['show_price'] = $tissue_box_goods['platform_price'] * 1;
-        $tissue_box_goods ['show_quantity'] = 1;
-
-        $vegatable_basin = '不锈钢洗菜盆';
-        $vegatable_basin_goods = Goods::priceDetail(3,$vegatable_basin,$post['city'],$post['series'],$post['style']);
-        $vegatable_basin_goods ['show_price'] = $vegatable_basin_goods['platform_price'] * 1;
-        $vegatable_basin_goods ['show_quantity'] = 1;
-
-        $toilet_brush= '马桶刷';
-        $toilet_brush_goods = Goods::priceDetail(3,$toilet_brush,$post['city'],$post['series'],$post['style']);
-        $toilet_brush_goods ['show_price'] = $toilet_brush_goods['platform_price'] * 1;
-        $toilet_brush_goods ['show_quantity'] = 1;
-
-        $stinkpot = '马桶';
-        $stinkpot_goods = Goods::priceDetail(3,$stinkpot,$post['city'],$post['series'],$post['style']);
-        $stinkpot_goods ['show_price'] = $stinkpot_goods['platform_price'] * 1;
-        $stinkpot_goods ['show_quantity'] = 1;
-
-        $squatting_pan = '蹲便器';
-        $squatting_pan_goods = Goods::priceDetail(3,$squatting_pan,$post['city'],$post['series'],$post['style']);
-        $squatting_pan_goods ['show_price'] = $squatting_pan_goods['platform_price'] * 1;
-        $squatting_pan_goods ['show_quantity'] = 1;
-
-        $bath_cabinet = '浴柜';
-        $bath_cabinet_goods = Goods::priceDetail(3,$bath_cabinet,$post['city'],$post['series'],$post['style']);
-        $bath_cabinet_goods ['show_price'] = $bath_cabinet_goods['platform_price'] * 1;
-        $bath_cabinet_goods ['show_quantity'] = 1;
-
-        $sprinkler = '花洒套装';
-        $sprinkler_goods = Goods::priceDetail(3,$sprinkler,$post['city'],$post['series'],$post['style']);
-        $sprinkler_goods ['show_price'] = $sprinkler_goods['platform_price'] * 1;
-        $sprinkler_goods ['show_quantity'] = 1;
-
-
+        $classify = '生活配套';
+        $material_property_classify = MaterialPropertyClassify::findByAll($classify);
+        $goods = Goods::categoryById($material_property_classify);
+        foreach ($goods as &$one_goods)
+        {
+            $one_goods['show_price'] = $one_goods['platform_price'] * 1;
+            $one_goods['show_quantity'] = 1;
+        }
 
         return Json::encode([
             'code' => 200,
@@ -1467,23 +1408,27 @@ class OwnerController extends Controller
             'toilet' => 1,
             'kitchen' => 1,
             'style' => 1,
-            'series' => 1,
+            'series' => 2,
             'province' => 510000,
             'city' => 510100,
             'waterproof_total_area'=>50
         ];
+
         $classify = '智能配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
-        $goods = Goods::
-        var_dump($material_property_classify);exit;
-//        return Json::encode([
-//            'code' => 200,
-//            'msg' => '成功',
-//            'data' =>[
-//                'distribution_box' =>$distribution_box_goods,
-//                'background_music' => $background_music_goods
-//            ]
-//        ]);
+        $goods = Goods::categoryById($material_property_classify);
+        foreach ($goods as &$one_goods)
+        {
+            $one_goods['show_price'] = $one_goods['platform_price'] * 1;
+            $one_goods['show_quantity'] = 1;
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' =>[
+                'goods' =>$goods,
+            ]
+        ]);
     }
 
     public function actionBasisList()
