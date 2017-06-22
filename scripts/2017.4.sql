@@ -54,7 +54,7 @@ CREATE TABLE `decoration_company` (
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `designer` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -115,7 +115,7 @@ CREATE TABLE `supplier` (
   `identity_card_no` varchar(18) not null DEFAULT '' comment '身份证号',
   `shop_no` int(11) unsigned not null default 0 comment '店铺号',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `project` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

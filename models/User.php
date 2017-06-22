@@ -14,7 +14,7 @@ class User extends ActiveRecord implements IdentityInterface
     const CACHE_PREFIX = 'user_';
     const PASSWORD_MIN_LEN = 6;
     const PASSWORD_MAX_LEN = 25;
-    const PREFIX_DEFAULT_MOBILE = '8';
+    const PREFIX_DEFAULT_MOBILE = '18';
     const DEFAULT_PWD = '888888';
 
     /**
@@ -199,7 +199,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             // mobile and password are both required
             [['mobile', 'password'], 'required'],
-            ['mobile', 'match', 'pattern' => '/^[0-9]{11}$/'],
+            ['mobile', 'match', 'pattern' => '/^1[34578]{1}\d{9}$/'],
             ['mobile', 'unique'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],

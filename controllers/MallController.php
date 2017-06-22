@@ -3530,10 +3530,10 @@ class MallController extends Controller
             ]);
         }
 
-        $transaction = Yii::$app->db->beginTransaction();
+        $transactionOutter = Yii::$app->db->beginTransaction();
 
         if (!$supplier->save()) {
-            $transaction->rollBack();
+            $transactionOutter->rollBack();
 
             $code = 500;
             return Json::encode([
@@ -3542,13 +3542,16 @@ class MallController extends Controller
             ]);
         }
 
+        $rawMobile = $mobile = (int)Yii::$app->request->post('mobile', 0);
+        $mobile <= 0 && $mobile = User::PREFIX_DEFAULT_MOBILE . rand(10000, 99999) . rand(1000, 9999);
+
         $userData = [
-            'mobile' => User::PREFIX_DEFAULT_MOBILE . rand(10000, 99999) . rand(10000, 99999),
+            'mobile' => $mobile,
             'password' => User::DEFAULT_PWD,
         ];
-        $regUserRes = User::register($userData, false);
+        $regUserRes = User::register($userData, $rawMobile > 0);
         if (!is_array($regUserRes)) {
-            $transaction->rollBack();
+            $transactionOutter->rollBack();
 
             return Json::encode([
                 'code' => $regUserRes,
@@ -3561,7 +3564,7 @@ class MallController extends Controller
             + Yii::$app->params['supplierRoleId'];
         $supplier->uid = $regUserRes['id'];
         if (!$supplier->save()) {
-            $transaction->rollBack();
+            $transactionOutter->rollBack();
 
             $code = 500;
             return Json::encode([
@@ -3570,7 +3573,7 @@ class MallController extends Controller
             ]);
         }
 
-        $transaction->commit();
+        $transactionOutter->commit();
 
         return Json::encode([
             'code' => 200,
