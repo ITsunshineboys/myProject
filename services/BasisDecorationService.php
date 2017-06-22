@@ -748,6 +748,14 @@ class BasisDecorationService
         return $wall_area;
     }
 
+    /**
+     * 泥作费用
+     * @param int $area
+     * @param array $goods
+     * @param int $craft
+     * @param string $project
+     * @return mixed
+     */
     public static function mudMakeCost($area = 1,$goods = [],$craft = 1,$project = '')
     {
         if ($goods && $craft)
