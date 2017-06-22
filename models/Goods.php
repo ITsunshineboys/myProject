@@ -864,7 +864,7 @@ AND goods.id IN (" . $id . ")";
         $user = User::findOne($supplier->uid);
 
         if ($goodsComment = GoodsComment::find()
-            ->select(GoodsComment::FIELDS_APP)
+            ->select(array_diff(GoodsComment::FIELDS_APP, GoodsComment::FIELDS_EXTRA))
             ->where(['goods_id' => $this->id])
             ->orderBy(['id' => SORT_DESC])
             ->one()
