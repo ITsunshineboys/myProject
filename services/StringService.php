@@ -40,7 +40,7 @@ class StringService
             return false;
         }
 
-        return preg_match("/^1[34578]{1}\d{9}$/", $mobile);
+        return preg_match('/^1[34578]{1}\d{9}$/', $mobile);
     }
 
     /**
@@ -227,5 +227,22 @@ class StringService
         }
 
         return false;
+    }
+
+    /**
+     * Check if identity card no
+     *
+     * @param string $cardNo identity card no
+     * @return bool
+     */
+    public static function checkIdentityCardNo($cardNo)
+    {
+        return filter_var($cardNo, FILTER_VALIDATE_REGEXP,
+            [
+                'options' => [
+                    'regexp' => '/^\d{17}[0-9xX]$/',
+                ]
+            ]
+        );
     }
 }
