@@ -8,10 +8,11 @@ myApp.controller("comment_controller",function($scope, $http,$filter){
         method: 'get',
         url: "commodity.json"
     }).then(function successCallback(response) {
-        $scope.message = response.data.data.category_goods;
-        $scope.myFilter={
-            limit:4
-        };
+        $scope.message = response.data.data.code;
+        //category_goods
+        //$scope.myFilter={
+        //    limit:4
+        //};
         alert(message);
 
         //$scope.returnMore=function(a,b){
@@ -21,7 +22,7 @@ myApp.controller("comment_controller",function($scope, $http,$filter){
 
     }, function errorCallback(response) {
         // «Î«Û ß∞‹÷¥––¥˙¬Î
-        alert(response);
+        alert(222);
 
     });
 });

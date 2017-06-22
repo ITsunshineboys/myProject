@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/all_comment.css"/>
 </head>
-<body>
+<body ng-app="myapp">
 <header>
     <div class="comment_box">
         <span class="return_arrow"><</span>
@@ -33,14 +33,14 @@
         </ul>
 
         <!-- Tab panes -->
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="home">
+        <div class="tab-content" ng-controller="commentctrl">
+            <div role="tabpanel" class="tab-pane active" id="home" ng-repeat="n in message">
                 <!--全部-->
                <div>
                    <ul>
-                       <li class="comment_li">
+                       <li class="comment_li" >
                            <img src="images/bed.png" alt="" class="logo_img"/>
-                           <span>亚索</span>
+                           <span>{{n.name}}</span>
                            <span  class="good_comment">好评</span><br/>
                            <span>2017-12-13</span>
                            <p>速度快，便利</p>

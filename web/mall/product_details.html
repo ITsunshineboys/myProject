@@ -27,9 +27,17 @@
         <!--下拉选择数量-->
         <div class="standard">
             <div>选择数量</div>
-            <div data-toggle="modal" data-target="#myModal">∨</div>
+            <div data-toggle="modal" data-target="#myModal"> > </div>
         </div>
-
+        <!--服务项-->
+         <div class="service_item" data-toggle="modal" data-target="#myModal_sec">
+             <ul>
+                 <li><img src="images/right.png" alt=""/> &nbsp;<span>上门维修</span></li>
+                 <li><img src="images/right.png" alt=""/> &nbsp;<span>上门换货</span></li>
+                 <li><img src="images/right.png" alt=""/> &nbsp;<span>上门退货</span></li>
+                 <li> > </li>
+             </ul>
+         </div>
         <!--评论-->
         <div class="comment">
             <span>评论</span>
@@ -76,7 +84,6 @@
         <!--图文详情和参数-->
         <div class="pic_comment">
             <div>
-
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs pic_tabs active" role="tablist">
                     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">图文详情</a></li>
@@ -140,7 +147,69 @@
             </div>
         </div>
     </div>
+      <!--售后服务条款模态框-->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal_sec" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class=" t-header">
+                    <h1 class="modal-title" id="myModalLabel">售后</h1>
+                </div>
+                <div class="modal-body-comment">
+                   <div class="service_comment">
+                       <ul>
+                           <li>
+                               <img src="images/right.png" alt=""/>
+                               <span>上门维修</span>
+                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
+                           </li>
+                           <li>
+                               <img src="images/right.png" alt=""/>
+                               <span>上门换货</span>
+                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
+                           </li>
+                           <li>
+                               <img src="images/right.png" alt=""/>
+                               <span>上门退货</span>
+                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
+                           </li>
+                           <li>
+                               <img src="images/right.png" alt=""/>
+                               <span>换货</span>
+                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
+                           </li>
+                           <li>
+                               <img src="images/right.png" alt=""/>
+                               <span>退货</span>
+                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
+                           </li>
+                       </ul>
+                   </div>
+                   <div class="t-header-two">
+                        <h1>保障</h1>
+                   </div>
+                   <div class="service_comment">
+                       <ul>
+                           <li>
+                               <img src="images/right.png" alt=""/>
+                               <span>提供发票</span>
+                               <p>在购买后，会提供相应的发票</p>
+                           </li>
+                           <li>
+                               <img src="images/right.png" alt=""/>
+                               <span>上门安装</span>
+                               <p>在购买商品后，商家会上门安装</p>
+                           </li>
+                       </ul>
+                   </div>
 
+                </div>
+                <div class="modal-footer-btn">
+                    <button type="button" class="btn btn-primary"  data-dismiss="modal">完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--购物成功模态框-->
     <!-- Modal -->
     <!--<div id="myAlert" class="alert alert-success">-->

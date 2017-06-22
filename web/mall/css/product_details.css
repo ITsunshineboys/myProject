@@ -54,7 +54,7 @@
 }
 .main .standard >div:nth-child(2){
     position: absolute;
-    right:1rem;
+    right:2rem;
     top:0;
     z-index: 10;
 }
@@ -285,4 +285,71 @@
 }
 .modal-body_success p{
     padding-left: 2rem;
+}
+.service_item ul li {
+    display: inline-block;
+    font-size: 1.4rem;
+    color: #999;
+    margin-left: 1rem;
+}
+.service_item ul li img {
+    width: 2rem;
+}
+.service_item{
+    border-bottom:1px solid #999;
+    padding-bottom: .5rem;
+    border-top:1px solid #999 ;
+    padding-top: .5rem;
+}
+.modal-title {
+    font-size: 1.5rem!important;
+    text-align: center;
+}
+.myModal_sec, .modal-body-comment{
+    height: 42rem;
+}
+.myModal_sec{
+    margin-top: -2rem;
+}
+.modal-body-comment{
+    margin-top: 1rem;
+}
+.t-header{
+    border-bottom: 1px solid #999;
+    padding:.1rem 0;
+}
+.t-header-two{
+    border-bottom: 1px solid #999;
+    padding: .1rem 0;
+}
+.t-header-two h1{
+    text-align: center;
+    font-size: 1.4rem;
+}
+.t-header h1{
+    text-align: center;
+}
+.service_comment ul li img{
+    width: 2rem;
+    margin-left: 1rem;
+}
+.service_comment ul li span {
+    font-size: 1.3rem;
+    margin-left: 1rem;
+    color: #333333;
+}
+.service_comment ul li p{
+    font-size: 1.2rem;
+    color: #999;
+    padding-left: 4rem;
+}
+.modal-footer-btn button{
+    width: 100%;
+    height: 3rem;
+    color: white;
+    font-size: 1.2rem;
+}
+.modal {
+    position: fixed;
+    top: -1rem;
 }

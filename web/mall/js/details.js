@@ -1,4 +1,5 @@
 //点击减号递减
+
 $(".min").on('click',function () {
    var numVal=$(".text_box").val();
    //alert(numVal);
@@ -8,6 +9,7 @@ $(".min").on('click',function () {
       $(".text_box").val(0);
    }
 });
+
 //点击加号递加
 $(".add").on('click',function () {
    var numVal=$(".text_box").val();
@@ -15,6 +17,7 @@ $(".add").on('click',function () {
       $(".text_box").val(parseInt(numVal)+1);
 
 });
+
 //点击添加购物车  提示框2秒消失
 $(".join_cart").on("click" ,function (){
    setTimeout(function(){
@@ -25,6 +28,7 @@ $(".join_cart").on("click" ,function (){
 $(".pic_tabs li").on("click",function () {
    //$()
 });
+
 console.log("url上带的值=="+decodeURI(GetQueryString('txt')));
 
 app.controller("details",function($http,$scope){
@@ -32,12 +36,11 @@ app.controller("details",function($http,$scope){
         method: 'post',
         url: url+"categories?pid=6"
         //url:"http://test.cdlhzz.cn:888/mall/categories?pid=6"
-    }).then(function successCallback(data) {
+   }).then(function successCallback(data) {
         $scope.message = data.data.data.categories;
         //alert(message)
-    }, function errorCallback(data) {
-
-    alert(2222);
+   }, function errorCallback(data) {
+        alert(2222);
 
 });
 });

@@ -26,6 +26,9 @@ header div:last-child span{
 .ul_item{
     margin-top: 1rem;
 }
+.ul_item li{
+    display: inline-block;
+}
 .li_item{
     display:inline-block;
     margin-left: 3rem;

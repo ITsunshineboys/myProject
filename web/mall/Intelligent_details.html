@@ -14,9 +14,11 @@
 </head>
 <body ng-app="maApp">
 <header>
-    <div>
-        <span><</span>
-        <sapn class="span_center">欧式板</sapn>
+    <!--搜索框-->
+    <div class="search_box">
+        <span class="return_arrow"><</span>
+        <input href="search.html" id="search" placeholder="请输入想购买的商品"/>
+        <span class="massage">...</span>
     </div>
 </header>
 <section ng-controller="comment_controller">
@@ -30,16 +32,16 @@
     <!--商品展示列表-->
     <div class="mall_list">
         <div class="flex_div" >
-            <div class=" item_commodity"  ng-repeat="n in message |limitTo:myFilter.limit ">
+            <div class=" item_commodity"  ng-repeat="v in message |limitTo:myFilter.limit ">
                 <div class="item_commodity_divimg">
-                    <img src="{{n.image}}" alt="" class="img_item " />
+                    <img src="{{v.image}}" alt="" class="img_item " />
                 </div>
                 <div class="item_commodity_comment">
-                    <p class="comment_one">{{n.title}}</p>
-                    <p class="comment_two">{{n.subtitle}}</p>
-                    <span class="comment_span">销量数：{{n.comment_number}}&nbsp;&nbsp;</span>
-                    <span class="comment_span_two">{{n.favourable_comment_rate}}%好评</span>
-                    <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">￥{{n.platform_price}}</p>
+                    <p class="comment_one">{{v.title}}</p>
+                    <p class="comment_two">{{v.subtitle}}</p>
+                    <span class="comment_span">销量数：{{v.comment_number}}&nbsp;&nbsp;</span>
+                    <span class="comment_span_two">{{v.favourable_comment_rate}}%好评</span>
+                    <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">￥{{v.platform_price}}</p>
                 </div>
             </div>
         </div>
@@ -151,7 +153,6 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-
                                             </div>
                                             <div class="footer_div_btn">
                                                 <button type="button" class="btn btn-default back_btn" data-dismiss="modal">返回</button>

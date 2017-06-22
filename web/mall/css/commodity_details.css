@@ -1,41 +1,26 @@
-.search_box{
-     height: 4.1rem;
-     background-color: white;
-     border: 1px solid #666;
- }
-.search{
-    width: 23rem;
-    height: 2.6rem;
-    line-height: 2.6rem;
+header div{
+    height: 4rem;
+    width: auto;
+    background-color: white;
+    border-bottom:4px solid #999 ;
+}
+header div span{
+    line-height: 4rem;
     font-size: 1.2rem;
-    border-radius: 1.2rem;
-    position: absolute;
-    top: 0.85rem;
-    left:1.2rem;
-    margin-left:2rem;
-    padding-left: 2.4rem;
-    background-image: url("../images/search.png");
-    background-size:1rem;
-    background-repeat: no-repeat;
-    background-position: 1rem 0.7rem;
-    /*background-color: rgba(255, 255, 255, 0.3);*/
-    border:1px solid #666;
-    /*color:#fff;*/
 }
- .massage{
-    width: 1.6rem;
-    height: 1.6rem;
-    position: absolute;
-    /*top:1.5rem;*/
-    font-size: 2.4rem;
-    right:1.8rem;
+header div:last-child span{
+    padding-left: .5rem;
 }
- .return_arrow{
-     position: absolute;
-     top:1rem;
-     font-size: 2rem;
-     margin-left: .4rem;
- }
+.span_center{
+    margin-left: 13rem;
+    font-size: 1.2rem;
+}
+
+.search_box{
+    height: 4.1rem;
+    background-color: white;
+    border: 1px solid #666;
+}
  .memo_pad{
      background-color: white;
      height:4.1rem;
