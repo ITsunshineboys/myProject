@@ -109,6 +109,10 @@ CREATE TABLE `supplier` (
   `status` tinyint(1) not null default 0,
   `follower_number` int(11) unsigned not null default 0 comment '关注人数',
   `comprehensive_score` float unsigned not null default 10 comment '综合评分',
+  `type_org` tinyint(1) unsigned not null default 0 comment '0:个体工商户, 1:企业',
+  `type_shop` tinyint(1) unsigned not null default 0 comment '0:旗舰店, 1:自营店, 2:专营店, 3:专卖店',
+  `category_id` int(11) unsigned not null default 0,
+  `identity_card_no` varchar(18) not null DEFAULT '' comment '身份证号',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
