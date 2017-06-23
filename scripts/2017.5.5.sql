@@ -220,6 +220,14 @@ create table brand_application (
   `brand_id` int(11) unsigned not null default 0,
   `authorization_start` int unsigned not null default 0,
   `authorization_end` int unsigned not null default 0,
+  `category_title` varchar(255) not null DEFAULT '',
+  `brand_name` varchar(50) not null DEFAULT '',
+  `supplier_name` varchar(25) not null DEFAULT '' COMMENT '供应商',
+  `mobile` bigint unsigned not null DEFAULT 0,
+  `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
+  `review_note` varchar(100) not null DEFAULT '' comment '审核备注',
+  `review_time` int unsigned not null DEFAULT 0,
+  `create_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
