@@ -12,6 +12,7 @@ return [
     'ownerRoleId' => 7,
     'supplierRoleId' => 6,
     'lhzzRoleId' => 1,
+    'maxRolesNumber' => 2,
     'errorCodes' => [
         403 => '没有权限',
         500 => '接口服务器异常',
@@ -25,6 +26,8 @@ return [
         1007 => '商品品牌名称不能重复',
         1008 => '物流模板名称不能重复',
         1009 => '商品属性名称不能重复',
+        1010 => '该用户尚未注册',
+        1011 => '该用户已添加过角色',
     ],
     'events' => [
         'supplier' => [

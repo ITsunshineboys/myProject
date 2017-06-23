@@ -18,6 +18,7 @@ use app\models\GoodsAttr;
 use app\models\GoodsImage;
 use app\models\GoodsComment;
 use app\models\User;
+use app\models\UserRole;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
@@ -3519,10 +3520,37 @@ class MallController extends Controller
     {
         $code = 1000;
 
+        $mobile = (int)Yii::$app->request->post('mobile', 0);
+        if (!$mobile) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = User::find()->where(['mobile' => $mobile])->one();
+
+        if (!$user) {
+            $code = 1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        } else {
+            if (UserRole::find()->where(['user_id' => $user->id])->count() >= Yii::$app->params['maxRolesNumber']) {
+                $code = 1011;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
         $supplier = new Supplier;
         $supplier->attributes = Yii::$app->request->post();
-
+        $supplier->uid = $user->id;
         $supplier->scenario = Supplier::SCENARIO_ADD;
+
         if (!$supplier->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -3542,28 +3570,23 @@ class MallController extends Controller
             ]);
         }
 
-        $rawMobile = $mobile = (int)Yii::$app->request->post('mobile', 0);
-        $mobile <= 0 && $mobile = User::PREFIX_DEFAULT_MOBILE . rand(10000, 99999) . rand(1000, 9999);
+        $supplier->shop_no = Yii::$app->params['supplierRoleId']
+            . (Yii::$app->params['offsetGeneral'] + $supplier->id);
 
-        $userData = [
-            'mobile' => $mobile,
-            'password' => User::DEFAULT_PWD,
-        ];
-        $regUserRes = User::register($userData, $rawMobile > 0);
-        if (!is_array($regUserRes)) {
+        if (!$supplier->save()) {
             $transactionOutter->rollBack();
 
+            $code = 500;
             return Json::encode([
-                'code' => $regUserRes,
-                'msg' => Yii::$app->params['errorCodes'][$regUserRes],
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $supplier->shop_no = $supplier->id
-            + Yii::$app->params['offsetGeneral']
-            + Yii::$app->params['supplierRoleId'];
-        $supplier->uid = $regUserRes['id'];
-        if (!$supplier->save()) {
+        $userRole = new UserRole;
+        $userRole->user_id = $user->id;
+        $userRole->role_id = Yii::$app->params['supplierRoleId'];
+        if (!$userRole->save()) {
             $transactionOutter->rollBack();
 
             $code = 500;
