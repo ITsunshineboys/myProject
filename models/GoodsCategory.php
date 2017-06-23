@@ -35,6 +35,11 @@ class GoodsCategory extends ActiveRecord
     const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
     const SEPARATOR_TITLES = ' - ';
     const ERROR_CODE_SAME_NAME = 1006;
+    const CATEGORY_BRANDS_STYLES_SERIES = [
+        'brands' => [],
+        'styles' => [],
+        'series' => []
+    ];
 
     /**
      * @var array admin fields
@@ -422,6 +427,52 @@ class GoodsCategory extends ActiveRecord
                 'offline_time' => time()
             ], $where);
         }
+    }
+
+    /**
+     * Get brands, styles or series by category id
+     *
+     * @param $categoryId category id
+     * @param array $fields data fields
+     * @return array|int
+     */
+    public static function brandsStylesSeriesByCategoryId($categoryId, array $fields)
+    {
+        $brandsStylesSeries = [];
+
+        $categoryId = (int)$categoryId;
+        if ($categoryId <= 0) {
+            return $brandsStylesSeries;
+        }
+
+        if ($fields && array_diff($fields, array_keys(self::CATEGORY_BRANDS_STYLES_SERIES))) {
+            $code = 1000;
+            return $code;
+        }
+
+        if ($fields) {
+            foreach ($fields as $field) {
+                if ($field == 'brands') {
+                    $brandsStylesSeries[$field] = BrandCategory::brandsByCategoryId($categoryId);
+                } elseif ($field == 'styles') {
+                    $brandsStylesSeries[$field] = Style::stylesByCategoryId($categoryId);
+                } else {
+                    $brandsStylesSeries[$field] = Series::seriesByCategoryId($categoryId);
+                }
+            }
+        } else {
+            foreach (self::CATEGORY_BRANDS_STYLES_SERIES as $field => $v) {
+                if ($field == 'brands') {
+                    $brandsStylesSeries[$field] = BrandCategory::brandsByCategoryId($categoryId);
+                } elseif ($field == 'styles') {
+                    $brandsStylesSeries[$field] = Style::stylesByCategoryId($categoryId);
+                } else {
+                    $brandsStylesSeries[$field] = Series::seriesByCategoryId($categoryId);
+                }
+            }
+        }
+
+        return $brandsStylesSeries;
     }
 
     /**

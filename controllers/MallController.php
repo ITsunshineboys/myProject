@@ -2579,20 +2579,22 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category-brands-styles-series' => [
-                    'category-brands' => [],
-                    'category-styles' => [],
-                    'category-series' => [],
-                ]
+                'category-brands-styles-series' => GoodsCategory::CATEGORY_BRANDS_STYLES_SERIES
             ],
         ];
 
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
-        if ($categoryId > 0) {
-            $ret['data']['category-brands-styles-series']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
-            $ret['data']['category-brands-styles-series']['category-styles'] = Style::stylesByCategoryId($categoryId);
-            $ret['data']['category-brands-styles-series']['category-series'] = Series::seriesByCategoryId($categoryId);
+        $fields = Yii::$app->request->get('fields', []);
+
+        $brandsStylesSeries = GoodsCategory::brandsStylesSeriesByCategoryId($categoryId, $fields);
+        if (!is_array($brandsStylesSeries)) {
+            return Json::encode([
+                'code' => $brandsStylesSeries,
+                'msg' => Yii::$app->params['errorCodes'][$brandsStylesSeries],
+            ]);
         }
+
+        $ret['data']['category-brands-styles-series'] = $brandsStylesSeries;
         return Json::encode($ret);
     }
 
