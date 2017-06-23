@@ -212,3 +212,20 @@ create table comment_reply (
   `content` varchar(255) not null default '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table brand_application (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) unsigned not null default 0,
+  `category_id` int(11) unsigned not null default 0,
+  `brand_id` int(11) unsigned not null default 0,
+  `authorization_start` int unsigned not null default 0,
+  `authorization_end` int unsigned not null default 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table brand_application_image (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `brand_application_id` int(11) unsigned not null default 0,
+  `image` varchar(255) not null DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
