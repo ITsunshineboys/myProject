@@ -2,8 +2,6 @@
 
 namespace app\controllers;
 
-use app\models\AppliancesAssort;
-use app\models\BasisDecoration;
 use app\models\CarpentryAdd;
 use app\models\CarpentryReconstruction;
 use app\models\CircuitryReconstruction;
@@ -11,24 +9,17 @@ use app\models\DecorationAdd;
 use app\models\DecorationList;
 use app\models\DecorationParticulars;
 use app\models\Effect;
-use app\models\EffectPicture;
 use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
-use app\models\FixationFurniture;
-use app\models\Goods;
-use app\models\GoodsCategory;
-use app\models\IntelligenceAssort;
+use app\models\Goods;;
 use app\models\LaborCost;
-use app\models\LifeAssort;
 use app\models\MaterialPropertyClassify;
-use app\models\MoveFurniture;
 use app\models\PaintReconstruction;
 use app\models\PlasteringReconstruction;
 use app\models\Points;
 use app\models\PointsDetails;
 use app\models\PointsTotal;
 use app\models\Series;
-use app\models\SoftOutfitAssort;
 use app\models\StairsDetails;
 use app\models\Style;
 use app\models\StylePicture;
@@ -37,7 +28,6 @@ use app\models\WaterwayReconstruction;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
-use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -1092,8 +1082,10 @@ class OwnerController extends Controller
             'city' => 510100,
             'waterproof_total_area'=>50
         ];
-
-
+        $classify = '软装配套';
+        $material_property_classify = MaterialPropertyClassify::findByAll($classify);
+        $goods = Goods::categoryById($material_property_classify);
+        var_dump($goods);exit;
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
@@ -1130,45 +1122,34 @@ class OwnerController extends Controller
             'waterproof_total_area'=>50,
             'stairway_id' => 1
         ];
-        $chest_quantity = $post['master_bedroom'];
-        $chest = '衣柜';
-        $chest_goods = Goods::priceDetail(3,$chest,$post['city'],$post['series'],$post['style']);
-        $chest_goods ['show_price'] = $chest_goods['platform_price'] * $chest_quantity;
-        $chest_goods ['show_quantity'] = $chest_quantity;
-
-        $wine_cabinet = '酒柜';
-        $wine_cabinet_goods = Goods::priceDetail(3,$wine_cabinet,$post['city'],$post['series'],$post['style']);
-        $wine_cabinet_goods ['show_price'] = $wine_cabinet_goods['platform_price'] * 1;
-        $wine_cabinet_goods ['show_quantity'] = 1;
-
-        $cabinet = '橱柜';
-        $cabinet_goods = Goods::priceDetail(3,$cabinet,$post['city'],$post['series'],$post['style']);
-        $cabinet_goods ['show_price'] = $cabinet_goods['platform_price'] * 1;
-        $cabinet_goods ['show_quantity'] = 1;
-
-        $wall_cupboard = '吊柜';
-        $wall_cupboard_goods = Goods::priceDetail(3,$wall_cupboard,$post['city'],$post['series'],$post['style']);
-        $wall_cupboard_goods ['show_price'] = $wall_cupboard_goods['platform_price'] * 1;
-        $wall_cupboard_goods ['show_quantity'] = 1;
-
-        //楼梯
-        if ($post['stairway_id'])
+        $classify = '固定家具';
+        $material_property_classify = MaterialPropertyClassify::findByAll($classify);
+        $goods = Goods::categoryById($material_property_classify);
+        foreach ($goods as &$one_goods)
         {
-            $stairway = '楼梯';
-            $stairway_goods = Goods::priceDetail(3,$stairway,$post['city'],$post['series'],$post['style']);
-            $stairway_goods ['show_price'] = $stairway_goods['platform_price'] * 1;
-            $stairway_goods ['show_quantity'] = 1;
+            $one_goods['show_price'] = $one_goods['platform_price'] * 1;
+            $one_goods['show_quantity'] = 1;
+            if ($one_goods['title'] == '衣柜')
+            {
+                $one_goods['show_price'] = $one_goods['platform_price'] * $post['master_bedroom'];;
+                $one_goods['show_quantity'] = $post['master_bedroom'];;
+            }
+            if ($one_goods['title'] == '楼梯')
+            {
+                if ($post['stairway_id'] >= 1)
+                {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * 1;
+                    $one_goods['show_quantity'] = 1;
+                }else{
+                    $one_goods = NULL;
+                }
+            }
         }
-
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-                'chest' =>$chest_goods,
-                'wine_cabinet' =>$wine_cabinet_goods,
-                'cabinet'=>$cabinet_goods,
-                'wall_cupboard'=>$wall_cupboard_goods,
-                'stairway'=> $stairway_goods
+                'goods' =>$goods,
             ]
         ]);
     }
@@ -1179,7 +1160,7 @@ class OwnerController extends Controller
      */
     public function actionMoveFurniture()
     {
-//        $receive = \Yii::$app->request->post();
+//       $receive = \Yii::$app->request->post();
 //        $post = Json::decode($receive);
         $post = [
 //            'effect_id' => 1,
@@ -1196,22 +1177,42 @@ class OwnerController extends Controller
             'series' => 1,
             'province' => 510000,
             'city' => 510100,
-            'waterproof_total_area'=>50
+            'waterproof_total_area'=>50,
         ];
-
-//
-
+        if ($post['toilet'] >= 2)
+        {
+            $drawing_room = $post['sitting_room'] - 1;
+        }else{
+            $drawing_room = $post['sitting_room'];
+        }
+        $classify = '移动家具';
+        $material_property_classify = MaterialPropertyClassify::findByAll($classify);
+        $goods = Goods::categoryById($material_property_classify);
+        foreach ($goods as &$one_goods)
+        {
+            $one_goods['show_price'] = $one_goods['platform_price'] * 1;
+            $one_goods['show_quantity'] = 1;
+            if ($one_goods['title'] == '客厅沙发')
+            {
+                $one_goods['show_price'] = $one_goods['platform_price'] * $drawing_room;
+                $one_goods['show_quantity'] = $drawing_room;
+            }
+            if ($one_goods['title'] == '床' || $one_goods['title'] == '床垫')
+            {
+                $one_goods['show_price'] = $one_goods['platform_price'] * $post['master_bedroom'];
+                $one_goods['show_quantity'] = $post['master_bedroom'];
+            }
+            if ($one_goods['title'] == '床头柜')
+            {
+                $one_goods['show_price'] = $one_goods['platform_price'] * ($post['master_bedroom'] * 2);
+                $one_goods['show_quantity'] = ($post['master_bedroom'] * 2);
+            }
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-                'sitting_room_sofa' =>$sitting_room_sofa_goods,
-                'tea_table' =>$tea_table_goods,
-                'tv_bench' =>$tv_bench_goods,
-                'dining_table' =>$dining_table_goods,
-                'bed' =>$bed_goods,
-                'night_table' =>$night_table_goods,
-                'mattress' => $mattress_goods
+                'goods' =>$goods,
             ]
         ]);
     }

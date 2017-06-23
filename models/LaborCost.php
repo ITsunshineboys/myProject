@@ -33,5 +33,16 @@ class LaborCost extends ActiveRecord
         }
         return $labors;
     }
+
+    public static function findWorkerKind()
+    {
+        $select = "labor_cost.worker_kind";
+        $worker_kind = self::find()
+            ->select($select)
+            ->asArray()
+            ->where([''])
+            ->all();
+        return $worker_kind;
+    }
 }
 

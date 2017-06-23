@@ -22,15 +22,15 @@ class MaterialPropertyClassify extends ActiveRecord
     {
         if ($classify)
         {
-            $all = self::find()->asArray()->where(['classify'=>$classify])->all();
-            $material = [];
-            foreach ($all as $one)
-            {
-                $material [] = $one['material'];
-            }
+            $select = "material_property_classify.material,material_property_classify.quantity";
+            $all = self::find()
+                ->asArray()
+                ->select($select)
+                ->where(['classify'=>$classify])
+                ->all();
         }
 
-        return $material;
+        return $all;
     }
 
 }
