@@ -1056,6 +1056,27 @@ class OwnerController extends Controller
         ]);
     }
 
+    /**
+     * 杂工
+     */
+    public function actionHandyman()
+    {
+//        $receive = \Yii::$app->request->post();
+//        $post = Json::decode($receive);
+        $post = [
+            '12_dismantle' => 20,
+            '24_dismantle' => 25,
+            'repair' => 22,
+            '12_new_construction' => 20,
+            '24_new_construction' => 25,
+            'have_building_scrap' => true,
+            'without_building_scrap' => true,
+        ];
+
+//        12墙拆除天数=12墙拆除面积÷【每天拆除12墙面积】
+
+    }
+
 
     /**
      * 软装配套
@@ -1085,13 +1106,46 @@ class OwnerController extends Controller
         $classify = '软装配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $goods = Goods::categoryById($material_property_classify);
-        var_dump($goods);exit;
+        foreach ($goods as &$one_goods)
+        {
+            foreach ($material_property_classify as $quantity)
+            {
+                if ($one_goods['title'] == $quantity['material'])
+                {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
+                    $one_goods['show_quantity'] = $quantity['quantity'];
+                }
+
+                if ($one_goods['title'] == '客厅装饰吊灯')
+                {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['sitting_room'];
+                    $one_goods['show_quantity'] = $post['sitting_room'];;
+                }
+
+                if ($one_goods['title'] == '次卧装饰吊灯')
+                {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['master_bedroom'] -1;
+                    $one_goods['show_quantity'] = $post['master_bedroom'];;
+                }
+
+                if ($one_goods['title'] == '厨房平板灯')
+                {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['kitchen'];
+                    $one_goods['show_quantity'] = $post['kitchen'];;
+                }
+                if ($one_goods['title'] == '窗帘')
+                {
+                    $curtain_quantity = $post['sitting_room'] + $post['master_bedroom'];
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $curtain_quantity;
+                    $one_goods['show_quantity'] = $curtain_quantity;
+                }
+            }
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-                'appliances_goods' =>$goods_price,
-                'quantity' => 1
+                'goods' =>$goods,
             ]
         ]);
     }
