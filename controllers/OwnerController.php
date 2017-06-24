@@ -12,6 +12,7 @@ use app\models\Effect;
 use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;;
+use app\models\GoodsAttr;
 use app\models\LaborCost;
 use app\models\MaterialPropertyClassify;
 use app\models\PaintReconstruction;
@@ -1064,17 +1065,66 @@ class OwnerController extends Controller
 //        $receive = \Yii::$app->request->post();
 //        $post = Json::decode($receive);
         $post = [
+            'province' => 510000,
+            'city' => 510100,
             '12_dismantle' => 20,
             '24_dismantle' => 25,
             'repair' => 22,
             '12_new_construction' => 20,
             '24_new_construction' => 25,
-            'have_building_scrap' => true,
-            'without_building_scrap' => true,
+            'building_scrap' => true,
         ];
+        $handyman = '杂工';
+        $labor = LaborCost::univalence($post,$handyman);
 
-//        12墙拆除天数=12墙拆除面积÷【每天拆除12墙面积】
+//        总天数
+        $total_day = BasisDecorationService::wallArea($post,$labor);
 
+//        清运建渣费用
+        $craft = EngineeringStandardCraft::findByAll($handyman,$post['city']);
+        if ($post['building_scrap']  == true){
+            $building_scrap = BasisDecorationService::haveBuildingScrap($post,$craft);
+        }else{
+            $building_scrap = BasisDecorationService::nothingBuildingScrap($post,$craft);
+        }
+
+//        总人工费
+        $labor_cost = $total_day['total_day'] * $labor[0]['univalence'] + $building_scrap['cost'];
+
+        //材料费
+        $cement = '水泥';
+        $cement_price = Goods::priceDetail(3,$cement,$post['city']);
+        $river_sand = '河沙';
+        $river_sand_price = Goods::priceDetail(3,$river_sand,$post['city']);
+        $brick = '空心砖';
+        $brick_price = Goods::priceDetail(3,$brick,$post['city']);
+        $brick_standard = GoodsAttr::findByGoodsId($brick_price['id']);
+
+        //水泥费用
+        $cement_cost = BasisDecorationService::cementCost($post,$craft,$cement_price);
+        //空心砖费用
+        $brick_cost = BasisDecorationService::brickCost($post,$brick_price,$brick_standard);
+        //河沙费用
+        $river_sand = BasisDecorationService::riverSandCost($post,$river_sand_price,$craft);
+        //总材料费
+        $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand['cost'];
+
+        //添加材料费用
+        $carpentry_add = DecorationAdd::CarpentryAddAll('杂工');
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'total_material_cost' => $total_material_cost,
+                'labor_cost' => $labor_cost,
+                'cement_cost' => $cement_cost,
+                'brick_cost' => $brick_cost,
+                'river_sand' => $river_sand,
+                'carpentry_add' => $carpentry_add,
+
+            ]
+        ]);
     }
 
 

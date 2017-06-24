@@ -321,4 +321,18 @@ class GoodsAttr extends ActiveRecord
             ['addition_type', 'in', 'range' => array_keys(self::ADDITION_TYPES)]
         ];
     }
+
+    public static function findByGoodsId($id = 0)
+    {
+        if ($id)
+        {
+            $select = "goods_attr.name,goods_attr.value";
+            $standard = self::find()
+                        ->asArray()
+                        ->select($select)
+                        ->where(['goods_id'=>$id])
+                        ->all();
+        }
+       return $standard;
+    }
 }

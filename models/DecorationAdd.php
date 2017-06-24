@@ -42,7 +42,7 @@ class DecorationAdd extends ActiveRecord
         return $add_price;
     }
 
-    public static function CarpentryAddAll($str = '',$series = '',$style = '')
+    public static function CarpentryAddAll($str = '',$series = 1,$style = 1)
     {
         if($str){
             $add = self::find()->where(['and',['project'=>$str],['series_id'=>$series],['style_id'=>$style]])->all();
