@@ -78,4 +78,5 @@ return [
 
     // supplier
     'supplier-add' => [1],
+    'supplier-icon-reset' => [6],
 ];

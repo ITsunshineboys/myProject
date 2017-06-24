@@ -95,6 +95,7 @@ class MallController extends Controller
         'goods-inventory-reset',
 //        'goods-images',
         'supplier-add',
+        'supplier-icon-reset',
     ];
 
     /**
@@ -148,6 +149,7 @@ class MallController extends Controller
                     'brand-status-toggle' => ['post',],
                     'brand-disable-batch' => ['post',],
                     'brand-enable-batch' => ['post',],
+                    'brand-application-add' => ['post',],
                     'logistics-template-add' => ['post',],
                     'logistics-template-edit' => ['post',],
                     'goods-attr-add' => ['post',],
@@ -161,7 +163,7 @@ class MallController extends Controller
                     'goods-reason-reset' => ['post',],
                     'goods-inventory-reset' => ['post',],
                     'supplier-add' => ['post',],
-                    'brand-application-add' => ['post',],
+                    'supplier-icon-reset' => ['post',],
                 ],
             ],
         ];
@@ -3669,6 +3671,62 @@ class MallController extends Controller
             'data' => [
                 'brand-application-list-admin' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
             ],
+        ]);
+    }
+
+    /**
+     * Reset supplier icon action
+     *
+     * @return string
+     */
+    public function actionSupplierIconReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $icon = trim(Yii::$app->request->post('icon', ''));
+
+        if (!$icon) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier = Supplier::findOne($id);
+        if (!$supplier) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier->icon = $icon;
+        if (!$supplier->isAttributeChanged('icon')) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+            ]);
+        }
+
+        if (!$supplier->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$supplier->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 }
