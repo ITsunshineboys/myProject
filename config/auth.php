@@ -49,6 +49,7 @@ return [
     'brand-review-list' => [1],
     'brand-list-admin' => [1, 6],
     'brand-application-add' => [6],
+    'brand-application-list-admin' => [1, 6],
 
     // logistics template
     'logistics-template-add' => [6],

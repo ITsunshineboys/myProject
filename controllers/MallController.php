@@ -74,6 +74,7 @@ class MallController extends Controller
         'brand-review-list',
         'brand-list-admin',
         'brand-application-add',
+        'brand-application-list-admin',
         'logistics-template-add',
         'logistics-template-edit',
         'logistics-template-view',
@@ -3649,6 +3650,25 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Get brand application list action(admin).
+     *
+     * @return string
+     */
+    public function actionBrandApplicationListAdmin()
+    {
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', BrandApplication::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'categories' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
+            ],
         ]);
     }
 }

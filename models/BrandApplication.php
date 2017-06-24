@@ -8,11 +8,26 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
-use yii\helpers\Json;
 
 class BrandApplication extends ActiveRecord
 {
+    const PAGE_SIZE_DEFAULT = 12;
+    /**
+     * @var array admin fields
+     */
+    const FIELDS_ADMIN = [
+        'id',
+        'brand_name',
+        'create_time',
+        'authorization_start',
+        'authorization_end',
+        'review_status',
+        'review_note',
+    ];
+
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -57,6 +72,49 @@ class BrandApplication extends ActiveRecord
         }
 
         return $brandApplication;
+    }
+
+    /**
+     * Get brand application list
+     *
+     * @param  array $where search condition
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  string $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    {
+        $offset = ($page - 1) * $size;
+        $brandApplicationList = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+
+        foreach ($brandApplicationList as &$brandApplication) {
+            if (isset($brandApplication['create_time'])) {
+                $brandApplication['create_time'] = date('Y-m-d H:i', $brandApplication['create_time']);
+            }
+
+            if (isset($brandApplication['authorization_start'])) {
+                $brandApplication['authorization_start'] = date('Y-m-d', $brandApplication['authorization_start']);
+            }
+
+            if (isset($brandApplication['authorization_end'])) {
+                $brandApplication['authorization_end'] = date('Y-m-d', $brandApplication['authorization_end']);
+            }
+
+            if (isset($brandApplication['review_status'])) {
+                $brandApplication['review_status'] = Yii::$app->params['reviewStatuses'][$brandApplication['review_status']];
+            }
+        }
+
+        return $brandApplicationList;
     }
 
     /**
