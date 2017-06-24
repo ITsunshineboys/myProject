@@ -185,6 +185,10 @@ class StringService
      */
     public static function checkEmptyElement(array $elements)
     {
+        if (!$elements) {
+            return true;
+        }
+
         foreach ($elements as $element) {
             if (!$element) {
                 return true;
@@ -202,6 +206,10 @@ class StringService
      */
     public static function checkIntList(array $elements)
     {
+        if (!$elements) {
+            return false;
+        }
+
         foreach ($elements as $element) {
             if (!is_numeric($element)) {
                 return false;

@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use yii\db\ActiveRecord;
 
 class BrandApplicationImage extends ActiveRecord
@@ -27,14 +28,31 @@ class BrandApplicationImage extends ActiveRecord
      * @param array $images images
      * @return int
      */
-    public static function addByAttrs(ActiveRecord $brandApplication, array $images)
+    public static function addByAttrs(ActiveRecord $brandApplication, array $images, array $authorizationNames)
     {
         $code = 1000;
 
-        foreach ($images as $image) {
+        if ($authorizationNames) {
+            if (StringService::checkEmptyElement($authorizationNames)
+                || StringService::checkEmptyElement($images)
+            ) {
+                return $code;
+            }
+        }
+
+        if ($images) {
+            if (StringService::checkEmptyElement($images)
+                || StringService::checkEmptyElement($authorizationNames)
+            ) {
+                return $code;
+            }
+        }
+
+        foreach ($images as $i => $image) {
             $brandApplicationImage = new self;
             $brandApplicationImage->brand_application_id = $brandApplication->id;
             $brandApplicationImage->image = $image;
+            $brandApplicationImage->authorization_name = $authorizationNames[$i];
 
             if (!$brandApplicationImage->validate()) {
                 return $code;

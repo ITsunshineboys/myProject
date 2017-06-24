@@ -235,5 +235,6 @@ create table brand_application_image (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `brand_application_id` int(11) unsigned not null default 0,
   `image` varchar(255) not null DEFAULT '',
+  `authorization_name` varchar(50) not null DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

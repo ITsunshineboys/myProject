@@ -3631,8 +3631,10 @@ class MallController extends Controller
             ]);
         }
 
+        $authorizationNames = Yii::$app->request->post('authorization_names', []);
         $images = Yii::$app->request->post('images', []);
-        $code = BrandApplicationImage::addByAttrs($brandApplication, $images);
+
+        $code = BrandApplicationImage::addByAttrs($brandApplication, $images, $authorizationNames);
         if (200 != $code) {
             $transaction->rollBack();
 
