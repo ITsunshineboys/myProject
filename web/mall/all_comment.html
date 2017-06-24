@@ -23,7 +23,7 @@
     </div>
 </header>
 <section>
-    <div>
+    <div ng-controller="commentctrl">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs tab_li" role="tablist">
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">全部 (490)</a></li>
@@ -33,25 +33,12 @@
         </ul>
 
         <!-- Tab panes -->
-        <div class="tab-content" ng-controller="commentctrl">
-            <div role="tabpanel" class="tab-pane active" id="home" ng-repeat="n in message">
+        <div class="tab-content" >
+            <div role="tabpanel" class="tab-pane active" id="home" >
                 <!--全部-->
-               <div>
+               <div ng-repeat="n in message">
                    <ul>
                        <li class="comment_li" >
-                           <img src="images/bed.png" alt="" class="logo_img"/>
-                           <span>{{n.name}}</span>
-                           <span  class="good_comment">好评</span><br/>
-                           <span>2017-12-13</span>
-                           <p>速度快，便利</p>
-                           <ul class="comment_img">
-                               <li><img src="images/bed.png" alt=""/></li>
-                               <li><img src="images/bed.png" alt=""/></li>
-                               <li><img src="images/bed.png" alt=""/></li>
-                           </ul>
-                           <p class="reply_comment">店家回复：谢谢光临，欢迎下次再来</p>
-                       </li>
-                       <li class="comment_li">
                            <img src="images/bed.png" alt="" class="logo_img"/>
                            <span>亚索</span>
                            <span  class="good_comment">好评</span><br/>
@@ -64,6 +51,19 @@
                            </ul>
                            <p class="reply_comment">店家回复：谢谢光临，欢迎下次再来</p>
                        </li>
+                       <!--<li class="comment_li">-->
+                           <!--<img src="images/bed.png" alt="" class="logo_img"/>-->
+                           <!--<span>亚索</span>-->
+                           <!--<span  class="good_comment">好评</span><br/>-->
+                           <!--<span>2017-12-13</span>-->
+                           <!--<p>速度快，便利</p>-->
+                           <!--<ul class="comment_img">-->
+                               <!--<li><img src="images/bed.png" alt=""/></li>-->
+                               <!--<li><img src="images/bed.png" alt=""/></li>-->
+                               <!--<li><img src="images/bed.png" alt=""/></li>-->
+                           <!--</ul>-->
+                           <!--<p class="reply_comment">店家回复：谢谢光临，欢迎下次再来</p>-->
+                       <!--</li>-->
                    </ul>
                </div>
             </div>

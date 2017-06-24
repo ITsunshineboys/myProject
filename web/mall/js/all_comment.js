@@ -11,10 +11,11 @@ myapp.controller("commentctrl",function ($scope,$http) {
        method:"get",
        url:url+"mall/goods-comments?id=31"
    }).then(function successCallback (data) {
-       $scope.message=data.data.goods-comments.details;
+       $scope.message=data.data.data.goods-comments.details;
+       //alert(111);
 
    }, function errorCallback (data) {
-       alert(url);
+       //alert(url);
    });
 
 });

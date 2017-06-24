@@ -1,6 +1,6 @@
 //var url="http://local.test.cdlhzz.cn/";
 var url="http://test.cdlhzz.cn:888/";
-var app=angular.module("app",[]);
+var app=angular.module("app",["ngRoutec"]);
 //导航栏
 $(function(){
     $(".nav_box dd").hide();
@@ -19,9 +19,8 @@ $(function(){
             $(this).find("a").addClass("dd_on");
         })
     });
-
-
 });
+
 /*
 //右边内容自适应
 var browser_width1=$(document).width()-$(".nav_box").width();
