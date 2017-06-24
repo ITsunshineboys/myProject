@@ -3667,7 +3667,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'categories' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
+                'brand-application-list-admin' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
             ],
         ]);
     }
