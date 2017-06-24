@@ -9,6 +9,7 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use yii\helpers\Json;
 
 class BrandApplication extends ActiveRecord
 {
@@ -18,6 +19,44 @@ class BrandApplication extends ActiveRecord
     public static function tableName()
     {
         return 'brand_application';
+    }
+
+    /**
+     * Add brand application by attributes
+     *
+     * @param ActiveRecord $user
+     * @param $attrs brand application attributes
+     * @return BrandApplication|int
+     */
+    public static function addByAttrs(ActiveRecord $user, $attrs)
+    {
+        $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+
+        $brandApplication = new self;
+        $brandApplication->attributes = $attrs;
+        $brandApplication->authorization_start = strtotime($brandApplication->authorization_start);
+        $brandApplication->authorization_end = strtotime($brandApplication->authorization_end);
+        $brandApplication->mobile = $user->mobile;
+        $brandApplication->supplier_id = $supplier->id;
+        $brandApplication->supplier_name = $supplier->name;
+        $brandApplication->create_time = time();
+
+        if (!$brandApplication->validate()) {
+            $code = 1000;
+            return $code;
+        }
+
+        $category = GoodsCategory::findOne($brandApplication->category_id);
+        $brand = GoodsBrand::findOne($brandApplication->brand_id);
+
+        $brandApplication->brand_name = $brand->name;
+        $brandApplication->category_title = $category->fullTitle();
+        if (!$brandApplication->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        return $brandApplication;
     }
 
     /**

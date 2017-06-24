@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\BrandApplicationImage;
 use app\models\BrandCategory;
 use app\models\GoodsBrand;
 use app\models\GoodsRecommend;
@@ -19,6 +20,7 @@ use app\models\GoodsImage;
 use app\models\GoodsComment;
 use app\models\User;
 use app\models\UserRole;
+use app\models\BrandApplication;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
@@ -71,6 +73,7 @@ class MallController extends Controller
         'brand-enable-batch',
         'brand-review-list',
         'brand-list-admin',
+        'brand-application-add',
         'logistics-template-add',
         'logistics-template-edit',
         'logistics-template-view',
@@ -157,6 +160,7 @@ class MallController extends Controller
                     'goods-reason-reset' => ['post',],
                     'goods-inventory-reset' => ['post',],
                     'supplier-add' => ['post',],
+                    'brand-application-add' => ['post',],
                 ],
             ],
         ];
@@ -3599,6 +3603,46 @@ class MallController extends Controller
         }
 
         $transactionOutter->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Add brand application action
+     *
+     * @return string
+     */
+    public function actionBrandApplicationAdd()
+    {
+        $user = Yii::$app->user->identity;
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        $brandApplication = BrandApplication::addByAttrs($user, Yii::$app->request->post());
+        if (!is_object($brandApplication)) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $brandApplication,
+                'msg' => Yii::$app->params['errorCodes'][$brandApplication],
+            ]);
+        }
+
+        $images = Yii::$app->request->post('images', []);
+        $code = BrandApplicationImage::addByAttrs($brandApplication, $images);
+        if (200 != $code) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
 
         return Json::encode([
             'code' => 200,

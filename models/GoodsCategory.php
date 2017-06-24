@@ -476,6 +476,35 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Get full title
+     *
+     * @return string
+     */
+    public function fullTitle()
+    {
+        $fullTitle = '';
+
+        if ($this->level == self::LEVEL3) {
+            $path = trim($this->path, ',');
+            list($rootId, $parentId, $id) = explode(',', $path);
+            $rootCategory = self::findOne($rootId);
+            $fullTitle = $rootCategory->title
+                . self::SEPARATOR_TITLES
+                . $this->parent_title
+                . self::SEPARATOR_TITLES
+                . $this->title;
+        } elseif ($this->level == self::LEVEL2) {
+            $fullTitle = $this->parent_title
+                . self::SEPARATOR_TITLES
+                . $this->title;
+        } elseif ($this->level == self::LEVEL1) {
+            $fullTitle = $this->title;
+        }
+
+        return $fullTitle;
+    }
+
+    /**
      * Get goods categories(including subcategories) by pid
      *
      * @param int $pid parent id
