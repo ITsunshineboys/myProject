@@ -25,8 +25,13 @@ class BrandApplication extends ActiveRecord
         'authorization_end',
         'review_status',
         'review_note',
+        'category_title',
+        'supplier_name',
+        'mobile',
+        'review_time',
+        'images',
     ];
-
+    const FIELDS_EXTRA = ['images'];
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -86,6 +91,10 @@ class BrandApplication extends ActiveRecord
      */
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
+        $selectOld = $select;
+
+        $select = array_diff($select, self::FIELDS_EXTRA);
+
         $offset = ($page - 1) * $size;
         $brandApplicationList = self::find()
             ->select($select)
@@ -101,6 +110,12 @@ class BrandApplication extends ActiveRecord
                 $brandApplication['create_time'] = date('Y-m-d H:i', $brandApplication['create_time']);
             }
 
+            if (isset($brandApplication['review_time'])) {
+                $brandApplication['review_time'] = $brandApplication['review_time']
+                    ? date('Y-m-d H:i', $brandApplication['create_time'])
+                    : '';
+            }
+
             if (isset($brandApplication['authorization_start'])) {
                 $brandApplication['authorization_start'] = date('Y-m-d', $brandApplication['authorization_start']);
             }
@@ -111,6 +126,10 @@ class BrandApplication extends ActiveRecord
 
             if (isset($brandApplication['review_status'])) {
                 $brandApplication['review_status'] = Yii::$app->params['reviewStatuses'][$brandApplication['review_status']];
+            }
+
+            if (in_array('images', $selectOld)) {
+                $brandApplication['images'] = BrandApplicationImage::findImagesByApplicationId($brandApplication['id']);
             }
         }
 

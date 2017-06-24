@@ -9,10 +9,13 @@
 namespace app\models;
 
 use app\services\StringService;
+use Yii;
 use yii\db\ActiveRecord;
 
 class BrandApplicationImage extends ActiveRecord
 {
+    const FIELDS_AUTHORIZATION = ['authorization_name', 'image'];
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -66,5 +69,21 @@ class BrandApplicationImage extends ActiveRecord
 
         $code = 200;
         return $code;
+    }
+
+    /**
+     * Get authorization info by application id
+     *
+     * @param $applicationId application id
+     * @param array $select select fields
+     * @return array
+     */
+    public static function findImagesByApplicationId($applicationId, array $select = self::FIELDS_AUTHORIZATION)
+    {
+        return self::find()
+            ->select($select)
+            ->where(['brand_application_id' => $applicationId])
+            ->asArray()
+            ->all();
     }
 }
