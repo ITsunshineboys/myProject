@@ -68,7 +68,7 @@ tr>th,tr>td{
     height: 42px;
     text-align: left;
     border-right: none;
-    padding: 0 15px;
+    /*padding: 0 15px;*/
     border-bottom: 2px solid #F5F7FC;
     font-size: 14px;
     color:#666F80;
