@@ -117,6 +117,7 @@ CREATE TABLE `supplier` (
   `category_id` int(11) unsigned not null default 0,
   `identity_card_no` varchar(18) not null DEFAULT '' comment '身份证号',
   `shop_no` int(11) unsigned not null default 0 comment '店铺号',
+  `create_time` int unsigned not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

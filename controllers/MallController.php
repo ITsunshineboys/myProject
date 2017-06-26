@@ -96,6 +96,7 @@ class MallController extends Controller
 //        'goods-images',
         'supplier-add',
         'supplier-icon-reset',
+        'supplier-view-admin',
     ];
 
     /**
@@ -3727,6 +3728,41 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * View supplier action(admin)
+     *
+     * @return string
+     */
+    public function actionSupplierViewAdmin()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->get('id', 0);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier = Supplier::findOne($id);
+
+        if (!$supplier) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier-view-admin' => $supplier->viewAdmin(),
+            ],
         ]);
     }
 }

@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use app\services\StringService;
 use yii\db\ActiveRecord;
 
@@ -29,6 +30,22 @@ class Supplier extends ActiveRecord
     const STATUSES = [
         self::STATUS_OFFLINE => '已关闭',
         self::STATUS_ONLINE => '正常营业',
+    ];
+    const FIELDS_VIEW_ADMIN_MODEL = [
+        'id',
+        'name',
+        'shop_no',
+        'create_time',
+        'status',
+        'icon',
+        'comprehensive_score',
+        'store_service_score',
+        'logistics_speed_score',
+        'delivery_service_score',
+        'follower_number',
+    ];
+    const FIELDS_VIEW_ADMIN_EXTRA = [
+        'mobile',
     ];
 
     /**
@@ -95,5 +112,60 @@ class Supplier extends ActiveRecord
         }
 
         return true;
+    }
+
+    /**
+     * Get admin view data
+     *
+     * @return array
+     */
+    public function viewAdmin()
+    {
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_ADMIN_MODEL);
+        $viewData = $modelData
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_ADMIN_EXTRA))
+            : $modelData;
+        $this->_formatData($viewData);
+        return $viewData;
+    }
+
+    /**
+     * Get extra fields
+     *
+     * @access private
+     * @param array $extraFields extra fields
+     * @return array
+     */
+    private function _extraData(array $extraFields)
+    {
+        $extraData = [];
+
+        foreach ($extraFields as $extraField) {
+            switch ($extraField) {
+                case 'mobile':
+                    $user = User::findOne($this->uid);
+                    $extraData[$extraField] = $user->$extraField;
+                    break;
+            }
+
+        }
+
+        return $extraData;
+    }
+
+    /**
+     * Format data
+     *
+     * @param array $data data to format
+     */
+    private function _formatData(array &$data)
+    {
+        if (isset($data['create_time'])) {
+            $data['create_time'] = date('Y-m-d', $data['create_time']);
+        }
+
+        if (isset($data['status'])) {
+            $data['status'] = self::STATUSES[$data['status']];
+        }
     }
 }
