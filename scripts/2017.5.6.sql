@@ -22,7 +22,8 @@ CREATE TABLE `style_picture` (
   `style_id` int(11) DEFAULT NULL COMMENT '风格表id',
   `picture` varchar(255) DEFAULT '' COMMENT '图片',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `style` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -63,24 +64,40 @@ CREATE TABLE `effect` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `series_id` int(11) DEFAULT NULL COMMENT '系列id',
   `style_id` int(11) DEFAULT NULL COMMENT '风格id',
-  `room` int(5) DEFAULT NULL COMMENT '室',
-  `hall` int(5) DEFAULT NULL COMMENT '厅',
+  `master_bedroom` int(5) DEFAULT NULL COMMENT '主卧',
+  `secondary_bedroom` int(5) DEFAULT NULL COMMENT '次卧',
+  `sitting_room` int(5) DEFAULT NULL COMMENT '客厅',
+  `dining_room` int(5) DEFAULT NULL COMMENT '餐厅',
   `toilet` int(5) DEFAULT NULL COMMENT '卫生间',
   `kitchen` int(5) DEFAULT NULL COMMENT '厨房',
   `window` int(5) DEFAULT NULL COMMENT '飘窗',
   `area` int(5) DEFAULT NULL COMMENT '面积',
+  `high` int(5) unsigned DEFAULT NULL COMMENT '层高',
+  `province` varchar(10) DEFAULT NULL COMMENT '省份',
+  `city` varchar(10) DEFAULT NULL COMMENT '市',
+  `district` varchar(10) DEFAULT NULL COMMENT '区',
+  `toponymy` varchar(10) DEFAULT NULL COMMENT '小区名称',
+  `street` varchar(10) DEFAULT NULL COMMENT '街道',
+  `particulars` varchar(50) DEFAULT NULL COMMENT '厅室详情',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `labor_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `province` varchar(20) DEFAULT NULL COMMENT '省份',
+  `province` varchar(20) DEFAULT NULL COMMENT '省',
+  `province_code` varchar(20) DEFAULT NULL COMMENT '省份编码',
   `city` varchar(20) DEFAULT NULL COMMENT '市',
-  `district` varchar(20) DEFAULT NULL COMMENT '区县',
+  `city_code` varchar(20) DEFAULT NULL COMMENT '市编码',
   `univalence` bigint(10) NOT NULL COMMENT '工人单价',
   `worker_kind` varchar(20) DEFAULT NULL COMMENT '工人种类',
+  `day_points` int(10) unsigned NOT NULL COMMENT '每天完成的点位',
+  `day_area` int(10) DEFAULT NULL COMMENT '每天完成面积',
+  `day_sculpt_length` int(10) unsigned NOT NULL COMMENT '造型长度',
+  `rank` varchar(20) DEFAULT NULL COMMENT '工人级别',
+  `worker_kind_details` varchar(20) DEFAULT NULL COMMENT '工种详情',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `decoration_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -97,17 +114,30 @@ CREATE TABLE `decoration_list` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `main_ materials` (
+CREATE TABLE `main_materials` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `decoration_list_id` int(11) DEFAULT NULL,
   `goods_id` int(11) DEFAULT NULL,
+  `effect_id` int(11) DEFAULT NULL COMMENT '效果图',
+  `province` varchar(50) DEFAULT NULL COMMENT '省',
+  `province_code` int(11) DEFAULT NULL COMMENT '省编码',
+  `city` varchar(50) DEFAULT NULL COMMENT '市',
+  `city_code` int(11) DEFAULT NULL COMMENT '市编码',
+  `series_id` int(11) DEFAULT NULL COMMENT '系列',
+  `style_id` int(11) DEFAULT NULL COMMENT '风格',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `fixation_furniture` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `decoration_list_id` int(11) DEFAULT NULL,
-  `goods_id` int(11) DEFAULT NULL,
+  `effect_id` int(11) DEFAULT NULL,
+  `goods_category_id` int(11) DEFAULT NULL,
+  `province` varchar(20) DEFAULT NULL COMMENT '省',
+  `city` varchar(20) DEFAULT NULL COMMENT '市',
+  `series_id` int(11) DEFAULT NULL,
+  `style_id` int(11) DEFAULT NULL,
+  `province_code` int(11) DEFAULT NULL COMMENT '省编码',
+  `city_code` int(11) DEFAULT NULL COMMENT '市编码',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

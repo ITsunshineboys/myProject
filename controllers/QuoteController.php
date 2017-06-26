@@ -63,7 +63,6 @@ class QuoteController extends Controller
 
     public function actionLaborCostAdd()
     {
-        $labor_cost = LaborCost::findWorkerKind();
-        var_dump($labor_cost);exit;
+
     }
 }
