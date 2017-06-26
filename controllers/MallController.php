@@ -2568,7 +2568,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category_list_admin' => [
+                'goods-attr-list-admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
                     'details' => $details
                 ]
