@@ -124,6 +124,7 @@ CREATE TABLE `goods_recommend_view_log` (
 CREATE TABLE `goods_recommend_sale_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `recommend_id` int unsigned not null default 0,
+  `number` int unsigned not null default 1 comment '销售数量',
   `create_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
