@@ -69,7 +69,7 @@ class Supplier extends ActiveRecord
             ['type_shop', 'in', 'range' => array_keys(self::TYPE_SHOP)],
             ['identity_card_no', 'validateIdentityCardNo'],
             ['status', 'in', 'range' => [self::STATUS_ONLINE, self::STATUS_OFFLINE]],
-            [['type_org', 'category_id', 'type_shop',], 'number', 'integerOnly' => true],
+            [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit'], 'number', 'integerOnly' => true],
             [['nickname', 'name', 'licence', 'licence_image', 'legal_person', 'identity_card_no', 'identity_card_front_image', 'identity_card_back_image', 'approve_reason', 'reject_reason'], 'string'],
         ];
     }
