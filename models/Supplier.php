@@ -43,6 +43,13 @@ class Supplier extends ActiveRecord
         'logistics_speed_score',
         'delivery_service_score',
         'follower_number',
+        'quality_guarantee_deposit',
+        'licence',
+        'licence_image',
+        'legal_person',
+        'identity_card_front_image',
+        'identity_card_back_image',
+        'identity_card_no',
     ];
     const FIELDS_VIEW_ADMIN_EXTRA = [
         'mobile',
@@ -166,6 +173,10 @@ class Supplier extends ActiveRecord
 
         if (isset($data['status'])) {
             $data['status'] = self::STATUSES[$data['status']];
+        }
+
+        if (isset($data['quality_guarantee_deposit'])) {
+            $data['quality_guarantee_deposit'] /= 100;
         }
     }
 }
