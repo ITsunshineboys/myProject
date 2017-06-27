@@ -857,9 +857,10 @@ AND goods.id IN (" . $id . ")";
     /**
      * Get view data
      *
+     * @param string $ip ip
      * @return array
      */
-    public function view()
+    public function view($ip)
     {
         $supplier = Supplier::findOne($this->supplier_id);
         $user = User::findOne($supplier->uid);
@@ -873,7 +874,7 @@ AND goods.id IN (" . $id . ")";
             $goodsComment->create_time = date('Y-m-d');
         }
 
-        GoodsStat::updateViewedNumberBySupplierId($this->supplier_id);
+        GoodsStat::updateDailyViewedNumberAndIpNumberBySupplierId($this->supplier_id, $ip);
 
         return [
             'title' => $this->title,
