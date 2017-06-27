@@ -3672,7 +3672,10 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'brand-application-list-admin' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
+                'brand-application-list-admin' => [
+                    'total' => (int)BrandApplication::find()->where([])->asArray()->count(),
+                    'details' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
+                ]
             ],
         ]);
     }
@@ -3828,7 +3831,10 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'shop-data' => GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size)
+                'shop-data' => [
+                    'total' => (int)GoodsStat::find()->where($where)->asArray()->count(),
+                    'details' => GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size)
+                ]
             ],
         ]);
     }
