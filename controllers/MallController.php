@@ -21,6 +21,7 @@ use app\models\GoodsComment;
 use app\models\User;
 use app\models\UserRole;
 use app\models\BrandApplication;
+use app\models\GoodsStat;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
@@ -97,6 +98,7 @@ class MallController extends Controller
         'supplier-add',
         'supplier-icon-reset',
         'supplier-view-admin',
+        'supplier-data',
     ];
 
     /**
@@ -3762,6 +3764,71 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'supplier-view-admin' => $supplier->viewAdmin(),
+            ],
+        ]);
+    }
+
+    /**
+     * View supplier data action
+     *
+     * @return string
+     */
+    public function actionSupplierData()
+    {
+        $code = 1000;
+
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $supplierId = Supplier::find()->where(['uid' => $user->id])->one()->id;
+        } else {
+            $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
+        }
+
+        $where = "supplier_id = {$supplierId}";
+
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = str_replace( '-', '', $startTime);
+            $startTime && $where .= " and create_date >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = str_replace( '-', '', $endTime);
+            $endTime && $where .= " and create_date <= {$endTime}";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsStat::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier-data' => GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size)
             ],
         ]);
     }

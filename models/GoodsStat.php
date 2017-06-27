@@ -16,6 +16,15 @@ use yii\db\ActiveRecord;
 class GoodsStat extends ActiveRecord
 {
     const CACHE_KEY_PREFIX_VIEWED_IPS = 'viewed_ips_';
+    const PAGE_SIZE_DEFAULT = 12;
+    const FIELDS_ADMIN = [
+        'create_date',
+        'sold_number',
+        'amount_sold',
+        'ip_number',
+        'viewed_number',
+    ];
+    const FIELDS_EXTRA = [];
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -88,5 +97,40 @@ class GoodsStat extends ActiveRecord
 
         $todayEnd = strtotime(StringService::startEndDate('today')[1]);
         $cache->set($key, Json::encode($ips), $todayEnd - $now);
+    }
+
+    /**
+     * Get goods statistics list
+     *
+     * @param  array $where search condition
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  string $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    {
+        $select = array_diff($select, self::FIELDS_EXTRA);
+
+        $offset = ($page - 1) * $size;
+        $goodsStatList = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+
+        foreach ($goodsStatList as &$goodsStat) {
+            if (isset($goodsStat['create_date'])) {
+                $goodsStat['create_date'] = substr($goodsStat['create_date'], 0, 4) . '-'
+                    . substr($goodsStat['create_date'], 4, 2) . '-'
+                    . substr($goodsStat['create_date'], 6);
+            }
+        }
+
+        return $goodsStatList;
     }
 }
