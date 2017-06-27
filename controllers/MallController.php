@@ -3828,7 +3828,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-data' => GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size)
+                'shop-data' => GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size)
             ],
         ]);
     }
