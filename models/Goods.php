@@ -873,6 +873,8 @@ AND goods.id IN (" . $id . ")";
             $goodsComment->create_time = date('Y-m-d');
         }
 
+        GoodsStat::setViewdNumberBySupplierId($this->supplier_id);
+
         return [
             'title' => $this->title,
             'subtitle' => $this->subtitle,
