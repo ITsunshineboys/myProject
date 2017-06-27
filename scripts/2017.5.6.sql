@@ -145,6 +145,12 @@ CREATE TABLE `move_furniture` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `decoration_list_id` int(11) DEFAULT NULL,
   `goods_id` int(11) DEFAULT NULL,
+  `province` varchar(50) DEFAULT NULL COMMENT '省',
+  `province_code` int(11) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `city_code` int(11) DEFAULT NULL,
+  `series_id` int(11) DEFAULT NULL,
+  `style_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -152,57 +158,78 @@ CREATE TABLE `appliances_assort` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `decoration_list_id` int(11) DEFAULT NULL,
   `goods_id` int(11) DEFAULT NULL,
+  `goods_category_id` int(11) DEFAULT NULL,
+  `province` varchar(50) DEFAULT NULL,
+  `province_code` int(11) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `city_code` int(11) DEFAULT NULL,
+  `series_id` int(11) DEFAULT NULL,
+  `style_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `soft_outfit_assort` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `decoration_list_id` int(11) DEFAULT NULL,
-  `goods_id` int(11) DEFAULT NULL,
+  `goods_category_id` int(11) DEFAULT NULL,
+  `province` varchar(50) DEFAULT NULL,
+  `province_code` int(11) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `city_code` int(11) DEFAULT NULL,
+  `series_id` int(11) DEFAULT NULL,
+  `style_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `intelligence_assort` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `decoration_list_id` int(11) DEFAULT NULL,
-  `goods_id` int(11) DEFAULT NULL,
+  `goods_category_id` int(11) DEFAULT NULL,
+  `province` varchar(50) DEFAULT NULL,
+  `province_code` int(11) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `city_code` int(11) DEFAULT NULL,
+  `series_id` int(11) DEFAULT NULL,
+  `style_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `life_assort` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `decoration_list_id` int(11) DEFAULT NULL,
-  `goods_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE `basis_decoration` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(100) DEFAULT NULL COMMENT 'l类型',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE `basis_material` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `basis_decoration_id` int(11) DEFAULT NULL,
-  `goods_id` int(11) DEFAULT NULL,
+  `goods_category_id` int(11) DEFAULT NULL,
+  `province_code` int(11) DEFAULT NULL,
+  `province` varchar(50) DEFAULT NULL,
+  `city_code` int(11) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `series_id` int(11) DEFAULT NULL,
+  `style_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `points` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `decoration_list_id` int(11) DEFAULT NULL,
   `place` varchar(20) DEFAULT NULL COMMENT '位置',
-  `weak_current_points` int(5) DEFAULT NULL,
+  `weak_current_points` int(5) NOT NULL DEFAULT '0' COMMENT '弱电点位',
+  `effect_id` int(11) DEFAULT NULL,
+  `waterway_points` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `points_details` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `place_id` int(11) DEFAULT NULL,
   `details` varchar(50) DEFAULT NULL COMMENT '简介详情',
   `points_quantity` int(10) unsigned DEFAULT NULL COMMENT '点位数量',
+  `points_quantity_total` int(11) DEFAULT NULL COMMENT '点位总和',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `points_total` (
+  `id` int(11) NOT NULL,
+  `place_id` int(11) DEFAULT NULL,
+  `place` varchar(20) DEFAULT NULL,
+  `points_total` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
