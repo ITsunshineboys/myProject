@@ -239,3 +239,14 @@ create table brand_application_image (
   `authorization_name` varchar(50) not null DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `goods_sale_stat` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `supplier_id` int unsigned not null default 0,
+  `sold_number` int unsigned not null default 0 comment '销售数量',
+  `amount_sold` int unsigned not null default 0 comment '销售额',
+  `create_date` int(8) not null DEFAULT 0,
+  `ip_number` int(11) unsigned not null default 0 comment '游客数',
+  `viewed_number` int(11) unsigned not null default 0 comment '访问量',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
