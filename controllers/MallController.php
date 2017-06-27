@@ -98,7 +98,7 @@ class MallController extends Controller
         'supplier-add',
         'supplier-icon-reset',
         'supplier-view-admin',
-        'supplier-data',
+        'shop-data',
     ];
 
     /**
@@ -3769,11 +3769,11 @@ class MallController extends Controller
     }
 
     /**
-     * View supplier data action
+     * View supplier shop data action
      *
      * @return string
      */
-    public function actionSupplierData()
+    public function actionShopData()
     {
         $code = 1000;
 
