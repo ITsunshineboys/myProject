@@ -8,8 +8,6 @@
 
 namespace app\models;
 
-use app\services\StringService;
-use yii\helpers\Json;
 use yii\db\ActiveRecord;
 
 class GoodsStat extends ActiveRecord
@@ -25,32 +23,17 @@ class GoodsStat extends ActiveRecord
     }
 
     /**
-     * Set viewd number by supplierId
+     * Update viewed number by supplier id
      *
      * @param int $supplierId supplier id
      */
-    public static function setViewdNumberBySupplierId($supplierId)
-    {
-        $cache = Yii::$app->cache;
-        $key = self::CACHE_KEY_PREFIX_VIEWED_IPS . date('Ymd') . $supplierId;
-        $number = $cache->get($key);
-        $number++;
-        $todayEnd = strtotime(StringService::startEndDate('today')[1]);
-        $cache->set($key, $number, $todayEnd - time());
-    }
-
-    /**
-     * Update by supplier id
-     *
-     * @param int $supplierId supplier id
-     */
-    public static function updateBySupplierId($supplierId)
+    public static function updateViewedNumberBySupplierId($supplierId)
     {
         $date = date('Ymd');
 
         $model = self::find()->where(['supplier_id' => $supplierId, 'create_date' => $date])->one();
         if ($model) {
-            $model->viewed_number += self::getViewdNumberBySupplierId($supplierId);
+            $model->viewed_number += 1;
         } else {
             $model = new self;
             $model->supplier_id = $supplierId;
@@ -59,18 +42,5 @@ class GoodsStat extends ActiveRecord
         }
 
         $model->save();
-    }
-
-    /**
-     * Get viewd number by supplierId
-     *
-     * @param int $supplierId supplier id
-     * @return int
-     */
-    public static function getViewdNumberBySupplierId($supplierId)
-    {
-        $cache = Yii::$app->cache;
-        $key = self::CACHE_KEY_PREFIX_VIEWED_IPS . date('Ymd') . $supplierId;
-        return $cache->get($key);
     }
 }
