@@ -240,7 +240,7 @@ create table brand_application_image (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `goods_sale_stat` (
+CREATE TABLE `goods_stat` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` int unsigned not null default 0,
   `sold_number` int unsigned not null default 0 comment '销售数量',
