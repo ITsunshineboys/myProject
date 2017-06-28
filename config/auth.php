@@ -81,5 +81,5 @@ return [
     'supplier-icon-reset' => [6],
     'supplier-view-admin' => [1, 6],
     'shop-data' => [1, 6],
-    'shop-index' => [6],
+    'supplier-index-admin' => [6],
 ];

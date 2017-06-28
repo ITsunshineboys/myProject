@@ -99,7 +99,7 @@ class MallController extends Controller
         'supplier-icon-reset',
         'supplier-view-admin',
         'shop-data',
-        'shop-index',
+        'supplier-index-admin',
     ];
 
     /**
@@ -3846,11 +3846,11 @@ class MallController extends Controller
     }
 
     /**
-     * Shop index action
+     * Supplier index action(admin)
      *
      * @return string
      */
-    public function actionShopIndex()
+    public function actionSupplierIndexAdmin()
     {
         $timeType = 'today';
 
