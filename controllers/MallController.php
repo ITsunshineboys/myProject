@@ -3921,7 +3921,7 @@ class MallController extends Controller
                     'today_ip_number' => GoodsStat::totalIpNumber($where),
                     'today_viewed_number' => GoodsStat::totalViewedNumber($where),
                     'delta_supplier_number' => $deltaSupplierNumber,
-                    'total_supplier_number' => Supplier::find()->where(['status' => Supplier::STATUS_ONLINE])->count(),
+                    'total_supplier_number' => (int)Supplier::find()->where(['status' => Supplier::STATUS_ONLINE])->count(),
                 ]
             ],
         ]);
