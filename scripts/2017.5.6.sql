@@ -79,8 +79,9 @@ CREATE TABLE `effect` (
   `toponymy` varchar(10) DEFAULT NULL COMMENT '小区名称',
   `street` varchar(10) DEFAULT NULL COMMENT '街道',
   `particulars` varchar(50) DEFAULT NULL COMMENT '厅室详情',
+  `site_particulars` varchar(100) DEFAULT NULL COMMENT '地址详情',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `labor_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
