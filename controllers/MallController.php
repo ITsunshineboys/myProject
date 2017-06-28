@@ -3863,6 +3863,12 @@ class MallController extends Controller
         $where = "supplier_id = {$supplierId}";
 
         list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+        $intStartTime = strtotime($startTime);
+        $intEndTime = strtotime($endTime);
+        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime);
+        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime);
+
         $startTime = explode(' ', $startTime)[0];
         $endTime = explode(' ', $endTime)[0];
 
@@ -3880,8 +3886,10 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'supplier-index-admin' => [
-                    'total_ip_number' => GoodsStat::totalIpNumber($where),
-                    'total_viewed_number' => GoodsStat::totalViewedNumber($where),
+                    'today_amount_order' => $todayAmountOrder,
+                    'today_order_number' => $todayOrderNumber,
+                    'today_ip_number' => GoodsStat::totalIpNumber($where),
+                    'today_viewed_number' => GoodsStat::totalViewedNumber($where),
                 ]
             ],
         ]);
