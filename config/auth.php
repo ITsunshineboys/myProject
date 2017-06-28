@@ -84,5 +84,5 @@ return [
     'supplier-index-admin' => [6],
 
     // mall
-    'mall-index-admin' => [1],
+    'index-admin' => [1],
 ];

@@ -100,7 +100,7 @@ class MallController extends Controller
         'supplier-view-admin',
         'shop-data',
         'supplier-index-admin',
-        'mall-index-admin',
+        'index-admin',
     ];
 
     /**
@@ -3891,7 +3891,7 @@ class MallController extends Controller
      *
      * @return string
      */
-    public function actionMallIndexAdmin()
+    public function actionIndexAdmin()
     {
         $timeType = 'today';
 
@@ -3917,10 +3917,11 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'mall-index-admin' => [
-                    'total_ip_number' => GoodsStat::totalIpNumber($where),
-                    'total_viewed_number' => GoodsStat::totalViewedNumber($where),
+                'index-admin' => [
+                    'today_ip_number' => GoodsStat::totalIpNumber($where),
+                    'today_viewed_number' => GoodsStat::totalViewedNumber($where),
                     'delta_supplier_number' => $deltaSupplierNumber,
+                    'total_supplier_number' => Supplier::find()->where(['status' => Supplier::STATUS_ONLINE])->count(),
                 ]
             ],
         ]);
