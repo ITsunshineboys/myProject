@@ -25,16 +25,19 @@ class GoodsOrder extends ActiveRecord
      *
      * @param int $startTime start time
      * @param int $endTime end time
+     * @param int $supplierId supplier id default 0
      * @return int
      */
-    public static function totalAmountOrder($startTime, $endTime)
+    public static function totalAmountOrder($startTime, $endTime, $supplierId = 0)
     {
-        return (int)self::find()
+        $query = self::find()
             ->select('sum(amount_order) as total_amount_order')
             ->where(['>=', 'create_time', $startTime])
-            ->andWhere(['<=', 'create_time', $endTime])
-            ->asArray()
-            ->all()[0]['total_amount_order'];
+            ->andWhere(['<=', 'create_time', $endTime]);
+
+        $supplierId > 0 && $query->andWhere(['supplier_id' => $supplierId]);
+
+        return (int)$query->asArray()->all()[0]['total_amount_order'];
     }
 
     /**
@@ -42,13 +45,17 @@ class GoodsOrder extends ActiveRecord
      *
      * @param int $startTime start time
      * @param int $endTime end time
+     * @param int $supplierId supplier id default 0
      * @return int
      */
-    public static function totalOrderNumber($startTime, $endTime)
+    public static function totalOrderNumber($startTime, $endTime, $supplierId = 0)
     {
-        return (int)self::find()
+        $query = self::find()
             ->where(['>=', 'create_time', $startTime])
-            ->andWhere(['<=', 'create_time', $endTime])
-            ->count();
+            ->andWhere(['<=', 'create_time', $endTime]);
+
+        $supplierId > 0 && $query->andWhere(['supplier_id' => $supplierId]);
+
+        return (int)$query->count();
     }
 }

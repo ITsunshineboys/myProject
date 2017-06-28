@@ -256,5 +256,6 @@ CREATE TABLE `goods_order` (
   `order_no` varchar(50) not null default '' comment '订单号',
   `amount_order` int unsigned not null default 0 comment '订单金额',
   `create_time` int(8) not null DEFAULT 0,
+  `supplier_id` int unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

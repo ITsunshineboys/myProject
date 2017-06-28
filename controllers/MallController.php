@@ -3860,14 +3860,14 @@ class MallController extends Controller
         $user = Yii::$app->user->identity;
         $supplierId = Supplier::find()->where(['uid' => $user->id])->one()->id;
 
-        $where = "supplier_id = {$supplierId}";
-
         list($startTime, $endTime) = StringService::startEndDate($timeType);
 
         $intStartTime = strtotime($startTime);
         $intEndTime = strtotime($endTime);
-        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime);
-        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime);
+        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime, $supplierId);
+        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime, $supplierId);
+
+        $where = "supplier_id = {$supplierId}";
 
         $startTime = explode(' ', $startTime)[0];
         $endTime = explode(' ', $endTime)[0];
@@ -3904,11 +3904,15 @@ class MallController extends Controller
     {
         $timeType = 'today';
 
-        $where = '1';
-
         list($startTime, $endTime) = StringService::startEndDate($timeType);
 
-        $deltaSupplierNumber = Supplier::deltaNumber(strtotime($startTime), strtotime($endTime));
+        $intStartTime = strtotime($startTime);
+        $intEndTime = strtotime($endTime);
+        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime);
+        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime);
+        $deltaSupplierNumber = Supplier::deltaNumber($intStartTime, $intEndTime);
+
+        $where = '1';
 
         $startTime = explode(' ', $startTime)[0];
         $endTime = explode(' ', $endTime)[0];
@@ -3927,6 +3931,9 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'index-admin' => [
+                    'today_date' => date('Y-m-d'),
+                    'today_amount_order' => $todayAmountOrder,
+                    'today_order_number' => $todayOrderNumber,
                     'today_ip_number' => GoodsStat::totalIpNumber($where),
                     'today_viewed_number' => GoodsStat::totalViewedNumber($where),
                     'delta_supplier_number' => $deltaSupplierNumber,
