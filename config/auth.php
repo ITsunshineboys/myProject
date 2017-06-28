@@ -82,4 +82,7 @@ return [
     'supplier-view-admin' => [1, 6],
     'shop-data' => [1, 6],
     'supplier-index-admin' => [6],
+
+    // mall
+    'mall-index-admin' => [1],
 ];

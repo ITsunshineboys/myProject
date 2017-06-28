@@ -100,6 +100,7 @@ class MallController extends Controller
         'supplier-view-admin',
         'shop-data',
         'supplier-index-admin',
+        'mall-index-admin',
     ];
 
     /**
@@ -3562,6 +3563,7 @@ class MallController extends Controller
         $supplier = new Supplier;
         $supplier->attributes = Yii::$app->request->post();
         $supplier->uid = $user->id;
+        $supplier->create_time = time();
         $supplier->scenario = Supplier::SCENARIO_ADD;
 
         if (!$supplier->validate()) {
@@ -3876,9 +3878,49 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'shop-index' => [
+                'supplier-index-admin' => [
                     'total_ip_number' => GoodsStat::totalIpNumber($where),
                     'total_viewed_number' => GoodsStat::totalViewedNumber($where),
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Mall index action(admin)
+     *
+     * @return string
+     */
+    public function actionMallIndexAdmin()
+    {
+        $timeType = 'today';
+
+        $where = '1';
+
+        list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+        $deltaSupplierNumber = Supplier::deltaNumber(strtotime($startTime), strtotime($endTime));
+
+        $startTime = explode(' ', $startTime)[0];
+        $endTime = explode(' ', $endTime)[0];
+
+        if ($startTime) {
+            $startTime = str_replace( '-', '', $startTime);
+            $startTime && $where .= " and create_date >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = str_replace( '-', '', $endTime);
+            $endTime && $where .= " and create_date <= {$endTime}";
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'mall-index-admin' => [
+                    'total_ip_number' => GoodsStat::totalIpNumber($where),
+                    'total_viewed_number' => GoodsStat::totalViewedNumber($where),
+                    'delta_supplier_number' => $deltaSupplierNumber,
                 ]
             ],
         ]);

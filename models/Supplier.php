@@ -64,6 +64,23 @@ class Supplier extends ActiveRecord
     }
 
     /**
+     * Get delta number
+     *
+     * @param int $startTime start time
+     * @param int $endTime end time
+     * @param int $status status default 1(online)
+     * @return int
+     */
+    public static function deltaNumber($startTime, $endTime, $status = self::STATUS_ONLINE)
+    {
+        return (int)Supplier::find()
+            ->where(['status' => $status])
+            ->andWhere(['>=', 'create_time', $startTime])
+            ->andWhere(['<=', 'create_time', $endTime])
+            ->count();
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
