@@ -250,3 +250,11 @@ CREATE TABLE `goods_stat` (
   `viewed_number` int(11) unsigned not null default 0 comment '访问量',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `goods_order` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(50) not null default '' comment '订单号',
+  `amount_order` int unsigned not null default 0 comment '订单金额',
+  `create_time` int(8) not null DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

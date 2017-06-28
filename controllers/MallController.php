@@ -22,6 +22,7 @@ use app\models\User;
 use app\models\UserRole;
 use app\models\BrandApplication;
 use app\models\GoodsStat;
+use app\models\GoodsOrder;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
