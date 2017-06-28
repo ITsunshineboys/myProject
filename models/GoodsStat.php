@@ -160,7 +160,7 @@ class GoodsStat extends ActiveRecord
      */
     public static function totalAmountSold($where)
     {
-        return (int)GoodsStat::find()
+        return (int)self::find()
             ->select('sum(amount_sold) as total_amount_sold')
             ->where($where)
             ->asArray()
@@ -175,7 +175,7 @@ class GoodsStat extends ActiveRecord
      */
     public static function totalIpNumber($where)
     {
-        return (int)GoodsStat::find()
+        return (int)self::find()
             ->select('sum(ip_number) as total_ip_number')
             ->where($where)
             ->asArray()
@@ -190,7 +190,7 @@ class GoodsStat extends ActiveRecord
      */
     public static function totalViewedNumber($where)
     {
-        return (int)GoodsStat::find()
+        return (int)self::find()
             ->select('sum(viewed_number) as total_viewed_number')
             ->where($where)
             ->asArray()
