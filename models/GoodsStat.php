@@ -131,6 +131,69 @@ class GoodsStat extends ActiveRecord
             }
         }
 
-        return $goodsStatList;
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'details' => $goodsStatList
+        ];
+    }
+
+    /**
+     * Get total sold number
+     *
+     * @param string $where query conditions
+     * @return int
+     */
+    public static function totalSoldNumber($where)
+    {
+        return (int)self::find()
+            ->select('sum(sold_number) as total_sold_number')
+            ->where($where)
+            ->asArray()
+            ->all()[0]['total_sold_number'];
+    }
+
+    /**
+     * Get total amount sold
+     *
+     * @param string $where query conditions
+     * @return int
+     */
+    public static function totalAmountSold($where)
+    {
+        return (int)GoodsStat::find()
+            ->select('sum(amount_sold) as total_amount_sold')
+            ->where($where)
+            ->asArray()
+            ->all()[0]['total_amount_sold'];
+    }
+
+    /**
+     * Get total ip number
+     *
+     * @param string $where query conditions
+     * @return int
+     */
+    public static function totalIpNumber($where)
+    {
+        return (int)GoodsStat::find()
+            ->select('sum(ip_number) as total_ip_number')
+            ->where($where)
+            ->asArray()
+            ->all()[0]['total_ip_number'];
+    }
+
+    /**
+     * Get total viewed number
+     *
+     * @param string $where query conditions
+     * @return int
+     */
+    public static function totalViewedNumber($where)
+    {
+        return (int)GoodsStat::find()
+            ->select('sum(viewed_number) as total_viewed_number')
+            ->where($where)
+            ->asArray()
+            ->all()[0]['total_viewed_number'];
     }
 }

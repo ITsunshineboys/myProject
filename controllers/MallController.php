@@ -3826,14 +3826,19 @@ class MallController extends Controller
 
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsStat::PAGE_SIZE_DEFAULT);
+        $paginationData = GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size);
 
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
                 'shop-data' => [
-                    'total' => (int)GoodsStat::find()->where($where)->asArray()->count(),
-                    'details' => GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size)
+                    'total_sold_number' => GoodsStat::totalSoldNumber($where),
+                    'total_amount_sold' => GoodsStat::totalAmountSold($where),
+                    'total_ip_number' => GoodsStat::totalIpNumber($where),
+                    'total_viewed_number' => GoodsStat::totalViewedNumber($where),
+                    'total' => $paginationData['total'],
+                    'details' => $paginationData['details']
                 ]
             ],
         ]);
