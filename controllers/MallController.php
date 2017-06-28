@@ -99,6 +99,7 @@ class MallController extends Controller
         'supplier-icon-reset',
         'supplier-view-admin',
         'shop-data',
+        'shop-index',
     ];
 
     /**
@@ -3839,6 +3840,45 @@ class MallController extends Controller
                     'total_viewed_number' => GoodsStat::totalViewedNumber($where),
                     'total' => $paginationData['total'],
                     'details' => $paginationData['details']
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Shop index action
+     *
+     * @return string
+     */
+    public function actionShopIndex()
+    {
+        $timeType = 'today';
+
+        $user = Yii::$app->user->identity;
+        $supplierId = Supplier::find()->where(['uid' => $user->id])->one()->id;
+
+        $where = "supplier_id = {$supplierId}";
+
+        list($startTime, $endTime) = StringService::startEndDate($timeType);
+        $startTime = explode(' ', $startTime)[0];
+        $endTime = explode(' ', $endTime)[0];
+
+        if ($startTime) {
+            $startTime = str_replace( '-', '', $startTime);
+            $startTime && $where .= " and create_date >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = str_replace( '-', '', $endTime);
+            $endTime && $where .= " and create_date <= {$endTime}";
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'shop-index' => [
+                    'total_ip_number' => GoodsStat::totalIpNumber($where),
+                    'total_viewed_number' => GoodsStat::totalViewedNumber($where),
                 ]
             ],
         ]);
