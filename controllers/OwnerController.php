@@ -87,19 +87,20 @@ class OwnerController extends Controller
      */
     public function actionSeriesAndStyle()
     {
-        $stairs_details = StairsDetails::find()->asArray()->all();
-        $series = Series::findByAll();
-        $style = Style::findByAll();
-        $style_picture = StylePicture::findById($style);
-
+        $show['stairs_details'] = StairsDetails::find()->asArray()->all();
+        $show['series'] = Series::findByAll();
+        $show['style'] = Style::findByAll();
+        if (!is_null($show['style']))
+        {
+            $show['style_picture'] = StylePicture::findById($show['style']);
+        }else{
+            $show['style_picture'] = null;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'stairs_details' =>$stairs_details,
-                'series' => $series,
-                'style' => $style,
-                'style_picture' => $style_picture
+                'show' =>$show,
             ]
         ]);
     }
@@ -110,8 +111,12 @@ class OwnerController extends Controller
      */
     public function actionSearch()
     {
-        $post = \Yii::$app->request->post();
-        $string = $post ?? '花好月圆';
+        if (\Yii::$app->request->post() == null)
+        {
+            $string = '花好月圆';
+        }else{
+            $string = \Yii::$app->request->post();
+        }
         $effect = Effect::districtSearch($string);
 
         return Json::encode([
