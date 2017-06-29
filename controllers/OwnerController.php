@@ -176,16 +176,13 @@ class OwnerController extends Controller
                {
                    $weak_current_place []  = $one['place'];
                    $weak_current_points [] = $one['weak_current_points'];
-               }else{
-                   $weak_current_place []  = $one['place'];
-                   $weak_current_points [] = 0;
                }
             }
 
             $weak_current_all = array_combine($weak_current_place,$weak_current_points);
-            $sitting_room = $weak_current_all['客厅'] * $post['sitting_room'];
-            $master_bedroom = $weak_current_all['主卧'] * $post['master_bedroom'];
-            $secondary_bedroom = $weak_current_all['次卧'] * $post['secondary_bedroom'];
+            $sitting_room = $weak_current_all['客厅'] * $post['hall'];
+            $master_bedroom = $weak_current_all['主卧'] * 1;
+            $secondary_bedroom = $weak_current_all['次卧'] * $post['bedroom'] - 1;
             $weak_points = $sitting_room + $master_bedroom + $secondary_bedroom;
         }
 

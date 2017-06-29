@@ -85,19 +85,16 @@ CREATE TABLE `effect` (
 
 CREATE TABLE `labor_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `province` varchar(20) DEFAULT NULL COMMENT '省',
   `province_code` varchar(20) DEFAULT NULL COMMENT '省份编码',
-  `city` varchar(20) DEFAULT NULL COMMENT '市',
   `city_code` varchar(20) DEFAULT NULL COMMENT '市编码',
   `univalence` bigint(10) NOT NULL COMMENT '工人单价',
   `worker_kind` varchar(20) DEFAULT NULL COMMENT '工人种类',
-  `day_points` int(10) unsigned NOT NULL COMMENT '每天完成的点位',
-  `day_area` int(10) DEFAULT NULL COMMENT '每天完成面积',
-  `day_sculpt_length` int(10) unsigned NOT NULL COMMENT '造型长度',
+  `quantity` int(10) NOT NULL DEFAULT '0' COMMENT '每天完成的数量',
+  `unit` varchar(10) DEFAULT NULL COMMENT '单位',
   `rank` varchar(20) DEFAULT NULL COMMENT '工人级别',
   `worker_kind_details` varchar(20) DEFAULT NULL COMMENT '工种详情',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `decoration_list` (

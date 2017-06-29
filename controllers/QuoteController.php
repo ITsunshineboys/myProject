@@ -72,22 +72,24 @@ class QuoteController extends Controller
 //        $data = \Yii::$app->request->post();
         $data = [
         [
-               'profession'=>'电工',
-                'province'=>'510000',
-                'city'=>'510100',
-                'grade'=>'白银',
-                'univalence'=>'300',
-                'points'=>'5',
-               'worker_kind_details' => '强电'
+            'profession'=>'电工',
+            'province'=>'510000',
+            'city'=>'510100',
+            'grade'=>'白银',
+            'univalence'=>'300',
+            'points'=>'5',
+            'worker_kind_details' => '强电',
+            'unit'=>'个'
         ],
         [
-                'profession'=>'电工',
-                'province'=>'510000',
-                'city'=>'510100',
-                'grade'=>'白银',
-                'univalence'=>'300',
-                'points'=>'6',
-               'worker_kind_details' => '弱电'
+            'profession'=>'电工',
+            'province'=>'510000',
+            'city'=>'510100',
+            'grade'=>'白银',
+            'univalence'=>'300',
+            'points'=>'6',
+            'worker_kind_details' => '弱电',
+            'unit'=>'个'
         ]
         ];
         $labor_cost =  new LaborCost;
@@ -99,8 +101,9 @@ class QuoteController extends Controller
             $_labor_cost->rank = $one_data['grade'];
             $_labor_cost->worker_kind = $one_data['profession'];
             $_labor_cost->univalence = $one_data['univalence'];
-            $_labor_cost->day_points = $one_data['points'];
+            $_labor_cost->quantity = $one_data['points'];
             $_labor_cost->worker_kind_details = $one_data['worker_kind_details'];
+            $_labor_cost->unit = $one_data['unit'];
             $_labor_cost->setAttributes($one_data);
             if (!$_labor_cost->validate())
             {
@@ -121,7 +124,10 @@ class QuoteController extends Controller
         }
     }
 
-    public function actionElectricianEdit()
+    /*
+     * 电工、油漆工、木工、泥瓦工、杂工做工标准修改
+     */
+    public function actionMultitermEdit()
     {
         $code = 1000;
 //        $data = \Yii::$app->request->post();
@@ -146,7 +152,7 @@ class QuoteController extends Controller
             $_labor_cost = clone $labor_cost;
             $a = $_labor_cost->findOne($one_data['id']);
             $a->univalence = $one_data['univalence'];
-            $a->day_points = $one_data['points'];
+            $a->quantity = $one_data['points'];
             $a->worker_kind_details = $one_data['worker_kind_details'];
             $a->setAttributes($one_data);
             if (!$a->validate())
@@ -166,6 +172,42 @@ class QuoteController extends Controller
                 ]);
             }
         }
-
     }
+
+    /**
+     * 水路和防水做工标准修改
+     * @return string
+     */
+    public function actionMonomialEdit()
+    {
+        $code = 1000;
+//        $data = \Yii::$app->request->post();
+        $data = [
+                'id'=>56,
+                'univalence'=>'400',
+                'points'=>'6',
+        ];
+        $labor_cost = new LaborCost();
+        $_labor_cost = $labor_cost->findOne($data['id']);
+        $_labor_cost->univalence = $data['univalence'];
+        $_labor_cost->quantity = $data['points'];
+            if (!$_labor_cost->validate())
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$_labor_cost->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+    }
+
+
+
 }

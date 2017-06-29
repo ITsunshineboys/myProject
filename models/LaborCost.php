@@ -11,6 +11,18 @@ use yii\db\ActiveRecord;
 
 class LaborCost extends ActiveRecord
 {
+    const FIELDS_ADMIN =[
+        'id',
+        'province_code',
+        'city_code',
+        'univalence',
+        'worker_kind',
+        'quantity',
+        'unit',
+        'rank',
+        'worker_kind_details'
+    ];
+
 
     /**
      * @return string 返回该AR类关联的数据表名
