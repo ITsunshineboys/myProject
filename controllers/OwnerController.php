@@ -177,8 +177,8 @@ class OwnerController extends Controller
                    $weak_current_place []  = $one['place'];
                    $weak_current_points [] = $one['weak_current_points'];
                }else{
-                   $weak_current_place []  = null;
-                   $weak_current_points [] = null;
+                   $weak_current_place []  = $one['place'];
+                   $weak_current_points [] = 0;
                }
             }
 
