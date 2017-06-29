@@ -64,7 +64,7 @@ class GoodsAttr extends ActiveRecord
 
             if (StringService::checkRepeatedElement($row)
                 || StringService::checkEmptyElement($row)
-                || !StringService::checkIntList($row)
+//                || !StringService::checkIntList($row)
             ) {
                 return false;
             }
