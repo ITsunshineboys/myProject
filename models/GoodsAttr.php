@@ -26,7 +26,8 @@ class GoodsAttr extends ActiveRecord
         'L',
         'M',
         'M^2',
-        'Kg'
+        'Kg',
+        'MM'
     ];
 
     const ADDITION_TYPES = [
