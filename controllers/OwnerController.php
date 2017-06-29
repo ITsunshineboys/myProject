@@ -138,10 +138,8 @@ class OwnerController extends Controller
 //        $post = Json::decode($receive);
         $post = [
 //            'effect_id' => 1,
-            'master_bedroom' => 1,
-            'secondary_bedroom' => 1,
-            'sitting_room' => 1,
-            'dining_room' => 1,
+            'bedroom' => 1,
+            'hall' => 1,
             'window' => 2,
             'high' => 2.8,
             'area' => 62,
@@ -150,7 +148,8 @@ class OwnerController extends Controller
             'style' => 1,
             'series' => 1,
             'province' => 510000,
-            'city' => 510100
+            'city' => 510100,
+            'stairs_details_id'=> 1,
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
@@ -177,8 +176,12 @@ class OwnerController extends Controller
                {
                    $weak_current_place []  = $one['place'];
                    $weak_current_points [] = $one['weak_current_points'];
+               }else{
+                   $weak_current_place []  = null;
+                   $weak_current_points [] = null;
                }
             }
+
             $weak_current_all = array_combine($weak_current_place,$weak_current_points);
             $sitting_room = $weak_current_all['客厅'] * $post['sitting_room'];
             $master_bedroom = $weak_current_all['主卧'] * $post['master_bedroom'];
