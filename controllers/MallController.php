@@ -2441,7 +2441,7 @@ class MallController extends Controller
 
         $attrCnt = count($names);
         if ($attrCnt > 0) {
-            if (!($attrCnt == count($values) && $attrCnt == count($units) && $attrCnt == count($additionTypes))) {
+            if (!($attrCnt == count($units) && $attrCnt == count($additionTypes))) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
