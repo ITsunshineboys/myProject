@@ -10,6 +10,14 @@ use yii\db\ActiveRecord;
 
 class EngineeringStandardCraft  extends ActiveRecord
 {
+    const FIELDS_ADMIN =[
+        'id',
+        'district_code',
+        'project',
+        'material',
+        'project_details',
+        'units',
+    ];
     /**
      * @return string 返回该AR类关联的数据表名
      */

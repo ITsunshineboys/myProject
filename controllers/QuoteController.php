@@ -6,6 +6,7 @@
  * Time: 上午 11:48
  */
 namespace app\controllers;
+use app\models\EngineeringStandardCraft;
 use app\models\LaborCost;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
@@ -137,13 +138,11 @@ class QuoteController extends Controller
                 'profession'=>'电工',
                 'univalence'=>'400',
                 'points'=>'6',
-                'worker_kind_details' => '强电'
             ],
             [
                 'id'=>55,
                 'univalence'=>'250',
                 'points'=>'6',
-                'worker_kind_details' => '弱电'
             ]
         ];
         $labor_cost = new LaborCost();
@@ -153,7 +152,6 @@ class QuoteController extends Controller
             $a = $_labor_cost->findOne($one_data['id']);
             $a->univalence = $one_data['univalence'];
             $a->quantity = $one_data['points'];
-            $a->worker_kind_details = $one_data['worker_kind_details'];
             $a->setAttributes($one_data);
             if (!$a->validate())
             {
@@ -206,6 +204,55 @@ class QuoteController extends Controller
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
+    }
+
+    /**
+     * 工程标准工艺标准修改
+     * @return string
+     */
+    public function actionCraftEdit()
+    {
+        $code = 1000;
+//        $data = \Yii::$app->request->post();
+        $data = [
+            [
+                'id'=>1,
+                'material'=>'11'
+            ],
+            [
+            'id'=>2,
+            'material'=>'15'
+             ]
+        ];
+        $engineering_standard_craft = new EngineeringStandardCraft();
+        foreach ($data as $one_data)
+        {
+            $craft = clone $engineering_standard_craft;
+            $_craft = $craft->findOne($one_data['id']);
+            $_craft->material = $one_data['material'];
+            $_craft->setAttributes($one_data);
+            if (!$_craft->validate())
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$_craft->save())
+            {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+    }
+
+    public function actionNewMaterialAdd()
+    {
+
     }
 
 
