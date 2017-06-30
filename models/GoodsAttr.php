@@ -55,16 +55,20 @@ class GoodsAttr extends ActiveRecord
      */
     public static function validateValues($values, $additionTypes)
     {
-        foreach ($values as $i => $row) {
-            if ($additionTypes[$i] == self::ADDITION_TYPE_NORMAL) {
+        foreach ($additionTypes as $i => $additionType) {
+            if ($additionType == self::ADDITION_TYPE_NORMAL) {
                 continue;
             }
 
-            $row = explode(',', $row);
+            if (count($values) != count($additionTypes)) {
+                return false;
+            }
 
-            if (StringService::checkRepeatedElement($row)
-                || StringService::checkEmptyElement($row)
-//                || !StringService::checkIntList($row)
+            $value = explode(',', $values[$i]);
+
+            if (StringService::checkRepeatedElement($value)
+                || StringService::checkEmptyElement($value)
+//                || !StringService::checkIntList($value)
             ) {
                 return false;
             }
