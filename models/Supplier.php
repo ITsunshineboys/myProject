@@ -86,15 +86,14 @@ class Supplier extends ActiveRecord
     public function rules()
     {
         return [
-            [['type_org', 'category_id', 'type_shop', 'nickname', 'name', 'licence', 'licence_image', 'legal_person', 'identity_card_no', 'identity_card_front_image', 'identity_card_back_image'], 'required'],
+            [['type_org', 'category_id', 'type_shop', 'nickname', 'name', 'licence', 'licence_image'], 'required'],
             [['nickname', 'name', 'licence'], 'unique', 'on' => self::SCENARIO_ADD],
             ['category_id', 'validateCategoryId'],
             ['type_org', 'in', 'range' => array_keys(self::TYPE_ORG)],
             ['type_shop', 'in', 'range' => array_keys(self::TYPE_SHOP)],
-            ['identity_card_no', 'validateIdentityCardNo'],
             ['status', 'in', 'range' => [self::STATUS_ONLINE, self::STATUS_OFFLINE]],
             [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit'], 'number', 'integerOnly' => true],
-            [['nickname', 'name', 'licence', 'licence_image', 'legal_person', 'identity_card_no', 'identity_card_front_image', 'identity_card_back_image', 'approve_reason', 'reject_reason'], 'string'],
+            [['nickname', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason'], 'string'],
         ];
     }
 
@@ -120,22 +119,6 @@ class Supplier extends ActiveRecord
 
         $this->addError($attribute);
         return false;
-    }
-
-    /**
-     * Validates identity card no
-     *
-     * @param string $attribute licence to validate
-     * @return bool
-     */
-    public function validateIdentityCardNo($attribute)
-    {
-        if (!StringService::checkIdentityCardNo($this->$attribute)) {
-            $this->addError($attribute);
-            return false;
-        }
-
-        return true;
     }
 
     /**
