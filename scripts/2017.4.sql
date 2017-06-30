@@ -29,6 +29,9 @@ CREATE TABLE `user` (
   `create_time` int DEFAULT 0,
   `login_time` int DEFAULT 0,
   `login_role_id` int DEFAULT 0,
+  `legal_person` varchar(50) not null DEFAULT '' comment '法人',
+  `identity_card_front_image` varchar(255) not null DEFAULT '' comment '身份证正面图片',
+  `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

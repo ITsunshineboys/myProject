@@ -203,6 +203,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['mobile', 'unique'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['identity_no', 'validateIdentityNo'],
         ];
     }
 
@@ -239,6 +240,22 @@ class User extends ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+    }
+
+    /**
+     * Validates identity card no
+     *
+     * @param string $attribute licence to validate
+     * @return bool
+     */
+    public function validateIdentityNo($attribute)
+    {
+        if (!StringService::checkIdentityCardNo($this->$attribute)) {
+            $this->addError($attribute);
+            return false;
+        }
+
+        return true;
     }
 
     /**
