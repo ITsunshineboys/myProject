@@ -396,7 +396,7 @@ class GoodsCategory extends ActiveRecord
         $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
         $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
         if ($category->level == self::LEVEL2) {
-            return $db->createCommand()->queryColumn();
+            return $db->createCommand($sql)->queryColumn();
         } elseif ($category->level == self::LEVEL1) {
             $pids = $db->createCommand($sql)->queryColumn();
             $ret = [];
