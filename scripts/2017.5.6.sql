@@ -37,7 +37,7 @@ CREATE TABLE `style` (
   `category_id` int(11) DEFAULT NULL default 0 COMMENT '分类id',
   `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `series` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -51,7 +51,7 @@ CREATE TABLE `series` (
   `category_id` int(11) DEFAULT NULL default 0 COMMENT '分类id',
   `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `effect_ picture` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
