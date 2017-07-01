@@ -28,6 +28,7 @@ use app\models\Style;
 use app\models\StylePicture;
 use app\models\WaterproofReconstruction;
 use app\models\WaterwayReconstruction;
+use app\models\User;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
@@ -43,6 +44,7 @@ class OwnerController extends Controller
      */
     const ACCESS_LOGGED_IN_USER = [
         'certification',
+        'view-identity',
     ];
 
     /**
@@ -1533,6 +1535,24 @@ class OwnerController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * View owner action
+     *
+     * @return string
+     */
+    public function actionViewIdentity()
+    {
+        $user = Yii::$app->user->identity;
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'owner-view' => $user->view(User::FIELDS_VIEW_IDENTITY),
+            ],
         ]);
     }
 }

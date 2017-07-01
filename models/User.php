@@ -16,6 +16,12 @@ class User extends ActiveRecord implements IdentityInterface
     const PASSWORD_MAX_LEN = 25;
     const PREFIX_DEFAULT_MOBILE = '18';
     const DEFAULT_PWD = '888888';
+    const FIELDS_VIEW_IDENTITY = [
+        'legal_person',
+        'identity_no',
+        'identity_card_front_image',
+        'identity_card_back_image',
+    ];
 
     /**
      * @inheritdoc
@@ -250,6 +256,22 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateIdentityNo()
     {
         return StringService::checkIdentityCardNo($this->identity_no);
+    }
+
+    /**
+     * Get view data
+     *
+     * @return array
+     */
+    public function view($fields)
+    {
+        $viewData = [];
+
+        foreach ($fields as $field) {
+            $viewData[$field] = $this->$field;
+        }
+
+        return $viewData;
     }
 
     /**
