@@ -1517,7 +1517,7 @@ class OwnerController extends Controller
         $user->identity_card_front_image = $identityCardFrontImage;
         $user->identity_card_back_image = $identityCardBackImage;
 
-        if (!$user->validateIdentityNo()) {
+        if (!$user->validateIdentityNo() || !$user->validateLegalPerson()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],

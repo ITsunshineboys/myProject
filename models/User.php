@@ -22,6 +22,9 @@ class User extends ActiveRecord implements IdentityInterface
         'identity_card_front_image',
         'identity_card_back_image',
     ];
+    const LEN_MAX_FIELDS = [
+        'legal_person' => 15,
+    ];
 
     /**
      * @inheritdoc
@@ -232,7 +235,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['mobile', 'unique'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
-            [['identity_no', 'legal_person', 'identity_card_front_image', 'identity_card_back_image'], 'string']
+            [['identity_no', 'legal_person', 'identity_card_front_image', 'identity_card_back_image'], 'string'],
+            ['legal_person', 'string', 'length' => [1, 15]],
         ];
     }
 
@@ -279,6 +283,17 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateIdentityNo()
     {
         return StringService::checkIdentityCardNo($this->identity_no);
+    }
+
+    /**
+     * Validates legal person
+     *
+     * @return bool
+     */
+    public function validateLegalPerson()
+    {
+        $attr = 'legal_person';
+        return mb_strlen($this->$attr) <= self::LEN_MAX_FIELDS[$attr];
     }
 
     /**
