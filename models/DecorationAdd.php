@@ -11,6 +11,20 @@ use yii\db\ActiveRecord;
 
 class DecorationAdd extends ActiveRecord
 {
+
+    const FIELDS_ADMIN =
+        [
+            'id',
+            'project',
+            'min_area',
+            'max_area',
+            'material',
+            'quantity',
+            'sku',
+            'series_id',
+            'style_id',
+            'district_code'
+        ];
     /**
      * @return string 返回该AR类关联的数据表名
      */

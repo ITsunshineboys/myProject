@@ -1,16 +1,15 @@
 CREATE TABLE `decoration_add` (
   `id` int(11) NOT NULL,
-  `series_id` int(11) DEFAULT NULL COMMENT '系列',
-  `style_id` int(11) DEFAULT NULL COMMENT '风格',
+  `series_id` int(11) DEFAULT '0' COMMENT '系列',
+  `style_id` int(11) DEFAULT '0' COMMENT '风格',
   `project` varchar(50) DEFAULT NULL COMMENT '项目名称',
-  `min_area` int(10) unsigned zerofill DEFAULT '0000000000' COMMENT '最小面积',
-  `max_area` int(10) unsigned zerofill DEFAULT '0000000000' COMMENT '最大面积',
+  `min_area` int(10) DEFAULT '0' COMMENT '最小面积',
+  `max_area` int(10) DEFAULT '0' COMMENT '最大面积',
   `material` varchar(20) DEFAULT NULL COMMENT '材料',
-  `price` bigint(20) DEFAULT NULL COMMENT '价格',
+  `quantity` int(20) DEFAULT '0' COMMENT '数量',
   `sku` int(10) DEFAULT NULL COMMENT '商品编码',
   `supplier_price` bigint(20) DEFAULT NULL COMMENT '平台价格',
   `district_code` int(10) DEFAULT NULL COMMENT '城市编码',
-  `district` varchar(20) DEFAULT NULL COMMENT '城市',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
