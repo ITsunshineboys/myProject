@@ -198,6 +198,29 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Check role and get user identity
+     *
+     * @param int $mobile mobile
+     * @return ActiveRecord
+     */
+    public static function checkRoleAndGetIdentityByMobile($mobile)
+    {
+        $user = self::find()->where(['mobile' => $mobile])->one();
+
+        if (!$user) {
+            $code = 1010;
+            return $code;
+        } else {
+            if (UserRole::find()->where(['user_id' => $user->id])->count() >= Yii::$app->params['maxRolesNumber']) {
+                $code = 1011;
+                return $code;
+            }
+        }
+
+        return $user;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

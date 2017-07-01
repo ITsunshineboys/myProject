@@ -97,6 +97,7 @@ class MallController extends Controller
         'goods-inventory-reset',
 //        'goods-images',
         'supplier-add',
+        'check-role-get-identity',
         'supplier-icon-reset',
         'supplier-view-admin',
         'shop-data',
@@ -3527,7 +3528,7 @@ class MallController extends Controller
     }
 
     /**
-     * Add supplier action
+     * Add supplier action(lhzz admin)
      *
      * @return string
      */
@@ -3543,23 +3544,15 @@ class MallController extends Controller
             ]);
         }
 
-        $user = User::find()->where(['mobile' => $mobile])->one();
-
-        if (!$user) {
-            $code = 1010;
+        $checkRoleRes = User::checkRoleAndGetIdentityByMobile($mobile);
+        if (is_int($checkRoleRes)) {
             return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
+                'code' => $checkRoleRes,
+                'msg' => Yii::$app->params['errorCodes'][$checkRoleRes],
             ]);
-        } else {
-            if (UserRole::find()->where(['user_id' => $user->id])->count() >= Yii::$app->params['maxRolesNumber']) {
-                $code = 1011;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
         }
+
+        $user = $checkRoleRes;
 
         $supplier = new Supplier;
         $supplier->attributes = Yii::$app->request->post();
@@ -3617,6 +3610,40 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Check role and get identity action(lhzz admin)
+     *
+     * @return string
+     */
+    public function actionCheckRoleGetIdentity()
+    {
+        $code = 1000;
+
+        $mobile = (int)Yii::$app->request->get('mobile', 0);
+        if (!$mobile) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $checkRoleRes = User::checkRoleAndGetIdentityByMobile($mobile);
+        if (is_int($checkRoleRes)) {
+            return Json::encode([
+                'code' => $checkRoleRes,
+                'msg' => Yii::$app->params['errorCodes'][$checkRoleRes],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'identity' => $checkRoleRes->view(User::FIELDS_VIEW_IDENTITY),
+            ],
         ]);
     }
 
@@ -3820,11 +3847,11 @@ class MallController extends Controller
         }
 
         if ($startTime) {
-            $startTime = str_replace( '-', '', $startTime);
+            $startTime = str_replace('-', '', $startTime);
             $startTime && $where .= " and create_date >= {$startTime}";
         }
         if ($endTime) {
-            $endTime = str_replace( '-', '', $endTime);
+            $endTime = str_replace('-', '', $endTime);
             $endTime && $where .= " and create_date <= {$endTime}";
         }
 
@@ -3873,11 +3900,11 @@ class MallController extends Controller
         $endTime = explode(' ', $endTime)[0];
 
         if ($startTime) {
-            $startTime = str_replace( '-', '', $startTime);
+            $startTime = str_replace('-', '', $startTime);
             $startTime && $where .= " and create_date >= {$startTime}";
         }
         if ($endTime) {
-            $endTime = str_replace( '-', '', $endTime);
+            $endTime = str_replace('-', '', $endTime);
             $endTime && $where .= " and create_date <= {$endTime}";
         }
 
@@ -3918,11 +3945,11 @@ class MallController extends Controller
         $endTime = explode(' ', $endTime)[0];
 
         if ($startTime) {
-            $startTime = str_replace( '-', '', $startTime);
+            $startTime = str_replace('-', '', $startTime);
             $startTime && $where .= " and create_date >= {$startTime}";
         }
         if ($endTime) {
-            $endTime = str_replace( '-', '', $endTime);
+            $endTime = str_replace('-', '', $endTime);
             $endTime && $where .= " and create_date <= {$endTime}";
         }
 
