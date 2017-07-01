@@ -372,6 +372,25 @@ class Goods extends ActiveRecord
         }
     }
 
+    public static function newMaterialAdd($level = '', $title = '', $city = 510100)
+    {
+        if (empty($level) && empty($title)) {
+            echo '请正确输入值';
+            exit;
+        } else {
+            $db = Yii::$app->db;
+            $sql = "SELECT goods.*,goods_brand. NAME,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = " . $city . "  AND goods_category.`level` = " . $level . "  AND goods_category.title LIKE '" . $title . "'";
+            $a = $db->createCommand($sql)->queryAll();
+        }
+        if (!empty($a)) {
+            foreach ($a as $v => $k) {
+                $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                $max = array_search(max($c), $c);
+            }
+            return $a[$max];
+        }
+    }
+
     public static function findByIdAll($level = '', $title = '', $series = '1', $style = '2')
     {
         if (empty($level) && empty($title)) {

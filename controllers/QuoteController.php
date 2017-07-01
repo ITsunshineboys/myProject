@@ -7,6 +7,7 @@
  */
 namespace app\controllers;
 use app\models\EngineeringStandardCraft;
+use app\models\Goods;
 use app\models\LaborCost;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
@@ -252,7 +253,11 @@ class QuoteController extends Controller
 
     public function actionNewMaterialAdd()
     {
-
+//        $post = \Yii::$app->request->post();
+//        $data = Json::encode($post);
+        $data = '河沙';
+        $goods = Goods::newMaterialAdd(3,$data);
+        var_dump($goods);exit;
     }
 
 
