@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/rem.css">
+    <link rel="stylesheet" href="css/all.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/inteligent_nodata.css"/>
+</head>
+<body>
+<header>
+    <div>
+        <span class="in_span"><</span>
+        <span class="pic_span">智能报价</span>
+        <img src="images/dingw.png" alt=""/>
+        <span class="postion_span">成都</span>
+    </div>
+</header>
+
+<section>
+    <!--小区信息-->
+    <div class="quarters_small">
+        <h1>小区信息</h1>
+        <span class="choose_quarter">小区选择</span>
+        <input type="text" placeholder="请输入小区名字" /><br/>
+        <p class="quarters_adress">小区地址</p>
+        <textarea class="text_all" rows="5" cols="43">例：金牛区沙西线66号</textarea>
+    </div>
+
+    <!--房屋信息-->
+    <div class="house_area">
+        <span class="house_span">房屋面积</span>
+        <input type="text" placeholder="180"/>
+        <span class="p">m<sup>2</sup></span>
+    </div>
+    <!--户型-->
+    <div class="apartment_layout">
+        <span class="apartment_span">户型</span>
+        <div>
+            <ul class="apartment_ul">
+                <li>
+                    <input type="text" value="3"/>
+                    <span>室</span>
+                    <button class="btn_left">-</button>
+                    <button class="btn_right">+</button>
+                </li>
+                <li>
+                    <input type="text" value="2"/>
+                    <span>厅</span>
+                    <button class="btn_left">-</button>
+                    <button class="btn_right">+</button>
+                </li>
+                <li>
+                    <input type="text" value="2"/>
+                    <span>卫</span>
+                    <button class="btn_left">-</button>
+                    <button class="btn_right">+</button>
+                </li>
+                <li>
+                    <input type="text" value="2"/>
+                    <span>厨</span>
+                    <button class="btn_left">-</button>
+                    <button class="btn_right">+</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--层高-->
+    <div class="storey">
+        <h1>层高</h1>
+        <ul class="storey_ul">
+            <li >
+                <input type="checkbox"/>
+                <span>2.8m<sup>2</sup></span>
+            </li>
+            <li >
+                <input type="checkbox"/>
+                <span>3m<sup>2</sup></span>
+            </li>
+            <li >
+                <input type="checkbox"/>
+                <span>3m<sup>2</sup></span>
+            </li>
+            <li >
+                <input type="checkbox"/>
+                <span>>3m<sup>2</sup></span>
+                <span>(跃成商铺等)</span>
+            </li>
+        </ul>
+    </div>
+
+    <!--飘窗-->
+    <div class="bay_window">
+        <span class="bay_span">飘窗</span>
+        <input type="text"placeholder="20"/>
+        <spann class="bay_square">m<sup>2</sup></spann>
+    </div>
+
+    <!--楼梯有无-->
+    <div class="choose_stairs">
+        <span class="choose_span">楼梯选择</span>
+        <input type="checkbox"/><span class="have">有</span>
+        <input type="checkbox"/><span class="no">无</span>
+    </div>
+
+    <!--结构-->
+    <div class="structure">
+        <ul>
+            <li>
+                <input type="checkbox"/>
+                <span>实木构造</span>
+            </li>
+            <li>
+                <input type="checkbox"/>
+                <span>实木构造</span>
+            </li> <li>
+                <input type="checkbox"/>
+                <span>实木构造</span>
+            </li>
+            <li>
+                <input type="checkbox"/>
+                <span>实木构造</span>
+            </li>
+            <li>
+                <input type="checkbox"/>
+                <span>实木构造</span>
+            </li>
+        </ul>
+    </div>
+
+    <!--系类选择-->
+    <div class="series">
+        <h1>系列选择</h1>
+        <ul>
+            <li>
+                <input type="checkbox"/>
+                <span>期间</span>
+            </li>
+            <li>
+                <input type="checkbox"/>
+                <span>期间</span>
+            </li>
+            <li>
+                <input type="checkbox"/>
+                <span>期间</span>
+            </li>
+        </ul>
+    </div>
+
+    <!--适合人群-->
+    <div class="fit">
+        <h2>适合人群</h2>
+        <p>适合4-8年的收入，有固定的资本。富二代，白富美，官二代等美女明星</p>
+    </div>
+
+    <!--风格选择-->
+    <div  class="choose_style">
+        <h1>风格选择</h1>
+        <ul>
+            <li>
+                <button>现代简约</button>
+            </li><li>
+                <button>现代简约</button>
+            </li><li>
+                <button>现代简约</button>
+            </li>
+        </ul>
+    </div>
+
+    <!--轮播图-->
+    <div class="carousel">
+
+    </div>
+
+    <!--便签-->
+   <div class="note">
+       <ul>
+           <li>
+               <button>外形简介</button>
+           </li>
+           <li>
+               <button>外形简介</button>
+           </li>
+           <li>
+               <button>外形简介</button>
+           </li>
+           <li>
+               <button>外形简介</button>
+           </li>
+           <li>
+               <button>外形简介</button>
+           </li>
+       </ul>
+   </div>
+
+    <!--按钮-->
+    <div class="btn_vr">
+      <button >生成3D/VR图和材料</button>
+    </div>
+
+    <div style="height: 18rem"></div>
+</section>
+<script src="../js/jquery.js"></script>
+<script src="../js/angular.min.js"></script>
+<script src="js/rem.js"></script>
+<script src="js/global.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -6,8 +6,7 @@
     var b=1;
 $(".only_add").on("click",function () {
     a++;
-    alert(a);
-    //for(var i=0; i<a;i++){
+    //alert(a);
     var newNode=$("<li>\
     <img src='images/red.png' alt=''/>\
     <button id='btn_delete' onclick='deletePar(this)'>-</button>\
@@ -21,32 +20,82 @@ $(".only_add").on("click",function () {
     </select>\
     </li>");
     b++;
-
 //添加节点
     $(".input_ul").append(newNode);
 });
 
 //点击多项添加
 $('.more_add').on("click",function () {
+    a++;
     var moreNode=$("<li>\
     <img src='images/red.png' alt=''/>\
-    <button id='btn_delete' onclick='deletePar()'>-</button>\
-    <input type='text' placeholder='1-6个字' class='input_val'/>\
-    <input type='text' placeholder='多属性以 , 隔开'/>\
-    <select>\
+    <button id='btn_delete' onclick='deletePar(this)'>-</button>\
+    <input type='text' placeholder='1-6个字' class='input_val_more' id='input"+a+"'/>\
+    <input type='text' class='input_more' placeholder='多属性以 , 隔开' id='input"+a+"' />\
+    <select class='sel_more'>\
     <option value='1'>无</option>\
     <option value='2'>L</option>\
     <option value='3'>m</option>\
     <option value='4'>kg</option>\
     </select>\
     </li>");
+    b++;
     $('.input_ul').append(moreNode);
 });
 
 //点击删除按钮  删除节点
 function deletePar (obj) {
-    var a=$(obj).parent().remove();
+    $(obj).parent().remove();
 }
+
+//点击保存时获取所有input 的值.并且发起AJAX 请求传值到后台
+var selete,text,more,selete_more, text_more;
+function add_data () {
+    //普通添加获取input值
+    $('.input_val').each(function (index,item) {
+        text=($(item).val());
+        console.log(text);
+    });
+    //多项添加获取input 的值
+    $('.input_val_more').each(function (index,item) {
+        text_more=($(item).val());
+        console.log(text_more);
+    });
+    //多项添加 隔开内容获取
+    $('.input_more').each(function (index,item) {
+        more=($(item).val());
+    //var c=$('input_val')
+        console.log(more);
+    });
+
+    //普通添加获取下拉框值
+    $('.sel option:selected').each(function (index,item) {
+        selete=($(item).text());
+        console.log(selete);
+    });
+    //多项添加获取下拉框的值
+    $('.sel_more option:selected').each(function (index,item) {
+        selete_more=($(item).text());
+        console.log(selete_more);
+    });
+
+    $.ajax({
+        method:"post",
+        url:url+"",
+        dataType:"json",
+        data:{
+            arrayInput:text,
+            arraySelete:selete
+        },
+        success:function (data){
+            alert("11111");
+        },
+        error:function(data){
+            alert(2222);
+        }
+    })
+
+};
 
 //获取数据传给后台
 //var app=angular.module('app',[]);
@@ -57,51 +106,3 @@ function deletePar (obj) {
 //    })
 //});
 
-//点击保存时获取所有input 的值
-var selete;
-var text1;
-function add_data () {
-    /*for(var i=1; i<b; i++){
-     console.log($("#input"+i));
-     }*/
-    //获取inputd 值
-    $('.input_val').each(function (index,item) {
-        text1=($(item).val());
-        console.log(text1);
-    });
-    //获取下拉框值
-    $('.sel option:selected').each(function (index,item) {
-        selete=($(item).text());
-        console.log(selete)
-    });
-
-
-}
-
-//$(".add_data").on("click",function () {
-//    console.log($(".input_val").val());
-//});
-//$(".input_val").focus(function (){
-//    //var a=$(".input_val").val();
-//    //var b=$(".input_string").val();
-//    alert(1111);
-//    //console.log(b)
-//});
-//$(function () {
-//    console.log(a)
-//    console.log(b)
-//    $.ajax({
-//        method:"post",
-//        url:url+"",
-//        dataType:"json",
-//        data:{
-//
-//        },
-//        success:function (data){
-//            alert("11111");
-//        },
-//        error:function(data){
-//            alert(2222);
-//        }
-//    })
-//});

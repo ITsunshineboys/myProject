@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/nav_menu.css"/>
+    <link rel="stylesheet" href="css/add_newthing.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+</head>
+<body>
+<!--导航栏开始-->
+<div class="nav_box ">
+    <div class="logo">
+        <img src="images/logo.png" alt=""/>
+    </div>
+    <dl >
+        <dt >
+            <a href="">
+                <i class="font2 fl">&#xe600;</i>店铺首页
+            </a>
+        </dt>
+    </dl>
+    <dl >
+        <dt >
+            <a href="">
+                <i class="font2 fl">&#xe600;</i>店铺管理
+            </a>
+        </dt>
+    </dl>
+    <dl >
+        <dt >
+            <a href="">
+                <i class="font2 fl">&#xe600;</i>商品管理
+            </a>
+        </dt>
+    </dl>
+    <dl >
+        <dt >
+            <a href="">
+                <i class="font2 fl">&#xe600;</i>订单管理
+            </a>
+        </dt>
+    </dl>
+    <dl >
+        <dt >
+            <a href="">
+                <i class="font2 fl">&#xe600;</i>店铺数据
+            </a>
+        </dt>
+    </dl>
+    <dl >
+        <dt >
+            <a href="">
+                <i class="font2 fl">&#xe600;</i>店铺装修
+            </a>
+        </dt>
+    </dl>
+    <dl >
+        <dt >
+            <a href="brand_goods.html">
+                <i class="font2 fl">&#xe600;</i>品牌管理
+            </a>
+        </dt>
+    </dl>
+    <dl class="dl_on">
+        <dt class="on">
+            <a href=""  >
+                <i class="font2 fl">&#xe600;</i>
+                分类管理
+            </a>
+        </dt>
+    </dl>
+    <dl >
+        <dt >
+            <a href="">
+                <i class="font2 fl">&#xe734;</i>钱包
+            </a>
+        </dt>
+    </dl>
+</div>
+<!--导航栏结束-->
+<section class="my_container">
+    <!--左右布局的 右部分   头部-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-8 " id="div_img">
+                <img src="images/shop.png" alt=""/>
+                <span class="shop_span">商城管理 ></span>
+                <span style="color: #C2C2C2">添加新商品 </span>
+            </div>
+            <div class="col-md-4 col-sm-4 col-md-push-1 div_size">
+                <img src="images/news.png" alt="" class="img_new"/>
+                <span>站内信</span>
+                <span>|</span>
+                <span>个人面板</span>
+                <img src="images/center.png" alt="" class="img_logo"/>
+            </div>
+        </div>
+    </div>
+    <!--横线-->
+    <div style="width:100%;height: 1px;background: #c2c2c2"></div>
+
+    <!--主内容-->
+    <div class="classify_div">
+      <span>商品分类</span>
+      <span>主材料-地面材料-木地板</span>
+    </div>
+    <div class="comment_show">
+        <ul class="fill_in ">
+            <li>
+                <img src="images/red.png" alt=""/>
+                <sapn>商品名称</sapn>
+                <input type="text" placeholder="1-6个字符，不含特殊字符"/>
+            </li>
+            <li>
+                <img src="images/red.png" alt=""/>
+                <sapn>商品特色</sapn>
+                <input type="text" placeholder="1-6个字符，不含特殊字符"/>
+                <span style="color: #C2C2C2">*例:家用环保，复合，耐磨</span>
+            </li>
+            <li>
+                <img src="images/red.png" alt=""/>
+                <sapn>品牌选择</sapn>
+                <select>
+                    <option value="1">深大</option>
+                    <option value="2">23</option>
+                    <option value="3">55</option>
+                </select>
+            </li>
+            <li>
+                <img src="images/red.png" alt=""/>
+                <sapn>系类选择</sapn>
+                <select>
+                    <option value="1">深大</option>
+                    <option value="2">23</option>
+                    <option value="3">55</option>
+                </select>
+            </li>
+            <li>
+                <img src="images/red.png" alt=""/>
+                <sapn>风格选择</sapn>
+                <select>
+                    <option value="1">深大</option>
+                    <option value="2">23</option>
+                    <option value="3">55</option>
+                </select>
+            </li>
+        </ul>
+        <div class="attr_display">
+            <sapn class="attr_span">属性设置</sapn>
+            <ul class="attr_display_ul">
+                <li>
+                    <button class="add_btn">+</button>
+                    <span>属性名称</span>
+                    <span>属性值</span>
+                    <span class="mar_left">单位</span>
+                </li>
+            </ul>
+            <ul class="attr_data">
+                <!--<li>-->
+                    <!--<img src="images/red.png" alt=""/>-->
+                    <!--<button>-</button>-->
+                    <!--<span>长</span>-->
+                    <!--<input type="text"/>-->
+                    <!--<span>m</span>-->
+                <!--</li>-->
+            </ul>
+        </div>
+
+    </div>
+
+    <!--上传图片-->
+    <div class="upload_pic">
+        <span>上传图片</span>
+        <img src="images/dd.png" alt=""/><br/>
+        <span style="margin-left: 160px;color: #C2C2C2">图片大小750*750，支持jpg,png</span>
+    </div>
+    <div class="upload_pic_add">
+        <span>上传图片</span>
+        <img src="images/add.png" alt=""/><br/>
+        <span style="margin-left: 180px;color: #C2C2C2">图片大小750*750，支持jpg,png</span>
+    </div>
+
+    <!--价格库存-->
+    <div class="pic_add">
+        <span class="span_add">价格/库存</span>
+        <ul class="div_li">
+            <li>供货价格</li>
+            <li>平台价格</li>
+            <li>市场价格</li>
+            <li>库存</li>
+        </ul>
+        <div style="height: 1px ;width: 450px;border: 1px solid #C2C2C2;margin-left: 180px"></div>
+        <div>
+            <input type="text" placeholder="$30.00"/>
+            <input type="text" placeholder="$30.00"/>
+            <input type="text" placeholder="$30.00"/>
+            <input type="text" placeholder="$30.00"/>
+        </div>
+
+
+    </div>
+
+    <!--售后-->
+    <div class="service_div">
+        <span class="span_service">售后</span>
+        <div>
+            <input type="checkbox"/> <span>上门维修</span><br/>
+            <input type="checkbox"/> <span>上门退货</span><br/>
+            <input type="checkbox"/> <span>上门换货</span><br/>
+            <input type="checkbox"/> <span>退货</span><br/>
+            <input type="checkbox"/> <span>换货</span><br/>
+        </div>
+
+    </div>
+
+    <!--保障-->
+    <div class="guarantee_div">
+        <span class="guarantee_span">保障</span>
+        <div>
+            <input type="checkbox"/><span class="span_f">提供发票</span><br/>
+            <input type="checkbox"/><span class="span_a">上门安装</span>
+        </div>
+
+    </div>
+
+    <!--详细编辑-->
+  <div class="edit_div">
+      <span>详细描述</span>
+      <div>
+
+      </div>
+  </div>
+
+    <!--按钮-->
+    <div class="preservation_btn">
+        <button>保存</button>
+        <button>返回</button>
+    </div>
+</section>
+<script src="../../js/jquery-3.1.1.js"></script>
+<script src="../../js/angular.min.js"></script>
+<script src="js/global.js"></script>
+<script src="js/add_newthing.js"></script>
+</body>
+</html>

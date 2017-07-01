@@ -1,0 +1,273 @@
+header{
+    width: auto;
+    height: 4rem;
+    border-bottom: 1px solid #C2C2C2;
+}
+header div{
+    line-height: 4rem;
+}
+header div span{
+    font-size: 1.2rem;
+}
+.in_span{
+    margin-left: 1rem;
+}
+.pic_span{
+    margin-left: 11rem;
+}
+header div img{
+    margin-left: 9rem;
+    width: 1rem;
+}
+
+.quarters_small{
+    border-bottom: 1px solid #C2C2C2;
+    padding-bottom: 2rem;
+}
+.quarters_adress{
+    padding-left: 1rem;
+    font-size: 1rem;
+    display: inline-block;
+    position: relative;
+    top:-6em;
+}
+.quarters{
+    margin-left: 2rem;
+    font-size: 1rem;
+    display: inline-block;
+}
+.quarters_small h1{
+    padding-left: 1rem;
+}
+.choose_quarter{
+    margin-left: 1rem;
+    font-size: 1rem;
+}
+.quarters_small input {
+    width: 22rem;
+    height: 2.2rem;
+    border: 1px solid #C2C2C2;
+    /*border-radius: 1rem;*/
+    padding-left: 1rem;
+    font-size: 1rem;
+    margin-left: 2rem;
+}
+.p{
+    font-size: 1.2rem;
+    margin-left: -2rem;
+    margin-top: .2rem;
+}
+.house_area{
+    padding-top: 1rem;
+}
+.house_span{
+    margin-left: 1rem;
+    font-size: 1.4rem;
+}
+.house_area input{
+    width:20rem;
+    height: 3rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    border: 1px solid #C2C2C2;
+    font-size: 1.2rem;
+}
+.apartment_layout {
+    margin-top: 1rem;
+}
+.apartment_span{
+    margin-left: 1rem;
+    font-size: 1.4rem;
+}
+.apartment_ul span{
+    margin-left: -4rem;
+    font-size: 1.2rem;
+}
+.apartment_ul{
+    margin-left: 5rem;
+    margin-top: -1rem;
+}
+.apartment_ul li{
+    display: inline;
+    width: 8rem;
+    height: 3rem;
+    margin-left: 3rem;
+
+}
+.apartment_ul li input{
+    width: 8rem;
+    height: 2.8rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    padding-left: 3rem;
+    /*margin-left: 6rem;*/
+    border: 1px solid #C2C2C2;
+}
+.apartment_ul button{
+    width: 2rem;
+    height: 2rem;
+    background-color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-left: .2rem;
+}
+.btn_left{
+    position: relative;
+    left: -5.5rem;
+}
+.btn_right{
+    position: relative;
+    left: -2rem;
+}
+.text_all{
+    margin-left: 2rem;
+    margin-top: 1rem;
+    border: 1px solid #C2C2C2;
+    font-size: 1rem;
+}
+.storey{
+    border-top: 1px solid #C2C2C2;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+}
+.storey h1{
+    margin-left: 1rem;
+}
+.storey_ul{
+    margin-left: 7.5rem;
+}
+.storey_ul li {
+    display: inline-block;
+    list-style: none;
+    font-size: 1rem;
+    margin-left: 1rem;
+}
+.bay_window{
+    border-top: 1px solid #C2C2C2;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.bay_span{
+    margin-left: 1rem;
+    font-size: 1.2rem;
+}
+.bay_window input{
+    width: 12rem;
+    height: 3rem;
+    border-radius: .4rem;
+    border: 1px solid #C2C2C2;
+    margin-left: 4.5rem;
+    font-size:1.2rem;
+    padding-left: 1rem;
+}
+.bay_square{
+    margin-left: -2.2rem;
+    font-size: 1.2rem;
+
+}
+.choose_stairs{
+    padding-top: 1rem;
+    border-top: 1px solid #C2C2C2;
+}
+.choose_span{
+    font-size: 1.2rem;
+    margin-left: 1rem;
+}
+.choose_stairs input{
+    margin-left: 2rem;
+}
+.have, .no{
+    margin-left: .1rem;
+    font-size: 1rem;
+}
+.structure{
+    border: 1px solid #C2C2C2;
+    width: 29rem;
+    margin-left: 1rem;
+    padding-top: 1rem;
+    margin-top: 1rem;
+
+}
+.structure ul li{
+    font-size: 1.2rem;
+    display: inline-block;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+.series {
+    padding-top: 1rem;
+}
+.series h1{
+    margin-left:1rem;
+}
+.series ul li{
+    display: inline-block;
+    font-size: 1rem;
+    margin-left: 1rem;
+    padding-top: 1rem;
+}
+.fit{
+    padding-top: 1rem;
+}
+.fit h2{
+    margin-left: 1rem;
+}
+.fit p{
+    padding-left: 1rem;
+    font-size: 1rem;
+    color: #999;
+}
+.choose_style{
+   padding-top: 1rem;
+}
+.choose_style h1{
+    margin-left: 1rem;
+    font-size: 1.2rem;
+}
+.choose_style ul li{
+    display: inline-block;
+
+}
+.choose_style ul li button{
+    background-color: white;
+    width: 5rem;
+    height: 2.3rem;
+    font-size: 1rem;
+    color: #999;
+    border: 1px solid #C2C2C2;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+.carousel{
+    margin-top: 1rem;
+    border: 1px solid #C2C2C2;
+    width: 30rem;
+    height: 16rem;
+    margin-left: 1rem;
+}
+
+.note{
+    margin-top: 1rem;
+}
+.note ul li {
+    display: inline-block;
+    margin-left: 1rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+
+}
+.note ul li button  {
+    width: 6rem;
+    height: 3rem;
+    background-color: white;
+    border: 1px solid #C2C2C2;
+}
+.btn_vr button{
+    width: 32rem;
+    height: 4rem;
+    background-color: #53A8F4;
+    color: white;
+    font-size: 1.2rem;
+
+}
