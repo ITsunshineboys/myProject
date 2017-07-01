@@ -97,4 +97,20 @@ class ModelService
 
         return $data;
     }
+
+    /**
+     * View model by fields
+     *
+     * @return array
+     */
+    public static function viewModelByFields(ActiveRecord $model, $fields)
+    {
+        $viewData = [];
+
+        foreach ($fields as $field) {
+            $viewData[$field] = $model->$field;
+        }
+
+        return $viewData;
+    }
 }

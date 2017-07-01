@@ -282,22 +282,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Get view data
-     *
-     * @return array
-     */
-    public function view($fields)
-    {
-        $viewData = [];
-
-        foreach ($fields as $field) {
-            $viewData[$field] = $this->$field;
-        }
-
-        return $viewData;
-    }
-
-    /**
      * Set cache after updated user model
      *
      * @param bool $insert
