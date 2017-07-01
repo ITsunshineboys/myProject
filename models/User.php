@@ -203,7 +203,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['mobile', 'unique'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
-            ['identity_no', 'validateIdentityNo'],
+            [['identity_no', 'legal_person', 'identity_card_front_image', 'identity_card_back_image'], 'string']
         ];
     }
 
@@ -245,17 +245,11 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Validates identity card no
      *
-     * @param string $attribute licence to validate
      * @return bool
      */
-    public function validateIdentityNo($attribute)
+    public function validateIdentityNo()
     {
-        if (!StringService::checkIdentityCardNo($this->$attribute)) {
-            $this->addError($attribute);
-            return false;
-        }
-
-        return true;
+        return StringService::checkIdentityCardNo($this->identity_no);
     }
 
     /**
