@@ -1551,7 +1551,7 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'owner-view' => $user->view(User::FIELDS_VIEW_IDENTITY),
+                'view-identity' => $user->view(User::FIELDS_VIEW_IDENTITY),
             ],
         ]);
     }
