@@ -9,13 +9,20 @@
 namespace app\models;
 
 use app\services\ModelService;
-use app\services\StringService;
+use Yii;
 use yii\db\ActiveRecord;
 
 class Supplier extends ActiveRecord
 {
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
+    const STATUS_WAIT_REVIEW = 2;
+    const STATUS_NOT_APPROVED = 3;
+    const STATUS_DESC_ONLINE_APP = '审核通过';
+    const STATUS_DESC_ONLINE_ADMIN = '正常营业';
+    const STATUS_DESC_OFFLINE = '已关闭';
+    const STATUS_DESC_WAIT_REVIEW = '等待审核';
+    const STATUS_DESC_NOT_APPROVED = '审核未通过';
     const SCENARIO_ADD = 'add';
     const TYPE_ORG = [
         '个体工商户',
@@ -28,8 +35,10 @@ class Supplier extends ActiveRecord
         '专卖店',
     ];
     const STATUSES = [
-        self::STATUS_OFFLINE => '已关闭',
-        self::STATUS_ONLINE => '正常营业',
+        self::STATUS_OFFLINE => self::STATUS_DESC_OFFLINE,
+        self::STATUS_ONLINE => self::STATUS_DESC_ONLINE_ADMIN,
+        self::STATUS_WAIT_REVIEW => self::STATUS_DESC_WAIT_REVIEW,
+        self::STATUS_NOT_APPROVED => self::STATUS_DESC_NOT_APPROVED,
     ];
     const FIELDS_VIEW_ADMIN_MODEL = [
         'id',
@@ -81,17 +90,104 @@ class Supplier extends ActiveRecord
     }
 
     /**
+     * Add supplier and have it certificated if necessary
+     *
+     * @param ActiveRecord $user user
+     * @param array $attrs supplier attributes
+     * @return int
+     */
+    public static function add(ActiveRecord $user, array $attrs, $fromLhzz = false)
+    {
+        $supplier = new self;
+        $supplier->type_org = isset($attrs['type_org']) ? (int)$attrs['type_org'] : 0;
+        $supplier->category_id = isset($attrs['category_id']) ? (int)$attrs['category_id'] : 0;
+        $supplier->type_shop = isset($attrs['type_shop']) ? (int)$attrs['type_shop'] : 0;
+        $supplier->name = isset($attrs['name']) ? trim($attrs['name']) : '';
+        $supplier->licence = isset($attrs['licence']) ? trim($attrs['licence']) : '';
+        $supplier->licence_image = isset($attrs['licence_image']) ? trim($attrs['licence_image']) : '';
+        $supplier->uid = $user->id;
+        $supplier->create_time = time();
+        $supplier->status = !$fromLhzz ? self::STATUS_WAIT_REVIEW : self::STATUS_ONLINE;
+
+        $supplier->scenario = self::SCENARIO_ADD;
+        if (!$supplier->validate()) {
+            $code = 1000;
+            return $code;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        if (!$supplier->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return $code;
+        }
+
+        $supplier->shop_no = Yii::$app->params['supplierRoleId']
+            . (Yii::$app->params['offsetGeneral'] + $supplier->id);
+
+        if (!$supplier->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return $code;
+        }
+
+        $userRole = new UserRole;
+        $userRole->user_id = $user->id;
+        $userRole->role_id = Yii::$app->params['supplierRoleId'];
+        if (!$userRole->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return $code;
+        }
+
+        $user->refresh();
+        if (empty($user->identity_no)) {
+            $user->legal_person = isset($attrs['legal_person']) ? trim($attrs['legal_person']) : '';
+            $user->identity_no = isset($attrs['identity_no']) ? trim($attrs['identity_no']) : '';
+            $user->identity_card_front_image = isset($attrs['identity_card_front_image'])
+                ? trim($attrs['identity_card_front_image'])
+                : '';
+            $user->identity_card_back_image = isset($attrs['identity_card_back_image'])
+                ? trim($attrs['identity_card_back_image'])
+                : '';
+
+            if (!$user->validateIdentity()) {
+                $transaction->rollBack();
+
+                $code = 1000;
+                return $code;
+            }
+
+            if (!$user->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
+        }
+
+        $transaction->commit();
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
     {
         return [
-            [['type_org', 'category_id', 'type_shop', 'nickname', 'name', 'licence', 'licence_image'], 'required'],
+            [['type_org', 'category_id', 'type_shop', 'name', 'licence', 'licence_image'], 'required'],
             [['name', 'licence'], 'unique', 'on' => self::SCENARIO_ADD],
             ['category_id', 'validateCategoryId'],
             ['type_org', 'in', 'range' => array_keys(self::TYPE_ORG)],
             ['type_shop', 'in', 'range' => array_keys(self::TYPE_SHOP)],
-            ['status', 'in', 'range' => [self::STATUS_ONLINE, self::STATUS_OFFLINE]],
+            ['status', 'in', 'range' => array_keys(self::STATUSES)],
             [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit'], 'number', 'integerOnly' => true],
             [['nickname', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason'], 'string'],
             ['name', 'string', 'length' => [1, 30]],
