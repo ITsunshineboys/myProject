@@ -22,6 +22,7 @@ app.controller("index",function($scope,$http){
         $http.get(url+carousel1)
             .success(function(data){
                 $scope.carousel1=data.data.carousel;
+                alert(1212);
             });
         $http.get(url+classify)
             .success(function(data){
