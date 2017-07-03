@@ -87,13 +87,15 @@ class Supplier extends ActiveRecord
     {
         return [
             [['type_org', 'category_id', 'type_shop', 'nickname', 'name', 'licence', 'licence_image'], 'required'],
-            [['nickname', 'name', 'licence'], 'unique', 'on' => self::SCENARIO_ADD],
+            [['name', 'licence'], 'unique', 'on' => self::SCENARIO_ADD],
             ['category_id', 'validateCategoryId'],
             ['type_org', 'in', 'range' => array_keys(self::TYPE_ORG)],
             ['type_shop', 'in', 'range' => array_keys(self::TYPE_SHOP)],
             ['status', 'in', 'range' => [self::STATUS_ONLINE, self::STATUS_OFFLINE]],
             [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit'], 'number', 'integerOnly' => true],
             [['nickname', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason'], 'string'],
+            ['name', 'string', 'length' => [1, 30]],
+            ['licence', 'string', 'length' => [1, 15]],
         ];
     }
 
