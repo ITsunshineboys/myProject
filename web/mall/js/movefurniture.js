@@ -11,7 +11,7 @@ myapp.controller("commentCtrl",function ($scope,$http) {
         //alert(message);
     }, function errorCallback(data) {
 
-        alert(data);
+        //alert(data);
 
     });
 });
