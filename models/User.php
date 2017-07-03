@@ -176,6 +176,33 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
+    /**
+     * Reset user's new mobile and new password
+     *
+     * @param int $mobile mobile
+     * @param int $newMobile new mobile
+     * @param string $pwd password
+     * @return bool
+     */
+    public static function resetMobileAndPwdByMobile($mobile, $newMobile, $pwd)
+    {
+        $user = self::find()->where(['mobile' => $mobile])->one();
+        if (!$user) {
+            return false;
+        }
+
+        $user->mobile = $newMobile;
+        $user->password = Yii::$app->getSecurity()->generatePasswordHash($pwd);
+        return $user->validate() && $user->save();
+    }
+
+    /**
+     * Add user by mobile and password
+     *
+     * @param int $mobile mobile
+     * @param string $pwd password
+     * @return int
+     */
     public static function addByMobileAndPwd($mobile, $pwd)
     {
         $code = 1000;
@@ -276,13 +303,36 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Validates identity info
+     *
+     * @return bool
+     */
+    public function validateIdentity()
+    {
+        if (!$this->identity_card_front_image
+            || !$this->identity_card_back_image
+            || !$this->validateIdentityNo()
+            || !$this->validateLegalPerson()
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Validates identity card no
      *
      * @return bool
      */
     public function validateIdentityNo()
     {
-        return StringService::checkIdentityCardNo($this->identity_no);
+        $attr = 'identity_no';
+        if (!$this->$attr) {
+            return false;
+        }
+
+        return StringService::checkIdentityCardNo($this->$attr);
     }
 
     /**
@@ -293,6 +343,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateLegalPerson()
     {
         $attr = 'legal_person';
+        if (!$this->$attr) {
+            return false;
+        }
+
         return mb_strlen($this->$attr) <= self::LEN_MAX_FIELDS[$attr];
     }
 
