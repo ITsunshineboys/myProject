@@ -12,8 +12,6 @@ use app\models\Effect;
 use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;
-
-;
 use app\models\GoodsAttr;
 use app\models\LaborCost;
 use app\models\MaterialPropertyClassify;
