@@ -3554,63 +3554,18 @@ class MallController extends Controller
             ]);
         }
 
-        $user = $checkRoleRes;
-
-        $supplier = new Supplier;
-        $supplier->attributes = Yii::$app->request->post();
-        $supplier->uid = $user->id;
-        $supplier->create_time = time();
-        $supplier->scenario = Supplier::SCENARIO_ADD;
-
-        if (!$supplier->validate()) {
+        $data = Yii::$app->request->post();
+        $data['status'] = Supplier::STATUS_ONLINE;
+        $code = Supplier::add($checkRoleRes, $data);
+        if (200 != $code) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        $transactionOutter = Yii::$app->db->beginTransaction();
-
-        if (!$supplier->save()) {
-            $transactionOutter->rollBack();
-
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $supplier->shop_no = Yii::$app->params['supplierRoleId']
-            . (Yii::$app->params['offsetGeneral'] + $supplier->id);
-
-        if (!$supplier->save()) {
-            $transactionOutter->rollBack();
-
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $userRole = new UserRole;
-        $userRole->user_id = $user->id;
-        $userRole->role_id = Yii::$app->params['supplierRoleId'];
-        if (!$userRole->save()) {
-            $transactionOutter->rollBack();
-
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $transactionOutter->commit();
 
         return Json::encode([
-            'code' => 200,
+            'code' => $code,
             'msg' => 'OK',
         ]);
     }

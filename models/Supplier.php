@@ -181,7 +181,7 @@ class Supplier extends ActiveRecord
     public function rules()
     {
         return [
-            [['type_org', 'category_id', 'type_shop', 'name', 'licence', 'licence_image'], 'required'],
+            [['type_org', 'category_id', 'type_shop', 'shop_name', 'name', 'licence', 'licence_image'], 'required'],
             [['name', 'licence'], 'unique', 'on' => self::SCENARIO_ADD],
             ['category_id', 'validateCategoryId'],
             ['type_org', 'in', 'range' => array_keys(self::TYPE_ORG)],
