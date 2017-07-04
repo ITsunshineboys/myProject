@@ -88,6 +88,7 @@ CREATE TABLE `supplier` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned not null default 0,
   `nickname` varchar(25) not null DEFAULT '' COMMENT '供应商',
+  `shop_name` varchar(25) not null DEFAULT '' COMMENT '店铺名称',
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像',
   `name` varchar(50) not null DEFAULT '' COMMENT '公司名称',
   `licence` varchar(50) not null DEFAULT '' COMMENT '营业执照号',

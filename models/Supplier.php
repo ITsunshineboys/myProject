@@ -188,7 +188,7 @@ class Supplier extends ActiveRecord
             ['type_shop', 'in', 'range' => array_keys(self::TYPE_SHOP)],
             ['status', 'in', 'range' => array_keys(self::STATUSES)],
             [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit'], 'number', 'integerOnly' => true],
-            [['nickname', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason'], 'string'],
+            [['nickname', 'shop_name', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason'], 'string'],
             ['name', 'string', 'length' => [1, 30]],
             ['licence', 'string', 'length' => [1, 15]],
         ];
