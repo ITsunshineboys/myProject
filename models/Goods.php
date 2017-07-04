@@ -548,8 +548,8 @@ AND goods.id IN (" . $id . ")";
             ['after_sale_services', 'validateAfterSaleServices'],
             [['category_id'], 'validateCategoryId'],
             [['brand_id'], 'validateBrandId'],
-            [['style_id'], 'validateStyleId', 'skipOnEmpty' => true],
-            [['series_id'], 'validateSeriesId', 'skipOnEmpty' => true],
+            [['style_id'], 'validateStyleId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
+            [['series_id'], 'validateSeriesId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             [['logistics_template_id'], 'validateLogisticsTemplateId'],
             ['description', 'safe']
         ];
