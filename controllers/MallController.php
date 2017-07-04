@@ -3972,6 +3972,10 @@ class MallController extends Controller
         ]);
     }
 
+    /**
+     * series list
+     * @return string
+     */
     public function actionSeriesList()
     {
         $series = Series::find()->All();
@@ -3984,6 +3988,10 @@ class MallController extends Controller
         ]);
     }
 
+    /**
+     * series add
+     * @return string
+     */
     public function actionSeriesAdd()
     {
         $code = 1000;
@@ -4018,6 +4026,10 @@ class MallController extends Controller
         }
     }
 
+    /**
+     * series edit
+     * @return string
+     */
     public function actionSeriesEdit()
     {
         $code = 1000;
@@ -4052,6 +4064,10 @@ class MallController extends Controller
         }
     }
 
+    /**
+     * series status
+     * @return string
+     */
     public function actionSeriesStatus()
     {
         $code = 1000;
@@ -4082,6 +4098,10 @@ class MallController extends Controller
         }
     }
 
+    /**
+     * style list
+     * @return string
+     */
     public function actionStyleList()
     {
         $style = Style::find()->All();
@@ -4094,6 +4114,10 @@ class MallController extends Controller
         ]);
     }
 
+    /**
+     * style add
+     * @return string
+     */
     public function actionStyleAdd()
     {
         $code = 1000;
@@ -4150,6 +4174,10 @@ class MallController extends Controller
 
     }
 
+    /**
+     * style edit
+     * @return string
+     */
     public function actionStyleEdit()
     {
         $code = 1000;
@@ -4158,8 +4186,8 @@ class MallController extends Controller
         $data = [
             'id'=>4,
             'style'=>'中国风',
-            'theme'=>'中国风',
-            'intro'=>'物有所值',
+            'theme'=>'传统东西',
+            'intro'=>'你城山',
             'picture'=>'C:\Users\Administrator\Desktop'
         ];
         $style =  new Style();
@@ -4185,9 +4213,9 @@ class MallController extends Controller
         }
 
         $style_picture = new StylePicture();
-        $style_picture_edit =  clone $style_picture->find()->where(['style_id'=>$data['id']])->all();
+        $style_picture_edit = $style_picture->find()->asArray()->where(['style_id'=>$data['id']])->one();
         $style_picture_edit->picture = FileService::upload();
-        if (!$style_picture->validate())
+        if (!$style_picture_edit->validate())
         {
             return Json::encode([
                 'code' => $code,
@@ -4195,7 +4223,7 @@ class MallController extends Controller
             ]);
         }
 
-        if (!$style_picture->save())
+        if (!$style_picture_edit->save())
         {
             $code = 500;
             return Json::encode([
@@ -4205,7 +4233,37 @@ class MallController extends Controller
         }
     }
 
+    /**
+     * style status
+     * @return string
+     */
     public function actionStyleStatus()
     {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'id'=>4,
+            'status'=>'0',
+        ];
+        $series =  new Style();
+        $series_edit = $series->findOne($data['id']);
+        $series_edit->status = $data['status'];
+        if (!$series_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$series_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
     }
 }
