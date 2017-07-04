@@ -93,10 +93,9 @@ class Supplier extends ActiveRecord
      * Add supplier and have it certificated if necessary
      *
      * @param ActiveRecord $user user
-     * @param array $attrs supplier attributes
      * @return int
      */
-    public static function add(ActiveRecord $user, array $attrs, $fromLhzz = false)
+    public static function add(ActiveRecord $user, array $attrs)
     {
         $supplier = new self;
         $supplier->type_org = isset($attrs['type_org']) ? (int)$attrs['type_org'] : 0;
@@ -107,7 +106,7 @@ class Supplier extends ActiveRecord
         $supplier->licence_image = isset($attrs['licence_image']) ? trim($attrs['licence_image']) : '';
         $supplier->uid = $user->id;
         $supplier->create_time = time();
-        $supplier->status = !$fromLhzz ? self::STATUS_WAIT_REVIEW : self::STATUS_ONLINE;
+        $supplier->status = isset($attrs['status']) ? (int)$attrs['status'] : self::STATUS_WAIT_REVIEW;
 
         $supplier->scenario = self::SCENARIO_ADD;
         if (!$supplier->validate()) {
