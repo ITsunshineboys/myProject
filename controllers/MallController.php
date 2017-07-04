@@ -11,6 +11,7 @@ use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\Series;
 use app\models\Style;
+use app\models\StylePicture;
 use app\models\Supplier;
 use app\models\Lhzz;
 use app\models\LogisticsTemplate;
@@ -24,6 +25,7 @@ use app\models\BrandApplication;
 use app\models\GoodsStat;
 use app\models\GoodsOrder;
 use app\services\ExceptionHandleService;
+use app\services\FileService;
 use app\services\StringService;
 use app\services\ModelService;
 use app\services\AdminAuthService;
@@ -3968,5 +3970,242 @@ class MallController extends Controller
                 ]
             ],
         ]);
+    }
+
+    public function actionSeriesList()
+    {
+        $series = Series::find()->All();
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'OK',
+            'data'=>[
+                'series_list'=>$series
+            ]
+        ]);
+    }
+
+    public function actionSeriesAdd()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'series'=>'齐家',
+            'theme'=>'简单',
+            'intro'=>'齐家的东西就是好'
+        ];
+        $series =  new Series();
+        $series->series = $data['series'];
+        $series->theme = $data['theme'];
+        $series->intro = $data['intro'];
+        $series->creation_time = time();
+        $series->status= Series::STATUS_ONLINE;
+        if (!$series->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$series->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+
+    public function actionSeriesEdit()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'id'=>2,
+            'series'=>'齐家',
+            'theme'=>'方便',
+            'intro'=>'齐家的东西，无敌，美好'
+        ];
+        $series =  new Series();
+        $series_edit = $series->findOne($data['id']);
+        $series_edit->series = $data['series'];
+        $series_edit->theme = $data['theme'];
+        $series_edit->intro = $data['intro'];
+        if (!$series_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$series_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+
+    public function actionSeriesStatus()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'id'=>2,
+            'status'=>'0',
+        ];
+        $series =  new Series();
+        $series_edit = $series->findOne($data['id']);
+        $series_edit->status = $data['status'];
+        if (!$series_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$series_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+
+    public function actionStyleList()
+    {
+        $style = Style::find()->All();
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'OK',
+            'data'=>[
+                'style_list'=>$style
+            ]
+        ]);
+    }
+
+    public function actionStyleAdd()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'style'=>'中国风',
+            'theme'=>'中国风',
+            'intro'=>'物有所值',
+            'picture'=>'C:\Users\Administrator\Desktop'
+        ];
+        $style =  new Style();
+        $style->style = $data['style'];
+        $style->theme = $data['theme'];
+        $style->intro = $data['intro'];
+        $style->creation_time = time();
+        $style->status= Style::STATUS_ONLINE;
+        if (!$style->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$style->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $style_picture = new StylePicture();
+        $style_picture->style_id = $style->attributes['id'];
+        $style_picture->picture = FileService::upload();
+        if (!$style_picture->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$style_picture->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+    }
+
+    public function actionStyleEdit()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'id'=>4,
+            'style'=>'中国风',
+            'theme'=>'中国风',
+            'intro'=>'物有所值',
+            'picture'=>'C:\Users\Administrator\Desktop'
+        ];
+        $style =  new Style();
+        $style_edit = $style->findOne($data['id']);
+        $style_edit->style = $data['style'];
+        $style_edit->theme = $data['theme'];
+        $style_edit->intro = $data['intro'];
+        if (!$style_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$style_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $style_picture = new StylePicture();
+        $style_picture_edit =  clone $style_picture->find()->where(['style_id'=>$data['id']])->all();
+        $style_picture_edit->picture = FileService::upload();
+        if (!$style_picture->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$style_picture->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+
+    public function actionStyleStatus()
+    {
     }
 }
