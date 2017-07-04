@@ -21,7 +21,7 @@ class BasisDecorationService
     {
         if($points && $labor){
             //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-            $labor_formula = ceil(($points / $labor['day_points'])) * $labor['univalence'];
+            $labor_formula = ceil(($points / $labor['quantity'])) * $labor['univalence'];
         }
         return $labor_formula;
     }

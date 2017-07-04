@@ -36,7 +36,7 @@ class LaborCost extends ActiveRecord
      * 根据地名查询单价
      * @param string $toponymy
      */
-    public static function univalence($arr = [],$jobs= '',$rank = '银')
+    public static function univalence($arr = [],$jobs= '',$rank = '白银')
     {
         if(!$arr == null && !$jobs == null) {
             $province = $arr['province'] ?? 510000;

@@ -161,7 +161,7 @@ class OwnerController extends Controller
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
-        $arr['worker_kind'] = '水电';
+        $arr['worker_kind'] = '电工';
 
         //人工价格
         $workers = LaborCost::univalence($post, $arr['worker_kind']);
@@ -170,7 +170,6 @@ class OwnerController extends Controller
                 $Weak_labor = $worker;
             }
         }
-
         //点位查询
         if (!empty($post['effect_id'])) {
             $weak_points = Points::weakPoints($post['effect_id']);
@@ -214,7 +213,46 @@ class OwnerController extends Controller
         $labor_all_cost = BasisDecorationService::laborFormula($weak_points, $Weak_labor);
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points, $weak_current, $craft);
-        $add_price = DecorationAdd::findByAll('弱电', $post['area'], $post['city']);
+        //添加材料
+
+        $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);
+        $add_price = [];
+        foreach ($add_price_area as $add_area)
+        {
+            $sku_area =  Goods::skuAll($add_area['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+
+        $add_price_series = DecorationAdd::AllSeries('弱电', $post['series'], $post['city']);
+        foreach ($add_price_series as $add_series)
+        {
+            $sku_area =  Goods::skuAll($add_series['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+        $add_price_style = DecorationAdd::AllStyle('弱电', $post['style'], $post['city']);
+        foreach ($add_price_style as $add_style)
+        {
+            $sku_area =  Goods::skuAll($add_style['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
 
         return Json::encode([
             'code' => 200,
@@ -259,7 +297,7 @@ class OwnerController extends Controller
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
-        $arr['worker_kind'] = '水电';
+        $arr['worker_kind'] = '电工';
 
         //人工价格
         $workers = LaborCost::univalence($post, $arr['worker_kind']);
@@ -342,7 +380,44 @@ class OwnerController extends Controller
         //材料总费用
         $material_price = BasisDecorationService::quantity($points_details, $strong_current, $craft);
 
-        $add_price = DecorationAdd::findByAll('强电', $post['area'], $post['city']);
+        $add_price_area = DecorationAdd::AllArea('强电', $post['area'], $post['city']);
+        $add_price = [];
+        foreach ($add_price_area as $add_area)
+        {
+            $sku_area =  Goods::skuAll($add_area['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+
+        $add_price_series = DecorationAdd::AllSeries('强电', $post['series'], $post['city']);
+        foreach ($add_price_series as $add_series)
+        {
+            $sku_area =  Goods::skuAll($add_series['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+        $add_price_style = DecorationAdd::AllStyle('弱电', $post['style'], $post['city']);
+        foreach ($add_price_style as $add_style)
+        {
+            $sku_area =  Goods::skuAll($add_style['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
 
         return Json::encode([
             'code' => 200,
@@ -387,12 +462,12 @@ class OwnerController extends Controller
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
-        $arr['worker_kind'] = '水电';
+        $arr['worker_kind'] = '水路工';
 
         //人工价格
         $workers = LaborCost::univalence($post, $arr['worker_kind']);
         foreach ($workers as $worker) {
-            if ($worker['worker_kind_details'] == '防水') {
+            if ($worker['worker_kind_details'] == '水路工') {
                 $waterway_labor = $worker;
             }
         }
@@ -441,7 +516,44 @@ class OwnerController extends Controller
         //材料总费用
         $material_price = BasisDecorationService::waterwayGoods($waterway_points, $waterway_current, $craft);
         //添加材料费用
-        $add_price = DecorationAdd::findByAll('水路', $post['area'], $post['city']);
+        $add_price_area = DecorationAdd::AllArea('水路', $post['area'], $post['city']);
+        $add_price = [];
+        foreach ($add_price_area as $add_area)
+        {
+            $sku_area =  Goods::skuAll($add_area['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+
+        $add_price_series = DecorationAdd::AllSeries('水路', $post['series'], $post['city']);
+        foreach ($add_price_series as $add_series)
+        {
+            $sku_area =  Goods::skuAll($add_series['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+        $add_price_style = DecorationAdd::AllStyle('水路', $post['style'], $post['city']);
+        foreach ($add_price_style as $add_style)
+        {
+            $sku_area =  Goods::skuAll($add_style['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
 
         return Json::encode([
             'code' => 200,
@@ -485,12 +597,12 @@ class OwnerController extends Controller
         ];
         $arr = [];
         $arr['profit'] = $post['1'] ?? 0.7;
-        $arr['worker_kind'] = '水电';
+        $arr['worker_kind'] = '防水工';
 
         //人工价格
         $workers = LaborCost::univalence($post, $arr['worker_kind']);
         foreach ($workers as $worker) {
-            if ($worker['worker_kind_details'] == '防水') {
+            if ($worker['worker_kind_details'] == '防水工') {
                 $waterproof_labor = $worker;
             }
         }
@@ -533,12 +645,49 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('防水', $post['city']);
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost = ceil($total_area / $waterproof_labor['day_area'] * $waterproof_labor['univalence']);
+        $labor_all_cost = ceil($total_area / $waterproof_labor['quantity'] * $waterproof_labor['univalence']);
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
 
         //添加材料费用
-        $add_price = DecorationAdd::findByAll('防水', $post['area'], $post['city']);
+        $add_price_area = DecorationAdd::AllArea('防水', $post['area'], $post['city']);
+        $add_price = [];
+        foreach ($add_price_area as $add_area)
+        {
+            $sku_area =  Goods::skuAll($add_area['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+
+        $add_price_series = DecorationAdd::AllSeries('防水', $post['series'], $post['city']);
+        foreach ($add_price_series as $add_series)
+        {
+            $sku_area =  Goods::skuAll($add_series['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+        $add_price_style = DecorationAdd::AllStyle('防水', $post['style'], $post['city']);
+        foreach ($add_price_style as $add_style)
+        {
+            $sku_area =  Goods::skuAll($add_style['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
 
         return Json::encode([
             'code' => 200,
@@ -587,9 +736,9 @@ class OwnerController extends Controller
         // 造型长度
         $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add, $series_all, $post['series']);
         //造型天数
-        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $labor_cost['day_sculpt_length'], $series_all, $style_all);
+        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $labor_cost['quantity'], $series_all, $style_all);
         //平顶天数
-        $flat_day = BasisDecorationService::flatDay($carpentry_add, $labor_cost['day_area'], $series_all, $style_all);
+        $flat_day = BasisDecorationService::flatDay($carpentry_add, $labor_cost['quantity'], $series_all, $style_all);
         //人工费
         $labour_charges = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
 
@@ -620,7 +769,44 @@ class OwnerController extends Controller
         //材料费用
         $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
 //      添加费用
-        $carpentry_add = DecorationAdd::CarpentryAddAll('木作', $post['series'], $post['style']);
+        $add_price_area = DecorationAdd::AllArea('木作', $post['area'], $post['city']);
+        $add_price = [];
+        foreach ($add_price_area as $add_area)
+        {
+            $sku_area =  Goods::skuAll($add_area['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+
+        $add_price_series = DecorationAdd::AllSeries('木作', $post['series'], $post['city']);
+        foreach ($add_price_series as $add_series)
+        {
+            $sku_area =  Goods::skuAll($add_series['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+        $add_price_style = DecorationAdd::AllStyle('木作', $post['style'], $post['city']);
+        foreach ($add_price_style as $add_style)
+        {
+            $sku_area =  Goods::skuAll($add_style['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
 
         return Json::encode([
             'code' => 200,
@@ -818,7 +1004,44 @@ class OwnerController extends Controller
         $coating_labor_price = $total_day * $labor_cost['univalence'];
 
         //添加材料费用
-        $carpentry_add = DecorationAdd::CarpentryAddAll('乳胶漆', $post['series'], $post['style']);
+        $add_price_area = DecorationAdd::AllArea('油漆', $post['area'], $post['city']);
+        $add_price = [];
+        foreach ($add_price_area as $add_area)
+        {
+            $sku_area =  Goods::skuAll($add_area['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+
+        $add_price_series = DecorationAdd::AllSeries('油漆', $post['series'], $post['city']);
+        foreach ($add_price_series as $add_series)
+        {
+            $sku_area =  Goods::skuAll($add_series['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+        $add_price_style = DecorationAdd::AllStyle('油漆', $post['style'], $post['city']);
+        foreach ($add_price_style as $add_style)
+        {
+            $sku_area =  Goods::skuAll($add_style['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
 
         return Json::encode([
             'code' => 200,
@@ -831,7 +1054,7 @@ class OwnerController extends Controller
                 'finishing_coat_cost' => $finishing_coat_cost,
                 'concave_line_cost' => $concave_line_cost,
                 'gypsum_powder_cost' => $gypsum_powder_cost,
-                'carpentry_add_price' => $carpentry_add,
+                'add_price' => $add_price,
                 'goods_price' => $goods_price
             ]
         ]);
@@ -1031,7 +1254,44 @@ class OwnerController extends Controller
         $material_cost_total = $floor_tile_cost['cost'] + $river_sand_cost['cost'] + $cement_cost['cost'] + $self_leveling_cost['cost'] + $wall_brick_cost['cost'];
 
         //添加材料费用
-        $carpentry_add = DecorationAdd::CarpentryAddAll('泥工', $post['series'], $post['style']);
+        $add_price_area = DecorationAdd::AllArea('泥作', $post['area'], $post['city']);
+        $add_price = [];
+        foreach ($add_price_area as $add_area)
+        {
+            $sku_area =  Goods::skuAll($add_area['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+
+        $add_price_series = DecorationAdd::AllSeries('泥作', $post['series'], $post['city']);
+        foreach ($add_price_series as $add_series)
+        {
+            $sku_area =  Goods::skuAll($add_series['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+        $add_price_style = DecorationAdd::AllStyle('泥作', $post['style'], $post['city']);
+        foreach ($add_price_style as $add_style)
+        {
+            $sku_area =  Goods::skuAll($add_style['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
 
         return Json::encode([
             'code' => 200,
@@ -1045,7 +1305,7 @@ class OwnerController extends Controller
                 'river_sand_cost' => $river_sand_cost,
                 'kitchen_and_toilet_floor_tile' => $kitchen_and_toilet,
                 'drawing_room_cost' => $drawing_room_cost,
-                'carpentry_add' => $carpentry_add,
+                'add_price' => $add_price,
                 'goods_price' => $goods_price
             ]
         ]);
@@ -1104,7 +1364,44 @@ class OwnerController extends Controller
         $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand['cost'];
 
         //添加材料费用
-        $carpentry_add = DecorationAdd::CarpentryAddAll('杂工');
+        $add_price_area = DecorationAdd::AllArea('杂工', $post['area'], $post['city']);
+        $add_price = [];
+        foreach ($add_price_area as $add_area)
+        {
+            $sku_area =  Goods::skuAll($add_area['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+
+        $add_price_series = DecorationAdd::AllSeries('杂工', $post['series'], $post['city']);
+        foreach ($add_price_series as $add_series)
+        {
+            $sku_area =  Goods::skuAll($add_series['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
+        $add_price_style = DecorationAdd::AllStyle('杂工', $post['style'], $post['city']);
+        foreach ($add_price_style as $add_style)
+        {
+            $sku_area =  Goods::skuAll($add_style['sku']);
+            if ($sku_area !== null)
+            {
+                $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
+            }else
+            {
+                $add_price [] = 0;
+            }
+        }
 
         return Json::encode([
             'code' => 200,
@@ -1115,7 +1412,7 @@ class OwnerController extends Controller
                 'cement_cost' => $cement_cost,
                 'brick_cost' => $brick_cost,
                 'river_sand' => $river_sand,
-                'carpentry_add' => $carpentry_add,
+                'add_price' => $add_price,
 
             ]
         ]);

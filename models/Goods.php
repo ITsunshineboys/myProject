@@ -980,4 +980,13 @@ AND goods.id IN (" . $id . ")";
     {
         return $this->hasOne(GoodsBrand::className(), ['id' => 'brand_id']);
     }
+
+    public static function skuAll($sku = '')
+    {
+        if (!$sku)
+        {
+            return false;
+        }
+        return self::findone($sku);
+    }
 }
