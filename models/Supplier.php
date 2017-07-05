@@ -18,6 +18,7 @@ class Supplier extends ActiveRecord
     const STATUS_ONLINE = 1;
     const STATUS_WAIT_REVIEW = 2;
     const STATUS_NOT_APPROVED = 3;
+    const STATUS_APPROVED = 4;
     const STATUS_DESC_ONLINE_APP = '审核通过';
     const STATUS_DESC_ONLINE_ADMIN = '正常营业';
     const STATUS_DESC_OFFLINE = '已关闭';
@@ -39,6 +40,7 @@ class Supplier extends ActiveRecord
         self::STATUS_ONLINE => self::STATUS_DESC_ONLINE_ADMIN,
         self::STATUS_WAIT_REVIEW => self::STATUS_DESC_WAIT_REVIEW,
         self::STATUS_NOT_APPROVED => self::STATUS_DESC_NOT_APPROVED,
+        self::STATUS_APPROVED => self::STATUS_DESC_ONLINE_APP,
     ];
     const FIELDS_VIEW_ADMIN_MODEL = [
         'id',
@@ -58,6 +60,22 @@ class Supplier extends ActiveRecord
     ];
     const FIELDS_VIEW_ADMIN_EXTRA = [
         'mobile',
+    ];
+    const FIELDS_VIEW_APP_MODEL = [
+        'status',
+        'type_org',
+        'shop_name',
+        'category_id',
+        'type_shop',
+        'name',
+        'licence',
+        'licence_image',
+    ];
+    const FIELDS_VIEW_APP_EXTRA = [
+        'legal_person',
+        'identity_no',
+        'identity_card_front_image',
+        'identity_card_back_image',
     ];
 
     /**
@@ -230,21 +248,6 @@ class Supplier extends ActiveRecord
     }
 
     /**
-     * Get view data
-     *
-     * @return array
-     */
-    public function view()
-    {
-        $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_ADMIN_MODEL);
-        $viewData = $modelData
-            ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_ADMIN_EXTRA))
-            : $modelData;
-        $this->_formatData($viewData);
-        return $viewData;
-    }
-
-    /**
      * Get extra fields
      *
      * @access private
@@ -258,6 +261,22 @@ class Supplier extends ActiveRecord
         foreach ($extraFields as $extraField) {
             switch ($extraField) {
                 case 'mobile':
+                    $user = User::findOne($this->uid);
+                    $extraData[$extraField] = $user->$extraField;
+                    break;
+                case 'legal_person':
+                    $user = User::findOne($this->uid);
+                    $extraData[$extraField] = $user->$extraField;
+                    break;
+                case 'identity_no':
+                    $user = User::findOne($this->uid);
+                    $extraData[$extraField] = $user->$extraField;
+                    break;
+                case 'identity_card_front_image':
+                    $user = User::findOne($this->uid);
+                    $extraData[$extraField] = $user->$extraField;
+                    break;
+                case 'identity_card_back_image':
                     $user = User::findOne($this->uid);
                     $extraData[$extraField] = $user->$extraField;
                     break;
@@ -286,5 +305,34 @@ class Supplier extends ActiveRecord
         if (isset($data['quality_guarantee_deposit'])) {
             $data['quality_guarantee_deposit'] /= 100;
         }
+
+        if (isset($data['type_org'])) {
+            $data['type_org'] = self::TYPE_ORG[$data['type_org']];
+        }
+
+        if (isset($data['category_id'])) {
+            $cat = GoodsCategory::findOne($data['category_id']);
+            $data['category_name'] = $cat->fullTitle();
+            unset($data['category_id']);
+        }
+
+        if (isset($data['type_shop'])) {
+            $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
+        }
+    }
+
+    /**
+     * Get certification view data
+     *
+     * @return array
+     */
+    public function viewCertification()
+    {
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_APP_MODEL);
+        $viewData = $modelData
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_APP_EXTRA))
+            : $modelData;
+        $this->_formatData($viewData);
+        return $viewData;
     }
 }

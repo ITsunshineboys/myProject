@@ -16,7 +16,8 @@ class SupplierController extends Controller
      * Actions accessed by logged-in users
      */
     const ACCESS_LOGGED_IN_USER = [
-        'certification',
+        'certification-view',
+        'view',
     ];
 
     /**
@@ -95,6 +96,26 @@ class SupplierController extends Controller
         return Json::encode([
             'code' => $code,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Certification view action
+     *
+     * @return string
+     */
+    public function actionCertificationView()
+    {
+        $user = Yii::$app->user->identity;
+        $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+        $supplier->status = Supplier::STATUS_APPROVED;
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'view' => $supplier->viewCertification(),
+            ],
         ]);
     }
 }
