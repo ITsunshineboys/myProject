@@ -160,7 +160,6 @@ class OwnerController extends Controller
             'stairs_details_id' => 1,
         ];
         $arr = [];
-        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '电工';
 
         //人工价格
@@ -296,7 +295,6 @@ class OwnerController extends Controller
             'city' => 510100
         ];
         $arr = [];
-        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '电工';
 
         //人工价格
@@ -461,7 +459,6 @@ class OwnerController extends Controller
             'city' => 510100
         ];
         $arr = [];
-        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '水路工';
 
         //人工价格
@@ -596,7 +593,6 @@ class OwnerController extends Controller
             'city' => 510100
         ];
         $arr = [];
-        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '防水工';
 
         //人工价格
@@ -724,7 +720,6 @@ class OwnerController extends Controller
             'city' => 510100
         ];
         $arr = [];
-        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '木工';
         //人工一天价格
         $labor_costs = LaborCost::univalence($post['city'], $arr['worker_kind']);
@@ -847,7 +842,6 @@ class OwnerController extends Controller
             'city' => 510100
         ];
         $arr = [];
-        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post['city'], $arr['worker_kind']);
@@ -1085,7 +1079,6 @@ class OwnerController extends Controller
             'waterproof_total_area' => 50
         ];
         $arr = [];
-        $arr['profit'] = $post['1'] ?? 0.7;
         $arr['worker_kind'] = '泥工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post['city'], $arr['worker_kind']);
@@ -1416,6 +1409,18 @@ class OwnerController extends Controller
 
             ]
         ]);
+    }
+
+    /**
+     * 主材
+     */
+    public function actionPrincipalMaterial()
+    {
+//        $post = Yii::$app->request->port();
+//        $data = Json::decode($post);
+        $data = [
+            ''
+        ];
     }
 
 
@@ -1777,10 +1782,6 @@ class OwnerController extends Controller
         ]);
     }
 
-    public function actionBasisList()
-    {
-
-    }
 
     /**
      * Owner certification action(app)
