@@ -55,10 +55,6 @@ class Supplier extends ActiveRecord
         'quality_guarantee_deposit',
         'licence',
         'licence_image',
-        'legal_person',
-        'identity_card_front_image',
-        'identity_card_back_image',
-        'identity_card_no',
     ];
     const FIELDS_VIEW_ADMIN_EXTRA = [
         'mobile',
@@ -224,6 +220,21 @@ class Supplier extends ActiveRecord
      * @return array
      */
     public function viewAdmin()
+    {
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_ADMIN_MODEL);
+        $viewData = $modelData
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_ADMIN_EXTRA))
+            : $modelData;
+        $this->_formatData($viewData);
+        return $viewData;
+    }
+
+    /**
+     * Get view data
+     *
+     * @return array
+     */
+    public function view()
     {
         $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_ADMIN_MODEL);
         $viewData = $modelData
