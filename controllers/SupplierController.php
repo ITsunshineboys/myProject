@@ -114,7 +114,7 @@ class SupplierController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'view' => $supplier->viewCertification(),
+                'certification-view' => $supplier->viewCertification(),
             ],
         ]);
     }
