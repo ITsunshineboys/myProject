@@ -29,6 +29,7 @@ use app\models\WaterwayReconstruction;
 use app\models\User;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
+use app\services\ModelService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -1847,7 +1848,7 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'view-identity' => $user->view(User::FIELDS_VIEW_IDENTITY),
+                'view-identity' => ModelService::viewModelByFields($user, User::FIELDS_VIEW_IDENTITY),
             ],
         ]);
     }
