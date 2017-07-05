@@ -319,27 +319,27 @@ class OwnerController extends Controller
             foreach ($points_total as $one) {
                 if ($one['place'] == '客厅') {
                     $sitting_room = $one['points_total'] * $post['sitting_room'];
-                    $sitting_room = $sitting_room ?? 0;
+                    $sitting_room = $sitting_room ?: 0;
                     $points_places [] = $sitting_room;
                 } elseif ($one['place'] == '主卧') {
                     $master_bedroom = $one['points_total'] * $post['master_bedroom'];
-                    $master_bedroom = $master_bedroom ?? 0;
+                    $master_bedroom = $master_bedroom ?: 0;
                     $points_places [] = $master_bedroom;
                 } elseif ($one['place'] == '次卧') {
                     $secondary_bedroom = $one['points_total'] * $post['secondary_bedroom'];
-                    $secondary_bedroom = $secondary_bedroom ?? 0;
+                    $secondary_bedroom = $secondary_bedroom ?: 0;
                     $points_places [] = $secondary_bedroom;
                 } elseif ($one['place'] == '餐厅') {
                     $dining_room = $one['points_total'] * $post['dining_room'];
-                    $dining_room = $dining_room ?? 0;
+                    $dining_room = $dining_room ?: 0;
                     $points_places [] = $dining_room;
                 } elseif ($one['place'] == '厨房') {
                     $kitchen = $one['points_total'] * $post['kitchen'];
-                    $kitchen = $kitchen ?? 0;
+                    $kitchen = $kitchen ?: 0;
                     $points_places [] = $kitchen;
                 } elseif ($one['place'] == '卫生间') {
                     $toilet = $one['points_total'] * $post['toilet'];
-                    $toilet = $toilet ?? 0;
+                    $toilet = $toilet ?: 0;
                     $points_places [] = $toilet;
                 } elseif ($one['place'] !== '卫生间' && $one['place'] !== '客厅' && $one['place'] !== '主卧' && $one['place'] !== '次卧' && $one['place'] !== '餐厅' && $one['place'] !== '厨房' && $one['place'] !== '卫生间') {
                     $other [] = $one;
@@ -867,7 +867,7 @@ class OwnerController extends Controller
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $area = DecorationParticulars::findByOne($decoration_list);
-            $tall = $tall ?? 2.8;
+            $tall =  2.8;
         } else {
             $project = '油漆';
             $areas = EngineeringUniversalCriterion::findByAll($project);
