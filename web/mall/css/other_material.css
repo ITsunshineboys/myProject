@@ -169,11 +169,12 @@ a:hover{
     display: none;
 
 }
-.modal-body{
-    font-size: 1.2rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
+/*.modal-body{*/
+    /*font-size: 1.2rem;*/
+    /*padding-top: 2rem;*/
+    /*padding-bottom: 2rem;*/
+    /*text-align: center;*/
+/*}*/
 .del_two{
     display:block;
     border: none;
