@@ -124,6 +124,7 @@ CREATE TABLE `goods_recommend_view_log` (
 CREATE TABLE `goods_recommend_sale_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `recommend_id` int unsigned not null default 0,
+  `number` int unsigned not null default 1 comment '销售数量',
   `create_time` int not null DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -172,7 +173,7 @@ create table goods_attr (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) not null default '',
   `value` varchar(50) not null default '',
-  `unit` tinyint(1) not null DEFAULT 0 comment '0: 无, 1: L, 2: M, 3: M^2, 4: Kg',
+  `unit` tinyint(1) not null DEFAULT 0 comment '0: 无, 1: L, 2: M, 3: M^2, 4: Kg, 5: MM',
   `addition_type` tinyint(1) not null default 0 comment '0: 普通添加, 1: 下拉框添加',
   `goods_id` int(11) not null default 0,
   `category_id` int(11) not null default 0,
@@ -203,5 +204,58 @@ create table comment_image (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `comment_id` int(11) unsigned not null default 0,
   `image` varchar(255) not null DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table comment_reply (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comment_id` int(11) unsigned not null default 0,
+  `content` varchar(255) not null default '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table brand_application (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) unsigned not null default 0,
+  `category_id` int(11) unsigned not null default 0,
+  `brand_id` int(11) unsigned not null default 0,
+  `authorization_start` int unsigned not null default 0,
+  `authorization_end` int unsigned not null default 0,
+  `category_title` varchar(255) not null DEFAULT '',
+  `brand_name` varchar(50) not null DEFAULT '',
+  `supplier_name` varchar(25) not null DEFAULT '' COMMENT '供应商',
+  `mobile` bigint unsigned not null DEFAULT 0,
+  `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
+  `review_note` varchar(100) not null DEFAULT '' comment '审核备注',
+  `review_time` int unsigned not null DEFAULT 0,
+  `create_time` int not null DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table brand_application_image (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `brand_application_id` int(11) unsigned not null default 0,
+  `image` varchar(255) not null DEFAULT '',
+  `authorization_name` varchar(50) not null DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `goods_stat` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `supplier_id` int unsigned not null default 0,
+  `sold_number` int unsigned not null default 0 comment '销售数量',
+  `amount_sold` int unsigned not null default 0 comment '销售额',
+  `create_date` int(8) not null DEFAULT 0,
+  `ip_number` int(11) unsigned not null default 0 comment '游客数',
+  `viewed_number` int(11) unsigned not null default 0 comment '访问量',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `goods_order` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(50) not null default '' comment '订单号',
+  `amount_order` int unsigned not null default 0 comment '订单金额',
+  `create_time` int(8) not null DEFAULT 0,
+  `supplier_id` int unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

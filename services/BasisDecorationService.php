@@ -21,7 +21,7 @@ class BasisDecorationService
     {
         if($points && $labor){
             //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-            $labor_formula = ceil(($points / $labor['day_points'])) * $labor['univalence'];
+            $labor_formula = ceil(($points / $labor['quantity'])) * $labor['univalence'];
         }
         return $labor_formula;
     }
@@ -748,6 +748,14 @@ class BasisDecorationService
         return $wall_area;
     }
 
+    /**
+     * 泥作费用
+     * @param int $area
+     * @param array $goods
+     * @param int $craft
+     * @param string $project
+     * @return mixed
+     */
     public static function mudMakeCost($area = 1,$goods = [],$craft = 1,$project = '')
     {
         if ($goods && $craft)
@@ -767,5 +775,272 @@ class BasisDecorationService
             $mud_make['cost'] = $mud_make['quantity'] * $goods_price;
         }
         return $mud_make;
+    }
+
+    /**
+     * 杂工拆除
+     * @param array $get_area
+     * @param $day_area
+     * @return mixed
+     */
+    public static function wallArea($get_area = [],$day_area)
+    {
+        if ($get_area && $day_area)
+        {
+            foreach ($day_area as $skill)
+            {
+                if ($skill['worker_kind_details'] == '拆除12墙')
+                {
+                    $dismantle_12 = $skill;
+                }
+                if ($skill['worker_kind_details'] == '拆除24墙')
+                {
+                    $dismantle_24 = $skill;
+                }
+                if ($skill['worker_kind_details'] == '新建12墙')
+                {
+                    $new_construction_12 = $skill;
+                }
+                if ($skill['worker_kind_details'] == '新建24墙')
+                {
+                    $new_construction_24 = $skill;
+                }
+                if ($skill['worker_kind_details'] == '补烂')
+                {
+                    $repair = $skill;
+                }
+            }
+        }
+//        12墙拆除天数=12墙拆除面积÷【每天拆除12墙面积】
+        $day['dismantle_12'] = $get_area['12_dismantle'] / $dismantle_12['day_area'];
+//        24墙拆除天数=24墙拆除面积÷【每天拆除24墙面积】
+        $day['dismantle_24'] = $get_area['24_dismantle'] / $dismantle_24['day_area'];
+//        ①拆除天数=12墙拆除天数+24墙拆除天数
+        $day['dismantle_day'] = $day['dismantle_12'] + $day['dismantle_24'];
+
+//        12墙新建天数=12墙新建面积÷【每天新建12墙面积】
+        $day['new_construction_12'] = $get_area['12_new_construction'] / $new_construction_12['day_area'];
+//        24墙新建天数=24墙新建面积÷【每天新建24墙面积】
+        $day['new_construction_24'] = $get_area['24_new_construction'] / $new_construction_24['day_area'];
+//        ②新建天数=12墙新建天数+24墙新建天数
+        $day['new_construction_day'] =  $day['new_construction_12'] + $day['new_construction_24'];
+
+//        ③补烂天数=补烂长度÷【每天补烂长度】
+        $day['repair_day'] = $get_area['repair'] / $repair['day_sculpt_length'];
+//        总天数=拆除天数+新建天数+补烂天数
+        $day['total_day'] = ceil($day['dismantle_day'] + $day['new_construction_day'] + $day['repair_day']);
+
+        return $day;
+    }
+
+    /**
+     * 杂工清运有建渣点
+     * @param array $get_area
+     * @param array $craft
+     * @return mixed
+     */
+    public static function haveBuildingScrap($get_area = [],$craft = [])
+    {
+        if ($get_area && $craft)
+        {
+            $clear_12 = 0;
+            $clear_24 = 0;
+            foreach ($craft as $one_craft)
+            {
+                if ($one_craft['project_details'] == '清运12墙')
+                {
+                    $clear_12 = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '清运24墙')
+                {
+                    $clear_24 = $one_craft['material'];
+                }
+            }
+//            运到小区楼下费用=（12墙拆除面积）×【40】
+            $transportation_cost['12_wall'] = $get_area['12_dismantle'] * $clear_12;
+//            运到小区楼下费用=（12墙拆除面积）×【20】
+            $transportation_cost['24_wall'] = $get_area['24_dismantle'] * $clear_24;
+//            清运建渣费用=清运24墙费用+清运12墙费用
+            $transportation_cost['cost'] = $transportation_cost['12_wall'] + $transportation_cost['24_wall'];
+        }
+        return $transportation_cost;
+    }
+
+    /**
+     * 杂工清运无建渣点
+     * @param array $get_area
+     * @param array $craft
+     * @return mixed
+     */
+    public static function nothingBuildingScrap($get_area = [],$craft = [])
+    {
+        if ($get_area && $craft)
+        {
+            $clear_12 = 0;
+            $vehicle_12_area = 0;
+            $clear_24 = 0;
+            $vehicle_24_area = 0;
+            $vehicle_cost = 0;
+            foreach ($craft as $one_craft)
+            {
+                if ($one_craft['project_details'] == '清运12墙')
+                {
+                    $clear_12 = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '运渣车12墙面积')
+                {
+                    $vehicle_12_area = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '清运24墙')
+                {
+                    $clear_24 = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '运渣车24墙面积')
+                {
+                    $vehicle_24_area = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '运渣车费用')
+                {
+                    $vehicle_cost = $one_craft['material'];
+                }
+            }
+//            运到小区楼下费用=（12墙拆除面积）×【40】
+            $transportation_cost['12_wall'] = $get_area['12_dismantle'] * $clear_12;
+//            单独外运费用=（12墙拆除面积÷【20】）×【300】
+            $transportation_cost['12_wall_transportation'] = ceil($get_area['12_dismantle'] / $vehicle_12_area) * $vehicle_cost;
+//            清运12墙费用=运到小区楼下费用+单独外运费用
+            $transportation_cost['12_wall_cost'] = $transportation_cost['12_wall'] + $transportation_cost['12_wall_transportation'];
+
+
+//            运到小区楼下费用=（24墙拆除面积）×【20】
+            $transportation_cost['24_wall'] = $get_area['24_dismantle'] * $clear_24;
+//            单独外运费用=（24墙拆除面积÷【10】）×【300】
+            $transportation_cost['24_wall_transportation'] = ceil($get_area['24_dismantle'] / $vehicle_24_area) * $vehicle_cost;
+//            清运24墙费用=运到小区楼下费用+单独外运费用
+            $transportation_cost['24_wall_cost'] = $transportation_cost['24_wall'] + $transportation_cost['24_wall_transportation'];
+
+
+//            清运建渣费用=清运24墙费用+清运12墙费用
+            $transportation_cost['cost'] = $transportation_cost['12_wall_cost'] +  $transportation_cost['24_wall_cost'];
+        }
+        return $transportation_cost;
+    }
+
+    /**
+     * 杂工水泥计算公式
+     * @param array $get_area
+     * @param array $craft
+     * @param array $goods
+     * @return mixed
+     */
+    public static function cementCost($get_area = [],$craft = [] ,$goods = [])
+    {
+        if ($get_area && $craft)
+        {
+            $cement_12 = 0;
+            $cement_24 = 0;
+            $repair = 0;
+            foreach ($craft as $one_craft)
+            {
+                if ($one_craft['project_details'] == '12墙水泥用量')
+                {
+                    $cement_12 = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '24墙水泥用量')
+                {
+                    $cement_24 = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '补烂水泥用量')
+                {
+                    $repair = $one_craft['material'];
+                }
+            }
+
+//            水泥用量=新建用量+补烂用量
+//        新建用量=12墙新建面积×【10kg】+24墙新建面积×【15kg】+补烂长度×【2kg】
+        $new_12 = $get_area['12_dismantle'] * $cement_12;
+        $new_24 = $get_area['24_dismantle'] * $cement_24;
+        $new_repair = $get_area['24_dismantle'] * $repair;
+        $new_dosage = $new_12 + $new_24 + $new_repair;
+
+        //        个数：（水泥用量÷抓取的商品的KG）
+        $cement['quantity'] = ceil($new_dosage / $goods['value']);
+        //        水泥费用：个数×抓取的商品价格
+        $cement['cost'] = $cement['quantity'] * $goods['platform_price'];
+        }
+        return $cement;
+    }
+
+    /**
+     * 杂工空心砖计算公式
+     * @param array $get_area
+     * @param array $goods
+     * @param array $goods_standard
+     * @return mixed
+     */
+    public static function brickCost($get_area = [],$goods = [],$goods_standard = [])
+    {
+        if ($get_area && $goods && $goods_standard)
+        {
+            $length = 0;
+            $wide = 0;
+            $high = 0;
+            foreach ($goods_standard as $standard)
+            {
+                if ($standard['name'] == '长')
+                {
+                    $length = $standard['value'];
+                }
+                if ($standard['name'] == '宽')
+                {
+                    $wide = $standard['value'];
+                }
+                if ($standard['name'] == '高')
+                {
+                    $high = $standard['value'];
+                }
+            }
+//        空心砖费用：个数×抓取的商品价格
+//        个数：（空心砖用量）
+//        空心砖用量=12墙新建面积÷长÷高+24墙新建面积÷宽÷高
+            $dosage_12 = $get_area['12_dismantle'] / $length / $wide;
+            $dosage_24 = $get_area['12_dismantle'] / $wide / $high;
+            $brick['quantity'] = ceil($dosage_12 + $dosage_24);
+            $brick['cost'] = $brick['quantity'] * $goods['platform_price'];
+        }
+        return $brick;
+    }
+
+    public static function riverSandCost($get_area = [],$goods = [],$craft = [])
+    {
+        if ($get_area && $goods && $craft)
+        {
+            foreach ($craft as $one_craft)
+            {
+                if ($one_craft['project_details'] == '12墙河沙用量')
+                {
+                    $river_sand_12 = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '24墙河沙用量')
+                {
+                    $river_sand_24 = $one_craft['material'];
+                }
+                if ($one_craft['project_details'] == '补烂河沙用量')
+                {
+                    $river_sand_repair = $one_craft['material'];
+                }
+            }
+//              河沙用量=新建用量+补烂用量
+//              新建用量=12墙新建面积×【3kg】+24墙新建面积×【3kg】+补烂长度×【2kg】
+            $dosage_12 = $get_area['12_dismantle'] * $river_sand_12;
+            $dosage_24 = $get_area['24_dismantle'] * $river_sand_24;
+            $dosage_repair = $get_area['repair'] * $river_sand_repair;
+            $river_sand_dosage = $dosage_12 + $dosage_24 + $dosage_repair;
+//              个数：（河沙用量÷抓取的商品的KG）
+            $river_sand['quantity'] =  ceil($river_sand_dosage / $goods['value']);
+//              河沙费用：个数×抓取的商品价格
+            $river_sand['cost'] =   $river_sand['quantity'] * $goods['platform_price'];
+        }
+        return $river_sand;
     }
 }

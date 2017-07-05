@@ -381,7 +381,11 @@ class GoodsRecommend extends ActiveRecord
         $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
         $recommendId = (int)$recommendId;
         $recommendId && $where .= " and recommend_id = {$recommendId}";
-        return (int)GoodsRecommendSaleLog::find()->where($where)->asArray()->count();
+        return (int)GoodsRecommendSaleLog::find()
+            ->select('sum(number) as soldNumber')
+            ->where($where)
+            ->asArray()
+            ->all()[0]['soldNumber'];
     }
 
     /**

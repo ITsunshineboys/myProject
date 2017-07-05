@@ -343,7 +343,7 @@ class SiteController extends Controller
     {
         $postData = Yii::$app->request->post();
         $code = 1000;
-        if (!$postData) {
+        if (!$postData || !isset($postData['role_id'])) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],

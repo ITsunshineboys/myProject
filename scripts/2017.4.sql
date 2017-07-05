@@ -29,6 +29,9 @@ CREATE TABLE `user` (
   `create_time` int DEFAULT 0,
   `login_time` int DEFAULT 0,
   `login_role_id` int DEFAULT 0,
+  `legal_person` varchar(50) not null DEFAULT '' comment '法人',
+  `identity_card_front_image` varchar(255) not null DEFAULT '' comment '身份证正面图片',
+  `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -43,29 +46,21 @@ CREATE TABLE `decoration_company` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned not null default 0,
   `nickname` varchar(25) not null DEFAULT '' COMMENT '昵称',
-  `identity_no` varchar(19) NOT NULL default '' COMMENT '个人身份标识',
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
   `name` varchar(50) not null DEFAULT '' COMMENT '装修公司名称',
   `licence` varchar(50) not null DEFAULT '' COMMENT '营业执照号',
   `licence_image` varchar(255) not null DEFAULT '营业执照图片',
-  `legal_person` varchar(50) not null DEFAULT '' comment '法人',
-  `identity_card_front_image` varchar(255) not null DEFAULT '' comment '身份证正面图片',
-  `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `designer` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned not null default 0,
   `nickname` varchar(25) not null DEFAULT '' COMMENT '设计师名称',
-  `identity_no` varchar(19) not null DEFAULT '' COMMENT '个人身份标识',
   `decoration_company_id` int(11) unsigned not null DEFAULT 0 COMMENT '装修公司“id”',
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
-  `name` varchar(50) not null DEFAULT '' COMMENT '名称',
-  `identity_card_front_image` varchar(255) not null DEFAULT '' comment '身份证正面图片',
-  `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   PRIMARY KEY (`id`)
@@ -75,12 +70,8 @@ CREATE TABLE `project_manager` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned not null default 0,
   `nickname` varchar(25) not null DEFAULT '' COMMENT '项目经理名称',
-  `identity_no` varchar(19) not null DEFAULT '' COMMENT '个人身份标识',
   `decoration_company_id` int(11) unsigned not null DEFAULT 0 COMMENT '装修公司“id”',
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
-  `name` varchar(50) not null DEFAULT '' COMMENT '名称',
-  `identity_card_front_image` varchar(255) not null DEFAULT '' comment '身份证正面图片',
-  `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   PRIMARY KEY (`id`)
@@ -97,20 +88,27 @@ CREATE TABLE `supplier` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned not null default 0,
   `nickname` varchar(25) not null DEFAULT '' COMMENT '供应商',
+  `shop_name` varchar(25) not null DEFAULT '' COMMENT '店铺名称',
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像',
   `name` varchar(50) not null DEFAULT '' COMMENT '公司名称',
   `licence` varchar(50) not null DEFAULT '' COMMENT '营业执照号',
   `licence_image` varchar(255) not null DEFAULT '营业执照图片',
-  `legal_person` varchar(50) not null DEFAULT '' comment '法人',
-  `identity_card_front_image` varchar(255) not null DEFAULT '' comment '身份证正面图片',
-  `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   `status` tinyint(1) not null default 0,
   `follower_number` int(11) unsigned not null default 0 comment '关注人数',
   `comprehensive_score` float unsigned not null default 10 comment '综合评分',
+  `store_service_score` float unsigned not null default 10 comment '店家服务评分',
+  `logistics_speed_score` float unsigned not null default 10 comment '物流速度评分',
+  `delivery_service_score` float unsigned not null default 10 comment '配送员服务评分',
+  `type_org` tinyint(1) unsigned not null default 0 comment '0:个体工商户, 1:企业',
+  `type_shop` tinyint(1) unsigned not null default 0 comment '0:旗舰店, 1:自营店, 2:专营店, 3:专卖店',
+  `category_id` int(11) unsigned not null default 0,
+  `shop_no` int(11) unsigned not null default 0 comment '店铺号',
+  `create_time` int unsigned not null DEFAULT 0,
+  `quality_guarantee_deposit` bigint not null DEFAULT 0 comment '质保金, unit: fen',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `project` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -125,13 +123,9 @@ CREATE TABLE `worker` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned not null default 0,
   `nickname` varchar(25) not null DEFAULT '' COMMENT '工人姓名',
-  `identity_no` int(11) unsigned not null DEFAULT 0 COMMENT '个人身份标识',
   `project_manager_id` int(11) unsigned not null DEFAULT 0 COMMENT '项目经理“id”',
   `work_type_id` int(11) unsigned not null DEFAULT 0 COMMENT '工种类型“id”',
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
-  `name` varchar(50) not null DEFAULT '' COMMENT '名称',
-  `identity_card_front_image` varchar(255) not null DEFAULT '' comment '身份证正面图片',
-  `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   PRIMARY KEY (`id`)

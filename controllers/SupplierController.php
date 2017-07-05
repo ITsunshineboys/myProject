@@ -2,27 +2,21 @@
 
 namespace app\controllers;
 
-use app\models\Carousel;
-use app\models\GoodsRecommend;
-use app\models\GoodsCategory;
-use app\models\User;
 use app\services\ExceptionHandleService;
-use app\services\StringService;
-use Yii;
+use app\models\Supplier;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use Yii;
 
-class TestController extends Controller
+class SupplierController extends Controller
 {
     /**
      * Actions accessed by logged-in users
      */
     const ACCESS_LOGGED_IN_USER = [
-        'cache-delete',
-        'cache-delete-all',
-        'reset-mobile-pwd',
+        'certification',
     ];
 
     /**
@@ -50,9 +44,7 @@ class TestController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'cache-delete' => ['post',],
-                    'cache-delete-all' => ['post',],
-                    'reset-mobile-pwd' => ['post',],
+                    'certification' => ['post',],
                 ],
             ],
         ];
@@ -75,36 +67,34 @@ class TestController extends Controller
     }
 
     /**
-     * Delete cache action.
+     * Supplier certification action(app)
      *
      * @return string
      */
-    public function actionCacheDelete()
+    public function actionCertification()
     {
-        $key = trim(Yii::$app->request->post('key', ''));
-        return Yii::$app->cache->delete($key);
-    }
+        $code = 1000;
 
-    /**
-     * Delete all cache action.
-     *
-     * @return string
-     */
-    public function actionCacheDeleteAll()
-    {
-        return Yii::$app->cache->flush();
-    }
+        $user = Yii::$app->user->identity;
 
-    /**
-     * Reset user's new mobile and new password
-     *
-     * @return bool
-     */
-    public function actionResetMobilePwd()
-    {
-        $mobile = Yii::$app->request->post('mobile');
-        $newMobile = Yii::$app->request->post('new_mobile');
-        $pwd = Yii::$app->request->post('pwd');
-        return User::resetMobileAndPwdByMobile($mobile, $newMobile, $pwd);
+        if (Supplier::find()->where(['uid' => $user->id])->exists()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = Supplier::add($user, Yii::$app->request->post());
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'OK',
+        ]);
     }
 }

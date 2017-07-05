@@ -2,30 +2,29 @@
 
 namespace app\models;
 
+use app\services\StringService;
+use app\services\SmValidationService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\helpers\Json;
 
 class User extends ActiveRecord implements IdentityInterface
 {
     const CACHE_PREFIX = 'user_';
     const PASSWORD_MIN_LEN = 6;
     const PASSWORD_MAX_LEN = 25;
-
-    /**
-     * @return array the validation rules.
-     */
-    public function rules()
-    {
-        return [
-            // mobile and password are both required
-            [['mobile', 'password'], 'required'],
-            ['mobile', 'match', 'pattern' => '/^[0-9]{11}$/'],
-            ['mobile', 'unique'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
-        ];
-    }
+    const PREFIX_DEFAULT_MOBILE = '18';
+    const DEFAULT_PWD = '888888';
+    const FIELDS_VIEW_IDENTITY = [
+        'legal_person',
+        'identity_no',
+        'identity_card_front_image',
+        'identity_card_back_image',
+    ];
+    const LEN_MAX_FIELDS = [
+        'legal_person' => 15,
+    ];
 
     /**
      * @inheritdoc
@@ -98,6 +97,177 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Register user
+     *
+     * @param array $data data
+     * @param bool $checkValidationCode if check validation code
+     * @return int|array
+     */
+    public static function register(array $data, $checkValidationCode = true, $external = true)
+    {
+        $code = 1000;
+
+        if (empty($data['mobile'])
+            || empty($data['password'])
+            || strlen(($data['password'])) < self::PASSWORD_MIN_LEN
+            || strlen(($data['password'])) > self::PASSWORD_MAX_LEN
+        ) {
+            return $code;
+        }
+
+        if ($checkValidationCode) {
+            if (empty($data['validation_code'])) {
+                return $code;
+            }
+
+            if (!SmValidationService::validCode($data['mobile'], $data['validation_code'])) {
+                $code = 1002;
+                return $code;
+            }
+        }
+
+        $user = new self;
+        $user->attributes = $data;
+        $user->password = Yii::$app->security->generatePasswordHash($user->password);
+        $user->create_time = $user->login_time = time();
+        $user->login_role_id = Yii::$app->params['ownerRoleId'];
+
+        if (!$user->validate()) {
+            return $code;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!$user->save()) {
+                $transaction->rollBack();
+                return $code;
+            }
+
+            $offset = $external ? Yii::$app->params['offsetAiteCubeNo'] : Yii::$app->params['offsetAiteCubeNoInternal'];
+            $user->aite_cube_no = $user->id + $offset;
+            if (!$user->save()) {
+                $transaction->rollBack();
+                return $code;
+            }
+
+            $userRole = new UserRole;
+            $userRole->user_id = $user->id;
+            $userRole->role_id = Yii::$app->params['ownerRoleId']; // owner
+            if (!$userRole->save()) {
+                $transaction->rollBack();
+                return $code;
+            }
+
+            $transaction->commit();
+
+            if ($checkValidationCode && !empty($data['validation_code'])) {
+                SmValidationService::deleteCode($data['mobile']);
+            }
+
+            $code = 200;
+            return [
+                'code' => $code,
+                'id' => $user->id
+            ];
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return $code;
+        }
+    }
+
+    /**
+     * Reset user's new mobile and new password
+     *
+     * @param int $mobile mobile
+     * @param int $newMobile new mobile
+     * @param string $pwd password
+     * @return bool
+     */
+    public static function resetMobileAndPwdByMobile($mobile, $newMobile, $pwd)
+    {
+        $user = self::find()->where(['mobile' => $mobile])->one();
+        if (!$user) {
+            return false;
+        }
+
+        $user->mobile = $newMobile;
+        $user->password = Yii::$app->getSecurity()->generatePasswordHash($pwd);
+        return $user->validate() && $user->save();
+    }
+
+    /**
+     * Add user by mobile and password
+     *
+     * @param int $mobile mobile
+     * @param string $pwd password
+     * @return int
+     */
+    public static function addByMobileAndPwd($mobile, $pwd)
+    {
+        $code = 1000;
+
+        if (!StringService::isMobile($mobile)) {
+            return $code;
+        }
+
+        $user = new self;
+        $user->mobile = $mobile;
+        $user->password = Yii::$app->getSecurity()->generatePasswordHash($pwd);
+        if (!$user->validate()) {
+            return $code;
+        }
+
+        if (!$user->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
+     * Check role and get user identity
+     *
+     * @param int $mobile mobile
+     * @return ActiveRecord
+     */
+    public static function checkRoleAndGetIdentityByMobile($mobile)
+    {
+        $user = self::find()->where(['mobile' => $mobile])->one();
+
+        if (!$user) {
+            $code = 1010;
+            return $code;
+        } else {
+            if (UserRole::find()->where(['user_id' => $user->id])->count() >= Yii::$app->params['maxRolesNumber']) {
+                $code = 1011;
+                return $code;
+            }
+        }
+
+        return $user;
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            // mobile and password are both required
+            [['mobile', 'password'], 'required'],
+            ['mobile', 'match', 'pattern' => '/^1[34578]{1}\d{9}$/'],
+            ['mobile', 'unique'],
+            // password is validated by validatePassword()
+            ['password', 'validatePassword'],
+            [['identity_no', 'legal_person', 'identity_card_front_image', 'identity_card_back_image'], 'string'],
+            ['legal_person', 'string', 'length' => [1, 15]],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     public function getId()
@@ -130,6 +300,54 @@ class User extends ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+    }
+
+    /**
+     * Validates identity info
+     *
+     * @return bool
+     */
+    public function validateIdentity()
+    {
+        if (!$this->identity_card_front_image
+            || !$this->identity_card_back_image
+            || !$this->validateIdentityNo()
+            || !$this->validateLegalPerson()
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates identity card no
+     *
+     * @return bool
+     */
+    public function validateIdentityNo()
+    {
+        $attr = 'identity_no';
+        if (!$this->$attr) {
+            return false;
+        }
+
+        return StringService::checkIdentityCardNo($this->$attr);
+    }
+
+    /**
+     * Validates legal person
+     *
+     * @return bool
+     */
+    public function validateLegalPerson()
+    {
+        $attr = 'legal_person';
+        if (!$this->$attr) {
+            return false;
+        }
+
+        return mb_strlen($this->$attr) <= self::LEN_MAX_FIELDS[$attr];
     }
 
     /**

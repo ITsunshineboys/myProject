@@ -35,6 +35,11 @@ class GoodsCategory extends ActiveRecord
     const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
     const SEPARATOR_TITLES = ' - ';
     const ERROR_CODE_SAME_NAME = 1006;
+    const CATEGORY_BRANDS_STYLES_SERIES = [
+        'brands' => [],
+        'styles' => [],
+        'series' => []
+    ];
 
     /**
      * @var array admin fields
@@ -391,7 +396,7 @@ class GoodsCategory extends ActiveRecord
         $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
         $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
         if ($category->level == self::LEVEL2) {
-            return $db->createCommand()->queryColumn();
+            return $db->createCommand($sql)->queryColumn();
         } elseif ($category->level == self::LEVEL1) {
             $pids = $db->createCommand($sql)->queryColumn();
             $ret = [];
@@ -422,6 +427,81 @@ class GoodsCategory extends ActiveRecord
                 'offline_time' => time()
             ], $where);
         }
+    }
+
+    /**
+     * Get brands, styles or series by category id
+     *
+     * @param $categoryId category id
+     * @param array $fields data fields
+     * @return array|int
+     */
+    public static function brandsStylesSeriesByCategoryId($categoryId, array $fields)
+    {
+        $brandsStylesSeries = [];
+
+        $categoryId = (int)$categoryId;
+        if ($categoryId <= 0) {
+            return $brandsStylesSeries;
+        }
+
+        if ($fields && array_diff($fields, array_keys(self::CATEGORY_BRANDS_STYLES_SERIES))) {
+            $code = 1000;
+            return $code;
+        }
+
+        if ($fields) {
+            foreach ($fields as $field) {
+                if ($field == 'brands') {
+                    $brandsStylesSeries[$field] = BrandCategory::brandsByCategoryId($categoryId);
+                } elseif ($field == 'styles') {
+                    $brandsStylesSeries[$field] = Style::stylesByCategoryId($categoryId);
+                } else {
+                    $brandsStylesSeries[$field] = Series::seriesByCategoryId($categoryId);
+                }
+            }
+        } else {
+            foreach (self::CATEGORY_BRANDS_STYLES_SERIES as $field => $v) {
+                if ($field == 'brands') {
+                    $brandsStylesSeries[$field] = BrandCategory::brandsByCategoryId($categoryId);
+                } elseif ($field == 'styles') {
+                    $brandsStylesSeries[$field] = Style::stylesByCategoryId($categoryId);
+                } else {
+                    $brandsStylesSeries[$field] = Series::seriesByCategoryId($categoryId);
+                }
+            }
+        }
+
+        return $brandsStylesSeries;
+    }
+
+    /**
+     * Get full title
+     *
+     * @return string
+     */
+    public function fullTitle()
+    {
+        $fullTitle = '';
+
+        if ($this->level == self::LEVEL3) {
+            $path = trim($this->path, ',');
+            list($rootId, $parentId, $id) = explode(',', $path);
+            $rootCategory = self::findOne($rootId);
+            $fullTitle = $rootCategory->title
+                . self::SEPARATOR_TITLES
+                . $this->parent_title
+                . self::SEPARATOR_TITLES
+                . $this->title;
+        } elseif ($this->level == self::LEVEL2) {
+            $fullTitle = $this->parent_title
+                . self::SEPARATOR_TITLES
+                . $this->title;
+        } elseif ($this->level == self::LEVEL1) {
+            $fullTitle = $this->title;
+        }
+
+        return $fullTitle;
     }
 
     /**

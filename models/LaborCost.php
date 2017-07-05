@@ -11,6 +11,19 @@ use yii\db\ActiveRecord;
 
 class LaborCost extends ActiveRecord
 {
+    const FIELDS_ADMIN =[
+        'id',
+        'province_code',
+        'city_code',
+        'univalence',
+        'worker_kind',
+        'quantity',
+        'unit',
+        'rank',
+        'worker_kind_details'
+    ];
+
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -23,13 +36,16 @@ class LaborCost extends ActiveRecord
      * 根据地名查询单价
      * @param string $toponymy
      */
-    public static function univalence($arr = [],$jobs= '',$rank = '银')
+    public static function univalence($arr = [],$jobs= '',$rank = '白银')
     {
         if(!$arr == null && !$jobs == null) {
             $province = $arr['province'] ?? 510000;
             $city = $arr['city'] ?? 510100;
 
-            $labors = self::find()->asArray()->where(['and', ['province_code' => $province], ['city_code' => $city], ['worker_kind' => $jobs],['rank'=>$rank]])->all();
+            $labors = self::find()
+                ->asArray()
+                ->where(['and', ['province_code' => $province], ['city_code' => $city], ['worker_kind' => $jobs],['rank'=>$rank]])
+                ->all();
         }
         return $labors;
     }

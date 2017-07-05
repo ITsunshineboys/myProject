@@ -1,3 +1,19 @@
+CREATE TABLE `decoration_list` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `effect_id` int(11) DEFAULT NULL COMMENT '效果图',
+  `decoration_company_id` int(11) DEFAULT NULL COMMENT '装修公司',
+  `project_manager_id` int(11) DEFAULT NULL COMMENT '项目经理',
+  `majordomo` varchar(50) DEFAULT NULL COMMENT '总监',
+  `hardcover_manager` varchar(50) DEFAULT NULL COMMENT '精装经理',
+  `monitor` varchar(50) DEFAULT NULL COMMENT '监察',
+  `user_id` int(11) DEFAULT NULL COMMENT '业主',
+  `project_name` varchar(255) DEFAULT NULL COMMENT '工程名称',
+  `begin_time` datetime DEFAULT NULL COMMENT '开工时间',
+  `end_time` datetime DEFAULT NULL COMMENT '竣工时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE `decoration_particulars` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `decoration_list_id` int(11) DEFAULT NULL COMMENT '装修列表',
@@ -43,9 +59,9 @@ CREATE TABLE `decoration_particulars` (
 CREATE TABLE `circuitry_reconstruction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `decoration_list_id` int(11) DEFAULT NULL COMMENT '装修列表',
+  `project` char(15) DEFAULT NULL COMMENT '强电or弱电',
+  `material` varchar(20) DEFAULT NULL COMMENT '材料',
   `goods_id` int(11) DEFAULT NULL COMMENT '商品',
-  `points_id` int(11) DEFAULT NULL COMMENT '点位',
-  `material` varchar(50) DEFAULT NULL COMMENT '材料',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -60,6 +76,7 @@ CREATE TABLE `waterway_reconstruction` (
 
 CREATE TABLE `waterproof_reconstruction` (
   `id` int(11) NOT NULL,
+  `decoration_list_id` int(11) DEFAULT NULL,
   `goods_id` int(11) DEFAULT NULL COMMENT '商品',
   `material` varchar(50) DEFAULT NULL COMMENT '材料',
   PRIMARY KEY (`id`)

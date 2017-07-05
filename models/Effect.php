@@ -12,6 +12,24 @@ use yii\db\ActiveRecord;
 class Effect extends ActiveRecord
 {
 
+    const FIELDS_VIEW_ADMIN_MODEL = [
+          'id',
+          'series_id',
+          'style_id',
+          'bedroom',
+          'sittingRoom_diningRoom',
+          'toilet',
+          'kitchen',
+          'window',
+          'area',
+          'high',
+          'province',
+          'city',
+          'district',
+          'toponymy',
+          'particulars',
+          'site_particulars',
+        ];
     /**
      * @return string 返回该AR类关联的数据表名
      */

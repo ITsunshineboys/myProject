@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\BrandApplicationImage;
 use app\models\BrandCategory;
 use app\models\GoodsBrand;
 use app\models\GoodsRecommend;
@@ -10,6 +11,7 @@ use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\Series;
 use app\models\Style;
+use app\models\StylePicture;
 use app\models\Supplier;
 use app\models\Lhzz;
 use app\models\LogisticsTemplate;
@@ -17,7 +19,13 @@ use app\models\LogisticsDistrict;
 use app\models\GoodsAttr;
 use app\models\GoodsImage;
 use app\models\GoodsComment;
+use app\models\User;
+use app\models\UserRole;
+use app\models\BrandApplication;
+use app\models\GoodsStat;
+use app\models\GoodsOrder;
 use app\services\ExceptionHandleService;
+use app\services\FileService;
 use app\services\StringService;
 use app\services\ModelService;
 use app\services\AdminAuthService;
@@ -69,6 +77,8 @@ class MallController extends Controller
         'brand-enable-batch',
         'brand-review-list',
         'brand-list-admin',
+        'brand-application-add',
+        'brand-application-list-admin',
         'logistics-template-add',
         'logistics-template-edit',
         'logistics-template-view',
@@ -88,6 +98,13 @@ class MallController extends Controller
         'goods-list-admin',
         'goods-inventory-reset',
 //        'goods-images',
+        'supplier-add',
+        'check-role-get-identity',
+        'supplier-icon-reset',
+        'supplier-view-admin',
+        'shop-data',
+        'supplier-index-admin',
+        'index-admin',
     ];
 
     /**
@@ -141,6 +158,7 @@ class MallController extends Controller
                     'brand-status-toggle' => ['post',],
                     'brand-disable-batch' => ['post',],
                     'brand-enable-batch' => ['post',],
+                    'brand-application-add' => ['post',],
                     'logistics-template-add' => ['post',],
                     'logistics-template-edit' => ['post',],
                     'goods-attr-add' => ['post',],
@@ -153,6 +171,8 @@ class MallController extends Controller
                     'goods-offline-reason-reset' => ['post',],
                     'goods-reason-reset' => ['post',],
                     'goods-inventory-reset' => ['post',],
+                    'supplier-add' => ['post',],
+                    'supplier-icon-reset' => ['post',],
                 ],
             ],
         ];
@@ -2424,7 +2444,7 @@ class MallController extends Controller
 
         $attrCnt = count($names);
         if ($attrCnt > 0) {
-            if (!($attrCnt == count($values) && $attrCnt == count($units) && $attrCnt == count($additionTypes))) {
+            if (!($attrCnt == count($units) && $attrCnt == count($additionTypes))) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2556,7 +2576,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category_list_admin' => [
+                'goods-attr-list-admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
                     'details' => $details
                 ]
@@ -2575,20 +2595,22 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category-brands-styles-series' => [
-                    'category-brands' => [],
-                    'category-styles' => [],
-                    'category-series' => [],
-                ]
+                'category-brands-styles-series' => GoodsCategory::CATEGORY_BRANDS_STYLES_SERIES
             ],
         ];
 
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
-        if ($categoryId > 0) {
-            $ret['data']['category-brands-styles-series']['category-brands'] = BrandCategory::brandsByCategoryId($categoryId);
-            $ret['data']['category-brands-styles-series']['category-styles'] = Style::stylesByCategoryId($categoryId);
-            $ret['data']['category-brands-styles-series']['category-series'] = Series::seriesByCategoryId($categoryId);
+        $fields = Yii::$app->request->get('fields', []);
+
+        $brandsStylesSeries = GoodsCategory::brandsStylesSeriesByCategoryId($categoryId, $fields);
+        if (!is_array($brandsStylesSeries)) {
+            return Json::encode([
+                'code' => $brandsStylesSeries,
+                'msg' => Yii::$app->params['errorCodes'][$brandsStylesSeries],
+            ]);
         }
+
+        $ret['data']['category-brands-styles-series'] = $brandsStylesSeries;
         return Json::encode($ret);
     }
 
@@ -3453,7 +3475,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'goods-view' => $goods->view(),
+                'goods-view' => $goods->view(Yii::$app->request->userIP),
             ],
         ]);
     }
@@ -3505,5 +3527,698 @@ class MallController extends Controller
         $ret['data']['goods-comments']['stat'] = GoodsComment::statByGoodsId($goodsId);
         $ret['data']['goods-comments']['details'] = GoodsComment::pagination($where, GoodsComment::FIELDS_APP, $page, $size);
         return Json::encode($ret);
+    }
+
+    /**
+     * Add supplier action(lhzz admin)
+     *
+     * @return string
+     */
+    public function actionSupplierAdd()
+    {
+        $code = 1000;
+
+        $mobile = (int)Yii::$app->request->post('mobile', 0);
+        if (!$mobile) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $checkRoleRes = User::checkRoleAndGetIdentityByMobile($mobile);
+        if (is_int($checkRoleRes)) {
+            return Json::encode([
+                'code' => $checkRoleRes,
+                'msg' => Yii::$app->params['errorCodes'][$checkRoleRes],
+            ]);
+        }
+
+        $data = Yii::$app->request->post();
+        $data['status'] = Supplier::STATUS_ONLINE;
+        $code = Supplier::add($checkRoleRes, $data);
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Check role and get identity action(lhzz admin)
+     *
+     * @return string
+     */
+    public function actionCheckRoleGetIdentity()
+    {
+        $code = 1000;
+
+        $mobile = (int)Yii::$app->request->get('mobile', 0);
+        if (!$mobile) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $checkRoleRes = User::checkRoleAndGetIdentityByMobile($mobile);
+        if (is_int($checkRoleRes)) {
+            return Json::encode([
+                'code' => $checkRoleRes,
+                'msg' => Yii::$app->params['errorCodes'][$checkRoleRes],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'identity' => ModelService::viewModelByFields($checkRoleRes, User::FIELDS_VIEW_IDENTITY),
+            ],
+        ]);
+    }
+
+    /**
+     * Add brand application action
+     *
+     * @return string
+     */
+    public function actionBrandApplicationAdd()
+    {
+        $user = Yii::$app->user->identity;
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        $brandApplication = BrandApplication::addByAttrs($user, Yii::$app->request->post());
+        if (!is_object($brandApplication)) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $brandApplication,
+                'msg' => Yii::$app->params['errorCodes'][$brandApplication],
+            ]);
+        }
+
+        $authorizationNames = Yii::$app->request->post('authorization_names', []);
+        $images = Yii::$app->request->post('images', []);
+
+        $code = BrandApplicationImage::addByAttrs($brandApplication, $images, $authorizationNames);
+        if (200 != $code) {
+            $transaction->rollBack();
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Get brand application list action(admin).
+     *
+     * @return string
+     */
+    public function actionBrandApplicationListAdmin()
+    {
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', BrandApplication::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'brand-application-list-admin' => [
+                    'total' => (int)BrandApplication::find()->where([])->asArray()->count(),
+                    'details' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Reset supplier icon action
+     *
+     * @return string
+     */
+    public function actionSupplierIconReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $icon = trim(Yii::$app->request->post('icon', ''));
+
+        if (!$icon) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier = Supplier::findOne($id);
+        if (!$supplier) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier->icon = $icon;
+        if (!$supplier->isAttributeChanged('icon')) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+            ]);
+        }
+
+        if (!$supplier->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$supplier->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * View supplier action(admin)
+     *
+     * @return string
+     */
+    public function actionSupplierViewAdmin()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->get('id', 0);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier = Supplier::findOne($id);
+
+        if (!$supplier) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier-view-admin' => $supplier->viewAdmin(),
+            ],
+        ]);
+    }
+
+    /**
+     * View supplier shop data action
+     *
+     * @return string
+     */
+    public function actionShopData()
+    {
+        $code = 1000;
+
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $supplierId = Supplier::find()->where(['uid' => $user->id])->one()->id;
+        } else {
+            $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
+        }
+
+        $where = "supplier_id = {$supplierId}";
+
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = str_replace('-', '', $startTime);
+            $startTime && $where .= " and create_date >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = str_replace('-', '', $endTime);
+            $endTime && $where .= " and create_date <= {$endTime}";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsStat::PAGE_SIZE_DEFAULT);
+        $paginationData = GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'shop-data' => [
+                    'total_sold_number' => GoodsStat::totalSoldNumber($where),
+                    'total_amount_sold' => GoodsStat::totalAmountSold($where),
+                    'total_ip_number' => GoodsStat::totalIpNumber($where),
+                    'total_viewed_number' => GoodsStat::totalViewedNumber($where),
+                    'total' => $paginationData['total'],
+                    'details' => $paginationData['details']
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Supplier index action(admin)
+     *
+     * @return string
+     */
+    public function actionSupplierIndexAdmin()
+    {
+        $timeType = 'today';
+
+        $user = Yii::$app->user->identity;
+        $supplierId = Supplier::find()->where(['uid' => $user->id])->one()->id;
+
+        list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+        $intStartTime = strtotime($startTime);
+        $intEndTime = strtotime($endTime);
+        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime, $supplierId);
+        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime, $supplierId);
+
+        $where = "supplier_id = {$supplierId}";
+
+        $startTime = explode(' ', $startTime)[0];
+        $endTime = explode(' ', $endTime)[0];
+
+        if ($startTime) {
+            $startTime = str_replace('-', '', $startTime);
+            $startTime && $where .= " and create_date >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = str_replace('-', '', $endTime);
+            $endTime && $where .= " and create_date <= {$endTime}";
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier-index-admin' => [
+                    'today_amount_order' => $todayAmountOrder,
+                    'today_order_number' => $todayOrderNumber,
+                    'today_ip_number' => GoodsStat::totalIpNumber($where),
+                    'today_viewed_number' => GoodsStat::totalViewedNumber($where),
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Mall index action(admin)
+     *
+     * @return string
+     */
+    public function actionIndexAdmin()
+    {
+        $timeType = 'today';
+
+        list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+        $intStartTime = strtotime($startTime);
+        $intEndTime = strtotime($endTime);
+        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime);
+        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime);
+        $deltaSupplierNumber = Supplier::deltaNumber($intStartTime, $intEndTime);
+
+        $where = '1';
+
+        $startTime = explode(' ', $startTime)[0];
+        $endTime = explode(' ', $endTime)[0];
+
+        if ($startTime) {
+            $startTime = str_replace('-', '', $startTime);
+            $startTime && $where .= " and create_date >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = str_replace('-', '', $endTime);
+            $endTime && $where .= " and create_date <= {$endTime}";
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'index-admin' => [
+                    'today_date' => date('Y-m-d'),
+                    'today_amount_order' => $todayAmountOrder,
+                    'today_order_number' => $todayOrderNumber,
+                    'today_ip_number' => GoodsStat::totalIpNumber($where),
+                    'today_viewed_number' => GoodsStat::totalViewedNumber($where),
+                    'delta_supplier_number' => $deltaSupplierNumber,
+                    'total_supplier_number' => (int)Supplier::find()->where(['status' => Supplier::STATUS_ONLINE])->count(),
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * series list
+     * @return string
+     */
+    public function actionSeriesList()
+    {
+        $series = Series::find()->All();
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'OK',
+            'data'=>[
+                'series_list'=>$series
+            ]
+        ]);
+    }
+
+    /**
+     * series add
+     * @return string
+     */
+    public function actionSeriesAdd()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'series'=>'齐家',
+            'theme'=>'简单',
+            'intro'=>'齐家的东西就是好'
+        ];
+        $series =  new Series();
+        $series->series = $data['series'];
+        $series->theme = $data['theme'];
+        $series->intro = $data['intro'];
+        $series->creation_time = time();
+        $series->status= Series::STATUS_ONLINE;
+        if (!$series->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$series->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+
+    /**
+     * series edit
+     * @return string
+     */
+    public function actionSeriesEdit()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'id'=>2,
+            'series'=>'齐家',
+            'theme'=>'方便',
+            'intro'=>'齐家的东西，无敌，美好'
+        ];
+        $series =  new Series();
+        $series_edit = $series->findOne($data['id']);
+        $series_edit->series = $data['series'];
+        $series_edit->theme = $data['theme'];
+        $series_edit->intro = $data['intro'];
+        if (!$series_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$series_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+
+    /**
+     * series status
+     * @return string
+     */
+    public function actionSeriesStatus()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'id'=>2,
+            'status'=>'0',
+        ];
+        $series =  new Series();
+        $series_edit = $series->findOne($data['id']);
+        $series_edit->status = $data['status'];
+        if (!$series_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$series_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+
+    /**
+     * style list
+     * @return string
+     */
+    public function actionStyleList()
+    {
+        $style = Style::find()->All();
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'OK',
+            'data'=>[
+                'style_list'=>$style
+            ]
+        ]);
+    }
+
+    /**
+     * style add
+     * @return string
+     */
+    public function actionStyleAdd()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'style'=>'中国风',
+            'theme'=>'中国风',
+            'intro'=>'物有所值',
+            'picture'=>'C:\Users\Administrator\Desktop'
+        ];
+        $style =  new Style();
+        $style->style = $data['style'];
+        $style->theme = $data['theme'];
+        $style->intro = $data['intro'];
+        $style->creation_time = time();
+        $style->status= Style::STATUS_ONLINE;
+        if (!$style->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$style->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $style_picture = new StylePicture();
+        $style_picture->style_id = $style->attributes['id'];
+        $style_picture->picture = FileService::upload();
+        if (!$style_picture->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$style_picture->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+    }
+
+    /**
+     * style edit
+     * @return string
+     */
+    public function actionStyleEdit()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'id'=>4,
+            'style'=>'中国风',
+            'theme'=>'传统东西',
+            'intro'=>'你城山',
+            'picture'=>'C:\Users\Administrator\Desktop'
+        ];
+        $style =  new Style();
+        $style_edit = $style->findOne($data['id']);
+        $style_edit->style = $data['style'];
+        $style_edit->theme = $data['theme'];
+        $style_edit->intro = $data['intro'];
+        if (!$style_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$style_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $style_picture = new StylePicture();
+        $style_picture_edit = $style_picture->find()->asArray()->where(['style_id'=>$data['id']])->one();
+        $style_picture_edit->picture = FileService::upload();
+        if (!$style_picture_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$style_picture_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+
+    /**
+     * style status
+     * @return string
+     */
+    public function actionStyleStatus()
+    {
+        $code = 1000;
+//        $post = Yii::$app->request->post();
+//        $data = Json::decode($post);
+        $data = [
+            'id'=>4,
+            'status'=>'0',
+        ];
+        $series =  new Style();
+        $series_edit = $series->findOne($data['id']);
+        $series_edit->status = $data['status'];
+        if (!$series_edit->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$series_edit->save())
+        {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
     }
 }

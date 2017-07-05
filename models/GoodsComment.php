@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
 
 class GoodsComment extends ActiveRecord
 {
-    const FIELDS_APP = ['id', 'name', 'icon', 'create_time', 'content', 'score', 'images'];
+    const FIELDS_APP = ['id', 'name', 'icon', 'create_time', 'content', 'score', 'images', 'replies'];
     const SCORE_GOOD = [8, 10];
     const SCORE_MEDIUM = [4, 6];
     const SCORE_POOR = [0, 2];
@@ -26,7 +26,7 @@ class GoodsComment extends ActiveRecord
     ];
     const MAX_LEN_CONTENT = 70;
     const PAGE_SIZE_DEFAULT = 12;
-    const FIELDS_EXTRA = ['images'];
+    const FIELDS_EXTRA = ['images', 'replies'];
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -64,6 +64,7 @@ class GoodsComment extends ActiveRecord
 
         if (!$selectOld
             || in_array('images', $selectOld)
+            || in_array('replies', $selectOld)
             || in_array('create_time', $selectOld)
             || in_array('score', $selectOld)
         ) {
@@ -74,6 +75,10 @@ class GoodsComment extends ActiveRecord
 
                 if (in_array('images', $selectOld)) {
                     $comment['images'] = CommentImage::findImagesByCommentId($comment['id']);
+                }
+
+                if (in_array('replies', $selectOld)) {
+                    $comment['replies'] = CommentReply::findRepliesByCommentId($comment['id']);
                 }
 
                 if (isset($comment['score'])) {

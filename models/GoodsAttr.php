@@ -26,7 +26,8 @@ class GoodsAttr extends ActiveRecord
         'L',
         'M',
         'M^2',
-        'Kg'
+        'Kg',
+        'MM'
     ];
 
     const ADDITION_TYPES = [
@@ -54,16 +55,20 @@ class GoodsAttr extends ActiveRecord
      */
     public static function validateValues($values, $additionTypes)
     {
-        foreach ($values as $i => $row) {
-            if ($additionTypes[$i] == self::ADDITION_TYPE_NORMAL) {
+        foreach ($additionTypes as $i => $additionType) {
+            if ($additionType == self::ADDITION_TYPE_NORMAL) {
                 continue;
             }
 
-            $row = explode(',', $row);
+            if (count($values) != count($additionTypes)) {
+                return false;
+            }
 
-            if (StringService::checkRepeatedElement($row)
-                || StringService::checkEmptyElement($row)
-                || !StringService::checkIntList($row)
+            $value = explode(',', $values[$i]);
+
+            if (StringService::checkRepeatedElement($value)
+                || StringService::checkEmptyElement($value)
+//                || !StringService::checkIntList($value)
             ) {
                 return false;
             }
@@ -320,5 +325,19 @@ class GoodsAttr extends ActiveRecord
             ['unit', 'in', 'range' => array_keys(self::UNITS)],
             ['addition_type', 'in', 'range' => array_keys(self::ADDITION_TYPES)]
         ];
+    }
+
+    public static function findByGoodsId($id = 0)
+    {
+        if ($id)
+        {
+            $select = "goods_attr.name,goods_attr.value";
+            $standard = self::find()
+                        ->asArray()
+                        ->select($select)
+                        ->where(['goods_id'=>$id])
+                        ->all();
+        }
+       return $standard;
     }
 }

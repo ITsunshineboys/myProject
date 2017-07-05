@@ -71,4 +71,46 @@ class ModelService
 
         return false;
     }
+
+    /**
+     * Select model fields
+     *
+     * @return array
+     */
+    public static function selectModelFields(ActiveRecord $model, array $fields = [])
+    {
+        $data = [];
+
+        $modelAttrs = array_keys($model->attributes);
+
+        if (!$fields) {
+            $fields = $modelAttrs;
+        } else {
+            if (array_diff($fields, $modelAttrs)) {
+                return $data;
+            }
+        }
+
+        foreach ($fields as $field) {
+            $data[$field] = $model->$field;
+        }
+
+        return $data;
+    }
+
+    /**
+     * View model by fields
+     *
+     * @return array
+     */
+    public static function viewModelByFields(ActiveRecord $model, $fields)
+    {
+        $viewData = [];
+
+        foreach ($fields as $field) {
+            $viewData[$field] = $model->$field;
+        }
+
+        return $viewData;
+    }
 }

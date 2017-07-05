@@ -48,6 +48,8 @@ return [
     'brand-enable-batch' => [1],
     'brand-review-list' => [1],
     'brand-list-admin' => [1, 6],
+    'brand-application-add' => [6],
+    'brand-application-list-admin' => [1, 6],
 
     // logistics template
     'logistics-template-add' => [6],
@@ -73,4 +75,15 @@ return [
     'goods-list-admin' => [1, 6],
     'goods-inventory-reset' => [6],
 //    'goods-images' => [1, 6],
+
+    // supplier
+    'supplier-add' => [1],
+    'supplier-icon-reset' => [6],
+    'supplier-view-admin' => [1, 6],
+    'shop-data' => [1, 6],
+    'supplier-index-admin' => [6],
+    'check-role-get-identity' => [1],
+
+    // mall
+    'index-admin' => [1],
 ];

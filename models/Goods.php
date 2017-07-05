@@ -372,6 +372,25 @@ class Goods extends ActiveRecord
         }
     }
 
+    public static function newMaterialAdd($level = '', $title = '', $city = 510100)
+    {
+        if (empty($level) && empty($title)) {
+            echo '请正确输入值';
+            exit;
+        } else {
+            $db = Yii::$app->db;
+            $sql = "SELECT goods.*,goods_brand. NAME,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = " . $city . "  AND goods_category.`level` = " . $level . "  AND goods_category.title LIKE '" . $title . "'";
+            $a = $db->createCommand($sql)->queryAll();
+        }
+        if (!empty($a)) {
+            foreach ($a as $v => $k) {
+                $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                $max = array_search(max($c), $c);
+            }
+            return $a[$max];
+        }
+    }
+
     public static function findByIdAll($level = '', $title = '', $series = '1', $style = '2')
     {
         if (empty($level) && empty($title)) {
@@ -404,16 +423,17 @@ AND goods.id IN (" . $id . ")";
         return $all_goods;
     }
 
-    public static function categoryById($all = [], $series = 1, $style = 1, $city = 510100)
+    public static function categoryById($all = [], $city = 510100)
     {
         if ($all) {
-            $category_id = [];
-            foreach ($all as $one) {
-                $category_id [] = $one['id'];
+            $material = [];
+            foreach ($all as $one)
+            {
+                $material [] = $one['material'];
             }
-            $id = implode(',', $category_id);
+            $id = implode('\',\'',$material);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`id` in (" . $id . ") AND goods.series_id = " . $series . " AND goods.style_id =" . $style;
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_district ON goods.id = logistics_district.goods_id WHERE logistics_district.district_code = " . $city . " AND goods_category.title in ('" .$id . "')";
             $all_goods = $db->createCommand($sql)->queryAll();
         }
         return $all_goods;
@@ -522,14 +542,14 @@ AND goods.id IN (" . $id . ")";
             [['title', 'subtitle', 'category_id', 'brand_id', 'cover_image', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_ADD],
             [['title', 'subtitle'], 'string', 'length' => [1, 16]],
             [['cover_image', 'offline_reason', 'reason'], 'string'],
-            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id'], 'number', 'min' => 0],
+            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'style_id', 'series_id'], 'number', 'min' => 0],
             ['supplier_price', 'validateSupplierPrice', 'on' => self::SCENARIO_REVIEW],
             ['platform_price', 'validatePlatformPrice', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             ['after_sale_services', 'validateAfterSaleServices'],
             [['category_id'], 'validateCategoryId'],
             [['brand_id'], 'validateBrandId'],
-            [['style_id'], 'validateStyleId'],
-            [['series_id'], 'validateSeriesId'],
+            [['style_id'], 'validateStyleId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
+            [['series_id'], 'validateSeriesId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             [['logistics_template_id'], 'validateLogisticsTemplateId'],
             ['description', 'safe']
         ];
@@ -856,21 +876,24 @@ AND goods.id IN (" . $id . ")";
     /**
      * Get view data
      *
+     * @param string $ip ip
      * @return array
      */
-    public function view()
+    public function view($ip)
     {
         $supplier = Supplier::findOne($this->supplier_id);
         $user = User::findOne($supplier->uid);
 
         if ($goodsComment = GoodsComment::find()
-            ->select(GoodsComment::FIELDS_APP)
+            ->select(array_diff(GoodsComment::FIELDS_APP, GoodsComment::FIELDS_EXTRA))
             ->where(['goods_id' => $this->id])
             ->orderBy(['id' => SORT_DESC])
             ->one()
         ) {
             $goodsComment->create_time = date('Y-m-d');
         }
+
+        GoodsStat::updateDailyViewedNumberAndIpNumberBySupplierId($this->supplier_id, $ip);
 
         return [
             'title' => $this->title,
@@ -956,5 +979,14 @@ AND goods.id IN (" . $id . ")";
     public function getOrders()
     {
         return $this->hasOne(GoodsBrand::className(), ['id' => 'brand_id']);
+    }
+
+    public static function skuAll($sku = '')
+    {
+        if (!$sku)
+        {
+            return false;
+        }
+        return self::findone($sku);
     }
 }
