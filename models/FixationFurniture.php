@@ -19,8 +19,8 @@ class FixationFurniture extends ActiveRecord
     {
         if(!$arr == null){
             $id = $arr['effect_id'];
-            $province = $arr['province']??510000;
-            $city = $arr['city']??510100;
+            $province = $arr['province'] ?: 510000;
+            $city = $arr['city'] ?: 510100;
             $series_id = $arr['series'];
             $style_id = $arr['style'];
             $fixation_furniture = self::find()->asArray()->where(['and',['effect_id'=>$id],['city'=>$city],['province'=>$province],['series_id'=>$series_id],['style_id'=>$style_id]])->all();

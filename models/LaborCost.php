@@ -39,8 +39,8 @@ class LaborCost extends ActiveRecord
     public static function univalence($arr = [],$jobs= '',$rank = '白银')
     {
         if(!$arr == null && !$jobs == null) {
-            $province = $arr['province'] ?? 510000;
-            $city = $arr['city'] ?? 510100;
+            $province = $arr['province'] ?: 510000;
+            $city = $arr['city'] ?: 510100;
 
             $labors = self::find()
                 ->asArray()
