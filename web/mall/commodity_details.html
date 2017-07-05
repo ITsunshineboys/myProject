@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- meta使用viewport以确保页面可自由缩放 -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>产品列表</title>
     <link rel="stylesheet" href="../css/all.css"/>
     <link rel="stylesheet" href="css/rem.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
@@ -18,8 +18,8 @@
 
 <header>
     <div>
-        <span><</span>
-        <sapn class="span_center">欧式板</sapn>
+        <a href="javascript:history.go(-1)"><span><</span></a>
+        <span class="span_center">欧式板</span>
     </div>
 </header>
 <section ng-controller="comment_controller">
@@ -35,7 +35,9 @@
         <div class="flex_div" >
                <div class=" item_commodity"  ng-repeat="n in message |limitTo:myFilter.limit ">
                    <div class="item_commodity_divimg">
-                      <img src="{{n.image}}" alt="" class="img_item " />
+                       <a href="commodity_details.html">
+                            <img src="{{n.image}}" alt="" class="img_item " />
+                       </a>
                    </div>
                    <div class="item_commodity_comment">
                        <p class="comment_one">{{n.title}}</p>

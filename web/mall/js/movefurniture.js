@@ -5,7 +5,7 @@ var myapp=angular.module('myapp',[]);
 myapp.controller("commentCtrl",function ($scope,$http) {
     $http({
         method: 'post',
-        url:url+"categories"
+        url:url+"/categories"
     }).then(function successCallback(data) {
         $scope.message = data.data.data.categories;
         //alert(message);

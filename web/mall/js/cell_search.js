@@ -13,3 +13,15 @@ app.controller("searchCtrl", function ($scope,$http) {
 
     })
 });
+
+//获取焦点，获取输入的内容  显示数据
+$(".input_data").keyup(function () {
+    //data 为接口的数据
+    var data;
+    if(data.length>0){
+        $(".have_data").css("display","black")
+    }else{
+        $(".no_data").css("display","black")
+    }
+
+});

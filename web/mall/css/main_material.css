@@ -93,35 +93,5 @@ header div span{
     margin-left: 11.8rem;
 }
 .money_col{
-   color: #F55122;
+    color: #F55122;
 }
-/*模态框样式*/
-.comment_img{
-    border: 1px solid #C2C2C2;
-    width: 20rem;
-    height: 15rem;
-}
-
-.modal-content{
-    width: 21rem!important;
-}
-.close{
-    font-size: 2rem!important;
-    margin-left: -1rem;
-}
-.comment{
-    margin-top: 1rem;
-    font-size: 1rem;
-}
-.comment_se{
-    position: relative;
-    left: 11rem;
-    top:-1rem;
-}
-.comment_p{
-    padding-top: 1rem;
-}
-.modal-dialog{
-    padding-top: 6rem;
-}
-/*结束、、*/

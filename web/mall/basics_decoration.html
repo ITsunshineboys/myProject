@@ -22,7 +22,7 @@
       <div class="wall_material">
           <h1>墙面材料</h1>
           <ul class="wall_ul">
-              <li>
+              <li data-toggle="modal" data-target="#myModal">
                   <span class="wall_span">石傲芬</span><br/>
                   <span class="wall_brand">品牌名称</span>
                   <span class="wall_money">￥200.00 ></span>
@@ -169,7 +169,33 @@
         <span class="money_col">￥15000.22</span>
         <button>保存</button>
     </div>
+
+    <!--模态框-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <button type="button" class="close"   data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-body ">
+                   <div class="comment_img">
+                       <img src="" alt=""/>
+                   </div>
+                    <div class="comment">
+                        <span class="comment_span">品牌名称</span><br/>
+                        <span class="comment_square">1000m <sup>2</sup></span>
+                        <span class="comment_se">￥700.00</span>
+
+                        <p class="comment_p">商品特色</p>
+                        <p>我用双手成就你的梦想，你的剑就是我的剑，我去前面探探路</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+
 
 <footer style="height: 500px"></footer>
 <script src="../js/jquery.js"></script>

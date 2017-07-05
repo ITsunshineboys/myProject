@@ -30,3 +30,21 @@
 .first_fru {
     font-size: 1.2rem;
 }
+
+.have_data{
+    display: none;
+}
+.no_data{
+    text-align: center;
+    padding-top: 5rem;
+    display: none;
+}
+.no_data span{
+    font-size: 1.2rem;
+    color: #C2C2C2;
+}
+.no_data a{
+    position: relative;
+    top:2rem;
+    font-size: 1.2rem;
+}

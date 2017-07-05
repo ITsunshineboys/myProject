@@ -17,3 +17,9 @@ $(".list_dis ul li img").on("click",function () {
 
     //$(this).addClass("blue").siblings("black").removeClass("blue");
 });
+
+
+//输入框获取焦点跳转页面
+$(".search_a").blur(function () {
+
+});
