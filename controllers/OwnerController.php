@@ -194,7 +194,7 @@ class OwnerController extends Controller
         if (empty($post['effect_id'])) {
             //查询弱电所需要材料
             $weak_current = [];
-            $electric_wire = '电线';
+            $electric_wire = '网线';
             $weak_current [] = Goods::priceDetail(3, $electric_wire);
             $pipe = '线管';
             $weak_current [] = Goods::priceDetail(3, $pipe);
@@ -211,8 +211,10 @@ class OwnerController extends Controller
 
         //人工总费用
         $labor_all_cost = BasisDecorationService::laborFormula($weak_points, $Weak_labor);
+
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points, $weak_current, $craft);
+
         //添加材料
 
         $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);

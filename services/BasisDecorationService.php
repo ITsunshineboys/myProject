@@ -28,7 +28,10 @@ class BasisDecorationService
 
     /**
      * 电线计算公式
-     * @param string $str
+     * @param string $points
+     * @param array $goods
+     * @param string $crafts
+     * @return mixed
      */
     public static function quantity($points = '',$goods = [],$crafts= '')
     {
@@ -38,10 +41,17 @@ class BasisDecorationService
             foreach ($crafts as $craft){
                 if($craft['project_details'] == '网线' || $craft['project_details'] == '电线'){
                     $material = $craft['material'];
+                }else
+                {
+                    $material = 0;
                 }
                 if($craft['project_details'] == '线管'){
                     $spool = $craft['material'];
+                }else
+                {
+                    $spool = 0;
                 }
+
             }
 
             $goods_value = 0;
@@ -53,29 +63,52 @@ class BasisDecorationService
                 if($one['title'] == '网线' || $one['title'] == '电线' ){
                     $goods_value = $one['value'];
                     $goods_price = $one['platform_price'];
+                }else
+                {
+                    $goods_value = 0;
+                    $goods_price = 0;
                 }
 //                线管费用：个数3×抓取的商品价格
 //                个数3：（电路总点位×【10m】÷抓取的商品的长度）
                 if($one['title'] == '线管'){
                     $spool_value = $one['value'];;
                     $spool_price = $one['platform_price'];
+                }else
+                {
+                    $spool_value = 0;
+                    $spool_price = 0;
                 }
+
 
                 if($one['title'] == '底盒'){
                     $bottom_case = $one['platform_price'];
+                }else
+                {
+                    $bottom_case = 0;
                 }
+
             }
-            //个数计算
-            $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
-            //费用计算
+
+
+            if ($points == 0 || $material == 0 || $goods_value == 0 )
+            {
+                $electricity['wire_quantity'] = 0;
+                $electricity['spool_quantity'] = 0;
+            }else
+            {
+                //线路个数计算
+                $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
+                //线管个数计算
+                $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
+            }
+
+            //线路费用计算
             $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
-            //个数计算
-            $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
-            //费用计算
+            //线管费用计算
             $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
             $electricity['bottom_case'] = $points * $bottom_case;
             //总费用
-            $electricity['total_cost'] =  $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_case'];
+            $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_case'];
         }
      return  $electricity;
     }
