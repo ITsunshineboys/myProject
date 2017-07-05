@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="intelligent_nodata">
 <head lang="en">
     <meta charset="UTF-8">
-    <title>智能报价无资料</title>
+    <title></title>
     <link rel="stylesheet" href="css/rem.css">
     <link rel="stylesheet" href="css/all.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/inteligent_nodata.css"/>
-    <link rel="stylesheet" href="css/intelligent.css"/>
 </head>
-<body>
+<body ng-controller="nodata_ctrl">
 <header>
     <div>
         <span class="in_span"><</span>
@@ -24,11 +23,12 @@
     <div class="quarters_small">
         <h1>小区信息</h1>
         <span class="choose_quarter">小区选择</span>
-        <a href="cell_search.html">
         <input type="text" placeholder="请输入小区名字" /><br/>
-        </a>
+        <div class="address_content">
         <p class="quarters_adress">小区地址</p>
-        <textarea class="text_all" rows="5" cols="43">例：金牛区沙西线66号</textarea>
+        <textarea class="text_all" rows="5" cols="43" placeholder="例：金牛区沙西线66号" ng-model="message"></textarea>
+        <span class="text_all_length">{{message.length}}/45</span>
+        </div>
     </div>
 
     <!--房屋信息-->
@@ -76,19 +76,19 @@
         <h1>层高</h1>
         <ul class="storey_ul">
             <li >
-                <input type="checkbox"/>
+                <input type="radio" name="storey_content"/>
                 <span>2.8m<sup>2</sup></span>
             </li>
             <li >
-                <input type="checkbox"/>
+                <input type="radio" name="storey_content"/>
                 <span>3m<sup>2</sup></span>
             </li>
             <li >
-                <input type="checkbox"/>
+                <input type="radio" name="storey_content"/>
                 <span>3m<sup>2</sup></span>
             </li>
             <li >
-                <input type="checkbox"/>
+                <input type="radio" name="storey_content"/>
                 <span>>3m<sup>2</sup></span>
                 <span>(跃成商铺等)</span>
             </li>
@@ -105,8 +105,8 @@
     <!--楼梯有无-->
     <div class="choose_stairs">
         <span class="choose_span">楼梯选择</span>
-        <input type="checkbox"/><span class="have">有</span>
-        <input type="checkbox"/><span class="no">无</span>
+        <input type="radio" name="have_stairs"/><span class="have">有</span>
+        <input type="radio" name="have_stairs"/><span class="no">无</span>
     </div>
 
     <!--结构-->
@@ -138,144 +138,82 @@
     <div class="series">
         <h1>系列选择</h1>
         <ul>
-            <li>
-                <input type="checkbox"/>
-                <span>期间</span>
-            </li>
-            <li>
-                <input type="checkbox"/>
-                <span>期间</span>
-            </li>
-            <li>
-                <input type="checkbox"/>
-                <span>期间</span>
+            <li ng-repeat="item in series" ng-cloak ng-click="toggleSeries(item.series)">
+                <label ng-cloak><input type="radio" name="series" ng-checked="(nowSeries==item.series)">{{item.series}}</label>
             </li>
         </ul>
     </div>
 
     <!--适合人群-->
-    <div class="fit">
-        <h2>适合人群</h2>
-        <p>适合4-8年的收入，有固定的资本。富二代，白富美，官二代等美女明星</p>
-    </div>
+        <div ng-switch on="nowSeries">
+            <div ng-switch-when="齐家">
+                <div class="tag"><span ng-cloak  ng-repeat="item in series[0].theme.split(',')">{{item}}</span></div>
+                <div class="fit">
+                    <h2>适合人群</h2>
+                    <p ng-cloak>{{series[0].intro}}</p>
+                </div>
+            </div>
+            <div ng-switch-when="享家">
+                <div class="tag"><span ng-cloak ng-repeat="item in series[1].theme.split(',')">{{item}}</span></div>
+                <div class="fit">
+                    <h2>适合人群</h2>
+                    <p ng-cloak>{{series[1].intro}}</p>
+                </div>
+            </div>
+            <div ng-switch-default>
+
+            </div>
+        </div>
 
     <!--风格选择-->
     <div  class="choose_style">
         <h1>风格选择</h1>
         <ul>
-            <li>
-                <button>现代简约</button>
-            </li><li>
-                <button>现代简约</button>
-            </li><li>
-                <button>现代简约</button>
+            <li ng-repeat="item in style">
+                <button ng-cloak ng-class="{'btn_checked':(nowStyle==item.style)}" ng-click="toggleStyle(item.style)">{{item.style}}</button>
             </li>
         </ul>
+
     </div>
 
     <!--轮播图-->
-    <div class="carousel">
+<div ng-switch on="nowStyle">
+    <div ng-switch-when="现代简约">
+         <div class="carousel">
+1
+         </div>
+        <!--现代简约便签-->
+        <div class="note">
+            <ul>
+                <li ng-repeat="item in style[0].theme.split(',')">
+                    <button ng-cloak>{{item}}</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div ng-switch-when="中国风">
+        <div class="carousel">
+2
+        </div>
+        <!--中国风便签-->
+        <div class="note">
+            <ul>
+                <li ng-repeat="item in style[1].theme.split(',')">
+                    <button ng-cloak>{{item}}</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div ng-switch-default>
 
     </div>
-
-    <!--便签-->
-   <div class="note">
-       <ul>
-           <li>
-               <button>外形简介</button>
-           </li>
-           <li>
-               <button>外形简介</button>
-           </li>
-           <li>
-               <button>外形简介</button>
-           </li>
-           <li>
-               <button>外形简介</button>
-           </li>
-           <li>
-               <button>外形简介</button>
-           </li>
-       </ul>
-   </div>
+</div>
 
     <!--按钮-->
     <div class="btn_vr">
       <button >生成3D/VR图和材料</button>
     </div>
 
-
-    <!--点击后  生成的智能报价材料明细-->
-    <div>
-        <!--材料选择-->
-        <div class="material_choose">
-            <p class="title_span">材料选择</p>
-            <span  class="comment_span">点击以下版块查看详情和编辑</span>
-            <!--左边内容-->
-            <div class="left_main">
-                <!--基础装修-->
-                <ul class="decoration">
-                    <li></li>
-                </ul>
-
-                <!--固定家居-->
-                <ul class="fixed_home">
-                    <li></li>
-                </ul>
-
-                <!--家电配套-->
-                <ul class="appliance_matching">
-                    <li>
-
-                    </li>
-                </ul>
-
-                <!--智能配套-->
-                <ul class="Intelligence">
-                    <li></li>
-                </ul>
-            </div>
-            <!--右边内容-->
-            <div class="right_main">
-                <!--主材料-->
-                <ul class="main_material">
-                    <li></li>
-                </ul>
-
-                <!--移动家具-->
-                <ul class="mobile_furniture">
-                    <li></li>
-                </ul>
-
-                <!--软装配套-->
-                <ul class="soft_outfit">
-                    <li></li>
-                </ul>
-                <!--生活配套、-->
-                <ul class=life_matching">
-                    <li></li>
-                </ul>
-            </div>
-        </div>
-
-        <!--特殊要求-->
-        <div class="special_requirements">
-            <h1>特殊要求</h1>
-            <textarea class="main_text">请输入你的要求</textarea>
-            <span>0/300</span>
-        </div>
-    </div>
-
-    <!--尾部结算-->
-    <div class="footer_settlement">
-        <div class="footer_set">
-            <span class="first_span">$125888</span>
-            <span class="second_span">$1515151</span><br/>
-            <span class="three_span">未包含施工图费用，8项全场8折</span>
-        </div>
-        <button>保存方案</button>
-        <button class="primary_btn">去装修</button>
-    </div>
     <div style="height: 20rem"></div>
 </section>
 <script src="../js/jquery.js"></script>
@@ -283,6 +221,6 @@
 <script src="js/rem.js"></script>
 <script src="js/global.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/nodata_intell.js"></script>
+<script src="js/Intelligent_nodata.js"></script>
 </body>
 </html>

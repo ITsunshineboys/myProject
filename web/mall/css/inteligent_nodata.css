@@ -125,6 +125,15 @@ header div img{
     border: 1px solid #C2C2C2;
     font-size: 1rem;
 }
+.address_content{
+    position: relative;
+}
+.text_all_length{
+    position: absolute;
+    right:3.6rem;
+    bottom:0.5rem;
+    font-size:.5rem;
+}
 .storey{
     border-top: 1px solid #C2C2C2;
     padding-top: 1rem;
@@ -203,9 +212,13 @@ header div img{
 }
 .series ul li{
     display: inline-block;
-    font-size: 1rem;
-    margin-left: 1rem;
+    font-size: 1rem ;
+    margin-left: 2rem;
     padding-top: 1rem;
+}
+.series label{
+    font-weight:normal;
+    vertical-align: middle;
 }
 .fit{
     padding-top: 1rem;
@@ -220,6 +233,9 @@ header div img{
 }
 .choose_style{
    padding-top: 1rem;
+}
+[ng-cloak]{
+    display: none;
 }
 .choose_style h1{
     margin-left: 1rem;
@@ -238,6 +254,7 @@ header div img{
     border: 1px solid #C2C2C2;
     margin-left: 1rem;
     margin-top: 1rem;
+    border-radius:.5rem !important;
 }
 .carousel{
     margin-top: 1rem;
@@ -269,4 +286,37 @@ header div img{
     background-color: #53A8F4;
     color: white;
     font-size: 1.2rem;
+
+}
+/*系列*/
+.tag{
+    padding-left:1.5rem;
+    color: #06CB7E;
+}
+.tag span{
+    display: inline-block;
+    margin-right:1rem;
+    border-radius:1.5rem;
+    border:1px solid #8DE2C1;
+    text-align: center;
+    font-size:1rem;
+    padding-left:1.5rem;
+    padding-right:1.5rem;
+    padding-top:.3rem;
+    height:2rem;
+    background-color: #F9FEFC;
+}
+/*风格*/
+.btn_checked{
+    border:1px solid #53A8F4 !important;
+    color: #53A8F4 !important;
+}
+.note button{
+    border-radius:1.5rem;
+    color: #06CB7E;
+    background-color: #F9FEFC !important;
+    border:1px solid #8DE2C1 !important;
+}
+button{
+    outline:none!important;
 }
