@@ -43,7 +43,10 @@ class DecorationAdd extends ActiveRecord
     {
         if($str)
         {
-            $add = self::find()->asArray()->where(['and',['project'=>$str],['district_code'=>$city]])->all();
+            $add = self::find()
+                ->asArray()
+                ->where(['and',['project'=>$str],['district_code'=>$city]])
+                ->all();
             $add_prices = [];
             foreach ($add as $one)
             {
@@ -51,6 +54,9 @@ class DecorationAdd extends ActiveRecord
                     $add_prices [] = $one;
                 }
             }
+        }else
+        {
+            $add_prices = null;
         }
         return $add_prices;
     }
@@ -59,7 +65,10 @@ class DecorationAdd extends ActiveRecord
     {
         if ($str && $all_series)
         {
-            $add = self::find()->asArray()->where(['and',['project'=>$str],['district_code'=>$city],['series_id'=>$all_series]])->all();
+            $add = self::find()
+                ->asArray()
+                ->where(['and',['project'=>$str],['district_code'=>$city],['series_id'=>$all_series]])
+                ->all();
         }
         return $add;
     }
@@ -68,7 +77,10 @@ class DecorationAdd extends ActiveRecord
     {
         if ($str && $all_style)
         {
-            $add = self::find()->asArray()->where(['and',['project'=>$str],['district_code'=>$city],['style_id'=>$all_style]])->all();
+            $add = self::find()
+                ->asArray()
+                ->where(['and',['project'=>$str],['district_code'=>$city],['style_id'=>$all_style]])
+                ->all();
         }
         return $add;
     }
@@ -76,7 +88,10 @@ class DecorationAdd extends ActiveRecord
     public static function CarpentryAddAll($str = '',$series = 1,$style = 1)
     {
         if($str){
-            $add = self::find()->where(['and',['project'=>$str],['series_id'=>$series],['style_id'=>$style]])->all();
+            $add = self::find()
+                ->asArray()
+                ->where(['and',['project'=>$str],['series_id'=>$series],['style_id'=>$style]])
+                ->all();
             $add_price = 0;
             foreach ($add as $one)
             {
