@@ -232,8 +232,14 @@ class BasisDecorationService
                 $goods_platform_price = $one['platform_price'];
             }
 
+            if ($points == 0 || $goods_value == 0 || $material == 0)
+            {
+                $waterproof['quantity'] = 0;
+            }else
+            {
 //            个数：（防水总面积×【1.25】÷抓取的商品的KG）
-            $waterproof['quantity'] = ceil($points * $material /$goods_value);
+                $waterproof['quantity'] = ceil($points * $material /$goods_value);
+            }
 //            防水涂剂费用：个数×抓取的商品价格
             $waterproof['cost'] =  $waterproof['quantity'] * $goods_platform_price;
         }
