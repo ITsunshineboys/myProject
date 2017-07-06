@@ -451,23 +451,29 @@ class GoodsCategory extends ActiveRecord
         }
 
         if ($fields) {
+            in_array('styles', $fields) && $styles = Style::stylesByCategoryId();
+            in_array('series', $fields) && $series = Series::seriesByCategoryId();
+
             foreach ($fields as $field) {
                 if ($field == 'brands') {
                     $brandsStylesSeries[$field] = BrandCategory::brandsByCategoryId($categoryId);
                 } elseif ($field == 'styles') {
-                    $brandsStylesSeries[$field] = Style::stylesByCategoryId($categoryId);
+                    $brandsStylesSeries[$field] = $styles;
                 } else {
-                    $brandsStylesSeries[$field] = Series::seriesByCategoryId($categoryId);
+                    $brandsStylesSeries[$field] = $series;
                 }
             }
         } else {
+            in_array('styles', self::CATEGORY_BRANDS_STYLES_SERIES) && $styles = Style::stylesByCategoryId();
+            in_array('series', self::CATEGORY_BRANDS_STYLES_SERIES) && $series = Series::seriesByCategoryId();
+
             foreach (self::CATEGORY_BRANDS_STYLES_SERIES as $field => $v) {
                 if ($field == 'brands') {
                     $brandsStylesSeries[$field] = BrandCategory::brandsByCategoryId($categoryId);
                 } elseif ($field == 'styles') {
-                    $brandsStylesSeries[$field] = Style::stylesByCategoryId($categoryId);
+                    $brandsStylesSeries[$field] = $styles;
                 } else {
-                    $brandsStylesSeries[$field] = Series::seriesByCategoryId($categoryId);
+                    $brandsStylesSeries[$field] = $series;
                 }
             }
         }
