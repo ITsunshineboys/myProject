@@ -25,10 +25,7 @@
         <span class="choose_quarter">小区选择</span>
         <input type="text" placeholder="请输入小区名字" /><br/>
         <div class="address_content">
-    </a>
-        <a href="cell_search.html">
-            <input type="text" placeholder="请输入小区名字" /><br/>
-        </a>
+
         <p class="quarters_adress">小区地址</p>
         <textarea class="text_all" rows="5" cols="43" placeholder="例：金牛区沙西线66号" ng-model="message"></textarea>
         <span class="text_all_length">{{message.length}}/45</span>
@@ -48,10 +45,13 @@
         <div>
             <ul class="apartment_ul">
                 <li>
-                    <input type="text" value="3" class="val_input"/>
-                    <span>室</span>
-                    <button class="btn_left reduce_a">-</button>
-                    <button class="btn_right add_a">+</button>
+                    <a href="">
+                        <input type="text" value="3" class="val_input"/>
+                        <span>室</span>
+                        <button class="btn_left reduce_a">-</button>
+                        <button class="btn_right add_a">+</button>
+                    </a>
+
                 </li>
                 <li>
                     <input type="text" value="2" class="val_input_b"/>

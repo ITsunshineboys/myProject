@@ -4,30 +4,33 @@
 var myapp=angular.module('myapp',[]);
 myapp.controller("commentCtrl",function ($scope,$http) {
     $http({
-        method: 'post',
-        url:url+"/categories"
-    }).then(function successCallback(data) {
-        $scope.message = data.data.data.categories;
-        //alert(message);
+        method: 'get',
+        url:url+"mall/categories"
+    }).then(function successCallback(resp) {
+        $scope.message = resp.data.data.categories;
+        //$scope.url_img = resp.data.data.categories.icon;
+        //console.log($scope.url_img);
+        //console.log(resp);
+
     }, function errorCallback(data) {
 
-        //alert(data);
+        alert(22);
 
     });
 });
 //$(function () {
 //    $.ajax({
-//        method:"post",
-//        url:"http://local.test.cdlhzz.cn/mall/categories",
+//        method:"get",
+//        url:url+"categories",
 //        dataType:"json",
 //        data:{},
-//        success:function (data){
+//        success:function (resp){
 //            alert("11111");
-//            //console.log(res.data.data.categories)
+//            //console.1log(res.data.data.categories)
 //        },
-//        error:function(data){
+//        error:function(resp){
 //            //console.log(res)
-//            alert(2222);
+//            alert(222);
 //        }
 //    })
 //});
