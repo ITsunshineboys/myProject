@@ -86,6 +86,8 @@ CREATE TABLE `goods_category` (
   `attr_op_username` varchar(20) not null DEFAULT '',
   `attr_op_time` int not null DEFAULT 0,
   `attr_number` int(11) not null DEFAULT 0,
+  `has_style` tinyint(1) not null DEFAULT 0 comment '0: 无风格，1: 有风格',
+  `has_series` tinyint(1) not null DEFAULT 0 comment '0: 无系列，1: 有系列',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
