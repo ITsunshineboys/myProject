@@ -1,9 +1,9 @@
 angular.module('intelligent_nodata',[])
         .controller('nodata_ctrl',function ($scope,$http) {
             //小区地址
-            $scope.message = ''
-            $scope.nowStyle = '现代简约'
-            $scope.nowSeries = '齐家'
+            $scope.message = '';
+            $scope.nowStyle = '现代简约';
+            $scope.nowSeries = '齐家';
 
             $scope.$watch('message',function (newVal,oldVal) {
                 if(newVal && newVal!=oldVal){
@@ -25,10 +25,10 @@ angular.module('intelligent_nodata',[])
             }
             //请求后台数据
             $http.post('/owner/series-and-style').then(function (response) {
-                let arr = []
-                let arr2 = []
-                let arr3 = []
-                let arr1 = []
+                let arr = [];
+                let arr2 = [];
+                let arr3 = [];
+                let arr1 = [];
                 //系列数据
                 for(let item of response.data.data.show.series){
                     arr.push("series="+item.series+"&intro="+item.intro+"&theme="+item.theme)
@@ -37,11 +37,11 @@ angular.module('intelligent_nodata',[])
                 for(let item of response.data.data.show.style){
                     arr1.push("style="+item.style+"&intro="+item.intro+"&theme="+item.theme)
                 }
-                var m = Array.from(new Set(arr))
+                var m = Array.from(new Set(arr));
                 for(var i = 0;i<m.length;i++){
                     arr2.push(getJSON(m[i]))
                 }
-                var n = Array.from(new Set(arr1))
+                var n = Array.from(new Set(arr1));
                 for(var i = 0;i<n.length;i++){
                     arr3.push(getJSON(n[i]))
                 }
@@ -49,16 +49,16 @@ angular.module('intelligent_nodata',[])
                 $scope.style = arr3;
             },function (response) {
                 
-            })
+            });
             //切换系列
             $scope.toggleSeries = function (item) {
                 $scope.nowSeries = item;
-            }
+            };
             //切换风格
             $scope.toggleStyle = function (item) {
                 $scope.nowStyle = item;
             }
-        })
+        });
 /**
  * Created by xl on 2017/7/4 0004.
  */
