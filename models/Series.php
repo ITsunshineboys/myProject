@@ -44,17 +44,12 @@ class Series extends ActiveRecord
     /**
      * Get series by category id
      *
-     * @param int $categoryId category id
+     * @param array $statuses status list default online status
      * @param array $select select fields default id and series
      * @return array
      */
-    public static function seriesByCategoryId($categoryId, $select = ['id', 'series'])
+    public static function seriesByCategoryId($statuses = [self::STATUS_ONLINE], $select = ['id', 'series'])
     {
-        $categoryId = (int)$categoryId;
-        if ($categoryId <= 0) {
-            return [];
-        }
-
-        return self::find()->where(['category_id' => $categoryId])->select($select)->asArray()->all();
+        return self::find()->where(['in', 'status', $statuses])->select($select)->asArray()->all();
     }
 }

@@ -45,17 +45,12 @@ class Style extends ActiveRecord
     /**
      * Get styles by category id
      *
-     * @param int $categoryId category id
+     * @param array $statuses status list default online status
      * @param array $select select fields default id and style
      * @return array
      */
-    public static function stylesByCategoryId($categoryId, $select = ['id', 'style'])
+    public static function stylesByCategoryId($statuses = [self::STATUS_ONLINE], $select = ['id', 'style'])
     {
-        $categoryId = (int)$categoryId;
-        if ($categoryId <= 0) {
-            return [];
-        }
-
-        return self::find()->where(['category_id' => $categoryId])->select($select)->asArray()->all();
+        return self::find()->where(['in', 'status', $statuses])->select($select)->asArray()->all();
     }
 }
