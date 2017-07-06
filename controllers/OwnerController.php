@@ -279,10 +279,10 @@ class OwnerController extends Controller
      */
     public function actionStrongCurrent()
     {
-        //        $receive = \Yii::$app->request->post();
+//        $receive = \Yii::$app->request->post();
 //        $post = Json::decode($receive);
         $post = [
-            'effect_id' => 1,
+//            'effect_id' => 1,
             'master_bedroom' => 1,
             'secondary_bedroom' => 1,
             'sitting_room' => 1,

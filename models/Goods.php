@@ -405,7 +405,9 @@ class Goods extends ActiveRecord
     }
 
     /**
-     * @param array $id
+     * @param array $all
+     * @param int $city
+     * @return array
      */
     public static function findQueryAll($all = [], $city = 510100)
     {
