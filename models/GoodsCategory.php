@@ -464,8 +464,9 @@ class GoodsCategory extends ActiveRecord
                 }
             }
         } else {
-            in_array('styles', self::CATEGORY_BRANDS_STYLES_SERIES) && $styles = Style::stylesByCategoryId();
-            in_array('series', self::CATEGORY_BRANDS_STYLES_SERIES) && $series = Series::seriesByCategoryId();
+            $fields = array_keys(self::CATEGORY_BRANDS_STYLES_SERIES);
+            in_array('styles', $fields) && $styles = Style::stylesByCategoryId();
+            in_array('series', $fields) && $series = Series::seriesByCategoryId();
 
             foreach (self::CATEGORY_BRANDS_STYLES_SERIES as $field => $v) {
                 if ($field == 'brands') {
