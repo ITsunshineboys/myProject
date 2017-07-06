@@ -156,14 +156,22 @@ class BasisDecorationService
                     $pvc =  $craft['material'];
                 }
             }
-           //             PPR费用：个数×抓取的商品价格
+//             PPR费用：个数×抓取的商品价格
 //            个数：（水路总点位×【2m】÷抓取的商品的长度）
 //            PVC费用：个数×抓取的商品价格
 //            个数：（水路总点位×【2m】÷抓取的商品的长度）
-            $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
+            if ($points == 0 || $ppr == 0 || $ppr_value == 0 || $pvc == 0 || $pvc_value == 0)
+            {
+                $waterway['ppr_quantity'] = 0;
+                $waterway['pvc_quantity'] = 0;
+            }else
+            {
+                $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
+                $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
+            }
+
             $waterway['ppr_cost'] = $waterway['ppr_quantity'] * $ppr_price;
             //PPR费用
-            $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
             $waterway['pvc_cost'] = $waterway['pvc_quantity'] * $pvc_price;
             $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
 
