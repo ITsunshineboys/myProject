@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/all.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/inteligent_nodata.css"/>
+    <link rel="stylesheet" href="zui-1.7.0-dist/dist/css/zui.min.css"/>
 </head>
 <body ng-controller="nodata_ctrl">
 <header>
@@ -45,31 +46,38 @@
         <div>
             <ul class="apartment_ul">
                 <li>
-                    <a href="">
-                        <input type="text" value="3" class="val_input"/>
-                        <span>室</span>
-                        <button class="btn_left reduce_a">-</button>
-                        <button class="btn_right add_a">+</button>
-                    </a>
 
+                    <input type="text" value="3" class="val_input"/>
+                    <span>室</span>
+                    <i class="icon icon-check-minus btn_left reduce_a icon-5x"></i>
+                    <i class="icon icon-check-plus btn_right add_a icon-5x"></i>
+                    <!--<button class="btn_left reduce_a">-</button>-->
+                    <!--<button class="btn_right add_a">+</button>-->
                 </li>
                 <li>
                     <input type="text" value="2" class="val_input_b"/>
                     <span>厅</span>
-                    <button class="btn_left reduce_b">-</button>
-                    <button class="btn_right add_b">+</button>
+                    <i class="icon icon-check-minus btn_left reduce_b icon-5x"></i>
+                    <i class="icon icon-check-plus btn_right add_b icon-5x"></i>
+                    <!--<button class="btn_left reduce_b">-</button>-->
+                    <!--<button class="btn_right add_b">+</button>-->
                 </li>
                 <li>
                     <input type="text" value="2" class="val_input_c"/>
                     <span>卫</span>
-                    <button class="btn_left reduce_c">-</button>
-                    <button class="btn_right add_c">+</button>
+
+                    <i class="icon icon-check-minus btn_left reduce_c icon-5x"></i>
+                    <i class="icon icon-check-plus btn_right add_c icon-5x"></i>
+                    <!--<button class="btn_left reduce_c">-</button>-->
+                    <!--<button class="btn_right add_c">+</button>-->
                 </li>
                 <li>
                     <input type="text" value="2" class="val_input_d"/>
                     <span>厨</span>
-                    <button class="btn_left reduce_d">-</button>
-                    <button class="btn_right add_d">+</button>
+                    <i class="icon icon-check-minus btn_left reduce_d icon-5x"></i>
+                    <i class="icon icon-check-plus btn_right add_d icon-5x"></i>
+                    <!--<button class="btn_left reduce_d">-</button>-->
+                    <!--<button class="btn_right add_d">+</button>-->
                 </li>
             </ul>
         </div>
@@ -80,21 +88,38 @@
         <h1>层高</h1>
         <ul class="storey_ul">
             <li >
-                <input type="radio" name="storey_content"/>
-                <span>2.8m<sup>2</sup></span>
+                <label>
+                    <input type="radio" name="test" checked="checked" />
+                    <span></span>
+                    <span>2.8m<sup>2</sup></span>
+                </label>
+                <!--<input type="radio" name="storey_content"/>-->
+
             </li>
             <li >
-                <input type="radio" name="storey_content"/>
-                <span>3m<sup>2</sup></span>
+                <label>
+                    <input type="radio" name="test" />
+                    <span></span>
+                    <span>3m<sup>2</sup></span>
+                </label>
+                <!--<input type="radio" name="storey_content"/>-->
             </li>
             <li >
-                <input type="radio" name="storey_content"/>
-                <span>3m<sup>2</sup></span>
+                <label>
+                    <input type="radio" name="test" />
+                    <span></span>
+                    <span>3m<sup>2</sup></span>
+                </label>
+                <!--<input type="radio" name="storey_content"/>-->
             </li>
             <li >
-                <input type="radio" name="storey_content"/>
-                <span>>3m<sup>2</sup></span>
-                <span>(跃成商铺等)</span>
+                <label>
+                    <input type="radio" name="test" />
+                    <span></span>
+                    <span>>3m<sup>2</sup></span>
+                    <span class="ml">(跃成商铺等)</span>
+                </label>
+                <!--<input type="radio" name="storey_content"/>-->
             </li>
         </ul>
     </div>
@@ -102,38 +127,65 @@
     <!--飘窗-->
     <div class="bay_window">
         <span class="bay_span">飘窗</span>
-        <input type="text"placeholder="20"/>
-        <spann class="bay_square">m<sup>2</sup></spann>
+        <input type="text" placeholder="20" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="4"/>
+        <span class="bay_square">m<sup>2</sup></span>
     </div>
 
     <!--楼梯有无-->
     <div class="choose_stairs">
         <span class="choose_span">楼梯选择</span>
-        <input type="radio" name="have_stairs"/><span class="have">有</span>
-        <input type="radio" name="have_stairs"/><span class="no">无</span>
+        <label>
+            <input type="radio" name="test" checked="checked" />
+            <span></span>
+            <span class="have">有</span>
+        </label>
+        <label>
+            <input type="radio" name="test" />
+            <span></span>
+            <span class="no">无</span>
+        </label>
+        <!--<input type="radio" name="have_stairs"/><span class="have">有</span>-->
+        <!--<input type="radio" name="have_stairs"/><span class="no">无</span>-->
     </div>
 
     <!--结构-->
     <div class="structure">
         <ul>
             <li>
-                <input type="checkbox"/>
-                <span>实木构造</span>
+                <label>
+                    <input type="checkbox" name="test" checked="checked" />
+                    <span></span>
+                    <span>实木构造</span>
+                </label>
+                <!--<input type="checkbox"/>-->
+                <!--<span>实木构造</span>-->
             </li>
             <li>
-                <input type="checkbox"/>
-                <span>实木构造</span>
+                <label>
+                    <input type="checkbox" name="test"  />
+                    <span></span>
+                    <span>实木构造</span>
+                </label>
             </li> <li>
-                <input type="checkbox"/>
+            <label>
+                <input type="checkbox" name="test"  />
+                <span></span>
                 <span>实木构造</span>
+            </label>
             </li>
             <li>
-                <input type="checkbox"/>
-                <span>实木构造</span>
+                <label>
+                    <input type="checkbox" name="test"  />
+                    <span></span>
+                    <span>实木构造</span>
+                </label>
             </li>
             <li>
-                <input type="checkbox"/>
-                <span>实木构造</span>
+                <label>
+                    <input type="checkbox" name="test"  />
+                    <span></span>
+                    <span>实木构造</span>
+                </label>
             </li>
         </ul>
     </div>
@@ -245,6 +297,7 @@
 <script src="js/rem.js"></script>
 <script src="js/global.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="zui-1.7.0-dist/dist/js/zui.min.js"></script>
 <script src="js/Intelligent_nodata.js"></script>
 </body>
 </html>

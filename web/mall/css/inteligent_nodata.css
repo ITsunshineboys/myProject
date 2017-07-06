@@ -1,3 +1,40 @@
+/*单选按按钮样式*/
+input[type="radio"] {
+    display: none;
+}
+input[type="radio"]+span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    border: 1px solid #B8B6B6;
+    background-color: white;
+}
+input[type="radio"]:checked+span {
+    border: 1px solid #C2C2C2;
+    background-color: #53A8F4;
+}
+/*结束*/
+
+/*多选按按钮样式*/
+input[type="checkbox"] {
+    display: none;
+}
+input[type="checkbox"]+span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    border: 1px solid #B8B6B6;
+    background-color: white;
+}
+input[type="checkbox"]:checked+span {
+    border: 1px solid #C2C2C2;
+    background-color: #53A8F4;
+}
+/*结束*/
 header{
     width: auto;
     height: 4rem;
@@ -42,12 +79,13 @@ header div img{
 .choose_quarter{
     margin-left: 1rem;
     font-size: 1rem;
+
 }
 .quarters_small input {
     width: 22rem;
     height: 2.2rem;
     border: 1px solid #C2C2C2;
-    /*border-radius: 1rem;*/
+    border-radius: 1rem;
     padding-left: 1rem;
     font-size: 1rem;
     margin-left: 2rem;
@@ -65,12 +103,13 @@ header div img{
     font-size: 1.4rem;
 }
 .house_area input{
-    width:20rem;
+    width:21rem;
     height: 3rem;
     margin-left: 1rem;
     margin-top: 1rem;
     border: 1px solid #C2C2C2;
     font-size: 1.2rem;
+    border-radius: .3rem;
 }
 .apartment_layout {
     margin-top: 1rem;
@@ -84,7 +123,7 @@ header div img{
     font-size: 1.2rem;
 }
 .apartment_ul{
-    margin-left: 5rem;
+    margin-left: 4rem;
     margin-top: -1rem;
 }
 .apartment_ul li{
@@ -101,7 +140,8 @@ header div img{
     font-size: 1rem;
     padding-left: 3rem;
     /*margin-left: 6rem;*/
-    border: 1px solid #C2C2C2;
+    /*border: 1px solid #C2C2C2;*/
+    border: none;
 }
 .apartment_ul button{
     width: 2rem;
@@ -113,17 +153,23 @@ header div img{
 }
 .btn_left{
     position: relative;
-    left: -5.5rem;
+    left: -5rem;
+    top: .5rem;
+
+    color: #53A8F4;
 }
 .btn_right{
     position: relative;
-    left: -2rem;
+    left: -1.5rem;
+    top: .5rem;
+    color: #53A8F4;
 }
 .text_all{
     margin-left: 2rem;
     margin-top: 1rem;
     border: 1px solid #C2C2C2;
     font-size: 1rem;
+    border-radius: .3rem;
 }
 .address_content{
     position: relative;
@@ -132,7 +178,7 @@ header div img{
     position: absolute;
     right:3.6rem;
     bottom:0.5rem;
-    font-size:.5rem;
+    font-size:1rem;
 }
 .storey{
     border-top: 1px solid #C2C2C2;
@@ -144,14 +190,17 @@ header div img{
     margin-left: 1rem;
 }
 .storey_ul{
-    margin-left: 7.5rem;
+    margin-left: 7rem;
 }
 .storey_ul li {
     display: inline-block;
     list-style: none;
     font-size: 1rem;
-    margin-left: 1rem;
+    margin-left:.5rem;
 }
+/*.ml{*/
+    /*margin-left: 1rem;*/
+/*}*/
 .bay_window{
     border-top: 1px solid #C2C2C2;
     padding-top: 1rem;
@@ -183,26 +232,30 @@ header div img{
     font-size: 1.2rem;
     margin-left: 1rem;
 }
-.choose_stairs input{
-    margin-left: 2rem;
+.choose_stairs label{
+    margin-left: 3rem;
 }
 .have, .no{
     margin-left: .1rem;
     font-size: 1rem;
 }
 .structure{
-    border: 1px solid #C2C2C2;
+    border: 1px solid #E5E5E5 ;
     width: 29rem;
-    margin-left: 1rem;
+    margin-left: 1.5rem;
     padding-top: 1rem;
     margin-top: 1rem;
+    border-radius: .2rem;
 
 }
 .structure ul li{
     font-size: 1.2rem;
     display: inline-block;
-    margin-left: 1rem;
+    margin-left: 2rem;
     margin-bottom: 1rem;
+}
+.structure ul li span{
+    color: #6C6C6C;
 }
 .series {
     padding-top: 1rem;

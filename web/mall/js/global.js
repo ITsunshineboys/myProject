@@ -10,7 +10,7 @@ function GetQueryString(name) {
     var context = "";
     if (r != null)
         context = r[2];
-    
+
     reg = null;
     r = null;
     return context == null || context == "" || context == "undefined" ? "" : context;
