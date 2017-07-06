@@ -23,7 +23,6 @@ class Series extends ActiveRecord
         'modelling_day_coefficient',
         'flat_area_coefficient',
         'flat_day_coefficient',
-        'category_id',
         'status',
         'creation_time',
     ];
