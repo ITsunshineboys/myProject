@@ -373,7 +373,7 @@ class BasisDecorationService
      * @param int $style
      * @return float|int
      */
-    public static function carpentryModellingDay($modelling = '',$day_modelling = '',$series_all='',$style_all ='',$series =5,$style =5)
+    public static function carpentryModellingDay($modelling = '',$day_modelling = '',$series_all='',$style_all ='',$series =1,$style =1)
     {
         switch ($series)
         {
@@ -461,9 +461,9 @@ class BasisDecorationService
             }elseif ($series_find['series'] == '智家+'){
                 $series_coefficient = $family *  $series_find['modelling_day_coefficient'];
             }
-
 //            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
             $modelling_day = $modelling / $day_modelling * $series_coefficient * $style_find['modelling_day_coefficient'];
+
 
         }
         return $modelling_day;
@@ -610,6 +610,9 @@ class BasisDecorationService
             foreach ($goods as $goods_price ){
                 if($goods_price['name'] == '石膏板'){
                     $plasterboard = $goods_price;
+                }else
+                {
+                    $plasterboard = null;
                 }
             }
             $plasterboard_material = 0;
@@ -618,8 +621,15 @@ class BasisDecorationService
                     $plasterboard_material = $craft['material'];
                 }
             }
+            if ($modelling_length == 0 || $plasterboard_material == 0 || $flat_area == 0|| $plasterboard_material == 0)
+            {
+                $plasterboard_cost['quantity'] = 0;
+            }else
+            {
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
-            $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material +$video_wall);
+                $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material +$video_wall);
+            }
+
 //            石膏板费用：个数×商品价格
             $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
         }
@@ -643,6 +653,9 @@ class BasisDecorationService
             {
                 if($price['name'] == '龙骨'){
                     $goods_price = $price;
+                }else
+                {
+                    $goods_price = null;
                 }
             }
             $plasterboard_material = 0;
@@ -651,13 +664,19 @@ class BasisDecorationService
                     $plasterboard_material = $craft['material'];
                 }
             }
+            if ($modelling_length == 0 || $plasterboard_material == 0 || $flat_area == 0 )
+            {
+                $keel_cost['quantity'] = 0;
+            }else
+            {
 //          个数=个数1+个数2
 //          个数1：（造型长度÷【1.5m】）
 //          个数2：（平顶面积÷【1.5m²】）
-            $keel_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area /$plasterboard_material);
+                $keel_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area /$plasterboard_material);
+            }
+
 //          主龙骨费用：个数×商品价格
             $keel_cost['cost'] = $keel_cost['quantity'] * $goods_price['platform_price'];
-
         }
         return $keel_cost;
     }
@@ -679,6 +698,9 @@ class BasisDecorationService
             {
                 if($price['name'] == '丝杆'){
                     $goods_price = $price;
+                }else
+                {
+                    $goods_price = 0;
                 }
             }
             $plasterboard_material = 0;
@@ -687,11 +709,15 @@ class BasisDecorationService
                     $plasterboard_material = $craft['material'];
                 }
             }
-
+            if ($modelling_length == 0 || $plasterboard_material == 0 || $flat_area == 0 )
+            {
+                $pole_cost['quantity'] = 0;
+            }else{
 //            个数=个数1+个数2
 //            个数1：（造型长度÷【2m】）
 //            个数2：（平顶面积÷【2m²】
-            $pole_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
+                $pole_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
+            }
 //            丝杆费用：个数×抓取的商品价格
             $pole_cost['cost'] = $pole_cost['quantity'] * $goods_price['platform_price'];
         }
