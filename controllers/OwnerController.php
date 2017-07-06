@@ -855,16 +855,16 @@ class OwnerController extends Controller
         $putty = 0;
         foreach ($labor_costs as $labor_cost) {
             if ($labor_cost['worker_kind_details'] == '乳胶漆底漆') {
-                $primer = $labor_cost['day_area'];
+                $primer = $labor_cost['quantity'];
             }
             if ($labor_cost['worker_kind_details'] == '乳胶漆面漆') {
-                $finishing_coat = $labor_cost['day_area'];
+                $finishing_coat = $labor_cost['quantity'];
             }
             if ($labor_cost['worker_kind_details'] == '阴角线') {
-                $concave_line = $labor_cost['day_area'];
+                $concave_line = $labor_cost['quantity'];
             }
             if ($labor_cost['worker_kind_details'] == '腻子') {
-                $putty = $labor_cost['day_area'];
+                $putty = $labor_cost['quantity'];
             }
         }
 
@@ -879,12 +879,15 @@ class OwnerController extends Controller
             $area['sittingRoom_diningRoom_area'] = 0;
             $tall = 0;
             foreach ($areas as $one) {
-                if ($one['project_particulars'] == '卧室面积') {
+                if ($one['project_particulars'] == '卧室面积')
+                {
                     $area['masterBedroom_area'] = $one['project_value'];
-                    $tall = $one['particular'];
-                } elseif ($one['project_particulars'] == '客厅面积') {
+                    $tall = $one['storey'];
+                }
+                if ($one['project_particulars'] == '客厅面积')
+                {
                     $area['sittingRoom_diningRoom_area'] = $one['project_value'];
-                    $tall = $one['particular'];
+                    $tall = $one['storey'];
                 }
             }
         }
@@ -923,7 +926,6 @@ class OwnerController extends Controller
         $putty_area = $putty_bedroom_area + $putty_drawing_room_area;
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = ceil($putty_area / $putty);
-
         //材料
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
@@ -945,24 +947,39 @@ class OwnerController extends Controller
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll('乳胶漆', $post['city']);
-
         foreach ($goods_price as $goods) {
             if ($goods['title'] == '腻子') {
                 $goods_putty = $goods;
+            }else
+            {
+                $goods_putty = null;
             }
             if ($goods['title'] == '乳胶漆底漆') {
                 $goods_primer = $goods;
+            }else
+            {
+                $goods_primer = null;
             }
             if ($goods['title'] == '乳胶漆面漆') {
                 $goods_finishing_coat = $goods;
+            }else
+            {
+                $goods_finishing_coat = null;
             }
             if ($goods['title'] == '阴角线') {
                 $goods_concave_line = $goods;
+            }else
+            {
+                $goods_concave_line = null;
             }
             if ($goods['title'] == '石膏粉') {
                 $goods_gypsum_powder = $goods;
+            }else
+            {
+                $goods_gypsum_powder['platform_price'] = 1;
             }
         }
+
         foreach ($crafts as $craft) {
             if ($craft['project_details'] == '腻子') {
                 $putty_craft = $craft;
@@ -1089,14 +1106,13 @@ class OwnerController extends Controller
         $labor_day_cost = 0;
         foreach ($labor_costs as $labor_cost) {
             if ($labor_cost['worker_kind_details'] == '保护层') {
-                $covering_layer_day_area = $labor_cost['day_area'];
+                $covering_layer_day_area = $labor_cost['quantity'];
                 $labor_day_cost = $labor_cost['univalence'];
             }
             if ($labor_cost['worker_kind_details'] == '贴砖') {
-                $tiling_day_area = $labor_cost['day_area'];
+                $tiling_day_area = $labor_cost['quantity'];
             }
         }
-
         //泥作面积
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
@@ -1230,7 +1246,13 @@ class OwnerController extends Controller
         $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods_price, $self_leveling_craft, '自流平');
 //        个数：（墙砖面积÷抓取墙砖面积）
         $wall_brick_area = ($wall_brick_value / 1000) * ($wall_brick_value / 1000);
-        $wall_brick_cost ['quantity'] = ceil($wall_area / $wall_brick_area);
+        if ($wall_brick_area == 0)
+        {
+            $wall_brick_cost ['quantity'] = 0;
+        }else
+        {
+            $wall_brick_cost ['quantity'] = ceil($wall_area / $wall_brick_area);
+        }
 //        墙砖费用
         $wall_brick_cost['cost'] = $wall_brick_cost ['quantity'] * $wall_brick_price;
 //        河沙费用
@@ -1239,7 +1261,13 @@ class OwnerController extends Controller
 
 //        厨房/卫生间地砖费用
         $kitchen_and_toilet_floor_tile_area = ($floor_tile_value / 1000) * ($floor_tile_value / 1000);
-        $kitchen_and_toilet['quantity'] = ceil(($kitchen_area + $toilet_area) / $kitchen_and_toilet_floor_tile_area);
+        if ($kitchen_and_toilet_floor_tile_area == 0)
+        {
+            $kitchen_and_toilet['quantity'] = 0;
+        }else
+        {
+            $kitchen_and_toilet['quantity'] = ceil(($kitchen_area + $toilet_area) / $kitchen_and_toilet_floor_tile_area);
+        }
         $kitchen_and_toilet['cost'] = $kitchen_and_toilet['quantity'] * $floor_tile_price;
 //        客厅地砖费用
         $drawing_room_floor_tile_area = ($drawing_room_value / 1000) * ($drawing_room_value / 1000);
@@ -1324,6 +1352,9 @@ class OwnerController extends Controller
             '12_new_construction' => 20,
             '24_new_construction' => 25,
             'building_scrap' => true,
+            'area' =>62,
+            'series' =>1,
+            'style' =>1
         ];
         $handyman = '杂工';
         $labor = LaborCost::univalence($post, $handyman);

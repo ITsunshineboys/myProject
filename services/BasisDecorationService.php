@@ -797,6 +797,10 @@ class BasisDecorationService
             $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods['value']);
 //        腻子费用：个数×商品价格
             $putty_cost ['cost']  =  $putty_cost['quantity'] * $goods['platform_price'];
+        }else
+        {
+            $putty_cost ['quantity'] = 0 ;
+            $putty_cost ['cost']  =  $putty_cost['quantity'] * $goods['platform_price'];
         }
         return $putty_cost;
     }
@@ -842,8 +846,15 @@ class BasisDecorationService
                    $goods_value = $one['value'];
                }
             }
-            //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
-           $mud_make['quantity'] = ceil($area * $craft / $goods_value);
+            if ($area == 0 || $craft == 0 || $goods_value == 0)
+            {
+                $mud_make['quantity'] = 0;
+            }else
+            {
+                //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
+                $mud_make['quantity'] = ceil($area * $craft / $goods_value);
+            }
+
             //        水泥费用:个数×抓取的商品价格
             $mud_make['cost'] = $mud_make['quantity'] * $goods_price;
         }
@@ -856,7 +867,7 @@ class BasisDecorationService
      * @param $day_area
      * @return mixed
      */
-    public static function wallArea($get_area = [],$day_area)
+    public static function wallArea($get_area = [],$day_area = [])
     {
         if ($get_area && $day_area)
         {
@@ -885,21 +896,21 @@ class BasisDecorationService
             }
         }
 //        12墙拆除天数=12墙拆除面积÷【每天拆除12墙面积】
-        $day['dismantle_12'] = $get_area['12_dismantle'] / $dismantle_12['day_area'];
+        $day['dismantle_12'] = $get_area['12_dismantle'] / $dismantle_12['quantity'];
 //        24墙拆除天数=24墙拆除面积÷【每天拆除24墙面积】
-        $day['dismantle_24'] = $get_area['24_dismantle'] / $dismantle_24['day_area'];
+        $day['dismantle_24'] = $get_area['24_dismantle'] / $dismantle_24['quantity'];
 //        ①拆除天数=12墙拆除天数+24墙拆除天数
         $day['dismantle_day'] = $day['dismantle_12'] + $day['dismantle_24'];
 
 //        12墙新建天数=12墙新建面积÷【每天新建12墙面积】
-        $day['new_construction_12'] = $get_area['12_new_construction'] / $new_construction_12['day_area'];
+        $day['new_construction_12'] = $get_area['12_new_construction'] / $new_construction_12['quantity'];
 //        24墙新建天数=24墙新建面积÷【每天新建24墙面积】
-        $day['new_construction_24'] = $get_area['24_new_construction'] / $new_construction_24['day_area'];
+        $day['new_construction_24'] = $get_area['24_new_construction'] / $new_construction_24['quantity'];
 //        ②新建天数=12墙新建天数+24墙新建天数
         $day['new_construction_day'] =  $day['new_construction_12'] + $day['new_construction_24'];
 
 //        ③补烂天数=补烂长度÷【每天补烂长度】
-        $day['repair_day'] = $get_area['repair'] / $repair['day_sculpt_length'];
+        $day['repair_day'] = $get_area['repair'] / $repair['quantity'];
 //        总天数=拆除天数+新建天数+补烂天数
         $day['total_day'] = ceil($day['dismantle_day'] + $day['new_construction_day'] + $day['repair_day']);
 
@@ -1036,8 +1047,15 @@ class BasisDecorationService
         $new_repair = $get_area['24_dismantle'] * $repair;
         $new_dosage = $new_12 + $new_24 + $new_repair;
 
-        //        个数：（水泥用量÷抓取的商品的KG）
-        $cement['quantity'] = ceil($new_dosage / $goods['value']);
+        if ($goods == null)
+        {
+            $cement['quantity'] = 0;
+        }else
+        {
+            //        个数：（水泥用量÷抓取的商品的KG）
+            $cement['quantity'] = ceil($new_dosage / $goods['value']);
+        }
+
         //        水泥费用：个数×抓取的商品价格
         $cement['cost'] = $cement['quantity'] * $goods['platform_price'];
         }
@@ -1080,6 +1098,10 @@ class BasisDecorationService
             $dosage_24 = $get_area['12_dismantle'] / $wide / $high;
             $brick['quantity'] = ceil($dosage_12 + $dosage_24);
             $brick['cost'] = $brick['quantity'] * $goods['platform_price'];
+        }else
+        {
+            $brick['quantity'] = 0;
+            $brick['cost'] = $brick['quantity'] * $goods['platform_price'];
         }
         return $brick;
     }
@@ -1113,6 +1135,10 @@ class BasisDecorationService
             $river_sand['quantity'] =  ceil($river_sand_dosage / $goods['value']);
 //              河沙费用：个数×抓取的商品价格
             $river_sand['cost'] =   $river_sand['quantity'] * $goods['platform_price'];
+        }else
+        {
+            $river_sand['quantity'] =  0;
+            $river_sand['cost'] =  0;
         }
         return $river_sand;
     }

@@ -327,7 +327,7 @@ class GoodsAttr extends ActiveRecord
         ];
     }
 
-    public static function findByGoodsId($id = 0)
+    public static function findByGoodsId($id = [])
     {
         if ($id)
         {
@@ -335,8 +335,11 @@ class GoodsAttr extends ActiveRecord
             $standard = self::find()
                         ->asArray()
                         ->select($select)
-                        ->where(['goods_id'=>$id])
+                        ->where(['in','goods_id'=>$id])
                         ->all();
+        }else
+        {
+            $standard = null;
         }
        return $standard;
     }
