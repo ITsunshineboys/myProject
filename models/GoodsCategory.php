@@ -451,8 +451,8 @@ class GoodsCategory extends ActiveRecord
         }
 
         if ($fields) {
-            in_array('styles', $fields) && $styles = Style::stylesByCategoryId();
-            in_array('series', $fields) && $series = Series::seriesByCategoryId();
+            in_array('styles', $fields) && $styles = Style::stylesByCategoryId($categoryId);
+            in_array('series', $fields) && $series = Series::seriesByCategoryId($categoryId);
 
             foreach ($fields as $field) {
                 if ($field == 'brands') {
@@ -465,8 +465,8 @@ class GoodsCategory extends ActiveRecord
             }
         } else {
             $fields = array_keys(self::CATEGORY_BRANDS_STYLES_SERIES);
-            in_array('styles', $fields) && $styles = Style::stylesByCategoryId();
-            in_array('series', $fields) && $series = Series::seriesByCategoryId();
+            in_array('styles', $fields) && $styles = Style::stylesByCategoryId($categoryId);
+            in_array('series', $fields) && $series = Series::seriesByCategoryId($categoryId);
 
             foreach (self::CATEGORY_BRANDS_STYLES_SERIES as $field => $v) {
                 if ($field == 'brands') {
