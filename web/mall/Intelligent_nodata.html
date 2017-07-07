@@ -146,7 +146,6 @@
         <!--<input type="radio" name="have_stairs"/><span class="have">有</span>-->
         <!--<input type="radio" name="have_stairs"/><span class="no">无</span>-->
     </div>
-
     <!--结构-->
     <div class="structure">
         <ul>
@@ -171,7 +170,7 @@
                 <span></span>
                 <span>实木构造</span>
             </label>
-            </li>
+        </li>
             <li>
                 <label>
                     <input type="checkbox" name="test"  />
@@ -189,12 +188,17 @@
         </ul>
     </div>
 
+
     <!--系类选择-->
     <div class="series">
         <h1>系列选择</h1>
         <ul>
             <li ng-repeat="item in series" ng-cloak ng-click="toggleSeries(item.series)">
-                <label ng-cloak><input type="radio" name="series" ng-checked="(nowSeries==item.series)">{{item.series}}</label>
+                <label ng-cloak>
+                    <input type="radio" name="test" ng-checked="(nowSeries==item.series)">
+                    <span></span>
+                    <span>{{item.series}}</span>
+                </label>
             </li>
         </ul>
     </div>

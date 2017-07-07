@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head lang="en">
     <meta charset="UTF-8">
     <title>智能报价有资料</title>
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/intelligent_quotation.css"/>
     <link rel="stylesheet" href="css/swiper-3.4.2.min.css"/>
 </head>
-<body>
+<body ng-controller="Intelligent_quotation">
 <header>
     <div>
         <span class="in_span"><</span>
@@ -60,14 +60,60 @@
             <li>层高 <span>2.8m</span></li>
             <li>飘窗 <span>1.2m</span></li>
         </ul>
+
+    </div>
+
+    <div class="lou_stairs">
         <p class="stairs_span">楼梯选择</p>
-        <input type="checkbox" class="right"/><span class="y">有</span>
-        <input type="checkbox" class="right"/><span class="n">否</span>
-        <div class="more_choose">
-            <input type="checkbox"/> <span>实木结构</span>
-            <input type="checkbox"/> <span>实木结构</span>
-            <input type="checkbox"/> <span>实木结构</span>
-        </div>
+        <label>
+            <input type="radio" name="test" checked="checked" />
+            <span></span>
+            <span class="have">有</span>
+        </label>
+        <label>
+            <input type="radio" name="test" />
+            <span></span>
+            <span class="no">无</span>
+        </label>
+    </div>
+    <!--结构-->
+    <div class="structure">
+        <ul>
+            <li>
+                <label>
+                    <input type="checkbox" name="test" checked="checked" />
+                    <span></span>
+                    <span>实木构造</span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="test"  />
+                    <span></span>
+                    <span>实木构造</span>
+                </label>
+            </li> <li>
+            <label>
+                <input type="checkbox" name="test"  />
+                <span></span>
+                <span>实木构造</span>
+            </label>
+        </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="test"  />
+                    <span></span>
+                    <span>实木构造</span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="checkbox" name="test"  />
+                    <span></span>
+                    <span>实木构造</span>
+                </label>
+            </li>
+        </ul>
     </div>
 
 </div>
@@ -77,12 +123,16 @@
     <h1>系类选择</h1>
     <div>
         <ul class="choose_ul">
-            <li>
-                <input type="checkbox"/><span>齐家</span>
-            </li>
-            <li>
-                <input type="checkbox"/><span>齐家</span>
-            </li>
+            <label >
+                <input type="radio" name="test" >
+                <span></span>
+                <span>齐家</span>
+            </label>
+            <label >
+                <input type="radio" name="test" >
+                <span></span>
+                <span>齐家</span>
+            </label>
         </ul>
         <div class="note_div">
             <ul>

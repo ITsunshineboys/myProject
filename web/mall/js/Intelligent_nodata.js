@@ -11,7 +11,7 @@ angular.module('intelligent_nodata',[])
                         $scope.message = newVal.substr(0,45)
                     }
                 }
-            })
+            });
             //解析字符串为JSON
             function getJSON(str) {
                 var obj = {};

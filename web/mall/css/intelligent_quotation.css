@@ -1,4 +1,40 @@
+/*单选按按钮样式*/
+input[type="radio"] {
+    display: none;
+}
+input[type="radio"]+span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    border: 1px solid #B8B6B6;
+    background-color: white;
+}
+input[type="radio"]:checked+span {
+    border: 1px solid #C2C2C2;
+    background-color: #53A8F4;
+}
+/*结束*/
 
+/*多选按按钮样式*/
+input[type="checkbox"] {
+    display: none;
+}
+input[type="checkbox"]+span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    border: 1px solid #B8B6B6;
+    background-color: white;
+}
+input[type="checkbox"]:checked+span {
+    border: 1px solid #C2C2C2;
+    background-color: #53A8F4;
+}
+/*结束*/
 header{
     width: 31rem;
     height: 3rem;
@@ -275,4 +311,33 @@ header div img{
     background-color: #53A8F4!important;
     color: white!important;
     margin-left: 1rem;
+}
+.structure{
+    border: 1px solid #E5E5E5 ;
+    width: 29rem;
+    margin-left: 1.5rem;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-radius: .2rem;
+}
+.structure ul li{
+    font-size: 1.2rem;
+    display: inline-block;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+}
+.structure ul li span{
+    color: #6C6C6C;
+}
+.have ,.no{
+    font-size: 1rem;
+    margin-left: .3rem;
+}
+.lou_stairs label{
+    margin-left: 1rem;
+}
+.choose_ul label{
+    margin-left: 1rem;
+    margin-top: .5rem;
+    font-size: 1rem;
 }

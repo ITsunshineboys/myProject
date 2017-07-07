@@ -1,22 +1,18 @@
 /**
  * Created by xl on 2017/6/29 0029.
  */
-$(".list_dis ul li img").on("click",function () {
-   var a= $(this).attr("class");
-    console.log(a);
-    var b =b;
-    if(a == b){
-        //$(this).addClass("sel").siblings("b").removeClass("sel");
-        alert(1)
-    }else{
-        $(this).addClass("b").siblings("sel").removeClass("b");
-    }
-    //if(){
-    //
-    //}
+angular.module('app',[])
+    .controller("Intelligent_quotation",function ($scope,$http) {
+        $http({
+            method:"post",
+            url:url+"/mall/owner/series-and-style"
+        }).then(function successCallback (resp) {
+            $scope.message = resp.data.show;
+            console.log($scope.message);
+        },function errorCallback () {
 
-    //$(this).addClass("blue").siblings("black").removeClass("blue");
-});
+        })
+    });
 
 
 //输入框获取焦点跳转页面
