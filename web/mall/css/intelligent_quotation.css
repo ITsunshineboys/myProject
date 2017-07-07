@@ -167,6 +167,25 @@ header div img{
 .choose_ul li span{
     font-size: 1rem;
 }
+/*о╣ап*/
+.tag{
+    padding-left:1.5rem;
+    color: #06CB7E;
+    margin-left: .4rem;
+}
+.tag span{
+    display: inline-block;
+    margin-right:1rem;
+    border-radius:1.5rem;
+    border:1px solid #8DE2C1;
+    text-align: center;
+    font-size:1rem;
+    padding-left:1.5rem;
+    padding-right:1.5rem;
+    padding-top:.3rem;
+    height:2rem;
+    background-color: #F9FEFC;
+}
 .note_div{
     margin-top: 1rem;
 }
@@ -341,3 +360,32 @@ header div img{
     margin-top: .5rem;
     font-size: 1rem;
 }
+.series {
+    padding-top: 1rem;
+}
+.series h1{
+    margin-left:1rem;
+}
+.series ul li{
+    display: inline-block;
+    font-size: 1rem ;
+    margin-left: 2rem;
+    padding-top: 1rem;
+}
+.series label{
+    font-weight:normal;
+    vertical-align: middle;
+}
+.fit{
+    padding-top: 1rem;
+}
+.fit h1{
+    margin-left: 1rem;
+    font-size: 1.2rem;
+}
+.fit p{
+    padding-left: 1rem;
+    font-size: 1rem;
+    color: #999;
+}
+
