@@ -1244,7 +1244,7 @@ class OwnerController extends Controller
         $self_leveling_area = $drawing_room_area;
 //        自流平费用
         $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods_price, $self_leveling_craft, '自流平');
-//        个数：（墙砖面积÷抓取墙砖面积）
+//        厨房/卫生间个数：（墙砖面积÷抓取墙砖面积）
         $wall_brick_area = ($wall_brick_value / 1000) * ($wall_brick_value / 1000);
         if ($wall_brick_area == 0)
         {
@@ -1253,7 +1253,7 @@ class OwnerController extends Controller
         {
             $wall_brick_cost ['quantity'] = ceil($wall_area / $wall_brick_area);
         }
-//        墙砖费用
+//        厨房/卫生间墙砖费用
         $wall_brick_cost['cost'] = $wall_brick_cost ['quantity'] * $wall_brick_price;
 //        河沙费用
         $river_sand_cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
@@ -1453,9 +1453,11 @@ class OwnerController extends Controller
     {
 //        $post = Yii::$app->request->port();
 //        $data = Json::decode($post);
-        $data = [
-            ''
-        ];
+//        $data = [
+//            'wall_brick_cost'=> $wall_brick_cost,
+//        ];
+        $principal_material = '主材';
+
     }
 
 
@@ -1614,11 +1616,11 @@ class OwnerController extends Controller
         foreach ($goods as &$one_goods) {
             $one_goods['show_price'] = $one_goods['platform_price'] * 1;
             $one_goods['show_quantity'] = 1;
-            if ($one_goods['title'] == '客厅沙发') {
+            if ($one_goods['title'] == '沙发') {
                 $one_goods['show_price'] = $one_goods['platform_price'] * $drawing_room;
                 $one_goods['show_quantity'] = $drawing_room;
             }
-            if ($one_goods['title'] == '床' || $one_goods['title'] == '床垫') {
+            if ($one_goods['title'] == '床') {
                 $one_goods['show_price'] = $one_goods['platform_price'] * $post['master_bedroom'];
                 $one_goods['show_quantity'] = $post['master_bedroom'];
             }
@@ -1680,7 +1682,7 @@ class OwnerController extends Controller
                 $one_goods['show_price'] = $one_goods['platform_price'] * $post['kitchen'];
                 $one_goods['show_quantity'] = $post['kitchen'];
             }
-            if ($one_goods['title'] == '立柜空调') {
+            if ($one_goods['title'] == '立柜式空调') {
                 $one_goods['show_price'] = $one_goods['platform_price'] * $drawing_room;
                 $one_goods['show_quantity'] = $drawing_room;
             }
@@ -1763,6 +1765,10 @@ class OwnerController extends Controller
             if ($one_goods['title'] == '淋浴隔断') {
                 $one_goods['show_price'] = $one_goods['platform_price'] * $post['toilet'];
                 $one_goods['show_quantity'] = $post['toilet'];
+            }
+            if ( $one_goods['title'] == '床垫') {
+                $one_goods['show_price'] = $one_goods['platform_price'] * $post['master_bedroom'];
+                $one_goods['show_quantity'] = $post['master_bedroom'];
             }
         }
 
