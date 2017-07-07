@@ -2494,7 +2494,7 @@ class MallController extends Controller
             ]);
         }
 
-        GoodsAttr::deleteAll(['category_id' => $categoryId]);
+        GoodsAttr::deleteAll(['category_id' => $categoryId, 'goods_id' => 0]);
 
         foreach ($names as $i => $name) {
             $goodsAttr = new GoodsAttr;
