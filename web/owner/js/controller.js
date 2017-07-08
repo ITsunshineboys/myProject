@@ -17,17 +17,17 @@ angular.module("all_controller", [])
         }
     })
     .controller("intelligent_index_ctrl", function ($scope,$http) {//主页控制器
-        $scope.get_quotation = function () {
+        // $scope.get_quotation = function () {
             $http({
                 url:"/owner/search",
-                method:"post",
-                data:{id:1}
+                method:"get",
+                data:{'id':'111'}
             }).then(function (response) {
                 console.log(response)
             },function (response) {
 
             })
-        }
+        // }
     })
     .controller("intelligent_nodata_ctrl", function ($scope,$stateParams, $http) { //无数据控制器
         $scope.message = ''

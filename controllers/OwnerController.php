@@ -122,13 +122,23 @@ class OwnerController extends Controller
      */
     public function actionSearch()
     {
-        $effect = Effect::find()->asArray()->all();
-        $id = [];
-        foreach ($effect as $one_effect)
+        $get = Yii::$app->request->get('id');
+        $get = 1;
+        if ($get !== null)
         {
-            $id [] = $one_effect['id'];
+            $effect = Effect::find()->asArray()->where(['id'=>$get])->one();
+            $effect_picture = EffectPicture::find()->where(['effect_id'=>$effect['id']])->all();
+        }else
+        {
+            $effect = Effect::find()->asArray()->all();
+            $id = [];
+            foreach ($effect as $one_effect)
+            {
+                $id [] = $one_effect['id'];
+            }
+            $effect_picture = EffectPicture::find()->where(['in','effect_id',$id])->all();
         }
-        $effect_picture = EffectPicture::find()->where(['in','effect_id',$id])->all();
+
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
