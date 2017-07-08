@@ -121,7 +121,7 @@ class OwnerController extends Controller
      */
     public function actionSearch()
     {
-        $effect = Effect::districtSearch();
+        $effect = Effect::find()->asArray()->all();
 
         return Json::encode([
             'code' => 200,
