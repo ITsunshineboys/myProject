@@ -1458,37 +1458,45 @@ class OwnerController extends Controller
 //        $data = [
 //            'wall_brick_cost'=> $wall_brick_cost,
 //        ];
-//        $material = '主材';
-//        $material_property_classify = MaterialPropertyClassify::findByAll($material);
-//        $goods = Goods::categoryById($material_property_classify);
-//        var_dump($goods);exit;
-            $a = [
-              'a' => [
-                  'a'=>123,
-                  'b'=>456,
-                  'c'=>789,
-                  'd'=>1122,
-              ],
-                'b' => [
-                    'a'=>11222,
-                    'b'=>147,
-                    'c'=>258,
-                    'd'=>369,
-                ],
+        $material = '主材';
+        $material_property_classify = MaterialPropertyClassify::findByAll($material);
+        $goods = Goods::categoryById($material_property_classify);
+        foreach ($goods as &$one_goods)
+        {
+            foreach ($material_property_classify as $quantity) {
+                if ($one_goods['title'] == $quantity['material']) {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
+                    $one_goods['show_quantity'] = $quantity['quantity'];
+                }
 
-            ];
-            foreach ($a as $k=>$v)
-            {
-                if ($v['a'] ==$v['a'] ) {
-                    echo '$a相同';
-                    exit;
-                }else
-                {
-                    echo 'butong';
-                    exit;
+                if ($one_goods['title'] == '木地板') {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['sitting_room'];
+                    $one_goods['show_quantity'] = $post['sitting_room'];;
+                }
+
+                if ($one_goods['title'] == '次卧装饰吊灯') {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['master_bedroom'] - 1;
+                    $one_goods['show_quantity'] = $post['master_bedroom'];;
+                }
+
+                if ($one_goods['title'] == '厨房平板灯') {
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['kitchen'];
+                    $one_goods['show_quantity'] = $post['kitchen'];;
+                }
+                if ($one_goods['title'] == '窗帘') {
+                    $curtain_quantity = $post['sitting_room'] + $post['master_bedroom'];
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $curtain_quantity;
+                    $one_goods['show_quantity'] = $curtain_quantity;
                 }
             }
-
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'goods' => $goods,
+            ]
+        ]);
     }
 
 

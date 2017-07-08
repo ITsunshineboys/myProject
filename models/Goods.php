@@ -427,19 +427,32 @@ AND goods.id IN (" . $id . ")";
 
     public static function categoryById($all = [], $city = 510100)
     {
-        if ($all) {
+        if ($all)
+        {
             $material = [];
             foreach ($all as $one)
             {
                 $material [] = $one['material'];
             }
-            $id = implode('\',\'',$material);
+            $id = implode('\',\'', $material);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_brand.name in ('" .$id . "')";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_brand.name in ('" . $id . "')";
             $all_goods = $db->createCommand($sql)->queryAll();
-//            if ($all_goods['title'] == )
+            var_dump($all_goods);
+                foreach ($all_goods as $v => $k)
+                {
+                    foreach ($material as $one_material)
+                    {
+                        if ($k['name'] == $one_material)
+                        {
+                            $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
+                            var_dump($c);exit;
+                            $max = array_search(max($c), $c);
+                            return $all_goods[$max];
+                        }
+                    }
+                }
         }
-        return $all_goods;
     }
 
     /**
