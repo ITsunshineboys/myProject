@@ -122,27 +122,39 @@ class OwnerController extends Controller
      */
     public function actionSearch()
     {
-        $get = Yii::$app->request->get('id');
-        $get = 1;
-        if ($get !== null)
+        $post = Yii::$app->request->post();
+        $post = [
+            'id'=>1,
+        ];
+
+        if ($post['id'] == true )
         {
-            $effect = Effect::find()->asArray()->where(['id'=>$get])->one();
-            $effect_picture = EffectPicture::find()->where(['effect_id'=>$effect['id']])->all();
-        }else
-        {
-            $effect = Effect::find()->asArray()->all();
+            $list_effect = Effect::find()->where(['id'=>$post['id']])->one();
+            $list_effect_picture = EffectPicture::find()->where(['id'=>$list_effect['id']])->all();
+            $effect = Effect::districtSearch($list_effect['toponymy']);
             $id = [];
             foreach ($effect as $one_effect)
             {
-                $id [] = $one_effect['id'];
+                $id []= $one_effect['id'];
             }
             $effect_picture = EffectPicture::find()->where(['in','effect_id',$id])->all();
+        }else
+        {
+            $effect = Effect::districtSearch($post['str']);
+            $id = [];
+            foreach ($effect as $one_effect)
+            {
+                $id = $one_effect['id'];
+            }
+            $effect_picture = EffectPicture::find()->asArray()->where(['in','id'=>$id])->all();
         }
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
+                'list_effect' => $list_effect,
+                'list_effect_picture' => $list_effect_picture,
                 'effect' => $effect,
                 'effect_picture' => $effect_picture,
             ]
@@ -1474,22 +1486,26 @@ class OwnerController extends Controller
         foreach ($goods as &$one_goods)
         {
             foreach ($material_property_classify as $quantity) {
-                if ($one_goods['title'] == $quantity['material']) {
+                if ($one_goods['title'] == $quantity['material'])
+                {
                     $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
                     $one_goods['show_quantity'] = $quantity['quantity'];
                 }
 
-                if ($one_goods['title'] == '木地板') {
+                if ($one_goods['title'] == '木地板')
+                {
                     $one_goods['show_price'] = $one_goods['platform_price'] * $post['sitting_room'];
                     $one_goods['show_quantity'] = $post['sitting_room'];;
                 }
 
-                if ($one_goods['title'] == '次卧装饰吊灯') {
+                if ($one_goods['title'] == '次卧装饰吊灯')
+                {
                     $one_goods['show_price'] = $one_goods['platform_price'] * $post['master_bedroom'] - 1;
                     $one_goods['show_quantity'] = $post['master_bedroom'];;
                 }
 
-                if ($one_goods['title'] == '厨房平板灯') {
+                if ($one_goods['title'] == '厨房平板灯')
+                {
                     $one_goods['show_price'] = $one_goods['platform_price'] * $post['kitchen'];
                     $one_goods['show_quantity'] = $post['kitchen'];;
                 }
