@@ -19,8 +19,8 @@ class AdminAuthService extends AccessControl
 
         $user = Yii::$app->user->identity;
 
-        if (isset(Yii::$app->params['auth'][$action->id])
-            && !in_array($user->login_role_id, Yii::$app->params['auth'][$action->id])
+        if (!$user->checkLogin()
+            || (isset(Yii::$app->params['auth'][$action->id]) && !in_array($user->login_role_id, Yii::$app->params['auth'][$action->id]))
         ) {
             if ($this->denyCallback !== null) {
                 call_user_func($this->denyCallback, null, $action);

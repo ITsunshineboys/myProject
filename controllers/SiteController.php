@@ -137,16 +137,17 @@ class SiteController extends Controller
         $model = new LoginForm;
         if ($model->load($postData) && $model->login()) {
             $user = Yii::$app->user->identity;
-            $user->login_time = time();
-            $user->login_role_id = Yii::$app->params['ownerRoleId'];
-            $user->authKey = Yii::$app->session->id;
-            if (!$user->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+//            $user->login_time = time();
+//            $user->login_role_id = Yii::$app->params['ownerRoleId'];
+//            if (!$user->save()) {
+//                $code = 500;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' => Yii::$app->params['errorCodes'][$code],
+//                ]);
+//            }
+
+            $user->afterLogin();
 
             return Json::encode([
                 'code' => 200,
@@ -255,20 +256,32 @@ class SiteController extends Controller
     }
 
     /**
-     * Logout action.
+     * Logout action(app).
      *
      * @return string
      */
     public function actionLogout()
     {
         $userIdentity = Yii::$app->user->getIdentity();
-        if ($userIdentity) {
-            $cache = Yii::$app->cache;
-            $keyPrefix = User::CACHE_PREFIX;
-            $cache->delete($keyPrefix . $userIdentity->id);
-        }
+        $userIdentity->authKey = '';
+        $userIdentity->save();
 
-        Yii::$app->user->logout();
+        return Json::encode([
+            'code' => 200,
+            'msg' => '登出成功',
+        ]);
+    }
+
+    /**
+     * Logout action(admin).
+     *
+     * @return string
+     */
+    public function actionAdminLogout()
+    {
+        $userIdentity = Yii::$app->user->getIdentity();
+        $userIdentity->authKeyAdmin = '';
+        $userIdentity->save();
 
         return Json::encode([
             'code' => 200,
@@ -385,7 +398,7 @@ class SiteController extends Controller
                 ]);
             }
 
-            $user->afterLogin($role);
+            $user->afterLogin($role->id);
 
             return Json::encode([
                 'code' => 200,

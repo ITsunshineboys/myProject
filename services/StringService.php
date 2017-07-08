@@ -253,4 +253,25 @@ class StringService
             ]
         );
     }
+
+    /**
+     * Get user agent
+     *
+     * @return string
+     */
+    public static function userAgent()
+    {
+        $type = 'other';
+
+        $userAgent = Yii::$app->request->headers->get('user-agent');
+        if (stripos($userAgent, 'iPhone') !== false
+            || stripos($userAgent, 'iPad') !== false
+        ) {
+            $type = 'ios';
+        } elseif (stripos($userAgent, 'Android')) {
+            $type = 'android';
+        }
+
+        return $type;
+    }
 }

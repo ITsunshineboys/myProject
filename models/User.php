@@ -7,7 +7,6 @@ use app\services\SmValidationService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use yii\helpers\Json;
 
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -351,6 +350,24 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Check login by authentication key
+     *
+     * @return bool
+     */
+    public function checkLogin()
+    {
+        if (!$this->authKey && !$this->authKeyAdmin) {
+            return false;
+        }
+
+        if ('other' == StringService::userAgent()) { // from pc
+            return !empty($this->authKeyAdmin);
+        } else { // from app
+            return !empty($this->authKey);
+        }
+    }
+
+    /**
      * Set cache after updated user model
      *
      * @param bool $insert
@@ -370,10 +387,18 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @return bool
      */
-    public function afterLogin(Role $role)
+    public function afterLogin($roleId = 0)
     {
         $this->login_time = time();
-        $this->login_role_id = $role->id;
+        $this->login_role_id = $roleId;
+
+        $sessionId = Yii::$app->session->id;
+        if ($roleId) {
+            $this->authKeyAdmin = $sessionId;
+        } else {
+            $this->authKey = $sessionId;
+        }
+
         return $this->save();
     }
 }
