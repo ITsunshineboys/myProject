@@ -9,6 +9,7 @@ use app\models\DecorationAdd;
 use app\models\DecorationList;
 use app\models\DecorationParticulars;
 use app\models\Effect;
+use app\models\EffectPicture;
 use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;
@@ -122,12 +123,18 @@ class OwnerController extends Controller
     public function actionSearch()
     {
         $effect = Effect::find()->asArray()->all();
-
+        $id = [];
+        foreach ($effect as $one_effect)
+        {
+            $id [] = $one_effect['id'];
+        }
+        $effect_picture = EffectPicture::find()->where(['in','effect_id',$id])->all();
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
                 'effect' => $effect,
+                'effect_picture' => $effect_picture,
             ]
         ]);
     }
