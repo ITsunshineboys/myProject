@@ -139,6 +139,7 @@ class SiteController extends Controller
             $user = Yii::$app->user->identity;
             $user->login_time = time();
             $user->login_role_id = Yii::$app->params['ownerRoleId'];
+            $user->authKey = Yii::$app->session->id;
             if (!$user->save()) {
                 $code = 500;
                 return Json::encode([

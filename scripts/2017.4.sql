@@ -19,7 +19,7 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(25) DEFAULT '',
   `password` varchar(100) DEFAULT '',
-  `authKey` varchar(25) DEFAULT '',
+  `authKey` varchar(30) DEFAULT '',
   `accessToken` varchar(255) DEFAULT '',
   `mobile` bigint DEFAULT 0,
   `nickname` varchar(20) DEFAULT '',
