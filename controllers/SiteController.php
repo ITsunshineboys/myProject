@@ -753,7 +753,7 @@ class SiteController extends Controller
         ];
 
         $user = Yii::$app->user->identity;
-        if (!$user) {
+        if (!$user || !$user->checkLogin()) {
             return Json::encode($ret);
         }
 
