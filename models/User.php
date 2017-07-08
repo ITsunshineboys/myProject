@@ -250,6 +250,24 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Logout(admin)
+     */
+    public function adminLogout()
+    {
+        $this->authKeyAdmin = '';
+        $this->save();
+    }
+
+    /**
+     * Logout(app)
+     */
+    public function logout()
+    {
+        $this->authKey = '';
+        $this->save();
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

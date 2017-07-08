@@ -263,8 +263,7 @@ class SiteController extends Controller
     public function actionLogout()
     {
         $userIdentity = Yii::$app->user->getIdentity();
-        $userIdentity->authKey = '';
-        $userIdentity->save();
+        $userIdentity->logout();
 
         return Json::encode([
             'code' => 200,
@@ -280,8 +279,7 @@ class SiteController extends Controller
     public function actionAdminLogout()
     {
         $userIdentity = Yii::$app->user->getIdentity();
-        $userIdentity->authKeyAdmin = '';
-        $userIdentity->save();
+        $userIdentity->adminLogout();
 
         return Json::encode([
             'code' => 200,
