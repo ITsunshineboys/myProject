@@ -4,6 +4,7 @@ angular.module('intelligent_nodata',[])
             $scope.message = '';
             $scope.nowStyle = '现代简约';
             $scope.nowSeries = '齐家';
+            $scope.flag = true;
 
             $scope.$watch('message',function (newVal,oldVal) {
                 if(newVal && newVal!=oldVal){
@@ -149,3 +150,22 @@ $(".add_d").on("click",function (){
         text=2;
     }
 });
+
+//点击判断是否为空
+// $(".btn_vr button").on("click",function () {
+//     var first = $(".address").val();
+//     var scd= $(".text_all").val();
+//     var utp= $(".utp").val();
+//     var fix= $(".fix").val();
+//     console.log(scd);
+//     console.log(first);
+//     console.log(utp);
+//     console.log(fix);
+//     if(first=="" || scd=="" || utp=="" || fix==""){
+//         //$(".btn_vr button").attr("disabled","true")
+//     }else{
+//
+//     }
+//
+//     //alert(11);
+// });

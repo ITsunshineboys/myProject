@@ -2,6 +2,7 @@ angular.module("all_controller", [])
     .controller("cell_search_ctrl", function ($scope, $http) {//小区搜索控制器
         $scope.data = '';
         $scope.getData = function () {
+<<<<<<< HEAD
             let arr = [];
             $http({
                 method:"post",
@@ -11,6 +12,15 @@ angular.module("all_controller", [])
                 }
             }).then(function (response) {
                 console.log(response);
+=======
+            let arr = []
+            $http({
+               url:"/owner/search",
+                method:"post",
+                data:{str:"花"}
+            }).then(function (response) {
+                console.log(response)
+>>>>>>> 8bf3576dd3c8233c41d252a9834f6a223939169d
                 for (let item of response.data.data.effect) {
                     if (item.toponymy.indexOf($scope.data) != -1 && $scope.data != '') {
                         arr.push({"toponymy": item.toponymy, "site_particulars": item.site_particulars})
