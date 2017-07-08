@@ -1,0 +1,251 @@
+ <link rel="stylesheet" href="css/intelligent_quotation.css"/>
+    <link rel="stylesheet" href="css/swiper-3.4.2.min.css"/>
+<div ng-controller="intelligent_quotation_ctrl">
+<header>
+    <div>
+        <span class="in_span"><</span>
+        <span class="pic_span">智能报价</span>
+        <img src="images/dingw.png" alt=""/>
+        <span class="postion_span">成都</span>
+    </div>
+</header>
+
+<!--小区信息-->
+
+<div class="quarters_small">
+    <h1>小区信息</h1>
+    <span class="choose_quarter">小区选择</span>
+    <img src="images/big.png" alt=""/>
+    <a href="cell_search.html"><input type="text" placeholder="请输入小区名字" class="search_a"/><br/></a>
+
+    <p class="quarters_adress">小区地址</p>
+    <p class="quarters">金牛区蜀汉路</p>
+</div>
+
+<!--房屋信息-->
+<div class="housing_information">
+    <h1>房屋信息</h1>
+    <h2>户型选择</h2>
+    <div class="list_dis">
+        <ul>
+            <li >
+                <img src="images/bed.png" alt="" class="b"/><br/>
+                <span class="black">一室一厅85m</span>
+            </li>
+            <li>
+                <img src="images/bed.png" alt=""/><br/>
+                <span>一室一厅85m</span>
+            </li>
+            <li>
+                <img src="images/bed.png" alt=""/><br/>
+                <span>一室一厅85m</span>
+            </li>
+            <li>
+                <img src="images/bed.png" alt=""/><br/>
+                <span>一室一厅85m</span>
+            </li>
+        </ul>
+    </div>
+    <div class="comment_height">
+        <ul>
+            <li>层高 <span>2.8m</span></li>
+            <li>飘窗 <span>1.2m</span></li>
+        </ul>
+
+    </div>
+
+    <div class="lou_stairs">
+        <p class="stairs_span">楼梯选择</p>
+        <label>
+            <input type="radio" name="test" checked="checked" />
+            <span></span>
+            <span class="have">有</span>
+        </label>
+        <label>
+            <input type="radio" name="test" />
+            <span></span>
+            <span class="no">无</span>
+        </label>
+    </div>
+    <!--结构-->
+    <div class="structure" >
+        <ul>
+            <li ng-repeat="n in message">
+                <label>
+                    <input type="radio" name="test" />
+                    <span></span>
+                    <span>{{n.attribute}}</span>
+                </label>
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+
+<!--x系类选择-->
+<div class="department_choose">
+    <h1>系类选择</h1>
+    <div>
+        <ul class="choose_ul">
+            <li ng-repeat="n in style">
+                <label ng-click="toggleSeries(n.series)">
+                    <input type="radio" name="style" ng-checked="(nowSeries==n.series)">
+                    <span></span>
+                    <span>{{n.series}}</span>
+                </label>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--适合人群-->
+<div ng-switch on="nowSeries">
+    <div ng-switch-when="齐家">
+        <div class="tag"><span ng-cloak  ng-repeat="item in style[0].theme.split(',')">{{item}}</span></div>
+        <div class="fit">
+            <h1>适合人群</h1>
+            <p ng-cloak>{{style[0].intro}}</p>
+        </div>
+    </div>
+    <div ng-switch-when="享家">
+        <div class="tag"><span ng-cloak ng-repeat="item in style[1].theme.split(',')">{{item}}</span></div>
+        <div class="fit">
+            <h1>适合人群</h1>
+            <p ng-cloak>{{style[1].intro}}</p>
+        </div>
+    </div>
+    <div ng-switch-default>
+
+    </div>
+</div>
+
+<!--风格选择-->
+<div class="style_choose">
+    <h1>风格选择</h1>
+    <div class="style_choose_div">
+        <ul>
+            <li ng-repeat="n in me " ng-click="toggleStyle(item.style)" ng-class="{'btn_checked':(nowStyle==item.style)}">
+                <button>{{n.style}}</button>
+            </li>
+        </ul>
+    </div>
+    <!--轮播图-->
+    <div ng-switch on="nowStyle">
+        <div ng-switch-when="现代简约">
+            <div class="carousel">
+                1
+            </div>
+            <!--现代简约便签-->
+            <div class="note">
+                <ul>
+                    <li ng-repeat="item in me[0].theme.split(',')" >
+                        <button ng-cloak>{{item}}</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div ng-switch-when="中国风">
+            <div class="carousel">
+                2
+            </div>
+            <!--中国风便签-->
+            <div class="note">
+                <ul>
+                    <li ng-repeat="item in me[1].theme.split(',')">
+                        <button ng-cloak>{{item}}</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div ng-switch-default>
+
+        </div>
+    </div>
+    <!--具体便签-->
+    <div class="specific_tab">
+        <ul>
+            <li>外形简洁</li>
+            <li>外形简洁</li>
+            <li>外形简洁</li>
+        </ul>
+    </div>
+</div>
+
+<!--3D/VR图-->
+<div>
+    <!--轮播图-->
+    <div>
+        <div style="width: 30rem;height: 15rem;border: 1px solid #C2C2C2;margin-left: 1rem;margin-top: 1rem"></div>
+    </div>
+</div>
+
+<!--材料选择-->
+<div class="material_choose">
+ <p class="title_span">材料选择</p>
+    <span  class="comment_span">点击以下版块查看详情和编辑</span>
+    <!--左边内容-->
+    <div class="left_main">
+        <!--基础装修-->
+        <ul class="decoration">
+            <li></li>
+        </ul>
+
+        <!--固定家居-->
+        <ul class="fixed_home">
+            <li></li>
+        </ul>
+
+        <!--家电配套-->
+        <ul class="appliance_matching">
+            <li>
+
+            </li>
+        </ul>
+
+        <!--智能配套-->
+        <ul class="Intelligence">
+            <li></li>
+        </ul>
+    </div>
+    <!--右边内容-->
+    <div class="right_main">
+        <!--主材料-->
+        <ul class="main_material">
+            <li></li>
+        </ul>
+
+        <!--移动家具-->
+        <ul class="mobile_furniture">
+            <li></li>
+        </ul>
+
+        <!--软装配套-->
+        <ul class="soft_outfit">
+            <li></li>
+        </ul>
+        <!--生活配套、-->
+        <ul class=life_matching">
+            <li></li>
+        </ul>
+    </div>
+</div>
+
+<!--特殊要求-->
+<div class="special_requirements">
+    <h1>特殊要求</h1>
+    <textarea class="main_text">请输入你的要求</textarea>
+    <span>0/300</span>
+</div>
+
+<!--尾部结算-->
+<div class="footer_settlement">
+    <div class="footer_set">
+        <span class="first_span">$125888</span>
+        <span class="second_span">$1515151</span><br/>
+        <span class="three_span">未包含施工图费用，8项全场8折</span>
+    </div>
+    <button>保存方案</button>
+    <button class="primary_btn">去装修</button>
+</div>
+</div>

@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="css/intelligent_index.css"/>
+<div ng-controller="intelligent_index_ctrl">
+<header>
+    <div>
+        <img src="images/home_top.png" alt="" />
+    </div>
+</header>
+
+<section>
+    <div class="intelligent_div">
+        <span class="intel">智能报价</span>
+        <a ui-sref="city_choose">
+        <span class="address">成都</span>
+        </a>
+        <a ui-sref="nodata">
+            <button>计算我的房屋报价</button>
+        </a>
+
+    </div>
+
+    <!--展示页面-->
+
+    <div class="exhibition">
+        <ul>
+            <li>
+                <a ng-click="get_quotation()">
+                    <span>8.1万</span>
+                    <h1>蓝光coco时代</h1>
+                    <P>97m<sup>2</sup> 三室一厅双卫 齐家风格 欧美风</P>
+                    <img src="images/display_img.png" alt=""/>
+                </a>
+            </li> <li>
+                <a href="Intelligent_quotation.html">
+                    <span>8.1万</span>
+                    <h1>蓝光coco时代</h1>
+                    <P>97m<sup>2</sup> 三室一厅双卫 齐家风格 欧美风</P>
+                    <img src="images/display_img.png" alt=""/>
+                </a>
+            </li> <li>
+                <a href="Intelligent_quotation.html">
+                    <span>8.1万</span>
+                    <h1>蓝光coco时代</h1>
+                    <P>97m<sup>2</sup> 三室一厅双卫 齐家风格 欧美风</P>
+                    <img src="images/display_img.png" alt=""/>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</section>
+</div>
