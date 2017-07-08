@@ -403,6 +403,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Do some ops after login
      *
+     * @param int $roleId role id default 0
      * @return bool
      */
     public function afterLogin($roleId = 0)
