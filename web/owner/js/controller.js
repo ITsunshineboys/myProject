@@ -3,7 +3,11 @@ angular.module("all_controller", [])
         $scope.data = ''
         $scope.getData = function () {
             let arr = []
-            $http.get("/owner/search").then(function (response) {
+            $http({
+               url:"/owner/search",
+                method:"post",
+                data:{str:"花"}
+            }).then(function (response) {
                 console.log(response)
                 for (let item of response.data.data.effect) {
                     if (item.toponymy.indexOf($scope.data) != -1 && $scope.data != '') {
