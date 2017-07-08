@@ -2,19 +2,24 @@
     height: 4rem;
     background-color: white;
 }
-
+.header_cell i{
+    color: #E5E5E5 ;
+    position: relative;
+    left: 3rem;
+    top: .2rem;
+}
 .header_cell input{
-    width: 20rem;
-    height: 2rem;
+    width: 23rem;
+    height: 2.3rem;
     margin-top: 1rem;
     border: 1px solid #C2C2C2;
     border-radius: 1.2rem;
-    padding-left: 1rem;
+    padding-left: 2.5rem;
     font-size: 1rem;
-    margin-left: 2rem;
+    margin-left: 1rem;
 }
 .header_cell a{
-    margin-left: 3rem;
+    margin-left: 1rem;
     font-size: 1.2rem;
 }
 .cell_ul li{

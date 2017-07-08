@@ -18,13 +18,13 @@
         <span class="postion_span">成都</span>
     </div>
 </header>
+<section >
 
-<section>
     <!--小区信息-->
     <div class="quarters_small">
         <h1>小区信息</h1>
         <span class="choose_quarter">小区选择</span>
-        <input type="text" placeholder="请输入小区名字" /><br/>
+        <input type="text" placeholder="请输入小区名字" class="address" /><br/>
         <div class="address_content">
         <p class="quarters_adress">小区地址</p>
         <textarea class="text_all" rows="5" cols="43" placeholder="例：金牛区沙西线66号" ng-model="message"></textarea>
@@ -35,7 +35,7 @@
     <!--房屋信息-->
     <div class="house_area">
         <span class="house_span">房屋面积</span>
-        <input type="text" placeholder="180"  onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="3"/>
+        <input type="text" placeholder="180"  onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="3" class="utp"/>
 
         <span class="p">m<sup>2</sup></span>
     </div>
@@ -126,7 +126,7 @@
     <!--飘窗-->
     <div class="bay_window">
         <span class="bay_span">飘窗</span>
-        <input type="text" placeholder="20" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="4"/>
+        <input type="text" placeholder="20" class="fix"  onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="4"/>
         <span class="bay_square">m<sup>2</sup></span>
     </div>
 
@@ -290,7 +290,7 @@
 
     <!--按钮-->
     <div class="btn_vr">
-      <button >生成3D/VR图和材料</button>
+      <button  >生成3D/VR图和材料</button>
     </div>
 
     <div style="height: 20rem"></div>
