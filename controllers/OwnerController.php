@@ -123,10 +123,6 @@ class OwnerController extends Controller
     public function actionSearch()
     {
         $post = Yii::$app->request->post();
-        $post = [
-            'id'=>1,
-        ];
-
         if ($post['id'] == true )
         {
             $list_effect = Effect::find()->where(['id'=>$post['id']])->one();
