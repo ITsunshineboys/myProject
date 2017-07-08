@@ -51,7 +51,7 @@ class Effect extends ActiveRecord
      * @param $street
      * @return array|ActiveRecord[]
      */
-    public static function districtSearch($search = '')
+    public static function districtSearch($search = '花好月圆')
     {
         if (!empty($search))
         {

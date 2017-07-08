@@ -121,12 +121,7 @@ class OwnerController extends Controller
      */
     public function actionSearch()
     {
-        if (\Yii::$app->request->post() == null) {
-            $string = '花好月圆';
-        } else {
-            $string = \Yii::$app->request->post();
-        }
-        $effect = Effect::districtSearch($string);
+        $effect = Effect::districtSearch();
 
         return Json::encode([
             'code' => 200,
@@ -1456,7 +1451,36 @@ class OwnerController extends Controller
 //        $data = [
 //            'wall_brick_cost'=> $wall_brick_cost,
 //        ];
-        $principal_material = '主材';
+//        $material = '主材';
+//        $material_property_classify = MaterialPropertyClassify::findByAll($material);
+//        $goods = Goods::categoryById($material_property_classify);
+//        var_dump($goods);exit;
+            $a = [
+              'a' => [
+                  'a'=>123,
+                  'b'=>456,
+                  'c'=>789,
+                  'd'=>1122,
+              ],
+                'b' => [
+                    'a'=>11222,
+                    'b'=>147,
+                    'c'=>258,
+                    'd'=>369,
+                ],
+
+            ];
+            foreach ($a as $k=>$v)
+            {
+                if ($v['a'] ==$v['a'] ) {
+                    echo '$a相同';
+                    exit;
+                }else
+                {
+                    echo 'butong';
+                    exit;
+                }
+            }
 
     }
 
