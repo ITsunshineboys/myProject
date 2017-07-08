@@ -122,7 +122,10 @@ class OwnerController extends Controller
      */
     public function actionSearch()
     {
-        $post = Yii::$app->request->post();
+//        $post = Yii::$app->request->post();
+        $post = [
+            'str'=> '花好月圆',
+        ];
         if (array_key_exists('id',$post))
         {
             $list_effect = Effect::find()->where(['id'=>$post['id']])->one();
@@ -139,12 +142,13 @@ class OwnerController extends Controller
             $list_effect =  null;
             $list_effect_picture =  null;
             $effect = Effect::districtSearch($post['str']);
+
             $id = [];
             foreach ($effect as $one_effect)
             {
                 $id = $one_effect['id'];
             }
-            $effect_picture = EffectPicture::find()->asArray()->where(['in','id'=>$id])->all();
+            $effect_picture = EffectPicture::find()->asArray()->where(['in','id',$id])->all();
         }
 
         return Json::encode([

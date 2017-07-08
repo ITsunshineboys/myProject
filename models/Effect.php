@@ -55,7 +55,7 @@ class Effect extends ActiveRecord
     {
         if (!empty($search))
         {
-            $detail = self::find()->where(['like','toponymy',$search])->all();
+            $detail = self::find()->asArray()->where(['like','toponymy',$search])->all();
         }
         return $detail;
     }
