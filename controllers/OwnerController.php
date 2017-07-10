@@ -136,8 +136,6 @@ class OwnerController extends Controller
             $effect_picture = EffectPicture::find()->where(['in','effect_id',$id])->all();
         }elseif ( array_key_exists('str',$post))
         {
-            if (!empty($post))
-            {
                 $list_effect =  null;
                 $list_effect_picture =  null;
                 $effect = Effect::districtSearch($post['str']);
@@ -147,14 +145,7 @@ class OwnerController extends Controller
                     $id = $one_effect['id'];
                 }
                 $effect_picture = EffectPicture::find()->asArray()->where(['in','id',$id])->all();
-            }else
-            {
-                $list_effect =  null;
-                $list_effect_picture =  null;
-                $effect =  null;
-                $effect_picture =  null;
-            }
-        }else
+        }elseif($post == null)
         {
             $list_effect =  null;
             $list_effect_picture =  null;
