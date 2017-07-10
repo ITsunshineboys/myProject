@@ -38,14 +38,14 @@ class Effect extends ActiveRecord
         return 'effect';
     }
 
-//    public function rules()
-//    {
-//        return [
-//            [['province', 'city','district','street','toponymy','area','high','room','hall','toilet','kitchen','window'], 'required'],
-//            [['province', 'city','district','street','toponymy'],'string'],
-//            [['area','high','room','hall','toilet','kitchen','window'],'number']
-//        ];
-//    }
+    public function rules()
+    {
+        return [
+            [['province', 'city','district','street','toponymy','area','high','room','hall','toilet','kitchen','window'], 'required'],
+            [['province', 'city','district','street','toponymy'],'string'],
+            [['area','high','room','hall','toilet','kitchen','window'],'number']
+        ];
+    }
     /**
      * @param $toponymy
      * @param $street

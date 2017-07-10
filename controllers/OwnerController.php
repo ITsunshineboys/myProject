@@ -145,6 +145,12 @@ class OwnerController extends Controller
                 $id = $one_effect['id'];
             }
             $effect_picture = EffectPicture::find()->asArray()->where(['in','id',$id])->all();
+        }else
+        {
+            $list_effect =  null;
+            $list_effect_picture =  null;
+            $effect =  null;
+            $effect_picture =  null;
         }
 
         return Json::encode([
