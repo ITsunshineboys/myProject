@@ -1106,6 +1106,12 @@ class BasisDecorationService
         return $brick;
     }
 
+    /**
+     * @param array $get_area
+     * @param array $goods
+     * @param array $craft
+     * @return mixed
+     */
     public static function riverSandCost($get_area = [],$goods = [],$craft = [])
     {
         if ($get_area && $goods && $craft)
@@ -1141,5 +1147,44 @@ class BasisDecorationService
             $river_sand['cost'] =  0;
         }
         return $river_sand;
+    }
+
+    /**
+     * 木地板计算公式
+     * @param array $bedroom_area
+     * @param string $area
+     * @param array $goods
+     * @return mixed
+     */
+    public static function woodFloorCost($bedroom_area = [],$area = '',$goods = [])
+    {
+        if ($bedroom_area && $area && $goods)
+        {
+            foreach ($bedroom_area as $one_bedroom)
+            {
+                //        卧室地面积=【z】%×（房屋面积）
+                $bedroom = $one_bedroom['project_value'] * $area;
+            }
+//        木地板面积=卧室地面积
+            $wood_floor_area =  $bedroom;
+
+            //        个数：（木地板面积÷抓取木地板面积）
+            $wood_floor['quantity'] = ceil($wood_floor_area / $goods['value']);
+            //        木地板费用：个数×抓取的商品价格
+            $wood_floor['cost'] = $wood_floor['quantity'] * $goods['platform_price'];
+        }
+        return $wood_floor;
+    }
+
+    public static function marbleCost($post = '',$goods =[])
+    {
+        if ($post && $goods)
+        {
+            //        个数=飘窗米数
+            $marble['quantity'] = $post;
+            //        大理石费用：个数×抓取的商品价格
+            $marble['cost'] = $marble['quantity'] * $goods['platform_price'];
+        }
+        return $marble;
     }
 }
