@@ -41,9 +41,9 @@ class Effect extends ActiveRecord
     public function rules()
     {
         return [
-            [['province', 'city','district','street','toponymy','area','high','room','hall','toilet','kitchen','window'], 'required'],
-            [['province', 'city','district','street','toponymy'],'string'],
-            [['area','high','room','hall','toilet','kitchen','window'],'number']
+            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','city','district', 'toponymy','street','particulars','site_particulars'], 'required'],
+            [['province', 'city','district','toponymy','street','particulars','site_particulars'],'string'],
+            [['series_id','style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high'],'number']
         ];
     }
     /**
