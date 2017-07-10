@@ -136,7 +136,7 @@ class OwnerController extends Controller
             $effect_picture = EffectPicture::find()->where(['in','effect_id',$id])->all();
         }elseif ( array_key_exists('str',$post))
         {
-            if ($post !== null)
+            if ($post['str'] !== null)
             {
                 $list_effect =  null;
                 $list_effect_picture =  null;
