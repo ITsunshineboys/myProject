@@ -556,7 +556,8 @@ AND goods.id IN (" . $id . ")";
         return [
             [['title', 'subtitle', 'category_id', 'brand_id', 'cover_image', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_REVIEW],
             [['title', 'subtitle', 'category_id', 'brand_id', 'cover_image', 'supplier_price', 'platform_price', 'market_price', 'left_number', 'logistics_template_id', 'after_sale_services'], 'required', 'on' => self::SCENARIO_ADD],
-            [['title', 'subtitle'], 'string', 'length' => [1, 16]],
+            [['title'], 'string', 'length' => [1, 60]],
+            [['subtitle'], 'string', 'length' => [1, 16]],
             [['cover_image', 'offline_reason', 'reason'], 'string'],
             [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'style_id', 'series_id'], 'number', 'min' => 0],
             ['supplier_price', 'validateSupplierPrice', 'on' => self::SCENARIO_REVIEW],
