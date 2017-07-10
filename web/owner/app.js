@@ -43,7 +43,8 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                 views:{
                     "":{templateUrl:"Intelligent_quotation.html"}
                 },
-                controller:"intelligent_quotation_ctrl"
+                controller:"intelligent_quotation_ctrl",
+                params:{"id":""}
             })
 
     }])

@@ -20,7 +20,7 @@
 }
 .details_city span,p,button{
     font-size: 1.4rem;
-    line-height: 4rem;
+    /*line-height: 4.1rem;*/
 }
 .details_city p{
     display: inline-block;
@@ -33,7 +33,6 @@
     background: white;
     color: #5677FC;
     margin-left:8rem;
-    outline: none;
 }
 .choose_city{
     width: 30rem;

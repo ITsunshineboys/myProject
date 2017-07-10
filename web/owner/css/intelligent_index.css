@@ -44,9 +44,6 @@ header div img{
 .exhibition{
      margin-top: -3rem;
 }
-.exhibition a{
-    text-decoration: none;
-}
 .exhibition ul li {
     margin-left: 3%;
     width: 94%;
@@ -69,7 +66,6 @@ header div img{
     left: 25rem;
     top: 3rem;
     border-radius: 1rem;
-    font-size: 1rem;
 }
 .exhibition h1{
     position: absolute;

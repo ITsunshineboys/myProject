@@ -16,10 +16,10 @@
     <h1>小区信息</h1>
     <span class="choose_quarter">小区选择</span>
     <img src="images/big.png" alt=""/>
-    <a href="cell_search.html"><input type="text" placeholder="请输入小区名字" class="search_a"/><br/></a>
+    <a href="cell_search.html"><input type="text" ng-model="all_data.toponymy" placeholder="请输入小区名字" class="search_a"/><br/></a>
 
     <p class="quarters_adress">小区地址</p>
-    <p class="quarters">金牛区蜀汉路</p>
+    <p class="quarters">{{all_data.site_particulars}}</p>
 </div>
 
 <!--房屋信息-->
@@ -29,7 +29,11 @@
     <div class="list_dis">
         <ul>
             <li >
-                <img src="images/bed.png" alt="" class="b"/><br/>
+                <img src="images/bed.png"  alt="" class="b"/><br/>
+                <span class="black">{{all_data.particulars}}{{all_data.area}}m</span>
+            </li>
+            <!--<li >
+                <img src="images/bed.png"  alt="" class="b"/><br/>
                 <span class="black">一室一厅85m</span>
             </li>
             <li>
@@ -43,13 +47,13 @@
             <li>
                 <img src="images/bed.png" alt=""/><br/>
                 <span>一室一厅85m</span>
-            </li>
+            </li>-->
         </ul>
     </div>
     <div class="comment_height">
         <ul>
-            <li>层高 <span>2.8m</span></li>
-            <li>飘窗 <span>1.2m</span></li>
+            <li>层高 <span>{{all_data.high}}m</span></li>
+            <li>飘窗 <span>{{all_data.window}}m</span></li>
         </ul>
 
     </div>
@@ -57,12 +61,12 @@
     <div class="lou_stairs">
         <p class="stairs_span">楼梯选择</p>
         <label>
-            <input type="radio" name="test" checked="checked" />
+            <input type="radio" name="stairs" checked="checked" />
             <span></span>
             <span class="have">有</span>
         </label>
         <label>
-            <input type="radio" name="test" />
+            <input type="radio" name="stairs" />
             <span></span>
             <span class="no">无</span>
         </label>
@@ -71,8 +75,8 @@
     <div class="structure" >
         <ul>
             <li ng-repeat="n in message">
-                <label>
-                    <input type="radio" name="test" />
+                <label ng-click="toggleStairs($index)">
+                    <input type="radio" name="structure" ng-checked="index == $index"/>
                     <span></span>
                     <span>{{n.attribute}}</span>
                 </label>
