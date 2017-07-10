@@ -46,9 +46,9 @@ class Effect extends ActiveRecord
             [['series_id','style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high'],'number']
         ];
     }
+
     /**
-     * @param $toponymy
-     * @param $street
+     * @param string $search
      * @return array|ActiveRecord[]
      */
     public static function districtSearch($search = '花好月圆')
