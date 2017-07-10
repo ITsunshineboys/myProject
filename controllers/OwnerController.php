@@ -136,15 +136,24 @@ class OwnerController extends Controller
             $effect_picture = EffectPicture::find()->where(['in','effect_id',$id])->all();
         }elseif ( array_key_exists('str',$post))
         {
-            $list_effect =  null;
-            $list_effect_picture =  null;
-            $effect = Effect::districtSearch($post['str']);
-            $id = [];
-            foreach ($effect as $one_effect)
+            if (!empty($post))
             {
-                $id = $one_effect['id'];
+                $list_effect =  null;
+                $list_effect_picture =  null;
+                $effect = Effect::districtSearch($post['str']);
+                $id = [];
+                foreach ($effect as $one_effect)
+                {
+                    $id = $one_effect['id'];
+                }
+                $effect_picture = EffectPicture::find()->asArray()->where(['in','id',$id])->all();
+            }else
+            {
+                $list_effect =  null;
+                $list_effect_picture =  null;
+                $effect =  null;
+                $effect_picture =  null;
             }
-            $effect_picture = EffectPicture::find()->asArray()->where(['in','id',$id])->all();
         }else
         {
             $list_effect =  null;
@@ -1479,11 +1488,10 @@ class OwnerController extends Controller
      */
     public function actionPrincipalMaterial()
     {
-//        $post = Yii::$app->request->port();
-//        $data = Json::decode($post);
-//        $data = [
-//            'wall_brick_cost'=> $wall_brick_cost,
-//        ];
+        $post = Yii::$app->request->post();
+        $data = [
+            'wall_brick_cost'=> $wall_brick_cost,
+        ];
         $material = '主材';
         $material_property_classify = MaterialPropertyClassify::findByAll($material);
         $goods = Goods::categoryById($material_property_classify);
