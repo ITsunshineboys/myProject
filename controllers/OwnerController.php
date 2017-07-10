@@ -122,10 +122,8 @@ class OwnerController extends Controller
      */
     public function actionSearch()
     {
-        $post = Yii::$app->request->post();
-        var_dump(Yii::$app->request->absoluteUrl);
-        var_dump($post);
-        exit;
+        $data = Yii::$app->request->post();
+        $post = Json::decode($data);
         if (array_key_exists('id',$post))
         {
             $list_effect = Effect::find()->where(['id'=>$post['id']])->one();
