@@ -123,6 +123,7 @@ class OwnerController extends Controller
     public function actionSearch()
     {
         $data = Yii::$app->request->post();
+        var_dump($data);exit;
         $post = Json::decode($data);
 
         if (array_key_exists('id',$post))
