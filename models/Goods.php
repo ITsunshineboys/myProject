@@ -740,22 +740,34 @@ AND goods.id IN (" . $id . ")";
      * Check if can enable goods
      *
      * @param ActiveRecord $user user model
-     * @return bool
+     * @return int
      */
     public function canOnline(ActiveRecord $user)
     {
         if ($user->login_role_id == Yii::$app->params['lhzzRoleId']
             && in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE])
         ) {
-            if ($this->validateCategoryId('category_id')
-                && $this->validateBrandId('brand_id')
-                && $this->validateSupplierId('supplier_id')
-            ) {
-                return true;
+            $code = 200;
+
+            if (!$this->validateCategoryId('category_id')) {
+                $code = 1012;
+                return $code;
             }
+
+            if (!$this->validateBrandId('brand_id')) {
+                $code = 1013;
+                return $code;
+            }
+
+            if (!$this->validateSupplierId('supplier_id')) {
+                $code = 1014;
+                return $code;
+            }
+        } else {
+            $code = 403;
         }
 
-        return false;
+        return $code;
     }
 
     /**
