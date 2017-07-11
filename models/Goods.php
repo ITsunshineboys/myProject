@@ -360,7 +360,7 @@ class Goods extends ActiveRecord
             exit;
         } else {
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. NAME,goods_attr.VALUE,goods_brand. NAME,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`level` = " . $level . " AND goods_brand.name LIKE '". $title ."'";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. NAME,goods_attr.VALUE,goods_brand. NAME,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`level` = " . $level . " AND goods_category.title LIKE '". $title ."'";
             $a = $db->createCommand($sql)->queryAll();
         }
         if (!empty($a)) {

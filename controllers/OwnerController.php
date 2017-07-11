@@ -188,7 +188,8 @@ class OwnerController extends Controller
         //人工价格
         $workers = LaborCost::univalence($post, $arr['worker_kind']);
         foreach ($workers as $worker) {
-            if ($worker['worker_kind_details'] == '弱电') {
+            if ($worker['worker_kind_details'] == '弱电')
+            {
                 $Weak_labor = $worker;
             }
         }
