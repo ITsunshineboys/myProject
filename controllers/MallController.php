@@ -2977,17 +2977,9 @@ class MallController extends Controller
 
         $user = Yii::$app->user->identity;
 
-        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
-            if (!$model->canOnline($user)) {
-                $code = 403;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        } else {
-            if (!in_array($model->status, [Goods::STATUS_ONLINE, Goods::STATUS_OFFLINE])) {
-                $code = 403;
+        if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])) {
+           $code = $model->canOnline($user);
+            if (200 != $code) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
