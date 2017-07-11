@@ -44,17 +44,17 @@ angular.module("all_controller", [])
         }*/
     })
     .controller("intelligent_nodata_ctrl", function ($scope,$stateParams, $http) { //无数据控制器
-        $scope.message = '';
-        $scope.nowStyle = '现代简约';
-        $scope.nowStairs = '实木结构';
-        $scope.nowSeries = '齐家';
+        $scope.message = ''
+        $scope.nowStyle = '现代简约'
+        $scope.nowStairs = '实木结构'
+        $scope.nowSeries = '齐家'
         $scope.toponymy =''|| $stateParams.toponymy
         $scope.choose_stairs = true;
         //生成材料变量
-        $scope.house_bedroom = 1;
-        $scope.house_hall = 1;
-        $scope.house_kitchen = 1;
-        $scope.house_toilet = 1;
+        $scope.house_bedroom = 0
+        $scope.house_hall = 0
+        $scope.house_kitchen = 0
+        $scope.house_toilet = 0
         //无资料户型加减方法
         $scope.add = function (item,category) {
             if($scope[category]<item){
@@ -69,7 +69,7 @@ angular.module("all_controller", [])
             }else{
                 $scope[category] = item
             }
-        };
+        }
         //生成材料方法
         $scope.getData = function () {
             let url = "/owner/weak-current"
@@ -98,7 +98,6 @@ angular.module("all_controller", [])
                 console.log(error)
             })
         }
-        //判断字符长度
         $scope.$watch('message', function (newVal, oldVal) {
             if (newVal && newVal != oldVal) {
                 if (newVal.length > 45) {
@@ -168,12 +167,22 @@ angular.module("all_controller", [])
         }
         $http.post(url,data,config).then(function (response) {//小区房型基本信息
              console.log(response)
-            let arr = []
+            let url = "/owner/series-and-style"
+            let data = {
+                series_id:response.data.data.effect[0].series_id,
+                style_id:response.data.data.effect[0].style_id
+            }
+            $http.post(url,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
             $scope.data = response.data.data.effect
             $scope.imgSrc =  response.data.data.effect_picture
-            $scope.all_data = {"toponymy":$scope.data[0].toponymy,site_particulars:$scope.data[0].site_particulars,
-                high:$scope.data[0].high,area:$scope.data[0].area,particulars:$scope.data[0].particulars,window:$scope.data[0].window}
+            // $scope.all_data = {"toponymy":$scope.data[0].toponymy,site_particulars:$scope.data[0].site_particulars,
+            //     high:$scope.data[0].high,area:$scope.data[0].area,particulars:$scope.data[0].particulars,window:$scope.data[0].window}
             console.log($scope.data[0].toponymy)
+            $http
          },function (response) {
 
          })
