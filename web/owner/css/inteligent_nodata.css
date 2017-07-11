@@ -444,3 +444,8 @@ button {
 button[disabled]{
 
 }
+
+/*轮播*/
+.swiper-slide img{
+    width: 100%;
+}

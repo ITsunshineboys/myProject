@@ -44,17 +44,17 @@ angular.module("all_controller", [])
         }*/
     })
     .controller("intelligent_nodata_ctrl", function ($scope,$stateParams, $http) { //无数据控制器
-        $scope.message = ''
-        $scope.nowStyle = '现代简约'
-        $scope.nowStairs = '实木结构'
-        $scope.nowSeries = '齐家'
+        $scope.message = '';
+        $scope.nowStyle = '现代简约';
+        $scope.nowStairs = '实木结构';
+        $scope.nowSeries = '齐家';
         $scope.toponymy =''|| $stateParams.toponymy
         $scope.choose_stairs = true;
         //生成材料变量
-        $scope.house_bedroom = 0
-        $scope.house_hall = 0
-        $scope.house_kitchen = 0
-        $scope.house_toilet = 0
+        $scope.house_bedroom = 1;
+        $scope.house_hall = 1;
+        $scope.house_kitchen = 1;
+        $scope.house_toilet = 1;
         //无资料户型加减方法
         $scope.add = function (item,category) {
             if($scope[category]<item){
@@ -69,7 +69,7 @@ angular.module("all_controller", [])
             }else{
                 $scope[category] = item
             }
-        }
+        };
         //生成材料方法
         $scope.getData = function () {
             let url = "/owner/weak-current"
@@ -98,6 +98,7 @@ angular.module("all_controller", [])
                 console.log(error)
             })
         }
+        //判断字符长度
         $scope.$watch('message', function (newVal, oldVal) {
             if (newVal && newVal != oldVal) {
                 if (newVal.length > 45) {

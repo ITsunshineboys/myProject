@@ -20,7 +20,7 @@
 }
 .details_city span,p,button{
     font-size: 1.4rem;
-    /*line-height: 4.1rem;*/
+    line-height: 3.8rem;
 }
 .details_city p{
     display: inline-block;
