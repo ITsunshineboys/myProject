@@ -182,6 +182,7 @@ class OwnerController extends Controller
     public function actionWeakCurrent()
     {
         $post = \Yii::$app->request->post();
+        var_dump($post);exit;
         $arr = [];
         $arr['worker_kind'] = '电工';
 
