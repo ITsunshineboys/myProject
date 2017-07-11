@@ -1,0 +1,59 @@
+/*商城管理头部信息*/
+.my_container{
+    width: 85%;
+    height: auto;
+    min-width: 900px;
+    position: absolute;
+    left: 200px;
+    top:0;
+    padding-top: 20px;
+    background-color: #fff;
+    /*z-index: 0;*/
+    overflow-x: hidden;
+}
+.shop_span{
+    font-size: 16px;
+    font-weight: 700;
+}
+.img_new {
+    width:8%;
+}
+.div_size span{
+    margin-left: 5px;
+    font-size: 16px;
+    font-weight: 700;
+}
+.img_logo{
+    width: 12%;
+}
+/*头部结束*/
+
+.button_group{
+    margin-top: 30px;
+    /*padding-left: 20px;*/
+}
+.button_group span{
+    font-size: 16px;
+    margin-left: 20px;
+}
+.button_group select{
+    width: 100px;
+    height: 35px;
+    border-radius: 4px;
+}
+.button_group input{
+    width: 180px;
+    height: 35px;
+    border-radius: 15px;
+    border: 1px solid #C2C2C2;
+    padding-left: 5px;
+    margin-left: 20px;
+}
+.button_group button{
+    border: 1px solid #C2C2C2;
+    background-color: white;
+    width: 60px;
+    height: 35px;
+    margin-left: 10px;
+
+}

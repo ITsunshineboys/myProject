@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/menu_nav/menu_nav.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/commodity_ctrl.css"/>
+</head>
+<body>
+<!--导航栏开始-->
+<div class="nav_box ">
+    <div class="logo">
+        <img src="images/logo.png" alt=""/>
+    </div>
+    <dl >
+        <dt ><i class="font2 fl">&#xe600;</i>首页</dt>
+    </dl>
+    <dl >
+        <dt ><i class="font2 fl">&#xe600;</i>用户管理</dt>
+        <dd ><a href="">上架商品</a></dd>
+        <dd><a href="">活动商品</a></dd>
+    </dl>
+
+    <dl>
+        <dt><i class="font2 fl">&#xe600;</i>系统管理</dt>
+        <dd ><a href="" >管理员列表</a></dd>
+        <dd><a href="">角色管理</a></dd>
+        <dd><a href="">权限管理</a></dd>
+    </dl>
+
+    <dl class="dl_on">
+        <dt  class="on"><i class="font2 fl">&#xe734;</i>商城管理</dt>
+        <dd ><a href="index.html" class="dd_on">首页推荐</a></dd>
+        <dd ><a href="#" >app推荐banner管理</a></dd>
+        <dd ><a href="#" >搜索页面</a></dd>
+        <dd><a href="view/mall_manage/merchant_manage.html">商家管理</a></dd>
+        <dd><a href="#">商家数据</a></dd>
+        <dd><a href="#">品牌管理</a></dd>
+        <dd><a href="#">分类管理</a></dd>
+        <dd><a href="#">新品牌/新分类审核</a></dd>
+        <dd><a href="#">系类/风格/属性管理</a></dd>
+    </dl>
+</div>
+<!--导航栏结束-->
+<section class="my_container">
+    <!--左右布局的 右部分   头部-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <img src="images/shop.png" alt=""/>
+                <span class="shop_span">商城管理 ></span>
+                <span>商品管理 ></span>
+            </div>
+            <div class="col-md-4 col-sm-4 col-md-push-1 div_size">
+                <img src="images/news.png" alt="" class="img_new"/>
+                <span>站内信</span>
+                <span>|</span>
+                <span>个人面板</span>
+                <img src="images/center.png" alt="" class="img_logo"/>
+            </div>
+        </div>
+    </div>
+    <!--横线-->
+    <div style="width:100%;height: 1px;background: #c2c2c2"></div>
+       <!--主要内容  4个tab-->
+    <div class="container">
+        <div class="row" style="padding-left:3%">
+            <div class="tab_change">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs " role="tablist">
+                    <li role="presentation" class="act"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">已上架</a></li>
+                    <li role="presentation" ><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">等待上架</a></li>
+                </ul>
+
+                <!--横线-->
+                <div style="width: 94%;height: 1px;background: #999;margin-left:1%;margin-top: 1%"></div>
+                <!-- Tab panes -->
+                <div class="tab-content" style="margin-left: -20px">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <div class="put_away">
+                            <button>全选</button>
+                            <button>下架</button>
+                            <input type="text" placeholder="搜索商品和查询"/>
+                        </div>
+                        <!--表格内容-->
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>商品编号</th>
+                                            <th>商品名称</th>
+                                            <th>供货价格</th>
+                                            <th>采购价格</th>
+                                            <th>库存</th>
+                                            <th>销量</th>
+                                            <th>状态</th>
+                                            <th>上架时间</th>
+                                            <th>操作人员</th>
+                                            <th>图片</th>
+                                            <th>详情</th>
+                                            <th>下架</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox"  value="option1">
+                                            </td>
+                                            <td>
+                                                21212
+                                            </td>
+                                            <td>
+                                                地面材料
+                                            </td>
+                                            <td>
+                                                232
+                                            </td>
+                                            <td>
+                                               343434
+                                            </td>
+                                            <td>
+                                                地面材料
+                                            </td>
+                                            <td>
+                                                34343
+                                            </td>
+                                            <td>
+                                                已上架
+                                            </td>
+                                            <td>
+                                                2014-02-02
+                                            </td>
+                                            <td>
+                                               木笔的
+                                            </td>
+                                            <td>
+                                                <img src="images/ll.png" alt=""/>
+                                            </td>
+                                            <td>
+                                                <a href="edit.html">编辑</a>
+                                            </td>
+                                            <td>
+                                                <a href="#" data-toggle="modal" data-target="#myModal">下架</a>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--模态框  下架-->
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h3 class="modal-title" id="myModalLabel">下架操作</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p >下架分类</p>
+                                        <span >下架原因(选填)</span>
+                                        <textarea name="" id="" cols="50" rows="10" ></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                                        <button type="button" class="btn  btn-default">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--切换页面二  已下架-->
+                    <div role="tabpanel" class="tab-pane" id="profile">
+                        <div class="put_away">
+                            <button>全选</button>
+                            <button>下架</button>
+                            <input type="text" placeholder="搜索商品和查询"/>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>商品编号</th>
+                                            <th>商品名称</th>
+                                            <th>供货价格</th>
+                                            <th>采购价格</th>
+                                            <th>库存</th>
+                                            <th>销量</th>
+                                            <th>状态</th>
+                                            <th>上架时间</th>
+                                            <th>操作人员</th>
+                                            <th>图片</th>
+                                            <th>审核备注</th>
+                                            <th>详情</th>
+                                            <th>下架</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox"  value="option1">
+                                            </td>
+                                            <td>
+                                                21212
+                                            </td>
+                                            <td>
+                                                地面材料
+                                            </td>
+                                            <td>
+                                                232
+                                            </td>
+                                            <td>
+                                                343434
+                                            </td>
+                                            <td>
+                                                地面材料
+                                            </td>
+                                            <td>
+                                                34343
+                                            </td>
+                                            <td>
+                                                已上架
+                                            </td>
+                                            <td>
+                                                2014-02-02
+                                            </td>
+                                            <td>
+                                                木笔的
+                                            </td>
+                                            <td>
+                                                <img src="images/ll.png" alt=""/>
+                                            </td>
+                                            <td>
+                                                <input type="text" placeholder="点击输入" style="width: 80px;" data-toggle="modal" data-target="#myModal_p"/>
+                                            </td>
+                                            <td>
+                                                <a href="edit.html">编辑</a>
+                                            </td>
+                                            <td>
+                                                <a href="#" data-toggle="modal" data-target="#myModal">下架</a>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <!--模态框  下架-->
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="myModal_p" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h3 class="modal-title" id="myModalLabel_p">审核备注</h3>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p >审核备注</p>
+                                                    <span >审核备注(选填)</span>
+                                                    <textarea name=""  cols="50" rows="10" ></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                                                    <button type="button" class="btn  btn-default">取消</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="../../js/jquery-3.1.1.js"></script>
+<script src="../../js/angular.min.js"></script>
+<script src="js/global.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

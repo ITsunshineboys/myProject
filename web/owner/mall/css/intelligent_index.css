@@ -1,0 +1,83 @@
+.body{
+    background: #F6F6F6;
+}
+header div img{
+    width: 100%;
+}
+
+.intelligent_div{
+    font-size: 1.2rem;
+    /*border: 1px solid #C2C2C2;*/
+    width: 28rem;
+    height:11rem;
+    margin-left: 2rem;
+    position: relative;
+    top:-5.5rem;
+    background: #FFFFFF;
+    box-shadow: 0 6px 8px 0 rgba(146,203,255,0.20);
+    border-radius: 4px;
+}
+.intel{
+    color: #666F80;
+    position: absolute;
+    left: 2rem;
+    top: 1rem;
+}
+.address{
+    position: relative;
+    color: #53A8F4;
+    left: 24rem;
+    /*top: 1rem;*/
+}
+.intelligent_div button{
+    width: 24rem;
+    height: 4rem;
+    background-color: #53A8F4 ;
+    position: relative;
+    top:5rem;
+    border-radius: 3rem;
+    color: white;
+    left: -1rem;
+    outline: none;
+    font-size: 1.2rem;
+}
+.exhibition{
+     margin-top: -3rem;
+}
+.exhibition ul li {
+    margin-left: 3%;
+    width: 94%;
+    /*margin-bottom: 2rem;*/
+    border-radius: 2rem;
+    position: relative;
+}
+.exhibition ul li img{
+    width: 100%;
+}
+.exhibition span{
+    display: block;
+    width: 4rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    background-color: #FF9C15;
+    color: white;
+    position: relative;
+    left: 25rem;
+    top: 3rem;
+    border-radius: 1rem;
+}
+.exhibition h1{
+    position: absolute;
+    top:10.5rem;
+    font-size: 1.4rem;
+    color: white;
+    left: 1rem;
+}
+.exhibition p{
+    position: absolute;
+    top: 13rem;
+    left: 1rem;
+    color: white;
+    font-size: 1rem;
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/menu_nav/menu_nav.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/attr_add.css"/>
+</head>
+<body >
+<section class="my_container">
+    <!--导航栏开始-->
+    <div class="nav_box ">
+        <div class="logo">
+            <img src="images/logo.png" alt=""/>
+        </div>
+        <dl >
+            <dt ><i class="font2 fl">&#xe600;</i>首页</dt>
+        </dl>
+        <dl >
+            <dt ><i class="font2 fl">&#xe600;</i>用户管理</dt>
+            <dd ><a href="">上架商品</a></dd>
+            <dd><a href="">活动商品</a></dd>
+        </dl>
+
+        <dl>
+            <dt><i class="font2 fl">&#xe600;</i>系统管理</dt>
+            <dd ><a href="" >管理员列表</a></dd>
+            <dd><a href="">角色管理</a></dd>
+            <dd><a href="">权限管理</a></dd>
+        </dl>
+
+        <dl class="dl_on">
+            <dt  class="on"><i class="font2 fl">&#xe734;</i>商城管理</dt>
+            <dd ><a href="index.html" class="dd_on">首页推荐</a></dd>
+            <dd ><a href="#" >app推荐banner管理</a></dd>
+            <dd ><a href="#" >搜索页面</a></dd>
+            <dd><a href="view/mall_manage/merchant_manage.html">商家管理</a></dd>
+            <dd><a href="#">商家数据</a></dd>
+            <dd><a href="#">品牌管理</a></dd>
+            <dd><a href="#">分类管理</a></dd>
+            <dd><a href="#">新品牌/新分类审核</a></dd>
+            <dd><a href="#">系类/风格/属性管理</a></dd>
+        </dl>
+    </div>
+    <!--导航栏结束-->
+
+    <!--左右布局的 右部分   头部-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <img src="images/shop.png" alt=""/>
+                <span class="shop_span">商城管理 ></span>
+                <span>商家资质审核</span>
+            </div>
+            <div class="col-md-4 col-sm-4 col-md-push-1 div_size">
+                <img src="images/news.png" alt="" class="img_new"/>
+                <span>站内信</span>
+                <span>|</span>
+                <span>个人面板</span>
+                <img src="images/center.png" alt="" class="img_logo"/>
+            </div>
+        </div>
+    </div>
+    <!--横线-->
+    <div style="width:100%;height: 1px;background: #c2c2c2"></div>
+
+    <!--分类-->
+    <div class="classification">
+        <span>分类名称</span>
+        <span>基础材料-地点材料-pvc管</span>
+    </div>
+
+    <!--按钮添加-->
+    <div class="ordinary_add">
+        <button class="more_add">多项添加</button>
+        <button class="only_add">普通添加</button>
+        <br/>
+        <span>属性设置</span>
+        <ul class="ordinary_add_ul">
+            <li>属性名称</li>
+            <li>属性值</li>
+            <li>单位</li>
+        </ul>
+        <ul class="input_ul">
+            <!--<li>-->
+                <!--<img src="images/red.png" alt=""/>-->
+                <!--<button id="btn_delete">-</button>-->
+                <!--<input type="text" placeholder="1-6个字" class='input_val'/>-->
+                <!--<input type="text" disabled/>-->
+                <!--<select>-->
+                    <!--<option value="1">无</option>-->
+                    <!--<option value="2">L</option>-->
+                    <!--<option value="3">m</option>-->
+                    <!--<option value="4">kg</option>-->
+                <!--</select>-->
+            <!--</li>-->
+        </ul>
+    </div>
+
+    <!--保存按钮-->
+    <div class="rese_btn">
+        <button onclick="add_data()">保存</button>
+        <button>返回</button>
+    </div>
+</section>
+<script src="../../js/jquery-3.1.1.js"></script>
+<script src="../../js/angular.min.js"></script>
+<script src="js/global.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/attr_add.js"></script>
+</body>
+</html>

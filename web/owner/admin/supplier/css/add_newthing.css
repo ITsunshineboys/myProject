@@ -1,0 +1,180 @@
+.my_container{
+    width: 85%;
+    height: auto;
+    min-width: 900px;
+    position: absolute;
+    left: 200px;
+    top:0;
+    padding-top: 20px;
+    background-color: #fff;
+    /*z-index: 0;*/
+    overflow-x: hidden;
+}
+.div_img img{
+    width: 30px!important;
+    height: 30px;
+}
+.classify_div{
+    margin-top: 30px;
+    /*margin-left: 30px;*/
+}
+.classify_div span{
+    margin-left: 60px;
+}
+.comment_show{
+    margin-top: 20px;
+    border-bottom: 1px solid #C2C2C2;
+    margin-bottom: 20px;
+}
+.fill_in li {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.fill_in li input{
+    width: 220px;
+    height: 35px;
+    border-radius: 4px;
+    border: 1px solid #C2C2C2;
+    margin-left: 56px;
+}
+.fill_in li select{
+    width: 220px;
+    height: 35px;
+    border: 1px solid #C2C2C2;
+    border-radius: 4px;
+    margin-left: 56px;
+}
+.attr_display{
+    margin-top: 20px;
+}
+.attr_span{
+    margin-left: 60px;
+}
+.attr_display_ul{
+    display: inline-block;
+}
+.attr_display_ul  li{
+    list-style: none;
+    margin-left: 22px;
+}
+.attr_display_ul li button{
+    background-color:white;
+    border:  1px solid #C2C2C2;
+}
+.attr_display_ul li span{
+    margin-left: 50px;
+}
+.mar_left{
+    margin-left: 100px!important;
+}
+.attr_data li{
+    list-style: none;
+    margin-left: 118px;
+    margin-bottom: 10px;
+}
+.attr_data li button{
+    background-color: white;
+    border: 1px solid #C2C2C2;
+}
+.attr_data li input{
+    width: 120px;
+    height: 35px;
+    border-radius: 4px;
+    border: 1px solid #C2C2C2;
+    margin-left: 60px;
+}
+.attr_data li span{
+    margin-left: 60px;
+}
+.upload_pic{
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.upload_pic span{
+    margin-left: 40px;
+}
+.upload_pic img{
+    margin-left: 60px;
+    /*width: 750px;*/
+}
+.upload_pic_add{
+    margin-top: 30px;
+}
+.upload_pic_add span{
+    margin-left: 60px;
+}
+.upload_pic_add img{
+    margin-left: 60px;
+}
+.div_li{
+   margin-left: 80px;
+}
+.pic_add{
+    margin-top: 30px;
+}
+.div_li li {
+    display: inline-block;
+    list-style: none;
+    margin-left: 60px;
+}
+.span_add{
+    position: relative;
+    left: 60px;
+    top:20px;
+}
+.pic_add div{
+    margin-left: 150px;
+    margin-top: 10px;
+}
+.pic_add input{
+    width: 80px;
+    height: 35px;
+    border: 1px solid #C2C2C2;
+    border-radius: 4px;
+    margin-left: 30px;
+}
+.service_div{
+    margin-top: 20px;
+}
+.span_service{
+    margin-left: 60px;
+}
+.service_div div{
+    margin-left: 180px;
+    margin-top: -20px;
+}
+.guarantee_div{
+    margin-top: 20px;
+}
+.guarantee_span{
+    margin-left: 60px;
+}
+.guarantee_div div{
+    margin-left: 180px;
+    margin-top: -20px;
+}
+.edit_div{
+    margin-top: 30px;
+}
+.edit_div span{
+
+    position: relative;
+    left: 60px;
+    top:-280px;
+}
+.edit_div div{
+    display: inline-block;
+    border: 1px solid #C2C2C2;
+    width: 750px;
+    height: 300px;
+    margin-left: 120px;
+}
+.preservation_btn button{
+    border-radius: 4px;
+    background-color: white;
+    width: 60px;
+    height: 35px;
+    border: 1px solid #C2C2C2;
+    margin-left: 60px;
+}
