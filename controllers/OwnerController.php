@@ -315,6 +315,19 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->post();
+//                $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '电工';
 
@@ -339,19 +352,19 @@ class OwnerController extends Controller
             $points_places = [];
             foreach ($points_total as $one) {
                 if ($one['place'] == '客厅') {
-                    $sitting_room = $one['points_total'] * $post['sitting_room'];
+                    $sitting_room = $one['points_total'] * $post['hall'];
                     $sitting_room = $sitting_room ?: 0;
                     $points_places [] = $sitting_room;
                 } elseif ($one['place'] == '主卧') {
-                    $master_bedroom = $one['points_total'] * $post['master_bedroom'];
+                    $master_bedroom = $one['points_total'] * 1;
                     $master_bedroom = $master_bedroom ?: 0;
                     $points_places [] = $master_bedroom;
                 } elseif ($one['place'] == '次卧') {
-                    $secondary_bedroom = $one['points_total'] * $post['secondary_bedroom'];
+                    $secondary_bedroom = $one['points_total'] * ($post['bedroom'] - 1);
                     $secondary_bedroom = $secondary_bedroom ?: 0;
                     $points_places [] = $secondary_bedroom;
                 } elseif ($one['place'] == '餐厅') {
-                    $dining_room = $one['points_total'] * $post['dining_room'];
+                    $dining_room = $one['points_total'] * $post['hall'] - 1;
                     $dining_room = $dining_room ?: 0;
                     $points_places [] = $dining_room;
                 } elseif ($one['place'] == '厨房') {
@@ -462,6 +475,19 @@ class OwnerController extends Controller
     public function actionWaterway()
     {
         $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '水路工';
 
@@ -500,9 +526,9 @@ class OwnerController extends Controller
         if (empty($post['effect_id'])) {
             //查询弱电所需要材料
             $waterway_current = [];
-            $electric_wire = 'PPR';
+            $electric_wire = 'PPR水管';
             $waterway_current [] = Goods::priceDetail(3, $electric_wire);
-            $pipe = 'PVC';
+            $pipe = 'PVC管';
             $waterway_current [] = Goods::priceDetail(3, $pipe);
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
@@ -579,6 +605,19 @@ class OwnerController extends Controller
     public function actionWaterproof()
     {
         $post = \Yii::$app->request->post();
+//                $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '防水工';
 
@@ -594,8 +633,9 @@ class OwnerController extends Controller
         if (empty($post['effect_id'])) {
             //查询弱电所需要材料
             $waterproof = [];
-            $electric_wire = '防水涂剂';
+            $electric_wire = '防水涂料';
             $waterproof [] = Goods::priceDetail(3, $electric_wire);
+            var_dump($waterproof);exit;
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterproofReconstruction::findByAll($decoration_list);
@@ -691,6 +731,19 @@ class OwnerController extends Controller
     public function actionCarpentry()
     {
         $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '木工';
         //人工一天价格
@@ -708,7 +761,6 @@ class OwnerController extends Controller
         $flat_day = BasisDecorationService::flatDay($carpentry_add, $labor_cost['quantity'], $series_all, $style_all);
         //人工费
         $labour_charges = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
-
         //木工材料费
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
@@ -797,7 +849,19 @@ class OwnerController extends Controller
     public function actionCoating()
     {
         $post = \Yii::$app->request->post();
-
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
@@ -845,36 +909,36 @@ class OwnerController extends Controller
             }
         }
         //卧室底漆面积
-        $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall, $post['master_bedroom']);
+        $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall,$post['bedroom']);
         //客餐厅底漆面积
-        $drawing_room_primer_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['sitting_room'], 3);
+        $drawing_room_primer_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['hall'], 3);
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
         $primer_area = $bedroom_primer_area + $drawing_room_primer_area;
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
         $primer_day = ceil($primer_area / $primer);
 
         //卧室面漆面积
-        $bedroom_finishing_coat_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall, $post['master_bedroom']);
+        $bedroom_finishing_coat_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall, $post['bedroom']);
         //客餐厅面漆面积
-        $drawing_room_finishing_coat_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['sitting_room'], 3);
+        $drawing_room_finishing_coat_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['hall'], 3);
         //乳胶漆面漆面积
         $finishing_coat_area = $bedroom_finishing_coat_area + $drawing_room_finishing_coat_area;
 //        乳胶漆面漆天数：乳胶漆面漆面积÷【每天做乳胶漆面漆面积】
         $finishing_coat_day = ceil($finishing_coat_area / $finishing_coat);
 
 //        卧室周长
-        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($area['masterBedroom_area'], $post['area'], $post['master_bedroom']);
+        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($area['masterBedroom_area'], $post['area'], $post['bedroom']);
 //        客厅周长
-        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($area['sittingRoom_diningRoom_area'], $post['area'], $post['sitting_room']);
+        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall']);
 //        阴角线长度
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
         $concave_line_day = ceil($concave_line_length / $concave_line);
 
 //        腻子卧室墙面积
-        $putty_bedroom_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall, $post['master_bedroom']);
+        $putty_bedroom_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall, $post['bedroom']);
 //        腻子客餐厅面积
-        $putty_drawing_room_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['sitting_room'], 3);
+        $putty_drawing_room_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['hall'], 3);
 //        腻子面积 卧室腻子面积+客厅腻子面积
         $putty_area = $putty_bedroom_area + $putty_drawing_room_area;
 //        腻子天数 腻子面积÷【每天做腻子面积】
@@ -1034,6 +1098,20 @@ class OwnerController extends Controller
     public function actionMudMake()
     {
         $post = \Yii::$app->request->post();
+//                $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//            'waterproof_total_area' => 60,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '泥工';
         //工人一天单价
@@ -1306,7 +1384,6 @@ class OwnerController extends Controller
 
 //        总人工费
         $labor_cost = $total_day['total_day'] * $labor[0]['univalence'] + $building_scrap['cost'];
-
         //材料费
         $cement = '水泥';
         $cement_price = Goods::priceDetail(3, $cement, $post['city']);
@@ -1315,7 +1392,6 @@ class OwnerController extends Controller
         $brick = '空心砖';
         $brick_price = Goods::priceDetail(3, $brick, $post['city']);
         $brick_standard = GoodsAttr::findByGoodsId($brick_price['id']);
-
         //水泥费用
         $cement_cost = BasisDecorationService::cementCost($post, $craft, $cement_price);
         //空心砖费用

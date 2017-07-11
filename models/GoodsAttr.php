@@ -335,7 +335,7 @@ class GoodsAttr extends ActiveRecord
             $standard = self::find()
                         ->asArray()
                         ->select($select)
-                        ->where(['in','goods_id'=>$id])
+                        ->where(['in','goods_id',$id])
                         ->all();
         }else
         {
