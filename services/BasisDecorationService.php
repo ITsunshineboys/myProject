@@ -35,7 +35,8 @@ class BasisDecorationService
      */
     public static function quantity($points = '',$goods = [],$crafts= '')
     {
-        if($goods !== null && $points !== null){
+        if($goods !== null && $points !== null)
+        {
             $material = 0;
             $spool = 0;
             foreach ($crafts as $craft){
@@ -59,8 +60,10 @@ class BasisDecorationService
             $spool_value = 0;
             $spool_price = 0;
             $bottom_case = 0;
-            foreach ($goods as $one){
-                if($one['title'] == '网线' || $one['title'] == '电线' ){
+            foreach ($goods as $one)
+            {
+                if($one['title'] == '网线' || $one['title'] == '电线' )
+                {
                     $goods_value = $one['value'];
                     $goods_price = $one['platform_price'];
                 }else

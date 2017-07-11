@@ -343,4 +343,27 @@ class GoodsAttr extends ActiveRecord
         }
        return $standard;
     }
+
+    public static function findByGoodsIdUnit($goods = [])
+    {
+        if ($goods)
+        {
+            $id = [];
+            foreach ($goods as $one_weak_current)
+            {
+                $id [] = $one_weak_current['id'];
+            }
+            $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
+            $standard = self::find()
+                ->asArray()
+                ->select($select)
+                ->where(['in','goods_id',$id])
+                ->all();
+        }else
+        {
+            $standard = null;
+        }
+        return $standard;
+    }
+
 }

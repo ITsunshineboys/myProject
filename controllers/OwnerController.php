@@ -181,7 +181,20 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>60,
+            'style'=>60,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         $arr = [];
         $arr['worker_kind'] = '电工';
 
@@ -218,22 +231,21 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $weak_current = [];
             $electric_wire = '网线';
-            $weak_current [] = Goods::priceDetail(3, $electric_wire);
+            $weak_current [] = Goods::priceDetail(3,$electric_wire);
             $pipe = '线管';
-            $weak_current [] = Goods::priceDetail(3, $pipe);
+            $weak_current [] = Goods::priceDetail(3,$pipe);
             $box = '底盒';
-            $weak_current [] = Goods::priceDetail(3, $box);
+            $weak_current [] = Goods::priceDetail(3,$box);
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
             $weak_current = Goods::findQueryAll($weak, $post['city']);
         }
-
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
 
         //人工总费用
-        $labor_all_cost = BasisDecorationService::laborFormula($weak_points, $Weak_labor);
+        $labor_all_cost = BasisDecorationService::laborFormula($weak_points,$Weak_labor);
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points, $weak_current, $craft);
