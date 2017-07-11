@@ -182,7 +182,7 @@ class OwnerController extends Controller
     public function actionWeakCurrent()
     {
         $post = \Yii::$app->request->post();
-
+//        var_dump($post);exit;
         $arr = [];
         $arr['worker_kind'] = '电工';
 
@@ -254,7 +254,7 @@ class OwnerController extends Controller
             }
         }
 
-        $add_price_series = DecorationAdd::AllSeries('弱电', $post['series_id'], $post['city']);
+        $add_price_series = DecorationAdd::AllSeries('弱电', $post['series'], $post['city']);
         foreach ($add_price_series as $add_series)
         {
             $sku_area =  Goods::skuAll($add_series['sku']);
@@ -266,7 +266,7 @@ class OwnerController extends Controller
                 $add_price [] = 0;
             }
         }
-        $add_price_style = DecorationAdd::AllStyle('弱电', $post['style_id'], $post['city']);
+        $add_price_style = DecorationAdd::AllStyle('弱电', $post['style'], $post['city']);
         foreach ($add_price_style as $add_style)
         {
             $sku_area =  Goods::skuAll($add_style['sku']);
