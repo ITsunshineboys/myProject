@@ -730,20 +730,20 @@ class OwnerController extends Controller
      */
     public function actionCarpentry()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>60,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>1,
+            'style'=>1,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         $arr = [];
         $arr['worker_kind'] = '木工';
         //人工一天价格
