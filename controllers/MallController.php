@@ -431,8 +431,7 @@ class MallController extends Controller
 
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
-        $select = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'image1'];
-        $goods = $orderByArr ? Goods::findByBrandId($brandId, $select, $page, $size, $orderByArr) : Goods::findByBrandId($brandId, $select, $page, $size);
+        $goods = $orderByArr ? Goods::findByBrandId($brandId, Goods::BRAND_GOODS_APP, $page, $size, $orderByArr) : Goods::findByBrandId($brandId, $select, $page, $size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',

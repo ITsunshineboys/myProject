@@ -31,6 +31,7 @@ class Goods extends ActiveRecord
     ];
 
     const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'cover_image'];
+    const BRAND_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'cover_image'];
 
     const AFTER_SALE_SERVICES = [
         '提供发票',
