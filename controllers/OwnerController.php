@@ -181,20 +181,20 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>60,
-            'hall'=>60,
-            'toilet'=>60,
-            'kitchen'=>60,
-            'stairs_details_id'=>60,
-            'series'=>60,
-            'style'=>60,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '电工';
 
