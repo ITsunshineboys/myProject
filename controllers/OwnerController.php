@@ -1967,4 +1967,5 @@ class OwnerController extends Controller
             ],
         ]);
     }
+
 }
