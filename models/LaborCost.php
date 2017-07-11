@@ -33,8 +33,11 @@ class LaborCost extends ActiveRecord
     }
 
     /**
-     * 根据地名查询单价
-     * @param string $toponymy
+     * 根据地名查询
+     * @param array $arr
+     * @param string $jobs
+     * @param string $rank
+     * @return array|ActiveRecord[]
      */
     public static function univalence($arr = [],$jobs= '',$rank = '白银')
     {
