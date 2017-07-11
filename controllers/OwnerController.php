@@ -181,23 +181,7 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
-        $post = [
-//            'effect_id' => 1,
-            'bedroom' => 1,
-            'hall' => 1,
-            'window' => 2,
-            'high' => 2.8,
-            'area' => 62,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'style' => 1,
-            'series' => 1,
-            'province' => 510000,
-            'city' => 510100,
-            'stairs_details_id' => 1,
-        ];
+        $post = \Yii::$app->request->post();
         $arr = [];
         $arr['worker_kind'] = '电工';
 
@@ -317,24 +301,7 @@ class OwnerController extends Controller
      */
     public function actionStrongCurrent()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
-        $post = [
-            'effect_id' => 1,
-            'master_bedroom' => 1,
-            'secondary_bedroom' => 1,
-            'sitting_room' => 1,
-            'dining_room' => 1,
-            'window' => 2,
-            'high' => 2.8,
-            'area' => 62,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'style' => 1,
-            'series' => 1,
-            'province' => 510000,
-            'city' => 510100
-        ];
+        $post = \Yii::$app->request->post();
         $arr = [];
         $arr['worker_kind'] = '电工';
 
@@ -481,24 +448,7 @@ class OwnerController extends Controller
      */
     public function actionWaterway()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
-        $post = [
-//                'effect_id' => 1,
-            'master_bedroom' => 1,
-            'secondary_bedroom' => 1,
-            'sitting_room' => 1,
-            'dining_room' => 1,
-            'window' => 2,
-            'high' => 2.8,
-            'area' => 62,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'style' => 1,
-            'series' => 1,
-            'province' => 510000,
-            'city' => 510100
-        ];
+        $post = \Yii::$app->request->post();
         $arr = [];
         $arr['worker_kind'] = '水路工';
 
@@ -615,24 +565,7 @@ class OwnerController extends Controller
      */
     public function actionWaterproof()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
-        $post = [
-//            'effect_id' => 1,
-            'master_bedroom' => 1,
-            'secondary_bedroom' => 1,
-            'sitting_room' => 1,
-            'dining_room' => 1,
-            'window' => 2,
-            'high' => 2.8,
-            'area' => 62,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'style' => 1,
-            'series' => 1,
-            'province' => 510000,
-            'city' => 510100
-        ];
+        $post = \Yii::$app->request->post();
         $arr = [];
         $arr['worker_kind'] = '防水工';
 
@@ -744,22 +677,7 @@ class OwnerController extends Controller
      */
     public function actionCarpentry()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
-        $post = [
-//            'effect_id' => 1,
-            'room' => 1,
-            'hall' => 1,
-            'window' => 2,
-            'high' => 2.8,
-            'area' => 40,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'style' => 1,
-            'series' => 1,
-            'province' => 510000,
-            'city' => 510100
-        ];
+        $post = \Yii::$app->request->post();
         $arr = [];
         $arr['worker_kind'] = '木工';
         //人工一天价格
@@ -865,24 +783,8 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
-        $post = [
-//            'effect_id' => 1,
-            'master_bedroom' => 1,
-            'secondary_bedroom' => 1,
-            'sitting_room' => 1,
-            'dining_room' => 1,
-            'window' => 2,
-            'high' => 2.8,
-            'area' => 62,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'style' => 1,
-            'series' => 1,
-            'province' => 510000,
-            'city' => 510100
-        ];
+        $post = \Yii::$app->request->post();
+
         $arr = [];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
@@ -1118,25 +1020,7 @@ class OwnerController extends Controller
      */
     public function actionMudMake()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
-        $post = [
-//            'effect_id' => 1,
-            'master_bedroom' => 1,
-            'secondary_bedroom' => 1,
-            'sitting_room' => 1,
-            'dining_room' => 1,
-            'window' => 2,
-            'high' => 2.8,
-            'area' => 62,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'style' => 1,
-            'series' => 1,
-            'province' => 510000,
-            'city' => 510100,
-            'waterproof_total_area' => 50
-        ];
+        $post = \Yii::$app->request->post();
         $arr = [];
         $arr['worker_kind'] = '泥工';
         //工人一天单价
@@ -1379,8 +1263,7 @@ class OwnerController extends Controller
      */
     public function actionHandyman()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
+//        $post = \Yii::$app->request->post();
         $post = [
             'province' => 510000,
             'city' => 510100,
@@ -1573,8 +1456,7 @@ class OwnerController extends Controller
      */
     public function actionSoftOutfitAssort()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
+//        $post = \Yii::$app->request->post();
         $post = [
 //            'effect_id' => 1,
             'bedroom' => 2,
@@ -1584,7 +1466,8 @@ class OwnerController extends Controller
         $classify = '软装配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $goods = Goods::categoryById($material_property_classify);
-        foreach ($goods as &$one_goods) {
+        foreach ($goods as &$one_goods)
+        {
             foreach ($material_property_classify as $quantity) {
                 if ($one_goods['title'] == $quantity['material']) {
                     $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
@@ -1668,7 +1551,6 @@ class OwnerController extends Controller
     public function actionMoveFurniture()
     {
 //       $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
         $post = [
 //            'effect_id' => 1,
             'bedroom' => 2,
