@@ -747,7 +747,7 @@ class OwnerController extends Controller
         $arr = [];
         $arr['worker_kind'] = '木工';
         //人工一天价格
-        $labor_costs = LaborCost::univalence($post['city'], $arr['worker_kind']);
+        $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
         foreach ($labor_costs as $labor_cost) {
         }
         $series_all = Series::find()->all();
@@ -865,7 +865,7 @@ class OwnerController extends Controller
         $arr = [];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
-        $labor_costs = LaborCost::univalence($post['city'], $arr['worker_kind']);
+        $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
         $primer = 0;
         $finishing_coat = 0;
         $concave_line = 0;
@@ -1115,7 +1115,7 @@ class OwnerController extends Controller
         $arr = [];
         $arr['worker_kind'] = '泥工';
         //工人一天单价
-        $labor_costs = LaborCost::univalence($post['city'], $arr['worker_kind']);
+        $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
         $labor_day_cost = 0;
         foreach ($labor_costs as $labor_cost) {
             if ($labor_cost['worker_kind_details'] == '保护层') {
