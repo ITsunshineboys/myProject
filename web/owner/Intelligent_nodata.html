@@ -82,7 +82,7 @@
         </div>
 
         <!--层高-->
-        <div class="storey">
+        <div class="rey">
             <span class="storey_span">层高</span>
             <ul class="storey_ul" >
                 <li>
@@ -171,26 +171,47 @@
             </ul>
         </div>
 
-        <!--适合人群-->
-        <div ng-switch on="nowSeries">
-            <div ng-switch-when="齐家">
-                <div class="tag"><span ng-cloak ng-repeat="item in series[0].theme.split(',')">{{item}}</span></div>
-                <div class="fit">
-                    <h2>适合人群</h2>
-                    <p ng-cloak>{{series[0].intro}}</p>
+            <!--适合人群-->
+            <div ng-switch on="nowSeries">
+                <div ng-switch-when="齐家">
+                    <div class="tag"><span ng-cloak  ng-repeat="item in series[0].theme.split(',')">{{item}}</span></div>
+                    <div class="fit">
+                        <h1>适合人群</h1>
+                        <p ng-cloak>{{series[0].intro}}</p>
+                    </div>
                 </div>
-            </div>
-            <div ng-switch-when="享家">
-                <div class="tag"><span ng-cloak ng-repeat="item in series[1].theme.split(',')">{{item}}</span></div>
-                <div class="fit">
-                    <h2>适合人群</h2>
-                    <p ng-cloak>{{series[1].intro}}</p>
+                <div ng-switch-when="享家">
+                    <div class="tag"><span ng-cloak ng-repeat="item in series[1].theme.split(',')">{{item}}</span></div>
+                    <div class="fit">
+                        <h1>适合人群</h1>
+                        <p ng-cloak>{{series[1].intro}}</p>
+                    </div>
                 </div>
-            </div>
-            <div ng-switch-default>
+                <div ng-switch-when="享家+">
+                    <div class="tag"><span ng-cloak ng-repeat="item in series[2].theme.split(',')">{{item}}</span></div>
+                    <div class="fit">
+                        <h1>适合人群</h1>
+                        <p ng-cloak>{{series[2].intro}}</p>
+                    </div>
+                </div>
+                <div ng-switch-when="智家">
+                    <div class="tag"><span ng-cloak ng-repeat="item in series[3].theme.split(',')">{{item}}</span></div>
+                    <div class="fit">
+                        <h1>适合人群</h1>
+                        <p ng-cloak>{{series[3].intro}}</p>
+                    </div>
+                </div>
+                <div ng-switch-when="智家+">
+                    <div class="tag"><span ng-cloak ng-repeat="item in series[4].theme.split(',')">{{item}}</span></div>
+                    <div class="fit">
+                        <h1>适合人群</h1>
+                        <p ng-cloak>{{series[4].intro}}</p>
+                    </div>
+                </div>
+                <div ng-switch-default>
 
+                </div>
             </div>
-        </div>
 
         <!--风格选择-->
         <div class="choose_style">
@@ -206,34 +227,10 @@
         </div>
 
         <!--轮播图-->
-        <div ng-switch on="nowStyle">
-            <div ng-switch-when="现代简约">
-                <div class="carousel" swiper>
-                    <div class="swiper-container">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <img src="images/a.png" alt="">
-                            </div><div class="swiper-slide">
-                            <img src="images/b.png" alt="">
-                        </div><div class="swiper-slide">
-                            <img src="images/c.png" alt="">
-                        </div>
-                        </div>
-                        <!-- 如果需要分页器 -->
-                        <div class="swiper-pagination"></div>
-                    </div>
-                </div>
-                <!--现代简约便签-->
-                <div class="note">
-                    <ul>
-                        <li ng-repeat="item in style[0].theme.split(',')">
-                            <button ng-cloak>{{item}}</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div ng-switch-when="中国风">
-                <div class="carousel" swiper>
+            <!--轮播图-->
+            <div ng-switch on="nowStyle">
+                <div ng-switch-when="现代简约">
+                    <div class="carousel" swiper>
                         <div class="swiper-container">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
@@ -247,20 +244,120 @@
                             <!-- 如果需要分页器 -->
                             <div class="swiper-pagination"></div>
                         </div>
+                    </div>
+                    <!--现代简约便签-->
+                    <div class="note">
+                        <ul>
+                            <li ng-repeat="item in style[0].theme.split(',')">
+                                <button ng-cloak>{{item}}</button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <!--中国风便签-->
-                <div class="note">
-                    <ul>
-                        <li ng-repeat="item in style[1].theme.split(',')">
-                            <button ng-cloak>{{item}}</button>
-                        </li>
-                    </ul>
+                <div ng-switch-when="中国风">
+                    <div class="carousel" swiper>
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="images/a.png" alt="">
+                                </div><div class="swiper-slide">
+                                <img src="images/b.png" alt="">
+                            </div><div class="swiper-slide">
+                                <img src="images/c.png" alt="">
+                            </div>
+                            </div>
+                            <!-- 如果需要分页器 -->
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <!--中国风便签-->
+                    <div class="note">
+                        <ul>
+                            <li ng-repeat="item in style[1].theme.split(',')">
+                                <button ng-cloak>{{item}}</button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div ng-switch-default>
+                <div ng-switch-when="美式田园">
+                    <div class="carousel" swiper>
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="images/a.png" alt="">
+                                </div><div class="swiper-slide">
+                                <img src="images/b.png" alt="">
+                            </div><div class="swiper-slide">
+                                <img src="images/c.png" alt="">
+                            </div>
+                            </div>
+                            <!-- 如果需要分页器 -->
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <!--中国风便签-->
+                    <div class="note">
+                        <ul>
+                            <li ng-repeat="item in style[2].theme.split(',')">
+                                <button ng-cloak>{{item}}</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-switch-when="欧式">
+                    <div class="carousel" swiper>
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="images/a.png" alt="">
+                                </div><div class="swiper-slide">
+                                <img src="images/b.png" alt="">
+                            </div><div class="swiper-slide">
+                                <img src="images/c.png" alt="">
+                            </div>
+                            </div>
+                            <!-- 如果需要分页器 -->
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <!--中国风便签-->
+                    <div class="note">
+                        <ul>
+                            <li ng-repeat="item in style[3].theme.split(',')">
+                                <button ng-cloak>{{item}}</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-switch-when="日式">
+                    <div class="carousel" swiper>
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="images/a.png" alt="">
+                                </div><div class="swiper-slide">
+                                <img src="images/b.png" alt="">
+                            </div><div class="swiper-slide">
+                                <img src="images/c.png" alt="">
+                            </div>
+                            </div>
+                            <!-- 如果需要分页器 -->
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <!--中国风便签-->
+                    <div class="note">
+                        <ul>
+                            <li ng-repeat="item in style[4].theme.split(',')">
+                                <button ng-cloak>{{item}}</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-switch-default>
 
+                </div>
             </div>
-        </div>
 
         <!--按钮-->
         <div class="btn_vr">

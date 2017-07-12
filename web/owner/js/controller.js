@@ -251,70 +251,178 @@ angular.module("all_controller", [])
         // }
     })
     .controller("intelligent_quotation_ctrl",function ($scope,$http,$stateParams) {//有资料选择器
-        $scope.nowSeries ='齐家';
-        $scope.nowStyle = '现代简约';
-        $scope.nowStairs = '实木结构'
-        $scope.choose_stairs = true;
+        $scope.nowSeries ='齐家'//系列
+        $scope.nowStyle = '现代简约'//风格
+        $scope.nowStairs = '实木结构'//有楼梯风格
+        $scope.choose_stairs = true;//是否有楼梯
         $scope.index = 0
-        $scope.house_index = 0
-        $scope.isSelect = true
-        $scope.id = $stateParams.id
-        console.log($stateParams.id)
-        let url = "/owner/search"
+        $scope.house_index = 0//户型
+        $scope.id = $stateParams.id//主页传过来的id
+        let url = "/owner/search"//搜索url
         let data = {
-            id:$stateParams.id
+            id:$stateParams.id//有资料请求id
         }
-        let config = {
+        let config = {//所有post请求必须的请求头
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             transformRequest:function (data) {
                 return $.param(data)
             }
         }
         $http.post(url,data,config).then(function (response) {//小区房型基本信息
-             console.log(response)
-            let url = "/owner/series-and-style"
-            let data = {
-                series_id:response.data.data.effect[0].series_id,
-                style_id:response.data.data.effect[0].style_id
+            console.log(response)
+            $scope.data = response.data.data.effect//房型所有信息
+            $scope.series_id = response.data.data.effect[0].series_id//默认房型系列id
+            $scope.style_id = response.data.data.effect[0].style_id//默认房型风格id
+            $scope.imgSrc = response.data.data.effect_picture//默认房型对应轮播图
+            $scope.isNoChange = true//可选择项是否修改
+            $scope.labor_price = 0//工人费用
+            let data = {//请求发送的数据
+                area: response.data.data.effect[0].area,      //面积
+                bedroom: response.data.data.effect[0].bedroom, //卧室
+                hall: response.data.data.effect[0].sittingRoom_diningRoom,       //餐厅
+                toilet: response.data.data.effect[0].toilet,   // 卫生间
+                kitchen: response.data.data.effect[0].kitchen,  //厨房
+                stairway: response.data.data.effect[0].stairway, //楼梯
+                series: response.data.data.effect[0].series_id,   //系列
+                style: response.data.data.effect[0].style_id,  //风格
+                window: response.data.data.effect[0].window,//飘窗
+                province: 510000,   //省编码
+                city: 510100      // 市编码
             }
-            $http.post(url,data,config).then(function (response) {
+            // //泥作请求发送的数据:不一样
+            // let data1 = {}
+            // for(let i in data){
+            //     data1[i] = data[i]
+            // }
+            // data1["waterproof_total_area"] = 60
+            // //一系列请求
+            $http.post("/owner/weak-current", data, config).then(function (response) {//弱电请求
+                console.log("弱电请求"+response)
                 console.log(response)
-            },function (error) {
+                $scope.weak_current_category = response.data.data.weak_current
+                $scope.weak_current_bottom_case = response.data.data.weak_current_bottom_case
+                $scope.weak_current_labor_price = response.data.data.weak_current_labor_price
+                $scope.weak_current_material_price = response.data.data.weak_current_material_price
+                $scope.weak_current_reticle_cost = response.data.data.weak_current_reticle_cost
+                $scope.weak_current_reticle_quantity = response.data.data.weak_current_reticle_quantity
+                $scope.weak_current_spool_cost = response.data.data.weak_current_spool_cost
+                $scope.weak_current_spool_quantity = response.data.data.weak_current_spool_quantity
+                $scope.labor_price += $scope.weak_current_labor_price
+            }, function (error) {
                 console.log(error)
             })
-            $scope.data = response.data.data.effect
-            $scope.imgSrc =  response.data.data.effect_picture
-            // $scope.all_data = {"toponymy":$scope.data[0].toponymy,site_particulars:$scope.data[0].site_particulars,
-            //     high:$scope.data[0].high,area:$scope.data[0].area,particulars:$scope.data[0].particulars,window:$scope.data[0].window}
-            console.log($scope.data[0].toponymy)
-            $http
-         },function (response) {
+            // $http.post("/owner/strong-current", data, config).then(function (response) {//强电请求
+            //     console.log("强电请求"+response)
+            //     console.log(response)
+            //     $scope.strong_current_category = response.data.data.strong_current
+            //     $scope.strong_current_bottom_case = response.data.data.strong_current_bottom_case
+            //     $scope.strong_current_labor_price = response.data.data.strong_current_labor_price
+            //     $scope.strong_current_material_price = response.data.data.strong_current_material_price
+            //     $scope.strong_current_wire_cost = response.data.data.strong_current_wire_cost
+            //     $scope.strong_current_wire_quantity = response.data.data.strong_current_wire_quantity
+            //     $scope.strong_current_spool_cost = response.data.data.strong_current_spool_cost
+            //     $scope.strong_current_spool_quantity = response.data.data.strong_current_spool_quantity
+            //     $scope.labor_price += $scope.strong_current_labor_price
+            // }, function (error) {
+            //     console.log(error)
+            // })
+            // $http.post("/owner/waterway", data, config).then(function (response) {//水路请求
+            //     console.log("水路请求"+response)
+            //     console.log(response)
+            //     $scope.waterway_current = response.data.data.waterway_current
+            //     $scope.waterway_labor_price = response.data.data.waterway_labor_price
+            //     $scope.waterway_material_price = response.data.data.waterway_material_price
+            //     $scope.waterway_ppr_cost = response.data.data.waterway_ppr_cost
+            //     $scope.waterway_ppr_quantity = response.data.data.waterway_ppr_quantity
+            //     $scope.waterway_pvc_cost = response.data.data.waterway_pvc_cost
+            //     $scope.waterway_pvc_quantity = response.data.data.waterway_pvc_quantity
+            //     $scope.labor_price += $scope.waterway_labor_price
+            // }, function (error) {
+            //     console.log(error)
+            // })
+            // $http.post("/owner/carpentry", data, config).then(function (response) {//木作请求
+            //     console.log("木作请求"+response)
+            //     console.log(response)
+            //     $scope.carpentry_current = response.data.data.goods_price
+            //     $scope.carpentry_labor_price = response.data.data.carpentry_labor_price
+            //     $scope.carpentry_material_price = response.data.data.carpentry_material_price
+            //     $scope.keel_cost = response.data.data.keel_cost
+            //     $scope.plasterboard_cost = response.data.data.plasterboard_cost
+            //     $scope.pole_cost = response.data.data.pole_cost
+            //     $scope.labor_price += $scope.carpentry_labor_price
+            // }, function (error) {
+            //     console.log(error)
+            // })
+            // $http.post("/owner/coating", data, config).then(function (response) {//乳胶漆请求
+            //     console.log("乳胶漆请求"+response)
+            //     console.log(response)
+            //     $scope.coating_current = response.data.data.goods_price
+            //     $scope.coating_labor_price = response.data.data.coating_labor_price
+            //     $scope.coating_material_price = response.data.data.coating_material_price
+            //     $scope.concave_line_cost = response.data.data.concave_line_cost
+            //     $scope.finishing_coat_cost = response.data.data.finishing_coat_cost
+            //     $scope.gypsum_powder_cost = response.data.data.gypsum_powder_cost
+            //     $scope.primer_cost = response.data.data.primer_cost
+            //     $scope.putty_cost = response.data.data.putty_cost
+            //     $scope.labor_price += $scope.coating_labor_price
+            // }, function (error) {
+            //     console.log(error)
+            // })
+            // $http.post("/owner/mud-make", data1, config).then(function (response) {//泥作请求
+            //     console.log("泥作请求"+response)
+            //     console.log(response)
+            //     $scope.mud_make_current = response.data.data.goods_price
+            //     $scope.mud_make_labor_price = response.data.data.mud_make_labor_price
+            //     $scope.mud_make_material_price = response.data.data.mud_make_material_price
+            //     $scope.cement_cost = response.data.data.cement_cost
+            //     $scope.drawing_room_cost = response.data.data.drawing_room_cost
+            //     $scope.kitchen_and_toilet_floor_tile = response.data.data.kitchen_and_toilet_floor_tile
+            //     $scope.river_sand_cost = response.data.data.river_sand_cost
+            //     $scope.self_leveling_cost = response.data.data.self_leveling_cost
+            //     $scope.wall_brick_cost = response.data.data.wall_brick_cost
+            //     $scope.labor_price += $scope.mud_make_labor_price
+            // }, function (error) {
+            //     console.log(error)
+            // })
+            //系列风格请求
+            $http.get('/owner/series-and-style').then(function (response) {
+                $scope.stairs_details = response.data.data.show.stairs_details;//楼梯数据
+                $scope.series = response.data.data.show.series;//系列数据
+                for(let i = 0;i<$scope.series.length;i++){
+                    if($scope.series[i].id == $scope.series_id){
+                        $scope.nowSeries = $scope.series[i].series;
+                    }
+                }
+                $scope.style = response.data.data.show.style;//风格数据
+                for(let i = 0;i< $scope.style.length;i++){
+                    if($scope.style[i].id == $scope.series_id){
+                        $scope.nowStyle = $scope.style[i].style;
+                    }
+                }
+                $scope.style_picture = response.data.data.show.style_picture;//轮播图片数据
+                console.log(response)
+            }, function (response) {
 
-         })
-        $http.get('/owner/series-and-style').then(function (response) {
-            $scope.stairs_details = response.data.data.show.stairs_details;//楼梯数据
-            $scope.series = response.data.data.show.series;//系列数据
-            $scope.style = response.data.data.show.style;//风格数据
-            $scope.style_picture = response.data.data.show.style_picture;//轮播图片数据
-            console.log($scope.series)
-        }, function (response) {
-
+            })
         })
         //切换户型
         $scope.toggleHouse = function (item) {
             $scope.house_index = item
+            $scope.isNoChange = false
         }
         //切换系列
         $scope.toggleSeries = function (item) {
             $scope.nowSeries = item;
-        };
+            $scope.isNoChange = false
+        }
 
         //切换风格
         $scope.toggleStyle = function (item) {
             $scope.nowStyle = item;
+            $scope.isNoChange = false
         }
         //切换楼梯结构
         $scope.toggleStairs = function (index) {
-            $scope.index = index
+            $scope.nowStairs = index
         }
     })

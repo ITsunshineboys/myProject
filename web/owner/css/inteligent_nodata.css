@@ -354,11 +354,12 @@ header div img {
     vertical-align: middle;
 }
 
+
 .fit {
     padding-top: 1rem;
 }
 
-.fit h2 {
+.fit h1 {
     margin-left: 1rem;
 }
 
@@ -388,9 +389,9 @@ header div img {
 
 .choose_style ul li button {
     background-color: white;
-    width: 5rem;
+    width:5rem;
     height: 2.3rem;
-    font-size: 1rem;
+    font-size: .8rem;
     color: #999;
     border: 1px solid #C2C2C2;
     margin-left: 1rem;
@@ -419,10 +420,11 @@ header div img {
 }
 
 .note ul li button {
-    width: 6rem;
+    width: 5rem;
     height: 3rem;
     background-color: white;
     border: 1px solid #C2C2C2;
+    font-size: .8rem;
 }
 
 .btn_vr button {
@@ -455,11 +457,12 @@ header div img {
     border-radius: 1.5rem;
     border: 1px solid #8DE2C1;
     text-align: center;
-    font-size: 1rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    font-size: .8rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
     padding-top: .3rem;
     height: 2rem;
+    margin-left: 1rem;
     background-color: #F9FEFC;
 }
 
