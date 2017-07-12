@@ -1179,6 +1179,12 @@ class BasisDecorationService
         return $wood_floor;
     }
 
+    /**
+     * 大理石计算公式
+     * @param string $post
+     * @param array $goods
+     * @return mixed
+     */
     public static function marbleCost($post = '',$goods =[])
     {
         if ($post && $goods)
@@ -1189,5 +1195,18 @@ class BasisDecorationService
             $marble['cost'] = $marble['quantity'] * $goods['platform_price'];
         }
         return $marble;
+    }
+
+    public static function profitMax($material,$name)
+    {
+        var_dump($material);
+        if (empty($material) && empty($name))
+        {
+            return $material;
+        }else
+        {
+            $array = explode(',',$name);
+            var_dump($array);exit;
+        }
     }
 }
