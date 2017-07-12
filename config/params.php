@@ -48,9 +48,6 @@ return [
         'enableBuffering' => 'yes',
         'rate' => 102400, // 速度限制 Byte/s
     ],
-    'upload' => [
-        'directory' => 'uploads',
-    ],
     'uploadPublic' => [
         'maxSize' => 5 * 1024 * 1024 , // 5M
         'extensions' => ['png', 'jpg', 'gif'],
