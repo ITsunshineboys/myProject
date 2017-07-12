@@ -22,7 +22,7 @@ CREATE TABLE `style_picture` (
   `style_id` int(11) DEFAULT NULL COMMENT '风格表id',
   `picture` varchar(255) DEFAULT '' COMMENT '图片',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `style` (
@@ -30,13 +30,15 @@ CREATE TABLE `style` (
   `style` varchar(50) DEFAULT '' COMMENT '风格',
   `intro` varchar(255) DEFAULT '' COMMENT '风格介绍',
   `theme` varchar(50) DEFAULT '' COMMENT '风格主题',
-  `modelling_length_coefficient` float(10,1) DEFAULT NULL COMMENT '造型长度系数',
-  `modelling_day_coefficient` float(10,1) DEFAULT NULL COMMENT '造型天数系数',
-  `flat_area_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶面积系数',
-  `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
-  `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
+  `modelling_length_coefficient` float(10,1) DEFAULT '0.0' COMMENT '造型长度系数',
+  `modelling_day_coefficient` float(10,1) DEFAULT '0.0' COMMENT '造型天数系数',
+  `flat_area_coefficient` float(10,1) DEFAULT '0.0' COMMENT '平顶面积系数',
+  `flat_day_coefficient` float(10,1) DEFAULT '0.0' COMMENT '平顶天数系数',
+  `category_id` int(11) DEFAULT NULL COMMENT '分类id',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 已停用 1: 已启用',
+  `creation_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `series` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -47,9 +49,11 @@ CREATE TABLE `series` (
   `modelling_day_coefficient` float(10,1) DEFAULT NULL COMMENT '造型天数系数',
   `flat_area_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶面积系数',
   `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
-  `status` tinyint(1) not null DEFAULT 0 comment '0: 已停用 1: 已启用',
+  `category_id` int(11) DEFAULT '0' COMMENT '分类id',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 已停用 1: 已启用',
+  `creation_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `effect_ picture` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
