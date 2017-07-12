@@ -8,6 +8,8 @@
 
 namespace app\services;
 
+use app\models\UploadForm;
+use dosamigos\qrcode\QrCode;
 use Yii;
 
 class StringService
@@ -273,5 +275,17 @@ class StringService
         }
 
         return $type;
+    }
+
+    /**
+     * Generate qr code image
+     *
+     * @param string $str string
+     * @param string $filename filename to saved as
+     */
+    public static function generateQrCodeImage($str, $filename)
+    {
+        $dir = Yii::getAlias('@webroot') . '/' . UploadForm::DIR_PUBLIC . '/';
+        QrCode::png($str, $dir . "{$filename}.png");
     }
 }

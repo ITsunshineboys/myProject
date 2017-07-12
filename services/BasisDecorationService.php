@@ -33,65 +33,39 @@ class BasisDecorationService
      * @param string $crafts
      * @return mixed
      */
-    public static function quantity($points = '',$goods = [],$crafts= '')
+    public static function quantity($points,$goods,$crafts)
     {
-        if($goods !== null && $points !== null)
+        if($goods && $points)
         {
-            $material = 0;
-            $spool = 0;
             foreach ($crafts as $craft){
                 if($craft['project_details'] == '网线' || $craft['project_details'] == '电线'){
                     $material = $craft['material'];
-                }else
-                {
-                    $material = 0;
+
                 }
+
                 if($craft['project_details'] == '线管'){
                     $spool = $craft['material'];
-                }else
-                {
-                    $spool = 0;
                 }
-
             }
-
-            $goods_value = 0;
-            $goods_price = 0;
-            $spool_value = 0;
-            $spool_price = 0;
-            $bottom_case = 0;
             foreach ($goods as $one)
             {
                 if($one['title'] == '网线' || $one['title'] == '电线' )
                 {
                     $goods_value = $one['value'];
                     $goods_price = $one['platform_price'];
-                }else
-                {
-                    $goods_value = 0;
-                    $goods_price = 0;
                 }
+
 //                线管费用：个数3×抓取的商品价格
 //                个数3：（电路总点位×【10m】÷抓取的商品的长度）
                 if($one['title'] == '线管'){
                     $spool_value = $one['value'];;
                     $spool_price = $one['platform_price'];
-                }else
-                {
-                    $spool_value = 0;
-                    $spool_price = 0;
                 }
-
 
                 if($one['title'] == '底盒'){
                     $bottom_case = $one['platform_price'];
-                }else
-                {
-                    $bottom_case = 0;
                 }
-
             }
-
 
             if ($points == 0 || $material == 0 || $goods_value == 0 )
             {
@@ -103,6 +77,8 @@ class BasisDecorationService
                 $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
                 //线管个数计算
                 $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
+                // 底盒个数计算
+                $electricity['bottom_quantity'] = $points;
             }
 
             //线路费用计算
@@ -1179,6 +1155,12 @@ class BasisDecorationService
         return $wood_floor;
     }
 
+    /**
+     * 大理石计算公式
+     * @param string $post
+     * @param array $goods
+     * @return mixed
+     */
     public static function marbleCost($post = '',$goods =[])
     {
         if ($post && $goods)
@@ -1189,5 +1171,30 @@ class BasisDecorationService
             $marble['cost'] = $marble['quantity'] * $goods['platform_price'];
         }
         return $marble;
+    }
+
+    /**
+     * 利润率最大的计算公式
+     * @param $material
+     * @param $name
+     * @return array
+     */
+    public static function profitMax($material,$name)
+    {
+        if (empty($material) && empty($name))
+        {
+            return $material;
+        }else
+        {
+            $goods_profit = [];
+            foreach ($material as $one_materiel)
+            {
+                $profit = ($one_materiel['platform_price'] - $one_materiel['supplier_price']) / $one_materiel['supplier_price'];
+                $one_materiel['profit'] = $profit;
+                $goods_profit [] = $one_materiel;
+            }
+
+          return $goods_profit;
+        }
     }
 }

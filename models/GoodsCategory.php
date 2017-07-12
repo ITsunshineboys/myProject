@@ -834,4 +834,42 @@ class GoodsCategory extends ActiveRecord
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
     }
+
+    /**
+     * Goods category id find pid
+     * @param $goods
+     * @return array|ActiveRecord[]
+     */
+    public static function findPath($goods)
+    {
+        if ($goods)
+        {
+            $id = [];
+            foreach ($goods as $one_goods)
+            {
+                $id []= $one_goods['category_id'];
+            }
+
+            $select = "	goods_category.path";
+            $path = self::find()
+                    ->asArray()
+                    ->select($select)
+                    ->where(['in','id',$id])
+                    ->all();
+        }
+        return $path;
+    }
+
+    public static function findPathCategory($path)
+    {
+        if ($path)
+        {
+            $ids = implode($path);
+            $id = substr($ids,0,7);
+            $db = Yii::$app->db;
+            $sql = "SELECT goods_category.title FROM goods_category WHERE id IN (".$id.")";
+            $all = $db->createCommand($sql)->queryAll();
+        }
+        return $all;
+    }
 }

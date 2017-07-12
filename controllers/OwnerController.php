@@ -14,6 +14,7 @@ use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;
 use app\models\GoodsAttr;
+use app\models\GoodsCategory;
 use app\models\LaborCost;
 use app\models\MaterialPropertyClassify;
 use app\models\PaintReconstruction;
@@ -181,20 +182,20 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>60,
-//            'style'=>60,
-//            'window'=>60,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>60,
+            'style'=>60,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         $arr = [];
         $arr['worker_kind'] = '电工';
 
@@ -229,13 +230,14 @@ class OwnerController extends Controller
 
         if (empty($post['effect_id'])) {
             //查询弱电所需要材料
-            $weak_current = [];
-            $electric_wire = '网线';
-            $weak_current [] = Goods::priceDetail(3,$electric_wire);
-            $pipe = '线管';
-            $weak_current [] = Goods::priceDetail(3,$pipe);
-            $box = '底盒';
-            $weak_current [] = Goods::priceDetail(3,$box);
+            $material = ['网线','线管','底盒'];
+            $goods = Goods::priceDetail(3,$material);
+            $weak_current = BasisDecorationService::profitMax($goods,$material);
+            $goods_pid = GoodsCategory::findPath($weak_current);
+            foreach ($goods_pid as $one_pid)
+            {
+                $goods_pid [] = GoodsCategory::findPathCategory($one_pid);
+            }
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
@@ -296,14 +298,11 @@ class OwnerController extends Controller
             'msg' => '成功',
             'data' => [
                 'weak_current_labor_price' => $labor_all_cost,
-                'weak_current_material_price' => $material_price['total_cost'],
-                'weak_current_reticle_quantity' => $material_price['wire_quantity'],
-                'weak_current_reticle_cost' => $material_price['wire_cost'],
-                'weak_current_spool_quantity' => $material_price['spool_quantity'],
-                'weak_current_spool_cost' => $material_price['spool_cost'],
-                'weak_current_bottom_case' => $material_price['bottom_case'],
+                'weak_current_material' => $material_price,
+                'weak_current_goods_name'=>$weak_current,
+                'weak_current_goods_pid'=>$goods_pid,
                 'weak_current_add_price' => $add_price,
-                'weak_current' => $weak_current
+
             ]
         ]);
     }

@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\models\Carousel;
-use app\models\GoodsRecommend;
+use app\models\Goods;
 use app\models\GoodsCategory;
 use app\models\User;
 use app\services\ExceptionHandleService;
@@ -23,6 +23,7 @@ class TestController extends Controller
         'cache-delete',
         'cache-delete-all',
         'reset-mobile-pwd',
+        'goods-qr-gen',
     ];
 
     /**
@@ -106,5 +107,17 @@ class TestController extends Controller
         $newMobile = Yii::$app->request->post('new_mobile');
         $pwd = Yii::$app->request->post('pwd');
         return User::resetMobileAndPwdByMobile($mobile, $newMobile, $pwd);
+    }
+
+    /**
+     * Generate goods qr code image
+     */
+    public function actionGoodsQrGen()
+    {
+        $id = (int)Yii::$app->request->get('id', 0);
+        if ($id > 0) {
+            $goods = Goods::findOne($id);
+            $goods && $goods->generateQrCodeImage();
+        }
     }
 }

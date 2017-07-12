@@ -20,7 +20,6 @@ use app\models\GoodsAttr;
 use app\models\GoodsImage;
 use app\models\GoodsComment;
 use app\models\User;
-use app\models\UserRole;
 use app\models\BrandApplication;
 use app\models\GoodsStat;
 use app\models\GoodsOrder;
@@ -2759,6 +2758,8 @@ class MallController extends Controller
         }
 
         $transaction->commit();
+
+        $goods->generateQrCodeImage();
 
         return Json::encode([
             'code' => 200,
