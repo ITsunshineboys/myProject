@@ -47,6 +47,7 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                 params:{"id":""}
             })
 
+
     }])
     .run(["$rootScope","$state",function ($rootScope,$state) {
         $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {

@@ -55,6 +55,13 @@ angular.module("all_controller", [])
         $scope.house_hall = 0
         $scope.house_kitchen = 0
         $scope.house_toilet = 0
+        $scope.house_bedroom = 1
+        $scope.house_hall = 1
+        $scope.house_kitchen = 1
+        $scope.house_toilet = 1
+        $scope.highCrtl = 2.8
+
+
         //无资料户型加减方法
         $scope.add = function (item,category) {
             if($scope[category]<item){
@@ -73,30 +80,128 @@ angular.module("all_controller", [])
         //生成材料方法
         $scope.getData = function () {
             let url = "/owner/weak-current"
+            let strong ="/owner/strong-current"
+            let waterway="/owner/waterway"
+            let waterproof="/owner/waterproof"
+            let carpentry="/owner/carpentry"
+            let coating="/owner/coating"
+            let make ="/owner/mud-make"
+            let material="/owner/principal-material"
+            let soft="/owner/soft-outfit-assort"
+            let fixation= "/owner/fixation-furniture"
+            let move= "/owner/move-furniture"
+            let assort="/owner/appliances-assort"
+            let life="/owner/life-assort"
+            let intelligence="/owner/intelligence-assort"
             let data = {
                 bedroom:$scope.house_bedroom,
-                area:1,      //面积
+                area:$scope.area,      //面积
                 hall:$scope.house_hall,       //餐厅
                 toilet:$scope.house_toilet,   // 卫生间
                 kitchen:$scope.house_kitchen,  //厨房
-                stairs_details_id:1, //楼梯
-                series:1,   //系列
-                style:1,  //风格
-                window:1,//飘窗
+                stairs_details_id:+$scope.choose_stairs, //楼梯
+                structure:$scope.nowStairs,
+                series:$scope.nowSeries,   //系列
+                style:$scope.nowStyle,  //风格
+                window:$scope.window,//飘窗
+                high:$scope.highCrtl, //层高
                 province:510000,   //省编码
                 city:510100      // 市编码
             }
+
             let config = {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 transformRequest:function (data) {
                     return $.param(data)
                 }
             }
+            //发数据给后台
+            //第一个 弱电接口
             $http.post(url,data,config).then(function (response) {
+                $scope.data=response.data
                 console.log(response)
             },function (error) {
                 console.log(error)
             })
+            //第二个 强电接口
+            $http.post(strong,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+            //第三个 水路接口
+            $http.post(waterway,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+            //第四个 防水接口
+            $http.post(waterproof,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+            //第五个 木作接口
+            $http.post(carpentry,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+             //第六个 乳胶漆接口
+            $http.post(coating,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+             //第七个 泥作接口
+            $http.post(make,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+            //第八个 主材接口
+            $http.post(material,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+              //第九个 软装接口
+            $http.post(soft,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+            //第十个 固定家居接口
+            $http.post(fixation,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+             //第十一个 移动家具接口
+            $http.post(move,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+            //第十二个 家电配套接口
+            $http.post(assort,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+             //第十三个 生活配套接口
+            $http.post(life,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+              //第十四个 智能配套接口
+            $http.post(intelligence,data,config).then(function (response) {
+                console.log(response)
+            },function (error) {
+                console.log(error)
+            })
+
         }
         $scope.$watch('message', function (newVal, oldVal) {
             if (newVal && newVal != oldVal) {

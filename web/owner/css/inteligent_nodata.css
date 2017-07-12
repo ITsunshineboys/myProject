@@ -71,8 +71,28 @@ header div img {
 .quarters_small {
     border-bottom: 1px solid #C2C2C2;
     padding-bottom: 2rem;
+    position: relative;
 }
-
+.shu{
+    width: .2rem;
+    height: 1rem;
+    background-color:#53A8F4;
+    display: inline-block;
+    position: absolute;
+    /*top:1rem;*/
+    left: .6rem;
+    top: .2rem;
+}
+.area{
+    width: .2rem;
+    height: 1rem;
+    background-color:#53A8F4;
+    display: inline-block;
+    position: relative;
+    /*top:1rem;*/
+    left: .6rem;
+    top: 2rem;
+}
 .quarters_adress {
     padding-left: 1rem;
     font-size: 1rem;
@@ -89,6 +109,7 @@ header div img {
 
 .quarters_small h1 {
     padding-left: 1rem;
+    font-size: 1.2rem;
 }
 
 .choose_quarter {
@@ -96,7 +117,9 @@ header div img {
     font-size: 1rem;
 
 }
-
+.quarters_small{
+    position: relative;
+}
 .quarters_small input {
     width: 22rem;
     height: 2.2rem;
@@ -114,18 +137,21 @@ header div img {
 }
 
 .house_area {
-    padding-top: 1rem;
+    /*padding-top: 1rem;*/
 }
-
+.house_area h1{
+    margin-left: 1.5rem;
+    font-size: 1.2rem;
+}
 .house_span {
     margin-left: 1rem;
-    font-size: 1.4rem;
+    font-size: 1rem;
 }
 
 .house_area input {
     width: 21rem;
     height: 3rem;
-    margin-left: 1rem;
+    margin-left: 2rem;
     margin-top: 1rem;
     border: 1px solid #C2C2C2;
     font-size: 1.2rem;
@@ -138,7 +164,7 @@ header div img {
 
 .apartment_span {
     margin-left: 1rem;
-    font-size: 1.4rem;
+    font-size: 1rem;
 }
 
 .apartment_ul span {
@@ -219,13 +245,17 @@ header div img {
     padding-bottom: 1rem;
 
 }
+.storey_span{
+    font-size: 1rem;
+    margin-left: 1rem;
+}
 
 .storey h1 {
     margin-left: 1rem;
 }
 
 .storey_ul {
-    margin-left: 7rem;
+    margin-left: 3rem;
 }
 
 .storey_ul li {
@@ -404,6 +434,15 @@ header div img {
 
 }
 
+/*轮播*/
+.swiper-slide img{
+   width:100%;
+}
+
+.swiper-pagination span {
+    width: 1rem;
+    height: 1rem;
+}
 /*系列*/
 .tag {
     padding-left: 1.5rem;
@@ -443,4 +482,145 @@ button {
 /*提交按钮样式*/
 button[disabled]{
 
+
+}
+
+/*数据获取 样式*/
+.left_main{
+    /*border: 1px solid #C2C2C2;*/
+    display: inline-block;
+    width: 14rem;
+    margin-left: 1rem;
+}
+.right_main {
+    /*border: 1px solid #C2C2C2;*/
+    display: inline-block;
+    width: 14rem;
+    margin-left: 1.2rem;
+}
+.right_main ul li{
+    margin-bottom: .5rem;
+    font-size: 1rem;
+    border-bottom: 1px solid #C2C2C2;
+}
+.left_main ul {
+    border: 1px solid #C2C2C2;
+    margin-bottom: 1rem;
+}
+.right_main ul {
+    margin-bottom: 1rem;
+}
+.left_main ul li{
+    margin-bottom: .5rem;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(222, 222, 224, 0.9);
+    margin-left: 1rem;
+}
+.right_main ul li {
+    border-bottom: 1px solid rgba(222, 222, 224, 0.9);
+    margin-left: 1rem;
+}
+.decoration p{
+    padding-left: 1rem;
+    /*padding-top: .5rem;*/
+    font-size: 1rem;
+}
+.pic{
+    color:#FFB13D ;
+    font-size: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+.left_main p{
+    padding-left: 1rem;
+    /*padding-top: .5rem;*/
+    font-size: 1rem;
+}
+.pic{
+    color:#FFB13D ;
+    font-size: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+.pic_q{
+    margin-left: 4rem;
+}
+.right_main p{
+    padding-left: 1rem;
+    /*padding-top: .5rem;*/
+    font-size: 1rem;
+}
+.right_main span{
+    color:#FFB13D ;
+    font-size: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+/*.decoration li{*/
+    /*margin-bottom: .5rem;*/
+    /*font-size: 1rem;*/
+    /*border-bottom: 1px solid #C2C2C2;*/
+/*}*/
+.right_main ul {
+    border:1px solid #C2C2C2;
+}
+.material_choose h3{
+    display: inline-block;
+    font-size: 1rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+.comment_span{
+    margin-left: 1rem;
+    font-size: .8rem;
+    color: #C2C2C2;
+}
+/*样式结束*/
+
+/*尾部样式*/
+.first_span{
+    color: #F55122;
+    font-size: 1.2rem;
+    margin-left: 2rem;
+}
+.footer_set{
+    display: inline-block;
+    line-height: 1.2rem;
+}
+.second_span{
+    font-size: 1rem;
+    color: #F55122;
+    text-decoration:line-through ;
+    margin-left: 2rem;
+}
+.three_span{
+    font-size: .8rem;
+    color: #999;
+    margin-left: 2rem;
+    padding-top: 1rem;
+}
+.footer_settlement {
+    background-color: white;
+    height: 3rem;
+    border-top:2px solid #C2C2C2;
+    padding-top: 1rem;
+}
+.footer_settlement button{
+    width: 7rem;
+    height: 3.1rem;
+    background-color: white;
+    border: 1px solid #53A8F4;
+    font-size: 1rem;
+    /*margin-left: 1rem;*/
+    /*margin-top: -1rem!important;*/
+    position: relative;
+    top:-.6rem;
+    left: 2rem;
+
+}
+.primary_btn{
+    background-color: #53A8F4!important;
+    color: white!important;
+    margin-left: 1rem;
+>>>>>>> Stashed changes
 }
