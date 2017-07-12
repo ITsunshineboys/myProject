@@ -12,6 +12,7 @@ use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\HtmlPurifier;
+use yii\helpers\Url;
 
 class Goods extends ActiveRecord
 {
