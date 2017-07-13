@@ -234,6 +234,7 @@ class MallController extends Controller
      */
     public function actionRecommendSecond()
     {
+        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT);
 
@@ -241,7 +242,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'recommend_second' => GoodsRecommend::second($page, $size),
+                'recommend_second' => GoodsRecommend::second($districtCode, $page, $size),
             ],
         ]);
     }
