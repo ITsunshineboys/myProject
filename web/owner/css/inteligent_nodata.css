@@ -52,20 +52,25 @@ header div {
 }
 
 header div span {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
-
+.postion_span{
+    color: #53A8F4;
+    margin-left: .2rem;
+}
 .in_span {
     margin-left: 1rem;
+    color: #53A8F4 ;
 }
 
 .pic_span {
     margin-left: 11rem;
 }
 
-header div img {
-    margin-left: 9rem;
-    width: 1rem;
+.map {
+    margin-left: 8rem;
+    /*width: 1rem;*/
+    color: #53A8F4;
 }
 
 .quarters_small {
@@ -276,7 +281,7 @@ header div img {
 
 .bay_span {
     margin-left: 1rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .bay_window input {
@@ -301,7 +306,7 @@ header div img {
 }
 
 .choose_span {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-left: 1rem;
 }
 
@@ -340,6 +345,7 @@ header div img {
 
 .series h1 {
     margin-left: 1rem;
+    font-size: 1.2rem;
 }
 
 .series ul li {
@@ -408,7 +414,7 @@ header div img {
 }
 
 .note {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 }
 
 .note ul li {
@@ -421,15 +427,17 @@ header div img {
 
 .note ul li button {
     width: 5rem;
-    height: 3rem;
+    height: 2rem;
     background-color: white;
     border: 1px solid #C2C2C2;
     font-size: .8rem;
 }
 
 .btn_vr button {
-    width: 32rem;
+    width: 28rem;
     height: 4rem;
+    margin-left: 2rem;
+    border-radius: .3rem;
     background-color: #53A8F4;
     color: white;
     font-size: 1.2rem;

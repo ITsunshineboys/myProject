@@ -1,21 +1,28 @@
 .header_cell{
     height: 4rem;
     background-color: white;
+
 }
 
 .header_cell input{
-    width: 20rem;
+    width: 24rem;
     height: 2rem;
     margin-top: 1rem;
     border: 1px solid #C2C2C2;
     border-radius: 1.2rem;
-    padding-left: 1rem;
+    padding-left: 3em;
     font-size: 1rem;
-    margin-left: 2rem;
+    margin-left: 1.5rem;
 }
 .header_cell a{
-    margin-left: 3rem;
+    margin-left: 2rem;
     font-size: 1.2rem;
+}
+.header_i{
+    color: #d0d0d0;
+    position: absolute;
+    left:2.2rem;
+    top:1.2rem;
 }
 .cell_ul li{
     padding-left: 2rem;

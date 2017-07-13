@@ -13,14 +13,18 @@
     height: 4.1rem;
     background-color: white;
     width: auto;
-    margin-top: 1rem;
+    /*margin-top: 1rem;*/
     border-bottom: 1px solid #999;
     border-top: 1px solid #999;
     padding: 0 1rem;
 }
+.location_city i{
+    color: #53A8F4;
+    font-size: 1rem!important;
+}
 .details_city span,p,button{
     font-size: 1.4rem;
-    line-height: 3.8rem;
+    line-height: 3.2rem;
 }
 .details_city p{
     display: inline-block;
@@ -32,7 +36,9 @@
     width: auto;
     background: white;
     color: #5677FC;
-    margin-left:8rem;
+    margin-left:8.5rem;
+    margin-top: .1rem;
+    font-size:1.2rem;
 }
 .choose_city{
     width: 30rem;
@@ -44,6 +50,7 @@
     border-radius: .5rem;
     margin-top: 2rem;
     color: white;
+    font-size: 1.2rem;
 }
 .specific_position{
     width: 32rem;

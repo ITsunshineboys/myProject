@@ -251,14 +251,14 @@ angular.module("all_controller", [])
         // }
     })
     .controller("intelligent_quotation_ctrl",function ($scope,$http,$stateParams) {//有资料选择器
-        $scope.nowSeries ='齐家'//系列
-        $scope.nowStyle = '现代简约'//风格
-        $scope.nowStairs = '实木结构'//有楼梯风格
-        $scope.choose_stairs = true;//是否有楼梯
-        $scope.index = 0
-        $scope.house_index = 0//户型
-        $scope.id = $stateParams.id//主页传过来的id
-        let url = "/owner/search"//搜索url
+        $scope.nowSeries ='齐家'; //系列
+        $scope.nowStyle = '现代简约'; //风格
+        $scope.nowStairs = '实木结构'; //有楼梯风格
+        $scope.choose_stairs = true; //是否有楼梯
+        $scope.index = 0;
+        $scope.house_index = 0;//户型
+        $scope.id = $stateParams.id;//主页传过来的id
+        let url = "/owner/search";//搜索url
         let data = {
             id:$stateParams.id//有资料请求id
         }
@@ -269,7 +269,7 @@ angular.module("all_controller", [])
             }
         }
         $http.post(url,data,config).then(function (response) {//小区房型基本信息
-            console.log(response)
+            console.log(response);
             $scope.data = response.data.data.effect//房型所有信息
             $scope.series_id = response.data.data.effect[0].series_id//默认房型系列id
             $scope.style_id = response.data.data.effect[0].style_id//默认房型风格id
@@ -425,4 +425,7 @@ angular.module("all_controller", [])
         $scope.toggleStairs = function (index) {
             $scope.nowStairs = index
         }
+    })
+     .controller("all_comment_ctrl",function (){
+
     })

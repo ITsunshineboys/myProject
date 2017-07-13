@@ -17,6 +17,9 @@ header div img{
     box-shadow: 0 6px 8px 0 rgba(146,203,255,0.20);
     border-radius: 4px;
 }
+.intelligent_div a{
+    text-decoration: none;
+}
 .intel{
     color: #666F80;
     position: absolute;
