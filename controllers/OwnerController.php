@@ -918,21 +918,20 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>60,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
-        $arr = [];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>1,
+            'style'=>1,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -1019,17 +1018,12 @@ class OwnerController extends Controller
             $paint_reconstruction = PaintReconstruction::find()->where(['decoration_list_id' => $decoration_list])->all();
             $goods_price = Goods::findQueryAll($paint_reconstruction);
         } else {
-            $putty = '腻子';
-            $goods_price = [];
-            $goods_price [] = Goods::priceDetail(3, $putty);
-            $emulsion_varnish_primer = '乳胶漆底漆';
-            $goods_price [] = Goods::priceDetail(3, $emulsion_varnish_primer);
-            $emulsion_varnish_finishing_coat = '乳胶漆面漆';
-            $goods_price [] = Goods::priceDetail(3, $emulsion_varnish_finishing_coat);
-            $concave_line = '阴角线';
-            $goods_price [] = Goods::priceDetail(3, $concave_line);
-            $gypsum_powder = '石膏粉';
-            $goods_price [] = Goods::priceDetail(3, $gypsum_powder);
+            $material = ['腻子','乳胶漆底漆','乳胶漆面漆','阴角线','石膏粉'];
+            $goods = Goods::priceDetail(3,$material);
+            $goods_price = BasisDecorationService::profitMax($goods,$material);
+            $profit_margin_max = BasisDecorationService::goodsProfitMax($goods_price,$material);
+
+            var_dump($profit_margin_max);exit;
         }
 
         //当地工艺

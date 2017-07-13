@@ -1163,7 +1163,7 @@ class BasisDecorationService
     }
 
     /**
-     * 利润率最大的计算公式
+     * 利润率计算公式
      * @param $material
      * @param $name
      * @return array
@@ -1185,5 +1185,19 @@ class BasisDecorationService
 
           return $goods_profit;
         }
+    }
+
+    public static function goodsProfitMax($goods,$sign)
+    {
+        if ($goods  && $sign)
+        {
+            foreach ($sign as $one_sign)
+            foreach ($goods as $one_goods)
+            {
+                if ($one_goods['title'] == )
+                var_dump($one_goods);exit;
+            }
+        }
+//        return $goods_max;
     }
 }
