@@ -364,19 +364,31 @@ class MallController extends Controller
         $styleId && $where .= " and style_id = {$styleId}";
         $seriesId && $where .= " and series_id = {$seriesId}";
 
-        $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
-        $select = Goods::CATEGORY_GOODS_APP;
-        $categoryGoods = $sort
-            ? Goods::pagination($where, $select, $page, $size, $orderBy)
-            : Goods::pagination($where, $select, $page, $size);
-        return Json::encode([
+        $ret = [
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category_goods' => $categoryGoods,
+                'category_goods' => [],
             ],
-        ]);
+        ];
+
+        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
+        $goodsIds = Goods::findIdsByDistrictCode($districtCode);
+        if (!$goodsIds) {
+            return Json::encode($ret);
+        }
+
+        $where .= ' and id in(' . implode(',', $goodsIds) . ')';
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
+        $select = Goods::CATEGORY_GOODS_APP;
+
+        $categoryGoods = $sort
+            ? Goods::pagination($where, $select, $page, $size, $orderBy)
+            : Goods::pagination($where, $select, $page, $size);
+        $ret['data']['category_goods'] = $categoryGoods;
+        return Json::encode($ret);
     }
 
     /**
