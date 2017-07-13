@@ -103,34 +103,28 @@ class BasisDecorationService
     {
         if ($points && $goods)
        {
-            $pvc_value = 0;
-            $pvc_price = 0;
-            $ppr_value = 0;
-            $ppr_price = 0;
             foreach ($goods as $one)
             {
-                if($one['title'] == 'PVC')
+                if($one['title'] == 'PVC管')
                 {
                     $pvc_value = $one['value'];
                     $pvc_price = $one['platform_price'];
                 }
-                if($one['title'] == 'PPR')
+                if($one['title'] == 'PPR水管')
                 {
                     $ppr_value = $one['value'];
                     $ppr_price = $one['platform_price'];
                 }
 
             }
-            $ppr = 0;
-            $pvc = 0;
+
             foreach ($crafts as $craft)
             {
-                if($craft['project_details'] == 'PPR')
+                if($craft['project_details'] == 'PPR水管')
                 {
                     $ppr = $craft['material'];
                 }
-
-                if($craft['project_details'] == 'PVC')
+                if($craft['project_details'] == 'PVC管')
                 {
                     $pvc =  $craft['material'];
                 }
@@ -582,12 +576,13 @@ class BasisDecorationService
      * @param int $video_wall
      * @return float
      */
-    public static function carpentryPlasterboardCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '',$video_wall = 1)
+    public static function carpentryPlasterboardCost($modelling_length = '',$flat_area = '',$goods,$crafts = '',$video_wall = 1)
     {
+        var_dump($crafts);exit;
         if(!empty($modelling_length) && !empty($flat_area)){
             $plasterboard = [];
             foreach ($goods as $goods_price ){
-                if($goods_price['name'] == '石膏板'){
+                if($goods_price['title'] == '石膏板'){
                     $plasterboard = $goods_price;
                 }else
                 {
@@ -600,6 +595,7 @@ class BasisDecorationService
                     $plasterboard_material = $craft['material'];
                 }
             }
+            var_dump($plasterboard_material);exit;
             if ($modelling_length == 0 || $plasterboard_material == 0 || $flat_area == 0|| $plasterboard_material == 0)
             {
                 $plasterboard_cost['quantity'] = 0;

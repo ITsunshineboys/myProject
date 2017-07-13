@@ -356,7 +356,7 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level = '', $title, $city = 510100)
+    public static function priceDetail($level , $title, $city = 510100)
     {
         if (empty($level) && empty($title)) {
             echo '请正确输入值';
