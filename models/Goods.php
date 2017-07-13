@@ -550,10 +550,8 @@ AND goods.id IN (" . $id . ")";
      */
     public static function findIdsByDistrictCode($districtCode)
     {
-        $goodsIds = [];
-
         if (false === StringService::checkDistrict($districtCode)) {
-            return $goodsIds;
+            return [];
         }
 
         $goodsTbl = self::tableName();
