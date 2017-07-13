@@ -844,7 +844,7 @@ class GoodsCategory extends ActiveRecord
     {
         if ($level)
         {
-            $select = "	goods_category.title,goods_category.pid";
+            $select = "	goods_category.title,goods_category.id";
             $all = self::find()
                     ->asArray()
                     ->select($select)

@@ -179,7 +179,7 @@ class OwnerController extends Controller
     public function actionClassify()
     {
         $classify['stair'] = GoodsCategory::findLevel(1);
-        $classify['stair'] = GoodsCategory::findLevel(2);
+        $classify['level'] = GoodsCategory::findLevel(2);
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
