@@ -85,9 +85,9 @@ class BasisDecorationService
             $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
             //线管费用计算
             $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
-            $electricity['bottom_case'] = $points * $bottom_case;
+            $electricity['bottom_cost'] = $points * $bottom_case;
             //总费用
-            $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_case'];
+            $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
         }
      return  $electricity;
     }
