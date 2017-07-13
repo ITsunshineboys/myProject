@@ -17,7 +17,7 @@ class SupplierController extends Controller
      */
     const ACCESS_LOGGED_IN_USER = [
         'certification-view',
-        'view',
+        'certification',
     ];
 
     /**
@@ -115,6 +115,41 @@ class SupplierController extends Controller
             'msg' => 'OK',
             'data' => [
                 'certification-view' => $supplier->viewCertification(),
+            ],
+        ]);
+    }
+
+    /**
+     * View supplier action
+     *
+     * @return string
+     */
+    public function actionView()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->get('id', 0);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier = Supplier::findOne($id);
+
+        if (!$supplier) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier-view' => $supplier->view(),
             ],
         ]);
     }
