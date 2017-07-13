@@ -1194,7 +1194,7 @@ class BasisDecorationService
             foreach ($sign as $one_sign)
             foreach ($goods as $one_goods)
             {
-                if ($one_goods['title'] == )
+                if ($one_goods['title'] == 11)
                 var_dump($one_goods);exit;
             }
         }
