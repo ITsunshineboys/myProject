@@ -195,6 +195,7 @@ class OwnerController extends Controller
 //            'window'=>60,
 //            'province'=>510000,
 //            'city'=>510100,
+//        'effect_id' =>1,
 //        ];
         $arr = [];
         $arr['worker_kind'] = '电工';
