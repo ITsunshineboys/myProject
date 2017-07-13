@@ -647,20 +647,20 @@ class OwnerController extends Controller
      */
     public function actionWaterproof()
     {
-//        $post = \Yii::$app->request->post();
-                $post = [
-            'area'=>60,
-            'bedroom'=>60,
-            'hall'=>60,
-            'toilet'=>60,
-            'kitchen'=>60,
-            'stairs_details_id'=>60,
-            'series'=>60,
-            'style'=>60,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//                $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '防水工';
 
@@ -681,7 +681,7 @@ class OwnerController extends Controller
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterproofReconstruction::findByAll($decoration_list);
-            $waterproof [] = Goods::findQueryAll($weak, $post['city']);
+            $waterproof = Goods::findQueryAll($weak, $post['city']);
         }
 
         //防水所需面积
@@ -713,6 +713,18 @@ class OwnerController extends Controller
         $labor_all_cost = ceil($total_area / $waterproof_labor['quantity'] * $waterproof_labor['univalence']);
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
+
+        $material_total = [];
+        foreach ($waterproof as $one_waterproof)
+        {
+            if ($one_waterproof['title'] == '防水涂料')
+            {
+                $one_waterproof['quantity'] = $material_price['quantity'];
+                $one_waterproof['cost'] = $material_price['cost'];
+                $material_total =  $one_waterproof;
+            }
+        }
+        $material_total['total_cost'] = $material_price['cost'];
 
         //添加材料费用
         $add_price_area = DecorationAdd::AllArea('防水', $post['area'], $post['city']);
@@ -759,10 +771,8 @@ class OwnerController extends Controller
             'msg' => '成功',
             'data' => [
                 'waterproof_labor_price' => $labor_all_cost,
-                'waterproof_material_price' => $material_price['cost'],
-                'waterproof_material_quantity' => $material_price['quantity'],
+                'waterproof_material' => $material_total,
                 'waterproof_add_price' => $add_price,
-                'waterproof' => $waterproof
             ]
         ]);
     }
@@ -772,20 +782,20 @@ class OwnerController extends Controller
      */
     public function actionCarpentry()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>60,
-            'hall'=>60,
-            'toilet'=>60,
-            'kitchen'=>60,
-            'stairs_details_id'=>60,
-            'series'=>1,
-            'style'=>1,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr = [];
         $arr['worker_kind'] = '木工';
         //人工一天价格
@@ -818,7 +828,6 @@ class OwnerController extends Controller
 
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
-        var_dump($plasterboard_cost);exit;
 
         //龙骨费用
         $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
@@ -827,6 +836,31 @@ class OwnerController extends Controller
         //材料费用
         $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
 
+        $material_total = [];
+        foreach ($goods_price as $one_goods_price)
+        {
+            if ($one_goods_price['title'] == '石膏板')
+            {
+                $one_goods_price['quantity'] = $plasterboard_cost['quantity'];
+                $one_goods_price['cost'] = $plasterboard_cost['cost'];
+                $material_total [] =  $one_goods_price;
+            }
+
+            if ($one_goods_price['title'] == '龙骨')
+            {
+                $one_goods_price['quantity'] = $keel_cost['quantity'];
+                $one_goods_price['cost'] = $keel_cost['cost'];
+                $material_total [] =  $one_goods_price;
+            }
+
+            if ($one_goods_price['title'] == '丝杆')
+            {
+                $one_goods_price['quantity'] = $pole_cost['quantity'];
+                $one_goods_price['cost'] = $pole_cost['cost'];
+                $material_total [] =  $one_goods_price;
+            }
+        }
+        $material_total['total_cost'] = $material_cost;
 
 //      添加费用
         $add_price_area = DecorationAdd::AllArea('木作', $post['area'], $post['city']);
@@ -873,12 +907,8 @@ class OwnerController extends Controller
             'msg' => '成功',
             'data' => [
                 'carpentry_labor_price' => $labour_charges,
-                'carpentry_material_price' => $material_cost,
-                'plasterboard_cost' => $plasterboard_cost,
-                'keel_cost' => $keel_cost,
-                'pole_cost' => $pole_cost,
+                'carpentry_material' => $material_total,
                 'carpentry_add_price' => $carpentry_add,
-                'goods_price' => $goods_price
             ]
         ]);
     }

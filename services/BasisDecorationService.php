@@ -578,7 +578,6 @@ class BasisDecorationService
      */
     public static function carpentryPlasterboardCost($modelling_length = '',$flat_area = '',$goods,$crafts = '',$video_wall = 1)
     {
-        var_dump($crafts);exit;
         if(!empty($modelling_length) && !empty($flat_area)){
             $plasterboard = [];
             foreach ($goods as $goods_price ){
@@ -595,7 +594,6 @@ class BasisDecorationService
                     $plasterboard_material = $craft['material'];
                 }
             }
-            var_dump($plasterboard_material);exit;
             if ($modelling_length == 0 || $plasterboard_material == 0 || $flat_area == 0|| $plasterboard_material == 0)
             {
                 $plasterboard_cost['quantity'] = 0;
@@ -623,16 +621,14 @@ class BasisDecorationService
     public static function carpentryKeelCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '')
     {
         if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods)){
-            $goods_price = [];
             foreach ($goods as $price)
             {
-                if($price['name'] == '龙骨'){
-                    $goods_price = $price;
-                }else
+                if($price['title'] == '龙骨')
                 {
-                    $goods_price = null;
+                    $goods_price = $price;
                 }
             }
+
             $plasterboard_material = 0;
             foreach ($crafts as $craft){
                 if($craft['project_details'] == '龙骨'){
@@ -667,15 +663,12 @@ class BasisDecorationService
      */
     public static function carpentryPoleCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '')
     {
-        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)){
-            $goods_price = [];
+        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods))
+        {
             foreach ($goods as $price)
             {
-                if($price['name'] == '丝杆'){
+                if($price['title'] == '丝杆'){
                     $goods_price = $price;
-                }else
-                {
-                    $goods_price = 0;
                 }
             }
             $plasterboard_material = 0;
