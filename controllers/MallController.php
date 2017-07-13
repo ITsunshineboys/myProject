@@ -323,8 +323,9 @@ class MallController extends Controller
      */
     public function actionCategoryGoods()
     {
-        $categoryId = (int)Yii::$app->request->get('category_id', 0);
         $code = 1000;
+
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
         if (!$categoryId) {
             return Json::encode([
                 'code' => $code,
@@ -351,19 +352,6 @@ class MallController extends Controller
             }
         }
 
-        $platformPriceMin = (int)Yii::$app->request->get('platform_price_min', 0);
-        $platformPriceMax = (int)Yii::$app->request->get('platform_price_max', 0);
-        $brandId = (int)Yii::$app->request->get('brand_id', 0);
-        $styleId = (int)Yii::$app->request->get('style_id', 0);
-        $seriesId = (int)Yii::$app->request->get('series_id', 0);
-
-        $where = "category_id = {$categoryId}";
-        $platformPriceMin && $where .= " and platform_price >= {$platformPriceMin}";
-        $platformPriceMax && $where .= " and platform_price <= {$platformPriceMax}";
-        $brandId && $where .= " and brand_id = {$brandId}";
-        $styleId && $where .= " and style_id = {$styleId}";
-        $seriesId && $where .= " and series_id = {$seriesId}";
-
         $ret = [
             'code' => 200,
             'msg' => 'OK',
@@ -377,6 +365,19 @@ class MallController extends Controller
         if (!$goodsIds) {
             return Json::encode($ret);
         }
+
+        $platformPriceMin = (int)Yii::$app->request->get('platform_price_min', 0);
+        $platformPriceMax = (int)Yii::$app->request->get('platform_price_max', 0);
+        $brandId = (int)Yii::$app->request->get('brand_id', 0);
+        $styleId = (int)Yii::$app->request->get('style_id', 0);
+        $seriesId = (int)Yii::$app->request->get('series_id', 0);
+
+        $where = "category_id = {$categoryId}";
+        $platformPriceMin && $where .= " and platform_price >= {$platformPriceMin}";
+        $platformPriceMax && $where .= " and platform_price <= {$platformPriceMax}";
+        $brandId && $where .= " and brand_id = {$brandId}";
+        $styleId && $where .= " and style_id = {$styleId}";
+        $seriesId && $where .= " and series_id = {$seriesId}";
 
         $where .= ' and id in(' . implode(',', $goodsIds) . ')';
 
