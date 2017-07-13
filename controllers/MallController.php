@@ -200,11 +200,13 @@ class MallController extends Controller
      */
     public function actionCarousel()
     {
+        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'carousel' => GoodsRecommend::carousel(),
+                'carousel' => GoodsRecommend::carousel($districtCode),
             ],
         ]);
     }
