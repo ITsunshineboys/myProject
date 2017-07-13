@@ -176,6 +176,19 @@ class OwnerController extends Controller
         ]);
     }
 
+    public function actionClassify()
+    {
+        $classify['stair'] = GoodsCategory::findLevel(1);
+        $classify['stair'] = GoodsCategory::findLevel(2);
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'pid' => $classify,
+            ]
+        ]);
+    }
+
     /**
      * 弱电价格
      * @return string
@@ -252,22 +265,22 @@ class OwnerController extends Controller
         {
             if ($one_weak_current['title'] == '线管')
             {
-                 $one_weak_current['wire_quantity'] = $material_price['wire_quantity'];
-                 $one_weak_current['wire_cost'] = $material_price['wire_cost'];
+                 $one_weak_current['quantity'] = $material_price['wire_quantity'];
+                 $one_weak_current['cost'] = $material_price['wire_cost'];
                 $material [] =  $one_weak_current;
             }
 
             if ($one_weak_current['title'] == '网线')
             {
-                $one_weak_current['spool_quantity'] = $material_price['spool_quantity'];
-                $one_weak_current['spool_cost'] = $material_price['spool_cost'];
+                $one_weak_current['quantity'] = $material_price['spool_quantity'];
+                $one_weak_current['cost'] = $material_price['spool_cost'];
                 $material [] =  $one_weak_current;
             }
 
             if ($one_weak_current['title'] == '底盒')
             {
-                $one_weak_current['bottom_quantity'] = $material_price['bottom_quantity'];
-                $one_weak_current['bottom_cost'] = $material_price['bottom_cost'];
+                $one_weak_current['quantity'] = $material_price['bottom_quantity'];
+                $one_weak_current['cost'] = $material_price['bottom_cost'];
                 $material [] =  $one_weak_current;
             }
         }
