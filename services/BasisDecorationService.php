@@ -1180,17 +1180,188 @@ class BasisDecorationService
         }
     }
 
-    public static function goodsProfitMax($goods,$sign)
+    /**
+     * 乳胶漆最大利润
+     * @param $goods
+     * @return array
+     */
+    public static function goodsProfitMax($goods)
     {
-        if ($goods  && $sign)
+        if ($goods)
         {
-            foreach ($sign as $one_sign)
             foreach ($goods as $one_goods)
             {
-                if ($one_goods['title'] == 11)
-                var_dump($one_goods);exit;
+                if ($one_goods['title'] == '腻子')
+                {
+                   $putty [] = $one_goods;
+                }
+                if ($one_goods['title'] == '乳胶漆底漆')
+                {
+                    $emulsion_floor [] = $one_goods;
+                }
+                if ($one_goods['title'] == '乳胶漆面漆')
+                {
+                    $emulsion_side [] = $one_goods;
+                }
+                if ($one_goods['title'] == '阴角线')
+                {
+                    $concave_line [] = $one_goods;
+                }
+                if ($one_goods['title'] == '石膏粉')
+                {
+                    $gypsum_powder [] = $one_goods;
+                }
+            }
+            foreach ($putty as $one_putty)
+            {
+                $c [] = $one_putty['profit'];
+                $max = array_search(max($c),$c);
+            }
+            $all [] = $putty[$max];
+
+            foreach ($emulsion_floor as $one_emulsion_floor)
+            {
+                $b [] = $one_emulsion_floor['profit'];
+                $max = array_search(max($b),$b);
+            }
+            $all [] = $emulsion_floor[$max];
+
+            foreach ($emulsion_side as $one_emulsion_side)
+            {
+                $d [] = $one_emulsion_side['profit'];
+                $max = array_search(max($d),$d);
+            }
+            $all [] = $emulsion_side[$max];
+
+            foreach ($concave_line as $one_concave_line)
+            {
+                $e [] = $one_concave_line['profit'];
+                $max = array_search(max($e),$e);
+            }
+            $all [] = $concave_line[$max];
+
+            foreach ($gypsum_powder as $one_gypsum_powder)
+            {
+                $f [] = $one_gypsum_powder['profit'];
+                $max = array_search(max($f),$f);
+            }
+            $all [] = $gypsum_powder[$max];
+        }
+        return $all;
+    }
+
+    /**
+     * 木作利润最大
+     * @param $goods
+     * @return array
+     */
+    public static function mudMakeMax($goods)
+    {
+        foreach ($goods as $one_goods)
+        {
+            if ($one_goods['title'] == '河沙')
+            {
+                $river_sand [] = $one_goods;
+            }
+
+            if ($one_goods['title'] == '水泥')
+            {
+                $concrete [] = $one_goods;
+            }
+
+            if ($one_goods['title'] == '自流平')
+            {
+                $self_leveling [] = $one_goods;
+            }
+
+            if ($one_goods['title'] == '地砖')
+            {
+                $floor_tile [] = $one_goods;
+            }
+
+            if ($one_goods['title'] == '墙砖')
+            {
+                $wall_brick [] = $one_goods;
             }
         }
-//        return $goods_max;
+        foreach ($river_sand as $one_river_sand)
+        {
+            $c [] = $one_river_sand['profit'];
+            $max = array_search(max($c),$c);
+        }
+        $all [] = $river_sand[$max];
+
+        foreach ($concrete as $one_concrete)
+        {
+            $a [] = $one_concrete['profit'];
+            $max = array_search(max($a),$a);
+        }
+        $all [] = $concrete[$max];
+
+        foreach ($self_leveling as $one_self_leveling)
+        {
+            $b [] = $one_self_leveling['profit'];
+            $max = array_search(max($b),$b);
+        }
+        $all [] = $self_leveling[$max];
+
+        foreach ($floor_tile as $one_floor_tile)
+        {
+            $d [] = $one_floor_tile['profit'];
+            $max = array_search(max($d),$d);
+        }
+        $all [] = $floor_tile[$max];
+
+        foreach ($wall_brick as $one_wall_brick)
+        {
+            $e [] = $one_wall_brick['profit'];
+            $max = array_search(max($e),$e);
+        }
+        $all [] = $wall_brick[$max];
+
+        return $all;
+    }
+
+    public static function handymanMax($goods)
+    {
+        foreach ($goods as $one_goods)
+        {
+            if ($one_goods['title'] == '河沙')
+            {
+                $river_sand [] = $one_goods;
+            }
+
+            if ($one_goods['title'] == '水泥')
+            {
+                $concrete [] = $one_goods;
+            }
+
+            if ($one_goods['title'] == '空心砖')
+            {
+                $air_brick [] = $one_goods;
+            }
+        }
+        foreach ($river_sand as $one_river_sand)
+        {
+            $c [] = $one_river_sand['profit'];
+            $max = array_search(max($c),$c);
+        }
+        $all [] = $river_sand[$max];
+
+        foreach ($concrete as $one_concrete)
+        {
+            $a [] = $one_concrete['profit'];
+            $max = array_search(max($a),$a);
+        }
+        $all [] = $concrete[$max];
+
+        foreach ($air_brick as $one_air_brick)
+        {
+            $b [] = $one_air_brick['profit'];
+            $max = array_search(max($b),$b);
+        }
+        $all [] = $air_brick[$max];
+
+        return $all;
     }
 }
