@@ -4453,7 +4453,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'recommend_admin_index' => [
+                'recommend_admin_index_supplier' => [
                     'details' => []
                 ]
             ],
