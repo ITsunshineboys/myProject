@@ -53,6 +53,7 @@ class MallController extends Controller
         'recommend-click-record',
         'recommend-add-supplier',
         'recommend-edit-supplier',
+        'recommend-delete-supplier',
         'category-review',
         'categories-admin',
         'category-admin',
@@ -4333,6 +4334,62 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Supplier delete recommend record action.
+     *
+     * @return string
+     */
+    public function actionRecommendDeleteSupplier()
+    {
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $code = 1000;
+
+        if (!$id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $recommend = GoodsRecommendSupplier::findOne($id);
+        if (!$recommend) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($recommend->delete_time > 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($recommend->status != GoodsRecommendSupplier::STATUS_OFFLINE) {
+            $code = 1003;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $recommend->delete_time = time();
+        if (!$recommend->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
         ]);
     }
 }
