@@ -111,7 +111,7 @@ class GoodsRecommend extends ActiveRecord
     {
         $recommendGoods = [];
 
-        $goodsRecommend = GoodsRecommend::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_FIRST, 'status' => self::STATUS_ONLINE])->one();
+        $goodsRecommend = self::find()->where(['type' => self::RECOMMEND_GOODS_TYPE_FIRST, 'status' => self::STATUS_ONLINE])->one();
         if ($goodsRecommend) {
             $goods = Goods::find()->where(['sku' => $goodsRecommend->sku])->one();
             if ($goods) {
