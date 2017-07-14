@@ -23,6 +23,7 @@ use app\models\User;
 use app\models\BrandApplication;
 use app\models\GoodsStat;
 use app\models\GoodsOrder;
+use app\models\GoodsRecommendSupplier;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use app\services\StringService;
@@ -50,6 +51,7 @@ class MallController extends Controller
         'recommend-edit',
         'recommend-sort',
         'recommend-click-record',
+        'recommend-add-supplier',
         'category-review',
         'categories-admin',
         'category-admin',
@@ -104,7 +106,6 @@ class MallController extends Controller
         'shop-data',
         'supplier-index-admin',
         'index-admin',
-        'recommend-add-supplier',
     ];
 
     /**
@@ -4247,7 +4248,6 @@ class MallController extends Controller
 
         $code = 1000;
 
-        $recommend->scenario = GoodsRecommendSupplier::SCENARIO_ADD;
         if (!$recommend->validate()) {
             return Json::encode([
                 'code' => $code,
