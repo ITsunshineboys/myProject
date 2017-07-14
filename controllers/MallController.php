@@ -55,6 +55,7 @@ class MallController extends Controller
         'recommend-edit-supplier',
         'recommend-delete-supplier',
         'recommend-delete-batch-supplier',
+        'recommend-admin-index-supplier',
         'category-review',
         'categories-admin',
         'category-admin',
@@ -3001,7 +3002,7 @@ class MallController extends Controller
         $user = Yii::$app->user->identity;
 
         if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])) {
-           $code = $model->canOnline($user);
+            $code = $model->canOnline($user);
             if (200 != $code) {
                 return Json::encode([
                     'code' => $code,
@@ -3950,10 +3951,10 @@ class MallController extends Controller
     {
         $series = Series::find()->All();
         return Json::encode([
-            'code'=>200,
-            'msg'=>'OK',
-            'data'=>[
-                'series_list'=>$series
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'series_list' => $series
             ]
         ]);
     }
@@ -3968,26 +3969,24 @@ class MallController extends Controller
 //        $post = Yii::$app->request->post();
 //        $data = Json::decode($post);
         $data = [
-            'series'=>'齐家',
-            'theme'=>'简单',
-            'intro'=>'齐家的东西就是好'
+            'series' => '齐家',
+            'theme' => '简单',
+            'intro' => '齐家的东西就是好'
         ];
-        $series =  new Series();
+        $series = new Series();
         $series->series = $data['series'];
         $series->theme = $data['theme'];
         $series->intro = $data['intro'];
         $series->creation_time = time();
-        $series->status= Series::STATUS_ONLINE;
-        if (!$series->validate())
-        {
+        $series->status = Series::STATUS_ONLINE;
+        if (!$series->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$series->save())
-        {
+        if (!$series->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -4006,26 +4005,24 @@ class MallController extends Controller
 //        $post = Yii::$app->request->post();
 //        $data = Json::decode($post);
         $data = [
-            'id'=>2,
-            'series'=>'齐家',
-            'theme'=>'方便',
-            'intro'=>'齐家的东西，无敌，美好'
+            'id' => 2,
+            'series' => '齐家',
+            'theme' => '方便',
+            'intro' => '齐家的东西，无敌，美好'
         ];
-        $series =  new Series();
+        $series = new Series();
         $series_edit = $series->findOne($data['id']);
         $series_edit->series = $data['series'];
         $series_edit->theme = $data['theme'];
         $series_edit->intro = $data['intro'];
-        if (!$series_edit->validate())
-        {
+        if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$series_edit->save())
-        {
+        if (!$series_edit->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -4044,22 +4041,20 @@ class MallController extends Controller
 //        $post = Yii::$app->request->post();
 //        $data = Json::decode($post);
         $data = [
-            'id'=>2,
-            'status'=>'0',
+            'id' => 2,
+            'status' => '0',
         ];
-        $series =  new Series();
+        $series = new Series();
         $series_edit = $series->findOne($data['id']);
         $series_edit->status = $data['status'];
-        if (!$series_edit->validate())
-        {
+        if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$series_edit->save())
-        {
+        if (!$series_edit->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -4076,10 +4071,10 @@ class MallController extends Controller
     {
         $style = Style::find()->All();
         return Json::encode([
-            'code'=>200,
-            'msg'=>'OK',
-            'data'=>[
-                'style_list'=>$style
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'style_list' => $style
             ]
         ]);
     }
@@ -4094,27 +4089,25 @@ class MallController extends Controller
 //        $post = Yii::$app->request->post();
 //        $data = Json::decode($post);
         $data = [
-            'style'=>'中国风',
-            'theme'=>'中国风',
-            'intro'=>'物有所值',
-            'picture'=>'C:\Users\Administrator\Desktop'
+            'style' => '中国风',
+            'theme' => '中国风',
+            'intro' => '物有所值',
+            'picture' => 'C:\Users\Administrator\Desktop'
         ];
-        $style =  new Style();
+        $style = new Style();
         $style->style = $data['style'];
         $style->theme = $data['theme'];
         $style->intro = $data['intro'];
         $style->creation_time = time();
-        $style->status= Style::STATUS_ONLINE;
-        if (!$style->validate())
-        {
+        $style->status = Style::STATUS_ONLINE;
+        if (!$style->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$style->save())
-        {
+        if (!$style->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -4125,16 +4118,14 @@ class MallController extends Controller
         $style_picture = new StylePicture();
         $style_picture->style_id = $style->attributes['id'];
         $style_picture->picture = FileService::upload();
-        if (!$style_picture->validate())
-        {
+        if (!$style_picture->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$style_picture->save())
-        {
+        if (!$style_picture->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -4154,27 +4145,25 @@ class MallController extends Controller
 //        $post = Yii::$app->request->post();
 //        $data = Json::decode($post);
         $data = [
-            'id'=>4,
-            'style'=>'中国风',
-            'theme'=>'传统东西',
-            'intro'=>'你城山',
-            'picture'=>'C:\Users\Administrator\Desktop'
+            'id' => 4,
+            'style' => '中国风',
+            'theme' => '传统东西',
+            'intro' => '你城山',
+            'picture' => 'C:\Users\Administrator\Desktop'
         ];
-        $style =  new Style();
+        $style = new Style();
         $style_edit = $style->findOne($data['id']);
         $style_edit->style = $data['style'];
         $style_edit->theme = $data['theme'];
         $style_edit->intro = $data['intro'];
-        if (!$style_edit->validate())
-        {
+        if (!$style_edit->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$style_edit->save())
-        {
+        if (!$style_edit->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -4183,18 +4172,16 @@ class MallController extends Controller
         }
 
         $style_picture = new StylePicture();
-        $style_picture_edit = $style_picture->find()->asArray()->where(['style_id'=>$data['id']])->one();
+        $style_picture_edit = $style_picture->find()->asArray()->where(['style_id' => $data['id']])->one();
         $style_picture_edit->picture = FileService::upload();
-        if (!$style_picture_edit->validate())
-        {
+        if (!$style_picture_edit->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$style_picture_edit->save())
-        {
+        if (!$style_picture_edit->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -4213,22 +4200,20 @@ class MallController extends Controller
 //        $post = Yii::$app->request->post();
 //        $data = Json::decode($post);
         $data = [
-            'id'=>4,
-            'status'=>'0',
+            'id' => 4,
+            'status' => '0',
         ];
-        $series =  new Style();
+        $series = new Style();
         $series_edit = $series->findOne($data['id']);
         $series_edit->status = $data['status'];
-        if (!$series_edit->validate())
-        {
+        if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if (!$series_edit->save())
-        {
+        if (!$series_edit->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -4446,5 +4431,41 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK'
         ]);
+    }
+
+    /**
+     * Recommend index action(supplier admin)
+     *
+     * @return string
+     */
+    public function actionRecommendAdminIndexSupplier()
+    {
+        $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
+        if (!in_array($type, GoodsRecommendSupplier::$types)) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend_admin_index' => [
+                    'details' => []
+                ]
+            ],
+        ];
+
+        $where = 'delete_time = 0 and type = ' . $type;
+
+        $ret['data']['recommend_admin_index_supplier']['details'] = GoodsRecommendSupplier::pagination(
+            $where,
+            GoodsRecommendSupplier::$adminFields,
+            1,
+            GoodsRecommendSupplier::PAGE_SIZE_DEFAULT_ADMIN_INDEX);
+        return Json::encode($ret);
     }
 }

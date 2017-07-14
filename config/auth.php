@@ -24,6 +24,7 @@ return [
     'recommend-edit-supplier' => [6],
     'recommend-delete-supplier' => [6],
     'recommend-delete-batch-supplier' => [6],
+    'recommend-admin-index-supplier' => [6],
 
     // category
     'category-review' => [1],
