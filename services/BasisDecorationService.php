@@ -1322,6 +1322,11 @@ class BasisDecorationService
         return $all;
     }
 
+    /**
+     * 杂工利润率最大
+     * @param $goods
+     * @return array
+     */
     public static function handymanMax($goods)
     {
         foreach ($goods as $one_goods)
@@ -1363,5 +1368,13 @@ class BasisDecorationService
         $all [] = $air_brick[$max];
 
         return $all;
+    }
+
+    public static function profitMarginMax($goods)
+    {var_dump($goods);exit;
+        foreach ($goods as $one_goods)
+        {
+            var_dump($one_goods);exit;
+        }
     }
 }

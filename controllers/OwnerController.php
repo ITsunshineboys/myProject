@@ -1590,15 +1590,27 @@ class OwnerController extends Controller
     {
 //        $post = Yii::$app->request->post();
         $post = [
-            'area' => 60,
-            'window' => 8,
-        ];
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>1,
+            'style'=>1,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+            'waterproof_total_area' => 60,
+            ];
         $material = '主材';
         $material_property_classify = MaterialPropertyClassify::findByAll($material);
         $goods = Goods::categoryById($material_property_classify);
-        foreach ($goods as &$one_goods)
+        $goods_price = BasisDecorationService::profitMax($goods,$material);
+        foreach ($goods_price as &$one_goods)
         {
-            foreach ($material_property_classify as $quantity) {
+            foreach ($material_property_classify as $quantity)
+            {
                 if ($one_goods['title'] == $quantity['material'])
                 {
                     $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
@@ -1660,7 +1672,7 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'goods' => $goods,
+                'goods' => $goods_price,
             ]
         ]);
     }
