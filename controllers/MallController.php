@@ -54,6 +54,7 @@ class MallController extends Controller
         'recommend-add-supplier',
         'recommend-edit-supplier',
         'recommend-delete-supplier',
+        'recommend-delete-batch-supplier',
         'category-review',
         'categories-admin',
         'category-admin',
@@ -145,6 +146,10 @@ class MallController extends Controller
                     'recommend-status-toggle' => ['post',],
                     'recommend-click-record' => ['post',],
                     'recommend-disable-batch' => ['post',],
+                    'recommend-add-supplier' => ['post',],
+                    'recommend-edit-supplier' => ['post',],
+                    'recommend-delete-supplier' => ['post',],
+                    'recommend-delete-batch-supplier' => ['post',],
                     'category-review' => ['post',],
                     'category-add' => ['post',],
                     'category-edit' => ['post',],
@@ -176,7 +181,6 @@ class MallController extends Controller
                     'goods-inventory-reset' => ['post',],
                     'supplier-add' => ['post',],
                     'supplier-icon-reset' => ['post',],
-                    'recommend-add-supplier' => ['post',],
                 ],
             ],
         ];
@@ -4380,6 +4384,57 @@ class MallController extends Controller
 
         $recommend->delete_time = time();
         if (!$recommend->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Supplier delete recommend records in batches action.
+     *
+     * @return string
+     */
+    public function actionRecommendDeleteBatchSupplier()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $code = 1000;
+
+        if (!$ids) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $canDelete = GoodsRecommendSupplier::canDelete($ids);
+        if (false === $canDelete) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        } elseif (-1 === $canDelete) {
+            $code = 1003;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = 'id in(' . $ids . ')';
+        if (!GoodsRecommendSupplier::updateAll([
+            'delete_time' => time()
+        ], $where)
+        ) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
