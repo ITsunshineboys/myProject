@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\services\ExceptionHandleService;
 use app\models\Supplier;
+use app\models\Goods;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -152,5 +153,62 @@ class SupplierController extends Controller
                 'supplier-view' => $supplier->view(),
             ],
         ]);
+    }
+
+    /**
+     * Get supplier goods action.
+     *
+     * @return string
+     */
+    public function actionGoods()
+    {
+        $code = 1000;
+
+        $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
+        if (!$supplierId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $sort = Yii::$app->request->get('sort', []);
+        if ($sort) {
+            foreach ($sort as &$v) {
+                if (stripos($v, 'sold_number') !== false) {
+                    $v = 'sold_number:' . SORT_DESC;
+                    break;
+                }
+            }
+
+            $model = new Goods;
+            $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+            if ($orderBy === false) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier_goods' => [],
+            ],
+        ];
+
+        $where = "supplier_id = {$supplierId} and status = " . Goods::STATUS_ONLINE;
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
+        $select = Goods::CATEGORY_GOODS_APP;
+
+        $supplierGoods = $sort
+            ? Goods::pagination($where, $select, $page, $size, $orderBy)
+            : Goods::pagination($where, $select, $page, $size);
+        $ret['data']['supplier_goods'] = $supplierGoods;
+        return Json::encode($ret);
     }
 }
