@@ -216,10 +216,10 @@ class GoodsRecommend extends ActiveRecord
      * @access private
      * @param int $districtCode district code
      * @param array $select select fields default all fields
-     * @param array $orderBy order by fields default sorting_number asc
+     * @param array $orderBy order by fields default id desc
      * @return array
      */
-    private static function _carousel($districtCode, $select = [], $orderBy = ['sorting_number' => SORT_ASC])
+    private static function _carousel($districtCode, $select = [], $orderBy = ['id' => SORT_DESC])
     {
         return self::find()
             ->select($select)
@@ -228,6 +228,7 @@ class GoodsRecommend extends ActiveRecord
                 'status' => self::STATUS_ONLINE,
                 'district_code' => $districtCode])
             ->orderBy($orderBy)
+            ->limit(Yii::$app->params['carouselMaxNumber'])
             ->all();
     }
 
