@@ -46,7 +46,6 @@ class MallController extends Controller
         'recommend-status-toggle',
         'recommend-history',
         'recommend-second-admin',
-        'recommend-by-sku',
         'recommend-add',
         'recommend-edit',
         'recommend-sort',
@@ -97,6 +96,7 @@ class MallController extends Controller
         'goods-list-admin',
         'goods-inventory-reset',
 //        'goods-images',
+        'goods-by-sku',
         'supplier-add',
         'check-role-get-identity',
         'supplier-icon-reset',
@@ -104,6 +104,7 @@ class MallController extends Controller
         'shop-data',
         'supplier-index-admin',
         'index-admin',
+        'recommend-add-supplier',
     ];
 
     /**
@@ -172,6 +173,7 @@ class MallController extends Controller
                     'goods-inventory-reset' => ['post',],
                     'supplier-add' => ['post',],
                     'supplier-icon-reset' => ['post',],
+                    'recommend-add-supplier' => ['post',],
                 ],
             ],
         ];
@@ -771,11 +773,11 @@ class MallController extends Controller
     }
 
     /**
-     * Get recommend by sku action
+     * Get goods by sku action
      *
      * @return string
      */
-    public function actionRecommendBySku()
+    public function actionGoodsBySku()
     {
         $code = 1000;
 
@@ -4228,5 +4230,50 @@ class MallController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
+    }
+
+    /**
+     * Supplier add recommend action
+     *
+     * @return string
+     */
+    public function actionRecommendAddSupplier()
+    {
+        $recommend = new GoodsRecommendSupplier;
+        $recommend->attributes = Yii::$app->request->post();
+        if (isset($recommend->district_code)) {
+            unset($recommend->district_code);
+        }
+
+        $code = 1000;
+
+        $recommend->scenario = GoodsRecommendSupplier::SCENARIO_ADD;
+        if (!$recommend->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($recommend->sku) {
+            $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
+            $supplier = Supplier::findOne($goods->supplier_id);
+            $recommend->supplier_id = $supplier->id;
+            $recommend->supplier_name = $supplier->nickname;
+            $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
+        }
+
+        if (!$recommend->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
     }
 }

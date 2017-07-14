@@ -20,6 +20,7 @@ return [
     'recommend-edit' => [1],
     'recommend-sort' => [1],
 //    'recommend-click-record',
+    'recommend-add-supplier' => [6],
 
     // category
     'category-review' => [1],
