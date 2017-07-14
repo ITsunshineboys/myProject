@@ -366,4 +366,21 @@ class GoodsAttr extends ActiveRecord
         return $standard;
     }
 
+    public static function goodsIdUnit($goods)
+    {
+        if ($goods)
+        {
+            $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
+            $standard = self::find()
+                ->asArray()
+                ->select($select)
+                ->where(['goods_id'=>$goods['id']])
+                ->all();
+        }else
+        {
+            $standard = null;
+        }
+        return $standard;
+    }
+
 }

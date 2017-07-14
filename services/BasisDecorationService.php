@@ -1117,7 +1117,7 @@ class BasisDecorationService
      * @param array $goods
      * @return mixed
      */
-    public static function woodFloorCost($bedroom_area = [],$area = '',$goods = [])
+    public static function woodFloorCost($bedroom_area,$area,$goods,$nature)
     {
         if ($bedroom_area && $area && $goods)
         {
@@ -1129,8 +1129,20 @@ class BasisDecorationService
 //        木地板面积=卧室地面积
             $wood_floor_area =  $bedroom;
 
+            foreach ($nature as $one_nature)
+            {
+                if ($one_nature['name'] == '长度' )
+                {
+                    $length = $one_nature['value'] / 1000;
+                }
+                if ($one_nature['name'] == '长度' )
+                {
+                    $wide = $one_nature['value'] / 1000;
+                }
+            }
+            $wood_floor_area_1 = $length * $wide;
             //        个数：（木地板面积÷抓取木地板面积）
-            $wood_floor['quantity'] = ceil($wood_floor_area / $goods['value']);
+            $wood_floor['quantity'] = ceil($wood_floor_area / $wood_floor_area_1);
             //        木地板费用：个数×抓取的商品价格
             $wood_floor['cost'] = $wood_floor['quantity'] * $goods['platform_price'];
         }
@@ -1143,7 +1155,7 @@ class BasisDecorationService
      * @param array $goods
      * @return mixed
      */
-    public static function marbleCost($post = '',$goods =[])
+    public static function marbleCost($post,$goods)
     {
         if ($post && $goods)
         {
@@ -1371,10 +1383,17 @@ class BasisDecorationService
     }
 
     public static function profitMarginMax($goods)
-    {var_dump($goods);exit;
-        foreach ($goods as $one_goods)
+    {
+        if ($goods)
         {
-            var_dump($one_goods);exit;
+            foreach ($goods as $one_goods)
+            {
+                $profit [] = $one_goods['profit'];
+                $max = array_search(max($profit),$profit);
+                $profit_margin [] = $one_goods;
+            }
+            $goods_price = $profit_margin[$max];
+            return $goods_price;
         }
     }
 }

@@ -356,7 +356,7 @@ class Goods extends ActiveRecord
         } else {
             $str = implode('\',\'', $title);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.name,goods_attr.value,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`level` = " . $level . " AND goods_category.title in ('" . $str . "')";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`level` = " . $level . " AND goods_category.title in ('" . $str . "')";
             $all = $db->createCommand($sql)->queryAll();
         }
         return $all;
@@ -408,7 +408,7 @@ class Goods extends ActiveRecord
             }
             $id = implode(',', $goods_id);
             $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.name,goods_attr.value,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
 AND goods.id IN (" . $id . ")";
             $all_goods = $db->createCommand($sql)->queryAll();
         }
@@ -419,25 +419,15 @@ AND goods.id IN (" . $id . ")";
     {
         if ($all) {
             $material = [];
-            foreach ($all as $one) {
+            foreach ($all as $one)
+            {
                 $material [] = $one['material'];
             }
             $id = implode('\',\'', $material);
             $db = Yii::$app->db;
             $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_brand.name,goods_category.title,logistics_district.district_name,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.title in ('" . $id . "')";
             $all_goods = $db->createCommand($sql)->queryAll();
-            $all = [];
-            foreach ($all_goods as $k) {
-                foreach ($material as $one_material) {
-                    if ($k['title'] == $one_material) {
-                        $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
-                        $max = array_search(max($c), $c);
-                        $all [] = $all_goods[$max];
-
-                    }
-                }
-            }
-            return $all;
+            return $all_goods;
         }
     }
 
