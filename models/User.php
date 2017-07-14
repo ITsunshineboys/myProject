@@ -409,7 +409,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function afterLogin($roleId = 0)
     {
         $this->login_time = time();
-        $this->login_role_id = $roleId;
+        $roleId && $this->login_role_id = $roleId;
 
         $sessionId = Yii::$app->session->id;
         if ($roleId) {
