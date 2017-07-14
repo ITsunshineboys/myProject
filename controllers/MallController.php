@@ -200,11 +200,13 @@ class MallController extends Controller
      */
     public function actionCarousel()
     {
+        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'carousel' => GoodsRecommend::carousel(),
+                'carousel' => GoodsRecommend::carousel($districtCode),
             ],
         ]);
     }
@@ -232,6 +234,7 @@ class MallController extends Controller
      */
     public function actionRecommendSecond()
     {
+        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT);
 
@@ -239,7 +242,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'recommend_second' => GoodsRecommend::second($page, $size),
+                'recommend_second' => GoodsRecommend::second($districtCode, $page, $size),
             ],
         ]);
     }
@@ -320,8 +323,9 @@ class MallController extends Controller
      */
     public function actionCategoryGoods()
     {
-        $categoryId = (int)Yii::$app->request->get('category_id', 0);
         $code = 1000;
+
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
         if (!$categoryId) {
             return Json::encode([
                 'code' => $code,
@@ -348,6 +352,20 @@ class MallController extends Controller
             }
         }
 
+        $ret = [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category_goods' => [],
+            ],
+        ];
+
+        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
+        $goodsIds = Goods::findIdsByDistrictCode($districtCode);
+        if (!$goodsIds) {
+            return Json::encode($ret);
+        }
+
         $platformPriceMin = (int)Yii::$app->request->get('platform_price_min', 0);
         $platformPriceMax = (int)Yii::$app->request->get('platform_price_max', 0);
         $brandId = (int)Yii::$app->request->get('brand_id', 0);
@@ -361,19 +379,17 @@ class MallController extends Controller
         $styleId && $where .= " and style_id = {$styleId}";
         $seriesId && $where .= " and series_id = {$seriesId}";
 
+        $where .= ' and id in(' . implode(',', $goodsIds) . ')';
+
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', Goods::PAGE_SIZE_DEFAULT);
         $select = Goods::CATEGORY_GOODS_APP;
+
         $categoryGoods = $sort
             ? Goods::pagination($where, $select, $page, $size, $orderBy)
             : Goods::pagination($where, $select, $page, $size);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'category_goods' => $categoryGoods,
-            ],
-        ]);
+        $ret['data']['category_goods'] = $categoryGoods;
+        return Json::encode($ret);
     }
 
     /**

@@ -85,9 +85,9 @@ class BasisDecorationService
             $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
             //线管费用计算
             $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
-            $electricity['bottom_case'] = $points * $bottom_case;
+            $electricity['bottom_cost'] = $points * $bottom_case;
             //总费用
-            $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_case'];
+            $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
         }
      return  $electricity;
     }
@@ -103,34 +103,28 @@ class BasisDecorationService
     {
         if ($points && $goods)
        {
-            $pvc_value = 0;
-            $pvc_price = 0;
-            $ppr_value = 0;
-            $ppr_price = 0;
             foreach ($goods as $one)
             {
-                if($one['title'] == 'PVC')
+                if($one['title'] == 'PVC管')
                 {
                     $pvc_value = $one['value'];
                     $pvc_price = $one['platform_price'];
                 }
-                if($one['title'] == 'PPR')
+                if($one['title'] == 'PPR水管')
                 {
                     $ppr_value = $one['value'];
                     $ppr_price = $one['platform_price'];
                 }
 
             }
-            $ppr = 0;
-            $pvc = 0;
+
             foreach ($crafts as $craft)
             {
-                if($craft['project_details'] == 'PPR')
+                if($craft['project_details'] == 'PPR水管')
                 {
                     $ppr = $craft['material'];
                 }
-
-                if($craft['project_details'] == 'PVC')
+                if($craft['project_details'] == 'PVC管')
                 {
                     $pvc =  $craft['material'];
                 }
@@ -139,15 +133,8 @@ class BasisDecorationService
 //            个数：（水路总点位×【2m】÷抓取的商品的长度）
 //            PVC费用：个数×抓取的商品价格
 //            个数：（水路总点位×【2m】÷抓取的商品的长度）
-            if ($points == 0 || $ppr == 0 || $ppr_value == 0 || $pvc == 0 || $pvc_value == 0)
-            {
-                $waterway['ppr_quantity'] = 0;
-                $waterway['pvc_quantity'] = 0;
-            }else
-            {
-                $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
-                $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
-            }
+            $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
+            $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
 
             $waterway['ppr_cost'] = $waterway['ppr_quantity'] * $ppr_price;
             //PPR费用
@@ -582,12 +569,12 @@ class BasisDecorationService
      * @param int $video_wall
      * @return float
      */
-    public static function carpentryPlasterboardCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '',$video_wall = 1)
+    public static function carpentryPlasterboardCost($modelling_length = '',$flat_area = '',$goods,$crafts = '',$video_wall = 1)
     {
         if(!empty($modelling_length) && !empty($flat_area)){
             $plasterboard = [];
             foreach ($goods as $goods_price ){
-                if($goods_price['name'] == '石膏板'){
+                if($goods_price['title'] == '石膏板'){
                     $plasterboard = $goods_price;
                 }else
                 {
@@ -627,16 +614,14 @@ class BasisDecorationService
     public static function carpentryKeelCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '')
     {
         if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods)){
-            $goods_price = [];
             foreach ($goods as $price)
             {
-                if($price['name'] == '龙骨'){
-                    $goods_price = $price;
-                }else
+                if($price['title'] == '龙骨')
                 {
-                    $goods_price = null;
+                    $goods_price = $price;
                 }
             }
+
             $plasterboard_material = 0;
             foreach ($crafts as $craft){
                 if($craft['project_details'] == '龙骨'){
@@ -671,15 +656,12 @@ class BasisDecorationService
      */
     public static function carpentryPoleCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '')
     {
-        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)){
-            $goods_price = [];
+        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods))
+        {
             foreach ($goods as $price)
             {
-                if($price['name'] == '丝杆'){
+                if($price['title'] == '丝杆'){
                     $goods_price = $price;
-                }else
-                {
-                    $goods_price = 0;
                 }
             }
             $plasterboard_material = 0;
@@ -1174,7 +1156,7 @@ class BasisDecorationService
     }
 
     /**
-     * 利润率最大的计算公式
+     * 利润率计算公式
      * @param $material
      * @param $name
      * @return array
@@ -1196,5 +1178,19 @@ class BasisDecorationService
 
           return $goods_profit;
         }
+    }
+
+    public static function goodsProfitMax($goods,$sign)
+    {
+        if ($goods  && $sign)
+        {
+            foreach ($sign as $one_sign)
+            foreach ($goods as $one_goods)
+            {
+                if ($one_goods['title'] == 11)
+                var_dump($one_goods);exit;
+            }
+        }
+//        return $goods_max;
     }
 }

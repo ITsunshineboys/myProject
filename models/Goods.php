@@ -80,14 +80,6 @@ class Goods extends ActiveRecord
     ];
 
     /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'goods';
-    }
-
-    /**
      * Get goods list by category id
      *
      * @param  int $categoryId category id
@@ -356,16 +348,15 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level = '', $title, $city = 510100)
+    public static function priceDetail($level, $title, $city = 510100)
     {
         if (empty($level) && empty($title)) {
             echo '请正确输入值';
             exit;
-        } else
-        {
-            $str = implode('\',\'',$title);
+        } else {
+            $str = implode('\',\'', $title);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.name,goods_attr.value,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`level` = " . $level . " AND goods_category.title in ('". $str ."')";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.name,goods_attr.value,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`level` = " . $level . " AND goods_category.title in ('" . $str . "')";
             $all = $db->createCommand($sql)->queryAll();
         }
         return $all;
@@ -373,8 +364,7 @@ class Goods extends ActiveRecord
 
     public static function newMaterialAdd($level = '', $title = '', $city = 510100)
     {
-        if (empty($level) && empty($title))
-        {
+        if (empty($level) && empty($title)) {
             echo '请正确输入值';
             exit;
         } else {
@@ -418,7 +408,7 @@ class Goods extends ActiveRecord
             }
             $id = implode(',', $goods_id);
             $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.name,goods_attr.value,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
 AND goods.id IN (" . $id . ")";
             $all_goods = $db->createCommand($sql)->queryAll();
         }
@@ -427,24 +417,19 @@ AND goods.id IN (" . $id . ")";
 
     public static function categoryById($all = [], $city = 510100)
     {
-        if ($all)
-        {
+        if ($all) {
             $material = [];
-            foreach ($all as $one)
-            {
+            foreach ($all as $one) {
                 $material [] = $one['material'];
             }
             $id = implode('\',\'', $material);
             $db = Yii::$app->db;
             $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods_attr. name,goods_attr.value,goods_brand. name,goods_category.title,logistics_district.district_name,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_attr ON goods_attr.goods_id = goods.id LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.title in ('" . $id . "')";
             $all_goods = $db->createCommand($sql)->queryAll();
-            $all  = [];
-            foreach ($all_goods as $k)
-            {
-                foreach ($material as $one_material)
-                {
-                    if ($k['title'] == $one_material)
-                    {
+            $all = [];
+            foreach ($all_goods as $k) {
+                foreach ($material as $one_material) {
+                    if ($k['title'] == $one_material) {
                         $c [] = ($k['platform_price'] - $k['supplier_price']) / $k['supplier_price'];
                         $max = array_search(max($c), $c);
                         $all [] = $all_goods[$max];
@@ -555,6 +540,37 @@ AND goods.id IN (" . $id . ")";
             return false;
         }
         return self::findone($sku);
+    }
+
+    /**
+     * Get goods ids by district code
+     *
+     * @param int $districtCode district code
+     * @return array
+     */
+    public static function findIdsByDistrictCode($districtCode)
+    {
+        if (false === StringService::checkDistrict($districtCode)) {
+            return [];
+        }
+
+        $goodsTbl = self::tableName();
+        $logisticsDistrictTbl = LogisticsDistrict::tableName();
+        $sql = "select g.id from {$goodsTbl} g";
+        $sql .= ", (select template_id from {$logisticsDistrictTbl} ld where ld.district_code = {$districtCode}) tmp";
+        $sql .= ' where g.logistics_template_id = tmp.template_id';
+
+        return array_unique(Yii::$app->db
+            ->createCommand($sql)
+            ->queryColumn());
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'goods';
     }
 
     /**

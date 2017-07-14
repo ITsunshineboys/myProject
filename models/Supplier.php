@@ -71,11 +71,24 @@ class Supplier extends ActiveRecord
         'licence',
         'licence_image',
     ];
+    const FIELDS_VIEW_MALL_MODEL = [
+        'icon',
+        'shop_name',
+        'follower_number',
+        'create_time',
+        'comprehensive_score',
+        'store_service_score',
+        'logistics_speed_score',
+        'delivery_service_score',
+        'quality_guarantee_deposit',
+    ];
     const FIELDS_VIEW_APP_EXTRA = [
         'legal_person',
         'identity_no',
         'identity_card_front_image',
         'identity_card_back_image',
+    ];
+    const FIELDS_VIEW_MALL_EXTRA = [
     ];
 
     /**
@@ -331,6 +344,21 @@ class Supplier extends ActiveRecord
         $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_APP_MODEL);
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_APP_EXTRA))
+            : $modelData;
+        $this->_formatData($viewData);
+        return $viewData;
+    }
+
+    /**
+     * Get certification view data
+     *
+     * @return array
+     */
+    public function view()
+    {
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_MALL_MODEL);
+        $viewData = $modelData
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_MALL_EXTRA))
             : $modelData;
         $this->_formatData($viewData);
         return $viewData;

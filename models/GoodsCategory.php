@@ -840,36 +840,18 @@ class GoodsCategory extends ActiveRecord
      * @param $goods
      * @return array|ActiveRecord[]
      */
-    public static function findPath($goods)
+    public static function findLevel($level)
     {
-        if ($goods)
+        if ($level)
         {
-            $id = [];
-            foreach ($goods as $one_goods)
-            {
-                $id []= $one_goods['category_id'];
-            }
-
-            $select = "	goods_category.path";
-            $path = self::find()
+            $select = "	goods_category.title,goods_category.id";
+            $all = self::find()
                     ->asArray()
                     ->select($select)
-                    ->where(['in','id',$id])
+                    ->where(['in','level',$level])
                     ->all();
-        }
-        return $path;
-    }
-
-    public static function findPathCategory($path)
-    {
-        if ($path)
-        {
-            $ids = implode($path);
-            $id = substr($ids,0,7);
-            $db = Yii::$app->db;
-            $sql = "SELECT goods_category.title FROM goods_category WHERE id IN (".$id.")";
-            $all = $db->createCommand($sql)->queryAll();
         }
         return $all;
     }
+
 }

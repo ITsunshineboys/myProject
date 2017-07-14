@@ -136,30 +136,32 @@ class GoodsRecommend extends ActiveRecord
     /**
      * Get recommended goods for type second
      *
+     * @param int $districtCode district code
      * @param int $page page default 1
      * @param int $size page size default 12
      * @return array
      */
-    public static function second($page = 1, $size = self::PAGE_SIZE_DEFAULT)
+    public static function second($districtCode, $page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
         $page <= 0 && $page = 1;
         $size <= 0 && $size = self::PAGE_SIZE_DEFAULT;
         $offset = ($page - 1) * $size;
-        return array_slice(self::secondAll(), $offset, $size);
+        return array_slice(self::secondAll($districtCode), $offset, $size);
     }
 
     /**
      * Get all recommended goods for type second
      *
+     * @param int $districtCode district code
      * @return array
      */
-    public static function secondAll()
+    public static function secondAll($districtCode)
     {
         $key = self::CACHE_KEY_SECOND;
         $cache = Yii::$app->cache;
         $recommendGoods = $cache->get($key);
         if (!$recommendGoods) {
-            $recommendGoods = self::_secondAll(self::$appFields);
+            $recommendGoods = self::_secondAll($districtCode, self::$appFields);
             if ($recommendGoods) {
                 $cache->set($key, $recommendGoods);
             }
@@ -172,26 +174,34 @@ class GoodsRecommend extends ActiveRecord
      * Get all recommended goods for type second
      *
      * @access private
-     * @param  array $select select fields default all fields
+     * @param int $districtCode district code
+     * @param array $select select fields default all fields
      * @return array
      */
-    private static function _secondAll($select = [])
+    private static function _secondAll($districtCode, $select = [])
     {
-        return self::find()->select($select)->where(['type' => self::RECOMMEND_GOODS_TYPE_SECOND, 'status' => self::STATUS_ONLINE])->all();
+        return self::find()
+            ->select($select)
+            ->where([
+                'type' => self::RECOMMEND_GOODS_TYPE_SECOND,
+                'status' => self::STATUS_ONLINE,
+                'district_code' => $districtCode])
+            ->all();
     }
 
     /**
      * Get carousel
      *
+     * @param int $districtCode district code
      * @return array
      */
-    public static function carousel()
+    public static function carousel($districtCode)
     {
         $key = self::CACHE_KEY_CAROUSEL;
         $cache = Yii::$app->cache;
         $recommendGoods = $cache->get($key);
         if (!$recommendGoods) {
-            $recommendGoods = self::_carousel(self::$appFields);
+            $recommendGoods = self::_carousel($districtCode, self::$appFields);
             if ($recommendGoods) {
                 $cache->set($key, $recommendGoods);
             }
@@ -204,13 +214,21 @@ class GoodsRecommend extends ActiveRecord
      * Get carousel
      *
      * @access private
-     * @param  array $select select fields default all fields
-     * @param  array $orderBy order by fields default sorting_number asc
+     * @param int $districtCode district code
+     * @param array $select select fields default all fields
+     * @param array $orderBy order by fields default sorting_number asc
      * @return array
      */
-    private static function _carousel($select = [], $orderBy = ['sorting_number' => SORT_ASC])
+    private static function _carousel($districtCode, $select = [], $orderBy = ['sorting_number' => SORT_ASC])
     {
-        return self::find()->select($select)->where(['type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL, 'status' => self::STATUS_ONLINE])->orderBy($orderBy)->all();
+        return self::find()
+            ->select($select)
+            ->where([
+                'type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL,
+                'status' => self::STATUS_ONLINE,
+                'district_code' => $districtCode])
+            ->orderBy($orderBy)
+            ->all();
     }
 
     /**

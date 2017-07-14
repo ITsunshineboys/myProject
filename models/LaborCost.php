@@ -39,7 +39,7 @@ class LaborCost extends ActiveRecord
      * @param string $rank
      * @return array|ActiveRecord[]
      */
-    public static function univalence($arr = [],$jobs= '',$rank = '白银')
+    public static function univalence($arr,$jobs,$rank = '白银')
     {
         if(!$arr == null && !$jobs == null) {
             $province = $arr['province'] ?: 510000;

@@ -108,4 +108,5 @@ return [
     'supplier' => [
         'offline_reason' => '闭店下架',
     ],
+    'district_default' => 510100, // 成都
 ];
