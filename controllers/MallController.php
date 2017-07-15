@@ -4359,13 +4359,13 @@ class MallController extends Controller
             ]);
         }
 
-        if ($recommend->status != GoodsRecommendSupplier::STATUS_OFFLINE) {
-            $code = 1003;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+//        if ($recommend->status != GoodsRecommendSupplier::STATUS_OFFLINE) {
+//            $code = 1003;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code],
+//            ]);
+//        }
 
         $recommend->delete_time = time();
         if (!$recommend->save()) {

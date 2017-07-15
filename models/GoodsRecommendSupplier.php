@@ -661,6 +661,7 @@ class GoodsRecommendSupplier extends ActiveRecord
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->create_time = time();
+                $this->status = self::STATUS_ONLINE;
             }
             return true;
         } else {
