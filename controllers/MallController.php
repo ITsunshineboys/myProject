@@ -4470,4 +4470,23 @@ class MallController extends Controller
             GoodsRecommendSupplier::PAGE_SIZE_DEFAULT_ADMIN_INDEX);
         return Json::encode($ret);
     }
+
+    /**
+     * Supplier sort recommend action
+     *
+     * @return string
+     */
+    public function actionRecommendSortSupplier()
+    {
+        $ids = trim(Yii::$app->request->post('ids', ''));
+        $ids = trim($ids, ',');
+
+        $idArr = explode(',', $ids);
+        $code = GoodsRecommendSupplier::sort($idArr);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 200 == $code ? 'OK' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
 }
