@@ -113,4 +113,17 @@ class ModelService
 
         return $viewData;
     }
+
+    /**
+     * Check if some attribute value has been updated
+     *
+     * @param array $attrs attributes to be checked
+     * @param $model model
+     * @return bool
+     */
+    public static function hasChangedAttr(array $attrs, $model)
+    {
+        return count(array_intersect($attrs, $model->getDirtyAttributes()))
+            != count($attrs);
+    }
 }

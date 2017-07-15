@@ -9,6 +9,7 @@
 namespace app\models;
 
 use app\services\StringService;
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\HtmlPurifier;
@@ -29,6 +30,10 @@ class Goods extends ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
     const PROFIT_RATE_PRECISION = 100000;
+    const PROFIT_RATE_ATTRS = [
+        'supplier_price',
+        'platform_price',
+    ];
     const EXCEPT_FIELDS_WHEN_CHANGE_ONLINE_TO_WAIT = [
         'left_number',
     ];
@@ -1024,9 +1029,7 @@ AND goods.id IN (" . $id . ")";
                     $this->setProfitRate();
                 }
             } else {
-                if ($this->isAttributeChanged('supplier_price')
-                    || $this->isAttributeChanged('platform_price')
-                ) {
+                if (ModelService::hasChangedAttr(self::PROFIT_RATE_ATTRS, $this)) {
                     $this->setProfitRate();
                 }
             }
