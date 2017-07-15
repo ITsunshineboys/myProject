@@ -200,21 +200,30 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-        $post = \Yii::$app->request->post();
-        $arr['worker_kind'] = '电工';
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>60,
+            'style'=>60,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
 
         //人工价格
-        $workers = LaborCost::univalence($post, $arr['worker_kind']);
-        foreach ($workers as $worker) {
-            if ($worker['worker_kind_details'] == '弱电')
-            {
-                $Weak_labor = $worker;
-            }
-        }
+        $workers = LaborCost::profession($post,'弱电');
+
         //点位查询
-        if (!empty($post['effect_id'])) {
+        if (!empty($post['effect_id']))
+        {
             $weak_points = Points::weakPoints($post['effect_id']);
-        } else {
+        } else
+            {
             $weak_points = 0;
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::find()->where(['effect_id' => $effect['id']])->all();
@@ -224,7 +233,6 @@ class OwnerController extends Controller
                     $weak_current_points [] = $one['weak_current_points'];
                 }
             }
-
             $weak_current_all = array_combine($weak_current_place, $weak_current_points);
             $sitting_room = $weak_current_all['客厅'] * $post['hall'];
             $master_bedroom = $weak_current_all['主卧'] * 1;
@@ -232,24 +240,27 @@ class OwnerController extends Controller
             $weak_points = $sitting_room + $master_bedroom + $secondary_bedroom;
         }
 
-        if (empty($post['effect_id'])) {
+        if (empty($post['effect_id']))
+        {
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-            $weak_current = BasisDecorationService::profitMax($goods,$material);
-        } else {
+            $unit = GoodsAttr::findByGoodsIdUnit($goods);
+            $weak_current = BasisDecorationService::priceConversion($goods);
+        } else
+        {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
-            $weak_current = Goods::findQueryAll($weak, $post['city']);
+            $goods = Goods::findQueryAll($weak, $post['city']);
+            $weak_current = BasisDecorationService::priceConversion($goods);
         }
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
 
         //人工总费用
-        $labor_all_cost = BasisDecorationService::laborFormula($weak_points,$Weak_labor);
-
+        $labor_all_cost = BasisDecorationService::laborFormula($weak_points,$workers);
         //材料总费用
-        $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
+        $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft,$unit);
         $material = [];
         foreach ($weak_current as $one_weak_current)
         {
@@ -1752,6 +1763,8 @@ class OwnerController extends Controller
         $post = [
 //            'effect_id' => 1,
             'bedroom' => 2,
+            'stairway_id'=>1,
+            'stairs' =>'实木构造'
         ];
         $classify = '固定家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
@@ -1767,15 +1780,6 @@ class OwnerController extends Controller
                 if ($one_goods['title'] == '衣柜') {
                     $one_goods['show_price'] = $one_goods['platform_price'] * $post['bedroom'];
                     $one_goods['show_quantity'] = $post['bedroom'];
-                }
-
-                if ($one_goods['title'] == '楼梯') {
-                    if ($post['stairway_id'] >= 1) {
-                        $one_goods['show_price'] = $one_goods['platform_price'] * 1;
-                        $one_goods['show_quantity'] = 1;
-                    } else {
-                        $one_goods = NULL;
-                    }
                 }
             }
         }

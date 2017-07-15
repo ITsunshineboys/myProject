@@ -362,7 +362,7 @@ class Goods extends ActiveRecord
         } else {
             $str = implode('\',\'', $title);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`level` = " . $level . " AND goods_category.title in ('" . $str . "')";
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path,goods.profit_rate,goods.subtitle FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND goods_category.`level` = " . $level . " AND goods_category.title in ('" . $str . "') AND goods.profit_rate = (SELECT MAX(goods.profit_rate))";
             $all = $db->createCommand($sql)->queryAll();
         }
         return $all;
@@ -425,7 +425,8 @@ AND goods.id IN (" . $id . ")";
     {
         if ($all) {
             $material = [];
-            foreach ($all as $one) {
+            foreach ($all as $one)
+            {
                 $material [] = $one['material'];
             }
             $id = implode('\',\'', $material);

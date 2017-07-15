@@ -52,5 +52,24 @@ class LaborCost extends ActiveRecord
         }
         return $labors;
     }
+
+    /**
+     * 根据工种类型查询
+     * @param $arr
+     * @param $craft
+     * @param string $rank
+     * @return array|null|ActiveRecord
+     */
+    public static function profession($arr,$craft,$rank = '白银')
+    {
+        if ($arr && $craft)
+        {
+           $labors = self::find()
+               ->asArray()
+               ->where(['and',['city_code' => $arr['city']],['worker_kind_details'=>$craft],['rank'=>$rank]])
+               ->one();
+        }
+        return $labors;
+    }
 }
 

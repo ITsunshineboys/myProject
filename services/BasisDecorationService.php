@@ -33,14 +33,13 @@ class BasisDecorationService
      * @param string $crafts
      * @return mixed
      */
-    public static function quantity($points,$goods,$crafts)
+    public static function quantity($points,$goods,$crafts,$unit)
     {
         if($goods && $points)
         {
             foreach ($crafts as $craft){
                 if($craft['project_details'] == '网线' || $craft['project_details'] == '电线'){
                     $material = $craft['material'];
-
                 }
 
                 if($craft['project_details'] == '线管'){
@@ -51,14 +50,10 @@ class BasisDecorationService
             {
                 if($one['title'] == '网线' || $one['title'] == '电线' )
                 {
-                    $goods_value = $one['value'];
                     $goods_price = $one['platform_price'];
                 }
 
-//                线管费用：个数3×抓取的商品价格
-//                个数3：（电路总点位×【10m】÷抓取的商品的长度）
                 if($one['title'] == '线管'){
-                    $spool_value = $one['value'];;
                     $spool_price = $one['platform_price'];
                 }
 
@@ -66,26 +61,29 @@ class BasisDecorationService
                     $bottom_case = $one['platform_price'];
                 }
             }
-
-            if ($points == 0 || $material == 0 || $goods_value == 0 )
+            foreach ($unit as $one_unit)
             {
-                $electricity['wire_quantity'] = 0;
-                $electricity['spool_quantity'] = 0;
-            }else
-            {
-                //线路个数计算
-                $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
-                //线管个数计算
-                $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
-                // 底盒个数计算
-                $electricity['bottom_quantity'] = $points;
+                if($one_unit['title'] == '网线' || $one_unit['title'] == '电线' )
+                {
+                    $goods_value = $one_unit['value'];
+                }
+                if($one_unit['title'] == '线管'){
+                    $spool_value = $one_unit['value'];;
+                }
             }
 
-            //线路费用计算
+            //线路个数计算 ,线路费用计算
+            $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
             $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
-            //线管费用计算
+
+            //线管个数计算,线管费用计算
+            $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
             $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
+
+            // 底盒个数计算.底盒费用计算
+            $electricity['bottom_quantity'] = $points;
             $electricity['bottom_cost'] = $points * $bottom_case;
+
             //总费用
             $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
         }
@@ -1334,54 +1332,29 @@ class BasisDecorationService
         return $all;
     }
 
-    /**
-     * 杂工利润率最大
-     * @param $goods
-     * @return array
-     */
-    public static function handymanMax($goods)
+    public static function priceConversion($goods)
     {
-        foreach ($goods as $one_goods)
+        if (!empty($goods))
         {
-            if ($one_goods['title'] == '河沙')
+            $conversion = [];
+            foreach ($goods as $one_goods)
             {
-                $river_sand [] = $one_goods;
+                $one_goods['platform_price'] =  $one_goods['platform_price'] /100;
+                $one_goods['supplier_price'] =  $one_goods['supplier_price'] /100;
+                $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] /100;
+                $conversion [] = $one_goods;
             }
-
-            if ($one_goods['title'] == '水泥')
-            {
-                $concrete [] = $one_goods;
-            }
-
-            if ($one_goods['title'] == '空心砖')
-            {
-                $air_brick [] = $one_goods;
-            }
-        }
-        foreach ($river_sand as $one_river_sand)
+            return $conversion;
+        }else
         {
-            $c [] = $one_river_sand['profit'];
-            $max = array_search(max($c),$c);
+            return $goods;
         }
-        $all [] = $river_sand[$max];
-
-        foreach ($concrete as $one_concrete)
-        {
-            $a [] = $one_concrete['profit'];
-            $max = array_search(max($a),$a);
-        }
-        $all [] = $concrete[$max];
-
-        foreach ($air_brick as $one_air_brick)
-        {
-            $b [] = $one_air_brick['profit'];
-            $max = array_search(max($b),$b);
-        }
-        $all [] = $air_brick[$max];
-
-        return $all;
     }
-
+    /**
+     * 利润率最大
+     * @param $goods
+     * @return mixed
+     */
     public static function profitMarginMax($goods)
     {
         if ($goods)
