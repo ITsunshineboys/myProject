@@ -75,6 +75,8 @@ class ModelService
     /**
      * Select model fields
      *
+     * @param ActiveRecord $model model
+     * @param array $fields default empty
      * @return array
      */
     public static function selectModelFields(ActiveRecord $model, array $fields = [])
@@ -101,9 +103,11 @@ class ModelService
     /**
      * View model by fields
      *
+     * @param ActiveRecord $model model
+     * @param array $fields model fields
      * @return array
      */
-    public static function viewModelByFields(ActiveRecord $model, $fields)
+    public static function viewModelByFields(ActiveRecord $model, array $fields)
     {
         $viewData = [];
 
