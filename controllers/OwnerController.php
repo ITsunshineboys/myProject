@@ -200,21 +200,7 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>3,
-            'hall'=>1,
-            'toilet'=>1,
-            'kitchen'=>1,
-            'stairs_details_id'=>60,
-            'series'=>60,
-            'style'=>60,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-        ];
-
+        $post = \Yii::$app->request->post();
         //人工价格
         $workers = LaborCost::profession($post,'弱电');
 
@@ -245,7 +231,6 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-//            $unit = GoodsAttr::findByGoodsIdUnit($goods);
             $weak_current = BasisDecorationService::priceConversion($goods);
         } else
         {
@@ -344,28 +329,7 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->post();
-//                $post = [
-//            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>60,
-//            'style'=>60,
-//            'window'=>60,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
-        $arr['worker_kind'] = '电工';
-
-        //人工价格
-        $workers = LaborCost::univalence($post, $arr['worker_kind']);
-        foreach ($workers as $worker) {
-            if ($worker['worker_kind_details'] == '强电') {
-                $strong_labor = $worker;
-            }
-        }
+        $workers = LaborCost::profession($post,'强电');
 
         //点位查询
         if (!empty($post['effect_id'])) {
@@ -420,7 +384,7 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['电线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-            $strong_current = BasisDecorationService::profitMax($goods,$material);
+            $strong_current = BasisDecorationService::priceConversion($goods);
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list, '强电');
@@ -431,7 +395,7 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('强电', $post['city']);
 
         //人工总费用
-        $labor_all_cost = BasisDecorationService::laborFormula($points_details, $strong_labor);
+        $labor_all_cost = BasisDecorationService::laborFormula($points_details, $workers);
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($points_details, $strong_current, $craft);
@@ -445,7 +409,7 @@ class OwnerController extends Controller
                 $material [] =  $one_strong_current;
             }
 
-            if ($one_strong_current['title'] == '')
+            if ($one_strong_current['title'] == '电线')
             {
                 $one_strong_current['quantity'] = $material_price['spool_quantity'];
                 $one_strong_current['cost'] = $material_price['spool_cost'];

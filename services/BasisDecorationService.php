@@ -1178,31 +1178,6 @@ class BasisDecorationService
     }
 
     /**
-     * 利润率计算公式
-     * @param $material
-     * @param $name
-     * @return array
-     */
-    public static function profitMax($material,$name)
-    {
-        if (empty($material) && empty($name))
-        {
-            return $material;
-        }else
-        {
-            $goods_profit = [];
-            foreach ($material as $one_materiel)
-            {
-                $profit = ($one_materiel['platform_price'] - $one_materiel['supplier_price']) / $one_materiel['supplier_price'];
-                $one_materiel['profit'] = $profit;
-                $goods_profit [] = $one_materiel;
-            }
-
-          return $goods_profit;
-        }
-    }
-
-    /**
      * 乳胶漆最大利润
      * @param $goods
      * @return array
