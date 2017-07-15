@@ -243,7 +243,7 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
 
         //人工总费用
-        $labor_all_cost = BasisDecorationService::laborFormula($weak_points,$workers);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points,$workers);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
@@ -331,19 +331,6 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>3,
-//            'hall'=>1,
-//            'toilet'=>1,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>60,
-//            'style'=>60,
-//            'window'=>60,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
         $workers = LaborCost::profession($post,'强电');
 
         //点位查询
