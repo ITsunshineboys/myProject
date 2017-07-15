@@ -344,16 +344,11 @@ class GoodsAttr extends ActiveRecord
        return $standard;
     }
 
-    public static function findByGoodsIdUnit($goods)
+    public static function findByGoodsIdUnit($goods_id)
     {
-        if ($goods)
+        if ($goods_id)
         {
-            $id = [];
-            foreach ($goods as $one_weak_current)
-            {
-                $id [] = $one_weak_current['id'];
-            }
-            $str_id = implode(',',$id);
+            $str_id = implode(',',$goods_id);
             $db = Yii::$app->db;
             $sql = "SELECT goods_category.title,goods_attr.name,goods_attr.value FROM goods_attr LEFT JOIN goods ON goods_attr.goods_id = goods. id LEFT JOIN goods_category ON goods.category_id = goods_category.id WHERE goods_id IN (".$str_id.")";
             $standard = $db->createCommand($sql)->queryAll();

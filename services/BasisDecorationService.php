@@ -7,6 +7,8 @@
  */
 namespace app\services;
 
+use app\models\GoodsAttr;
+
 class BasisDecorationService
 {
 
@@ -33,7 +35,7 @@ class BasisDecorationService
      * @param string $crafts
      * @return mixed
      */
-    public static function quantity($points,$goods,$crafts,$unit)
+    public static function quantity($points,$goods,$crafts)
     {
         if($goods && $points)
         {
@@ -46,22 +48,32 @@ class BasisDecorationService
                     $spool = $craft['material'];
                 }
             }
+            $goods_id = [];
             foreach ($goods as $one)
             {
                 if($one['title'] == '网线' || $one['title'] == '电线' )
                 {
-                    $goods_price = $one['platform_price'];
+                    $goods_max = self::profitMarginMax($one);
+                    $goods_price = $goods_max['platform_price'];
+                    $goods_id [] = $goods_max['id'];
                 }
 
-                if($one['title'] == '线管'){
-                    $spool_price = $one['platform_price'];
+                if($one['title'] == '线管')
+                {
+                    $goods_max = self::profitMarginMax($one);
+                    $spool_price = $goods_max['platform_price'];
+                    $goods_id [] = $goods_max['id'];
                 }
 
-                if($one['title'] == '底盒'){
-                    $bottom_case = $one['platform_price'];
+                if($one['title'] == '底盒')
+                {
+                    $goods_max = self::profitMarginMax($one);
+                    $bottom_case = $goods_max['platform_price'];
+                    $goods_id [] = $goods_max['id'];
                 }
             }
-            foreach ($unit as $one_unit)
+            $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+            foreach ($ids as $one_unit)
             {
                 if($one_unit['title'] == '网线' || $one_unit['title'] == '电线' )
                 {
@@ -1357,12 +1369,12 @@ class BasisDecorationService
      */
     public static function profitMarginMax($goods)
     {
-        if ($goods)
-        {
-            foreach ($goods as $one_goods)
-            {
-                $profit [] = $one_goods['profit'];
-                $max = array_search(max($profit),$profit);
+        if (count($goods) == count($goods, 1)) {
+            return $goods;
+        } else {
+            foreach ($goods as $one_goods) {
+                $profit [] = $one_goods['profit_rate'];
+                $max = array_search(max($profit), $profit);
                 $profit_margin [] = $one_goods;
             }
             $goods_price = $profit_margin[$max];

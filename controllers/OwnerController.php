@@ -200,7 +200,21 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>3,
+            'hall'=>1,
+            'toilet'=>1,
+            'kitchen'=>1,
+            'stairs_details_id'=>60,
+            'series'=>60,
+            'style'=>60,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
+
         //人工价格
         $workers = LaborCost::profession($post,'弱电');
 
@@ -231,7 +245,7 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-            $unit = GoodsAttr::findByGoodsIdUnit($goods);
+//            $unit = GoodsAttr::findByGoodsIdUnit($goods);
             $weak_current = BasisDecorationService::priceConversion($goods);
         } else
         {
@@ -246,7 +260,7 @@ class OwnerController extends Controller
         //人工总费用
         $labor_all_cost = BasisDecorationService::laborFormula($weak_points,$workers);
         //材料总费用
-        $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft,$unit);
+        $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
         $material = [];
         foreach ($weak_current as $one_weak_current)
         {
