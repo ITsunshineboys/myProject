@@ -244,6 +244,8 @@ class OwnerController extends Controller
 
         //人工总费用
         $labor_all_cost = BasisDecorationService::laborFormula($weak_points,$workers);
+        $labor_all_cost['worker_kind'] = $workers['worker_kind'];
+        
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
         $material = [];
@@ -328,7 +330,20 @@ class OwnerController extends Controller
      */
     public function actionStrongCurrent()
     {
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>3,
+            'hall'=>1,
+            'toilet'=>1,
+            'kitchen'=>1,
+            'stairs_details_id'=>1,
+            'series'=>60,
+            'style'=>60,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         $workers = LaborCost::profession($post,'强电');
 
         //点位查询
@@ -395,7 +410,8 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('强电', $post['city']);
 
         //人工总费用
-        $labor_all_cost = BasisDecorationService::laborFormula($points_details, $workers);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points_details, $workers);
+        $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($points_details, $strong_current, $craft);
@@ -495,16 +511,8 @@ class OwnerController extends Controller
             'province'=>510000,
             'city'=>510100,
         ];
-        $arr = [];
-        $arr['worker_kind'] = '水路工';
-
         //人工价格
-        $workers = LaborCost::univalence($post, $arr['worker_kind']);
-        foreach ($workers as $worker) {
-            if ($worker['worker_kind_details'] == '水路工') {
-                $waterway_labor = $worker;
-            }
-        }
+        $waterway_labor = LaborCost::profession($post,'水路工');
 
         //点位查询
         if (!empty($post['effect_id'])) {
@@ -534,7 +542,7 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['PPR水管','PVC管'];
             $goods = Goods::priceDetail(3,$material);
-            $waterway_current = BasisDecorationService::profitMax($goods,$material);
+            $waterway_current = BasisDecorationService::priceConversion($goods);
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterwayReconstruction::findByAll($decoration_list);
