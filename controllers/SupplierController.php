@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\services\ExceptionHandleService;
 use app\models\Supplier;
 use app\models\Goods;
+use app\models\GoodsRecommendSupplier;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -210,5 +211,21 @@ class SupplierController extends Controller
             : Goods::pagination($where, $select, $page, $size);
         $ret['data']['supplier_goods'] = $supplierGoods;
         return Json::encode($ret);
+    }
+
+    /**
+     * Supplier carousel action.
+     *
+     * @return string
+     */
+    public function actionCarousel()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'carousel' => GoodsRecommendSupplier::carousel(),
+            ],
+        ]);
     }
 }
