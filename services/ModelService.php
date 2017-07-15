@@ -123,7 +123,6 @@ class ModelService
      */
     public static function hasChangedAttr(array $attrs, $model)
     {
-        return count(array_intersect($attrs, $model->getDirtyAttributes()))
-            != count($attrs);
+        return count(array_intersect($attrs, $model->getDirtyAttributes())) != count($attrs);
     }
 }
