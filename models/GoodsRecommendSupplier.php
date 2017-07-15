@@ -438,9 +438,9 @@ class GoodsRecommendSupplier extends ActiveRecord
             return false;
         }
 
-        if (self::find()->where('status = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
-            return -1;
-        }
+//        if (self::find()->where('status = ' . self::STATUS_ONLINE . ' and ' . $where)->count()) {
+//            return -1;
+//        }
 
         return true;
     }

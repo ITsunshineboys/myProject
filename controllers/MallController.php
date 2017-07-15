@@ -4368,6 +4368,7 @@ class MallController extends Controller
 //        }
 
         $recommend->delete_time = time();
+        $recommend->status = GoodsRecommendSupplier::STATUS_OFFLINE;
         if (!$recommend->save()) {
             $code = 500;
             return Json::encode([
@@ -4417,7 +4418,8 @@ class MallController extends Controller
 
         $where = 'id in(' . $ids . ')';
         if (!GoodsRecommendSupplier::updateAll([
-            'delete_time' => time()
+            'delete_time' => time(),
+            'status' => GoodsRecommendSupplier::STATUS_OFFLINE,
         ], $where)
         ) {
             $code = 500;
