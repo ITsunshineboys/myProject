@@ -28,6 +28,7 @@ class Goods extends ActiveRecord
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
+    const PROFIT_RATE_PRECISION = 100000;
     const EXCEPT_FIELDS_WHEN_CHANGE_ONLINE_TO_WAIT = [
         'left_number',
     ];
@@ -419,8 +420,7 @@ AND goods.id IN (" . $id . ")";
     {
         if ($all) {
             $material = [];
-            foreach ($all as $one)
-            {
+            foreach ($all as $one) {
                 $material [] = $one['material'];
             }
             $id = implode('\',\'', $material);
@@ -574,7 +574,7 @@ AND goods.id IN (" . $id . ")";
             [['title'], 'string', 'length' => [1, 60]],
             [['subtitle'], 'string', 'length' => [1, 16]],
             [['cover_image', 'offline_reason', 'reason'], 'string'],
-            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id'], 'number', 'min' => 0],
+            [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'style_id', 'series_id'], 'number', 'min' => 0],
             ['supplier_price', 'validateSupplierPrice', 'on' => self::SCENARIO_REVIEW],
             ['platform_price', 'validatePlatformPrice', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             ['after_sale_services', 'validateAfterSaleServices'],
@@ -1021,6 +1021,13 @@ AND goods.id IN (" . $id . ")";
                     }
 
                     $this->supplier_id = $supplier->id;
+                    $this->setProfitRate();
+                }
+            } else {
+                if ($this->isAttributeChanged('supplier_price')
+                    || $this->isAttributeChanged('platform_price')
+                ) {
+                    $this->setProfitRate();
                 }
             }
 
@@ -1028,6 +1035,14 @@ AND goods.id IN (" . $id . ")";
         } else {
             return false;
         }
+    }
+
+    public function setProfitRate()
+    {
+        $this->profit_rate = (int)(
+            ($this->platform_price - $this->supplier_price)
+            / $this->supplier_price
+            * self::PROFIT_RATE_PRECISION);
     }
 
     public function getOrders()
