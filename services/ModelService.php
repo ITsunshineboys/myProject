@@ -118,10 +118,10 @@ class ModelService
      * Check if some attribute value has been updated
      *
      * @param array $attrs attributes to be checked
-     * @param $model model
+     * @param ActiveRecord $model model
      * @return bool
      */
-    public static function hasChangedAttr(array $attrs, $model)
+    public static function hasChangedAttr(array $attrs, ActiveRecord $model)
     {
         return count(array_intersect($attrs, $model->getDirtyAttributes())) != count($attrs);
     }
