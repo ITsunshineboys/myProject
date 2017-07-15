@@ -1037,12 +1037,20 @@ AND goods.id IN (" . $id . ")";
         }
     }
 
+    /**
+     * Set goods profit rate
+     *
+     * @return goods object
+     */
     public function setProfitRate()
     {
         $this->profit_rate = (int)(
             ($this->platform_price - $this->supplier_price)
             / $this->supplier_price
-            * self::PROFIT_RATE_PRECISION);
+            * self::PROFIT_RATE_PRECISION
+        );
+
+        return $this;
     }
 
     public function getOrders()
