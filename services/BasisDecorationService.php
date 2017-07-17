@@ -109,7 +109,7 @@ class BasisDecorationService
      * @param string $crafts
      * @return float
      */
-    public static function waterwayGoods($points = '',$goods = [],$crafts= '')
+    public static function waterwayGoods($points,$goods,$crafts)
     {
         if ($points && $goods)
        {
@@ -117,16 +117,29 @@ class BasisDecorationService
             {
                 if($one['title'] == 'PVC管')
                 {
-                    $pvc_value = $one['value'];
-                    $pvc_price = $one['platform_price'];
+                    $goods_max = self::profitMarginMax($one);
+                    $pvc_price = $goods_max['platform_price'];
+                    $goods_id [] = $goods_max['id'];
                 }
                 if($one['title'] == 'PPR水管')
                 {
-                    $ppr_value = $one['value'];
-                    $ppr_price = $one['platform_price'];
+                    $goods_max = self::profitMarginMax($one);
+                    $ppr_price = $goods_max['platform_price'];
+                    $goods_id [] = $goods_max['id'];
                 }
-
             }
+           $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+           foreach ($ids as $one_unit)
+           {
+               if ($one_unit['title'] == 'PPR水管')
+               {
+                   $ppr_value = $one_unit['value'];
+               }
+               if ($one_unit['title'] == 'PVC管')
+               {
+                    $pvc_value = $one_unit['value'];
+               }
+           }
 
             foreach ($crafts as $craft)
             {
@@ -193,29 +206,37 @@ class BasisDecorationService
      * @param string $crafts
      * @return float
      */
-    public static function waterproofGoods($points = '',$goods = [],$crafts= '')
+    public static function waterproofGoods($points,$goods,$crafts)
     {
-        if ($points && $goods){
-            $material = 0;
+        if ($points && $goods)
+        {
             foreach ($crafts as $craft)
             {
                 $material = $craft['material'];
             }
-            $goods_value = 0;
-            $goods_platform_price = 0;
-            foreach ($goods as $one){
-                $goods_value = $one['value'];
-                $goods_platform_price = $one['platform_price'];
+            if (count($goods) == count($goods, 1)) {
+                $goods_platform_price = $goods['platform_price'];
+                $goods_id [] = $goods['id'];
+            } else {
+                foreach ($goods as $one)
+                {
+                    $goods_max = self::profitMarginMax($one);
+                    $goods_platform_price = $goods_max['platform_price'];
+                    $goods_id [] = $goods_max['id'];
+                }
+            }
+            $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+            foreach ($ids as $one_unit)
+            {
+                if ($one_unit['title'] == '防水涂料')
+                {
+                    $goods_value = $one_unit['value'];
+
+                }
             }
 
-            if ($points == 0 || $goods_value == 0 || $material == 0)
-            {
-                $waterproof['quantity'] = 0;
-            }else
-            {
 //            个数：（防水总面积×【1.25】÷抓取的商品的KG）
-                $waterproof['quantity'] = ceil($points * $material /$goods_value);
-            }
+            $waterproof['quantity'] = ceil($points * $material /$goods_value);
 //            防水涂剂费用：个数×抓取的商品价格
             $waterproof['cost'] =  $waterproof['quantity'] * $goods_platform_price;
         }
@@ -1178,147 +1199,10 @@ class BasisDecorationService
     }
 
     /**
-     * 乳胶漆最大利润
+     * 价格转化
      * @param $goods
      * @return array
      */
-    public static function goodsProfitMax($goods)
-    {
-        if ($goods)
-        {
-            foreach ($goods as $one_goods)
-            {
-                if ($one_goods['title'] == '腻子')
-                {
-                   $putty [] = $one_goods;
-                }
-                if ($one_goods['title'] == '乳胶漆底漆')
-                {
-                    $emulsion_floor [] = $one_goods;
-                }
-                if ($one_goods['title'] == '乳胶漆面漆')
-                {
-                    $emulsion_side [] = $one_goods;
-                }
-                if ($one_goods['title'] == '阴角线')
-                {
-                    $concave_line [] = $one_goods;
-                }
-                if ($one_goods['title'] == '石膏粉')
-                {
-                    $gypsum_powder [] = $one_goods;
-                }
-            }
-            foreach ($putty as $one_putty)
-            {
-                $c [] = $one_putty['profit'];
-                $max = array_search(max($c),$c);
-            }
-            $all [] = $putty[$max];
-
-            foreach ($emulsion_floor as $one_emulsion_floor)
-            {
-                $b [] = $one_emulsion_floor['profit'];
-                $max = array_search(max($b),$b);
-            }
-            $all [] = $emulsion_floor[$max];
-
-            foreach ($emulsion_side as $one_emulsion_side)
-            {
-                $d [] = $one_emulsion_side['profit'];
-                $max = array_search(max($d),$d);
-            }
-            $all [] = $emulsion_side[$max];
-
-            foreach ($concave_line as $one_concave_line)
-            {
-                $e [] = $one_concave_line['profit'];
-                $max = array_search(max($e),$e);
-            }
-            $all [] = $concave_line[$max];
-
-            foreach ($gypsum_powder as $one_gypsum_powder)
-            {
-                $f [] = $one_gypsum_powder['profit'];
-                $max = array_search(max($f),$f);
-            }
-            $all [] = $gypsum_powder[$max];
-        }
-        return $all;
-    }
-
-    /**
-     * 木作利润最大
-     * @param $goods
-     * @return array
-     */
-    public static function mudMakeMax($goods)
-    {
-        foreach ($goods as $one_goods)
-        {
-            if ($one_goods['title'] == '河沙')
-            {
-                $river_sand [] = $one_goods;
-            }
-
-            if ($one_goods['title'] == '水泥')
-            {
-                $concrete [] = $one_goods;
-            }
-
-            if ($one_goods['title'] == '自流平')
-            {
-                $self_leveling [] = $one_goods;
-            }
-
-            if ($one_goods['title'] == '地砖')
-            {
-                $floor_tile [] = $one_goods;
-            }
-
-            if ($one_goods['title'] == '墙砖')
-            {
-                $wall_brick [] = $one_goods;
-            }
-        }
-        foreach ($river_sand as $one_river_sand)
-        {
-            $c [] = $one_river_sand['profit'];
-            $max = array_search(max($c),$c);
-        }
-        $all [] = $river_sand[$max];
-
-        foreach ($concrete as $one_concrete)
-        {
-            $a [] = $one_concrete['profit'];
-            $max = array_search(max($a),$a);
-        }
-        $all [] = $concrete[$max];
-
-        foreach ($self_leveling as $one_self_leveling)
-        {
-            $b [] = $one_self_leveling['profit'];
-            $max = array_search(max($b),$b);
-        }
-        $all [] = $self_leveling[$max];
-
-        foreach ($floor_tile as $one_floor_tile)
-        {
-            $d [] = $one_floor_tile['profit'];
-            $max = array_search(max($d),$d);
-        }
-        $all [] = $floor_tile[$max];
-
-        foreach ($wall_brick as $one_wall_brick)
-        {
-            $e [] = $one_wall_brick['profit'];
-            $max = array_search(max($e),$e);
-        }
-        $all [] = $wall_brick[$max];
-
-        return $all;
-    }
-
     public static function priceConversion($goods)
     {
         if (!empty($goods))
@@ -1337,23 +1221,54 @@ class BasisDecorationService
             return $goods;
         }
     }
-    /**
-     * 利润率最大
-     * @param $goods
-     * @return mixed
-     */
-    public static function profitMarginMax($goods)
+
+
+    public static function mild($goods_profit,$post,$material_property_classify)
     {
-        if (count($goods) == count($goods, 1)) {
-            return $goods;
-        } else {
-            foreach ($goods as $one_goods) {
-                $profit [] = $one_goods['profit_rate'];
-                $max = array_search(max($profit), $profit);
-                $profit_margin [] = $one_goods;
+        if (!empty($goods_profit))
+        {
+            foreach ($goods_profit as $one_goods)
+            {
+                foreach ($material_property_classify as $quantity)
+                {
+                    if ($one_goods['title'] == '开关' && $quantity['material'] == '开关' )
+                    {
+                        $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
+                        $one_goods['show_quantity'] = $quantity['quantity'];
+                        $switch = $one_goods;
+                    }
+
+                    if ($one_goods['title'] == '插座' && $quantity['material'] == '插座' )
+                    {
+                        $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
+                        $one_goods['show_quantity'] = $quantity['quantity'];
+                        $socket = $one_goods;
+                    }
+                    if ($one_goods['title'] == '灯具')
+                    {
+                        $quantity = $post['bedroom'] + $post['sittingRoom_diningRoom'] + $post['kitchen'];
+                        $one_goods['show_price'] = $one_goods['platform_price'] * $quantity;
+                        $one_goods['show_quantity'] = $quantity;
+                        $light = $one_goods;
+                    }
+
+                    if ($one_goods['title'] == '窗帘')
+                    {
+                        $quantity = $post['bedroom'] + $post['sittingRoom_diningRoom'];
+                        $one_goods['show_price'] = $one_goods['platform_price'] * $quantity;
+                        $one_goods['show_quantity'] = $quantity;
+                        $curtain = $one_goods;
+                    }
+                }
             }
-            $goods_price = $profit_margin[$max];
+            $goods_price [] = $switch;
+            $goods_price [] = $socket;
+            $goods_price [] = $light;
+            $goods_price [] = $curtain;
             return $goods_price;
+        }else
+        {
+            return $goods_profit;
         }
     }
 }

@@ -484,20 +484,20 @@ class OwnerController extends Controller
      */
     public function actionWaterway()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>60,
-            'hall'=>60,
-            'toilet'=>60,
-            'kitchen'=>60,
-            'stairs_details_id'=>60,
-            'series'=>60,
-            'style'=>60,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         //人工价格
         $waterway_labor = LaborCost::profession($post,'水路工');
 
@@ -539,9 +539,10 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('水路', $post['city']);
 
         //人工总费用
-        $labor_all_cost = BasisDecorationService::laborFormula($waterway_points, $waterway_labor);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($waterway_points, $waterway_labor);
+        $labor_all_cost['worker_kind'] = $waterway_labor['worker_kind'];
         //材料总费用
-        $material_price = BasisDecorationService::waterwayGoods($waterway_points, $waterway_current, $craft);
+        $material_price = BasisDecorationService::waterwayGoods($waterway_points, $waterway_current,$craft);
         $material = [];
         foreach ($waterway_current as $one_waterway_current)
         {
@@ -631,23 +632,15 @@ class OwnerController extends Controller
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
-        $arr = [];
-        $arr['worker_kind'] = '防水工';
-
         //人工价格
-        $workers = LaborCost::univalence($post, $arr['worker_kind']);
-        foreach ($workers as $worker) {
-            if ($worker['worker_kind_details'] == '防水工') {
-                $waterproof_labor = $worker;
-            }
-        }
+        $waterproof_labor = LaborCost::profession($post,'防水工');
         //防水所需材料
 
         if (empty($post['effect_id'])) {
             //查询弱电所需要材料
             $material = ['防水涂料','未知'];
             $goods = Goods::priceDetail(3,$material);
-            $waterproof = BasisDecorationService::profitMax($goods,$material);
+            $waterproof = BasisDecorationService::priceConversion($goods);
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterproofReconstruction::findByAll($decoration_list);
@@ -683,17 +676,25 @@ class OwnerController extends Controller
         $labor_all_cost = ceil($total_area / $waterproof_labor['quantity'] * $waterproof_labor['univalence']);
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
-
         $material_total = [];
-        foreach ($waterproof as $one_waterproof)
+        if (count($waterproof) == count($waterproof, 1))
         {
-            if ($one_waterproof['title'] == '防水涂料')
+            $waterproof['quantity'] = $material_price['quantity'];
+            $waterproof['cost'] = $material_price['cost'];
+            $material_total =  $waterproof;
+        }else
+        {
+            foreach ($waterproof as $one_waterproof)
             {
-                $one_waterproof['quantity'] = $material_price['quantity'];
-                $one_waterproof['cost'] = $material_price['cost'];
-                $material_total =  $one_waterproof;
+                if ($one_waterproof['title'] == '防水涂料')
+                {
+                    $one_waterproof['quantity'] = $material_price['quantity'];
+                    $one_waterproof['cost'] = $material_price['cost'];
+                    $material_total =  $one_waterproof;
+                }
             }
         }
+
         $material_total['total_cost'] = $material_price['cost'];
 
         //添加材料费用
@@ -1663,45 +1664,19 @@ class OwnerController extends Controller
      */
     public function actionSoftOutfitAssort()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-//            'effect_id' => 1,
-            'bedroom' => 2,
-            'sittingRoom_diningRoom' => 1,
-            'kitchen' => 1,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+////            'effect_id' => 1,
+//            'bedroom' => 2,
+//            'sittingRoom_diningRoom' => 1,
+//            'kitchen' => 1,
+//        ];
         $classify = '软装配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $goods = Goods::categoryById($material_property_classify);
-        $goods_profit = BasisDecorationService::profitMax($goods,0);
-        foreach ($goods_profit as &$one_goods)
-        {
-            foreach ($material_property_classify as $quantity) {
-                if ($one_goods['title'] == $quantity['material']) {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
-                    $one_goods['show_quantity'] = $quantity['quantity'];
-                    $all [] = $one_goods;
-                }
+        $goods_profit = BasisDecorationService::priceConversion($goods);
+        $goods_price = BasisDecorationService::mild($goods_profit,$post,$material_property_classify);
 
-                if ($one_goods['title'] == '灯具')
-                {
-                    $quantity = $post['bedroom'] + $post['sittingRoom_diningRoom'] + $post['kitchen'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity;
-                    $one_goods['show_quantity'] = $quantity;
-                    $lamps [] = $one_goods;
-                }
-
-                if ($one_goods['title'] == '窗帘') {
-                    $quantity = $post['bedroom'] + $post['sittingRoom_diningRoom'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity;
-                    $one_goods['show_quantity'] = $quantity;
-                    $blind [] = $one_goods;
-                }
-            }
-        }
-        $goods_price [] = BasisDecorationService::profitMarginMax($all);
-        $goods_price [] = BasisDecorationService::profitMarginMax($lamps);
-        $goods_price [] = BasisDecorationService::profitMarginMax($blind);
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
