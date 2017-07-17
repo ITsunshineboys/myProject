@@ -228,4 +228,23 @@ class SupplierController extends Controller
             ],
         ]);
     }
+
+    /**
+     * Recommend goods for type second action.
+     *
+     * @return string
+     */
+    public function actionRecommendSecond()
+    {
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsRecommendSupplier::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'recommend_second' => GoodsRecommendSupplier::second(null, $page, $size),
+            ],
+        ]);
+    }
 }
