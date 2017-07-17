@@ -217,9 +217,8 @@ class BasisDecorationService
             } else {
                 foreach ($goods as $one)
                 {
-                    $goods_max = self::profitMarginMax($one);
-                    $goods_platform_price = $goods_max['platform_price'];
-                    $goods_id [] = $goods_max['id'];
+                    $goods_platform_price = $one['platform_price'];
+                    $goods_id [] = $one['id'];
                 }
             }
             $ids = GoodsAttr::findByGoodsIdUnit($goods_id);

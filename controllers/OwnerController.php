@@ -644,20 +644,20 @@ class OwnerController extends Controller
      */
     public function actionWaterproof()
     {
-        $post = \Yii::$app->request->post();
-//                $post = [
-//            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>60,
-//            'style'=>60,
-//            'window'=>60,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
+//        $post = \Yii::$app->request->post();
+                $post = [
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>60,
+            'style'=>60,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         //人工价格
         $waterproof_labor = LaborCost::profession($post,'防水工');
         //防水所需材料
