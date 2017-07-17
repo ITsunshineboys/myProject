@@ -6,6 +6,7 @@ use app\services\ExceptionHandleService;
 use app\models\Supplier;
 use app\models\Goods;
 use app\models\GoodsRecommendSupplier;
+use app\services\ModelService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -245,6 +246,41 @@ class SupplierController extends Controller
             'data' => [
                 'recommend_second' => GoodsRecommendSupplier::second(null, $page, $size),
             ],
+        ]);
+    }
+
+    /**
+     * Shop index action.
+     *
+     * @return string
+     */
+    public function actionIndex()
+    {
+        $code = 1000;
+
+        $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
+        if (!$supplierId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier = Supplier::find()->where(['id' => $supplierId, 'status' => Supplier::STATUS_ONLINE])->one();
+        if (!$supplier) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $data = ModelService::selectModelFields($supplier, Supplier::FIELDS_SHOP_INDEX_MODEL);
+        $data['carousel'] = GoodsRecommendSupplier::carousel();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => $data
         ]);
     }
 }

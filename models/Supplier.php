@@ -90,6 +90,11 @@ class Supplier extends ActiveRecord
     ];
     const FIELDS_VIEW_MALL_EXTRA = [
     ];
+    const FIELDS_SHOP_INDEX_MODEL = [
+        'icon',
+        'shop_name',
+        'follower_number',
+    ];
 
     /**
      * @return string 返回该AR类关联的数据表名
