@@ -1014,7 +1014,7 @@ class BasisDecorationService
      * @param array $goods
      * @return mixed
      */
-    public static function cementCost($get_area = [],$craft = [] ,$goods = [])
+    public static function cementCost($get_area,$craft,$goods,$goods_attr)
     {
         if ($get_area && $craft)
         {
@@ -1044,14 +1044,8 @@ class BasisDecorationService
         $new_repair = $get_area['24_dismantle'] * $repair;
         $new_dosage = $new_12 + $new_24 + $new_repair;
 
-        if ($goods == null)
-        {
-            $cement['quantity'] = 0;
-        }else
-        {
             //        个数：（水泥用量÷抓取的商品的KG）
-            $cement['quantity'] = ceil($new_dosage / $goods['value']);
-        }
+            $cement['quantity'] = ceil($new_dosage / $goods_attr['value']);
 
         //        水泥费用：个数×抓取的商品价格
         $cement['cost'] = $cement['quantity'] * $goods['platform_price'];

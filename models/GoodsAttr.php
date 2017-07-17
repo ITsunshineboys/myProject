@@ -331,7 +331,7 @@ class GoodsAttr extends ActiveRecord
     {
         if ($id)
         {
-            $select = "goods_attr.name,goods_attr.value";
+            $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
             $standard = self::find()
                         ->asArray()
                         ->select($select)
