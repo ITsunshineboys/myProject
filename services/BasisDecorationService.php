@@ -777,20 +777,29 @@ class BasisDecorationService
      * @param array $area
      * @return int
      */
-    public static function paintedCost($goods = [],$craft = [],$area = [])
+    public static function paintedCost($goods,$craft,$area)
     {
-        if ($goods && $craft && $area){
+        if ($goods && $craft && $area)
+        {
+            $goods_value = GoodsAttr::findByGoodsIdUnit($goods['id']);
+            $goods_value_one = '';
+            foreach ($goods_value as $value)
+            {
+                    if ($value['name'] == '长度' && $value['title'] =='阴角线')
+                    {
+                        $goods_value_one = $value['value'];
+                    }elseif($value['name'] !=='材质')
+                    {
+                        $goods_value_one = $value['value'];
+                    }
 
+            }
 //        个数：（腻子面积×【0.33kg】÷抓取的商品的规格重量）
-            $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods['value']);
+            $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods_value_one);
 //        腻子费用：个数×商品价格
             $putty_cost ['cost']  =  $putty_cost['quantity'] * $goods['platform_price'];
-        }else
-        {
-            $putty_cost ['quantity'] = 0 ;
-            $putty_cost ['cost']  =  $putty_cost['quantity'] * $goods['platform_price'];
+            return $putty_cost;
         }
-        return $putty_cost;
     }
 
     /**

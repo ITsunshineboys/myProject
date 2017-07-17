@@ -699,7 +699,9 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('防水', $post['city']);
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost = ceil($total_area / $waterproof_labor['quantity'] * $waterproof_labor['univalence']);
+        $labor_all_cost['price'] = ceil($total_area / $waterproof_labor['quantity'] * $waterproof_labor['univalence']);
+        $labor_all_cost['worker_kind'] = $waterproof_labor['worker_kind'];
+
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
         $material_total = [];
@@ -793,12 +795,8 @@ class OwnerController extends Controller
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
-        $arr = [];
-        $arr['worker_kind'] = '木工';
-        //人工一天价格
-        $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
-        foreach ($labor_costs as $labor_cost) {
-        }
+        $labor_cost = LaborCost::profession($post,'木工');
+
         $series_all = Series::find()->all();
         $style_all = Style::find()->all();
         $carpentry_add = CarpentryAdd::findByStipulate($post['series'], $post['style']);
@@ -808,8 +806,11 @@ class OwnerController extends Controller
         $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $labor_cost['quantity'], $series_all, $style_all);
         //平顶天数
         $flat_day = BasisDecorationService::flatDay($carpentry_add, $labor_cost['quantity'], $series_all, $style_all);
+
         //人工费
-        $labour_charges = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
+        $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
+        $labour_charges['worker_kind'] = $labor_cost['worker_kind'];
+
         //木工材料费
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
@@ -817,8 +818,7 @@ class OwnerController extends Controller
             $goods_price = Goods::findQueryAll($carpentry_reconstruction);
         } else {
             $material = ['石膏板','龙骨','丝杆'];
-            $goods = Goods::priceDetail(3,$material);
-            $goods_price = BasisDecorationService::profitMax($goods,$material);
+            $goods_price = Goods::priceDetail(3,$material);
         }
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('木作', $post['city']);
@@ -915,20 +915,20 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>60,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>1,
+            'style'=>1,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -1017,8 +1017,7 @@ class OwnerController extends Controller
         } else {
             $material = ['腻子','乳胶漆底漆','乳胶漆面漆','阴角线','石膏粉'];
             $goods = Goods::priceDetail(3,$material);
-            $goods_price_profit = BasisDecorationService::profitMax($goods,$material);
-            $goods_price = BasisDecorationService::goodsProfitMax($goods_price_profit);
+            $goods_price = BasisDecorationService::priceConversion($goods);
         }
 
         //当地工艺
@@ -1068,14 +1067,15 @@ class OwnerController extends Controller
                 $gypsum_powder_craft = $craft;
             }
         }
-//        腻子费用
+////        腻子费用
         $putty_cost = BasisDecorationService::paintedCost($goods_putty, $putty_craft, $putty_area);
-//        底漆费用
+////        底漆费用
         $primer_cost = BasisDecorationService::paintedCost($goods_primer, $primer_craft, $primer_area);
-//        乳胶漆面漆费用
+////        乳胶漆面漆费用
         $finishing_coat_cost = BasisDecorationService::paintedCost($goods_finishing_coat, $finishing_coat_craft, $finishing_coat_area);
 //        阴角线费用
-        $concave_line_cost = BasisDecorationService::paintedCost($goods_concave_line, $concave_line_craft, $concave_line_length);
+        $concave_line_cost = BasisDecorationService::paintedCost($goods_concave_line,$concave_line_craft, $concave_line_length);
+
 //        石膏粉费用   石膏粉费用：个数×商品价格
 //        个数：（【3元】×乳胶漆面漆面积÷商品价格）
         $gypsum_powder_cost['quantity'] = ceil($gypsum_powder_craft['material'] * $finishing_coat_area / $goods_gypsum_powder['platform_price']);
@@ -1124,7 +1124,8 @@ class OwnerController extends Controller
         //总天数   乳胶漆天数+阴角线天数+腻子天数
         $total_day = $primer_day + $finishing_coat_day + $putty_day + $concave_line_day;
         //总人工费   人工费：（总天数）×【工人每天费用】
-        $coating_labor_price = $total_day * $labor_cost['univalence'];
+        $coating_labor_price['price'] = $total_day * $labor_cost['univalence'];
+        $coating_labor_price['worker_kind'] = $labor_cost['worker_kind'];
 
         //添加材料费用
         $add_price_area = DecorationAdd::AllArea('油漆', $post['area'], $post['city']);
