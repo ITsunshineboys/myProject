@@ -1234,6 +1234,10 @@ class BasisDecorationService
             {
                 $hall = $post['hall'] -1;
             }
+            $curtain = [];
+            $socket = [];
+            $light = [];
+            $switch = [];
             foreach ($goods_profit as $one_goods)
             {
                 foreach ($material_property_classify as $quantity)
