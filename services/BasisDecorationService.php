@@ -1227,6 +1227,13 @@ class BasisDecorationService
     {
         if (!empty($goods_profit))
         {
+            if ($post['hall'] <= 1)
+            {
+                $hall = 1;
+            }else
+            {
+                $hall = $post['hall'] -1;
+            }
             foreach ($goods_profit as $one_goods)
             {
                 foreach ($material_property_classify as $quantity)
@@ -1246,7 +1253,7 @@ class BasisDecorationService
                     }
                     if ($one_goods['title'] == '灯具')
                     {
-                        $quantity = $post['bedroom'] + $post['sittingRoom_diningRoom'] + $post['kitchen'];
+                        $quantity = $post['bedroom'] + $hall + $post['kitchen'];
                         $one_goods['show_price'] = $one_goods['platform_price'] * $quantity;
                         $one_goods['show_quantity'] = $quantity;
                         $light = $one_goods;
@@ -1254,7 +1261,7 @@ class BasisDecorationService
 
                     if ($one_goods['title'] == '窗帘')
                     {
-                        $quantity = $post['bedroom'] + $post['sittingRoom_diningRoom'];
+                        $quantity = $post['bedroom'] + $hall;
                         $one_goods['show_price'] = $one_goods['platform_price'] * $quantity;
                         $one_goods['show_quantity'] = $quantity;
                         $curtain = $one_goods;

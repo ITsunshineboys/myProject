@@ -1668,7 +1668,7 @@ class OwnerController extends Controller
 //        $post = [
 ////            'effect_id' => 1,
 //            'bedroom' => 2,
-//            'sittingRoom_diningRoom' => 1,
+//            'hall' => 1,
 //            'kitchen' => 1,
 //        ];
         $classify = '软装配套';
