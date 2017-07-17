@@ -1675,7 +1675,6 @@ class OwnerController extends Controller
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $goods = Goods::categoryById($material_property_classify);
         $goods_profit = BasisDecorationService::priceConversion($goods);
-        var_dump($goods_profit);exit;
         $goods_price = BasisDecorationService::mild($goods_profit,$post,$material_property_classify);
 
         return Json::encode([
