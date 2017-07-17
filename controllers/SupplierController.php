@@ -280,7 +280,9 @@ class SupplierController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
-            'data' => $data
+            'data' => [
+                'index' => $data
+            ]
         ]);
     }
 }
