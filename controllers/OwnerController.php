@@ -1502,6 +1502,7 @@ class OwnerController extends Controller
         $material = ['水泥','河沙','空心砖'];
         $goods = Goods::priceDetail(3,$material);
         $goods_price_max = BasisDecorationService::priceConversion($goods);
+        var_dump($goods_price_max);exit;
         $material = [];
         foreach ($goods_price_max as $max)
         {
