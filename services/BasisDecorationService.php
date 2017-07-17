@@ -53,23 +53,20 @@ class BasisDecorationService
             {
                 if($one['title'] == '网线' || $one['title'] == '电线' )
                 {
-                    $goods_max = self::profitMarginMax($one);
-                    $goods_price = $goods_max['platform_price'];
-                    $goods_id [] = $goods_max['id'];
+                    $goods_price = $one['platform_price'];
+                    $goods_id [] = $one['id'];
                 }
 
                 if($one['title'] == '线管')
                 {
-                    $goods_max = self::profitMarginMax($one);
-                    $spool_price = $goods_max['platform_price'];
-                    $goods_id [] = $goods_max['id'];
+                    $spool_price = $one['platform_price'];
+                    $goods_id [] = $one['id'];
                 }
 
                 if($one['title'] == '底盒')
                 {
-                    $goods_max = self::profitMarginMax($one);
-                    $bottom_case = $goods_max['platform_price'];
-                    $goods_id [] = $goods_max['id'];
+                    $bottom_case = $one['platform_price'];
+                    $goods_id [] = $one['id'];
                 }
             }
             $ids = GoodsAttr::findByGoodsIdUnit($goods_id);

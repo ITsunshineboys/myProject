@@ -200,20 +200,20 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>60,
-            'hall'=>60,
-            'toilet'=>60,
-            'kitchen'=>60,
-            'stairs_details_id'=>60,
-            'series'=>60,
-            'style'=>60,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         //人工价格
         $workers = LaborCost::profession($post,'弱电');
 
@@ -244,7 +244,6 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-            var_dump($goods);exit;
             $weak_current = BasisDecorationService::priceConversion($goods);
         } else
         {
@@ -345,6 +344,19 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $workers = LaborCost::profession($post,'强电');
 
         //点位查询
