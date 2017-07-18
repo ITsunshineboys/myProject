@@ -200,7 +200,7 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-//        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
 //            'bedroom'=>60,
