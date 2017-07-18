@@ -196,7 +196,7 @@ class BasisDecorationService
 
             return $total_area;
         }
-       
+
     }
 
     /**
