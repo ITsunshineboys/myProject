@@ -176,6 +176,7 @@ class BasisDecorationService
         {
             $area = [];
             $height = [];
+            var_dump($area);exit;
             foreach ($arr as $one)
             {
                 if($one['project_particulars'] == '厨房面积' || $one['project_particulars'] == '卫生间面积'){
