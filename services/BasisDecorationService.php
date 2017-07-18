@@ -170,9 +170,12 @@ class BasisDecorationService
      * @param int $quantity
      * @return float
      */
-    public static  function waterproofArea($arr =[],$house_area ='',$quantity = 1)
+    public static  function waterproofArea($arr,$house_area,$quantity = 1)
     {
-        if ($arr){
+        if ($arr)
+        {
+            $area = [];
+            $height = [];
             foreach ($arr as $one)
             {
                 if($one['project_particulars'] == '厨房面积' || $one['project_particulars'] == '卫生间面积'){
@@ -190,8 +193,10 @@ class BasisDecorationService
 //            厨房防水面积：厨房地面积+厨房墙面积
             $all_area = $ground + $wall_space;
             $total_area = round($all_area,2);
+
+            return $total_area;
         }
-        return $total_area;
+       
     }
 
     /**
