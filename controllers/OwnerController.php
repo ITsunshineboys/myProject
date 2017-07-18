@@ -1031,61 +1031,18 @@ class OwnerController extends Controller
             $decoration_list = DecorationList::findById($post['effect_id']);
             $paint_reconstruction = PaintReconstruction::find()->where(['decoration_list_id' => $decoration_list])->all();
             $goods_price = Goods::findQueryAll($paint_reconstruction);
-        } else {
+        } else
+        {
             $material = ['腻子','乳胶漆底漆','乳胶漆面漆','阴角线','石膏粉'];
             $goods = Goods::priceDetail(3,$material);
             $judge = BasisDecorationService::priceConversion($goods);
             $goods_price = BasisDecorationService::judge($judge,$post);
-            var_dump($goods_price);exit;
         }
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll('乳胶漆', $post['city']);
-        foreach ($goods_price as $goods)
-        {
-            if ($goods['title'] == '腻子')
-            {
-                $goods_putty = $goods;
-            }
+        $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price,$crafts,$post);
 
-            if ($goods['title'] == '乳胶漆底漆')
-            {
-                $goods_primer = $goods;
-            }
-
-            if ($goods['title'] == '乳胶漆面漆')
-            {
-                $goods_finishing_coat = $goods;
-            }
-
-            if ($goods['title'] == '阴角线')
-            {
-                $goods_concave_line = $goods;
-            }
-
-            if ($goods['title'] == '石膏粉')
-            {
-                $goods_gypsum_powder = $goods;
-            }
-        }
-
-        foreach ($crafts as $craft) {
-            if ($craft['project_details'] == '腻子') {
-                $putty_craft = $craft;
-            }
-            if ($craft['project_details'] == '乳胶漆底漆') {
-                $primer_craft = $craft;
-            }
-            if ($craft['project_details'] == '乳胶漆面漆') {
-                $finishing_coat_craft = $craft;
-            }
-            if ($craft['project_details'] == '阴角线') {
-                $concave_line_craft = $craft;
-            }
-            if ($craft['project_details'] == '石膏粉') {
-                $gypsum_powder_craft = $craft;
-            }
-        }
 ////        腻子费用
         $putty_cost = BasisDecorationService::paintedCost($goods_putty, $putty_craft, $putty_area);
 ////        底漆费用
