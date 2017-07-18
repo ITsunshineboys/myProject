@@ -244,13 +244,15 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-            $weak_current = BasisDecorationService::priceConversion($goods,$post);
+            $weak_current = BasisDecorationService::priceConversion($goods);
+            $judge = BasisDecorationService::judge($weak_current,$post);
+            $a = Goods::
         } else
         {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
             $goods = Goods::findQueryAll($weak, $post['city']);
-            $weak_current = BasisDecorationService::priceConversion($goods);
+            $weak_current = BasisDecorationService::priceConversion($goods,$post);
         }
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
@@ -510,20 +512,20 @@ class OwnerController extends Controller
      */
     public function actionWaterway()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>60,
-            'hall'=>60,
-            'toilet'=>60,
-            'kitchen'=>60,
-            'stairs_details_id'=>60,
-            'series'=>60,
-            'style'=>60,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         //人工价格
         $waterway_labor = LaborCost::profession($post,'水路工');
 
@@ -916,20 +918,20 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>60,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>60,
+            'hall'=>60,
+            'toilet'=>60,
+            'kitchen'=>60,
+            'stairs_details_id'=>60,
+            'series'=>1,
+            'style'=>1,
+            'window'=>60,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -1019,10 +1021,12 @@ class OwnerController extends Controller
             $material = ['腻子','乳胶漆底漆','乳胶漆面漆','阴角线','石膏粉'];
             $goods = Goods::priceDetail(3,$material);
             $goods_price = BasisDecorationService::priceConversion($goods,$post);
+            var_dump($goods_price);exit;
         }
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll('乳胶漆', $post['city']);
+        var_dump($goods_price);exit;
         foreach ($goods_price as $goods)
         {
             if ($goods['title'] == '腻子')

@@ -354,18 +354,25 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level, $title, $city = 510100)
+    public static function priceDetail($level,$title,$city = 510100)
     {
-        if (empty($level) && empty($title)) {
-            echo '请正确输入值';
-            exit;
-        } else {
-            $str = implode('\',\'', $title);
-            $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category as gc ON goods.category_id = gc.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . " AND gc.`level` = " . $level . " AND gc.title IN ('" . $str . "') AND goods.profit_rate = (SELECT MAX(goods.profit_rate)FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE goods_category.title = gc.title)";
-            $all = $db->createCommand($sql)->queryAll();
+        if ($level && $title)
+        {
+            $select ="goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id";
+            $all  = self::find()
+                ->asArray()
+                ->select($select)
+                ->leftJoin('goods_brand' , 'goods.brand_id = goods_brand.id')
+                ->leftJoin('goods_category as gc','goods.category_id = gc.id ')
+                ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
+                ->leftJoin('logistics_district','logistics_template.id = logistics_district.template_id')
+                ->where(['and',['logistics_district.district_code'=>$city],['gc.level'=>$level],['in','gc.title',$title]])
+                ->all();
+            return $all;
+        }else
+        {
+            return false;
         }
-        return $all;
     }
 
     public static function newMaterialAdd($level = '', $title = '', $city = 510100)

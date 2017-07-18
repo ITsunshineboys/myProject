@@ -1210,27 +1210,48 @@ class BasisDecorationService
      * @param $goods
      * @return array
      */
-    public static function priceConversion($goods,$post)
+    public static function priceConversion($goods)
     {
-        if (!empty($goods))
+        if (empty($goods))
         {
-
+           return false;
+        }else
+        {
             $conversion = [];
             foreach ($goods as $one_goods)
             {
-                if (($one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['series']) || ($one_goods['series_id'] == 0 && $one_goods['style_id'] == 0))
-                {
                 $one_goods['platform_price'] =  $one_goods['platform_price'] /100;
                 $one_goods['supplier_price'] =  $one_goods['supplier_price'] /100;
                 $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] /100;
                 $conversion [] = $one_goods;
-                }
             }
             return $conversion;
+        }
+    }
+
+    public static function judge($goods,$post)
+    {
+        if ($goods && $post)
+        {
+            foreach ($goods as $one_goods)
+            {
+                if ($one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $goods_judge [] =$one_goods;
+                }elseif ($one_goods['series_id'] == 0 && $one_goods['style_id'] == 0)
+                {
+                    $goods_judge [] =$one_goods;
+                }else
+                {
+                    $goods_judge [] =$one_goods;
+                }
+            }
+            return $goods_judge;
         }else
         {
-            return $goods;
+            return false;
         }
+
     }
 
     /**
