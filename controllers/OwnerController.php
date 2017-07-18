@@ -200,7 +200,7 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
 //            'bedroom'=>60,
@@ -244,15 +244,14 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-            $weak_current = BasisDecorationService::priceConversion($goods);
-            $judge = BasisDecorationService::judge($weak_current,$post);
-            $a = Goods::
+            $judge = BasisDecorationService::priceConversion($goods);
+            $weak_current= BasisDecorationService::judge($judge,$post);
         } else
         {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
             $goods = Goods::findQueryAll($weak, $post['city']);
-            $weak_current = BasisDecorationService::priceConversion($goods,$post);
+            $weak_current = BasisDecorationService::priceConversion($goods);
         }
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
@@ -268,23 +267,26 @@ class OwnerController extends Controller
         {
             if ($one_weak_current['title'] == '线管')
             {
-                 $one_weak_current['quantity'] = $material_price['wire_quantity'];
-                 $one_weak_current['cost'] = $material_price['wire_cost'];
-                $material [] =  $one_weak_current;
+                $goods_max = BasisDecorationService::profitMargin($one_weak_current);
+                $goods_max['quantity'] = $material_price['wire_quantity'];
+                $goods_max['cost'] = $material_price['wire_cost'];
+                $material [] =  $goods_max;
             }
 
             if ($one_weak_current['title'] == '网线')
             {
-                $one_weak_current['quantity'] = $material_price['spool_quantity'];
-                $one_weak_current['cost'] = $material_price['spool_cost'];
-                $material [] =  $one_weak_current;
+                $goods_max = BasisDecorationService::profitMargin($one_weak_current);
+                $goods_max['quantity'] = $material_price['spool_quantity'];
+                $goods_max['cost'] = $material_price['spool_cost'];
+                $material [] =  $goods_max;
             }
 
             if ($one_weak_current['title'] == '底盒')
             {
-                $one_weak_current['quantity'] = $material_price['bottom_quantity'];
-                $one_weak_current['cost'] = $material_price['bottom_cost'];
-                $material [] =  $one_weak_current;
+                $goods_max = BasisDecorationService::profitMargin($one_weak_current);
+                $goods_max['quantity'] = $material_price['bottom_quantity'];
+                $goods_max['cost'] = $material_price['bottom_cost'];
+                $material [] =  $goods_max;
             }
         }
         $material ['total_cost'] = $material_price['total_cost'];

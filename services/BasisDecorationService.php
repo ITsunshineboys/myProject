@@ -1410,4 +1410,18 @@ class BasisDecorationService
             return $standard;
         }
     }
+
+    public static function profitMargin($goods)
+    {
+        if ($goods)
+        {
+            if (count($goods) == count($goods, 1))
+            {
+                return $goods;
+            } else
+            {
+
+            }
+        }
+    }
 }
