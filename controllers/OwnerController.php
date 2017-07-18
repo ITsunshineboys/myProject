@@ -1184,21 +1184,21 @@ class OwnerController extends Controller
      */
     public function actionMudMake()
     {
-//        $post = \Yii::$app->request->post();
-                $post = [
-            'area'=>60,
-            'bedroom'=>60,
-            'hall'=>60,
-            'toilet'=>60,
-            'kitchen'=>60,
-            'stairs_details_id'=>60,
-            'series'=>1,
-            'style'=>1,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-            'waterproof_total_area' => 60,
-        ];
+        $post = \Yii::$app->request->post();
+//                $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//            'waterproof_total_area' => 60,
+//        ];
         $arr['worker_kind'] = '泥工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -1250,7 +1250,6 @@ class OwnerController extends Controller
                 $river_sand_craft = $local_craft['material'];
             }
         }
-//        var_dump($self_leveling_craft);exit;
 //        保护层面积
         $covering_layer_area = $post['waterproof_total_area'];
 //        保护层天数：保护层面积÷【每天做保护层面积】
@@ -1273,104 +1272,51 @@ class OwnerController extends Controller
 //        总天数：保护层天数+贴砖天数
         $total_day = ceil($tiling_day + $covering_layer_day);
         //总的人工费
-        $total_labor_cost = $total_day * $labor_day_cost;
+        $total_labor_cost['price'] = $total_day * $labor_day_cost;
+        $total_labor_cost['worker_kind'] = '泥工';
 
         //材料费
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $plastering_reconstruction = PlasteringReconstruction::findById($decoration_list);
             $goods_price = Goods::findQueryAll($plastering_reconstruction, $post['city']);
-            $wall_brick_value = 0;
-            $wall_brick_price = 0;
-            $floor_tile_value = 0;
-            $floor_tile_price = 0;
-            $drawing_room_price = 0;
-            $drawing_room_value = 0;
-            foreach ($goods_price as $goods_brick_area) {
-                if ($goods_brick_area['title'] == '墙砖') {
-                    $wall_brick_value = $goods_brick_area['value'];
-                    $wall_brick_price = $goods_brick_area['platform_price'];
-                }
-                if ($goods_brick_area['title'] == '地砖') {
-                    $floor_tile_value = $goods_brick_area['value'];
-                    $floor_tile_price = $goods_brick_area['platform_price'];
-                }
-                if ($goods_brick_area['title'] == '客厅地砖') {
-                    $drawing_room_price = $goods_brick_area['platform_price'];
-                    $drawing_room_value = $goods_brick_area['value'];
-                }
-            }
-        } else {
+        } else
+        {
             $material = ['水泥','自流平','墙砖','地砖','河沙'];
             $goods = Goods::priceDetail(3,$material);
-            $goods_price = BasisDecorationService::priceConversion($goods);
-            $ids = [];
-            foreach ($goods_price as $one_goods_price)
-            {
-                $ids [] = $one_goods_price['id'];
-            }
-            $goods_property = GoodsAttr::findByGoodsId($ids);
-            var_dump($goods_property);exit;
-            $wall_brick_value = 0;
-            $wall_brick_price = 0;
-            $floor_tile_value = 0;
-            $floor_tile_price = 0;
-            $drawing_room_price = 0;
-            $drawing_room_value = 0;
-            foreach ($goods_price as $goods_brick_area) {
-                if ($goods_brick_area['title'] == '墙砖') {
-                    $wall_brick_value = $goods_brick_area['value'];
-                    $wall_brick_price = $goods_brick_area['platform_price'];
-                }
-                if ($goods_brick_area['title'] == '地砖') {
-                    $floor_tile_value = $goods_brick_area['value'];
-                    $floor_tile_price = $goods_brick_area['platform_price'];
-                }
-                if ($goods_brick_area['title'] == '客厅地砖') {
-                    $drawing_room_price = $goods_brick_area['platform_price'];
-                    $drawing_room_value = $goods_brick_area['value'];
-                }
-            }
+            $goods_price = BasisDecorationService::priceConversion($goods,$post);
+            $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price,$post);
         }
 //        水泥面积=保护层面积+ 地砖面积+墙砖面积
         $cement_area = $covering_layer_area + $floor_tile_area + $floor_tile_area;
 //        水泥费用
-        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods_price, $cement_craft, '水泥');
+        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods_price, $cement_craft,$goods_attr,'水泥');
 //        自流平面积
         $self_leveling_area = $drawing_room_area;
 //        自流平费用
-        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods_price, $self_leveling_craft, '自流平');
+        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods_price, $self_leveling_craft,$goods_attr, '自流平');
 //        厨房/卫生间个数：（墙砖面积÷抓取墙砖面积）
-        $wall_brick_area = ($wall_brick_value / 1000) * ($wall_brick_value / 1000);
-        if ($wall_brick_area == 0)
-        {
-            $wall_brick_cost ['quantity'] = 0;
-        }else
-        {
-            $wall_brick_cost ['quantity'] = ceil($wall_area / $wall_brick_area);
-        }
+        $wall_brick_area = $goods_attr['all_brick_area']['area'] * $goods_attr['all_brick_area']['area'];
+        $wall_brick_cost ['quantity'] = ceil($wall_area / $wall_brick_area);
 //        厨房/卫生间墙砖费用
-        $wall_brick_cost['cost'] = $wall_brick_cost ['quantity'] * $wall_brick_price;
+        $wall_brick_cost['cost'] = $wall_brick_cost ['quantity'] * $goods_attr['all_brick_area']['price'];
+
 //        河沙费用
         $river_sand_cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods_price, $river_sand_craft, '河沙');
-
+        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods_price, $river_sand_craft,$goods_attr, '河沙');
 //        厨房/卫生间地砖费用
-        $kitchen_and_toilet_floor_tile_area = ($floor_tile_value / 1000) * ($floor_tile_value / 1000);
-        if ($kitchen_and_toilet_floor_tile_area == 0)
-        {
-            $kitchen_and_toilet['quantity'] = 0;
-        }else
-        {
-            $kitchen_and_toilet['quantity'] = ceil(($kitchen_area + $toilet_area) / $kitchen_and_toilet_floor_tile_area);
-        }
-        $kitchen_and_toilet['cost'] = $kitchen_and_toilet['quantity'] * $floor_tile_price;
+        $kitchen_and_toilet_floor_tile_area = $goods_attr['floor_tile_area']['area'] * $goods_attr['floor_tile_area']['area'];
+        $kitchen_and_toilet['quantity'] = ceil(($kitchen_area + $toilet_area) / $kitchen_and_toilet_floor_tile_area);
+        $kitchen_and_toilet['cost'] = $kitchen_and_toilet['quantity'] * $goods_attr['floor_tile_area']['price'];
+
 //        客厅地砖费用
-        $drawing_room_floor_tile_area = ($drawing_room_value / 1000) * ($drawing_room_value / 1000);
+        $drawing_room_floor_tile_area = $goods_attr['floor_tile_area']['area'] * $goods_attr['floor_tile_area']['area'];
         $drawing_room_cost['quantity'] = ceil($drawing_room_area * $drawing_room_floor_tile_area);
-        $drawing_room_cost['cost'] = $drawing_room_cost['quantity'] * $drawing_room_price;
+        $drawing_room_cost['cost'] = $drawing_room_cost['quantity'] * $goods_attr['floor_tile_area']['price'];
         //        地砖费用
-        $floor_tile_cost = $kitchen_and_toilet['cost'] + $drawing_room_cost['cost'];
+        $floor_tile_cost['quantity'] = $drawing_room_cost['quantity'] +  $kitchen_and_toilet['quantity'];
+        $floor_tile_cost['cost'] = $kitchen_and_toilet['cost'] + $drawing_room_cost['cost'];
+
         //材料总费用
         $material_cost_total = $floor_tile_cost['cost'] + $river_sand_cost['cost'] + $cement_cost['cost'] + $self_leveling_cost['cost'] + $wall_brick_cost['cost'];
 
@@ -1469,19 +1415,19 @@ class OwnerController extends Controller
     public function actionHandyman()
     {
         $post = \Yii::$app->request->post();
-        $post = [
-            'province' => 510000,
-            'city' => 510100,
-            '12_dismantle' => 20,
-            '24_dismantle' => 25,
-            'repair' => 22,
-            '12_new_construction' => 20,
-            '24_new_construction' => 25,
-            'building_scrap' => true,
-            'area' =>62,
-            'series' =>1,
-            'style' =>1
-        ];
+//        $post = [
+//            'province' => 510000,
+//            'city' => 510100,
+//            '12_dismantle' => 20,
+//            '24_dismantle' => 25,
+//            'repair' => 22,
+//            '12_new_construction' => 20,
+//            '24_new_construction' => 25,
+//            'building_scrap' => true,
+//            'area' =>62,
+//            'series' =>1,
+//            'style' =>1
+//        ];
         $handyman = '杂工';
         $labor = LaborCost::univalence($post,'杂工');
 
@@ -1497,12 +1443,12 @@ class OwnerController extends Controller
         }
 
 //        总人工费
-        $labor_cost = $total_day['total_day'] * $labor[0]['univalence'] + $building_scrap['cost'];
+        $labor_cost['price'] = $total_day['total_day'] * $labor[0]['univalence'] + $building_scrap['cost'];
+        $labor_cost['worker_kind'] = $handyman;
         //材料费
         $material = ['水泥','河沙','空心砖'];
         $goods = Goods::priceDetail(3,$material);
         $goods_price_max = BasisDecorationService::priceConversion($goods);
-        var_dump($goods_price_max);exit;
         $material = [];
         foreach ($goods_price_max as $max)
         {
@@ -1513,30 +1459,31 @@ class OwnerController extends Controller
                 $cement_cost = BasisDecorationService::cementCost($post, $craft,$max,$goods_attr);
                 $max['quantity'] = $cement_cost['quantity'];
                 $max['cost'] = $cement_cost['cost'];
-                $material = $max;
+                $material [] = $max;
             }
-//            if ($max['title'] == '空心砖')
-//            {
-//                //空心砖费用
-//                $brick_standard = GoodsAttr::findByGoodsId($max['id']);
-//                $brick_cost = BasisDecorationService::brickCost($post, $max, $brick_standard);
-//                $max['quantity'] = $brick_cost['quantity'];
-//                $max['cost'] = $brick_cost['cost'];
-//                $material [] = $max;
-//            }
-//            if ($max['title'] == '河沙')
-//            {
-//                //河沙费用
-//                $river_sand = BasisDecorationService::riverSandCost($post, $max, $craft);
-//                $max['quantity'] = $river_sand['quantity'];
-//                $max['cost'] = $river_sand['cost'];
-//                $material [] = $max;
-//            }
+            if ($max['title'] == '空心砖')
+            {
+                //空心砖费用
+                $brick_standard = GoodsAttr::findByGoodsId($max['id']);
+                $brick_cost = BasisDecorationService::brickCost($post, $max, $brick_standard);
+                $max['quantity'] = $brick_cost['quantity'];
+                $max['cost'] = $brick_cost['cost'];
+                $material [] = $max;
+            }
+            if ($max['title'] == '河沙')
+            {
+                $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
+                //河沙费用
+                $river_sand = BasisDecorationService::riverSandCost($post, $max, $craft,$goods_attr);
+                $max['quantity'] = $river_sand['quantity'];
+                $max['cost'] = $river_sand['cost'];
+                $material [] = $max;
+            }
         }
-        var_dump($material);exit;
         //总材料费
         $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand['cost'];
         $material['total_cost'] = $total_material_cost;
+
 
         //添加材料费用
         $add_price_area = DecorationAdd::AllArea('杂工', $post['area'], $post['city']);
