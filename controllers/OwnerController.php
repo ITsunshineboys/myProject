@@ -244,7 +244,7 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-            $weak_current = BasisDecorationService::priceConversion($goods);
+            $weak_current = BasisDecorationService::priceConversion($goods,$post);
         } else
         {
             $decoration_list = DecorationList::findById($post['effect_id']);
@@ -412,7 +412,7 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['电线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
-            $strong_current = BasisDecorationService::priceConversion($goods);
+            $strong_current = BasisDecorationService::priceConversion($goods,$post);
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list, '强电');
@@ -555,7 +555,7 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['PPR水管','PVC管'];
             $goods = Goods::priceDetail(3,$material);
-            $waterway_current = BasisDecorationService::priceConversion($goods);
+            $waterway_current = BasisDecorationService::priceConversion($goods,$post);
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterwayReconstruction::findByAll($decoration_list);
@@ -666,7 +666,7 @@ class OwnerController extends Controller
             //查询弱电所需要材料
             $material = ['防水涂料','未知'];
             $goods = Goods::priceDetail(3,$material);
-            $waterproof = BasisDecorationService::priceConversion($goods);
+            $waterproof = BasisDecorationService::priceConversion($goods,$post);
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterproofReconstruction::findByAll($decoration_list);
@@ -819,7 +819,7 @@ class OwnerController extends Controller
         } else {
             $material = ['石膏板','龙骨','丝杆'];
             $goods = Goods::priceDetail(3,$material);
-            $goods_price = BasisDecorationService::priceConversion($goods);
+            $goods_price = BasisDecorationService::priceConversion($goods,$post);
         }
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('木作', $post['city']);
@@ -1018,7 +1018,7 @@ class OwnerController extends Controller
         } else {
             $material = ['腻子','乳胶漆底漆','乳胶漆面漆','阴角线','石膏粉'];
             $goods = Goods::priceDetail(3,$material);
-            $goods_price = BasisDecorationService::priceConversion($goods);
+            $goods_price = BasisDecorationService::priceConversion($goods,$post);
         }
 
         //当地工艺
@@ -1448,7 +1448,7 @@ class OwnerController extends Controller
         //材料费
         $material = ['水泥','河沙','空心砖'];
         $goods = Goods::priceDetail(3,$material);
-        $goods_price_max = BasisDecorationService::priceConversion($goods);
+        $goods_price_max = BasisDecorationService::priceConversion($goods,$post);
         $material = [];
         foreach ($goods_price_max as $max)
         {
