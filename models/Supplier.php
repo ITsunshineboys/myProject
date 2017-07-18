@@ -60,6 +60,10 @@ class Supplier extends ActiveRecord
     ];
     const FIELDS_VIEW_ADMIN_EXTRA = [
         'mobile',
+        'legal_person',
+        'identity_no',
+        'identity_card_front_image',
+        'identity_card_back_image',
     ];
     const FIELDS_VIEW_APP_MODEL = [
         'status',
