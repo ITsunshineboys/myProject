@@ -114,15 +114,13 @@ class BasisDecorationService
             {
                 if($one['title'] == 'PVC管')
                 {
-                    $goods_max = self::profitMarginMax($one);
-                    $pvc_price = $goods_max['platform_price'];
-                    $goods_id [] = $goods_max['id'];
+                    $pvc_price = $one['platform_price'];
+                    $goods_id [] = $one['id'];
                 }
                 if($one['title'] == 'PPR水管')
                 {
-                    $goods_max = self::profitMarginMax($one);
-                    $ppr_price = $goods_max['platform_price'];
-                    $goods_id [] = $goods_max['id'];
+                    $ppr_price = $one['platform_price'];
+                    $goods_id [] = $one['id'];
                 }
             }
            $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
