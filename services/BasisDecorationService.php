@@ -1460,7 +1460,6 @@ class BasisDecorationService
     {
         if ($goods)
         {
-            var_dump($goods);exit;
             if (count($goods) == count($goods, 1))
             {
                 return $goods;
