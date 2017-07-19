@@ -1280,7 +1280,7 @@ class OwnerController extends Controller
         {
             $material = ['水泥','自流平','墙砖','地砖','河沙'];
             $goods = Goods::priceDetail(3,$material);
-            $goods_price = BasisDecorationService::priceConversion($goods,$post);
+            $goods_price = BasisDecorationService::priceConversion($goods);
             $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price,$post);
         }
 //        水泥面积=保护层面积+ 地砖面积+墙砖面积
@@ -1669,35 +1669,39 @@ class OwnerController extends Controller
     public function actionFixationFurniture()
     {
 //        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
         $post = [
 //            'effect_id' => 1,
             'bedroom' => 2,
             'stairway_id'=>1,
-            'stairs' =>'实木构造'
+            'stairs' =>'实木构造',
+            'style' =>1,
+            'series'=>1
         ];
         $classify = '固定家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $goods = Goods::categoryById($material_property_classify);
-        foreach ($goods as &$one_goods)
-        {
-            foreach ($material_property_classify as $quantity) {
-                if ($one_goods['title'] == $quantity['material']) {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
-                    $one_goods['show_quantity'] = $quantity['quantity'];
-                }
+        $goods_price = BasisDecorationService::priceConversion($goods);
+        $series_style = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
 
-                if ($one_goods['title'] == '衣柜') {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['bedroom'];
-                    $one_goods['show_quantity'] = $post['bedroom'];
+        if (!is_null($post['stairway_id']))
+        {
+            $stairs = Goods::findByCategory('楼梯');
+            $stairs_price = BasisDecorationService::priceConversion($stairs);
+            foreach ($stairs_price as $one_stairs_price)
+            {
+                if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style'])
+                {
+                    $condition_stairs = $one_stairs_price;
                 }
             }
         }
+
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'goods' => $goods,
+                'goods' => $series_style,
+                ''
             ]
         ]);
     }

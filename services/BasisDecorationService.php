@@ -8,6 +8,7 @@
 namespace app\services;
 
 use app\models\GoodsAttr;
+use yii\web\BadRequestHttpException;
 
 class BasisDecorationService
 {
@@ -1239,6 +1240,12 @@ class BasisDecorationService
         }
     }
 
+    /**
+     * 条件判断
+     * @param $goods
+     * @param $post
+     * @return array|bool
+     */
     public static function judge($goods,$post)
     {
         if ($goods && $post)
@@ -1343,12 +1350,35 @@ class BasisDecorationService
             $ids = [];
             foreach ($goods as $one_goods)
             {
-                if (($one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['series']) || ($one_goods['series_id'] == 0 && $one_goods['style_id'] == 0))
-                {
-                    $ids [] = $one_goods['id'];
-                }
+                $ids [] = $one_goods['id'];
             }
             $goods_property = GoodsAttr::findByGoodsIdUnit($ids);
+
+            foreach ($goods as $one_goods)
+            {
+                if ($one_goods['title'] == '地砖' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $floor_tile[] = $one_goods;
+                }
+                if ($one_goods['title'] == '墙砖' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $wall_tile [] = $one_goods;
+                }
+                if ($one_goods['title'] == '河沙')
+                {
+                    $river_sand [] = $one_goods;
+                }
+                if ($one_goods['title'] == '水泥')
+                {
+                    $concrete [] = $one_goods;
+                }
+                if ($one_goods['title'] == '自流平')
+                {
+                    $self_leveling [] = $one_goods;
+                }
+            }
+
+
             foreach ($goods_property as $goods_brick_area)
             {
                 foreach ($goods as $goods_price)
@@ -1430,16 +1460,24 @@ class BasisDecorationService
     {
         if ($goods)
         {
+            var_dump($goods);exit;
             if (count($goods) == count($goods, 1))
             {
                 return $goods;
             } else
             {
-
+                var_dump($goods);exit;
             }
         }
     }
 
+    /**
+     * 乳胶漆风格和系列
+     * @param $goods_price
+     * @param $crafts
+     * @param $post
+     * @return mixed
+     */
     public static function coatingSeriesAndStyle($goods_price,$crafts,$post)
     {
         if ($goods_price && $crafts)
@@ -1477,6 +1515,43 @@ class BasisDecorationService
                 }
             }
             return $goods_all;
+        }
+    }
+
+    public static function fixationFurnitureSeriesStyle($goods,$post)
+    {
+        if ($goods)
+        {
+
+            foreach ($goods as $one_goods)
+            {
+                if ($one_goods['title'] == '衣柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $chest = $one_goods;
+                }
+                if ($one_goods['title'] == '酒柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $wine_cabinet = $one_goods;
+                }
+                if ($one_goods['title'] == '橱柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $cabinet = $one_goods;
+                }
+                if ($one_goods['title'] == '吊柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $wall_cupboard = $one_goods;
+                }
+                if ($one_goods['title'] == '鞋柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $shoe_cabinet = $one_goods;
+                }
+            }
+            $all_goods[] = $chest;
+            $all_goods[] = $wine_cabinet;
+            $all_goods[] = $cabinet;
+            $all_goods[] = $wall_cupboard;
+            $all_goods[] = $shoe_cabinet;
+            return $all_goods;
         }
     }
 }

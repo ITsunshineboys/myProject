@@ -1068,4 +1068,24 @@ AND goods.id IN (" . $id . ")";
     {
         return $this->hasOne(GoodsBrand::className(), ['id' => 'brand_id']);
     }
+
+    public static function findByCategory($condition)
+    {
+        if ($condition)
+        {
+            $select ="goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path";
+            $goods = self::find()
+                ->asArray()
+                ->select($select)
+                ->leftJoin('goods_attr','goods.id = goods_attr.goods_id')
+                ->leftJoin('goods_brand','goods.brand_id = goods_brand.id')
+                ->leftJoin('goods_category AS gc','goods.category_id = gc.id')
+                ->leftJoin('logistics_template','goods.supplier_id = logistics_template.supplier_id')
+                ->leftJoin('logistics_district','logistics_template.id = logistics_district.template_id')
+                ->where(['gc.title'=>$condition])
+                ->all();
+
+            return $goods;
+        }
+    }
 }
