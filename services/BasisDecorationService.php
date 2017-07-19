@@ -323,7 +323,7 @@ class BasisDecorationService
      * @param string $series
      * @return mixed
      */
-    public static function  carpentryModellingLength($arr = [],$coefficient_all = [],$series = '1')
+    public static function  carpentryModellingLength($arr,$coefficient_all,$series = '1')
     {
         switch ($series)
         {
@@ -788,6 +788,8 @@ class BasisDecorationService
             $goods_value_one = '';
             foreach ($goods_value as $value)
             {
+                if ($goods['title'] == '阴角线')
+                {
                     if ($value['name'] == '长度' && $value['title'] =='阴角线')
                     {
                         $goods_value_one = $value['value'];
@@ -795,7 +797,10 @@ class BasisDecorationService
                     {
                         $goods_value_one = $value['value'];
                     }
-
+                }else
+                {
+                    $goods_value_one = $value['value'];
+                }
             }
 //        个数：（腻子面积×【0.33kg】÷抓取的商品的规格重量）
             $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods_value_one);
@@ -1444,51 +1449,34 @@ class BasisDecorationService
                 if ($goods['title'] == '腻子' && $goods['series_id'] == $post['series'])
                 {
                     $goods_max = self::profitMargin($goods);
-                    $goods_putty = $goods_max;
+                    $goods_all ['putty'] = $goods_max;
                 }
 
                 if ($goods['title'] == '乳胶漆底漆' && $goods['series_id'] == $post['series'])
                 {
                     $goods_max = self::profitMargin($goods);
-                    $goods_primer = $goods_max;
+                    $goods_all ['primer'] = $goods_max;
                 }
 
                 if ($goods['title'] == '乳胶漆面漆' && $goods['series_id'] == $post['series'])
                 {
-                    $goods_finishing_coat = $goods;
+                    $goods_max = self::profitMargin($goods);
+                    $goods_all ['finishing_coat'] = $goods_max;
                 }
 
                 if ($goods['title'] == '阴角线' && $goods['style_id'] == $post['style'])
                 {
-                    $goods_concave_line = $goods;
+                    $goods_max = self::profitMargin($goods);
+                    $goods_all ['concave_line'] = $goods_max;
                 }
 
-                if ($goods['title'] == '石膏粉' && $goods['style_id'] == 0 && $goods['series'] == 0)
+                if ($goods['title'] == '石膏粉' && $goods['style_id'] == 0 && $goods['series_id'] == 0)
                 {
-                    $goods_gypsum_powder = $goods;
+                    $goods_max = self::profitMargin($goods);
+                    $goods_all ['gypsum_powder'] = $goods_max;
                 }
             }
-            var_dump($goods_putty);exit;
-            foreach ($crafts as $craft) {
-                if ($craft['project_details'] == '腻子') {
-                    $putty_craft = $craft;
-                }
-                if ($craft['project_details'] == '乳胶漆底漆') {
-                    $primer_craft = $craft;
-                }
-                if ($craft['project_details'] == '乳胶漆面漆') {
-                    $finishing_coat_craft = $craft;
-                }
-                if ($craft['project_details'] == '阴角线') {
-                    $concave_line_craft = $craft;
-                }
-                if ($craft['project_details'] == '石膏粉') {
-                    $gypsum_powder_craft = $craft;
-                }
-            }
-
-            return 111;
+            return $goods_all;
         }
-
     }
 }
