@@ -1051,9 +1051,9 @@ class BasisDecorationService
 
 //            水泥用量=新建用量+补烂用量
 //        新建用量=12墙新建面积×【10kg】+24墙新建面积×【15kg】+补烂长度×【2kg】
-        $new_12 = $get_area['12_dismantle'] * $cement_12;
-        $new_24 = $get_area['24_dismantle'] * $cement_24;
-        $new_repair = $get_area['24_dismantle'] * $repair;
+        $new_12 = $get_area['12_new_construction'] * $cement_12;
+        $new_24 = $get_area['24_new_construction'] * $cement_24;
+        $new_repair = $get_area['repair'] * $repair;
         $new_dosage = $new_12 + $new_24 + $new_repair;
 
             //        个数：（水泥用量÷抓取的商品的KG）
@@ -1097,8 +1097,8 @@ class BasisDecorationService
 //        空心砖费用：个数×抓取的商品价格
 //        个数：（空心砖用量）
 //        空心砖用量=12墙新建面积÷长÷高+24墙新建面积÷宽÷高
-            $dosage_12 = $get_area['12_dismantle'] / $length / $wide;
-            $dosage_24 = $get_area['12_dismantle'] / $wide / $high;
+            $dosage_12 = $get_area['12_new_construction'] / $length / $wide;
+            $dosage_24 = $get_area['24_new_construction'] / $wide / $high;
             $brick['quantity'] = ceil($dosage_12 + $dosage_24);
             $brick['cost'] = $brick['quantity'] * $goods['platform_price'];
         }else
@@ -1142,8 +1142,8 @@ class BasisDecorationService
             }
 //              河沙用量=新建用量+补烂用量
 //              新建用量=12墙新建面积×【3kg】+24墙新建面积×【3kg】+补烂长度×【2kg】
-            $dosage_12 = $get_area['12_dismantle'] * $river_sand_12;
-            $dosage_24 = $get_area['24_dismantle'] * $river_sand_24;
+            $dosage_12 = $get_area['12_new_construction'] * $river_sand_12;
+            $dosage_24 = $get_area['24_new_construction'] * $river_sand_24;
             $dosage_repair = $get_area['repair'] * $river_sand_repair;
             $river_sand_dosage = $dosage_12 + $dosage_24 + $dosage_repair;
 //              个数：（河沙用量÷抓取的商品的KG）

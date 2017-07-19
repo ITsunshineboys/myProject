@@ -1414,7 +1414,7 @@ class OwnerController extends Controller
 //        $post = [
 //            'province' => 510000,
 //            'city' => 510100,
-//            '12_dismantle' => 10,
+//            '12_dismantle' => 0,
 //            '24_dismantle' => 0,
 //            'repair' => 0,
 //            '12_new_construction' => 10,
@@ -1529,8 +1529,8 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'total_material' => $material,
                 'labor_cost' => $labor_cost,
+                'total_material' => $material,
                 'add_price' => $add_price,
             ]
         ]);
