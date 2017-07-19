@@ -871,7 +871,7 @@ class BasisDecorationService
      * @param $day_area
      * @return mixed
      */
-    public static function wallArea($get_area = [],$day_area = [])
+    public static function wallArea($get_area,$day_area)
     {
         if ($get_area && $day_area)
         {
@@ -927,7 +927,7 @@ class BasisDecorationService
      * @param array $craft
      * @return mixed
      */
-    public static function haveBuildingScrap($get_area = [],$craft = [])
+    public static function haveBuildingScrap($get_area,$craft)
     {
         if ($get_area && $craft)
         {
@@ -960,7 +960,7 @@ class BasisDecorationService
      * @param array $craft
      * @return mixed
      */
-    public static function nothingBuildingScrap($get_area = [],$craft = [])
+    public static function nothingBuildingScrap($get_area,$craft)
     {
         if ($get_area && $craft)
         {

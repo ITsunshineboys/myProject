@@ -1035,8 +1035,7 @@ class OwnerController extends Controller
         {
             $material = ['腻子','乳胶漆底漆','乳胶漆面漆','阴角线','石膏粉'];
             $goods = Goods::priceDetail(3,$material);
-            $judge = BasisDecorationService::priceConversion($goods);
-            $goods_price = BasisDecorationService::judge($judge,$post);
+            $goods_price = BasisDecorationService::priceConversion($goods);
         }
 
         //当地工艺
@@ -1415,13 +1414,13 @@ class OwnerController extends Controller
 //        $post = [
 //            'province' => 510000,
 //            'city' => 510100,
-//            '12_dismantle' => 20,
-//            '24_dismantle' => 25,
-//            'repair' => 22,
-//            '12_new_construction' => 20,
-//            '24_new_construction' => 25,
+//            '12_dismantle' => 10,
+//            '24_dismantle' => 0,
+//            'repair' => 0,
+//            '12_new_construction' => 10,
+//            '24_new_construction' => 0,
 //            'building_scrap' => true,
-//            'area' =>62,
+//            'area' =>60,
 //            'series' =>1,
 //            'style' =>1
 //        ];
@@ -1429,12 +1428,12 @@ class OwnerController extends Controller
         $labor = LaborCost::univalence($post,'杂工');
 
 //        总天数
-        $total_day = BasisDecorationService::wallArea($post, $labor);
+        $total_day = BasisDecorationService::wallArea($post,$labor);
 
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($handyman, $post['city']);
         if ($post['building_scrap'] == true) {
-            $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
+            $building_scrap = BasisDecorationService::haveBuildingScrap($post,$craft);
         } else {
             $building_scrap = BasisDecorationService::nothingBuildingScrap($post, $craft);
         }
@@ -1442,39 +1441,43 @@ class OwnerController extends Controller
 //        总人工费
         $labor_cost['price'] = $total_day['total_day'] * $labor[0]['univalence'] + $building_scrap['cost'];
         $labor_cost['worker_kind'] = $handyman;
+
         //材料费
         $material = ['水泥','河沙','空心砖'];
         $goods = Goods::priceDetail(3,$material);
-        $goods_price_max = BasisDecorationService::priceConversion($goods,$post);
+        $goods_price = BasisDecorationService::priceConversion($goods);
         $material = [];
-        foreach ($goods_price_max as $max)
+        foreach ($goods_price as $max)
         {
             if ($max['title'] == '水泥')
             {
-                $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
+                $goods_max = BasisDecorationService::profitMargin($max);
+                $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                 //水泥费用
-                $cement_cost = BasisDecorationService::cementCost($post, $craft,$max,$goods_attr);
-                $max['quantity'] = $cement_cost['quantity'];
-                $max['cost'] = $cement_cost['cost'];
-                $material [] = $max;
+                $cement_cost = BasisDecorationService::cementCost($post,$craft,$goods_max,$goods_attr);
+                $goods_max['quantity'] = $cement_cost['quantity'];
+                $goods_max['cost'] = $cement_cost['cost'];
+                $material [] = $goods_max;
             }
             if ($max['title'] == '空心砖')
             {
+                $goods_max = BasisDecorationService::profitMargin($max);
                 //空心砖费用
-                $brick_standard = GoodsAttr::findByGoodsId($max['id']);
-                $brick_cost = BasisDecorationService::brickCost($post, $max, $brick_standard);
-                $max['quantity'] = $brick_cost['quantity'];
-                $max['cost'] = $brick_cost['cost'];
-                $material [] = $max;
+                $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
+                $brick_cost = BasisDecorationService::brickCost($post,$goods_max, $brick_standard);
+                $goods_max['quantity'] = $brick_cost['quantity'];
+                $goods_max['cost'] = $brick_cost['cost'];
+                $material [] = $goods_max;
             }
             if ($max['title'] == '河沙')
             {
-                $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
+                $goods_max = BasisDecorationService::profitMargin($max);
+                $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                 //河沙费用
-                $river_sand = BasisDecorationService::riverSandCost($post, $max, $craft,$goods_attr);
-                $max['quantity'] = $river_sand['quantity'];
-                $max['cost'] = $river_sand['cost'];
-                $material [] = $max;
+                $river_sand = BasisDecorationService::riverSandCost($post,$goods_max, $craft,$goods_attr);
+                $goods_max['quantity'] = $river_sand['quantity'];
+                $goods_max['cost'] = $river_sand['cost'];
+                $material [] = $goods_max;
             }
         }
         //总材料费
