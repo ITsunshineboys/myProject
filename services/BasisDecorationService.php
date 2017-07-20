@@ -1362,7 +1362,8 @@ class BasisDecorationService
                 }
                 if ($one_goods['title'] == '墙砖' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
-                    $wall_tile [] = $one_goods;
+                    $wall_tile_max = max($one_goods['profit_rate'],$one_goods['profit_rate']);
+                    $a = $one_goods['profit_rate'];
                 }
                 if ($one_goods['title'] == '河沙')
                 {
@@ -1378,76 +1379,47 @@ class BasisDecorationService
                 }
             }
 
-
-            foreach ($goods_property as $goods_brick_area)
-            {
-                foreach ($goods as $goods_price)
-                {
-                    if ($goods_brick_area['title'] == '墙砖' && $goods_price['title'] == '墙砖')
-                    {
-                        $all_brick_price = $goods_price['platform_price'];
-                        if ($goods_brick_area['name']  == '长度')
-                        {
-                            $all_brick_length = $goods_brick_area['value'] / 1000;
-                        }
-                        if ($goods_brick_area['name']  == '宽度')
-                        {
-                            $all_brick_wide = $goods_brick_area['value'] / 1000;
-                        }
-                    }
-                    if ($goods_brick_area['title'] == '地砖' && $goods_price['title'] == '地砖')
-                    {
-                        $floor_tile_price = $goods_price['platform_price'];
-                        if ($goods_brick_area['name']  == '长度')
-                        {
-                            $floor_tile_length = $goods_brick_area['value'] / 1000;
-                        }
-                        if ($goods_brick_area['name']  == '宽度')
-                        {
-                            $floor_tile_wide = $goods_brick_area['value'] / 1000;
-                        }
-                    }
-
-                    if ($goods_brick_area['title'] == '河沙' && $goods_price['title'] == '河沙')
-                    {
-                        $river_sand_weight = $goods_brick_area['value'];
-                        $river_sand_price = $goods_price['platform_price'];
-                    }
-
-                    if ($goods_brick_area['title'] == '水泥' && $goods_price['title'] == '水泥')
-                    {
-                        $concrete_weight = $goods_brick_area['value'];
-                        $concrete_price = $goods_price['platform_price'];
-                    }
-
-                    if ($goods_brick_area['title'] == '自流平' && $goods_price['title'] == '自流平')
-                    {
-                        $self_leveling_weight = $goods_brick_area['value'];
-                        $self_leveling_price = $goods_price['platform_price'];
-                    }
-                }
-            }
-            $standard ['all_brick_area']['title'] = '墙砖';
-            $standard ['all_brick_area']['price'] = $all_brick_price;
-            $standard ['all_brick_area']['area'] = $all_brick_length * $all_brick_wide;
-
-            $standard ['floor_tile_area'] ['title']= '地砖';
-            $standard ['floor_tile_area'] ['price']= $floor_tile_price;
-            $standard ['floor_tile_area'] ['area']= $floor_tile_length * $floor_tile_wide;
-
-            $standard ['river_sand_weight']['title'] = '河沙';
-            $standard ['river_sand_weight']['price'] = $river_sand_price;
-            $standard ['river_sand_weight']['area'] = $river_sand_weight;
-
-            $standard ['concrete_weight']['title'] = '水泥';
-            $standard ['concrete_weight']['price'] = $concrete_price;
-            $standard ['concrete_weight']['area'] = $concrete_weight;
-
-            $standard ['self_leveling_weight']['title'] = '自流平';
-            $standard ['self_leveling_weight']['price'] = $self_leveling_price;
-            $standard ['self_leveling_weight']['area'] = $self_leveling_weight;
-
-            return $standard;
+//            foreach ($goods_property as $goods_brick_area)
+//            {
+//                foreach ($floor_tile as $one_floor_tile)
+//                {
+//                    if ($one_floor_tile['id'] == $goods_brick_area['goods_id'])
+//                    {
+//                        $floor_tile_property [] = $goods_brick_area;
+//                    }
+//                }
+//                foreach ($wall_tile as $one_wall_tile)
+//                {
+//                    if ($one_wall_tile['id'] == $goods_brick_area['goods_id'])
+//                    {
+//                        $wall_tile_property [] = $goods_brick_area;
+//                    }
+//                }
+////
+//            }
+            var_dump($wall_tile_max);
+            exit;
+//            $standard ['all_brick_area']['title'] = '墙砖';
+//            $standard ['all_brick_area']['price'] = $all_brick_price;
+//            $standard ['all_brick_area']['area'] = $all_brick_length * $all_brick_wide;
+//
+//            $standard ['floor_tile_area'] ['title']= '地砖';
+//            $standard ['floor_tile_area'] ['price']= $floor_tile_price;
+//            $standard ['floor_tile_area'] ['area']= $floor_tile_length * $floor_tile_wide;
+//
+//            $standard ['river_sand_weight']['title'] = '河沙';
+//            $standard ['river_sand_weight']['price'] = $river_sand_price;
+//            $standard ['river_sand_weight']['area'] = $river_sand_weight;
+//
+//            $standard ['concrete_weight']['title'] = '水泥';
+//            $standard ['concrete_weight']['price'] = $concrete_price;
+//            $standard ['concrete_weight']['area'] = $concrete_weight;
+//
+//            $standard ['self_leveling_weight']['title'] = '自流平';
+//            $standard ['self_leveling_weight']['price'] = $self_leveling_price;
+//            $standard ['self_leveling_weight']['area'] = $self_leveling_weight;
+//
+//            return $standard;
         }
     }
 

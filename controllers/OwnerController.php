@@ -1249,7 +1249,6 @@ class OwnerController extends Controller
             $goods = Goods::priceDetail(3,$material);
             $goods_price = BasisDecorationService::priceConversion($goods);
             $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price,$post);
-            var_dump($goods_attr);exit;
         }
 //        水泥面积=保护层面积+ 地砖面积+墙砖面积
         $cement_area = $covering_layer_area + $floor_tile_area + $floor_tile_area;
