@@ -200,7 +200,7 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-//        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
 //            'bedroom'=>60,
@@ -233,10 +233,9 @@ class OwnerController extends Controller
                 }
             }
             $weak_current_all = array_combine($weak_current_place, $weak_current_points);
-            $sitting_room = $weak_current_all['客厅'] * $post['hall'];
-            $master_bedroom = $weak_current_all['主卧'] * 1;
-            $secondary_bedroom = $weak_current_all['次卧'] * $post['bedroom'] - 1;
-            $weak_points = $sitting_room + $master_bedroom + $secondary_bedroom;
+            $sitting_room = $weak_current_all['客餐厅'] * $post['hall'];
+            $secondary_bedroom = $weak_current_all['卧室'] * $post['bedroom'];
+            $weak_points = $sitting_room + $secondary_bedroom;
         }
 
         if (empty($post['effect_id']))
@@ -1250,6 +1249,7 @@ class OwnerController extends Controller
             $goods = Goods::priceDetail(3,$material);
             $goods_price = BasisDecorationService::priceConversion($goods);
             $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price,$post);
+            var_dump($goods_attr);exit;
         }
 //        水泥面积=保护层面积+ 地砖面积+墙砖面积
         $cement_area = $covering_layer_area + $floor_tile_area + $floor_tile_area;
