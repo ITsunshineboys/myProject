@@ -111,6 +111,29 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Check if level 3
+     *
+     * @param bool $isOnline if online default true
+     * @return bool
+     */
+    public static function isLevel3($isOnline = true)
+    {
+        return self::find()->where(['deleted' => !$isOnline, 'level' => self::LEVEL3])->exists();
+    }
+
+    /**
+     * Get level 3 categories by level 1 category id
+     *
+     * @param int $leve1Pid parent id for level 1
+     * @return array
+     */
+    public static function level3CategoriesByLevel1Pid($leve1Pid)
+    {
+        $level2Ids = self::categoriesByPid(['id'], $leve1Pid);
+        return self::categoriesByPids($level2Ids, self::APP_FIELDS);
+    }
+
+    /**
      * Get direct goods categories by pid
      *
      * @param array $select category fields default empty
@@ -123,6 +146,23 @@ class GoodsCategory extends ActiveRecord
         $reviewApproveStatus = self::REVIEW_STATUS_APPROVE;
         $where .= " and deleted = 0 and (supplier_id = 0 or review_status = {$reviewApproveStatus})";
         return self::find()->select($select)->where($where)->asArray()->all();
+    }
+
+    /**
+     * Get direct goods categories by pid
+     *
+     * @param array $pids parent id list
+     * @param array $select category fields default empty
+     * @return array
+     */
+    public static function categoriesByPids(array $pids, array $select = [])
+    {
+        $categories = [];
+        foreach ($pids as $pid) {
+            is_array($pid) && $pid = $pid['id'];
+            $categories = array_merge($categories, self::categoriesByPid($select, $pid));
+        }
+        return $categories;
     }
 
     /**
@@ -483,6 +523,36 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Goods category id find pid
+     * @param $goods
+     * @return array|ActiveRecord[]
+     */
+    public static function findLevel($level)
+    {
+        if ($level) {
+            $select = "	goods_category.title,goods_category.id";
+            $all = self::find()
+                ->asArray()
+                ->select($select)
+                ->where(['in', 'level', $level])
+                ->all();
+        }
+        return $all;
+    }
+
+    /**
+     * Get categories by id list
+     *
+     * @param array $ids id list
+     * @param array $select select fields default id, title and icon
+     * @return array
+     */
+    public static function findByIds(array $ids, array $select = self::APP_FIELDS)
+    {
+        return self::find()->select($select)->where(['in', 'id', $ids])->asArray()->all();
+    }
+
+    /**
      * Get full title
      *
      * @return string
@@ -834,24 +904,4 @@ class GoodsCategory extends ActiveRecord
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
     }
-
-    /**
-     * Goods category id find pid
-     * @param $goods
-     * @return array|ActiveRecord[]
-     */
-    public static function findLevel($level)
-    {
-        if ($level)
-        {
-            $select = "	goods_category.title,goods_category.id";
-            $all = self::find()
-                    ->asArray()
-                    ->select($select)
-                    ->where(['in','level',$level])
-                    ->all();
-        }
-        return $all;
-    }
-
 }

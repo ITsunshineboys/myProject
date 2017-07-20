@@ -4489,4 +4489,28 @@ class MallController extends Controller
             'msg' => 200 == $code ? 'OK' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
+
+    /**
+     * Categories for level 3 action
+     *
+     * @return string
+     */
+    public function actionCategoriesLevel3()
+    {
+        $code = 1000;
+
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        if ($pid <= 0 || !GoodsCategory::isLevel3()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'categories_level3' => GoodsCategory::level3CategoriesByLevel1Pid($pid)
+        ]);
+    }
 }
