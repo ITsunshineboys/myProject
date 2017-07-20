@@ -200,7 +200,7 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
 //            'bedroom'=>60,
@@ -347,92 +347,60 @@ class OwnerController extends Controller
      */
     public function actionStrongCurrent()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>60,
-            'hall'=>60,
-            'toilet'=>60,
-            'kitchen'=>60,
-            'stairs_details_id'=>60,
-            'series'=>60,
-            'style'=>60,
-            'window'=>60,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>60,
+//            'hall'=>60,
+//            'toilet'=>60,
+//            'kitchen'=>60,
+//            'stairs_details_id'=>60,
+//            'series'=>60,
+//            'style'=>60,
+//            'window'=>60,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $workers = LaborCost::profession($post,'强电');
 
         //点位查询
-        if (!empty($post['effect_id'])) {
-            $strong_points = 0;
+        if (!empty($post['effect_id']))
+        {
             $points = Points::strongPoints($post['effect_id']);
             $points_details = PointsDetails::AllQuantity($points);
-        } else {
-            $strong_points = 0;
+        } else
+        {
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::strongPointsAll($effect);
             $points_total = PointsTotal::findByAll($points);
-            $points_places = [];
-            foreach ($points_total as $one) {
-                if ($one['place'] == '客厅') {
-                    $sitting_room = $one['points_total'] * $post['hall'];
-                    $sitting_room = $sitting_room ?: 0;
-                    $points_places [] = $sitting_room;
-                } elseif ($one['place'] == '主卧') {
-                    $master_bedroom = $one['points_total'] * 1;
-                    $master_bedroom = $master_bedroom ?: 0;
-                    $points_places [] = $master_bedroom;
-                } elseif ($one['place'] == '次卧') {
-                    $secondary_bedroom = $one['points_total'] * ($post['bedroom'] - 1);
-                    $secondary_bedroom = $secondary_bedroom ?: 0;
-                    $points_places [] = $secondary_bedroom;
-                } elseif ($one['place'] == '餐厅') {
-                    $dining_room = $one['points_total'] * $post['hall'] - 1;
-                    $dining_room = $dining_room ?: 0;
-                    $points_places [] = $dining_room;
-                } elseif ($one['place'] == '厨房') {
-                    $kitchen = $one['points_total'] * $post['kitchen'];
-                    $kitchen = $kitchen ?: 0;
-                    $points_places [] = $kitchen;
-                } elseif ($one['place'] == '卫生间') {
-                    $toilet = $one['points_total'] * $post['toilet'];
-                    $toilet = $toilet ?: 0;
-                    $points_places [] = $toilet;
-                } elseif ($one['place'] !== '卫生间' && $one['place'] !== '客厅' && $one['place'] !== '主卧' && $one['place'] !== '次卧' && $one['place'] !== '餐厅' && $one['place'] !== '厨房' && $one['place'] !== '卫生间') {
-                    $other [] = $one;
-                }
-            }
-            $other_points = 0;
-            foreach ($other as $other_one) {
-                $other_points += $other_one['points_total'];
-                $points_places [] = $other_points;
-            }
-            $points_details = array_sum($points_places);
+            $points_details = BasisDecorationService::strongCurrentPoints($points_total,$post);
         }
 
         //材料查询
-        if (empty($post['effect_id'])) {
+        if (empty($post['effect_id']))
+        {
             //查询弱电所需要材料
             $material = ['电线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
             $judge = BasisDecorationService::priceConversion($goods);
             $strong_current = BasisDecorationService::judge($judge,$post);
-        } else {
+        } else
+        {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = CircuitryReconstruction::findByAll($decoration_list, '强电');
             $strong_current = Goods::findQueryAll($weak, $post['city']);
         }
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll('强电', $post['city']);
+        $craft = EngineeringStandardCraft::findByAll('强电',$post['city']);
 
         //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points_details, $workers);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points_details,$workers);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($points_details, $strong_current, $craft);
+
         $material = [];
         foreach ($strong_current as $one_strong_current)
         {

@@ -20,7 +20,7 @@ class BasisDecorationService
      * @return float
      *
      */
-    public static function  laborFormula($points = '',$labor = [])
+    public static function  laborFormula($points,$labor)
     {
         if($points && $labor){
             //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
@@ -1517,6 +1517,12 @@ class BasisDecorationService
         }
     }
 
+    /**
+     * 固定家具系列和风格
+     * @param $goods
+     * @param $post
+     * @return array
+     */
     public static function fixationFurnitureSeriesStyle($goods,$post)
     {
         if ($goods)
@@ -1551,6 +1557,35 @@ class BasisDecorationService
             $all_goods[] = $wall_cupboard;
             $all_goods[] = $shoe_cabinet;
             return $all_goods;
+        }
+    }
+
+    public static function strongCurrentPoints($points,$post)
+    {
+        if ($points)
+        {
+            foreach ($points as $one_points)
+            {
+                if ($one_points['place'] == '客餐厅')
+                {
+                    $hall = $one_points['points_total'] * $post['hall'];
+                }
+                if ($one_points['place'] == '卧室')
+                {
+                    $bedroom = $one_points['points_total'] * $post['bedroom'];
+                }
+                if ($one_points['place'] == '厨房')
+                {
+                    $kitchen = $one_points['points_total'] * $post['kitchen'];
+                }
+                if ($one_points['place'] == '卫生间')
+                {
+                    $toilet = $one_points['points_total'] * $post['toilet'];
+                }
+            }
+            $strong_current_points = $hall+$bedroom+$kitchen+$toilet;
+
+            return $strong_current_points;
         }
     }
 }
