@@ -404,12 +404,27 @@ CREATE TABLE `goods_stat` (
 
 CREATE TABLE `goods_order` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `order_no` varchar(50) not null default '' comment '订单号',
-  `amount_order` int unsigned not null default 0 comment '订单金额',
-  `create_time` int(8) not null DEFAULT 0,
-  `supplier_id` int unsigned not null default 0,
+  `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
+  `amount_order` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单金额',
+  `supplier_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `address_id` int(11) NOT NULL COMMENT '收货地址号',
+  `invoice_id` int(11) NOT NULL COMMENT '发票信息',
+  `order_status` tinyint(1) NOT NULL COMMENT '订单状态:0：未完成1：已完成2：已取消',
+  `pay_status` tinyint(1) NOT NULL COMMENT '支付状态：0：未付款 1：已付款',
+  `shipping_status` tinyint(1) NOT NULL COMMENT '发货状态:0:未发货1：已发货2：已收',
+  `customer_service` tinyint(1) NOT NULL COMMENT '售后状态:0：未售后1：售后中2：售后完成',
+  `user_id` int(11) NOT NULL,
+  `goods_id` int(11) NOT NULL,
+  `pay_name` varchar(120) NOT NULL,
+  `create_time` int(11) NOT NULL DEFAULT '0',
+  `paytime` int(11) NOT NULL,
+  `order_refer` tinyint(1) NOT NULL COMMENT '订单来元:1：线下店2：非线下店；',
+  `money_paid` bigint(20) NOT NULL,
+  `comment` varchar(300) NOT NULL,
+  `return_insurance` bigint(20) NOT NULL,
+  `freight` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='\r\n';
 --5.5 end--
 
 --5.6 start--
@@ -881,3 +896,31 @@ CREATE TABLE `goods_recommend_supplier` (
   `district_code` int(6) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--7.21 start--
+DROP TABLE IF EXISTS `invoice`;
+CREATE TABLE `invoice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_type` varchar(5) NOT NULL,
+  `invoice_header_type` int(1) NOT NULL DEFAULT '0',
+  `invoice_header` varchar(50) NOT NULL,
+  `invoice_content` varchar(30) NOT NULL,
+  `creat_time` datetime NOT NULL,
+  `invoicetoken` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `user_address`;
+CREATE TABLE `user_address` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `address_name` varchar(50) NOT NULL,
+  `consignee` varchar(60) NOT NULL,
+  `zipcode` varchar(60) NOT NULL,
+  `mobile` varchar(60) NOT NULL,
+  `district` int(6) NOT NULL,
+  `region` varchar(150) NOT NULL,
+  `addresstoken` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+--7.21 end
