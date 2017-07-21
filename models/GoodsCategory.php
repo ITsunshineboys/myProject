@@ -24,6 +24,7 @@ class GoodsCategory extends ActiveRecord
     const LEVEL2 = 2;
     const LEVEL3 = 3;
     const APP_FIELDS = ['id', 'title', 'icon'];
+    const APP_FIELDS_QUOTE = ['id', 'title', 'icon', 'path'];
     const PAGE_SIZE_DEFAULT = 12;
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
@@ -130,7 +131,7 @@ class GoodsCategory extends ActiveRecord
     public static function level3CategoriesByLevel1Pid($leve1Pid)
     {
         $level2Ids = self::categoriesByPid(['id'], $leve1Pid);
-        return self::categoriesByPids($level2Ids, self::APP_FIELDS);
+        return self::categoriesByPids($level2Ids, self::APP_FIELDS_QUOTE);
     }
 
     /**
