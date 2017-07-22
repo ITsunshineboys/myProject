@@ -3792,14 +3792,13 @@ class MallController extends Controller
             ]);
         }
 
+        $where = '1';
+
         $user = Yii::$app->user->identity;
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
             $supplierId = Supplier::find()->where(['uid' => $user->id])->one()->id;
-        } else {
-            $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
+            $where .= " and supplier_id = {$supplierId}";
         }
-
-        $where = "supplier_id = {$supplierId}";
 
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
