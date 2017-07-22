@@ -7,6 +7,7 @@
  */
 namespace app\services;
 
+use app\models\Goods;
 use app\models\GoodsAttr;
 use yii\web\BadRequestHttpException;
 
@@ -855,7 +856,7 @@ class BasisDecorationService
             {
                 if ($one_goods_attr['title'] == $project)
                 {
-                    $goods_unit = $one_goods_attr['price'];
+                    $goods_unit = $one_goods_attr['value'];
                 }
             }
             //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
@@ -1343,83 +1344,36 @@ class BasisDecorationService
      * @param $goods
      * @return mixed
      */
-    public static function mudMakeMaterial($goods,$post)
+    public static function mudMakeMaterial($goods)
     {
         if ($goods)
         {
-            $ids = [];
+            $property = [];
+            $id = [];
             foreach ($goods as $one_goods)
             {
-                $ids [] = $one_goods['id'];
+                $id[] = $one_goods['id'];
             }
-            $goods_property = GoodsAttr::findByGoodsIdUnit($ids);
-
-            foreach ($goods as $one_goods)
+            $goods_property = GoodsAttr::findByGoodsIdUnit($id);
+            foreach ($goods_property as $one_goods_property)
             {
-                if ($one_goods['title'] == '地砖' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                if ($one_goods_property['title'] == '河沙')
                 {
-                    $floor_tile[] = $one_goods;
+                    $property['river_sand']['title'] = '河沙';
+                    $property['river_sand']['value'] = $one_goods_property['value'];
                 }
-                if ($one_goods['title'] == '墙砖' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                if ($one_goods_property['title'] == '水泥')
                 {
-                    $wall_tile_max = max($one_goods['profit_rate'],$one_goods['profit_rate']);
-                    $a = $one_goods['profit_rate'];
+                    $property['concrete']['title'] = '水泥';
+                    $property['concrete']['value'] = $one_goods_property['value'];
                 }
-                if ($one_goods['title'] == '河沙')
+                if ($one_goods_property['title'] == '自流平')
                 {
-                    $river_sand [] = $one_goods;
-                }
-                if ($one_goods['title'] == '水泥')
-                {
-                    $concrete [] = $one_goods;
-                }
-                if ($one_goods['title'] == '自流平')
-                {
-                    $self_leveling [] = $one_goods;
+                    $property['self_leveling']['title'] = '自流平';
+                    $property['self_leveling']['value'] = $one_goods_property['value'];
                 }
             }
-
-//            foreach ($goods_property as $goods_brick_area)
-//            {
-//                foreach ($floor_tile as $one_floor_tile)
-//                {
-//                    if ($one_floor_tile['id'] == $goods_brick_area['goods_id'])
-//                    {
-//                        $floor_tile_property [] = $goods_brick_area;
-//                    }
-//                }
-//                foreach ($wall_tile as $one_wall_tile)
-//                {
-//                    if ($one_wall_tile['id'] == $goods_brick_area['goods_id'])
-//                    {
-//                        $wall_tile_property [] = $goods_brick_area;
-//                    }
-//                }
-////
-//            }
-            var_dump($wall_tile_max);
-            exit;
-//            $standard ['all_brick_area']['title'] = '墙砖';
-//            $standard ['all_brick_area']['price'] = $all_brick_price;
-//            $standard ['all_brick_area']['area'] = $all_brick_length * $all_brick_wide;
-//
-//            $standard ['floor_tile_area'] ['title']= '地砖';
-//            $standard ['floor_tile_area'] ['price']= $floor_tile_price;
-//            $standard ['floor_tile_area'] ['area']= $floor_tile_length * $floor_tile_wide;
-//
-//            $standard ['river_sand_weight']['title'] = '河沙';
-//            $standard ['river_sand_weight']['price'] = $river_sand_price;
-//            $standard ['river_sand_weight']['area'] = $river_sand_weight;
-//
-//            $standard ['concrete_weight']['title'] = '水泥';
-//            $standard ['concrete_weight']['price'] = $concrete_price;
-//            $standard ['concrete_weight']['area'] = $concrete_weight;
-//
-//            $standard ['self_leveling_weight']['title'] = '自流平';
-//            $standard ['self_leveling_weight']['price'] = $self_leveling_price;
-//            $standard ['self_leveling_weight']['area'] = $self_leveling_weight;
-//
-//            return $standard;
+            return $property;
         }
     }
 
@@ -1437,7 +1391,12 @@ class BasisDecorationService
                 return $goods;
             } else
             {
-                var_dump($goods);exit;
+                foreach($goods as $v)
+                {
+                    $r[$v['title']][$v['profit_rate']] = $v;
+                    $max = max($v['profit_rate'],$r[$v['title']][$v['profit_rate']]);
+                }
+                return $max;
             }
         }
     }
@@ -1532,6 +1491,12 @@ class BasisDecorationService
         }
     }
 
+    /**
+     * 强电点位
+     * @param $points
+     * @param $post
+     * @return mixed
+     */
     public static function strongCurrentPoints($points,$post)
     {
         if ($points)
@@ -1559,5 +1524,139 @@ class BasisDecorationService
 
             return $strong_current_points;
         }
+    }
+
+    /**
+     * 墙砖面积计算
+     * @param $id
+     * @return bool|float|int
+     */
+    public static function wallBrickAttr($id)
+    {
+        if ($id)
+        {
+            $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
+            foreach ($goods_attr as $one_goods_attr)
+            {
+                if ($one_goods_attr['name'] == '长度')
+                {
+                    $length = $one_goods_attr['value'] / 1000;
+                }
+                if ($one_goods_attr['name'] == '宽度')
+                {
+                    $wide = $one_goods_attr['value'] / 1000;
+                }
+            }
+            $goods_area = $length * $wide;
+            return $goods_area;
+        }else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * 泥作地砖
+     * @param $goods
+     * @return array|bool
+     */
+    public static function floorTile($goods)
+    {
+        if ($goods)
+        {
+            $id = [];
+            $goods_attr_details = [];
+            foreach ($goods as $one_goods)
+            {
+                $id [] = $one_goods['id'];
+            }
+            $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
+
+            foreach ($goods_attr as $one_goods_attr)
+            {
+                if ($one_goods_attr['value'] == '厨房')
+                {
+                    $kitchen_id = $one_goods_attr['goods_id'];
+                    $goods_attr_details['kitchen']['id'] = $one_goods_attr['goods_id'];
+                    $goods_attr_details['kitchen']['name'] = $one_goods_attr['value'];
+                }
+                if ($one_goods_attr['value'] == '卫生间')
+                {
+                    $toilet_id = $one_goods_attr['goods_id'];
+                    $goods_attr_details['toilet']['id'] = $one_goods_attr['goods_id'];
+                    $goods_attr_details['toilet']['name'] = $one_goods_attr['value'];
+                }
+                if ($one_goods_attr['value'] == '客厅')
+                {
+                    $hall_id = $one_goods_attr['goods_id'];
+                    $goods_attr_details['hall']['id'] = $one_goods_attr['goods_id'];
+                    $goods_attr_details['hall']['name'] = $one_goods_attr['value'];
+                }
+            }
+            foreach ($goods_attr as  $goods_area)
+            {
+                if ($goods_area['goods_id'] == $kitchen_id)
+                {
+                    if ($goods_area['name'] == '长度')
+                    {
+                        $kitchen_length = $goods_area['value'] / 1000;
+                    }
+                    if ($goods_area['name'] == '宽度')
+                    {
+                        $kitchen_wide = $goods_area['value'] / 1000;
+                    }
+                }
+                if ($goods_area['goods_id'] == $toilet_id)
+                {
+                    if ($goods_area['name'] == '长度')
+                    {
+                        $toilet_length = $goods_area['value'] / 1000;
+                    }
+                    if ($goods_area['name'] == '宽度')
+                    {
+                        $toilet_wide = $goods_area['value'] / 1000;
+                    }
+                }
+                if ($goods_area['goods_id'] == $hall_id)
+                {
+                    if ($goods_area['name'] == '长度')
+                    {
+                        $hall_length = $goods_area['value'] / 1000;
+                    }
+                    if ($goods_area['name'] == '宽度')
+                    {
+                        $hall_wide = $goods_area['value'] / 1000;
+                    }
+                }
+            }
+            foreach ($goods as $goods_price)
+            {
+                if ($goods_price['id'] == $kitchen_id)
+                {
+                    $goods_attr_details['kitchen']['price'] =  $goods_price['platform_price'];
+                }
+                if ($goods_price['id'] == $toilet_id)
+                {
+                    $goods_attr_details['toilet']['price'] =  $goods_price['platform_price'];
+                }
+                if ($goods_price['id'] == $hall_id)
+                {
+                    $goods_attr_details['hall']['price'] =  $goods_price['platform_price'];
+                }
+            }
+            $goods_attr_details['kitchen']['area'] = $kitchen_length * $kitchen_wide;
+            $goods_attr_details['toilet']['area'] = $toilet_length * $toilet_wide;
+            $goods_attr_details['hall']['area'] = $hall_length * $hall_wide;
+
+          return $goods_attr_details;
+        }else
+        {
+            return false;
+        }
+    }
+
+    public static function mudMakePrice()
+    {
+        return 11;
     }
 }
