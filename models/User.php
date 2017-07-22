@@ -409,6 +409,8 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function afterLogin($roleId = 0)
     {
+        Yii::$app->session->removeAll();
+
         $this->login_time = time();
         $roleId && $this->login_role_id = $roleId;
 
