@@ -24,6 +24,7 @@ class TestController extends Controller
         'cache-delete-all',
         'reset-mobile-pwd',
         'goods-qr-gen',
+        'register-user',
     ];
 
     /**
@@ -54,6 +55,7 @@ class TestController extends Controller
                     'cache-delete' => ['post',],
                     'cache-delete-all' => ['post',],
                     'reset-mobile-pwd' => ['post',],
+                    'register-user' => ['post',],
                 ],
             ],
         ];
@@ -119,5 +121,16 @@ class TestController extends Controller
             $goods = Goods::findOne($id);
             $goods && $goods->generateQrCodeImage();
         }
+    }
+
+    /**
+     * Register user
+     *
+     * @return string
+     */
+    public function actionRegisterUser()
+    {
+        $res = User::register(Yii::$app->request->post(), false);
+        return is_array($res) ? 'ok' : 'failed';
     }
 }

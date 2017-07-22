@@ -143,6 +143,7 @@ class Supplier extends ActiveRecord
         $supplier->uid = $user->id;
         $supplier->create_time = time();
         $supplier->status = isset($attrs['status']) ? (int)$attrs['status'] : self::STATUS_WAIT_REVIEW;
+        $supplier->shop_name = isset($attrs['shop_name']) ? trim($attrs['shop_name']) : '';
 
         $supplier->scenario = self::SCENARIO_ADD;
         if (!$supplier->validate()) {
@@ -217,14 +218,14 @@ class Supplier extends ActiveRecord
     public function rules()
     {
         return [
-            [['type_org', 'category_id', 'type_shop', 'shop_name', 'name', 'licence', 'licence_image'], 'required'],
-            [['name', 'licence'], 'unique', 'on' => self::SCENARIO_ADD],
+            [['type_org', 'category_id', 'type_shop', 'shop_name', 'name', 'licence', 'licence_image', 'shop_name'], 'required'],
+            [['name', 'licence', 'shop_name'], 'unique', 'on' => self::SCENARIO_ADD],
             ['category_id', 'validateCategoryId'],
             ['type_org', 'in', 'range' => array_keys(self::TYPE_ORG)],
             ['type_shop', 'in', 'range' => array_keys(self::TYPE_SHOP)],
             ['status', 'in', 'range' => array_keys(self::STATUSES)],
             [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit'], 'number', 'integerOnly' => true],
-            [['nickname', 'shop_name', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason'], 'string'],
+            [['nickname', 'shop_name', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason', 'shop_name'], 'string'],
             ['name', 'string', 'length' => [1, 30]],
             ['licence', 'string', 'length' => [1, 15]],
         ];
