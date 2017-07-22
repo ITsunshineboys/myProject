@@ -159,90 +159,10 @@ class SiteController extends Controller
      */
     public function actionRegister()
     {
-        $postData = Yii::$app->request->post();
-        $code = 1000;
-
-        if (empty($postData['mobile'])
-            || empty($postData['validation_code'])
-            || empty($postData['password'])
-            || strlen(($postData['password'])) < User::PASSWORD_MIN_LEN
-            || strlen(($postData['password'])) > User::PASSWORD_MAX_LEN
-        ) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $user = new User;
-        $user->attributes = $postData;
-        $user->password = Yii::$app->security->generatePasswordHash($user->password);
-        $user->create_time = $user->login_time = time();
-        $user->login_role_id = Yii::$app->params['ownerRoleId'];
-
-        if (!$user->validate()) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
-            $code = 1002;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $transaction = Yii::$app->db->beginTransaction();
-        $code = 500;
-        try {
-            if (!$user->save()) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            $user->aite_cube_no = $user->id + Yii::$app->params['offsetAiteCubeNo'];
-            if (!$user->save()) {
-                $transaction->rollBack();
-
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            $userRole = new UserRole;
-            $userRole->user_id = $user->id;
-            $userRole->role_id = Yii::$app->params['ownerRoleId']; // owner
-            if (!$userRole->save()) {
-                $transaction->rollBack();
-
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            $transaction->commit();
-
-            SmValidationService::deleteCode($postData['mobile']);
-
-            return Json::encode([
-                'code' => 200,
-                'msg' => '注册成功',
-            ]);
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-        }
-
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code],
-        ]);
+        $res = User::register(Yii::$app->request->post());
+        $code = is_array($res) ? 200 : $res;
+        $msg = is_array($res) ? '注册成功' : Yii::$app->params['errorCodes'][$code];
+        return Json::encode(compact('code', 'msg'));
     }
 
     /**
