@@ -1416,30 +1416,35 @@ class BasisDecorationService
             {
                 if ($goods['title'] == '腻子' && $goods['series_id'] == $post['series'])
                 {
+                    $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['putty'] = $goods_max;
                 }
 
                 if ($goods['title'] == '乳胶漆底漆' && $goods['series_id'] == $post['series'])
                 {
+                    $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['primer'] = $goods_max;
                 }
 
                 if ($goods['title'] == '乳胶漆面漆' && $goods['series_id'] == $post['series'])
                 {
+                    $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['finishing_coat'] = $goods_max;
                 }
 
                 if ($goods['title'] == '阴角线' && $goods['style_id'] == $post['style'])
                 {
+                    $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['concave_line'] = $goods_max;
                 }
 
                 if ($goods['title'] == '石膏粉' && $goods['style_id'] == 0 && $goods['series_id'] == 0)
                 {
+                    $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['gypsum_powder'] = $goods_max;
                 }
