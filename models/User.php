@@ -100,6 +100,7 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @param array $data data
      * @param bool $checkValidationCode if check validation code
+     * @param bool $external if external user
      * @return int|array
      */
     public static function register(array $data, $checkValidationCode = true, $external = true)
