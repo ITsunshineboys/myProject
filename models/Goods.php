@@ -354,7 +354,7 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level,$title,$post,$city = 510100)
+    public static function priceDetail($level,$title,$city = 510100)
     {
         if ($level && $title)
         {
