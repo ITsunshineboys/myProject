@@ -327,7 +327,7 @@ class GoodsAttr extends ActiveRecord
         ];
     }
 
-    public static function findByGoodsId($id = [])
+    public static function findByGoodsId($id)
     {
         if ($id)
         {
