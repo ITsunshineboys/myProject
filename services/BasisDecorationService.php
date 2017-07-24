@@ -1459,40 +1459,61 @@ class BasisDecorationService
      * @param $post
      * @return array
      */
-    public static function fixationFurnitureSeriesStyle($goods,$post)
+    public static function fixationFurnitureSeriesStyle($goods,$post,$material_one)
     {
         if ($goods)
         {
-
+            $material = [];
             foreach ($goods as $one_goods)
             {
                 if ($one_goods['title'] == '衣柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
-                    $chest = $one_goods;
+                    $one_goods['show_quantity'] = $post['bedroom'];
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $chest [] = $one_goods;
                 }
                 if ($one_goods['title'] == '酒柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
-                    $wine_cabinet = $one_goods;
+                    $one_goods['show_quantity'] = $material_one['酒柜']['quantity'];
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $wine_cabinet []  = $one_goods;
+                }else
+                {
+                    $wine_cabinet = false;
                 }
                 if ($one_goods['title'] == '橱柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
-                    $cabinet = $one_goods;
+                    $one_goods['show_quantity'] = $material_one['橱柜']['quantity'];
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $cabinet [] = $one_goods;
                 }
                 if ($one_goods['title'] == '吊柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
-                    $wall_cupboard = $one_goods;
+                    $one_goods['show_quantity'] = $material_one['吊柜']['quantity'];
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $wall_cupboard [] = $one_goods;
+                }else
+                {
+                    $wall_cupboard = false;
                 }
                 if ($one_goods['title'] == '鞋柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
-                    $shoe_cabinet = $one_goods;
+                    $one_goods['show_quantity'] = $material_one['鞋柜']['quantity'];
+                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $shoe_cabinet [] = $one_goods;
+                }else
+                {
+                    $shoe_cabinet = false;
                 }
             }
-            $all_goods[] = $chest;
-            $all_goods[] = $wine_cabinet;
-            $all_goods[] = $cabinet;
-            $all_goods[] = $wall_cupboard;
-            $all_goods[] = $shoe_cabinet;
-            return $all_goods;
+
+            $material[] = self::profitMargin($chest);
+            $material[] = self::profitMargin($wine_cabinet);
+            $material[] = self::profitMargin($cabinet);
+            $material[] = self::profitMargin($wall_cupboard);
+            $material[] = self::profitMargin($shoe_cabinet);
+
+            return $material;
         }
     }
 
@@ -1660,6 +1681,14 @@ class BasisDecorationService
         }
     }
 
+    /**
+     * 主材系列和风格
+     * @param $goods
+     * @param $add
+     * @param $post
+     * @param $area
+     * @return array
+     */
     public static function principalMaterialSeriesStyle($goods,$add,$post,$area)
     {
         if ($goods)
@@ -1765,6 +1794,69 @@ class BasisDecorationService
             $material []  = self::profitMargin($marble);
         }
 
+        return $material;
+    }
+
+    public static function moveFurnitureSeriesStyle($goods,$add,$post)
+    {
+        if ($goods)
+        {
+            $material = [];
+            $hall = '';
+            if ($post['hall'] < 2)
+            {
+                $hall = 1;
+            }else
+            {
+                $hall = $post['hall'] - 1 ;
+            }
+
+            foreach ($goods as $one_goods)
+            {
+                if ($one_goods['title'] == '沙发' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $one_goods['show_quantity'] = $hall;
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $sofa [] = $one_goods;
+                }
+                if ($one_goods['title'] == '茶几' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $one_goods['show_quantity'] = $add['茶几']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $end_table [] = $one_goods;
+                }
+                if ($one_goods['title'] == '电视柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $one_goods['show_quantity'] = $add['电视柜']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $tv_bench [] = $one_goods;
+                }
+                if ($one_goods['title'] == '餐桌' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $one_goods['show_quantity'] = $add['餐桌']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $dining_table [] = $one_goods;
+                }
+                if ($one_goods['title'] == '床' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $one_goods['show_quantity'] = $post['bedroom'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $bed [] = $one_goods;
+                }
+                if ($one_goods['title'] == '床头柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $one_goods['show_quantity'] = $post['bedroom'] * 2;
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $night_table [] = $one_goods;
+                }
+            }
+            $material [] = self::profitMargin($sofa);
+            $material [] = self::profitMargin($end_table);
+            $material [] = self::profitMargin($tv_bench);
+            $material [] = self::profitMargin($dining_table);
+            $material [] = self::profitMargin($bed);
+            $material [] = self::profitMargin($night_table);
+        }
         return $material;
     }
 }

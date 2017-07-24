@@ -1599,20 +1599,25 @@ class OwnerController extends Controller
      */
     public function actionFixationFurniture()
     {
-//        $receive = \Yii::$app->request->post();
-        $post = [
-//            'effect_id' => 1,
-            'bedroom' => 2,
-            'stairway_id'=>1,
-            'stairs' =>'实木构造',
-            'style' =>1,
-            'series'=>1
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+////            'effect_id' => 1,
+//            'bedroom' => 2,
+//            'stairway_id'=>1,
+//            'stairs' =>'实木构造',
+//            'style' =>1,
+//            'series'=>1
+//        ];
         $classify = '固定家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
+        $one_material = [];
+        foreach ($material_property_classify as $one)
+        {
+            $one_material[$one['material']] = $one;
+        }
         $goods = Goods::categoryById($material_property_classify);
         $goods_price = BasisDecorationService::priceConversion($goods);
-        $series_style = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        $series_style = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post,$one_material);
 
         if (!is_null($post['stairway_id']))
         {
@@ -1622,10 +1627,16 @@ class OwnerController extends Controller
             {
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style'])
                 {
-                    $condition_stairs = $one_stairs_price;
+                    $one_stairs_price['show_quantity'] = $one_material['楼梯']['quantity'];
+                    $one_stairs_price['show_cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['show_quantity'];
+                    $condition_stairs [] = $one_stairs_price;
                 }
             }
+        }else
+        {
+            $condition_stairs = false;
         }
+        $series_style [] = BasisDecorationService::profitMargin($condition_stairs);
 
         return Json::encode([
             'code' => 200,
@@ -1643,50 +1654,31 @@ class OwnerController extends Controller
      */
     public function actionMoveFurniture()
     {
-//       $receive = \Yii::$app->request->post();
-        $post = [
+       $post = \Yii::$app->request->post();
+//        $post = [
 //            'effect_id' => 1,
-            'bedroom' => 2,
-            'sittingRoom_diningRoom'=> 1,
-        ];
-        if ($post['toilet'] >= 2) {
-            $drawing_room = $post['sittingRoom_diningRoom'] - 1;
-        } else {
-            $drawing_room = $post['sittingRoom_diningRoom'];
-        }
+//            'bedroom' => 2,
+//            'hall'=> 2,
+//            'style' =>1,
+//            'series'=>1
+//        ];
+
         $classify = '移动家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
-        $goods = Goods::categoryById($material_property_classify);
-        foreach ($goods as &$one_goods) {
-            foreach ($material_property_classify as $quantity)
-            {
-                if ($one_goods['title'] == $quantity['material'])
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
-                    $one_goods['show_quantity'] = $quantity['quantity'];
-                }
-
-                if ($one_goods['title'] == '沙发') {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $drawing_room;
-                    $one_goods['show_quantity'] = $drawing_room;
-                }
-
-                if ($one_goods['title'] == '床') {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['bedroom'];
-                    $one_goods['show_quantity'] = $post['bedroom'];
-                }
-
-                if ($one_goods['title'] == '床头柜') {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * ($post['bedroom'] * 2);
-                    $one_goods['show_quantity'] = ($post['bedroom'] * 2);
-                }
-            }
+        $one_material = [];
+        foreach ($material_property_classify as $one)
+        {
+            $one_material[$one['material']] = $one;
         }
+        $goods = Goods::categoryById($material_property_classify);
+        $goods_price = BasisDecorationService::priceConversion($goods);
+        $material = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$one_material,$post);
+
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'goods' => $goods,
+                'goods' => $material,
             ]
         ]);
     }
