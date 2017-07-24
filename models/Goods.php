@@ -354,17 +354,15 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level,$title,$city = 510100)
+    public static function priceDetail($level, $title, $city = 510100)
     {
-        if ($level && $title)
-        {
-            $id = implode('\',\'',$title);
+        if ($level && $title) {
+            $id = implode('\',\'', $title);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category AS gc ON goods.category_id = gc.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . "  AND gc.level= ".$level." AND gc.title IN ('" . $id . "')";
+            $sql = "SELECT goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category AS gc ON goods.category_id = gc.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . "  AND gc.level= " . $level . " AND gc.title IN ('" . $id . "')";
             $all = $db->createCommand($sql)->queryAll();
             return $all;
-        }else
-        {
+        } else {
             return false;
         }
     }
@@ -426,8 +424,7 @@ AND goods.id IN (" . $id . ")";
     {
         if ($all) {
             $material = [];
-            foreach ($all as $one)
-            {
+            foreach ($all as $one) {
                 $material [] = $one['material'];
             }
             $id = implode('\',\'', $material);
@@ -436,6 +433,71 @@ AND goods.id IN (" . $id . ")";
             $all_goods = $db->createCommand($sql)->queryAll();
             return $all_goods;
         }
+    }
+
+    /**
+     * Get categories by title
+     *
+     * @param string $title title
+     * @param array $select select fields default id, title etc.
+     * @param  array $orderBy order by fields default sold_number desc
+     * @return array
+     */
+    public static function findByTitle($title, array $select = self::CATEGORY_GOODS_APP, $orderBy = ['sold_number' => SORT_DESC])
+    {
+        $goodsList = self::find()
+            ->select($select)
+            ->where(['like', 'title', $title])
+            ->orderBy($orderBy)
+            ->asArray()
+            ->all();
+        return self::_format($goodsList);
+    }
+
+    /**
+     * Format goods list
+     *
+     * @param array $goodsList goods list
+     * @return array
+     */
+    private static function _format(array $goodsList)
+    {
+        foreach ($goodsList as &$goods) {
+            isset($goods['platform_price']) && $goods['platform_price'] /= 100;
+            isset($goods['supplier_price']) && $goods['supplier_price'] /= 100;
+            isset($goods['market_price']) && $goods['market_price'] /= 100;
+            isset($goods['purchase_price_decoration_company']) && $goods['purchase_price_decoration_company'] /= 100;
+            isset($goods['purchase_price_manager']) && $goods['purchase_price_manager'] /= 100;
+            isset($goods['purchase_price_designer']) && $goods['purchase_price_designer'] /= 100;
+
+            if (isset($goods['create_time'])) {
+                $goods['create_time'] = $goods['create_time']
+                    ? date('Y-m-d H:i', $goods['create_time'])
+                    : '';
+            }
+
+            if (isset($goods['online_time'])) {
+                $goods['online_time'] = $goods['online_time']
+                    ? date('Y-m-d H:i', $goods['online_time'])
+                    : '';
+            }
+
+            if (isset($goods['offline_time'])) {
+                $goods['offline_time'] = $goods['offline_time']
+                    ? date('Y-m-d H:i', $goods['offline_time'])
+                    : '';
+            }
+
+            if (isset($goods['delete_time'])) {
+                $goods['delete_time'] = $goods['delete_time']
+                    ? date('Y-m-d H:i', $goods['delete_time'])
+                    : '';
+            }
+
+            isset($goods['status']) && $goods['status'] = self::$statuses[$goods['status']];
+        }
+
+        return $goodsList;
     }
 
     /**
@@ -568,6 +630,42 @@ AND goods.id IN (" . $id . ")";
     public static function tableName()
     {
         return 'goods';
+    }
+
+    public static function findByCategory($condition)
+    {
+        if ($condition) {
+            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path";
+            $goods = self::find()
+                ->asArray()
+                ->select($select)
+                ->leftJoin('goods_attr', 'goods.id = goods_attr.goods_id')
+                ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
+                ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
+                ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
+                ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+                ->where(['gc.title' => $condition])
+                ->all();
+
+            return $goods;
+        }
+    }
+
+    public static function seriesAndStyle($level, $title, $post)
+    {
+        if ($title) {
+            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id";
+            $goods = self::find()
+                ->asArray()
+                ->select($select)
+                ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
+                ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
+                ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
+                ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+                ->where(['and', ['gc.title' => $title], ['gc.level' => $level], ['goods.series_id' => $post['series']], ['goods.style_id' => $post['style']]])
+                ->all();
+            return $goods;
+        }
     }
 
     /**
@@ -1061,43 +1159,5 @@ AND goods.id IN (" . $id . ")";
     public function getOrders()
     {
         return $this->hasOne(GoodsBrand::className(), ['id' => 'brand_id']);
-    }
-
-    public static function findByCategory($condition)
-    {
-        if ($condition)
-        {
-            $select ="goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path";
-            $goods = self::find()
-                ->asArray()
-                ->select($select)
-                ->leftJoin('goods_attr','goods.id = goods_attr.goods_id')
-                ->leftJoin('goods_brand','goods.brand_id = goods_brand.id')
-                ->leftJoin('goods_category AS gc','goods.category_id = gc.id')
-                ->leftJoin('logistics_template','goods.supplier_id = logistics_template.supplier_id')
-                ->leftJoin('logistics_district','logistics_template.id = logistics_district.template_id')
-                ->where(['gc.title'=>$condition])
-                ->all();
-
-            return $goods;
-        }
-    }
-
-    public static function seriesAndStyle($level,$title,$post)
-    {
-        if ($title)
-        {
-            $select ="goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id";
-            $goods = self::find()
-                ->asArray()
-                ->select($select)
-                ->leftJoin('goods_brand','goods.brand_id = goods_brand.id')
-                ->leftJoin('goods_category AS gc','goods.category_id = gc.id')
-                ->leftJoin('logistics_template','goods.supplier_id = logistics_template.supplier_id')
-                ->leftJoin('logistics_district','logistics_template.id = logistics_district.template_id')
-                ->where(['and',['gc.title'=>$title],['gc.level'=>$level],['goods.series_id'=>$post['series']],['goods.style_id'=>$post['style']]])
-                ->all();
-            return $goods;
-        }
     }
 }

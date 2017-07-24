@@ -554,6 +554,18 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Get categories by title
+     *
+     * @param string $title title
+     * @param array $select select fields default id, title and icon
+     * @return array
+     */
+    public static function findByTitle($title, array $select = self::APP_FIELDS)
+    {
+        return self::find()->select($select)->where(['like', 'title', $title])->asArray()->all();
+    }
+
+    /**
      * Get full title
      *
      * @return string

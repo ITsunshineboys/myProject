@@ -409,18 +409,29 @@ class MallController extends Controller
      */
     public function actionSearch()
     {
-        $brands = [];
+        $res = [
+            'categories' => [],
+            'goods' => [],
+            'category_id' => 0,
+        ];
 
         $keyword = trim(Yii::$app->request->get('keyword', ''));
         if ($keyword) {
-            $brands = GoodsBrand::findByName($keyword, ['id', 'name', 'logo']);
+            $categories = GoodsCategory::findByTitle($keyword);
+            if ($categories) {
+                $res['categories'] = $categories;
+            } else {
+                $goods = Goods::findByTitle($keyword);
+                $res['goods'] = $goods;
+                $res['category_id'] = Goods::findOne($goods[0]['id'])->category_id;
+            }
         }
 
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'brands' => $brands,
+                'search' => $res,
             ],
         ]);
     }
