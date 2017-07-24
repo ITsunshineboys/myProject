@@ -38,7 +38,7 @@ class Goods extends ActiveRecord
         'left_number',
     ];
 
-    const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'sold_number', 'favourable_comment_rate', 'cover_image'];
+    const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'sold_number', 'favourable_comment_rate', 'cover_image', 'market_price', 'purchase_price_decoration_company'];
     const BRAND_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'cover_image'];
 
     const AFTER_SALE_SERVICES = [
