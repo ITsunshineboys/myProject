@@ -1712,72 +1712,72 @@ class BasisDecorationService
                         }
                     }
                     $area = $length * $breadth;
-                    $one_goods['show_quantity'] = ceil($bedroom_area / $area);
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = ceil($bedroom_area / $area);
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $wood_floor [] = $one_goods;
                 }
                 if ($one_goods['title'] == '木门' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
-                    $one_goods['show_quantity'] = $post['bedroom'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $post['bedroom'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $timber_door [] = $one_goods;
                 }
 
                 if ($one_goods['title'] == '铝合金门窗' && $one_goods['series_id'] == $post['series'])
                 {
-                    $one_goods['show_quantity'] = $post['toilet'] + $post['kitchen'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $post['toilet'] + $post['kitchen'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $aluminium_alloy_door [] = $one_goods;
                 }
 
                 if ($one_goods['title'] == '界面剂')
                 {
-                    $one_goods['show_quantity'] = $add['界面剂']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $add['界面剂']['quantity'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $adhesion_agent [] = $one_goods;
                 }
 
                 if ($one_goods['title'] == '铝扣板' && $one_goods['series_id'] == $post['series'])
                 {
-                    $one_goods['show_quantity'] = $add['铝扣板']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $add['铝扣板']['quantity'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $aluminous_gusset_plate [] = $one_goods;
                 }
 
                 if ($one_goods['title'] == '浴霸' && $one_goods['series_id'] == $post['series'])
                 {
-                    $one_goods['show_quantity'] = $add['浴霸']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $add['浴霸']['quantity'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $bath_heater [] = $one_goods;
                 }
                 if ($one_goods['title'] == '换气扇' && $one_goods['series_id'] == $post['series'])
                 {
-                    $one_goods['show_quantity'] = $add['换气扇']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $add['换气扇']['quantity'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $ventilator [] = $one_goods;
                 }
                 if ($one_goods['title'] == '吸顶灯' && $one_goods['series_id'] == $post['series'])
                 {
-                    $one_goods['show_quantity'] = $add['吸顶灯']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $add['吸顶灯']['quantity'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $ceiling_lamp [] = $one_goods;
                 }
                 if ($one_goods['title'] == '防盗门' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
-                    $one_goods['show_quantity'] = $add['防盗门']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $add['防盗门']['quantity'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $security [] = $one_goods;
                 }
                 if ($one_goods['title'] == '水龙头' && $one_goods['series_id'] == $post['series'] )
                 {
-                    $one_goods['show_quantity'] = $post['toilet'] + $post['kitchen'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $post['toilet'] + $post['kitchen'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $faucet [] = $one_goods;
                 }
                 if ($one_goods['title'] == '人造大理石')
                 {
-                    $one_goods['show_quantity'] = $post['window'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['quantity'] = $post['window'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $marble [] = $one_goods;
                 }
             }

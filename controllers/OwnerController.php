@@ -1725,68 +1725,18 @@ class OwnerController extends Controller
      */
     public function actionLifeAssort()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
+//        $post = \Yii::$app->request->post();
         $post = [
 //            'effect_id' => 1,
             'bedroom' => 2,
             'toilet' => 1,
         ];
 
-        if ($post['toilet'] >= 2) {
-            $toilet = $post['toilet'] - 1;
-        } else {
-            $toilet = $post['toilet'];
-        }
         $classify = '生活配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
+        var_dump($material_property_classify);exit;
         $goods = Goods::categoryById($material_property_classify);
-        foreach ($goods as &$one_goods) {
-            foreach ($material_property_classify as $quantity)
-            {
-                if ($one_goods['title'] == $quantity['material'])
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
-                    $one_goods['show_quantity'] = $quantity['quantity'];
-                }
 
-                if ($one_goods['title'] == '马桶')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $toilet;
-                    $one_goods['show_quantity'] = $post['toilet'];
-                }
-
-                if ($one_goods['title'] == '蹲便器')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $toilet;
-                    $one_goods['show_quantity'] = $post['toilet'];
-                }
-
-                if ($one_goods['title'] == '浴柜')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['toilet'];
-                    $one_goods['show_quantity'] = $post['toilet'];
-                }
-
-                if ($one_goods['title'] == '花洒套装')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['toilet'];
-                    $one_goods['show_quantity'] = $post['toilet'];
-                }
-
-                if ($one_goods['title'] == '淋浴隔断')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['toilet'];
-                    $one_goods['show_quantity'] = $post['toilet'];
-                }
-
-                if ( $one_goods['title'] == '床垫')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['bedroom'];
-                    $one_goods['show_quantity'] = $post['bedroom'];
-                }
-            }
-        }
 
         return Json::encode([
             'code' => 200,
@@ -1803,18 +1753,29 @@ class OwnerController extends Controller
      */
     public function actionIntelligenceAssort()
     {
-//        $receive = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
         $classify = '智能配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
+        $material_one = [];
+        foreach ($material_property_classify as $one)
+        {
+            $material_one[$one['material']] = $one;
+        }
         $goods = Goods::categoryById($material_property_classify);
-        foreach ($goods as &$one_goods) {
-            foreach ($material_property_classify as $quantity)
+        $goods_price = BasisDecorationService::priceConversion($goods);
+        foreach ($goods_price as $one_goods)
+        {
+            if ($one_goods['title'] == '智能配电箱')
             {
-                if ($one_goods['title'] == $quantity['material'])
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
-                    $one_goods['show_quantity'] = $quantity['quantity'];
-                }
+                $one_goods['show_quantity'] = $material_one['智能配电箱']['quantity'];
+                $one_goods['show_cost'] = $one_goods['show_quantity'] *$one_goods['platform_price'];
+                $switch_box [] = $one_goods;
+            }
+            if ($one_goods['title'] == '背景音乐系统' && $one_goods['series_id'] == $post['series'])
+            {
+                $one_goods['show_quantity'] = $material_one['背景音乐系统']['quantity'];
+                $one_goods['show_cost'] = $one_goods['show_quantity'] *$one_goods['platform_price'];
+                $switch_box [] = $one_goods;
             }
         }
         return Json::encode([
