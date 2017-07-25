@@ -11,6 +11,7 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
     const CACHE_PREFIX = 'user_';
+    const CACHE_PREFIX_DAILY_FORGOT_PWD_CNT = 'daily_forgot_pwd_cnt_';
     const PASSWORD_MIN_LEN = 6;
     const PASSWORD_MAX_LEN = 25;
     const PREFIX_DEFAULT_MOBILE = '18';
@@ -388,6 +389,38 @@ class User extends ActiveRecord implements IdentityInterface
         } else { // from app
             return !empty($this->authKey);
         }
+    }
+
+    /**
+     * Set daily forgot password count
+     */
+    public function setDailyForgotPwdCnt()
+    {
+        $cache = Yii::$app->cache;
+        $key = self::CACHE_PREFIX_DAILY_FORGOT_PWD_CNT . $this->id;
+        $cnt = (int)$cache->get($key);
+        $todayEnd = strtotime(StringService::startEndDate('today')[1]);
+        $cache->set($key, ++$cnt, $todayEnd - time());
+    }
+
+    /**
+     * Check daily forgot password count
+     */
+    public function checkDailyForgotPwdCnt()
+    {
+        return $this->getDailyForgotPwdCnt() < Yii::$app->params['user']['daily_forgot_pwd_cnt_max'];
+    }
+
+    /**
+     * Get daily forgot password count
+     *
+     * @return int
+     */
+    public function getDailyForgotPwdCnt()
+    {
+        $cache = Yii::$app->cache;
+        $key = self::CACHE_PREFIX_DAILY_FORGOT_PWD_CNT . $this->id;
+        return (int)$cache->get($key);
     }
 
     /**

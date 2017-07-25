@@ -346,8 +346,8 @@ class SiteController extends Controller
         }
 
         $user = User::find()->where(['mobile' => $postData['mobile']])->one();
-        if (!$user || $user->deadtime > 0) {
-            $code = !$user ? 1010 : 1015;
+        if (!$user || $user->deadtime > 0 || !$user->checkDailyForgotPwdCnt()) {
+            $code = !$user ? 1010 : ($user->deadtime > 0 ? 1015 : 1016);
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -364,6 +364,7 @@ class SiteController extends Controller
 
         if ($user->validatePassword($postData['new_password'])) {
             SmValidationService::deleteCode($user->mobile);
+            $user->setDailyForgotPwdCnt();
 
             return Json::encode([
                 'code' => 200,

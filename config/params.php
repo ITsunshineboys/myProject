@@ -32,6 +32,7 @@ return [
         1013 => '商品所在品牌已移除，请商家重新选择新品牌。',
         1014 => '商品所在店铺已关闭，请开店后上传商品。',
         1015 => '该用户已被禁封',
+        1016 => '一天只能5次密码操作',
     ],
     'events' => [
         'supplier' => [
@@ -111,4 +112,7 @@ return [
     ],
     'district_default' => 510100, // 成都
     'carouselMaxNumber' => 3,
+    'user' => [
+        'daily_forgot_pwd_cnt_max' => 5,
+    ],
 ];
