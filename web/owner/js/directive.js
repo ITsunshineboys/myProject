@@ -1,6 +1,38 @@
 angular.module("directives", [])
-//     .directive("nodataDirective", function () {
-//         return function (scope, element, attr) {
+     .directive("otherDirective", function () {
+         return function (scope, element, attr) {
+             $(".edit").on("click",function () {
+                 $(".del").toggleClass("del_two");
+             $(".wall_money").toggleClass("wall_money_sec");
+         });
+
+         //点击删除节点
+             $(".del").on("click",function () {
+                 var that=this;
+                 $('#myModal_del').modal("show");
+                 $(".del_btn").on("click",function () {
+                     //console.log(a);
+                     $(that).parent().remove();
+                     $('#myModal_del').modal("hide");
+                 })
+             });
+             angular.module("directives", [])
+                 .directive("swiper", function () {
+                     return {
+                         restrict: "EA",
+                         link: function (scope, element, attrs) {
+                             var mySwiper = new Swiper('.swiper-container', {
+                                 direction: 'horizontal',
+                                 loop: true,
+                                 autoplay: 1000,
+
+                                 // 如果需要分页器
+                                 pagination: '.swiper-pagination'
+                             })
+                         }
+                     }
+                 })
+
 //             $(".reduce_a").on("click", function () {
 //                 var text = $(".val_input").val();
 //                 //alert(text);
@@ -88,8 +120,8 @@ angular.module("directives", [])
 //                 }
 //             });
 //
-//         }
-//     })
+         }
+     })
     .directive("swiper", function () {
         return {
             restrict: "EA",

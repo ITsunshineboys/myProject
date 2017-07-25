@@ -41,12 +41,19 @@ input[type="checkbox"]:checked + span {
 }
 
 /*结束*/
+.back{
+    background:#F6F6F6;
+}
 header {
     width: auto;
     height: 4rem;
     border-bottom: 1px solid #C2C2C2;
+    background: white;
+    /*margin-bottom: 1rem;*/
 }
-
+section{
+    margin-top: 1rem;
+}
 header div {
     line-height: 4rem;
 }
@@ -77,6 +84,8 @@ header div span {
     border-bottom: 1px solid #C2C2C2;
     padding-bottom: 2rem;
     position: relative;
+    /*margin-top: 1rem;*/
+    background: white;
 }
 .shu{
     width: .2rem;
@@ -143,6 +152,8 @@ header div span {
 
 .house_area {
     /*padding-top: 1rem;*/
+    background: white;
+    margin-top: 1rem;
 }
 .house_area h1{
     margin-left: 1.5rem;
@@ -341,6 +352,8 @@ header div span {
 
 .series {
     padding-top: 1rem;
+    background: white;
+    margin-top: 1rem;
 }
 
 .series h1 {

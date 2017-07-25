@@ -21,6 +21,7 @@
 .main .intro_box .product_name{
     font-size: 1.6rem;
     line-height: 4rem;
+    margin-left: 1rem;
 }
 .main .intro_box  .intro{
     font-size: 1.2rem;
@@ -32,10 +33,12 @@
 .main .intro_box  .intro .introduce{
     display: inline;
     color:#A1A1A1;
+    margin-left: 1rem;
 }
 .main .intro_box  .intro .cost{
     font-size: 1.4rem;
     color:#FF5722;
+    margin-left: 1rem;
 }
 .main .standard{
     height: 3rem;
@@ -107,9 +110,12 @@
 .comment_list img{
     width: 3rem;
     border-radius:50% ;
+    margin-left: 1rem;
 }
 .comment_list p{
-    margin-left: 0.3rem;
+    margin-left: 1rem;
+    margin-top: .8rem;
+
     font-size: 1rem;
 }
 .user_comment{
@@ -137,6 +143,7 @@
     height: 15rem;
     width: auto;
     background-color: white;
+    margin-bottom: 2rem;
 }
 .shop_header_child{
     margin-top: 1rem;
@@ -151,6 +158,9 @@
     font-size:1.2rem;
     margin-left: 1rem;
 }
+.shop_number {
+    margin-top: .6rem;
+}
 .shop_number ul{
     margin-left: .6rem;
 }
@@ -158,6 +168,24 @@
     display: inline-block;
     font-size: 1.2rem;
     margin-left: 3rem;
+}
+.Stroll{
+    margin-left:11rem;
+    margin-top: 2rem;
+
+}
+.Stroll button{
+    height: 2.5rem;
+    width: 8rem;
+    background: white;
+    font-size: 1rem;
+    border: 1px solid #53A8F4;
+    color: #53A8F4;
+    border-radius:2rem ;
+    outline: none;
+}
+.comment_p{
+    margin-top: 1rem;
 }
 .num_shop {
     color: #5677FC;
@@ -195,7 +223,12 @@
   margin-left: 18rem;
 }
 .foot_tab{
+    width: 32rem;
     margin-top: 2rem;
+    position: fixed;
+    bottom: 0;
+    background: #F6F6F6;
+    z-index: 2;
 }
 .foot_tab ul li{
     display: inline-block;

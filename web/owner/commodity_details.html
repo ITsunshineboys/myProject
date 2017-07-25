@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <!-- meta使用viewport以确保页面可自由缩放 -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>具体产品详情页</title>
     <link rel="stylesheet" href="../css/all.css"/>
     <link rel="stylesheet" href="css/rem.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/commodity_details.css"/>
     <link rel="stylesheet" href="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="zui-1.7.0-dist/dist/css/zui.min.css"/>
     <!--<script src="https://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>-->
     <script src="js/jquery-1.11.2.js"></script>
     <script src="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -18,29 +19,43 @@
 
 <header>
     <div>
-        <span><</span>
+        <i class="icon icon-angle-left icon-2x"></i>
         <sapn class="span_center">欧式板</sapn>
     </div>
 </header>
 <section ng-controller="comment_controller">
     <!--便签栏-->
     <div class="memo_pad">
-        <li ng-click="sort('comment_number')" >销量优先</li>
-        <li ng-click="sort('platform_price')">价格</li>
-        <li ng-click="sort('favourable_comment_rate')">好评率</li>
-        <li data-toggle="modal" data-target="#myModal">筛选</li>
+        <ul>
+        <li ng-click="sort('comment_number')" >
+            销量优先
+
+        </li>
+        <li ng-click="sort('platform_price')">
+            价格
+            <i class="icon icon-sort sort"></i>
+        </li>
+        <li ng-click="sort('favourable_comment_rate')">
+            好评率
+            <i class="icon icon-sort sort"></i>
+        </li>
+        <li data-toggle="modal" data-target="#myModal">
+            筛选
+            <i class="icon icon-filter filter_col"></i>
+        </li>
+        </ul>
     </div>
     <!--商品展示列表-->
     <div class="mall_list">
         <div class="flex_div" >
-               <div class=" item_commodity"  ng-repeat="n in message |limitTo:myFilter.limit ">
+               <div class="item_commodity"  ng-repeat="n in message |limitTo:myFilter.limit ">
                    <div class="item_commodity_divimg">
                       <img src="{{n.image}}" alt="" class="img_item " />
                    </div>
                    <div class="item_commodity_comment">
                        <p class="comment_one">{{n.title}}</p>
                        <p class="comment_two">{{n.subtitle}}</p>
-                       <span class="comment_span">销量数：{{n.comment_number}}&nbsp;&nbsp;</span>
+                       <span class="comment_span">{{n.comment_number}}个评价 &nbsp; &nbsp;</span>
                        <span class="comment_span_two">{{n.favourable_comment_rate}}%好评</span>
                        <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">￥{{n.platform_price}}</p>
                    </div>
@@ -173,7 +188,7 @@
                             <button type="button" class="btn btn-primary reset_btn">完成</button>
                         </div>
 
-                        
+
                     </div>
                 </div>
             </div>
