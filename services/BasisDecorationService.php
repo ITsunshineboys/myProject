@@ -1867,6 +1867,13 @@ class BasisDecorationService
         return $material;
     }
 
+    /**
+     * 家电配套系列和风格
+     * @param $goods
+     * @param $add
+     * @param $post
+     * @return array
+     */
     public static function appliancesAssortSeriesStyle($goods,$add,$post)
     {
         if ($goods)
@@ -1966,5 +1973,109 @@ class BasisDecorationService
             $material [] = self::profitMargin($central_air_conditioning);
         }
         return $material;
+    }
+
+    public static function lifeAssortSeriesStyle($goods,$add,$post)
+    {
+        if ($goods)
+        {
+            var_dump($goods);
+            $material = [];
+            foreach ($goods as $one_goods)
+            {
+                if ($one_goods['title'] == '水槽')
+                {
+                    $one_goods['show_quantity'] = $add['水槽']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $water_channel [] = $one_goods;
+                }
+                if ($one_goods['title'] == '刀具')
+                {
+                    $one_goods['show_quantity'] = $add['刀具']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $cutter [] = $one_goods;
+                }
+                if ($one_goods['title'] == '消毒柜')
+                {
+                    $one_goods['show_quantity'] = $add['消毒柜']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $disinfection_cabinet [] = $one_goods;
+                }
+                if ($one_goods['title'] == '不锈钢洗菜盆')
+                {
+                    $one_goods['show_quantity'] = $add['不锈钢洗菜盆']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $lavatory [] = $one_goods;
+                }
+                if ($one_goods['title'] == '床垫' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $post['bedroom'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $mattress [] = $one_goods;
+                }
+                if ($one_goods['title'] == '马桶刷')
+                {
+                    $one_goods['show_quantity'] = $add['马桶刷']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $mattress [] = $one_goods;
+                }
+                if ($one_goods['title'] == '洗衣机地漏')
+                {
+                    $one_goods['show_quantity'] = $add['洗衣机地漏']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $floor_drain [] = $one_goods;
+                }
+                if ($one_goods['title'] == '拖布池龙头')
+                {
+                    $one_goods['show_quantity'] = $add['拖布池龙头']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $bibcock [] = $one_goods;
+                }
+                if ($one_goods['title'] == '拖布池')
+                {
+                    $one_goods['show_quantity'] = $add['拖布池']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $mop [] = $one_goods;
+                }
+                if ($one_goods['title'] == '高压管')
+                {
+                    $one_goods['show_quantity'] = $add['高压管']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $high_voltage_tube [] = $one_goods;
+                }
+                if ($one_goods['title'] == '三角阀')
+                {
+                    $one_goods['show_quantity'] = $add['三角阀']['quantity'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $triangular_valve [] = $one_goods;
+                }
+                if ($one_goods['title'] == '淋浴隔断')
+                {
+                    $one_goods['show_quantity'] = $post['toilet'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $cut_off [] = $one_goods;
+                }
+                if ($one_goods['title'] == '花洒套装' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $post['toilet'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $sprinkler [] = $one_goods;
+                }
+            }
+            $material [] = self::profitMargin($water_channel);
+            $material [] = self::profitMargin($cutter);
+            $material [] = self::profitMargin($disinfection_cabinet);
+            $material [] = self::profitMargin($lavatory);
+            $material [] = self::profitMargin($mattress);
+            $material [] = self::profitMargin($floor_drain);
+            $material [] = self::profitMargin($bibcock);
+            $material [] = self::profitMargin($mop);
+            $material [] = self::profitMargin($high_voltage_tube);
+            $material [] = self::profitMargin($triangular_valve);
+            $material [] = self::profitMargin($cut_off);
+            $material [] = self::profitMargin($sprinkler);
+            var_dump($water_channel);exit;
+        }
+        return 111;
     }
 }

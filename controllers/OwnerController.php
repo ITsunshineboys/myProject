@@ -1634,7 +1634,7 @@ class OwnerController extends Controller
             }
         }else
         {
-            $condition_stairs = false;
+            $condition_stairs [] = false;
         }
         $series_style [] = BasisDecorationService::profitMargin($condition_stairs);
 
@@ -1730,19 +1730,27 @@ class OwnerController extends Controller
 //            'effect_id' => 1,
             'bedroom' => 2,
             'toilet' => 1,
+            'style' =>1,
+            'series'=>1
         ];
 
         $classify = '生活配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
-        var_dump($material_property_classify);exit;
+        $material_one = [];
+        foreach ($material_property_classify as $one)
+        {
+            $material_one[$one['material']] = $one;
+        }
         $goods = Goods::categoryById($material_property_classify);
+        $goods_price = BasisDecorationService::priceConversion($goods);
+        $material = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$material_one,$post);
 
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'goods' => $goods,
+                'goods' => $material,
             ]
         ]);
     }
@@ -1753,7 +1761,7 @@ class OwnerController extends Controller
      */
     public function actionIntelligenceAssort()
     {
-//        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->post();
         $classify = '智能配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $material_one = [];
