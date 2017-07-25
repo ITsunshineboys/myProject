@@ -1780,7 +1780,6 @@ class BasisDecorationService
                 }
             }
             $material []  = self::profitMargin($wood_floor);
-            $material []  = self::profitMargin($timber_door);
             $material []  = self::profitMargin($aluminium_alloy_door);
             $material []  = self::profitMargin($adhesion_agent);
             $material []  = self::profitMargin($aluminous_gusset_plate);
