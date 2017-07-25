@@ -166,6 +166,32 @@ class SiteController extends Controller
     }
 
     /**
+     * Check if mobile has been registered action.
+     *
+     * @return string
+     */
+    public function actionCheckMobileRegistered()
+    {
+        $code = 1000;
+
+        $mobile = (int)Yii::$app->request->get('mobile', 0);
+        if (!StringService::isMobile($mobile)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'registered' => User::find()->where(['mobile' => $mobile])->exists()
+            ],
+        ]);
+    }
+
+    /**
      * Logout action(app).
      *
      * @return string
