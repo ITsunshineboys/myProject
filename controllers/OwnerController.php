@@ -203,14 +203,14 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>60,
-//            'style'=>60,
-//            'window'=>60,
+//            'bedroom'=>3,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>14,
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
@@ -258,6 +258,10 @@ class OwnerController extends Controller
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points,$workers);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
+        var_dump($weak_points);
+        var_dump($workers);
+        var_dump($labor_all_cost);
+        exit;
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
