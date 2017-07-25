@@ -1797,6 +1797,13 @@ class BasisDecorationService
         return $material;
     }
 
+    /**
+     * 移动家具系列和风格
+     * @param $goods
+     * @param $add
+     * @param $post
+     * @return array
+     */
     public static function moveFurnitureSeriesStyle($goods,$add,$post)
     {
         if ($goods)
@@ -1856,6 +1863,107 @@ class BasisDecorationService
             $material [] = self::profitMargin($dining_table);
             $material [] = self::profitMargin($bed);
             $material [] = self::profitMargin($night_table);
+        }
+        return $material;
+    }
+
+    public static function appliancesAssortSeriesStyle($goods,$add,$post)
+    {
+        if ($goods)
+        {
+            $material = [];
+            $hall = '';
+            if ($post['hall'] <= 1)
+            {
+                $hall = 1;
+            }else
+            {
+                $hall = $post['hall'] - 1;
+            }
+
+            foreach ($goods as $one_goods)
+            {
+                if ($one_goods['title'] == '油烟机' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $post['kitchen'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $kitchen_ventilator [] = $one_goods;
+                }
+
+                if ($one_goods['title'] == '灶具' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $post['kitchen'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $stove [] = $one_goods;
+                }
+
+                if ($one_goods['title'] == '热水器' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $add['热水器']['quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $water_heater [] = $one_goods;
+                }
+                if ($one_goods['title'] == '冰箱' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $add['冰箱']['quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $refrigerator [] = $one_goods;
+                }
+                if ($one_goods['title'] == '洗衣机' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $add['洗衣机']['quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $washer [] = $one_goods;
+                }
+                if ($one_goods['title'] == '电视' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $add['电视']['quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $tv [] = $one_goods;
+                }
+                if ($one_goods['title'] == '立柜式空调' && $one_goods['series_id'] == $post['series'])
+                {
+                    if ($post['series'] < 3)
+                    {
+                        $one_goods['show_quantity'] = $hall;
+                        $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                        $hall_air_conditioner [] = $one_goods;
+                    }else
+                    {
+                        $hall_air_conditioner = null;
+                    }
+                }
+                if ($one_goods['title'] == '挂壁式空调' && $one_goods['series_id'] == $post['series'])
+                {
+                    if ($post['series'] <= 2)
+                    {
+                        $one_goods['show_quantity'] = $post['bedroom'];
+                        $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                        $bedroom_air_conditioner [] = $one_goods;
+                    }else
+                    {
+                        $bedroom_air_conditioner = null;
+                    }
+                }
+                if ($one_goods['title'] == '中央空调' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $add['中央空调']['quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $central_air_conditioning [] = $one_goods;
+                }else
+                {
+                    $central_air_conditioning = null;
+                }
+            }
+            $material [] = self::profitMargin($kitchen_ventilator);
+            $material [] = self::profitMargin($stove);
+            $material [] = self::profitMargin($water_heater);
+            $material [] = self::profitMargin($refrigerator);
+            $material [] = self::profitMargin($washer);
+            $material [] = self::profitMargin($tv);
+            $material [] = self::profitMargin($hall_air_conditioner);
+            $material [] = self::profitMargin($bedroom_air_conditioner);
+            $material [] = self::profitMargin($central_air_conditioning);
         }
         return $material;
     }

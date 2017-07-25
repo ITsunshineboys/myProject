@@ -1689,71 +1689,32 @@ class OwnerController extends Controller
      */
     public function actionAppliancesAssort()
     {
-//        $receive = \Yii::$app->request->post();
-//        $post = Json::decode($receive);
-        $post = [
-//            'effect_id' => 1,
-            'kitchen' => 1,
-            'bedroom' => 2,
-            'sittingRoom_diningRoom' => 1,
-        ];
-        if ($post['toilet'] >= 2) {
-            $drawing_room = $post['sittingRoom_diningRoom'] - 1;
-        } else {
-            $drawing_room = $post['sittingRoom_diningRoom'];
-        }
+        $post = \Yii::$app->request->post();
+//        $post = [
+////            'effect_id' => 1,
+//            'kitchen' => 1,
+//            'bedroom' => 2,
+//            'hall' => 1,
+//            'style' =>1,
+//            'series'=>1
+//        ];
+
         $classify = '家电配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
-        $goods = Goods::categoryById($material_property_classify);
-        foreach ($goods as &$one_goods) {
-            foreach ($material_property_classify as $quantity)
-            {
-                if ($one_goods['title'] == $quantity['material'])
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
-                    $one_goods['show_quantity'] = $quantity['quantity'];
-                }
-
-                if ($one_goods['title'] == '油烟机')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['kitchen'];
-                    $one_goods['show_quantity'] = $post['kitchen'];
-                }
-
-                if ($one_goods['title'] == '灶具')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['kitchen'];
-                    $one_goods['show_quantity'] = $post['kitchen'];
-                }
-
-                if ($one_goods['title'] == '立柜式空调')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $drawing_room;
-                    $one_goods['show_quantity'] = $drawing_room;
-                }
-
-                if ($one_goods['title'] == '挂壁式空调')
-                {
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $post['bedroom'];
-                    $one_goods['show_quantity'] = $post['bedroom'];
-                }
-
-                if ($one_goods['title'] == '中央空调') {
-                    if ($post['series'] >= 2) {
-                        $one_goods['show_price'] = $one_goods['platform_price'] * 1;
-                        $one_goods['show_quantity'] = 1;
-                    } else {
-                        $one_goods = NULL;
-                    }
-                }
-            }
+        $one_material = [];
+        foreach ($material_property_classify as $one)
+        {
+            $one_material[$one['material']] = $one;
         }
+        $goods = Goods::categoryById($material_property_classify);
+        $goods_price = BasisDecorationService::priceConversion($goods);
+        $material = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$one_material,$post);
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'goods' => $goods,
+                'goods' => $material,
             ]
         ]);
     }
