@@ -302,13 +302,13 @@ class BasisDecorationService
 
     /**
      * 木作人工计算公式
-     * @param array $arr
-     * @param string $modelling
-     * @param string $area
-     * @param string $television_walls
-     * @return float|int
+     * @param $modelling_day
+     * @param $flat_day
+     * @param int $video_wall
+     * @param $worker_day_cost
+     * @return float
      */
-    public static function carpentryLabor($modelling_day = '',$flat_day = '',$video_wall = 1,$worker_day_cost = '')
+    public static function carpentryLabor($modelling_day,$flat_day,$video_wall = 1,$worker_day_cost)
     {
         if(!empty($modelling_day) && !empty($flat_day) )
         {
@@ -461,8 +461,6 @@ class BasisDecorationService
             }
 //            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
             $modelling_day = $modelling / $day_modelling * $series_coefficient * $style_find['modelling_day_coefficient'];
-
-
         }
         return $modelling_day;
     }
@@ -1505,6 +1503,12 @@ class BasisDecorationService
                 {
                     $shoe_cabinet = false;
                 }
+                if ($one_goods['title'] == '木门' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
+                {
+                    $one_goods['quantity'] = $post['bedroom'];
+                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $timber_door [] = $one_goods;
+                }
             }
 
             $material[] = self::profitMargin($chest);
@@ -1512,6 +1516,7 @@ class BasisDecorationService
             $material[] = self::profitMargin($cabinet);
             $material[] = self::profitMargin($wall_cupboard);
             $material[] = self::profitMargin($shoe_cabinet);
+            $material[] = self::profitMargin($timber_door);
 
             return $material;
         }
@@ -1716,13 +1721,6 @@ class BasisDecorationService
                     $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
                     $wood_floor [] = $one_goods;
                 }
-                if ($one_goods['title'] == '木门' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
-                {
-                    $one_goods['quantity'] = $post['bedroom'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
-                    $timber_door [] = $one_goods;
-                }
-
                 if ($one_goods['title'] == '铝合金门窗' && $one_goods['series_id'] == $post['series'])
                 {
                     $one_goods['quantity'] = $post['toilet'] + $post['kitchen'];

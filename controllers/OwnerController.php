@@ -349,14 +349,14 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>60,
-//            'style'=>60,
-//            'window'=>60,
+//            'bedroom'=>3,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>14,
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
@@ -488,14 +488,14 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>60,
-//            'style'=>60,
-//            'window'=>60,
+//            'bedroom'=>3,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>14,
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
@@ -623,16 +623,16 @@ class OwnerController extends Controller
     public function actionWaterproof()
     {
         $post = \Yii::$app->request->post();
-//                $post = [
+//        $post = [
 //            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
-//            'series'=>60,
-//            'style'=>60,
-//            'window'=>60,
+//            'bedroom'=>3,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>14,
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
@@ -678,7 +678,7 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('防水', $post['city']);
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost['price'] = ceil($total_area / $waterproof_labor['quantity'] * $waterproof_labor['univalence']);
+        $labor_all_cost['price'] = ceil($total_area / $waterproof_labor['quantity']) * $waterproof_labor['univalence'];
         $labor_all_cost['worker_kind'] = $waterproof_labor['worker_kind'];
 
         //材料总费用
@@ -763,14 +763,14 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
+//            'bedroom'=>3,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
 //            'series'=>1,
 //            'style'=>1,
-//            'window'=>60,
+//            'window'=>14,
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
