@@ -345,17 +345,17 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
-            $code = 1002;
+        $user = User::find()->where(['mobile' => $postData['mobile']])->one();
+        if (!$user || $user->deadtime > 0) {
+            $code = !$user ? 1010 : 1015;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $user = User::find()->where(['mobile' => $postData['mobile']])->one();
-        if (!$user || $user->deadtime > 0) {
-            $code = !$user ? 1010 : 1015;
+        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
+            $code = 1002;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
