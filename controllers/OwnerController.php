@@ -899,20 +899,20 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>1,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>10,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>1,
+            'hall'=>1,
+            'toilet'=>1,
+            'kitchen'=>1,
+            'stairs_details_id'=>1,
+            'series'=>1,
+            'style'=>1,
+            'window'=>10,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -959,40 +959,37 @@ class OwnerController extends Controller
             }
         }
         //卧室底漆面积
-        $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall,$post['bedroom']);
+        $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'],$post['bedroom'],2.8,4);
+
         //客餐厅底漆面积
-        $drawing_room_primer_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['hall'], 3);
+        $drawing_room_primer_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], 2.8,3);
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
         $primer_area = $bedroom_primer_area + $drawing_room_primer_area;
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
-        $primer_day = ceil($primer_area / $primer);
+        $primer_day = $primer_area / $primer;
 
-        //卧室面漆面积
-        $bedroom_finishing_coat_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall, $post['bedroom']);
-        //客餐厅面漆面积
-        $drawing_room_finishing_coat_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['hall'], 3);
         //乳胶漆面漆面积
-        $finishing_coat_area = ($bedroom_finishing_coat_area + $drawing_room_finishing_coat_area) * 2;
+        $finishing_coat_area = $primer_area* 2;
 //        乳胶漆面漆天数：乳胶漆面漆面积÷【每天做乳胶漆面漆面积】
-        $finishing_coat_day = ceil($finishing_coat_area / $finishing_coat);
+        $finishing_coat_day = $finishing_coat_area / $finishing_coat;
 
 //        卧室周长
-        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($area['masterBedroom_area'], $post['area'], $post['bedroom']);
+        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($area['masterBedroom_area'], $post['area'], $post['bedroom'],4);
 //        客厅周长
-        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall']);
+        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'],3);
 //        阴角线长度
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
-        $concave_line_day = ceil($concave_line_length / $concave_line);
+        $concave_line_day = $concave_line_length / $concave_line;
 
 //        腻子卧室墙面积
-        $putty_bedroom_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $tall, $post['bedroom']);
+        $putty_bedroom_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'],2.8,4);
 //        腻子客餐厅面积
-        $putty_drawing_room_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['hall'], 3);
+        $putty_drawing_room_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'],$post['hall'],2.8,3);
 //        腻子面积 卧室腻子面积+客厅腻子面积
         $putty_area = $putty_bedroom_area + $putty_drawing_room_area;
 //        腻子天数 腻子面积÷【每天做腻子面积】
-        $putty_day = ceil($putty_area / $putty);
+        $putty_day = $putty_area / $putty;
         //材料
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
@@ -1086,7 +1083,8 @@ class OwnerController extends Controller
         }
         $material_total['total_cost'] = $total_cost;
         //总天数   乳胶漆天数+阴角线天数+腻子天数
-        $total_day = $primer_day + $finishing_coat_day + $putty_day + $concave_line_day;
+        $total_day = ceil($primer_day + $finishing_coat_day + $putty_day + $concave_line_day);
+
         //总人工费   人工费：（总天数）×【工人每天费用】
         $coating_labor_price['price'] = $total_day * $labor_cost['univalence'];
         $coating_labor_price['worker_kind'] = $labor_cost['worker_kind'];

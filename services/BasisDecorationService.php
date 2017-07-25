@@ -724,7 +724,7 @@ class BasisDecorationService
      * @param int $wall
      * @return array|string
      */
-    public static function paintedArea($area = [],$house_area = '',$bedroom = '',$tall = 2.8,$wall = 4)
+    public static function paintedArea($area,$house_area ,$bedroom ,$tall= 2.8,$wall = 4)
     {
         if ($area && $house_area && $bedroom)
         {
@@ -755,7 +755,7 @@ class BasisDecorationService
      * @param int $wall
      * @return float|string
      */
-    public  static function paintedPerimeter($area = [],$house_area = '',$bedroom = '',$wall = 4)
+    public  static function paintedPerimeter($area,$house_area,$bedroom ,$wall = 4)
     {
         if ($area && $house_area){
             if ($area <= 1){
