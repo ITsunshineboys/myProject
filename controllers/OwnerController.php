@@ -1771,6 +1771,7 @@ class OwnerController extends Controller
         }
         $goods = Goods::categoryById($material_property_classify);
         $goods_price = BasisDecorationService::priceConversion($goods);
+        $material = [] ;
         foreach ($goods_price as $one_goods)
         {
             if ($one_goods['title'] == '智能配电箱')
@@ -1783,14 +1784,16 @@ class OwnerController extends Controller
             {
                 $one_goods['show_quantity'] = $material_one['背景音乐系统']['quantity'];
                 $one_goods['show_cost'] = $one_goods['show_quantity'] *$one_goods['platform_price'];
-                $switch_box [] = $one_goods;
+                $background_music [] = $one_goods;
             }
         }
+        $material [] = BasisDecorationService::profitMargin($switch_box);
+        $material [] = BasisDecorationService::profitMargin($background_music);
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'goods' => $goods,
+                'goods' => $material,
             ]
         ]);
     }
