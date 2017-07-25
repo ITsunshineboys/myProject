@@ -1977,14 +1977,11 @@ class BasisDecorationService
         if ($goods)
         {
             $toilet = '';
-            $stinkpot = '';
             if ($post['toilet'] <= 2)
             {
-                $stinkpot = 0;
                 $toilet = 1;
             }else
             {
-                $stinkpot = 1;
                 $toilet = $post['toilet'] - 1;
             }
             $material = [];
@@ -2076,9 +2073,16 @@ class BasisDecorationService
                 }
                 if ($one_goods['title'] == '蹲便器' && $one_goods['series_id'] == $post['series'])
                 {
-                    $one_goods['show_quantity'] = $stinkpot;
-                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
-                    $squatting_pan [] = $one_goods;
+                    if ($post['toilet'] < 2)
+                    {
+                        $squatting_pan = null;
+                    }else
+                    {
+                        $one_goods['show_quantity'] = 1;
+                        $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                        $squatting_pan [] = $one_goods;
+                    }
+
                 }
                 if ($one_goods['title'] == '马桶' && $one_goods['series_id'] == $post['series'])
                 {

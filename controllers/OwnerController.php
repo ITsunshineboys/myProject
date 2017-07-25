@@ -1726,14 +1726,14 @@ class OwnerController extends Controller
      */
     public function actionLifeAssort()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-////            'effect_id' => 1,
-//            'bedroom' => 2,
-//            'toilet' => 1,
-//            'style' =>1,
-//            'series'=>1
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+//            'effect_id' => 1,
+            'bedroom' => 2,
+            'toilet' => 1,
+            'style' =>1,
+            'series'=>1
+        ];
 
         $classify = '生活配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
