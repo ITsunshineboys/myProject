@@ -972,7 +972,7 @@ class OwnerController extends Controller
         //客餐厅面漆面积
         $drawing_room_finishing_coat_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $tall, $post['hall'], 3);
         //乳胶漆面漆面积
-        $finishing_coat_area = $bedroom_finishing_coat_area + $drawing_room_finishing_coat_area;
+        $finishing_coat_area = ($bedroom_finishing_coat_area + $drawing_room_finishing_coat_area) * 2;
 //        乳胶漆面漆天数：乳胶漆面漆面积÷【每天做乳胶漆面漆面积】
         $finishing_coat_day = ceil($finishing_coat_area / $finishing_coat);
 
