@@ -1300,21 +1300,21 @@ class BasisDecorationService
                 {
                     if ($one_goods['title'] == '开关' && $quantity['material'] == '开关' )
                     {
-                        $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
+                        $one_goods['show_cost'] = $one_goods['platform_price'] * $quantity['quantity'];
                         $one_goods['show_quantity'] = $quantity['quantity'];
                         $switch = $one_goods;
                     }
 
                     if ($one_goods['title'] == '插座' && $quantity['material'] == '插座' )
                     {
-                        $one_goods['show_price'] = $one_goods['platform_price'] * $quantity['quantity'];
+                        $one_goods['show_cost'] = $one_goods['platform_price'] * $quantity['quantity'];
                         $one_goods['show_quantity'] = $quantity['quantity'];
                         $socket = $one_goods;
                     }
                     if ($one_goods['title'] == '灯具')
                     {
                         $quantity = $post['bedroom'] + $hall + $post['kitchen'];
-                        $one_goods['show_price'] = $one_goods['platform_price'] * $quantity;
+                        $one_goods['show_cost'] = $one_goods['platform_price'] * $quantity;
                         $one_goods['show_quantity'] = $quantity;
                         $light = $one_goods;
                     }
@@ -1322,7 +1322,7 @@ class BasisDecorationService
                     if ($one_goods['title'] == '窗帘')
                     {
                         $quantity = $post['bedroom'] + $hall;
-                        $one_goods['show_price'] = $one_goods['platform_price'] * $quantity;
+                        $one_goods['show_cost'] = $one_goods['platform_price'] * $quantity;
                         $one_goods['show_quantity'] = $quantity;
                         $curtain = $one_goods;
                     }
