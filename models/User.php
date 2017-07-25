@@ -375,7 +375,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function checkLogin()
     {
-        if (!$this->authKey && !$this->authKeyAdmin) {
+        $this->refresh();
+
+        if ($this->deadtime > 0 ||
+            (!$this->authKey && !$this->authKeyAdmin)
+        ) {
             return false;
         }
 
@@ -409,8 +413,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function afterLogin($roleId = 0)
     {
-        Yii::$app->session->removeAll();
-
         $this->login_time = time();
         $roleId && $this->login_role_id = $roleId;
 
