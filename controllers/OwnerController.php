@@ -763,14 +763,14 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>3,
+//            'bedroom'=>1,
 //            'hall'=>1,
 //            'toilet'=>1,
 //            'kitchen'=>1,
 //            'stairs_details_id'=>1,
 //            'series'=>1,
 //            'style'=>1,
-//            'window'=>14,
+//            'window'=>10,
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
@@ -902,14 +902,14 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
+//            'bedroom'=>1,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
 //            'series'=>1,
 //            'style'=>1,
-//            'window'=>60,
+//            'window'=>10,
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
@@ -1150,17 +1150,17 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //                $post = [
 //            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
+//            'bedroom'=>1,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
 //            'series'=>1,
 //            'style'=>1,
-//            'window'=>60,
+//            'window'=>10,
 //            'province'=>510000,
 //            'city'=>510100,
-//            'waterproof_total_area' => 60,
+//            'waterproof_total_area' =>60,
 //        ];
         $arr['worker_kind'] = '泥工';
         //工人一天单价
