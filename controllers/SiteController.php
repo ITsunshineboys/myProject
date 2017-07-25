@@ -354,8 +354,8 @@ class SiteController extends Controller
         }
 
         $user = User::find()->where(['mobile' => $postData['mobile']])->one();
-        if (!$user) {
-            $code = 403;
+        if (!$user || $user->deadtime > 0) {
+            $code = !$user ? 1010 : 1015;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
