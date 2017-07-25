@@ -1780,11 +1780,14 @@ class OwnerController extends Controller
                 $one_goods['show_cost'] = $one_goods['show_quantity'] *$one_goods['platform_price'];
                 $switch_box [] = $one_goods;
             }
-            if ($one_goods['title'] == '背景音乐系统' && $one_goods['series_id'] == $post['series'])
+            if ($one_goods['title'] == '背景音乐系统' && $one_goods['series_id'] == 1)
             {
                 $one_goods['show_quantity'] = $material_one['背景音乐系统']['quantity'];
                 $one_goods['show_cost'] = $one_goods['show_quantity'] *$one_goods['platform_price'];
                 $background_music [] = $one_goods;
+            }else
+            {
+                $background_music = null;
             }
         }
         $material [] = BasisDecorationService::profitMargin($switch_box);
