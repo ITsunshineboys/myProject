@@ -1467,13 +1467,13 @@ class BasisDecorationService
                 if ($one_goods['title'] == '衣柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
                     $one_goods['show_quantity'] = $post['bedroom'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $chest [] = $one_goods;
                 }
                 if ($one_goods['title'] == '酒柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
                     $one_goods['show_quantity'] = $material_one['酒柜']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $wine_cabinet []  = $one_goods;
                 }else
                 {
@@ -1482,13 +1482,13 @@ class BasisDecorationService
                 if ($one_goods['title'] == '橱柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
                     $one_goods['show_quantity'] = $material_one['橱柜']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $cabinet [] = $one_goods;
                 }
                 if ($one_goods['title'] == '吊柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
                     $one_goods['show_quantity'] = $material_one['吊柜']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $wall_cupboard [] = $one_goods;
                 }else
                 {
@@ -1497,7 +1497,7 @@ class BasisDecorationService
                 if ($one_goods['title'] == '鞋柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
                     $one_goods['show_quantity'] = $material_one['鞋柜']['quantity'];
-                    $one_goods['show_price'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $shoe_cabinet [] = $one_goods;
                 }else
                 {
@@ -1506,7 +1506,7 @@ class BasisDecorationService
                 if ($one_goods['title'] == '木门' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
                     $one_goods['quantity'] = $post['bedroom'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
                     $timber_door [] = $one_goods;
                 }
             }
