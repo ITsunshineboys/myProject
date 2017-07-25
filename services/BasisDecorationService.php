@@ -1979,7 +1979,17 @@ class BasisDecorationService
     {
         if ($goods)
         {
-            var_dump($goods);
+            $toilet = '';
+            $stinkpot = '';
+            if ($post['toilet'] <= 2)
+            {
+                $stinkpot = 0;
+                $toilet = 1;
+            }else
+            {
+                $stinkpot = 1;
+                $toilet = $post['toilet'] - 1;
+            }
             $material = [];
             foreach ($goods as $one_goods)
             {
@@ -2061,6 +2071,24 @@ class BasisDecorationService
                     $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
                     $sprinkler [] = $one_goods;
                 }
+                if ($one_goods['title'] == '浴柜' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $post['toilet'];
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $bath_cabinet [] = $one_goods;
+                }
+                if ($one_goods['title'] == '蹲便器' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $stinkpot;
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $squatting_pan [] = $one_goods;
+                }
+                if ($one_goods['title'] == '马桶' && $one_goods['series_id'] == $post['series'])
+                {
+                    $one_goods['show_quantity'] = $toilet;
+                    $one_goods['show_cost'] =  $one_goods['show_quantity'] * $one_goods['platform_price'];
+                    $closestool [] = $one_goods;
+                }
             }
             $material [] = self::profitMargin($water_channel);
             $material [] = self::profitMargin($cutter);
@@ -2074,8 +2102,10 @@ class BasisDecorationService
             $material [] = self::profitMargin($triangular_valve);
             $material [] = self::profitMargin($cut_off);
             $material [] = self::profitMargin($sprinkler);
-            var_dump($water_channel);exit;
+            $material [] = self::profitMargin($bath_cabinet);
+            $material [] = self::profitMargin($squatting_pan);
+            $material [] = self::profitMargin($closestool);
         }
-        return 111;
+        return $material;
     }
 }

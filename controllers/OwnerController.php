@@ -1694,6 +1694,7 @@ class OwnerController extends Controller
 ////            'effect_id' => 1,
 //            'kitchen' => 1,
 //            'bedroom' => 2,
+//            'toilet' => 2,
 //            'hall' => 1,
 //            'style' =>1,
 //            'series'=>1
@@ -1725,14 +1726,14 @@ class OwnerController extends Controller
      */
     public function actionLifeAssort()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-//            'effect_id' => 1,
-            'bedroom' => 2,
-            'toilet' => 1,
-            'style' =>1,
-            'series'=>1
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+////            'effect_id' => 1,
+//            'bedroom' => 2,
+//            'toilet' => 1,
+//            'style' =>1,
+//            'series'=>1
+//        ];
 
         $classify = '生活配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
@@ -1744,7 +1745,6 @@ class OwnerController extends Controller
         $goods = Goods::categoryById($material_property_classify);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$material_one,$post);
-
 
         return Json::encode([
             'code' => 200,
