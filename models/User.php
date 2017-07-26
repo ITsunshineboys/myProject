@@ -327,6 +327,29 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Reset gender action
+     *
+     * @param string $gender gender
+     * @return int
+     */
+    public function resetGender($gender)
+    {
+        if (!in_array($gender, array_keys(self::SEXES))) {
+            $code = 1000;
+            return $code;
+        }
+
+        $this->gender = $gender;
+        if (!$this->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

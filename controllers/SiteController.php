@@ -35,6 +35,7 @@ class SiteController extends Controller
         'review-statuses',
         'reset-nickname',
         'reset-signature',
+        'reset-gender',
     ];
 
     /**
@@ -598,6 +599,30 @@ class SiteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '修改签名成功',
+        ]);
+    }
+
+    /**
+     * Reset gender action.
+     *
+     * @return string
+     */
+    public function actionResetGender()
+    {
+        $gender = (int)Yii::$app->request->post('gender', 0);
+
+        $user = Yii::$app->user->identity;
+        $code = $user->resetGender($gender);
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '修改成功',
         ]);
     }
 
