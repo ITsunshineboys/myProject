@@ -33,6 +33,7 @@ class SiteController extends Controller
         'upload',
         'upload-delete',
         'review-statuses',
+        'reset-nickname',
     ];
 
     /**
@@ -182,12 +183,17 @@ class SiteController extends Controller
             ]);
         }
 
+        if (User::find()->where(['mobile' => $mobile])->exists()) {
+            $code = 1019;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
-            'data' => [
-                'registered' => User::find()->where(['mobile' => $mobile])->exists()
-            ],
         ]);
     }
 
@@ -484,6 +490,58 @@ class SiteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '重设密码成功',
+        ]);
+    }
+
+    /**
+     * Reset nickname action.
+     *
+     * @return string
+     */
+    public function actionResetNickname()
+    {
+        $code = 1000;
+
+        $nickname = Yii::$app->request->post('nickname', '');
+
+        if (strlen($nickname) < User::NICKNAME_MIN_LEN
+            || strlen($nickname) > User::NICKNAME_MAX_LEN
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        if ($user->nickname) {
+            $code = 1017;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (User::find()->where(['nickname' => $nickname])->exists()) {
+            $code = 1018;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user->nickname = $nickname;
+        if (!$user->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '修改昵称成功',
         ]);
     }
 
