@@ -36,6 +36,7 @@ class SiteController extends Controller
         'reset-nickname',
         'reset-signature',
         'reset-gender',
+        'reset-birthday',
     ];
 
     /**
@@ -613,6 +614,30 @@ class SiteController extends Controller
 
         $user = Yii::$app->user->identity;
         $code = $user->resetGender($gender);
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '修改成功',
+        ]);
+    }
+
+    /**
+     * Reset birthday action.
+     *
+     * @return string
+     */
+    public function actionResetBirthday()
+    {
+        $birthday = (int)Yii::$app->request->post('birthday', 0);
+
+        $user = Yii::$app->user->identity;
+        $code = $user->resetBirthday($birthday);
         if (200 != $code) {
             return Json::encode([
                 'code' => $code,

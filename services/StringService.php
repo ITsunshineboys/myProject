@@ -32,7 +32,7 @@ class StringService
     /**
      * Check if mobile number
      *
-     * @param $mobile
+     * @param int $mobile mobile
      * @return bool
      */
     public static function isMobile($mobile)
@@ -43,6 +43,24 @@ class StringService
         }
 
         return preg_match('/^1[34578]{1}\d{9}$/', $mobile);
+    }
+
+    /**
+     * Check if birthday
+     *
+     * @param string $birthday birthday
+     * @param string $separator separator default empty
+     * @return bool
+     */
+    public static function isBirthday($birthday, $separator = '')
+    {
+        $birthday = trim($birthday);
+        if (!$birthday) {
+            return false;
+        }
+
+        $pattern = '/^\d{4}' . $separator . '\d{2}' . $separator . '\d{2}$/';
+        return preg_match($pattern, $birthday);
     }
 
     /**

@@ -288,7 +288,12 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function resetNickname($nickname)
     {
-        if ($this->nickname == $nickname) {
+        if (!$nickname) {
+            $code = 1000;
+            return $code;
+        }
+
+        if ($this->nickname) {
             $code = 1017;
             return $code;
         }
@@ -316,7 +321,45 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function resetSignature($signature)
     {
+        if (!$signature) {
+            $code = 1000;
+            return $code;
+        }
+
+        if ($this->signature == $signature) {
+            $code = 200;
+            return $code;
+        }
+
         $this->signature = $signature;
+        if (!$this->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
+     * Reset birthday action
+     *
+     * @param string $birthday birthday
+     * @return int
+     */
+    public function resetBirthday($birthday)
+    {
+        if (!StringService::isBirthday($birthday)) {
+            $code = 1000;
+            return $code;
+        }
+
+        if ($this->birthday == $birthday) {
+            $code = 200;
+            return $code;
+        }
+
+        $this->birthday = $birthday;
         if (!$this->save()) {
             $code = 500;
             return $code;
@@ -336,6 +379,11 @@ class User extends ActiveRecord implements IdentityInterface
     {
         if (!in_array($gender, array_keys(self::SEXES))) {
             $code = 1000;
+            return $code;
+        }
+
+        if ($this->gender == $gender) {
+            $code = 200;
             return $code;
         }
 
