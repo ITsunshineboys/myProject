@@ -1703,15 +1703,15 @@ class OwnerController extends Controller
     public function actionAppliancesAssort()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-////            'effect_id' => 1,
-//            'kitchen' => 1,
-//            'bedroom' =>2,
-//            'toilet' => 1,
-//            'hall' => 1,
-//            'style' =>1,
-//            'series'=>2
-//        ];
+        $post = [
+//            'effect_id' => 1,
+            'kitchen' => 1,
+            'bedroom' =>2,
+            'toilet' => 1,
+            'hall' => 1,
+            'style' =>1,
+            'series'=>1
+        ];
 
         $classify = '家电配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);

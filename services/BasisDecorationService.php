@@ -1981,10 +1981,13 @@ class BasisDecorationService
                     }
                 }
                 if ($one_goods['title'] == '中央空调' && $one_goods['series_id'] == $post['series'])
-                {
+                {var_dump($one_goods);exit;
                     $one_goods['show_quantity'] = $add['中央空调']['quantity'];
                     $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $central_air_conditioning [] = $one_goods;
+                }else
+                {
+                    $central_air_conditioning = null;
                 }
             }
 
