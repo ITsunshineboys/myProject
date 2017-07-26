@@ -357,6 +357,43 @@ class SiteController extends Controller
     }
 
     /**
+     * Forget password check action.
+     *
+     * @return string
+     */
+    public function actionForgetPasswordCheck()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (empty($postData['mobile'])
+            || !StringService::isMobile($postData['mobile'])
+            || empty($postData['new_password'])
+            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = User::find()->where(['mobile' => $postData['mobile']])->one();
+        if (!$user || $user->deadtime > 0 || !$user->checkDailyForgotPwdCnt()) {
+            $code = !$user ? 1010 : ($user->deadtime > 0 ? 1015 : 1016);
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
      * Forget password action.
      *
      * @return string
