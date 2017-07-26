@@ -266,7 +266,7 @@ class MallController extends Controller
     {
         $pid = (int)Yii::$app->request->get('pid', 0);
         $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS, $pid);
-        $pid == 0 && array_unshift($categories, GoodsCategory::forAll());
+//        $pid == 0 && array_unshift($categories, GoodsCategory::forAll());
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
