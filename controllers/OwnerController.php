@@ -623,20 +623,20 @@ class OwnerController extends Controller
      */
     public function actionWaterproof()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>2,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>14,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>1,
+            'hall'=>1,
+            'toilet'=>2,
+            'kitchen'=>1,
+            'stairs_details_id'=>1,
+            'series'=>1,
+            'style'=>1,
+            'window'=>14,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         //人工价格
         $waterproof_labor = LaborCost::profession($post,'防水工');
         //防水所需材料
@@ -1159,21 +1159,21 @@ class OwnerController extends Controller
      */
     public function actionMudMake()
     {
-//        $post = \Yii::$app->request->post();
-                $post = [
-            'area'=>60,
-            'bedroom'=>1,
-            'hall'=>1,
-            'toilet'=>1,
-            'kitchen'=>1,
-            'stairs_details_id'=>1,
-            'series'=>1,
-            'style'=>1,
-            'window'=>10,
-            'province'=>510000,
-            'city'=>510100,
-            'waterproof_total_area' =>60,
-        ];
+        $post = \Yii::$app->request->post();
+//                $post = [
+//            'area'=>60,
+//            'bedroom'=>1,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
+//            'series'=>1,
+//            'style'=>2,
+//            'window'=>10,
+//            'province'=>510000,
+//            'city'=>510100,
+//            'waterproof_total_area' =>32.58,
+//        ];
         $arr['worker_kind'] = '泥工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -1286,6 +1286,7 @@ class OwnerController extends Controller
 //        墙砖费用 墙砖费用：个数×抓取的商品价格 个数：（墙砖面积÷抓取墙砖面积）
         $wall_brick_cost['quantity'] = ceil($wall_area / $wall_brick_area);
         $wall_brick_cost['cost'] = $wall_brick_cost ['quantity'] * $wall_brick_max['platform_price'];
+        var_dump($wall_brick_cost);exit;
 
 //        卫生间地砖个数和价格：（墙砖面积÷抓取墙砖面积）  厨房/卫生间墙砖费用
         $toilet_wall_brick_cost['quantity'] = ceil($toilet_area / $floor_tile_attr['toilet']['area']);
