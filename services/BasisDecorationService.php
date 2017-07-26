@@ -192,6 +192,7 @@ class BasisDecorationService
 //            厨房墙面积：（厨房地面积÷厨房个数）开平方×【0.3m】×4 ×厨房个数
             $sqrt = sqrt($ground);
             $wall_space = $sqrt * $height['project_value'] * 4 * $quantity;
+            var_dump($quantity);exit;
 //            厨房防水面积：厨房地面积+厨房墙面积
             $all_area = $ground + $wall_space;
             $total_area = round($all_area,2);
@@ -249,7 +250,7 @@ class BasisDecorationService
      * @param array $arr
      * @return int|mixed
      */
-    public static function groundArea($arr = [])
+    public static function groundArea($arr)
     {
         $all_area = [];
         if($arr)
@@ -1537,7 +1538,13 @@ class BasisDecorationService
             {
                 if ($one_points['place'] == '客餐厅')
                 {
-                    $hall = $one_points['points_total'] * $post['hall'];
+                    if ($post['hall'] != 2)
+                    {
+                        $hall = $one_points['points_total'] * $post['hall'];
+                    }else
+                    {
+                        $hall = $one_points['points_total'] + 2;
+                    }
                 }
                 if ($one_points['place'] == '卧室')
                 {
@@ -1551,8 +1558,24 @@ class BasisDecorationService
                 {
                     $toilet = $one_points['points_total'] * $post['toilet'];
                 }
+                if ($one_points['place'] == '入户')
+                {
+                    $register = $one_points['points_total'] * $post['toilet'];
+                }
+                if ($one_points['place'] == '客厅阳台')
+                {
+                    $balcony = $one_points['points_total'] * $post['toilet'];
+                }
+                if ($one_points['place'] == '客厅卧室过道')
+                {
+                    $passage = $one_points['points_total'] * $post['toilet'];
+                }
+                if ($one_points['place'] == '生活阳台')
+                {
+                    $live_balcony= $one_points['points_total'] * $post['toilet'];
+                }
             }
-            $strong_current_points = $hall+$bedroom+$kitchen+$toilet;
+            $strong_current_points = $hall+$bedroom+$kitchen+$toilet+$register+$balcony+$passage+$live_balcony;
 
             return $strong_current_points;
         }

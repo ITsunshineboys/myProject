@@ -203,7 +203,7 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>3,
+//            'bedroom'=>2,
 //            'hall'=>1,
 //            'toilet'=>1,
 //            'kitchen'=>1,
@@ -222,7 +222,7 @@ class OwnerController extends Controller
         {
             $weak_points = Points::weakPoints($post['effect_id']);
         } else
-            {
+        {
             $weak_points = 0;
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::find()->where(['effect_id' => $effect['id']])->all();
@@ -237,7 +237,6 @@ class OwnerController extends Controller
             $secondary_bedroom = $weak_current_all['卧室'] * $post['bedroom'];
             $weak_points = $sitting_room + $secondary_bedroom;
         }
-
         if (empty($post['effect_id']))
         {
             //查询弱电所需要材料
@@ -261,34 +260,35 @@ class OwnerController extends Controller
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
+
         $material = [];
         foreach ($weak_current as $one_weak_current)
         {
-            if ($one_weak_current['title'] == '线管')
-            {
-                $goods_max = BasisDecorationService::profitMargin($one_weak_current);
-                $goods_max['quantity'] = $material_price['wire_quantity'];
-                $goods_max['cost'] = $material_price['wire_cost'];
-                $material [] =  $goods_max;
-            }
-
             if ($one_weak_current['title'] == '网线')
             {
-                $goods_max = BasisDecorationService::profitMargin($one_weak_current);
-                $goods_max['quantity'] = $material_price['spool_quantity'];
-                $goods_max['cost'] = $material_price['spool_cost'];
-                $material [] =  $goods_max;
+                $one_weak_current['quantity'] = $material_price['wire_quantity'];
+                $one_weak_current['cost'] = $material_price['wire_cost'];
+                $wire [] =  $one_weak_current;
+            }
+
+            if ($one_weak_current['title'] == '线管')
+            {
+                $one_weak_current['quantity'] = $material_price['spool_quantity'];
+                $one_weak_current['cost'] = $material_price['spool_cost'];
+                $spool [] =  $one_weak_current;
             }
 
             if ($one_weak_current['title'] == '底盒')
             {
-                $goods_max = BasisDecorationService::profitMargin($one_weak_current);
-                $goods_max['quantity'] = $material_price['bottom_quantity'];
-                $goods_max['cost'] = $material_price['bottom_cost'];
-                $material [] =  $goods_max;
+                $one_weak_current['quantity'] = $material_price['bottom_quantity'];
+                $one_weak_current['cost'] = $material_price['bottom_cost'];
+                $bottom [] =  $one_weak_current;
             }
         }
         $material ['total_cost'] = $material_price['total_cost'];
+        $material [] = BasisDecorationService::profitMargin($wire);
+        $material [] = BasisDecorationService::profitMargin($spool);
+        $material [] = BasisDecorationService::profitMargin($bottom);
         //添加材料
         $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);
         $add_price = [];
@@ -349,7 +349,7 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>3,
+//            'bedroom'=>2,
 //            'hall'=>1,
 //            'toilet'=>1,
 //            'kitchen'=>1,
@@ -403,31 +403,31 @@ class OwnerController extends Controller
         $material = [];
         foreach ($strong_current as $one_strong_current)
         {
-            if ($one_strong_current['title'] == '线管')
-            {
-                $goods_max = BasisDecorationService::profitMargin($one_strong_current);
-                $goods_max['quantity'] = $material_price['wire_quantity'];
-                $goods_max['cost'] = $material_price['wire_cost'];
-                $material [] =  $goods_max;
-            }
-
             if ($one_strong_current['title'] == '电线')
             {
-                $goods_max = BasisDecorationService::profitMargin($one_strong_current);
-                $goods_max['quantity'] = $material_price['spool_quantity'];
-                $goods_max['cost'] = $material_price['spool_cost'];
-                $material [] =  $goods_max;
+                $one_strong_current['quantity'] = $material_price['wire_quantity'];
+                $one_strong_current['cost'] = $material_price['wire_cost'];
+                $wire [] =  $one_strong_current;
+            }
+
+            if ($one_strong_current['title'] == '线管')
+            {
+                $one_strong_current['quantity'] = $material_price['spool_quantity'];
+                $one_strong_current['cost'] = $material_price['spool_cost'];
+                $spool [] =  $one_strong_current;
             }
 
             if ($one_strong_current['title'] == '底盒')
             {
-                $goods_max = BasisDecorationService::profitMargin($one_strong_current);
-                $goods_max['quantity'] = $material_price['bottom_quantity'];
-                $goods_max['cost'] = $material_price['bottom_cost'];
-                $material [] =  $goods_max;
+                $one_strong_current['quantity'] = $material_price['bottom_quantity'];
+                $one_strong_current['cost'] = $material_price['bottom_cost'];
+                $bottom [] =  $one_strong_current;
             }
         }
         $material ['total_cost'] = $material_price['total_cost'];
+        $material [] = BasisDecorationService::profitMargin($wire);
+        $material [] = BasisDecorationService::profitMargin($spool);
+        $material [] = BasisDecorationService::profitMargin($bottom);
 
         $add_price_area = DecorationAdd::AllArea('强电', $post['area'], $post['city']);
         $add_price = [];
@@ -488,10 +488,10 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>3,
+//            'bedroom'=>1,
 //            'hall'=>1,
-//            'toilet'=>1,
-//            'kitchen'=>1,
+//            'toilet'=>2,
+//            'kitchen'=>2,
 //            'stairs_details_id'=>1,
 //            'series'=>1,
 //            'style'=>1,
@@ -545,6 +545,7 @@ class OwnerController extends Controller
         $labor_all_cost['worker_kind'] = $waterway_labor['worker_kind'];
         //材料总费用
         $material_price = BasisDecorationService::waterwayGoods($waterway_points, $waterway_current,$craft);
+
         $material = [];
         foreach ($waterway_current as $one_waterway_current)
         {
@@ -625,9 +626,9 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>3,
+//            'bedroom'=>1,
 //            'hall'=>1,
-//            'toilet'=>1,
+//            'toilet'=>2,
 //            'kitchen'=>1,
 //            'stairs_details_id'=>1,
 //            'series'=>1,
@@ -662,17 +663,18 @@ class OwnerController extends Controller
             $wall_space_total_perimeter = BasisDecorationService::wallSpace($area);
             $total_area_float = $ground_total_area + $wall_space_total_perimeter;
             //总面积
-            $total_area = intval($total_area_float);
+            $total_area = $total_area_float;
         } else {
             //厨房
             $kitchen = EngineeringUniversalCriterion::findByAll('厨房');
             $kitchen_area = BasisDecorationService::waterproofArea($kitchen, $post['area'], $post['kitchen']);
             //卫生间
             $toilet = EngineeringUniversalCriterion::findByAll('卫生间');
-            $toilet_area = BasisDecorationService::waterproofArea($toilet, $post['area'], $post['kitchen']);
+            $toilet_area = BasisDecorationService::waterproofArea($toilet, $post['area'], $post['toilet']);
             //总面积
-            $total_area = intval($kitchen_area + $toilet_area);
+            $total_area = $kitchen_area + $toilet_area;
         }
+
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('防水', $post['city']);
