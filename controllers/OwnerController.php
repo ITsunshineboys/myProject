@@ -1668,14 +1668,14 @@ class OwnerController extends Controller
      */
     public function actionMoveFurniture()
     {
-//       $post = \Yii::$app->request->post();
-        $post = [
-            'effect_id' => 1,
-            'bedroom' => 2,
-            'hall'=> 2,
-            'style' =>1,
-            'series'=>1
-        ];
+       $post = \Yii::$app->request->post();
+//        $post = [
+//            'effect_id' => 1,
+//            'bedroom' => 2,
+//            'hall'=> 2,
+//            'style' =>1,
+//            'series'=>1
+//        ];
 
         $classify = '移动家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);

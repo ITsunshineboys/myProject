@@ -359,7 +359,7 @@ class Goods extends ActiveRecord
         if ($level && $title) {
             $id = implode('\',\'', $title);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category AS gc ON goods.category_id = gc.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . "  AND gc.level= " . $level . " AND gc.title IN ('" . $id . "')";
+            $sql = "SELECT goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category AS gc ON goods.category_id = gc.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code = " . $city . "  AND gc.level= " . $level . " AND gc.title IN ('" . $id . "')";
             $all = $db->createCommand($sql)->queryAll();
             return $all;
         } else {
@@ -413,7 +413,7 @@ class Goods extends ActiveRecord
             }
             $id = implode(',', $goods_id);
             $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
+            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
 AND goods.id IN (" . $id . ")";
             $all_goods = $db->createCommand($sql)->queryAll();
         }
@@ -429,7 +429,7 @@ AND goods.id IN (" . $id . ")";
             }
             $id = implode('\',\'', $material);
             $db = Yii::$app->db;
-            $sql = "SELECT goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category as gc ON goods.category_id = gc.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code =" . $city . " AND gc.title IN ('" . $id . "')";
+            $sql = "SELECT goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category as gc ON goods.category_id = gc.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id WHERE logistics_district.district_code =" . $city . " AND gc.title IN ('" . $id . "')";
             $all_goods = $db->createCommand($sql)->queryAll();
             return $all_goods;
         }
