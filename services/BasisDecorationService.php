@@ -1959,7 +1959,7 @@ class BasisDecorationService
                 }
                 if ($one_goods['title'] == '立柜式空调' && $one_goods['series_id'] == $post['series'])
                 {
-                    if ($post['series'] < 3)
+                    if ($post['series'] < 2)
                     {
                         $one_goods['show_quantity'] = $hall;
                         $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
@@ -1971,7 +1971,7 @@ class BasisDecorationService
                 }
                 if ($one_goods['title'] == '挂壁式空调' && $one_goods['series_id'] == $post['series'])
                 {
-                    if ($post['series'] <= 2)
+                    if ($post['series'] < 2)
                     {
                         $one_goods['show_quantity'] = $post['bedroom'];
                         $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
@@ -1986,11 +1986,9 @@ class BasisDecorationService
                     $one_goods['show_quantity'] = $add['中央空调']['quantity'];
                     $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $central_air_conditioning [] = $one_goods;
-                }else
-                {
-                    $central_air_conditioning = null;
                 }
             }
+
             $material [] = self::profitMargin($kitchen_ventilator);
             $material [] = self::profitMargin($stove);
             $material [] = self::profitMargin($water_heater);

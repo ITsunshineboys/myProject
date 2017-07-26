@@ -913,20 +913,20 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>1,
-            'hall'=>1,
-            'toilet'=>1,
-            'kitchen'=>1,
-            'stairs_details_id'=>1,
-            'series'=>1,
-            'style'=>1,
-            'window'=>10,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>1,
+//            'hall'=>1,
+//            'toilet'=>1,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
+//            'series'=>1,
+//            'style'=>2,
+//            'window'=>10,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -952,13 +952,11 @@ class OwnerController extends Controller
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $area = DecorationParticulars::findByOne($decoration_list);
-            $tall =  2.8;
         } else {
             $project = '油漆';
             $areas = EngineeringUniversalCriterion::findByAll($project);
             $area['masterBedroom_area'] = 0;
             $area['sittingRoom_diningRoom_area'] = 0;
-            $tall = 0;
             foreach ($areas as $one) {
                 if ($one['project_particulars'] == '卧室面积')
                 {
@@ -998,12 +996,14 @@ class OwnerController extends Controller
 
 //        腻子卧室墙面积
         $putty_bedroom_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'],2.8,4);
+
 //        腻子客餐厅面积
         $putty_drawing_room_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'],$post['hall'],2.8,3);
 //        腻子面积 卧室腻子面积+客厅腻子面积
         $putty_area = $putty_bedroom_area + $putty_drawing_room_area;
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
+
         //材料
         if (!empty($post['effect_id'])) {
             $decoration_list = DecorationList::findById($post['effect_id']);
@@ -1043,18 +1043,18 @@ class OwnerController extends Controller
             }
         }
 
-////        腻子费用
+//        腻子费用
         $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'],$putty_craft,$putty_area);
 ////        底漆费用
         $primer_cost = BasisDecorationService::paintedCost($series_and_style['primer'], $primer_craft, $primer_area);
-////        乳胶漆面漆费用
-        $finishing_coat_cost = BasisDecorationService::paintedCost($series_and_style['finishing_coat'], $finishing_coat_craft, $finishing_coat_area);
+//        乳胶漆面漆费用
+        $finishing_coat_cost = BasisDecorationService::paintedCost($series_and_style['finishing_coat'],$finishing_coat_craft, $finishing_coat_area);
 //        阴角线费用
         $concave_line_cost = BasisDecorationService::paintedCost($series_and_style['concave_line'],$concave_line_craft, $concave_line_length);
 
 //        石膏粉费用   石膏粉费用：个数×商品价格
 //        个数：（【3元】×乳胶漆面漆面积÷商品价格）
-        $gypsum_powder_cost['quantity'] = ceil($gypsum_powder_craft['material'] * $finishing_coat_area / $series_and_style['gypsum_powder']['platform_price']);
+        $gypsum_powder_cost['quantity'] = ceil($gypsum_powder_craft['material'] * $primer_area / $series_and_style['gypsum_powder']['platform_price']);
         $gypsum_powder_cost['cost'] = $gypsum_powder_cost['quantity'] * $series_and_style['gypsum_powder']['platform_price'];
 
         //总费用
@@ -1550,17 +1550,17 @@ class OwnerController extends Controller
         $post = Yii::$app->request->post();
 //        $post = [
 //            'area'=>60,
-//            'bedroom'=>60,
-//            'hall'=>60,
-//            'toilet'=>60,
-//            'kitchen'=>60,
-//            'stairs_details_id'=>60,
+//            'bedroom'=>1,
+//            'hall'=>1,
+//            'toilet'=>2,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
 //            'series'=>1,
 //            'style'=>1,
-//            'window'=>60,
+//            'window'=>5,
 //            'province'=>510000,
 //            'city'=>510100,
-//            'waterproof_total_area' => 60,
+//            'waterproof_total_area' => 1,
 //            ];
         $material = '主材';
         $material_property_classify = MaterialPropertyClassify::findByAll($material);
@@ -1618,8 +1618,8 @@ class OwnerController extends Controller
 ////            'effect_id' => 1,
 //            'bedroom' => 2,
 //            'stairway_id'=>1,
-//            'stairs' =>'实木构造',
-//            'style' =>1,
+//            'stairs' =>'玻璃金属',
+//            'style' =>2,
 //            'series'=>1
 //        ];
         $classify = '固定家具';
@@ -1668,14 +1668,14 @@ class OwnerController extends Controller
      */
     public function actionMoveFurniture()
     {
-       $post = \Yii::$app->request->post();
-//        $post = [
-//            'effect_id' => 1,
-//            'bedroom' => 2,
-//            'hall'=> 2,
-//            'style' =>1,
-//            'series'=>1
-//        ];
+//       $post = \Yii::$app->request->post();
+        $post = [
+            'effect_id' => 1,
+            'bedroom' => 2,
+            'hall'=> 2,
+            'style' =>1,
+            'series'=>1
+        ];
 
         $classify = '移动家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
@@ -1707,11 +1707,11 @@ class OwnerController extends Controller
 //        $post = [
 ////            'effect_id' => 1,
 //            'kitchen' => 1,
-//            'bedroom' => 2,
-//            'toilet' => 2,
+//            'bedroom' =>2,
+//            'toilet' => 1,
 //            'hall' => 1,
 //            'style' =>1,
-//            'series'=>1
+//            'series'=>2
 //        ];
 
         $classify = '家电配套';
@@ -1740,14 +1740,14 @@ class OwnerController extends Controller
      */
     public function actionLifeAssort()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-//            'effect_id' => 1,
-            'bedroom' => 2,
-            'toilet' => 1,
-            'style' =>1,
-            'series'=>1
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+////            'effect_id' => 1,
+//            'bedroom' => 2,
+//            'toilet' => 3,
+//            'style' =>1,
+//            'series'=>1
+//        ];
 
         $classify = '生活配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
