@@ -453,7 +453,6 @@ class BasisDecorationService
             $series_coefficient = 0;
             if($series_find['series'] == '齐家' || $series_find['series'] == '享家')
             {
-                echo 111;exit;
                 $series_coefficient = $series_find['modelling_day_coefficient'];
             }
             elseif ($series_find['series'] == '享家+')
