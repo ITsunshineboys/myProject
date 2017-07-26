@@ -33,6 +33,9 @@ class User extends ActiveRecord implements IdentityInterface
         self::SEX_FEMALE => '女',
         self::SEX_UNKOWN => '保密',
     ];
+    const NICKNAME_MIN_LEN = 4;
+    const NICKNAME_MAX_LEN = 20;
+    const SIGNATURE_MAX_LEN = 20;
 
     /**
      * @inheritdoc
@@ -278,6 +281,33 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Reset nickname action
+     *
+     * @return int
+     */
+    public function resetNickname()
+    {
+        if ($this->nickname) {
+            $code = 1017;
+            return $code;
+        }
+
+        if (User::find()->where(['nickname' => $nickname])->exists()) {
+            $code = 1018;
+            return $code;
+        }
+
+        $this->nickname = $nickname;
+        if (!$this->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
@@ -291,6 +321,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['password', 'validatePassword'],
             [['identity_no', 'legal_person', 'identity_card_front_image', 'identity_card_back_image'], 'string'],
             ['legal_person', 'string', 'length' => [1, 15]],
+            ['nickname', 'string', 'length' => [self::NICKNAME_MIN_LEN, self::NICKNAME_MAX_LEN]],
+            ['signature', 'string', 'length' => [1, self::SIGNATURE_MAX_LEN]],
         ];
     }
 
