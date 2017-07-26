@@ -770,27 +770,39 @@ class OwnerController extends Controller
 //            'toilet'=>1,
 //            'kitchen'=>1,
 //            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
+//            'series'=>4,
+//            'style'=>2,
 //            'window'=>10,
 //            'province'=>510000,
 //            'city'=>510100,
 //        ];
-        $labor_cost = LaborCost::profession($post,'木工');
-
-        $series_all = Series::find()->all();
-        $style_all = Style::find()->all();
+        $labor_cost = LaborCost::univalence($post,'木工');
+        foreach ($labor_cost as $one_labor)
+        {
+            $price = $one_labor['univalence'];
+            if ($one_labor['worker_kind_details'] == '平顶')
+            {
+                $flat = $one_labor['quantity'];
+            }
+            if ($one_labor['worker_kind_details'] == '造型')
+            {
+                $modelling = $one_labor['quantity'];
+            }
+        }
+        $series_all = Series::find()->asArray()->all();
+        $style_all = Style::find()->asArray()->all();
         $carpentry_add = CarpentryAdd::findByStipulate($post['series'], $post['style']);
         // 造型长度
-        $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add, $series_all, $post['series']);
+        $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$series_all,$post['series']);
+
         //造型天数
-        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $labor_cost['quantity'], $series_all, $style_all);
+        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length,$modelling,$series_all, $style_all,$post['series']);
         //平顶天数
-        $flat_day = BasisDecorationService::flatDay($carpentry_add, $labor_cost['quantity'], $series_all, $style_all);
+        $flat_day = BasisDecorationService::flatDay($carpentry_add,$flat,$series_all,$style_all,$post['series']);
 
         //人工费
-        $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
-        $labour_charges['worker_kind'] = $labor_cost['worker_kind'];
+        $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1,$price);
+        $labour_charges['worker_kind'] = '木工';
 
         //木工材料费
         if (!empty($post['effect_id'])) {
@@ -807,7 +819,7 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('木作', $post['city']);
 
         //石膏板费用
-        $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
+        $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length,$carpentry_add['flat_area'], $goods_price, $craft);
 
         //龙骨费用
         $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
@@ -1402,20 +1414,20 @@ class OwnerController extends Controller
      */
     public function actionHandyman()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'province' => 510000,
-//            'city' => 510100,
-//            '12_dismantle' => 40,
-//            '24_dismantle' => 0,
-//            'repair' => 40,
-//            '12_new_construction' => 0,
-//            '24_new_construction' => 0,
-//            'building_scrap' => false,
-//            'area' =>60,
-//            'series' =>1,
-//            'style' =>1
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'province' => 510000,
+            'city' => 510100,
+            '12_dismantle' => 0,
+            '24_dismantle' => 0,
+            'repair' =>30,
+            '12_new_construction' => 40,
+            '24_new_construction' => 40,
+            'building_scrap' => false,
+            'area' =>60,
+            'series' =>1,
+            'style' =>1
+        ];
         $handyman = '杂工';
         $labor = LaborCost::univalence($post,'杂工');
 
@@ -1424,6 +1436,7 @@ class OwnerController extends Controller
 
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($handyman, $post['city']);
+
         if ($post['building_scrap'] == true) {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post,$craft);
         } else {
