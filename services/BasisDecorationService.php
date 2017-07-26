@@ -915,6 +915,7 @@ class BasisDecorationService
 
 //        ③补烂天数=补烂长度÷【每天补烂长度】
         $day['repair_day'] = $get_area['repair'] / $repair['quantity'];
+
 //        总天数=拆除天数+新建天数+补烂天数
         $day['total_day'] = ceil($day['dismantle_day'] + $day['new_construction_day'] + $day['repair_day']);
 

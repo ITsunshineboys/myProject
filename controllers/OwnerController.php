@@ -1404,12 +1404,12 @@ class OwnerController extends Controller
 //        $post = [
 //            'province' => 510000,
 //            'city' => 510100,
-//            '12_dismantle' => 0,
+//            '12_dismantle' => 40,
 //            '24_dismantle' => 0,
-//            'repair' => 0,
-//            '12_new_construction' => 10,
+//            'repair' => 40,
+//            '12_new_construction' => 0,
 //            '24_new_construction' => 0,
-//            'building_scrap' => true,
+//            'building_scrap' => false,
 //            'area' =>60,
 //            'series' =>1,
 //            'style' =>1
