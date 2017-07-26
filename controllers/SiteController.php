@@ -521,31 +521,6 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        /*
-        if ($user->nickname) {
-            $code = 1017;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if (User::find()->where(['nickname' => $nickname])->exists()) {
-            $code = 1018;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $user->nickname = $nickname;
-        if (!$user->save()) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }*/
 
         return Json::encode([
             'code' => 200,
