@@ -309,6 +309,24 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Reset signature action
+     *
+     * @param string $signature nickname
+     * @return int
+     */
+    public function resetSignature($signature)
+    {
+        $this->signature = $signature;
+        if (!$this->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

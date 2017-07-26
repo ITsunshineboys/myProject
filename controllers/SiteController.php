@@ -34,6 +34,7 @@ class SiteController extends Controller
         'upload-delete',
         'review-statuses',
         'reset-nickname',
+        'reset-signature',
     ];
 
     /**
@@ -525,6 +526,41 @@ class SiteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '修改昵称成功',
+        ]);
+    }
+
+    /**
+     * Reset signature action.
+     *
+     * @return string
+     */
+    public function actionResetSignature()
+    {
+        $code = 1000;
+
+        $signature = Yii::$app->request->post('signature', '');
+
+        if (!$signature
+            || strlen($signature) > User::SIGNATURE_MAX_LEN
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        $code = $user->resetSignature($signature);
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '修改签名成功',
         ]);
     }
 
