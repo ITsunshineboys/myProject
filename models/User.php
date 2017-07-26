@@ -283,11 +283,12 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Reset nickname action
      *
+     * @param string $nickname nickname
      * @return int
      */
-    public function resetNickname()
+    public function resetNickname($nickname)
     {
-        if ($this->nickname) {
+        if ($this->nickname == $nickname) {
             $code = 1017;
             return $code;
         }

@@ -514,6 +514,14 @@ class SiteController extends Controller
         }
 
         $user = Yii::$app->user->identity;
+        $code = $user->resetNickname($nickname);
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        /*
         if ($user->nickname) {
             $code = 1017;
             return Json::encode([
@@ -537,7 +545,7 @@ class SiteController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
-        }
+        }*/
 
         return Json::encode([
             'code' => 200,
