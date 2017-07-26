@@ -1517,7 +1517,7 @@ class BasisDecorationService
                 if ($one_goods['title'] == '木门' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
                     $one_goods['show_quantity'] = $post['bedroom'];
-                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $timber_door [] = $one_goods;
                 }
             }

@@ -1159,21 +1159,21 @@ class OwnerController extends Controller
      */
     public function actionMudMake()
     {
-        $post = \Yii::$app->request->post();
-//                $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>1,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>10,
-//            'province'=>510000,
-//            'city'=>510100,
-//            'waterproof_total_area' =>60,
-//        ];
+//        $post = \Yii::$app->request->post();
+                $post = [
+            'area'=>60,
+            'bedroom'=>1,
+            'hall'=>1,
+            'toilet'=>1,
+            'kitchen'=>1,
+            'stairs_details_id'=>1,
+            'series'=>1,
+            'style'=>1,
+            'window'=>10,
+            'province'=>510000,
+            'city'=>510100,
+            'waterproof_total_area' =>60,
+        ];
         $arr['worker_kind'] = '泥工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
