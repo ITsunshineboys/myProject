@@ -634,6 +634,14 @@ class SiteController extends Controller
     public function actionValidationCode()
     {
         $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (empty($postData['type'])) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         if (in_array($postData['type'], SmValidationService::$needAuthorizedTypes)) {
             if (!Yii::$app->user->identity) {
@@ -660,6 +668,13 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         } catch (\Exception $e) {
+            $code = 1020;
+            if ($code == $e->getCode()) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
 
         return Json::encode([

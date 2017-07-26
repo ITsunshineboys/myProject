@@ -22,6 +22,7 @@ class SmValidationService
 
     const SUFFIX_INTERVAL = '_interval';
     const SUFFIX_VALIDATION_CODE = '_validationCode';
+    const SUFFIX_VALIDATION_CODE_FLG = '_validationCodeFlg';
 
     private $_appKey;
     private $_appSecret;
@@ -81,12 +82,19 @@ class SmValidationService
             return;
         }
 
-        // generate validation code
+        // check and generate validation code
         $validationCodeKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE;
         if (!($validationCode = $cache->get($validationCodeKey))) {
+            $flgKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE_FLG;
+            if ($cache->get($flgKey)) {
+                $code = 1020;
+                throw new \Exception(Yii::$app->params['errorCodes'][$code], $code);
+            }
+
             $validationCodeMethod = $this->_validationCodeMethod;
             $validationCode = $this->$validationCodeMethod();
             $cache->set($validationCodeKey, $validationCode, $this->_validationCodeExpire);
+            $cache->set($flgKey, 1);
         }
 
         $config = [
@@ -174,8 +182,11 @@ class SmValidationService
             return;
         }
 
+        $cache = Yii::$app->cache;
         $validationCodeKey = $mobile . self::SUFFIX_VALIDATION_CODE;
-        Yii::$app->cache->delete($validationCodeKey);
+        $cache->delete($validationCodeKey);
+        $flgKey = $mobile . self::SUFFIX_VALIDATION_CODE_FLG;
+        $cache->delete($flgKey);
     }
 
     /**
