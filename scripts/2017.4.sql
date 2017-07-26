@@ -35,6 +35,7 @@ CREATE TABLE `user` (
   `identity_card_back_image` varchar(255) not null DEFAULT '' comment '身份证反面图片',
   `deadtime` int unsigned not null default 0 comment '封号时间',
   `signature` varchar(20) not null DEFAULT '' comment '个性签名',
+  `gender` tinyint(1) unsigned not null DEFAULT 0 comment '0: 男, 1: 女, 2: 保密',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
