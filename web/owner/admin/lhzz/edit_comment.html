@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/menu_nav/menu_nav.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/edit_comment.css"/>
+</head>
+<body>
+<!--导航栏开始-->
+<div class="nav_box ">
+    <div class="logo">
+        <img src="images/logo.png" alt=""/>
+    </div>
+    <dl >
+        <dt ><i class="font2 fl">&#xe600;</i>首页</dt>
+    </dl>
+    <dl >
+        <dt ><i class="font2 fl">&#xe600;</i>用户管理</dt>
+        <dd ><a href="">上架商品</a></dd>
+        <dd><a href="">活动商品</a></dd>
+    </dl>
+
+    <dl>
+        <dt><i class="font2 fl">&#xe600;</i>系统管理</dt>
+        <dd ><a href="" >管理员列表</a></dd>
+        <dd><a href="">角色管理</a></dd>
+        <dd><a href="">权限管理</a></dd>
+    </dl>
+
+    <dl class="dl_on">
+        <dt  class="on"><i class="font2 fl">&#xe734;</i>商城管理</dt>
+        <dd ><a href="index.html" class="dd_on">首页推荐</a></dd>
+        <dd ><a href="#" >app推荐banner管理</a></dd>
+        <dd ><a href="#" >搜索页面</a></dd>
+        <dd><a href="view/mall_manage/merchant_manage.html">商家管理</a></dd>
+        <dd><a href="#">商家数据</a></dd>
+        <dd><a href="#">品牌管理</a></dd>
+        <dd><a href="#">分类管理</a></dd>
+        <dd><a href="#">新品牌/新分类审核</a></dd>
+        <dd><a href="#">系类/风格/属性管理</a></dd>
+    </dl>
+</div>
+<!--导航栏结束-->
+<section class="my_container">
+    <!--左右布局的 右部分   头部-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <img src="images/shop.png" alt=""/>
+                <span class="shop_span">商城管理 ></span>
+                <span>商品管理 ></span>
+                <span style="color: #C2C2C2">商品详情</span>
+            </div>
+            <div class="col-md-4 col-sm-4 col-md-push-1 div_size">
+                <img src="images/news.png" alt="" class="img_new"/>
+                <span>站内信</span>
+                <span>|</span>
+                <span>个人面板</span>
+                <img src="images/center.png" alt="" class="img_logo"/>
+            </div>
+        </div>
+    </div>
+    <!--横线-->
+    <div style="width:100%;height: 1px;background: #c2c2c2"></div>
+
+    <div class="div_ul">
+        <ul class="ul_li">
+            <li><span class="li_span">商品分类</span> <span class="sec_span">主材-地板材料-木地板</span></li>
+            <li><span class="li_span">商品名称</span> <span class="sec_span">深大地板</span></li>
+            <li><span class="li_span">商品特色</span> <span class="sec_span">好买一送哟！</span></li>
+            <li><span class="li_span">选择品牌</span> <span class="sec_span">深大地板</span></li>
+            <li>
+                <span class="li_span">商品属性</span>
+                <ul>
+                    <li class="li_li"> &nbsp;&nbsp; <sapn>厚度</sapn> <span>9cm</span></li>
+                    <li class="li_li"> <span>长度</span> <span>90cm</span></li>
+                    <li class="li_li"> <span>材质</span> <span>黄花</span></li>
+                    <li class="li_li"> <span>风格</span> <span>美式</span></li>
+                    <li class="li_li"> <span>系类</span> <span>齐家</span></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!--上传图片、-->
+    <div class=upload_pic>
+        <span>上传图片</span>
+        <div>
+            <img src="images/dd.png" alt=""/>
+            <img src="images/dd.png" alt=""/>
+            <img src="images/dd.png" alt=""/>
+            <img src="images/dd.png" alt=""/>
+            <img src="images/dd.png" alt=""/>
+            <img src="images/dd.png" alt=""/>
+        </div>
+    </div>
+
+    <!--库存、价格  -->
+    <div class="stock_div">
+        <span>价格/库存</span>
+        <ul>
+            <li>供货价格</li>
+            <li>平台价格</li>
+            <li>市场价格</li>
+            <li>库存</li>
+        </ul>
+        <div style="height: 2px;background-color: #C2C2C2;width: 250px;margin-left: 180px;"></div>
+        <ul id="stock_ul">
+            <li>￥45.00</li>
+            <li>￥55.00</li>
+            <li>￥85.00</li>
+            <li>666</li>
+        </ul>
+    </div>
+
+    <!--采购价-->
+    <div class="pur_pic">
+        <span>采购价</span>
+        <ul>
+            <li>装修公司采购价</li>
+            <li>项目经理采购价</li>
+            <li>设计师采购价</li>
+        </ul>
+        <div style="height: 2px;background-color: #C2C2C2;width: 450px;margin-left: 180px;"></div>
+        <div class="div_input">
+            <img src="images/red.png" alt=""/>
+            <input type="text" placeholder="$45.00"/>
+            <input type="text" placeholder="$45.00"/>
+            <input type="text" placeholder="$45.00"/><br/>
+            <span>*价格，供货价<=装修公司<=项目经理采购价/设计师采购价<=平台价<=市场价</span>
+        </div>
+
+
+
+    </div>
+
+    <!--商品物流-->
+    <div class="logistic_div">
+        <span class="logistic_span">商品物流</span>
+        <div class="logistic_one">
+             <span>模板一</span><br/>
+            <ul>
+                <li>
+                    <span>快递方式</span>
+                    <span class="s_span">快递</span> <br/>
+                </li>
+                <li>
+                    <span>城市选择</span>
+                    <span class="s_span">北京,上海，重庆，福州，四川，湖南....</span><a href="">查看</a>
+                </li>
+                <li>
+                    <span>是否包邮</span>
+                    <span class="s_span">不包邮</span>
+                </li>
+                <li>
+                    <span>收费金额</span>
+                    <span class="s_span"> 默认1件商品：￥120.00 </span><br/>
+                    <span class="s_span_on"> 每增加一件商品运费增加：$60.00</span>
+                </li>
+            </ul>
+
+
+
+        </div>
+    </div>
+
+    <!--售后-->
+    <div class="service_div">
+        <span class="span_service">售后</span>
+        <div>
+            <span>上门维修</span>
+            <span>上门退货</span>
+            <span>上门换货</span>
+            <span>退货</span>
+            <span>换货</span>
+        </div>
+
+    </div>
+
+    <!--保障-->
+    <div class="guarantee_div">
+        <span class="guarantee_span">保障</span>
+        <span class="span_f">提供发票</span><br/>
+        <span class="span_a">上门安装</span>
+    </div>
+
+    <!--详细描述-->
+    <div class="comment_all">
+        <span>详细描述</span>
+        <div class="div_img">
+            <img src="" alt=""/>
+            <span></span>
+        </div>
+    </div>
+
+    <!--审核备注-->
+    <div class="examine_div">
+        <span>审核备注</span>
+        <textarea name="" id="" cols="104" rows="10" ></textarea>
+    </div>
+    <div class="an_btn">
+        <button class="btn_right">保存</button>
+        <button class="btn_right">返回</button>
+    </div>
+
+</section>
+<script src="../../js/jquery-3.1.1.js"></script>
+<script src="../../js/angular.min.js"></script>
+<script src="js/global.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
