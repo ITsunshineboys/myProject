@@ -789,10 +789,6 @@ class OwnerController extends Controller
         //人工费
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
         $labour_charges['worker_kind'] = $labor_cost['worker_kind'];
-        var_dump($modelling_day);
-        var_dump($flat_day);
-        var_dump($labor_cost['univalence']);
-        exit;
 
         //木工材料费
         if (!empty($post['effect_id'])) {
