@@ -1569,19 +1569,19 @@ class BasisDecorationService
                 }
                 if ($one_points['place'] == '入户')
                 {
-                    $register = $one_points['points_total'] * $post['toilet'];
+                    $register = $one_points['points_total'];
                 }
                 if ($one_points['place'] == '客厅阳台')
                 {
-                    $balcony = $one_points['points_total'] * $post['toilet'];
+                    $balcony = $one_points['points_total'];
                 }
                 if ($one_points['place'] == '客厅卧室过道')
                 {
-                    $passage = $one_points['points_total'] * $post['toilet'];
+                    $passage = $one_points['points_total'];
                 }
                 if ($one_points['place'] == '生活阳台')
                 {
-                    $live_balcony= $one_points['points_total'] * $post['toilet'];
+                    $live_balcony= $one_points['points_total'];
                 }
             }
             $strong_current_points = $hall+$bedroom+$kitchen+$toilet+$register+$balcony+$passage+$live_balcony;
