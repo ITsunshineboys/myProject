@@ -370,9 +370,6 @@ class SiteController extends Controller
 
         if (empty($postData['mobile'])
             || !StringService::isMobile($postData['mobile'])
-            || empty($postData['new_password'])
-            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
-            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
         ) {
             return Json::encode([
                 'code' => $code,
