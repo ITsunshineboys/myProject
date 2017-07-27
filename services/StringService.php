@@ -248,13 +248,7 @@ class StringService
      */
     public static function checkArrayIdentity(array $arr1, array $arr2)
     {
-        if (count(array_diff($arr1, $arr2)) == 0
-            && count(array_diff($arr2, $arr1)) == 0
-        ) {
-            return true;
-        }
-
-        return false;
+        return empty(array_diff($arr1, $arr2)) && empty(array_diff($arr2, $arr1));
     }
 
     /**
