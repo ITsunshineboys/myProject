@@ -1632,7 +1632,7 @@ class OwnerController extends Controller
         $goods_price = BasisDecorationService::priceConversion($goods);
         $series_style = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post,$one_material);
 
-        if (!is_null($post['stairway_id']))
+        if ($post['stairway_id'] == 1)
         {
             $stairs = Goods::findByCategory('楼梯');
             $stairs_price = BasisDecorationService::priceConversion($stairs);
@@ -1703,15 +1703,15 @@ class OwnerController extends Controller
     public function actionAppliancesAssort()
     {
         $post = \Yii::$app->request->post();
-        $post = [
-//            'effect_id' => 1,
-            'kitchen' => 1,
-            'bedroom' =>2,
-            'toilet' => 1,
-            'hall' => 1,
-            'style' =>1,
-            'series'=>1
-        ];
+//        $post = [
+////            'effect_id' => 1,
+//            'kitchen' => 1,
+//            'bedroom' =>2,
+//            'toilet' => 1,
+//            'hall' => 1,
+//            'style' =>1,
+//            'series'=>1
+//        ];
 
         $classify = '家电配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
