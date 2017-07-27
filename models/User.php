@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\services\StringService;
 use app\services\SmValidationService;
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -36,6 +37,15 @@ class User extends ActiveRecord implements IdentityInterface
     const NICKNAME_MIN_LEN = 4;
     const NICKNAME_MAX_LEN = 20;
     const SIGNATURE_MAX_LEN = 20;
+    const FIELDS_USER_CENTER_MODEL = [
+        'icon',
+        'nickname',
+        'gender',
+        'birthday',
+        'district_name',
+        'signature',
+        'aite_cube_no',
+    ];
 
     /**
      * @inheritdoc
@@ -143,6 +153,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user->password = Yii::$app->security->generatePasswordHash($user->password);
         $user->create_time = $user->login_time = time();
         $user->login_role_id = Yii::$app->params['ownerRoleId'];
+        $user->nickname = Yii::$app->params['user']['default_nickname'];
 
         if (!$user->validate()) {
             return $code;
@@ -293,7 +304,7 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
 
-        if ($this->nickname) {
+        if ($this->nickname != Yii::$app->params['user']['default_nickname']) {
             $code = 1017;
             return $code;
         }
@@ -581,6 +592,30 @@ class User extends ActiveRecord implements IdentityInterface
         $cache = Yii::$app->cache;
         $key = self::CACHE_PREFIX_DAILY_FORGOT_PWD_CNT . $this->id;
         return (int)$cache->get($key);
+    }
+
+    /**
+     * Get view data
+     *
+     * @return array
+     */
+    public function view()
+    {
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_USER_CENTER_MODEL);
+        $this->_formatData($modelData);
+        return $modelData;
+    }
+
+    /**
+     * Format data
+     *
+     * @param array $data data to format
+     */
+    private function _formatData(array &$data)
+    {
+        if (isset($data['gender'])) {
+            $data['gender'] = self::SEXES[$data['gender']];
+        }
     }
 
     /**

@@ -118,5 +118,6 @@ return [
     'carouselMaxNumber' => 3,
     'user' => [
         'daily_forgot_pwd_cnt_max' => 5,
+        'default_nickname' => 'default nickname', // 待定
     ],
 ];

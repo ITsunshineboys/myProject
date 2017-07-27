@@ -39,6 +39,7 @@ class SiteController extends Controller
         'reset-gender',
         'reset-birthday',
         'reset-district',
+        'user-view',
     ];
 
     /**
@@ -935,5 +936,21 @@ class SiteController extends Controller
         $b = BasisDecorationService::formula($arr, $quantity, $unitPrice);
 
         var_dump($b);
+    }
+
+    /**
+     * View owner action
+     *
+     * @return string
+     */
+    public function actionUserView()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'user-view' => Yii::$app->user->identity->view(),
+            ],
+        ]);
     }
 }
