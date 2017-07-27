@@ -342,14 +342,15 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Reset district code action
+     * Reset district action
      *
      * @param string $districtCode district code
      * @return int
      */
-    public function resetDistrictCode($districtCode)
+    public function resetDistrict($districtCode)
     {
-        if (!$districtCode) {
+        $district = District::validateDistrictCode($districtCode);
+        if (!$district) {
             $code = 1000;
             return $code;
         }
@@ -360,6 +361,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         $this->district_code = $districtCode;
+        $this->district_name = $district->name;
         if (!$this->save()) {
             $code = 500;
             return $code;

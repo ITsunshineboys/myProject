@@ -38,6 +38,7 @@ CREATE TABLE `user` (
   `gender` tinyint(1) unsigned not null DEFAULT 0 comment '0: 男, 1: 女, 2: 保密',
   `birthday` int(8) unsigned not null DEFAULT 0,
   `district_code` int(6) unsigned not null default 0 comment '区域码',
+  `district_name` varchar(50) NOT NULL DEFAULT '' comment '区域名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

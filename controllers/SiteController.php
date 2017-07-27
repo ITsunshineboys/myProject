@@ -6,6 +6,7 @@ use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
 use app\models\Role;
+use app\models\District;
 use app\models\UserRole;
 use app\services\BasisDecorationService;
 use app\services\FileService;
@@ -37,7 +38,7 @@ class SiteController extends Controller
         'reset-signature',
         'reset-gender',
         'reset-birthday',
-        'reset-district-code',
+        'reset-district',
     ];
 
     /**
@@ -73,7 +74,7 @@ class SiteController extends Controller
                     'reset-signature' => ['post',],
                     'reset-gender' => ['post',],
                     'reset-birthday' => ['post',],
-                    'reset-district-code' => ['post',],
+                    'reset-district' => ['post',],
                 ],
             ],
         ];
@@ -607,17 +608,17 @@ class SiteController extends Controller
     }
 
     /**
-     * Reset district code action.
+     * Reset district action.
      *
      * @return string
      */
-    public function actionResetDistrictCode()
+    public function actionResetDistrict()
     {
         $code = 1000;
 
         $districtCode = (int)Yii::$app->request->post('district_code', 0);
 
-        if (!StringService::checkDistrict($districtCode)) {
+        if (!District::validateDistrictCode($districtCode)) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -625,7 +626,7 @@ class SiteController extends Controller
         }
 
         $user = Yii::$app->user->identity;
-        $code = $user->resetDistrictCode($districtCode);
+        $code = $user->resetDistrict($districtCode);
         if (200 != $code) {
             return Json::encode([
                 'code' => $code,
