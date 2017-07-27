@@ -19,10 +19,11 @@ function carousel() {
 //轮播设置结束
 app.controller("index",function($scope,$http){
         //轮播数据
+    console.log(url+carousel1)
         $http.get(url+carousel1)
             .success(function(data){
+                console.log(data)
                 $scope.carousel1=data.data.carousel;
-                alert(1212);
             });
         $http.get(url+classify)
             .success(function(data){

@@ -37,9 +37,7 @@ header div:last-child span{
 .li_item img{
     width: 6rem;
 }
-.li_item p{
-    display: inline-block;
-    margin-left: 1.4rem;
+.li_item span{
+    margin-left: 1rem;
     font-size: 1rem;
-    margin-top: 1rem;
 }

@@ -77,3 +77,13 @@
     padding-bottom: 1rem;
 
 }
+.nav-tabs {
+     border-bottom: 1px solid white;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+     border: none!important;
+    border-bottom-color: transparent;
+}
