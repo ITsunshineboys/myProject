@@ -1616,7 +1616,7 @@ class OwnerController extends Controller
 //        $post = [
 ////            'effect_id' => 1,
 //            'bedroom' => 2,
-//            'stairway_id'=>1,
+//            'stairway_id'=>0,
 //            'stairs' =>'玻璃金属',
 //            'style' =>2,
 //            'series'=>1
@@ -1647,7 +1647,7 @@ class OwnerController extends Controller
             }
         }else
         {
-            $condition_stairs [] = null;
+            $condition_stairs = null;
         }
         $series_style [] = BasisDecorationService::profitMargin($condition_stairs);
 
