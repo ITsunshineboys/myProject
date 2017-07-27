@@ -46,6 +46,7 @@ class User extends ActiveRecord implements IdentityInterface
         'signature',
         'aite_cube_no',
     ];
+    const BIRTHDAY_LEN = 8;
 
     /**
      * @inheritdoc
@@ -615,6 +616,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         if (isset($data['gender'])) {
             $data['gender'] = self::SEXES[$data['gender']];
+        }
+
+        if (isset($data['birthday'])) {
+            $data['birthday'] = StringService::formatBirthday($data['birthday']);
         }
     }
 

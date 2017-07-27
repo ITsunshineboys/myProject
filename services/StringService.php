@@ -9,11 +9,14 @@
 namespace app\services;
 
 use app\models\UploadForm;
+use app\models\User;
 use dosamigos\qrcode\QrCode;
 use Yii;
 
 class StringService
 {
+    const SEPARATOR_BIRTHDAY = '-';
+
     /**
      * Get basename of fully qualified class
      *
@@ -299,5 +302,24 @@ class StringService
     {
         $dir = Yii::getAlias('@webroot') . '/' . UploadForm::DIR_PUBLIC . '/';
         QrCode::png($str, $dir . "{$filename}.png");
+    }
+
+    /**
+     * Format birthday
+     *
+     * @param int $birthday birthday
+     * @param string $separator separator default -
+     * @return string
+     */
+    public static function formatBirthday($birthday, $separator = self::SEPARATOR_BIRTHDAY)
+    {
+        $birthday = trim($birthday);
+        $pattern = '/(\d{4})(\d{2})(\d{2})/';
+        if (!$birthday || strlen($birthday) != User::BIRTHDAY_LEN || !preg_match($pattern, $birthday, $matches)) {
+            return '';
+        }
+
+        unset($matches[0]);
+        return implode($separator, $matches);
     }
 }
