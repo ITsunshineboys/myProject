@@ -37,6 +37,7 @@ class SiteController extends Controller
         'reset-signature',
         'reset-gender',
         'reset-birthday',
+        'reset-district-code',
     ];
 
     /**
@@ -67,7 +68,12 @@ class SiteController extends Controller
                     'logout' => ['post',],
                     'reset-password' => ['post',],
                     'upload' => ['post',],
-                    'upload-delete' => ['post',]
+                    'upload-delete' => ['post',],
+                    'reset-nickname' => ['post',],
+                    'reset-signature' => ['post',],
+                    'reset-gender' => ['post',],
+                    'reset-birthday' => ['post',],
+                    'reset-district-code' => ['post',],
                 ],
             ],
         ];
@@ -597,6 +603,39 @@ class SiteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '修改签名成功',
+        ]);
+    }
+
+    /**
+     * Reset district code action.
+     *
+     * @return string
+     */
+    public function actionResetDistrictCode()
+    {
+        $code = 1000;
+
+        $districtCode = (int)Yii::$app->request->post('district_code', 0);
+
+        if (!StringService::checkDistrict($districtCode)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        $code = $user->resetDistrictCode($districtCode);
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '修改地区成功',
         ]);
     }
 

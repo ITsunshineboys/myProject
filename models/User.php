@@ -342,6 +342,34 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Reset district code action
+     *
+     * @param string $districtCode district code
+     * @return int
+     */
+    public function resetDistrictCode($districtCode)
+    {
+        if (!$districtCode) {
+            $code = 1000;
+            return $code;
+        }
+
+        if ($this->district_code == $districtCode) {
+            $code = 200;
+            return $code;
+        }
+
+        $this->district_code = $districtCode;
+        if (!$this->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
      * Reset birthday action
      *
      * @param string $birthday birthday

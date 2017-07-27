@@ -929,3 +929,12 @@ CREATE TABLE `user_address` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 --7.21 end
+
+--7.27 start
+create table district (
+  `id` int(11) unsigned NOT NULL DEFAULT 0,
+  `pid` int(11) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--7.27 end
