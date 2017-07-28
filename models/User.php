@@ -622,6 +622,10 @@ class User extends ActiveRecord implements IdentityInterface
         if (isset($data['birthday'])) {
             $data['birthday'] = StringService::formatBirthday($data['birthday']);
         }
+
+        if (isset($data['balance'])) {
+            $data['balance'] /= 100;
+        }
     }
 
     /**
