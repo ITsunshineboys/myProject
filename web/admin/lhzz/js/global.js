@@ -1,10 +1,10 @@
-var url="http://local.test.cdlhzz.cn/";
-//var url="http://test.cdlhzz.cn:888/";
+// var url="http://local.test.cdlhzz.cn/";
+var url="http://test.cdlhzz.cn:888/";
 var app=angular.module("app",["ngRoutec"]);
-//µ¼º½À¸
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 $(function(){
     $(".nav_box dd").hide();
-    //³õÊ¼¸ÃÏÔÊ¾µÄdd
+    //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½dd
     $(".nav_box .dl_on>dd").show();
     $(".nav_box dt").click(function(){
         $(".nav_box dt").css({"background-color":"#F5F7FA","color":"#ABABAB"});
@@ -22,11 +22,11 @@ $(function(){
 });
 
 /*
-//ÓÒ±ßÄÚÈÝ×ÔÊÊÓ¦
+//ï¿½Ò±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦
 var browser_width1=$(document).width()-$(".nav_box").width();
 $(".my_container").css("width",browser_width1);
 $(".header_box").css("width",browser_width1);
-//ä¯ÀÀÆ÷´óÐ¡±ä»¯µÄ¼àÌý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ä»¯ï¿½Ä¼ï¿½ï¿½ï¿½
 $(window).resize(function() {
     browser_width1=$(document).width()-$(".nav_box").width();
     console.log("$(document).width()="+$(document).width())
