@@ -3,7 +3,8 @@ window.onload = function () {
       method:"get",
       url:'http://test.cdlhzz.cn:888/site/all-roles',
       success:function (data) {
-          console.log(data)
+          document.write(data);
+          //console.log(data)
       }
   })
 };
