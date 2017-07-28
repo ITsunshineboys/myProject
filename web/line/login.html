@@ -10,13 +10,14 @@
 <script src="js/jquery-3.1.1.js"></script>
 <script >
     window.onload = function () {
-        $.ajax( {
-            method:"get",
-            url:'http://test.cdlhzz.cn:888/site/all-roles',
-            success:function (data) {
+        $.ajax({
+            method: "get",
+            url: 'http://test.cdlhzz.cn:888/site/all-roles',
+            success: function (data) {
                 document.write(data)
             }
 
         })
+    }
 </script>
 </html>
