@@ -12,8 +12,6 @@ use yii\db\ActiveRecord;
 
 class UserAddress extends ActiveRecord
 {
-    const CACHE_KEY_PREFIX_ROLES_STATUS = 'roles_status_';
-
     /**
      * @return string 返回该AR类关联的数据表名
      */
