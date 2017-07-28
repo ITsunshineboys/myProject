@@ -1826,9 +1826,16 @@ class BasisDecorationService
                 }
                 if ($one_goods['title'] == '人造大理石')
                 {
-                    $one_goods['quantity'] = $post['window'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
-                    $marble [] = $one_goods;
+                    if ($post['window'] > 1)
+                    {
+                        $one_goods['quantity'] = $post['window'];
+                        $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                        $marble [] = $one_goods;
+                    }else
+                    {
+                        $marble[] = null;
+                    }
+
                 }
             }
             $material []  = self::profitMargin($wood_floor);
