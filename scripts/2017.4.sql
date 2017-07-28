@@ -39,6 +39,7 @@ CREATE TABLE `user` (
   `birthday` int(8) unsigned not null DEFAULT 0,
   `district_code` int(6) unsigned not null default 0 comment '区域码',
   `district_name` varchar(50) NOT NULL DEFAULT '' comment '区域名',
+  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
