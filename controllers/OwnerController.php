@@ -223,7 +223,6 @@ class OwnerController extends Controller
             $weak_points = Points::weakPoints($post['effect_id']);
         } else
         {
-            $weak_points = 0;
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::find()->where(['effect_id' => $effect['id']])->all();
             foreach ($points as $one) {
