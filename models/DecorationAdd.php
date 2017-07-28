@@ -39,7 +39,7 @@ class DecorationAdd extends ActiveRecord
      * @param string $all_area
      * @return int|mixed
      */
-    public static function AllArea($str = '',$all_area ='',$city= '510100')
+    public static function AllArea($str,$all_area,$city='510100')
     {
         if($str)
         {
@@ -61,7 +61,14 @@ class DecorationAdd extends ActiveRecord
         return $add_prices;
     }
 
-    public static function AllSeries($str = '',$all_series ='',$city= '510100')
+    /**
+     * series find all
+     * @param $str
+     * @param $all_series
+     * @param string $city
+     * @return array|ActiveRecord[]
+     */
+    public static function AllSeries($str,$all_series,$city= '510100')
     {
         if ($str && $all_series)
         {
@@ -73,7 +80,14 @@ class DecorationAdd extends ActiveRecord
         return $add;
     }
 
-    public static function AllStyle($str = '',$all_style ='',$city= '510100')
+    /**
+     * style find all
+     * @param $str
+     * @param $all_style
+     * @param string $city
+     * @return array|ActiveRecord[]
+     */
+    public static function AllStyle($str,$all_style,$city= '510100')
     {
         if ($str && $all_style)
         {
@@ -85,7 +99,14 @@ class DecorationAdd extends ActiveRecord
         return $add;
     }
 
-    public static function CarpentryAddAll($str = '',$series = 1,$style = 1)
+    /**
+     * carpentry find all
+     * @param $str
+     * @param int $series
+     * @param int $style
+     * @return int|mixed
+     */
+    public static function CarpentryAddAll($str,$series = 1,$style = 1)
     {
         if($str){
             $add = self::find()

@@ -23,7 +23,8 @@ class BasisDecorationService
      */
     public static function  laborFormula($points,$labor)
     {
-        if($points && $labor){
+        if($points && $labor)
+        {
             //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
             $labor_formula = ceil(($points / $labor['quantity'])) * $labor['univalence'];
         }
@@ -42,11 +43,13 @@ class BasisDecorationService
         if($goods && $points)
         {
             foreach ($crafts as $craft){
-                if($craft['project_details'] == '网线' || $craft['project_details'] == '电线'){
+                if($craft['project_details'] == '网线' || $craft['project_details'] == '电线')
+                {
                     $material = $craft['material'];
                 }
 
-                if($craft['project_details'] == '线管'){
+                if($craft['project_details'] == '线管')
+                {
                     $spool = $craft['material'];
                 }
             }
@@ -180,10 +183,12 @@ class BasisDecorationService
             $height = [];
             foreach ($arr as $one)
             {
-                if($one['project_particulars'] == '厨房面积' || $one['project_particulars'] == '卫生间面积'){
+                if($one['project_particulars'] == '厨房面积' || $one['project_particulars'] == '卫生间面积')
+                {
                        $area = $one;
                 }
-                if ($one['project_particulars'] == '厨房防水' || $one['project_particulars'] == '卫生间防水'){
+                if ($one['project_particulars'] == '厨房防水' || $one['project_particulars'] == '卫生间防水')
+                {
                         $height = $one;
                 }
             }
@@ -216,10 +221,12 @@ class BasisDecorationService
             {
                 $material = $craft['material'];
             }
-            if (count($goods) == count($goods, 1)) {
+            if (count($goods) == count($goods, 1))
+            {
                 $goods_platform_price = $goods['platform_price'];
                 $goods_id [] = $goods['id'];
-            } else {
+            } else
+            {
                 foreach ($goods as $one)
                 {
                     $goods_platform_price = $one['platform_price'];
@@ -273,7 +280,7 @@ class BasisDecorationService
      * @param array $arr
      * @return int|mixed
      */
-    public static function wallSpace($arr = [])
+    public static function wallSpace($arr)
     {
         $all_area = [];
         if($arr)
@@ -610,10 +617,13 @@ class BasisDecorationService
      */
     public static function carpentryPlasterboardCost($modelling_length,$flat_area,$goods,$crafts ,$video_wall = 1)
     {
-        if(!empty($modelling_length) && !empty($flat_area)){
+        if(!empty($modelling_length) && !empty($flat_area))
+        {
             $plasterboard = [];
-            foreach ($goods as $goods_price ){
-                if($goods_price['title'] == '石膏板'){
+            foreach ($goods as $goods_price )
+            {
+                if($goods_price['title'] == '石膏板')
+                {
                     $plasterboard = $goods_price;
                 }else
                 {
@@ -649,9 +659,10 @@ class BasisDecorationService
      * @param array $goods
      * @return float
      */
-    public static function carpentryKeelCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '')
+    public static function carpentryKeelCost($modelling_length,$flat_area,$goods,$crafts)
     {
-        if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods)){
+        if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods))
+        {
             foreach ($goods as $price)
             {
                 if($price['title'] == '龙骨')
@@ -661,8 +672,10 @@ class BasisDecorationService
             }
 
             $plasterboard_material = 0;
-            foreach ($crafts as $craft){
-                if($craft['project_details'] == '龙骨'){
+            foreach ($crafts as $craft)
+            {
+                if($craft['project_details'] == '龙骨')
+                {
                     $plasterboard_material = $craft['material'];
                 }
             }
@@ -692,26 +705,30 @@ class BasisDecorationService
      * @param array $goods
      * @return float
      */
-    public static function carpentryPoleCost($modelling_length = '',$flat_area = '',$goods = [],$crafts = '')
+    public static function carpentryPoleCost($modelling_length,$flat_area,$goods,$crafts)
     {
         if(!empty($modelling_length) && !empty($flat_area) && !empty($goods))
         {
             foreach ($goods as $price)
             {
-                if($price['title'] == '丝杆'){
+                if($price['title'] == '丝杆')
+                {
                     $goods_price = $price;
                 }
             }
             $plasterboard_material = 0;
-            foreach ($crafts as $craft){
-                if($craft['project_details'] == '丝杆'){
+            foreach ($crafts as $craft)
+            {
+                if($craft['project_details'] == '丝杆')
+                {
                     $plasterboard_material = $craft['material'];
                 }
             }
             if ($modelling_length == 0 || $plasterboard_material == 0 || $flat_area == 0 )
             {
                 $pole_cost['quantity'] = 0;
-            }else{
+            }else
+            {
 //            个数=个数1+个数2
 //            个数1：（造型长度÷【2m】）
 //            个数2：（平顶面积÷【2m²】
@@ -736,14 +753,16 @@ class BasisDecorationService
     {
         if ($area && $house_area && $bedroom)
         {
-            if ($area <= 1){
+            if ($area <= 1)
+            {
 //        卧室地面积：【z】%×（房屋面积）
                 $ground_area = $area * $house_area;
 //        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
                 $wall_space_area =  sqrt($ground_area / $bedroom) * $tall * $wall * $bedroom;
 //        卧室底漆面积=卧室地面积+卧室墙面积
                 $total_area =    $ground_area + $wall_space_area;
-            }else{
+            }else
+            {
 //        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
                 $wall_space_area = sqrt($area / $bedroom)* $tall * $wall * $bedroom;
 //        卧室底漆面积=卧室地面积+卧室墙面积
@@ -766,12 +785,14 @@ class BasisDecorationService
     public  static function paintedPerimeter($area,$house_area,$bedroom ,$wall = 4)
     {
         if ($area && $house_area){
-            if ($area <= 1){
+            if ($area <= 1)
+            {
                 //        卧室地面积：【z】%×（房屋面积）
                 $ground_area =  $area * $house_area;
                 //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
                 $wall_space_perimeter = sqrt($ground_area / $bedroom) * $wall * $bedroom;
-            }else{
+            }else
+            {
                 //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
                 $wall_space_perimeter = sqrt($area / $bedroom) * $wall * $bedroom;
             }
@@ -826,7 +847,7 @@ class BasisDecorationService
      * @param int $wall
      * @return float
      */
-    public static function mudMakeArea($ground_area = [],$craft = [],$quantity = 1,$wall = 4)
+    public static function mudMakeArea($ground_area,$craft,$quantity = 1,$wall = 4)
     {
         if ($ground_area && $craft)
         {
@@ -2004,6 +2025,13 @@ class BasisDecorationService
         return $material;
     }
 
+    /**
+     * 生活配套系列和风格
+     * @param $goods
+     * @param $add
+     * @param $post
+     * @return array
+     */
     public static function lifeAssortSeriesStyle($goods,$add,$post)
     {
         if ($goods)
