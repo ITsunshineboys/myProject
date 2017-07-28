@@ -1,0 +1,26 @@
+{
+  "code":200,
+  "msg":"OK",
+  "data":
+  {
+    "recommend_second":
+    [
+      {
+        "id":8,
+        "title":"title a",
+        "image":"http://test.cdlhzz.cn:888/mall/images/banner1.png",
+        "url":"",
+        "platform_price":100,
+        "description":"说明a"
+      },
+      {
+        "id":8,
+        "title":"title b",
+        "image":"http://test.cdlhzz.cn:888/mall/images/banner1.png",
+        "url":"",
+        "platform_price":200,
+        "description":"说明b"
+      }
+    ]
+  }
+}
