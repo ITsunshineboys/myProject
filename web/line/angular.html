@@ -10,7 +10,7 @@
 <script src="js/angular.js"></script>
 <script >
    app=angular.module("app", [])
-  .controller("search_ctrl", function ($scope,$http ,$state,$stateParams) {
+  .controller("search_ctrl", function ($scope,$http) {
      $http({
          method:"get",
          url:'http://test.cdlhzz.cn:888/site/all-roles'
