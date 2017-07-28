@@ -213,7 +213,8 @@
 }
 .active{
     /*background-color:#738FFE;*/
-    /*color: white;*/
+    color: #53A8F4 ;
+
 }
 .tab_one img{
     width: 100%;
@@ -399,4 +400,7 @@
 .modal {
     position: fixed;
     top: -1rem;
+}
+.pic_comment{
+    background-color: #fff;
 }

@@ -1,7 +1,7 @@
 angular.module("all_controller", [])
     .controller("cell_search_ctrl", function ($scope, $http) {//小区搜索控制器
         $scope.data = ''
-        $scope.search_data = ''
+        // $scope.search_data = ''
         let arr = []
         let url = "/owner/search"
 
@@ -12,6 +12,7 @@ angular.module("all_controller", [])
             }
         }
         $scope.getData = function () {
+            $scope.search_data = ''
             let data = {
                 str: $scope.data
             }
@@ -351,13 +352,16 @@ angular.module("all_controller", [])
         let all_url = 'http://test.cdlhzz.cn:888'
         console.log($stateParams)
         $scope.message = ''
+        $scope.platform_price = $stateParams.platform_price || 0 //平台价格
+        $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
         $scope.nowStyle = '现代简约'
         $scope.nowStairs = $stateParams.cur_stair || '实木构造'
         $scope.nowSeries = '齐家'
         $scope.area = $stateParams.area || ''
+        $scope.cur_labor = $stateParams.cur_labor || ''
         $scope.series_index = $stateParams.series_index || 0//系列编号
         $scope.style_index = $stateParams.style_index || 0//风格编号
-        $scope.window = $stateParams.window || ''
+        $scope.window = $stateParams.window || 0
         $scope.labor_price = $stateParams.labor_price || 0//工人总费用
         $scope.labor_category = $stateParams.worker_category || {}//工人详细费用
         $scope.toponymy = $stateParams.toponymy || ''
@@ -382,7 +386,6 @@ angular.module("all_controller", [])
         $scope.twenty_four_new_construction = $stateParams.twenty_four_new_construction || ''
         $scope.building_scrap = $stateParams.building_scrap || false
 
-
         //无资料户型加减方法
         $scope.add = function (item, category) {
             if ($scope[category] < item) {
@@ -406,7 +409,9 @@ angular.module("all_controller", [])
         }
         //生成材料方法
         $scope.getData = function () {
-            $http.post(all_url+"/owner/classify", {}, config).then(function (response) {
+            $scope.platform_price = 0 //平台价格
+            $scope.supply_price = 0//装修公司供货价
+            $http.post(all_url + "/owner/classify", {}, config).then(function (response) {
                 $scope.level = response.data.data.pid.level
                 $scope.stair = response.data.data.pid.stair
                 for (let [key, value] of $scope.level.entries()) {
@@ -450,7 +455,7 @@ angular.module("all_controller", [])
                 high: $scope.highCrtl, //层高
                 province: 510000,   //省编码
                 city: 510100,      // 市编码
-                stairway_id: +!$scope.choose_stairs,//有无楼梯
+                stairway_id: +$scope.choose_stairs,//有无楼梯
                 stairs: $scope.nowStairs//楼梯结构
             }
             let labor_category = {"worker_category": ['杂工'], '杂工': {'price': 0, 'worker_kind': '杂工'}}
@@ -489,7 +494,23 @@ angular.module("all_controller", [])
                         }
                     }
                 }
-
+                //平台价格处理
+                for (let [key, value] of weak_arr.entries()) {
+                    $scope.platform_price += value.cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of weak_arr.entries()) {
+                    if(+value.path.split(',')[0] == 1 || +value.path.split(',')[0] == 43){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else if(+value.path.split(',')[0] == 93 || +value.path.split(',')[0] == 102){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else if(+value.path.split(',')[0] == 144){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else{
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity
+                    }
+                }
+                console.log($scope.platform_price)
                 //工人费用处理
                 if (labor_category["worker_category"].indexOf(response.data.data.weak_current_labor_price.worker_kind) == -1) {
                     labor_category["worker_category"].push(response.data.data.weak_current_labor_price.worker_kind)
@@ -582,6 +603,22 @@ angular.module("all_controller", [])
                         if (value.path.split(',')[1] == value1.id) {
                             value1["cost"] += value.cost
                         }
+                    }
+                }
+                //平台价格处理
+                for (let [key, value] of strong_arr.entries()) {
+                    $scope.platform_price += value.cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of strong_arr.entries()) {
+                    if(+value.path.split(',')[0] == 1 || +value.path.split(',')[0] == 43){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else if(+value.path.split(',')[0] == 93 || +value.path.split(',')[0] == 102){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else if(+value.path.split(',')[0] == 144){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else{
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity
                     }
                 }
                 //工人费用处理
@@ -678,6 +715,22 @@ angular.module("all_controller", [])
                         }
                     }
                 }
+                //平台价格处理
+                for (let [key, value] of waterway_arr.entries()) {
+                    $scope.platform_price += value.cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of waterway_arr.entries()) {
+                    if(+value.path.split(',')[0] == 1 || +value.path.split(',')[0] == 43){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else if(+value.path.split(',')[0] == 93 || +value.path.split(',')[0] == 102){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else if(+value.path.split(',')[0] == 144){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else{
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity
+                    }
+                }
                 //工人费用处理
                 if (labor_category["worker_category"].indexOf(response.data.data.waterway_labor_price.worker_kind) == -1) {
                     labor_category["worker_category"].push(response.data.data.waterway_labor_price.worker_kind)
@@ -757,6 +810,18 @@ angular.module("all_controller", [])
                     if (carpentry.path.split(',')[1] == value1.id) {
                         value1["cost"] += carpentry.cost
                     }
+                }
+                //平台价格处理
+                $scope.platform_price += carpentry.cost
+                //装修公司供货价处理
+                if(+carpentry.path.split(',')[0] == 1 || +carpentry.path.split(',')[0] == 43){
+                    $scope.supply_price += carpentry.purchase_price_decoration_company * carpentry.quantity/1
+                }else if(+value.path.split(',')[0] == 93 || +value.path.split(',')[0] == 102){
+                    $scope.supply_price += carpentry.purchase_price_decoration_company * carpentry.quantity/1
+                }else if(+value.path.split(',')[0] == 144){
+                    $scope.supply_price += carpentry.purchase_price_decoration_company * carpentry.quantity/1
+                }else{
+                    $scope.supply_price += carpentry.purchase_price_decoration_company * carpentry.quantity
                 }
                 //工人费用处理
                 if (labor_category["worker_category"].indexOf(response.data.data.waterproof_labor_price.worker_kind) == -1) {
@@ -843,6 +908,14 @@ angular.module("all_controller", [])
                             value1["cost"] += value.cost
                         }
                     }
+                }
+                //平台价格处理
+                for (let [key, value] of carpentry_arr.entries()) {
+                    $scope.platform_price += value.cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of carpentry_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
                 }
                 //工人费用处理
                 if (labor_category["worker_category"].indexOf(response.data.data.carpentry_labor_price.worker_kind) == -1) {
@@ -934,6 +1007,19 @@ angular.module("all_controller", [])
                             value1["cost"] += value.cost
                         }
                     }
+                }
+                //平台价格处理
+                for (let [key, value] of coating_arr.entries()) {
+                    $scope.platform_price += value.cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of coating_arr.entries()) {
+                    if(value.path.split(',')[1] == 1){
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }else{
+                        $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                    }
+
                 }
                 //工人费用处理
                 if (labor_category["worker_category"].indexOf(response.data.data.coating_labor_price.worker_kind) == -1) {
@@ -1027,6 +1113,14 @@ angular.module("all_controller", [])
                         }
                     }
                 }
+                //平台价格处理
+                for (let [key, value] of mud_make_arr.entries()) {
+                    $scope.platform_price += value.cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of mud_make_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.quantity/1
+                }
                 //工人费用处理
                 if (labor_category["worker_category"].indexOf(response.data.data.mud_make_labor_price.worker_kind) == -1) {
                     labor_category["worker_category"].push(response.data.data.mud_make_labor_price.worker_kind)
@@ -1114,6 +1208,14 @@ angular.module("all_controller", [])
                         }
                     }
                 }
+                //平台价格处理
+                for (let [key, value] of material_arr.entries()) {
+                    $scope.platform_price += value.cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of material_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.quantity
+                }
                 //整合一级二级三级
                 for (let [key, value] of material_arr.entries()) {
                     for (let [key1, value1] of $scope.level.entries()) {
@@ -1183,6 +1285,14 @@ angular.module("all_controller", [])
                             value1["cost"] += value.show_cost
                         }
                     }
+                }
+                //平台价格处理
+                for (let [key, value] of soft_arr.entries()) {
+                    $scope.platform_price += value.show_cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of soft_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.show_quantity
                 }
                 //整合一级二级三级
                 for (let [key, value] of soft_arr.entries()) {
@@ -1259,6 +1369,14 @@ angular.module("all_controller", [])
                         }
                     }
                 }
+                //平台价格处理
+                for (let [key, value] of fixation_arr.entries()) {
+                    $scope.platform_price += value.show_cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of fixation_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.show_quantity
+                }
                 //整合一级二级三级
                 for (let [key, value] of fixation_arr.entries()) {
                     for (let [key1, value1] of $scope.level.entries()) {
@@ -1327,6 +1445,14 @@ angular.module("all_controller", [])
                             value1["cost"] += value.show_cost
                         }
                     }
+                }
+                //平台价格处理
+                for (let [key, value] of move_arr.entries()) {
+                    $scope.platform_price += value.show_cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of move_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.show_quantity
                 }
                 //整合一级二级三级
                 for (let [key, value] of move_arr.entries()) {
@@ -1401,6 +1527,14 @@ angular.module("all_controller", [])
                         }
                     }
                 }
+                //平台价格处理
+                for (let [key, value] of assort_arr.entries()) {
+                    $scope.platform_price += value.show_cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of assort_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.show_quantity
+                }
                 //整合一级二级三级
                 for (let [key, value] of assort_arr.entries()) {
                     for (let [key1, value1] of $scope.level.entries()) {
@@ -1472,6 +1606,14 @@ angular.module("all_controller", [])
                         }
                     }
                 }
+                //平台价格处理
+                for (let [key, value] of life_arr.entries()) {
+                    $scope.platform_price += value.show_cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of life_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.show_quantity
+                }
                 //整合一级二级三级
                 for (let [key, value] of life_arr.entries()) {
                     for (let [key1, value1] of $scope.level.entries()) {
@@ -1541,6 +1683,14 @@ angular.module("all_controller", [])
                         }
                     }
                 }
+                //平台价格处理
+                for (let [key, value] of intelligence_arr.entries()) {
+                    $scope.platform_price += value.show_cost
+                }
+                //装修公司供货价处理
+                for (let [key, value] of intelligence_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.show_quantity
+                }
                 //整合一级二级三级
                 for (let [key, value] of intelligence_arr.entries()) {
                     for (let [key1, value1] of $scope.level.entries()) {
@@ -1599,6 +1749,8 @@ angular.module("all_controller", [])
             if (item.title == "辅材") {
                 $state.go("basics", {
                     'stair': $scope.stair,
+                    'platform_price': $scope.platform_price,
+                    'supply_price': $scope.supply_price,
                     'level': $scope.level,
                     'stair_copy': angular.copy($scope.stair),
                     'level_copy': angular.copy($scope.level),
@@ -1606,7 +1758,7 @@ angular.module("all_controller", [])
                     'worker_category': $scope.labor_category,
                     'handyman_price': $scope.handyman_price,
                     'area': $scope.area,
-                    'cur_stair':!$scope.choose_stairs?$scope.nowStairs:'实木构造',
+                    'cur_stair': !$scope.choose_stairs ? $scope.nowStairs : '实木构造',
                     'series_index': $scope.series_index,
                     'style_index': $scope.style_index,
                     'labor_price': $scope.labor_price,
@@ -1616,6 +1768,7 @@ angular.module("all_controller", [])
                     'house_toilet': $scope.house_toilet,
                     'highCrtl': $scope.highCrtl,
                     'window': $scope.window,
+                    'cur_labor':$scope.cur_labor,
                     'choose_stairs': $scope.choose_stairs,
                     'twelve_dismantle': $scope.twelve_dismantle,
                     'twenty_four_dismantle': $scope.twenty_four_dismantle,
@@ -1628,6 +1781,8 @@ angular.module("all_controller", [])
                 $state.go("main", {
                     'stair': $scope.stair,
                     'level': $scope.level,
+                    'platform_price': $scope.platform_price,
+                    'supply_price': $scope.supply_price,
                     'stair_copy': angular.copy($scope.stair),
                     'level_copy': angular.copy($scope.level),
                     'index': index,
@@ -1642,7 +1797,7 @@ angular.module("all_controller", [])
                     'house_kitchen': $scope.house_kitchen,
                     'house_toilet': $scope.house_toilet,
                     'highCrtl': $scope.highCrtl,
-                    'cur_stair':!$scope.choose_stairs?$scope.nowStairs:'实木构造',
+                    'cur_stair': !$scope.choose_stairs ? $scope.nowStairs : '实木构造',
                     'window': $scope.window,
                     'choose_stairs': $scope.choose_stairs,
                     'twelve_dismantle': $scope.twelve_dismantle,
@@ -1657,6 +1812,8 @@ angular.module("all_controller", [])
                     'stair': $scope.stair,
                     'stair_copy': $scope.stair,
                     'level_copy': $scope.level,
+                    'platform_price': $scope.platform_price,
+                    'supply_price': $scope.supply_price,
                     'index': index,
                     'level': $scope.level,
                     'worker_category': $scope.labor_category,
@@ -1665,7 +1822,7 @@ angular.module("all_controller", [])
                     'series_index': $scope.series_index,
                     'style_index': $scope.style_index,
                     'labor_price': $scope.labor_price,
-                    'cur_stair':!$scope.choose_stairs?$scope.nowStairs:'实木构造',
+                    'cur_stair': !$scope.choose_stairs ? $scope.nowStairs : '实木构造',
                     'house_bedroom': $scope.house_bedroom,
                     'house_hall': $scope.house_hall,
                     'house_kitchen': $scope.house_kitchen,
@@ -1736,16 +1893,6 @@ angular.module("all_controller", [])
                 $scope.isClick = false
             }
         })
-        // $scope.$watch('choose_stairs', function (newVal, oldVal) {
-        //     if (newVal != oldVal) {
-        //         $scope.isClick = false
-        //     }
-        // })
-        // $scope.$watch('choose_stairs', function (newVal, oldVal) {
-        //     if (newVal != oldVal) {
-        //         $scope.isClick = false
-        //     }
-        // })
 
         //请求后台数据
         $http.get(all_url + '/owner/series-and-style').then(function (response) {
@@ -1781,10 +1928,13 @@ angular.module("all_controller", [])
         //     window.history.back()
         // }
     })
-    .controller("basics_ctrl", function ($scope, $stateParams, $http,$state) {//辅材页面
+    .controller("basics_ctrl", function ($scope, $stateParams, $http, $state) {//辅材页面
         console.log($stateParams)
         $scope.modalData = ''
+        $scope.platform_price = $stateParams.platform_price || 0 //平台价格
+        $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
         $scope.stair = $stateParams.stair
+        $scope.cur_labor = $stateParams.cur_labor || ''
         $scope.choose_stairs = $stateParams.choose_stairs
         $scope.index = $stateParams.index
         $scope.stair_copy = $stateParams.stair_copy
@@ -1816,8 +1966,8 @@ angular.module("all_controller", [])
         console.log(arr)
         //杂工数据
         $scope.complete = !!$stateParams.twelve_dismantle || false
-        $scope.complete1 =!!$stateParams.twenty_four_dismantle ||false
-        $scope.complete2 =!!$stateParams.repair || false
+        $scope.complete1 = !!$stateParams.twenty_four_dismantle || false
+        $scope.complete2 = !!$stateParams.repair || false
         $scope.complete3 = !!$stateParams.twelve_new_construction || false
         $scope.complete4 = !!$stateParams.twenty_four_new_construction || false
         $scope.twelve_dismantle = $stateParams.twelve_dismantle || ''
@@ -1848,6 +1998,8 @@ angular.module("all_controller", [])
                     'isBack': true,
                     'level': $stateParams.level,
                     'stair': $stateParams.stair,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                     'level_copy': $stateParams.level,
                     'stair_copy': $stateParams.stair,
                     'labor_price': $scope.labor_price,
@@ -1861,7 +2013,7 @@ angular.module("all_controller", [])
                     'highCrtl': $scope.highCrtl,
                     'area': $scope.area,
                     'window': $scope.window,
-                'cur_stair' :$scope.cur_stair,
+                    'cur_stair': $scope.cur_stair,
                     'choose_stairs': $scope.choose_stairs,
                     'twelve_dismantle': $stateParams.twelve_dismantle,
                     'twenty_four_dismantle': $stateParams.twenty_four_dismantle,
@@ -1874,6 +2026,7 @@ angular.module("all_controller", [])
         }
         //杂工费用
         $scope.get_handyman_price = function () {
+            console.log($scope.repair)
             let data = {
                 'province': 510000,
                 'city': 510100,
@@ -1897,13 +2050,13 @@ angular.module("all_controller", [])
                     }
                 }
                 console.log(other_arr)
-               let cur_price =  response.data.data.labor_cost.price-$stateParams.worker_category['杂工'].price
+                let cur_price = response.data.data.labor_cost.price - $stateParams.worker_category['杂工'].price
                 $scope.worker_category['杂工'].price = response.data.data.labor_cost.price
                 $scope.labor_price += cur_price
                 console.log($scope.labor_price)
                 //一级总费用统计
                 for (let [key, value] of other_arr.entries()) {
-                    for (let [key1, value1] of $scope.stair.entries()) {
+                    for (let [key1, value1] of $scope.stair_copy.entries()) {
                         if (value.path.split(',')[0] == value1.id) {
                             value1["cost"] += value.cost
                         }
@@ -1911,12 +2064,56 @@ angular.module("all_controller", [])
                 }
                 //二级总费用统计
                 for (let [key, value] of other_arr.entries()) {
-                    for (let [key1, value1] of $scope.level.entries()) {
+                    for (let [key1, value1] of $scope.level_copy.entries()) {
                         if (value.path.split(',')[1] == value1.id) {
                             value1["cost"] += value.cost
                         }
                     }
                 }
+                //平台价格处理
+                for (let [key, value] of other_arr.entries()) {
+                    $scope.platform_price += value.cost
+                }
+                if(!!$scope.cur_labor){
+                    for (let [key, value] of $scope.cur_labor.entries()) {
+                        $scope.platform_price -= value.cost
+                    }
+                }
+                //装修公司供货价处理
+                for (let [key, value] of other_arr.entries()) {
+                    $scope.supply_price += value.purchase_price_decoration_company * value.quantity
+                }
+                if(!!$scope.cur_labor){
+                    for (let [key, value] of $scope.cur_labor.entries()) {
+                        $scope.supply_price -= value.purchase_price_decoration_company * value.quantity
+                    }
+                }
+                //杂工一级二级三级处理
+                if(!!$scope.cur_labor){
+                    for (let [key, value] of $scope.cur_labor.entries()) {
+                        for (let [key1, value1] of $scope.level_copy.entries()) {
+                            if (value.path.split(',')[1] == value1.id) {
+                               value1.cost -= value.cost
+                                value1[value.path.split(',')[2]].cost -= value.cost
+                                delete value1[value.path.split(',')[2]][value.id]
+                                value1[value.path.split(',')[2]].goods_detail.splice(value1[value.path.split(',')[2]].goods_detail
+                                    .indexOf(value.id),1)
+                            }
+                        }
+                    }
+                    for (let [key, value] of $scope.cur_labor.entries()) {
+                        for (let [key1, value1] of $scope.stair_copy.entries()) {
+                            for (let [key2, value2] of $scope.level_copy.entries()) {
+                                if (value.path.split(',')[0] == value1.id && value.path.split(',')[1] == value2.id) {
+                                   value1[value2.id] = value2
+                                    value1.cost -= value.cost
+                                }
+                            }
+                        }
+                    }
+                }
+                console.log($scope.stair_copy)
+                console.log($scope.level_copy)
                 //整合一级二级三级
                 for (let [key, value] of other_arr.entries()) {
                     for (let [key1, value1] of $scope.level_copy.entries()) {
@@ -1962,6 +2159,8 @@ angular.module("all_controller", [])
                 }
                 $scope.stair = $scope.stair_copy
                 $scope.level = $scope.level_copy
+                console.log($scope.stair_copy)
+                console.log($scope.level_copy)
                 console.log($scope.level)
                 console.log($scope.stair)
                 console.log($scope.worker_category)
@@ -1971,6 +2170,8 @@ angular.module("all_controller", [])
                     'level': $scope.level,
                     'stair_copy': $scope.stair,
                     'level_copy': $scope.level,
+                    'platform_price': $scope.platform_price,
+                    'supply_price': $scope.supply_price,
                     'stair': $scope.stair,
                     'labor_price': $scope.labor_price,
                     'series_index': $scope.series_index,
@@ -1982,14 +2183,15 @@ angular.module("all_controller", [])
                     'house_toilet': $scope.house_toilet,
                     'highCrtl': $scope.highCrtl,
                     'area': $scope.area,
-                    'choose_stairs':$scope.choose_stairs,
+                    'cur_labor':other_arr,
+                    'choose_stairs': $scope.choose_stairs,
                     'window': $scope.window,
-                    'cur_stair' :$scope.cur_stair,
-                    'twelve_dismantle': $scope.complete?$scope.twelve_dismantle:'',
-                    'twenty_four_dismantle': $scope.complete?$scope.twenty_four_dismantle:'',
-                    'repair': $scope.complete?$scope.repair : '',
-                    'twelve_new_construction': $scope.complete?$scope.twelve_new_construction:'',
-                    'twenty_four_new_construction': $scope.complete?$scope.twenty_four_new_construction:'',
+                    'cur_stair': $scope.cur_stair,
+                    'twelve_dismantle': $scope.complete ? $scope.twelve_dismantle : '',
+                    'twenty_four_dismantle': $scope.complete1 ? $scope.twenty_four_dismantle : '',
+                    'repair': $scope.complete2 ? $scope.repair : '',
+                    'twelve_new_construction': $scope.complete3 ? $scope.twelve_new_construction : '',
+                    'twenty_four_new_construction': $scope.complete4 ? $scope.twenty_four_new_construction : '',
                     'building_scrap': $scope.building_scrap,
                 })
                 console.log(response)
@@ -2004,6 +2206,10 @@ angular.module("all_controller", [])
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair_copy
         $scope.level = $stateParams.level_copy
+        $scope.platform_price = $stateParams.platform_price || 0 //平台价格
+        $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
+        $scope.platform_price_copy = $stateParams.platform_price_copy || 0
+        $scope.supply_price_copy = $stateParams.supply_price_copy || 0
         $scope.stair_copy = angular.copy($stateParams.stair_copy)
         $scope.level_copy = angular.copy($stateParams.level_copy)
         $scope.index = $stateParams.index
@@ -2044,6 +2250,8 @@ angular.module("all_controller", [])
                     'isBack': true,
                     'level': $stateParams.level,
                     'stair': $stateParams.stair,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                     'level_copy': $stateParams.level,
                     'stair_copy': $stateParams.stair,
                     'labor_price': $scope.labor_price,
@@ -2056,15 +2264,15 @@ angular.module("all_controller", [])
                     'house_toilet': $scope.house_toilet,
                     'highCrtl': $scope.highCrtl,
                     'area': $scope.area,
-                'cur_stair' :$scope.cur_stair,
+                    'cur_stair': $scope.cur_stair,
                     'window': $scope.window,
                     'choose_stairs': $scope.choose_stairs,
-                'twelve_dismantle': $scope.twelve_dismantle,
-                'twenty_four_dismantle': $scope.twenty_four_dismantle,
-                'repair': $scope.repair,
-                'twelve_new_construction': $scope.twelve_new_construction,
-                'twenty_four_new_construction': $scope.twenty_four_new_construction,
-                'building_scrap': $scope.building_scrap
+                    'twelve_dismantle': $scope.twelve_dismantle,
+                    'twenty_four_dismantle': $scope.twenty_four_dismantle,
+                    'repair': $scope.repair,
+                    'twelve_new_construction': $scope.twelve_new_construction,
+                    'twenty_four_new_construction': $scope.twenty_four_new_construction,
+                    'building_scrap': $scope.building_scrap
                 }
             )
         }
@@ -2083,10 +2291,16 @@ angular.module("all_controller", [])
         $scope.change_material = function () {
             $scope.stair = $scope.stair_copy
             $scope.level = $scope.level_copy
+            if($scope.platform_price_copy!=0&&$scope.supply_price_copy!=0){
+                $scope.platform_price = $scope.platform_price_copy
+                $scope.supply_price = $scope.supply_price_copy
+            }
             $state.go('nodata', {
                 'isBack': true,
                 'level': $scope.level,
                 'stair': $scope.stair,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
                 'stair_copy': $scope.stair_copy,
                 'labor_price': $scope.labor_price,
@@ -2098,7 +2312,7 @@ angular.module("all_controller", [])
                 'house_kitchen': $scope.house_kitchen,
                 'house_toilet': $scope.house_toilet,
                 'highCrtl': $scope.highCrtl,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
                 'area': $scope.area,
                 'window': $scope.window,
                 'choose_stairs': $scope.choose_stairs,
@@ -2116,6 +2330,8 @@ angular.module("all_controller", [])
                 'isBack': true,
                 'level': $scope.level,
                 'stair': $scope.stair,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                 'level_copy': $scope.level,
                 'stair_copy': $scope.stair,
                 'labor_price': $scope.labor_price,
@@ -2127,7 +2343,7 @@ angular.module("all_controller", [])
                 'house_kitchen': $scope.house_kitchen,
                 'house_toilet': $scope.house_toilet,
                 'highCrtl': $scope.highCrtl,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
                 'area': $scope.area,
                 'window': $scope.window,
                 'index': $scope.index,
@@ -2146,6 +2362,8 @@ angular.module("all_controller", [])
                 'isBack': true,
                 'level': $scope.level,
                 'stair': $scope.stair,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
                 'stair_copy': $scope.stair_copy,
                 'labor_price': $scope.labor_price,
@@ -2163,7 +2381,7 @@ angular.module("all_controller", [])
                 'choose_stairs': $scope.choose_stairs,
                 'excluded_item': item,
                 'prev_index': 1,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
                 'twelve_dismantle': $scope.twelve_dismantle,
                 'twenty_four_dismantle': $scope.twenty_four_dismantle,
                 'repair': $scope.repair,
@@ -2203,6 +2421,8 @@ angular.module("all_controller", [])
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair
         $scope.level = $stateParams.level
+        $scope.platform_price = $stateParams.platform_price || 0 //平台价格
+        $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
         $scope.stair_copy = $stateParams.stair_copy
         $scope.level_copy = $stateParams.level_copy
         $scope.index = $stateParams.index
@@ -2237,10 +2457,12 @@ angular.module("all_controller", [])
         })
         $scope.curGoPrev = function () {
             $state.go('other', {
-                'cur_stair' :$scope.cur_stair,
+                    'cur_stair': $scope.cur_stair,
                     'level': $stateParams.level,
                     'stair': $stateParams.stair,
                     'index': $stateParams.index,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                     'level_copy': $stateParams.level,
                     'stair_copy': $stateParams.stair,
                     'labor_price': $scope.labor_price,
@@ -2255,12 +2477,12 @@ angular.module("all_controller", [])
                     'area': $scope.area,
                     'window': $scope.window,
                     'choose_stairs': $scope.choose_stairs,
-                'twelve_dismantle': $scope.twelve_dismantle,
-                'twenty_four_dismantle': $scope.twenty_four_dismantle,
-                'repair': $scope.repair,
-                'twelve_new_construction': $scope.twelve_new_construction,
-                'twenty_four_new_construction': $scope.twenty_four_new_construction,
-                'building_scrap': $scope.building_scrap
+                    'twelve_dismantle': $scope.twelve_dismantle,
+                    'twenty_four_dismantle': $scope.twenty_four_dismantle,
+                    'repair': $scope.repair,
+                    'twelve_new_construction': $scope.twelve_new_construction,
+                    'twenty_four_new_construction': $scope.twenty_four_new_construction,
+                    'building_scrap': $scope.building_scrap
                 }
             )
         }
@@ -2269,6 +2491,8 @@ angular.module("all_controller", [])
                 stair: $scope.stair,
                 index: $scope.index,
                 level: $scope.level,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                 stair_copy: $stateParams.stair_copy,
                 level_copy: $stateParams.level_copy,
                 worker_category: $scope.worker_category,
@@ -2288,7 +2512,7 @@ angular.module("all_controller", [])
                 three_material: item,
                 pid: item.id,
                 prev_index: 0,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
             })
         }
     })
@@ -2297,6 +2521,8 @@ angular.module("all_controller", [])
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair
         $scope.level = $stateParams.level
+        $scope.platform_price = $stateParams.platform_price || 0 //平台价格
+        $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
         $scope.stair_copy = $stateParams.stair_copy || $stateParams.stair
         $scope.level_copy = $stateParams.level_copy || $stateParams.level_copy
         $scope.index = $stateParams.index
@@ -2339,6 +2565,8 @@ angular.module("all_controller", [])
                     stair: $scope.stair,
                     index: $scope.index,
                     level: $scope.level,
+                    'platform_price': $scope.platform_price,
+                    'supply_price': $scope.supply_price,
                     stair_copy: $stateParams.stair_copy,
                     level_copy: $stateParams.level_copy,
                     worker_category: $scope.worker_category,
@@ -2356,7 +2584,7 @@ angular.module("all_controller", [])
                     choose_stairs: $scope.choose_stairs,
                     second_material: $scope.second_material,
                     three_material: $scope.three_material,
-                    'cur_stair' :$scope.cur_stair,
+                    'cur_stair': $scope.cur_stair,
                     'twelve_dismantle': $scope.twelve_dismantle,
                     'twenty_four_dismantle': $scope.twenty_four_dismantle,
                     'repair': $scope.repair,
@@ -2369,6 +2597,8 @@ angular.module("all_controller", [])
                     stair: $scope.stair,
                     index: $scope.index,
                     level: $scope.level,
+                    'platform_price': $scope.platform_price,
+                    'supply_price': $scope.supply_price,
                     stair_copy: $stateParams.stair_copy,
                     level_copy: $stateParams.level_copy,
                     worker_category: $scope.worker_category,
@@ -2386,7 +2616,7 @@ angular.module("all_controller", [])
                     choose_stairs: $scope.choose_stairs,
                     second_material: $scope.second_material,
                     three_material: $scope.three_material,
-                    'cur_stair' :$scope.cur_stair,
+                    'cur_stair': $scope.cur_stair,
                     'twelve_dismantle': $scope.twelve_dismantle,
                     'twenty_four_dismantle': $scope.twenty_four_dismantle,
                     'repair': $scope.repair,
@@ -2399,6 +2629,8 @@ angular.module("all_controller", [])
                     stair: $scope.stair,
                     index: $scope.index,
                     level: $scope.level,
+                    'platform_price': $scope.platform_price,
+                    'supply_price': $scope.supply_price,
                     stair_copy: $stateParams.stair_copy,
                     level_copy: $stateParams.level_copy,
                     worker_category: $scope.worker_category,
@@ -2416,7 +2648,7 @@ angular.module("all_controller", [])
                     choose_stairs: $scope.choose_stairs,
                     second_material: $scope.second_material,
                     three_material: $scope.three_material,
-                    'cur_stair' :$scope.cur_stair,
+                    'cur_stair': $scope.cur_stair,
                     'twelve_dismantle': $scope.twelve_dismantle,
                     'twenty_four_dismantle': $scope.twenty_four_dismantle,
                     'repair': $scope.repair,
@@ -2432,6 +2664,8 @@ angular.module("all_controller", [])
                 stair: $scope.stair,
                 index: $scope.index,
                 level: $scope.level,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                 stair_copy: $stateParams.stair_copy,
                 level_copy: $stateParams.level_copy,
                 worker_category: $scope.worker_category,
@@ -2454,7 +2688,7 @@ angular.module("all_controller", [])
                 prev_index: $stateParams.prev_index,
                 excluded_item: $scope.excluded_item,
                 pid: $scope.pid,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
                 'twelve_dismantle': $scope.twelve_dismantle,
                 'twenty_four_dismantle': $scope.twenty_four_dismantle,
                 'repair': $scope.repair,
@@ -2469,6 +2703,10 @@ angular.module("all_controller", [])
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair
         $scope.level = $stateParams.level
+        $scope.platform_price = $stateParams.platform_price || 0 //平台价格
+        $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
+        $scope.platform_price_copy = angular.copy($stateParams.platform_price_copy) || $stateParams.platform_price//平台价格
+        $scope.supply_price_copy = angular.copy($stateParams.supply_price_copy) || $stateParams.supply_price//装修公司供货价
         $scope.stair_copy = angular.copy($stateParams.stair_copy)
         $scope.level_copy = angular.copy($stateParams.level_copy)
         $scope.index = $stateParams.index
@@ -2495,6 +2733,8 @@ angular.module("all_controller", [])
         $scope.prev_index = $stateParams.prev_index//判断是更换还是添加
         $scope.excluded_item = $stateParams.excluded_item
         $scope.add_quantity = 1//添加数量
+        $scope.platform_price_copy = angular.copy($scope.platform_price)
+        $scope.supply_price_copy = angular.copy($scope.supply_price)
         //杂工数据
         $scope.twelve_dismantle = $stateParams.twelve_dismantle || ''
         $scope.twenty_four_dismantle = $stateParams.twenty_four_dismantle || ''
@@ -2502,6 +2742,7 @@ angular.module("all_controller", [])
         $scope.twelve_new_construction = $stateParams.twelve_new_construction || ''
         $scope.twenty_four_new_construction = $stateParams.twenty_four_new_construction || ''
         $scope.building_scrap = $stateParams.building_scrap || false
+        $scope.tab_title = 0
         let good = angular.copy($scope.current_good)
         let category = angular.copy($scope.three_material)
         $scope.subtract = function () {
@@ -2509,6 +2750,13 @@ angular.module("all_controller", [])
                 $scope.add_quantity = 1
             } else {
                 $scope.add_quantity--
+            }
+        }
+        $scope.change_tab = function(){
+            if($scope.tab_title == 0){
+                $scope.tab_title = 1
+            }else{
+                $scope.tab_title = 0
             }
         }
         $scope.add = function () {
@@ -2553,8 +2801,7 @@ angular.module("all_controller", [])
                                 'show_cost': good.platform_price * $scope.add_quantity,
                                 'show_quantity': parseInt($scope.add_quantity),
                                 'id': good.id,
-                                'name': $scope.good_detail.brand_name
-                                ,
+                                'name': $scope.good_detail.brand_name,
                                 'platform_price': good.platform_price,
                                 'subtitle': good.subtitle,
                                 'title': good.title,
@@ -2583,11 +2830,17 @@ angular.module("all_controller", [])
                     }
                 }
             }
+            $scope.platform_price_copy += good.platform_price * $scope.add_quantity
+            $scope.supply_price_copy += good.purchase_price_decoration_company * $scope.add_quantity
             console.log($scope.stair)
             console.log($scope.level)
             $state.go("other", {
                 stair: $scope.stair,
                 level: $scope.level,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.platform_price,
+                'platform_price_copy':$scope.platform_price_copy,
+                'supply_price_copy':$scope.supply_price_copy,
                 stair_copy: $scope.stair_copy,
                 level_copy: $scope.level_copy,
                 index: $scope.index,
@@ -2604,7 +2857,7 @@ angular.module("all_controller", [])
                 highCrtl: $scope.highCrtl,
                 window: $scope.window,
                 choose_stairs: $scope.choose_stairs,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
                 'twelve_dismantle': $scope.twelve_dismantle,
                 'twenty_four_dismantle': $scope.twenty_four_dismantle,
                 'repair': $scope.repair,
@@ -2700,8 +2953,7 @@ angular.module("all_controller", [])
                                     'cost': good.platform_price * $scope.add_quantity,
                                     'quantity': $scope.add_quantity,
                                     'id': good.id,
-                                    'name': $scope.good_detail.brand_name
-                                    ,
+                                    'name': $scope.good_detail.brand_name,
                                     'platform_price': good.platform_price,
                                     'subtitle': good.subtitle,
                                     'title': good.title,
@@ -2741,6 +2993,15 @@ angular.module("all_controller", [])
                     }
                 }
             }
+            if ($scope.prev_index == 1) {
+                $scope.platform_price_copy -= +category.show_cost
+                $scope.supply_price_copy -= +category.show_quantity*category.purchase_price_decoration_company
+            } else {
+                $scope.platform_price_copy -= +category.cost
+                $scope.supply_price_copy -= +category.quantity*category.purchase_price_decoration_company
+            }
+            $scope.platform_price_copy += good.platform_price * $scope.add_quantity
+            $scope.supply_price_copy += good.purchase_price_decoration_company * $scope.add_quantity
             console.log($scope.stair)
             console.log($scope.level)
             let goTitle = ''
@@ -2754,6 +3015,10 @@ angular.module("all_controller", [])
                 stair_copy: $scope.stair_copy,
                 index: $scope.index,
                 level: $scope.level,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
+                'platform_price_copy':$scope.platform_price_copy,
+                'supply_price_copy':$scope.supply_price_copy,
                 level_copy: $scope.level_copy,
                 worker_category: $scope.worker_category,
                 handyman_price: $scope.handyman_price,
@@ -2768,7 +3033,7 @@ angular.module("all_controller", [])
                 highCrtl: $scope.highCrtl,
                 window: $scope.window,
                 choose_stairs: $scope.choose_stairs,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
                 'twelve_dismantle': $scope.twelve_dismantle,
                 'twenty_four_dismantle': $scope.twenty_four_dismantle,
                 'repair': $scope.repair,
@@ -2783,6 +3048,10 @@ angular.module("all_controller", [])
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair
         $scope.level = $stateParams.level
+        $scope.platform_price = $stateParams.platform_price || 0 //平台价格
+        $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
+        $scope.platform_price_copy = $stateParams.platform_price_copy || 0
+        $scope.supply_price_copy = $stateParams.supply_price_copy || 0
         $scope.stair_copy = angular.copy($stateParams.stair_copy)
         $scope.level_copy = angular.copy($stateParams.level_copy)
         $scope.index = $stateParams.index
@@ -2817,12 +3086,14 @@ angular.module("all_controller", [])
                 'isBack': true,
                 'level': $scope.level,
                 'stair': $scope.stair,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
                 'stair_copy': $scope.stair_copy,
                 'labor_price': $scope.labor_price,
                 'series_index': $scope.series_index,
                 'style_index': $scope.style_index,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
                 'worker_category': $scope.worker_category,
                 'house_bedroom': $scope.house_bedroom,
                 'house_hall': $scope.house_hall,
@@ -2847,10 +3118,16 @@ angular.module("all_controller", [])
         $scope.change_material = function () {
             $scope.stair = $scope.stair_copy
             $scope.level = $scope.level_copy
+            if($scope.platform_price_copy!=0&&$scope.supply_price_copy!=0){
+                $scope.platform_price = $scope.platform_price_copy
+                $scope.supply_price = $scope.supply_price_copy
+            }
             $state.go('nodata', {
                 'isBack': true,
                 'level': $scope.level,
                 'stair': $scope.stair,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
                 'stair_copy': $scope.stair_copy,
                 'labor_price': $scope.labor_price,
@@ -2863,7 +3140,7 @@ angular.module("all_controller", [])
                 'house_toilet': $scope.house_toilet,
                 'highCrtl': $scope.highCrtl,
                 'area': $scope.area,
-                'cur_stair' :$scope.cur_stair,
+                'cur_stair': $scope.cur_stair,
                 'window': $scope.window,
                 'choose_stairs': $scope.choose_stairs,
                 'twelve_dismantle': $scope.twelve_dismantle,
@@ -2881,6 +3158,8 @@ angular.module("all_controller", [])
                     'isBack': true,
                     'level': $stateParams.level,
                     'stair': $stateParams.stair,
+                'platform_price': $scope.platform_price,
+                'supply_price': $scope.supply_price,
                     'level_copy': $stateParams.level,
                     'stair_copy': $stateParams.stair,
                     'labor_price': $scope.labor_price,
@@ -2889,19 +3168,19 @@ angular.module("all_controller", [])
                     'worker_category': $scope.worker_category,
                     'house_bedroom': $scope.house_bedroom,
                     'house_hall': $scope.house_hall,
-                    'cur_stair' :$scope.cur_stair,
+                    'cur_stair': $scope.cur_stair,
                     'house_kitchen': $scope.house_kitchen,
                     'house_toilet': $scope.house_toilet,
                     'highCrtl': $scope.highCrtl,
                     'area': $scope.area,
                     'window': $scope.window,
                     'choose_stairs': $scope.choose_stairs,
-                'twelve_dismantle': $scope.twelve_dismantle,
-                'twenty_four_dismantle': $scope.twenty_four_dismantle,
-                'repair': $scope.repair,
-                'twelve_new_construction': $scope.twelve_new_construction,
-                'twenty_four_new_construction': $scope.twenty_four_new_construction,
-                'building_scrap': $scope.building_scrap
+                    'twelve_dismantle': $scope.twelve_dismantle,
+                    'twenty_four_dismantle': $scope.twenty_four_dismantle,
+                    'repair': $scope.repair,
+                    'twelve_new_construction': $scope.twelve_new_construction,
+                    'twenty_four_new_construction': $scope.twenty_four_new_construction,
+                    'building_scrap': $scope.building_scrap
                 }
             )
         }

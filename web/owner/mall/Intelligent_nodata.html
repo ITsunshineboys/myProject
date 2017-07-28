@@ -24,7 +24,7 @@
             </a>
             <div class="address_content">
                 <p class="quarters_adress">小区地址</p>
-                <textarea class="text_all" rows="5" cols="40" placeholder="例：金牛区沙西线66号" ng-model="message"></textarea>
+                <textarea class="text_all" rows="5" cols="44" placeholder="例：金牛区沙西线66号" ng-model="message"></textarea>
                 <span class="text_all_length">{{message.length}}/45</span>
             </div>
         </div>
@@ -35,7 +35,7 @@
             <div class="shu_house"></div>
             <h1>房屋信息</h1>
             <span class="house_span">房屋面积</span>
-            <input type="text" required placeholder="0" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="3" ng-model="area"/>
+            <input type="text" required placeholder="请输入1-180的面积" ng-pattern="/^([1-9]|[1-9][0-9]|1[0-7][0-9]|180)$/" maxlength="3" ng-model="area"/>
 
             <span class="p">m<sup>2</sup></span>
         </div>
@@ -46,7 +46,7 @@
                 <ul class="apartment_ul">
                     <li>
 
-                        <input type="text" ng-model="house_bedroom" class="val_input"/>
+                        <input type="text" ng-model="house_bedroom" class="val_input" disabled/>
                         <span>室</span>
                         <i class="icon icon-check-minus btn_left reduce_a icon-5x" ng-click="subtract(1,'house_bedroom')"></i>
                         <i class="icon icon-check-plus btn_right add_a icon-5x" ng-click="add(6,'house_bedroom')"></i>
@@ -54,7 +54,7 @@
                         <!--<button class="btn_right add_a">+</button>-->
                     </li>
                     <li>
-                        <input type="text" ng-model="house_hall" class="val_input_b"/>
+                        <input type="text" ng-model="house_hall" class="val_input_b" disabled/>
                         <span>厅</span>
                         <i class="icon icon-check-minus btn_left reduce_b icon-5x" ng-click="subtract(1,'house_hall')"></i>
                         <i class="icon icon-check-plus btn_right add_b icon-5x" ng-click="add(3,'house_hall')"></i>
@@ -62,7 +62,7 @@
                         <!--<button class="btn_right add_b">+</button>-->
                     </li>
                     <li>
-                        <input type="text" ng-model="house_toilet" class="val_input_c"/>
+                        <input type="text" ng-model="house_toilet" class="val_input_c" disabled/>
                         <span>卫</span>
 
                         <i class="icon icon-check-minus btn_left reduce_c icon-5x" ng-click="subtract(1,'house_toilet')"></i>
@@ -71,7 +71,7 @@
                         <!--<button class="btn_right add_c">+</button>-->
                     </li>
                     <li>
-                        <input type="text" ng-model="house_kitchen" class="val_input_d"/>
+                        <input type="text" ng-model="house_kitchen" class="val_input_d" disabled/>
                         <span>厨</span>
                         <i class="icon icon-check-minus btn_left reduce_d icon-5x" ng-click="subtract(1,'house_kitchen')"></i>
                         <i class="icon icon-check-plus btn_right add_d icon-5x" ng-click="add(2,'house_kitchen')"></i>
@@ -90,7 +90,8 @@
                     <label ng-click="highCrtl=2.8">
                         <input type="radio" name="test" ng-checked="highCrtl==2.8"/>
                         <span></span>
-                        <span class="storey_txt">2.8m<sup>2</sup></span>
+                        <span class="storey_txt">2.8m</span>
+                        <img src="images/mall_list_radio.png" alt=""/>
                     </label>
                     <!--<input type="radio" name="storey_content"/>-->
 
@@ -99,7 +100,8 @@
                     <label ng-click="highCrtl=3">
                         <input type="radio" name="test" ng-checked="highCrtl==3"/>
                         <span></span>
-                        <span class="storey_txt">3m<sup>2</sup></span>
+                        <span class="storey_txt">3m</span>
+                        <img src="images/mall_list_radio.png" alt=""/>
                     </label>
                     <!--<input type="radio" name="storey_content"/>-->
                 </li>
@@ -107,7 +109,8 @@
                     <label ng-click="highCrtl=3.3">
                         <input type="radio" name="test" ng-checked="highCrtl==3.3"/>
                         <span></span>
-                        <span class="storey_txt">3.3m<sup>2</sup></span>
+                        <span class="storey_txt">3.3m</span>
+                        <img src="images/mall_list_radio.png" alt=""/>
                     </label>
                     <!--<input type="radio" name="storey_content"/>-->
                 </li>
@@ -115,8 +118,9 @@
                     <label ng-click="highCrtl=4.5">
                         <input type="radio" name="test" ng-checked="highCrtl==4.5"/>
                         <span></span>
-                        <span class="storey_txt"> >4.5m<sup>2</sup></span>
-                        <span class="ml storey_txt">(跃成商铺等)</span>
+                        <span class="storey_txt"> >4.5m</span>
+                        <span class="ml storey_txt">(跃层商铺等)</span>
+                        <img src="images/mall_list_radio.png" alt=""/>
                     </label>
                     <!--<input type="radio" name="storey_content"/>-->
                 </li>
@@ -126,33 +130,36 @@
         <!--飘窗-->
         <div class="bay_window">
             <span class="bay_span">飘窗</span>
-            <input type="text" required placeholder="0" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" maxlength="4" ng-model="window"/>
-            <span class="bay_square">m<sup>2</sup></span>
+            <input type="text" required placeholder="0" ng-pattern="/^([0-9]|1[0-9]|20)$/"  maxlength="2" ng-model="window"/>
+            <span class="bay_square">m</span>
         </div>
 
         <!--楼梯有无-->
         <div class="choose_stairs">
             <span class="choose_span">楼梯选择</span>
-            <label ng-click="choose_stairs = false" >
-                <input type="radio" ng-checked="!choose_stairs"  name="have_stairs" />
+            <label ng-click="choose_stairs = true" >
+                <input type="radio"  ng-checked="choose_stairs" name="have_stairs" />
                 <span></span>
                 <span class="have">有</span>
+                <img src="images/mall_list_radio.png" alt=""/>
             </label>
-            <label ng-click="choose_stairs = true" >
-                <input type="radio" ng-checked="choose_stairs" name="have_stairs" />
+            <label ng-click="choose_stairs = false" >
+                <input type="radio" ng-checked="!choose_stairs" name="have_stairs" />
                 <span></span>
                 <span class="no">无</span>
+                <img src="images/mall_list_radio.png" alt=""/>
             </label>
         </div>
 
         <!--结构-->
-        <div class="structure" ng-show="!choose_stairs">
+        <div class="structure" ng-show="choose_stairs">
             <ul>
                 <li ng-repeat="item in stairs_details" ng-click="toggleStairs(item.attribute)">
                     <label ng-click="">
                         <input type="radio" name="stairs" ng-checked="nowStairs==item.attribute"/>
                         <span></span>
                         <span>{{item.attribute}}</span>
+                        <img src="images/mall_list_radio.png" alt=""/>
                     </label>
                 </li>
             </ul>
@@ -168,6 +175,7 @@
                         <input type="radio" name="series" ng-checked="(series_index==$index)">
                         <span></span>
                         <span>{{item.series}}</span>
+                        <img src="images/mall_list_radio.png" alt=""/>
                     </label>
                 </li>
             </ul>
@@ -381,12 +389,12 @@
                         <!--<a ui-sref="basics_decoration({first_level:item,second_level:level})">-->
                         <div class="basis_item">
                             <p  ng-if="item.title == '辅材'" class="basis_title">基础装修 <span class="basis_title_span"> &nbsp;&nbsp;{{item.second_level.length+1}}项</span> </p>
-                            <p  ng-if="item.title == '主要材料'" class="basis_title">{{item.title}}<span class="basis_title_span"> &nbsp;&nbsp;{{item.second_level.length}}项</span></p>
+                            <p  ng-if="item.title == '主要材料'" class="basis_title">主材料<span class="basis_title_span"> &nbsp;&nbsp;{{item.second_level.length}}项</span></p>
                             <p  ng-if="item.title != '辅材'&& item.title!='主要材料'" class="basis_title"> {{item.title}}<span class="basis_title_span"> &nbsp;&nbsp;{{item.goods_count}}项</span></p>
-                            <span class="pic" ng-if="item.title == '辅材'">{{item.cost+labor_price | currency:'￥'}}</span>
-                            <span class="pic" ng-if="item.title != '辅材'">{{item.cost | currency:'￥'}}</span>
-                            <ul class="decoration" ng-if="item.title=='辅材'||item.title=='主要材料' ">
-                                <li ng-repeat="item1 in item.second_level" class="dw basis_border">
+                            <p class="pic" ng-if="item.title == '辅材'&&item.cost!=0">{{item.cost+labor_price | currency:'￥'}}</p>
+                            <p class="pic" ng-if="item.title != '辅材'&&item.cost!=0">{{item.cost | currency:'￥'}}</p>
+                            <ul class="two_category" ng-if="item.title=='辅材'||item.title=='主要材料' ">
+                                <li ng-repeat="item1 in item.second_level" class="dw basis_border" ng-if="item[item1].cost>0">
                                     <span class="basis_txt">{{item[item1].title}}</span>
                                     <span class="pic_q">{{item[item1].cost | currency:'￥'}}</span>
                                 </li>
@@ -395,16 +403,19 @@
                                     <span class="pic_q">{{labor_price | currency:"￥"}}</span>
                                 </li>
                             </ul>
-                            <ul ng-if="item.title!=='辅材'&& item.title!=='主要材料'">
+                            <ul ng-if="item.title!=='辅材'&& item.title!=='主要材料'&&item.cost!=0">
                                 <li ng-repeat="item1 in item.second_level" >
                                     <div ng-repeat="item2 in item[item1].three_level" class="dw basis_border basis_txt">
-                                        <div ng-repeat="item3 in item[item1][item2].goods_detail">
-                                    <span>{{item[item1][item2].title}}</span>
+                                        <div ng-repeat="item3 in item[item1][item2].goods_detail"
+                                             ng-if="item[item1][item2][item3].show_cost>0">
+                                    <p>{{item[item1][item2].title}}</p>
+                                            <span class="cur_title">{{item[item1][item2][item3].name}}</span>
                                     <span class="pic_q">{{item[item1][item2][item3].show_cost | currency:'￥'}}</span>
                                         </div>
                                     </div>
                                 </li>
                             </ul>
+                            <button class="no_data" ng-if="item.cost==0">点击编辑</button>
                         </div>
                     </div>
                     </div>
@@ -422,8 +433,8 @@
         <!--尾部结算-->
         <div class="footer_settlement">
             <div class="footer_set">
-                <span class="first_span">$125888</span>
-                <span class="second_span">$1515151</span><br/>
+                <span class="first_span">{{supply_price+labor_price | currency:'￥'}}</span>
+                <span class="second_span">{{platform_price+labor_price | currency:'￥'}}</span><br/>
                 <span class="three_span">未包含施工图费用，8项全场8折</span>
             </div>
             <button>保存方案</button>

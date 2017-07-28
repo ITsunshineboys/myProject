@@ -16,7 +16,7 @@
     <section>
 
         <!--辅材-->
-        <div class="wall_material" ng-repeat="item in first_level.second_level">
+        <div class="wall_material" ng-repeat="item in first_level.second_level" ng-if="first_level[item].cost>0">
             <!--<div class="divide"></div>-->
             <div class="shu"></div>
             <h1>{{first_level[item].title}}</h1>
@@ -56,27 +56,27 @@
                             <li>
                                 <input type="checkbox" ng-model="complete" class="zagong_check"/>
                                 <span class="check_word">12墙拆除</span>
-                                <input type="text" placeholder="30" class="handyman_span" ng-model="twelve_dismantle"/>
+                                <input type="text" placeholder="请输入数值" class="handyman_span" ng-model="twelve_dismantle"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
                             <li>
                                 <input type="checkbox" ng-model="complete1"  class="zagong_check"/>
                                 <span class="check_word">24墙拆除</span>
-                                <input type="text" placeholder="30" class="handyman_span"
+                                <input type="text" placeholder="请输入数值" class="handyman_span"
                                        ng-model="twenty_four_dismantle"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
                             <li>
                                 <input type="checkbox" ng-model="complete2"  class="zagong_check"/>
                                 <span class="check_word" id="bulan">补烂</span>
-                                <input type="text" placeholder="30" class="handyman_span" ng-model="repair"/>
+                                <input type="text" placeholder="请输入数值" class="handyman_span" ng-model="repair"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
                             <li>
                                 <input type="checkbox" ng-model="complete3"  class="zagong_check"/>
                                 <span class="check_word">12墙新建</span>
                                 <span class="two-sided">(含双面抹灰)</span>
-                                <input type="text" placeholder="30" class="handyman_input"
+                                <input type="text" placeholder="请输入数值" class="handyman_input"
                                        ng-model="twelve_new_construction"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
@@ -84,7 +84,7 @@
                                 <input type="checkbox" ng-model="complete4"  class="zagong_check"/>
                                 <span class="check_word">24墙新建</span>
                                 <span class="two-sided">(含双面抹灰)</span>
-                                <input type="text" placeholder="30" class="handyman_input"
+                                <input type="text" placeholder="请输入数值" class="handyman_input"
                                        ng-model="twenty_four_new_construction"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
@@ -152,7 +152,6 @@
                         <p class="comment_p">商品特色</p>
                         <p class="text_p ">{{modalData.subtitle}}</p>
                     </div>
-                    <button type="button" class="btn replace btn-primary"  data-dismiss="modal" ng-click="replace_material(modalData)">更换</button>
                 </div>
             </div>
         </div>

@@ -78,22 +78,22 @@
         <div class="pic_comment">
             <div>
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs pic_tabs active" role="tablist">
-                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">图文详情</a></li>
-                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">产品参数</a></li>
+                <ul class="nav nav-tabs pic_tabs" role="tablist">
+                    <li role="presentation" ng-class="{'active':(tab_title==0)}"><a ng-click="(tab_title == 0)" aria-controls="home" role="tab" data-toggle="tab">图文详情</a></li>
+                    <li role="presentation" ng-class="{'active':(tab_title==1)}"><a ng-click="(tab_title == 1)" aria-controls="profile" role="tab" data-toggle="tab">产品参数</a></li>
                 </ul>
 
                 <!-- Tab panes -->
-                <div class="tab-content">
+                <div class="tab-content" ng-switch on="tab_title">
                     <!--图文详情-->
-                    <div role="tabpanel" class="tab-pane active" id="home">
+                    <div role="tabpanel" class="tab-pane active" id="home" ng-switch-when="0">
                         <div class="tab_one">
                             <img src="images/banner1.png" alt=""/>
-                            <p>哈哈哈啊哈哈哈哈哈哈哈哈哈哈</p>
+                            <!--<p>哈哈哈啊哈哈哈哈哈哈哈哈哈哈</p>-->
                         </div>
                     </div>
                     <!--产品参数-->
-                    <div role="tabpanel" class="tab-pane" id="profile">
+                    <div role="tabpanel" class="tab-pane" id="profile" ng-switch-when="1">
                       <div class="shop_two">
                           <ul>
                               <li><span>产品参数</span><span class="comment_num">25446556</span></li>
@@ -207,7 +207,7 @@
     <div class="foot_tab">
         <div><img src="images/mall_collect.png" alt=""><p>联系商家</p></div>
         <button class="add" ng-if="prev_index == 0" data-toggle="modal" data-target="#myModal">添加</button>
-        <button class="add" ng-if="prev_index == 1" data-toggle="modal" data-target="#myModal">更换</button>
+        <button class="add" ng-if="prev_index == 1 || prev_index == 2" data-toggle="modal" data-target="#myModal">更换</button>
     </div>
     <div style="height: 4rem;"></div>
 </div>
