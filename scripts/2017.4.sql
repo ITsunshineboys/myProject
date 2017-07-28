@@ -921,7 +921,7 @@ CREATE TABLE `invoice` (
 DROP TABLE IF EXISTS `user_address`;
 CREATE TABLE `user_address` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `address_name` varchar(50) NOT NULL,
+  `uid` int(11) unsigned NOT NULL DEFAULT 0,
   `consignee` varchar(60) NOT NULL,
   `zipcode` varchar(60) NOT NULL,
   `mobile` varchar(60) NOT NULL,
