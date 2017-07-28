@@ -1,7 +1,7 @@
 <?php
 
 $districts = require(__DIR__ . '/districts.php');
-$pinyin = require(__DIR__ . '/pinyin.php');
+//$pinyin = require(__DIR__ . '/pinyin.php');
 $auth = require(__DIR__ . '/auth.php');
 
 return [
@@ -103,7 +103,7 @@ return [
         '2' => '审核通过',
     ],
     'districts' => $districts,
-    'pinyin'=>$pinyin,
+//    'pinyin'=>$pinyin,
     'auth' => $auth,
     'goods' => [
         'maxImagesCnt' => 5,
