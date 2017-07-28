@@ -33,55 +33,32 @@ header div span{
     font-size: 1.4rem;
 }
 .wall_ul li{
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #C2C2C2;
     font-size: 1.2rem;
     padding-left: 1rem;
     position: relative;
 }
-
-.left_com{
-    width: .6rem;
-    position: absolute;
-    right: 1rem;
-    top: 1.1rem;
-}
-
-.left_com{
-    width: .6rem;
-    position: absolute;
-    right: 1rem;
-    top: 1.1rem;
-}
-
+/*.wall_margin{*/
+    /*margin:30px 0;*/
+/*}*/
 .wall_brand{
    color: #959292;
     font-size: 1.1rem;
 }
-
-.left_com{
-    width: .6rem;
-    position: absolute;
-    right: 1rem;
-    top: 1.1rem;
-}
-
-.left_com{
-    width: .6rem;
-    position: absolute;
-    right: 2rem;
-    top: 1.3rem;
-}
-
-.wall_ul li{
-    position: relative;
+.wall_span_brand{
+    float: left;
+    width: 10rem;
 }
 .wall_money{
-    position: absolute;
+    /*position: absolute;*/
     left: 23rem;
     top:1rem;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #F59C22;
+    float: right;
+    margin-right: 2rem;
+}
+.wall_money i{
+    font-size: 1.6rem;
 }
 .wall_money_sec{
     position: relative;
@@ -92,6 +69,17 @@ header div span{
 .add_material{
     text-align: center;
     margin-top: 1rem;
+    background-color: white;
+}
+.add_material span:nth-child(1){
+    font-size: 2rem;
+}
+.add_material span:nth-child(2){
+    font-size: 1.3rem;
+}
+.sheet_material{
+    margin-top: 5rem;
+    /*margin-bottom: 3rem;*/
     background-color: white;
 }
 .sheet_material h1{
@@ -151,13 +139,22 @@ header div span{
     font-size: 1.2rem;
     width: 8.5rem;
     height:4rem;
-    margin-left: 11.1rem;
     border: none;
+    position: absolute;
+    right: 0;
+}
+.preservation span:nth-child(1){
+    position: absolute;
+    bottom: 1.1rem;
+    left:0;
 }
 .money_col{
     color: #F55122;
     font-size: 1.5rem!important;
     margin-left: -.3rem!important;
+    position: absolute;
+    bottom: .9rem;
+    left: 5rem;
 }
 .edit{
     margin-left: 8.5rem;
@@ -168,13 +165,12 @@ header div span{
     top:1rem;
     color: #4A4A4A;
     font-size: 1.3rem;
+    font-family: PingFangSC-Regular;
 }
 .first_top{
     margin-top: 4.5rem!important;
 }
-.wall_ul li{
-    margin-top: .5rem;
-}
+
 .add_mater{
     height: 3.5rem;
     line-height: 3.5rem;
@@ -186,10 +182,7 @@ header div span{
 .add_mater span{
     color: #53A8F4;
 }
-.sheet_material{
-    margin-top: 3.5rem;
-    background-color: white;
-}
+
 .color_a{
     color:#53A8F4;
     font-size: 1.3rem;
@@ -207,22 +200,64 @@ a:hover{
 }
 
 /*模态框*/
-
-.comment{
-    margin-top: 1rem;
-    font-size: 1rem;
-}
-
-.comment_p{
-    padding-top: 1rem;
-}
 .modal-dialog{
-    /*padding-top: 6rem;*/
+    border-radius:.5rem !important;
+    width:21.28rem!important;
+    overflow: hidden;
 }
-.replace button{
-    width: 100%;
-    height: 2rem;
-    font-size: 1rem;
+.comment_img img{
+    /*width:100%;*/
+    /*height: 100%;*/
+    width:21.28rem!important;
+    height:21.28rem!important;
+}
+.close{
+    position: absolute;
+    top:1rem;
+    left:1rem;
+    font-size:3rem!important;
+    color: #53A8F4!important;
+    z-index:100;
+}
+.comment{
+    padding:1.5rem .85rem !important;
+}
+.good_title{
+    position: relative;
+    margin-bottom:.77rem !important;
+    font-size:1.19rem;
+}
+.comment_span{
+    color: #4a4a4a;
+}
+.comment_se{
+    color: #F59C22;
+    position: absolute;
+    right: 0;
+}
+.comment_square{
+    color: #B8B6B6;
+    font-size:1rem;
+    margin-bottom:1.36rem;
+
+}
+.comment_p{
+    color: #4a4a4a;
+    margin-bottom:.25rem;
+    font-size:1.19rem;
+}
+.text_p{
+    font-size:1rem;
+    color: #6C6C6C;
+}
+.replace{
+    width:100%;
+    height: 2.9rem;
+    line-height:2.9rem;
+    border:none;
+    background-color: #53A8F4;
+    color: #fff;
+    font-size:1.19rem!important;
 }
 /*结束*/
 .del{
@@ -235,15 +270,10 @@ a:hover{
     position: relative;
     left: 15rem;
     top:-1rem;
-    display: none;
+    /*display: none;*/
 
 }
-/*.modal-body{*/
-    /*font-size: 1.2rem;*/
-    /*padding-top: 2rem;*/
-    /*padding-bottom: 2rem;*/
-    /*text-align: center;*/
-/*}*/
+
 .del_two{
     display:block;
     border: none;
@@ -256,18 +286,11 @@ a:hover{
     left: 27rem;
     top:.6rem
 }
-#whit{
-    padding: 30px!important;
-    font-size: 1.2rem!important;
-    text-align: center!important;
-}
+
 .btn{
-    width: 47%;
+    width: 100%;
     height: 3rem;
     border: none;
-
-    /*background-color: white;*/
-    /*margin-left: -1rem;*/
     font-size: 1.2rem;
 }
 .del_btn{

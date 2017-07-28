@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <link rel="stylesheet" href="css/intelligent_quotation.css"/>
 <link rel="stylesheet" href="css/swiper-3.4.2.min.css"/>
 <link rel="stylesheet" href="zui-1.7.0-dist/dist/css/zui.min.css"/>
@@ -14,24 +13,9 @@
             <span class="pos_span">成都</span>
         </div>
     </header>
-=======
- <link rel="stylesheet" href="css/intelligent_quotation.css"/>
-    <link rel="stylesheet" href="css/swiper-3.4.2.min.css"/>
-<div ng-controller="intelligent_quotation_ctrl">
-<header>
-    <div>
-        <a ui-sref="home">
-        <span class="in_span"><</span></a>
-        <span class="pic_span">智能报价</span>
-        <img src="images/dingw.png" alt=""/>
-        <span class="postion_span">成都</span>
-    </div>
-</header>
->>>>>>> 3744ed0535f2dab0266c0771190b54bf355d2ac8
 
-<!--小区信息-->
+    <!--小区信息-->
 
-<<<<<<< HEAD
     <div class="quarters_small animated fadeInUp" style="animation-delay: 0.15s;">
         <div class="shu"></div>
         <p>小区信息</p>
@@ -72,39 +56,9 @@
                 <li>层高 <span>2.8m</span></li>
                 <li>飘窗 <span>3.5m</span></li>
             </ul>
-=======
-<div class="quarters_small">
-    <h1>小区信息</h1>
-    <span class="choose_quarter">小区选择</span>
-    <img src="images/big.png" alt=""/>
-    <a ui-sref="cell_search"><input type="text" ng-model="data[0].toponymy" placeholder="请输入小区名字" class="search_a"/><br/></a>
 
-    <p class="quarters_adress">小区地址</p>
-    <p class="quarters">{{data[0].site_particulars}}</p>
-</div>
+        </div>
 
-<!--房屋信息-->
-<div class="housing_information">
-    <h1>房屋信息</h1>
-    <h2>户型选择</h2>
-    <div class="list_dis">
-        <ul house-style>
-            <li ng-repeat="item in data"  ng-click="toggleHouse($index)" ng-class="{house:$index==house_index}">
-                <img src="images/bed.png"  alt="" class="b"/><br/>
-                <span class="black">{{item.particulars}}{{item.area}}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="comment_height">
-        <ul>
-            <li>层高 <span>{{data[house_index].high}}m</span></li>
-            <li>飘窗 <span>{{data[house_index].window}}m</span></li>
-        </ul>
->>>>>>> 3744ed0535f2dab0266c0771190b54bf355d2ac8
-
-    </div>
-
-<<<<<<< HEAD
         <!--楼梯有无-->
         <div class="choose_stairs">
             <span class="choose_span">楼梯选择</span>
@@ -162,38 +116,8 @@
                 </li>
             </ul>
         </div>
-=======
-    <!--楼梯有无-->
-    <div class="choose_stairs">
-        <span class="choose_span">楼梯选择</span>
-        <label>
-            <input type="radio" ng-checked="data[house_index].stairway==1"  name="have_stairs" ng-disabled="data[house_index].stairway==0"/>
-            <span></span>
-            <span class="have">有</span>
-        </label>
-        <label>
-            <input type="radio" name="have_stairs" ng-checked="data[house_index].stairway==0"  ng-disabled="data[house_index].stairway==1"/>
-            <span></span>
-            <span class="no">无</span>
-        </label>
     </div>
 
-    <!--结构-->
-    <div class="structure" ng-show="data[house_index].stairway==1">
-        <ul>
-            <li ng-repeat="item in stairs_details" ng-click="toggleStairs(item.attribute)">
-                <label>
-                    <input type="radio" name="stairs" ng-checked="nowStairs==item.attribute"/>
-                    <span></span>
-                    <span>{{item.attribute}}</span>
-                </label>
-            </li>
-        </ul>
->>>>>>> 3744ed0535f2dab0266c0771190b54bf355d2ac8
-    </div>
-</div>
-
-<<<<<<< HEAD
     <!--x系类选择-->
     <div class="department_choose animated fadeInUp" style="animation-delay: 0.5s;">
         <div class="shu_house"></div>
@@ -238,65 +162,9 @@
                     <p >适合收入3-5年的,对质量和价格看重，关乎健康</p>
                 </div>
             </div>
-=======
-<!--x系类选择-->
-<div class="department_choose">
-    <h1>系类选择</h1>
-    <div>
-        <ul class="choose_ul">
-            <li ng-repeat="n in series">
-                <label ng-click="toggleSeries(n.series)">
-                    <input type="radio" name="style" ng-checked="(nowSeries==n.series)">
-                    <span></span>
-                    <span>{{n.series}}</span>
-                </label>
-            </li>
-        </ul>
-    </div>
-</div>
 
-<!--适合人群-->
-<div ng-switch on="nowSeries">
-    <div ng-switch-when="齐家">
-        <div class="tag"><span ng-cloak  ng-repeat="item in series[0].theme.split(',')">{{item}}</span></div>
-        <div class="fit">
-            <h1>适合人群</h1>
-            <p ng-cloak>{{series[0].intro}}</p>
         </div>
     </div>
-    <div ng-switch-when="享家">
-        <div class="tag"><span ng-cloak ng-repeat="item in series[1].theme.split(',')">{{item}}</span></div>
-        <div class="fit">
-            <h1>适合人群</h1>
-            <p ng-cloak>{{series[1].intro}}</p>
-        </div>
-    </div>
-    <div ng-switch-when="享家+">
-        <div class="tag"><span ng-cloak ng-repeat="item in series[2].theme.split(',')">{{item}}</span></div>
-        <div class="fit">
-            <h1>适合人群</h1>
-            <p ng-cloak>{{series[2].intro}}</p>
-        </div>
-    </div>
-    <div ng-switch-when="智家">
-        <div class="tag"><span ng-cloak ng-repeat="item in series[3].theme.split(',')">{{item}}</span></div>
-        <div class="fit">
-            <h1>适合人群</h1>
-            <p ng-cloak>{{series[3].intro}}</p>
-        </div>
-    </div>
-    <div ng-switch-when="智家+">
-        <div class="tag"><span ng-cloak ng-repeat="item in series[4].theme.split(',')">{{item}}</span></div>
-        <div class="fit">
-            <h1>适合人群</h1>
-            <p ng-cloak>{{series[4].intro}}</p>
-        </div>
-    </div>
-    <div ng-switch-default>
->>>>>>> 3744ed0535f2dab0266c0771190b54bf355d2ac8
-
-    </div>
-</div>
 
 
     <!--风格选择-->
@@ -355,7 +223,6 @@
         </div>
     </div>
 
-<<<<<<< HEAD
     <!--3d/vr 图-->
     <div class="pic_d animated fadeInUp" style="animation-delay: 0.9s;">
         <div class="shu_house"></div>
@@ -363,18 +230,12 @@
         <div class="div_img">
             <img src="images/f.png" alt=""/>
         </div>
-=======
-    <!--按钮-->
-    <div class="btn_vr" ng-show="!isNoChange">
-        <button>生成3D/VR图和材料</button>
->>>>>>> 3744ed0535f2dab0266c0771190b54bf355d2ac8
     </div>
     <!--&lt;!&ndash;按钮&ndash;&gt;-->
     <!--<div class="btn_vr" ng-if="!isNoChange">-->
         <!--<button>生成3D/VR图和材料</button>-->
     <!--</div>-->
 
-<<<<<<< HEAD
     <!--材料选择-->
     <div class="item_masonry animated fadeInUp" style="animation-delay: 1.1s;">
         <div class="shu_house"></div>
@@ -676,108 +537,8 @@
             <p>特殊要求</p>
             <textarea class="main_text" placeholder="请输入你的要求"></textarea>
             <span>0/300</span>
-=======
-<!--材料选择-->
-    <div ng-show="isNoChange">
-<div class="material_choose">
-    <h3 class="title_span">材料选择</h3>
-    <span  class="comment_span">点击以下版块查看详情和编辑</span>
-
-    <div>
-        <!--左边内容-->
-        <div class="left_main">
-
-            <ul class="decoration" ng-repeat="item in stair">
-                <p>{{item.title}} 5项</p>
-                <span class="pic">$15000</span>
-                <li ng-repeat="item1 in item.second_level">
-                    <span>{{item[item1].title}}</span>
-                    <span class="pic_q">{{item[item1].cost | currency:'￥'}}</span>
-                </li>
-            </ul>
-            <!--<h1>{{obj}}</h1>-->
-            <!--&lt;!&ndash;固定家居&ndash;&gt;&ndash;&gt;-->
-            <!--<ul class="fixed_home">-->
-                <!--<p>基础材料 5项</p>-->
-                <!--<span class="pic">$15000</span>-->
-                <!--<li>-->
-                    <!--<span>弱点</span>-->
-                    <!--<span class="pic_q">$700</span>-->
-                <!--</li>-->
-            <!--</ul>-->
-
-            <!--&lt;!&ndash;家电配套&ndash;&gt;&ndash;&gt;-->
-            <!--<ul class="appliance_matching">-->
-                <!--<p>基础材料 5项</p>-->
-                <!--<span class="pic">$15000</span>-->
-                <!--<li>-->
-                    <!--<span>一区二三里</span>-->
-                    <!--<span class="pic_q">$700</span>-->
-                <!--</li>-->
-            <!--</ul>-->
-
-            <!--&lt;!&ndash;&lt;!&ndash;智能配套&ndash;&gt;&ndash;&gt;-->
-            <!--<ul class="Intelligence">-->
-                <!--<p>基础材料 5项</p>-->
-                <!--<span class="pic">$15000</span>-->
-                <!--<li>-->
-                    <!--<span>一区二三里</span>-->
-                    <!--<span class="pic_q">$700</span>-->
-                <!--</li>-->
-            <!--</ul>-->
-        <!--</div>-->
-        <!--&lt;!&ndash;右边内容&ndash;&gt;&ndash;&gt;-->
-        <!--<div class="right_main">-->
-            <!--&lt;!&ndash;主材料&ndash;&gt;&ndash;&gt;-->
-            <!--<ul class="main_material">-->
-                <!--<p>基础材料 5项</p>-->
-                <!--<span class="pic">$15000</span>-->
-                <!--<li>-->
-                    <!--<span>一区二三里</span>-->
-                    <!--<span class="pic_q">$700</span>-->
-                <!--</li>-->
-            <!--</ul>-->
-
-            <!--&lt;!&ndash;移动家具&ndash;&gt;&ndash;&gt;-->
-            <!--<ul class="mobile_furniture">-->
-                <!--<p>基础材料 5项</p>-->
-                <!--<span class="pic">$15000</span>-->
-                <!--<li>-->
-                    <!--<span>一区二三里</span>-->
-                    <!--<span class="pic_q">$700</span>-->
-                <!--</li>-->
-            <!--</ul>-->
-
-            <!--&lt;!&ndash;软装配套&ndash;&gt;&ndash;&gt;-->
-            <!--<ul class="soft_outfit">-->
-                <!--<p>基础材料 5项</p>-->
-                <!--<span class="pic">$15000</span>-->
-                <!--<li>-->
-                    <!--<span>一区二三里</span>-->
-                    <!--<span class="pic_q">$700</span>-->
-                <!--</li>-->
-            <!--</ul>-->
-            <!--&lt;!&ndash;生活配套&ndash;&gt;-->
-            <!--<ul class=life_matching">-->
-                <!--<p>基础材料 5项</p>-->
-                <!--<span class="pic">$15000</span>-->
-                <!--<li>-->
-                    <!--<span>一区二三里</span>-->
-                    <!--<span class="pic_q">$700</span>-->
-                <!--</li>>-->
-            <!--</ul>-->
->>>>>>> 3744ed0535f2dab0266c0771190b54bf355d2ac8
         </div>
-    </div>
-</div>
-<!--特殊要求-->
-<div class="special_requirements">
-    <h1>特殊要求</h1>
-    <textarea class="main_text" rows="5" cols="43" placeholder="请输入你的要求" ng-model="require_msg"></textarea>
-    <span>{{require_msg.length}}/300</span>
-</div>
 
-<<<<<<< HEAD
         <!--尾部结算-->
         <div class="footer_settlement">
             <div class="footer_set">
@@ -788,17 +549,4 @@
             <button class="btn_l">保存方案</button>
             <button class="primary_btn">去装修</button>
         </div>
-=======
-<!--尾部结算-->
-<div class="footer_settlement">
-    <div class="footer_set">
-        <span class="first_span">$125888</span>
-        <span class="second_span">$1515151</span><br/>
-        <span class="three_span">未包含施工图费用，8项全场8折</span>
-    </div>
-    <button>保存方案</button>
-    <button class="primary_btn">去装修</button>
-</div>
-    </div>
->>>>>>> 3744ed0535f2dab0266c0771190b54bf355d2ac8
 </div>

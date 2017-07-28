@@ -1,9 +1,8 @@
 <link rel="stylesheet" href="css/location_city.css"/>
-<link rel="stylesheet" href="zui-1.7.0-dist/dist/css/zui.min.css"/>
 <div ng-controller="location_city_ctrl">
     <header>
         <div class="location_city">
-            <i class="icon icon-chevron-left " ng-click="goPrev()"></i>
+            <span ng-click="goPrev()"> < </span>
             <span class="location_city_span">选择所在城市</span>
         </div>
     </header>
@@ -15,15 +14,15 @@
             <button>重新定位城市</button>
         </div>
         <button class="choose_city">选择城市</button>
-        <!--<div class="specific_position">-->
-            <!--<div>-->
-                <!--<span>取消</span>-->
-                <!--<span>确定</span>-->
-            <!--</div>-->
-            <!--<div>-->
-                <!--具体定位-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="specific_position">
+            <div>
+                <span>取消</span>
+                <span>确定</span>
+            </div>
+            <div>
+                具体定位
+            </div>
+        </div>
     </section>
     <footer>
 

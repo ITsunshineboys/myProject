@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!--<meta content="width=device-width,name="viewport">-->
-   <meta name="viewport"  user-scalable="no">
+    <meta name="viewport" content="user-scalable=0" />
+    <!--<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />-->
     <title>Demo</title>
     <link rel="stylesheet" href="css/rem.css">
     <link rel="stylesheet" href="css/all.css"/>
@@ -11,63 +11,6 @@
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/swiper-3.4.2.min.css">
     <!--<link rel="stylesheet" href="css/index.css"/>-->
-  <style>
-    /* leaving animations ----------------------------------------- */
-    /* rotate and fall */
-    /*@keyframes rotateFall {*/
-      /*0%      { transform: rotateZ(0deg); }*/
-      /*20%     { transform: rotateZ(10deg); animation-timing-function: ease-out; }*/
-      /*40%     { transform: rotateZ(17deg); }*/
-      /*60%     { transform: rotateZ(16deg); }*/
-      /*100%    { transform: translateY(100%) rotateZ(17deg); }*/
-    /*}*/
-
-    /*/!* slide in from the bottom *!/*/
-    /*@keyframes slideOutLeft {*/
-      /*to      { transform: translateX(-100%); }*/
-    /*}*/
-
-    /*/!* rotate out newspaper *!/*/
-    /*@keyframes rotateOutNewspaper {*/
-      /*to      { transform: translateZ(-3000px) rotateZ(360deg); opacity: 0; }*/
-    /*}*/
-
-    /*/!* entering animations --------------------------------------- *!/*/
-    /*/!* scale up *!/*/
-    /*@keyframes scaleUp {*/
-      /*from    { opacity: 0.3; -webkit-transform: scale(0.8); }*/
-    /*}*/
-
-    /*/!* slide in from the right *!/*/
-    /*@keyframes slideInRight {*/
-      /*from    { transform:translateX(100%); }*/
-      /*to      { transform: translateX(0); }*/
-    /*}*/
-
-    /*/!* slide in from the bottom *!/*/
-    /*@keyframes slideInUp {*/
-      /*from    { transform:translateY(100%); }*/
-      /*to      { transform: translateY(0); }*/
-    /*}*/
-
-
-    .ng-enter       { z-index: 8888; }
-    .ng-leave       { z-index: 9999; }
-
-    /* page specific animations ------------------------ */
-
-    /* home -------------------------- */
-    /*.intelligent_index.ng-enter         { animation: lightSpeedIn .5s both ease-in}*/
-    /*.intelligent_index.ng-leave         { animation: lightSpeedOut.5s both ease-in; }*/
-
-    /* about ------------------------ */
-    .Intelligent_nodata.ng-enter        { animation:bouncInRight 0.6s both ease-in; }
-    .Intelligent_nodata.ng-leave        { animation:bouncInLeft 0.6s both ease-in; }
-
-    /* contact ---------------------- */
-    .movefurniture.ng-leave      { transform-origin: 50% 50%; animation: rotateOutNewspaper .5s both ease-in; }
-    .movefurniture.ng-enter      { animation:slideInUp 0.5s both ease-in; }
-  </style>
 </head>
 <body>
 <div ng-app="app">
@@ -246,11 +189,12 @@
           </div>
       </div>
     </div>-->
-    <div ui-view class="intelligent_index"></div>
+    <div ui-view></div>
 </div>
 <script src="js/angular.js"></script>
 <script src="js/angular-ui-router.js"></script>
 <script src="js/angular-animate.min.js"></script>
+<script src="js/ocLazyLoad.min.js"></script>
 <script src="../js/jquery-3.1.1.js"></script>
 <script src="js/swiper.jquery.min.js"></script>
 <script src="js/rem.js"></script>
@@ -261,6 +205,5 @@
 <!--轮播插件的js-->
 <!--<script src="js/idangerous.swiper.js"></script>-->
 <script src="zui-1.7.0-dist/dist/js/zui.min.js"></script>
-<!--<script src="js/index.js"></script>-->
 </body>
 </html>

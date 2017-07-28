@@ -56,6 +56,14 @@ header div span{
     font-size: 1.1rem;
     color: #959292;
 }
+
+.left_com{
+    width: .6rem;
+    position: absolute;
+    right: 2rem;
+    top: 1.3rem;
+}
+
 .wall_ul li{
     position: relative;
 }

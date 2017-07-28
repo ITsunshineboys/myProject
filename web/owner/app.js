@@ -1,15 +1,122 @@
-angular.module("app", ["ui.router","ngAnimate","directives", "all_controller"])
+angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
     .config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/")
         $stateProvider
-            .state("home", {  // ◊“≥
+            .state("home", {
                 url: "/",
                 views: {
                     "": {templateUrl: "intelligent_index.html"}
                 },
-                controller: "intelligent_index_ctrl"
+                controller: "intelligent_index_ctrl",
+            })
+            .state("have_data",{   //ÊúâËµÑÊñô
+                url:"/have_data",
+                views:{
+                    "":{templateUrl:"Intelligent_quotation.html"}
+                },
+                controller:"intelligent_quotation_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("all_comment",{  //ËØÑËÆ∫È°µ
+                url:"/all_comment",
+                views:{
+                    "":{templateUrl:"all_comment.html"}
+                },
+                controller:"all_comment_ctrl",
+                params:{"id":""}
             })
 
+            .state("main_material",{  //‰∏ªÊùêÊñôÈ°µ
+                url:"/main_material",
+                views:{
+                    "":{templateUrl:"main_material.html"}
+                },
+                controller:"main_material_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("other_materials",{  //ÂÖ∂‰ªñÊùêÊñôÈ°µ
+                url:"/other_materials",
+                views:{
+                    "":{templateUrl:"other_materials.html"}
+                },
+                controller:"other_materials_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+
+            .state("fixed_home",{  //Âõ∫ÂÆöÂÆ∂Â±Ö
+                url:"/fixed_home",
+                views:{
+                    "":{templateUrl:"fixed_home.html"}
+                },
+                controller:"fixed_home_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("house_hold",{  //Âõ∫ÂÆöÂÆ∂Â±Ö
+                url:"/house_hold",
+                views:{
+                    "":{templateUrl:"house_hold.html"}
+                },
+                controller:"house_hold_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("soft_house",{  //ËΩØË£ÖÂÆ∂Â±Ö
+                url:"/soft_house",
+                views:{
+                    "":{templateUrl:"soft_house.html"}
+                },
+                controller:"soft_house_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("life_house",{  //ÁîüÊ¥ªÂÆ∂Â±Ö
+                url:"/life_house",
+                views:{
+                    "":{templateUrl:"life_house.html"}
+                },
+                controller:"soft_house_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("add_main",{  //ÁîüÊ¥ªÂÆ∂Â±Ö
+                url:"/add_main",
+                views:{
+                    "":{templateUrl:"add_main.html"}
+                },
+                controller:"add_main_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("have_search",{  //ÁîüÊ¥ªÂÆ∂Â±Ö
+                url:"/have_search",
+                views:{
+                    "":{templateUrl:"have_search.html"}
+                },
+                controller:"have_search_ctrl",
+                params:{'name':'','address':"",'pic_one':"",'pic_two':""}
+            })
+            .state("basics_decoration",{  //ËæÖÊùêÈ°µ
+                url:"/basics_decoration",
+                views:{
+                    "":{templateUrl:"basics_decoration.html"}
+                },
+                controller:"basics_decoration_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("nodata", {
+                url: "/nodata",
+                views: {
+                    "": {templateUrl: "Intelligent_nodata.html"}
+                },
+                controller: "intelligent_nodata_ctrl",
+                // resolve:{
+                //     load:['$ocLazyLoad',function ($ocLazyLoad) {
+                //         return $ocLazyLoad.load(['css/inteligent_nodata.css','zui-1.7.0-dist/dist/css/zui.min.css'])
+                //     }]
+                // },
+                params:{"toponymy":"","handyman_price":0,'isBack':'','stair':'','labor_price':'','series_index':'',
+                'style_index':'','worker_category':'','level':'','house_bedroom':'','house_hall':'',
+                    'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'',"area":"",'choose_stairs':''
+                    ,'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
+                    'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
+                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor':''}
+            })
             .state("cell_search", {
                 url: "/cell_search",
                 views: {
@@ -31,128 +138,88 @@ angular.module("app", ["ui.router","ngAnimate","directives", "all_controller"])
                 },
                 controller:"location_city_ctrl"
             })
-            .state("have_data",{   //”–◊ ¡œ
-                url:"/have_data",
+            .state("basics",{  //ËæÖÊùêÈ°µ
+                url:"/basics",
                 views:{
-                    "":{templateUrl:"Intelligent_quotation.html"}
+                    "":{templateUrl:"basics.html"}
                 },
-                controller:"intelligent_quotation_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
+                controller:"basics_ctrl",
+                params:{"stair":"","index":"","worker_category":"","handyman_price":"","style_index":"",
+                "series_index":"","area":"","labor_price":"","level":"",'house_bedroom':'','house_hall':'',
+                    'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
+                    'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
+                    'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
+                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor':''}
             })
-            .state("all_comment",{  //∆¿¬€“≥
-                url:"/all_comment",
+            .state("other",{  //ÂÖ∂‰ªñÊùêÊñôÈ°µ
+                url:"/other",
                 views:{
-                    "":{templateUrl:"all_comment.html"}
+                    "":{templateUrl:"other.html"}
                 },
-                controller:"all_comment_ctrl",
-                params:{"id":""}
+                controller:"other_ctrl",
+                params:{'stair':'','index':'',"worker_category":"","handyman_price":"","style_index":"",
+                    "series_index":"","area":"","labor_price":"","level":"",'house_bedroom':'','house_hall':'',
+                    'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
+                    'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
+                    'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
+                    'cur_stair' :'','platform_price':'','supply_price':'','platform_price_copy':'','supply_price_copy':''}
             })
-            .state("product_details",{  //≤˙∆∑œÍ«È“≥
+            .state("second_level_material",{  //Êüê‰∫åÁ∫ßÂàÜÁ±ªÈ°µ
+                url:"/second_level_material",
+                views:{
+                    "":{templateUrl:"second_level_material.html"}
+                },
+                controller:"second_level_material_ctrl",
+                params:{'stair':'','index':'',"worker_category":"","handyman_price":"","style_index":"",
+                    "series_index":"","area":"","labor_price":"","level":"",'house_bedroom':'','house_hall':'',
+                    'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
+                    'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
+                    'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
+                    'cur_stair' :'','platform_price':'','supply_price':''}
+            })
+            .state("commodity_details",{  //Êüê‰∏âÁ∫ßÂàÜÁ±ªÈ°µ
+                url:"/commodity_details",
+                views:{
+                    "":{templateUrl:"commodity_details.html"}
+                },
+                controller:"commodity_details_ctrl",
+                params:{'stair':'','index':'',"worker_category":"","handyman_price":"","style_index":"",
+                    "series_index":"","area":"","labor_price":"","level":"",'house_bedroom':'','house_hall':'',
+                    'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
+                    'second_material':'','three_material':'','pid':'','excluded_item':'','prev_index':'',
+                    'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
+                    'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
+                    'cur_stair' :'','platform_price':'','supply_price':''}
+            })
+            .state("product_details",{  //ÂçïÈ°πËØ¶ÊÉÖÈ°µ
                 url:"/product_details",
                 views:{
                     "":{templateUrl:"product_details.html"}
                 },
                 controller:"product_details_ctrl",
-                params:{"id":""}
+                params:{'stair':'','index':'',"worker_category":"","handyman_price":"","style_index":"",
+                    "series_index":"","area":"","labor_price":"","level":"",'house_bedroom':'','house_hall':'',
+                    'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
+                    'second_material':'','three_material':'','three_material_details':'','product_details':'',
+                'prev_index':'','excluded_item':'','stair_copy':'','level_copy':'','pid':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
+                    'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
+                    'cur_stair' :'','platform_price':'','supply_price':''}
             })
-            //.state("basics_decoration",{  //ª˘¥°◊∞–ﬁ“≥
-            //    url:"/basics_decoration",
-            //    views:{
-            //        "":{templateUrl:"basics_decoration.html"}
-            //    },
-            //    controller:"basics_decoration_ctrl",
-            //    params:{name:'',address:'','pic_one':"",'pic_two':""}
-            //})
-
-            .state("main_material",{  //÷˜≤ƒ¡œ“≥
-                url:"/main_material",
+            .state("main",{  //‰∏ªË¶ÅÊùêÊñôËØ¶ÊÉÖÈ°µ
+                url:"/main",
                 views:{
-                    "":{templateUrl:"main_material.html"}
+                    "":{templateUrl:"main.html"}
                 },
-                controller:"main_material_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
+                controller:"main_ctrl",
+                params:{'stair':'','index':'',"worker_category":"","handyman_price":"","style_index":"",
+                    "series_index":"","area":"","labor_price":"","level":"",'house_bedroom':'','house_hall':'',
+                    'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
+                    'second_material':'','three_material':'','three_material_details':'','product_details':'',
+                'prev_index':'','excluded_item':'','stair_copy':'','level_copy':'','pid':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
+                    'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
+                    'cur_stair' :'','platform_price':'','supply_price':'','platform_price_copy':'','supply_price_copy':''}
             })
-            .state("other_materials",{  //∆‰À˚≤ƒ¡œ“≥
-                url:"/other_materials",
-                views:{
-                    "":{templateUrl:"other_materials.html"}
-                },
-                controller:"other_materials_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
-            })
-
-            .state("fixed_home",{  //πÃ∂®º“æ”
-                url:"/fixed_home",
-                views:{
-                    "":{templateUrl:"fixed_home.html"}
-                },
-                controller:"fixed_home_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
-            })
-            .state("house_hold",{  //πÃ∂®º“æ”
-                url:"/house_hold",
-                views:{
-                    "":{templateUrl:"house_hold.html"}
-                },
-                controller:"house_hold_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
-            })
-            .state("soft_house",{  //»Ì◊∞º“æ”
-                url:"/soft_house",
-                views:{
-                    "":{templateUrl:"soft_house.html"}
-                },
-                controller:"soft_house_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
-            })
-            .state("life_house",{  //…˙ªÓº“æ”
-                url:"/life_house",
-                views:{
-                    "":{templateUrl:"life_house.html"}
-                },
-                controller:"soft_house_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
-            })
-            .state("add_main",{  //…˙ªÓº“æ”
-                url:"/add_main",
-                views:{
-                    "":{templateUrl:"add_main.html"}
-                },
-                controller:"add_main_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
-            })
-            .state("have_search",{  //…˙ªÓº“æ”
-                url:"/have_search",
-                views:{
-                    "":{templateUrl:"have_search.html"}
-                },
-                controller:"have_search_ctrl",
-                params:{'name':'','address':"",'pic_one':"",'pic_two':""}
-            })
-            .state("basics_decoration",{  //∏®≤ƒ“≥
-                url:"/basics_decoration",
-                views:{
-                    "":{templateUrl:"basics_decoration.html"}
-                },
-                controller:"basics_decoration_ctrl",
-                params:{name:'',address:'','pic_one':"",'pic_two':""}
-            })
-
-
-
     }])
-    .controller("intelligent_index_ctrl",function ($scope) {
-        $scope.pageClass="intelligent_index"
-    })
-    .controller("intelligent_nodata_ctrl",function ($scope) {
-        $scope.pageClass="Intelligent_nodata"
-    })
-    .controller("move_furniture_ctrl",function ($scope) {
-        $scope.pageClass="movefurniture"
-    })
-    .controller("location_city_ctrl",function ($scope) {
-        $scope.pageClass="location_city"
-    })
     .run(["$rootScope","$state",function ($rootScope,$state) {
         $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
             document.body.scrollTop = document.documentElement.scrollTop = 0
@@ -160,5 +227,5 @@ angular.module("app", ["ui.router","ngAnimate","directives", "all_controller"])
                 $state.go(fromState.name,obj)
             }
         })
-    }]);
+    }])
 
