@@ -81,6 +81,8 @@ class ModelService
      */
     public static function selectModelFields(ActiveRecord $model, array $fields = [])
     {
+        $model->refresh();
+
         $data = [];
 
         $modelAttrs = array_keys($model->attributes);

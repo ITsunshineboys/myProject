@@ -45,6 +45,7 @@ class User extends ActiveRecord implements IdentityInterface
         'district_name',
         'signature',
         'aite_cube_no',
+        'balance',
     ];
     const BIRTHDAY_LEN = 8;
 
