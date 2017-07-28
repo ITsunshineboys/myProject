@@ -6,6 +6,7 @@ app.controller("admin_login",function($scope,$http){
     $http.get(url+role)
         .success(function(data){
             $scope.allrole=data.data.roles;
+            document.write(data);
         })
     $scope.name1=function(){
         $scope.name=$("input[name='name1']").val();
