@@ -1,55 +1,55 @@
 angular.module("app", ["ui.router","ngAnimate", "all_controller"])
-.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/");
-    $stateProvider
-        .state("home", {  //Ê×Ò³
-            url: "/",
-            views: {
-                "": {templateUrl:"mall_index.html"}
-        },
-            controller:"mall_index_ctrl"
-        })
-        .state("minute_class", {   //·ÖÀàÒ³
-            url: "/minute_class",
-            views: {
-                "": {templateUrl: "minute_class.html"}
-            },
-            controller: "minute_class_ctrl",
-            params:{"pid":"","title":""}
-        })
-        .state("search", {   //Ğ¡ÇøËÑË÷Ò³
-            url: "/search",
-            views: {
-                "": {templateUrl: "search.html"}
-            },
-            controller: "search_ctrl"
-            //params:{"pid":"","title":""}
-        })
-        .state("commodity_search", {   //ÉÌÆ·ËÑË÷Ò³
-            url: "/commodity_search",
-            views: {
-                "": {templateUrl: "commodity_search.html"}
-            },
-            controller: "commodity_search_ctrl",
-            params:{"pid":"","title":""}
-        })
-        .state("details", {   //Ä³¸öÉÌÆ·ÏêÏ¸ÁĞ±í
-            url: "/details",
-            views: {
-                "": {templateUrl: "details.html"}
-            },
-            controller: "details_ctrl",
-            params:{"id":""}
-        })
+    .config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/");
+        $stateProvider
+            .state("home", {  //é¦–é¡µ
+                url: "/",
+                views: {
+                    "": {templateUrl:"mall_index.html"}
+                },
+                controller:"mall_index_ctrl"
+            })
+            .state("minute_class", {   //åˆ†ç±»é¡µ
+                url: "/minute_class",
+                views: {
+                    "": {templateUrl: "minute_class.html"}
+                },
+                controller: "minute_class_ctrl",
+                params:{"pid":"","title":""}
+            })
+            .state("search", {   //å°åŒºæœç´¢é¡µ
+                url: "/search",
+                views: {
+                    "": {templateUrl: "search.html"}
+                },
+                controller: "search_ctrl"
+                //params:{"pid":"","title":""}
+            })
+            .state("commodity_search", {   //å•†å“æœç´¢é¡µ
+                url: "/commodity_search",
+                views: {
+                    "": {templateUrl: "commodity_search.html"}
+                },
+                controller: "commodity_search_ctrl",
+                params:{"pid":"","title":""}
+            })
+            .state("details", {   //æŸä¸ªå•†å“è¯¦ç»†åˆ—è¡¨
+                url: "/details",
+                views: {
+                    "": {templateUrl: "details.html"}
+                },
+                controller: "details_ctrl",
+                params:{"id":""}
+            })
 
 
-}])
+    }])
 
-.run(["$rootScope","$state",function ($rootScope,$state) {
-    $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
-        document.body.scrollTop = document.documentElement.scrollTop = 0
-        $rootScope.goPrev = function (obj) {
-            $state.go(fromState.name,obj)
-        }
-    })
-}])
+    .run(["$rootScope","$state",function ($rootScope,$state) {
+        $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
+            document.body.scrollTop = document.documentElement.scrollTop = 0
+            $rootScope.goPrev = function (obj) {
+                $state.go(fromState.name,obj)
+            }
+        })
+    }])
