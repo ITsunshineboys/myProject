@@ -559,18 +559,24 @@ class OwnerController extends Controller
 
         if (empty($post['effect_id'])) {
             //查询弱电所需要材料
-            $material = ['防水涂料','未知'];
+            $material = ['防水涂料'];
             $goods = Goods::priceDetail(3,$material);
             $judge = BasisDecorationService::priceConversion($goods);
             $waterproof = BasisDecorationService::judge($judge,$post);
+
+            //厨房
+            $kitchen = EngineeringUniversalCriterion::findByAll('厨房');
+            $kitchen_area = BasisDecorationService::waterproofArea($kitchen, $post['area'], $post['kitchen']);
+            //卫生间
+            $toilet = EngineeringUniversalCriterion::findByAll('卫生间');
+            $toilet_area = BasisDecorationService::waterproofArea($toilet, $post['area'], $post['toilet']);
+            //总面积
+            $total_area = $kitchen_area + $toilet_area;
         } else {
             $decoration_list = DecorationList::findById($post['effect_id']);
             $weak = WaterproofReconstruction::findByAll($decoration_list);
             $waterproof = Goods::findQueryAll($weak, $post['city']);
-        }
 
-        //防水所需面积
-        if (!empty($post['effect_id'])) {
             $effect = DecorationList::findById($post['effect_id']);
             $area = DecorationParticulars::findByOne($effect);
             //地面面积
@@ -580,17 +586,7 @@ class OwnerController extends Controller
             $total_area_float = $ground_total_area + $wall_space_total_perimeter;
             //总面积
             $total_area = $total_area_float;
-        } else {
-            //厨房
-            $kitchen = EngineeringUniversalCriterion::findByAll('厨房');
-            $kitchen_area = BasisDecorationService::waterproofArea($kitchen, $post['area'], $post['kitchen']);
-            //卫生间
-            $toilet = EngineeringUniversalCriterion::findByAll('卫生间');
-            $toilet_area = BasisDecorationService::waterproofArea($toilet, $post['area'], $post['toilet']);
-            //总面积
-            $total_area = $kitchen_area + $toilet_area;
         }
-
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('防水', $post['city']);
@@ -602,24 +598,14 @@ class OwnerController extends Controller
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
         $material_total = [];
-        if (count($waterproof) == count($waterproof, 1))
-        {
-            $waterproof['quantity'] = $material_price['quantity'];
-            $waterproof['cost'] = $material_price['cost'];
-            $material_total =  $waterproof;
-        }else
-        {
-            foreach ($waterproof as $one_waterproof)
-            {
-                if ($one_waterproof['title'] == '防水涂料')
-                {
-                    $goods_max = BasisDecorationService::profitMargin($one_waterproof);
-                    $goods_max['quantity'] = $material_price['quantity'];
-                    $goods_max['cost'] = $material_price['cost'];
-                    $material_total =  $goods_max;
-                }
+        foreach ($waterproof as $one_waterproof) {
+            if ($one_waterproof['title'] == '防水涂料') {
+                $one_waterproof['quantity'] = $material_price['quantity'];
+                $one_waterproof['cost'] = $material_price['cost'];
+                $goods_max [] =  $one_waterproof;
             }
         }
+        $material_total [] = BasisDecorationService::profitMargin($goods_max);
         $material_total['total_cost'] = $material_price['cost'];
 
         //添加材料费用

@@ -171,11 +171,11 @@ class BasisDecorationService
             {
                 if($one['project_particulars'] == '厨房面积' || $one['project_particulars'] == '卫生间面积')
                 {
-                       $area = $one;
+                    $area = $one;
                 }
                 if ($one['project_particulars'] == '厨房防水' || $one['project_particulars'] == '卫生间防水')
                 {
-                        $height = $one;
+                    $height = $one;
                 }
             }
 //            厨房地面面积：【x】%×（房屋面积)
@@ -201,39 +201,29 @@ class BasisDecorationService
      */
     public static function waterproofGoods($points,$goods,$crafts)
     {
-        if ($points && $goods)
-        {
-            foreach ($crafts as $craft)
-            {
-                $material = $craft['material'];
+        foreach ($crafts as $craft) {
+            $material = $craft['material'];
+        }
+        if (count($goods) == count($goods, 1)) {
+            $goods_platform_price = $goods['platform_price'];
+            $goods_id [] = $goods['id'];
+        } else {
+            foreach ($goods as $one) {
+                $goods_platform_price = $one['platform_price'];
+                $goods_id [] = $one['id'];
             }
-            if (count($goods) == count($goods, 1))
-            {
-                $goods_platform_price = $goods['platform_price'];
-                $goods_id [] = $goods['id'];
-            } else
-            {
-                foreach ($goods as $one)
-                {
-                    $goods_platform_price = $one['platform_price'];
-                    $goods_id [] = $one['id'];
-                }
+        }
+        $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+        foreach ($ids as $one_unit) {
+            if ($one_unit['title'] == '防水涂料') {
+                $goods_value = $one_unit['value'];
             }
-            $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-            foreach ($ids as $one_unit)
-            {
-                if ($one_unit['title'] == '防水涂料')
-                {
-                    $goods_value = $one_unit['value'];
-
-                }
-            }
+        }
 
 //            个数：（防水总面积×【1.25】÷抓取的商品的KG）
-            $waterproof['quantity'] = ceil($points * $material /$goods_value);
+        $waterproof['quantity'] = ceil($points * $material /$goods_value);
 //            防水涂剂费用：个数×抓取的商品价格
-            $waterproof['cost'] =  $waterproof['quantity'] * $goods_platform_price;
-        }
+        $waterproof['cost'] =  $waterproof['quantity'] * $goods_platform_price;
         return $waterproof;
     }
 

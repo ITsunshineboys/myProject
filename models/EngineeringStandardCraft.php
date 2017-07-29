@@ -33,7 +33,11 @@ class EngineeringStandardCraft  extends ActiveRecord
                 ->asArray()
                 ->where(['and', ['district_code' => $district], ['project' => $project]])
                 ->all();
+            return $craft;
+        }else
+        {
+            return false;
         }
-        return $craft;
+
     }
 }
