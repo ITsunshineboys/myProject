@@ -1577,8 +1577,7 @@ class OwnerController extends Controller
         $classify = '移动家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
-        foreach ($material_property_classify as $one)
-        {
+        foreach ($material_property_classify as $one) {
             $one_material[$one['material']] = $one;
         }
         $goods = Goods::categoryById($material_property_classify);
@@ -1608,14 +1607,13 @@ class OwnerController extends Controller
 //            'toilet' => 1,
 //            'hall' => 1,
 //            'style' =>1,
-//            'series'=>1
+//            'series'=>2
 //        ];
 
         $classify = '家电配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
-        foreach ($material_property_classify as $one)
-        {
+        foreach ($material_property_classify as $one) {
             $one_material[$one['material']] = $one;
         }
         $goods = Goods::categoryById($material_property_classify);
