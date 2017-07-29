@@ -99,6 +99,8 @@ class Supplier extends ActiveRecord
         'shop_name',
         'follower_number',
     ];
+    const OFFLINE_SHOP_SUPPORT = 0; // 支持线下商店
+    const OFFLINE_SHOP_NOT_SUPPORT = 1; // 不支持线下商店
 
     /**
      * @return string 返回该AR类关联的数据表名
