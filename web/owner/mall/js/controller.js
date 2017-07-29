@@ -1193,8 +1193,12 @@ angular.module("all_controller", [])
             $http.post(material, data, config).then(function (response) {
                 console.log("主材")
                 console.log(response)
-                response.data.data.goods.splice(response.data.data.goods.indexOf(null),1)
-                let material_arr = response.data.data.goods
+                let material_arr = []
+                for (let [key, value] of  response.data.data.goods.entries()) {
+                    if (value != null) {
+                        material_arr.push(value)
+                    }
+                }
                 console.log(material_arr)
                 //一级总费用统计
                 for (let [key, value] of material_arr.entries()) {
@@ -1511,9 +1515,12 @@ angular.module("all_controller", [])
             $http.post(assort, data, config).then(function (response) {
                 console.log("家电配套")
                 console.log(response)
-
-                response.data.data.goods.splice(response.data.data.goods.indexOf(null), 1)
-                let assort_arr = response.data.data.goods
+                let assort_arr = []
+                for (let [key, value] of  response.data.data.goods.entries()) {
+                    if (value != null) {
+                        assort_arr.push(value)
+                    }
+                }
                 console.log(assort_arr)
                 //一级总费用统计
                 for (let [key, value] of assort_arr.entries()) {
@@ -1592,8 +1599,12 @@ angular.module("all_controller", [])
             $http.post(life, data, config).then(function (response) {
                 console.log("生活配套")
                 console.log(response)
-                response.data.data.goods.splice(response.data.data.goods.indexOf(null), 1)
-                let life_arr = response.data.data.goods
+                let life_arr = []
+                for (let [key, value] of  response.data.data.goods.entries()) {
+                    if (value != null) {
+                        life_arr.push(value)
+                    }
+                }
                 //一级总费用统计
                 for (let [key, value] of life_arr.entries()) {
                     for (let [key1, value1] of $scope.stair.entries()) {
@@ -1669,8 +1680,12 @@ angular.module("all_controller", [])
             $http.post(intelligence, data, config).then(function (response) {
                 console.log("智能配套")
                 console.log(response)
-                response.data.data.goods.splice(response.data.data.goods.indexOf(null), 1)
-                let intelligence_arr = response.data.data.goods
+                let intelligence_arr = []
+                for (let [key, value] of  response.data.data.goods.entries()) {
+                    if (value != null) {
+                        intelligence_arr.push(value)
+                    }
+                }
                 //一级总费用统计
                 for (let [key, value] of intelligence_arr.entries()) {
                     for (let [key1, value1] of $scope.stair.entries()) {
