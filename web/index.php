@@ -10,7 +10,7 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 $config = require(__DIR__ . '/../config/web.php');
 
 if (YII_DEBUG) {
-    header('Access-Control-Allow-Origin: http://test.cdlhzz.cn:888');
+    header('Access-Control-Allow-Origin: http://localhost:808');
     header("Access-Control-Allow-Credentials: true");
 }
 
