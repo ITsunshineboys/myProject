@@ -424,20 +424,20 @@ class OwnerController extends Controller
      */
     public function actionWaterway()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>1,
-            'hall'=>1,
-            'toilet'=>2,
-            'kitchen'=>2,
-            'stairs_details_id'=>1,
-            'series'=>1,
-            'style'=>1,
-            'window'=>14,
-            'province'=>510000,
-            'city'=>510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>1,
+//            'hall'=>1,
+//            'toilet'=>2,
+//            'kitchen'=>2,
+//            'stairs_details_id'=>1,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>14,
+//            'province'=>510000,
+//            'city'=>510100,
+//        ];
         //人工价格
         $waterway_labor = LaborCost::profession($post,'水路工');
 
