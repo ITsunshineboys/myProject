@@ -14,7 +14,7 @@ class Role extends ActiveRecord
     const AUTHENTICATION_STATUS_REJECTED = 4;
 
     public static $authenticationStatus = [
-        self::AUTHENTICATION_STATUS_NO_APPLICATION => '未申请',
+        self::AUTHENTICATION_STATUS_NO_APPLICATION => '未认证',
         self::AUTHENTICATION_STATUS_IN_PROCESS => '审核中',
         self::AUTHENTICATION_STATUS_APPROVED => '已通过',
         self::AUTHENTICATION_STATUS_REJECTED => '不通过',
