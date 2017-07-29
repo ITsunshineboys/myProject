@@ -3,7 +3,7 @@ angular.module("all_controller", [])
         $scope.data = ''
         // $scope.search_data = ''
         let arr = []
-        let url = "/owner/search"
+        let url = "http://test.cdlhzz.cn:888/owner/search"
 
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -350,6 +350,7 @@ angular.module("all_controller", [])
     })
     .controller("intelligent_nodata_ctrl", function ($scope, $stateParams, $http, $state) { //无数据控制器
         let all_url = 'http://test.cdlhzz.cn:888'
+        // let all_url = ""
         console.log($stateParams)
         $scope.message = ''
         $scope.cur_labor = $stateParams.cur_labor || ''
@@ -406,6 +407,7 @@ angular.module("all_controller", [])
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
                 return $.param(data)
+
             }
         }
         //生成材料方法
@@ -1995,6 +1997,7 @@ angular.module("all_controller", [])
         }
         //杂工数据请求
         let url = 'http://test.cdlhzz.cn:888/owner/handyman'
+        // let url = '/owner/handyman'
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
@@ -2481,7 +2484,7 @@ angular.module("all_controller", [])
         $scope.building_scrap = $stateParams.building_scrap || false
         //获取分类
         let pid = $stateParams.stair[$stateParams.index].id
-        $http.get('http://test.cdlhzz.cn:888/mall/categories-level3?pid=' + pid).then(function (response) {
+        $http.get('/mall/categories-level3?pid=' + pid).then(function (response) {
             $scope.second_material = response.data.categories_level3
             console.log(response)
         }, function (error) {
@@ -2597,7 +2600,7 @@ angular.module("all_controller", [])
         $scope.twenty_four_new_construction = $stateParams.twenty_four_new_construction || ''
         $scope.building_scrap = $stateParams.building_scrap || false
         //获取指定id三级下面详细商品
-        $http.get('http://test.cdlhzz.cn:888/mall/category-goods?category_id=' + $scope.pid).then(function (response) {
+        $http.get('/mall/category-goods?category_id=' + $scope.pid).then(function (response) {
             console.log(response)
             $scope.three_material_details = response.data.data.category_goods
         }, function (error) {
@@ -2812,7 +2815,7 @@ angular.module("all_controller", [])
         $scope.add = function () {
             $scope.add_quantity++
         }
-        $http.get('http://test.cdlhzz.cn:888/mall/goods-view?id=' + $scope.goods_id).then(function (response) {
+        $http.get('/mall/goods-view?id=' + $scope.goods_id).then(function (response) {
             $scope.good_detail = response.data.data['goods-view']
             console.log(response)
         }, function (error) {

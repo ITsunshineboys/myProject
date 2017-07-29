@@ -55,6 +55,13 @@ input[type="checkbox"]:checked + span {
 .back{
     background-color: #F6F6F6;
 }
+.area_news{
+    background-color: white;
+}
+.background_w{
+    background-color: white;
+    padding-bottom: 1.5rem;
+}
 header{
     width: 32rem;
     height: 4rem;
@@ -63,6 +70,19 @@ header{
     top: 0;
     z-index: 100;
     box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+header > div{
+    position: relative;
+}
+.return_btn{
+    /*display: inline-block;*/
+    position: absolute;
+    left: 0;
+    /*top:1rem;*/
+    width:3rem;
+    height: 4rem;
+    line-height: 4rem;
+    /*border:2px solid red;*/
 }
 section{
     margin-top: 1rem;
@@ -78,13 +98,20 @@ header div span {
     color: #53A8F4;
     margin-left: .2rem;
 }
+.cur_location{
+    position: absolute;
+    top: 0;
+    right:1.4rem;
+    height: 4rem;
+    /*lh4rem*/
+}
 .in_span {
     margin-left: 1rem;
     color: #53A8F4 ;
 }
 
 .pic_span {
-    margin-left: 11rem;
+    margin-left: 12.8rem;
     font-size: 1.5rem;
 }
 .pos_span{
@@ -118,6 +145,7 @@ header div i{
     background-color:#53A8F4;
     position: absolute;
     left: .9rem;
+    top: 0.3rem;
     /*margin: 1.4rem 0 0 1.5rem;*/
     font-size: 1.5rem;
 }
@@ -152,7 +180,7 @@ header div i{
 
 .choose_quarter {
     display: inline-block;
-    margin: 1rem 0 0 1.3rem;
+    margin: 1rem 0 0 1rem;
     font-size: 1.3rem!important;
     color: #4A4A4A!important;
 }
@@ -179,8 +207,9 @@ header div i{
 .house_area {
     /*padding-top: 1rem;*/
     background: white;
-    margin-top: 4rem;
+    margin-top: 5rem;
     overflow: hidden;
+    padding-bottom: 2rem;
 }
 .house_area h1{
     margin: 1.4rem 0 0 1.5rem;
@@ -213,6 +242,9 @@ header div i{
 
 .apartment_layout {
     margin-top: 1rem;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 1.2rem;
+    padding-bottom: 1rem;
 }
 
 .apartment_span {
@@ -222,7 +254,7 @@ header div i{
 }
 
 .apartment_ul span {
-    margin-left: -4rem;
+    margin-left: -3rem;
     font-size: 1.2rem;
 }
 
@@ -234,11 +266,15 @@ header div i{
 }
 
 .apartment_ul li {
-    display: inline;
-    width: 8rem;
+    display: inline-block;
+    width: 10rem;
     height: 3rem;
-    margin-left: 3rem;
-
+    margin-left: 3.3rem;
+    margin-right:-2.3rem;
+    position: relative;
+    border:1px solid #e5e5e5;
+    border-radius: 12px;
+    margin-top:.7rem;
 }
 
 .apartment_ul li input {
@@ -246,9 +282,7 @@ header div i{
     height: 2.8rem;
     margin-bottom: 1rem;
     font-size: 1rem;
-    padding-left: 3rem;
-    /*margin-left: 6rem;*/
-    /*border: 1px solid #C2C2C2;*/
+    padding-left: 4rem;
     border: none;
 }
 
@@ -262,16 +296,15 @@ header div i{
 }
 
 .btn_left {
-    position: relative;
-    left: -5rem;
+    position: absolute;
+    left: 0.5rem;
     top: .5rem;
-
     color: #53A8F4;
 }
 
 .btn_right {
-    position: relative;
-    left: -1.5rem;
+    position: absolute;
+    right: 0.5rem;
     top: .5rem;
     color: #53A8F4;
 }
@@ -291,7 +324,7 @@ header div i{
 
 .text_all_length {
     position: absolute;
-    right: 1.5rem;
+    right: 1.8rem;
     bottom: 0;
     font-size: 1rem;
 }
@@ -305,6 +338,9 @@ header div i{
 .storey_span{
     font-size: 1.3rem;
     margin-left: 1rem;
+    /*margin-top: 1rem;*/
+    position: relative;
+    top:1rem;
     color: #4A4A4A;
 }
 
@@ -340,8 +376,8 @@ header div i{
  }
 input[type='radio'] ~ img{
     position: absolute;
-    top: .5rem;
-    left: -.02rem;
+    top: 13px!important;
+    left: -2px!important;
     display: none;
 }
 .storey_ul input[type='radio'] ~ img{
@@ -354,7 +390,10 @@ input[type='radio']:checked ~ img{
     display: inline-block;
 }
 .rey{
-    margin-top: -1rem;
+    margin-top: 1rem;
+    border-top: 1px solid #e5e5e5;
+    position: relative;
+    padding-bottom: 1rem;
 }
 .storey_txt{
     font-size: 1rem;
@@ -366,7 +405,7 @@ input[type='radio']:checked ~ img{
 .bay_window {
     border-top: 1px solid #C2C2C2;
     padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-bottom: 2rem;
 }
 
 .bay_span {
@@ -394,6 +433,7 @@ input[type='radio']:checked ~ img{
 .choose_stairs {
     padding-top: 1rem;
     border-top: 1px solid #C2C2C2;
+    padding-bottom: 1rem;
 }
 
 .choose_span {
@@ -414,6 +454,10 @@ input[type='radio']:checked ~ img{
 .have, .no {
     margin-left: .1rem;
     font-size: 1rem;
+    margin-top: .5rem;
+    position: relative;
+    top: .2rem;
+    left: .2rem;
 }
 
 .structure {
@@ -481,12 +525,13 @@ input[type='radio']:checked ~ img{
 
 .fit p {
     padding-left: 1rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #999;
 }
 
 .choose_style {
     padding-top: 1rem;
+    margin-top: 1rem;
 }
 .choose_style h1{
     margin: 1.4rem 0 0 1.5rem;
@@ -507,17 +552,16 @@ input[type='radio']:checked ~ img{
 
 .choose_style ul li {
     display: inline-block;
-
 }
 
 .choose_style ul li button {
     background-color: white;
-    width:5rem;
+    width:5.6rem;
     height: 2.3rem;
-    font-size: .8rem;
+    font-size: .9rem;
     color: #999;
     border: 1px solid #C2C2C2;
-    margin-left: 1rem;
+    margin-left: 0.4rem;
     margin-top: 1rem;
     border-radius: .5rem !important;
 }
@@ -537,17 +581,17 @@ input[type='radio']:checked ~ img{
 .note ul li {
     display: inline-block;
     margin-left: 1rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin-bottom: 1rem;
 
 }
 
 .note ul li button {
-    width: 5rem;
+    width: 6rem;
     height: 2rem;
     background-color: white;
     border: 1px solid #C2C2C2;
-    font-size: .8rem;
+    font-size: .9rem;
 }
 
 .btn_vr button {
@@ -572,7 +616,7 @@ input[type='radio']:checked ~ img{
 }
 /*系列*/
 .tag {
-    padding-left: 1.5rem;
+    padding-left: 1rem;
     color: #06CB7E;
 }
 
@@ -582,10 +626,10 @@ input[type='radio']:checked ~ img{
     border-radius: 1.5rem;
     border: 1px solid #8DE2C1;
     text-align: center;
-    font-size: .8rem;
+    font-size: .9rem;
     padding-left: 1.2rem;
     padding-right: 1.2rem;
-    padding-top: .3rem;
+    padding-top: .25rem;
     height: 2rem;
     margin-left: 1rem;
     background-color: #F9FEFC;
@@ -617,6 +661,8 @@ button[disabled]{
 .left_main{
     display: inline-block;
     width: 100%;
+    background-color: white;
+    margin-top: 1rem;
 }
 .title_span{
     margin-left: 1rem;
@@ -648,9 +694,15 @@ button[disabled]{
 .basis_border{
     border-bottom: 1px solid rgba(222, 222, 224, 0.9);
 }
+.basis_border:last-child div{
+    border-bottom: none!important;
+}
 /*.left_main div{*/
     /*border-bottom: 1px solid rgba(222, 222, 224, 0.9);*/
 /*}*/
+.last_chird div:last-child{
+    border-bottom: none!important;
+}
 .right_main ul li {
     border-bottom: 1px solid rgba(222, 222, 224, 0.9);
     margin-left: 1rem;
@@ -722,6 +774,9 @@ button[disabled]{
     padding-top:.77rem;
     padding-bottom:.77rem;
 }
+.two_category li:last-child{
+    border-bottom: none;
+}
 .basis_decoration{
     column-count: 2;
     column-gap: 0;
@@ -771,7 +826,7 @@ button[disabled]{
     margin-top: 1rem;
     overflow: hidden;
     background-color: white;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     padding-bottom: 1rem;
 }
 .special_requirements p{
@@ -805,6 +860,7 @@ button[disabled]{
     height:4rem;
     overflow: hidden;
     margin:0!important;
+    background-color: white;
 }
 .footer_set{
     width:calc(100% - 13.6rem);
@@ -826,6 +882,7 @@ button[disabled]{
     height: 3.23rem;
     border-radius:4rem;
     color: #53A8F4;
+    font-size: 1.2rem;
     border:1px dotted #E5E5E5 ;
     background: none;
 }
@@ -839,7 +896,7 @@ button[disabled]{
     width:6.8rem;
     height: 4rem;
     color: #6C6C6C;
-    font-size:1.36rem;
+    font-size:1.2rem;
     border-left:.08rem solid #CDD3D7;
     background-color: #fff;
 }
@@ -849,7 +906,7 @@ button[disabled]{
     width:6.8rem;
     height: 4rem;
     color: #fff;
-    font-size:1.36rem;
+    font-size:1.2rem;
     border-left:.08rem solid #CDD3D7;
     background-color: #53A8F4 ;
 }
