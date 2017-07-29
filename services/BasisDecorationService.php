@@ -2155,17 +2155,17 @@ class BasisDecorationService
     }
 
     /**
-     * 弱电材料利润最大
+     * 电工材料利润最大
      * @param $goods
      * @param $material_price
      * @return array
      */
-    public static function weakCurrentMaterial($goods,$material_price)
+    public static function electricianMaterial($goods,$material_price)
     {
         foreach ($goods as $one_weak_current) {
             switch ($one_weak_current)
             {
-                case $one_weak_current['title'] == '网线':
+                case $one_weak_current['title'] == '网线' || $one_weak_current['title'] == '电线':
                     $one_weak_current['quantity'] = $material_price['wire_quantity'];
                     $one_weak_current['cost'] = $material_price['wire_cost'];
                     $wire [] =  $one_weak_current;

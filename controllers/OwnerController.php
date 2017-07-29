@@ -257,7 +257,7 @@ class OwnerController extends Controller
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
-        $material = BasisDecorationService::weakCurrentMaterial($weak_current,$material_price);
+        $material = BasisDecorationService::electricianMaterial($weak_current,$material_price);
 
         //添加材料
         $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);
@@ -366,35 +366,7 @@ class OwnerController extends Controller
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($points_details, $strong_current, $craft);
-
-        $material = [];
-        foreach ($strong_current as $one_strong_current)
-        {
-            if ($one_strong_current['title'] == '电线')
-            {
-                $one_strong_current['quantity'] = $material_price['wire_quantity'];
-                $one_strong_current['cost'] = $material_price['wire_cost'];
-                $wire [] =  $one_strong_current;
-            }
-
-            if ($one_strong_current['title'] == '线管')
-            {
-                $one_strong_current['quantity'] = $material_price['spool_quantity'];
-                $one_strong_current['cost'] = $material_price['spool_cost'];
-                $spool [] =  $one_strong_current;
-            }
-
-            if ($one_strong_current['title'] == '底盒')
-            {
-                $one_strong_current['quantity'] = $material_price['bottom_quantity'];
-                $one_strong_current['cost'] = $material_price['bottom_cost'];
-                $bottom [] =  $one_strong_current;
-            }
-        }
-        $material ['total_cost'] = $material_price['total_cost'];
-        $material [] = BasisDecorationService::profitMargin($wire);
-        $material [] = BasisDecorationService::profitMargin($spool);
-        $material [] = BasisDecorationService::profitMargin($bottom);
+        $material = BasisDecorationService::electricianMaterial($strong_current,$material_price);
 
         $add_price_area = DecorationAdd::AllArea('强电', $post['area'], $post['city']);
         $add_price = [];
