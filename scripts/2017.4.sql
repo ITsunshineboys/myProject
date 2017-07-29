@@ -120,7 +120,7 @@ CREATE TABLE `supplier` (
   `shop_no` int(11) unsigned not null default 0 comment '店铺号',
   `create_time` int unsigned not null DEFAULT 0,
   `quality_guarantee_deposit` bigint not null DEFAULT 0 comment '质保金, unit: fen',
-  `support_offline_shop` tinyint(1) not null DEFAULT 0 comment '0: 支持, 1: 不支持',
+  `support_offline_shop` tinyint(1) not null DEFAULT 0 comment '0: 不支持, 1: 支持',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

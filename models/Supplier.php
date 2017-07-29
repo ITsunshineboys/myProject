@@ -99,8 +99,8 @@ class Supplier extends ActiveRecord
         'shop_name',
         'follower_number',
     ];
-    const OFFLINE_SHOP_SUPPORT = 0; // 支持线下商店
-    const OFFLINE_SHOP_NOT_SUPPORT = 1; // 不支持线下商店
+    const OFFLINE_SHOP_SUPPORT = 0; // 不支持线下商店
+    const OFFLINE_SHOP_NOT_SUPPORT = 1; // 支持线下商店
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -226,10 +226,11 @@ class Supplier extends ActiveRecord
             ['type_org', 'in', 'range' => array_keys(self::TYPE_ORG)],
             ['type_shop', 'in', 'range' => array_keys(self::TYPE_SHOP)],
             ['status', 'in', 'range' => array_keys(self::STATUSES)],
-            [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit'], 'number', 'integerOnly' => true],
+            [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit', 'support_offline_shop'], 'number', 'integerOnly' => true],
             [['nickname', 'shop_name', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason', 'shop_name'], 'string'],
             ['name', 'string', 'length' => [1, 30]],
             ['licence', 'string', 'length' => [1, 15]],
+            ['support_offline_shop', 'in', 'range' => [self::OFFLINE_SHOP_SUPPORT, self::OFFLINE_SHOP_NOT_SUPPORT]],
         ];
     }
 
