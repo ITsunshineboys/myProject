@@ -679,16 +679,15 @@ class OwnerController extends Controller
 //            'city'=>510100,
 //        ];
         $labor_cost = LaborCost::univalence($post,'木工');
-        foreach ($labor_cost as $one_labor)
-        {
+        foreach ($labor_cost as $one_labor) {
             $price = $one_labor['univalence'];
-            if ($one_labor['worker_kind_details'] == '平顶')
-            {
-                $flat = $one_labor['quantity'];
-            }
-            if ($one_labor['worker_kind_details'] == '造型')
-            {
-                $modelling = $one_labor['quantity'];
+            switch ($one_labor) {
+                case $one_labor['worker_kind_details'] == '平顶':
+                    $flat = $one_labor['quantity'];
+                    break;
+                case $one_labor['worker_kind_details'] == '造型':
+                    $modelling = $one_labor['quantity'];
+                    break;
             }
         }
         $series_all = Series::find()->asArray()->all();
@@ -696,7 +695,6 @@ class OwnerController extends Controller
         $carpentry_add = CarpentryAdd::findByStipulate($post['series'], $post['style']);
         // 造型长度
         $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$series_all,$post['series']);
-
         //造型天数
         $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length,$modelling,$series_all, $style_all,$post['series']);
         //平顶天数
@@ -1513,26 +1511,25 @@ class OwnerController extends Controller
      */
     public function actionFixationFurniture()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-////            'effect_id' => 1,
-//            'bedroom' => 2,
-//            'stairway_id'=>0,
-//            'stairs' =>'玻璃金属',
-//            'style' =>2,
-//            'series'=>1
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+//            'effect_id' => 1,
+            'bedroom' => 2,
+            'stairway_id'=>0,
+            'stairs' =>'玻璃金属',
+            'style' =>2,
+            'series'=>1
+        ];
         $classify = '固定家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
-        foreach ($material_property_classify as $one)
-        {
+        foreach ($material_property_classify as $one) {
             $one_material[$one['material']] = $one;
         }
         $goods = Goods::categoryById($material_property_classify);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $series_style = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post,$one_material);
-
+        
         if ($post['stairway_id'] == 1)
         {
             $stairs = Goods::findByCategory('楼梯');

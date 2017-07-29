@@ -1461,7 +1461,7 @@ class BasisDecorationService
                     $wine_cabinet []  = $one_goods;
                 }else
                 {
-                    $wine_cabinet = false;
+                    $wine_cabinet = null;
                 }
                 if ($one_goods['title'] == '橱柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
@@ -1476,7 +1476,7 @@ class BasisDecorationService
                     $wall_cupboard [] = $one_goods;
                 }else
                 {
-                    $wall_cupboard = false;
+                    $wall_cupboard = null;
                 }
                 if ($one_goods['title'] == '鞋柜' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
@@ -1485,7 +1485,7 @@ class BasisDecorationService
                     $shoe_cabinet [] = $one_goods;
                 }else
                 {
-                    $shoe_cabinet = false;
+                    $shoe_cabinet = null;
                 }
                 if ($one_goods['title'] == '木门' && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
                 {
