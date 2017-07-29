@@ -40,67 +40,60 @@ class BasisDecorationService
      */
     public static function quantity($points,$goods,$crafts)
     {
-        if($goods && $points)
+        foreach ($crafts as $craft)
         {
-            foreach ($crafts as $craft){
-                if($craft['project_details'] == '网线' || $craft['project_details'] == '电线')
-                {
+            switch ($craft) {
+                case $craft['project_details'] == '网线' || $craft['project_details'] == '电线':
                     $material = $craft['material'];
-                }
-
-                if($craft['project_details'] == '线管')
-                {
+                    break;
+                case $craft['project_details'] == '线管':
                     $spool = $craft['material'];
-                }
+                    break;
             }
-            $goods_id = [];
-            foreach ($goods as $one)
-            {
-                if($one['title'] == '网线' || $one['title'] == '电线' )
-                {
+        }
+        $goods_id = [];
+        foreach ($goods as $one) {
+            switch ($one) {
+                case $one['title'] == '网线' || $one['title'] == '电线':
                     $goods_price = $one['platform_price'];
                     $goods_id [] = $one['id'];
-                }
-
-                if($one['title'] == '线管')
-                {
+                    break;
+                case $one['title'] == '线管':
                     $spool_price = $one['platform_price'];
                     $goods_id [] = $one['id'];
-                }
-
-                if($one['title'] == '底盒')
-                {
+                    break;
+                case $one['title'] == '底盒':
                     $bottom_case = $one['platform_price'];
                     $goods_id [] = $one['id'];
-                }
+                    break;
             }
-            $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-            foreach ($ids as $one_unit)
-            {
-                if($one_unit['title'] == '网线' || $one_unit['title'] == '电线' )
-                {
-                    $goods_value = $one_unit['value'];
-                }
-                if($one_unit['title'] == '线管'){
-                    $spool_value = $one_unit['value'];;
-                }
-            }
-
-            //线路个数计算 ,线路费用计算
-            $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
-            $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
-
-            //线管个数计算,线管费用计算
-            $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
-            $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
-
-            // 底盒个数计算.底盒费用计算
-            $electricity['bottom_quantity'] = $points;
-            $electricity['bottom_cost'] = $points * $bottom_case;
-
-            //总费用
-            $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
         }
+        $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+        foreach ($ids as $one_unit) {
+            switch ($one_unit) {
+                case $one_unit['title'] == '网线' || $one_unit['title'] == '电线':
+                    $goods_value = $one_unit['value'];
+                    break;
+                case $one_unit['title'] == '线管':
+                    $spool_value = $one_unit['value'];
+                    break;
+            }
+        }
+
+        //线路个数计算 ,线路费用计算
+        $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
+        $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
+
+        //线管个数计算,线管费用计算
+        $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
+        $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
+
+        // 底盒个数计算.底盒费用计算
+        $electricity['bottom_quantity'] = $points;
+        $electricity['bottom_cost'] = $points * $bottom_case;
+
+        //总费用
+        $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
      return  $electricity;
     }
 
@@ -1252,21 +1245,15 @@ class BasisDecorationService
      */
     public static function priceConversion($goods)
     {
-        if (empty($goods))
+        $conversion = [];
+        foreach ($goods as $one_goods)
         {
-           return false;
-        }else
-        {
-            $conversion = [];
-            foreach ($goods as $one_goods)
-            {
-                $one_goods['platform_price'] =  $one_goods['platform_price'] /100;
-                $one_goods['supplier_price'] =  $one_goods['supplier_price'] /100;
-                $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] /100;
-                $conversion [] = $one_goods;
-            }
-            return $conversion;
+            $one_goods['platform_price'] =  $one_goods['platform_price'] /100;
+            $one_goods['supplier_price'] =  $one_goods['supplier_price'] /100;
+            $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] /100;
+            $conversion [] = $one_goods;
         }
+        return $conversion;
     }
 
     /**
@@ -1277,27 +1264,17 @@ class BasisDecorationService
      */
     public static function judge($goods,$post)
     {
-        if ($goods && $post)
-        {
-            foreach ($goods as $one_goods)
-            {
-                if ($one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'])
-                {
-                    $goods_judge [] =$one_goods;
-                }elseif ($one_goods['series_id'] == 0 && $one_goods['style_id'] == 0)
-                {
-                    $goods_judge [] =$one_goods;
-                }else
-                {
-                    $goods_judge [] =$one_goods;
-                }
+        foreach ($goods as $one_goods) {
+            switch ($one_goods) {
+                case $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']:
+                     $goods_judge[] = $one_goods;
+                    break;
+                default:
+                    $goods_judge[] = $one_goods;
+                    break;
             }
-            return $goods_judge;
-        }else
-        {
-            return false;
         }
-
+        return $goods_judge;
     }
 
     /**
@@ -2174,6 +2151,41 @@ class BasisDecorationService
             $material [] = self::profitMargin($squatting_pan);
             $material [] = self::profitMargin($closestool);
         }
+        return $material;
+    }
+
+    /**
+     * 弱电材料利润最大
+     * @param $goods
+     * @param $material_price
+     * @return array
+     */
+    public static function weakCurrentMaterial($goods,$material_price)
+    {
+        foreach ($goods as $one_weak_current) {
+            switch ($one_weak_current)
+            {
+                case $one_weak_current['title'] == '网线':
+                    $one_weak_current['quantity'] = $material_price['wire_quantity'];
+                    $one_weak_current['cost'] = $material_price['wire_cost'];
+                    $wire [] =  $one_weak_current;
+                    break;
+                case $one_weak_current['title'] == '线管':
+                    $one_weak_current['quantity'] = $material_price['spool_quantity'];
+                    $one_weak_current['cost'] = $material_price['spool_cost'];
+                    $spool [] =  $one_weak_current;
+                    break;
+                case $one_weak_current['title'] == '底盒':
+                    $one_weak_current['quantity'] = $material_price['bottom_quantity'];
+                    $one_weak_current['cost'] = $material_price['bottom_cost'];
+                    $bottom [] =  $one_weak_current;
+                    break;
+            }
+        }
+        $material ['total_cost'] = $material_price['total_cost'];
+        $material [] = BasisDecorationService::profitMargin($wire);
+        $material [] = BasisDecorationService::profitMargin($spool);
+        $material [] = BasisDecorationService::profitMargin($bottom);
         return $material;
     }
 }

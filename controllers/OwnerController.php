@@ -230,19 +230,16 @@ class OwnerController extends Controller
         } else
         {
             $effect = Effect::find()->where(['id' => 1])->one();
-            $points = Points::find()->where(['effect_id' => $effect['id']])->all();
-            foreach ($points as $one) {
-                if ($one['weak_current_points'] !== 0)
-                {
-                    $weak_current_place [] = $one['place'];
-                    $weak_current_points [] = $one['weak_current_points'];
+            $points = Points::find()->where(['effect_id' => $effect['id']])->asArray()->all();
+            $weak_current_all = [];
+            foreach ($points as $v=>$k) {
+                if ($k['weak_current_points'] !== 0) {
+                    $weak_current_all[$k['place']] = $k['weak_current_points'];
                 }
             }
-            $weak_current_all = array_combine($weak_current_place, $weak_current_points);
             $sitting_room = $weak_current_all['客餐厅'] * $post['hall'];
             $secondary_bedroom = $weak_current_all['卧室'] * $post['bedroom'];
             $weak_points = $sitting_room + $secondary_bedroom;
-
 
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
@@ -260,35 +257,8 @@ class OwnerController extends Controller
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points,$weak_current,$craft);
+        $material = BasisDecorationService::weakCurrentMaterial($weak_current,$material_price);
 
-        $material = [];
-        foreach ($weak_current as $one_weak_current)
-        {
-            if ($one_weak_current['title'] == '网线')
-            {
-                $one_weak_current['quantity'] = $material_price['wire_quantity'];
-                $one_weak_current['cost'] = $material_price['wire_cost'];
-                $wire [] =  $one_weak_current;
-            }
-
-            if ($one_weak_current['title'] == '线管')
-            {
-                $one_weak_current['quantity'] = $material_price['spool_quantity'];
-                $one_weak_current['cost'] = $material_price['spool_cost'];
-                $spool [] =  $one_weak_current;
-            }
-
-            if ($one_weak_current['title'] == '底盒')
-            {
-                $one_weak_current['quantity'] = $material_price['bottom_quantity'];
-                $one_weak_current['cost'] = $material_price['bottom_cost'];
-                $bottom [] =  $one_weak_current;
-            }
-        }
-        $material ['total_cost'] = $material_price['total_cost'];
-        $material [] = BasisDecorationService::profitMargin($wire);
-        $material [] = BasisDecorationService::profitMargin($spool);
-        $material [] = BasisDecorationService::profitMargin($bottom);
         //添加材料
         $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);
         $add_price = [];
