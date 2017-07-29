@@ -1,3 +1,4 @@
+
 var role="site/all-roles";
 var logout="site/admin-login";
 app.controller("admin_login",function($scope,$http){

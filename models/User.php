@@ -47,6 +47,9 @@ class User extends ActiveRecord implements IdentityInterface
         'aite_cube_no',
         'balance',
     ];
+    const FIELDS_USER_CENTER_EXTRA = [
+        'address',
+    ];
     const BIRTHDAY_LEN = 8;
 
     /**
@@ -604,8 +607,37 @@ class User extends ActiveRecord implements IdentityInterface
     public function view()
     {
         $modelData = ModelService::selectModelFields($this, self::FIELDS_USER_CENTER_MODEL);
-        $this->_formatData($modelData);
-        return $modelData;
+        $viewData = $modelData
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_CENTER_EXTRA))
+            : $modelData;
+        $this->_formatData($viewData);
+        return $viewData;
+    }
+
+    /**
+     * Get extra fields
+     *
+     * @access private
+     * @param array $extraFields extra fields
+     * @return array
+     */
+    private function _extraData(array $extraFields)
+    {
+        $extraData = [];
+
+        foreach ($extraFields as $extraField) {
+            switch ($extraField) {
+                case 'address':
+                    $userAddress = UserAddress::find()->where(['uid' => $this->id])->one();
+                    if ($userAddress) {
+                        $district = District::findOne($userAddress->district);
+                        $extraData[$extraField] = $district->name . $userAddress->region;
+                    }
+                    break;
+            }
+        }
+
+        return $extraData;
     }
 
     /**

@@ -217,16 +217,23 @@ class OwnerController extends Controller
         //人工价格
         $workers = LaborCost::profession($post,'弱电');
 
-        //点位查询
+ //      点位 和 材料查询
         if (!empty($post['effect_id']))
         {
             $weak_points = Points::weakPoints($post['effect_id']);
+
+            //查询弱电所需要材料
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
+            $goods = Goods::findQueryAll($weak, $post['city']);
+            $weak_current = BasisDecorationService::priceConversion($goods);
         } else
         {
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::find()->where(['effect_id' => $effect['id']])->all();
             foreach ($points as $one) {
-                if ($one['weak_current_points'] !== 0) {
+                if ($one['weak_current_points'] !== 0)
+                {
                     $weak_current_place [] = $one['place'];
                     $weak_current_points [] = $one['weak_current_points'];
                 }
@@ -235,21 +242,15 @@ class OwnerController extends Controller
             $sitting_room = $weak_current_all['客餐厅'] * $post['hall'];
             $secondary_bedroom = $weak_current_all['卧室'] * $post['bedroom'];
             $weak_points = $sitting_room + $secondary_bedroom;
-        }
-        if (empty($post['effect_id']))
-        {
+
+
             //查询弱电所需要材料
             $material = ['网线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
             $judge = BasisDecorationService::priceConversion($goods);
             $weak_current= BasisDecorationService::judge($judge,$post);
-        } else
-        {
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
-            $goods = Goods::findQueryAll($weak, $post['city']);
-            $weak_current = BasisDecorationService::priceConversion($goods);
         }
+
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
 
@@ -361,33 +362,30 @@ class OwnerController extends Controller
 //        ];
         $workers = LaborCost::profession($post,'强电');
 
-        //点位查询
+        //点位 和材料查询
         if (!empty($post['effect_id']))
         {
             $points = Points::strongPoints($post['effect_id']);
             $points_details = PointsDetails::AllQuantity($points);
+
+            //查询弱电所需要材料
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $weak = CircuitryReconstruction::findByAll($decoration_list, '强电');
+            $strong_current = Goods::findQueryAll($weak, $post['city']);
         } else
         {
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::strongPointsAll($effect);
             $points_total = PointsTotal::findByAll($points);
             $points_details = BasisDecorationService::strongCurrentPoints($points_total,$post);
-        }
 
-        //材料查询
-        if (empty($post['effect_id']))
-        {
             //查询弱电所需要材料
             $material = ['电线','线管','底盒'];
             $goods = Goods::priceDetail(3,$material);
             $judge = BasisDecorationService::priceConversion($goods);
             $strong_current = BasisDecorationService::judge($judge,$post);
-        } else
-        {
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $weak = CircuitryReconstruction::findByAll($decoration_list, '强电');
-            $strong_current = Goods::findQueryAll($weak, $post['city']);
         }
+
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('强电',$post['city']);
@@ -501,21 +499,28 @@ class OwnerController extends Controller
         //人工价格
         $waterway_labor = LaborCost::profession($post,'水路工');
 
-        //点位查询
+        //点位 和材料 查询
         if (!empty($post['effect_id'])) {
             $waterway_points = Points::waterwayPoints($post['effect_id']);
-        } else {
+
+            $decoration_list = DecorationList::findById($post['effect_id']);
+            $weak = WaterwayReconstruction::findByAll($decoration_list);
+            $waterway_current = Goods::findQueryAll($weak, $post['city']);
+        } else
+        {
             $waterway_points = 0;
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::find()->where(['effect_id' => $effect['id']])->all();
             $other = 0;
             foreach ($points as $one) {
-                if ($one['waterway_points'] !== 0) {
+                if ($one['waterway_points'] !== 0)
+                {
                     $waterway_current_place [] = $one['place'];
                     $waterway_current_points [] = $one['waterway_points'];
                 }
 
-                if ($one['place'] !== '厨房' && $one['place'] !== '卫生间') {
+                if ($one['place'] !== '厨房' && $one['place'] !== '卫生间')
+                {
                     $other += $one['waterway_points'];
                 }
             }
@@ -523,19 +528,14 @@ class OwnerController extends Controller
             $kitchen = $waterway_current_all['厨房'] * $post['kitchen'];
             $toilet = $waterway_current_all['卫生间'] * $post['toilet'];
             $waterway_points = $kitchen + $toilet + $other;
-        }
 
-        if (empty($post['effect_id'])) {
             //查询弱电所需要材料
             $material = ['PPR水管','PVC管'];
             $goods = Goods::priceDetail(3,$material);
             $judge = BasisDecorationService::priceConversion($goods);
             $waterway_current = BasisDecorationService::judge($judge,$post);
-        } else {
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $weak = WaterwayReconstruction::findByAll($decoration_list);
-            $waterway_current = Goods::findQueryAll($weak, $post['city']);
         }
+
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('水路', $post['city']);
 
@@ -1581,7 +1581,6 @@ class OwnerController extends Controller
             ]
         ]);
     }
-
 
     /**
      * 软装配套

@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="css/mall_index.css"/>
+
+<div ng-controller="mall_index_ctrl">
+<div class="main" ng-cloak>
+    <div class="search_box">
+        <i class="icon icon-map-marker icon-3x icon_color"></i>
+        <span class="address">成都</span>
+        <a ui-sref="commodity_search" class="search">超级无敌地暖片</a>
+        <!--<img src="searchimages/message_icon.png" class="massage" alt=""/>-->
+    </div>
+    <!--banner图开始-->
+    <div class="device">
+            <div swiper>
+                <div class="carousel">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" ng-repeat="n in swiper_img">
+                                <img src="{{n.image}}" alt="" class="size_img"/>
+                            </div>
+                        </div>
+                        <!-- 如果需要分页器 -->
+                        <div class="swiper-pagination size_div"></div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!--banner图结束-->
+    <!--分类开始-->
+    <div class="classify-box">
+        <ul class="classify-ul">
+            <li ng-repeat="n in message" >
+                <a ui-sref="minute_class({'pid':n.id ,'title':n.title})" >
+                    <img src="images/material.png" alt=""/><br/>
+                <!--<img src="{{n.icon}}" alt=""/><br/>-->
+                <span>{{n.title}}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--分类结束-->
+
+    <!--推荐开始-->
+    <div class="recommend_box">
+        <!--推荐数据列表-->
+        <div class="recommend2_box">
+            <p class="recommend_p">推荐</p>
+            <ul >
+                <li ng-repeat="n in commodity">
+                    <a href="product_details.html?txt={{n.link}}">
+                        <img src="{{n.image}}" alt=""/>
+                        <div class="title2">{{n.title}}</div>
+                        <div class="describe2">{{n.description}}</div>
+                        <div class="price2">¥ {{n.platform_price}}</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--<footer>-->
+        <!--<div class="footer_home">-->
+           <!--<ul>-->
+               <!--<li>-->
+
+               <!--</li>-->
+           <!--</ul>-->
+        <!--</div>-->
+    <!--</footer>-->
+</div>
+
+</div>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en" >
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-controller="search_ctrl">
+<h1>555556</h1>
+</body>
+<script src="js/angular.js"></script>
+<script >
+   app=angular.module("app", [])
+  .controller("search_ctrl", function ($scope,$http) {
+     $http({
+         method:"get",
+         url:'http://test.cdlhzz.cn:888/site/all-roles'
+     }).then( function successCallback (response) {
+         console.log(response.data.data.roles);
+         document.write(response.data.data.roles);
+     })
+  })
+</script>
+
+</html>
