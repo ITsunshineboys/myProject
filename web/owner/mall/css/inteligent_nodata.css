@@ -344,6 +344,12 @@ input[type='radio'] ~ img{
     left: -.02rem;
     display: none;
 }
+.storey_ul input[type='radio'] ~ img{
+    position: absolute;
+    top: 1rem;
+    left: -.05rem;
+    display: none;
+}
 input[type='radio']:checked ~ img{
     display: inline-block;
 }

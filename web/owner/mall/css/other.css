@@ -56,6 +56,7 @@ header div span{
     color: #F59C22;
     float: right;
     margin-right: 2rem;
+    transition: margin-right linear .2s;
 }
 .wall_money i{
     font-size: 1.6rem;
@@ -267,13 +268,18 @@ a:hover{
     height: 3rem;
     color: white;
     font-size: 1rem;
-    position: relative;
-    left: 15rem;
-    top:-1rem;
+    position: absolute;
+    right: -2rem;
+    top:.7rem;
     /*display: none;*/
-
+    transition: right linear .2s;
 }
-
+.cur_animate > span{
+    margin-right:4rem;
+}
+.cur_animate > button{
+    right:0rem;
+}
 .del_two{
     display:block;
     border: none;

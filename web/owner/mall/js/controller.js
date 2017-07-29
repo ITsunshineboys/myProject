@@ -352,6 +352,7 @@ angular.module("all_controller", [])
         let all_url = 'http://test.cdlhzz.cn:888'
         console.log($stateParams)
         $scope.message = ''
+        $scope.cur_labor = $stateParams.cur_labor || ''
         $scope.platform_price = $stateParams.platform_price || 0 //平台价格
         $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
         $scope.nowStyle = '现代简约'
@@ -1190,6 +1191,7 @@ angular.module("all_controller", [])
             $http.post(material, data, config).then(function (response) {
                 console.log("主材")
                 console.log(response)
+                response.data.data.goods.splice(response.data.data.goods.indexOf(null),1)
                 let material_arr = response.data.data.goods
                 console.log(material_arr)
                 //一级总费用统计
@@ -1749,11 +1751,14 @@ angular.module("all_controller", [])
             if (item.title == "辅材") {
                 $state.go("basics", {
                     'stair': $scope.stair,
+                    'cur_labor' :$scope.cur_labor,
                     'platform_price': $scope.platform_price,
                     'supply_price': $scope.supply_price,
                     'level': $scope.level,
                     'stair_copy': angular.copy($scope.stair),
                     'level_copy': angular.copy($scope.level),
+                    'supply_price_copy': angular.copy($scope.supply_price),
+                    'platform_price_copy':angular.copy($scope.platform_price),
                     'index': index,
                     'worker_category': $scope.labor_category,
                     'handyman_price': $scope.handyman_price,
@@ -1781,8 +1786,11 @@ angular.module("all_controller", [])
                 $state.go("main", {
                     'stair': $scope.stair,
                     'level': $scope.level,
+                    'cur_labor' :$scope.cur_labor,
                     'platform_price': $scope.platform_price,
                     'supply_price': $scope.supply_price,
+                    'supply_price_copy': angular.copy($scope.supply_price),
+                    'platform_price_copy':angular.copy($scope.platform_price),
                     'stair_copy': angular.copy($scope.stair),
                     'level_copy': angular.copy($scope.level),
                     'index': index,
@@ -1812,8 +1820,11 @@ angular.module("all_controller", [])
                     'stair': $scope.stair,
                     'stair_copy': $scope.stair,
                     'level_copy': $scope.level,
+                    'cur_labor' :$scope.cur_labor,
                     'platform_price': $scope.platform_price,
                     'supply_price': $scope.supply_price,
+                    'supply_price_copy': angular.copy($scope.supply_price),
+                    'platform_price_copy':angular.copy($scope.platform_price),
                     'index': index,
                     'level': $scope.level,
                     'worker_category': $scope.labor_category,
@@ -2012,6 +2023,7 @@ angular.module("all_controller", [])
                     'house_toilet': $scope.house_toilet,
                     'highCrtl': $scope.highCrtl,
                     'area': $scope.area,
+                'cur_labor' :$scope.cur_labor,
                     'window': $scope.window,
                     'cur_stair': $scope.cur_stair,
                     'choose_stairs': $scope.choose_stairs,
@@ -2054,22 +2066,6 @@ angular.module("all_controller", [])
                 $scope.worker_category['杂工'].price = response.data.data.labor_cost.price
                 $scope.labor_price += cur_price
                 console.log($scope.labor_price)
-                //一级总费用统计
-                for (let [key, value] of other_arr.entries()) {
-                    for (let [key1, value1] of $scope.stair_copy.entries()) {
-                        if (value.path.split(',')[0] == value1.id) {
-                            value1["cost"] += value.cost
-                        }
-                    }
-                }
-                //二级总费用统计
-                for (let [key, value] of other_arr.entries()) {
-                    for (let [key1, value1] of $scope.level_copy.entries()) {
-                        if (value.path.split(',')[1] == value1.id) {
-                            value1["cost"] += value.cost
-                        }
-                    }
-                }
                 //平台价格处理
                 for (let [key, value] of other_arr.entries()) {
                     $scope.platform_price += value.cost
@@ -2095,9 +2091,8 @@ angular.module("all_controller", [])
                             if (value.path.split(',')[1] == value1.id) {
                                value1.cost -= value.cost
                                 value1[value.path.split(',')[2]].cost -= value.cost
-                                delete value1[value.path.split(',')[2]][value.id]
-                                value1[value.path.split(',')[2]].goods_detail.splice(value1[value.path.split(',')[2]].goods_detail
-                                    .indexOf(value.id),1)
+                                 value1[value.path.split(',')[2]][value.id].cost -= value.cost
+                                 value1[value.path.split(',')[2]][value.id].quantity -= value.quantity
                             }
                         }
                     }
@@ -2111,52 +2106,81 @@ angular.module("all_controller", [])
                             }
                         }
                     }
+                    for (let [key, value] of other_arr.entries()) {
+                        for (let [key1, value1] of $scope.level_copy.entries()) {
+                            if (value.path.split(',')[1] == value1.id) {
+                               value1.cost += value.cost
+                                if(value1.three_level.indexOf(value.path.split(',')[2])==-1){
+                                    value1.three_level.push(value.path.split(',')[2])
+                                }
+                                if(!value1[value.path.split(',')[2]]){
+                                    value1[value.path.split(',')[2]] = {'cost':value.cost,'id':value.path.split(',')[2],
+                                    'goods_detail':[value.id],'title':value.title}
+                                }else{
+                                    value1[value.path.split(',')[2]].cost += value.cost
+                                }
+                                if(!value1[value.path.split(',')[2]][value.id]){
+                                    value1[value.path.split(',')[2]][value.id] = value
+                                }else{
+                                    value1[value.path.split(',')[2]][value.id].quantity += value.quantity
+                                    value1[value.path.split(',')[2]][value.id].cost += value.cost
+                                }
+                            }
+                        }
+                    }
+                    for (let [key, value] of other_arr.entries()) {
+                        for (let [key1, value1] of $scope.stair_copy.entries()) {
+                            for (let [key2, value2] of $scope.level_copy.entries()) {
+                                if (value.path.split(',')[0] == value1.id && value.path.split(',')[1] == value2.id) {
+                                    if(value1.second_level.indexOf(value2.id)==-1){
+                                        value1.second_level.push(value2.id)
+                                    }
+                                   value1[value2.id] = value2
+                                    value1.cost += value.cost
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    for (let [key, value] of other_arr.entries()) {
+                        for (let [key1, value1] of $scope.level_copy.entries()) {
+                            if (value.path.split(',')[1] == value1.id) {
+                                value1.cost += value.cost
+                                if(value1.three_level.indexOf(value.path.split(',')[2]) == -1){
+                                    value1.three_level.push(value.path.split(',')[2])
+                                }
+                                if(!value1[value.path.split(',')[2]]){
+                                    value1[value.path.split(',')[2]] = {'cost':value.cost,'id':value.path.split(',')[2],
+                                        'goods_detail':[value.id],'title':value.title}
+                                }else{
+                                    value1[value.path.split(',')[2]].cost += value.cost
+                                    // value1[value.path.split(',')[2]].three_level += value.cost
+                                }
+                                if(!value1[value.path.split(',')[2]][value.id]){
+                                    value1[value.path.split(',')[2]][value.id] = value
+                                }else{
+                                    value1[value.path.split(',')[2]][value.id].quantity += value.quantity
+                                    value1[value.path.split(',')[2]][value.id].cost += value.cost
+                                }
+                            }
+                        }
+                    }
+                    for (let [key, value] of other_arr.entries()) {
+                        for (let [key1, value1] of $scope.stair_copy.entries()) {
+                            for (let [key2, value2] of $scope.level_copy.entries()) {
+                                if (value.path.split(',')[0] == value1.id && value.path.split(',')[1] == value2.id) {
+                                    if(value1.second_level.indexOf(value2.id)==-1){
+                                        value1.second_level.push(value2.id)
+                                    }
+                                    value1[value2.id] = value2
+                                    value1.cost += value.cost
+                                }
+                            }
+                        }
+                    }
                 }
                 console.log($scope.stair_copy)
                 console.log($scope.level_copy)
-                //整合一级二级三级
-                for (let [key, value] of other_arr.entries()) {
-                    for (let [key1, value1] of $scope.level_copy.entries()) {
-                        if (value.path.split(',')[1] == value1.id) {
-                            if (value1.three_level.indexOf(value.path.split(',')[2]) == -1) {
-                                value1.three_level.push(value.path.split(',')[2])
-                                if (!value1[value.path.split(',')[2]]) {
-                                    value1[value.path.split(',')[2]] = {
-                                        'goods_detail': [], 'cost': 0,
-                                        'id': value.path.split(',')[2], 'title': value.title
-                                    }
-                                }
-                                value1[value.path.split(',')[2]][value.id] = value
-                                value1[value.path.split(',')[2]]['goods_detail'].push(value.id)
-                                value1[value.path.split(',')[2]].cost = value.cost
-                            } else {
-                                if (value1[value.path.split(',')[2]]['goods_detail'].indexOf(value.id) == -1) {
-                                    value1[value.path.split(',')[2]]['goods_detail'].push(value.id)
-                                    value1[value.path.split(',')[2]][value.id] = value
-                                    value1[value.path.split(',')[2]].cost += value.cost
-                                } else {
-                                    value1[value.path.split(',')[2]][value.id].cost += value.cost
-                                    value1[value.path.split(',')[2]][value.id].quantity += value.quantity
-                                    value1[value.path.split(',')[2]].cost += value.cost
-                                }
-                            }
-                        }
-                    }
-                }
-                for (let [key, value] of other_arr.entries()) {
-                    for (let [key1, value1] of $scope.stair_copy.entries()) {
-                        for (let [key2, value2] of $scope.level_copy.entries()) {
-                            if (value.path.split(',')[0] == value1.id && value.path.split(',')[1] == value2.id) {
-                                if (value1.second_level.indexOf(value2.id) == -1) {
-                                    value1.second_level.push(value2.id)
-                                }
-                                if (!value1[value2.id]) {
-                                    value1[value2.id] = value2
-                                }
-                            }
-                        }
-                    }
-                }
                 $scope.stair = $scope.stair_copy
                 $scope.level = $scope.level_copy
                 console.log($scope.stair_copy)
@@ -2176,6 +2200,7 @@ angular.module("all_controller", [])
                     'labor_price': $scope.labor_price,
                     'series_index': $scope.series_index,
                     'style_index': $scope.style_index,
+                    'cur_labor' :$scope.cur_labor,
                     'worker_category': $scope.worker_category,
                     'house_bedroom': $scope.house_bedroom,
                     'house_hall': $scope.house_hall,
@@ -2206,6 +2231,7 @@ angular.module("all_controller", [])
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair_copy
         $scope.level = $stateParams.level_copy
+        $scope.cur_labor = $stateParams.cur_labor || ''
         $scope.platform_price = $stateParams.platform_price || 0 //平台价格
         $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
         $scope.platform_price_copy = $stateParams.platform_price_copy || 0
@@ -2257,6 +2283,7 @@ angular.module("all_controller", [])
                     'labor_price': $scope.labor_price,
                     'series_index': $scope.series_index,
                     'style_index': $scope.style_index,
+                'cur_labor' :$scope.cur_labor,
                     'worker_category': $scope.worker_category,
                     'house_bedroom': $scope.house_bedroom,
                     'house_hall': $scope.house_hall,
@@ -2308,6 +2335,7 @@ angular.module("all_controller", [])
                 'style_index': $scope.style_index,
                 'worker_category': $scope.worker_category,
                 'house_bedroom': $scope.house_bedroom,
+                'cur_labor' :$scope.cur_labor,
                 'house_hall': $scope.house_hall,
                 'house_kitchen': $scope.house_kitchen,
                 'house_toilet': $scope.house_toilet,
@@ -2345,6 +2373,7 @@ angular.module("all_controller", [])
                 'highCrtl': $scope.highCrtl,
                 'cur_stair': $scope.cur_stair,
                 'area': $scope.area,
+                'cur_labor' :$scope.cur_labor,
                 'window': $scope.window,
                 'index': $scope.index,
                 'choose_stairs': $scope.choose_stairs,
@@ -2369,6 +2398,7 @@ angular.module("all_controller", [])
                 'labor_price': $scope.labor_price,
                 'series_index': $scope.series_index,
                 'style_index': $scope.style_index,
+                'cur_labor' :$scope.cur_labor,
                 'worker_category': $scope.worker_category,
                 'house_bedroom': $scope.house_bedroom,
                 'house_hall': $scope.house_hall,
@@ -2394,25 +2424,26 @@ angular.module("all_controller", [])
             console.log($scope.stair)
             console.log($scope.level)
             console.log(item)
-            for (let [key, value] of $scope.stair_copy.entries()) {
-                if (item.path.split(',')[0] == value.id) {
-                    value.cost -= item.show_cost
-                    value[item.path.split(',')[1]][item.path.split(',')[2]].cost -= item.show_cost
-                    delete  value[item.path.split(',')[1]][item.path.split(',')[2]][item.id]
-                    value[item.path.split(',')[1]][item.path.split(',')[2]].goods_detail.splice(
-                        value[item.path.split(',')[1]][item.path.split(',')[2]].goods_detail.indexOf(item.id), 1)
-                    value['goods_count']--
-                }
-            }
-            for (let [key, value] of $scope.level_copy.entries()) {
-                if (item.path.split(',')[1] == value.id) {
+            for(let [key,value] of $scope.level_copy.entries()){
+                if(item.path.split(',')[1] == value.id){
+                    value.cost -=item.show_cost
                     value[item.path.split(',')[2]].cost -= item.show_cost
+                    value[item.path.split(',')[2]].goods_detail.splice(value[item.path.split(',')[2]]
+                        .goods_detail.indexOf(item.id),1)
                     delete value[item.path.split(',')[2]][item.id]
-                    value[item.path.split(',')[2]].goods_detail.splice(
-                        value[item.path.split(',')[2]].goods_detail.indexOf(item.id), 1)
+                    $scope.platform_price_copy -= item.show_cost
+                    $scope.supply_price_copy -= item.show_quantity*item.purchase_price_decoration_company
                 }
             }
-            // $scope.all_goods = arr
+            for(let [key,value] of $scope.stair_copy.entries()){
+                for(let [key1,value1] of $scope.level_copy.entries()){
+                    if(item.path.split(',')[1] == value1.id && item.path.split(',')[0] == value.id){
+                        value.cost -= item.show_cost
+                        value[value1.id] = value1
+                        value.goods_count--
+                    }
+                }
+            }
             console.log($scope.stair)
         }
     })
@@ -2421,6 +2452,7 @@ angular.module("all_controller", [])
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair
         $scope.level = $stateParams.level
+        $scope.cur_labor = $stateParams.cur_labor || ''
         $scope.platform_price = $stateParams.platform_price || 0 //平台价格
         $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
         $scope.stair_copy = $stateParams.stair_copy
@@ -2466,6 +2498,7 @@ angular.module("all_controller", [])
                     'level_copy': $stateParams.level,
                     'stair_copy': $stateParams.stair,
                     'labor_price': $scope.labor_price,
+                'cur_labor' :$scope.cur_labor,
                     'series_index': $scope.series_index,
                     'style_index': $scope.style_index,
                     'worker_category': $scope.worker_category,
@@ -2521,6 +2554,7 @@ angular.module("all_controller", [])
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair
         $scope.level = $stateParams.level
+        $scope.cur_labor = $stateParams.cur_labor || ''
         $scope.platform_price = $stateParams.platform_price || 0 //平台价格
         $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
         $scope.stair_copy = $stateParams.stair_copy || $stateParams.stair
@@ -2541,10 +2575,20 @@ angular.module("all_controller", [])
         $scope.cur_stair = $stateParams.cur_stair
         $scope.choose_stairs = $stateParams.choose_stairs
         $scope.second_material = $stateParams.second_material//三级各项分类
-        $scope.three_material = $stateParams.three_material//三级单项传递
-        $scope.excluded_item = $stateParams.excluded_item || ''
+        $scope.three_material = $stateParams.three_material || ''//三级单项传递
+        $scope.excluded_item = $stateParams.excluded_item
         $scope.prev_index = $stateParams.prev_index
         $scope.pid = $stateParams.pid || +$stateParams.excluded_item.path.split(',')[2] || ''//传递选择的三级id
+        $scope.cur_three_title = ''
+        if(!$stateParams.three_material){
+            for(let [key,value] of $scope.level.entries()){
+                if($scope.excluded_item.path.split(',')[1] == value.id){
+                    $scope.cur_three_title = value.title
+                }
+            }
+        }else{
+            $scope.cur_three_title = $stateParams.three_material.title
+        }
         //杂工数据
         $scope.twelve_dismantle = $stateParams.twelve_dismantle || ''
         $scope.twenty_four_dismantle = $stateParams.twenty_four_dismantle || ''
@@ -2573,6 +2617,7 @@ angular.module("all_controller", [])
                     handyman_price: $scope.handyman_price,
                     area: $scope.area,
                     series_index: $scope.series_index,
+                    'cur_labor' :$scope.cur_labor,
                     style_index: $scope.style_index,
                     labor_price: $scope.labor_price,
                     house_bedroom: $scope.house_bedroom,
@@ -2601,6 +2646,7 @@ angular.module("all_controller", [])
                     'supply_price': $scope.supply_price,
                     stair_copy: $stateParams.stair_copy,
                     level_copy: $stateParams.level_copy,
+                    'cur_labor' :$scope.cur_labor,
                     worker_category: $scope.worker_category,
                     handyman_price: $scope.handyman_price,
                     area: $scope.area,
@@ -2636,6 +2682,7 @@ angular.module("all_controller", [])
                     worker_category: $scope.worker_category,
                     handyman_price: $scope.handyman_price,
                     area: $scope.area,
+                    'cur_labor' :$scope.cur_labor,
                     series_index: $scope.series_index,
                     style_index: $scope.style_index,
                     labor_price: $scope.labor_price,
@@ -2672,6 +2719,7 @@ angular.module("all_controller", [])
                 handyman_price: $scope.handyman_price,
                 area: $scope.area,
                 series_index: $scope.series_index,
+                'cur_labor' :$scope.cur_labor,
                 style_index: $scope.style_index,
                 labor_price: $scope.labor_price,
                 house_bedroom: $scope.house_bedroom,
@@ -2702,11 +2750,12 @@ angular.module("all_controller", [])
         console.log($stateParams)
         //获取传递的数据(固定)
         $scope.stair = $stateParams.stair
+        $scope.cur_labor = $stateParams.cur_labor || ''
         $scope.level = $stateParams.level
         $scope.platform_price = $stateParams.platform_price || 0 //平台价格
         $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
-        $scope.platform_price_copy = angular.copy($stateParams.platform_price_copy) || $stateParams.platform_price//平台价格
-        $scope.supply_price_copy = angular.copy($stateParams.supply_price_copy) || $stateParams.supply_price//装修公司供货价
+        $scope.platform_price_copy = angular.copy($stateParams.platform_price)//平台价格
+        $scope.supply_price_copy = angular.copy($stateParams.supply_price)//装修公司供货价
         $scope.stair_copy = angular.copy($stateParams.stair_copy)
         $scope.level_copy = angular.copy($stateParams.level_copy)
         $scope.index = $stateParams.index
@@ -2743,7 +2792,8 @@ angular.module("all_controller", [])
         $scope.twenty_four_new_construction = $stateParams.twenty_four_new_construction || ''
         $scope.building_scrap = $stateParams.building_scrap || false
         $scope.tab_title = 0
-        let good = angular.copy($scope.current_good)
+        let cur_good = angular.copy($scope.current_good)
+        let replace_good = angular.copy($scope.excluded_item)
         let category = angular.copy($scope.three_material)
         $scope.subtract = function () {
             if ($scope.add_quantity <= 1) {
@@ -2770,73 +2820,32 @@ angular.module("all_controller", [])
         })
         $scope.add_goods = function () {
             //整合一级二级三级
-            console.log($scope.level_copy)
-            for (let [key1, value1] of $scope.level_copy.entries()) {
-                if (category.path.split(',')[1] == value1.id) {
-                    if (value1.three_level.indexOf(category.path.split(',')[2]) == -1) {
-                        value1.three_level.push(category.path.split(',')[2])
-                        if (!value1[category.path.split(',')[2]]) {
-                            value1[category.path.split(',')[2]] = {
-                                'goods_detail': [], 'cost': 0,
-                                'id': category.path.split(',')[2], 'title': good.title
-                            }
-                        }
-                        value1[category.path.split(',')[2]][good.id] = {
-                            'show_cost': good.platform_price * $scope.add_quantity,
-                            'show_quantity': parseInt($scope.add_quantity),
-                            'id': good.id,
-                            'name': $scope.good_detail.brand_name
-                            ,
-                            'platform_price': good.platform_price,
-                            'subtitle': good.subtitle,
-                            'title': good.title,
-                            'path': category.path
-                        }
-                        value1[category.path.split(',')[2]]['goods_detail'].push(good.id)
-                        value1[category.path.split(',')[2]].cost = good.platform_price * $scope.add_quantity
-                    } else {
-                        if (value1[category.path.split(',')[2]]['goods_detail'].indexOf(good.id) == -1) {
-                            value1[category.path.split(',')[2]]['goods_detail'].push(good.id)
-                            value1[category.path.split(',')[2]][good.id] = {
-                                'show_cost': good.platform_price * $scope.add_quantity,
-                                'show_quantity': parseInt($scope.add_quantity),
-                                'id': good.id,
-                                'name': $scope.good_detail.brand_name,
-                                'platform_price': good.platform_price,
-                                'subtitle': good.subtitle,
-                                'title': good.title,
-                                'path': category.path
-                            }
-                            value1[category.path.split(',')[2]].cost += good.platform_price * $scope.add_quantity
-                        } else {
-                            value1[category.path.split(',')[2]][good.id].show_cost += good.platform_price * $scope.add_quantity
-                            value1[category.path.split(',')[2]][good.id].show_quantity = +value1[category.path.split(',')[2]][good.id].show_quantity + parseInt($scope.add_quantity)
-                            value1[category.path.split(',')[2]].cost += good.platform_price * $scope.add_quantity
-                        }
+            for(let [key,value] of $scope.level_copy.entries()){
+                if($scope.three_material.path.split(',')[1] == value.id){
+                    value.cost += cur_good.platform_price*$scope.add_quantity
+                    value[$scope.three_material.path.split(',')[2]].cost += cur_good.platform_price*$scope.add_quantity
+                    value[$scope.three_material.path.split(',')[2]].goods_detail.push(cur_good.id)
+                    value[$scope.three_material.path.split(',')[2]][cur_good.id] = cur_good
+                    value[$scope.three_material.path.split(',')[2]][cur_good.id].name = '马可波罗'
+                    value[$scope.three_material.path.split(',')[2]][cur_good.id].show_quantity = $scope.add_quantity
+                    value[$scope.three_material.path.split(',')[2]][cur_good.id].show_cost = cur_good.platform_price*$scope.add_quantity
+                    value[$scope.three_material.path.split(',')[2]][cur_good.id].path = $scope.three_material.path
+                    $scope.platform_price_copy += cur_good.platform_price*$scope.add_quantity
+                    $scope.supply_price_copy += $scope.add_quantity*cur_good.purchase_price_decoration_company
+                }
+            }
+            for(let [key,value] of $scope.stair_copy.entries()){
+                for(let [key1,value1] of $scope.level_copy.entries()){
+                    if($scope.three_material.path.split(',')[1] == value1.id && $scope.three_material.path.split(',')[0] == value.id){
+                        value.cost += cur_good.platform_price*$scope.add_quantity
+                        value[value1.id] = value1
                     }
                 }
             }
-            for (let [key1, value1] of $scope.stair_copy.entries()) {
-                for (let [key2, value2] of $scope.level_copy.entries()) {
-                    if (category.path.split(',')[0] == value1.id && category.path.split(',')[1] == value2.id) {
-                        if (value1.second_level.indexOf(value2.id) == -1) {
-                            value1.second_level.push(value2.id)
-                            value1[value2.id] = value2
-                        } else {
-                            value1[value2.id] = value2
-                        }
-                        value1.cost += good.platform_price * $scope.add_quantity
-                        value1['goods_count']++
-                    }
-                }
-            }
-            $scope.platform_price_copy += good.platform_price * $scope.add_quantity
-            $scope.supply_price_copy += good.purchase_price_decoration_company * $scope.add_quantity
-            console.log($scope.stair)
-            console.log($scope.level)
             $state.go("other", {
                 stair: $scope.stair,
                 level: $scope.level,
+                'cur_labor' :$scope.cur_labor,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.platform_price,
                 'platform_price_copy':$scope.platform_price_copy,
@@ -2870,138 +2879,69 @@ angular.module("all_controller", [])
             console.log(category)
             console.log($scope.excluded_item)
             //整合一级二级三级
-            if ($scope.prev_index == 1) {
-                for (let [key1, value1] of $scope.level_copy.entries()) {
-                    if ($scope.excluded_item.path.split(',')[1] == value1.id) {
-                        delete value1[$scope.excluded_item.path.split(',')[2]][$scope.excluded_item.id]
-                        value1[$scope.excluded_item.path.split(',')[2]].goods_detail.splice(value1[$scope.excluded_item.path.split(',')[2]].goods_detail
-                            .indexOf($scope.excluded_item.id), 1)
+            if($scope.prev_index == 2){
+                for(let [key,value] of $scope.level_copy.entries()){
+                    if(replace_good.path.split(',')[1] == value.id){
+                        value.cost -=replace_good.cost
+                        value[replace_good.path.split(',')[2]].cost -= replace_good.cost
+                        value[replace_good.path.split(',')[2]].goods_detail.splice(value[replace_good.path.split(',')[2]]
+                            .goods_detail.indexOf(replace_good.id),1)
+                        delete value[replace_good.path.split(',')[2]][replace_good.id]
+                        value.cost += cur_good.platform_price*$scope.add_quantity
+                        value[replace_good.path.split(',')[2]].cost += cur_good.platform_price*$scope.add_quantity
+                        value[replace_good.path.split(',')[2]].goods_detail.push(cur_good.id)
+                        value[replace_good.path.split(',')[2]][cur_good.id] = cur_good
+                        value[replace_good.path.split(',')[2]][cur_good.id].name = '马可波罗'
+                        value[replace_good.path.split(',')[2]][cur_good.id].quantity = $scope.add_quantity
+                        value[replace_good.path.split(',')[2]][cur_good.id].cost = cur_good.platform_price*$scope.add_quantity
+                        value[replace_good.path.split(',')[2]][cur_good.id].path = replace_good.path
+                        $scope.platform_price_copy -= replace_good.cost
+                        $scope.platform_price_copy += cur_good.platform_price*$scope.add_quantity
+                        $scope.supply_price_copy -= replace_good.quantity*replace_good.purchase_price_decoration_company
+                        $scope.supply_price_copy += $scope.add_quantity*cur_good.purchase_price_decoration_company
                     }
-                    if (category.path.split(',')[1] == value1.id) {
-                        if (value1.three_level.indexOf(category.path.split(',')[2]) == -1) {
-                            value1.three_level.push(category.path.split(',')[2])
-                            if (!value1[category.path.split(',')[2]]) {
-                                value1[category.path.split(',')[2]] = {
-                                    'goods_detail': [], 'cost': 0,
-                                    'id': category.path.split(',')[2], 'title': good.title
-                                }
-                            }
-                            value1[category.path.split(',')[2]][good.id] = {
-                                'show_cost': good.platform_price * $scope.add_quantity,
-                                'show_quantity': +$scope.add_quantity,
-                                'id': good.id,
-                                'name': $scope.good_detail.brand_name
-                                ,
-                                'platform_price': good.platform_price,
-                                'subtitle': good.subtitle,
-                                'title': good.title,
-                                'path': category.path
-                            }
-                            value1[category.path.split(',')[2]]['goods_detail'].push(good.id)
-                            value1[category.path.split(',')[2]].cost = good.platform_price * $scope.add_quantity
-                        } else {
-                            if (value1[category.path.split(',')[2]]['goods_detail'].indexOf(good.id) == -1) {
-                                value1[category.path.split(',')[2]]['goods_detail'].push(good.id)
-                                value1[category.path.split(',')[2]][good.id] = {
-                                    'show_cost': good.platform_price * $scope.add_quantity,
-                                    'show_quantity': +$scope.add_quantity,
-                                    'id': good.id,
-                                    'name': $scope.good_detail.brand_name
-                                    ,
-                                    'platform_price': good.platform_price,
-                                    'subtitle': good.subtitle,
-                                    'title': good.title,
-                                    'path': category.path
-                                }
-                                value1[category.path.split(',')[2]].cost += good.platform_price * $scope.add_quantity
-                            } else {
-                                value1[category.path.split(',')[2]][good.id].show_cost += good.platform_price * $scope.add_quantity
-                                value1[category.path.split(',')[2]][good.id].show_quantity += $scope.add_quantity
-                                value1[category.path.split(',')[2]].cost += good.platform_price * $scope.add_quantity
-                            }
+                }
+                for(let [key,value] of $scope.stair_copy.entries()){
+                    for(let [key1,value1] of $scope.level_copy.entries()){
+                        if(replace_good.path.split(',')[1] == value1.id && replace_good.path.split(',')[0] == value.id){
+                            value.cost -= replace_good.cost
+                            value.cost += cur_good.platform_price*$scope.add_quantity
+                            value[value1.id] = value1
                         }
                     }
                 }
-            } else {
-                for (let [key1, value1] of $scope.level_copy.entries()) {
-                    if ($scope.excluded_item.path.split(',')[1] == value1.id) {
-                        delete value1[$scope.excluded_item.path.split(',')[2]][$scope.excluded_item.id]
-                        value1[$scope.excluded_item.path.split(',')[2]].goods_detail.splice(value1[$scope.excluded_item.path.split(',')[2]].goods_detail
-                            .indexOf($scope.excluded_item.id), 1)
+            }else{
+                for(let [key,value] of $scope.level_copy.entries()){
+                    if(replace_good.path.split(',')[1] == value.id){
+                        value.cost -=replace_good.cost
+                        value[replace_good.path.split(',')[2]].cost -= replace_good.cost
+                        value[replace_good.path.split(',')[2]].goods_detail.splice(value[replace_good.path.split(',')[2]]
+                            .goods_detail.indexOf(replace_good.id),1)
+                        delete value[replace_good.path.split(',')[2]][replace_good.id]
+                        value.cost += cur_good.platform_price*$scope.add_quantity
+                        value[replace_good.path.split(',')[2]].cost += cur_good.platform_price*$scope.add_quantity
+                        value[replace_good.path.split(',')[2]].goods_detail.push(cur_good.id)
+                        value[replace_good.path.split(',')[2]][cur_good.id] = cur_good
+                        value[replace_good.path.split(',')[2]][cur_good.id].name = '马可波罗'
+                        value[replace_good.path.split(',')[2]][cur_good.id].show_quantity = $scope.add_quantity
+                        value[replace_good.path.split(',')[2]][cur_good.id].show_cost = cur_good.platform_price*$scope.add_quantity
+                        value[replace_good.path.split(',')[2]][cur_good.id].path = replace_good.path
+                        $scope.platform_price_copy -= replace_good.show_cost
+                        $scope.platform_price_copy += cur_good.platform_price*$scope.add_quantity
+                        $scope.supply_price_copy -= replace_good.show_quantity*replace_good.purchase_price_decoration_company
+                        $scope.supply_price_copy += $scope.add_quantity*cur_good.purchase_price_decoration_company
                     }
-                    if (category.path.split(',')[1] == value1.id) {
-                        if (value1.three_level.indexOf(category.path.split(',')[2]) == -1) {
-                            value1.three_level.push(category.path.split(',')[2])
-                            if (!value1[category.path.split(',')[2]]) {
-                                value1[category.path.split(',')[2]] = {
-                                    'goods_detail': [], 'cost': 0,
-                                    'id': category.path.split(',')[2], 'title': good.title
-                                }
-                            }
-                            value1[category.path.split(',')[2]][good.id] = {
-                                'cost': good.platform_price * $scope.add_quantity,
-                                'quantity': $scope.add_quantity, 'id': good.id, 'name': $scope.good_detail.brand_name
-                                , 'platform_price': good.platform_price, 'subtitle': good.subtitle, 'title': good.title,
-                                'path': category.path
-                            }
-                            value1[category.path.split(',')[2]]['goods_detail'].push(good.id)
-                            value1[category.path.split(',')[2]].cost = good.platform_price * $scope.add_quantity
-                        } else {
-                            if (value1[category.path.split(',')[2]]['goods_detail'].indexOf(good.id) == -1) {
-                                value1[category.path.split(',')[2]]['goods_detail'].push(good.id)
-                                value1[category.path.split(',')[2]][good.id] = {
-                                    'cost': good.platform_price * $scope.add_quantity,
-                                    'quantity': $scope.add_quantity,
-                                    'id': good.id,
-                                    'name': $scope.good_detail.brand_name,
-                                    'platform_price': good.platform_price,
-                                    'subtitle': good.subtitle,
-                                    'title': good.title,
-                                    'path': category.path
-                                }
-                                value1[category.path.split(',')[2]].cost += good.platform_price * $scope.add_quantity
-                            } else {
-                                value1[category.path.split(',')[2]][good.id].cost += good.platform_price * $scope.add_quantity
-                                value1[category.path.split(',')[2]][good.id].quantity += $scope.add_quantity
-                                value1[category.path.split(',')[2]].cost += good.platform_price * $scope.add_quantity
-                            }
+                }
+                for(let [key,value] of $scope.stair_copy.entries()){
+                    for(let [key1,value1] of $scope.level_copy.entries()){
+                        if(replace_good.path.split(',')[1] == value1.id && replace_good.path.split(',')[0] == value.id){
+                            value.cost -= replace_good.show_cost
+                            value.cost += cur_good.platform_price*$scope.add_quantity
+                            value[value1.id] = value1
                         }
                     }
                 }
             }
-
-            for (let [key1, value1] of $scope.stair_copy.entries()) {
-                for (let [key2, value2] of $scope.level_copy.entries()) {
-                    if (category.path.split(',')[0] == value1.id && category.path.split(',')[1] == value2.id) {
-                        if (value1.second_level.indexOf(value2.id) == -1) {
-                            value1.second_level.push(value2.id)
-                            value1[value2.id] = value2
-                        } else {
-                            value1[value2.id] = value2
-                        }
-                        if ($scope.prev_index == 1) {
-                            value1.cost -= +category.show_cost
-                            value2.cost -= +category.show_cost
-                        } else {
-                            value1.cost -= +category.cost
-                            value2.cost -= +category.cost
-                        }
-                        value1.cost += good.platform_price * $scope.add_quantity
-
-                        value2.cost += good.platform_price * $scope.add_quantity
-                        value2[category.path.split(',')[2]].cost -= +category.show_cost
-                    }
-                }
-            }
-            if ($scope.prev_index == 1) {
-                $scope.platform_price_copy -= +category.show_cost
-                $scope.supply_price_copy -= +category.show_quantity*category.purchase_price_decoration_company
-            } else {
-                $scope.platform_price_copy -= +category.cost
-                $scope.supply_price_copy -= +category.quantity*category.purchase_price_decoration_company
-            }
-            $scope.platform_price_copy += good.platform_price * $scope.add_quantity
-            $scope.supply_price_copy += good.purchase_price_decoration_company * $scope.add_quantity
             console.log($scope.stair)
             console.log($scope.level)
             let goTitle = ''
@@ -3015,6 +2955,7 @@ angular.module("all_controller", [])
                 stair_copy: $scope.stair_copy,
                 index: $scope.index,
                 level: $scope.level,
+                'cur_labor' :$scope.cur_labor,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
                 'platform_price_copy':$scope.platform_price_copy,
@@ -3050,8 +2991,8 @@ angular.module("all_controller", [])
         $scope.level = $stateParams.level
         $scope.platform_price = $stateParams.platform_price || 0 //平台价格
         $scope.supply_price = $stateParams.supply_price || 0//装修公司供货价
-        $scope.platform_price_copy = $stateParams.platform_price_copy || 0
-        $scope.supply_price_copy = $stateParams.supply_price_copy || 0
+        $scope.platform_price_copy =angular.copy($stateParams.platform_price_copy)|| angular.copy($stateParams.platform_price) || 0
+        $scope.supply_price_copy =angular.copy($stateParams.supply_price_copy) || angular.copy($stateParams.supply_price) || 0
         $scope.stair_copy = angular.copy($stateParams.stair_copy)
         $scope.level_copy = angular.copy($stateParams.level_copy)
         $scope.index = $stateParams.index
@@ -3069,6 +3010,7 @@ angular.module("all_controller", [])
         $scope.highCrtl = $stateParams.highCrtl
         $scope.choose_stairs = $stateParams.choose_stairs
         $scope.cur_stair = $stateParams.cur_stair
+        $scope.cur_labor = $stateParams.cur_labor
         //杂工数据
         $scope.twelve_dismantle = $stateParams.twelve_dismantle || ''
         $scope.twenty_four_dismantle = $stateParams.twenty_four_dismantle || ''
@@ -3086,6 +3028,7 @@ angular.module("all_controller", [])
                 'isBack': true,
                 'level': $scope.level,
                 'stair': $scope.stair,
+                'cur_labor' :$scope.cur_labor,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
@@ -3126,6 +3069,7 @@ angular.module("all_controller", [])
                 'isBack': true,
                 'level': $scope.level,
                 'stair': $scope.stair,
+                'cur_labor' :$scope.cur_labor,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
@@ -3158,6 +3102,7 @@ angular.module("all_controller", [])
                     'isBack': true,
                     'level': $stateParams.level,
                     'stair': $stateParams.stair,
+                'cur_labor' :$scope.cur_labor,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
                     'level_copy': $stateParams.level,

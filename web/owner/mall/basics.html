@@ -23,7 +23,7 @@
             <ul class="wall_ul">
                 <li data-toggle="modal" data-target="#myModal"
                     ng-repeat="item1 in first_level[item].three_level track by $index">
-                    <div ng-repeat="item2 in first_level[item][item1].goods_detail track by $index" ng-click="
+                    <div ng-repeat="item2 in first_level[item][item1].goods_detail" ng-click="
               goModalData(first_level[item][item1][item2])">
                         <span class="wall_span">{{first_level[item][item1].title}}x{{first_level[item][item1][item2].quantity}}</span><br/>
                         <span class="wall_brand">{{first_level[item][item1][item2].name}}</span>
