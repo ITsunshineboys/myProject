@@ -345,42 +345,35 @@ class GoodsAttr extends ActiveRecord
        return $standard;
     }
 
+    /**
+     * find goods_id
+     * @param $goods_id
+     * @return array
+     */
     public static function findByGoodsIdUnit($goods_id)
     {
-        if ($goods_id)
+        if (is_array($goods_id))
         {
-            if (is_array($goods_id))
-            {
-                $str_id = implode(',',$goods_id);
-            }else
-            {
-                $str_id = $goods_id;
-            }
-
-            $db = Yii::$app->db;
-            $sql = "SELECT goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value FROM goods_attr LEFT JOIN goods ON goods_attr.goods_id = goods. id LEFT JOIN goods_category ON goods.category_id = goods_category.id WHERE goods_id IN (".$str_id.")";
-            $standard = $db->createCommand($sql)->queryAll();
+            $str_id = implode(',',$goods_id);
         }else
         {
-            $standard = null;
+            $str_id = $goods_id;
         }
+
+        $db = Yii::$app->db;
+        $sql = "SELECT goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value FROM goods_attr LEFT JOIN goods ON goods_attr.goods_id = goods. id LEFT JOIN goods_category ON goods.category_id = goods_category.id WHERE goods_id IN (".$str_id.")";
+        $standard = $db->createCommand($sql)->queryAll();
         return $standard;
     }
 
     public static function goodsIdUnit($goods)
     {
-        if ($goods)
-        {
-            $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
-            $standard = self::find()
-                ->asArray()
-                ->select($select)
-                ->where(['goods_id'=>$goods['id']])
-                ->all();
-        }else
-        {
-            $standard = null;
-        }
+        $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
+        $standard = self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['goods_id'=>$goods['id']])
+            ->all();
         return $standard;
     }
 

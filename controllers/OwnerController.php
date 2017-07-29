@@ -424,20 +424,20 @@ class OwnerController extends Controller
      */
     public function actionWaterway()
     {
-        $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>2,
-//            'kitchen'=>2,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>14,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'area'=>60,
+            'bedroom'=>1,
+            'hall'=>1,
+            'toilet'=>2,
+            'kitchen'=>2,
+            'stairs_details_id'=>1,
+            'series'=>1,
+            'style'=>1,
+            'window'=>14,
+            'province'=>510000,
+            'city'=>510100,
+        ];
         //人工价格
         $waterway_labor = LaborCost::profession($post,'水路工');
 
@@ -450,23 +450,17 @@ class OwnerController extends Controller
             $waterway_current = Goods::findQueryAll($weak, $post['city']);
         } else
         {
-            $waterway_points = 0;
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::find()->where(['effect_id' => $effect['id']])->all();
             $other = 0;
-            foreach ($points as $one) {
-                if ($one['waterway_points'] !== 0)
-                {
-                    $waterway_current_place [] = $one['place'];
-                    $waterway_current_points [] = $one['waterway_points'];
+            foreach ($points as $v=>$k) {
+                if ($k['waterway_points'] !== 0) {
+                    $waterway_current_all[$k['place']] = $k['waterway_points'];
                 }
-
-                if ($one['place'] !== '厨房' && $one['place'] !== '卫生间')
-                {
-                    $other += $one['waterway_points'];
+                if ($k['place'] !== '厨房' && $k['place'] !== '卫生间') {
+                    $other += $k['waterway_points'];
                 }
             }
-            $waterway_current_all = array_combine($waterway_current_place, $waterway_current_points);
             $kitchen = $waterway_current_all['厨房'] * $post['kitchen'];
             $toilet = $waterway_current_all['卫生间'] * $post['toilet'];
             $waterway_points = $kitchen + $toilet + $other;
@@ -486,26 +480,7 @@ class OwnerController extends Controller
         $labor_all_cost['worker_kind'] = $waterway_labor['worker_kind'];
         //材料总费用
         $material_price = BasisDecorationService::waterwayGoods($waterway_points, $waterway_current,$craft);
-
-        $material = [];
-        foreach ($waterway_current as $one_waterway_current)
-        {
-            if ($one_waterway_current['title'] == 'PPR水管')
-            {
-                $goods_max = BasisDecorationService::profitMargin($one_waterway_current);
-                $goods_max['quantity'] = $material_price['ppr_quantity'];
-                $goods_max['cost'] = $material_price['ppr_cost'];
-                $material [] =  $goods_max;
-            }
-            if ($one_waterway_current['title'] == 'PVC管')
-            {
-                $goods_max = BasisDecorationService::profitMargin($one_waterway_current);
-                $goods_max['quantity'] = $material_price['pvc_quantity'];
-                $goods_max['cost'] = $material_price['pvc_cost'];
-                $material [] =  $goods_max;
-            }
-        }
-        $material['total_cost'] = $material_price['total_cost'];
+        $material = BasisDecorationService::waterwayMaterial($waterway_current,$material_price);
 
         //添加材料费用
         $add_price_area = DecorationAdd::AllArea('水路', $post['area'], $post['city']);

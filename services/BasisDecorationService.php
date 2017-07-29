@@ -106,58 +106,51 @@ class BasisDecorationService
      */
     public static function waterwayGoods($points,$goods,$crafts)
     {
-        if ($points && $goods)
-       {
-            foreach ($goods as $one)
-            {
-                if($one['title'] == 'PVC管')
-                {
+        foreach ($goods as $one) {
+            switch ($one) {
+                case $one['title'] == 'PVC管':
                     $pvc_price = $one['platform_price'];
                     $goods_id [] = $one['id'];
-                }
-                if($one['title'] == 'PPR水管')
-                {
+                    break;
+                case $one['title'] == 'PPR水管':
                     $ppr_price = $one['platform_price'];
                     $goods_id [] = $one['id'];
-                }
+                    break;
             }
-           $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-           foreach ($ids as $one_unit)
-           {
-               if ($one_unit['title'] == 'PPR水管')
-               {
-                   $ppr_value = $one_unit['value'];
-               }
-               if ($one_unit['title'] == 'PVC管')
-               {
+        }
+        $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+        foreach ($ids as $one_unit) {
+            switch ($one_unit) {
+                case $one_unit['title'] == 'PPR水管':
+                    $ppr_value = $one_unit['value'];
+                    break;
+                case $one_unit['title'] == 'PVC管':
                     $pvc_value = $one_unit['value'];
-               }
-           }
-
-            foreach ($crafts as $craft)
-            {
-                if($craft['project_details'] == 'PPR水管')
-                {
-                    $ppr = $craft['material'];
-                }
-                if($craft['project_details'] == 'PVC管')
-                {
-                    $pvc =  $craft['material'];
-                }
+                    break;
             }
-//             PPR费用：个数×抓取的商品价格
-//            个数：（水路总点位×【2m】÷抓取的商品的长度）
-//            PVC费用：个数×抓取的商品价格
-//            个数：（水路总点位×【2m】÷抓取的商品的长度）
-            $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
-            $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
+        }
 
-            $waterway['ppr_cost'] = $waterway['ppr_quantity'] * $ppr_price;
-            //PPR费用
-            $waterway['pvc_cost'] = $waterway['pvc_quantity'] * $pvc_price;
-            $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
+        foreach ($crafts as $craft) {
+            switch ($craft) {
+                case $craft['project_details'] == 'PPR水管':
+                    $ppr = $craft['material'];
+                    break;
+                case $craft['project_details'] == 'PVC管':
+                    $pvc =  $craft['material'];
+                    break;
+            }
+        }
+//           PPR费用：个数×抓取的商品价格
+//           个数：（水路总点位×【2m】÷抓取的商品的长度）
+//           PVC费用：个数×抓取的商品价格
+//           个数：（水路总点位×【2m】÷抓取的商品的长度）
+        $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
+        $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
 
-       }
+        $waterway['ppr_cost'] = $waterway['ppr_quantity'] * $ppr_price;
+        //PPR费用
+        $waterway['pvc_cost'] = $waterway['pvc_quantity'] * $pvc_price;
+        $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
         return $waterway;
     }
 
@@ -1389,20 +1382,14 @@ class BasisDecorationService
      */
     public static function profitMargin($goods)
     {
-        if ($goods)
-        {
-            if (count($goods) == count($goods, 1))
-            {
-                return $goods;
-            } else
-            {
-                foreach($goods as $v)
-                {
-                    $r[$v['title']][$v['profit_rate']] = $v;
-                    $max = max($v['profit_rate'],$r[$v['title']][$v['profit_rate']]);
-                }
-                return $max;
+        if (count($goods) == count($goods, 1)) {
+            return $goods;
+        } else {
+            foreach($goods as $v) {
+                $r[$v['title']][$v['profit_rate']] = $v;
+                $max = max($v['profit_rate'],$r[$v['title']][$v['profit_rate']]);
             }
+            return $max;
         }
     }
 
@@ -2186,6 +2173,29 @@ class BasisDecorationService
         $material [] = BasisDecorationService::profitMargin($wire);
         $material [] = BasisDecorationService::profitMargin($spool);
         $material [] = BasisDecorationService::profitMargin($bottom);
+        return $material;
+    }
+
+    public static function waterwayMaterial($goods,$material_price)
+    {
+        foreach ($goods as $one_waterway_current) {
+            switch ($one_waterway_current)
+            {
+                case $one_waterway_current['title'] == 'PPR水管';
+                    $one_waterway_current['quantity'] = $material_price['ppr_quantity'];
+                    $one_waterway_current['cost'] = $material_price['ppr_cost'];
+                    $ppr[] = $one_waterway_current;
+                    break;
+                case $one_waterway_current['title'] == 'PVC管';
+                    $one_waterway_current['quantity'] = $material_price['ppr_quantity'];
+                    $one_waterway_current['cost'] = $material_price['ppr_cost'];
+                    $pvc[] = $one_waterway_current;
+                    break;
+            }
+        }
+        $material['total_cost'] = $material_price['total_cost'];
+        $material [] = BasisDecorationService::profitMargin($ppr);
+        $material [] = BasisDecorationService::profitMargin($pvc);
         return $material;
     }
 }
