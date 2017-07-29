@@ -49,6 +49,7 @@ class User extends ActiveRecord implements IdentityInterface
     ];
     const FIELDS_USER_CENTER_EXTRA = [
         'address',
+        'review_status',
     ];
     const BIRTHDAY_LEN = 8;
 
@@ -632,6 +633,14 @@ class User extends ActiveRecord implements IdentityInterface
                     if ($userAddress) {
                         $district = District::findOne($userAddress->district);
                         $extraData[$extraField] = $district->name . $userAddress->region;
+                    }
+                    break;
+                case 'review_status':
+                    $userRole = UserRole::find()
+                        ->where(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']])
+                        ->one();
+                    if ($userRole) {
+                        $extraData[$extraField] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
                     }
                     break;
             }

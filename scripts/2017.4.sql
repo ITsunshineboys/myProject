@@ -47,6 +47,11 @@ create table user_role (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
   `role_id` int(11) NOT NULL DEFAULT 0,
+  `review_apply_time` int unsigned not null DEFAULT 0 comment '审核申请时间',
+  `review_time` int unsigned not null DEFAULT 0 comment '审核时间',
+  `review_status` tinyint(1) not null DEFAULT 3 comment '0: 待审核 1: 审核不通过 2: 审核通过 3: 未认证',
+  `review_remark` varchar(50) not null DEFAULT '' comment'审核备注',
+  `reviewer_uid` int(11) NOT NULL DEFAULT 0 comment '审核人用户id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -115,6 +120,7 @@ CREATE TABLE `supplier` (
   `shop_no` int(11) unsigned not null default 0 comment '店铺号',
   `create_time` int unsigned not null DEFAULT 0,
   `quality_guarantee_deposit` bigint not null DEFAULT 0 comment '质保金, unit: fen',
+  `support_offline_shop` tinyint(1) not null DEFAULT 0 comment '0: 不支持, 1: 支持',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
