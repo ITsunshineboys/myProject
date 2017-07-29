@@ -1529,7 +1529,7 @@ class OwnerController extends Controller
         $goods = Goods::categoryById($material_property_classify);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $series_style = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post,$one_material);
-        
+
         if ($post['stairway_id'] == 1)
         {
             $stairs = Goods::findByCategory('楼梯');
