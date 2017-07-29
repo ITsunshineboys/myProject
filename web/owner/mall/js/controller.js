@@ -801,7 +801,7 @@ angular.module("all_controller", [])
                 console.log("防水")
                 console.log(response)
                 $scope.labor_price += response.data.data.waterproof_labor_price.price
-                let carpentry = response.data.data.waterproof_material
+                let carpentry = response.data.data.waterproof_material[0]
                 //一级总费用统计
                 for (let [key1, value1] of $scope.stair.entries()) {
                     if (carpentry.path.split(',')[0] == value1.id) {
