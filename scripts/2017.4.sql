@@ -49,7 +49,7 @@ create table user_role (
   `role_id` int(11) NOT NULL DEFAULT 0,
   `review_apply_time` int unsigned not null DEFAULT 0 comment '审核申请时间',
   `review_time` int unsigned not null DEFAULT 0 comment '审核时间',
-  `review_status` tinyint(1) not null DEFAULT 0 comment '0: 待审核 1: 审核不通过 2:审核通过',
+  `review_status` tinyint(1) not null DEFAULT 3 comment '0: 待审核 1: 审核不通过 2: 审核通过 3: 未认证',
   `review_remark` varchar(50) not null DEFAULT '' comment'审核备注',
   `reviewer_uid` int(11) NOT NULL DEFAULT 0 comment '审核人用户id',
   PRIMARY KEY (`id`)
