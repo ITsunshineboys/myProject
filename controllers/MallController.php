@@ -111,6 +111,7 @@ class MallController extends Controller
         'supplier-index-admin',
         'index-admin',
         'user-identity',
+        'user-add',
     ];
 
     /**
@@ -183,6 +184,7 @@ class MallController extends Controller
                     'goods-inventory-reset' => ['post',],
                     'supplier-add' => ['post',],
                     'supplier-icon-reset' => ['post',],
+                    'user-add' => ['post',],
                 ],
             ],
         ];
@@ -4542,6 +4544,20 @@ class MallController extends Controller
             'data' => [
                 'user-identity' => $user->viewIdentityLhzz(),
             ],
+        ]);
+    }
+
+    /**
+     * Add user(lhzz)
+     *
+     * @return string
+     */
+    public function actionUserAdd()
+    {
+        $res = User::register(Yii::$app->request->post(), false);
+        return Json::encode([
+            'code' => is_array($res) ? 200 : $res,
+            'msg' => is_array($res) ? 'OK' : Yii::$app->params['errorCodes'][$res]
         ]);
     }
 }
