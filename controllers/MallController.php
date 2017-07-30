@@ -422,8 +422,10 @@ class MallController extends Controller
                 $res['categories'] = $categories;
             } else {
                 $goods = Goods::findByTitle($keyword);
-                $res['goods'] = $goods;
-                $res['category_id'] = Goods::findOne($goods[0]['id'])->category_id;
+                if ($goods) {
+                    $res['goods'] = $goods;
+                    $res['category_id'] = Goods::findOne($goods[0]['id'])->category_id;
+                }
             }
         }
 
