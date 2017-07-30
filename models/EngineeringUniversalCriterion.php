@@ -34,7 +34,7 @@ EngineeringUniversalCriterion extends ActiveRecord
     {
         if ($str)
         {
-            return $one =self::find()->asArray()->where(['and',['project'=>$str],['project_particulars'=>$area]])->one();
+            return self::find()->asArray()->where(['and',['project'=>$str],['project_particulars'=>$area]])->one();
         }else
         {
             return false;

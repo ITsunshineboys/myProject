@@ -727,25 +727,20 @@ class BasisDecorationService
      */
     public static function paintedArea($area,$house_area ,$bedroom ,$tall= 2.8,$wall = 4)
     {
-        if ($area && $house_area && $bedroom)
+        if ($area <= 1)
         {
-            if ($area <= 1)
-            {
 //        卧室地面积：【z】%×（房屋面积）
-                $ground_area = $area * $house_area;
+            $ground_area = $area * $house_area;
 //        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
-                $wall_space_area =  sqrt($ground_area / $bedroom) * $tall * $wall * $bedroom;
+            $wall_space_area =  sqrt($ground_area / $bedroom) * $tall * $wall * $bedroom;
 //        卧室底漆面积=卧室地面积+卧室墙面积
-                $total_area =    $ground_area + $wall_space_area;
-            }else
-            {
+            $total_area =    $ground_area + $wall_space_area;
+        }else
+        {
 //        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
-                $wall_space_area = sqrt($area / $bedroom)* $tall * $wall * $bedroom;
+            $wall_space_area = sqrt($area / $bedroom)* $tall * $wall * $bedroom;
 //        卧室底漆面积=卧室地面积+卧室墙面积
-                $total_area =    $area + $wall_space_area;
-            }
-        }else{
-            return '错误信息';
+            $total_area =    $area + $wall_space_area;
         }
         return $total_area;
     }
@@ -760,20 +755,14 @@ class BasisDecorationService
      */
     public  static function paintedPerimeter($area,$house_area,$bedroom ,$wall = 4)
     {
-        if ($area && $house_area){
-            if ($area <= 1)
-            {
-                //        卧室地面积：【z】%×（房屋面积）
-                $ground_area =  $area * $house_area;
-                //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
-                $wall_space_perimeter = sqrt($ground_area / $bedroom) * $wall * $bedroom;
-            }else
-            {
-                //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
-                $wall_space_perimeter = sqrt($area / $bedroom) * $wall * $bedroom;
-            }
-        }else{
-            return '错误信息';
+        if ($area <= 1) {
+//        卧室地面积：【z】%×（房屋面积）
+            $ground_area =  $area * $house_area;
+//        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
+            $wall_space_perimeter = sqrt($ground_area / $bedroom) * $wall * $bedroom;
+        }else {
+ //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
+            $wall_space_perimeter = sqrt($area / $bedroom) * $wall * $bedroom;
         }
         return $wall_space_perimeter;
     }
@@ -1015,31 +1004,26 @@ class BasisDecorationService
      */
     public static function cementCost($get_area,$craft,$goods,$goods_attr)
     {
-        if ($get_area && $craft)
-        {
-            $cement_12 = 0;
-            $cement_24 = 0;
-            $repair = 0;
-            foreach ($craft as $one_craft)
-            {
-                if ($one_craft['project_details'] == '12墙水泥用量')
-                {
+        $cement_12 = 0;
+        $cement_24 = 0;
+        $repair = 0;
+        foreach ($craft as $one_craft) {
+            switch ($one_craft) {
+                case $one_craft['project_details'] == '12墙水泥用量':
                     $cement_12 = $one_craft['material'];
-                }
-                if ($one_craft['project_details'] == '24墙水泥用量')
-                {
+                    break;
+                case $one_craft['project_details'] == '24墙水泥用量':
                     $cement_24 = $one_craft['material'];
-                }
-                if ($one_craft['project_details'] == '补烂水泥用量')
-                {
+                    break;
+                case $one_craft['project_details'] == '补烂水泥用量':
                     $repair = $one_craft['material'];
-                }
+                    break;
             }
-            $value = '';
-            foreach ($goods_attr as $one_goods)
-            {
-                $value = $one_goods['value'];
-            }
+        }
+        $value = '';
+        foreach ($goods_attr as $one_goods) {
+            $value = $one_goods['value'];
+        }
 
 //            水泥用量=新建用量+补烂用量
 //        新建用量=12墙新建面积×【10kg】+24墙新建面积×【15kg】+补烂长度×【2kg】
@@ -1047,13 +1031,10 @@ class BasisDecorationService
         $new_24 = $get_area['24_new_construction'] * $cement_24;
         $new_repair = $get_area['repair'] * $repair;
         $new_dosage = $new_12 + $new_24 + $new_repair;
-
-            //        个数：（水泥用量÷抓取的商品的KG）
-            $cement['quantity'] = ceil($new_dosage / $value);
-
-        //        水泥费用：个数×抓取的商品价格
+//        个数：（水泥用量÷抓取的商品的KG）
+        $cement['quantity'] = ceil($new_dosage / $value);
+//        水泥费用：个数×抓取的商品价格
         $cement['cost'] = $cement['quantity'] * $goods['platform_price'];
-        }
         return $cement;
     }
 
@@ -1319,27 +1300,26 @@ class BasisDecorationService
         {
             $property = [];
             $id = [];
-            foreach ($goods as $one_goods)
-            {
+            foreach ($goods as $one_goods) {
                 $id[] = $one_goods['id'];
             }
             $goods_property = GoodsAttr::findByGoodsIdUnit($id);
             foreach ($goods_property as $one_goods_property)
             {
-                if ($one_goods_property['title'] == '河沙')
+                switch ($one_goods_property)
                 {
-                    $property['river_sand']['title'] = '河沙';
-                    $property['river_sand']['value'] = $one_goods_property['value'];
-                }
-                if ($one_goods_property['title'] == '水泥')
-                {
-                    $property['concrete']['title'] = '水泥';
-                    $property['concrete']['value'] = $one_goods_property['value'];
-                }
-                if ($one_goods_property['title'] == '自流平')
-                {
-                    $property['self_leveling']['title'] = '自流平';
-                    $property['self_leveling']['value'] = $one_goods_property['value'];
+                    case $one_goods_property['title'] == '河沙':
+                        $property['river_sand']['title'] = '河沙';
+                        $property['river_sand']['value'] = $one_goods_property['value'];
+                        break;
+                    case $one_goods_property['title'] == '水泥':
+                        $property['concrete']['title'] = '水泥';
+                        $property['concrete']['value'] = $one_goods_property['value'];
+                        break;
+                    case $one_goods_property['title'] == '自流平':
+                        $property['self_leveling']['title'] = '自流平';
+                        $property['self_leveling']['value'] = $one_goods_property['value'];
+                        break;
                 }
             }
             return $property;
@@ -1373,47 +1353,38 @@ class BasisDecorationService
      */
     public static function coatingSeriesAndStyle($goods_price,$crafts,$post)
     {
-        if ($goods_price && $crafts)
+        foreach ($goods_price as $goods)
         {
-            foreach ($goods_price as $goods)
+            switch ($goods)
             {
-                if ($goods['title'] == '腻子' && $goods['series_id'] == $post['series'])
-                {
+                case $goods['title'] == '腻子' && $goods['series_id'] == $post['series']:
                     $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['putty'] = $goods_max;
-                }
-
-                if ($goods['title'] == '乳胶漆底漆' && $goods['series_id'] == $post['series'])
-                {
+                    break;
+                case $goods['title'] == '乳胶漆底漆' && $goods['series_id'] == $post['series']:
                     $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['primer'] = $goods_max;
-                }
-
-                if ($goods['title'] == '乳胶漆面漆' && $goods['series_id'] == $post['series'])
-                {
+                    break;
+                case $goods['title'] == '乳胶漆面漆' && $goods['series_id'] == $post['series']:
                     $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['finishing_coat'] = $goods_max;
-                }
-
-                if ($goods['title'] == '阴角线' && $goods['style_id'] == $post['style'])
-                {
+                    break;
+                case $goods['title'] == '阴角线' && $goods['style_id'] == $post['style']:
                     $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['concave_line'] = $goods_max;
-                }
-
-                if ($goods['title'] == '石膏粉' && $goods['style_id'] == 0 && $goods['series_id'] == 0)
-                {
+                    break;
+                case $goods['title'] == '石膏粉' && $goods['style_id'] == 0 && $goods['series_id'] == 0:
                     $all_goods[] = $goods;
                     $goods_max = self::profitMargin($goods);
                     $goods_all ['gypsum_powder'] = $goods_max;
-                }
+                    break;
             }
-            return $goods_all;
         }
+        return $goods_all;
     }
 
     /**
@@ -1578,97 +1549,83 @@ class BasisDecorationService
      */
     public static function floorTile($goods)
     {
-        if ($goods)
-        {
-            $id = [];
-            $goods_attr_details = [];
-            foreach ($goods as $one_goods)
-            {
-                $id [] = $one_goods['id'];
-            }
-            $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
+        $id = [];
+        $goods_attr_details = [];
+        foreach ($goods as $one_goods) {
+            $id [] = $one_goods['id'];
+        }
+        $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
 
-            foreach ($goods_attr as $one_goods_attr)
+        foreach ($goods_attr as $one_goods_attr)
+        {
+            switch ($one_goods_attr)
             {
-                if ($one_goods_attr['value'] == '厨房')
-                {
+                case $one_goods_attr['value'] == '厨房':
                     $kitchen_id = $one_goods_attr['goods_id'];
                     $goods_attr_details['kitchen']['id'] = $one_goods_attr['goods_id'];
                     $goods_attr_details['kitchen']['name'] = $one_goods_attr['value'];
-                }
-                if ($one_goods_attr['value'] == '卫生间')
-                {
+                    break;
+                case $one_goods_attr['value'] == '卫生间':
                     $toilet_id = $one_goods_attr['goods_id'];
                     $goods_attr_details['toilet']['id'] = $one_goods_attr['goods_id'];
                     $goods_attr_details['toilet']['name'] = $one_goods_attr['value'];
-                }
-                if ($one_goods_attr['value'] == '客厅')
-                {
+                    break;
+                case $one_goods_attr['value'] == '客厅':
                     $hall_id = $one_goods_attr['goods_id'];
                     $goods_attr_details['hall']['id'] = $one_goods_attr['goods_id'];
                     $goods_attr_details['hall']['name'] = $one_goods_attr['value'];
-                }
+                    break;
             }
-            foreach ($goods_attr as  $goods_area)
+        }
+        foreach ($goods_attr as  $goods_area)
+        {
+            switch ($goods_area)
             {
-                if ($goods_area['goods_id'] == $kitchen_id)
-                {
-                    if ($goods_area['name'] == '长度')
-                    {
+                case $goods_area['goods_id'] == $kitchen_id:
+                    if ($goods_area['name'] == '长度') {
                         $kitchen_length = $goods_area['value'] / 1000;
                     }
-                    if ($goods_area['name'] == '宽度')
-                    {
+                    if ($goods_area['name'] == '宽度') {
                         $kitchen_wide = $goods_area['value'] / 1000;
                     }
-                }
-                if ($goods_area['goods_id'] == $toilet_id)
-                {
-                    if ($goods_area['name'] == '长度')
-                    {
+                    break;
+                case $goods_area['goods_id'] == $toilet_id:
+                    if ($goods_area['name'] == '长度') {
                         $toilet_length = $goods_area['value'] / 1000;
                     }
-                    if ($goods_area['name'] == '宽度')
-                    {
+                    if ($goods_area['name'] == '宽度') {
                         $toilet_wide = $goods_area['value'] / 1000;
                     }
-                }
-                if ($goods_area['goods_id'] == $hall_id)
-                {
-                    if ($goods_area['name'] == '长度')
-                    {
+                    break;
+                case $goods_area['goods_id'] == $hall_id:
+                    if ($goods_area['name'] == '长度') {
                         $hall_length = $goods_area['value'] / 1000;
                     }
-                    if ($goods_area['name'] == '宽度')
-                    {
+                    if ($goods_area['name'] == '宽度') {
                         $hall_wide = $goods_area['value'] / 1000;
                     }
-                }
+                    break;
             }
-            foreach ($goods as $goods_price)
-            {
-                if ($goods_price['id'] == $kitchen_id)
-                {
-                    $goods_attr_details['kitchen']['price'] =  $goods_price['platform_price'];
-                }
-                if ($goods_price['id'] == $toilet_id)
-                {
-                    $goods_attr_details['toilet']['price'] =  $goods_price['platform_price'];
-                }
-                if ($goods_price['id'] == $hall_id)
-                {
-                    $goods_attr_details['hall']['price'] =  $goods_price['platform_price'];
-                }
-            }
-            $goods_attr_details['kitchen']['area'] = $kitchen_length * $kitchen_wide;
-            $goods_attr_details['toilet']['area'] = $toilet_length * $toilet_wide;
-            $goods_attr_details['hall']['area'] = $hall_length * $hall_wide;
-
-          return $goods_attr_details;
-        }else
-        {
-            return false;
         }
+        foreach ($goods as $goods_price)
+        {
+            switch ($goods_price)
+            {
+                case $goods_price['id'] == $kitchen_id:
+                    $goods_attr_details['kitchen']['price'] =  $goods_price['platform_price'];
+                    break;
+                case $goods_price['id'] == $toilet_id:
+                    $goods_attr_details['toilet']['price'] =  $goods_price['platform_price'];
+                    break;
+                case $goods_price['id'] == $hall_id:
+                    $goods_attr_details['hall']['price'] =  $goods_price['platform_price'];
+                    break;
+            }
+        }
+        $goods_attr_details['kitchen']['area'] = $kitchen_length * $kitchen_wide;
+        $goods_attr_details['toilet']['area'] = $toilet_length * $toilet_wide;
+        $goods_attr_details['hall']['area'] = $hall_length * $hall_wide;
+        return $goods_attr_details;
     }
 
     /**

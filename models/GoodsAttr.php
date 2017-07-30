@@ -352,8 +352,7 @@ class GoodsAttr extends ActiveRecord
      */
     public static function findByGoodsIdUnit($goods_id)
     {
-        if (is_array($goods_id))
-        {
+        if (is_array($goods_id)) {
             $str_id = implode(',',$goods_id);
         }else
         {

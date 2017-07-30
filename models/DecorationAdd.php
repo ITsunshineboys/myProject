@@ -48,8 +48,7 @@ class DecorationAdd extends ActiveRecord
                 ->where(['and',['project'=>$str],['district_code'=>$city]])
                 ->all();
             $add_prices = [];
-            foreach ($add as $one)
-            {
+            foreach ($add as $one) {
                 if($one['max_area'] >= $all_area && $one['min_area'] <= $all_area){
                     $add_prices [] = $one;
                 }

@@ -18,12 +18,19 @@ class DecorationParticulars extends ActiveRecord
         return 'decoration_particulars';
     }
 
-    public static function findByOne($id = '')
+    /**
+     * find id one
+     * @param $id
+     * @return array|bool|null|ActiveRecord
+     */
+    public static function findByOne($id)
     {
         if($id)
         {
-            $area = self::find()->asArray()->where(['decoration_list_id' => $id])->one();
+            return  self::find()->asArray()->where(['decoration_list_id' => $id])->one();
+        }else
+        {
+            return false;
         }
-        return $area;
     }
 }

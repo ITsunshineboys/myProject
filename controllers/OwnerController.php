@@ -835,17 +835,20 @@ class OwnerController extends Controller
         $concave_line = 0;
         $putty = 0;
         foreach ($labor_costs as $labor_cost) {
-            if ($labor_cost['worker_kind_details'] == '乳胶漆底漆') {
-                $primer = $labor_cost['quantity'];
-            }
-            if ($labor_cost['worker_kind_details'] == '乳胶漆面漆') {
-                $finishing_coat = $labor_cost['quantity'];
-            }
-            if ($labor_cost['worker_kind_details'] == '阴角线') {
-                $concave_line = $labor_cost['quantity'];
-            }
-            if ($labor_cost['worker_kind_details'] == '腻子') {
-                $putty = $labor_cost['quantity'];
+            switch ($labor_cost)
+            {
+                case $labor_cost['worker_kind_details'] == '乳胶漆底漆':
+                    $primer = $labor_cost['quantity'];
+                    break;
+                case $labor_cost['worker_kind_details'] == '乳胶漆面漆':
+                    $finishing_coat = $labor_cost['quantity'];
+                    break;
+                case $labor_cost['worker_kind_details'] == '阴角线':
+                    $concave_line = $labor_cost['quantity'];
+                    break;
+                case $labor_cost['worker_kind_details'] == '腻子':
+                    $putty = $labor_cost['quantity'];
+                    break;
             }
         }
 
@@ -858,15 +861,16 @@ class OwnerController extends Controller
             $area['masterBedroom_area'] = 0;
             $area['sittingRoom_diningRoom_area'] = 0;
             foreach ($areas as $one) {
-                if ($one['project_particulars'] == '卧室面积')
+                switch ($one)
                 {
-                    $area['masterBedroom_area'] = $one['project_value'];
-                    $tall = $one['storey'];
-                }
-                if ($one['project_particulars'] == '客厅面积')
-                {
-                    $area['sittingRoom_diningRoom_area'] = $one['project_value'];
-                    $tall = $one['storey'];
+                    case $one['project_particulars'] == '卧室面积':
+                        $area['masterBedroom_area'] = $one['project_value'];
+                        $tall = $one['storey'];
+                        break;
+                    case $one['project_particulars'] == '客厅面积':
+                        $area['sittingRoom_diningRoom_area'] = $one['project_value'];
+                        $tall = $one['storey'];
+                        break;
                 }
             }
         }
@@ -921,25 +925,23 @@ class OwnerController extends Controller
         $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price,$crafts,$post);
         foreach ($crafts as $craft)
         {
-            if ($craft['project_details'] == '腻子')
+            switch ($craft)
             {
-                $putty_craft = $craft;
-            }
-            if ($craft['project_details'] == '乳胶漆底漆')
-            {
-                $primer_craft = $craft;
-            }
-            if ($craft['project_details'] == '乳胶漆面漆')
-            {
-                $finishing_coat_craft = $craft;
-            }
-            if ($craft['project_details'] == '阴角线')
-            {
-                $concave_line_craft = $craft;
-            }
-            if ($craft['project_details'] == '石膏粉')
-            {
-                $gypsum_powder_craft = $craft;
+                case $craft['project_details'] == '腻子':
+                    $putty_craft = $craft;
+                    break;
+                case $craft['project_details'] == '乳胶漆底漆':
+                    $primer_craft = $craft;
+                    break;
+                case $craft['project_details'] == '乳胶漆面漆':
+                    $finishing_coat_craft = $craft;
+                    break;
+                case $craft['project_details'] == '阴角线':
+                    $concave_line_craft = $craft;
+                    break;
+                case $craft['project_details'] == '石膏粉':
+                    $gypsum_powder_craft = $craft;
+                    break;
             }
         }
 
@@ -962,37 +964,33 @@ class OwnerController extends Controller
         $material_total = [];
         foreach ($series_and_style as $one_goods_price)
         {
-            if ($one_goods_price['title'] == '腻子')
+            switch ($one_goods_price)
             {
-                $one_goods_price['quantity'] = $putty_cost['quantity'];
-                $one_goods_price['cost'] = $putty_cost['cost'];
-                $material_total [] =  $one_goods_price;
-            }
-
-            if ($one_goods_price['title'] == '乳胶漆底漆')
-            {
-                $one_goods_price['quantity'] = $primer_cost['quantity'];
-                $one_goods_price['cost'] = $primer_cost['cost'];
-                $material_total [] =  $one_goods_price;
-            }
-
-            if ($one_goods_price['title'] == '乳胶漆面漆')
-            {
-                $one_goods_price['quantity'] = $finishing_coat_cost['quantity'];
-                $one_goods_price['cost'] = $finishing_coat_cost['cost'];
-                $material_total [] =  $one_goods_price;
-            }
-            if ($one_goods_price['title'] == '阴角线')
-            {
-                $one_goods_price['quantity'] = $concave_line_cost['quantity'];
-                $one_goods_price['cost'] = $concave_line_cost['cost'];
-                $material_total [] =  $one_goods_price;
-            }
-            if ($one_goods_price['title'] == '石膏粉')
-            {
-                $one_goods_price['quantity'] = $gypsum_powder_cost['quantity'];
-                $one_goods_price['cost'] = $gypsum_powder_cost['cost'];
-                $material_total [] =  $one_goods_price;
+                case $one_goods_price['title'] == '腻子':
+                    $one_goods_price['quantity'] = $putty_cost['quantity'];
+                    $one_goods_price['cost'] = $putty_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == '乳胶漆底漆':
+                    $one_goods_price['quantity'] = $primer_cost['quantity'];
+                    $one_goods_price['cost'] = $primer_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == '乳胶漆面漆':
+                    $one_goods_price['quantity'] = $finishing_coat_cost['quantity'];
+                    $one_goods_price['cost'] = $finishing_coat_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == '阴角线':
+                    $one_goods_price['quantity'] = $concave_line_cost['quantity'];
+                    $one_goods_price['cost'] = $concave_line_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == '石膏粉':
+                    $one_goods_price['quantity'] = $gypsum_powder_cost['quantity'];
+                    $one_goods_price['cost'] = $gypsum_powder_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
             }
         }
         $material_total['total_cost'] = $total_cost;
@@ -1079,12 +1077,14 @@ class OwnerController extends Controller
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
         $labor_day_cost = 0;
         foreach ($labor_costs as $labor_cost) {
-            if ($labor_cost['worker_kind_details'] == '保护层') {
-                $covering_layer_day_area = $labor_cost['quantity'];
-                $labor_day_cost = $labor_cost['univalence'];
-            }
-            if ($labor_cost['worker_kind_details'] == '贴砖') {
-                $tiling_day_area = $labor_cost['quantity'];
+            switch ($labor_cost) {
+                case $labor_cost['worker_kind_details'] == '保护层':
+                    $covering_layer_day_area = $labor_cost['quantity'];
+                    $labor_day_cost = $labor_cost['univalence'];
+                    break;
+                case $labor_cost['worker_kind_details'] == '贴砖':
+                    $tiling_day_area = $labor_cost['quantity'];
+                    break;
             }
         }
         //泥作面积
@@ -1112,17 +1112,20 @@ class OwnerController extends Controller
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('泥工', $post['city']);
         foreach ($craft as $local_craft) {
-            if ($local_craft['project_details'] == '贴砖') {
-                $wall_height = $local_craft['material'];
-            }
-            if ($local_craft['project_details'] == '水泥') {
-                $cement_craft = $local_craft['material'];
-            }
-            if ($local_craft['project_details'] == '自流平') {
-                $self_leveling_craft = $local_craft['material'];
-            }
-            if ($local_craft['project_details'] == '河沙') {
-                $river_sand_craft = $local_craft['material'];
+            switch ($local_craft)
+            {
+                case $local_craft['project_details'] == '贴砖':
+                    $wall_height = $local_craft['material'];
+                    break;
+                case $local_craft['project_details'] == '水泥':
+                    $cement_craft = $local_craft['material'];
+                    break;
+                case $local_craft['project_details'] == '自流平':
+                    $self_leveling_craft = $local_craft['material'];
+                    break;
+                case $local_craft['project_details'] == '河沙':
+                    $river_sand_craft = $local_craft['material'];
+                    break;
             }
         }
 //        保护层面积
@@ -1204,31 +1207,28 @@ class OwnerController extends Controller
 
         foreach ($goods_price as $one_goods_price)
         {
-            if ($one_goods_price['title'] == '河沙')
+            switch ($one_goods_price)
             {
-                $one_goods_price['quantity'] = $river_sand_cost['quantity'];
-                $one_goods_price['cost'] = $river_sand_cost['cost'];
-                $material_total [] =  $one_goods_price;
-            }
-
-            if ($one_goods_price['title'] == '水泥')
-            {
-                $one_goods_price['quantity'] = $cement_cost['quantity'];
-                $one_goods_price['cost'] = $cement_cost['cost'];
-                $material_total [] =  $one_goods_price;
-            }
-
-            if ($one_goods_price['title'] == '自流平')
-            {
-                $one_goods_price['quantity'] = $self_leveling_cost['quantity'];
-                $one_goods_price['cost'] = $self_leveling_cost['cost'];
-                $material_total [] =  $one_goods_price;
-            }
-            if ($one_goods_price['title'] == '墙砖')
-            {
-                $one_goods_price['quantity'] = $wall_brick_cost['quantity'];
-                $one_goods_price['cost'] = $wall_brick_cost['cost'];
-                $material_total [] =  $one_goods_price;
+                case $one_goods_price['title'] == '河沙':
+                    $one_goods_price['quantity'] = $river_sand_cost['quantity'];
+                    $one_goods_price['cost'] = $river_sand_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == '水泥':
+                    $one_goods_price['quantity'] = $cement_cost['quantity'];
+                    $one_goods_price['cost'] = $cement_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == '自流平':
+                    $one_goods_price['quantity'] = $self_leveling_cost['quantity'];
+                    $one_goods_price['cost'] = $self_leveling_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == '墙砖':
+                    $one_goods_price['quantity'] = $wall_brick_cost['quantity'];
+                    $one_goods_price['cost'] = $wall_brick_cost['cost'];
+                    $material_total [] =  $one_goods_price;
+                    break;
             }
         }
             $wall_brick_max['quantity'] = $wall_brick_cost['quantity'];
@@ -1237,23 +1237,23 @@ class OwnerController extends Controller
 
         foreach ($floor_tile_price as $one_floor_tile_price)
         {
-            if ($one_floor_tile_price['id'] == $floor_tile_attr['hall']['id'])
+            switch ($one_floor_tile_price)
             {
-                $one_floor_tile_price['quantity'] = $hall_wall_brick_cost['quantity'];
-                $one_floor_tile_price['cost'] = $hall_wall_brick_cost['cost'];
-                $material_total [] =  $one_floor_tile_price;
-            }
-            if ($one_floor_tile_price['id'] == $floor_tile_attr['kitchen']['id'])
-            {
-                $one_floor_tile_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
-                $one_floor_tile_price['cost'] = $kitchen_wall_brick_cost['cost'];
-                $material_total [] =  $one_floor_tile_price;
-            }
-            if ($one_floor_tile_price['id'] == $floor_tile_attr['toilet']['id'])
-            {
-                $one_floor_tile_price['quantity'] = $toilet_wall_brick_cost['quantity'];
-                $one_floor_tile_price['cost'] = $toilet_wall_brick_cost['cost'];
-                $material_total [] =  $one_floor_tile_price;
+                case $one_floor_tile_price['id'] == $floor_tile_attr['hall']['id']:
+                    $one_floor_tile_price['quantity'] = $hall_wall_brick_cost['quantity'];
+                    $one_floor_tile_price['cost'] = $hall_wall_brick_cost['cost'];
+                    $material_total [] =  $one_floor_tile_price;
+                    break;
+                case $one_floor_tile_price['id'] == $floor_tile_attr['kitchen']['id']:
+                    $one_floor_tile_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
+                    $one_floor_tile_price['cost'] = $kitchen_wall_brick_cost['cost'];
+                    $material_total [] =  $one_floor_tile_price;
+                    break;
+                case $one_floor_tile_price['id'] == $floor_tile_attr['toilet']['id']:
+                    $one_floor_tile_price['quantity'] = $toilet_wall_brick_cost['quantity'];
+                    $one_floor_tile_price['cost'] = $toilet_wall_brick_cost['cost'];
+                    $material_total [] =  $one_floor_tile_price;
+                    break;
             }
         }
         $material_total['total_cost'] = $material_cost_total;
@@ -1351,52 +1351,47 @@ class OwnerController extends Controller
         $goods = Goods::priceDetail(3,$material);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = [];
-        foreach ($goods_price as $max)
-        {
-            if ($max['title'] == '水泥')
-            {
-                $goods_max = BasisDecorationService::profitMargin($max);
-                $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
-                //水泥费用
-                $cement_cost = BasisDecorationService::cementCost($post,$craft,$goods_max,$goods_attr);
-                $goods_max['quantity'] = $cement_cost['quantity'];
-                $goods_max['cost'] = $cement_cost['cost'];
-                $material [] = $goods_max;
-            }
-            if ($max['title'] == '空心砖')
-            {
-                $goods_max = BasisDecorationService::profitMargin($max);
-                //空心砖费用
-                $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
-                $brick_cost = BasisDecorationService::brickCost($post,$goods_max, $brick_standard);
-                $goods_max['quantity'] = $brick_cost['quantity'];
-                $goods_max['cost'] = $brick_cost['cost'];
-                $material [] = $goods_max;
-            }
-            if ($max['title'] == '河沙')
-            {
-                $goods_max = BasisDecorationService::profitMargin($max);
-                $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
-                //河沙费用
-                $river_sand = BasisDecorationService::riverSandCost($post,$goods_max, $craft,$goods_attr);
-                $goods_max['quantity'] = $river_sand['quantity'];
-                $goods_max['cost'] = $river_sand['cost'];
-                $material [] = $goods_max;
+        foreach ($goods_price as $max) {
+            switch ($max) {
+                case $max['title'] == '水泥':
+                    $goods_max = BasisDecorationService::profitMargin($max);
+                    $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
+                    //水泥费用
+                    $cement_cost = BasisDecorationService::cementCost($post,$craft,$goods_max,$goods_attr);
+                    $goods_max['quantity'] = $cement_cost['quantity'];
+                    $goods_max['cost'] = $cement_cost['cost'];
+                    $material [] = $goods_max;
+                    break;
+                case $max['title'] == '空心砖':
+                    $goods_max = BasisDecorationService::profitMargin($max);
+                    //空心砖费用
+                    $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
+                    $brick_cost = BasisDecorationService::brickCost($post,$goods_max, $brick_standard);
+                    $goods_max['quantity'] = $brick_cost['quantity'];
+                    $goods_max['cost'] = $brick_cost['cost'];
+                    $material [] = $goods_max;
+                    break;
+                case $max['title'] == '河沙':
+                    $goods_max = BasisDecorationService::profitMargin($max);
+                    $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
+                    //河沙费用
+                    $river_sand = BasisDecorationService::riverSandCost($post,$goods_max, $craft,$goods_attr);
+                    $goods_max['quantity'] = $river_sand['quantity'];
+                    $goods_max['cost'] = $river_sand['cost'];
+                    $material [] = $goods_max;
+                    break;
             }
         }
         //总材料费
         $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand['cost'];
         $material['total_cost'] = $total_material_cost;
 
-
         //添加材料费用
         $add_price_area = DecorationAdd::AllArea('杂工', $post['area'], $post['city']);
         $add_price = [];
-        foreach ($add_price_area as $add_area)
-        {
+        foreach ($add_price_area as $add_area) {
             $sku_area =  Goods::skuAll($add_area['sku']);
-            if ($sku_area !== null)
-            {
+            if ($sku_area !== null) {
                 $add_price [] = $add_area['quantity'] *  $sku_area['platform_price'];
             }else
             {
@@ -1405,11 +1400,9 @@ class OwnerController extends Controller
         }
 
         $add_price_series = DecorationAdd::AllSeries('杂工', $post['series'], $post['city']);
-        foreach ($add_price_series as $add_series)
-        {
+        foreach ($add_price_series as $add_series) {
             $sku_area =  Goods::skuAll($add_series['sku']);
-            if ($sku_area !== null)
-            {
+            if ($sku_area !== null) {
                 $add_price [] = $add_series['quantity'] *  $sku_area['platform_price'];
             }else
             {
@@ -1417,11 +1410,9 @@ class OwnerController extends Controller
             }
         }
         $add_price_style = DecorationAdd::AllStyle('杂工', $post['style'], $post['city']);
-        foreach ($add_price_style as $add_style)
-        {
+        foreach ($add_price_style as $add_style) {
             $sku_area =  Goods::skuAll($add_style['sku']);
-            if ($sku_area !== null)
-            {
+            if ($sku_area !== null) {
                 $add_price [] = $add_style['quantity'] *  $sku_area['platform_price'];
             }else
             {
