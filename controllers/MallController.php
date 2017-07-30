@@ -110,6 +110,7 @@ class MallController extends Controller
         'shop-data',
         'supplier-index-admin',
         'index-admin',
+        'user-identity',
     ];
 
     /**
@@ -4523,6 +4524,24 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'categories_level3' => GoodsCategory::level3CategoriesByLevel1Pid($pid)
+        ]);
+    }
+
+    /**
+     * User identity action
+     *
+     * @return string
+     */
+    public function actionUserIdentity()
+    {
+        $user = Yii::$app->user->identity;
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'user-identity' => $user->viewIdentityLhzz(),
+            ],
         ]);
     }
 }
