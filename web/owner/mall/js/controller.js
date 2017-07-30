@@ -348,9 +348,9 @@ angular.module("all_controller", [])
         }
 
     })
-    .controller("intelligent_nodata_ctrl", function ($scope, $stateParams, $http, $state) { //无数据控制器
-        let all_url = 'http://test.cdlhzz.cn:888'
-        // let all_url = ""
+    .controller("intelligent_nodata_ctrl", function ($scope, $stateParams, $http, $state,$location,$anchorScroll) { //无数据控制器
+        // let all_url = 'http://test.cdlhzz.cn:888'
+        let all_url = ""
         console.log($stateParams)
         $scope.message = ''
         $scope.cur_labor = $stateParams.cur_labor || ''
@@ -359,6 +359,7 @@ angular.module("all_controller", [])
         $scope.nowStyle = '现代简约'
         $scope.nowStairs = $stateParams.cur_stair || '实木构造'
         $scope.nowSeries = '齐家'
+        $scope.index = $stateParams.index || ''
         $scope.area = $stateParams.area || ''
         $scope.cur_labor = $stateParams.cur_labor || ''
         $scope.series_index = $stateParams.series_index || 0//系列编号
@@ -373,6 +374,12 @@ angular.module("all_controller", [])
         $scope.level = $stateParams.level//默认二级传递值
         $scope.isClick = $stateParams.isBack || false
         $scope.handyman_price = $stateParams.worker_category['杂工'] || 0
+        if($stateParams.index !== ''){
+            $anchorScroll.yOffset = 150
+            console.log($scope.stair[$stateParams.index].id)
+            $location.hash('bottom'+$scope.stair[$stateParams.index].id)
+            $anchorScroll()
+        }
         //生成材料变量
         $scope.house_bedroom = $stateParams.house_bedroom || 1
         $scope.house_hall = $stateParams.house_hall || 1
@@ -2011,8 +2018,8 @@ angular.module("all_controller", [])
             console.log($scope.modalData)
         }
         //杂工数据请求
-        let url = 'http://test.cdlhzz.cn:888/owner/handyman'
-        // let url = '/owner/handyman'
+        // let url = 'http://test.cdlhzz.cn:888/owner/handyman'
+        let url = '/owner/handyman'
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
@@ -2025,6 +2032,7 @@ angular.module("all_controller", [])
             console.log($stateParams.stair)
             $state.go('nodata', {
                     'isBack': true,
+                'index':$scope.index,
                     'level': $stateParams.level,
                     'stair': $stateParams.stair,
                 'platform_price': $scope.platform_price,
@@ -2215,6 +2223,7 @@ angular.module("all_controller", [])
                     'platform_price': $scope.platform_price,
                     'supply_price': $scope.supply_price,
                     'stair': $scope.stair,
+                    'index':$scope.index,
                     'labor_price': $scope.labor_price,
                     'series_index': $scope.series_index,
                     'style_index': $scope.style_index,
@@ -2294,6 +2303,7 @@ angular.module("all_controller", [])
                     'isBack': true,
                     'level': $stateParams.level,
                     'stair': $stateParams.stair,
+                'index':$scope.index,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
                     'level_copy': $stateParams.level,
@@ -2344,6 +2354,7 @@ angular.module("all_controller", [])
                 'isBack': true,
                 'level': $scope.level,
                 'stair': $scope.stair,
+                'index':$scope.index,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
@@ -2798,8 +2809,7 @@ angular.module("all_controller", [])
         $scope.current_good = $stateParams.product_details //当前商品信息
         $scope.goods_id = $stateParams.product_details.id//当前商品id
         $scope.prev_index = $stateParams.prev_index//判断是更换还是添加
-        $scope.excluded_item = $stateParams.excluded_item
-        $scope.add_quantity = 1//添加数量
+        $scope.add_quantity =$scope.excluded_item.show_quantity || $scope.excluded_item.quantity || 1//添加数量
         $scope.platform_price_copy = angular.copy($scope.platform_price)
         $scope.supply_price_copy = angular.copy($scope.supply_price)
         //杂工数据
@@ -3047,6 +3057,7 @@ angular.module("all_controller", [])
                 'level': $scope.level,
                 'stair': $scope.stair,
                 'cur_labor' :$scope.cur_labor,
+                'index':$scope.index,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
@@ -3088,6 +3099,7 @@ angular.module("all_controller", [])
                 'level': $scope.level,
                 'stair': $scope.stair,
                 'cur_labor' :$scope.cur_labor,
+                'index':$scope.index,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
                 'level_copy': $scope.level_copy,
@@ -3123,6 +3135,7 @@ angular.module("all_controller", [])
                 'cur_labor' :$scope.cur_labor,
                 'platform_price': $scope.platform_price,
                 'supply_price': $scope.supply_price,
+                'index':$scope.index,
                     'level_copy': $stateParams.level,
                     'stair_copy': $stateParams.stair,
                     'labor_price': $scope.labor_price,

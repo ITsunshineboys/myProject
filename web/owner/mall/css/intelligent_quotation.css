@@ -55,8 +55,10 @@ header div span{
 }
 .in_span{
     margin-left: 1rem;
+    margin-top: -0.5rem;
     /*color:#53A8F4 ;*/
     font-weight: 100;
+
 }
 .pic_span{
     margin-left: 11rem;
@@ -145,6 +147,9 @@ header div i{
     margin-bottom: 1rem;
     margin-top: 1rem;
 
+}
+.choose_ul{
+    margin-left: -1.6rem;
 }
 .choose_ul li label{
     font-weight:400;
@@ -238,9 +243,9 @@ header div i{
 }
 /*ϵ��*/
 .tag{
-    padding-left:1.5rem;
+    /*padding-left:1.5rem;*/
     color: #06CB7E;
-    margin-left: .4rem;
+    margin-left: -1.6rem;
     margin-top: 1.2rem;
 }
 .tag span{
@@ -325,6 +330,7 @@ header div i{
 }
 .decoration li:last-child{
     border-bottom: none;
+    margin-bottom: 0;
 }
 .title_p{
     font-size: 1.1rem;
@@ -350,7 +356,7 @@ header div i{
     border-radius: 2.5rem;
     width: 12rem;
     height: 3.2rem;
-    color:#53A8F4;
+    color:#53A8F4!important;
     font-size: 1.2rem;
     /*margin-left: 2.5rem;*/
 
@@ -461,6 +467,7 @@ a{
     border-radius: 1rem;
     outline: none;
     border: 1px solid #B8B6B6;
+    padding-top: .5rem;
 }
 .special_requirements span{
     position: relative;
@@ -546,8 +553,8 @@ a{
 }
 .structure{
     border: 1px solid #E5E5E5;
-    width: 29rem;
-    margin-left: 1.2rem;
+    width: 30rem;
+    margin-left: 1rem;
     padding-top: 1rem;
     margin-top: 1rem;
     border-radius: .2rem;
@@ -555,12 +562,12 @@ a{
 
 }
 .structure ul{
-    margin-left:.8rem;
+    margin-left:-1rem;
 }
 .structure ul li{
     font-size: 1.2rem;
     display: inline-block;
-    margin-left: 2rem;
+    margin-left: 3rem;
     margin-bottom: 1rem;
 }
 .structure ul li span{
@@ -574,10 +581,21 @@ a{
 .active_l{
     color: #53A8F4!important;
 }
-.have ,.no{
+.have {
     font-size: 1.3rem;
     margin-left: .3rem;
     font-weight: 400;
+    position: absolute;
+    top:-.35rem;
+    left: 1.4rem;
+}
+.no{
+    font-size: 1.3rem;
+    margin-left: .3rem;
+    font-weight: 400;
+    position: absolute;
+    top:-.5rem;
+    left: 1.4rem;
 }
 .lou_stairs label{
     margin-left: 1rem;
@@ -637,6 +655,7 @@ a{
 }
 .choose_style ul {
     margin-bottom: 1rem;
+    padding-left: 0;
 }
 
 .choose_style ul li {
@@ -688,11 +707,13 @@ a{
 
 .note ul li button {
     width:7.1rem;
-    height: 2.4rem;
+    height: 2.2rem;
     background-color: white;
     border: 1px solid #C2C2C2;
-    margin-top: .3rem;
+    margin-top: .2rem;
     font-size: 1rem;
+
+
 }
 
 .btn_vr button {
@@ -705,6 +726,7 @@ a{
     border-radius: .3rem;
 
 }
+
 .choose_stairs{
     margin-top: 1rem;
 }
@@ -712,9 +734,12 @@ a{
     font-size: 1.3rem;
     margin-left: 1rem;
     color: #4A4A4A;
+    position: relative;
+    top:.4rem;
 }
 .choose_stairs label{
-    margin-left: 2rem;
+    margin-left: 3rem;
+    position: relative;
 }
 .choose_stairs label span {
     margin-top: -.2rem;
@@ -722,7 +747,7 @@ a{
 /*系列*/
 .tag {
     margin-left: 1.2rem;
-    padding-left: 1.5rem;
+    /*padding-left: 1.5rem;*/
     color: #06CB7E;
 }
 
@@ -795,11 +820,11 @@ button {
 .item_p {
     break-inside: avoid;
     box-sizing: border-box;
-    padding: 10px;
+    /*padding: 10px;*/
     border: 1px solid #E5E5E5;
     margin-left: 1rem;
     width: 14rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     border-radius: 2px;
 
 }

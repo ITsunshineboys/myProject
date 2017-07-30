@@ -115,7 +115,7 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                     'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'',"area":"",'choose_stairs':''
                     ,'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
                     'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
-                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor':''}
+                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor':'','index':''}
             })
             .state("cell_search", {
                 url: "/cell_search",

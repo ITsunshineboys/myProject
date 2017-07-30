@@ -105,7 +105,7 @@ ul{
 }
 .close{
     position: absolute;
-    top:1rem;
+    top:.7rem;
     left:1rem;
     font-size:3rem!important;
     color: #53A8F4!important;

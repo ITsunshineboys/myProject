@@ -23,12 +23,14 @@
                 <p>小区信息</p>
                 <span class="choose_quarter">小区选择</span>
                 <a ui-sref="cell_search">
-                    <input type="text" placeholder="请输入小区" ng-model="toponymy"/><br/>
+                    <img src="images/mall_searchbar.png" class="seachr" alt="">
+                    <input type="text" placeholder="请输入小区" class="seach" ng-model="toponymy"/><br/>
                 </a>
                 <div class="address_content">
                     <p class="quarters_adress">小区地址</p>
                     <textarea class="text_all" rows="3" cols="44" placeholder="例：金牛区沙西线66号"
-                              ng-model="message"></textarea>
+                              ng-model="message">
+                    </textarea>
                     <span class="text_all_length">{{message.length}}/45</span>
                 </div>
             </div>
@@ -40,7 +42,7 @@
                 <div class="shu_house"></div>
                 <h1>房屋信息</h1>
                 <span class="house_span">房屋面积</span>
-                <input type="text" required placeholder="请输入1-180的面积"
+                <input type="text" required placeholder="请输入1-180的面积"  style="color: #B8B6B6;"
                        ng-pattern="/^([1-9]|[1-9][0-9]|1[0-7][0-9]|180)$/" maxlength="3" ng-model="area"/>
 
                 <span class="p">m<sup>2</sup></span>
@@ -183,7 +185,7 @@
             <!--系类选择-->
             <div class="background_w">
             <div class="series">
-                <div class="shu_house"></div>
+                <div class="shu_house_1"></div>
                 <h1>系列选择</h1>
                 <ul>
                     <li ng-repeat="item in series" ng-cloak ng-click="toggleSeries(item.series,$index)">
@@ -416,7 +418,7 @@
                         <div class="basis_decoration">
                             <div ng-repeat="item in stair" ng-click="goDetail(item,$index)">
                                 <!--<a ui-sref="basics_decoration({first_level:item,second_level:level})">-->
-                                <div class="basis_item">
+                                <div class="basis_item" id="bottom{{item.id}}">
                                     <p ng-if="item.title == '辅材'" class="basis_title">基础装修 <span
                                             class="basis_title_span"> &nbsp;&nbsp;{{item.second_level.length+1}}项</span>
                                     </p>
@@ -446,9 +448,9 @@
                                             <div ng-repeat="item2 in item[item1].three_level"
                                                  class="dw basis_border basis_txt" >
                                                 <div ng-repeat="item3 in item[item1][item2].goods_detail"
-                                                     ng-if="item[item1][item2][item3].show_cost>0">
+                                                     ng-if="item[item1][item2][item3].show_cost>0" class="font_size">
                                                     <p>{{item[item1][item2].title}}</p>
-                                                    <span class="cur_title">{{item[item1][item2][item3].name}}</span>
+                                                    <span class="cur_title">{{item[item1][item2][item3].name}}</span >
                                                     <span class="pic_q">{{item[item1][item2][item3].show_cost | currency:'￥'}}</span>
                                                 </div>
                                             </div>
