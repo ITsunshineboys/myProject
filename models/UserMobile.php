@@ -52,7 +52,7 @@ class UserMobile extends ActiveRecord
     }
 
     /**
-     * Get list
+     * Get pagination list
      *
      * @param  array $where search condition
      * @param  array $select select fields default all fields
