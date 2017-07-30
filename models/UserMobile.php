@@ -82,6 +82,9 @@ class UserMobile extends ActiveRecord
             }
         }
 
-        return $list;
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'details' => $list
+        ];
     }
 }
