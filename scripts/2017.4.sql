@@ -418,26 +418,19 @@ CREATE TABLE `goods_stat` (
 CREATE TABLE `goods_order` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
-  `amount_order` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单金额',
+  `amount_order` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '订单金额',
   `supplier_id` int(10) unsigned NOT NULL DEFAULT '0',
   `address_id` int(11) NOT NULL COMMENT '收货地址号',
   `invoice_id` int(11) NOT NULL COMMENT '发票信息',
-  `order_status` tinyint(1) NOT NULL COMMENT '订单状态:0：未完成1：已完成2：已取消',
-  `pay_status` tinyint(1) NOT NULL COMMENT '支付状态：0：未付款 1：已付款',
-  `shipping_status` tinyint(1) NOT NULL COMMENT '发货状态:0:未发货1：已发货2：已收',
-  `customer_service` tinyint(1) NOT NULL COMMENT '售后状态:0：未售后1：售后中2：售后完成',
+  `pay_status` tinyint(1) NOT NULL COMMENT 'pay_status：0：未付款 1：已付款',
   `user_id` int(11) NOT NULL,
-  `goods_id` int(11) NOT NULL,
   `pay_name` varchar(120) NOT NULL,
   `create_time` int(11) NOT NULL DEFAULT '0',
-  `paytime` int(11) NOT NULL,
-  `order_refer` tinyint(1) NOT NULL COMMENT '订单来元:1：线下店2：非线下店；',
-  `money_paid` bigint(20) NOT NULL,
-  `comment` varchar(300) NOT NULL,
+  `paytime` int(11) NOT NULL DEFAULT '0',
+  `order_refer` tinyint(1) NOT NULL COMMENT 'order_refer:1：线下店2：非线下店；',
   `return_insurance` bigint(20) NOT NULL,
-  `freight` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='\r\n';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='\r\n';
 --5.5 end--
 
 --5.6 start--
@@ -946,3 +939,28 @@ create table district (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --7.27 end
+--7.30 start
+DROP TABLE IF EXISTS `order_goodslist`;
+CREATE TABLE `order_goodslist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `goods_id` int(11) NOT NULL,
+  `goods_number` int(8) NOT NULL,
+  `goods_attr_id` varchar(50) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `goods_name` varchar(100) NOT NULL,
+  `goods_price` bigint(20) NOT NULL,
+  `sku` int(11) NOT NULL,
+  `market_price` bigint(20) NOT NULL,
+  `supplier_price` bigint(20) NOT NULL,
+  `shipping_type` tinyint(1) NOT NULL,
+  `order_status` tinyint(1) NOT NULL,
+  `shipping_status` tinyint(1) NOT NULL,
+  `customer_service` tinyint(1) NOT NULL,
+  `is_unusual` tinyint(1) NOT NULL,
+  `freight` bigint(20) NOT NULL,
+  `comment` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+--7.30 end
+
