@@ -1333,7 +1333,6 @@ class OwnerController extends Controller
 
 //        总天数
         $total_day = BasisDecorationService::wallArea($post,$labor);
-
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($handyman, $post['city']);
 
@@ -1647,8 +1646,7 @@ class OwnerController extends Controller
         $classify = '生活配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $material_one = [];
-        foreach ($material_property_classify as $one)
-        {
+        foreach ($material_property_classify as $one) {
             $material_one[$one['material']] = $one;
         }
         $goods = Goods::categoryById($material_property_classify,510100);
