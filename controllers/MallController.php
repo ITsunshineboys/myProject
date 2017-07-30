@@ -112,6 +112,7 @@ class MallController extends Controller
         'index-admin',
         'user-identity',
         'user-add',
+        'reset-mobile',
     ];
 
     /**
@@ -185,6 +186,7 @@ class MallController extends Controller
                     'supplier-add' => ['post',],
                     'supplier-icon-reset' => ['post',],
                     'user-add' => ['post',],
+                    'reset-mobile' => ['post',]
                 ],
             ],
         ];
@@ -2633,7 +2635,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category-brands-styles-series' => GoodsCategory::CATEGORY_BRANDS_STYLES_SERIES
+                'category_brands_styles_series' => GoodsCategory::CATEGORY_BRANDS_STYLES_SERIES
             ],
         ];
 
@@ -2648,7 +2650,7 @@ class MallController extends Controller
             ]);
         }
 
-        $ret['data']['category-brands-styles-series'] = $brandsStylesSeries;
+        $ret['data']['category_brands_styles_series'] = $brandsStylesSeries;
         return Json::encode($ret);
     }
 
@@ -4559,6 +4561,39 @@ class MallController extends Controller
         return Json::encode([
             'code' => is_array($res) ? 200 : $res,
             'msg' => is_array($res) ? 'OK' : Yii::$app->params['errorCodes'][$res]
+        ]);
+    }
+
+    /**
+     * Reset mobile action.
+     *
+     * @return string
+     */
+    public function actionResetMobile()
+    {
+        $code = 1000;
+
+        $mobile = (int)Yii::$app->request->post('mobile', 0);
+
+        if (!StringService::isMobile($mobile)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        $code = $user->resetMobile($mobile);
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '更换手机号成功',
         ]);
     }
 }

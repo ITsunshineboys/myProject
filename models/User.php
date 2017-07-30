@@ -243,40 +243,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Reset user's new mobile
-     *
-     * @param int $mobile mobile
-     * @return bool
-     */
-    public function resetMobile($mobile)
-    {
-        if ($this->mobile == $mobile) {
-            $code = 200;
-            return $code;
-        }
-
-//        $user = self::find()->where(['mobile' => $mobile])->one();
-//        if ($user) {
-//            $code = 1019;
-//            return $code;
-//        }
-
-        $this->mobile = $mobile;
-        if (!$this->validate()) {print_r($this->errors);
-            $code = 1000;
-            return $code;
-        }
-
-        if (!$this->save()) {
-            $code = 500;
-            return $code;
-        }
-
-        $code = 200;
-        return $code;
-    }
-
-    /**
      * Add user by mobile and password
      *
      * @param int $mobile mobile
@@ -328,6 +294,47 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return $user;
+    }
+
+    /**
+     * Reset user's new mobile
+     *
+     * @param int $mobile mobile
+     * @return bool
+     */
+    public function resetMobile($mobile)
+    {
+        if ($this->mobile == $mobile) {
+            $code = 200;
+            return $code;
+        }
+
+        $this->mobile = $mobile;
+        if (!$this->validate()) {
+            $code = ModelService::uniqueError($this, 'mobile') ? 1019 : 1000;
+            return $code;
+        }
+
+        $code = 500;
+        try {
+            $tran = Yii::$app->db->beginTransaction();
+            if (!$this->save()) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            if (!UserMobile::addByUserAndOperator($this, Yii::$app->user->identity)) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            $tran->commit();
+            $code = 200;
+            return $code;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+            return $code;
+        }
     }
 
     /**
