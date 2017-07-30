@@ -1511,7 +1511,7 @@ class OwnerController extends Controller
      */
     public function actionFixationFurniture()
     {
-//        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->post();
 //        $post = [
 ////            'effect_id' => 1,
 //            'bedroom' => 2,
