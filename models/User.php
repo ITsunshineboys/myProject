@@ -172,6 +172,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user->nickname = Yii::$app->params['user']['default_nickname'];
 
         if (!$user->validate()) {
+            ModelService::uniqueError($user, 'mobile') && $code = 1019;
             return $code;
         }
 

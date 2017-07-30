@@ -131,4 +131,17 @@ class ModelService
     {
         return count(array_intersect($attrs, $model->getDirtyAttributes())) != count($attrs);
     }
+
+    /**
+     * Check if unique error
+     *
+     * @param ActiveRecord $model model
+     * @param $attr attribute name
+     * @return bool
+     */
+    public static function uniqueError(ActiveRecord $model, $attr)
+    {
+        $errors = $model->errors;
+        return isset($errors[$attr]) && false !== stripos($errors[$attr][0], 'has already been taken');
+    }
 }
