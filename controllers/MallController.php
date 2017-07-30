@@ -4624,7 +4624,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'reset-mobile-logs' => UserMobile::pagination([], UserMobile::FIELDS_BINDING_LOGS, $page, $size, $orderBy)
+                'reset_mobile_logs' => UserMobile::pagination([], UserMobile::FIELDS_BINDING_LOGS, $page, $size, $orderBy)
             ],
         ]);
     }
