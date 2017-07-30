@@ -18,18 +18,19 @@ class MaterialPropertyClassify extends ActiveRecord
         return 'material_property_classify';
     }
 
-    public static function findByAll($classify = [])
+    /**
+     * find classify all
+     * @param $classify
+     * @return array|ActiveRecord[]
+     */
+    public static function findByAll($classify)
     {
-        if ($classify)
-        {
-            $select = "material_property_classify.material,material_property_classify.quantity";
-            $all = self::find()
-                ->asArray()
-                ->select($select)
-                ->where(['classify'=>$classify])
-                ->all();
-        }
-
+        $select = "material_property_classify.material,material_property_classify.quantity";
+        $all = self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['classify'=>$classify])
+            ->all();
         return $all;
     }
 

@@ -1785,7 +1785,7 @@ class BasisDecorationService
                         $marble [] = $one_goods;
                     }else
                     {
-                        $marble[] = null;
+                        $marble = null;
                     }
 
                 }
