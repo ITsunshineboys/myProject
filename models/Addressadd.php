@@ -5,52 +5,70 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
-const USER = 'user_';
+use app\models\LogisticsDistrict;
+const USER_ADDRESS = 'user_address';
 
-class Addressadd extends Model
+class Addressadd extends  ActiveRecord
 {
     public $mobile;
     public $region;
     public $district;
     public $consignee;
 
-    public function rules()
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
     {
-        return [
-            ['mobile', 'required','message'=>'收货人手机号不能为空'],
-            ['region', 'required','message'=>'收货详细地址不能为空'],
-            ['district', 'required','message'=>'收货地址不能为空'],
-            ['consignee', 'required','message'=>'收货人不能为空'],
-            ['mobile','match','pattern'=>'/0?(13|14|15|18)[0-9]{9}/','message'=>'手机号格式不正确'],
-        ];
+        return 'user_address';
     }
 
-    //添加收货地址
-     public function insertaddress($mobile,$consignee,$region,$district){
+
+    /**
+     * 8.31
+     * 无登录App-添加收货地址
+     * @param $mobile
+     * @param $consignee
+     * @param $region
+     * @param $districtcode
+     * @return int
+     */
+     public function insertaddress($mobile,$consignee,$region,$districtcode){
          $addresstoken= md5($mobile.$consignee.date('Y-m-d H:i:s', time()));
-         $res=Yii::$app->db->createCommand()->insert('user_address',[
-             'mobile'    => $mobile,
-             'consignee' =>$consignee,
-             'region'      =>$region,
-             'district'  =>$district,
-             'addresstoken'=>$addresstoken,
+         $res=Yii::$app->db->createCommand()->insert(USER_ADDRESS,[
+             'mobile'      => $mobile,
+             'consignee'   => $consignee,
+             'region'      => $region,
+             'district'    => $districtcode,
+             'addresstoken'=> $addresstoken,
          ])->execute();
          if ($res){
              $session = Yii::$app->session;
              $session['addresstoken']=$addresstoken;
          }
-        return $res;
+         return $res;
      }
-    //获取用户收货地址
+
+    /**
+     * 无登录app-获取收货地址
+     * @param $addresstoken
+     * @return array|null
+     */
     public function getaddress($addresstoken){
         $query=new \yii\db\Query();
-        $array  = $query->from('user_address')->select('mobile,consignee,region,district,addresstoken')->where(['addresstoken' => $addresstoken])->limit(1)->all();
+        $array  = self::find()->select('mobile,consignee,region,district,addresstoken')->where(['addresstoken' => $addresstoken])->limit(1)->asArray()->all();
         if ($array){
+            foreach ($array as $k=>$v){
+                $model=new LogisticsDistrict();
+                $array[$k]['district']=$model->getdistrict($array[$k]['district']);
+            }
             return $array;
         }else
         {
             return null;
         }
     }
+
+
 
 }

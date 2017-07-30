@@ -112,4 +112,89 @@ class LogisticsDistrict extends ActiveRecord
 
         return true;
     }
+
+     /**
+     *   get district
+     * 通过districtcode获取地址
+     * @param $districtcode
+     * @return mixed
+     */
+    public function getdistrict($districtcode){
+        $pro=substr($districtcode,0,2);
+        $ci=substr($districtcode,2,2);
+        $dis=substr($districtcode,4,2);
+        $code=Yii::$app->params['districts'][0];
+        if ($ci==0){
+            $position=$code[86][$pro.'0000'];
+        }else if($dis==0){
+            $position=$code[86][$pro.'0000'].$code[$pro.'0000'][$pro.$ci.'00'];
+        }else{
+            $position=$code[86][$pro.'0000'].$code[$pro.'0000'][$pro.$ci.'00'].$code[$pro.$ci.'00'][$pro.$ci.$dis];
+        }
+        return $position;
+    }
+
+
+    /**
+     *
+     * @param $province
+     * @param $city
+     * @param $district
+     * @return array
+     */
+    public function getdistrictcode($province, $city, $district){
+        $code=Yii::$app->params['districts'][0];
+        foreach($code[86] as $k=>$v){
+            if ($code[86][$k]==$province){
+                $provincecode=$k;
+            }
+        }
+        foreach($code[$provincecode] as $k =>$v ){
+            if ($code[$provincecode][$k]==$city){
+                $citycode=$k;
+            }
+        }
+        foreach ($code[$citycode] as $k =>$v ){
+            if ($code[$citycode][$k]==$district){
+                $districtcode=$k;
+            }
+        }
+        $arr=array(
+            'provincecode'=>$provincecode,
+            'citycode'    =>$citycode,
+            'districtcode'=>$districtcode
+
+        );
+        return $arr;
+    }
+
+
+    /**
+     * 判断是否在指定收货区域
+     * @param $districtcode
+     * @param $template_id
+     * @return bool
+     */
+    public function is_apply($districtcode, $template_id){
+        $code=Yii::$app->params['districts'][0];
+        $query=new \yii\db\Query();
+        $array  = $query->from('logistics_template AS a')->select('a.id,b.district_code')->leftJoin('logistics_district AS b', 'b.template_id = a.id')->where(['a.id' =>$template_id])->one();
+        if ($array){
+            $a=0;
+            foreach ($code[$array['district_code']] AS $k =>$v ){
+                if ($k==$districtcode){
+                    $a=1;
+                }
+            }
+            if ($a==1){
+                $code=200;
+            }else{
+                $code=500;
+            }
+        }else{
+            $code=500;
+        }
+        return  $code;
+
+    }
 }

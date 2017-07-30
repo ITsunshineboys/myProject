@@ -12,8 +12,13 @@ use yii\helpers\Json;
 
 class Invoice extends ActiveRecord
 {
-
-
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'invoice';
+    }
     /**
      * @param   线下商城添加发票信息
      * @return array
@@ -46,7 +51,7 @@ class Invoice extends ActiveRecord
                 $array['data']=$res;
                 return $array;
             }else{
-                $code=500;
+                $code=1050;
                 $array['code']=$code;
                 $array['data']=null;
                 return $array;
@@ -66,13 +71,12 @@ class Invoice extends ActiveRecord
     public function  getlineinvoice($invoicetoken){
         $query=new \yii\db\Query();
         $array  = $query->from('invoice')->select('invoice_content,invoice_header')->where(['invoicetoken' => $invoicetoken])->limit(1)->all();
+//        $array=self::find()->select('invoice_content,invoice_header')->where(['invoicetoken' => $invoicetoken])->limit(1)->asArray()->all();
         if ($array){
             return $array;
         }else
         {
             return null;
         }
-
-
     }
 }
