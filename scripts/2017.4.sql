@@ -430,7 +430,7 @@ CREATE TABLE `goods_order` (
   `order_refer` tinyint(1) NOT NULL COMMENT 'order_refer:1：线下店2：非线下店；',
   `return_insurance` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='\r\n';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\r\n';
 --5.5 end--
 
 --5.6 start--
@@ -915,7 +915,7 @@ CREATE TABLE `invoice` (
   `creat_time` datetime NOT NULL,
   `invoicetoken` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_address`;
 CREATE TABLE `user_address` (
@@ -928,7 +928,7 @@ CREATE TABLE `user_address` (
   `region` varchar(150) NOT NULL,
   `addresstoken` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 --7.21 end
 
 --7.27 start
@@ -961,7 +961,7 @@ CREATE TABLE `order_goodslist` (
   `freight` bigint(20) NOT NULL,
   `comment` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 create table user_mobile (
   `id` int(11) unsigned NOT NULL auto_increment,
