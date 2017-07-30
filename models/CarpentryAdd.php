@@ -21,18 +21,15 @@ class CarpentryAdd extends ActiveRecord
     public static function findByStipulate($series = '',$style = '',$province = '四川',$city = '成都')
     {
         $inquire_result = [];
-        if(!empty($series) && !empty($style))
+        $carpentry_add_all = self::find()->where(['and',['province'=>$province],['city'=>$city],['series_id'=>$series],['style_id'=>$style]])->all();
+        foreach ($carpentry_add_all as $carpentry_add_one)
         {
-            $carpentry_add_all = self::find()->where(['and',['province'=>$province],['city'=>$city],['series_id'=>$series],['style_id'=>$style]])->all();
-           foreach ($carpentry_add_all as $carpentry_add_one)
-           {
-               if($carpentry_add_one['project'] == '造型长度'){
-                   $inquire_result ['modelling_length']  = $carpentry_add_one['standard'];
-               }elseif ($carpentry_add_one['project'] == '平顶面积')
-               {
-                   $inquire_result ['flat_area'] = $carpentry_add_one['standard'];
-               }
-           }
+            if($carpentry_add_one['project'] == '造型长度'){
+                $inquire_result ['modelling_length']  = $carpentry_add_one['standard'];
+            }elseif ($carpentry_add_one['project'] == '平顶面积')
+            {
+                $inquire_result ['flat_area'] = $carpentry_add_one['standard'];
+            }
         }
         return $inquire_result;
     }

@@ -295,7 +295,6 @@ class BasisDecorationService
     {
         if(!empty($modelling_day) && !empty($flat_day) )
         {
-
             //人工费：（造型天数+平顶天数+【1】天）×【工人每天费用】
             $artificial_fee = ceil($modelling_day + $flat_day + $video_wall) * $worker_day_cost;
         }
@@ -399,61 +398,56 @@ class BasisDecorationService
                 echo "请输入正确1-5的值";
         }
 
-        if(!empty($modelling) && !empty($day_modelling) && !empty($series_all) && !empty($style_all))
+        $series_find = [];
+        $enjoy_family = 0;
+        $wisdom_family = 0;
+        foreach ($series_all as $series_one)
         {
-            $series_find = [];
-            $enjoy_family = 0;
-            $wisdom_family = 0;
-            foreach ($series_all as $series_one)
+            switch ($series_one)
             {
-                if($series_one['series'] == '享家+')
-                {
+                case $series_one['series'] == '享家+':
                     $enjoy_family = $series_one['modelling_day_coefficient'];
-                }elseif ($series_one['series'] == '智家')
-                {
+                    break;
+                case $series_one['series'] == '智家':
                     $wisdom_family = $series_one['modelling_day_coefficient'];
-                }
-
-                if($series_one['series'] == $series)
-                {
+                    break;
+                case $series_one['series'] == $series:
                     $series_find = $series_one;
-                }
+                    break;
             }
-            $family = $enjoy_family * $wisdom_family;
+        }
+        $family = $enjoy_family * $wisdom_family;
 
-            $style_find = [];
-            foreach ($style_all as $style_one)
+        $style_find = [];
+        foreach ($style_all as $style_one)
+        {
+            if($style_one['style'] == $style)
             {
-                if($style_one['style'] == $style)
-                {
-                    $style_find = $style_one;
-                }
+                $style_find = $style_one;
             }
+        }
 //            齐家，享家：【1】
 //            享家+：【1.2】
 //            智家：享家+×【1.2】
 //            智家+：智家×【1.2】
-            $series_coefficient = 0;
-            if($series_find['series'] == '齐家' || $series_find['series'] == '享家')
-            {
+        $series_coefficient = 0;
+        switch ($series_find['series'])
+        {
+            case $series_find['series'] == '齐家' || $series_find['series'] == '享家':
                 $series_coefficient = $series_find['modelling_day_coefficient'];
-            }
-            elseif ($series_find['series'] == '享家+')
-            {
+                break;
+            case $series_find['series'] == '享家+':
                 $series_coefficient = $series_find['modelling_day_coefficient'];
-
-            }
-            elseif ($series_find['series'] == '智家')
-            {
+                break;
+            case $series_find['series'] == '智家':
                 $series_coefficient = $enjoy_family * $series_find['modelling_day_coefficient'];
-            }
-            elseif ($series_find['series'] == '智家+')
-            {
+                break;
+            case $series_find['series'] == '智家+':
                 $series_coefficient = $family *  $series_find['modelling_day_coefficient'];
-            }
-//            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
-            $modelling_day = $modelling / $day_modelling * $series_coefficient * $style_find['modelling_day_coefficient'];
+                break;
         }
+//            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
+        $modelling_day = $modelling / $day_modelling * $series_coefficient * $style_find['modelling_day_coefficient'];
         return $modelling_day;
     }
 
@@ -510,75 +504,75 @@ class BasisDecorationService
             default:
                 echo "请输入正确1-5的值";
         }
-        if($area && $day_area)
+        //平顶面积
+        $flat_area = $area['flat_area'];
+
+        $series_find = [];
+        $neat_family = 0;
+        $enjoy_family = 0;
+        $enjoy_family_plus = 0;
+        $wisdom_family = 0;
+        $wisdom_family_plus = 0;
+
+        foreach ($series_all as $series_one)
         {
-            //平顶面积
-            $flat_area = $area['flat_area'];
-
-            $series_find = [];
-            $neat_family = 0;
-            $enjoy_family = 0;
-            $enjoy_family_plus = 0;
-            $wisdom_family = 0;
-            $wisdom_family_plus = 0;
-
-            foreach ($series_all as $series_one)
-           {
-               if($series_one['series'] == $series){
-                   $series_find = $series_one;
-               }
-
-               if($series_one['series'] == '齐家')
-               {
-                   $neat_family = $series_one['flat_day_coefficient'];
-               }elseif ($series_one['series'] == '享家')
-               {
-                   $enjoy_family = $series_one['flat_day_coefficient'];
-               }elseif ($series_one['series'] == '享家+')
-               {
-                   $enjoy_family_plus = $series_one['flat_day_coefficient'];
-               }elseif ($series_one['series'] == '智家')
-               {
-                   $wisdom_family = $series_one['flat_day_coefficient'];
-               }elseif ($series_one['series'] == '智家+')
-               {
-                   $wisdom_family_plus = $series_one['flat_day_coefficient'];
-               }
-           }
-            $style_find = [];
-            foreach ($style_all as $style_one)
+            switch ($series_one)
             {
-                if($style_one['style'] == $style)
-                {
-                     $style_find = $style_one;
-                }
+                case $series_one['series'] == $series:
+                    $series_find = $series_one;
+                    break;
+                case $series_one['series'] == '齐家':
+                    $neat_family = $series_one['flat_day_coefficient'];
+                    break;
+                case $series_one['series'] == '享家':
+                    $enjoy_family = $series_one['flat_day_coefficient'];
+                    break;
+                case $series_one['series'] == '享家+':
+                    $enjoy_family_plus = $series_one['flat_day_coefficient'];
+                    break;
+                case $series_one['series'] == '智家':
+                    $wisdom_family = $series_one['flat_day_coefficient'];
+                    break;
+                case $series_one['series'] == '智家+':
+                    $wisdom_family_plus = $series_one['flat_day_coefficient'];
+                    break;
             }
+        }
+        $style_find = [];
+        foreach ($style_all as $style_one)
+        {
+            if($style_one['style'] == $style)
+            {
+                $style_find = $style_one;
+            }
+        }
 //            齐家：【1】
 //            享家：齐家×【1.2】
 //            享家+：享家×【1.2】
 //            智家：享家+×【1.2】
 //            智家+：智家×【1.2】
-            $series_coefficient = 0;
-            if($series_find['series'] == '齐家')
-            {
+        $series_coefficient = 0;
+        switch ($series_find['series'])
+        {
+            case $series_find['series'] == '齐家':
                 $series_coefficient = $series_find['flat_day_coefficient'];
-            }elseif ($series_find['series'] == '享家')
-            {
+                break;
+            case $series_find['series'] == '享家':
                 $series_coefficient = $neat_family * $series_find['flat_day_coefficient'];
-            }elseif ($series_find['series'] == '享家+')
-            {
+                break;
+            case $series_find['series'] == '享家+':
                 $series_coefficient = $neat_family * $enjoy_family * $series_find['flat_day_coefficient'];
-            }elseif ($series_find['series'] == '智家')
-            {
+                break;
+            case $series_find['series'] == '智家':
                 $series_coefficient = $neat_family * $enjoy_family * $enjoy_family_plus * $series_find['flat_day_coefficient'];
-            }elseif ($series_find['series'] == '智家+')
-            {
+                break;
+            case $series_find['series'] == '智家+':
                 $series_coefficient = $neat_family * $enjoy_family * $enjoy_family_plus * $wisdom_family * $series_find['flat_day_coefficient'];
-            }
-
-            //平顶天数=平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
-            $flat_day = $flat_area / $day_area * $series_coefficient * $style_find['flat_day_coefficient'];
+                break;
         }
+
+        //平顶天数=平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
+        $flat_day = $flat_area / $day_area * $series_coefficient * $style_find['flat_day_coefficient'];
         return $flat_day;
     }
 
@@ -593,36 +587,34 @@ class BasisDecorationService
      */
     public static function carpentryPlasterboardCost($modelling_length,$flat_area,$goods,$crafts ,$video_wall = 1)
     {
-        if(!empty($modelling_length) && !empty($flat_area))
+        $plasterboard = [];
+        foreach ($goods as $goods_price )
         {
-            $plasterboard = [];
-            foreach ($goods as $goods_price )
+            if($goods_price['title'] == '石膏板')
             {
-                if($goods_price['title'] == '石膏板')
-                {
-                    $plasterboard = $goods_price;
-                }else
-                {
-                    $plasterboard = null;
-                }
+                $plasterboard = $goods_price;
+            }else
+            {
+                $plasterboard = null;
             }
-            foreach ($crafts as $craft)
+        }
+        foreach ($crafts as $craft)
+        {
+            switch ($craft)
             {
-                if($craft['project_details'] == '造型长度石膏板')
-                {
+                case $craft['project_details'] == '造型长度石膏板':
                     $plasterboard_material = $craft['material'];
-                }
-                if ($craft['project_details'] == '平顶面积石膏板')
-                {
+                    break;
+                case $craft['project_details'] == '平顶面积石膏板':
                     $area_material = $craft['material'];
-                }
+                    break;
             }
+        }
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
-                $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $area_material +$video_wall);
+        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $area_material +$video_wall);
 
 //            石膏板费用：个数×商品价格
-            $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
-        }
+        $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
         return $plasterboard_cost;
     }
 
@@ -655,17 +647,11 @@ class BasisDecorationService
                     $plasterboard_material = $craft['material'];
                 }
             }
-            if ($modelling_length == 0 || $plasterboard_material == 0 || $flat_area == 0 )
-            {
-                $keel_cost['quantity'] = 0;
-            }else
-            {
+
 //          个数=个数1+个数2
 //          个数1：（造型长度÷【1.5m】）
 //          个数2：（平顶面积÷【1.5m²】）
-                $keel_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area /$plasterboard_material);
-            }
-
+            $keel_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area /$plasterboard_material);
 //          主龙骨费用：个数×商品价格
             $keel_cost['cost'] = $keel_cost['quantity'] * $goods_price['platform_price'];
         }
@@ -700,16 +686,11 @@ class BasisDecorationService
                     $plasterboard_material = $craft['material'];
                 }
             }
-            if ($modelling_length == 0 || $plasterboard_material == 0 || $flat_area == 0 )
-            {
-                $pole_cost['quantity'] = 0;
-            }else
-            {
 //            个数=个数1+个数2
 //            个数1：（造型长度÷【2m】）
 //            个数2：（平顶面积÷【2m²】
-                $pole_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
-            }
+            $pole_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
+
 //            丝杆费用：个数×抓取的商品价格
             $pole_cost['cost'] = $pole_cost['quantity'] * $goods_price['platform_price'];
         }

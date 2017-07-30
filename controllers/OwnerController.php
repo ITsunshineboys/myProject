@@ -672,7 +672,7 @@ class OwnerController extends Controller
 //            'toilet'=>1,
 //            'kitchen'=>1,
 //            'stairs_details_id'=>1,
-//            'series'=>4,
+//            'series'=>1,
 //            'style'=>2,
 //            'window'=>10,
 //            'province'=>510000,
@@ -731,28 +731,26 @@ class OwnerController extends Controller
         $material_total = [];
         foreach ($goods_price as $one_goods_price)
         {
-            if ($one_goods_price['title'] == '石膏板')
+            switch ($one_goods_price)
             {
-                $goods_max = BasisDecorationService::profitMargin($one_goods_price);
-                $goods_max['quantity'] = $plasterboard_cost['quantity'];
-                $goods_max['cost'] = $plasterboard_cost['cost'];
-                $material_total [] =  $goods_max;
-            }
-
-            if ($one_goods_price['title'] == '龙骨')
-            {
-                $goods_max = BasisDecorationService::profitMargin($one_goods_price);
-                $goods_max['quantity'] = $keel_cost['quantity'];
-                $goods_max['cost'] = $keel_cost['cost'];
-                $material_total [] =  $goods_max;
-            }
-
-            if ($one_goods_price['title'] == '丝杆')
-            {
-                $goods_max = BasisDecorationService::profitMargin($one_goods_price);
-                $goods_max['quantity'] = $pole_cost['quantity'];
-                $goods_max['cost'] = $pole_cost['cost'];
-                $material_total [] =  $goods_max;
+                case $one_goods_price['title'] == '石膏板':
+                    $goods_max = BasisDecorationService::profitMargin($one_goods_price);
+                    $goods_max['quantity'] = $plasterboard_cost['quantity'];
+                    $goods_max['cost'] = $plasterboard_cost['cost'];
+                    $material_total [] =  $goods_max;
+                    break;
+                case $one_goods_price['title'] == '龙骨':
+                    $goods_max = BasisDecorationService::profitMargin($one_goods_price);
+                    $goods_max['quantity'] = $keel_cost['quantity'];
+                    $goods_max['cost'] = $keel_cost['cost'];
+                    $material_total [] =  $goods_max;
+                    break;
+                case $one_goods_price['title'] == '丝杆':
+                    $goods_max = BasisDecorationService::profitMargin($one_goods_price);
+                    $goods_max['quantity'] = $pole_cost['quantity'];
+                    $goods_max['cost'] = $pole_cost['cost'];
+                    $material_total [] =  $goods_max;
+                    break;
             }
         }
         $material_total['total_cost'] = $material_cost;
