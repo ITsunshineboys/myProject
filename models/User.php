@@ -199,6 +199,12 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
+            $operator = isset($data['operator']) ? $data['operator'] : null;
+            if (!UserMobile::addByUserAndOperator($user, $operator)) {
+                $transaction->rollBack();
+                return $code;
+            }
+
             $transaction->commit();
 
             if ($checkValidationCode && !empty($data['validation_code'])) {
@@ -234,6 +240,40 @@ class User extends ActiveRecord implements IdentityInterface
         $user->mobile = $newMobile;
         $user->password = Yii::$app->getSecurity()->generatePasswordHash($pwd);
         return $user->validate() && $user->save();
+    }
+
+    /**
+     * Reset user's new mobile
+     *
+     * @param int $mobile mobile
+     * @return bool
+     */
+    public function resetMobile($mobile)
+    {
+        if ($this->mobile == $mobile) {
+            $code = 200;
+            return $code;
+        }
+
+//        $user = self::find()->where(['mobile' => $mobile])->one();
+//        if ($user) {
+//            $code = 1019;
+//            return $code;
+//        }
+
+        $this->mobile = $mobile;
+        if (!$this->validate()) {print_r($this->errors);
+            $code = 1000;
+            return $code;
+        }
+
+        if (!$this->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
     }
 
     /**
