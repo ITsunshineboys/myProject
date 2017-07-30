@@ -18,6 +18,8 @@ class ModelService
         SORT_ASC => 'ASC',
     ];
     const SEPARATOR_ERRCODE_ERRMSG = ':';
+    const PAGE_SIZE_DEFAULT = 12;
+    const ORDER_BY_DEFAULT = ['id' => SORT_ASC];
 
     /**
      * Generate sorting statements for query

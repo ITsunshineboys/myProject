@@ -24,6 +24,7 @@ use app\models\BrandApplication;
 use app\models\GoodsStat;
 use app\models\GoodsOrder;
 use app\models\GoodsRecommendSupplier;
+use app\models\UserMobile;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use app\services\StringService;
@@ -113,6 +114,7 @@ class MallController extends Controller
         'user-identity',
         'user-add',
         'reset-mobile',
+        'reset-mobile-logs',
     ];
 
     /**
@@ -4594,6 +4596,36 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '更换手机号成功',
+        ]);
+    }
+
+    /**
+     * Reset mobile logs action.
+     *
+     * @return string
+     */
+    public function actionResetMobileLogs()
+    {
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new UserMobile;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+
+        if ($orderBy === false) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'reset-mobile-logs' => UserMobile::pagination([], UserMobile::FIELDS_BINDING_LOGS, $page, $size, $orderBy)
+            ],
         ]);
     }
 }
