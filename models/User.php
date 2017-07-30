@@ -52,6 +52,16 @@ class User extends ActiveRecord implements IdentityInterface
         'review_status',
     ];
     const BIRTHDAY_LEN = 8;
+    const FIELDS_IDENTITY_LHZZ = [
+        'legal_person',
+        'identity_no',
+        'identity_card_front_image',
+        'identity_card_back_image',
+    ];
+    const FIELDS_IDENTITY_LHZZ_EXTRA = [
+        'review_status',
+        'review_time',
+    ];
 
     /**
      * @inheritdoc
@@ -162,6 +172,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user->nickname = Yii::$app->params['user']['default_nickname'];
 
         if (!$user->validate()) {
+            ModelService::uniqueError($user, 'mobile') && $code = 1019;
             return $code;
         }
 
@@ -601,15 +612,15 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Get view data
+     * View identity(lhzz)
      *
      * @return array
      */
-    public function view()
+    public function viewIdentityLhzz()
     {
-        $modelData = ModelService::selectModelFields($this, self::FIELDS_USER_CENTER_MODEL);
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_IDENTITY_LHZZ);
         $viewData = $modelData
-            ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_CENTER_EXTRA))
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_IDENTITY_LHZZ_EXTRA))
             : $modelData;
         $this->_formatData($viewData);
         return $viewData;
@@ -643,6 +654,16 @@ class User extends ActiveRecord implements IdentityInterface
                         $extraData[$extraField] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
                     }
                     break;
+                case 'review_time':
+                    $userRole = UserRole::find()
+                        ->where(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']])
+                        ->one();
+                    if ($userRole) {
+                        $extraData[$extraField] = $userRole->review_time
+                            ? date('Y-m-d H:i', $userRole->review_time)
+                            : '';
+                    }
+                    break;
             }
         }
 
@@ -667,6 +688,21 @@ class User extends ActiveRecord implements IdentityInterface
         if (isset($data['balance'])) {
             $data['balance'] /= 100;
         }
+    }
+
+    /**
+     * Get view data
+     *
+     * @return array
+     */
+    public function view()
+    {
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_USER_CENTER_MODEL);
+        $viewData = $modelData
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_CENTER_EXTRA))
+            : $modelData;
+        $this->_formatData($viewData);
+        return $viewData;
     }
 
     /**

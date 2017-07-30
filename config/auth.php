@@ -91,4 +91,6 @@ return [
 
     // mall
     'index-admin' => [1],
+    'user-identity' => [1],
+    'user-add' => [1],
 ];

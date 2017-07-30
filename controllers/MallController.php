@@ -110,6 +110,8 @@ class MallController extends Controller
         'shop-data',
         'supplier-index-admin',
         'index-admin',
+        'user-identity',
+        'user-add',
     ];
 
     /**
@@ -182,6 +184,7 @@ class MallController extends Controller
                     'goods-inventory-reset' => ['post',],
                     'supplier-add' => ['post',],
                     'supplier-icon-reset' => ['post',],
+                    'user-add' => ['post',],
                 ],
             ],
         ];
@@ -422,8 +425,10 @@ class MallController extends Controller
                 $res['categories'] = $categories;
             } else {
                 $goods = Goods::findByTitle($keyword);
-                $res['goods'] = $goods;
-                $res['category_id'] = Goods::findOne($goods[0]['id'])->category_id;
+                if ($goods) {
+                    $res['goods'] = $goods;
+                    $res['category_id'] = Goods::findOne($goods[0]['id'])->category_id;
+                }
             }
         }
 
@@ -4521,6 +4526,38 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'categories_level3' => GoodsCategory::level3CategoriesByLevel1Pid($pid)
+        ]);
+    }
+
+    /**
+     * User identity action
+     *
+     * @return string
+     */
+    public function actionUserIdentity()
+    {
+        $user = Yii::$app->user->identity;
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'user-identity' => $user->viewIdentityLhzz(),
+            ],
+        ]);
+    }
+
+    /**
+     * Add user(lhzz)
+     *
+     * @return string
+     */
+    public function actionUserAdd()
+    {
+        $res = User::register(Yii::$app->request->post(), false);
+        return Json::encode([
+            'code' => is_array($res) ? 200 : $res,
+            'msg' => is_array($res) ? 'OK' : Yii::$app->params['errorCodes'][$res]
         ]);
     }
 }

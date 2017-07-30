@@ -29,13 +29,14 @@
     margin-bottom:.84rem;
 }
 .main .intro_box .product_name{
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     margin-bottom:.66rem;
+    color: #4A4A4A;
 }
 .main .intro_box  .introduce{
-    font-size:1rem;
+    font-size:1.1rem;
     color: #6C6C6C;
-    margin-bottom:2rem;
+    margin-bottom:1rem;
 }
 .main .intro_box  .cost{
     margin-bottom:0!important;
@@ -56,6 +57,14 @@
     /*top:0;*/
     /*z-index: 10;*/
 /*}*/
+.img_size{
+    width: .8rem!important;
+    margin-left: .2rem!important;
+}
+.img_size_1{
+    margin-left: .5rem!important;
+    width: .8rem!important;
+}
 .main .standard >div:nth-child(2){
     position: absolute;
     right:1.53rem;
@@ -111,6 +120,7 @@
 }
 .comment_total{
     margin-bottom:1.66rem;
+    font-size: 1.3rem;
 }
 .comment_list img{
     width: 3.5rem;
@@ -129,7 +139,8 @@
     position: absolute;
     margin-left: 2rem;
     margin-top: .6rem;
-    font-size: 1rem;
+    font-size: 1.3rem;
+    color: #4A4A4A;
 }
 .comment_time{
     position: absolute;
@@ -137,7 +148,10 @@
     margin-top: .6rem;
     font-size: 1rem;
 }
-.all_comment{
+.comment_des{
+    color: #4A4A4A;
+}
+.all_comment {
     height: 3rem;
     background-color: white;
     border-bottom: 1px solid #666;
@@ -145,6 +159,9 @@
     text-align: center;
     line-height: 3rem;
     font-size: 1rem;
+}
+.all_comment span{
+   font-size: 1.3rem
 }
 .shop_header{
     height: 15rem;
@@ -298,7 +315,31 @@
     margin-left: 14rem;
     display: inline-block;
 }
-
+.text_box{
+    margin-left: .4rem;
+}
+.close{
+    font-size: 1.5rem!important;
+}
+.div_pic{
+    position: relative;
+}
+.pic_data{
+    position: absolute;
+    top:-5rem;
+    left: 6rem;
+    color: #F59C22;
+}
+.shu_pic{
+    position: absolute;
+    top:-3rem;
+    left: 6rem;
+}
+.modal-header {
+    min-height: 16.43px;
+    padding: 15px;
+     border-bottom: none;
+}
 .modal-footer_div{
     border-top:1px solid #999;
     height: 4rem;
@@ -403,4 +444,8 @@
 }
 .pic_comment{
     background-color: #fff;
+}
+.btn_color{
+    background-color: #53A8F4;
+    height: 3.5rem;
 }

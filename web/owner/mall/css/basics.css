@@ -118,14 +118,14 @@ header div span{
 }
 .wall_money{
     position: absolute;
-    right: 1.9rem;
+    right: 1.5rem;
     top:1rem;
     color: #F59C22 ;
     font-size: 1.2rem;
 }
 
 .right_arrow{
-    margin-left: 1rem;
+    margin-left: 2rem;
 }
 
 

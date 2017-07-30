@@ -3,7 +3,7 @@ angular.module("all_controller", [])
         $scope.data = ''
         // $scope.search_data = ''
         let arr = []
-        let url = "/owner/search"
+        let url = "http://test.cdlhzz.cn:888/owner/search"
 
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -350,6 +350,7 @@ angular.module("all_controller", [])
     })
     .controller("intelligent_nodata_ctrl", function ($scope, $stateParams, $http, $state) { //无数据控制器
         let all_url = 'http://test.cdlhzz.cn:888'
+        // let all_url = ""
         console.log($stateParams)
         $scope.message = ''
         $scope.cur_labor = $stateParams.cur_labor || ''
@@ -406,6 +407,7 @@ angular.module("all_controller", [])
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
                 return $.param(data)
+
             }
         }
         //生成材料方法
@@ -799,7 +801,7 @@ angular.module("all_controller", [])
                 console.log("防水")
                 console.log(response)
                 $scope.labor_price += response.data.data.waterproof_labor_price.price
-                let carpentry = response.data.data.waterproof_material
+                let carpentry = response.data.data.waterproof_material[0]
                 //一级总费用统计
                 for (let [key1, value1] of $scope.stair.entries()) {
                     if (carpentry.path.split(',')[0] == value1.id) {
@@ -1191,8 +1193,12 @@ angular.module("all_controller", [])
             $http.post(material, data, config).then(function (response) {
                 console.log("主材")
                 console.log(response)
-                response.data.data.goods.splice(response.data.data.goods.indexOf(null),1)
-                let material_arr = response.data.data.goods
+                let material_arr = []
+                for (let [key, value] of  response.data.data.goods.entries()) {
+                    if (value != null) {
+                        material_arr.push(value)
+                    }
+                }
                 console.log(material_arr)
                 //一级总费用统计
                 for (let [key, value] of material_arr.entries()) {
@@ -1509,9 +1515,12 @@ angular.module("all_controller", [])
             $http.post(assort, data, config).then(function (response) {
                 console.log("家电配套")
                 console.log(response)
-
-                response.data.data.goods.splice(response.data.data.goods.indexOf(null), 1)
-                let assort_arr = response.data.data.goods
+                let assort_arr = []
+                for (let [key, value] of  response.data.data.goods.entries()) {
+                    if (value != null) {
+                        assort_arr.push(value)
+                    }
+                }
                 console.log(assort_arr)
                 //一级总费用统计
                 for (let [key, value] of assort_arr.entries()) {
@@ -1590,8 +1599,12 @@ angular.module("all_controller", [])
             $http.post(life, data, config).then(function (response) {
                 console.log("生活配套")
                 console.log(response)
-                response.data.data.goods.splice(response.data.data.goods.indexOf(null), 1)
-                let life_arr = response.data.data.goods
+                let life_arr = []
+                for (let [key, value] of  response.data.data.goods.entries()) {
+                    if (value != null) {
+                        life_arr.push(value)
+                    }
+                }
                 //一级总费用统计
                 for (let [key, value] of life_arr.entries()) {
                     for (let [key1, value1] of $scope.stair.entries()) {
@@ -1667,8 +1680,12 @@ angular.module("all_controller", [])
             $http.post(intelligence, data, config).then(function (response) {
                 console.log("智能配套")
                 console.log(response)
-                response.data.data.goods.splice(response.data.data.goods.indexOf(null), 1)
-                let intelligence_arr = response.data.data.goods
+                let intelligence_arr = []
+                for (let [key, value] of  response.data.data.goods.entries()) {
+                    if (value != null) {
+                        intelligence_arr.push(value)
+                    }
+                }
                 //一级总费用统计
                 for (let [key, value] of intelligence_arr.entries()) {
                     for (let [key1, value1] of $scope.stair.entries()) {
@@ -1995,6 +2012,7 @@ angular.module("all_controller", [])
         }
         //杂工数据请求
         let url = 'http://test.cdlhzz.cn:888/owner/handyman'
+        // let url = '/owner/handyman'
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
@@ -2481,7 +2499,7 @@ angular.module("all_controller", [])
         $scope.building_scrap = $stateParams.building_scrap || false
         //获取分类
         let pid = $stateParams.stair[$stateParams.index].id
-        $http.get('http://test.cdlhzz.cn:888/mall/categories-level3?pid=' + pid).then(function (response) {
+        $http.get('/mall/categories-level3?pid=' + pid).then(function (response) {
             $scope.second_material = response.data.categories_level3
             console.log(response)
         }, function (error) {
@@ -2597,7 +2615,7 @@ angular.module("all_controller", [])
         $scope.twenty_four_new_construction = $stateParams.twenty_four_new_construction || ''
         $scope.building_scrap = $stateParams.building_scrap || false
         //获取指定id三级下面详细商品
-        $http.get('http://test.cdlhzz.cn:888/mall/category-goods?category_id=' + $scope.pid).then(function (response) {
+        $http.get('/mall/category-goods?category_id=' + $scope.pid).then(function (response) {
             console.log(response)
             $scope.three_material_details = response.data.data.category_goods
         }, function (error) {
@@ -2812,7 +2830,7 @@ angular.module("all_controller", [])
         $scope.add = function () {
             $scope.add_quantity++
         }
-        $http.get('http://test.cdlhzz.cn:888/mall/goods-view?id=' + $scope.goods_id).then(function (response) {
+        $http.get('/mall/goods-view?id=' + $scope.goods_id).then(function (response) {
             $scope.good_detail = response.data.data['goods-view']
             console.log(response)
         }, function (error) {

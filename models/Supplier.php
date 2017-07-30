@@ -99,8 +99,8 @@ class Supplier extends ActiveRecord
         'shop_name',
         'follower_number',
     ];
-    const OFFLINE_SHOP_SUPPORT = 0; // 不支持线下商店
-    const OFFLINE_SHOP_NOT_SUPPORT = 1; // 支持线下商店
+    const OFFLINE_SHOP_SUPPORT = 1; // 支持线下商店
+    const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -146,6 +146,9 @@ class Supplier extends ActiveRecord
         $supplier->create_time = time();
         $supplier->status = isset($attrs['status']) ? (int)$attrs['status'] : self::STATUS_WAIT_REVIEW;
         $supplier->shop_name = isset($attrs['shop_name']) ? trim($attrs['shop_name']) : '';
+        $supplier->support_offline_shop = isset($attrs['support_offline_shop'])
+            ? (int)$attrs['support_offline_shop']
+            : self::OFFLINE_SHOP_NOT_SUPPORT;
 
         $supplier->scenario = self::SCENARIO_ADD;
         if (!$supplier->validate()) {

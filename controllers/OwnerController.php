@@ -1333,7 +1333,6 @@ class OwnerController extends Controller
 
 //        总天数
         $total_day = BasisDecorationService::wallArea($post,$labor);
-
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($handyman, $post['city']);
 
@@ -1456,7 +1455,7 @@ class OwnerController extends Controller
 //            'stairs_details_id'=>1,
 //            'series'=>1,
 //            'style'=>1,
-//            'window'=>5,
+//            'window'=>0,
 //            'province'=>510000,
 //            'city'=>510100,
 //            'waterproof_total_area' => 1,
@@ -1492,7 +1491,7 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         $classify = '软装配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
-        $goods = Goods::categoryById($material_property_classify);
+        $goods = Goods::categoryById($material_property_classify,510100);
         $goods_profit = BasisDecorationService::priceConversion($goods);
         $goods_price = BasisDecorationService::mild($goods_profit,$post,$material_property_classify);
 
@@ -1511,15 +1510,15 @@ class OwnerController extends Controller
      */
     public function actionFixationFurniture()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-//            'effect_id' => 1,
-            'bedroom' => 2,
-            'stairway_id'=>0,
-            'stairs' =>'玻璃金属',
-            'style' =>2,
-            'series'=>1
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+////            'effect_id' => 1,
+//            'bedroom' => 2,
+//            'stairway_id'=>0,
+//            'stairs' =>'玻璃金属',
+//            'style' =>2,
+//            'series'=>1
+//        ];
         $classify = '固定家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
@@ -1577,8 +1576,7 @@ class OwnerController extends Controller
         $classify = '移动家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
-        foreach ($material_property_classify as $one)
-        {
+        foreach ($material_property_classify as $one) {
             $one_material[$one['material']] = $one;
         }
         $goods = Goods::categoryById($material_property_classify);
@@ -1608,17 +1606,16 @@ class OwnerController extends Controller
 //            'toilet' => 1,
 //            'hall' => 1,
 //            'style' =>1,
-//            'series'=>1
+//            'series'=>2
 //        ];
 
         $classify = '家电配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
-        foreach ($material_property_classify as $one)
-        {
+        foreach ($material_property_classify as $one) {
             $one_material[$one['material']] = $one;
         }
-        $goods = Goods::categoryById($material_property_classify);
+        $goods = Goods::categoryById($material_property_classify,510100);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$one_material,$post);
 
@@ -1649,11 +1646,10 @@ class OwnerController extends Controller
         $classify = '生活配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $material_one = [];
-        foreach ($material_property_classify as $one)
-        {
+        foreach ($material_property_classify as $one) {
             $material_one[$one['material']] = $one;
         }
-        $goods = Goods::categoryById($material_property_classify);
+        $goods = Goods::categoryById($material_property_classify,510100);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$material_one,$post);
 
@@ -1676,23 +1672,19 @@ class OwnerController extends Controller
         $classify = '智能配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $material_one = [];
-        foreach ($material_property_classify as $one)
-        {
+        foreach ($material_property_classify as $one) {
             $material_one[$one['material']] = $one;
         }
-        $goods = Goods::categoryById($material_property_classify);
+        $goods = Goods::categoryById($material_property_classify,510100);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = [] ;
-        foreach ($goods_price as $one_goods)
-        {
-            if ($one_goods['title'] == '智能配电箱')
-            {
+        foreach ($goods_price as $one_goods) {
+            if ($one_goods['title'] == '智能配电箱') {
                 $one_goods['show_quantity'] = $material_one['智能配电箱']['quantity'];
                 $one_goods['show_cost'] = $one_goods['show_quantity'] *$one_goods['platform_price'];
                 $switch_box [] = $one_goods;
             }
-            if ($one_goods['title'] == '背景音乐系统' && $one_goods['series_id'] == $post['series'])
-            {
+            if ($one_goods['title'] == '背景音乐系统' && $one_goods['series_id'] == $post['series']) {
                 $one_goods['show_quantity'] = $material_one['背景音乐系统']['quantity'];
                 $one_goods['show_cost'] = $one_goods['show_quantity'] *$one_goods['platform_price'];
                 $background_music [] = $one_goods;
