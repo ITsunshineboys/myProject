@@ -1446,21 +1446,21 @@ class OwnerController extends Controller
      */
     public function actionPrincipalMaterial()
     {
-//        $post = Yii::$app->request->post();
-        $post = [
-            'area'=>60,
-            'bedroom'=>1,
-            'hall'=>1,
-            'toilet'=>2,
-            'kitchen'=>1,
-            'stairs_details_id'=>1,
-            'series'=>1,
-            'style'=>1,
-            'window'=>0,
-            'province'=>510000,
-            'city'=>510100,
-            'waterproof_total_area' => 1,
-            ];
+        $post = Yii::$app->request->post();
+//        $post = [
+//            'area'=>60,
+//            'bedroom'=>1,
+//            'hall'=>1,
+//            'toilet'=>2,
+//            'kitchen'=>1,
+//            'stairs_details_id'=>1,
+//            'series'=>1,
+//            'style'=>1,
+//            'window'=>0,
+//            'province'=>510000,
+//            'city'=>510100,
+//            'waterproof_total_area' => 1,
+//            ];
         $material = '主材';
         $material_property_classify = MaterialPropertyClassify::findByAll($material);
         $one_add = [];
