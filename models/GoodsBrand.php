@@ -153,7 +153,7 @@ class GoodsBrand extends ActiveRecord
      * @param  array $select select fields default all fields
      * @param  int $page page number default 1
      * @param  int $size page size default 12
-     * @param  array $orderBy order by fields default sold_number desc
+     * @param  array $orderBy order by fields default id desc
      * @return array
      */
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
