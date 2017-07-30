@@ -962,5 +962,15 @@ CREATE TABLE `order_goodslist` (
   `comment` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+create table user_mobile (
+  `id` int(11) unsigned NOT NULL DEFAULT 0,
+  `uid` int(11) unsigned NOT NULL DEFAULT 0,
+  `mobile` int(11) unsigned NOT NULL DEFAULT 0,
+  `create_time` int(10) unsigned NOT NULL DEFAULT 0 comment '绑定时间',
+  `op_uid` int(11) unsigned not null DEFAULT 0 comment '操作人员用户id',
+  `op_username` varchar(20) not null DEFAULT '' comment '操作人员名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --7.30 end
 
