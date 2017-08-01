@@ -115,6 +115,7 @@ class MallController extends Controller
         'user-add',
         'reset-mobile',
         'reset-mobile-logs',
+        'user-status-toggle',
     ];
 
     /**
@@ -188,7 +189,8 @@ class MallController extends Controller
                     'supplier-add' => ['post',],
                     'supplier-icon-reset' => ['post',],
                     'user-add' => ['post',],
-                    'reset-mobile' => ['post',]
+                    'reset-mobile' => ['post',],
+                    'user-status-toggle' => ['post',],
                 ],
             ],
         ];
@@ -4576,7 +4578,6 @@ class MallController extends Controller
         $code = 1000;
 
         $mobile = (int)Yii::$app->request->post('mobile', 0);
-
         if (!StringService::isMobile($mobile)) {
             return Json::encode([
                 'code' => $code,
@@ -4584,8 +4585,16 @@ class MallController extends Controller
             ]);
         }
 
-        $user = Yii::$app->user->identity;
-        $code = $user->resetMobile($mobile);
+        $userId = (int)Yii::$app->request->post('user_id', 0);
+        $user = User::findOne($userId);
+        if (!$user) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $code = $user->resetMobile($mobile, Yii::$app->user->identity);
         if (200 != $code) {
             return Json::encode([
                 'code' => $code,
@@ -4626,6 +4635,52 @@ class MallController extends Controller
             'data' => [
                 'reset_mobile_logs' => UserMobile::pagination([], UserMobile::FIELDS_BINDING_LOGS, $page, $size, $orderBy)
             ],
+        ]);
+    }
+
+    /**
+     * Toggle user status action.
+     *
+     * @return string
+     */
+    public function actionUserStatusToggle()
+    {
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $code = 1000;
+
+        if (!$id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $model = User::findOne($id);
+        if (!$model) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $now = time();
+        $user = Yii::$app->user->identity;
+        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+        if ($model->deadtime > 0) {
+            $model->deadtime = 0;
+            $model->online_time = $now;
+            $model->online_person = $lhzz->nickname;
+        } else {
+            $model->status = GoodsBrand::STATUS_OFFLINE;
+            $model->offline_time = $now;
+            $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+            $model->offline_person = $lhzz->nickname;
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
         ]);
     }
 }

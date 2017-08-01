@@ -62,6 +62,8 @@ class User extends ActiveRecord implements IdentityInterface
         'review_status',
         'review_time',
     ];
+    const STATUS_OFFLINE = 0; // 关闭
+    const STATUS_ONLINE = 1; // 开启
 
     /**
      * @inheritdoc
@@ -300,9 +302,10 @@ class User extends ActiveRecord implements IdentityInterface
      * Reset user's new mobile
      *
      * @param int $mobile mobile
+     * @param User $operator operator
      * @return bool
      */
-    public function resetMobile($mobile)
+    public function resetMobile($mobile, User $operator)
     {
         if ($this->mobile == $mobile) {
             $code = 200;
@@ -323,7 +326,7 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
-            if (!UserMobile::addByUserAndOperator($this, Yii::$app->user->identity)) {
+            if (!UserMobile::addByUserAndOperator($this, $operator)) {
                 $tran->rollBack();
                 return $code;
             }
@@ -671,6 +674,25 @@ class User extends ActiveRecord implements IdentityInterface
             : $modelData;
         $this->_formatData($viewData);
         return $viewData;
+    }
+
+    public function toggleStatus()
+    {
+        if ($this->deadtime > 0) {
+            $this->deadtime = 0;
+            $code = 500;
+            $tran = Yii::$app->db->beginTransaction();
+            try {
+                if (!$this->save()) {
+                    $tran->rollBack();
+                    return $code;
+                }
+
+//                UserStatus::addByUserAndOperator($this,)
+            } catch (\Exception $e) {
+
+            }
+        }
     }
 
     /**
