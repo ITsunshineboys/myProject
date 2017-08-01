@@ -247,6 +247,9 @@
 .comment_num {
   margin-left: 18rem;
 }
+.img_size_3{
+    width:1.8rem!important;
+}
 .foot_tab{
     width: 32rem;
     height: 4rem;

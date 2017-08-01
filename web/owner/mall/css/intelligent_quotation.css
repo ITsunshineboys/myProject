@@ -520,12 +520,12 @@ a{
 }
 .btn_l{
     margin-left: 1.2rem;
-    width: 8rem!important;
+    width: 6.8rem!important;
     border-left: 1px solid #CDD3D7;
 
 }
 .footer_settlement button{
-    width: 8rem;
+    width: 7.5rem;
     height: 4rem;
     background-color: white;
     border: none;
@@ -636,7 +636,7 @@ a{
     color: #959292;
 }
 .choose_style {
-    padding-top: 1rem;
+    /*padding-top: 1rem;*/
     background-color: white;
     overflow: hidden;
     margin-top: 1rem;
@@ -695,8 +695,11 @@ a{
 
 .note {
     margin-top: 1.5rem;
+    padding-left: 0;
 }
-
+.note ul {
+     padding-left: 0!important;
+}
 .note ul li {
     display: inline-block;
     margin-left: 1rem;
