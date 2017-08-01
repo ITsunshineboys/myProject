@@ -974,3 +974,17 @@ create table user_mobile (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --7.30 end
 
+--8.1 start
+create table user_status (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `uid` int(11) unsigned NOT NULL DEFAULT 0,
+  `mobile` bigint DEFAULT 0,
+  `create_time` int(10) unsigned NOT NULL DEFAULT 0 comment '操作时间',
+  `op_uid` int(11) unsigned not null DEFAULT 0 comment '操作人员用户id',
+  `op_username` varchar(20) not null DEFAULT '' comment '操作人员名称',
+  `remark` varchar(100) not null DEFAULT '' comment '备注',
+  `status` tinyint(1) unsigned not null DEFAULT 0 comment '0: 关闭, 1: 开启',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--8.1 end
+
