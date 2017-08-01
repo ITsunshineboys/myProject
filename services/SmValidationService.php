@@ -16,14 +16,12 @@ use Flc\Alidayu\Requests\AlibabaAliqinFcSmsNumSend;
 
 class SmValidationService
 {
-    public static $needAuthorizedTypes = [
-        'resetPassword',
-    ];
-
     const SUFFIX_INTERVAL = '_interval';
     const SUFFIX_VALIDATION_CODE = '_validationCode';
     const SUFFIX_VALIDATION_CODE_FLG = '_validationCodeFlg';
-
+    public static $needAuthorizedTypes = [
+        'resetPassword',
+    ];
     private $_appKey;
     private $_appSecret;
     private $_signName;
@@ -61,7 +59,9 @@ class SmValidationService
         $this->_validationCodeMethod = $validationCodeMethod;
         $this->_appKey = $smParams['appKey'];
         $this->_appSecret = $smParams['appSecret'];
-        $this->_signName = $smParams[$data['type']]['signName'] ?? $smParams['signName'];
+        $this->_signName = isset($smParams[$data['type']]['signName'])
+            ? $smParams[$data['type']]['signName']
+            : $smParams['signName'];
         $this->_templateId = $smParams[$data['type']]['templateId'];
         $this->_interval = $smParams['interval'];
         $this->_validationCodeExpire = $smParams['validationCode']['expire'];
@@ -140,8 +140,8 @@ class SmValidationService
     /**
      * Get daily sent num
      *
-     * @param int    $mobile mobile
-     * @param string $type   validation code type, register|resetPassword|forgetPassword
+     * @param int $mobile mobile
+     * @param string $type validation code type, register|resetPassword|forgetPassword
      * @return int
      */
     public static function sendNum($mobile, $type)
