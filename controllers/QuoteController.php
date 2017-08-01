@@ -7,6 +7,9 @@
  */
 namespace app\controllers;
 use app\models\DecorationAdd;
+use app\models\DecorationList;
+use app\models\DecorationParticulars;
+use app\models\Effect;
 use app\models\EngineeringStandardCraft;
 use app\models\Goods;
 use app\models\GoodsAttr;
@@ -349,5 +352,12 @@ class QuoteController extends Controller
         }
     }
 
+    /**
+     * 小区添加项
+     * @return string
+     */
+    public function actionPlotList()
+    {
+    }
 
 }

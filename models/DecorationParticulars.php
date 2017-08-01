@@ -27,7 +27,10 @@ class DecorationParticulars extends ActiveRecord
     {
         if($id)
         {
-            return  self::find()->asArray()->where(['decoration_list_id' => $id])->one();
+            return  self::find()
+                ->asArray()
+                ->where(['decoration_list_id' => $id])
+                ->one();
         }else
         {
             return false;

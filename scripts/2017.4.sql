@@ -502,15 +502,13 @@ CREATE TABLE `effect` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `series_id` int(11) DEFAULT NULL COMMENT '系列id',
   `style_id` int(11) DEFAULT NULL COMMENT '风格id',
-  `master_bedroom` int(5) DEFAULT NULL COMMENT '主卧',
-  `secondary_bedroom` int(5) DEFAULT NULL COMMENT '次卧',
-  `sitting_room` int(5) DEFAULT NULL COMMENT '客厅',
-  `dining_room` int(5) DEFAULT NULL COMMENT '餐厅',
+  `bedroom` int(5) DEFAULT NULL COMMENT '卧室',
+  `sittingRoom_diningRoom` int(5) DEFAULT NULL COMMENT '客餐厅和过道',
   `toilet` int(5) DEFAULT NULL COMMENT '卫生间',
   `kitchen` int(5) DEFAULT NULL COMMENT '厨房',
   `window` int(5) DEFAULT NULL COMMENT '飘窗',
   `area` int(5) DEFAULT NULL COMMENT '面积',
-  `high` int(5) unsigned DEFAULT NULL COMMENT '层高',
+  `high` float(5,2) DEFAULT NULL COMMENT '层高',
   `province` varchar(10) DEFAULT NULL COMMENT '省份',
   `city` varchar(10) DEFAULT NULL COMMENT '市',
   `district` varchar(10) DEFAULT NULL COMMENT '区',
@@ -518,6 +516,8 @@ CREATE TABLE `effect` (
   `street` varchar(10) DEFAULT NULL COMMENT '街道',
   `particulars` varchar(50) DEFAULT NULL COMMENT '厅室详情',
   `site_particulars` varchar(100) DEFAULT NULL COMMENT '地址详情',
+  `stairway` tinyint(5) DEFAULT '0' COMMENT '楼梯信息 0：无 1：有',
+  `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
