@@ -93,5 +93,6 @@ return [
     'index-admin' => [1],
     'user-identity' => [1],
     'user-add' => [1],
-    'reset-mobile' => [1]
+    'reset-mobile' => [1],
+    'user-status-toggle' => [1],
 ];

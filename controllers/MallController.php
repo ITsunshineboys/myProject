@@ -4645,37 +4645,32 @@ class MallController extends Controller
      */
     public function actionUserStatusToggle()
     {
-        $id = (int)Yii::$app->request->post('id', 0);
+        $userId = (int)Yii::$app->request->post('user_id', 0);
+        $remark = trim(Yii::$app->request->post('remark', ''));
 
         $code = 1000;
 
-        if (!$id) {
+        if (!$userId) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $model = User::findOne($id);
-        if (!$model) {
+        $user = User::findOne($userId);
+        if (!$user) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $now = time();
-        $user = Yii::$app->user->identity;
-        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
-        if ($model->deadtime > 0) {
-            $model->deadtime = 0;
-            $model->online_time = $now;
-            $model->online_person = $lhzz->nickname;
-        } else {
-            $model->status = GoodsBrand::STATUS_OFFLINE;
-            $model->offline_time = $now;
-            $model->offline_reason = Yii::$app->request->post('offline_reason', '');
-            $model->offline_person = $lhzz->nickname;
+        $code = $user->toggleStatus(Yii::$app->user->identity, $remark);
+        if (200 !== $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
         }
 
         return Json::encode([

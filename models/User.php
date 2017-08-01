@@ -207,6 +207,11 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
+            if (!UserStatus::addByUserAndOperator($user, $operator)) {
+                $transaction->rollBack();
+                return $code;
+            }
+
             $transaction->commit();
 
             if ($checkValidationCode && !empty($data['validation_code'])) {
@@ -676,25 +681,6 @@ class User extends ActiveRecord implements IdentityInterface
         return $viewData;
     }
 
-    public function toggleStatus()
-    {
-        if ($this->deadtime > 0) {
-            $this->deadtime = 0;
-            $code = 500;
-            $tran = Yii::$app->db->beginTransaction();
-            try {
-                if (!$this->save()) {
-                    $tran->rollBack();
-                    return $code;
-                }
-
-//                UserStatus::addByUserAndOperator($this,)
-            } catch (\Exception $e) {
-
-            }
-        }
-    }
-
     /**
      * Get extra fields
      *
@@ -756,6 +742,39 @@ class User extends ActiveRecord implements IdentityInterface
 
         if (isset($data['balance'])) {
             $data['balance'] /= 100;
+        }
+    }
+
+    /**
+     * Toggle user status
+     *
+     * @param User $operator operator
+     * @param string $remark remark
+     * @return int
+     */
+    public function toggleStatus(User $operator, $remark = '')
+    {
+        $code = 500;
+        $tran = Yii::$app->db->beginTransaction();
+
+        try {
+            $this->deadtime = $this->deadtime > 0 ? 0 : time();
+            if (!$this->save()) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            if (!UserStatus::addByUserAndOperator($this, $operator, $remark)) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            $tran->commit();
+            $code = 200;
+            return $code;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+            return $code;
         }
     }
 
