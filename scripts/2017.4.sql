@@ -121,6 +121,8 @@ CREATE TABLE `supplier` (
   `create_time` int unsigned not null DEFAULT 0,
   `quality_guarantee_deposit` bigint not null DEFAULT 0 comment '质保金, unit: fen',
   `support_offline_shop` tinyint(1) not null DEFAULT 0 comment '0: 不支持, 1: 支持',
+  `balance` bigint(20) NOT NULL DEFAULT 0 COMMENT '账户总余额',
+  `availableamount` bigint(20) NOT NULL DEFAULT 0 COMMENT '可用金额',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -986,5 +988,25 @@ create table user_status (
   `status` tinyint(1) unsigned not null DEFAULT 0 comment '0: 关闭, 1: 开启',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `supplier_bankinformation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) NOT NULL,
+  `bankname` varchar(50) NOT NULL,
+  `bankcard` int(50) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `position` varchar(150) NOT NULL,
+  `bankbranch` varchar(150) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `supplier_freezelist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `freeze_money` bigint(20) NOT NULL,
+  `supplier_id` int(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 --8.1 end
 
