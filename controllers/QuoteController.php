@@ -134,22 +134,9 @@ class QuoteController extends Controller
     public function actionMultitermEdit()
     {
         $code = 1000;
-//        $data = \Yii::$app->request->post();
-        $data = [
-            [
-                'id'=>54,
-                'profession'=>'电工',
-                'univalence'=>'400',
-                'points'=>'6',
-            ],
-            [
-                'id'=>55,
-                'univalence'=>'250',
-                'points'=>'6',
-            ]
-        ];
+        $post = \Yii::$app->request->post();
         $labor_cost = new LaborCost();
-        foreach ($data as $one_data)
+        foreach ($post as $one_data)
         {
             $_labor_cost = clone $labor_cost;
             $a = $_labor_cost->findOne($one_data['id']);
@@ -182,17 +169,11 @@ class QuoteController extends Controller
     public function actionMonomialEdit()
     {
         $code = 1000;
-//        $post = \Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-                'id'=>56,
-                'univalence'=>'400',
-                'points'=>'6',
-        ];
+        $post = \Yii::$app->request->post();
         $labor_cost = new LaborCost();
-        $_labor_cost = $labor_cost->findOne($data['id']);
-        $_labor_cost->univalence = $data['univalence'];
-        $_labor_cost->quantity = $data['points'];
+        $_labor_cost = $labor_cost->findOne($post['id']);
+        $_labor_cost->univalence = $post['univalence'];
+        $_labor_cost->quantity = $post['points'];
             if (!$_labor_cost->validate())
             {
                 return Json::encode([
@@ -217,19 +198,9 @@ class QuoteController extends Controller
     public function actionCraftEdit()
     {
         $code = 1000;
-//        $data = \Yii::$app->request->post();
-        $data = [
-            [
-                'id'=>1,
-                'material'=>'11'
-            ],
-            [
-                'id'=>2,
-                'material'=>'15'
-             ]
-        ];
+        $post = \Yii::$app->request->post();
         $engineering_standard_craft = new EngineeringStandardCraft();
-        foreach ($data as $one_data)
+        foreach ($post as $one_data)
         {
             $craft = clone $engineering_standard_craft;
             $_craft = $craft->findOne($one_data['id']);
@@ -260,8 +231,7 @@ class QuoteController extends Controller
      */
     public function actionMaterialAddInquire()
     {
-//        $post = \Yii::$app->request->post();
-//        $data = Json::encode($post);
+        $post = \Yii::$app->request->post();
         $data = '河沙';
         $goods = Goods::newMaterialAdd(3,$data);
         $goods_attr = GoodsAttr::findByGoodsId($goods['id']);
@@ -285,32 +255,9 @@ class QuoteController extends Controller
     public function actionMaterialAdd()
     {
         $code = 1000;
-//        $post = \Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-           [
-                'project' => '电工',
-                'material'=>'石灰粉',
-//                'series_id'=>'11',
-                'min_area'=>'60',
-                'max_area'=>'69',
-                'quantity'=>'1',
-                'sku'=>'123',
-                'district_code'=>'510100',
-           ],
-           [
-               'project' => '电工',
-               'material'=>'石灰粉',
-//               'series_id'=>'12',
-               'min_area'=>'70',
-               'max_area'=>'79',
-               'quantity'=>'3',
-               'sku'=>'51231',
-               'district_code'=>'510100',
-           ]
-        ];
+        $post = \Yii::$app->request->post();
         $decoration_add = new DecorationAdd();
-        foreach ($data as $one_data)
+        foreach ($post as $one_data)
         {
             $add = clone $decoration_add;
             if (array_key_exists('series_id',$one_data) == true)
@@ -358,34 +305,9 @@ class QuoteController extends Controller
     public function actionMaterialEdit()
     {
         $code = 1000;
-//        $post = \Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-            [
-                'id'=>27,
-                'project' => '电工',
-                'material'=>'石灰粉',
-//                'series_id'=>'11',
-                'min_area'=>'60',
-                'max_area'=>'69',
-                'quantity'=>'1',
-                'sku'=>'112233',
-                'district_code'=>'510100',
-            ],
-            [
-                'id'=>28,
-                'project' => '电工',
-                'material'=>'石灰粉',
-//               'series_id'=>'12',
-                'min_area'=>'70',
-                'max_area'=>'79',
-                'quantity'=>'3',
-                'sku'=>'332211',
-                'district_code'=>'510100',
-            ]
-        ];
+        $post = \Yii::$app->request->post();
         $decoration_add = new DecorationAdd();
-        foreach ($data as $one_data)
+        foreach ($post as $one_data)
         {
             $add = clone $decoration_add;
             $_add = $add->findOne($one_data['id']);
@@ -426,5 +348,6 @@ class QuoteController extends Controller
             }
         }
     }
+
 
 }

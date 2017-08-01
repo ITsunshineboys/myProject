@@ -530,14 +530,12 @@ class GoodsCategory extends ActiveRecord
      */
     public static function findLevel($level)
     {
-        if ($level) {
-            $select = "	goods_category.title,goods_category.id";
-            $all = self::find()
-                ->asArray()
-                ->select($select)
-                ->where(['in', 'level', $level])
-                ->all();
-        }
+        $select = "	goods_category.title,goods_category.id";
+        $all = self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['in', 'level', $level])
+            ->all();
         return $all;
     }
 
