@@ -404,17 +404,15 @@ class Goods extends ActiveRecord
      */
     public static function findQueryAll($all,$city = 510100)
     {
-        if ($all) {
-            $goods_id = [];
-            foreach ($all as $single) {
-                $goods_id [] = $single['goods_id'];
-            }
-            $id = implode(',', $goods_id);
-            $db = \Yii::$app->db;
-            $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
-AND goods.id IN (" . $id . ")";
-            $all_goods = $db->createCommand($sql)->queryAll();
+        $goods_id = [];
+        foreach ($all as $single) {
+            $goods_id [] = $single['goods_id'];
         }
+        $id = implode(',', $goods_id);
+        $db = \Yii::$app->db;
+        $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
+AND goods.id IN (" . $id . ")";
+        $all_goods = $db->createCommand($sql)->queryAll();
         return $all_goods;
     }
 

@@ -67,9 +67,10 @@ class Points extends ActiveRecord
 
     public static function strongPointsAll($id)
     {
-        if($id){
-            $all = self::find()->asArray()->where(['effect_id'=>$id])->all();
-        }
+        $all = self::find()
+            ->asArray()
+            ->where(['effect_id'=>$id])
+            ->all();
         return $all;
     }
 }

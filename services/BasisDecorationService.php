@@ -23,12 +23,14 @@ class BasisDecorationService
      */
     public static function  laborFormula($points,$labor)
     {
-        if($points && $labor)
-        {
-            //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-            $labor_formula = ceil(($points / $labor['quantity'])) * $labor['univalence'];
-        }
-        return $labor_formula;
+       if (is_null($points)) {
+           //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
+           return ceil(($points / $labor['quantity'])) * $labor['univalence'];
+       }else {
+           return false;
+       }
+
+
     }
 
     /**
@@ -1445,53 +1447,45 @@ class BasisDecorationService
      */
     public static function strongCurrentPoints($points,$post)
     {
-        if ($points)
+        foreach ($points as $one_points)
         {
-            foreach ($points as $one_points)
+            switch ($one_points)
             {
-                if ($one_points['place'] == '客餐厅')
-                {
-                    if ($post['hall'] != 2)
-                    {
-                        $hall = $one_points['points_total'] * $post['hall'];
-                    }else
-                    {
-                        $hall = $one_points['points_total'] + 2;
-                    }
-                }
-                if ($one_points['place'] == '卧室')
-                {
+                case $one_points['place'] == '卧室':
                     $bedroom = $one_points['points_total'] * $post['bedroom'];
-                }
-                if ($one_points['place'] == '厨房')
-                {
+                    break;
+                case $one_points['place'] == '厨房':
                     $kitchen = $one_points['points_total'] * $post['kitchen'];
-                }
-                if ($one_points['place'] == '卫生间')
-                {
+                    break;
+                case $one_points['place'] == '卫生间':
                     $toilet = $one_points['points_total'] * $post['toilet'];
-                }
-                if ($one_points['place'] == '入户')
-                {
+                    break;
+                case $one_points['place'] == '入户':
                     $register = $one_points['points_total'];
-                }
-                if ($one_points['place'] == '客厅阳台')
-                {
+                    break;
+                case $one_points['place'] == '客厅阳台':
                     $balcony = $one_points['points_total'];
-                }
-                if ($one_points['place'] == '客厅卧室过道')
-                {
+                    break;
+                case $one_points['place'] == '客厅卧室过道':
                     $passage = $one_points['points_total'];
-                }
-                if ($one_points['place'] == '生活阳台')
-                {
+                    break;
+                case $one_points['place'] == '生活阳台':
                     $live_balcony= $one_points['points_total'];
+                    break;
+            }
+            if ($one_points['place'] == '客餐厅')
+            {
+                if ($post['hall'] != 2)
+                {
+                    $hall = $one_points['points_total'] * $post['hall'];
+                }else
+                {
+                    $hall = $one_points['points_total'] + 2;
                 }
             }
-            $strong_current_points = $hall+$bedroom+$kitchen+$toilet+$register+$balcony+$passage+$live_balcony;
-
-            return $strong_current_points;
         }
+        $strong_current_points = $hall+$bedroom+$kitchen+$toilet+$register+$balcony+$passage+$live_balcony;
+        return $strong_current_points;
     }
 
     /**

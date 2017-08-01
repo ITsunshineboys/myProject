@@ -18,17 +18,17 @@ class PointsTotal extends ActiveRecord
         return 'points_total';
     }
 
-    public static function findByAll($AllId = [])
+    public static function findByAll($AllId)
     {
-        if ($AllId)
+        $id = [];
+        foreach ($AllId as $oneId)
         {
-            $id = [];
-            foreach ($AllId as $oneId)
-            {
-                $id [] = intval($oneId['id']);
-            }
-            $all = self::find()->asArray()->where(['in','place_id',$id])->all();
+            $id [] = intval($oneId['id']);
         }
+        $all = self::find()
+            ->asArray()
+            ->where(['in','place_id',$id])
+            ->all();
         return $all;
     }
 }
