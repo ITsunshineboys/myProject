@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 class District extends ActiveRecord
 {
     const CODE_LEN = 6;
+    const SEPARATOR_NAMES = '-';
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -40,5 +41,35 @@ class District extends ActiveRecord
     public static function findByCode($code)
     {
         return self::findOne($code);
+    }
+
+    /**
+     * Get full name by district code
+     *
+     * @param int $code district code
+     * @param string $separator separator default '-'
+     * @return string
+     */
+    public static function fullNameByCode($code, $separator = self::SEPARATOR_NAMES)
+    {
+        $names = [];
+
+        $district = self::findByCode($code);
+        if ($district) {
+            $names[] = $district->name;
+            if (strlen($district->pid) == self::CODE_LEN) {
+                $parentDistrict = self::findByCode($district->pid);
+                if ($parentDistrict) {
+                    $names[] = $parentDistrict->name;
+                    if (strlen($parentDistrict->pid) == self::CODE_LEN) {
+                        $rootDistrict = self::findByCode($parentDistrict->pid);
+                        $names[] = $rootDistrict->name;
+                    }
+                }
+            }
+        }
+
+        $names = array_reverse($names);
+        return implode($separator, $names);
     }
 }

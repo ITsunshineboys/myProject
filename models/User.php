@@ -795,8 +795,7 @@ class User extends ActiveRecord implements IdentityInterface
                 case 'address':
                     $userAddress = UserAddress::find()->where(['uid' => $this->id])->one();
                     if ($userAddress) {
-                        $district = District::findOne($userAddress->district);
-                        $extraData[$extraField] = $district->name . $userAddress->region;
+                        $extraData[$extraField] = District::fullNameByCode($userAddress->district) . $userAddress->region;
                     }
                     break;
                 case 'review_status':
