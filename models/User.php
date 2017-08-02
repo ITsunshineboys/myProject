@@ -746,19 +746,53 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Toggle user status
+     * Disable users in batch
      *
+     * @param array $userIds user id list
      * @param User $operator operator
      * @param string $remark remark
      * @return int
      */
-    public function toggleStatus(User $operator, $remark = '')
+    public static function disableInBatch(array $userIds, User $operator, $remark = '')
+    {
+        $tran = Yii::$app->db->beginTransaction();
+
+        foreach ($userIds as $userId) {
+            $user = self::findOne($userId);
+            if ($user->deadtime > 0) {
+                continue;
+            }
+
+            $toggleStatusRes = $user->toggleStatus($operator, $remark, true);
+            if (200 !== $toggleStatusRes) {
+                $tran->rollBack();
+                return $toggleStatusRes;
+            }
+        }
+
+        $tran->commit();
+        return 200;
+    }
+
+    /**
+     * Toggle user status
+     *
+     * @param User $operator operator
+     * @param string $remark remark
+     * @param bool $disableOnly if disable only
+     * @return int
+     */
+    public function toggleStatus(User $operator, $remark = '', $disableOnly = false)
     {
         $code = 500;
         $tran = Yii::$app->db->beginTransaction();
 
         try {
-            $this->deadtime = $this->deadtime > 0 ? 0 : time();
+            if ($disableOnly) {
+                $this->deadtime = time();
+            } else {
+                $this->deadtime = $this->deadtime > 0 ? 0 : time();
+            }
             if (!$this->save()) {
                 $tran->rollBack();
                 return $code;

@@ -116,6 +116,7 @@ class MallController extends Controller
         'reset-mobile',
         'reset-mobile-logs',
         'user-status-toggle',
+        'user-disable-batch',
     ];
 
     /**
@@ -191,6 +192,7 @@ class MallController extends Controller
                     'user-add' => ['post',],
                     'reset-mobile' => ['post',],
                     'user-status-toggle' => ['post',],
+                    'user-disable-batch' => ['post',],
                 ],
             ],
         ];
@@ -4676,6 +4678,32 @@ class MallController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'OK'
+        ]);
+    }
+
+    /**
+     * Disable users in batches action.
+     *
+     * @return string
+     */
+    public function actionUserDisableBatch()
+    {
+        $userIds = trim(Yii::$app->request->post('user_ids', ''));
+        $userIds = trim($userIds, ',');
+        $remark = trim(Yii::$app->request->post('remark', ''));
+
+        $code = 1000;
+        if (!$userIds) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $disableInBatchRes = User::disableInBatch(explode(',', $userIds), Yii::$app->user->identity, $remark);
+        return Json::encode([
+            'code' => $disableInBatchRes,
+            'msg' => $disableInBatchRes == 200 ? 'OK' : Yii::$app->params['errorCodes'][$disableInBatchRes]
         ]);
     }
 }

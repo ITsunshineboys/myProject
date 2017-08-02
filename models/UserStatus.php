@@ -34,8 +34,7 @@ class UserStatus extends ActiveRecord
         $userStatus->uid = $user->id;
         $userStatus->mobile = $user->mobile;
         $userStatus->create_time = time();
-        $userStatus->remark = $remark;
-        $user->deadtime == 0 && $userStatus->remark = $remark;
+        $user->deadtime > 0 && $userStatus->remark = $remark;
         $userStatus->status = $user->deadtime > 0 ? User::STATUS_OFFLINE : User::STATUS_ONLINE;
         if ($operator) {
             $lhzz = Lhzz::find()->where(['uid' => $operator->id])->one();

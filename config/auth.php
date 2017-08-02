@@ -95,4 +95,5 @@ return [
     'user-add' => [1],
     'reset-mobile' => [1],
     'user-status-toggle' => [1],
+    'user-disable-batch' => [1],
 ];
