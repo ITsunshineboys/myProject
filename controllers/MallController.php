@@ -119,6 +119,7 @@ class MallController extends Controller
         'user-status-toggle',
         'user-disable-batch',
         'user-disable-remark-reset',
+        'user-enable-batch',
     ];
 
     /**
@@ -196,6 +197,7 @@ class MallController extends Controller
                     'user-status-toggle' => ['post',],
                     'user-disable-batch' => ['post',],
                     'user-disable-remark-reset' => ['post',],
+                    'user-enable-batch' => ['post',],
                 ],
             ],
         ];
@@ -4733,6 +4735,31 @@ class MallController extends Controller
         return Json::encode([
             'code' => $res ? 200 : 500,
             'msg' => $res ? 'OK' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+    /**
+     * Enable users in batches action.
+     *
+     * @return string
+     */
+    public function actionUserEnableBatch()
+    {
+        $userIds = trim(Yii::$app->request->post('user_ids', ''));
+        $userIds = trim($userIds, ',');
+
+        $code = 1000;
+        if (!$userIds) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $enableInBatchRes = User::enableInBatch(explode(',', $userIds), Yii::$app->user->identity);
+        return Json::encode([
+            'code' => $enableInBatchRes,
+            'msg' => $enableInBatchRes == 200 ? 'OK' : Yii::$app->params['errorCodes'][$enableInBatchRes]
         ]);
     }
 }

@@ -304,6 +304,104 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Disable users in batch
+     *
+     * @param array $userIds user id list
+     * @param User $operator operator
+     * @param string $remark remark
+     * @return int
+     */
+    public static function disableInBatch(array $userIds, User $operator, $remark = '')
+    {
+        $tran = Yii::$app->db->beginTransaction();
+
+        foreach ($userIds as $userId) {
+            $user = self::findOne($userId);
+            if ($user->deadtime > 0) {
+                continue;
+            }
+
+            $toggleStatusRes = $user->toggleStatus($operator, $remark, true);
+            if (200 !== $toggleStatusRes) {
+                $tran->rollBack();
+                return $toggleStatusRes;
+            }
+        }
+
+        $tran->commit();
+        return 200;
+    }
+
+    /**
+     * Toggle user status
+     *
+     * @param User $operator operator
+     * @param string $remark remark
+     * @param bool $disableOnly if disable only
+     * @param bool $enableOnly if enable only
+     * @return int
+     */
+    public function toggleStatus(User $operator, $remark = '', $disableOnly = false, $enableOnly = false)
+    {
+        $code = 500;
+        $tran = Yii::$app->db->beginTransaction();
+
+        try {
+            if ($disableOnly) {
+                $this->deadtime = time();
+            } elseif ($enableOnly) {
+                $this->deadtime = 0;
+            } else {
+                $this->deadtime = $this->deadtime > 0 ? 0 : time();
+            }
+            if (!$this->save()) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            if (!UserStatus::addByUserAndOperator($this, $operator, $remark)) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            $tran->commit();
+            $code = 200;
+            return $code;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+            return $code;
+        }
+    }
+
+    /**
+     * Enable users in batch
+     *
+     * @param array $userIds user id list
+     * @param User $operator operator
+     * @return int
+     */
+    public static function enableInBatch(array $userIds, User $operator)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+
+        foreach ($userIds as $userId) {
+            $user = self::findOne($userId);
+            if ($user->deadtime == 0) {
+                continue;
+            }
+
+            $toggleStatusRes = $user->toggleStatus($operator, '', false, true);
+            if (200 !== $toggleStatusRes) {
+                $tran->rollBack();
+                return $toggleStatusRes;
+            }
+        }
+
+        $tran->commit();
+        return 200;
+    }
+
+    /**
      * Reset user's new mobile
      *
      * @param int $mobile mobile
@@ -742,73 +840,6 @@ class User extends ActiveRecord implements IdentityInterface
 
         if (isset($data['balance'])) {
             $data['balance'] /= 100;
-        }
-    }
-
-    /**
-     * Disable users in batch
-     *
-     * @param array $userIds user id list
-     * @param User $operator operator
-     * @param string $remark remark
-     * @return int
-     */
-    public static function disableInBatch(array $userIds, User $operator, $remark = '')
-    {
-        $tran = Yii::$app->db->beginTransaction();
-
-        foreach ($userIds as $userId) {
-            $user = self::findOne($userId);
-            if ($user->deadtime > 0) {
-                continue;
-            }
-
-            $toggleStatusRes = $user->toggleStatus($operator, $remark, true);
-            if (200 !== $toggleStatusRes) {
-                $tran->rollBack();
-                return $toggleStatusRes;
-            }
-        }
-
-        $tran->commit();
-        return 200;
-    }
-
-    /**
-     * Toggle user status
-     *
-     * @param User $operator operator
-     * @param string $remark remark
-     * @param bool $disableOnly if disable only
-     * @return int
-     */
-    public function toggleStatus(User $operator, $remark = '', $disableOnly = false)
-    {
-        $code = 500;
-        $tran = Yii::$app->db->beginTransaction();
-
-        try {
-            if ($disableOnly) {
-                $this->deadtime = time();
-            } else {
-                $this->deadtime = $this->deadtime > 0 ? 0 : time();
-            }
-            if (!$this->save()) {
-                $tran->rollBack();
-                return $code;
-            }
-
-            if (!UserStatus::addByUserAndOperator($this, $operator, $remark)) {
-                $tran->rollBack();
-                return $code;
-            }
-
-            $tran->commit();
-            $code = 200;
-            return $code;
-        } catch (\Exception $e) {
-            $tran->rollBack();
-            return $code;
         }
     }
 
