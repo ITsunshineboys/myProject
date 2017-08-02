@@ -25,6 +25,7 @@ use app\models\GoodsStat;
 use app\models\GoodsOrder;
 use app\models\GoodsRecommendSupplier;
 use app\models\UserMobile;
+use app\models\UserStatus;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use app\services\StringService;
@@ -117,6 +118,7 @@ class MallController extends Controller
         'reset-mobile-logs',
         'user-status-toggle',
         'user-disable-batch',
+        'user-disable-remark-reset',
     ];
 
     /**
@@ -193,6 +195,7 @@ class MallController extends Controller
                     'reset-mobile' => ['post',],
                     'user-status-toggle' => ['post',],
                     'user-disable-batch' => ['post',],
+                    'user-disable-remark-reset' => ['post',],
                 ],
             ],
         ];
@@ -4704,6 +4707,32 @@ class MallController extends Controller
         return Json::encode([
             'code' => $disableInBatchRes,
             'msg' => $disableInBatchRes == 200 ? 'OK' : Yii::$app->params['errorCodes'][$disableInBatchRes]
+        ]);
+    }
+
+    /**
+     * Reset disable user remark action
+     *
+     * @return string
+     */
+    public function actionUserDisableRemarkReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $userStatus = UserStatus::findOne($id);
+        if (!$userStatus) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $userStatus->remark = trim(Yii::$app->request->post('remark', ''));
+        $res = $userStatus->save();
+        return Json::encode([
+            'code' => $res ? 200 : 500,
+            'msg' => $res ? 'OK' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
 }
