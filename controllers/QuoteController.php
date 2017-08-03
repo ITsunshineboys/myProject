@@ -420,10 +420,14 @@ class QuoteController extends Controller
         $effect->stairway = $post['stairway'];
         $effect->high = $post['high'];
         $effect->window = $post['window'];
-        $decoration_particulars->sittingRoom_diningRoom_area = $post['sittingRoom_diningRoom_area'];
-        $decoration_particulars->sittingRoom_diningRoom_perimeter = $post['sittingRoom_diningRoom_perimeter'];
-        $decoration_particulars->masterBedroom_area = $post['masterBedroom_area'];
-        $decoration_particulars->masterBedroom_area = $post['masterBedroom_area'];
+        $decoration_particulars->hall_area = $post['hall_area'];
+        $decoration_particulars->hall_perimeter = $post['hall_perimeter'];
+        $decoration_particulars->bedroom_area = $post['bedroom_area'];
+        $decoration_particulars->bedroom_perimeter = $post['bedroom_perimeter'];
+        $decoration_particulars->toilet_area = $post['toilet_area'];
+        $decoration_particulars->toilet_perimeter = $post['toilet_perimeter'];
+        $decoration_particulars->kitchen_area = $post['kitchen_area'];
+        $decoration_particulars->kitchen_perimeter = $post['kitchen_perimeter'];
     }
 
 }
