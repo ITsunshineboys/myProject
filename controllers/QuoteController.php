@@ -388,22 +388,25 @@ class QuoteController extends Controller
     public function actionPlotGrabble()
     {
         $post = \Yii::$app->request->post();
-        var_dump($post);exit;
-        if (!is_array($post))
+//        $post = [
+//            'min'=>1501646042,
+//            'max'=>1501646191
+//        ];
+        switch ($post)
         {
-            $data = (string)$post;
-            $effect = Effect::conditionFind($data);
-            return Json::encode([
-                'effect'=>$effect
-            ]);
-        }else
-        {
-            $effect = Effect::conditionFind($post);
-            return Json::encode([
-                'effect'=>$effect
-            ]);
+            case is_string($post);
+                $effect = Effect::conditionFind($post);
+                return Json::encode([
+                    'effect'=>$effect
+                ]);
+                break;
+            case is_array($post);
+                $effect = Effect::findAddTime($post);
+                return Json::encode([
+                   'effect'=> $effect
+                ]);
+                break;
         }
-
     }
 
     /**
