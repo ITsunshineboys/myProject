@@ -71,12 +71,17 @@ class User extends ActiveRecord implements IdentityInterface
         'birthday',
         'district_name',
         'signature',
+        'mobile',
         'aite_cube_no',
-        'balance',
+        'create_time',
     ];
     const FIELDS_USER_DETAILS_MODEL_LHZZ_EXTRA = [
         'old_nickname',
+        'roles',
     ];
+    const SESSION_KEY_LOGIN_ORIGIN = 'session_key_login_origin';
+    const LOGIN_ORIGIN_ADMIN = 'login_origin_admin';
+    const LOGIN_ORIGIN_APP = 'login_origin_app';
 
     /**
      * @inheritdoc
@@ -765,7 +770,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        if ('other' == StringService::userAgent()) { // from pc
+        if (Yii::$app->session[self::SESSION_KEY_LOGIN_ORIGIN] == self::LOGIN_ORIGIN_ADMIN) { // from admin
             return !empty($this->authKeyAdmin);
         } else { // from app
             return !empty($this->authKey);
@@ -853,6 +858,12 @@ class User extends ActiveRecord implements IdentityInterface
                             : '';
                     }
                     break;
+                case 'old_nickname':
+                    $extraData[$extraField] = $this->getOldNickname();
+                    break;
+                case 'roles':
+//                    UserRole::
+                    break;
             }
         }
 
@@ -877,6 +888,10 @@ class User extends ActiveRecord implements IdentityInterface
         if (isset($data['balance'])) {
             $data['balance'] /= 100;
         }
+
+        if (isset($data['create_time'])) {
+            $data['create_time'] = date('Y-m-d H:i', $data['create_time']);
+        }
     }
 
     /**
@@ -889,6 +904,21 @@ class User extends ActiveRecord implements IdentityInterface
         $modelData = ModelService::selectModelFields($this, self::FIELDS_USER_CENTER_MODEL);
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_CENTER_EXTRA))
+            : $modelData;
+        $this->_formatData($viewData);
+        return $viewData;
+    }
+
+    /**
+     * Get view data(lhzz)
+     *
+     * @return array
+     */
+    public function viewLhzz()
+    {
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_USER_DETAILS_MODEL_LHZZ);
+        $viewData = $modelData
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_DETAILS_MODEL_LHZZ_EXTRA))
             : $modelData;
         $this->_formatData($viewData);
         return $viewData;
@@ -923,7 +953,9 @@ class User extends ActiveRecord implements IdentityInterface
         $sessionId = Yii::$app->session->id;
         if ($roleId) {
             $this->authKeyAdmin = $sessionId;
+            Yii::$app->session[self::SESSION_KEY_LOGIN_ORIGIN] = self::LOGIN_ORIGIN_ADMIN;
         } else {
+            Yii::$app->session[self::SESSION_KEY_LOGIN_ORIGIN] = self::LOGIN_ORIGIN_APP;
             $this->authKey = $sessionId;
         }
 
