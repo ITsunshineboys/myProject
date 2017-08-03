@@ -1198,7 +1198,7 @@ class MallController extends Controller
         }
 
         $model->scenario = GoodsCategory::SCENARIO_TOGGLE_STATUS;
-        if (!$model->validate()) {
+        if (!$model->validate()) {print_r($model->errors);
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
