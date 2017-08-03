@@ -1168,7 +1168,7 @@ class MallController extends Controller
 
         $code = 1000;
 
-        if (!$id) {
+        if (!$id) {echo 'aa';
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1176,7 +1176,7 @@ class MallController extends Controller
         }
 
         $model = GoodsCategory::findOne($id);
-        if (!$model) {
+        if (!$model) {echo 'bb';
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
