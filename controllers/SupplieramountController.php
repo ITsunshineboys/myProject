@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\models\Supplieramountmanage;
 use app\models\Supplier;
 use app\models\GoodsOrder;
+use app\models\User;
 use app\services\SmValidationService;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
