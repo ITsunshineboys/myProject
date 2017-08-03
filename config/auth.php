@@ -98,4 +98,5 @@ return [
     'user-disable-batch' => [1],
     'user-disable-remark-reset' => [1],
     'user-enable-batch' => [1],
+    'user-view-lhzz' => [1],
 ];

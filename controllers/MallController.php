@@ -120,6 +120,7 @@ class MallController extends Controller
         'user-disable-batch',
         'user-disable-remark-reset',
         'user-enable-batch',
+        'user-view-lhzz',
     ];
 
     /**
@@ -4760,6 +4761,22 @@ class MallController extends Controller
         return Json::encode([
             'code' => $enableInBatchRes,
             'msg' => $enableInBatchRes == 200 ? 'OK' : Yii::$app->params['errorCodes'][$enableInBatchRes]
+        ]);
+    }
+
+    /**
+     * View owner action(lhzz)
+     *
+     * @return string
+     */
+    public function actionUserViewLhzz()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'user-view' => Yii::$app->user->identity->viewLhzz(),
+            ],
         ]);
     }
 }

@@ -45,15 +45,19 @@ class Role extends ActiveRecord
     /**
      * Get all roles
      *
+     * @param bool $onlyApp if only app fields
      * @return array|mixed|ActiveRecord[]
      */
-    public static function allRoles()
+    public static function allRoles($onlyApp = false)
     {
         $key = self::CACHE_KEY_ALL;
         $cache = Yii::$app->cache;
         $roles = $cache->get($key);
         if (!$roles) {
-            $roles = self::find()->where([])->asArray()->orderBy('id')->all();
+            $where = $onlyApp
+                ? ['not in', 'id', [Yii::$app->params['ownerRoleId'], Yii::$app->params['lhzzRoleId']]]
+                : [];
+            $roles = self::find()->where($where)->asArray()->orderBy('id')->all();
             if ($roles) {
                 $cache->set($key, $roles);
             }
@@ -90,6 +94,7 @@ class Role extends ActiveRecord
      */
     public static function appRoles()
     {
-        return array_slice(self::allRoles(), 1);
+        return self::allRoles(true);
+//        return array_slice(self::allRoles(), 1);
     }
 }
