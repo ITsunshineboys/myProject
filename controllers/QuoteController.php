@@ -388,6 +388,7 @@ class QuoteController extends Controller
     public function actionPlotGrabble()
     {
         $post = \Yii::$app->request->post();
+        var_dump($post);exit;
         if (!is_array($post))
         {
             $data = (string)$post;
@@ -438,6 +439,12 @@ class QuoteController extends Controller
         $decoration_particulars->modelling_length = $post['modelling_length'];
         $decoration_particulars->flat_area = $post['flat_area'];
         $decoration_particulars->balcony_area = $post['balcony_area'];
+    }
+
+    public function actionPaa()
+    {
+        $a = \Yii::$app->districts;
+        var_dump($a);exit;
     }
 
 }
