@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
 
 class Effect extends ActiveRecord
 {
-
+    const STATUS_STAIRWAY_YES = 1;
     const FIELDS_VIEW_ADMIN_MODEL = [
           'id',
           'series_id',
@@ -29,6 +29,8 @@ class Effect extends ActiveRecord
           'toponymy',
           'particulars',
           'site_particulars',
+          'stairway',
+          'add_time'
         ];
     /**
      * @return string 返回该AR类关联的数据表名
@@ -53,13 +55,17 @@ class Effect extends ActiveRecord
      */
     public static function districtSearch($search = '花好月圆')
     {
-        if (!empty($search))
-        {
-            $detail = self::find()->asArray()->where(['like','toponymy',$search])->all();
-        }
+        $detail = self::find()
+            ->asArray()
+            ->where(['like','toponymy',$search])
+            ->all();
         return $detail;
     }
 
+    /**
+     * @param $arr
+     * @return array|null|ActiveRecord
+     */
     public static function conditionQuery($arr)
     {
         $basis_condition = [];
@@ -82,5 +88,46 @@ class Effect extends ActiveRecord
             'series'=> $basis_condition ['series_id'],
             'style'=> $basis_condition ['style_id']])->one();
         return $effect;
+    }
+
+    /**
+     * find all
+     * @return string
+     */
+    public static function conditionFind($post)
+    {
+        if (!is_array($post))
+        {
+            $data = strlen($post);
+            switch ($data) {
+                case 6:
+                    $effect = self::find()
+                        ->select('effect.toponymy,effect.add_time,effect.district')
+                        ->groupBy('toponymy')
+                        ->where(['city' => $post])
+                        ->asArray()
+                        ->all();
+                    return $effect;
+                    break;
+                case 12:
+                    $effect = self::find()
+                        ->select('effect.toponymy,effect.add_time,effect.district')
+                        ->groupBy('toponymy')
+                        ->where(['toponymy' => $post])
+                        ->asArray()
+                        ->all();
+                    return $effect;
+                    break;
+            }
+        }else {
+            $effect = self::find()
+                ->select('effect.toponymy,effect.add_time,effect.district')
+                ->groupBy('toponymy')
+                ->where(['and',['>=','add_time',$post['min']],['<=','add_time',$post['max']]])
+                ->asArray()
+                ->orderBy(['add_time'=>SORT_ASC])
+                ->all();
+            return $effect;
+        }
     }
 }

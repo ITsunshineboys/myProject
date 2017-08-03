@@ -15,6 +15,8 @@ use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\LaborCost;
 use app\services\ExceptionHandleService;
+use app\services\SmValidationService;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -353,11 +355,75 @@ class QuoteController extends Controller
     }
 
     /**
-     * 小区添加项
+     * plot list and pages
      * @return string
      */
     public function actionPlotList()
     {
+        $effect = Effect::find()->where(['city'=>510100]);
+        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>10]);
+        $model = $effect->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->distinct()
+            ->select('effect.toponymy,effect.add_time,effect.district')
+            ->all();
+        return Json::encode([
+                'model' => $model,
+                'pages'=> $pages
+            ]);
+    }
+
+    /**
+     * city and time and toponymy grabble
+     * @return string
+     */
+    public function actionPlotGrabble()
+    {
+        $post = \Yii::$app->request->post();
+        if (!is_array($post))
+        {
+            $data = (string)$post;
+            $effect = Effect::conditionFind($data);
+            return Json::encode([
+                'effect'=>$effect
+            ]);
+        }else
+        {
+            $effect = Effect::conditionFind($post);
+            return Json::encode([
+                'effect'=>$effect
+            ]);
+        }
+
+    }
+
+    /**
+     * plot add function
+     * @return string
+     */
+    public function actionPlotAdd()
+    {
+        $code = 1000;
+        $post = \Yii::$app->request->post();
+        $effect = new Effect();
+        $decoration_particulars = new DecorationParticulars();
+        $effect->toponymy = $post['toponymy'];
+        $effect->city = $post['city'];
+        $effect->site_particulars = $post['site_particulars'];
+        $effect->particulars = $post['particulars'];
+        $effect->area = $post['area'];
+        $effect->bedroom = $post['bedroom'];
+        $effect->sittingRoom_diningRoom = $post['sittingRoom_diningRoom'];
+        $effect->toilet = $post['toilet'];
+        $effect->kitchen = $post['kitchen'];
+        $effect->stairway = $post['stairway'];
+        $effect->high = $post['high'];
+        $effect->window = $post['window'];
+        $decoration_particulars->sittingRoom_diningRoom_area = $post['sittingRoom_diningRoom_area'];
+        $decoration_particulars->sittingRoom_diningRoom_perimeter = $post['sittingRoom_diningRoom_perimeter'];
+        $decoration_particulars->masterBedroom_area = $post['masterBedroom_area'];
+        $decoration_particulars->masterBedroom_area = $post['masterBedroom_area'];
     }
 
 }
