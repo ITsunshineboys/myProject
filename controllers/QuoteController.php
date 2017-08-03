@@ -388,6 +388,7 @@ class QuoteController extends Controller
     public function actionPlotGrabble()
     {
         $post = \Yii::$app->request->post();
+        var_dump($post);exit;
 //        $post = [
 //            'min'=>1501646042,
 //            'max'=>1501646191
