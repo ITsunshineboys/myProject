@@ -369,8 +369,14 @@ class QuoteController extends Controller
             ->select('effect.toponymy,effect.add_time,effect.district')
             ->groupBy('toponymy')
             ->all();
+        $list = [];
+        foreach ($model as $one_model)
+        {
+            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+            $list [] = $one_model;
+        }
         return Json::encode([
-                'model' => $model,
+                'model' => $list,
                 'pages'=> $pages
             ]);
     }
