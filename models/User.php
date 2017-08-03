@@ -48,7 +48,7 @@ class User extends ActiveRecord implements IdentityInterface
         'balance',
     ];
     const FIELDS_USER_CENTER_EXTRA = [
-        'address',
+//        'address',
         'review_status',
     ];
     const BIRTHDAY_LEN = 8;
@@ -64,6 +64,19 @@ class User extends ActiveRecord implements IdentityInterface
     ];
     const STATUS_OFFLINE = 0; // 关闭
     const STATUS_ONLINE = 1; // 开启
+    const FIELDS_USER_DETAILS_MODEL_LHZZ = [
+        'icon',
+        'nickname',
+        'gender',
+        'birthday',
+        'district_name',
+        'signature',
+        'aite_cube_no',
+        'balance',
+    ];
+    const FIELDS_USER_DETAILS_MODEL_LHZZ_EXTRA = [
+        'old_nickname',
+    ];
 
     /**
      * @inheritdoc
@@ -542,7 +555,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         $this->district_code = $districtCode;
-        $this->district_name = $district->name;
+        $this->district_name = District::fullNameByCode($districtCode);
         if (!$this->save()) {
             $code = 500;
             return $code;
@@ -641,6 +654,33 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAuthKey()
     {
         return $this->authKey;
+    }
+
+    /**
+     * Get old nickname
+     *
+     * @return string
+     */
+    public function getOldNickname()
+    {
+        return $this->nickname != Yii::$app->params['user']['default_nickname']
+            ? Yii::$app->params['user']['default_nickname']
+            : '';
+    }
+
+    /**
+     * Get user full address
+     *
+     * @return string
+     */
+    public function getFullAddress()
+    {
+        $fullAddress = '';
+        $userAddress = UserAddress::find()->where(['uid' => $this->id])->one();
+        if ($userAddress) {
+            $fullAddress = District::fullNameByCode($userAddress->district) . $userAddress->region;
+        }
+        return $fullAddress;
     }
 
     /**
@@ -793,11 +833,7 @@ class User extends ActiveRecord implements IdentityInterface
         foreach ($extraFields as $extraField) {
             switch ($extraField) {
                 case 'address':
-                    $userAddress = UserAddress::find()->where(['uid' => $this->id])->one();
-                    if ($userAddress) {
-                        $district = District::findOne($userAddress->district);
-                        $extraData[$extraField] = $district->name . $userAddress->region;
-                    }
+                    $extraData[$extraField] = $this->getFullAddress();
                     break;
                 case 'review_status':
                     $userRole = UserRole::find()
