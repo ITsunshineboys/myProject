@@ -37,12 +37,6 @@ return [
         1018 => '昵称已存在',
         1019 => '该手机号已被注册',
         1020 => '验证码超时',
-        1050 => '请求方式错误',
-        1051 => '失败',
-        1052 => '未登录',
-        1053 => '两次输入密码不一致',
-        1054 => '提现金额超出可提现限额，请重新填写',
-        1055 => '支付密码错误',
     ],
     'events' => [
         'supplier' => [
@@ -126,5 +120,12 @@ return [
     'user' => [
         'daily_forgot_pwd_cnt_max' => 5,
         'default_nickname' => 'default nickname', // 待定
+    ],
+    //聊天服务配置
+    'chatOptions' => [
+            'client_id' => 'YXA6DxGD4HQZEee78SNJqGuchQ',
+            'client_secret' => 'YXA6isIrLRTIwuEyLOIGXGHGTPMX3WE',
+            'org_name' => '1170170729178073',
+            'app_name' => '111'
     ],
 ];
