@@ -361,9 +361,9 @@ class QuoteController extends Controller
     public function actionPlotList()
     {
         $post = \Yii::$app->request->post();
-        var_dump($post);exit;
+        var_dump($post['post']);exit;
 //        $post = 510100;
-        $effect = Effect::find()->where(['city'=>$post]);
+        $effect = Effect::find()->where(['city'=>$post['post']]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>10]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
