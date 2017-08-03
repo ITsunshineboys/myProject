@@ -17,22 +17,12 @@ class DecorationParticulars extends ActiveRecord
         'bedroom_area',
         'toilet_area',
         'kitchen_area',
+        'hallway_area',
         'hall_perimeter',
         'bedroom_perimeter',
         'toilet_perimeter',
         'kitchen_perimeter',
         'hallway_perimeter',
-        'drawingRoom_balcony_area',
-        'masterBedroom_balcony_area',
-        'secondaryBedroom_balcony_area',
-        'toilet_balcony_area',
-        'kitchen_balcony_area',
-        'bedroom_aisle_area',
-        'drawingRoom_balcony_perimeter',
-        'masterBedroom_balcony_perimeter',
-        'secondaryBedroom_balcony_perimeter',
-        'toilet_balcony_perimeter',
-        'kitchen_balcony_perimeter',
         'shoe_cabinet_length',
         'masterBedroom_garderobe_length',
         'secondaryBedroom_garderobe_length',
@@ -43,9 +33,9 @@ class DecorationParticulars extends ActiveRecord
         'masterBedroom_curtain_length',
         'secondaryBedroom_curtain_length',
         'wallCabinet_length',
-        'drawingRoom_sill_length',
-        'masterBedroom_sill_length',
-        'secondaryBedroom_sill_length'
+        'modelling_length',
+        'flat_area',
+        'balcony_area'
     ];
     /**
      * @return string 返回该AR类关联的数据表名

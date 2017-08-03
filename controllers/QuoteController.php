@@ -360,7 +360,8 @@ class QuoteController extends Controller
      */
     public function actionPlotList()
     {
-        $effect = Effect::find()->where(['city'=>510100]);
+        $post = \Yii::$app->request->post();
+        $effect = Effect::find()->where(['city'=>$post]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>10]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
@@ -428,6 +429,9 @@ class QuoteController extends Controller
         $decoration_particulars->toilet_perimeter = $post['toilet_perimeter'];
         $decoration_particulars->kitchen_area = $post['kitchen_area'];
         $decoration_particulars->kitchen_perimeter = $post['kitchen_perimeter'];
+        $decoration_particulars->modelling_length = $post['modelling_length'];
+        $decoration_particulars->flat_area = $post['flat_area'];
+        $decoration_particulars->balcony_area = $post['balcony_area'];
     }
 
 }
