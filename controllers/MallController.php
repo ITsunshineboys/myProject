@@ -1165,10 +1165,10 @@ class MallController extends Controller
     public function actionCategoryStatusToggle()
     {
         $id = (int)Yii::$app->request->post('id', 0);
-        print_r(Yii::$app->request->post());
+
         $code = 1000;
 
-        if (!$id) {echo 'aa';
+        if (!$id) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1176,7 +1176,7 @@ class MallController extends Controller
         }
 
         $model = GoodsCategory::findOne($id);
-        if (!$model) {echo 'bb';
+        if (!$model) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1198,7 +1198,7 @@ class MallController extends Controller
         }
 
         $model->scenario = GoodsCategory::SCENARIO_TOGGLE_STATUS;
-        if (!$model->validate()) {print_r($model->errors);
+        if (!$model->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
