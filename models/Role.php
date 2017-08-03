@@ -8,10 +8,10 @@ use yii\db\ActiveRecord;
 class Role extends ActiveRecord
 {
     const CACHE_KEY_ALL = 'all_roles';
-    const AUTHENTICATION_STATUS_NO_APPLICATION = 1;
-    const AUTHENTICATION_STATUS_IN_PROCESS = 2;
-    const AUTHENTICATION_STATUS_APPROVED = 3;
-    const AUTHENTICATION_STATUS_REJECTED = 4;
+    const AUTHENTICATION_STATUS_NO_APPLICATION = 0;
+    const AUTHENTICATION_STATUS_IN_PROCESS = 1;
+    const AUTHENTICATION_STATUS_APPROVED = 2;
+    const AUTHENTICATION_STATUS_REJECTED = 3;
 
     public static $authenticationStatus = [
         self::AUTHENTICATION_STATUS_NO_APPLICATION => '未认证',
