@@ -360,15 +360,15 @@ class QuoteController extends Controller
      */
     public function actionPlotList()
     {
-        $post = \Yii::$app->request->post();
-//        $post = 510100;
-        $effect = Effect::find()->where(['city'=>$post['post']]);
+//        $post = \Yii::$app->request->post();
+        $post = 510100;
+        $effect = Effect::find()->where(['city'=>$post]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>10]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
             ->asArray()
-            ->distinct()
             ->select('effect.toponymy,effect.add_time,effect.district')
+            ->groupBy('toponymy')
             ->all();
         return Json::encode([
                 'model' => $model,
