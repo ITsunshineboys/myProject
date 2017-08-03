@@ -1165,7 +1165,7 @@ class MallController extends Controller
     public function actionCategoryStatusToggle()
     {
         $id = (int)Yii::$app->request->post('id', 0);
-
+        print_r(Yii::$app->request->post());
         $code = 1000;
 
         if (!$id) {echo 'aa';
