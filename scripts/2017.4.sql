@@ -123,6 +123,7 @@ CREATE TABLE `supplier` (
   `support_offline_shop` tinyint(1) not null DEFAULT 0 comment '0: 不支持, 1: 支持',
   `balance` bigint(20) NOT NULL DEFAULT 0 COMMENT '账户总余额',
   `availableamount` bigint(20) NOT NULL DEFAULT 0 COMMENT '可用金额',
+  `pay_password` varchar(100) NOT NULL COMMENT '支付密码' ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -990,7 +991,7 @@ create table user_status (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `supplier_bankinformation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+   `id` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) NOT NULL,
   `bankname` varchar(50) NOT NULL,
   `bankcard` int(50) NOT NULL,
@@ -1003,10 +1004,24 @@ CREATE TABLE `supplier_bankinformation` (
 
 CREATE TABLE `supplier_freezelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `freeze_money` bigint(20) NOT NULL,
+  `freeze_money` bigint(20) NOT NULL COMMENT '结冻资金',
   `supplier_id` int(11) NOT NULL,
   `create_time` int(11) NOT NULL,
+  `freeze_reason` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 --8.1 end
+--8.3 start
+CREATE TABLE `supplier_cashregister` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cash_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '提现金额',
+  `apply_time` int(11) NOT NULL COMMENT '申请提现时间',
+  `supplier_id` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '提现状态  1:未提现 2:提现中 3:已提现 4:提现失败',
+  `supplier_reason` varchar(150) NOT NULL COMMENT '商家提现操作原因',
+  `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
+  `handle_time` int(11) DEFAULT NULL COMMENT '商家处理时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+--8.3 end
