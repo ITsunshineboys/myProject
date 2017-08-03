@@ -99,7 +99,7 @@ class Effect extends ActiveRecord
         $effect = self::find()
             ->select('effect.toponymy,effect.add_time,effect.district')
             ->groupBy('toponymy')
-            ->where(['toponymy' => $post])
+            ->where(['like','toponymy' => $post])
             ->asArray()
             ->all();
         $list = [];
