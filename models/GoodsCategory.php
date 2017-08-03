@@ -45,7 +45,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'online_person', 'offline_person', 'deleted', 'path', 'attr_op_time', 'attr_op_username', 'attr_number'];
+    public static $adminFields = ['id', 'title', 'icon', 'pid', 'parent_title', 'level', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'description', 'supplier_name', 'online_person', 'offline_person', 'deleted', 'path', 'attr_op_time', 'attr_op_username', 'attr_number', 'path'];
 
     /**
      * @var array admin fields
@@ -255,10 +255,6 @@ class GoodsCategory extends ActiveRecord
                 }
 
                 $category['level'] = self::$levels[$category['level']];
-
-                if (isset($category['path'])) {
-                    unset($category['path']);
-                }
             }
 
             if (isset($category['review_status'])) {
