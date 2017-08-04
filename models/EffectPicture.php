@@ -11,6 +11,12 @@ use yii\db\ActiveRecord;
 
 class EffectPicture extends ActiveRecord
 {
+    const FIELDS_ADMIN = [
+        'id',
+        'effect_id',
+        'house_pictrue',
+        'vr_pictrue',
+    ];
     /**
      * @return string 返回该AR类关联的数据表名
      */

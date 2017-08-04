@@ -57,4 +57,12 @@ class Style extends ActiveRecord
         }
         return self::find()->where(['in', 'status', $statuses])->select($select)->asArray()->all();
     }
+
+    public static function findByStyle()
+    {
+        return self::find()
+            ->asArray()
+            ->select(['id','style'])
+            ->all();
+    }
 }
