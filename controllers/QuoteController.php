@@ -402,7 +402,7 @@ class QuoteController extends Controller
                 $list [] = $one_model;
             }
             return Json::encode([
-                'effect'=>$list,
+                'model'=>$list,
                 'pages'=>$pages
             ]);
         }
