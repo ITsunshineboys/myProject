@@ -363,7 +363,7 @@ class QuoteController extends Controller
      */
     public function actionPlotList()
     {
-        $post = \Yii::$app->request->get();
+        $post = \Yii::$app->request->get('post');
         if (substr($post,4) ==00)
         {
             $effect = Effect::find()->where(['city'=>$post]);
