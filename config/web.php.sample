@@ -58,6 +58,9 @@ $config = [
 
     ],
     'params' => $params,
+     'aliases' => [
+            '@Flc' => '@vendor/flc',
+     ],
 ];
 
 if (YII_ENV_DEV) {

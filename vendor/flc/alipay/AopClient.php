@@ -5,7 +5,7 @@ class AopClient {
     //应用ID
     public $appId;
     //私钥文件路径
-    public $rsaPrivateKeyFilWWePath;
+    public $rsaPrivateKeyFilePath;
 
     //私钥值
     public $rsaPrivateKey;
