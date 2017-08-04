@@ -1,7 +1,7 @@
 <?php
 namespace  Flc\Alipay;
-class Alipayconfig{
-    public static function  alipayconfig(){
+class AlipayConfig{
+    public  function  alipayconfig(){
         $config = array (
             //应用ID,您的APPID。
             'app_id' => "2017080208002347",

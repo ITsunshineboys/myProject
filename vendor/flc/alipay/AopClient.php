@@ -1,6 +1,5 @@
 <?php
 namespace Flc\Alipay;
-
 class AopClient {
     //应用ID
     public $appId;
@@ -361,7 +360,7 @@ class AopClient {
 
         $this->setupCharsets($request);
 
-        //		//  如果两者编码不一致，会出现签名验签或者乱码
+        //      //  如果两者编码不一致，会出现签名验签或者乱码
         if (strcasecmp($this->fileCharset, $this->postCharset)) {
 
             // writeLog("本地文件字符集编码与表单提交编码不一致，请务必设置成一样，属性名分别为postCharset!");
@@ -518,7 +517,7 @@ class AopClient {
             $fileType = $this->fileCharset;
             if (strcasecmp($fileType, $targetCharset) != 0) {
                 $data = mb_convert_encoding($data, $targetCharset, $fileType);
-                //				$data = iconv($fileType, $targetCharset.'//IGNORE', $data);
+                //              $data = iconv($fileType, $targetCharset.'//IGNORE', $data);
             }
         }
 
@@ -840,8 +839,8 @@ class AopClient {
 
         $rootIndex = strpos($responseContent, $rootNodeName);
         $errorIndex = strpos($responseContent, $this->ERROR_RESPONSE);
-        //		$this->echoDebug("<br/>rootNodeName:" . $rootNodeName);
-        //		$this->echoDebug("<br/> responseContent:<xmp>" . $responseContent . "</xmp>");
+        //      $this->echoDebug("<br/>rootNodeName:" . $rootNodeName);
+        //      $this->echoDebug("<br/> responseContent:<xmp>" . $responseContent . "</xmp>");
 
 
         if ($rootIndex > 0) {
@@ -1048,8 +1047,8 @@ class AopClient {
 
         $rootIndex = strpos($responseContent, $rootNodeName);
         $errorIndex = strpos($responseContent, $this->ERROR_RESPONSE);
-        //		$this->echoDebug("<br/>rootNodeName:" . $rootNodeName);
-        //		$this->echoDebug("<br/> responseContent:<xmp>" . $responseContent . "</xmp>");
+        //      $this->echoDebug("<br/>rootNodeName:" . $rootNodeName);
+        //      $this->echoDebug("<br/> responseContent:<xmp>" . $responseContent . "</xmp>");
 
 
         if ($rootIndex > 0) {
