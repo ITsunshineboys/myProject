@@ -1,115 +1,163 @@
 angular.module("all_controller", [])
-    //Ê×Ò³¿ØÖÆÆ÷
-    .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //Ê×Ò³¿ØÖÆÆ÷
-
-        $http({   //ÂÖ²¥½Ó¿Úµ÷ÓÃ
+    //é¦–é¡µæ§åˆ¶å™¨
+    .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //é¦–é¡µæ§åˆ¶å™¨
+        $http({   //è½®æ’­æ¥å£è°ƒç”¨
             method: 'get',
-            url: "swiper.json"
+            url: "http://test.cdlhzz.cn:888/mall/carousel"
         }).then(function successCallback(response) {
             $scope.swiper_img = response.data.data.carousel;
             //console.log( $scope.message);
         }, function errorCallback(response) {
 
         });
-        $http({   //ÉÌÆ··ÖÀàÁĞ±í
+        $http({   //å•†å“åˆ†ç±»åˆ—è¡¨
             method: 'get',
             url: "http://test.cdlhzz.cn:888/mall/categories"
         }).then(function successCallback (response) {
             $scope.message=response.data.data.categories;
             console.log( $scope.message);
+            console.log(response);
         }, function errorCallback (response) {
 
         });
-        $http({   //·ÖÀàÉÌÆ·ÁĞ±í
+        $http({   //æ¨èåˆ†ç±»å•†å“åˆ—è¡¨
             method: 'get',
-            url: "swiper.json"
+            url: "http://test.cdlhzz.cn:888/mall/recommend-second"
         }).then(function successCallback (response) {
-            $scope.commodity=response.data.data.carousel;
+            $scope.commodity=response.data.data.recommend_second;
             console.log( $scope.commodity);
         }, function errorCallback(response) {
 
         });
     })
-    //·ÖÀàÏêÇé¿ØÖÆÆ÷
+    //åˆ†ç±»è¯¦æƒ…æ§åˆ¶å™¨
     .controller("minute_class_ctrl", function ($scope,$http ,$state,$stateParams) {
-         $scope.pid = $stateParams.pid;
-         $scope.title =  $stateParams.title;
-         console.log($scope.pid);
-         console.log($scope.title);
-        //×ó²àÊı¾İ»ñÈ¡
+        $scope.pid = $stateParams.pid;
+        //$scope.title = $stateParams.title;
+        console.log($scope.pid);
+        //console.log($scope.title);
+        $scope.details = '';
+
+        //å·¦ä¾§æ•°æ®è·å–
         $http({
-            method:'get',
-            url:'http://test.cdlhzz.cn:888/mall/categories'
-        }).then( function successCallback (response) {
-            $scope.star= response.data.data.categories;
+            method: 'get',
+            url: 'http://test.cdlhzz.cn:888/mall/categories'
+        }).then(function successCallback(response) {
+            $scope.star = response.data.data.categories;
             console.log(response)
         });
-        //Ê×Ò³ÁĞ±íµã»÷·ÖÀàÁĞ±í´«Öµid»ñÈ¡Êı¾İ(Ò»¼¶id²éÈ¥¶ş¼¶)
+        //é¦–é¡µåˆ—è¡¨ç‚¹å‡»åˆ†ç±»åˆ—è¡¨ä¼ å€¼idè·å–æ•°æ®(ä¸€çº§idæŸ¥å»äºŒçº§)
         $http({
-            method:'get',
-            url:'http://test.cdlhzz.cn:888/mall/categories?pid='+$stateParams.pid
-        }).then( function successCallback (response) {
+            method: 'get',
+            url: 'http://test.cdlhzz.cn:888/mall/categories?pid=' + $stateParams.pid
+        }).then(function successCallback(response) {
             $scope.details = response.data.data.categories;
             //console.log(response.data.data.categories[0].id);
             console.log(response)
         });
 
-        //Ê×Ò³ÁĞ±íµã»÷·ÖÀàÁĞ±í´«Öµid»ñÈ¡Êı¾İ(Ò»¼¶id²éÈ¥Èı¼¶)
+        //é¦–é¡µåˆ—è¡¨ç‚¹å‡»åˆ†ç±»åˆ—è¡¨ä¼ å€¼idè·å–æ•°æ®(ä¸€çº§idæŸ¥å»ä¸‰çº§)
         $http({
-            method:'get',
-            url:'http://test.cdlhzz.cn:888/mall/categories-level3?pid='+$stateParams.pid
-        }).then( function successCallback (response) {
-            $scope.commentThree= response.data.categories_level3;
+            method: 'get',
+            url: 'http://test.cdlhzz.cn:888/mall/categories-level3?pid=' + $stateParams.pid
+        }).then(function successCallback(response) {
+            let arr= {}
+            for(let [key,value] of response.data.categories_level3.entries()){
+                if(!(value.path.split(',')[1] in arr)){
+                    arr[value.path.split(',')[1]] = [value]
+                }else{
+                    arr[value.path.split(',')[1]].push(value)
+                }
+            }
+            $scope.commentThree = arr;
             console.log(response)
         });
 
-        //µã»÷×ó²à·ÖÀàÁĞ±í²Ëµ¥»ñÈ¡ÓÒ±ßÊı¾İ
-        //$scope.getTitle = function (item) {
-        //    $http({
-        //        method:'get',
-        //        url:'http://test.cdlhzz.cn:888/mall/categories?pid='+$stateParams.pid
-        //    }).then (function successCallback (response) {
-        //        $scope.leftMain = response.data.data.categories;
-        //        console.log(response)
-        //    })
-        //};
+        //ç‚¹å‡»å·¦ä¾§åˆ†ç±»åˆ—è¡¨èœå•è·å–å³è¾¹æ•°æ®
+        $scope.getTitle = function (item) {
+            //é¦–é¡µåˆ—è¡¨ç‚¹å‡»åˆ†ç±»åˆ—è¡¨ä¼ å€¼idè·å–æ•°æ®(ä¸€çº§idæŸ¥å»äºŒçº§)
+            $scope.pid = item.id;
+            $http({
+                method: 'get',
+                url: 'http://test.cdlhzz.cn:888/mall/categories?pid=' + item.id
+            }).then(function successCallback(response) {
+                $scope.details = response.data.data.categories;
+                //console.log(response.data.data.categories[0].id);
+                console.log(response)
+            });
 
+            //é¦–é¡µåˆ—è¡¨ç‚¹å‡»åˆ†ç±»åˆ—è¡¨ä¼ å€¼idè·å–æ•°æ®(ä¸€çº§idæŸ¥å»ä¸‰çº§)
+            $http({
+                method: 'get',
+                url: 'http://test.cdlhzz.cn:888/mall/categories-level3?pid=' + item.id
+            }).then(function successCallback(response) {
+                let arr= {};
+                for(let [key,value] of response.data.categories_level3.entries()){
+                    if(!(value.path.split(',')[1] in arr)){
+                        arr[value.path.split(',')[1]] = [value]
+                    }else{
+                        arr[value.path.split(',')[1]].push(value)
+                    }
+                }
+                $scope.commentThree = arr;
+                console.log(response)
+            });
+            //å°åŒºæœç´¢
+            //.controller("search_ctrl", function ($scope, $http, $state, $stateParams) {
+            //
+            //})
+        }
     })
-    //Ğ¡ÇøËÑË÷
-    .controller("search_ctrl", function ($scope,$http ,$state,$stateParams) {
-
-    })
-    //ÉÌÆ·ËÑË÷
+    //å•†å“æœç´¢
     .controller("commodity_search_ctrl", function ($scope,$http ,$state,$stateParams) {
         $scope.data = '';
         //$scope.title =  $stateParams.title;
-        //ÅĞ¶Ï
+        $scope.pid = $stateParams.pid
+        //åˆ¤æ–­
         $scope.getSearch = function () {
             let arr=[];
             $http({
                 method:'get',
                 url:"http://test.cdlhzz.cn:888/mall/search?keyword="+$scope.data
             }).then( function successCallback (response) {
+                console.log(response);
                 $scope.commoditySearch= response.data.data.search.goods;
-                for (let [key,item] of response.data.data.search.goods.entries()) { //ÅĞ¶ÏÊäÈë¿òÊı¾İºÍÊı¾İ¿âÄÚÈİÆ¥Åä
-                    if (item.title.indexOf($scope.data) != -1 && $scope.data != '') {
-                        arr.push({"title": item.title,"id":item.id})
+                $scope.commoditySearchTwo= response.data.data.search.categories;
+                if($scope.commoditySearch.length > 0) {
+                    for (let [key,item] of response.data.data.search.goods.entries()) { //åˆ¤æ–­è¾“å…¥æ¡†æ•°æ®å’Œæ•°æ®åº“å†…å®¹åŒ¹é…
+                        if (item.title.indexOf($scope.data) != -1 && $scope.data != '') {
+                            arr.push({"title": item.title,"id":item.id})
+                        }
                     }
                 }
+                if($scope.commoditySearchTwo.length > 0){
+                    for (let [key,item] of response.data.data.search.categories.entries()) { //åˆ¤æ–­è¾“å…¥æ¡†æ•°æ®å’Œæ•°æ®åº“å†…å®¹åŒ¹é…
+                        if (item.title.indexOf($scope.data) != -1 && $scope.data != '') {
+                            arr.push({"title": item.title,"id":item.id})
+                        }
+                    }
+                }
+
                 $scope.search_data = arr;
                 console.log(response)
             });
         };
-        //Ìø×ªµÀÄ³¸öÉÌÆ·ÏêÇé
+        //è·³è½¬é“æŸä¸ªå•†å“è¯¦æƒ…
         $scope.getBackData = function (item) {
-            $state.go("details",{id:item})
-
+            $state.go("details",{'pid':$scope.pid,'id':item.id})
         }
     })
 
-    //Ä³¸öÉÌÆ·µÄÏêÏ¸ÁĞ±í
-     .controller("details_ctrl", function ($scope,$http ,$state,$stateParams) {
+    //æŸä¸ªå•†å“çš„è¯¦ç»†åˆ—è¡¨
+    .controller("details_ctrl", function ($scope,$http ,$state,$stateParams) {
+        console.log($stateParams);
         $scope.id=$stateParams.id;
+        $scope.pid=$stateParams.pid;
+        $scope.brands = '';
+        $scope.series = '';
+        $scope.styles = '';
+        $scope.orderType = 'sold_number';
+        $scope.order = '-';
         console.log($stateParams.id);
         $http({
             method:"get",
@@ -117,9 +165,87 @@ angular.module("all_controller", [])
         }).then(function successCallback (response) {
             $scope.detailsList = response.data.data.category_goods;
             console.log(response)
-        })
+        });
         $scope.curGoPrev = function () {
-            $state.go("minute_class")
-        }
+            $state.go("minute_class",{'pid':$scope.pid,'id':$scope.id})
+        };
+        //ç­›é€‰  æ’åº
+        $scope.changeOrder = function (type) {
+            $scope.orderType = type
+            if(arguments.length == 2){
+                $scope.order = '-'
+            }else{
+                if($scope.order == '-'){
+                    $scope.order = ''
+                }else{
+                    $scope.order = '-'
+                }
+            }
+        };
 
-     })
+        //é£æ ¼  ç³»ç±» æ¥æ•°æ®è°ƒç”¨
+        $http({
+            method:"get",
+            url:"http://test.cdlhzz.cn:888/mall/category-brands-styles-series?category_id="+$stateParams.id
+        }).then (function successCallBack (response) {
+            $scope.brands = response.data.data.category_brands_styles_series.brands;
+            $scope.series = response.data.data.category_brands_styles_series.series;
+            $scope.styles = response.data.data.category_brands_styles_series.styles;
+            console.log(response);
+            console.log($scope.brands)
+        });
+        //å…·ä½“å‡ çº§æŸä¸ªå•†å“è·³è½¬åˆ°äº§å“è¯¦æƒ…åˆ—è¡¨
+    })
+    //æŸä¸ª å•†å“è¯¦ç»†ä¿¡æ¯å±•ç¤º
+    .controller("product_details_ctrl", function ($scope,$http,$state,$stateParams) {  //é¦–é¡µæ§åˆ¶å™¨
+       let vm = $scope.vm = {};
+        $scope.id=$stateParams.id;
+        $scope.title=$stateParams.title;
+        $scope.description=$stateParams.description;
+        $scope.platform_price=$stateParams.platform_price;
+        console.log($stateParams.id);
+        console.log($stateParams.title);
+        console.log($stateParams.description);
+        console.log($stateParams.platform_price)
+
+        $http({
+            method:'get',
+            url:"http://test.cdlhzz.cn:888/mall/supplier-goods?supplier_id="+$stateParams.id
+        }).then( function successCallback (response) {
+            console.log(response);
+
+        });
+
+    })
+     //åº—é“ºé¦–é¡µå’Œå…¨éƒ¨å•†å“
+    .controller("shop_front_ctrl", function ($scope,$http,$state,$stateParams) {  //é¦–é¡µæ§åˆ¶å™¨
+        let vm = $scope.vm = {};
+       //è·å–å•†å“åˆ—è¡¨
+        console.log($stateParams);
+        $scope.id=$stateParams.id;
+        $scope.pid=$stateParams.pid;
+        $scope.brands = '';
+        $scope.series = '';
+        $scope.styles = '';
+        $scope.orderType = 'sold_number';
+        $scope.order = '-';
+        console.log($stateParams.id);
+        $http({
+            method:"get",
+            url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id
+        }).then(function successCallback (response) {
+            $scope.detailsList = response.data.data.category_goods;
+            console.log(response)
+        });
+        $http({   //åˆ†ç±»å•†å“åˆ—è¡¨
+            method: 'get',
+            url: "http://test.cdlhzz.cn:888/mall/recommend-second"
+        }).then(function successCallback (response) {
+            $scope.commodity=response.data.data.recommend_second;
+            console.log( $scope.commodity);
+        }, function errorCallback(response) {
+
+        });
+
+    })
+

@@ -10,14 +10,14 @@
 }
 .icon_color{
     color: #FFFFFF;
-    margin-top: 1rem;
+    margin-top: 1.2rem;
     position: absolute;
 }
 .address{
     font-size: 1.1rem;
     color: #ffffff;
     position: absolute;
-    top: 1rem;
+    top: 1.2rem;
     left: 2.5rem;
 }
 .search_box .search{
@@ -187,7 +187,7 @@ Pagination Styles
 }
 .classify-ul>li a{
     width: 100%;
-
+    text-decoration: none!important;
 }
 .classify-ul>li img{
     /*padding-top:1.5rem;*/
@@ -297,6 +297,9 @@ Pagination Styles
     border-right: 0.5rem solid #fff;
     border-left: 0.5rem solid #fff;
     border-bottom: 0.7rem solid #fff;
+}
+.recommend2_box ul li a{
+    text-decoration: none;
 }
 .recommend2_box ul>li a img{
     width: 14.4rem;

@@ -4,7 +4,7 @@
         <div class="header_cell">
             <img src="images/mall_search_1.png" alt=""/>
             <input type="text" placeholder="请输入想要购买的商品" ng-model="data" ng-change="getSearch ()"/>
-            <span><a ng-click="goPrev()">取消</a></span>
+            <span><a ng-click="goPrev({'pid':pid})">取消</a></span>
         </div>
     </header>
 
@@ -12,7 +12,7 @@
         <!--有结果显示数据-->
         <div class="have_data" ng-if="search_data.length">
             <ul class="cell_ul">
-                <li ng-repeat="item in search_data" ng-click="getBackData (item.id)">
+                <li ng-repeat="item in search_data" ng-click="getBackData (item)">
                     <a >
                         <span class="first_fru">{{item.title}}</span><br/>
                         <!--<span class="second_fru">{{item.site_particulars}}</span>-->

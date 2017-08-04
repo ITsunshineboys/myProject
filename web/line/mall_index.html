@@ -3,7 +3,8 @@
 <div ng-controller="mall_index_ctrl">
 <div class="main" ng-cloak>
     <div class="search_box">
-        <i class="icon icon-map-marker icon-3x icon_color"></i>
+        <img src="images/mall_nav_location_white.png" class="icon_color" alt=""/>
+        <!--<i class="icon icon-map-marker icon-3x icon_color"></i>-->
         <span class="address">成都</span>
         <a ui-sref="commodity_search" class="search">超级无敌地暖片</a>
         <!--<img src="searchimages/message_icon.png" class="massage" alt=""/>-->
@@ -30,7 +31,8 @@
         <ul class="classify-ul">
             <li ng-repeat="n in message" >
                 <a ui-sref="minute_class({'pid':n.id ,'title':n.title})" >
-                    <img src="images/material.png" alt=""/><br/>
+                    <img src="http://test.cdlhzz.cn:888/{{n.icon}}" alt=""/><br/>
+                    <!--<img src="images/material.png" alt=""/><br/>-->
                 <!--<img src="{{n.icon}}" alt=""/><br/>-->
                 <span>{{n.title}}</span>
                 </a>
@@ -46,8 +48,9 @@
             <p class="recommend_p">推荐</p>
             <ul >
                 <li ng-repeat="n in commodity">
-                    <a href="product_details.html?txt={{n.link}}">
-                        <img src="{{n.image}}" alt=""/>
+                    <a ui-sref="product_details({id:n.id,title:n.title,description:n.description,
+                    platform_price:n.platform_price})">
+                        <img src="images/banner1.png" alt=""/>
                         <div class="title2">{{n.title}}</div>
                         <div class="describe2">{{n.description}}</div>
                         <div class="price2">¥ {{n.platform_price}}</div>

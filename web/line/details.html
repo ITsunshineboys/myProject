@@ -14,24 +14,24 @@
     <section>
         <!--便签栏-->
         <div class="memo_pad">
-            <li ng-click="sort('comment_number')" >销量优先</li>
-            <li ng-click="sort('platform_price')">
-                价格
-                <img src="images/mall_arrow_up.png" alt=""/>
-            </li>
-            <li ng-click="sort('favourable_comment_rate')">
-                好评率
-                <img src="images/mall_arrow_up.png" alt=""/>
-            </li>
-            <li data-toggle="modal" data-target="#myModal">
-                筛选
-                <img src="images/mall_filter_normal.png" alt=""/>
-            </li>
-        </div>
+        <li ng-click="changeOrder('sold_number',0)">销量优先</li>
+        <li ng-click="changeOrder ('platform_price')">
+            价格
+            <img src="images/mall_arrow_up.png" alt=""/>
+        </li>
+        <li ng-click="changeOrder('favourable_comment_rate')">
+            好评率
+            <img src="images/mall_arrow_up.png" alt=""/>
+        </li>
+        <li data-toggle="modal" data-target="#myModal">
+            筛选
+            <img src="images/mall_filter_normal.png" alt=""/>
+        </li>
+    </div>
         <!--商品展示列表-->
         <div class="mall_list">
             <div class="flex_div" >
-                <div class="item_commodity"  ng-repeat="item in detailsList" ng-click="go_three_details(item)">
+                <div class="item_commodity"  ng-repeat="item in detailsList | orderBy:order+orderType" ng-click="go_three_details(item)">
                     <div class="item_commodity_divimg">
                         <img src="images/bed.png" alt="" class="img_item " />
                     </div>
@@ -58,67 +58,74 @@
                                 <div class="style_screen" >
                                     <!--f风格选择？-->
                                     <div class="header_font">
-                                        <span >风格选择</span>
-                                        <span class="down_arrow"  data-toggle="collapse" href="#collapseExample_comment" aria-expanded="false" aria-controls="collapseExample_comment">#</span>
+                                        <span class="style_size">风格选择</span>
+                                        <span class="down_arrow"  data-toggle="collapse" href="#collapseExample_comment" aria-expanded="true" aria-controls="collapseExample_comment">
+                                          <img src="images/mall_list.png" class="down_list" alt=""/>
+                                        </span>
                                     </div>
 
                                     <!--x下拉面板-->
                                     <div class="collapse" id="collapseExample_comment">
                                         <div class="well">
                                             <ul class="item_li">
-                                                <li>美式田园</li>
-                                                <li>美式田园</li>
-                                                <li>美式田园</li>
-                                                <li>美式田园</li>
+                                                <li ng-repeat="item in series">{{item.series}}</li>
+                                                <!--<li>美式田园</li>-->
+                                                <!--<li>美式田园</li>-->
+                                                <!--<li>美式田园</li>-->
                                             </ul>
                                         </div>
                                     </div>
                                     <!--系列选择-->
                                     <div class="header_font">
-                                        <span>系列选择</span>
-                                        <span class="down_arrow"  data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">#</span>
+                                        <span class="style_size">系列选择</span>
+                                        <span class="down_arrow"  data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                                          <img src="images/mall_list.png" class="down_list" alt=""/>
+                                        </span>
                                     </div>
                                     <!--x下拉面板-->
                                     <div class="collapse" id="collapseExample">
                                         <div class="well">
                                             <ul>
-                                                <li>美式系类</li>
-                                                <li>金典系类</li>
-                                                <li>复古系类</li>
-                                                <li>田园系类</li>
-                                                <li>田园系类</li>
+                                                <li ng-repeat="item in styles">{{item.styles}}</li>
+                                                <!--<li>金典系类</li>-->
+                                                <!--<li>复古系类</li>-->
+                                                <!--<li>田园系类</li>-->
+                                                <!--<li>田园系类</li>-->
                                             </ul>
                                         </div>
                                     </div>
 
                                     <!--价格区间-->
                                     <div class="header_font">
-                                        <span>价格选择</span>
+                                        <span class="style_size">价格选择</span>
                                     </div>
 
                                     <div class="price_range">
-                                        <input type="text" placeholder="输入最低价格" maxlength="8"  pattern="[1-9]\d*"/>
-                                        <span>---</span>
-                                        <input type="text" placeholder="输入最高价格" maxlength="8" pattern="[1-9]\d*"/>
+                                        <input type="text" placeholder="最低价" maxlength="2"  pattern="[1-9]\d*"/>
+                                        <span>&nbsp;----</span>
+                                        <input type="text" placeholder="最高价" maxlength="8" pattern="[1-9]\d*"/>
                                     </div>
 
 
                                     <!--品牌选择-->
                                     <div class="header_font">
-                                        <span>品牌选择</span>
+                                        <span class="style_size">品牌选择</span>
                                     </div>
                                     <div class="well">
                                         <ul>
-                                            <li>牧师品牌</li>
-                                            <li>木生品牌</li>
-                                            <li>复古系类</li>
-                                            <li>田园系类</li>
-                                            <li>田园系类</li>
+                                            <li ng-repeat="item in brands">{{item.name}}</li>
+                                            <!--<li>木生品牌</li>-->
+                                            <!--<li>复古系类</li>-->
+                                            <!--<li>田园系类</li>-->
+                                            <!--<li>田园系类</li>-->
                                         </ul>
 
                                     </div>
                                     <div class="all_brand_btn">
-                                        <span data-toggle="modal" data-target="#myModal_brand">查看全部品牌 ></span>
+                                        <span data-toggle="modal" data-target="#myModal_brand">
+                                            查看全部品牌 
+                                            <img src="images/left_com.png" alt=""/>
+                                        </span>
                                     </div>
                                     <!--  模态框   品牌-->
                                     <!-- Modal -->
@@ -165,7 +172,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default reset_btn" data-dismiss="modal">重置</button>
-                                <button type="button" class="btn btn-primary reset_btn">完成</button>
+                                <button type="button" class="btn reset_btn last_btn">完成</button>
                             </div>
                         </div>
                     </div>

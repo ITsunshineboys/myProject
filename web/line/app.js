@@ -7,7 +7,8 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 views: {
                     "": {templateUrl:"mall_index.html"}
                 },
-                controller:"mall_index_ctrl"
+                controller:"mall_index_ctrl",
+                params:{"pid":"","id":"",platform_price:"",title:"title",description:"description"}
             })
             .state("minute_class", {   //分类页
                 url: "/minute_class",
@@ -15,7 +16,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     "": {templateUrl: "minute_class.html"}
                 },
                 controller: "minute_class_ctrl",
-                params:{"pid":"","title":""}
+                params:{"pid":"","id":""}
             })
             .state("search", {   //小区搜索页
                 url: "/search",
@@ -31,7 +32,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     "": {templateUrl: "commodity_search.html"}
                 },
                 controller: "commodity_search_ctrl",
-                params:{"pid":"","title":""}
+                params:{"pid":"","id":""}
             })
             .state("details", {   //某个商品详细列表
                 url: "/details",
@@ -39,7 +40,23 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     "": {templateUrl: "details.html"}
                 },
                 controller: "details_ctrl",
-                params:{"id":""}
+                params:{'pid':'',"id":""}
+            })
+            .state("product_details", {   //某个商品详细信息
+                url: "/product_details",
+                views: {
+                    "": {templateUrl: "product_details.html"}
+                },
+                controller: "product_details_ctrl",
+                params:{'pid':'',"id":"",platform_price:"",title:"title",description:"description"}
+            })
+            .state("shop_front", {   //店铺首页和全部商品
+                url: "/shop_front",
+                views: {
+                    "": {templateUrl: "shop_front.html"}
+                },
+                controller: "shop_front_ctrl)",
+                params:{'pid':'',"id":""}
             })
 
 

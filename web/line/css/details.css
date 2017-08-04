@@ -120,6 +120,15 @@ section{
 }
 .style_screen{
     position: relative;
+    height: 51.8rem;
+}
+.style_size{
+    font-size: 1.3rem;
+    color: #4A4A4A;
+    margin-left: 1rem;
+}
+.down_list{
+    width: 1.2rem;
 }
 .header_font{
     /*overflow: hidden;*/
@@ -138,6 +147,9 @@ section{
 }
 .well{
     padding: 0.1rem;
+}
+.well ul{
+    margin-left: 1rem;
 }
 .well ul li{
     width: 6rem;
@@ -159,25 +171,42 @@ section{
     margin: 1.2rem 0;
 }
 .price_range input{
-    width: 6.12rem;
-    height: 3.1rem;
-    font-size: 1rem;
+    width: 5.5rem;
+    height: 3rem;
+    font-size: 1.1rem;
+    border: 1px solid #B8B6B6;
+    margin-left: 1rem;
+    padding-left: 1rem;
 }
 .all_brand_btn{
     /*height: 3rem;*/
-    width:24rem;
+    width:32rem;
     background-color: white;
     text-align: center;
     line-height: 3rem;
     font-size: 1rem;
-    border-top:1px solid #959292;
+    border-top:1px solid #E9EDEE;
+    border-bottom: 1px solid #E9EDEE;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+.all_brand_btn span{
+    color: #959292;
+    font-size: 1.2rem;
+    margin-left: -5rem;
 }
 .reset_btn{
-    width: 12rem;
-    font-: 1.2rem;
+    width: 13.7rem;
+    font-size: 1.2rem;
+    height: 4rem;
+    color: #4A4A4A;
+}
+.last_btn{
+    background-color: #53A8F4;
+    color: white;
 }
 .modal-footer {
-    padding: 1rem;
+    padding: 0;
     text-align: center;
     border-top: 1px solid #e5e5e5;
 }
