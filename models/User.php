@@ -812,6 +812,63 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Certificate user
+     *
+     * @param string $identityNo
+     * @param string $legalPerson
+     * @param string $identityCardFrontImage
+     * @param string $identityCardBackImage
+     * @return int
+     */
+    public function certificate($identityNo, $legalPerson, $identityCardFrontImage, $identityCardBackImage)
+    {
+        $this->refresh();
+
+        if ($this->identity_no) {
+            return 200;
+        }
+
+        $this->legal_person = $legalPerson;
+        $this->identity_no = $identityNo;
+        $this->identity_card_front_image = $identityCardFrontImage;
+        $this->identity_card_back_image = $identityCardBackImage;
+        if (!$this->validateIdentityNo() || !$this->validateLegalPerson()) {
+            return 1000;
+        }
+
+        $tran = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!$this->save()) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            $userRole = UserRole::find()
+                ->where([
+                    'user_id' => $this->id,
+                    'role_id' => Yii::$app->params['ownerRoleId'],
+                    'review_status' => Role::AUTHENTICATION_STATUS_NO_APPLICATION
+                ])
+                ->one();
+            if ($userRole) {
+                $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
+                $userRole->review_apply_time = time();
+                if (!$userRole->save()) {
+                    $tran->rollBack();
+                    return $code;
+                }
+            }
+
+            $tran->commit();
+            return 200;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+            return $code;
+        }
+    }
+
+    /**
      * View identity(lhzz)
      *
      * @return array
