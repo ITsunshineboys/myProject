@@ -1,7 +1,7 @@
 <?php
 namespace  vendor\alipay;
 
-class AlipayConfig{
+class Alipayconfig{
     public  function  alipayconfig(){
         $config = array (
             //应用ID,您的APPID。
