@@ -82,18 +82,13 @@ class SmValidationService
             return;
         }
 
-        // check and generate validation code
+        // generate validation code
         $validationCodeKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE;
         if (!($validationCode = $cache->get($validationCodeKey))) {
-            $flgKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE_FLG;
-            if ($cache->get($flgKey)) {
-                $code = 1020;
-                throw new \Exception(Yii::$app->params['errorCodes'][$code], $code);
-            }
-
             $validationCodeMethod = $this->_validationCodeMethod;
             $validationCode = $this->$validationCodeMethod();
             $cache->set($validationCodeKey, $validationCode, $this->_validationCodeExpire);
+            $flgKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE_FLG;
             $cache->set($flgKey, 1);
         }
 
@@ -159,7 +154,7 @@ class SmValidationService
      *
      * @param int $mobile mobile
      * @param string $validationCode validation code
-     * @return bool if valid validation code
+     * @return bool|int
      */
     public static function validCode($mobile, $validationCode)
     {
@@ -167,8 +162,15 @@ class SmValidationService
             return false;
         }
 
+        $cache = Yii::$app->cache;
         $validationCodeKey = $mobile . self::SUFFIX_VALIDATION_CODE;
-        return Yii::$app->cache->get($validationCodeKey) == $validationCode;
+        $flgKey = $mobile . self::SUFFIX_VALIDATION_CODE_FLG;
+        $realCode = $cache->get($validationCodeKey);
+        if (!$realCode && $cache->get($flgKey)) {
+            return 1020;
+        }
+
+        return $realCode == $validationCode;
     }
 
     /**

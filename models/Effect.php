@@ -91,43 +91,45 @@ class Effect extends ActiveRecord
     }
 
     /**
-     * find all
+     * toponymy find all
      * @return string
      */
     public static function conditionFind($post)
     {
-        if (!is_array($post))
+        $effect = self::find()
+            ->select('effect.toponymy,effect.add_time,effect.district')
+            ->groupBy('toponymy')
+            ->where(['like','toponymy' => $post])
+            ->asArray()
+            ->all();
+        $list = [];
+        foreach ($effect as $one_model)
         {
-            $data = strlen($post);
-            switch ($data) {
-                case 6:
-                    $effect = self::find()
-                        ->select('effect.toponymy,effect.add_time,effect.district')
-                        ->groupBy('toponymy')
-                        ->where(['city' => $post])
-                        ->asArray()
-                        ->all();
-                    return $effect;
-                    break;
-                case 12:
-                    $effect = self::find()
-                        ->select('effect.toponymy,effect.add_time,effect.district')
-                        ->groupBy('toponymy')
-                        ->where(['toponymy' => $post])
-                        ->asArray()
-                        ->all();
-                    return $effect;
-                    break;
-            }
-        }else {
-            $effect = self::find()
-                ->select('effect.toponymy,effect.add_time,effect.district')
-                ->groupBy('toponymy')
-                ->where(['and',['>=','add_time',$post['min']],['<=','add_time',$post['max']]])
-                ->asArray()
-                ->orderBy(['add_time'=>SORT_ASC])
-                ->all();
-            return $effect;
+            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+            $list [] = $one_model;
         }
+        return $list;
+    }
+
+    /**
+     * find add_time all
+     * @return int
+     */
+    public static function findAddTime($arr)
+    {
+        $effect = self::find()
+            ->select('effect.toponymy,effect.add_time,effect.district')
+            ->groupBy('toponymy')
+            ->where(['and',['>=','add_time',$arr['min']],['<=','add_time',$arr['max']]])
+            ->asArray()
+            ->orderBy(['add_time'=>SORT_ASC])
+            ->all();
+        $list = [];
+        foreach ($effect as $one_model)
+        {
+            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+            $list [] = $one_model;
+        }
+        return $list;
     }
 }

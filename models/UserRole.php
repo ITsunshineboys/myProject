@@ -51,7 +51,7 @@ class UserRole extends ActiveRecord
                 'role_id' => $role['id'],
                 'role_name' => $role['name'],
                 'status' => $status,
-                'status_desc' => Role::$authenticationStatus[$status],
+                'status_desc' => Yii::$app->params['reviewStatuses'][$status],
             ];
         }
 
@@ -62,15 +62,19 @@ class UserRole extends ActiveRecord
         return $rolesStatus;
     }
 
-    public static function findRolesByUserId($userId)
+    /**
+     * Find user's role name(s) by user id
+     *
+     * @param int $userId user id
+     * @return array
+     */
+    public static function findRoleNamesByUserId($userId)
     {
-//        self::find()
-//            ->select([])
-//            ->where(['user_id' => $user->id])->asArray()->all();
         $roleTbl = Role::tableName();
         $userRoleTbl = UserRole::tableName();
-        $sql = "select role.name from {{%{$roleTbl}}} r, {{%{$userRoleTbl}}} ur";
-//        $sql .= " where r.id = ur.role_id and ur.user.id = {$userId} and review_status = " . self::;
+        $sql = "select r.name from {{%{$roleTbl}}} r, {{%{$userRoleTbl}}} ur";
+        $sql .= " where r.id = ur.role_id and ur.user_id = {$userId} and review_status = " . Role::AUTHENTICATION_STATUS_APPROVED;
+        return Yii::$app->db->createCommand($sql)->queryColumn();
     }
 
     /**

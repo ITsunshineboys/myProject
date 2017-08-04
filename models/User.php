@@ -77,7 +77,7 @@ class User extends ActiveRecord implements IdentityInterface
     ];
     const FIELDS_USER_DETAILS_MODEL_LHZZ_EXTRA = [
         'old_nickname',
-        'roles',
+        'role_names',
     ];
     const SESSION_KEY_LOGIN_ORIGIN = 'session_key_login_origin';
     const LOGIN_ORIGIN_ADMIN = 'login_origin_admin';
@@ -178,9 +178,11 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
-            if (!SmValidationService::validCode($data['mobile'], $data['validation_code'])) {
-                $code = 1002;
-                return $code;
+            $checkCodeRes = SmValidationService::validCode($data['mobile'], $data['validation_code']);
+            if ($checkCodeRes === false) {
+                return 1002;
+            } elseif (is_int($checkCodeRes)) {
+                return $checkCodeRes;
             }
         }
 
@@ -861,8 +863,8 @@ class User extends ActiveRecord implements IdentityInterface
                 case 'old_nickname':
                     $extraData[$extraField] = $this->getOldNickname();
                     break;
-                case 'roles':
-//                    UserRole::
+                case 'role_names':
+                    $extraData[$extraField] = UserRole::findRoleNamesByUserId($this->id);
                     break;
             }
         }
