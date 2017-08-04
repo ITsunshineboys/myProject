@@ -7,6 +7,7 @@
  */
 namespace app\models;
 
+use yii\data\Pagination;
 use yii\db\ActiveRecord;
 
 class Effect extends ActiveRecord
@@ -111,25 +112,4 @@ class Effect extends ActiveRecord
         return $list;
     }
 
-    /**
-     * find add_time all
-     * @return int
-     */
-    public static function findAddTime($arr)
-    {
-        $effect = self::find()
-            ->select('effect.toponymy,effect.add_time,effect.district')
-            ->groupBy('toponymy')
-            ->where(['and',['>=','add_time',$arr['min']],['<=','add_time',$arr['max']]])
-            ->asArray()
-            ->orderBy(['add_time'=>SORT_ASC])
-            ->all();
-        $list = [];
-        foreach ($effect as $one_model)
-        {
-            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
-            $list [] = $one_model;
-        }
-        return $list;
-    }
 }

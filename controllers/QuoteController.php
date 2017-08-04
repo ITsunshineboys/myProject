@@ -362,12 +362,12 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         $effect = Effect::find()->where(['city'=>$post]);
-        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>10]);
+        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
             ->asArray()
             ->select('effect.toponymy,effect.add_time,effect.district')
-            ->groupBy('toponymy')
+            ->groupBy('district')
             ->all();
         $list = [];
         foreach ($model as $one_model)
@@ -382,32 +382,87 @@ class QuoteController extends Controller
     }
 
     /**
-     * city and time and toponymy grabble
+     * time find grabble
+     * @return string
+     */
+    public function actionPlotTimeGrabble()
+    {
+        $post = \Yii::$app->request->post();
+        $effect = Effect::find()->where(['and',['>=','add_time',$post['min']],['<=','add_time',$post['max']],['city'=>$post['city']]]);
+        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+        $model = $effect->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->select('effect.toponymy,effect.add_time,effect.district')
+            ->groupBy('district')
+            ->orderBy(['add_time'=>SORT_ASC])
+            ->all();
+        $list = [];
+        foreach ($model as $one_model)
+        {
+            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+            $list [] = $one_model;
+        }
+        return Json::encode([
+            'effect'=>$list,
+            'pages'=>$pages
+        ]);
+    }
+
+    /**
+     * plot find grabble all
      * @return string
      */
     public function actionPlotGrabble()
     {
         $post = \Yii::$app->request->post();
-        var_dump($post);exit;
-//        $post = [
-//            'min'=>1501646042,
-//            'max'=>1501646191
-//        ];
-        switch ($post)
+        $effect = Effect::find()->where(['and',['toponymy'=>$post['toponymy']],['city'=>$post['city']]]);
+        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+        $model = $effect->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->select('effect.toponymy,effect.add_time,effect.district')
+            ->groupBy('district')
+            ->orderBy(['add_time'=>SORT_ASC])
+            ->all();
+        $list = [];
+        foreach ($model as $one_model)
         {
-            case is_string($post);
-                $effect = Effect::conditionFind($post);
-                return Json::encode([
-                    'effect'=>$effect
-                ]);
-                break;
-            case is_array($post);
-                $effect = Effect::findAddTime($post);
-                return Json::encode([
-                   'effect'=> $effect
-                ]);
-                break;
+            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+            $list [] = $one_model;
         }
+        return Json::encode([
+            'effect'=>$list,
+            'pages'=>$pages
+        ]);
+    }
+
+    /**
+     * district find grabble all
+     * @return string
+     */
+    public function actionDistrictGrabble()
+    {
+        $post = \Yii::$app->request->post();
+        $effect = Effect::find()->where(['and',['district'=>$post['district']],['city'=>$post['city']]]);
+        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+        $model = $effect->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->select('effect.toponymy,effect.add_time,effect.district')
+            ->groupBy('district')
+            ->orderBy(['add_time'=>SORT_ASC])
+            ->all();
+        $list = [];
+        foreach ($model as $one_model)
+        {
+            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+            $list [] = $one_model;
+        }
+        return Json::encode([
+            'effect'=>$list,
+            'pages'=>$pages
+        ]);
     }
 
     /**
@@ -443,12 +498,6 @@ class QuoteController extends Controller
         $decoration_particulars->modelling_length = $post['modelling_length'];
         $decoration_particulars->flat_area = $post['flat_area'];
         $decoration_particulars->balcony_area = $post['balcony_area'];
-    }
-
-    public function actionPaa()
-    {
-        $a = \Yii::$app->districts;
-        var_dump($a);exit;
     }
 
 }
