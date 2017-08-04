@@ -364,24 +364,49 @@ class QuoteController extends Controller
     public function actionPlotList()
     {
         $post = \Yii::$app->request->get();
-        $effect = Effect::find()->where(['city'=>$post]);
-        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
-        $model = $effect->offset($pages->offset)
-            ->limit($pages->limit)
-            ->asArray()
-            ->select('effect.toponymy,effect.add_time,effect.district')
-            ->groupBy('district')
-            ->all();
-        $list = [];
-        foreach ($model as $one_model)
+        if (substr($post,4) ==00)
         {
-            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
-            $list [] = $one_model;
-        }
-        return Json::encode([
+            $effect = Effect::find()->where(['city'=>$post]);
+            $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+            $model = $effect->offset($pages->offset)
+                ->limit($pages->limit)
+                ->asArray()
+                ->select('effect.toponymy,effect.add_time,effect.district')
+                ->groupBy('district')
+                ->all();
+            $list = [];
+            foreach ($model as $one_model)
+            {
+                $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+                $list [] = $one_model;
+            }
+            return Json::encode([
                 'model' => $list,
                 'pages'=> $pages
             ]);
+        }else
+        {
+            $effect = Effect::find()->where(['district'=>$post]);
+            $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+            $model = $effect->offset($pages->offset)
+                ->limit($pages->limit)
+                ->asArray()
+                ->select('effect.toponymy,effect.add_time,effect.district')
+                ->groupBy('district')
+                ->orderBy(['add_time'=>SORT_ASC])
+                ->all();
+            $list = [];
+            foreach ($model as $one_model)
+            {
+                $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+                $list [] = $one_model;
+            }
+            return Json::encode([
+                'effect'=>$list,
+                'pages'=>$pages
+            ]);
+        }
+
     }
 
     /**
@@ -420,34 +445,6 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->get();
         $effect = Effect::find()->where(['and',['toponymy'=>$post['toponymy']],['city'=>$post['city']]]);
-        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
-        $model = $effect->offset($pages->offset)
-            ->limit($pages->limit)
-            ->asArray()
-            ->select('effect.toponymy,effect.add_time,effect.district')
-            ->groupBy('district')
-            ->orderBy(['add_time'=>SORT_ASC])
-            ->all();
-        $list = [];
-        foreach ($model as $one_model)
-        {
-            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
-            $list [] = $one_model;
-        }
-        return Json::encode([
-            'effect'=>$list,
-            'pages'=>$pages
-        ]);
-    }
-
-    /**
-     * district find grabble all
-     * @return string
-     */
-    public function actionDistrictGrabble()
-    {
-        $post = \Yii::$app->request->get('district');
-        $effect = Effect::find()->where(['district'=>$post]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
