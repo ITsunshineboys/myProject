@@ -445,7 +445,7 @@ class QuoteController extends Controller
     public function actionPlotGrabble()
     {
         $post = \Yii::$app->request->get();
-        $effect = Effect::find()->where(['and',['toponymy_code'=>$post['toponymy']],['city_code'=>$post['city']]]);
+        $effect = Effect::find()->where(['and',['toponymy'=>$post['toponymy']],['city_code'=>$post['city']]]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
