@@ -3,9 +3,10 @@
 namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
-use Flc\Alipay\AlipayTradeWapPayContentBuilder;
-use Flc\Alipay\AlipayConfig;
+use vendor\Alipay\AlipayTradeWapPayContentBuilder;
+use vendor\Alipay\AlipayConfig;
 use app\services\AlipayTradeService;
+
 class Alipay extends  ActiveRecord
 {
 
@@ -48,6 +49,7 @@ class Alipay extends  ActiveRecord
 //    }
 
     public function Alipay($out_trade_no,$subject,$total_amount,$body){
+        Yii::setAlias('@Flc', '@vendor/flc');
 //        if (!empty($_POST['WIDout_trade_no'])&& trim($_POST['WIDout_trade_no'])!=""){
             $config=(new AlipayConfig())->alipayconfig();
             //商户订单号，商户网站订单系统中唯一订单号，必填

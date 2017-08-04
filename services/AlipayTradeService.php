@@ -9,15 +9,15 @@
 namespace app\services;
 use Yii;
 use yii\base\Exception;
-use Flc\Alipay\AlipayTradeWapPayRequest;
-use Flc\Alipay\AopClient;
-use Flc\Alipay\AlipayTradeFastpayRefundQueryRequest;
-use Flc\Alipay\alipaydatadataservicebilldownloadurlqueryRequest;
-use Flc\Alipay\AlipayTradeCloseRequest;
-use Flc\Alipay\AlipayTradeRefundRequest;
-use Flc\Alipay\AlipayTradeQueryRequest;
-require_once dirname ( __FILE__ ).DIRECTORY_SEPARATOR.'./../vendor/flc/alipay/AopSdk.php';
-require dirname ( __FILE__ ).DIRECTORY_SEPARATOR.'./../vendor/flc/alipay/config.php';
+use vendor\Alipay\AlipayTradeWapPayRequest;
+use vendor\Alipay\AopClient;
+use vendor\Alipay\AlipayTradeFastpayRefundQueryRequest;
+use vendor\Alipay\alipaydatadataservicebilldownloadurlqueryRequest;
+use vendor\Alipay\AlipayTradeCloseRequest;
+use vendor\Alipay\AlipayTradeRefundRequest;
+use vendor\Alipay\AlipayTradeQueryRequest;
+require_once dirname ( __FILE__ ).DIRECTORY_SEPARATOR.'./../vendor/alipay/AopSdk.php';
+require dirname ( __FILE__ ).DIRECTORY_SEPARATOR.'./../vendor/alipay/config.php';
 
 class AlipayTradeService {
 
