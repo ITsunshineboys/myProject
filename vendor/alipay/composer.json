@@ -1,0 +1,14 @@
+{
+    "name": "flc/alipay",
+    "description": "支付宝",
+    "keywords": ["alipay", "flc"],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flc\\Alipay\\": "Alipay/"
+        }
+    }
+}
