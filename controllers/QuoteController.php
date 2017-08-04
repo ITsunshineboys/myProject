@@ -10,10 +10,13 @@ use app\models\DecorationAdd;
 use app\models\DecorationList;
 use app\models\DecorationParticulars;
 use app\models\Effect;
+use app\models\EffectPicture;
 use app\models\EngineeringStandardCraft;
 use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\LaborCost;
+use app\models\Series;
+use app\models\Style;
 use app\services\ExceptionHandleService;
 use app\services\SmValidationService;
 use yii\data\Pagination;
@@ -360,25 +363,50 @@ class QuoteController extends Controller
      */
     public function actionPlotList()
     {
-        $post = \Yii::$app->request->post();
-        $effect = Effect::find()->where(['city'=>$post]);
-        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
-        $model = $effect->offset($pages->offset)
-            ->limit($pages->limit)
-            ->asArray()
-            ->select('effect.toponymy,effect.add_time,effect.district')
-            ->groupBy('district')
-            ->all();
-        $list = [];
-        foreach ($model as $one_model)
+        $post = \Yii::$app->request->get('post');
+        if (substr($post,4) ==00)
         {
-            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
-            $list [] = $one_model;
-        }
-        return Json::encode([
+            $effect = Effect::find()->where(['city'=>$post]);
+            $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+            $model = $effect->offset($pages->offset)
+                ->limit($pages->limit)
+                ->asArray()
+                ->select('effect.toponymy,effect.add_time,effect.district')
+                ->groupBy('district')
+                ->all();
+            $list = [];
+            foreach ($model as $one_model)
+            {
+                $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+                $list [] = $one_model;
+            }
+            return Json::encode([
                 'model' => $list,
                 'pages'=> $pages
             ]);
+        }else
+        {
+            $effect = Effect::find()->where(['district'=>$post]);
+            $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+            $model = $effect->offset($pages->offset)
+                ->limit($pages->limit)
+                ->asArray()
+                ->select('effect.toponymy,effect.add_time,effect.district')
+                ->groupBy('district')
+                ->orderBy(['add_time'=>SORT_ASC])
+                ->all();
+            $list = [];
+            foreach ($model as $one_model)
+            {
+                $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+                $list [] = $one_model;
+            }
+            return Json::encode([
+                'model'=>$list,
+                'pages'=>$pages
+            ]);
+        }
+
     }
 
     /**
@@ -387,7 +415,7 @@ class QuoteController extends Controller
      */
     public function actionPlotTimeGrabble()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         $effect = Effect::find()->where(['and',['>=','add_time',$post['min']],['<=','add_time',$post['max']],['city'=>$post['city']]]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
         $model = $effect->offset($pages->offset)
@@ -404,7 +432,7 @@ class QuoteController extends Controller
             $list [] = $one_model;
         }
         return Json::encode([
-            'effect'=>$list,
+            'model'=>$list,
             'pages'=>$pages
         ]);
     }
@@ -415,7 +443,7 @@ class QuoteController extends Controller
      */
     public function actionPlotGrabble()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         $effect = Effect::find()->where(['and',['toponymy'=>$post['toponymy']],['city'=>$post['city']]]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
         $model = $effect->offset($pages->offset)
@@ -432,36 +460,22 @@ class QuoteController extends Controller
             $list [] = $one_model;
         }
         return Json::encode([
-            'effect'=>$list,
+            'model'=>$list,
             'pages'=>$pages
         ]);
     }
 
     /**
-     * district find grabble all
+     * series and style show
      * @return string
      */
-    public function actionDistrictGrabble()
+    public function actionSeriesAndStyle()
     {
-        $post = \Yii::$app->request->post();
-        $effect = Effect::find()->where(['and',['district'=>$post['district']],['city'=>$post['city']]]);
-        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
-        $model = $effect->offset($pages->offset)
-            ->limit($pages->limit)
-            ->asArray()
-            ->select('effect.toponymy,effect.add_time,effect.district')
-            ->groupBy('district')
-            ->orderBy(['add_time'=>SORT_ASC])
-            ->all();
-        $list = [];
-        foreach ($model as $one_model)
-        {
-            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
-            $list [] = $one_model;
-        }
+        $series = Series::findBySeries();
+        $style = Style::findByStyle();
         return Json::encode([
-            'effect'=>$list,
-            'pages'=>$pages
+           'series'=>$series,
+            'style'=>$style
         ]);
     }
 
@@ -471,33 +485,7 @@ class QuoteController extends Controller
      */
     public function actionPlotAdd()
     {
-        $code = 1000;
-        $post = \Yii::$app->request->post();
-        $effect = new Effect();
-        $decoration_particulars = new DecorationParticulars();
-        $effect->toponymy = $post['toponymy'];
-        $effect->city = $post['city'];
-        $effect->site_particulars = $post['site_particulars'];
-        $effect->particulars = $post['particulars'];
-        $effect->area = $post['area'];
-        $effect->bedroom = $post['bedroom'];
-        $effect->sittingRoom_diningRoom = $post['sittingRoom_diningRoom'];
-        $effect->toilet = $post['toilet'];
-        $effect->kitchen = $post['kitchen'];
-        $effect->stairway = $post['stairway'];
-        $effect->high = $post['high'];
-        $effect->window = $post['window'];
-        $decoration_particulars->hall_area = $post['hall_area'];
-        $decoration_particulars->hall_perimeter = $post['hall_perimeter'];
-        $decoration_particulars->bedroom_area = $post['bedroom_area'];
-        $decoration_particulars->bedroom_perimeter = $post['bedroom_perimeter'];
-        $decoration_particulars->toilet_area = $post['toilet_area'];
-        $decoration_particulars->toilet_perimeter = $post['toilet_perimeter'];
-        $decoration_particulars->kitchen_area = $post['kitchen_area'];
-        $decoration_particulars->kitchen_perimeter = $post['kitchen_perimeter'];
-        $decoration_particulars->modelling_length = $post['modelling_length'];
-        $decoration_particulars->flat_area = $post['flat_area'];
-        $decoration_particulars->balcony_area = $post['balcony_area'];
+        $post = \Yii::$app->request;
     }
 
 }
