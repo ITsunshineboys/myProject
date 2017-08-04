@@ -81,7 +81,7 @@ class AlipayTradeService {
 
         $biz_content=$builder->getBizContent();
         //打印业务参数
-        $this->writeLog($biz_content);
+        // $this->writeLog($biz_content);
 
         $request = new AlipayTradeWapPayRequest();
 
@@ -118,7 +118,7 @@ class AlipayTradeService {
         }
 
         //打开后，将报文写入log文件
-        $this->writeLog("response: ".var_export($result,true));
+        // $this->writeLog("response: ".var_export($result,true));
         return $result;
     }
 
@@ -130,7 +130,7 @@ class AlipayTradeService {
     function Query($builder){
         $biz_content=$builder->getBizContent();
         //打印业务参数
-        $this->writeLog($biz_content);
+        // $this->writeLog($biz_content);
         $request = new AlipayTradeQueryRequest();
         $request->setBizContent ( $biz_content );
         // 首先调用支付api
@@ -148,7 +148,7 @@ class AlipayTradeService {
     function Refund($builder){
         $biz_content=$builder->getBizContent();
         //打印业务参数
-        $this->writeLog($biz_content);
+        // $this->writeLog($biz_content);
         $request = new AlipayTradeRefundRequest();
         $request->setBizContent ( $biz_content );
 
@@ -167,7 +167,7 @@ class AlipayTradeService {
     function Close($builder){
         $biz_content=$builder->getBizContent();
         //打印业务参数
-        $this->writeLog($biz_content);
+        // $this->writeLog($biz_content);
         $request = new AlipayTradeCloseRequest();
         $request->setBizContent ( $biz_content );
 
@@ -186,7 +186,7 @@ class AlipayTradeService {
     function refundQuery($builder){
         $biz_content=$builder->getBizContent();
         //打印业务参数
-        $this->writeLog($biz_content);
+        // $this->writeLog($biz_content);
         $request = new AlipayTradeFastpayRefundQueryRequest();
         $request->setBizContent ( $biz_content );
 
@@ -203,7 +203,7 @@ class AlipayTradeService {
     function downloadurlQuery($builder){
         $biz_content=$builder->getBizContent();
         //打印业务参数
-        $this->writeLog($biz_content);
+        // $this->writeLog($biz_content);
         $request = new alipaydatadataservicebilldownloadurlqueryRequest();
         $request->setBizContent ( $biz_content );
 
@@ -226,12 +226,12 @@ class AlipayTradeService {
         return $result;
     }
 
-    //请确保项目文件有可写权限，不然打印不了日志。
-    function writeLog($text) {
-        // $text=iconv("GBK", "UTF-8//IGNORE", $text);
-        //$text = characet ( $text );
-        file_put_contents ( dirname ( __FILE__ ).DIRECTORY_SEPARATOR."./../../log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
-    }
+    // //请确保项目文件有可写权限，不然打印不了日志。
+    // function writeLog($text) {
+    //     // $text=iconv("GBK", "UTF-8//IGNORE", $text);
+    //     //$text = characet ( $text );
+    //     file_put_contents ( dirname ( __FILE__ ).DIRECTORY_SEPARATOR."./../../log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
+    // }
 
 
     /** *利用google api生成二维码图片
