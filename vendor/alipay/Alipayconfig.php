@@ -1,5 +1,5 @@
 <?php
-namespace  vendor\Alipay;
+namespace  app\vendor\Alipay;
 class AlipayConfig{
     public  function  alipayconfig(){
         $config = array (
