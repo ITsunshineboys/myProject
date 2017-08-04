@@ -1,5 +1,5 @@
 <?php
-namespace app\vendor\Alipay;
+namespace app\vendor\alipay;
 /**
  * ALIPAY API: alipay.trade.query request
  *
