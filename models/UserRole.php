@@ -51,7 +51,7 @@ class UserRole extends ActiveRecord
                 'role_id' => $role['id'],
                 'role_name' => $role['name'],
                 'status' => $status,
-                'status_desc' => Role::$authenticationStatus[$status],
+                'status_desc' => Yii::$app->params['reviewStatuses'][$status],
             ];
         }
 
