@@ -4,7 +4,7 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 use app\vendor\alipay\AlipayTradeWapPayContentBuilder;
-use app\vendor\alipay\AlipayConfig;
+use vendor\alipay\AlipayConfig;
 use app\services\AlipayTradeService;
 
 class Alipay extends  ActiveRecord
