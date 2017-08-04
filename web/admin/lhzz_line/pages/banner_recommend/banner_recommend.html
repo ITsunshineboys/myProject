@@ -1,0 +1,619 @@
+<link rel="stylesheet" href="pages/banner_recommend/css/banner_recommend.css">
+
+<div ng-controller="banner_recommend_ctrl">
+    <!--头部导航开始-->
+    <div class="header_box">
+        <div class="header_txt">
+            <i class="glyphicon glyphicon-home"></i>
+            <a href="javascript:void(0)" class="head_nav_font_weight">商品管理 </a>>
+            <a href="javascript:void(0)" class="gray">APP推荐位-banner管理</a>
+        </div>
+    </div>
+    <!--头部导航结束-->
+
+    <!--选择城市开始-->
+    <section class="content">
+        <div class="city">
+            <form action="">
+                <label>
+                    选择省份
+                    <select  class="citySelect" ng-model="cur_province" ng-options="item.name for item in province" ng-change="getCity(cur_province)"></select>
+                </label>
+                <label>
+                    选择城市
+                    <select  class="citySelect" ng-model="cur_city" ng-options="item.name for item in city" ng-change="getCounty(cur_city)"></select>
+                </label>
+            </form>
+        </div>
+        <!--选择城市结束-->
+
+        <!--选项卡开始-->
+        <div class="myTab">
+            <a class="tabChange" onclick="tabChangeFn(this)" ui-sref="banner_recommend">Banner</a>
+            <a class="tabChange" onclick="tabChangeFn(this)" ui-sref="index_recommend">推荐</a>
+        </div>
+        <!--选项卡结束-->
+
+        <!--操作-->
+        <div class="tabContent">
+            <div class="topTab">
+                <span class="topTabE topTabActive" data-toggle="modal" data-target="#banner_modal_save"><i
+                        class="glyphicon glyphicon-home"></i> 保存</span>
+                <span class="topTabE" data-toggle="modal" data-target="#banner_shop_modal_add">
+                    <i class="glyphicon glyphicon-home"></i> 添加</span>
+                <span class="topTabS">全选</span>
+                <span class="topTabS" data-toggle="modal" data-target="#banner_modal_del">删除</span>
+                <span class="topTabS" data-toggle="modal" data-target="#banner_modal_stop">停用</span>
+                <a class="topTabE" ui-sref="banner_history"><i class="glyphicon glyphicon-home"></i> 历史数据</a>
+                <span class="topTabS topTabList"><i class="glyphicon glyphicon-th-list"></i></span>
+            </div>
+        </div>
+        <!--Table内容-->
+        <div class="tabTable">
+            <table>
+                <tr class="th">
+                    <td>&nbsp;</td>
+                    <td>类型</td>
+                    <td>商品编号</td>
+                    <td class="ellipsis_name">名称</td>
+                    <td>来源商家</td>
+                    <td>上架浏览</td>
+                    <td>上架销量</td>
+                    <td>是否启用</td>
+                    <td>创建时间</td>
+                    <td>图片</td>
+                    <td>操作</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>链接</td>
+                    <td>无</td>
+                    <td class="ellipsis ellipsis_name" data-toggle="modal" data-target="#banner_link_modal_details">5.1地砖报销</td>
+                    <td><a href="">小猫旗舰店</a></td>
+                    <td>1211</td>
+                    <td>530</td>
+                    <td class="yesGreen">已启用</td>
+                    <td>2017-03-03 16:00</td>
+                    <td><img src="1.jpg" alt=""></td>
+                    <td>
+                        <a href="" data-toggle="modal" data-target="#banner_modal_stop">停用</a>
+                        <a href="" data-toggle="modal" data-target="#banner_link_modal_edit">编辑</a>
+                        <a href="" data-toggle="modal" data-target="#banner_link_modal_details">详情</a>
+                        <a href="" data-toggle="modal" data-target="#banner_modal_enable_del">删除</a>
+                    </td>
+                </tr>
+                <!--<tr>-->
+                    <!--<td><input type="checkbox"></td>-->
+                    <!--<td>商家</td>-->
+                    <!--<td>CD12345678</td>-->
+                    <!--<td class="ellipsis ellipsis_name" data-toggle="modal" data-target="#banner_shop_modal_details">小米瓷砖全抛釉地砖客厅瓷砖现代简约地板砖800x800欧式</td>-->
+                    <!--<td><a href="">小猫旗舰店</a></td>-->
+                    <!--<td>1211</td>-->
+                    <!--<td>530</td>-->
+                    <!--<td class="noRed">停用</td>-->
+                    <!--<td>2017-03-03 16:00</td>-->
+                    <!--<td><img src="1.jpg" alt=""></td>-->
+                    <!--<td>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_modal_start">启用</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_shop_modal_edit">编辑</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_shop_modal_details">详情</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_modal_disable_del">删除</a>-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td><input type="checkbox"></td>-->
+                    <!--<td>商家</td>-->
+                    <!--<td>CD12345678</td>-->
+                    <!--<td class="ellipsis ellipsis_name" data-toggle="modal" data-target="#banner_shop_modal_details">小米瓷砖全抛釉地砖客厅瓷砖现代简约地板砖800x800欧式</td>-->
+                    <!--<td><a href="">小猫旗舰店</a></td>-->
+                    <!--<td>1211</td>-->
+                    <!--<td>530</td>-->
+                    <!--<td class="yesGreen">已启用</td>-->
+                    <!--<td>2017-03-03 16:00</td>-->
+                    <!--<td><img src="1.jpg" alt=""></td>-->
+                    <!--<td>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_modal_stop">停用</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_shop_modal_edit">编辑</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_shop_modal_details">详情</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_modal_disable_del">删除</a>-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td><input type="checkbox"></td>-->
+                    <!--<td>商家</td>-->
+                    <!--<td>CD12345678</td>-->
+                    <!--<td class="ellipsis ellipsis_name" data-toggle="modal" data-target="#banner_shop_modal_details">小米瓷砖全抛釉地砖客厅瓷砖现代简约地板砖800x800欧式</td>-->
+                    <!--<td><a href="">小猫旗舰店</a></td>-->
+                    <!--<td>1211</td>-->
+                    <!--<td>530</td>-->
+                    <!--<td class="noRed">停用</td>-->
+                    <!--<td>2017-03-03 16:00</td>-->
+                    <!--<td><img src="1.jpg" alt=""></td>-->
+                    <!--<td>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_modal_start">启用</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_shop_modal_edit">编辑</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_shop_modal_details">详情</a>-->
+                        <!--<a href="" data-toggle="modal" data-target="#banner_modal_disable_del">删除</a>-->
+                    <!--</td>-->
+                <!--</tr>-->
+            </table>
+        </div>
+    </section>
+        <!--Banner保存模态框开始-->
+        <div class="modal fade modelCenter" id="banner_modal_save" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabelAdd">保存</h4>
+                    </div>
+                    <div class="modal-body">
+                        确认保存
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Banner保存模态框结束-->
+
+        <!--Banner商铺  添加模态框开始-->
+        <div class="modal fade modelCenter" id="banner_shop_modal_add" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">添加商铺</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal_tab">
+                            <span class="modal_tab_active">商家</span>
+                            <span data-dismiss="modal" data-toggle="modal" data-target="#banner_link_modal_add">链接</span>
+                        </div>
+                        <div class="modal_txt_one">
+                            <i class="red">*</i>
+                            <span>商铺</span>
+                            <input type="text"/><span>获取</span>
+                        </div>
+                        <div class="modal_txt_one modal_txt_two">
+                            <i class="red">*</i>
+                            <span>商品名称</span>
+                            <input type="text" placeholder="请输入商品名称"/>
+                        </div>
+                        <div class="modal_txt_one modal_txt_two">
+                            <i class="red">*</i>
+                            <span>商品链接</span>
+                            <input type="text" value="http://www.baidu.com"/>
+                        </div>
+                        <div class="modal_txt_one">
+                            <i class="red">*</i>
+                            <span>是否启用</span>
+                            <input type="radio" checked="checked" name="modal_radio">是
+                            <input type="radio" name="modal_radio" class="no_radio">否
+                        </div>
+                        <div class="modal_txt_one modal_img_box">
+                            <span><i class="red">*</i> 图片</span>
+                            <div class="modal_img"></div>
+                            <div class="clear"></div>
+                            <div class="modal_img_btn">
+                                <span>上传</span>
+                                <span>16565165ada.jpg</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Banner商铺 添加模态框结束-->
+
+        <!--Banner链接  添加模态框开始-->
+        <div class="modal fade modelCenter" id="banner_link_modal_add" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">添加链接</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal_tab">
+                            <span data-dismiss="modal" data-toggle="modal" data-target="#banner_shop_modal_add">商家</span>
+                            <span class="modal_tab_active">链接</span>
+                        </div>
+                        <div class="modal_txt_one modal_txt_one_del">
+                            <i class="red">*</i>
+                            <span>名称</span>
+                            <input type="text"/>
+                        </div>
+                        <div class="modal_txt_one modal_txt_two">
+                            <i class="red">*</i>
+                            <span>链接</span>
+                            <input type="text"/>
+                        </div>
+                        <div class="modal_txt_one">
+                            <i class="red">*</i>
+                            <span>是否启用</span>
+                            <input type="radio" checked="checked" name="modal_radio">是
+                            <input type="radio" name="modal_radio" class="no_radio">否
+                        </div>
+                        <div class="modal_txt_one modal_img_box">
+                            <span><i class="red">*</i> 图片</span>
+                            <div class="modal_img"></div>
+                            <div class="clear"></div>
+                            <div class="modal_img_btn">
+                                <span>上传</span>
+                                <span>123456789.jpg</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Banner链接  添加模态框结束-->
+
+        <!--Banner删除模态框开始-->
+        <div class="modal fade modelCenter" id="banner_modal_del" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">删除</h4>
+                    </div>
+                    <div class="modal-body">
+                        确认删除X个？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Banner删除模态框结束-->
+
+        <!--Banner停用模态框开始-->
+        <div class="modal fade modelCenter" id="banner_modal_stop" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">停用</h4>
+                    </div>
+                    <div class="modal-body">
+                        确认停用X个？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Banner停用模态框结束-->
+
+        <!--Banner启用模态框开始-->
+        <div class="modal fade modelCenter" id="banner_modal_start" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">启用</h4>
+                    </div>
+                    <div class="modal-body">
+                        确认启用X个？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Banner 启用模态框结束-->
+
+    <!--Banner链接  编辑模态框开始-->
+    <div class="modal fade modelCenter" id="banner_link_modal_edit" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">链接编辑</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal_txt_one modal_txt_one_del">
+                        <i class="red">*</i>
+                        <span>名称</span>
+                        <input type="text" placeholder="小米瓷砖 全抛釉地砖"/>
+                    </div>
+                    <div class="modal_txt_one modal_txt_two">
+                        <i class="red">*</i>
+                        <span>链接</span>
+                        <input type="text" placeholder="http://exzple.com"/>
+                    </div>
+                    <div class="modal_txt_one">
+                        <i class="red">*</i>
+                        <span>是否启用</span>
+                        <input type="radio" checked="checked" name="modal_radio">是
+                        <input type="radio" name="modal_radio" class="no_radio">否
+                    </div>
+                    <div class="modal_txt_one modal_img_box">
+                        <span><i class="red">*</i>图片</span>
+                        <div class="modal_img"></div>
+                        <div class="clear"></div>
+                        <div class="modal_img_btn">
+                            <span>上传</span>
+                            <span>123456789.jpg</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Banner链接  编辑模态框结束-->
+
+    <!--Banner商铺  编辑模态框开始-->
+    <div class="modal fade modelCenter" id="banner_shop_modal_edit" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">商铺编辑</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal_txt_one">
+                        <i class="red">*</i>
+                        <span>商铺</span>
+                        <input type="text" placeholder="CD123456"/><span>获取</span>
+                    </div>
+                    <div class="modal_txt_one modal_txt_two">
+                        <i class="red">*</i>
+                        <span>商品名称</span>
+                        <input type="text" placeholder="小米瓷砖 全抛釉地砖"/>
+                    </div>
+                    <div class="modal_txt_one modal_txt_two">
+                        <i class="red">*</i>
+                        <span>商品链接</span>
+                        <input type="text" disabled="disabled" value="http://www.baidu.com"/>
+                    </div>
+                    <div class="modal_txt_one">
+                        <i class="red">*</i>
+                        <span>是否启用</span>
+                        <input type="radio" checked="checked" name="modal_radio">是
+                        <input type="radio" name="modal_radio" class="no_radio">否
+                    </div>
+                    <div class="modal_txt_one modal_img_box">
+                        <span><i class="red">*</i> 图片</span>
+                        <div class="modal_img"></div>
+                        <div class="clear"></div>
+                        <div class="modal_img_btn">
+                            <span>上传</span>
+                            <span>16565165ada.jpg</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Banner商铺 编辑模态框结束-->
+
+    <!--Banner链接  详情模态框开始-->
+    <div class="modal fade modelCenter" id="banner_link_modal_details" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">链接详情</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>名称：</span>
+                            <span>5.1地板促销</span>
+                        </div>
+                        <div class="details_div">
+                            <span>类型：</span>
+                            <span>链接</span>
+                        </div>
+                    </div>
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>来源商家：</span>
+                            <span class="blue">链接</span>
+                        </div>
+                        <div class="details_div">
+                            <span>创建时间：</span>
+                            <span>2017-03-03 16:00</span>
+                        </div>
+                    </div>
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>是否启用：</span>
+                            <span class="yesGreen">已启用</span>
+                        </div>
+                        <div class="details_div">
+                            <span>浏览：</span>
+                            <span>1211</span>
+                        </div>
+                    </div>
+                    <div class="modal_txt_one modal_img_box">
+                        <span>图片：</span>
+                        <div class="modal_img"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Banner链接 详情模态框结束-->
+
+    <!--Banner商铺  详情模态框开始-->
+    <div class="modal fade modelCenter" id="banner_shop_modal_details" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">商家详情</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="details_big_div">
+                        <span>商品名称：</span>
+                        <span>小米瓷砖 全抛釉地砖客厅瓷砖现代简约</span>
+                    </div>
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>类型：</span>
+                            <span>商铺</span>
+                        </div>
+                        <div class="details_div">
+                            <span>商铺编号：</span>
+                            <span>CD123456</span>
+                        </div>
+                    </div>
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>来源商家：</span>
+                            <span>小猫旗舰店</span>
+                        </div>
+                        <div class="details_div">
+                            <span>创建时间：</span>
+                            <span>2017-03-03 16:00</span>
+                        </div>
+                    </div>
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>是否启用：</span>
+                            <span class="yesGreen">已启用</span>
+                        </div>
+                        <div class="details_div">
+                            <span>上架浏览：</span>
+                            <span class="blue">1211</span>
+                        </div>
+                    </div>
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>库存：</span>
+                            <span>121</span>
+                        </div>
+                        <div class="details_div">
+                            <span>上架销量：</span>
+                            <span class="blue">1211</span>
+                        </div>
+                    </div>
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>供货价格：</span>
+                            <span>100</span>
+                        </div>
+                        <div class="details_div">
+                            <span>平台价格：</span>
+                            <span>121</span>
+                        </div>
+                    </div>
+                    <div class="details_big_div">
+                        <div class="details_div">
+                            <span>市场价格：</span>
+                            <span>160</span>
+                        </div>
+                    </div>
+                    <div class="modal_txt_one modal_img_box">
+                        <span>图片：</span>
+                        <div class="modal_img"></div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Banner商铺 详情模态框结束-->
+
+    <!--Banner已启用 删除模态框开始-->
+    <div class="modal fade modelCenter" id="banner_modal_enable_del" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">已启用删除</h4>
+                </div>
+                <div class="modal-body">
+                    请停用后再删除
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Banner已启用 删除模态框结束-->
+
+    <!--Banner停用 删除模态框开始-->
+    <div class="modal fade modelCenter" id="banner_modal_disable_del" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">停用删除</h4>
+                </div>
+                <div class="modal-body">
+                    确定删除?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Banner停用 删除模态框结束-->
+</div>

@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="pages/add_class/css/add_class.css">
+<div ng-controller="addClass">
+    <!--顶部导航-->
+    <div class="topnav">
+        <span class="glyphicon glyphicon-certificate"></span>
+        <h6>商城管理 ></h6>
+        <h6>首页推荐</h6>
+        <h6>> 添加分类 </h6>
+    </div>
+
+    <!--分类详情-->
+    <div class="cla_detail">
+        <!--分类名称-->
+        <div class="cla_name">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">分类名称</span>
+            <input type="text" placeholder="1～10个字，不含特殊字符">
+        </div>
+        <div class="divider"></div>
+
+        <!--分类所属-->
+        <div class="cla_belong">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">分类所属</span>
+            <select name="" class="belong first_select">
+                <option value="" selected="selected">当前</option>
+                <option value="">基础材料</option>
+            </select>
+            <select name="suoshukuang" class="belong">
+                <option value="" selected="selected">当前</option>
+                <option value="">墙面</option>
+            </select>
+        </div>
+
+        <!--分类图片-->
+        <div class="cla_pic">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">上传图片</span>
+            <div class="upload_pic">
+                <img src="pages/offsale_edit/images/egpic.png" alt="" id="cla_pic_uploadpic">
+                <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                <div id="upload">
+                    <button id="upload_btn">上传</button>
+                    <span id="pic_path">456456456456456.jpg</span>
+                </div>
+                <div class="reload_tishi">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                </div>
+            </div>
+        </div>
+        <div class="divider"></div>
+
+        <!--分类描述-->
+        <div class="cla_des">
+            <span class="each_title">分类描述</span>
+            <div id="edit_tool">此处应为富文本编辑器</div>
+        </div>
+        <div class="divider"></div>
+
+        <div class="info">
+            <p>
+                <span>添加人员</span>
+                <span>森林木地板专营店</span>
+            </p>
+
+            <p>
+                <span>上架时间</span>
+                <span>2017-05-21 12:21</span>
+            </p>
+        </div>
+
+        <div class="btn_sure">
+            <button>确认</button>
+            <button>返回</button>
+        </div>
+    </div>
+    </div>
+</div>
