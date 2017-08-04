@@ -1638,13 +1638,11 @@ class OwnerController extends Controller
      */
     public function actionViewIdentity()
     {
-        $user = Yii::$app->user->identity;
-
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'view-identity' => ModelService::viewModelByFields($user, User::FIELDS_VIEW_IDENTITY),
+                'view-identity' => Yii::$app->user->identity->viewIdentity()
             ],
         ]);
     }

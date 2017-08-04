@@ -23,6 +23,10 @@ class User extends ActiveRecord implements IdentityInterface
         'identity_card_front_image',
         'identity_card_back_image',
     ];
+    const FIELDS_VIEW_IDENTITY_EXTRA = [
+        'review_status',
+        'review_remark',
+    ];
     const LEN_MAX_FIELDS = [
         'legal_person' => 15,
     ];
@@ -664,33 +668,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Get old nickname
-     *
-     * @return string
-     */
-    public function getOldNickname()
-    {
-        return $this->nickname != Yii::$app->params['user']['default_nickname']
-            ? Yii::$app->params['user']['default_nickname']
-            : '';
-    }
-
-    /**
-     * Get user full address
-     *
-     * @return string
-     */
-    public function getFullAddress()
-    {
-        $fullAddress = '';
-        $userAddress = UserAddress::find()->where(['uid' => $this->id])->one();
-        if ($userAddress) {
-            $fullAddress = District::fullNameByCode($userAddress->district) . $userAddress->region;
-        }
-        return $fullAddress;
-    }
-
-    /**
      * @inheritdoc
      */
     public function validateAuthKey($authKey)
@@ -908,6 +885,14 @@ class User extends ActiveRecord implements IdentityInterface
                         $extraData[$extraField . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
                     }
                     break;
+                case 'review_remark':
+                    $userRole = UserRole::find()
+                        ->where(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']])
+                        ->one();
+                    if ($userRole) {
+                        $extraData[$extraField] = $userRole->review_remark;
+                    }
+                    break;
                 case 'review_time':
                     $userRole = UserRole::find()
                         ->where(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']])
@@ -928,6 +913,33 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return $extraData;
+    }
+
+    /**
+     * Get user full address
+     *
+     * @return string
+     */
+    public function getFullAddress()
+    {
+        $fullAddress = '';
+        $userAddress = UserAddress::find()->where(['uid' => $this->id])->one();
+        if ($userAddress) {
+            $fullAddress = District::fullNameByCode($userAddress->district) . $userAddress->region;
+        }
+        return $fullAddress;
+    }
+
+    /**
+     * Get old nickname
+     *
+     * @return string
+     */
+    public function getOldNickname()
+    {
+        return $this->nickname != Yii::$app->params['user']['default_nickname']
+            ? Yii::$app->params['user']['default_nickname']
+            : '';
     }
 
     /**
@@ -952,6 +964,21 @@ class User extends ActiveRecord implements IdentityInterface
         if (isset($data['create_time'])) {
             $data['create_time'] = date('Y-m-d H:i', $data['create_time']);
         }
+    }
+
+    /**
+     * View identity(app)
+     *
+     * @return array
+     */
+    public function viewIdentity()
+    {
+        $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_IDENTITY);
+        $viewData = $modelData
+            ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_IDENTITY_EXTRA))
+            : $modelData;
+        $this->_formatData($viewData);
+        return $viewData;
     }
 
     /**
