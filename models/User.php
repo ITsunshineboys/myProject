@@ -178,9 +178,11 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
-            if (!SmValidationService::validCode($data['mobile'], $data['validation_code'])) {
-                $code = 1002;
-                return $code;
+            $checkCodeRes = SmValidationService::validCode($data['mobile'], $data['validation_code']);
+            if ($checkCodeRes === false) {
+                return 1002;
+            } elseif (is_int($checkCodeRes)) {
+                return $checkCodeRes;
             }
         }
 
