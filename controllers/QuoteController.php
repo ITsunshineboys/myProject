@@ -366,7 +366,7 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->get('post');
         if (substr($post,4) ==00)
         {
-            $effect = Effect::find()->where(['city'=>$post]);
+            $effect = Effect::find()->where(['city_code'=>$post]);
             $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
             $model = $effect->offset($pages->offset)
                 ->limit($pages->limit)
@@ -386,7 +386,7 @@ class QuoteController extends Controller
             ]);
         }else
         {
-            $effect = Effect::find()->where(['district'=>$post]);
+            $effect = Effect::find()->where(['district_code'=>$post]);
             $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
             $model = $effect->offset($pages->offset)
                 ->limit($pages->limit)
@@ -444,7 +444,7 @@ class QuoteController extends Controller
     public function actionPlotGrabble()
     {
         $post = \Yii::$app->request->get();
-        $effect = Effect::find()->where(['and',['toponymy'=>$post['toponymy']],['city'=>$post['city']]]);
+        $effect = Effect::find()->where(['and',['toponymy_code'=>$post['toponymy']],['city_code'=>$post['city']]]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
