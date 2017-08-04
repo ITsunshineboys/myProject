@@ -1,5 +1,5 @@
 <?php
-namespace app\vendor\alipay;
+namespace vendor\alipay;
 class AopClient {
     //应用ID
     public $appId;
