@@ -20,6 +20,7 @@ class ModelService
     const SEPARATOR_ERRCODE_ERRMSG = ':';
     const PAGE_SIZE_DEFAULT = 12;
     const ORDER_BY_DEFAULT = ['id' => SORT_ASC];
+    const SUFFIX_FIELD_DESCRIPTION = '_desc';
 
     /**
      * Generate sorting statements for query

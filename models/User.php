@@ -904,7 +904,8 @@ class User extends ActiveRecord implements IdentityInterface
                         ->where(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']])
                         ->one();
                     if ($userRole) {
-                        $extraData[$extraField] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
+                        $extraData[$extraField] = $userRole->review_status;
+                        $extraData[$extraField . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
                     }
                     break;
                 case 'review_time':
