@@ -494,12 +494,14 @@ CREATE TABLE `series` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `effect_ picture` (
+CREATE TABLE `effect_picture` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `effect_id` int(11) DEFAULT NULL,
-  `picture` varchar(255) DEFAULT '' COMMENT '图片',
+  `house_pictrue` varchar(255) DEFAULT '' COMMENT '户型图',
+  `vr_pictrue` varchar(255) DEFAULT NULL COMMENT 'VR图',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `effect` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -700,6 +702,7 @@ CREATE TABLE `decoration_particulars` (
   `hallway_area` int(10) DEFAULT NULL COMMENT '玄关地面面积',
   `hall_perimeter` int(10) DEFAULT NULL COMMENT '客餐厅及过道周长',
   `bedroom_perimeter` int(10) DEFAULT NULL COMMENT '卧室周长',
+  `toilet_perimeter` int(10) DEFAULT NULL COMMENT '卫生间周长',
   `toilet_perimeter` int(10) DEFAULT NULL COMMENT '卫生间周长',
   `kitchen_perimeter` int(10) DEFAULT NULL COMMENT '厨房周长',
   `hallway_perimeter` int(10) DEFAULT NULL COMMENT '玄关地面周长',
