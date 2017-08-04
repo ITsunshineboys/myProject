@@ -417,7 +417,7 @@ class QuoteController extends Controller
     public function actionPlotTimeGrabble()
     {
         $post = \Yii::$app->request->get();
-        $effect = Effect::find()->where(['and',['>=','add_time',$post['min']],['<=','add_time',$post['max']],['city'=>$post['city']]]);
+        $effect = Effect::find()->where(['and',['>=','add_time',$post['min']],['<=','add_time',$post['max']],['city_code'=>$post['city']]]);
         $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
@@ -486,7 +486,35 @@ class QuoteController extends Controller
      */
     public function actionPlotAdd()
     {
-        $post = \Yii::$app->request;
+        $request = \Yii::$app->request;
+        $toponymy = $request->post('toponymy');
+        $area = $request->post('area');
+        $bedroom = $request->post('bedroom');
+        $sittingRoom_diningRoom = $request->post('sittingRoom_diningRoom');
+        $toilet = $request->post('toilet');
+        $kitchen = $request->post('kitchen');
+        $house_picture = $request->post('house_picture');
+        $high = $request->post('high');
+        $window = $request->post('window');
+        $hall_area = $request->post('hall_area');
+        $hall_perimeter = $request->post('hall_perimeter');
+        $bedroom_area = $request->post('bedroom_area');
+        $bedroom_perimeter = $request->post('bedroom_perimeter');
+        $toilet_area = $request->post('toilet_area');
+        $toilet_perimeter = $request->post('toilet_perimeter');
+        $kitchen_area = $request->post('kitchen_area');
+        $kitchen_perimeter = $request->post('kitchen_perimeter');
+        $modelling_length = $request->post('modelling_length');
+        $flat_area = $request->post('flat_area');
+        $balcony_area = $request->post('balcony_area');
+        if (!$toponymy || !$area || !$bedroom || !$sittingRoom_diningRoom || !$toilet || !$kitchen || !$house_picture || !$high || !$window || !$hall_area || !$hall_perimeter || !$bedroom_area || !$bedroom_perimeter || !$toilet_area || !$toilet_perimeter || !$kitchen_area || !$kitchen_perimeter || !$modelling_length || !$flat_area || !$balcony_area){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $all [] =(new Effect());
     }
 
 }
