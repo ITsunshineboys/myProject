@@ -373,6 +373,7 @@ class QuoteController extends Controller
                 ->asArray()
                 ->select('effect.toponymy,effect.add_time,effect.district')
                 ->groupBy('district')
+                ->orderBy(['add_time'=>SORT_ASC])
                 ->all();
             $list = [];
             foreach ($model as $one_model)
