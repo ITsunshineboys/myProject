@@ -53,14 +53,14 @@ class GeneratePageObject extends Command
             $suite = DIRECTORY_SEPARATOR . ucfirst($suite);
         }
 
-        $path = $this->createDirectoryFor(Configuration::supportDir() . 'Page' . $suite, $class);
+        $path = $this->buildPath(Configuration::supportDir() . 'Page' . $suite, $class);
 
-        $filename = $path . $this->getShortClassName($class) . '.php';
+        $filename = $path . $this->getClassName($class) . '.php';
 
         $output->writeln($filename);
 
         $gen = new PageObjectGenerator($conf, ucfirst($suite) . '\\' . $class);
-        $res = $this->createFile($filename, $gen->produce());
+        $res = $this->save($filename, $gen->produce());
 
         if (!$res) {
             $output->writeln("<error>PageObject $filename already exists</error>");

@@ -4,7 +4,6 @@ namespace Codeception\Lib\Driver;
 
 use Codeception\Exception\ModuleConfigException;
 use Codeception\Exception\ModuleException;
-use MongoDB\Database;
 
 class MongoDb
 {
@@ -96,20 +95,17 @@ class MongoDb
      */
     public function __construct($dsn, $user, $password)
     {
-        $this->legacy = extension_loaded('mongodb') === false &&
-            class_exists('\\MongoClient') &&
-            strpos(\MongoClient::VERSION, 'mongofill') === false;
+        $this->legacy = class_exists('\\MongoClient') && strpos(\MongoClient::VERSION, 'mongofill') === false;
 
         /* defining DB name */
-        $this->dbName = preg_replace('/\?.*/', '', substr($dsn, strrpos($dsn, '/') + 1));
-
+        $this->dbName = substr($dsn, strrpos($dsn, '/') + 1);
         if (strlen($this->dbName) == 0) {
             throw new ModuleConfigException($this, 'Please specify valid $dsn with DB name after the host:port');
         }
 
         /* defining host */
-        if (strpos($dsn, 'mongodb://') !== false) {
-            $this->host = str_replace('mongodb://', '', preg_replace('/\?.*/', '', $dsn));
+        if (false !== strpos($dsn, 'mongodb://')) {
+            $this->host = str_replace('mongodb://', '', $dsn);
         } else {
             $this->host = $dsn;
         }

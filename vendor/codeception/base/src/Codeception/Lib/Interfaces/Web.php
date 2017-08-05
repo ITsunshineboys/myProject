@@ -14,7 +14,7 @@ interface Web
      * $I->amOnPage('/register');
      * ```
      *
-     * @param string $page
+     * @param $page
      */
     public function amOnPage($page);
 
@@ -46,8 +46,8 @@ interface Web
      *
      * For checking the raw source code, use `seeInSource()`.
      *
-     * @param string $text
-     * @param string $selector optional
+     * @param      $text
+     * @param null $selector
      */
     public function see($text, $selector = null);
 
@@ -77,8 +77,8 @@ interface Web
      *
      * For checking the raw source code, use `seeInSource()`.
      *
-     * @param string $text
-     * @param string $selector optional
+     * @param      $text
+     * @param null $selector
      */
     public function dontSee($text, $selector = null);
     
@@ -109,7 +109,7 @@ interface Web
     public function dontSeeInSource($raw);
 
     /**
-     * Submits the given form on the page, with the given form
+     * Submits the given form on the page, optionally with the given form
      * values.  Pass the form field's values as an array in the second
      * parameter.
      *
@@ -325,8 +325,8 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $text
-     * @param string $url optional
+     * @param      $text
+     * @param null $url
      */
     public function seeLink($text, $url = null);
 
@@ -341,8 +341,8 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $text
-     * @param string $url optional
+     * @param $text
+     * @param null $url
      */
     public function dontSeeLink($text, $url = null);
 
@@ -358,7 +358,7 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $uri
+     * @param $uri
      */
     public function seeInCurrentUrl($uri);
 
@@ -373,7 +373,7 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $uri
+     * @param $uri
      */
     public function seeCurrentUrlEquals($uri);
 
@@ -387,7 +387,7 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $uri
+     * @param $uri
      */
     public function seeCurrentUrlMatches($uri);
 
@@ -400,7 +400,7 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $uri
+     * @param $uri
      */
     public function dontSeeInCurrentUrl($uri);
 
@@ -415,7 +415,7 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $uri
+     * @param $uri
      */
     public function dontSeeCurrentUrlEquals($uri);
 
@@ -429,7 +429,7 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $uri
+     * @param $uri
      */
     public function dontSeeCurrentUrlMatches($uri);
 
@@ -444,7 +444,7 @@ interface Web
      * ?>
      * ```
      *
-     * @param string $uri optional
+     * @param null $uri
      *
      * @return mixed
      */
@@ -480,8 +480,8 @@ interface Web
     public function dontSeeCheckboxIsChecked($checkbox);
 
     /**
-     * Checks that the given input field or textarea *equals* (i.e. not just contains) the given value.
-     * Fields are matched by label text, the "name" attribute, CSS, or XPath.
+     * Checks that the given input field or textarea contains the given value.
+     * For fuzzy locators, fields are matched by label text, the "name" attribute, CSS, and XPath.
      *
      * ``` php
      * <?php
@@ -700,7 +700,7 @@ interface Web
     public function fillField($field, $value);
 
     /**
-     * Attaches a file relative to the Codeception `_data` directory to the given file upload field.
+     * Attaches a file relative to the Codeception data directory to the given file upload field.
      *
      * ``` php
      * <?php
@@ -843,11 +843,13 @@ interface Web
      * ``` php
      * <?php
      * $I->seeNumberOfElements('tr', 10);
-     * $I->seeNumberOfElements('tr', [0,10]); // between 0 and 10 elements
+     * $I->seeNumberOfElements('tr', [0,10]); //between 0 and 10 elements
      * ?>
      * ```
      * @param $selector
-     * @param mixed $expected int or int[]
+     * @param mixed $expected :
+     * - string: strict number
+     * - array: range of numbers [0,10]
      */
     public function seeNumberOfElements($selector, $expected);
 
@@ -973,11 +975,4 @@ interface Web
      * @return mixed
      */
     public function grabCookie($cookie, array $params = []);
-
-    /**
-     * Grabs current page source code.
-     *
-     * @return string Current page source code.
-     */
-    public function grabPageSource();
 }

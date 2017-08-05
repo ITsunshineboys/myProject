@@ -48,7 +48,7 @@ class BaseCommandRunner extends \PHPUnit_Framework_TestCase
         $self = $this;
 
         $mockedMethods = [
-            'createFile' => function ($file, $output) use ($self, $saved) {
+            'save'            => function ($file, $output) use ($self, $saved) {
                 if (!$saved) {
                     return false;
                 }
@@ -64,7 +64,7 @@ class BaseCommandRunner extends \PHPUnit_Framework_TestCase
             'getSuiteConfig'  => function () use ($self) {
                 return $self->config;
             },
-            'createDirectoryFor' => function ($path, $testName) {
+            'buildPath'       => function ($path, $testName) {
                 $path = rtrim($path, DIRECTORY_SEPARATOR);
                 $testName = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $testName);
                 return pathinfo($path . DIRECTORY_SEPARATOR . $testName, PATHINFO_DIRNAME) . DIRECTORY_SEPARATOR;

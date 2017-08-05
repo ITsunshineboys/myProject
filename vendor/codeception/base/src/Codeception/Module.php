@@ -202,6 +202,10 @@ abstract class Module
     {
     }
 
+    public function _cleanup()
+    {
+    }
+
     /**
      * **HOOK** executed before suite
      *

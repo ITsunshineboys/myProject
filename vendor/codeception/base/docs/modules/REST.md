@@ -69,16 +69,6 @@ Adds HTTP authentication via username/password.
  * `[Part]` xml
 
 
-### assertArraySubset
- 
-Checks that array contains subset.
-
- * `param array`  $subset
- * `param array`  $array
- * `param bool`   $strict
- * `param string` $message
-
-
 ### deleteHeader
  
 Deletes the header with the passed name.  Subsequent requests
@@ -212,7 +202,7 @@ Parameter can be passed either as XmlBuilder, DOMDocument, DOMNode, XML string, 
 
 ### dontSeeXmlResponseMatchesXpath
  
-Checks whether XML response does not match XPath
+Checks wheather XML response does not match XPath
 
 ```php
 <?php
@@ -348,7 +338,7 @@ $fileData = file_get_contents("test_file.jpg");
 $I->seeBinaryResponseEquals(md5($fileData));
 ?>
 ```
-Example: Using sha256 hash
+Example: Using sha256 hsah
 
 ```php
 <?php
@@ -603,7 +593,7 @@ $I->seeResponseMatchesJsonType([
 ?>
 ```
 
-You can also apply filters to check values. Filter can be applied with `:` char after the type declaration.
+You can also apply filters to check values. Filter can be applied with `:` char after the type declatation.
 
 Here is the list of possible filters:
 
@@ -671,7 +661,7 @@ $I->seeXmlResponseIncludes("<result>1</result>");
 
 ### seeXmlResponseMatchesXpath
  
-Checks whether XML response matches XPath
+Checks wheather XML response matches XPath
 
 ```php
 <?php
@@ -749,35 +739,13 @@ Sends PATCH request to given uri.
 
 ### sendPOST
  
-Sends a POST request to given uri. Parameters and files can be provided separately.
+Sends a POST request to given uri.
 
-Example:
-```php
-<?php
-//simple POST call
-$I->sendPOST('/message', ['subject' => 'Read this!', 'to' => 'johndoe@example.com']);
-//simple upload method
-$I->sendPOST('/message/24', ['inline' => 0], ['attachmentFile' => codecept_data_dir('sample_file.pdf')]);
-//uploading a file with a custom name and mime-type. This is also useful to simulate upload errors.
-$I->sendPOST('/message/24', ['inline' => 0], [
-    'attachmentFile' => [
-         'name' => 'document.pdf',
-         'type' => 'application/pdf',
-         'error' => UPLOAD_ERR_OK,
-         'size' => filesize(codecept_data_dir('sample_file.pdf')),
-         'tmp_name' => codecept_data_dir('sample_file.pdf')
-    ]
-]);
-```
+Parameters and files (as array of filenames) can be provided.
 
  * `param` $url
  * `param array|\JsonSerializable` $params
- * `param array` $files A list of filenames or "mocks" of $_FILES (each entry being an array with the following
-                    keys: name, type, error, size, tmp_name (pointing to the real file path). Each key works
-                    as the "name" attribute of a file input field.
-
-@see http://php.net/manual/en/features.file-upload.post-method.php
-@see codecept_data_dir()
+ * `param array` $files
  * `[Part]` json
  * `[Part]` xml
 
@@ -830,4 +798,4 @@ $I->stopFollowingRedirects();
  * `[Part]` xml
  * `[Part]` json
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/REST.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.2/src/Codeception/Module/REST.php">Help us to improve documentation. Edit module reference</a></div>

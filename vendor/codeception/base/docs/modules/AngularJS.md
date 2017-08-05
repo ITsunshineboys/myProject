@@ -6,7 +6,7 @@ Module for AngularJS testing, based on [WebDriver module](http://codeception.com
 Performs **synchronization to ensure that page content is fully rendered**.
 Uses Angular's and Protractor internals methods to synchronize with the page.
 
-## Configuration
+## Configurarion
 
 The same as for [WebDriver](http://codeception.com/docs/modules/WebDriver#Configuration), but few new options added:
 
@@ -35,59 +35,6 @@ $I->selectOption(['model' => 'customerId'], '3');
 
 
 ## Actions
-
-### _backupSession
-
-*hidden API method, expected to be used from Helper classes*
- 
-Returns current WebDriver session for saving
-
- * `return` RemoteWebDriver
-
-
-### _closeSession
-
-*hidden API method, expected to be used from Helper classes*
- 
-Manually closes current WebDriver session.
-
-```php
-<?php
-$this->getModule('WebDriver')->_closeSession();
-
-// close a specific session
-$webDriver = $this->getModule('WebDriver')->webDriver;
-$this->getModule('WebDriver')->_closeSession($webDriver);
-```
-
- * `param` $webDriver (optional) a specific webdriver session instance
-
-
-### _findClickable
-
-*hidden API method, expected to be used from Helper classes*
- 
-Locates a clickable element.
-
-Use it in Helpers or GroupObject or Extension classes:
-
-```php
-<?php
-$module = $this->getModule('WebDriver');
-$page = $module->webDriver;
-
-// search a link or button on a page
-$el = $module->_findClickable($page, 'Click Me');
-
-// search a link or button within an element
-$topBar = $module->_findElements('.top-bar')[0];
-$el = $module->_findClickable($topBar, 'Click Me');
-
-```
- * `param` $page WebDriver instance or an element to search within
- * `param` $link a link text or locator to click
- * `return` WebDriverElement
-
 
 ### _findElements
 
@@ -131,47 +78,7 @@ Uri of currently opened page.
 *hidden API method, expected to be used from Helper classes*
  
 Returns URL of a host.
-
 @throws ModuleConfigException
-
-
-### _initializeSession
-
-*hidden API method, expected to be used from Helper classes*
- 
-Manually starts a new browser session.
-
-```php
-<?php
-$this->getModule('WebDriver')->_initializeSession();
-```
-
-
-
-### _loadSession
-
-*hidden API method, expected to be used from Helper classes*
- 
-Loads current RemoteWebDriver instance as a session
-
- * `param RemoteWebDriver` $session
-
-
-### _restart
-
-*hidden API method, expected to be used from Helper classes*
- 
-Restarts a web browser.
-Can be used with `_reconfigure` to open browser with different configuration
-
-```php
-<?php
-// inside a Helper
-$this->getModule('WebDriver')->_restart(); // just restart
-$this->getModule('WebDriver')->_restart(['browser' => $browser]); // reconfigure + restart
-```
-
- * `param array` $config
 
 
 ### _savePageSource
@@ -219,7 +126,7 @@ $I->amOnPage('/');
 $I->amOnPage('/register');
 ```
 
- * `param string` $page
+ * `param` $page
 
 
 ### amOnSubdomain
@@ -279,19 +186,9 @@ $I->appendField('#myTextField', 'appended');
 @throws \Codeception\Exception\ElementNotFound
 
 
-### assertArraySubset
- 
-Checks that array contains subset.
-
- * `param array`  $subset
- * `param array`  $array
- * `param bool`   $strict
- * `param string` $message
-
-
 ### attachFile
  
-Attaches a file relative to the Codeception `_data` directory to the given file upload field.
+Attaches a file relative to the Codeception data directory to the given file upload field.
 
 ``` php
 <?php
@@ -306,7 +203,7 @@ $I->attachFile('input[@type="file"]', 'prices.xls');
 
 ### cancelPopup
  
-Dismisses the active JavaScript popup, as created by `window.alert`, `window.confirm`, or `window.prompt`.
+Dismisses the active JavaScript popup, as created by `window.alert`|`window.confirm`|`window.prompt`.
 
 
 ### checkOption
@@ -447,8 +344,8 @@ But will ignore strings like:
 
 For checking the raw source code, use `seeInSource()`.
 
- * `param string` $text
- * `param string` $selector optional
+ * `param`      $text
+ * `param null` $selector
 
 
 ### dontSeeCheckboxIsChecked
@@ -487,7 +384,7 @@ $I->dontSeeCurrentUrlEquals('/');
 ?>
 ```
 
- * `param string` $uri
+ * `param` $uri
 
 
 ### dontSeeCurrentUrlMatches
@@ -501,7 +398,7 @@ $I->dontSeeCurrentUrlMatches('~$/users/(\d+)~');
 ?>
 ```
 
- * `param string` $uri
+ * `param` $uri
 
 
 ### dontSeeElement
@@ -540,7 +437,7 @@ $I->dontSeeInCurrentUrl('/users/');
 ?>
 ```
 
- * `param string` $uri
+ * `param` $uri
 
 
 ### dontSeeInField
@@ -646,8 +543,8 @@ $I->dontSeeLink('Checkout now', '/store/cart.php');
 ?>
 ```
 
- * `param string` $text
- * `param string` $url optional
+ * `param` $text
+ * `param null` $url
 
 
 ### dontSeeOptionIsSelected
@@ -775,7 +672,7 @@ $uri = $I->grabFromCurrentUrl();
 ?>
 ```
 
- * `param string` $uri optional
+ * `param null` $uri
 
 
 
@@ -803,15 +700,6 @@ $aLinks = $I->grabMultiple('a', 'href');
  * `param` $cssOrXpath
  * `param` $attribute
  * `return` string[]
-
-
-### grabPageSource
- 
-Grabs current page source code.
-
-@throws ModuleException if no page was opened.
-
- * `return` string Current page source code.
 
 
 ### grabTextFrom
@@ -865,8 +753,7 @@ Takes a screenshot of the current window and saves it to `tests/_output/debug`.
 $I->amOnPage('/user/edit');
 $I->makeScreenshot('edit_page');
 // saved to: tests/_output/debug/edit_page.png
-$I->makeScreenshot();
-// saved to: tests/_output/debug/2017-05-26_14-24-11_4b3403665fea6.png
+?>
 ```
 
  * `param` $name
@@ -1082,8 +969,8 @@ But will *not* be true for strings like:
 
 For checking the raw source code, use `seeInSource()`.
 
- * `param string` $text
- * `param string` $selector optional
+ * `param`      $text
+ * `param null` $selector
 
 
 ### seeCheckboxIsChecked
@@ -1128,7 +1015,7 @@ $I->seeCurrentUrlEquals('/');
 ?>
 ```
 
- * `param string` $uri
+ * `param` $uri
 
 
 ### seeCurrentUrlMatches
@@ -1142,7 +1029,7 @@ $I->seeCurrentUrlMatches('~$/users/(\d+)~');
 ?>
 ```
 
- * `param string` $uri
+ * `param` $uri
 
 
 ### seeElement
@@ -1194,13 +1081,13 @@ $I->seeInCurrentUrl('/users/');
 ?>
 ```
 
- * `param string` $uri
+ * `param` $uri
 
 
 ### seeInField
  
-Checks that the given input field or textarea *equals* (i.e. not just contains) the given value.
-Fields are matched by label text, the "name" attribute, CSS, or XPath.
+Checks that the given input field or textarea contains the given value.
+For fuzzy locators, fields are matched by label text, the "name" attribute, CSS, and XPath.
 
 ``` php
 <?php
@@ -1341,8 +1228,8 @@ $I->seeLink('Logout','/logout'); // matches <a href="/logout">Logout</a>
 ?>
 ```
 
- * `param string` $text
- * `param string` $url optional
+ * `param`      $text
+ * `param null` $url
 
 
 ### seeNumberOfElements
@@ -1352,11 +1239,13 @@ Checks that there are a certain number of elements matched by the given locator 
 ``` php
 <?php
 $I->seeNumberOfElements('tr', 10);
-$I->seeNumberOfElements('tr', [0,10]); // between 0 and 10 elements
+$I->seeNumberOfElements('tr', [0,10]); //between 0 and 10 elements
 ?>
 ```
  * `param` $selector
- * `param mixed` $expected int or int[]
+ * `param mixed` $expected :
+- string: strict number
+- array: range of numbers [0,10]
 
 
 ### seeNumberOfElementsInDOM
@@ -1631,15 +1520,15 @@ Can't be used with PhantomJS
 
 ### switchToPreviousTab
  
-Switches to previous browser tab.
+Switches to next browser tab.
 An offset can be specified.
 
 ```php
 <?php
 // switch to previous tab
-$I->switchToPreviousTab();
+$I->switchToNextTab();
 // switch to 2nd previous tab
-$I->switchToPreviousTab(2);
+$I->switchToNextTab(-2);
 ```
 
 Can't be used with PhantomJS
@@ -1827,7 +1716,7 @@ $I->waitForText('foo', 30, '.title'); // secs
 
  * `param string` $text
  * `param int` $timeout seconds
- * `param string` $selector optional
+ * `param null` $selector
 @throws \Exception
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/AngularJS.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.2/src/Codeception/Module/AngularJS.php">Help us to improve documentation. Edit module reference</a></div>

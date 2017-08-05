@@ -135,17 +135,17 @@ class Application extends BaseApplication
         }
 
         $argv = $_SERVER['argv'];
-        $argvWithoutConfig = [];
+        $argvWithoutConfig = array();
 
         for ($i = 0; $i < count($argv); $i++) {
             if (preg_match('/^(?:-([^c-]*)?c|--config(?:=|$))(.*)$/', $argv[$i], $match)) {
                 if (!empty($match[2])) { //same index
-                    $this->preloadConfiguration($match[2]);
+                    $this->preloadConfigration($match[2]);
                 } elseif (isset($argv[$i + 1])) { //next index
-                    $this->preloadConfiguration($argv[++$i]);
+                    $this->preloadConfigration($argv[++$i]);
                 }
                 if (!empty($match[1])) {
-                    $argvWithoutConfig[] = "-".$match[1]; //rest commands
+                    $argvWithoutConfig[] = "-".$match[1]; //rest comands
                 }
                 continue;
             }
@@ -162,7 +162,7 @@ class Application extends BaseApplication
      *
      * @throws ConfigurationException
      */
-    protected function preloadConfiguration($configFile)
+    protected function preloadConfigration($configFile)
     {
         try {
             Configuration::config($configFile);

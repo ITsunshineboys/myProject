@@ -3,6 +3,15 @@
 $vendorDir = dirname(__DIR__);
 
 return array (
+  'yiisoft/yii2-swiftmailer' => 
+  array (
+    'name' => 'yiisoft/yii2-swiftmailer',
+    'version' => '2.0.6.0',
+    'alias' => 
+    array (
+      '@yii/swiftmailer' => $vendorDir . '/yiisoft/yii2-swiftmailer',
+    ),
+  ),
   'yiisoft/yii2-bootstrap' => 
   array (
     'name' => 'yiisoft/yii2-bootstrap',
@@ -39,13 +48,22 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker',
     ),
   ),
-  'yiisoft/yii2-jpush' => 
+  'yiisoft/yii2-redis' => 
   array (
-    'name' => 'yiisoft/yii2-jpush',
-    'version' => '3.5.6',
+    'name' => 'yiisoft/yii2-redis',
+    'version' => '2.0.6.0',
     'alias' => 
     array (
-      '@yii/JPush' => $vendorDir . '/yiisoft/yii2-jpush',
+      '@yii/redis' => $vendorDir . '/yiisoft/yii2-redis',
+    ),
+  ),
+  '2amigos/yii2-qrcode-helper' => 
+  array (
+    'name' => '2amigos/yii2-qrcode-helper',
+    'version' => '1.0.3.0',
+    'alias' => 
+    array (
+      '@dosamigos/qrcode' => $vendorDir . '/2amigos/yii2-qrcode-helper/src',
     ),
   ),
 );

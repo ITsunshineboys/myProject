@@ -301,35 +301,13 @@ EOF;
     }
 
     /**
-     * Sends a POST request to given uri. Parameters and files can be provided separately.
+     * Sends a POST request to given uri.
      *
-     * Example:
-     * ```php
-     * <?php
-     * //simple POST call
-     * $I->sendPOST('/message', ['subject' => 'Read this!', 'to' => 'johndoe@example.com']);
-     * //simple upload method
-     * $I->sendPOST('/message/24', ['inline' => 0], ['attachmentFile' => codecept_data_dir('sample_file.pdf')]);
-     * //uploading a file with a custom name and mime-type. This is also useful to simulate upload errors.
-     * $I->sendPOST('/message/24', ['inline' => 0], [
-     *     'attachmentFile' => [
-     *          'name' => 'document.pdf',
-     *          'type' => 'application/pdf',
-     *          'error' => UPLOAD_ERR_OK,
-     *          'size' => filesize(codecept_data_dir('sample_file.pdf')),
-     *          'tmp_name' => codecept_data_dir('sample_file.pdf')
-     *     ]
-     * ]);
-     * ```
+     * Parameters and files (as array of filenames) can be provided.
      *
      * @param $url
      * @param array|\JsonSerializable $params
-     * @param array $files A list of filenames or "mocks" of $_FILES (each entry being an array with the following
-     *                     keys: name, type, error, size, tmp_name (pointing to the real file path). Each key works
-     *                     as the "name" attribute of a file input field.
-     *
-     * @see http://php.net/manual/en/features.file-upload.post-method.php
-     * @see codecept_data_dir()
+     * @param array $files
      * @part json
      * @part xml
      */
@@ -959,7 +937,7 @@ EOF;
      * ?>
      * ```
      *
-     * You can also apply filters to check values. Filter can be applied with `:` char after the type declaration.
+     * You can also apply filters to check values. Filter can be applied with `:` char after the type declatation.
      *
      * Here is the list of possible filters:
      *
@@ -1103,7 +1081,7 @@ EOF;
     }
 
     /**
-     * Checks whether XML response matches XPath
+     * Checks wheather XML response matches XPath
      *
      * ```php
      * <?php
@@ -1119,7 +1097,7 @@ EOF;
     }
 
     /**
-     * Checks whether XML response does not match XPath
+     * Checks wheather XML response does not match XPath
      *
      * ```php
      * <?php
@@ -1261,7 +1239,7 @@ EOF;
      * $I->seeBinaryResponseEquals(md5($fileData));
      * ?>
      * ```
-     * Example: Using sha256 hash
+     * Example: Using sha256 hsah
      *
      * ```php
      * <?php

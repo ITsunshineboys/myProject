@@ -3,11 +3,10 @@ namespace Codeception\Lib;
 
 use Codeception\Lib\Interfaces\ConflictsWithModule;
 use Codeception\Lib\Interfaces\DependsOnModule;
-use Codeception\Test\Unit;
 use Codeception\Util\Stub;
 
 // @codingStandardsIgnoreFile
-class ModuleContainerTest extends Unit
+class ModuleContainerTest extends \PHPUnit_Framework_TestCase
 {
     use \Codeception\Specify;
     /**

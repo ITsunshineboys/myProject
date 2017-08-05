@@ -13,16 +13,6 @@ Wrapper for basic shell commands and shell output
 
 ## Actions
 
-### assertArraySubset
- 
-Checks that array contains subset.
-
- * `param array`  $subset
- * `param array`  $array
- * `param bool`   $strict
- * `param string` $message
-
-
 ### dontSeeInShellOutput
  
 Checks that output from latest command doesn't contain text
@@ -55,32 +45,7 @@ Checks that output from last executed command contains text
  * `param` $text
 
 
-### seeResultCodeIs
- 
-Checks result code
-
-```php
-<?php
-$I->seeResultCodeIs(0);
-```
-
- * `param` $code
-
-
-### seeResultCodeIsNot
- 
-Checks result code
-
-```php
-<?php
-$I->seeResultCodeIsNot(0);
-```
-
- * `param` $code
-
-
 ### seeShellOutputMatches
- 
- * `param` $regex
+__not documented__
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/Cli.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.2/src/Codeception/Module/Cli.php">Help us to improve documentation. Edit module reference</a></div>

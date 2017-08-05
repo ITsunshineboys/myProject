@@ -3978,12 +3978,21 @@ class MallController extends Controller
      */
     public function actionSeriesList()
     {
-        $series = Series::find()->All();
+        $series = Series::find()
+            ->asArray()
+            ->select('series,creation_time,status')
+            ->All();
+        $all = [];
+        foreach ($series as $one_series)
+        {
+            $one_series['creation_time'] = date('Y-m-d H:i',$one_series['creation_time']);
+            $all [] = $one_series;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'series_list' => $series
+                'series_list' => $all
             ]
         ]);
     }

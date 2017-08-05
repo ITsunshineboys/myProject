@@ -23,16 +23,6 @@ Project root directory is used by default
  * `param string` $path
 
 
-### assertArraySubset
- 
-Checks that array contains subset.
-
- * `param array`  $subset
- * `param array`  $array
- * `param bool`   $strict
- * `param string` $message
-
-
 ### cleanDir
  
 Erases directory contents
@@ -207,4 +197,4 @@ Saves contents to file
  * `param string` $filename
  * `param string` $contents
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/Filesystem.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.2/src/Codeception/Module/Filesystem.php">Help us to improve documentation. Edit module reference</a></div>

@@ -162,6 +162,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     {
         $browserModule->_setConfig($params);
         $browserModule->_initialize();
+        $browserModule->_cleanup();
         $browserModule->_before($this->makeTest());
     }
 }

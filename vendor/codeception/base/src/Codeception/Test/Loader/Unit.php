@@ -66,8 +66,9 @@ class Unit implements LoaderInterface
         $dependencies = \PHPUnit_Util_Test::getDependencies($className, $methodName);
         $test->setDependencies($dependencies);
         if ($test instanceof UnitFormat) {
-            $test->getMetadata()->setParamsFromAnnotations(Annotation::forMethod($test, $methodName)->raw());
             $test->getMetadata()->setFilename(Descriptor::getTestFileName($test));
+            $test->getMetadata()->setDependencies($dependencies);
+            $test->getMetadata()->setEnv(Annotation::forMethod($test, $methodName)->fetchAll('env'));
         }
     }
 }

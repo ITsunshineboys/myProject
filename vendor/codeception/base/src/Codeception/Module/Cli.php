@@ -2,7 +2,6 @@
 namespace Codeception\Module;
 
 use Codeception\Module as CodeceptionModule;
-use Codeception\TestInterface;
 
 /**
  * Wrapper for basic shell commands and shell output
@@ -18,9 +17,7 @@ class Cli extends CodeceptionModule
 {
     public $output = '';
 
-    public $result = null;
-
-    public function _before(TestInterface $test)
+    public function _cleanup()
     {
         $this->output = '';
     }
@@ -44,7 +41,6 @@ class Cli extends CodeceptionModule
     {
         $data = [];
         exec("$command", $data, $resultCode);
-        $this->result = $resultCode;
         $this->output = implode("\n", $data);
         if ($this->output === null) {
             \PHPUnit_Framework_Assert::fail("$command can't be executed");
@@ -77,41 +73,8 @@ class Cli extends CodeceptionModule
         \PHPUnit_Framework_Assert::assertNotContains($text, $this->output);
     }
 
-    /**
-     * @param $regex
-     */
     public function seeShellOutputMatches($regex)
     {
         \PHPUnit_Framework_Assert::assertRegExp($regex, $this->output);
-    }
-
-    /**
-     * Checks result code
-     *
-     * ```php
-     * <?php
-     * $I->seeResultCodeIs(0);
-     * ```
-     *
-     * @param $code
-     */
-    public function seeResultCodeIs($code)
-    {
-        $this->assertEquals($this->result, $code, "result code is $code");
-    }
-
-    /**
-     * Checks result code
-     *
-     * ```php
-     * <?php
-     * $I->seeResultCodeIsNot(0);
-     * ```
-     *
-     * @param $code
-     */
-    public function seeResultCodeIsNot($code)
-    {
-        $this->assertNotEquals($this->result, $code, "result code is $code");
     }
 }

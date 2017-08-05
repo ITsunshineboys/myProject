@@ -1044,14 +1044,12 @@ class PHPUnit_Util_Test
                 $result[$filename] = [];
             }
 
-            $result[$filename] = array_merge(
-                $result[$filename],
-                range($reflector->getStartLine(), $reflector->getEndLine())
+            $result[$filename] = array_unique(
+                array_merge(
+                    $result[$filename],
+                    range($reflector->getStartLine(), $reflector->getEndLine())
+                )
             );
-        }
-
-        foreach ($result as $filename => $lineNumbers) {
-            $result[$filename] = array_keys(array_flip($lineNumbers));
         }
 
         return $result;

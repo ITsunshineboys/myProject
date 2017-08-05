@@ -17,9 +17,7 @@ class ConditionalAssertion extends Assertion
 
     public function getAction()
     {
-        $action = 'can' . ucfirst($this->action);
-        $action = preg_replace('/^canDont/', 'cant', $action);
-        return $action;
+        return 'can' . ucfirst($this->action);
     }
 
     public function getHumanizedAction()

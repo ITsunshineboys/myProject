@@ -32,24 +32,9 @@ class AMQPTest extends \PHPUnit_Framework_TestCase
         $connection->channel()->queue_declare('queue1');
     }
 
-    public function testPushToQueue()
+    public function testQueueUsage()
     {
         $this->module->pushToQueue('queue1', 'hello');
         $this->module->seeMessageInQueueContainsText('queue1', 'hello');
-    }
-
-    public function testPushToExchange()
-    {
-        $queue = 'test-queue';
-        $exchange = 'test-exchange';
-        $topic = 'test.3';
-        $message = 'test-message';
-
-        $this->module->declareExchange($exchange, 'topic', false, true, false);
-        $this->module->declareQueue($queue, false, true, false, false);
-        $this->module->bindQueueToExchange($queue, $exchange, 'test.#');
-
-        $this->module->pushToExchange($exchange, $message, $topic);
-        $this->module->seeMessageInQueueContainsText($queue , $message);
     }
 }

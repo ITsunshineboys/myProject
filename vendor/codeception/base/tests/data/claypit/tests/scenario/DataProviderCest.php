@@ -5,7 +5,7 @@ class DataProviderCest
 {
      /**
       * @group dataprovider
-      * @dataProvider __exampleDataSource
+      * @dataprovider __exampleDataSource
       */
       public function withDataProvider(ScenarioGuy $I, Example $example)
       {
@@ -25,7 +25,7 @@ class DataProviderCest
 
       /**
        * @group dataprovider
-       * @dataProvider __exampleDataSource
+       * @dataprovider __exampleDataSource
        * @example(path=".", file="skipped.suite.yml")
        */
        public function withDataProviderAndExample(ScenarioGuy $I, Example $example)

@@ -54,8 +54,6 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
 
     protected $internalDomains = null;
 
-    private $baseUrl;
-
     public function _failed(TestInterface $test, $fail)
     {
         if (!$this->client || !$this->client->getInternalResponse()) {
@@ -155,7 +153,7 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
 
         foreach ($this->headers as $header => $val) { // moved from REST module
 
-            if ($val === null || $val === '') {
+            if (!$val) {
                 continue;
             }
 
@@ -239,7 +237,6 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
         $content = null
     ) {
         $this->crawler = $this->clientRequest($method, $uri, $parameters, $files, $server, $content);
-        $this->baseUrl = $this->retrieveBaseUrl();
         $this->forms = [];
     }
 
@@ -290,7 +287,7 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
      * Example:
      * ```php
      * <?php
-     * $I->haveHttpHeader('X-Requested-With', 'Codeception');
+     * $I->setHeader('X-Requested-With', 'Codeception');
      * $I->amOnPage('test-headers.php');
      * ?>
      * ```
@@ -437,11 +434,6 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
 
     private function getBaseUrl()
     {
-        return $this->baseUrl;
-    }
-
-    private function retrieveBaseUrl()
-    {
         $baseUrl = '';
 
         $baseHref = $this->crawler->filter('base');
@@ -498,7 +490,6 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
                 $this->fail("No links containing text '$text' and URL '$url' were found in page " . $this->_getCurrentUri());
             }
         }
-        $this->assertTrue(true);
     }
 
     public function dontSeeLink($text, $url = null)
@@ -1059,21 +1050,17 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
     public function attachFile($field, $filename)
     {
         $form = $this->getFormFor($field = $this->getFieldByLabelOrCss($field));
-        $filePath = codecept_data_dir() . $filename;
-        if (!file_exists($filePath)) {
-            throw new \InvalidArgumentException("File does not exist: $filePath");
-        }
-        if (!is_readable($filePath)) {
-            throw new \InvalidArgumentException("File is not readable: $filePath");
-        }
-
+        $path = Configuration::dataDir() . $filename;
         $name = $field->attr('name');
+        if (!is_readable($path)) {
+            $this->fail("file $filename not found in Codeception data path. Only files stored in data path accepted");
+        }
         $formField = $this->matchFormField($name, $form, new FileFormField($field->getNode(0)));
         if (is_array($formField)) {
             $this->fail("Field $name is ignored on upload, field $name is treated as array.");
         }
 
-        $formField->upload($filePath);
+        $formField->upload($path);
     }
 
     /**
@@ -1339,18 +1326,6 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
             return null;
         }
         return $cookies->getValue();
-    }
-
-    /**
-     * Grabs current page source code.
-     *
-     * @throws ModuleException if no page was opened.
-     *
-     * @return string Current page source code.
-     */
-    public function grabPageSource()
-    {
-        return $this->_getResponseContent();
     }
 
     public function seeCookie($cookie, array $params = [])

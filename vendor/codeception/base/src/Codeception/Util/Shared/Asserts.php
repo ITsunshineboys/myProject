@@ -30,11 +30,12 @@ trait Asserts
      * @param        $expected
      * @param        $actual
      * @param string $message
-     * @param float  $delta
+     *
+     * @return mixed
      */
-    protected function assertEquals($expected, $actual, $message = '', $delta = 0.0)
+    protected function assertEquals($expected, $actual, $message = '')
     {
-        \PHPUnit_Framework_Assert::assertEquals($expected, $actual, $message, $delta);
+        \PHPUnit_Framework_Assert::assertEquals($expected, $actual, $message);
     }
 
     /**
@@ -43,11 +44,10 @@ trait Asserts
      * @param        $expected
      * @param        $actual
      * @param string $message
-     * @param float  $delta
      */
-    protected function assertNotEquals($expected, $actual, $message = '', $delta = 0.0)
+    protected function assertNotEquals($expected, $actual, $message = '')
     {
-        \PHPUnit_Framework_Assert::assertNotEquals($expected, $actual, $message, $delta);
+        \PHPUnit_Framework_Assert::assertNotEquals($expected, $actual, $message);
     }
 
     /**
@@ -56,6 +56,8 @@ trait Asserts
      * @param        $expected
      * @param        $actual
      * @param string $message
+     *
+     * @return mixed
      */
     protected function assertSame($expected, $actual, $message = '')
     {
@@ -186,32 +188,8 @@ trait Asserts
     {
         \PHPUnit_Framework_Assert::assertNotRegExp($pattern, $string, $message);
     }
-
-    /**
-     * Checks that a string starts with the given prefix.
-     *
-     * @param string $prefix
-     * @param string $string
-     * @param string $message
-     */
-    protected function assertStringStartsWith($prefix, $string, $message = '')
-    {
-        \PHPUnit_Framework_Assert::assertStringStartsWith($prefix, $string, $message);
-    }
-
-    /**
-     * Checks that a string doesn't start with the given prefix.
-     *
-     * @param string $prefix
-     * @param string $string
-     * @param string $message
-     */
-    protected function assertStringStartsNotWith($prefix, $string, $message = '')
-    {
-        \PHPUnit_Framework_Assert::assertStringStartsNotWith($prefix, $string, $message);
-    }
-
-
+        
+    
     /**
      * Checks that variable is empty.
      *
@@ -373,19 +351,6 @@ trait Asserts
     protected function assertArrayNotHasKey($key, $actual, $description = '')
     {
         \PHPUnit_Framework_Assert::assertArrayNotHasKey($key, $actual, $description);
-    }
-
-    /**
-     * Checks that array contains subset.
-     *
-     * @param array  $subset
-     * @param array  $array
-     * @param bool   $strict
-     * @param string $message
-     */
-    public function assertArraySubset($subset, $array, $strict = false, $message = '')
-    {
-        \PHPUnit_Framework_Assert::assertArraySubset($subset, $array, $strict, $message);
     }
 
     /**

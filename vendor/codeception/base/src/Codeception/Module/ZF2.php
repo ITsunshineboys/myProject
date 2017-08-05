@@ -41,7 +41,7 @@ use Codeception\Lib\Connector\ZF2 as ZF2Connector;
  * Usage example:
  *
  * ```yaml
- * actor: AcceptanceTester
+ * class_name: AcceptanceTester
  * modules:
  *     enabled:
  *         - ZF2:
@@ -80,7 +80,7 @@ class ZF2 extends Framework implements DoctrineProvider, PartedModule
     protected $time = 0;
 
     /**
-     * @var array Used to collect domains while recursively traversing route tree
+     * @var array Used to collect domains while recusively traversing route tree
      */
     private $domainCollector = [];
 
@@ -121,6 +121,10 @@ class ZF2 extends Framework implements DoctrineProvider, PartedModule
             StaticEventManager::resetInstance();
         }
 
+        //Close the session, if any are open
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
         $this->queries = 0;
         $this->time = 0;
 

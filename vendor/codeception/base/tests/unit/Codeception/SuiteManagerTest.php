@@ -28,7 +28,7 @@ class SuiteManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher;
         $settings = \Codeception\Configuration::$defaultSuiteSettings;
-        $settings['actor'] = 'CodeGuy';
+        $settings['class_name'] = 'CodeGuy';
         $this->suiteman = new \Codeception\SuiteManager($this->dispatcher, 'suite', $settings);
         
         $printer = \Codeception\Util\Stub::makeEmpty('PHPUnit_TextUI_ResultPrinter');

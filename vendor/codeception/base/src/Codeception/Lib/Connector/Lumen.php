@@ -2,7 +2,6 @@
 namespace Codeception\Lib\Connector;
 
 use Codeception\Lib\Connector\Lumen\DummyKernel;
-use Codeception\Lib\Connector\Shared\LaravelCommon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
@@ -12,8 +11,6 @@ use Symfony\Component\HttpKernel\Client;
 
 class Lumen extends Client
 {
-    use LaravelCommon;
-
     /**
      * @var \Laravel\Lumen\Application
      */
@@ -69,11 +66,6 @@ class Lumen extends Client
         }
         $this->firstRequest = false;
 
-        $this->applyBindings();
-        $this->applyContextualBindings();
-        $this->applyInstances();
-        $this->applyApplicationHandlers();
-
         $request = Request::createFromBase($request);
         $response = $this->kernel->handle($request);
 
@@ -98,13 +90,9 @@ class Lumen extends Client
             $this->oldDb = $this->app['db'];
         }
 
-        if (class_exists(Facade::class)) {
-            // If the container has been instantiated ever,
-            // we need to clear its static fields before create new container.
-            Facade::clearResolvedInstances();
-        }
-
         $this->app = $this->kernel = require $this->module->config['bootstrap_file'];
+
+        Facade::clearResolvedInstances();
 
         // Lumen registers necessary bindings on demand when calling $app->make(),
         // so here we force the request binding before registering our own request object,
