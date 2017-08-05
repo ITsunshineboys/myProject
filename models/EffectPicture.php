@@ -16,6 +16,7 @@ class EffectPicture extends ActiveRecord
         'effect_id',
         'house_pictrue',
         'vr_pictrue',
+        'images_user',
     ];
     /**
      * @return string 返回该AR类关联的数据表名
@@ -25,4 +26,11 @@ class EffectPicture extends ActiveRecord
         return 'effect_picture';
     }
 
+    public static  function plotAdd($post)
+    {
+        if ($post)
+        {
+            return 11;exit;
+        }
+    }
 }

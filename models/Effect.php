@@ -12,7 +12,7 @@ use yii\db\Query;
 
 class Effect extends ActiveRecord
 {
-
+    const STATUS_STAIRWAY_YES = 1;
     const FIELDS_VIEW_ADMIN_MODEL = [
           'id',
           'series_id',
@@ -126,4 +126,12 @@ class Effect extends ActiveRecord
         return $list;
     }
 
+    public static function plotAdd($post)
+    {
+        if ($post)
+        {
+
+        }
+        return 11;
+    }
 }
