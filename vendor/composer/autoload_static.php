@@ -9,7 +9,6 @@ class ComposerStaticInit1e05d923a4c2f827691329d0a0dfc024
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
     );
@@ -17,8 +16,6 @@ class ComposerStaticInit1e05d923a4c2f827691329d0a0dfc024
     public static $prefixLengthsPsr4 = array (
         'y' => 
         array (
-            'yii\\swiftmailer\\' => 16,
-            'yii\\redis\\' => 10,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
             'yii\\debug\\' => 10,
@@ -29,10 +26,6 @@ class ComposerStaticInit1e05d923a4c2f827691329d0a0dfc024
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
-        ),
-        'd' => 
-        array (
-            'dosamigos\\qrcode\\' => 17,
         ),
         'c' => 
         array (
@@ -60,13 +53,16 @@ class ComposerStaticInit1e05d923a4c2f827691329d0a0dfc024
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
         ),
+        'J' => 
+        array (
+            'JPush\\' => 6,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
         ),
         'F' => 
         array (
-            'Flc\\Alidayu\\' => 12,
             'Faker\\' => 6,
         ),
         'D' => 
@@ -82,14 +78,6 @@ class ComposerStaticInit1e05d923a4c2f827691329d0a0dfc024
     );
 
     public static $prefixDirsPsr4 = array (
-        'yii\\swiftmailer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer',
-        ),
-        'yii\\redis\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/yiisoft/yii2-redis',
-        ),
         'yii\\gii\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-gii',
@@ -119,10 +107,6 @@ class ComposerStaticInit1e05d923a4c2f827691329d0a0dfc024
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-        ),
-        'dosamigos\\qrcode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/2amigos/yii2-qrcode-helper/src',
         ),
         'cebe\\markdown\\' => 
         array (
@@ -180,13 +164,13 @@ class ComposerStaticInit1e05d923a4c2f827691329d0a0dfc024
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'JPush\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jpush/jpush/src/JPush',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
-        ),
-        'Flc\\Alidayu\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/flc/alidayu/src/Alidayu',
         ),
         'Faker\\' => 
         array (
@@ -253,9 +237,12 @@ class ComposerStaticInit1e05d923a4c2f827691329d0a0dfc024
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
+        'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
+        'PHPUnit\\Framework\\Test' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Test.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
         'PHPUnit\\Framework\\TestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestListener.php',
+        'PHPUnit\\Framework\\TestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestSuite.php',
         'PHPUnit_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit_Extensions_GroupTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
         'PHPUnit_Extensions_PhptTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/PhptTestCase.php',

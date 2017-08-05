@@ -52,6 +52,16 @@ class JpushController extends \yii\web\Controller
 public function actionPu(){
     $client = new \JPush\Client(' af59e43d6324a2a9d995f72f','44c54839bd576b9a2a476275');
 
+    $pusher = $client->push();
+    $pusher->setPlatform('all');
+    $pusher->addAllAudience();
+    $pusher->setNotificationAlert('Hello, JPush');
+    try {
+        $pusher->send();
+    } catch (\JPush\Exceptions\JPushException $e) {
+        // try something else here
+        print $e;
+    }
 
 //   $a= $push->message(['1'=>'2'],['a'=>2]);
 
@@ -104,64 +114,51 @@ public function actionPu(){
 //    $master_secret = "32da4e2c06ac7b55da2c9228";
 //    $client = new Client($app_key, $master_secret);
 
-    //简单的推送样例
-    $auth=base64_decode("7973f8b4ad32cb15c10ea2b0:7cf2502eba69046f73bebb39");
+//    //简单的推送样例
+//    $auth=base64_decode("7973f8b4ad32cb15c10ea2b0:7cf2502eba69046f73bebb39");
+//
+//
+//
+//    $headers=[
+//        "Content-Type: application/json",
+//        "Authorization: Basic $auth"
+//    ];
+//
+//    $url="https://api.jpush.cn/v3/push";
+//    //初始化
+//    $curl = curl_init();
+//    //设置抓取的url
+//    curl_setopt($curl, CURLOPT_URL, $url);
+//    //设置头文件的信息作为数据流输出
+//    curl_setopt($curl, CURLOPT_HEADER, 0);
+//
+//    //设置获取的信息以文件流的形式返回，而不是直接输出。
+//    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 0);
+//
+//    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+//    //执行命令
+//    $data = curl_exec($curl);
+//    //关闭URL请求
+//    curl_close($curl);
+//    //显示获得的数据
+//
+//    var_dump($data);
 
 
-
-    $headers=[
-        "Content-Type: application/json",
-        "Authorization: Basic $auth"
-    ];
-
-    $url="https://api.jpush.cn/v3/push";
-    //初始化
-    $curl = curl_init();
-    //设置抓取的url
-    curl_setopt($curl, CURLOPT_URL, $url);
-    //设置头文件的信息作为数据流输出
-    curl_setopt($curl, CURLOPT_HEADER, 0);
-
-    //设置获取的信息以文件流的形式返回，而不是直接输出。
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 0);
-
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    //执行命令
-    $data = curl_exec($curl);
-    //关闭URL请求
-    curl_close($curl);
-    //显示获得的数据
-
-    var_dump($data);
-//    $push_payload = $client->push()
-//        ->setPlatform('all')
-//        ->addAllAudience()
-//        ->setNotificationAlert('Hi, JPush');
-//    try {
-//        $response = $push_payload->send();
+// $push_payload=$client->push()->setPlatform('all')->addAllAudience()->setNotificationAlert('alert');
+//    try{
+//        $response=$push_payload->send();
 //        var_dump($response);
-//    } catch (\JPush\Exceptions\APIConnectionException $e) {
-//        // try something here
-//        print $e;
-//    } catch (\JPush\Exceptions\APIRequestException $e) {
-//        // try something here
-//        print $e;
+//
+//
+//    }catch (APIConnectionException $e){
+//
+//        echo $e;
+//
+//    }catch (APIRequestException $e){
+//
+//        echo $e;
 //    }
-
- $push_payload=$client->push()->setPlatform('all')->addAllAudience()->setNotificationAlert('alert');
-    try{
-        $response=$push_payload->send();
-        var_dump($response);
-
-
-    }catch (APIConnectionException $e){
-
-        echo $e;
-
-    }catch (APIRequestException $e){
-
-        echo $e;
-    }
 
 }
 

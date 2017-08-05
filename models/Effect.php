@@ -7,12 +7,12 @@
  */
 namespace app\models;
 
-use yii\data\Pagination;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class Effect extends ActiveRecord
 {
-    const STATUS_STAIRWAY_YES = 1;
+
     const FIELDS_VIEW_ADMIN_MODEL = [
           'id',
           'series_id',
@@ -30,8 +30,6 @@ class Effect extends ActiveRecord
           'toponymy',
           'particulars',
           'site_particulars',
-          'stairway',
-          'add_time'
         ];
     /**
      * @return string 返回该AR类关联的数据表名
@@ -56,17 +54,13 @@ class Effect extends ActiveRecord
      */
     public static function districtSearch($search = '花好月圆')
     {
-        $detail = self::find()
-            ->asArray()
-            ->where(['like','toponymy',$search])
-            ->all();
+        if (!empty($search))
+        {
+            $detail = self::find()->asArray()->where(['like','toponymy',$search])->all();
+        }
         return $detail;
     }
 
-    /**
-     * @param $arr
-     * @return array|null|ActiveRecord
-     */
     public static function conditionQuery($arr)
     {
         $basis_condition = [];
@@ -90,6 +84,26 @@ class Effect extends ActiveRecord
             'style'=> $basis_condition ['style_id']])->one();
         return $effect;
     }
+
+    public function geteffectdata($effect_id){
+
+        $query=new Query();
+
+       $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,t.style,s.series')->leftJoin('series As s','s.id = e.series_id')->leftJoin('style As t','t.id = e.style_id')->where(['e.id'=>$effect_id])->one();
+       $array1=(new Query())->from('effect_earnst')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
+
+      $array['phone']=$array1['phone'];
+      $array['create_time']=$array1['create_time'];
+      $array['earnest']=$array1['earnest'];
+      $array['name']=$array1['name'];
+      $array['remark']=$array1['remark'];
+
+
+       return $array;
+
+    }
+
+
 
     /**
      * toponymy find all
