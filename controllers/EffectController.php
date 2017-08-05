@@ -3,8 +3,6 @@ namespace app\controllers;
 
 use app\models\Effect;
 use app\models\EffectEarnst;
-use app\models\EffectSearchForm;
-use app\models\TestEffect;
 use app\services\AdminAuthService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
