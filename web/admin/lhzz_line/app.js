@@ -26,7 +26,7 @@ app.config(function ($stateProvider,$httpProvider) {
     .state("onsale_edit",{
     params:{"classtitle":null,"classid":null,"classlevel":null},
     url:"/onsale_edit",
-    templateUrl:"pages/onsale_edit/onsale_edit.html",
+    templateUrl:"pages/onsale_edit/onsale_edit.html"
     })
     .state("offsale_edit",{
     params:{"classtitle":null,"classid":null,"classlevel":null},
