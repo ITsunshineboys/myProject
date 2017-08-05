@@ -1367,6 +1367,9 @@ class OrderController extends Controller
         $model=new Wxpay();
         $res=$model->Wxpay();
         echo $res;
+
+
+        
     }
 
 
