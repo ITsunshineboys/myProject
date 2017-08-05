@@ -18,44 +18,44 @@ class EffectController extends Controller
 {
 
     const PAGE_SIZE = 10;
-//    const ACCESS_LOGGED_IN_USER = [
-//        'effect-view',
-//        'effect-list',
-//        'remark-view'
-//
-//    ];
-//    public function behaviors()
-//    {
-//        return [
-//            'access' => [
-//                'class' => AdminAuthService::className(),
-//                'denyCallback' => function ($rule, $action) {
-//                    $code = 403;
-//                    new ExceptionHandleService($code);
-//                    exit;
-//                },
-//                'only' => self::ACCESS_LOGGED_IN_USER,
-//                'rules' => [
-//                    [
-//                        'actions' => self::ACCESS_LOGGED_IN_USER,
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ],
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//
-//                    'effect-view'=>['post'],
-//                    'effect-list'=>['get'],
-//                    'remark-view'=>['get']
-//
-//                    ],
-//                ],
-//            ];
-//
-//    }
+    const ACCESS_LOGGED_IN_USER = [
+        'effect-view',
+        'effect-list',
+        'remark-view'
+
+    ];
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AdminAuthService::className(),
+                'denyCallback' => function ($rule, $action) {
+                    $code = 403;
+                    new ExceptionHandleService($code);
+                    exit;
+                },
+                'only' => self::ACCESS_LOGGED_IN_USER,
+                'rules' => [
+                    [
+                        'actions' => self::ACCESS_LOGGED_IN_USER,
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+
+                    'effect-view'=>['post'],
+                    'effect-list'=>['get'],
+                    'remark-view'=>['get']
+
+                    ],
+                ],
+            ];
+
+    }
 
     /**
      * 前台样板间申请
