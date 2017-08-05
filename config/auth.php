@@ -99,4 +99,5 @@ return [
     'user-disable-remark-reset' => [1],
     'user-enable-batch' => [1],
     'user-view-lhzz' => [1],
+    'reset-user-status-logs' => [1],
 ];

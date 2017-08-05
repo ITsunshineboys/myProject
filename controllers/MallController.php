@@ -121,6 +121,7 @@ class MallController extends Controller
         'user-disable-remark-reset',
         'user-enable-batch',
         'user-view-lhzz',
+        'reset-user-status-logs',
     ];
 
     /**
@@ -4747,6 +4748,36 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'user-view' => Yii::$app->user->identity->viewLhzz(),
+            ],
+        ]);
+    }
+
+    /**
+     * Reset user status logs action.
+     *
+     * @return string
+     */
+    public function actionResetUserStatusLogs()
+    {
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new UserStatus;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+
+        if ($orderBy === false) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'reset_user_status_logs' => UserStatus::pagination([], UserStatus::FIELDS_STATUS_LOGS, $page, $size, $orderBy)
             ],
         ]);
     }
