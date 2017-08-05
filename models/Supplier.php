@@ -232,7 +232,7 @@ class Supplier extends ActiveRecord
             [['type_org', 'category_id', 'type_shop', 'quality_guarantee_deposit', 'support_offline_shop'], 'number', 'integerOnly' => true],
             [['nickname', 'shop_name', 'name', 'licence', 'licence_image', 'approve_reason', 'reject_reason', 'shop_name'], 'string'],
             ['name', 'string', 'length' => [1, 30]],
-            ['licence', 'string', 'length' => [1, 15]],
+            ['licence', 'string', 'length' => [1, 18]],
             ['support_offline_shop', 'in', 'range' => [self::OFFLINE_SHOP_SUPPORT, self::OFFLINE_SHOP_NOT_SUPPORT]],
         ];
     }
