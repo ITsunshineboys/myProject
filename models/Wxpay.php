@@ -75,8 +75,7 @@ class Wxpay  extends ActiveRecord
             //、获取用户openid
             $tools = new PayService();
             $openId = $tools->GetOpenid();
-            echo $openId;
-            //②、统一下单
+            // //②、统一下单
             // $input = new WxPayUnifiedOrder();
             // $input->SetBody("test");
             // $input->SetAttach("1");
@@ -91,5 +90,6 @@ class Wxpay  extends ActiveRecord
             // $order = WxPayApi::unifiedOrder($input);
             // $jsApiParameters = $tools->GetJsApiParameters($order);
             // $editAddress = $tools->GetEditAddressParameters();
+            return $openId;
         }
 }
