@@ -172,7 +172,7 @@ class OrderController extends Controller
                     ]);
                 }else
                 {
-                    $code=500;
+                    $code=1051;
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1343,6 +1343,9 @@ class OrderController extends Controller
         return Json::encode([$data[0][$code]]);
     }
 
+    /**
+     * 测试支付宝
+     */
     public function actionAlipay(){
         $post=Yii::$app->request->post();
         //商户订单号，商户网站订单系统中唯一订单号，必填
@@ -1359,6 +1362,13 @@ class OrderController extends Controller
         $model=new Alipay();
         $res=$model->Alipay($out_trade_no,$subject,$total_amount,$body);
     }
+
+    public function actionTestwxpay(){
+        $model=new Wxpay();
+        $res=$model->Wxpay();
+        echo $res;
+    }
+
 
 
 }

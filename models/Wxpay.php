@@ -4,15 +4,18 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\base\WxPayException;
-use Flc\Wxpay\WxPayJsApiPay;
-use Flc\Wxpay\WxPayConfig;
-use Flc\Wxpay\WxPayUnifiedOrder;
-use Flc\Wxpay\WxPayApi;
-use Flc\Wxpay\log;
-use Flc\Wxpay\CLogFileHandler;
+use vendor\wxpay\WxPayJsApiPay;
+use vendor\wxpay\WxPayConfig;
+use vendor\wxpay\WxPayUnifiedOrder;
+use vendor\wxpay\WxPayApi;
+use vendor\wxpay\log;
+use vendor\wxpay\CLogFileHandler;
 use app\services\PayService;
-class Wxpay
+use yii\db\ActiveRecord;
+
+class Wxpay  extends ActiveRecord
 {
+
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -27,8 +30,7 @@ class Wxpay
      */
     public function Wxlineapipay($orders,$local){
             ini_set('date.timezone','Asia/Shanghai');
-            $logHandler= new CLogFileHandler( getcwd()."/libs/wxpay/logs/".date('Y-m-d').'.log');
-            $log = Log::Init($logHandler, 15);
+
             //打印输出数组信息
             function printf_info($data)
             {
@@ -62,8 +64,7 @@ class Wxpay
 
         public function Wxpay(){
             ini_set('date.timezone','Asia/Shanghai');
-            $logHandler= new CLogFileHandler( getcwd()."/libs/wxpay/logs/".date('Y-m-d').'.log');
-            $log = Log::Init($logHandler, 15);
+
             //打印输出数组信息
             function printf_info($data)
             {
@@ -78,7 +79,7 @@ class Wxpay
             $input = new WxPayUnifiedOrder();
             $input->SetBody("test");
             $input->SetAttach("1");
-            $input->SetOut_trade_no(self::MCHID.date("YmdHis"));
+            $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
             $input->SetTotal_fee("1");
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));

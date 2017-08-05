@@ -9,12 +9,12 @@
 namespace app\services;
 use Yii;
 use yii\base\WxPayException;
-use Flc\Wxpay\WxPayJsApiPay;
-use Flc\Wxpay\WxPayConfig;
-use Flc\Wxpay\WxPayUnifiedOrder;
-use Flc\Wxpay\WxPayApi;
-use Flc\Wxpay\log;
-use Flc\Wxpay\CLogFileHandler;
+use vendor\wxpay\WxPayJsApiPay;
+use vendor\wxpay\WxPayConfig;
+use vendor\wxpay\WxPayUnifiedOrder;
+use vendor\wxpay\WxPayApi;
+use vendor\wxpay\log;
+use vendor\wxpay\CLogFileHandler;
 class PayService
 {
 
