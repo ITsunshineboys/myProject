@@ -4,12 +4,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\base\WxPayException;
-use vendor\wxpay\WxPayJsApiPay;
-use vendor\wxpay\WxPayConfig;
-use vendor\wxpay\WxPayUnifiedOrder;
-use vendor\wxpay\WxPayApi;
-use vendor\wxpay\log;
-use vendor\wxpay\CLogFileHandler;
+use vendor\wxpay\lib\WxPayJsApiPay;
+use vendor\wxpay\lib\WxPayConfig;
+use vendor\wxpay\lib\WxPayUnifiedOrder;
+use vendor\wxpay\lib\WxPayApi;
+use vendor\wxpay\lib\log;
+use vendor\wxpay\lib\CLogFileHandler;
 use app\services\PayService;
 use yii\db\ActiveRecord;
 

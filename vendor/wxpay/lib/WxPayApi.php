@@ -1,12 +1,12 @@
 <?php
-namespace vendor\wxpay;
+namespace vendor\wxpay\lib;
 
 use Yii;
-use vendor\wxpay\WxPayConfig;
-use vendor\wxpay\WxPayResults;
-use vendor\wxpay\WxPayDataBase;
-use vendor\wxpay\WxPayJsApiPay;
-use vendor\wxpay\WxPayUnifiedOrder;
+use vendor\wxpay\lib\WxPayConfig;
+use vendor\wxpay\lib\WxPayResults;
+use vendor\wxpay\lib\WxPayDataBase;
+use vendor\wxpay\lib\WxPayJsApiPay;
+use vendor\wxpay\lib\WxPayUnifiedOrder;
 use yii\base\WxPayException;
 
 /**

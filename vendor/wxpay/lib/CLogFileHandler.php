@@ -1,5 +1,5 @@
 <?php
-namespace vendor\wxpay;
+namespace vendor\wxpay\lib;
 use yii\base\WxPayException;
 //以下为日志
 class CLogFileHandler implements ILogHandler

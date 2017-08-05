@@ -1,6 +1,6 @@
 <?php
-namespace vendor\wxpay;
-use vendor\wxpay\WxPayConfig;
+namespace vendor\wxpay\lib;
+use vendor\wxpay\lib\WxPayConfig;
 /**
  *
  * 统一下单输入对象

@@ -1,8 +1,8 @@
 <?php
 
-namespace vendor\wxpay;
+namespace vendor\wxpay\lib;
 use Yii;
-use vendor\wxpay\WxPayConfig;
+use vendor\wxpay\lib\WxPayConfig;
 /**
  *
  * 提交JSAPI输入对象

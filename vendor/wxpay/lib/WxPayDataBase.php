@@ -1,6 +1,6 @@
 <?php
-namespace vendor\wxpay;
-use vendor\wxpay\WxPayConfig;
+namespace vendor\wxpay\lib;
+use vendor\wxpay\lib\WxPayConfig;
 /**
  *
  * 数据对象基础类，该类中定义数据类最基本的行为，包括：
