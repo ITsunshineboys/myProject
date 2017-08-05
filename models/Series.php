@@ -25,6 +25,7 @@ class Series extends ActiveRecord
         'flat_day_coefficient',
         'status',
         'creation_time',
+        'series_grade',
     ];
     /**
      * @return string 返回该AR类关联的数据表名

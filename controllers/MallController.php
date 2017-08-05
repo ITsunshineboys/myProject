@@ -4010,6 +4010,7 @@ class MallController extends Controller
         $series->series = $post['series'];
         $series->theme = $post['theme'];
         $series->intro = $post['intro'];
+        $series->series_grade = $post['series_grade'];
         $series->creation_time = time();
         $series->status = Series::STATUS_ONLINE;
         if (!$series->validate()) {
@@ -4041,6 +4042,7 @@ class MallController extends Controller
         $series_edit->series = $post['series'];
         $series_edit->theme = $post['theme'];
         $series_edit->intro = $post['intro'];
+        $series->series_grade = $post['series_grade'];
         if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -4090,12 +4092,21 @@ class MallController extends Controller
      */
     public function actionStyleList()
     {
-        $style = Style::find()->All();
+        $style = Style::find()
+            ->asArray()
+            ->select('style,creation_time,status')
+            ->All();
+        $all = [];
+        foreach ($style as $one_style)
+        {
+            $one_style['creation_time'] = date('Y-m-d H:i',$one_style['creation_time']);
+            $all [] = $one_style;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'style_list' => $style
+                'style_list' => $all
             ]
         ]);
     }
