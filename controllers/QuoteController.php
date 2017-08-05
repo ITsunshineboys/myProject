@@ -507,8 +507,19 @@ class QuoteController extends Controller
         $modelling_length = $request->post('modelling_length');
         $flat_area = $request->post('flat_area');
         $balcony_area = $request->post('balcony_area');
-        if (!$toponymy || !$area || !$bedroom || !$sittingRoom_diningRoom || !$toilet || !$kitchen || !$house_picture || !$high || !$window || !$hall_area || !$hall_perimeter || !$bedroom_area || !$bedroom_perimeter || !$toilet_area || !$toilet_perimeter || !$kitchen_area || !$kitchen_perimeter || !$modelling_length || !$flat_area || !$balcony_area){
+        $balcony_area = $request->post('balcony_area');
+        $user = \Yii::$app->user->identity();
+        if (!$toponymy || !$area || !$bedroom || !$sittingRoom_diningRoom || !$toilet || !$kitchen || !$house_picture || !$high || !$window || !$hall_area || !$hall_perimeter || !$bedroom_area || !$bedroom_perimeter || !$toilet_area || !$toilet_perimeter || !$kitchen_area || !$kitchen_perimeter || !$modelling_length || !$flat_area || !$balcony_area)
+        {
             $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (!$user)
+        {
+            $code=1052;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
