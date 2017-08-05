@@ -90,7 +90,7 @@ class Effect extends ActiveRecord
         $query=new Query();
 
        $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,t.style,s.series')->leftJoin('series As s','s.id = e.series_id')->leftJoin('style As t','t.id = e.style_id')->where(['e.id'=>$effect_id])->one();
-       $array1=(new Query())->from('effect_earnst')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
+       $array1=(new Query())->from('effect_earnest')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
 
       $array['phone']=$array1['phone'];
       $array['create_time']=$array1['create_time'];
