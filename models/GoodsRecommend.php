@@ -40,7 +40,7 @@ class GoodsRecommend extends ActiveRecord
      * @var array from types
      */
     public static $fromTypes = [
-        self::FROM_TYPE_MALL => '商铺',
+        self::FROM_TYPE_MALL => '商家',
         self::FROM_TYPE_LINK => '链接',
     ];
 
