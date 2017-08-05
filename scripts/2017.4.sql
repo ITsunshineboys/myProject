@@ -499,6 +499,7 @@ CREATE TABLE `effect_picture` (
   `effect_id` int(11) DEFAULT NULL,
   `house_pictrue` varchar(255) DEFAULT '' COMMENT '户型图',
   `vr_pictrue` varchar(255) DEFAULT NULL COMMENT 'VR图',
+  `images_user` varchar(20) DEFAULT NULL COMMENT '图纸名称',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

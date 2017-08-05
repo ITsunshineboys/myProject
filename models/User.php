@@ -65,7 +65,6 @@ class User extends ActiveRecord implements IdentityInterface
     const FIELDS_IDENTITY_LHZZ_EXTRA = [
         'review_status',
         'review_time',
-        'status_operator',
     ];
     const STATUS_OFFLINE = 0; // 关闭
     const STATUS_ONLINE = 1; // 开启
@@ -89,6 +88,8 @@ class User extends ActiveRecord implements IdentityInterface
         'old_nickname',
         'role_names',
         'review_status',
+        'status_operator',
+        'status_remark',
     ];
     const SESSION_KEY_LOGIN_ORIGIN = 'session_key_login_origin';
     const LOGIN_ORIGIN_ADMIN = 'login_origin_admin';
@@ -920,6 +921,12 @@ class User extends ActiveRecord implements IdentityInterface
                     $userStatus = UserStatus::find()->where(['uid' => $this->id])->orderBy(['id' => SORT_DESC])->one();
                     if ($userStatus) {
                         $extraData[$extraField] = $userStatus->op_username;
+                    }
+                    break;
+                case 'status_remark':
+                    $userStatus = UserStatus::find()->where(['uid' => $this->id])->orderBy(['id' => SORT_DESC])->one();
+                    if ($userStatus) {
+                        $extraData[$extraField] = $userStatus->remark;
                     }
                     break;
             }
