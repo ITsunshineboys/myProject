@@ -491,6 +491,7 @@ CREATE TABLE `series` (
   `category_id` int(11) DEFAULT '0' COMMENT '分类id',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 已停用 1: 已启用',
   `creation_time` int(11) DEFAULT NULL,
+  `series_grade` int(5) DEFAULT NULL COMMENT '系列等级',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1019,3 +1020,24 @@ CREATE TABLE `supplier_cashregister` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --8.3 end
+--8.5 start
+CREATE TABLE `effect_earnst` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `effect_id` int(11) DEFAULT NULL COMMENT '样板id',
+  `phone` char(11) DEFAULT NULL COMMENT '电话号码',
+  `name` varchar(255) DEFAULT NULL COMMENT '名字',
+  `earnest` decimal(9,2) DEFAULT '0.00' COMMENT '定金',
+  `remark` text COMMENT '备注',
+  `create_time` int(11) DEFAULT NULL COMMENT '申请时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+--8.5 end
+
+CREATE TABLE `assort_goods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `one_path` varchar(20) DEFAULT NULL COMMENT '一级分类',
+  `two_path` varchar(20) DEFAULT NULL COMMENT '二级分类',
+  `three_parh` varchar(20) DEFAULT NULL COMMENT '三级分类',
+  `add_path` varchar(20) DEFAULT NULL COMMENT '商品管理',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -63,4 +63,12 @@ class DecorationParticulars extends ActiveRecord
             return false;
         }
     }
+
+    public static function plotAdd($post)
+    {
+        if ($post)
+        {
+            return 11;
+        }
+    }
 }

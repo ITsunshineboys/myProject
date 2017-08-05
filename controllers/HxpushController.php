@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 
+use app\models\Goods;
 use app\services\HxapiService;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -29,7 +30,9 @@ class  HxpushController extends Controller {
 //       $a= $model->getUser('yangr');
 //        var_dump($a);
 
-//        $res=$model->createUser('user','12300');
+//        $res=$model->createUser('1234','12300');
+
+       
 
 //        $res=$model->addFriend('yangr','user');
 
@@ -66,5 +69,7 @@ class  HxpushController extends Controller {
 
 
 //        var_dump($a);
+
+
     }
 }

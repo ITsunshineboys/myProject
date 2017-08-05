@@ -8,10 +8,19 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use yii\db\ActiveRecord;
 
 class UserStatus extends ActiveRecord
 {
+    const FIELDS_STATUS_LOGS = [
+        'mobile',
+        'create_time',
+        'op_username',
+        'status',
+        'remark',
+    ];
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -45,5 +54,46 @@ class UserStatus extends ActiveRecord
         }
 
         return $userStatus->save();
+    }
+
+    /**
+     * Get pagination list
+     *
+     * @param  array $where search condition
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  array $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = ModelService::ORDER_BY_DEFAULT)
+    {
+        $offset = ($page - 1) * $size;
+        $list = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        foreach ($list as &$row) {
+            if (isset($row['create_time'])) {
+                $row['create_time'] = date('Y-m-d H:i', $row['create_time']);
+            }
+
+            if (isset($row['op_username'])) {
+                $row['op_username'] = $row['op_username'] ? $row['op_username'] : '用户';
+            }
+
+            if (isset($row['status'])) {
+                $row['status'] = User::STATUSES[$row['status']];
+            }
+        }
+
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'details' => $list
+        ];
     }
 }

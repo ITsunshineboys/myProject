@@ -101,4 +101,6 @@ class EffectEarnst extends \yii\db\ActiveRecord
 
 
 
+
+
 }

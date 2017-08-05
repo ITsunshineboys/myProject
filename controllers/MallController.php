@@ -121,6 +121,7 @@ class MallController extends Controller
         'user-disable-remark-reset',
         'user-enable-batch',
         'user-view-lhzz',
+        'reset-user-status-logs',
     ];
 
     /**
@@ -3978,12 +3979,21 @@ class MallController extends Controller
      */
     public function actionSeriesList()
     {
-        $series = Series::find()->All();
+        $series = Series::find()
+            ->asArray()
+            ->select('series,creation_time,status')
+            ->All();
+        $all = [];
+        foreach ($series as $one_series)
+        {
+            $one_series['creation_time'] = date('Y-m-d H:i',$one_series['creation_time']);
+            $all [] = $one_series;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'series_list' => $series
+                'series_list' => $all
             ]
         ]);
     }
@@ -3995,17 +4005,12 @@ class MallController extends Controller
     public function actionSeriesAdd()
     {
         $code = 1000;
-//        $post = Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-            'series' => '齐家',
-            'theme' => '简单',
-            'intro' => '齐家的东西就是好'
-        ];
+        $post = Yii::$app->request->post();
         $series = new Series();
-        $series->series = $data['series'];
-        $series->theme = $data['theme'];
-        $series->intro = $data['intro'];
+        $series->series = $post['series'];
+        $series->theme = $post['theme'];
+        $series->intro = $post['intro'];
+        $series->series_grade = $post['series_grade'];
         $series->creation_time = time();
         $series->status = Series::STATUS_ONLINE;
         if (!$series->validate()) {
@@ -4031,19 +4036,13 @@ class MallController extends Controller
     public function actionSeriesEdit()
     {
         $code = 1000;
-//        $post = Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-            'id' => 2,
-            'series' => '齐家',
-            'theme' => '方便',
-            'intro' => '齐家的东西，无敌，美好'
-        ];
+        $post = Yii::$app->request->post();
         $series = new Series();
-        $series_edit = $series->findOne($data['id']);
-        $series_edit->series = $data['series'];
-        $series_edit->theme = $data['theme'];
-        $series_edit->intro = $data['intro'];
+        $series_edit = $series->findOne($post['id']);
+        $series_edit->series = $post['series'];
+        $series_edit->theme = $post['theme'];
+        $series_edit->intro = $post['intro'];
+        $series->series_grade = $post['series_grade'];
         if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -4067,15 +4066,10 @@ class MallController extends Controller
     public function actionSeriesStatus()
     {
         $code = 1000;
-//        $post = Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-            'id' => 2,
-            'status' => '0',
-        ];
+        $post = Yii::$app->request->post();
         $series = new Series();
-        $series_edit = $series->findOne($data['id']);
-        $series_edit->status = $data['status'];
+        $series_edit = $series->findOne($post['id']);
+        $series_edit->status = $post['status'];
         if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -4098,12 +4092,21 @@ class MallController extends Controller
      */
     public function actionStyleList()
     {
-        $style = Style::find()->All();
+        $style = Style::find()
+            ->asArray()
+            ->select('style,creation_time,status')
+            ->All();
+        $all = [];
+        foreach ($style as $one_style)
+        {
+            $one_style['creation_time'] = date('Y-m-d H:i',$one_style['creation_time']);
+            $all [] = $one_style;
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'style_list' => $style
+                'style_list' => $all
             ]
         ]);
     }
@@ -4115,18 +4118,11 @@ class MallController extends Controller
     public function actionStyleAdd()
     {
         $code = 1000;
-//        $post = Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-            'style' => '中国风',
-            'theme' => '中国风',
-            'intro' => '物有所值',
-            'picture' => 'C:\Users\Administrator\Desktop'
-        ];
+        $post = Yii::$app->request->post();
         $style = new Style();
-        $style->style = $data['style'];
-        $style->theme = $data['theme'];
-        $style->intro = $data['intro'];
+        $style->style = $post['style'];
+        $style->theme = $post['theme'];
+        $style->intro = $post['intro'];
         $style->creation_time = time();
         $style->status = Style::STATUS_ONLINE;
         if (!$style->validate()) {
@@ -4171,20 +4167,12 @@ class MallController extends Controller
     public function actionStyleEdit()
     {
         $code = 1000;
-//        $post = Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-            'id' => 4,
-            'style' => '中国风',
-            'theme' => '传统东西',
-            'intro' => '你城山',
-            'picture' => 'C:\Users\Administrator\Desktop'
-        ];
+        $post = Yii::$app->request->post();
         $style = new Style();
-        $style_edit = $style->findOne($data['id']);
-        $style_edit->style = $data['style'];
-        $style_edit->theme = $data['theme'];
-        $style_edit->intro = $data['intro'];
+        $style_edit = $style->findOne($post['id']);
+        $style_edit->style = $post['style'];
+        $style_edit->theme = $post['theme'];
+        $style_edit->intro = $post['intro'];
         if (!$style_edit->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -4201,7 +4189,7 @@ class MallController extends Controller
         }
 
         $style_picture = new StylePicture();
-        $style_picture_edit = $style_picture->find()->asArray()->where(['style_id' => $data['id']])->one();
+        $style_picture_edit = $style_picture->find()->asArray()->where(['style_id' => $post['id']])->one();
         $style_picture_edit->picture = FileService::upload();
         if (!$style_picture_edit->validate()) {
             return Json::encode([
@@ -4226,15 +4214,10 @@ class MallController extends Controller
     public function actionStyleStatus()
     {
         $code = 1000;
-//        $post = Yii::$app->request->post();
-//        $data = Json::decode($post);
-        $data = [
-            'id' => 4,
-            'status' => '0',
-        ];
+        $post = Yii::$app->request->post();
         $series = new Style();
-        $series_edit = $series->findOne($data['id']);
-        $series_edit->status = $data['status'];
+        $series_edit = $series->findOne($post['id']);
+        $series_edit->status = $post['status'];
         if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -4776,6 +4759,36 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'user-view' => Yii::$app->user->identity->viewLhzz(),
+            ],
+        ]);
+    }
+
+    /**
+     * Reset user status logs action.
+     *
+     * @return string
+     */
+    public function actionResetUserStatusLogs()
+    {
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new UserStatus;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+
+        if ($orderBy === false) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'reset_user_status_logs' => UserStatus::pagination([], UserStatus::FIELDS_STATUS_LOGS, $page, $size, $orderBy)
             ],
         ]);
     }

@@ -6,7 +6,7 @@ return [
     // common configuration for masters
     'masterConfig' => [
         'username' => 'root',
-        'password' => '',
+        'password' => 'admin',
         'charset' => 'utf8',
         'attributes' => [
             // use a smaller connection timeout

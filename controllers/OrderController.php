@@ -255,6 +255,7 @@ class OrderController extends Controller
             $goods_attr=trim(htmlspecialchars($request->post('goods_attr')),' ');
             $model=new GoodsOrder();
             $data=$model->getlinegoodsdata($goods_id,$goods_num,$goods_attr);
+//            var_dump($data);exit;
             if ($data){
                 return Json::encode([
                     'code' => 200,
@@ -1367,6 +1368,9 @@ class OrderController extends Controller
         $model=new Wxpay();
         $res=$model->Wxpay();
         echo $res;
+
+
+        
     }
 
 

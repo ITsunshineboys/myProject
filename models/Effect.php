@@ -9,7 +9,6 @@ namespace app\models;
 
 use yii\data\Pagination;
 use yii\db\ActiveRecord;
-use yii\db\Query;
 
 class Effect extends ActiveRecord
 {
@@ -118,6 +117,26 @@ class Effect extends ActiveRecord
         return $effect;
     }
 
+    public function geteffectdata($effect_id){
+
+        $query=new Query();
+
+       $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,t.style,s.series')->leftJoin('series As s','s.id = e.series_id')->leftJoin('style As t','t.id = e.style_id')->where(['e.id'=>$effect_id])->one();
+       $array1=(new Query())->from('effect_earnest')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
+
+      $array['phone']=$array1['phone'];
+      $array['create_time']=$array1['create_time'];
+      $array['earnest']=$array1['earnest'];
+      $array['name']=$array1['name'];
+      $array['remark']=$array1['remark'];
+
+
+       return $array;
+
+    }
+
+
+
     /**
      * toponymy find all
      * @return string
@@ -139,4 +158,12 @@ class Effect extends ActiveRecord
         return $list;
     }
 
+    public static function plotAdd($post)
+    {
+        if ($post)
+        {
+
+        }
+        return 11;
+    }
 }
