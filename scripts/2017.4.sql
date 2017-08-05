@@ -1031,7 +1031,6 @@ CREATE TABLE `effect_earnst` (
   `create_time` int(11) DEFAULT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
---8.5 end
 
 CREATE TABLE `assort_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1041,3 +1040,6 @@ CREATE TABLE `assort_goods` (
   `add_path` varchar(20) DEFAULT NULL COMMENT '商品管理',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+--8.5 end
+
+
