@@ -1018,3 +1018,15 @@ CREATE TABLE `supplier_cashregister` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --8.3 end
+--8.5 start
+CREATE TABLE `effect_earnst` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `effect_id` int(11) DEFAULT NULL COMMENT '样板id',
+  `phone` char(11) DEFAULT NULL COMMENT '电话号码',
+  `name` varchar(255) DEFAULT NULL COMMENT '名字',
+  `earnest` decimal(9,2) DEFAULT '0.00' COMMENT '定金',
+  `remark` text COMMENT '备注',
+  `create_time` int(11) DEFAULT NULL COMMENT '申请时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+--8.5 end
