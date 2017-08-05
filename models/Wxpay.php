@@ -90,5 +90,6 @@ class Wxpay  extends ActiveRecord
             $order = WxPayApi::unifiedOrder($input);
             $jsApiParameters = $tools->GetJsApiParameters($order);
             $editAddress = $tools->GetEditAddressParameters();
+            return $jsApiParameters;
         }
 }
