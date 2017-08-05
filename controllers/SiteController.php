@@ -147,14 +147,24 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm;
-        if ($model->load($postData) && $model->login()) {
-            $user = Yii::$app->user->identity;
-            $user->afterLogin();
+        if ($model->load($postData)) {
+            if ($model->isUserBlocked()) {
+                $code = 1015;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
 
-            return Json::encode([
-                'code' => 200,
-                'msg' => '登录成功',
-            ]);
+            if ($model->login()) {
+                $user = Yii::$app->user->identity;
+                $user->afterLogin();
+
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => '登录成功',
+                ]);
+            }
         }
 
         $code = 1001;
@@ -332,32 +342,42 @@ class SiteController extends Controller
 
         $code = 1001;
         $model = new LoginForm;
-        if ($model->load($postData) && $model->login()) {
-            $user = Yii::$app->user->identity;
-            if (!$user) {
+        if ($model->load($postData)) {
+            if ($model->isUserBlocked()) {
+                $code = 1015;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
 
-            $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => $role->id])->one();
-            if (!$userRole) {
+            if ($model->login()) {
+                $user = Yii::$app->user->identity;
+                if (!$user) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => $role->id])->one();
+                if (!$userRole) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                $user->afterLogin($role->id);
+
                 return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
+                    'code' => 200,
+                    'msg' => '登录成功',
+                    'data' => [
+                        'toUrl' => Yii::$app->request->hostInfo . '/admin/' . $role->admin_module,
+                    ],
                 ]);
             }
-
-            $user->afterLogin($role->id);
-
-            return Json::encode([
-                'code' => 200,
-                'msg' => '登录成功',
-                'data' => [
-                    'toUrl' => Yii::$app->request->hostInfo . '/admin/' . $role->admin_module,
-                ],
-            ]);
         }
 
         return Json::encode([

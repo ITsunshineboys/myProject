@@ -65,9 +65,14 @@ class User extends ActiveRecord implements IdentityInterface
     const FIELDS_IDENTITY_LHZZ_EXTRA = [
         'review_status',
         'review_time',
+        'status_operator',
     ];
     const STATUS_OFFLINE = 0; // 关闭
     const STATUS_ONLINE = 1; // 开启
+    const STATUSES = [
+        self::STATUS_OFFLINE => '关闭',
+        self::STATUS_ONLINE => '开启',
+    ];
     const FIELDS_USER_DETAILS_MODEL_LHZZ = [
         'icon',
         'nickname',
@@ -78,10 +83,12 @@ class User extends ActiveRecord implements IdentityInterface
         'mobile',
         'aite_cube_no',
         'create_time',
+        'deadtime',
     ];
     const FIELDS_USER_DETAILS_MODEL_LHZZ_EXTRA = [
         'old_nickname',
         'role_names',
+        'review_status',
     ];
     const SESSION_KEY_LOGIN_ORIGIN = 'session_key_login_origin';
     const LOGIN_ORIGIN_ADMIN = 'login_origin_admin';
@@ -909,6 +916,12 @@ class User extends ActiveRecord implements IdentityInterface
                 case 'role_names':
                     $extraData[$extraField] = UserRole::findRoleNamesByUserId($this->id);
                     break;
+                case 'status_operator':
+                    $userStatus = UserStatus::find()->where(['uid' => $this->id])->orderBy(['id' => SORT_DESC])->one();
+                    if ($userStatus) {
+                        $extraData[$extraField] = $userStatus->op_username;
+                    }
+                    break;
             }
         }
 
@@ -963,6 +976,11 @@ class User extends ActiveRecord implements IdentityInterface
 
         if (isset($data['create_time'])) {
             $data['create_time'] = date('Y-m-d H:i', $data['create_time']);
+        }
+
+        if (isset($data['deadtime'])) {
+            $data['status'] = self::STATUSES[$data['deadtime'] > 0 ? self::STATUS_OFFLINE : self::STATUS_ONLINE];
+            $data['deadtime'] = date('Y-m-d H:i', $data['deadtime']);
         }
     }
 
