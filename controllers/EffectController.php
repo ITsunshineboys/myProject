@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use app\models\Effect;
 use app\models\EffectEarnst;
+use app\models\StairsDetails;
 use app\services\AdminAuthService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
@@ -85,7 +86,18 @@ class EffectController extends Controller
             $effect->street = trim($request->post('street', ''), '');
             $effect->particulars = trim($request->post('particulars', ''), '');
             $effect->site_particulars = trim($request->post('site_particulars', ''), '');
-            $effect->stairway = trim($request->post('stairway', ''), '');
+           $stairway= $effect->stairway = trim($request->post('stairway', ''), '');
+
+
+            if($stairway=='1'){
+
+                 $stair_id=trim($request->post('stair_id',''),'');
+
+                $stairdetail=StairsDetails::findOne(['id'=>$stair_id])->toArray();
+
+                $effect->stairdetail=$stairdetail['attribute'];
+
+            }
 
             if($area>180){
 
@@ -100,6 +112,7 @@ class EffectController extends Controller
                     'msg' => '飘窗不能超过20',
                 ]);
             }
+
             if (!$effect->validate()) {
                 return json_encode([
                     'code' => $code,

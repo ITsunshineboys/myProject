@@ -528,6 +528,7 @@ CREATE TABLE `effect` (
   `site_particulars` varchar(100) DEFAULT NULL COMMENT '地址详情',
   `stairway` tinyint(5) DEFAULT '0' COMMENT '楼梯信息 0：无 1：有',
   `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
+  `stairdetail` varchar(100)  DEFAULT NULL COMMENT '楼梯材料',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1031,6 +1032,7 @@ CREATE TABLE `effect_earnst` (
   `create_time` int(11) DEFAULT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `assort_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
