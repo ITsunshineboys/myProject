@@ -595,6 +595,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function adminLogout()
     {
+        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN])) {
+            unset(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN]);
+        }
         $this->authKeyAdmin = '';
         $this->save();
     }
@@ -604,6 +607,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function logout()
     {
+        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])) {
+            unset(Yii::$app->session[self::LOGIN_ORIGIN_APP]);
+        }
         $this->authKey = '';
         $this->save();
     }
@@ -881,7 +887,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Check login by authentication key
+     * Check login
      *
      * @return bool
      */
@@ -889,17 +895,33 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->refresh();
 
-        if ($this->deadtime > 0 ||
-            (!$this->authKey && !$this->authKeyAdmin)
+        if ($this->deadtime > 0
+            || !$this->authKey
+            || empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])
         ) {
             return false;
         }
 
-        if (Yii::$app->session[self::SESSION_KEY_LOGIN_ORIGIN] == self::LOGIN_ORIGIN_ADMIN) { // from admin
-            return !empty($this->authKeyAdmin);
-        } else { // from app
-            return !empty($this->authKey);
+        return true;
+    }
+
+    /**
+     * Check admin login
+     *
+     * @return bool
+     */
+    public function checkAdminLogin()
+    {
+        $this->refresh();
+
+        if ($this->deadtime > 0
+            || !$this->authKeyAdmin
+            || empty(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN])
+        ) {
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -1203,9 +1225,9 @@ class User extends ActiveRecord implements IdentityInterface
         $sessionId = Yii::$app->session->id;
         if ($roleId) {
             $this->authKeyAdmin = $sessionId;
-            Yii::$app->session[self::SESSION_KEY_LOGIN_ORIGIN] = self::LOGIN_ORIGIN_ADMIN;
+            Yii::$app->session[self::LOGIN_ORIGIN_ADMIN] = $this->id;
         } else {
-            Yii::$app->session[self::SESSION_KEY_LOGIN_ORIGIN] = self::LOGIN_ORIGIN_APP;
+            Yii::$app->session[self::LOGIN_ORIGIN_APP] = $this->id;
             $this->authKey = $sessionId;
         }
 

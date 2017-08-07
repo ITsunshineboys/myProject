@@ -27,18 +27,20 @@ class SiteController extends Controller
      */
     const ACCESS_LOGGED_IN_USER = [
         'logout',
+        'admin-logout',
         'roles',
-        'reset-password',
         'roles-status',
         'time-types',
         'upload',
         'upload-delete',
         'review-statuses',
+        'reset-password',
         'reset-nickname',
         'reset-signature',
         'reset-gender',
         'reset-birthday',
         'reset-district',
+        'reset-icon',
         'user-view',
     ];
 
@@ -68,14 +70,16 @@ class SiteController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post',],
-                    'reset-password' => ['post',],
+                    'admin-logout' => ['post',],
                     'upload' => ['post',],
                     'upload-delete' => ['post',],
+                    'reset-password' => ['post',],
                     'reset-nickname' => ['post',],
                     'reset-signature' => ['post',],
                     'reset-gender' => ['post',],
                     'reset-birthday' => ['post',],
                     'reset-district' => ['post',],
+                    'reset-icon' => ['post',],
                 ],
             ],
         ];

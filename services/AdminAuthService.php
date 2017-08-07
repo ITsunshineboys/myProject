@@ -19,14 +19,17 @@ class AdminAuthService extends AccessControl
 
         $user = Yii::$app->user->identity;
 
-        if (!$user->checkLogin()
-            || (isset(Yii::$app->params['auth'][$action->id]) && !in_array($user->login_role_id, Yii::$app->params['auth'][$action->id]))
-        ) {
-            if ($this->denyCallback !== null) {
-                call_user_func($this->denyCallback, null, $action);
-            }
+        $path = Yii::$app->controller->id . '/' . $action->id;
+        if (isset(Yii::$app->params['auth'][$path])) {
+            if (!$user->checkAdminLogin()
+                || !in_array($user->login_role_id, Yii::$app->params['auth'][$path])
+            ) {
+                if ($this->denyCallback !== null) {
+                    call_user_func($this->denyCallback, null, $action);
+                }
 
-            return false;
+                return false;
+            }
         }
 
         return true;
