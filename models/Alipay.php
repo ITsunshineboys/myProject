@@ -58,6 +58,13 @@ class Alipay extends  ActiveRecord
 
     }
 
+       public function Alipaylinenotify(){
+        $config=(new AlipayConfig())->alipayconfig();
+        $alipaySevice = new AlipayTradeService($config);
+        return $alipaySevice;
+        }
+
+
 
 
 }
