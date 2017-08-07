@@ -336,6 +336,52 @@ class OrderController extends Controller
             ]);
         }
     }
+
+    /**
+     * 判断是否是微信登录
+     */
+    public function  actionIswxlogin(){
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        if (strpos($user_agent, 'MicroMessenger') === false) {
+            // 非微信浏览器禁止浏览
+            return Json::encode([
+                'code' => 201,
+                'msg' =>'非微信打开',
+            ]);
+        } else {
+            // 微信浏览器，允许访问
+
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'微信内打开',
+            ]);
+        }
+    }
+
+    /**
+     * 线下店商城支付宝支付提交订单
+     */
+    public function actionAlipaylinesubmit(){
+        $request=Yii::$app->request;
+        //商户订单号，商户网站订单系统中唯一订单号，必填
+
+            do {
+                $code=date('md',time()).'1'.rand(10000,99999);
+            } while ( $code==GoodsOrder::find()->select('order_no')->where(['order_no'=>$code])->asArray()->one()['order_no']);
+        $out_trade_no = $code;
+        $subject=trim(htmlspecialchars($request->post('goods_name')),' ');
+        //付款金额，必填
+        $total_amount =trim(htmlspecialchars($request->post('order_price')),' ');
+        $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
+        $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
+        $districtcode=trim(htmlspecialchars($request->post('districtcode')),' ');
+        $pay_name=trim(htmlspecialchars($request->post('pay_name')),' ');
+        $invoice_id=trim(htmlspecialchars($request->post('invoice_id')),' ');
+        //商品描述，可空
+        $body = trim(htmlspecialchars($request->post('body')),' ');
+        $model=new Alipay();
+        $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$districtcode,$pay_name,$invoice_id);
+    }
     /**
      * 快递查询类-物流跟踪接口
      *
@@ -729,7 +775,16 @@ class OrderController extends Controller
     public function actionJudegaddress(){
         $request=Yii::$app->request;
         $districtcode=trim(htmlspecialchars($request->post('districtcode','')),'');
-        $template_id=trim(htmlspecialchars($request->post('template_id','')),'');
+        $goods_id=trim(htmlspecialchars($request->post('goods_id','')),'');
+        if (!$districtcode || !$goods_id){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+        $template_id=Goods::find()->select('logistics_template_id')->where(['id'=>$goods_id])->asArray()->one()['logistics_template_id'];
         $model=new LogisticsDistrict();
         $data=$model->is_apply($districtcode,$template_id);
         if ($data==200){
@@ -744,7 +799,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
 
 
     /**
