@@ -392,7 +392,7 @@ class OrderController extends Controller
         $result = $alipaySevice->check($post);
         if($result){
             $res=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'      => $post
+                'content'      => $post['trade_no']
             ])->execute();//验证成功/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //            //请在这里加上商户的业务逻辑程序代
 //
