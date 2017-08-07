@@ -241,8 +241,7 @@ class QuoteController extends Controller
     public function actionMaterialAddInquire()
     {
         $post = \Yii::$app->request->post();
-        $data = '河沙';
-        $goods = Goods::newMaterialAdd(3,$data);
+        $goods = Goods::newMaterialAdd(3,$post);
         $goods_attr = GoodsAttr::findByGoodsId($goods['id']);
 
         return Json::encode([
@@ -571,12 +570,11 @@ class QuoteController extends Controller
      */
     public function actionAssortGoods()
     {
-        $goods_category = GoodsCategory::find()
-            ->select('title,path,id')
-            ->asArray()
-            ->all();
         return Json::encode([
-            'goods_category' =>$goods_category
+            'goods_category' => GoodsCategory::find()
+                ->select('title,path,id')
+                ->asArray()
+                ->all(),
         ]);
     }
 }
