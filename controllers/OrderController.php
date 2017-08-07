@@ -393,7 +393,7 @@ class OrderController extends Controller
         if($result){
             $content=json_encode($post);
             $res=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'      => $content,
+                'content'      => $post,
             ])->execute();//验证成功/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //            //请在这里加上商户的业务逻辑程序代
 //
