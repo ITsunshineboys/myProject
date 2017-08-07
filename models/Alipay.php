@@ -23,7 +23,7 @@ class Alipay extends  ActiveRecord
             $payRequestBuilder->setOutTradeNo($out_trade_no);
             $payRequestBuilder->setTotalAmount($total_amount);
             $payRequestBuilder->setTimeExpress($timeout_express);
-              $payRequestBuilder->setGoods_type(0);
+              $payRequestBuilder->setGoods_type(1);
         $payRequestBuilder->setGoods_id(1);
         $payRequestBuilder->setGoods_num(1);
         $payRequestBuilder->setDstrictcode(111);
