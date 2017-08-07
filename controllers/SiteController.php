@@ -710,6 +710,38 @@ class SiteController extends Controller
     }
 
     /**
+     * Reset icon action.
+     *
+     * @return string
+     */
+    public function actionResetIcon()
+    {
+        $code = 1000;
+
+        $icon = trim(Yii::$app->request->post('icon', ''));
+        if (!$icon) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = Yii::$app->user->identity;
+        $code = $user->resetIcon($icon);
+        if (200 != $code) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '修改头像成功',
+        ]);
+    }
+
+    /**
      * Get validation code action.
      *
      * @return string

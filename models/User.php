@@ -606,7 +606,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Reset nickname action
+     * Reset nickname
      *
      * @param string $nickname nickname
      * @return int
@@ -639,7 +639,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Reset signature action
+     * Reset signature
      *
      * @param string $signature nickname
      * @return int
@@ -667,7 +667,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Reset district action
+     * Reset district
      *
      * @param string $districtCode district code
      * @return int
@@ -697,7 +697,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Reset birthday action
+     * Reset birthday
      *
      * @param string $birthday birthday
      * @return int
@@ -725,7 +725,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Reset gender action
+     * Reset gender
      *
      * @param string $gender gender
      * @return int
@@ -743,6 +743,29 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         $this->gender = $gender;
+        if (!$this->save()) {
+            $code = 500;
+            return $code;
+        }
+
+        $code = 200;
+        return $code;
+    }
+
+    /**
+     * Reset icon
+     *
+     * @param string $icon icon
+     * @return int
+     */
+    public function resetIcon($icon)
+    {
+        if ($this->icon == $icon) {
+            $code = 200;
+            return $code;
+        }
+
+        $this->icon = $icon;
         if (!$this->save()) {
             $code = 500;
             return $code;
