@@ -123,7 +123,7 @@ class EffectController extends Controller
                 return json_encode([
                     'code' => 200,
                     'msg' => '样板间添加成功!',
-                    'data' => $effect->toArray()
+                    
                 ]);
             }
 
