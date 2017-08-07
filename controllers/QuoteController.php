@@ -8,7 +8,6 @@
 namespace app\controllers;
 use app\models\AssortGoods;
 use app\models\DecorationAdd;
-use app\models\DecorationList;
 use app\models\DecorationParticulars;
 use app\models\Effect;
 use app\models\EffectPicture;
@@ -20,7 +19,6 @@ use app\models\LaborCost;
 use app\models\Series;
 use app\models\Style;
 use app\services\ExceptionHandleService;
-use app\services\SmValidationService;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -184,21 +182,21 @@ class QuoteController extends Controller
         $_labor_cost = $labor_cost->findOne($post['id']);
         $_labor_cost->univalence = $post['univalence'];
         $_labor_cost->quantity = $post['points'];
-            if (!$_labor_cost->validate())
-            {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        if (!$_labor_cost->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
-            if (!$_labor_cost->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        if (!$_labor_cost->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
     }
 
     /**
