@@ -425,7 +425,7 @@ CREATE TABLE `goods_order` (
   `supplier_id` int(10) unsigned NOT NULL DEFAULT '0',
   `address_id` int(11) NOT NULL COMMENT '收货地址号',
   `invoice_id` int(11) NOT NULL COMMENT '发票信息',
-  `pay_status` tinyint(1) NOT NULL COMMENT 'pay_status：0：未付款 1：已付款',
+  `pay_status` tinyint(1) NOT NULL COMMENT 'pay_status：0：未付款 1：已付款 2：已退款',
   `user_id` int(11) NOT NULL,
   `pay_name` varchar(120) NOT NULL,
   `create_time` int(11) NOT NULL DEFAULT '0',
