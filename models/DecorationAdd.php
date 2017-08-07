@@ -71,12 +71,12 @@ class DecorationAdd extends ActiveRecord
     {
         if ($str && $all_series)
         {
-            $add = self::find()
+            return self::find()
                 ->asArray()
                 ->where(['and',['project'=>$str],['district_code'=>$city],['series_id'=>$all_series]])
                 ->all();
         }
-        return $add;
+
     }
 
     /**
@@ -90,12 +90,12 @@ class DecorationAdd extends ActiveRecord
     {
         if ($str && $all_style)
         {
-            $add = self::find()
+            return self::find()
                 ->asArray()
                 ->where(['and',['project'=>$str],['district_code'=>$city],['style_id'=>$all_style]])
                 ->all();
         }
-        return $add;
+
     }
 
     /**
