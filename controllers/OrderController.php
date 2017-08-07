@@ -139,6 +139,33 @@ class OrderController extends Controller
     }
 
     /**
+     * 获取省份
+     * @return string
+     */
+    public function actionGetprovince(){
+        $data=Yii::$app->params['districts'];
+        return Json::encode($data[0][86]);
+    }
+
+    /**
+     * 获取城市
+     * @return string
+     */
+    public  function  actionGetcity(){
+        $request=Yii::$app->request;
+        $code=trim(htmlspecialchars($request->post('code','')),'');
+        if (!$code){
+            $c=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$c]
+            ]);
+        }
+        $data=Yii::$app->params['districts'];
+        return Json::encode($data[0][$code]);
+    }
+
+    /**
      * 无登录app-添加收货地址
      * @return string
      */
@@ -148,20 +175,15 @@ class OrderController extends Controller
         if ($request->isPost) {
             $consignee = trim($request->post('consignee',''),'');
             $mobile= trim($request->post('mobile',''),'');
-            $district=trim($request->post('district',''),'');
-            $province=trim($request->post('province',''),'');
-            $city=trim($request->post('city',''),'');
+            $districtcode=trim($request->post('districtcode',''),'');
             $region=trim($request->post('region',''));
-            if (!$consignee || !$mobile || !$district || !$province || !$city || !$region ) {
+            if (!$districtcode || !$region  || !$mobile || !$consignee ) {
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }else{
-                $model=new LogisticsDistrict();
-                $arr=$model->getdistrictcode($province,$city,$district);
-                $districtcode=$arr['districtcode'];
                 $Addressadd = new Addressadd();
                 $res=$Addressadd->insertaddress($mobile,$consignee,$region,$districtcode);
                 if ($res==true){
@@ -221,11 +243,23 @@ class OrderController extends Controller
     public function actionOrderinvoicelineadd(){
         $request = \Yii::$app->request->post();
         $invoice_type        = trim(htmlspecialchars($request['invoice_type']),' ');
-        $invoice_header_type = trim(htmlspecialchars($request['invoice_header_type']),' ');
+        $invoice_header_type = 1;
         $invoice_header      = trim(htmlspecialchars($request['invoice_header']),' ');
         $invoice_content     = trim(htmlspecialchars($request['invoice_content']),' ');
+        $invoicer_card = trim(htmlspecialchars($request['invoicer_card']),' ');
+        if (!empty($invoicer_card)){
+            $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
+            if ($isMatched==false){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
         $model = new Invoice();
-        $res=$model->addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content);
+        $res=$model->addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
         if ($res['code']==200){
             return Json::encode([
                 'code' => 200,
@@ -247,15 +281,20 @@ class OrderController extends Controller
      * @return string
      */
     public function actionGetgoodsdata(){
-
         $request = Yii::$app->request;
         if ($request->isPost) {
             $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
             $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
-            $goods_attr=trim(htmlspecialchars($request->post('goods_attr')),' ');
             $model=new GoodsOrder();
-            $data=$model->getlinegoodsdata($goods_id,$goods_num,$goods_attr);
-//            var_dump($data);exit;
+            $data=$model->getlinegoodsdata($goods_id,$goods_num);
+            if (!$goods_id || !$goods_num){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
             if ($data){
                 return Json::encode([
                     'code' => 200,
@@ -271,7 +310,6 @@ class OrderController extends Controller
                 'data' => null
             ]);
         }
-
     }
     /**
      * 无登录app-获取发票信息
@@ -706,34 +744,7 @@ class OrderController extends Controller
             ]);
         }
     }
-    /**
-     *提交订单-线下店商城-微信支付
-     */
-    public function  actionLineplaceorder(){
-        $request=Yii::$app->request;
-        $address_id=trim(htmlspecialchars($request->post('address_id','')),'');
-        $invoice_id=trim(htmlspecialchars($request->post('invoice_id','')),'');
-        $goods_id=1;
-//        $goods_id=trim(htmlspecialchars($request->post('goods_id','')),'');
-        $goods_num=trim(htmlspecialchars($request->post('goods_id','')),'');
-        $goods_attr=trim(htmlspecialchars($request->post('goods_attr','')),'');
-        $paymentmethod=trim(htmlspecialchars($request->post('paymentmethod','')),'');
-        $goods_price=trim(htmlspecialchars($request->post('paymentmethod','')),'');
-        $orders=array(
-            'address_id'=>$address_id,
-            'invoice_id'=>$invoice_id,
-            'goods_id'=>$goods_id,
-            'goods_num'=>$goods_num,
-            'goods_attr'=>$goods_attr,
-            'paymentmethod'=>$paymentmethod,
-            'goods_price'=>$goods_price
-        );
-//        $goods=Goods::find()->select('title,subtitle')->where(['id' =>$goods_id])->one();
-//        $invoice=Invoice::find()->select('')->where(['id' =>$goods_id])->one();
-        $local=$_SERVER['SERVER_NAME'];
-        $model=new Wxpay();
-        $model->Wxlineapipay($orders,$local);
-    }
+
 
 
     /**
@@ -1317,32 +1328,7 @@ class OrderController extends Controller
         $a=rand(10000,99999);
         echo $a;
     }
-    /**
-     * 获取省份
-     * @return string
-     */
-    public function actionGetprovince(){
-        $data=Yii::$app->params['districts'];
-        return Json::encode([$data[0][86]]);
-    }
 
-    /**
-     * 获取城市
-     * @return string
-     */
-    public  function  actionGetcity(){
-        $request=Yii::$app->request;
-        $code=trim(htmlspecialchars($request->post('code','')),'');
-        if (!$code){
-            $c=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$c]
-            ]);
-        }
-        $data=Yii::$app->params['districts'];
-        return Json::encode([$data[0][$code]]);
-    }
 
     /**
      * 测试支付宝
@@ -1364,13 +1350,39 @@ class OrderController extends Controller
         $res=$model->Alipay($out_trade_no,$subject,$total_amount,$body);
     }
 
+    /**
+     *提交订单-线下店商城-微信支付
+     */
+    public function  actionLineplaceorder(){
+        $request=Yii::$app->request;
+        $address_id=trim(htmlspecialchars($request->post('address_id','')),'');
+        $invoice_id=trim(htmlspecialchars($request->post('invoice_id','')),'');
+        $goods_id=1;
+//        $goods_id=trim(htmlspecialchars($request->post('goods_id','')),'');
+        $goods_num=trim(htmlspecialchars($request->post('goods_id','')),'');
+        $goods_attr=trim(htmlspecialchars($request->post('goods_attr','')),'');
+        $paymentmethod=trim(htmlspecialchars($request->post('paymentmethod','')),'');
+        $goods_price=trim(htmlspecialchars($request->post('paymentmethod','')),'');
+        $orders=array(
+            'address_id'=>$address_id,
+            'invoice_id'=>$invoice_id,
+            'goods_id'=>$goods_id,
+            'goods_num'=>$goods_num,
+            'goods_attr'=>$goods_attr,
+            'paymentmethod'=>$paymentmethod,
+            'goods_price'=>$goods_price
+        );
+//        $goods=Goods::find()->select('title,subtitle')->where(['id' =>$goods_id])->one();
+//        $invoice=Invoice::find()->select('')->where(['id' =>$goods_id])->one();
+        $local=$_SERVER['SERVER_NAME'];
+        $model=new Wxpay();
+        $model->Wxlineapipay($orders,$local);
+    }
+
     public function actionTestwxpay(){
         $model=new Wxpay();
         $res=$model->Wxpay();
         echo $res;
-
-
-        
     }
 
 
