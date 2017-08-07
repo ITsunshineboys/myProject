@@ -507,11 +507,9 @@ class User extends ActiveRecord implements IdentityInterface
                 $userRole = UserRole::find()
                     ->where(['user_id' => $row->id, 'role_id' => Yii::$app->params['ownerRoleId']])
                     ->one();
-                if ($userRole) {
-                    $detail['review_status' . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
-                } else {
-                    $detail['review_status' . ModelService::SUFFIX_FIELD_DESCRIPTION] = '';
-                }
+                $reviewStatus = $userRole ? $userRole->review_status : Role::AUTHENTICATION_STATUS_NO_APPLICATION;
+                $detail['review_status'] = $reviewStatus;
+                $detail['review_status' . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$reviewStatus];
             }
 
             if (in_array('status_operator', $selectOld)) {
@@ -530,6 +528,11 @@ class User extends ActiveRecord implements IdentityInterface
                 } else {
                     $detail['status_remark'] = '';
                 }
+            }
+
+            if (isset($row['deadtime'])) {
+                $detail['status'] = self::STATUSES[$row['deadtime'] > 0 ? self::STATUS_OFFLINE : self::STATUS_ONLINE];
+                $row['deadtime'] = date('Y-m-d H:i', $row['deadtime']);
             }
 
             $detail = array_merge(array_filter($row->getAttributes()), $detail);
