@@ -22,7 +22,12 @@ class Alipay extends  ActiveRecord
             $payRequestBuilder->setOutTradeNo($out_trade_no);
             $payRequestBuilder->setTotalAmount($total_amount);
             $payRequestBuilder->setTimeExpress($timeout_express);
-            $payRequestBuilder->setGoods_type(0);
+              $payRequestBuilder->setGoods_type(0);
+        $payRequestBuilder->setGoods_id(1);
+        $payRequestBuilder->setGoods_num(1);
+        $payRequestBuilder->setDstrictcode(111);
+        $payRequestBuilder->setPay_name(支付宝);
+        $payRequestBuilder->setInvoice_id(1);
             $payResponse = new AlipayTradeService($config);
             $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
             return ;
