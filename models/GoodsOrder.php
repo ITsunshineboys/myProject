@@ -80,7 +80,7 @@ class GoodsOrder extends ActiveRecord
             }else{
                 $array['freight']=$logistics_template['delivery_cost_default']*0.01*$logistics_template['delivery_number_default']+$logistics_template['delivery_cost_delta']*0.01*$logistics_template['delivery_number_delta'];
             }
-            $array['cover_image']=$_SERVER['HTTP_HOST'].'/'.$array['cover_image'];
+            $array['cover_image']=$_SERVER['PHP_SELF'].'/'.$array['cover_image'];
             $array['goods_num']=$goods_num;
             $array['present_price']=$goods_num*0.01*$array['platform_price'];
             $array['original_price']=$goods_num*0.01*$array['platform_price'];
