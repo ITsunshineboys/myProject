@@ -4858,8 +4858,7 @@ class MallController extends Controller
         $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
 
         if ($orderBy === false) {
-            
-             = 1000;
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
