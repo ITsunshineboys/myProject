@@ -1044,4 +1044,12 @@ CREATE TABLE `assort_goods` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 --8.5 end
 
+--8.7  start
+CREATE TABLE `test` (
+  `id` int(11) NOT NULL,
+  `content` varchar(3000) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+--8.7  end
+
 
