@@ -12,10 +12,15 @@ use yii\db\ActiveRecord;
 use yii\data\Pagination;
 use app\models\LogisticsDistrict;
 use app\services\StringService;
+use app\services\SmValidationService;
 
-
+const  SUP_BANK_CARD='supplier_bankinformation';
+const  SUPPLIER='supplier';
+const  SUP_FREELIST='supplier_freezelist';
+const  SUP_CASHREGISTER='supplier_cashregister';
 class GoodsOrder extends ActiveRecord
 {
+
     public $goods_id;
     /**
          * @return string 返回该AR类关联的数据表名
@@ -67,17 +72,15 @@ class GoodsOrder extends ActiveRecord
      * @param $goods_attr
      * @return array|bool
      */
-    public  function Getlinegoodsdata($goods_id, $goods_num, $goods_attr){
-            $query=new \yii\db\Query();
-            $array  = $query->from('goods AS a')->select('a.supplier_id,a.title,a.subtitle,b.nickname,c.name,a.market_price,a.logistics_template_id,a.platform_price,a.cover_image,b.icon,c.name,a.is_unusual')->leftJoin('supplier AS b', 'b.id = a.supplier_id')->leftJoin('goods_brand AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])->one();
+    public  function Getlinegoodsdata($goods_id, $goods_num){
+            $array  =(new \yii\db\Query())->from('goods AS a')->select('a.supplier_id,a.title,a.subtitle,b.nickname,c.name,a.logistics_template_id,a.platform_price,a.cover_image,b.icon,c.name,a.sku')->leftJoin('supplier AS b', 'b.id = a.supplier_id')->leftJoin('goods_brand AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])->one();
                 $logistics_template=(new \yii\db\Query())->from('logistics_template')->select('supplier_id,delivery_method,delivery_cost_default,delivery_number_default,delivery_cost_delta,delivery_number_delta,status')->where(['status'=>1,'id'=>$array['logistics_template_id']])->one();
             if ($logistics_template['delivery_method']==1){
                 $array['freight']=0;
             }else{
                 $array['freight']=$logistics_template['delivery_cost_default']*0.01*$logistics_template['delivery_number_default']+$logistics_template['delivery_cost_delta']*0.01*$logistics_template['delivery_number_delta'];
             }
-            $array['cover_image']=$_SERVER['SERVER_NAME'].'/'.$array['cover_image'];
-            $array['goods_attr']=$goods_attr;
+            $array['cover_image']=$_SERVER['REMOTE_ADDR'].'/'.$array['cover_image'];
             $array['goods_num']=$goods_num;
             $array['present_price']=$goods_num*0.01*$array['platform_price'];
             $array['original_price']=$goods_num*0.01*$array['platform_price'];
@@ -389,10 +392,29 @@ class GoodsOrder extends ActiveRecord
     /**
      * 获取商家后台全部订单
      * @param $supplier_id
-     * @return mixed
+     * @param $pagesize
+     * @param $page
+     * @param $time_id
+     * @param $time_start
+     * @param $time_end
+     * @param $blend
+     * @return array
      */
-    public function Businessgetallorderlist($supplier_id,$pagesize){
-        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id]);
+    public function Businessgetallorderlist($supplier_id,$pagesize,$page,$time_id,$time_start,$time_end,$blend){
+        if ($blend==0){
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id]);
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
+            }
+        }else{
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id])->andwhere($this->ordercondition($blend));
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
+            }
+        }
+//        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id]);
         $count = $array->count();
         $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $pagesize,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)
@@ -415,14 +437,8 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['handle']='售后处理';
             }
         }
-        $totalpage=ceil($count/$pagesize);
-        $sd=array(
-            'orderlist'=>$arr,
-            'totalpage'=>$totalpage,
-            'count'=>$count,
-            'page'=>$pagination->getPage()
-        );
-        return $sd;
+        $data=$this->page($count,$pagesize,$page,$arr);
+        return $data;
     }
 
 
@@ -432,15 +448,27 @@ class GoodsOrder extends ActiveRecord
      * @param $pagesize
      * @return array
      */
-    public function Businessgetunpaidorder($supplier_id,$pagesize){
-        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0]);
+    public function Businessgetunpaidorder($supplier_id,$pagesize,$page,$time_id,$time_start,$time_end,$blend){
+        if ($blend==0){
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0]);
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
+            }
+
+        }else{
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0])->andwhere($this->ordercondition($blend));
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
+            }
+        }
+//        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0]);
         $count=$array->count();
         $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$pagesize,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-
-
         $arr=$this->getorderstatus($data);
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
@@ -458,24 +486,32 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['handle']='售后处理';
             }
         }
-        $totalpage=ceil($count/$pagesize);
-        $sd=array(
-            'orderlist'=>$arr,
-            'totalpage'=>$totalpage,
-            'count'=>$count
-            );
-        return $sd;
+        $data=$this->page($count,$pagesize,$page,$arr);
+        return $data;
     }
 
     /**
-     *
      * 获取商家后台未发货订单
      * @param $supplier_id
      * @param $pagesize
      * @return array
      */
-    public  function Businessgetnotshippedorder($supplier_id,$pagesize){
-        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
+    public  function Businessgetnotshippedorder($supplier_id,$pagesize,$page,$time_id,$time_start,$time_end,$blend){
+        if ($blend==0){
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
+            }
+
+        }else{
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0])->andwhere($this->ordercondition($blend));
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
+            }
+        }
+//        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
         $count=$array->count();
         $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$pagesize,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)
@@ -498,13 +534,8 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['handle']='售后处理';
             }
         }
-        $totalpage=ceil($count/$pagesize);
-        $sd=array(
-            'orderlist'=>$arr,
-            'totalpage'=>$totalpage,
-            'count'=>$count
-        );
-        return $sd;
+        $data=$this->page($count,$pagesize,$page,$arr);
+        return $data;
     }
 
 
@@ -514,8 +545,22 @@ class GoodsOrder extends ActiveRecord
      * @param $pagesize
      * @return array
      */
-    public function  Businessgetnotreceivedorder($supplier_id,$pagesize){
-        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
+    public function  Businessgetnotreceivedorder($supplier_id,$pagesize,$page,$time_id,$time_start,$time_end,$blend){
+        if ($blend==0){
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
+            }
+
+        }else{
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1])->andwhere($this->ordercondition($blend));
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
+            }
+        }
+//        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
         $count=$array->count();
         $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$pagesize,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)
@@ -538,13 +583,8 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['handle']='售后处理';
             }
         }
-        $totalpage=ceil($count/$pagesize);
-        $sd=array(
-            'orderlist'=>$arr,
-            'totalpage'=>$totalpage,
-            'count'=>$count
-        );
-        return $sd;
+        $data=$this->page($count,$pagesize,$page,$arr);
+        return $data;
     }
 
 
@@ -556,8 +596,22 @@ class GoodsOrder extends ActiveRecord
      * @return array
      *
      */
-    public function Businessgetcompletedorder($supplier_id,$pagesize){
-        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
+    public function Businessgetcompletedorder($supplier_id,$pagesize,$page,$time_id,$time_start,$time_end,$blend){
+        if ($blend==0){
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
+            }
+
+        }else{
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0])->andwhere($this->ordercondition($blend));
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
+            }
+        }
+//        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
         $count=$array->count();
         $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$pagesize,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)
@@ -580,13 +634,8 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['handle']='售后处理';
             }
         }
-        $totalpage=ceil($count/$pagesize);
-        $sd=array(
-            'orderlist'=>$arr,
-            'totalpage'=>$totalpage,
-            'count'=>$count
-        );
-        return $sd;
+        $data=$this->page($count,$pagesize,$page,$arr);
+        return $data;
     }
 
 
@@ -596,8 +645,21 @@ class GoodsOrder extends ActiveRecord
      * @param $pagesize
      * @return array
      */
-    public function Businessgetcanceledorder($supplier_id,$pagesize){
-        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2]);
+    public function Businessgetcanceledorder($supplier_id,$pagesize,$page,$time_id,$time_start,$time_end,$blend){
+        if ($blend==0){
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2]);
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
+            }
+        }else{
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2])->andwhere($this->ordercondition($blend));
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
+            }
+        }
+//        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2]);
         $count=$array->count();
         $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$pagesize,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)
@@ -620,13 +682,8 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['handle']='售后处理';
             }
         }
-        $totalpage=ceil($count/$pagesize);
-        $sd=array(
-            'orderlist'=>$arr,
-            'totalpage'=>$totalpage,
-            'count'=>$count
-        );
-        return $sd;
+        $data=$this->page($count,$pagesize,$page,$arr);
+        return $data;
     }
 
 
@@ -636,8 +693,21 @@ class GoodsOrder extends ActiveRecord
      * @param $pagesize
      * @return array
      */
-    public function  Businessgetcustomerserviceorder($supplier_id,$pagesize){
-        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0');
+    public function  Businessgetcustomerserviceorder($supplier_id,$pagesize,$page,$time_id,$time_start,$time_end,$blend){
+        if ($blend==0){
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0');
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0')->andwhere($this->Timehandle($time_id,$time_start,$time_end));
+            }
+        }else{
+            if ($time_id==0){
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0')->andwhere($this->ordercondition($blend));
+            }else{
+                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0')->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
+            }
+        }
+//        $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id')->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0');
         $count=$array->count();
         $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$pagesize,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)
@@ -660,13 +730,8 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['handle']='售后处理';
             }
         }
-        $totalpage=ceil($count/$pagesize);
-        $sd=array(
-            'orderlist'=>$arr,
-            'totalpage'=>$totalpage,
-            'count'=>$count
-        );
-        return $sd;
+        $data=$this->page($count,$pagesize,$page,$arr);
+        return $data;
     }
 
 
@@ -677,7 +742,7 @@ class GoodsOrder extends ActiveRecord
      * @return array|null|ActiveRecord
      */
     public function Getorderinformation($order_id,$goodsid){
-        $array=$this->getorderlist()->leftJoin('express AS b','b.order_no =a.order_no and b.sku=z.sku')->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.order_id')->where(['a.id'=>$order_id,'z.goods_id'=>$goodsid])->all();
+        $array=$this->getorderlist()->leftJoin('express AS b','b.order_no =a.order_no and b.sku=z.sku')->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.order_id,z.goods_price')->where(['a.id'=>$order_id,'z.goods_id'=>$goodsid])->all();
         $arr=$this->getorderstatus($array);
         $output=array();
         $goods_num=0;
@@ -735,6 +800,15 @@ class GoodsOrder extends ActiveRecord
     }
 
 
+    /**
+     * 获取商品信息
+     * @param $goods_name
+     * @param $goods_id
+     * @param $goods_attr_id
+     * @param $order_no
+     * @param $sku
+     * @return array
+     */
     public function Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
         $goods=array();
 
@@ -750,6 +824,203 @@ class GoodsOrder extends ActiveRecord
 
         return $goods;
     }
+
+//    /**
+//     * 添加银行卡-商家
+//     * @param $supplier_id
+//     * @param $bankname
+//     * @param $bankcard
+//     * @param $username
+//     * @param $position
+//     * @param $bankbranch
+//     * @return bool|int
+//     */
+//    public function Bankcardadd($supplier_id,$bankname,$bankcard,$username,$position,$bankbranch){
+//        //查询
+//        $data=$this->GetBankcard($supplier_id);
+//        if ($data){
+//            return false;
+//        }else{
+//            $time=time();
+//            $res=Yii::$app->db->createCommand()->insert(SUP_BANK_CARD,[
+//                'supplier_id'=>$supplier_id,
+//                'bankname'   =>$bankname,
+//                'bankcard'   =>$bankcard,
+//                'username'   =>$username,
+//                'position'   =>$position,
+//                'bankbranch' =>$bankbranch,
+//                'create_time'=>$time
+//            ])->execute();
+//            return $res;
+//        }
+//    }
+//
+//    /**
+//     * 查询银行卡
+//     * @param $supplier_id
+//     * @return array|null
+//     */
+//    public function Getbankcardinformation($supplier_id){
+//        $data=$this->GetBankcard($supplier_id);
+//        if ($data){
+//            return $data;
+//        }else{
+//            return null;
+//        }
+//    }
+//
+//    /**
+//     * 修改银行卡信息
+//     * @param $supplier_id
+//     * @param $bankname
+//     * @param $bankcard
+//     * @param $username
+//     * @param $position
+//     * @param $bankbranch
+//     * @return bool|int
+//     */
+//    public function Bankcardupdate($supplier_id,$bankname,$bankcard,$username,$position,$bankbranch)
+//    {
+//                //查询
+//                $data=$this->GetBankcard($supplier_id);
+//                if ($data){
+//                    $res=Yii::$app->db->createCommand()->update(SUP_BANK_CARD, ['bankname'   =>$bankname, 'bankcard'   =>$bankcard, 'username'   =>$username, 'position'   =>$position, 'bankbranch' =>$bankbranch],'supplier_id='.$supplier_id)->execute();
+//                    return $res;
+//                }else{
+//                    return false;
+//                }
+//    }
+//
+//    /**
+//     * 商家后台，获取商家余额，可用余额
+//     * @param $supplier_id
+//     * @return array|null
+//     */
+//    public function Getbalance($supplier_id){
+//        $data=(new \yii\db\Query())->from(SUPPLIER.' as a')->leftJoin(SUP_FREELIST.' as b','a.id=b.supplier_id')->select('a.type_shop,a.status,a.shop_no,a.balance,a.availableamount,b.freeze_money')->where(['a.id'=>$supplier_id])->all();
+//        if (!$data){
+//            return null;
+//        }
+//        $output=array();
+//        $a=0;
+//        foreach($data AS $k=>$v){
+//            $a+= $data[$k]['freeze_money'];
+//            $output['balance']=$data[$k]['freeze_money']*0.01;
+//            $output['availableamount']=$data[$k]['availableamount']*0.01;
+//        }
+//        $user = Yii::$app->user->identity;
+//        $cashregister=(new \yii\db\Query())->from(SUP_CASHREGISTER)->select('cash_money')->where(['supplier_id'=>$supplier_id,'status'=>3])->all();
+//        $cash_money=0;
+//        foreach ($cashregister AS $k=>$v){
+//            $cash_money+=$cashregister[$k]['cash_money'];
+//        }
+//        $output['cash_money']=$cash_money*0.01;
+//        $output['freeze_money']=$a*0.01;
+//        return $output;
+//    }
+//
+//
+//    /**
+//     * 验证是否设置支付密码
+//     * @param $supplier_id
+//     * @return int
+//     */
+//    public function Issetpaypsw($supplier_id){
+//        $data=(new \yii\db\Query())->from(SUPPLIER)->select('pay_password')->where(['id'=>$supplier_id])->one();
+//        if ($data['pay_password']){
+//            return 1;
+//        }else{
+//            return 2;
+//        }
+//    }
+//
+//
+//    /**
+//     * @param $psw
+//     * @param $supplier_id
+//     * @return bool
+//     */
+//    public function  Setpaypsw($psw,$supplier_id){
+//
+//      $res=Yii::$app->db->createCommand()->update(SUPPLIER, ['pay_password' =>$psw],'id='.$supplier_id)->execute();
+//       if($res){
+//           return true;
+//       }else{
+//           return false;
+//       }
+//    }
+//
+//
+//    /**
+//     * 商家重设支付密码-不是第一次
+//     * 1:成功  2：用户不存在 3：失败 4：短信验证失败
+//     * @param $psw
+//     * @param $supplier_id
+//     * @param $code
+//     * @return int
+//     */
+//    public function  Setpaypsw_sup_reset($psw,$supplier_id,$code){
+//        $user = Yii::$app->user->identity;
+//        if (!$user){
+//           return 2;
+//        }
+//        $mobile=user::find()->select('mobile')->where(['id'=>$user->id])->one()['mobile'];
+//        //验证短信验证码是否正确
+//        $re=SmValidationService::validCode($mobile,$code);
+//        if ($re==true){
+//            $res=Yii::$app->db->createCommand()->update(SUPPLIER, ['pay_password' =>$psw],'id='.$supplier_id)->execute();
+//            if($res){
+//                return 1;
+//            }else{
+//                return 3;
+//            }
+//        }else{
+//            return 4;
+//        }
+//    }
+//
+//    /**
+//     * 商家提现申请
+//     * @param $money
+//     * @return bool
+//     */
+//    public function Supplierwithdrawalsapply($money){
+//        $user = Yii::$app->user->identity;
+//        $supplier=Supplier::find()->select('id,shop_no,availableamount')->where(['uid' => $user->id])->one();
+//        $supplier_id=$supplier['id'];
+//        $time=time();
+//        $month=date('m',$time);
+//        $day=date('d',$time);
+//        $rand=rand(10000,99999);
+//        $transaction_no=$month.$day.$supplier['shop_no'].$rand;
+//        $res=Yii::$app->db->createCommand()->insert(SUP_CASHREGISTER,[
+//            'supplier_id'=>$supplier_id,
+//            'cash_money'=>$money*100,
+//            'status'    =>1,
+//            'transaction_no'=>$transaction_no,
+//            'apply_time'=>$time
+//        ])->execute();
+//        $availableamount=$supplier['availableamount']-$money*100;
+//        if ($availableamount<0){
+//            return false;
+//        }
+//        $re=Yii::$app->db->createCommand()->update(SUPPLIER, ['availableamount'=>$availableamount],'id='.$supplier_id)->execute();
+//        if ($res && $re){
+//            return true;
+//        }else{
+//            return false;
+//        }
+//    }
+
+//    /**
+//     * 查询银行卡信息
+//     * @param $supplier_id
+//     * @return array
+//     */
+//    private function GetBankcard($supplier_id){
+//        $data=(new \yii\db\Query())->from(SUP_BANK_CARD)->where(['supplier_id'=>$supplier_id])->one();
+//        return $data;
+//    }
     /**
      * 获取后台订单状态
      * @param $data
@@ -851,6 +1122,8 @@ class GoodsOrder extends ActiveRecord
     }
 
 
+
+
     private  function Timehandle($time_id,$time_start,$time_end){
         if ($time_id==0){
            return null;
@@ -884,7 +1157,6 @@ class GoodsOrder extends ActiveRecord
             $data="z.goods_name='".$blend."'";
             return $data;
         }
-
     }
 
 
