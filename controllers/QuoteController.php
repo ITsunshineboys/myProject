@@ -6,6 +6,7 @@
  * Time: 上午 11:48
  */
 namespace app\controllers;
+use app\models\AssortGoods;
 use app\models\DecorationAdd;
 use app\models\DecorationList;
 use app\models\DecorationParticulars;
@@ -576,5 +577,29 @@ class QuoteController extends Controller
                 ->asArray()
                 ->all(),
         ]);
+    }
+
+    /**
+     * add assort goods administration
+     * @return string
+     */
+    public function actionAssortGoodsAdd()
+    {
+        $post = \Yii::$app->request->post();
+        $assort = (new AssortGoods())->add($post);
+        if ($assort){
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }else{
+            $code=1051;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
     }
 }
