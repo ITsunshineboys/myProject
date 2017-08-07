@@ -122,6 +122,7 @@ class MallController extends Controller
         'user-enable-batch',
         'user-view-lhzz',
         'reset-user-status-logs',
+        'user-list',
     ];
 
     /**
@@ -3984,9 +3985,8 @@ class MallController extends Controller
             ->select('series,creation_time,status')
             ->All();
         $all = [];
-        foreach ($series as $one_series)
-        {
-            $one_series['creation_time'] = date('Y-m-d H:i',$one_series['creation_time']);
+        foreach ($series as $one_series) {
+            $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);
             $all [] = $one_series;
         }
         return Json::encode([
@@ -4097,9 +4097,8 @@ class MallController extends Controller
             ->select('style,creation_time,status')
             ->All();
         $all = [];
-        foreach ($style as $one_style)
-        {
-            $one_style['creation_time'] = date('Y-m-d H:i',$one_style['creation_time']);
+        foreach ($style as $one_style) {
+            $one_style['creation_time'] = date('Y-m-d H:i', $one_style['creation_time']);
             $all [] = $one_style;
         }
         return Json::encode([
@@ -4789,6 +4788,88 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'reset_user_status_logs' => UserStatus::pagination([], UserStatus::FIELDS_STATUS_LOGS, $page, $size, $orderBy)
+            ],
+        ]);
+    }
+
+    /**
+     * User list action.
+     *
+     * @return string
+     */
+    public function actionUserList()
+    {
+        $code = 1000;
+
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $status = (int)(Yii::$app->request->get('status', 0));
+        if (!in_array($status, array_keys(User::STATUSES))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = $status == User::STATUS_ONLINE ? 'deadtime = 0' : 'deadtime > 0';
+
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        if (!$keyword) {
+            if ($timeType == 'custom') {
+                $startTime = trim(Yii::$app->request->get('start_time', ''));
+                $endTime = trim(Yii::$app->request->get('end_time', ''));
+
+                if (($startTime && !StringService::checkDate($startTime))
+                    || ($endTime && !StringService::checkDate($endTime))
+                ) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                $endTime && $endTime .= ' 23:59:59';
+            } else {
+                list($startTime, $endTime) = StringService::startEndDate($timeType);
+            }
+
+            if ($startTime) {
+                $startTime = strtotime($startTime);
+                $startTime && $where .= " and create_time >= {$startTime}";
+            }
+            if ($endTime) {
+                $endTime = strtotime($endTime);
+                $endTime && $where .= " and create_time <= {$endTime}";
+            }
+        } else {
+            $where .= " and aite_cube_no like '%{$keyword}%' or nickname like '%{$keyword}%'";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new UserStatus;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+
+        if ($orderBy === false) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'user_list' => User::pagination($where, User::FIELDS_USER_LIST_LHZZ, $page, $size, $orderBy)
             ],
         ]);
     }

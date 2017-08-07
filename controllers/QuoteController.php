@@ -6,8 +6,8 @@
  * Time: 上午 11:48
  */
 namespace app\controllers;
+use app\models\AssortGoods;
 use app\models\DecorationAdd;
-use app\models\DecorationList;
 use app\models\DecorationParticulars;
 use app\models\Effect;
 use app\models\EffectPicture;
@@ -19,7 +19,6 @@ use app\models\LaborCost;
 use app\models\Series;
 use app\models\Style;
 use app\services\ExceptionHandleService;
-use app\services\SmValidationService;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -183,21 +182,21 @@ class QuoteController extends Controller
         $_labor_cost = $labor_cost->findOne($post['id']);
         $_labor_cost->univalence = $post['univalence'];
         $_labor_cost->quantity = $post['points'];
-            if (!$_labor_cost->validate())
-            {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        if (!$_labor_cost->validate())
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
-            if (!$_labor_cost->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        if (!$_labor_cost->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
     }
 
     /**
@@ -241,8 +240,7 @@ class QuoteController extends Controller
     public function actionMaterialAddInquire()
     {
         $post = \Yii::$app->request->post();
-        $data = '河沙';
-        $goods = Goods::newMaterialAdd(3,$data);
+        $goods = Goods::newMaterialAdd(3,$post);
         $goods_attr = GoodsAttr::findByGoodsId($goods['id']);
 
         return Json::encode([
@@ -571,12 +569,43 @@ class QuoteController extends Controller
      */
     public function actionAssortGoods()
     {
-        $goods_category = GoodsCategory::find()
-            ->select('title,path,id')
-            ->asArray()
-            ->all();
         return Json::encode([
-            'goods_category' =>$goods_category
+            'goods_category' => GoodsCategory::find()
+                ->select('title,path,id')
+                ->asArray()
+                ->all(),
         ]);
+    }
+
+    /**
+     * add assort goods administration
+     * @return string
+     */
+    public function actionAssortGoodsAdd()
+    {
+        $post = \Yii::$app->request->post();
+        $user = \Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $assort = (new AssortGoods())->add($post);
+        if ($assort){
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }else{
+            $code=1051;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
     }
 }

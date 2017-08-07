@@ -91,6 +91,24 @@ class User extends ActiveRecord implements IdentityInterface
         'status_operator',
         'status_remark',
     ];
+    const FIELDS_USER_LIST_LHZZ = [
+        'id',
+        'icon',
+        'nickname',
+        'gender',
+        'birthday',
+        'district_name',
+        'signature',
+        'mobile',
+        'aite_cube_no',
+        'create_time',
+        'deadtime',
+        'old_nickname',
+        'role_names',
+        'review_status',
+        'status_operator',
+        'status_remark',
+    ];
     const SESSION_KEY_LOGIN_ORIGIN = 'session_key_login_origin';
     const LOGIN_ORIGIN_ADMIN = 'login_origin_admin';
     const LOGIN_ORIGIN_APP = 'login_origin_app';
@@ -431,6 +449,96 @@ class User extends ActiveRecord implements IdentityInterface
 
         $tran->commit();
         return 200;
+    }
+
+    /**
+     * Get pagination list
+     *
+     * @param  array $where search condition
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  array $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = ModelService::ORDER_BY_DEFAULT)
+    {
+        $selectOld = $select;
+        $select = array_diff($select, self::FIELDS_USER_DETAILS_MODEL_LHZZ_EXTRA);
+
+        $offset = ($page - 1) * $size;
+        $list = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->all();
+
+        $details = [];
+        foreach ($list as &$row) {
+            $detail = [];
+
+            if (isset($row['create_time'])) {
+                $row['create_time'] = date('Y-m-d H:i', $row['create_time']);
+            }
+
+            if (isset($row['op_username'])) {
+                $row['op_username'] = $row['op_username'] ? $row['op_username'] : '用户';
+            }
+
+            if (isset($row['gender'])) {
+                $row['gender'] = self::SEXES[$row['gender']];
+            }
+
+            if (isset($row['birthday'])) {
+                $row['birthday'] = StringService::formatBirthday($row['birthday']);
+            }
+
+            if (in_array('old_nickname', $selectOld)) {
+                $detail['old_nickname'] = $row->getOldNickname();
+            }
+
+            if (in_array('role_names', $selectOld)) {
+                $detail['role_names'] = UserRole::findRoleNamesByUserId($row->id);
+            }
+
+            if (in_array('review_status', $selectOld)) {
+                $userRole = UserRole::find()
+                    ->where(['user_id' => $row->id, 'role_id' => Yii::$app->params['ownerRoleId']])
+                    ->one();
+                if ($userRole) {
+                    $detail['review_status' . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
+                } else {
+                    $detail['review_status' . ModelService::SUFFIX_FIELD_DESCRIPTION] = '';
+                }
+            }
+
+            if (in_array('status_operator', $selectOld)) {
+                $userStatus = UserStatus::find()->where(['uid' => $row->id])->orderBy(['id' => SORT_DESC])->one();
+                if ($userStatus) {
+                    $detail['status_operator'] = $userStatus->op_username;
+                } else {
+                    $detail['status_operator'] = '';
+                }
+            }
+
+            if (in_array('status_remark', $selectOld)) {
+                $userStatus = UserStatus::find()->where(['uid' => $row->id])->orderBy(['id' => SORT_DESC])->one();
+                if ($userStatus) {
+                    $detail['status_remark'] = $userStatus->remark;
+                } else {
+                    $detail['status_remark'] = '';
+                }
+            }
+
+            $details[] = array_merge(array_filter($row->getAttributes()), $detail);
+        }
+
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'details' => $details
+        ];
     }
 
     /**
@@ -864,7 +972,7 @@ class User extends ActiveRecord implements IdentityInterface
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_IDENTITY_LHZZ_EXTRA))
             : $modelData;
-        $this->_formatData($viewData);
+        self::_formatData($viewData);
         return $viewData;
     }
 
@@ -967,7 +1075,7 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @param array $data data to format
      */
-    private function _formatData(array &$data)
+    private static function _formatData(array &$data)
     {
         if (isset($data['gender'])) {
             $data['gender'] = self::SEXES[$data['gender']];
@@ -1002,7 +1110,7 @@ class User extends ActiveRecord implements IdentityInterface
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_IDENTITY_EXTRA))
             : $modelData;
-        $this->_formatData($viewData);
+        self::_formatData($viewData);
         return $viewData;
     }
 
@@ -1017,7 +1125,7 @@ class User extends ActiveRecord implements IdentityInterface
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_CENTER_EXTRA))
             : $modelData;
-        $this->_formatData($viewData);
+        self::_formatData($viewData);
         return $viewData;
     }
 
@@ -1032,7 +1140,7 @@ class User extends ActiveRecord implements IdentityInterface
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_DETAILS_MODEL_LHZZ_EXTRA))
             : $modelData;
-        $this->_formatData($viewData);
+        self::_formatData($viewData);
         return $viewData;
     }
 

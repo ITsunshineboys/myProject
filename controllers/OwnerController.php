@@ -101,7 +101,9 @@ class OwnerController extends Controller
      */
     public function actionSeriesAndStyle()
     {
-        $show['stairs_details'] = StairsDetails::find()->asArray()->all();
+        $show['stairs_details'] = StairsDetails::find()
+            ->asArray()
+            ->all();
         $show['series'] = Series::findByAll();
         $show['style'] = Style::findByAll();
         if (!is_null($show['style'])) {
@@ -133,7 +135,9 @@ class OwnerController extends Controller
             foreach ($effect as $one_effect) {
                 $id [] = $one_effect['id'];
             }
-            $effect_picture = EffectPicture::find()->where(['in', 'effect_id', $id])->all();
+            $effect_picture = EffectPicture::find()
+                ->where(['in', 'effect_id', $id])
+                ->all();
         } elseif (array_key_exists('str', $post)) {
             if ($post['str'] !== null) {
                 $list_effect = null;
@@ -143,7 +147,10 @@ class OwnerController extends Controller
                 foreach ($effect as $one_effect) {
                     $id = $one_effect['id'];
                 }
-                $effect_picture = EffectPicture::find()->asArray()->where(['in', 'id', $id])->all();
+                $effect_picture = EffectPicture::find()
+                    ->asArray()
+                    ->where(['in', 'id', $id])
+                    ->all();
             } else {
                 $list_effect = null;
                 $list_effect_picture = null;
@@ -271,6 +278,7 @@ class OwnerController extends Controller
                 $add_price [] = 0;
             }
         }
+
         $add_price_style = DecorationAdd::AllStyle('弱电', $post['style'], $post['city']);
         foreach ($add_price_style as $add_style) {
             $sku_area = Goods::skuAll($add_style['sku']);
