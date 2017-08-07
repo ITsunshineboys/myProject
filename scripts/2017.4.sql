@@ -1045,7 +1045,7 @@ CREATE TABLE `assort_goods` (
 --8.5 end
 
 --8.7  start
-CREATE TABLE `test` (
+CREATE TABLE `alipayreturntest` (
   `id` int(11) NOT NULL,
   `content` varchar(3000) NOT NULL,
   PRIMARY KEY (`id`)
