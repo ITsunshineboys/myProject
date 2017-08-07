@@ -532,7 +532,11 @@ class User extends ActiveRecord implements IdentityInterface
                 }
             }
 
-            $details[] = array_merge(array_filter($row->getAttributes()), $detail);
+            $detail = array_merge(array_filter($row->getAttributes()), $detail);
+            foreach (array_diff($selectOld, array_keys($detail)) as $attrName) {
+                $detail[$attrName] = '';
+            }
+            $details[] = $detail;
         }
 
         return [
