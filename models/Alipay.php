@@ -13,13 +13,14 @@ class Alipay extends  ActiveRecord
 
 
     public function Alipay($out_trade_no,$subject,$total_amount,$body){
+        $out_trade_no=0807145952;
             $config=(new AlipayConfig())->alipayconfig();
             //超时时间
             $timeout_express="1m";
             $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
             $payRequestBuilder->setBody($body);
             $payRequestBuilder->setSubject($subject);
-            $payRequestBuilder->setOutTradeNo(0807183259);
+            $payRequestBuilder->setOutTradeNo($out_trade_no);
             $payRequestBuilder->setTotalAmount($total_amount);
             $payRequestBuilder->setTimeExpress($timeout_express);
               $payRequestBuilder->setGoods_type(0);
