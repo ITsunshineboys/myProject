@@ -550,6 +550,38 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Get statistics on the total number of users, workers etc.
+     *
+     * @return int
+     */
+    public static function totalNumberStat()
+    {
+        $totalUserNumber = self::totalNumber();
+        $totalAuthorizedUserNumber = UserRole::totalAuthorizedUserNumber();
+        return [
+            'total_number_user' => $totalUserNumber,
+            'total_number_owner' => $totalUserNumber,
+            'total_number_designer' => Designer::totalNumber(),
+            'total_number_supplier' => Supplier::totalNumber(),
+            'total_number_manager' => Manager::totalNumber(),
+            'total_number_worker' => Worker::totalNumber(),
+            'total_number_decoration_company' => DecorationCompany::totalNumber(),
+            'total_number_authorized_user' => $totalAuthorizedUserNumber,
+            'total_number_unauthorized_user' => $totalUserNumber - $totalAuthorizedUserNumber,
+        ];
+    }
+
+    /**
+     * Get total number of users
+     *
+     * @return int
+     */
+    public static function totalNumber()
+    {
+        return self::find()->count();
+    }
+
+    /**
      * Reset user's new mobile
      *
      * @param int $mobile mobile

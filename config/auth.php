@@ -103,4 +103,7 @@ return [
     'mall/user-view-lhzz' => [1],
     'mall/reset-user-status-logs' => [1],
     'mall/user-list' => [1],
+    
+    // lhzz
+    'mall/index-admin-lhzz' => [1],
 ];

@@ -1,0 +1,94 @@
+/*头部导航开始*/
+.header_box{
+  height: 60px;
+  border-bottom: 1px solid #cccccc;
+  /*margin-left: 200px;*/
+}
+.header_txt{
+  width: 90%;
+  margin: 0 auto;
+  line-height: 60px;
+}
+/*头部导航 结束*/
+
+/*选择时间 开始*/
+.head_nav_font_weight{
+  font-weight: bold;
+}
+.gray{
+  color: #cccccc;
+}
+table{
+  width: 100%;
+}
+/*公用CSS样式 结束*/
+.content{
+  /*margin-left: 200px;*/
+  /*border: 2px solid blue;*/
+  height: 500px;
+}
+/*APP推荐-banner开始*/
+.city{
+  width: 90%;
+  margin: 20px auto;
+}
+
+.formDiv{
+  display: inline-block;
+}
+
+.time_select{
+  width: 188px;
+  height: 32px;
+  font-size: 12px;
+  color: #666F80;
+  border-radius: 3px;
+  border: 1px solid #BFC0C2;
+}
+.start_stop_time{
+  width: 135px;
+  height: 32px;
+  font-size: 12px;
+  color: #666F80;
+  border-radius: 3px;
+  border: 1px solid #E6E9F0;
+  box-shadow: inset 0 2px 3px 0 #EEF1F8;
+}
+.search{
+  display: inline-block;
+  text-decoration: none;
+  width: 60px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  border: 1px solid #BFC0C2;
+  border-radius: 3px;
+}
+/*选择时间 结束*/
+
+/*Table内容 开始-*/
+.tabTable{
+  width: 90%;
+  margin: 0 auto;
+}
+.tabTable table tr{
+  height: 42px;
+  border-bottom: 1px solid #E6E9F0;
+}
+.tabTable table tr td{
+  font-family: Helvetica;
+  font-size: 14px;
+  color: #666F80;
+  line-height: 14px;
+  /*padding: 0 22px;*/
+}
+.tabTable table tr td a{
+  color: #3F94F6;
+}
+.th td{
+  font-family: Helvetica;
+  font-size: 14px;
+  color: #7A8599!important;
+}
+/*Table内容 结束-*/
+

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="lib/css/index.css">
     <link rel="stylesheet" href="lib/data_js/need/laydate.css">
 
-    <!--&lt;!&ndash;banner推荐&ndash;&gt;<link rel="stylesheet" href="pages/banner_recommend/css/banner_recommend.css">-->
+    <!--&lt;!&ndash;banner推荐&ndash;&gt;<link rel="stylesheet" href="pages/banner_app/css/banner_app.css">-->
     <!--&lt;!&ndash;首页推荐&ndash;&gt;<link rel="stylesheet" href="pages/index_recommend/css/index_recommend.css">-->
 </head>
 <body ng-cloak>
@@ -26,7 +26,7 @@
         <dt ><i class="glyphicon glyphicon-home"></i> 商城管理</dt>
         <dd ><a ui-sref="banner_recommend">APP搜索位-banner管理</a></dd>
         <dd><a >搜索页面</a></dd>
-        <dd><a href="">商家管理</a></dd>
+        <dd><a ui-sref="commodity_manage">商城管理</a></dd>
         <dd><a href="">商家数据</a></dd>
         <dd><a href="">品牌管理</a></dd>
         <dd><a ui-sref="fenleiguanli">分类管理</a></dd>
@@ -61,26 +61,26 @@
 <script src="lib/js/controller.js"></script>
 <script src="lib/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
 <script src="lib/js/index.js"></script>
-<!--<script src="lib/js/ng-file-upload.js"></script>-->
-<!--<script src="lib/js/ng-file-upload-shim.js"></script>-->
+<script src="lib/js/ng-file-upload-shim.js"></script>
+<script src="lib/js/ng-file-upload.js"></script>
 
-<!--banner推荐--><script src="pages/banner_recommend/js/banner_recommend_ctrl.js"></script>
-<!--首页推荐--><script src="pages/index_recommend/js/index_recommend_ctrl.js"></script>
-<!--banner历史数据--><script src="pages/banner_history/js/banner_history_ctrl.js"></script>
-<!--推荐 历史数据--><script src="pages/index_recommend_history/js/index_recommend_history_ctrl.js"></script>
+<!--banner推荐--><script src="pages/mall_manage/banner_app/banner_recommend/js/banner_recommend_ctrl.js"></script>
+<!--首页推荐--><script src="pages/mall_manage/banner_app/index_recommend/js/index_recommend_ctrl.js"></script>
+<!--banner历史数据--><script src="pages/mall_manage/banner_app/banner_history/js/banner_history_ctrl.js"></script>
+<!--推荐 历史数据--><script src="pages/mall_manage/banner_app/index_recommend_history/js/index_recommend_history_ctrl.js"></script>
+<!--商品管理-->
+<script src="pages/mall_manage/merchant_manage/commodity_manage/js/commodity_manage.js"></script>
 <script src="lib/data_js/laydate.js"></script>
-<script src="pages/index_recommend_history/js/directive.js"></script>
+<script src="pages/mall_manage/banner_app/index_recommend_history/js/directive.js"></script>
 <!--芳子-->
 <script type="text/javascript" charset="utf-8" src="lib/editor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/editor/ueditor.all.js"> </script>
 <script src="lib/js/angular-ueditor.js"></script>
 <script src="lib/js/useeditor.js"></script>
-<script src="pages/cla_mag/js/cla_mag_ctrl.js"></script>
-<script src="pages/onsale_edit/js/onsale_edit_ctrl.js"></script>
-<script src="pages/offsale_edit/js/offsale_edit_ctrl.js"></script>
-<script src="pages/add_class/js/add_class_ctrl.js"></script>
-
-
+<script src="pages/mall_manage/class_manage/cla_mag/js/cla_mag_ctrl.js"></script>
+<script src="pages/mall_manage/class_manage/onsale_edit/js/onsale_edit_ctrl.js"></script>
+<script src="pages/mall_manage/class_manage/offsale_edit/js/offsale_edit_ctrl.js"></script>
+<script src="pages/mall_manage/class_manage/add_class/js/add_class_ctrl.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
