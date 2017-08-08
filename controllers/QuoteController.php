@@ -74,6 +74,14 @@ class QuoteController extends Controller
         ];
     }
 
+    public  function actionLaborCostList()
+    {
+        return Json::encode([
+            'list'=> LaborCost::LaborCostList(),
+        ]);
+
+    }
+
     /**
      * 做工标准添加
      * @return string
