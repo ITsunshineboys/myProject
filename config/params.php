@@ -1,6 +1,6 @@
 <?php
 
-$districts = require(__DIR__ . '/districts.php'); // district data
+$districts = require(__DIR__ . '/districts.php'); // districts data
 //$pinyin = require(__DIR__ . '/pinyin.php');
 $auth = require(__DIR__ . '/auth.php');
 
@@ -27,7 +27,7 @@ return [
         1008 => '物流模板名称不能重复',
         1009 => '商品属性名称不能重复',
         1010 => '该用户尚未注册',
-        1011 => '该用户已添加过角色',
+        1011 => '该用户已添加过角色'
         1012 => '商品所在分类已移除，请商家重新添加新商品。',
         1013 => '商品所在品牌已移除，请商家重新选择新品牌。',
         1014 => '商品所在店铺已关闭，请开店后上传商品。',
