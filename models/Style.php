@@ -63,6 +63,7 @@ class Style extends ActiveRecord
         return self::find()
             ->asArray()
             ->select(['id','style'])
+            ->orderBy(['id'=>SORT_ASC])
             ->all();
     }
 }
