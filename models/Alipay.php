@@ -38,7 +38,9 @@ class Alipay extends  ActiveRecord
    public function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id){
 
         $config=(new AlipayConfig())->alipayconfig();
-        $passback_params=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id;
+
+          $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id;
+        $passback_params=urlencode($str);
         //超时时间
         $timeout_express="1m";
         $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
