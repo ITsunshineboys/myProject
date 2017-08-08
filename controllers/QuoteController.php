@@ -74,12 +74,15 @@ class QuoteController extends Controller
         ];
     }
 
+    /**
+     * labor list show
+     * @return string
+     */
     public  function actionLaborCostList()
     {
         return Json::encode([
             'list'=> LaborCost::LaborCostList(),
         ]);
-
     }
 
     /**
