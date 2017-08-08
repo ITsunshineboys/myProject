@@ -1077,7 +1077,7 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
           if (src) {
             elem.removeClass('ng-hide');
           } else {
-            // elem.addClass('ng-hide');
+            elem.addClass('ng-hide');
           }
         });
       });
@@ -1130,7 +1130,7 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
             constructDataUrl(file);
           }
         } else {
-          // elem.addClass('ng-hide');
+          elem.addClass('ng-hide');
         }
       });
 

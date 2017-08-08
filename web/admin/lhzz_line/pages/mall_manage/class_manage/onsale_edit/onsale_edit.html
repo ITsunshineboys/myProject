@@ -1,0 +1,129 @@
+<link rel="stylesheet" href="pages/mall_manage/class_manage/onsale_edit/css/onsale_edit.css">
+<div ng-controller="onsaleEdit">
+    <!--顶部导航-->
+    <div class="topnav">
+        <span class="glyphicon glyphicon-certificate"></span>
+        <h6>商城管理 ></h6>
+        <h6>首页推荐</h6>
+        <h6>> 分类详情 </h6>
+    </div>
+
+    <!--分类详情-->
+    <div class="cla_detail">
+        <!--分类名称-->
+        <div class="cla_name">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">分类名称</span>
+            <input type="text" placeholder={{onsaleclasstitle}} ng-model="class_name" ng-blur="addClassName()">
+            <span>*限1~10个字符</span>
+            <h6 ng-if="showtishi" ng-bind="tishi"></h6>
+        </div>
+        <span></span>
+        <div class="divider"></div>
+
+        <!--分类所属-->
+        <div class="cla_belong">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">分类所属</span>
+            <select name="" class="belong first_select">
+                <option value="" selected="selected">基础材料</option>
+                <option value="">主材料</option>
+            </select>
+            <select name="suoshukuang" class="belong">
+                <option value="" selected="selected">墙面材料</option>
+                <option value="">板材类</option>
+            </select>
+        </div>
+
+        <!--分类图片-->
+        <div class="cla_pic">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">分类图片</span>
+            <div class="upload_pic">
+                <img src="pages/onsale_edit/images/egpic.png" alt="" id="cla_pic_uploadpic">
+                <span class="upload_tishi">一级分类上传图片，二三级上传图片</span>
+                <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                <div id="upload">
+                    <button id="upload_btn">上传</button>
+                    <span id="pic_path">456456456456456.jpg</span>
+                </div>
+                <div class="reload_tishi">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                </div>
+            </div>
+        </div>
+        <div class="divider"></div>
+
+        <!--分类描述-->
+        <div class="cla_des">
+            <span class="each_title" id="describclass">分类描述</span>
+            <div id="edit_tool">
+                <div class="ueditor" ng-model="content" id="editor"></div>
+            </div>
+        </div>
+        <div class="divider"></div>
+
+        <div class="info">
+            <p>
+                <span>添加人员</span>
+                <span>森林木地板专营店</span>
+            </p>
+
+            <p>
+                <span>上架时间</span>
+                <span>2017-05-21 12:21</span>
+            </p>
+        </div>
+
+        <div class="btn_sure">
+            <button  data-toggle="modal" data-target="#save_tishi">保存</button>
+            <button  data-toggle="modal" data-target="#shuru_modal">下架</button>
+            <button>返回</button>
+        </div>
+    </div>
+
+    <!--保存提示模态框-->
+    <div class="modal fade" id="save_tishi">
+        <div class="modal-dialog">
+            <div class="modal-content" id="save_content">
+                <div class="modal-header" id="save_header">
+                    <h4 class="modal-title" id="tishi">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body" id="save_body">
+                    <h6 id="tishi_wenzi">分类名称不正确，请重新填写</h6>
+                </div>
+
+                <div class="btn_modal_two">
+                    <button id="caozuo_sure">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--下架提示模态框-->
+    <div class="modal fade" id="shuru_modal">
+        <div class="modal-dialog">
+            <div class="modal-content" id="shuru_content">
+                <div class="modal-header" id="shuru_header">
+                    <h4 class="modal-title" id="shurucaozuo">
+                        下架原因
+                    </h4>
+                </div>
+                <div class="modal-body" id="shuru_body">
+                    <h6 id="shuru_reason">下架原因（选填）</h6>
+                    <textarea name="" id="shuru_textarea" cols="50" rows="14"
+                              placeholder="请填写下架原因，如选择多个则为批量备注"></textarea>
+                </div>
+
+                <div class="btn_modal">
+                    <button id="shuru_cancel">取消</button>
+                    <button id="shuru_sure">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
