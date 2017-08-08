@@ -1,6 +1,6 @@
 <?php
 
-$districts = require(__DIR__ . '/districts.php'); // districts data
+$districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
 $auth = require(__DIR__ . '/auth.php');
 
