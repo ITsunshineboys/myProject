@@ -27,12 +27,8 @@ class AlipayTradeWapPayContentBuilder
 
     // 订单总金额，整形，此处单位为元，精确到小数点后2位，不能超过1亿元
     private $totalAmount;
-    private $goods_id;
-    private $goods_num;
-    private $districtcode;
-    private $pay_name;
-    private $invoice_id;
-    private $goods_type;
+    private $passback_params;
+
 
     // 如果该字段为空，则默认为与支付宝签约的商户的PID，也就是appid对应的PID
     private $sellerId;
@@ -72,36 +68,12 @@ class AlipayTradeWapPayContentBuilder
         $this->body = $body;
         $this->bizContentarr['body'] = $body;
     }
-    public function setGoods_type($goods_type)
+    public function setPassback_params($passback_params)
     {
-        $this->goods_type = $goods_type;
-        $this->bizContentarr['goods_type'] = $goods_type;
+        $this->passback_params = $passback_params;
+        $this->bizContentarr['passback_params'] = $passback_params;
     }
-    public function setGoods_id($goods_id)
-    {
-        $this->goods_id =$goods_id;
-        $this->bizContentarr['goods_id'] = $goods_id;
-    }
-    public function setGoods_num($goods_num)
-    {
-        $this->goods_num =$goods_num;
-        $this->bizContentarr['goods_num'] = $goods_num;
-    }
-    public function setDstrictcode($districtcode)
-    {
-        $this->districtcode =$districtcode;
-        $this->bizContentarr['districtcode'] = $districtcode;
-    }
-    public function setPay_name($pay_name)
-    {
-        $this->pay_name =$pay_name;
-        $this->bizContentarr['pay_name'] = $pay_name;
-    }
-    public function setInvoice_id($invoice_id)
-    {
-        $this->invoice_id =$invoice_id;
-        $this->bizContentarr['invoice_id'] = $invoice_id;
-    }
+
 
     public function setSubject($subject)
     {
