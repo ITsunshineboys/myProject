@@ -578,7 +578,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function totalNumber()
     {
-        return self::find()->count();
+        return (int)self::find()->count();
     }
 
     /**

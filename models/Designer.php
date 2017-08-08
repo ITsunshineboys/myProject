@@ -21,6 +21,6 @@ class Designer extends ActiveRecord
      */
     public static function totalNumber()
     {
-        return self::find()->count();
+        return (int)self::find()->count();
     }
 }
