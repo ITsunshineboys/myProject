@@ -13,6 +13,7 @@ use app\models\Goods;
 use app\models\Supplier;
 use app\models\LogisticsDistrict;
 use app\services\SmValidationService;
+use app\services\AlipayTradeService;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -381,6 +382,30 @@ class OrderController extends Controller
         $body = trim(htmlspecialchars($request->post('body')),' ');
         $model=new Alipay();
         $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$districtcode,$pay_name,$invoice_id);
+    }
+
+
+    public function actionAlipaylinenotify(){
+        $post=Yii::$app->request->post();
+        $model=new Alipay();
+        $alipaySevice=$model->Alipaylinenotify();
+        $result = $alipaySevice->check($post);
+        if($result){
+            $res=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+                'content'      =>  $post
+            ])->execute();
+
+            echo "success";		//请不要修改或删除
+        }else{
+            //验证失败
+            echo "fail";	//请不要修改或删除
+        }
+    }
+    public function actionAlipaygetnotify(){
+       $data=(new \yii\db\Query())->from('alipayreturntest')->all();
+
+        var_dump($data);
+
     }
     /**
      * 快递查询类-物流跟踪接口
