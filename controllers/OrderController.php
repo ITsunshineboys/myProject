@@ -468,11 +468,11 @@ class OrderController extends Controller
      *微信线下支付异步操作
      */
     public function actionOrderlinewxpaynotify(){
-        $postStr = file_get_contents('php://input');
-        $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $data=json_encode($msg);
+        // $postStr = file_get_contents('php://input');
+        // $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        // $data=json_encode($msg);
         $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            'content'=>$data
+            'content'=>1111
         ])->execute();
     }
     /**
