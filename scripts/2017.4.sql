@@ -987,16 +987,16 @@ create table user_status (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `supplier_bankinformation` (
-   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `supplier_id` int(11) NOT NULL,
-  `bankname` varchar(50) NOT NULL,
-  `bankcard` int(50) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `position` varchar(150) NOT NULL,
-  `bankbranch` varchar(150) NOT NULL,
-  `create_time` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) NOT NULL COMMENT '商家id',
+  `bankname` varchar(50) NOT NULL COMMENT '开户银行',
+  `bankcard` int(50) NOT NULL COMMENT '银行卡号',
+  `username` varchar(50) NOT NULL COMMENT '开户名',
+  `position` varchar(150) NOT NULL COMMENT '开户行所在地',
+  `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
+  `create_time` int(11) NOT NULL COMMENT '开户时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `supplier_freezelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1019,7 +1019,7 @@ CREATE TABLE `supplier_cashregister` (
   `supplier_reason` varchar(150) NOT NULL COMMENT '商家提现操作原因',
   `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --8.3 end
 --8.5 start
@@ -1032,7 +1032,7 @@ CREATE TABLE `effect_earnst` (
   `remark` text COMMENT '备注',
   `create_time` int(11) DEFAULT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `assort_goods` (
