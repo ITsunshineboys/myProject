@@ -93,7 +93,7 @@ class Wxpay  extends ActiveRecord
             echo "
  <script type='text/javascript'>
    
-        if (typeof WeixinJSBridge == "undefined"){
+        if (typeof WeixinJSBridge == 'undefined'){
             if( document.addEventListener ){
                 document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
             }else if (document.attachEvent){
