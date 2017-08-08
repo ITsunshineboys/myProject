@@ -556,11 +556,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function totalNumberStat()
     {
-        $totalUserNumber = self::totalNumber();
+        $totalUserNumber = UserRole::totalNumber();
         $totalAuthorizedUserNumber = UserRole::totalAuthorizedUserNumber();
         return [
             'total_number_user' => $totalUserNumber,
-            'total_number_owner' => $totalUserNumber,
+            'total_number_owner' => self::totalNumber(),
             'total_number_designer' => Designer::totalNumber(),
             'total_number_supplier' => Supplier::totalNumber(),
             'total_number_manager' => Manager::totalNumber(),
