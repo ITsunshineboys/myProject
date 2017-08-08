@@ -375,37 +375,105 @@ class OrderController extends Controller
         $total_amount =trim(htmlspecialchars($request->post('order_price')),' ');
         $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
         $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
-        $districtcode=trim(htmlspecialchars($request->post('districtcode')),' ');
-        $pay_name=trim(htmlspecialchars($request->post('pay_name')),' ');
+        $address_id=trim(htmlspecialchars($request->post('address_id')),' ');
+        $pay_name='支付宝支付';
         $invoice_id=trim(htmlspecialchars($request->post('invoice_id')),' ');
+        $supplier_id=trim(htmlspecialchars($request->post('supplier_id')),' ');
+        $freight=trim(htmlspecialchars($request->post('freight')),' ');
+        $return_insurance=trim(htmlspecialchars($request->post('return_insurance')),' ');
         //商品描述，可空
         $body = trim(htmlspecialchars($request->post('body')),' ');
+        if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id|! $invoice_id||$supplier_id||!$freight ||!$return_insurance){
+            $c=1000;
+            return Json::encode([
+                'code' =>  $c,
+                'msg'  => Yii::$app->params['errorCodes'][$c],
+                'data' => null
+            ]);
+
+        }
         $model=new Alipay();
-        $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$districtcode,$pay_name,$invoice_id);
+        $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance);
     }
 
-
+    /**
+     * 支付宝线下店商城异步返回操作
+     */
     public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
         $alipaySevice=$model->Alipaylinenotify();
         $result = $alipaySevice->check($post);
-        if($result){
-            $str=json_encode($post);
-            $res=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'      =>$str
-            ])->execute();
-            echo "success";		//请不要修改或删除
+        if ($result){
+        if ($post['trade_status'] == 'TRADE_SUCCESS') {
+            $arr=explode('&',$post['passback_params']);
+            $order_no=$post['out_trade_no'];
+            $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$order_no])->asArray()->one();
+            if ($order){
+                exit;
+            }
+            $res=GoodsOrder::Alipaylinenotifydatabase($arr,$post);
+            if ($res==true){
+                echo "success";		//请不要修改或删除
+            }
+        }
         }else{
             //验证失败
             echo "fail";	//请不要修改或删除
         }
     }
+
     public function actionAlipaygetnotify(){
-       $data=(new \yii\db\Query())->from('alipayreturntest')->all();
+        $data=(new \yii\db\Query())->from('alipayreturntest')->one()['content'];
+        echo $data;
 
-        var_dump($data);
+    }
 
+    /**
+     *提交订单-线下店商城-微信支付
+     */
+    public function  actionLineplaceorder(){
+        $request=Yii::$app->request;
+        $subject=trim(htmlspecialchars($request->post('goods_name')),' ');
+        //付款金额，必填
+        $total_amount =trim(htmlspecialchars($request->post('order_price')),' ');
+        $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
+        $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
+        $address_id=trim(htmlspecialchars($request->post('address_id')),' ');
+        $pay_name='支付宝支付';
+        $invoice_id=trim(htmlspecialchars($request->post('invoice_id')),' ');
+        $supplier_id=trim(htmlspecialchars($request->post('supplier_id')),' ');
+        $freight=trim(htmlspecialchars($request->post('freight')),' ');
+        $return_insurance=trim(htmlspecialchars($request->post('return_insurance')),' ');
+        //商品描述，可空
+        $body = trim(htmlspecialchars($request->post('body')),' ');
+        $orders=array(
+            'address_id'=>$address_id,
+            'invoice_id'=>$invoice_id,
+            'goods_id'=>$goods_id,
+            'goods_num'=>$goods_num,
+            'order_price'=>$total_amount,
+            'goods_name'=>$subject,
+            'pay_name'=>$pay_name,
+            'supplier_id'=>$supplier_id,
+            'freight'=>$freight,
+            'return_insurance'=>$return_insurance,
+            'body'=>$body
+        );
+        $model=new Wxpay();
+        $model->Wxlineapipay($orders);
+    }
+
+    /**
+     *微信线下支付异步操作
+     */
+    public function actionOrderlinewxpaynotify(){
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $data=json_encode($msg);
+        $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+            'content'=>$data
+        ])->execute();
     }
     /**
      * 快递查询类-物流跟踪接口
@@ -1429,34 +1497,7 @@ class OrderController extends Controller
         $res=$model->Alipay($out_trade_no,$subject,$total_amount,$body);
     }
 
-    /**
-     *提交订单-线下店商城-微信支付
-     */
-    public function  actionLineplaceorder(){
-        $request=Yii::$app->request;
-        $address_id=trim(htmlspecialchars($request->post('address_id','')),'');
-        $invoice_id=trim(htmlspecialchars($request->post('invoice_id','')),'');
-        $goods_id=1;
-//        $goods_id=trim(htmlspecialchars($request->post('goods_id','')),'');
-        $goods_num=trim(htmlspecialchars($request->post('goods_id','')),'');
-        $goods_attr=trim(htmlspecialchars($request->post('goods_attr','')),'');
-        $paymentmethod=trim(htmlspecialchars($request->post('paymentmethod','')),'');
-        $goods_price=trim(htmlspecialchars($request->post('paymentmethod','')),'');
-        $orders=array(
-            'address_id'=>$address_id,
-            'invoice_id'=>$invoice_id,
-            'goods_id'=>$goods_id,
-            'goods_num'=>$goods_num,
-            'goods_attr'=>$goods_attr,
-            'paymentmethod'=>$paymentmethod,
-            'goods_price'=>$goods_price
-        );
-//        $goods=Goods::find()->select('title,subtitle')->where(['id' =>$goods_id])->one();
-//        $invoice=Invoice::find()->select('')->where(['id' =>$goods_id])->one();
-        $local=$_SERVER['SERVER_NAME'];
-        $model=new Wxpay();
-        $model->Wxlineapipay($orders,$local);
-    }
+
 
     public function actionTestwxpay(){
         $model=new Wxpay();
