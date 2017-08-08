@@ -218,6 +218,16 @@ class Supplier extends ActiveRecord
     }
 
     /**
+     * Get total number of suppliers
+     *
+     * @return int
+     */
+    public static function totalNumber()
+    {
+        return (int)self::find()->count();
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

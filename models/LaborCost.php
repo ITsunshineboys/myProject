@@ -41,11 +41,9 @@ class LaborCost extends ActiveRecord
      */
     public static function univalence($arr,$jobs,$rank = '白银')
     {
-        $province = $arr['province'] ?: 510000;
-        $city = $arr['city'] ?: 510100;
         $labors = self::find()
             ->asArray()
-            ->where(['and', ['province_code' => $province], ['city_code' => $city], ['worker_kind' => $jobs],['rank'=>$rank]])
+            ->where(['and',['province_code' => $arr['province']],['city_code' => $arr['city']],['worker_kind' => $jobs],['rank'=>$rank]])
             ->all();
         return $labors;
     }
@@ -59,14 +57,21 @@ class LaborCost extends ActiveRecord
      */
     public static function profession($arr,$craft,$rank = '白银')
     {
-        if ($arr && $craft)
-        {
-           $labors = self::find()
-               ->asArray()
-               ->where(['and',['city_code' => $arr['city']],['worker_kind_details'=>$craft],['rank'=>$rank]])
-               ->one();
-        }
+        $labors = self::find()
+            ->asArray()
+            ->where(['and',['city_code' => $arr['city']],['worker_kind_details'=>$craft],['rank'=>$rank]])
+            ->one();
         return $labors;
+    }
+
+    public static function LaborCostList()
+    {
+        return  self::find()
+            ->distinct()
+            ->select('worker_kind')
+            ->asArray()
+            ->all();
+
     }
 }
 

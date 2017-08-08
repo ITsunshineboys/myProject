@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="pages/mall_manage/banner_app/index_recommend_history/css/index_recommend_history.css">
+
+<div ng-controller="index_recommend_history_ctrl">
+<!--头部导航开始-->
+<div class="header_box">
+    <div class="header_txt">
+        <i class="glyphicon glyphicon-home"></i>
+        <a href="javascript:void(0)" class="head_nav_font_weight">商品管理 </a> >
+        <a ui-sref="index_recommend" class="head_nav_font_weight">APP推荐位-banner管理</a> >
+        <a href="javascript:void(0)" class="gray">历史数据统计</a>
+    </div>
+</div>
+<!--头部导航结束-->
+
+<!--APP推荐-banner开始-->
+<div class="content">
+    <!--选择城市开始-->
+    <div class="city">
+        <div class="formDiv">
+                <select  name="province" ng-model="selectValue" class="time_select" ng-options="item.name for item in time">
+                </select>
+            <input  ng-if="selectValue.name=='自定义'" id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
+            <input  ng-if="selectValue.name=='自定义'" id="stop_time"   ng-model="myng.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+        </div>
+    </div>
+    <!--选择城市结束-->
+
+    <!--Table内容  开始-->
+    <div class="tabTable">
+        <table>
+            <tr class="th">
+                <td>类型</td>
+                <td>商品编号</td>
+                <td>标题</td>
+                <td>来源商家</td>
+                <td>上架浏览</td>
+                <td>上架销量</td>
+                <td>平台价格</td>
+                <td>创建时间</td>
+                <td>图片</td>
+            </tr>
+            <tr ng-repeat="item in recommendList">
+                <td>{{item.from_type}}</td>
+                <td>{{item.sku}}</td>
+                <td>{{item.title}}</td>
+                <td><a href="">{{item.supplier_name}}</a></td>
+                <td>{{item.viewed_number}}</td>
+                <td>{{item.sold_number}}</td>
+                <td>{{item.platform_price}}</td>
+                <td>{{item.create_time}}</td>
+                <td><img src="{{item.image}}" alt=""></td>
+            </tr>
+        </table>
+    </div>
+    <!--Table内容  结束-->
+</div>
+</div>

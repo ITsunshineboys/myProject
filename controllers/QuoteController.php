@@ -75,6 +75,17 @@ class QuoteController extends Controller
     }
 
     /**
+     * labor list show
+     * @return string
+     */
+    public  function actionLaborCostList()
+    {
+        return Json::encode([
+            'list'=> LaborCost::LaborCostList(),
+        ]);
+    }
+
+    /**
      * 做工标准添加
      * @return string
      */
@@ -82,7 +93,7 @@ class QuoteController extends Controller
     {
         $code = 1000;
 //        $data = \Yii::$app->request->post();
-        $data = [
+        $post = [
         [
             'profession'=>'电工',
             'province'=>'510000',
@@ -105,7 +116,7 @@ class QuoteController extends Controller
         ]
         ];
         $labor_cost =  new LaborCost;
-        foreach ($data as $one_data)
+        foreach ($post as $one_data)
         {
             $_labor_cost = clone $labor_cost;
             $_labor_cost->province_code = $one_data['province'];

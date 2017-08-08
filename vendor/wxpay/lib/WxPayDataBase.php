@@ -1,6 +1,7 @@
 <?php
 namespace vendor\wxpay\lib;
 use vendor\wxpay\lib\WxPayConfig;
+use yii\base\WxPayException;
 /**
  *
  * 数据对象基础类，该类中定义数据类最基本的行为，包括：

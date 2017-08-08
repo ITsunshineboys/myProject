@@ -84,4 +84,29 @@ class UserRole extends ActiveRecord
     {
         return 'user_role';
     }
+
+    /**
+     * Get total number of authorized users
+     *
+     * @return int
+     */
+    public static function totalAuthorizedUserNumber()
+    {
+        return (int)self::find()
+            ->where([
+//                'role_id' => Yii::$app->params['ownerRoleId'],
+                'review_status' => Role::AUTHENTICATION_STATUS_APPROVED
+            ])
+            ->count();
+    }
+
+    /**
+     * Get total number of users
+     *
+     * @return int
+     */
+    public static function totalNumber()
+    {
+        return (int)self::find()->count();
+    }
 }

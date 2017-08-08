@@ -26,6 +26,11 @@ use app\models\GoodsOrder;
 use app\models\GoodsRecommendSupplier;
 use app\models\UserMobile;
 use app\models\UserStatus;
+use app\models\Designer;
+use app\models\Manager;
+use app\models\Worker;
+use app\models\DecorationCompany;
+use app\models\UserRole;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use app\services\StringService;
@@ -123,6 +128,7 @@ class MallController extends Controller
         'user-view-lhzz',
         'reset-user-status-logs',
         'user-list',
+        'index-admin-lhzz',
     ];
 
     /**
@@ -4871,6 +4877,22 @@ class MallController extends Controller
             'data' => [
                 'user_list' => User::pagination($where, User::FIELDS_USER_LIST_LHZZ, $page, $size, $orderBy)
             ],
+        ]);
+    }
+
+    /**
+     * Lhzz admin index action.
+     *
+     * @return string
+     */
+    public function actionIndexAdminLhzz()
+    {
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'index_admin_lhzz' => User::totalNumberStat()
+            ]
         ]);
     }
 }
