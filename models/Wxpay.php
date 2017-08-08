@@ -91,7 +91,7 @@ class Wxpay  extends ActiveRecord
             $jsApiParameters = $tools->GetJsApiParameters($order);
             $editAddress = $tools->GetEditAddressParameters();
             echo "
-
+ <script type='text/javascript'>
    
         if (typeof WeixinJSBridge == "undefined"){
             if( document.addEventListener ){
@@ -103,7 +103,7 @@ class Wxpay  extends ActiveRecord
         }else{
             jsApiCall();
         }
-            <script type='text/javascript'>
+           
     //调用微信JS api 支付
     function jsApiCall()
     {
