@@ -391,10 +391,10 @@ class OrderController extends Controller
         $alipaySevice=$model->Alipaylinenotify();
         $result = $alipaySevice->check($post);
         if($result){
+            $str=json_encode($post);
             $res=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'      =>  $post
+                'content'      =>$str
             ])->execute();
-
             echo "success";		//请不要修改或删除
         }else{
             //验证失败
