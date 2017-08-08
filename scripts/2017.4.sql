@@ -1046,10 +1046,10 @@ CREATE TABLE `assort_goods` (
 
 --8.7  start
 CREATE TABLE `alipayreturntest` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `content` varchar(3000) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 --8.7  end
 
 
