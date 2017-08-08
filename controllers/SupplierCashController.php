@@ -82,6 +82,8 @@ class SupplierCashController extends Controller
     }
 
 
+    //---------------------------商家后台---------------------------
+
     /**
      * 获取商家现金流列表
      * @return mixed
@@ -102,6 +104,7 @@ class SupplierCashController extends Controller
         $time_id = (int)trim(htmlspecialchars($request->post('time_id', 0)), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
+        $status = trim(htmlspecialchars($request->post('status', '')), '');
         if ($time_id == 5) {
             if (!$time_start || !$time_end) {
                 $code = 1000;
@@ -113,7 +116,7 @@ class SupplierCashController extends Controller
             }
         }
         $supplier = Supplier::find()->select('id')->where(['uid' => $user->id])->one();
-        $data = (new SupplierCashManager())->GetCashList($supplier['id'], $page, $page_size, $time_id, $time_start, $time_end);
+        $data = (new SupplierCashManager())->getCashList($supplier['id'], $page, $page_size, $time_id, $time_start, $time_end, $status);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -155,4 +158,133 @@ class SupplierCashController extends Controller
     }
 
 
+    //-----------------------------------大后台---------------------------------
+
+    /**
+     * 大后台商家财务中心首页
+     * @return [金额和数量的统计]
+     */
+    public function actionCashIndex()
+    {
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $cash_manager = new SupplierCashManager();
+        $data = [];
+        $data['orders_all'] = $cash_manager->getPayedOrdersAll();
+        $data['orders_today'] = $cash_manager->getPayedOrdersToday();
+        $data['cashes_all'] = $cash_manager->getPayedCashesAll();
+        $data['cashes_today'] = $cash_manager->getPayedCashesToday();
+        $data['payed_cashes_count'] = $cash_manager->getPayedCashesCountAll();
+        $data['not_payed_cashes_count'] = $cash_manager->getNotPayedCashesCountAll();
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 获取今日入账列表
+     */
+    public function actionOrderListToday()
+    {
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = \Yii::$app->request;
+        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $time_id = (int)trim(htmlspecialchars($request->post('time_id', 1)), '');
+        $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
+        $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
+        $search = trim(htmlspecialchars($request->post('search', '')), '');
+        if ($time_id == 5) {
+            if (!$time_start || !$time_end) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+        $data = (new SupplierCashManager())->getOrderList($page, $page_size, $time_id, $time_start, $time_end, $search);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
+
+
+    /**
+     * 获取今日提现列表
+     */
+    public function actionCashListToday()
+    {
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = \Yii::$app->request;
+        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $time_id = (int)trim(htmlspecialchars($request->post('time_id', 1)), '');
+        $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
+        $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
+        $status = trim(htmlspecialchars($request->post('status', 3)), '');
+        $search = trim(htmlspecialchars($request->post('search', '')), '');
+        if ($time_id == 5) {
+            if (!$time_start || !$time_end) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+        $data = (new SupplierCashManager())->getCashListAll($page, $page_size, $time_id, $time_start, $time_end, $status, $search);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function actionTest()
+    {
+        return Json::encode(time());
+    }
 }
