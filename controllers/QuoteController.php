@@ -79,10 +79,10 @@ class QuoteController extends Controller
      * labor list show
      * @return string
      */
-    public  function actionLaborCostList()
+    public function actionLaborCostList()
     {
         return Json::encode([
-            'list'=> LaborCost::LaborCostList(),
+            'list' => LaborCost::LaborCostList(),
         ]);
     }
 
@@ -92,59 +92,44 @@ class QuoteController extends Controller
      */
     public function actionLaborCostAdd()
     {
-        $code = 1000;
-//        $data = \Yii::$app->request->post();
-        $post = [
-        [
-            'profession'=>'电工',
-            'province'=>'510000',
-            'city'=>'510100',
-            'grade'=>'白银',
-            'univalence'=>'300',
-            'points'=>'5',
-            'worker_kind_details' => '强电',
-            'unit'=>'个'
-        ],
-        [
-            'profession'=>'电工',
-            'province'=>'510000',
-            'city'=>'510100',
-            'grade'=>'白银',
-            'univalence'=>'300',
-            'points'=>'6',
-            'worker_kind_details' => '弱电',
-            'unit'=>'个'
-        ]
-        ];
-        $labor_cost =  new LaborCost;
-        foreach ($post as $one_data)
+        $quest = \Yii::$app->request;
+        $worker_kind = $quest->post('worker_kind','');
+        $province_code = $quest->post('province_code','');
+        $city_code = $quest->post('city_code','');
+        $rank = $quest->post('rank','');
+        $univalence = $quest->post('univalence','');
+        $weak_quantity = $quest->post('weak','');
+        $strong_quantity = $quest->post('strong','');
+        $user = \Yii::$app->user->identity;
+        if (!$worker_kind || !$province_code || !$city_code || !$rank || !$univalence || !$weak_quantity || !$strong_quantity)
         {
-            $_labor_cost = clone $labor_cost;
-            $_labor_cost->province_code = $one_data['province'];
-            $_labor_cost->city_code = $one_data['city'];
-            $_labor_cost->rank = $one_data['grade'];
-            $_labor_cost->worker_kind = $one_data['profession'];
-            $_labor_cost->univalence = $one_data['univalence'];
-            $_labor_cost->quantity = $one_data['points'];
-            $_labor_cost->worker_kind_details = $one_data['worker_kind_details'];
-            $_labor_cost->unit = $one_data['unit'];
-            $_labor_cost->setAttributes($one_data);
-            if (!$_labor_cost->validate())
-            {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
 
-            if (!$_labor_cost->save())
-            {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        $res = (new LaborCost())->weakAdd($worker_kind,$province_code,$city_code,$rank,$univalence,$weak_quantity,$strong_quantity);
+        if ($res[0] == true && $res[1] == true){
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }else{
+            $code=1051;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
     }
 
@@ -156,23 +141,20 @@ class QuoteController extends Controller
         $code = 1000;
         $post = \Yii::$app->request->post();
         $labor_cost = new LaborCost();
-        foreach ($post as $one_data)
-        {
+        foreach ($post as $one_data) {
             $_labor_cost = clone $labor_cost;
             $a = $_labor_cost->findOne($one_data['id']);
             $a->univalence = $one_data['univalence'];
             $a->quantity = $one_data['points'];
             $a->setAttributes($one_data);
-            if (!$a->validate())
-            {
+            if (!$a->validate()) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
 
-            if (!$a->save())
-            {
+            if (!$a->save()) {
                 $code = 500;
                 return Json::encode([
                     'code' => $code,
@@ -194,8 +176,7 @@ class QuoteController extends Controller
         $_labor_cost = $labor_cost->findOne($post['id']);
         $_labor_cost->univalence = $post['univalence'];
         $_labor_cost->quantity = $post['points'];
-        if (!$_labor_cost->validate())
-        {
+        if (!$_labor_cost->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -220,22 +201,19 @@ class QuoteController extends Controller
         $code = 1000;
         $post = \Yii::$app->request->post();
         $engineering_standard_craft = new EngineeringStandardCraft();
-        foreach ($post as $one_data)
-        {
+        foreach ($post as $one_data) {
             $craft = clone $engineering_standard_craft;
             $_craft = $craft->findOne($one_data['id']);
             $_craft->material = $one_data['material'];
             $_craft->setAttributes($one_data);
-            if (!$_craft->validate())
-            {
+            if (!$_craft->validate()) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
 
-            if (!$_craft->save())
-            {
+            if (!$_craft->save()) {
                 $code = 500;
                 return Json::encode([
                     'code' => $code,
@@ -252,7 +230,7 @@ class QuoteController extends Controller
     public function actionMaterialAddInquire()
     {
         $post = \Yii::$app->request->post();
-        $goods = Goods::newMaterialAdd(3,$post);
+        $goods = Goods::newMaterialAdd(3, $post);
         $goods_attr = GoodsAttr::findByGoodsId($goods['id']);
 
         return Json::encode([
@@ -260,8 +238,8 @@ class QuoteController extends Controller
             'msg' => 'OK',
             'data' => [
                 'goods' => [
-                   'goods'=> $goods,
-                   'goods_attr'=> $goods_attr,
+                    'goods' => $goods,
+                    'goods_attr' => $goods_attr,
                 ],
             ],
         ]);
@@ -276,19 +254,15 @@ class QuoteController extends Controller
         $code = 1000;
         $post = \Yii::$app->request->post();
         $decoration_add = new DecorationAdd();
-        foreach ($post as $one_data)
-        {
+        foreach ($post as $one_data) {
             $add = clone $decoration_add;
-            if (array_key_exists('series_id',$one_data) == true)
-            {
+            if (array_key_exists('series_id', $one_data) == true) {
                 $add->series_id = $one_data['series_id'];
             }
-            if (array_key_exists('style_id',$one_data) == true)
-            {
+            if (array_key_exists('style_id', $one_data) == true) {
                 $add->style_id = $one_data['style_id'];
             }
-            if (array_key_exists('min_area',$one_data) == true)
-            {
+            if (array_key_exists('min_area', $one_data) == true) {
                 $add->min_area = $one_data['min_area'];
                 $add->max_area = $one_data['max_area'];
             }
@@ -298,16 +272,14 @@ class QuoteController extends Controller
             $add->district_code = $one_data['district_code'];
             $add->quantity = $one_data['quantity'];
             $add->setAttributes($one_data);
-            if (!$add->validate())
-            {
+            if (!$add->validate()) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
 
-            if (!$add->save())
-            {
+            if (!$add->save()) {
                 $code = 500;
                 return Json::encode([
                     'code' => $code,
@@ -326,20 +298,16 @@ class QuoteController extends Controller
         $code = 1000;
         $post = \Yii::$app->request->post();
         $decoration_add = new DecorationAdd();
-        foreach ($post as $one_data)
-        {
+        foreach ($post as $one_data) {
             $add = clone $decoration_add;
             $_add = $add->findOne($one_data['id']);
-            if (array_key_exists('series_id',$one_data) == true)
-            {
+            if (array_key_exists('series_id', $one_data) == true) {
                 $_add->series_id = $one_data['series_id'];
             }
-            if (array_key_exists('style_id',$one_data) == true)
-            {
+            if (array_key_exists('style_id', $one_data) == true) {
                 $_add->style_id = $one_data['style_id'];
             }
-            if (array_key_exists('min_area',$one_data) == true)
-            {
+            if (array_key_exists('min_area', $one_data) == true) {
                 $_add->min_area = $one_data['min_area'];
                 $_add->max_area = $one_data['max_area'];
             }
@@ -349,16 +317,14 @@ class QuoteController extends Controller
             $_add->district_code = $one_data['district_code'];
             $_add->quantity = $one_data['quantity'];
             $_add->setAttributes($one_data);
-            if (!$_add->validate())
-            {
+            if (!$_add->validate()) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
 
-            if (!$_add->save())
-            {
+            if (!$_add->save()) {
                 $code = 500;
                 return Json::encode([
                     'code' => $code,
@@ -375,47 +341,43 @@ class QuoteController extends Controller
     public function actionPlotList()
     {
         $post = \Yii::$app->request->get('post');
-        if (substr($post,4) ==00)
-        {
-            $effect = Effect::find()->where(['city_code'=>$post]);
-            $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+        if (substr($post, 4) == 00) {
+            $effect = Effect::find()->where(['city_code' => $post]);
+            $pages = new Pagination(['totalCount' => $effect->count(), 'pageSize' => 12]);
             $model = $effect->offset($pages->offset)
                 ->limit($pages->limit)
                 ->asArray()
                 ->select('effect.toponymy,effect.add_time,effect.district')
                 ->groupBy('district')
-                ->orderBy(['add_time'=>SORT_ASC])
+                ->orderBy(['add_time' => SORT_ASC])
                 ->all();
             $list = [];
-            foreach ($model as $one_model)
-            {
-                $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+            foreach ($model as $one_model) {
+                $one_model['add_time'] = date('Y-m-d H:i', $one_model['add_time']);
                 $list [] = $one_model;
             }
             return Json::encode([
                 'model' => $list,
-                'pages'=> $pages
+                'pages' => $pages
             ]);
-        }else
-        {
-            $effect = Effect::find()->where(['district_code'=>$post]);
-            $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+        } else {
+            $effect = Effect::find()->where(['district_code' => $post]);
+            $pages = new Pagination(['totalCount' => $effect->count(), 'pageSize' => 12]);
             $model = $effect->offset($pages->offset)
                 ->limit($pages->limit)
                 ->asArray()
                 ->select('effect.toponymy,effect.add_time,effect.district')
                 ->groupBy('district')
-                ->orderBy(['add_time'=>SORT_ASC])
+                ->orderBy(['add_time' => SORT_ASC])
                 ->all();
             $list = [];
-            foreach ($model as $one_model)
-            {
-                $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+            foreach ($model as $one_model) {
+                $one_model['add_time'] = date('Y-m-d H:i', $one_model['add_time']);
                 $list [] = $one_model;
             }
             return Json::encode([
-                'model'=>$list,
-                'pages'=>$pages
+                'model' => $list,
+                'pages' => $pages
             ]);
         }
 
@@ -428,24 +390,23 @@ class QuoteController extends Controller
     public function actionPlotTimeGrabble()
     {
         $post = \Yii::$app->request->get();
-        $effect = Effect::find()->where(['and',['>=','add_time',$post['min']],['<=','add_time',$post['max']],['city_code'=>$post['city']]]);
-        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+        $effect = Effect::find()->where(['and', ['>=', 'add_time', $post['min']], ['<=', 'add_time', $post['max']], ['city_code' => $post['city']]]);
+        $pages = new Pagination(['totalCount' => $effect->count(), 'pageSize' => 12]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
             ->asArray()
             ->select('effect.toponymy,effect.add_time,effect.district')
             ->groupBy('district')
-            ->orderBy(['add_time'=>SORT_ASC])
+            ->orderBy(['add_time' => SORT_ASC])
             ->all();
         $list = [];
-        foreach ($model as $one_model)
-        {
-            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+        foreach ($model as $one_model) {
+            $one_model['add_time'] = date('Y-m-d H:i', $one_model['add_time']);
             $list [] = $one_model;
         }
         return Json::encode([
-            'model'=>$list,
-            'pages'=>$pages
+            'model' => $list,
+            'pages' => $pages
         ]);
     }
 
@@ -456,24 +417,23 @@ class QuoteController extends Controller
     public function actionPlotGrabble()
     {
         $post = \Yii::$app->request->get();
-        $effect = Effect::find()->where(['and',['like','toponymy',$post['toponymy']],['city_code'=>$post['city']]]);
-        $pages = new Pagination(['totalCount'=>$effect->count(),'pageSize'=>12]);
+        $effect = Effect::find()->where(['and', ['like', 'toponymy', $post['toponymy']], ['city_code' => $post['city']]]);
+        $pages = new Pagination(['totalCount' => $effect->count(), 'pageSize' => 12]);
         $model = $effect->offset($pages->offset)
             ->limit($pages->limit)
             ->asArray()
             ->select('effect.toponymy,effect.add_time,effect.district')
             ->groupBy('district')
-            ->orderBy(['add_time'=>SORT_ASC])
+            ->orderBy(['add_time' => SORT_ASC])
             ->all();
         $list = [];
-        foreach ($model as $one_model)
-        {
-            $one_model['add_time'] = date('Y-m-d H:i',$one_model['add_time']);
+        foreach ($model as $one_model) {
+            $one_model['add_time'] = date('Y-m-d H:i', $one_model['add_time']);
             $list [] = $one_model;
         }
         return Json::encode([
-            'model'=>$list,
-            'pages'=>$pages
+            'model' => $list,
+            'pages' => $pages
         ]);
     }
 
@@ -486,8 +446,8 @@ class QuoteController extends Controller
         $series = Series::findBySeries();
         $style = Style::findByStyle();
         return Json::encode([
-           'series'=>$series,
-            'style'=>$style
+            'series' => $series,
+            'style' => $style
         ]);
     }
 
@@ -499,33 +459,31 @@ class QuoteController extends Controller
     {
         $request = \Yii::$app->request->post();
         $user = \Yii::$app->user->identity();
-        if (!$request)
-        {
-            $code=1000;
+        if (!$request) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if (!$user)
-        {
-            $code=1052;
+        if (!$user) {
+            $code = 1052;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $all [] =(new Effect())->plotAdd($request);
+        $all [] = (new Effect())->plotAdd($request);
         $all [] = (new EffectPicture())->plotAdd($request);
         $all [] = (new DecorationParticulars())->plotAdd($request);
-        if ($all){
-            $code=200;
+        if ($all) {
+            $code = 200;
             return Json::encode([
                 'code' => $code,
                 'msg' => 'ok'
             ]);
-        }else{
-            $code=1051;
+        } else {
+            $code = 1051;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
@@ -541,33 +499,31 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         $user = \Yii::$app->user->identity();
-        if (!$post)
-        {
-            $code=1000;
+        if (!$post) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if (!$user)
-        {
-            $code=1052;
+        if (!$user) {
+            $code = 1052;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $all [] =(new Effect())->plotAdd($post);
+        $all [] = (new Effect())->plotAdd($post);
         $all [] = (new EffectPicture())->plotAdd($post);
         $all [] = (new DecorationParticulars())->plotAdd($post);
-        if ($all){
-            $code=200;
+        if ($all) {
+            $code = 200;
             return Json::encode([
                 'code' => $code,
                 'msg' => 'ok'
             ]);
-        }else{
-            $code=1051;
+        } else {
+            $code = 1051;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
@@ -597,22 +553,22 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         $user = \Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
+        if (!$user) {
+            $code = 1052;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $assort = (new AssortGoods())->add($post);
-        if ($assort){
-            $code=200;
+        if ($assort) {
+            $code = 200;
             return Json::encode([
                 'code' => $code,
                 'msg' => 'ok'
             ]);
-        }else{
-            $code=1051;
+        } else {
+            $code = 1051;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]

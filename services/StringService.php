@@ -102,9 +102,10 @@ class StringService
      * Get start and ent time of some time type defined in params['timeTypes']
      *
      * @param string $timeType time type
+     * @param bool $returnTimestamp if start_time and end_time of timestamp
      * @return array
      */
-    public static function startEndDate($timeType)
+    public static function startEndDate($timeType, $returnTimestamp = false)
     {
         $startTime = $endTime = '';
 
@@ -129,6 +130,10 @@ class StringService
                 break;
         }
 
+        if ($returnTimestamp) {
+            $startTime = (int)strtotime($startTime);
+            $endTime = (int)strtotime($endTime);
+        }
         return [$startTime, $endTime];
     }
 
