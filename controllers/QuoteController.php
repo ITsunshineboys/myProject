@@ -620,5 +620,5 @@ class QuoteController extends Controller
         }
 
     }
-    
+
 }
