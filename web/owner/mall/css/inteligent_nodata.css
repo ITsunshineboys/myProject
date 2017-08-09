@@ -432,7 +432,7 @@ header div i{
  }
 input[type='radio'] ~ img{
     position: absolute;
-    top: 15px!important;
+    top: 19px!important;
     left: -2px!important;
     display: none;
 }
