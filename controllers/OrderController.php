@@ -471,8 +471,11 @@ class OrderController extends Controller
         // $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         // $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
         // $data=json_encode($msg);
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $data=json_encode($msg);
         $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            'content'=>1111
+            'content'=>$data
         ])->execute();
     }
     /**
