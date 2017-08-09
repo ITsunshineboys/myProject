@@ -333,7 +333,7 @@ angular.module("all_controller", [])
         };
         $scope.getBack = function (item) {
             if (item == "今日花园") {
-                $state.go("have_data", {name: '今日花园', address: '四川省成都市郫县高新西区泰山大道', pic_one:'101135', pic_two:'125280'})
+                $state.go("have_data", {name: '今日花园', address: '四川省成都市郫县高新西区泰山大道', pic_one: '101135', pic_two: '125280'})
             } else if (item == "花好月圆") {
                 $state.go("have_data", {name: '花好月圆', address: '四川省成都市蜀汉路东89号', pic_one: '116688', pic_two: '138280'})
             }
