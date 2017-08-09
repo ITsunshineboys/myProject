@@ -1052,5 +1052,15 @@ CREATE TABLE `alipayreturntest` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 --8.7  end
+--8.9  start
+CREATE TABLE `distribution` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL COMMENT '绑定手机号父id',
+  `mobile` bigint(20) NOT NULL COMMENT '手机号',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `applydis_time` int(11) DEFAULT NULL COMMENT '绑定父id时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+--8.9  end
 
 
