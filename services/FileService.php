@@ -72,12 +72,12 @@ class FileService
 
         $code = 1000;
 
-        if (!$model->file || !$model->file->extension) {
+        if (!$model->file || !$model->file->extension) {echo 'aa';
             return $code;
         }
 
-        if (!$model->validate()) {
-            if (!self::checkUploadSize($model)) {
+        if (!$model->validate()) {echo 'bb';
+            if (!self::checkUploadSize($model)) {echo 'cc';
                 $code = 1004;
                 return $code;
             }
