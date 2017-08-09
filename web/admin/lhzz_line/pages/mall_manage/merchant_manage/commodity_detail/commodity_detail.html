@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="pages/mall_manage/merchant_manage/commodity_detail/css/commodity_detail.css">
+<div ng-controller="commodity_detail_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">商城管理</span>
+            <span class="commodity_manage">>商品管理</span>
+            <img src="pages/mall_manage/merchant_manage/commodity_detail/images/user.png" alt=""/>
+        </div>
+    </header>
+    <section>
+        <!--商品分类-->
+        <div class="margin_top">
+            <span>商品分类</span>
+            <span class="margin_left">主材-地面材料-木地板</span>
+        </div>
+        <!--商品名称-->
+        <div class="margin_top">
+            <span>商品名称</span>
+            <span class="margin_left">森木地板</span>
+        </div>
+        <!--商品特色-->
+        <div class="margin_top">
+            <span>商品特色</span>
+            <span class="margin_left">好！买一送十</span>
+        </div>
+        <!--选择品牌-->
+        <div class="margin_top">
+            <span>选择品牌</span>
+            <span class="margin_left">美的</span>
+        </div>
+        <!--商品属性-->
+        <div class="margin_top">
+            <span>商品属性</span>
+            <div class="margin_left inline_block">
+                <div>
+                    <span>厚度</span>
+                    <span class="margin_left">9cm</span>
+                </div>
+                <div class="margin_top">
+                    <span>长度</span>
+                    <span class="margin_left">80cm</span>
+                </div>
+                <div class="margin_top">
+                    <span>材质</span>
+                    <span class="margin_left">黄花梨</span>
+                </div>
+                <div class="margin_top">
+                    <span>风格</span>
+                    <span class="margin_left">美式风格</span>
+                </div>
+                <div class="margin_top">
+                    <span>系列</span>
+                    <span class="margin_left">齐家系列</span>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!--上传图片-->
+        <div class="margin_top">
+            <span>上传图片</span>
+            <div class="margin_left inline_block img_size"></div>
+            <div class="inline_block img_size"></div>
+            <div class="inline_block img_size"></div>
+        </div>
+        <!--价格/库存-->
+        <div class="margin_top">
+            <span>价格/库存</span>
+            <div class="margin_left inline_block">
+                <div>
+                    <span class="font_size">供货价格</span>
+                    <span class="font_size">平台价格</span>
+                    <span class="font_size">市场价格</span>
+                    <span class="font_size">库存</span>
+                </div>
+                <hr>
+                <div class="margin_top">
+                    <span class="font_size">¥45.00</span>
+                    <span class="font_size">¥45.00</span>
+                    <span class="font_size">¥45.00</span>
+                    <span class="font_size">5</span>
+                </div>
+            </div>
+        </div>
+        <!--采购价-->
+        <div class="margin_top">
+            <span>采购价</span>
+            <div class="margin_left inline_block">
+                <div>
+                    <span class="">装修公司采购价</span>
+                    <span class="purchase_left">项目经理采购价</span>
+                    <span class="purchase_left">设计师采购价</span>
+                </div>
+                <hr>
+                <div class="margin_top">
+                    <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_detail/images/red.png" alt="">
+                    <input type="text" placeholder="¥45.00" class="purchase_input">
+                    <input type="text" placeholder="¥45.00" class="purchase_input">
+                    <input type="text" placeholder="¥45.00" class="purchase_input">
+                </div>
+                <p>*价格，供货价≤装修公司采购价≤项目经理采购价/设计师采购价≤平台价≤市场价</p>
+            </div>
+        </div>
+        <!--物流模块-->
+        <div class="margin_top">
+            <span>商品物流</span>
+            <div class="margin_left inline_block">
+                <div>
+                    <span class="margin_left">模块一</span>
+                </div>
+                <div class="margin_top">
+                    <span>快递方式</span>
+                    <span class="margin_left">快递</span>
+                </div>
+                <div class="margin_top">
+                    <span>城市选择</span>
+                    <span class="margin_left">北京、上海、广州、深圳、成都、长沙、杭州、厦门、福州、绵阳 ...</span>
+                    <span style="color:#5677FC">查看</span>
+                </div>
+                <div class="margin_top">
+                    <span>是否包邮</span>
+                    <span class="margin_left">不包邮</span>
+                </div>
+                <div class="margin_top">
+                    <span>收费金额</span>
+                    <div class="margin_left inline_block">
+                        <p>默认1件商品：¥120.00</p>
+                        <p>每增加1件商品，运费增加：¥60.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </section>
+</div>
