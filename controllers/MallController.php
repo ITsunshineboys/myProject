@@ -407,7 +407,7 @@ class MallController extends Controller
         $styleId = (int)Yii::$app->request->get('style_id', 0);
         $seriesId = (int)Yii::$app->request->get('series_id', 0);
 
-        $where = "category_id = {$categoryId}";
+        $where = "category_id = {$categoryId} and status = " . Goods::STATUS_ONLINE;
         $platformPriceMin && $where .= " and platform_price >= {$platformPriceMin}";
         $platformPriceMax && $where .= " and platform_price <= {$platformPriceMax}";
         $brandId && $where .= " and brand_id = {$brandId}";

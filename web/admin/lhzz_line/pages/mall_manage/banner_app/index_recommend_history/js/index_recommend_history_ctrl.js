@@ -21,8 +21,8 @@ index_recommend_history.controller("index_recommend_history_ctrl", function ($sc
         'type': 2
       }
     }).then(function (response) {
-      // console.log("推荐历史");
-      // console.log(response);
+      console.log("推荐历史");
+      console.log(response);
       $scope.recommendList = response.data.data.recommend_history.details
     }, function (error) {
       console.log(error)
@@ -31,7 +31,6 @@ index_recommend_history.controller("index_recommend_history_ctrl", function ($sc
     console.log(error)
   });
   $scope.$watch('selectValue',function(newVal,oldVal){
-    console.log(newVal);
     if(!!newVal){
       $http.get('http://test.cdlhzz.cn:888/mall/recommend-history', {
         params: {

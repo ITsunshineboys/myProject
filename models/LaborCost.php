@@ -22,7 +22,18 @@ class LaborCost extends ActiveRecord
         'rank',
         'worker_kind_details'
     ];
+    const LABOR_COST ='labor_cost';
 
+    const UNIT = [
+        'day' => '天',
+        'square' => 'M2',
+        'number'=>'个'
+    ];
+
+    const WORKER_KIND_DETAILS = [
+            'weak'=> '弱电',
+            'strong' => '强电'
+        ];
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -64,6 +75,10 @@ class LaborCost extends ActiveRecord
         return $labors;
     }
 
+    /**
+     * labor const list
+     * @return array|ActiveRecord[]
+     */
     public static function LaborCostList()
     {
         return  self::find()
@@ -72,6 +87,23 @@ class LaborCost extends ActiveRecord
             ->asArray()
             ->all();
 
+    }
+
+    public static function weakAdd($worker_kind,$province_code,$city_code,$rank,$univalence,$weak_quantity,$strong_quantity)
+    {
+        $labor_const = \Yii::$app->db;
+        // 弱电添加
+        $labor_const_add [] = $labor_const
+            ->createCommand()
+            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$weak_quantity,'unit'=>self::UNIT['number'],'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['weak']])
+            ->execute();
+
+        $labor_const_add [] = $labor_const
+            ->createCommand()
+            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$strong_quantity,'unit'=>self::UNIT['number'],'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['strong']])
+            ->execute();
+
+        return $labor_const_add;
     }
 }
 
