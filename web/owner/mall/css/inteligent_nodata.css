@@ -445,7 +445,7 @@ input[type='radio'] ~ img{
 input[type='radio']:checked ~ img{
     display: inline-block;
 }
-.img_size{
+#img_size{
     position: absolute;
     top: 19px!important;
     left: -2px!important;
