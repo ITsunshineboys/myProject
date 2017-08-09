@@ -97,10 +97,11 @@ class DistributionController extends Controller
      */
     public function actionDistributionlogin_mobile(){
         $request = Yii::$app->request;
+        $session = Yii::$app->session;
         $mobile=trim(htmlspecialchars($request->post('mobile','')),'');
         $user=Distribution::find()->where(['mobile'=>$mobile])->asArray()->one();
         $ismobile = preg_match('/^1[34578]\d{9}$/',$mobile);
-        if ($ismobile!=1){
+        if ($ismobile!=1 || !$mobile){
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -108,13 +109,24 @@ class DistributionController extends Controller
                 'data' => null
             ]);
         }
+        $time=time();
+        if ($session['distributionlastsendtime']){
+            if (($time-$session['distributionlastsendtime'])<60){
+                $code = 1020;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            $session['distributionlastsendtime']=$time;
+        }
         if ($user){
             $data['mobile']=$mobile;
             $data['type']='register';
             $res=new SmValidationService($data);
             if ($res){
                 $code=200;
-                $session = Yii::$app->session;
                 $session['distributionmobile']=$mobile;
                 return Json::encode([
                     'code' => $code,
@@ -127,7 +139,6 @@ class DistributionController extends Controller
             $res=new SmValidationService($data);
             if ($res){
                 $code=200;
-                $session = Yii::$app->session;
                 $session['distributionmobile']=$mobile;
                 return Json::encode([
                     'code' => $code,
@@ -146,13 +157,14 @@ class DistributionController extends Controller
         $mobile=$session['distributionmobile'];
         $request = Yii::$app->request;
         $code=trim(htmlspecialchars($request->post('code','')),'');
-        if (!SmValidationService::validCode(1, $code)) {
+        if (!SmValidationService::validCode($mobile, $code)) {
             $code = 1002;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        SmValidationService::deleteCode($mobile);
         $time=time();
         $customer = new Distribution();
         $customer->mobile = $mobile;
