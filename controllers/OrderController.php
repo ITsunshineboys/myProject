@@ -424,8 +424,8 @@ class OrderController extends Controller
     }
 
     public function actionAlipaygetnotify(){
-        $data=(new \yii\db\Query())->from('alipayreturntest')->one()['content'];
-        echo $data;
+        $data=(new \yii\db\Query())->from('alipayreturntest')->all();
+       var_dump($data);
 
     }
 
