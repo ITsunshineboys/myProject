@@ -110,48 +110,48 @@ class DistributionController extends Controller
             ]);
         }
         $time=time();
-        if ($session['distributionlastsendtime']){
-            if (($time-$session['distributionlastsendtime'])<60){
-                $code = 1020;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }else{
-            $session['distributionlastsendtime']=$time;
-        }
+//        if ($session['distributionlastsendtime']){
+//            if (($time-$session['distributionlastsendtime'])<60){
+//                $code = 1020;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' => Yii::$app->params['errorCodes'][$code],
+//                ]);
+//            }
+//        }else{
+//            $session['distributionlastsendtime']=$time;
+//        }
         $code=200;
-                $session['distributionmobile']=$mobile;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' =>'ok'
-                ]);
-        // if ($user){
-        //     $data['mobile']=$mobile;
-        //     $data['type']='register';
-        //     $res=new SmValidationService($data);
-        //     if ($res){
-        //         $code=200;
-        //         $session['distributionmobile']=$mobile;
-        //         return Json::encode([
-        //             'code' => $code,
-        //             'msg' =>'ok'
-        //         ]);
-        //     }
-        // }else{
-        //     $data['mobile']=$mobile;
-        //     $data['type']='register';
-        //     $res=new SmValidationService($data);
-        //     if ($res){
-        //         $code=200;
-        //         $session['distributionmobile']=$mobile;
-        //         return Json::encode([
-        //             'code' => $code,
-        //             'msg' =>'ok'
-        //         ]);
-        //     }
-        // }
+        $session['distributionmobile']=$mobile;
+        return Json::encode([
+            'code' => $code,
+            'msg' =>'ok'
+        ]);
+//        if ($user){
+//            $data['mobile']=$mobile;
+//            $data['type']='register';
+//            $res=new SmValidationService($data);
+//            if ($res){
+//                $code=200;
+//                $session['distributionmobile']=$mobile;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' =>'ok'
+//                ]);
+//            }
+//        }else{
+//            $data['mobile']=$mobile;
+//            $data['type']='register';
+//            $res=new SmValidationService($data);
+//            if ($res){
+//                $code=200;
+//                $session['distributionmobile']=$mobile;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' =>'ok'
+//                ]);
+//            }
+//        }
     }
 
     /**
@@ -163,14 +163,14 @@ class DistributionController extends Controller
         $mobile=$session['distributionmobile'];
         $request = Yii::$app->request;
         $code=trim(htmlspecialchars($request->post('code','')),'');
-        // if (!SmValidationService::validCode($mobile, $code)) {
-        //     $code = 1002;
-        //     return Json::encode([
-        //         'code' => $code,
-        //         'msg' => Yii::$app->params['errorCodes'][$code],
-        //     ]);
-        // }
-        // SmValidationService::deleteCode($mobile);
+//        if (!SmValidationService::validCode($mobile, $code)) {
+//            $code = 1002;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code],
+//            ]);
+//        }
+//        SmValidationService::deleteCode($mobile);
         $time=time();
         $customer = new Distribution();
         $customer->mobile = $mobile;
@@ -178,6 +178,11 @@ class DistributionController extends Controller
         $user=Distribution::find()->select('mobile')->where(['mobile'=>$mobile])->asArray()->one();
         if ($user){
             $session['distribution_token']=urlencode($mobile.'&'.$time);
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>'ok'
+            ]);
         }else{
              $res=$customer->save();
             if ($res){
