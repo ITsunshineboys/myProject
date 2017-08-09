@@ -154,7 +154,7 @@ class EffectController extends Controller
         $request = new Request();
 
         if ($request->isPost) {
-            $model = new EffectEarnst();
+            $model = new EffecteEarnst();
             //保存样板Id
             $model->effect_id = trim($request->post('effect_id', ''), '');
             $name = $model->name = trim($request->post('name', ''), '');
@@ -300,7 +300,35 @@ class EffectController extends Controller
 
 
     }
+    /**
+     * 后台样板间获取申请总金额
+     * @return string
+     *
+     */
 
+    public function actionApplyEarnestNum(){
+
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $earnest=new EffectEarnst();
+        $data=[];
+        $data['all_apply']=$earnest::getallapply();
+
+        $data['today_apply']=$earnest::gettodayapply();
+        $data['today_earnest']=$earnest::gettodayearnest();
+        $data['all_earnest']=$earnest::getallearnest();
+        return json_encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
     /**
      * 后台样板间列表搜索+分页
      * @return string
@@ -321,6 +349,8 @@ class EffectController extends Controller
         }
         $code = 1000;
 
+
+
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $phone = trim(Yii::$app->request->get('phone', ''));
 
@@ -334,14 +364,6 @@ class EffectController extends Controller
 
 
         }
-        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
-
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
 
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -358,17 +380,20 @@ class EffectController extends Controller
                 ]);
             }
         } else {
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+         list($startTime, $endTime) = StringService::startEndDate($timeType);
+
             $startTime = explode(' ', $startTime)[0];
             $endTime = explode(' ', $endTime)[0];
+
         }
 //
         if ($startTime) {
-            $startTime = str_replace('-', '', $startTime);
+            $startTime = (int)strtotime($startTime);
             $startTime && $where .= " and create_time >= {$startTime}";
         }
         if ($endTime) {
-            $endTime = str_replace('-', '', $endTime);
+            $endTime = (int)strtotime($endTime);
             $endTime && $where .= " and create_time <= {$endTime}";
         }
 
