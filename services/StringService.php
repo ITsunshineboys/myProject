@@ -131,8 +131,8 @@ class StringService
         }
 
         if ($returnTimestamp) {
-            $startTime = strtotime($startTime);
-            $endTime = strtotime($endTime);
+            $startTime = (int)strtotime($startTime);
+            $endTime = (int)strtotime($endTime);
         }
         return [$startTime, $endTime];
     }
