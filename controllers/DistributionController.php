@@ -157,14 +157,14 @@ class DistributionController extends Controller
         $mobile=$session['distributionmobile'];
         $request = Yii::$app->request;
         $code=trim(htmlspecialchars($request->post('code','')),'');
-        if (!SmValidationService::validCode($mobile, $code)) {
-            $code = 1002;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        SmValidationService::deleteCode($mobile);
+        // if (!SmValidationService::validCode($mobile, $code)) {
+        //     $code = 1002;
+        //     return Json::encode([
+        //         'code' => $code,
+        //         'msg' => Yii::$app->params['errorCodes'][$code],
+        //     ]);
+        // }
+        // SmValidationService::deleteCode($mobile);
         $time=time();
         $customer = new Distribution();
         $customer->mobile = $mobile;
