@@ -3,10 +3,12 @@ namespace app\controllers;
 
 use app\models\Effect;
 use app\models\EffectEarnst;
+use app\models\GoodsCategory;
 use app\models\StairsDetails;
 use app\services\AdminAuthService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -18,17 +20,24 @@ class EffectController extends Controller
 
     const PAGE_SIZE = 10;
     const ACCESS_LOGGED_IN_USER = [
-        'effect-view',
-        'effect-list',
-        'remark-view',
-        'edit-remark',
-
+        'logout',
+        'roles',
+        'reset-password',
+        'roles-status',
+        'time-types',
+        'upload',
+        'upload-delete',
+        'review-statuses',
     ];
+
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'access' => [
-                'class' => AdminAuthService::className(),
+                'class' => AccessControl::className(),
                 'denyCallback' => function ($rule, $action) {
                     $code = 403;
                     new ExceptionHandleService($code);
@@ -46,17 +55,14 @@ class EffectController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-
-                    'effect-view'=>['post'],
-                    'effect-list'=>['get'],
-                    'remark-view'=>['get'],
-                     'edit-remark'=>['post']
-                    ],
+                    'logout' => ['post',],
+                    'reset-password' => ['post',],
+                    'upload' => ['post',],
+                    'upload-delete' => ['post',]
                 ],
-            ];
-
+            ],
+        ];
     }
-
     /**
      * 前台样板间申请
      * @return string
@@ -123,7 +129,7 @@ class EffectController extends Controller
                 return json_encode([
                     'code' => 200,
                     'msg' => '样板间添加成功!',
-                    
+
                 ]);
             }
 
@@ -194,7 +200,14 @@ class EffectController extends Controller
      *
      */
     public function actionRemarkView(){
-
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=1000;
         $request=new Request();
 
@@ -227,6 +240,14 @@ class EffectController extends Controller
      */
     public function actionEffectView()
     {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code = 1000;
         $request = new Request();
 
@@ -290,6 +311,14 @@ class EffectController extends Controller
 
     public function actionEffectList()
     {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code = 1000;
 
         $timeType = trim(Yii::$app->request->get('time_type', ''));
@@ -300,7 +329,7 @@ class EffectController extends Controller
         $where = '1';
         if($phone){
             $where='phone';
-            $where .= " like $phone";
+            $where .= " like '%{$phone}%'";
 
 
 
@@ -368,6 +397,15 @@ class EffectController extends Controller
      *
      */
     public function actionEditRemark(){
+
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=1000;
         $request=new Request();
         $effect_id=trim($request->get('id',''),'');
