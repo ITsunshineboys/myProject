@@ -15,14 +15,14 @@
                 <li ng-repeat="item in stair_copy[index].second_level">
                     <div ng-repeat="item1 in stair_copy[index][item].three_level">
                         <div ng-repeat="item2 in stair_copy[index][item][item1].goods_detail" ng-click="goModalData(stair_copy[index][item][item1][item2])">
-                            <div style="overflow: hidden;border-bottom:1px solid #E9EDEE;padding: 10px">
+                            <div style="overflow: hidden;border-bottom:1px solid #E9EDEE;padding: 10px;position: relative;" ng-class="{'cur_animate':is_delete_btn}">
                             <div class="wall_span_brand">
                                 <span class="wall_span" data-toggle="modal" data-target="#myModal">{{stair_copy[index][item][item1].title}}x{{stair_copy[index][item][item1][item2].show_quantity}}</span><br>
                                 <span class="wall_brand" data-toggle="modal" data-target="#myModal">{{stair_copy[index][item][item1][item2].name}}</span>
                             </div>
                             <span class="wall_money" data-toggle="modal" data-target="#myModal">{{stair_copy[index][item][item1][item2].show_cost | currency:'￥'}} &nbsp;&nbsp;<i><img
                                     src="images/left_more.png" alt=""></i></span>
-                            <button class='del' ng-click="delete_category(stair_copy[index][item][item1][item2])" ng-if="is_delete_btn">删除</button>
+                            <button class="del" ng-click="delete_category(stair_copy[index][item][item1][item2])" ng-if="is_delete_btn">删除</button>
                             </div>
                         </div>
                     </div>

@@ -118,14 +118,14 @@ header div span{
 }
 .wall_money{
     position: absolute;
-    right: 1.9rem;
+    right: 1.5rem;
     top:1rem;
     color: #F59C22 ;
     font-size: 1.2rem;
 }
 
 .right_arrow{
-    margin-left: 1rem;
+    margin-left: 2rem;
 }
 
 
@@ -192,6 +192,7 @@ header div span{
 .handyman li{
     padding-top: 2rem;
     padding-bottom: 0;
+    position: relative;
 }
 
 .handyman_input{
@@ -216,16 +217,39 @@ header div span{
     margin-top: .8rem;
     font-weight: 400;
 }
-
+input[type='checkbox']{
+    border:0!important;
+    background:none!important;
+}
 .zagong_check{
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.2rem;
+    height: 1.2rem;
     background: #FFFFFF;
-    border: 1px solid #B8B6B6;
+    /*border: 1px solid #B8B6B6;*/
     border-radius: 1px;
     transform: translateY(8px);
 }
-
+.handyman li input[type='checkbox'] ~img{
+    position: absolute;
+    top:2.7rem;
+    left:.23rem;
+    display: none;
+}
+.handyman li input[type='radio'] ~img{
+    position: absolute;
+    top:2.46rem;
+    left:.02rem;
+    display: none;
+}
+.handyman li input[type='radio']:checked ~ img{
+    display: inline-block;
+}
+.handyman li input[type='checkbox']{
+    margin-left:-.3rem;
+}
+.handyman li input[type='checkbox']:checked ~ img{
+    display: inline-block;
+}
 .check_word{
    display: inline-block;
     margin-top: -2px;
@@ -325,19 +349,20 @@ header div span{
 #youjianzha{
     padding-bottom: 2rem;
     padding-top: 2rem;
+    padding-left: 0!important;
 }
 
 #wujianzha{
     padding-bottom: 2rem;
     padding-top: 2rem;
+    padding-left: 0!important;
 }
 
 .zagong_radio{
-    width: 1.5rem!important;
-    height: 1.5rem!important;
+    width: 1.2rem!important;
+    height: 1.2rem!important;
     transform: translateY(8px)!important;
 }
-
 #modal_content{
     width: 21.3rem;
     height: 36.2rem;
@@ -358,7 +383,7 @@ header div span{
 }
 .close{
     position: absolute;
-    top:1rem;
+    top:.7rem;
     left:1rem;
     font-size:3rem!important;
     color: #53A8F4!important;
@@ -394,6 +419,7 @@ header div span{
 .text_p{
     font-size:1rem;
     color: #6C6C6C;
+    padding-left:0 !important;
 }
 .replace{
     width:100%;

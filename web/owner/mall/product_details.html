@@ -22,7 +22,9 @@
         <!--下拉选择数量-->
         <div class="standard">
             <div>选择数量</div>
-            <div data-toggle="modal" data-target="#myModal"> > </div>
+            <div data-toggle="modal" data-target="#myModal">
+                <img src="images/left_more.png" class="img_size" alt="">
+            </div>
         </div>
         <!--服务项-->
          <div class="service_item" data-toggle="modal" data-target="#myModal_sec">
@@ -30,7 +32,9 @@
                  <li><img src="images/right.png" alt=""/> &nbsp;<span>上门维修</span></li>
                  <li><img src="images/right.png" alt=""/> &nbsp;<span>上门换货</span></li>
                  <li><img src="images/right.png" alt=""/> &nbsp;<span>上门退货</span></li>
-                 <li> > </li>
+                 <li>
+                     <img src="images/left_more.png" class="img_size_1" alt="">
+                 </li>
              </ul>
          </div>
 
@@ -42,11 +46,13 @@
             <span class="user_comment">提莫</span>
             <span class="comment_time">2017-06-06</span>
             </div>
-            <p class="comment_des">好好！我去前面探探路 ！</p>
+            <p class="comment_des">质量好，发货快，商家态度好</p>
         </div>
         <!--查看所有评论-->
         <div class="all_comment">
-            <span > <a href="all_comment.html">查看全部评论</a> &nbsp;></span>
+            <span > <a >查看全部评论</a>
+              <img src="images/left_more.png" alt="">
+            </span>
         </div>
         <!--商铺头部-->
         <div class="shop_header">
@@ -78,22 +84,22 @@
         <div class="pic_comment">
             <div>
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs pic_tabs active" role="tablist">
-                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">图文详情</a></li>
-                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">产品参数</a></li>
+                <ul class="nav nav-tabs pic_tabs" role="tablist">
+                    <li role="presentation" ng-class="{'active':(tab_title==0)}"><a ng-click="(tab_title == 0)" aria-controls="home" role="tab" data-toggle="tab">图文详情</a></li>
+                    <li role="presentation" ng-class="{'active':(tab_title==1)}"><a ng-click="(tab_title == 1)" aria-controls="profile" role="tab" data-toggle="tab">产品参数</a></li>
                 </ul>
 
                 <!-- Tab panes -->
-                <div class="tab-content">
+                <div class="tab-content" ng-switch on="tab_title">
                     <!--图文详情-->
-                    <div role="tabpanel" class="tab-pane active" id="home">
+                    <div role="tabpanel" class="tab-pane active" id="home" ng-switch-when="0">
                         <div class="tab_one">
                             <img src="images/banner1.png" alt=""/>
-                            <p>哈哈哈啊哈哈哈哈哈哈哈哈哈哈</p>
+                            <!--<p>哈哈哈啊哈哈哈哈哈哈哈哈哈哈</p>-->
                         </div>
                     </div>
                     <!--产品参数-->
-                    <div role="tabpanel" class="tab-pane" id="profile">
+                    <div role="tabpanel" class="tab-pane" id="profile" ng-switch-when="1">
                       <div class="shop_two">
                           <ul>
                               <li><span>产品参数</span><span class="comment_num">25446556</span></li>
@@ -115,17 +121,23 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <p type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></p>
+                    <p type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">
+                        <img src="images/close.png" alt="">
+                    </span>
+                    </p>
                 </div>
                 <div class="modal-body">
                   <div class="add_cart">
                       <img src="images/bed.png" alt=""/>
                   </div>
-                    <span>{{current_good.platform_price | currency:'￥'}}</span>
-                    <span>库存1200件</span>
+                    <div class="div_pic">
+                        <span class="pic_data">{{current_good.platform_price | currency:'￥'}}</span>
+                        <span class="shu_pic">库存1200件</span>
+                    </div>
+
 
                      <div class="sl">
-                        <span>购买数量：</span>
+                        <span>购买数量</span>
                         <div class="input_div">
                             <input class="min am-btn" ng-click="subtract()" name="" type="button" value="-" />
                             <input class="text_box" name="" type="text" ng-model="add_quantity" style="width:40px;border: none;" />
@@ -199,15 +211,15 @@
 
                 </div>
                 <div class="modal-footer-btn">
-                    <button type="button" class="btn btn-primary"  data-dismiss="modal">完成</button>
+                    <button type="button" class="btn btn_color"  data-dismiss="modal">完成</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="foot_tab">
-        <div><img src="images/mall_collect.png" alt=""><p>联系商家</p></div>
+        <div><img src="images/mall_collect.png" class="img_size_3" alt=""><p>联系商家</p></div>
         <button class="add" ng-if="prev_index == 0" data-toggle="modal" data-target="#myModal">添加</button>
-        <button class="add" ng-if="prev_index == 1" data-toggle="modal" data-target="#myModal">更换</button>
+        <button class="add" ng-if="prev_index == 1 || prev_index == 2" data-toggle="modal" data-target="#myModal">更换</button>
     </div>
     <div style="height: 4rem;"></div>
 </div>

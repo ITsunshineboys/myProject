@@ -115,7 +115,7 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                     'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'',"area":"",'choose_stairs':''
                     ,'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
                     'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
-                    'cur_stair' :''}
+                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor':'','index':''}
             })
             .state("cell_search", {
                 url: "/cell_search",
@@ -149,7 +149,7 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                     'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
                     'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
                     'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
-                    'cur_stair' :''}
+                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor':''}
             })
             .state("other",{  //其他材料页
                 url:"/other",
@@ -162,7 +162,8 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                     'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
                     'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
                     'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
-                    'cur_stair' :''}
+                    'cur_stair' :'','platform_price':'','supply_price':'','platform_price_copy':'','supply_price_copy':'',
+                    'cur_labor' :''}
             })
             .state("second_level_material",{  //某二级分类页
                 url:"/second_level_material",
@@ -175,7 +176,7 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                     'house_kitchen':'','house_toilet':'','highCrtl':'',"window":'','choose_stairs':'',
                     'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
                     'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
-                    'cur_stair' :''}
+                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor' :''}
             })
             .state("commodity_details",{  //某三级分类页
                 url:"/commodity_details",
@@ -189,7 +190,7 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                     'second_material':'','three_material':'','pid':'','excluded_item':'','prev_index':'',
                     'stair_copy':'','level_copy':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
                     'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
-                    'cur_stair' :''}
+                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor' :''}
             })
             .state("product_details",{  //单项详情页
                 url:"/product_details",
@@ -203,7 +204,7 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                     'second_material':'','three_material':'','three_material_details':'','product_details':'',
                 'prev_index':'','excluded_item':'','stair_copy':'','level_copy':'','pid':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
                     'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
-                    'cur_stair' :''}
+                    'cur_stair' :'','platform_price':'','supply_price':'','cur_labor' :''}
             })
             .state("main",{  //主要材料详情页
                 url:"/main",
@@ -217,7 +218,8 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                     'second_material':'','three_material':'','three_material_details':'','product_details':'',
                 'prev_index':'','excluded_item':'','stair_copy':'','level_copy':'','pid':'', 'twelve_dismantle':'' , 'twenty_four_dismantle':'',
                     'repair':'', 'twelve_new_construction':'' , 'twenty_four_new_construction':'', 'building_scrap':'',
-                    'cur_stair' :''}
+                    'cur_stair' :'','platform_price':'','supply_price':'','platform_price_copy':'','supply_price_copy':'',
+                    'cur_labor' :''}
             })
     }])
     .run(["$rootScope","$state",function ($rootScope,$state) {

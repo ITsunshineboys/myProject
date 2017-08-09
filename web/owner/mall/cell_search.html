@@ -22,7 +22,7 @@
         </div>
 
         <!--无数据显示-->
-        <div class="no_data" ng-if="!search_data.length">
+        <div class="no_data" ng-if="!search_data.length&&search_data!=undefined">
             <span>无数据</span><br/>
             <a ui-sref="nodata({toponymy:data})">没有我的小区?</a>
         </div>
