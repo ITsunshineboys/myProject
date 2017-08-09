@@ -1,9 +1,13 @@
 .header_cell{
     height: 4rem;
     background-color: white;
-
 }
-
+.header_cell img{
+    position: absolute;
+    top: 1.8rem;
+    left: 2.5rem;
+    width: 1.2rem;
+}
 .header_cell input{
     width: 25rem;
     height: 2.7rem;
