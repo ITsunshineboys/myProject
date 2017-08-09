@@ -121,31 +121,37 @@ class DistributionController extends Controller
         }else{
             $session['distributionlastsendtime']=$time;
         }
-        if ($user){
-            $data['mobile']=$mobile;
-            $data['type']='register';
-            $res=new SmValidationService($data);
-            if ($res){
-                $code=200;
+        $code=200;
                 $session['distributionmobile']=$mobile;
                 return Json::encode([
                     'code' => $code,
                     'msg' =>'ok'
                 ]);
-            }
-        }else{
-            $data['mobile']=$mobile;
-            $data['type']='register';
-            $res=new SmValidationService($data);
-            if ($res){
-                $code=200;
-                $session['distributionmobile']=$mobile;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' =>'ok'
-                ]);
-            }
-        }
+        // if ($user){
+        //     $data['mobile']=$mobile;
+        //     $data['type']='register';
+        //     $res=new SmValidationService($data);
+        //     if ($res){
+        //         $code=200;
+        //         $session['distributionmobile']=$mobile;
+        //         return Json::encode([
+        //             'code' => $code,
+        //             'msg' =>'ok'
+        //         ]);
+        //     }
+        // }else{
+        //     $data['mobile']=$mobile;
+        //     $data['type']='register';
+        //     $res=new SmValidationService($data);
+        //     if ($res){
+        //         $code=200;
+        //         $session['distributionmobile']=$mobile;
+        //         return Json::encode([
+        //             'code' => $code,
+        //             'msg' =>'ok'
+        //         ]);
+        //     }
+        // }
     }
 
     /**
