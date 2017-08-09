@@ -25,6 +25,7 @@ class TestController extends Controller
         'reset-mobile-pwd',
         'goods-qr-gen',
         'register-user',
+        'upload',
     ];
 
     /**
@@ -132,5 +133,15 @@ class TestController extends Controller
     {
         $res = User::register(Yii::$app->request->post(), false);
         return is_array($res) ? 'ok' : 'failed';
+    }
+
+    /**
+     * Upload test
+     *
+     * @return string
+     */
+    public function actionUpload()
+    {
+        return $this->render('upload');
     }
 }
