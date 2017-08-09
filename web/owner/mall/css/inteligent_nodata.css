@@ -432,7 +432,7 @@ header div i{
  }
 input[type='radio'] ~ img{
     position: absolute;
-    top: 19px!important;
+    top: 14px!important;
     left: -2px!important;
     display: none;
 }
@@ -444,6 +444,12 @@ input[type='radio'] ~ img{
 }
 input[type='radio']:checked ~ img{
     display: inline-block;
+}
+.img_size{
+    position: absolute;
+    top: 19px!important;
+    left: -2px!important;
+    display: none;
 }
 .rey{
     margin-top: 1rem;
