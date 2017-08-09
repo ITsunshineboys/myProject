@@ -7,7 +7,8 @@ var app = angular.module("app",["ng.ueditor",
 "banner_history_module",
 "index_recommend_history_module",
 "index_module",
-"commodity_manage_module"
+"commodity_manage_module",
+"commodity_detail_module"
 ]);
 /*路由拦截*/
 app.config(function ($stateProvider,$httpProvider) {
@@ -32,6 +33,10 @@ app.config(function ($stateProvider,$httpProvider) {
     .state("commodity_manage",{   //商城管理——商品管理
       url:"/commodity_manage",
       templateUrl:"pages/mall_manage/merchant_manage/commodity_manage/commodity_manage.html"
+    })
+    .state("commodity_detail",{   //商城管理——商品管理——商品详情（已上架）
+      url:"/commodity_detail",
+      templateUrl:"pages/mall_manage/merchant_manage/commodity_detail/commodity_detail.html"
     })
 })
   .directive('wdatePicker',function(){

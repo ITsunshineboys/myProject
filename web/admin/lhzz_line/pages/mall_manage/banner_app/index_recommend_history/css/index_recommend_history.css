@@ -90,5 +90,9 @@ table{
   font-size: 14px;
   color: #7A8599!important;
 }
+#show_img_size{
+  width: 30px;
+  height: 30px;
+}
 /*Table内容 结束-*/
 
