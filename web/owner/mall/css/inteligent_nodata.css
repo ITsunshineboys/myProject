@@ -508,11 +508,12 @@ input[type='radio']:checked ~ img{
     margin-left: 2rem;
     position: relative;
 }
-.choose_stairs img{
+.img_size{
     position: absolute;
     top:0;
     left:.5rem;
 }
+
 .have, .no {
     margin-left: .1rem;
     font-size: 1.2rem;
