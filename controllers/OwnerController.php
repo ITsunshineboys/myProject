@@ -1602,6 +1602,31 @@ class OwnerController extends Controller
         ]);
     }
 
+    /**
+     * @return string
+     */
+    public function actionAssortFacility()
+    {
+        $post = Yii::$app->request->post();
+        if (!empty($post)) {
+            echo 11;exit;
+        }else {
+            $assort_material = MaterialPropertyClassify::find()
+                ->asArray()
+                ->all();
+            $material = [];
+            foreach ($assort_material as $one_material) {
+                $material [] = $one_material['material'];
+            }
+            $goods = Goods::assortList($material,510100);
+            foreach ($goods as $one_goods) {
+
+            }
+            var_dump($goods);exit;
+        }
+
+    }
+
 
     /**
      * Owner certification action(app)
