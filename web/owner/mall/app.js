@@ -7,7 +7,7 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate"])
                 views: {
                     "": {templateUrl: "intelligent_index.html"}
                 },
-                controller: "intelligent_index_ctrl",
+                controller: "intelligent_index_ctrl"
             })
             .state("have_data",{   //有资料
                 url:"/have_data",

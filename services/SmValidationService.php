@@ -59,9 +59,7 @@ class SmValidationService
         $this->_validationCodeMethod = $validationCodeMethod;
         $this->_appKey = $smParams['appKey'];
         $this->_appSecret = $smParams['appSecret'];
-        $this->_signName = isset($smParams[$data['type']]['signName'])
-            ? $smParams[$data['type']]['signName']
-            : $smParams['signName'];
+        $this->_signName = $smParams['signName'];
         $this->_templateId = $smParams[$data['type']]['templateId'];
         $this->_interval = $smParams['interval'];
         $this->_validationCodeExpire = $smParams['validationCode']['expire'];

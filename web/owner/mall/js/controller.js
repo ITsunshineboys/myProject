@@ -333,7 +333,7 @@ angular.module("all_controller", [])
         };
         $scope.getBack = function (item) {
             if (item == "今日花园") {
-                $state.go("have_data", {name: '今日花园', address: '四川省成都市郫县高新西区泰山大道', pic_one: '91135', pic_two: '95280'})
+                $state.go("have_data", {name: '今日花园', address: '四川省成都市郫县高新西区泰山大道', pic_one: '101135', pic_two: '125280'})
             } else if (item == "花好月圆") {
                 $state.go("have_data", {name: '花好月圆', address: '四川省成都市蜀汉路东89号', pic_one: '116688', pic_two: '138280'})
             }
@@ -348,9 +348,10 @@ angular.module("all_controller", [])
         }
 
     })
-    .controller("intelligent_nodata_ctrl", function ($scope, $stateParams, $http, $state,$location,$anchorScroll) { //无数据控制器
+    .controller("intelligent_nodata_ctrl", function ($timeout,$scope, $stateParams, $http, $state,$location,$anchorScroll) { //无数据控制器
         // let all_url = 'http://test.cdlhzz.cn:888'
         let all_url = ""
+        $scope.btn_msg = '生成3D/VR图和材料'
         console.log($stateParams)
         $scope.message = ''
         $scope.cur_labor = $stateParams.cur_labor || ''
@@ -1764,7 +1765,12 @@ angular.module("all_controller", [])
             }, function (error) {
                 console.log(error)
             })
-            $scope.isClick = true
+            $scope.btn_msg = '正在拼命计算中...'
+           let a = $timeout(function(){
+                $scope.isClick = true
+               $scope.btn_msg = '生成3D/VR图和材料'
+            },500)
+            console.log($scope.isClick)
             console.log()
         }
         //传递数据

@@ -424,8 +424,8 @@ class OrderController extends Controller
     }
 
     public function actionAlipaygetnotify(){
-        $data=(new \yii\db\Query())->from('alipayreturntest')->one()['content'];
-        echo $data;
+        $data=(new \yii\db\Query())->from('alipayreturntest')->all();
+       var_dump($data);
 
     }
 
@@ -464,15 +464,18 @@ class OrderController extends Controller
         $model->Wxlineapipay($orders);
     }
 
-    /**
+   /**
      *微信线下支付异步操作
      */
     public function actionOrderlinewxpaynotify(){
-        // $postStr = file_get_contents('php://input');
+        // $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         // $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
         // $data=json_encode($msg);
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $data=json_encode($msg);
         $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            'content'=>1111
+            'content'=>$data
         ])->execute();
     }
     /**

@@ -19,6 +19,7 @@ use app\models\LaborCost;
 use app\models\Series;
 use app\models\Style;
 use app\services\ExceptionHandleService;
+use app\services\SmValidationService;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -619,4 +620,5 @@ class QuoteController extends Controller
         }
 
     }
+
 }
