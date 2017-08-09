@@ -56,7 +56,7 @@ class FileService
      * @return bool
      */
     public static function checkUploadSize(UploadForm $model)
-    {
+    {echo $model->file->size ,'<=', Yii::$app->params['uploadPublic']['maxSize'];
         return $model->file->size <= Yii::$app->params['uploadPublic']['maxSize'];
     }
 
@@ -72,12 +72,12 @@ class FileService
 
         $code = 1000;
 
-        if (!$model->file || !$model->file->extension) {echo 'aa';
+        if (!$model->file || !$model->file->extension) {
             return $code;
         }
 
-        if (!$model->validate()) {echo 'bb';
-            if (!self::checkUploadSize($model)) {echo 'cc';
+        if (!$model->validate()) {
+            if (!self::checkUploadSize($model)) {
                 $code = 1004;
                 return $code;
             }
