@@ -1,14 +1,11 @@
 body{
     background-color: white;
 }
-.back{
-    background-color: #F6F6F6;
-}
 header div{
     height: 4rem;
     width: auto;
     background-color: white;
-    /*border-bottom:4px solid #999 ;*/
+    border-bottom:4px solid #999 ;
 }
 header div span{
     line-height: 4rem;
@@ -25,11 +22,9 @@ header div:last-child span{
     margin-top: 1rem;
     background-color: white;
     width: auto;
-    overflow: hidden;
 }
 .ul_item{
     margin-top: 1rem;
-    margin-bottom: 1.5rem;
 }
 .ul_item li{
     display: inline-block;
@@ -37,19 +32,12 @@ header div:last-child span{
 .li_item{
     display:inline-block;
     margin-left: 3rem;
-    margin-bottom: 2rem;
-    position: relative;
+    margin-bottom: 1rem;
 }
 .li_item img{
     width: 6rem;
-    margin-bottom: 2rem;
-    position: relative;
 }
 .li_item span{
-    /*margin-left: 1rem;*/
-    font-size: 1.1rem;
-    left: 1rem;
-    color: #4A4A4A;
-     position: absolute;
-    top:6.5rem;
+    margin-left: 1rem;
+    font-size: 1rem;
 }

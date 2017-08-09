@@ -6,7 +6,7 @@
                 series_index,'style_index':style_index,'worker_category':worker_category
                 ,'house_bedroom':house_bedroom,'house_hall':house_hall,
                 'house_kitchen':house_kitchen,'house_toilet':house_toilet,
-                'highCrtl':highCrtl,'index':index,'area':area,'window':window,'choose_stairs':choose_stairs})">
+                'highCrtl':highCrtl,'area':area,'window':window,'choose_stairs':choose_stairs})">
                 <img src="images/mall_nav_return.png" alt="">
             </a>
             <span class="pic_span">基础装修</span>
@@ -16,14 +16,14 @@
     <section>
 
         <!--辅材-->
-        <div class="wall_material" ng-repeat="item in first_level.second_level" ng-if="first_level[item].cost>0">
+        <div class="wall_material" ng-repeat="item in first_level.second_level">
             <!--<div class="divide"></div>-->
             <div class="shu"></div>
             <h1>{{first_level[item].title}}</h1>
             <ul class="wall_ul">
                 <li data-toggle="modal" data-target="#myModal"
                     ng-repeat="item1 in first_level[item].three_level track by $index">
-                    <div ng-repeat="item2 in first_level[item][item1].goods_detail" ng-click="
+                    <div ng-repeat="item2 in first_level[item][item1].goods_detail track by $index" ng-click="
               goModalData(first_level[item][item1][item2])">
                         <span class="wall_span">{{first_level[item][item1].title}}x{{first_level[item][item1][item2].quantity}}</span><br/>
                         <span class="wall_brand">{{first_level[item][item1][item2].name}}</span>
@@ -54,64 +54,47 @@
                     <div class="well">
                         <ul class="handyman">
                             <li>
-                                <label for="cur_1">
-                                <input type="checkbox" ng-model="complete" id="cur_1" class="zagong_check"/>
-                                    <img src="images/public_list_checkbox_selected@2x.png" alt="">
-                                </label>
+                                <input type="checkbox" ng-model="complete" class="zagong_check"/>
                                 <span class="check_word">12墙拆除</span>
-                                <input type="text" placeholder="请输入数值" class="handyman_span" ng-model="twelve_dismantle"/>
+                                <input type="text" placeholder="30" class="handyman_span" ng-model="twelve_dismantle"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
                             <li>
-                                <label for="cur_2">
-                                    <input type="checkbox" ng-model="complete1" id="cur_2"  class="zagong_check"/>
-                                    <img src="images/public_list_checkbox_selected@2x.png" alt="">
-                                </label>
+                                <input type="checkbox" ng-model="complete1"  class="zagong_check"/>
                                 <span class="check_word">24墙拆除</span>
-                                <input type="text" placeholder="请输入数值" class="handyman_span"
+                                <input type="text" placeholder="30" class="handyman_span"
                                        ng-model="twenty_four_dismantle"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
                             <li>
-                                <label for="cur_3">
-                                    <input type="checkbox" ng-model="complete2" id="cur_3"  class="zagong_check"/>
-                                    <img src="images/public_list_checkbox_selected@2x.png" alt="">
-                                </label>
+                                <input type="checkbox" ng-model="complete2"  class="zagong_check"/>
                                 <span class="check_word" id="bulan">补烂</span>
-                                <input type="text" placeholder="请输入数值" class="handyman_span" ng-model="repair"/>
+                                <input type="text" placeholder="30" class="handyman_span" ng-model="repair"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
                             <li>
-                                <label for="cur_4">
-                                    <input type="checkbox" ng-model="complete3"  id="cur_4" class="zagong_check"/>
-                                    <img src="images/public_list_checkbox_selected@2x.png" alt="">
-                                </label>
+                                <input type="checkbox" ng-model="complete3"  class="zagong_check"/>
                                 <span class="check_word">12墙新建</span>
                                 <span class="two-sided">(含双面抹灰)</span>
-                                <input type="text" placeholder="请输入数值" class="handyman_input"
+                                <input type="text" placeholder="30" class="handyman_input"
                                        ng-model="twelve_new_construction"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
                             <li>
-                                <label for="cur_5">
-                                <input type="checkbox" ng-model="complete4" id="cur_5"  class="zagong_check"/>
-                                    <img src="images/public_list_checkbox_selected@2x.png" alt="">
-                                </label>
+                                <input type="checkbox" ng-model="complete4"  class="zagong_check"/>
                                 <span class="check_word">24墙新建</span>
                                 <span class="two-sided">(含双面抹灰)</span>
-                                <input type="text" placeholder="请输入数值" class="handyman_input"
+                                <input type="text" placeholder="30" class="handyman_input"
                                        ng-model="twenty_four_new_construction"/>
                                 <span class="handyman_sec">m <sup>2</sup></span>
                             </li>
                             <li  id="youjianzha">
                                 <input type="radio" name="building_scrap" ng-checked="building_scrap"  class="zagong_check zagong_radio"/>
                                 <span class="jianzha">小区有建渣</span>
-                                <img src="images/mall_list_radio.png" alt=""/>
                             </li>
                             <li  id="wujianzha">
                                 <input type="radio" name="building_scrap" ng-checked="!building_scrap" class="zagong_check zagong_radio"/>
                                 <span class="jianzha">小区无建渣</span>
-                                <img src="images/mall_list_radio.png" alt=""/>
                             </li>
                         </ul>
                     </div>
@@ -169,6 +152,7 @@
                         <p class="comment_p">商品特色</p>
                         <p class="text_p ">{{modalData.subtitle}}</p>
                     </div>
+                    <button type="button" class="btn replace btn-primary"  data-dismiss="modal" ng-click="replace_material(modalData)">更换</button>
                 </div>
             </div>
         </div>
