@@ -4938,6 +4938,7 @@ class MallController extends Controller
     {
         $code = 1000;
 
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
         $shopType = (int)Yii::$app->request->get('shop_type', 0);
         $status = (int)Yii::$app->request->get('status', 0);
         $page = (int)Yii::$app->request->get('page', 1);
@@ -4951,11 +4952,16 @@ class MallController extends Controller
         }
 
         $query = new Query;
-        if ($shopType != Yii::$app->params['value_all']) {
-            $query->andWhere(['type_shop' => $shopType]);
-        }
-        if ($status != Yii::$app->params['value_all']) {
-            $query->andWhere(['status' => $status]);
+        if (!$keyword) {
+            if ($shopType != Yii::$app->params['value_all']) {
+                $query->andWhere(['type_shop' => $shopType]);
+            }
+            if ($status != Yii::$app->params['value_all']) {
+                $query->andWhere(['status' => $status]);
+            }
+        } else {
+            $query->andWhere(['like', 'shop_no', $keyword]);
+            $query->orWhere(['like', 'shop_name', $keyword]);
         }
 
         return Json::encode([
