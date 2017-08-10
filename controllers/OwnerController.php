@@ -1607,8 +1607,8 @@ class OwnerController extends Controller
      */
     public function actionAssortFacility()
     {
-        $get = Yii::$app->request->post();
-        if (empty($get['effect'])) {
+        $post = Yii::$app->request->post();
+        if (empty($post['effect'])) {
             echo 11;exit;
         }else {
             $assort_material = MaterialPropertyClassify::find()
@@ -1621,27 +1621,15 @@ class OwnerController extends Controller
                 $material_name [] = $one_material['material'];
             }
             $goods = Goods::assortList($material_name,510100);
-            foreach ($goods as $one_goods) {
-                if ($one_goods['title'] == '智能配电箱') {
-                    $one_goods['show_quantity'] = $material_one['智能配电箱']['quantity'];
-                    $one_goods['show_cost'] = $one_goods['show_quantity'] * $one_goods['platform_price'];
-                    $switch_box [] = $one_goods;
-                }
-                if ($one_goods['title'] == '背景音乐系统' && $one_goods['series_id'] == $get['series']) {
-                    $one_goods['show_quantity'] = $material_one['背景音乐系统']['quantity'];
-                    $one_goods['show_cost'] = $one_goods['show_quantity'] * $one_goods['platform_price'];
-                    $background_music [] = $one_goods;
-                } else {
-                    $background_music = null;
-                }
-            }
-            $material ['capacity'][] = BasisDecorationService::profitMargin($switch_box);
-            $material ['capacity'][] = BasisDecorationService::profitMargin($background_music);
-            $material ['abc'][] = BasisDecorationService::profitMargin($background_music);
+            $goods_price = BasisDecorationService::priceConversion($goods);
+            $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price, $material_one, $post);
+            $material[] = BasisDecorationService::capacity($goods_price, $material_one, $post);
+            $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price, $material_one, $post);
+            $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price, $material_one, $post);
+
             return Json::encode([
-                'name'=>$material
+                'goods'=>$material
             ]);
-//            var_dump($material);exit;
         }
 
     }
