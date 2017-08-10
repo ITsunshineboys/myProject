@@ -389,4 +389,33 @@ class Supplier extends ActiveRecord
         $this->_formatData($viewData);
         return $viewData;
     }
+
+    /**
+     * Close supplier
+     *
+     * @param ActiveRecord $operator operator
+     * @return int
+     */
+    public function offline(ActiveRecord $operator)
+    {
+        $this->status = self::STATUS_OFFLINE;
+
+        $tran = Yii::$app->db->beginTransaction();
+        $code = 500;
+
+        try {
+            if (!$this->save()) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            Goods::disableGoodsBySupplierId($this->id, $operator);
+
+            $tran->commit();
+            return 200;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+            return $code;
+        }
+    }
 }

@@ -27,7 +27,7 @@ section{
   margin-left: 40px;
   border-bottom: 1px solid #E6E9F0 ;
 }
-.tab ul{
+.tab>ul{
   list-style: none;
   padding: 0;
 }
@@ -36,15 +36,20 @@ section{
   display: table;
   clear: both;
 }
-.tab ul li{
+.tab>ul>li{
   float: left;
   height: 60px;
   line-height: 60px;
   margin-right: 25px;
+  cursor: pointer;
 }
 .tab_blue{
   color: #5677FC;
   border-bottom: 1px solid #5677FC ;
+}
+.img_size{
+  width: 30px;
+  height: 30px;
 }
 /*上架选项卡*/
 .on_menu{
@@ -112,6 +117,9 @@ section{
   border:1px solid #8D9199;
   border-radius: 20px;
 }
+.search_input:focus{
+  outline: none;
+}
 .search{
   position: absolute;
   top:50%;
@@ -161,6 +169,12 @@ table tr{
 }
 .table_content{
   border-top:1px solid #e6e6e6;
+}
+.wait_check{
+  border: 1px solid #ABABAB!important;
+  color: #CCCCCC;
+  margin:0!important;
+  padding: 5px;
 }
 /*表格内容结束*/
 

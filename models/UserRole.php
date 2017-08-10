@@ -11,6 +11,7 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 use app\models\Role;
+use app\services\ModelService;
 
 class UserRole extends ActiveRecord
 {
@@ -108,5 +109,25 @@ class UserRole extends ActiveRecord
     public static function totalNumber()
     {
         return (int)self::find()->count();
+    }
+
+    /**
+     * Get role user by user model and role id
+     *
+     * @param User $user user model
+     * @param int $roleId role id
+     * @return ActiveRecord|null
+     */
+    public static function roleUser(User $user, $roleId)
+    {
+        if ($roleId == Yii::$app->params['ownerRoleId']) {
+            return $user;
+        }
+
+        $role = Role::findOne($roleId);
+        if ($role) {
+            $detail = Yii::createObject(__NAMESPACE__ . '\\' . $role->detail_model);
+            return $detail::find()->where(['uid' => $user->id])->one();
+        }
     }
 }

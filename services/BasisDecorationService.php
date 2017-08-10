@@ -2053,6 +2053,12 @@ class BasisDecorationService
         return $material;
     }
 
+    /**
+     * 水路材料
+     * @param $goods
+     * @param $material_price
+     * @return array
+     */
     public static function waterwayMaterial($goods,$material_price)
     {
         foreach ($goods as $one_waterway_current) {

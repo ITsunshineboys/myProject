@@ -264,7 +264,7 @@ class Goods extends ActiveRecord
     /**
      * Get goods ids by category id
      *
-     * @param  init $categoryId category id
+     * @param  int $categoryId category id
      * @return array
      */
     public static function findIdsByCategoryId($categoryId)
@@ -277,6 +277,52 @@ class Goods extends ActiveRecord
         return Yii::$app->db
             ->createCommand("select id from {{%goods}} where category_id = {$categoryId}")
             ->queryColumn();
+    }
+
+    /**
+     * Disable goods by supplier id
+     *
+     * @param int $supplierId supplier id
+     * @param ActiveRecord $operator $operator
+     */
+    public static function disableGoodsBySupplierId($supplierId, ActiveRecord $operator)
+    {
+        $goodsIds = self::findIdsBySupplierId($supplierId);
+        if ($goodsIds) {
+            self::updateAll([
+                'status' => self::STATUS_OFFLINE,
+                'offline_time' => time(),
+                'offline_reason' => Yii::$app->params['supplier']['offline_reason'],
+                'offline_uid' => $operator->id,
+                'offline_person' => $operator->nickname,
+            ], ['in', 'id', $goodsIds]);
+        }
+    }
+
+    /**
+     * Get goods ids by supplier id
+     *
+     * @param  int $supplierId supplier id
+     * @return array
+     */
+    public static function findIdsBySupplierId($supplierId)
+    {
+        $supplierId = (int)$supplierId;
+        if ($supplierId <= 0) {
+            return [];
+        }
+
+        return Yii::$app->db
+            ->createCommand("select id from {{%" . self::tableName() . "}} where supplier_id = {$supplierId}")
+            ->queryColumn();
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'goods';
     }
 
     /**
@@ -354,22 +400,22 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level,$title,$city = 510100)
+    public static function priceDetail($level, $title, $city = 510100)
     {
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image";
         $all = self::find()
             ->select($select)
             ->asArray()
-            ->leftJoin('goods_brand','goods.brand_id = goods_brand.id')
-            ->leftJoin('goods_category AS gc','goods.category_id = gc.id')
-            ->leftJoin('logistics_template','goods.supplier_id = logistics_template.supplier_id')
-            ->leftJoin('logistics_district','logistics_template.id = logistics_district.template_id')
-            ->where(['and',['logistics_district.district_code'=>$city],['gc.level'=>$level],['in','gc.title',$title]])
+            ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
+            ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
+            ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
+            ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title]])
             ->all();
         return $all;
     }
 
-    public static function newMaterialAdd($level,$title,$city = 510100)
+    public static function newMaterialAdd($level, $title, $city = 510100)
     {
         if (empty($level) && empty($title)) {
             echo '请正确输入值';
@@ -388,7 +434,7 @@ class Goods extends ActiveRecord
         }
     }
 
-    public static function findByIdAll($level,$title,$series = 1,$style = 1)
+    public static function findByIdAll($level, $title, $series = 1, $style = 1)
     {
 
         $db = \Yii::$app->db;
@@ -402,7 +448,7 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return array
      */
-    public static function findQueryAll($all,$city = 510100)
+    public static function findQueryAll($all, $city = 510100)
     {
         $goods_id = [];
         foreach ($all as $single) {
@@ -416,23 +462,23 @@ AND goods.id IN (" . $id . ")";
         return $all_goods;
     }
 
-    public static function categoryById($all,$city =510100)
+    public static function categoryById($all, $city = 510100)
     {
-            $material = [];
-            foreach ($all as $one) {
-                $material [] = $one['material'];
-            }
-            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image";
-            $all_goods = self::find()
-                ->select($select)
-                ->asArray()
-                ->leftJoin('goods_brand','goods.brand_id = goods_brand.id')
-                ->leftJoin('goods_category as gc','goods.category_id = gc.id')
-                ->leftJoin('logistics_template','goods.supplier_id = logistics_template.supplier_id')
-                ->leftJoin('logistics_district','logistics_template.id = logistics_district.template_id')
-                ->where(['and',['logistics_district.district_code'=>$city],['in','gc.title',$material]])
-                ->all();
-            return $all_goods;
+        $material = [];
+        foreach ($all as $one) {
+            $material [] = $one['material'];
+        }
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image";
+        $all_goods = self::find()
+            ->select($select)
+            ->asArray()
+            ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
+            ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
+            ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
+            ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $material]])
+            ->all();
+        return $all_goods;
     }
 
     /**
@@ -624,14 +670,6 @@ AND goods.id IN (" . $id . ")";
             ->queryColumn());
     }
 
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'goods';
-    }
-
     public static function findByCategory($condition)
     {
         if ($condition) {
@@ -666,6 +704,21 @@ AND goods.id IN (" . $id . ")";
                 ->all();
             return $goods;
         }
+    }
+
+    public static function assortList($all, $city = 510100)
+    {
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image";
+        $all_goods = self::find()
+            ->select($select)
+            ->asArray()
+            ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
+            ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
+            ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
+            ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all]])
+            ->all();
+        return $all_goods;
     }
 
     /**

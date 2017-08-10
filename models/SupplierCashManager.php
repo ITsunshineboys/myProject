@@ -3,9 +3,12 @@
 namespace app\models;
 
 
+use app\services\StringService;
+use function GuzzleHttp\Psr7\str;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\db\Query;
 
 const  SUP_BANK_CARD = 'supplier_bankinformation';
@@ -18,15 +21,25 @@ class SupplierCashManager extends ActiveRecord
 {
 
     /**
-     * 查询商家现金流列表
-     * @param $supplier_id
-     * @return array|bool|null
+     * 查询商家提现列表
+     * @param $supplier_id int 商家id
+     * @param $page  int 哪一页
+     * @param $page_size int 页面尺寸
+     * @param $time_type string 时间类型
+     * @param $time_start string 开始时间
+     * @param $time_end string 结束时间
+     * @param $status int 状态
+     * @return array
      */
-    public function getCashList($supplier_id, $page, $page_size, $time_id, $time_start, $time_end, $status)
+    public function getCashList($supplier_id, $page, $page_size, $time_type, $time_start, $time_end, $status)
     {
         $query = (new \yii\db\Query())->from(SUP_CASHREGISTER)->where(['supplier_id' => $supplier_id]);
-        if ($time_id) {
-            $query->andWhere(self::Timehandle($time_id, $time_start, $time_end, 'apply_time'));
+        $time_area = self::timeDeal($time_type, $time_start, $time_end);
+        $time_start = $time_area[0];
+        $time_end = $time_area[1];
+        if ($time_start && $time_end && $time_end > $time_start) {
+            $query->andWhere(['>', 'apply_time', $time_start])
+                ->andWhere(['<', 'apply_time', $time_end]);
         }
         if ($status) {
             $query->andWhere(['status' => $status]);
@@ -35,11 +48,20 @@ class SupplierCashManager extends ActiveRecord
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
-//            ->select(['id', 'cash_money', 'apply_time', 'status'])
             ->all();
         foreach ($arr as $k => $v) {
             $arr[$k]['apply_time'] = date('Y-m-d H:i', $arr[$k]['apply_time']);
-            $arr[$k]['handle_time'] = date('Y-m-d H:i', $arr[$k]['handle_time']);
+            if ($arr[$k]['handle_time']) {
+                $arr[$k]['handle_time'] = date('Y-m-d H:i', $arr[$k]['handle_time']);
+            }
+            $arr[$k]['cash_money'] = sprintf('%.2f', (float)$arr[$k]['cash_money'] / 100);
+            if ($arr[$k]['real_money']) {
+                $arr[$k]['real_money'] = sprintf('%.2f', (float)$arr[$k]['real_money'] / 100);
+                $arr[$k]['lost_money'] = sprintf('%.2f', $arr[$k]['cash_money'] - $arr[$k]['real_money']);
+            } else {
+                $arr[$k]['lost_money'] = sprintf('%.2f', 0);
+                $arr[$k]['real_money'] = sprintf('%.2f', 0);
+            }
         }
         $total_page = ceil($count / $page_size);
         if ($page > $total_page) {
@@ -60,35 +82,43 @@ class SupplierCashManager extends ActiveRecord
      * @param $cash_id
      * @return array|bool
      */
-    public function GetCash($supplier_id, $cash_id)
+    public function GetCash($cash_id, $supplier_id = 0)
     {
-        $arr = (new \yii\db\Query())->from(SUP_CASHREGISTER)->where(['supplier_id' => $supplier_id])->andWhere(['id' => $cash_id])->one();
-        $arr['apply_time'] = date('Y-m-d H:i', $arr['apply_time']);
-        $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
-        $arr['card_no'] = self::GetBankcard($supplier_id)['bankcard'];
-        return $arr;
-    }
-
-    private function Timehandle($time_id, $time_start, $time_end, $time = 'create_time')
-    {
-        if ($time_id == 0) {
-            return null;
-        } else if ($time_id == 1) {
-            $data = 'DATE(FROM_UNIXTIME(' . $time . ')) = CURDATE()';
-            return $data;
-        } else if ($time_id == 2) {
-            $data = "DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= DATE(FROM_UNIXTIME(" . $time . "))";
-            return $data;
-        } else if ($time_id == 3) {
-            $data = "DATE_SUB(CURDATE(), INTERVAL 1 MONTH) <= DATE(FROM_UNIXTIME(" . $time . "))";
-            return $data;
-        } else if ($time_id == 4) {
-            $data = "DATE_SUB(CURDATE(), INTERVAL 365 DAY) <= DATE(FROM_UNIXTIME(" . $time . "))";
-            return $data;
-        } else if ($time_id == 5) {
-            $data = $time . " >= " . strtotime($time_start) . " and " . $time . " <= " . strtotime($time_end);
-            return $data;
+        $query = (new \yii\db\Query())->from(SUP_CASHREGISTER)->where(['id' => $cash_id]);
+        if ($supplier_id) {
+            $query->andWhere(['supplier_id' => $supplier_id]);
         }
+        $arr = $query->one();
+        if (!$arr) {
+            return null;
+        }
+        if ($arr['apply_time']) {
+            $arr['apply_time'] = date('Y-m-d H:i', $arr['apply_time']);
+        }
+        if ($arr['handle_time']) {
+            $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
+        }
+        $supplier_id = $arr['supplier_id'];
+        $bankcard = self::GetBankcard($supplier_id);
+        $supplier = self::GetSupplier($supplier_id);
+        if (!$bankcard) {
+            return null;
+        }
+        $arr['card_no'] = $bankcard['bankcard'];
+        $arr['supplier_name'] = $supplier['shop_name'];
+        $arr['bank_name'] = $bankcard['bankname'];
+        $arr['position'] = $bankcard['position'];
+        $arr['bank_branch'] = $bankcard['bankbranch'];
+        $arr['username'] = $bankcard['username'];
+        $arr['cash_money'] = sprintf('%.2f', (float)$arr['cash_money'] / 100);
+        if ($arr['real_money']) {
+            $arr['real_money'] = sprintf('%.2f', (float)$arr['real_money'] / 100);
+            $arr['lost_money'] = sprintf('%.2f', $arr['cash_money'] - $arr['real_money']);
+        } else {
+            $arr['lost_money'] = sprintf('%.2f', 0);
+            $arr['real_money'] = sprintf('%.2f', 0);
+        }
+        return $arr;
     }
 
     /**
@@ -102,6 +132,15 @@ class SupplierCashManager extends ActiveRecord
         return $data;
     }
 
+    private function GetSupplier($supplier_id)
+    {
+        $data = (new Query())->from(SUPPLIER)->where(['id' => $supplier_id])->one();
+        return $data;
+    }
+
+    /**
+     * @return array
+     */
     public function getToday()
     {
         $year = date("Y");
@@ -119,9 +158,9 @@ class SupplierCashManager extends ActiveRecord
     {
         $data = (new Query())->from(GOODS_ORDER)->where(['pay_status' => 1])->sum('amount_order');
         if ($data == null) {
-            $data = 0;
+            return 0;
         }
-        return $data;
+        return sprintf('%.2f', (float)$data / 100);
     }
 
     /**
@@ -132,9 +171,9 @@ class SupplierCashManager extends ActiveRecord
         $today = $this->getToday();
         $data = (new Query())->from(GOODS_ORDER)->where(['pay_status' => 1])->andwhere('paytime >= ' . $today[0])->andWhere('paytime <= ' . $today[1])->sum('amount_order');
         if ($data == null) {
-            $data = 0;
+            return 0;
         }
-        return $data;
+        return sprintf('%.2f', (float)$data / 100);
     }
 
     /**
@@ -144,9 +183,9 @@ class SupplierCashManager extends ActiveRecord
     {
         $data = (new Query())->from(SUP_CASHREGISTER)->where(['status' => 3])->sum('cash_money');
         if ($data == null) {
-            $data = 0;
+            return 0;
         }
-        return $data;
+        return sprintf('%.2f', (float)$data / 100);
     }
 
     /**
@@ -157,9 +196,9 @@ class SupplierCashManager extends ActiveRecord
         $today = $this->getToday();
         $data = (new Query())->from(SUP_CASHREGISTER)->where(['status' => 3])->andwhere('handle_time >= ' . $today[0])->andWhere('handle_time <= ' . $today[1])->sum('cash_money');
         if ($data == null) {
-            $data = 0;
+            return 0;
         }
-        return $data;
+        return sprintf('%.2f', (float)$data / 100);
     }
 
     /**
@@ -180,14 +219,25 @@ class SupplierCashManager extends ActiveRecord
 
     /**
      * 获取订单列表
+     * @param $page
+     * @param $page_size
+     * @param $time_type
+     * @param $time_start
+     * @param $time_end
+     * @param $search
+     * @return array
      */
-    public function getOrderList($page, $page_size, $time_id, $time_start, $time_end, $search)
+    public function getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search)
     {
         $query = (new Query())->from(GOODS_ORDER . ' g')
             ->leftJoin(SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->where(['g.pay_status' => 1]);
-        if ($time_id) {
-            $query->andWhere($this->Timehandle($time_id, $time_start, $time_end, 'g.paytime'));
+        $time_area = self::timeDeal($time_type, $time_start, $time_end);
+        $time_start = $time_area[0];
+        $time_end = $time_area[1];
+        if ($time_start && $time_end && $time_end > $time_start) {
+            $query->andWhere(['>', 'g.paytime', $time_start])
+                ->andWhere(['<', 'g.paytime', $time_end]);
         }
         if ($search) {
             $query->andFilterWhere(['like', 'g.supplier_id', $search])
@@ -202,6 +252,7 @@ class SupplierCashManager extends ActiveRecord
             ->all();
         foreach ($arr as $k => $v) {
             $arr[$k]['paytime'] = date('Y-m-d H:i', $arr[$k]['paytime']);
+            $arr[$k]['amount_order'] = sprintf('%.2f', (float)$arr[$k]['amount_order'] / 100);
         }
         $total_page = ceil($count / $page_size);
         if ($page > $total_page) {
@@ -218,16 +269,28 @@ class SupplierCashManager extends ActiveRecord
 
     /**
      * 获取提现列表
+     * @param $page
+     * @param $page_size
+     * @param $time_type
+     * @param $time_start
+     * @param $time_end
+     * @param $status
+     * @param $search
+     * @return array
      */
-    public function getCashListAll($page, $page_size, $time_id, $time_start, $time_end, $status, $search)
+    public function getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
     {
         $query = (new Query())->from(SUP_CASHREGISTER . ' as g')->leftJoin(SUPPLIER . ' s', 'g.supplier_id = s.id')
-            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 'g.supplier_id', 'g.status']);
+            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 'g.supplier_id', 'g.status', 'g.real_money']);
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
-        if ($time_id) {
-            $query->andWhere($this->Timehandle($time_id, $time_start, $time_end, 'apply_time'));
+        $time_area = self::timeDeal($time_type, $time_start, $time_end);
+        $time_start = $time_area[0];
+        $time_end = $time_area[1];
+        if ($time_start && $time_end && $time_end > $time_start) {
+            $query->andWhere(['>', 'apply_time', $time_start])
+                ->andWhere(['<', 'apply_time', $time_end]);
         }
         if ($search) {
             $query->andFilterWhere(['like', 'g.supplier_id', $search])
@@ -240,6 +303,14 @@ class SupplierCashManager extends ActiveRecord
             ->all();
         foreach ($arr as $k => $v) {
             $arr[$k]['apply_time'] = date('Y-m-d H:i', $arr[$k]['apply_time']);
+            $arr[$k]['cash_money'] = sprintf('%.2f', (float)$arr[$k]['cash_money'] / 100);
+            if ($arr[$k]['real_money']) {
+                $arr[$k]['real_money'] = sprintf('%.2f', (float)$arr[$k]['real_money'] / 100);
+                $arr[$k]['lost_money'] = sprintf('%.2f', $arr[$k]['cash_money'] - $arr[$k]['real_money']);
+            } else {
+                $arr[$k]['lost_money'] = sprintf('%.2f', 0);
+                $arr[$k]['real_money'] = sprintf('%.2f', 0);
+            }
         }
         $total_page = ceil($count / $page_size);
         if ($page > $total_page) {
@@ -252,5 +323,63 @@ class SupplierCashManager extends ActiveRecord
         $arr['count'] = $count;
         $arr['page'] = $page;
         return $arr;
+    }
+
+
+    /**
+     * 处理提现请求
+     * @param $cash_id
+     * @param $status
+     * @param $reason
+     * @param $real_money
+     * @return \Exception|int|null|Exception
+     */
+    public function doCashDeal($cash_id, $status, $reason, $real_money)
+    {
+        $cash_money = (new Query())->from(SUP_CASHREGISTER)
+            ->where(['id' => $cash_id])->select('cash_money')->one()['cash_money'];
+        if (!$cash_money) {
+            return null;
+        }
+        if ($status == 4) {
+            $real_money = 0;
+        }
+        if ($real_money) {
+            $real_money = $real_money * 100;
+            if ($status == 3 && $real_money > $cash_money) {
+                $real_money = $cash_money;
+            }
+        }
+        $trans = \Yii::$app->db->beginTransaction();
+        $e = 1;
+        try {
+            \Yii::$app->db->createCommand()
+                ->update(SUP_CASHREGISTER, ['status' => $status, 'supplier_reason' => $reason, 'real_money' => $real_money], ['id' => $cash_id])
+                ->execute();
+            $trans->commit();
+        } catch (Exception $e) {
+            $trans->rollBack();
+        }
+        return $e;
+    }
+
+    /**
+     * 得到开始和结束时间
+     * @param $time_type
+     * @param $time_start
+     * @param $time_end
+     * @return array
+     */
+    private function timeDeal($time_type, $time_start, $time_end)
+    {
+        if ($time_type == 'custom' && $time_start && $time_end) {
+            $time_start = strtotime($time_start);
+            $time_end = strtotime($time_end);
+        } else {
+            $time_area = StringService::startEndDate($time_type, 1);
+            $time_start = $time_area[0];
+            $time_end = $time_area[1];
+        }
+        return [$time_start, $time_end];
     }
 }

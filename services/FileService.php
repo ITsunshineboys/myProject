@@ -50,14 +50,14 @@ class FileService
     }
 
     /**
-     * Check upload size
+     * Check file type
      *
      * @param UploadForm $model upload model
      * @return bool
      */
-    public static function checkUploadSize(UploadForm $model)
-    {echo $model->file->size ,'<=', Yii::$app->params['uploadPublic']['maxSize'];print_r($model->file);
-        return $model->file->size <= Yii::$app->params['uploadPublic']['maxSize'];
+    public static function checkType(UploadForm $model)
+    {
+        return in_array($model->file->extension, Yii::$app->params['uploadPublic']['extensions']);
     }
 
     /**
@@ -79,6 +79,11 @@ class FileService
         if (!$model->validate()) {
             if (!self::checkUploadSize($model)) {
                 $code = 1004;
+                return $code;
+            }
+
+            if (!self::checkType($model)) {
+                $code = 1021;
                 return $code;
             }
 
@@ -106,6 +111,17 @@ class FileService
         }
 
         return UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
+    }
+
+    /**
+     * Check upload size
+     *
+     * @param UploadForm $model upload model
+     * @return bool
+     */
+    public static function checkUploadSize(UploadForm $model)
+    {
+        return $model->file->size <= Yii::$app->params['uploadPublic']['maxSize'];
     }
 
     /**

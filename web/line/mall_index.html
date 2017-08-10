@@ -50,7 +50,7 @@
                 <li ng-repeat="n in commodity">
                     <a ui-sref="product_details({id:n.id,title:n.title,description:n.description,
                     platform_price:n.platform_price})">
-                        <img src="images/banner1.png" alt=""/>
+                        <img src="http://test.cdlhzz.cn:888/{{n.image}}" alt=""/>
                         <div class="title2">{{n.title}}</div>
                         <div class="describe2">{{n.description}}</div>
                         <div class="price2">¥ {{n.platform_price}}</div>

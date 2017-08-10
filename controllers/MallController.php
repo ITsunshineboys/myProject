@@ -129,6 +129,7 @@ class MallController extends Controller
         'reset-user-status-logs',
         'user-list',
         'index-admin-lhzz',
+        'supplier-offline',
     ];
 
     /**
@@ -207,6 +208,7 @@ class MallController extends Controller
                     'user-disable-batch' => ['post',],
                     'user-disable-remark-reset' => ['post',],
                     'user-enable-batch' => ['post',],
+                    'supplier-offline' => ['post',],
                 ],
             ],
         ];
@@ -407,7 +409,7 @@ class MallController extends Controller
         $styleId = (int)Yii::$app->request->get('style_id', 0);
         $seriesId = (int)Yii::$app->request->get('series_id', 0);
 
-        $where = "category_id = {$categoryId}";
+        $where = "category_id = {$categoryId} and status = " . Goods::STATUS_ONLINE;
         $platformPriceMin && $where .= " and platform_price >= {$platformPriceMin}";
         $platformPriceMax && $where .= " and platform_price <= {$platformPriceMax}";
         $brandId && $where .= " and brand_id = {$brandId}";
@@ -4893,6 +4895,39 @@ class MallController extends Controller
             'data' => [
                 'index_admin_lhzz' => User::totalNumberStat()
             ]
+        ]);
+    }
+
+    /**
+     * Close supplier
+     *
+     * @return string
+     */
+    public function actionSupplierOffline()
+    {
+        $code = 1000;
+
+        $supplierId = (int)Yii::$app->request->post('supplier_id', 0);
+        if (!$supplierId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier = Supplier::findOne($supplierId);
+        if (!$supplier) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
+        $res = $supplier->offline($operator);
+        return Json::encode([
+            'code' => $res,
+            'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res]
         ]);
     }
 }

@@ -58,12 +58,12 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   $scope.upload_img_src='';
   $scope.data = {
     file:null
-  }
+  };
   $scope.upload = function (file) {
     if(!$scope.data.file){
       return
     }
-    console.log($scope.data)
+    console.log($scope.data);
     Upload.upload({
       url:'http://test.cdlhzz.cn:888/site/upload',
       data:{'UploadForm[file]':file}
@@ -107,11 +107,13 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
       'type':2
     }
   }).then(function (res) {
+    console.log(res);
     $scope.shop_rep = res.data.data.recommend_admin_index.details;
     console.log($scope.shop_rep);
   },function (err) {
     console.log(err);
   });
+
   //批量删除按钮
   $scope.delete_batch_del=function () {
     $scope.delete_batch_num=[];
@@ -184,13 +186,12 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
    * -------------------------------------
    */
 
-//商铺添加--获取按钮
-  $scope.shop_rep=[]; //推荐--添加--商铺添加
+//商家添加--获取按钮
+  $scope.shop_rep=[]; //推荐--添加--商家添加
   $scope.link_rep=[]; //推荐--添加--链接添加
-  $scope.shop_check=0;//推荐--添加--商铺添加(是否启用) 默认为0 停用
+  $scope.shop_check=0;//推荐--添加--商家添加(是否启用) 默认为0 停用
   $scope.link_check=0;//推荐--添加--链接添加(是否启用) 默认为0 停用
-  $scope.shop_edit_check=0;//推荐--添加--商铺编辑(是否启用) 默认为0 停用
-  // $scope.shop_edit_check=0;//推荐--添加--商铺编辑(是否启用) 默认为0 停用
+  $scope.shop_edit_check=0;//推荐--添加--商家编辑(是否启用) 默认为0 停用
   $scope.recommend_shop_add_get=function () {
     $http({
       method:"GET",
@@ -214,7 +215,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   let shop_num_null=document.getElementById("shop_num_null");//提示不能为空
   let recommend_shop_modal_add=document.getElementById("recommend_shop_modal_add");
 
-  //商铺添加--确认按钮
+  //商家添加--确认按钮
   shop_add_num_input.onblur=function (event) {
     // if (event.relatedTarget==recommend_shop_modal_add)
     // {
@@ -242,7 +243,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
         from_type:"1",
         type:2,
         sku:$scope.shop_model,
-        description:"asdasdas",
+        description:$scope.recommend_shop_subtitle,
         platform_price:$scope.recommend_shop_platform_price,
         status:$scope.shop_check
       };
@@ -281,45 +282,23 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
     }else{
       $scope.shop_edit_check=1;
     }
-    //-------商铺编辑--------
+    //-------商家编辑--------
     if($scope.edit_item.from_type=='商家'){
       $scope.shop_edit_sku=$scope.edit_item.sku;//编号
       $scope.recommend_shop_edit_title=$scope.edit_item.title;//标题
       $scope.recommend_shop_edit_url=$scope.edit_item.url; //商品链接
       $scope.recommend_shop_edit_platform_price=$scope.edit_item.platform_price; //平台价格
-      $http({
-        method:"GET",
-        url:"http://test.cdlhzz.cn:888/mall/goods-by-sku",
-        params:{
-          sku:+$scope.edit_item.sku
-        }
-      }).then(function (res) {
-        $scope.recommend_shop_edit_subtitle=res.data.data.detail.subtitle;//副标题
-      },function (err) {
-        console.log(err);
-      });
+      $scope.recommend_shop_edit_subtitle=$scope.edit_item.description;//副标题
+      $scope.recommend_shop_edit_img=$scope.edit_item.image;//图片
     }
     //-----链接编辑------
     if($scope.edit_item.from_type=='链接'){
       $scope.link_edit_url=$scope.edit_item.url; //商品链接
       $scope.link_edit_title=$scope.edit_item.title;//标题
-      // $scope.recommend_shop_edit_model=item.sku;
+      $scope.link_edit_subtitle=$scope.edit_item.description;//副标题
       $scope.link_edit_price=$scope.edit_item.show_price; //平台价格
-      $http({
-        method:"GET",
-        url:"http://test.cdlhzz.cn:888/mall/goods-by-sku",
-        params:{
-          sku:$scope.edit_item.sku
-        }
-      }).then(function (res) {
-        console.log("链接返回");
-        console.log(res);
-        $scope.link_edit_subtitle=res.data.data.detail.subtitle;//副标题
-      },function (err) {
-        console.log(err);
-      });
+      $scope.link_edit_img=$scope.edit_item.image;//图片
     }
-
   };
 
   //商家编辑 - 获取按钮
@@ -328,9 +307,11 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
       method:"GET",
       url:"http://test.cdlhzz.cn:888/mall/goods-by-sku",
       params:{
-        sku:+$scope.edit_item.sku
+        sku:+$scope.shop_edit_sku
       }
     }).then(function (res) {
+      console.log("商家获取");
+      console.log(res);
       $scope.recommend_shop_edit_url=res.data.data.detail.url; //商品链接
       $scope.recommend_shop_edit_title=res.data.data.detail.title; //商品标题
       $scope.recommend_shop_edit_subtitle=res.data.data.detail.subtitle; //商品副标题
@@ -342,18 +323,18 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
 
  //编辑确认按钮
   $scope.recommend_shop_edit=function () {
-    if($scope.edit_item.from_type=='商铺'){
+    if($scope.edit_item.from_type=='商家'){
       let shop_url='http://test.cdlhzz.cn:888/mall/recommend-edit';
       $http.post(shop_url,{
         id:$scope.edit_item.id,
         url:$scope.edit_item.url,
         title:$scope.recommend_shop_edit_title,
-        image:"123.jgp",
+        image:$scope.recommend_shop_edit_img,
         from_type:"1",
         status:$scope.shop_edit_check,
         type:2,
         sku:$scope.shop_edit_sku,
-        description:"aaaaaa",
+        description:$scope.recommend_shop_edit_subtitle,
         platform_price:$scope.edit_item.platform_price
       },config).then(function (res) {
         console.log("编辑返回");
@@ -365,7 +346,6 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
             'type':2
           }
         }).then(function (res) {
-          // console.log(res);
           $scope.shop_rep = res.data.data.recommend_admin_index.details;
         },function (err) {
           console.log(err);
@@ -382,12 +362,11 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
         id:$scope.edit_item.id,
         url:$scope.edit_item.url,
         title:$scope.link_edit_title,
-        image:"123.jgp",
+        image:$scope.link_edit_img,
         from_type:"2",
         status:$scope.shop_edit_check,
         type:2,
-        sku:$scope.shop_edit_sku,
-        description:"aaaaaa",
+        description:$scope.link_edit_subtitle,
         platform_price:$scope.edit_item.platform_price
       },config).then(function (res) {
         console.log("编辑返回");
@@ -417,44 +396,35 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
 
   $scope.shop_details=function (item) {
     $scope.shop_datails=item;
-    $scope.shop_details_title=$scope.shop_datails.title;
-    $scope.shop_details_types=$scope.shop_datails.from_type;
-    $scope.shop_details_sku=$scope.shop_datails.sku;
-    $scope.shop_details_time=$scope.shop_datails.create_time;
-    $scope.shop_details_status=$scope.shop_datails.status;
-    $scope.shop_details_platform_price=$scope.shop_datails.platform_price;
-    $scope.shop_details_supplier_name=$scope.shop_datails.supplier_name;
-    $scope.shop_details_supplier_price=$scope.shop_datails.supplier_price;
-    $scope.shop_details_market_price=$scope.shop_datails.market_price;
-    $http({
-      method:"GET",
-      url:"http://test.cdlhzz.cn:888/mall/goods-by-sku",
-      params:{
-        sku:$scope.shop_datails.sku
-      }
-    }).then(function (res) {
-      $scope.shop_details_subtitle=res.data.data.detail.subtitle;
-    },function (err) {
-      console.log(err);
-    });
+    console.log($scope.shop_datails);
+    if($scope.shop_datails.from_type=='商家'){
+      console.log($scope.shop_datails);
+      $scope.shop_details_title=$scope.shop_datails.title; //标题
+      $scope.shop_details_subtitle=$scope.shop_datails.description;//副标题
+      $scope.shop_details_types=$scope.shop_datails.from_type; //类型
+      $scope.shop_details_sku=$scope.shop_datails.sku;  //编号
+      $scope.shop_details_time=$scope.shop_datails.create_time; //创建时间
+      $scope.shop_details_status=$scope.shop_datails.status;  //是否启用
+      $scope.shop_details_platform_price=$scope.shop_datails.platform_price;//平台价格
+      $scope.shop_details_supplier_name=$scope.shop_datails.supplier_name;//来源商家
+      $scope.shop_details_supplier_price=$scope.shop_datails.supplier_price; //供货价格
+      $scope.shop_details_market_price=$scope.shop_datails.market_price;  //市场价格
+      $scope.shop_details_img=$scope.shop_datails.image;//图片
+      $scope.shop_details_viewed_number=$scope.shop_datails.viewed_number;//上架浏览
+      $scope.shop_details_sold_number=$scope.shop_datails.sold_number;//上架销量
+    }
     //链接
-$scope.link_details_title=$scope.shop_datails.title;
-$scope.link_details_from_type=$scope.shop_datails.from_type;
-$scope.link_details_show_price=$scope.shop_datails.show_price;
-$scope.link_details_supplier_name=$scope.shop_datails.supplier_name;
-$scope.link_details_create_time=$scope.shop_datails.create_time;
-$scope.link_details_status=$scope.shop_datails.status;
-    $http({
-      method:"GET",
-      url:"http://test.cdlhzz.cn:888/mall/goods-by-sku",
-      params:{
-        sku:$scope.shop_datails.sku
-      }
-    }).then(function (res) {
-      $scope.link_details_subtitle=res.data.data.detail.subtitle;
-    },function (err) {
-      console.log(err);
-    });
+    if($scope.shop_datails.from_type=='链接'){
+      $scope.link_details_title=$scope.shop_datails.title;  //标题
+      $scope.link_details_subtitle=$scope.shop_datails.description;//副标题
+      $scope.link_details_from_type=$scope.shop_datails.from_type; //类型
+      $scope.link_details_show_price=$scope.shop_datails.show_price;//显示价格
+      $scope.link_details_supplier_name=$scope.shop_datails.supplier_name;//来源商家
+      $scope.link_details_create_time=$scope.shop_datails.create_time;//创建时间
+      $scope.link_details_status=$scope.shop_datails.status;//是否启用
+      $scope.link_details_viewed_number=$scope.shop_datails.viewed_number;//浏览
+      $scope.link_details_img=$scope.shop_datails.image;//图片
+    }
   } ;
 
   /**
@@ -504,11 +474,11 @@ $scope.link_details_status=$scope.shop_datails.status;
       district_code:510100,
       url:$scope.recommend_link_url,
       title:$scope.recommend_link_title,
-      image:"123.jgp",
+      image:$scope.upload_img_src,
       from_type:"2",
       status:$scope.link_check,
       type:2,
-      description:"描述",
+      description:$scope.recommend_link_subtitle,
       platform_price:$scope.recommend_link_show_price
     };
     $http.post(url,params,config).then(function (response) {
@@ -518,6 +488,8 @@ $scope.link_details_status=$scope.shop_datails.status;
           'type':2
         }
       }).then(function (res) {
+        console.log("链接添加");
+        console.log(res);
         $scope.shop_rep = res.data.data.recommend_admin_index.details;
       },function (err) {
         console.log(err);

@@ -1,0 +1,60 @@
+/*头部开始*/
+header{
+  height: 60px;
+  line-height: 60px;
+  padding-left: 40px;
+  border-bottom: 1px solid #E6E9F0 ;
+}
+.shop_manage{
+  color: #2F3033;
+  line-height: 14px;
+  font-weight: bold;
+}
+.commodity_manage{
+  color: #8D9199;
+}
+header img{
+  margin-left:80%;
+}
+/*头部结束*/
+section{
+  padding-left: 40px;
+  margin-top: 60px;
+}
+/*公共样式开始*/
+.margin_left{
+  margin-left: 85px;
+}
+.margin_top{
+  margin-top: 15px;
+}
+.inline_block{
+  display: inline-block;
+  vertical-align: top;
+}
+.img_size{
+  width: 140px;
+  height: 140px;
+  background-color:#ccc;
+}
+.font_size{
+  display: inline-block;
+  width: 56px;
+  margin-right: 25px;
+}
+hr{
+  margin: 10px auto;
+}
+.purchase_left{
+  margin-left: 40px;
+}
+.purchase_input{
+  width: 140px;
+  border-radius: 3px;
+  border: 1px solid #CCCCCC;
+}
+.red_img{
+  margin-left: -20px;
+}
+/*公共样式结束*/
+
