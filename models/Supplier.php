@@ -267,7 +267,7 @@ class Supplier extends ActiveRecord
      * @param  array $orderBy order by fields default id desc
      * @return array
      */
-    public static function pagination(Query $query, $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ModelService::ORDER_BY_DEFAULT)
+    public static function pagination(Query $query, array $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ModelService::ORDER_BY_DEFAULT)
     {
         $data = ModelService::pagination($query, $select, self::tableName(), $page, $size, $orderBy);
         foreach ($data['details'] as &$row) {
