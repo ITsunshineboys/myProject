@@ -1038,10 +1038,10 @@ CREATE TABLE `effect_earnst` (
 
 CREATE TABLE `assort_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `one_path` varchar(20) DEFAULT NULL COMMENT '一级分类',
-  `two_path` varchar(20) DEFAULT NULL COMMENT '二级分类',
-  `three_parh` varchar(20) DEFAULT NULL COMMENT '三级分类',
-  `add_path` varchar(20) DEFAULT NULL COMMENT '商品管理',
+  `title` varchar(20) DEFAULT NULL COMMENT '商品名称',
+  `category_id` int(10) DEFAULT NULL COMMENT '分类id',
+  `pid` int(10) DEFAULT NULL COMMENT '分类的父类id',
+  `path` varchar(20) DEFAULT NULL COMMENT '关系',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 --8.5 end
