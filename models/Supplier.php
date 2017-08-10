@@ -117,14 +117,6 @@ class Supplier extends ActiveRecord
     ];
 
     /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'supplier';
-    }
-
-    /**
      * Get delta number
      *
      * @param int $startTime start time
@@ -266,6 +258,33 @@ class Supplier extends ActiveRecord
     }
 
     /**
+     * Get model list
+     *
+     * @param  Query $query query object
+     * @param  array $select select fields default all fields
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  array $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function pagination(Query $query, $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ModelService::ORDER_BY_DEFAULT)
+    {
+        $data = ModelService::pagination($query, $select, self::tableName(), $page, $size, $orderBy);
+        foreach ($data['details'] as &$row) {
+            self::_formatData($row);
+        }
+        return $data;
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'supplier';
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
@@ -369,7 +388,7 @@ class Supplier extends ActiveRecord
      *
      * @param array $data data to format
      */
-    private function _formatData(array &$data)
+    private static function _formatData(array &$data)
     {
         if (isset($data['create_time'])) {
             $data['create_time'] = date('Y-m-d', $data['create_time']);

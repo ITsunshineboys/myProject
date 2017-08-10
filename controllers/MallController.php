@@ -4962,7 +4962,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, Supplier::tableName(), $page, $size)
+                'supplier-list' => Supplier::pagination($query, Supplier::FIELDS_LIST, $page, $size)
             ],
         ]);
     }
