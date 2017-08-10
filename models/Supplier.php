@@ -11,6 +11,7 @@ namespace app\models;
 use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class Supplier extends ActiveRecord
 {
@@ -42,8 +43,13 @@ class Supplier extends ActiveRecord
         self::STATUS_NOT_APPROVED => self::STATUS_DESC_NOT_APPROVED,
         self::STATUS_APPROVED => self::STATUS_DESC_ONLINE_APP,
     ];
+    const STATUSES_ONLINE_OFFLINE = [
+        self::STATUS_OFFLINE => self::STATUS_DESC_OFFLINE,
+        self::STATUS_ONLINE => self::STATUS_DESC_ONLINE_ADMIN,
+    ];
     const FIELDS_VIEW_ADMIN_MODEL = [
         'id',
+        'type_org',
         'name',
         'shop_no',
         'create_time',
@@ -101,6 +107,14 @@ class Supplier extends ActiveRecord
     ];
     const OFFLINE_SHOP_SUPPORT = 1; // 支持线下商店
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
+    const FIELDS_LIST = [
+        'id',
+        'type_shop',
+        'shop_name',
+        'shop_no',
+        'category_id',
+        'status',
+    ];
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -225,6 +239,30 @@ class Supplier extends ActiveRecord
     public static function totalNumber()
     {
         return (int)self::find()->count();
+    }
+
+    /**
+     * Check shop type
+     *
+     * @param $shopType shop type
+     * @return bool
+     */
+    public static function checkShopType($shopType)
+    {
+        return in_array($shopType,
+            array_merge(array_keys(Supplier::TYPE_SHOP), [Yii::$app->params['value_all']]));
+    }
+
+    /**
+     * Check status
+     *
+     * @param $status status
+     * @return bool
+     */
+    public static function checkStatus($status)
+    {
+        return in_array($status,
+            array_merge(array_keys(self::STATUSES_ONLINE_OFFLINE), [Yii::$app->params['value_all']]));
     }
 
     /**

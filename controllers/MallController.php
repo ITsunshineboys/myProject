@@ -26,10 +26,6 @@ use app\models\GoodsOrder;
 use app\models\GoodsRecommendSupplier;
 use app\models\UserMobile;
 use app\models\UserStatus;
-use app\models\Designer;
-use app\models\Manager;
-use app\models\Worker;
-use app\models\DecorationCompany;
 use app\models\UserRole;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
@@ -40,6 +36,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use yii\db\Query;
 
 class MallController extends Controller
 {
@@ -130,6 +127,7 @@ class MallController extends Controller
         'user-list',
         'index-admin-lhzz',
         'supplier-offline',
+        'supplier-list',
     ];
 
     /**
@@ -4928,6 +4926,44 @@ class MallController extends Controller
         return Json::encode([
             'code' => $res,
             'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res]
+        ]);
+    }
+
+    /**
+     * Supplier list action
+     *
+     * @return string
+     */
+    public function actionSupplierList()
+    {
+        $code = 1000;
+
+        $shopType = (int)Yii::$app->request->get('shop_type', 0);
+        $status = (int)Yii::$app->request->get('status', 0);
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+
+        if (!Supplier::checkShopType($shopType) || !Supplier::checkStatus($status)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $query = new Query;
+        if ($shopType != Yii::$app->params['value_all']) {
+            $query->andWhere(['type_shop' => $shopType]);
+        }
+        if ($status != Yii::$app->params['value_all']) {
+            $query->andWhere(['status' => $status]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, Supplier::tableName(), $page, $size)
+            ],
         ]);
     }
 }

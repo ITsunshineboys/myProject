@@ -9,6 +9,7 @@
 namespace app\services;
 
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class ModelService
 {
@@ -19,7 +20,7 @@ class ModelService
     ];
     const SEPARATOR_ERRCODE_ERRMSG = ':';
     const PAGE_SIZE_DEFAULT = 12;
-    const ORDER_BY_DEFAULT = ['id' => SORT_ASC];
+    const ORDER_BY_DEFAULT = ['id' => SORT_DESC];
     const SUFFIX_FIELD_DESCRIPTION = '_desc';
 
     /**
@@ -146,5 +147,30 @@ class ModelService
     {
         $errors = $model->errors;
         return isset($errors[$attr]) && false !== stripos($errors[$attr][0], 'has already been taken');
+    }
+
+    /**
+     * Get model list
+     *
+     * @param  Query $query query object
+     * @param  array $select select fields default all fields
+     * @param  string $from from table
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  array $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function pagination(Query $query, $select = [], $from, $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ModelService::ORDER_BY_DEFAULT)
+    {
+        $query->select($select)->from($from);
+        $offset = ($page - 1) * $size;
+        return [
+            'total' => $query->count(),
+            'details' => $query
+                ->orderBy($orderBy)
+                ->offset($offset)
+                ->limit($size)
+                ->all()
+        ];
     }
 }
