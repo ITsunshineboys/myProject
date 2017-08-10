@@ -549,6 +549,14 @@ class QuoteController extends Controller
         ]);
     }
 
+    public function actionAssortGoodsList()
+    {
+        return Json::encode([
+           'list'=> AssortGoods::find()
+               ->all(),
+        ]);
+    }
+
     /**
      * add assort goods administration
      * @return string
