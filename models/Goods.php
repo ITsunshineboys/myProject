@@ -1171,7 +1171,7 @@ AND goods.id IN (" . $id . ")";
             ->leftJoin('goods_category as gc','goods.category_id = gc.id')
             ->leftJoin('logistics_template','goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district','logistics_template.id = logistics_district.template_id')
-            ->where(['and',['logistics_district.district_code'=>$city],['in','gc.title',$all]])
+            ->where(['and',['logistics_district.district_code'=>$city],['in','gc.title',$all],['goods.status'=>self::STATUS_ONLINE]])
             ->all();
         return $all_goods;
     }
