@@ -25,6 +25,7 @@ class GoodsCategory extends ActiveRecord
     const LEVEL3 = 3;
     const APP_FIELDS = ['id', 'title', 'icon'];
     const APP_FIELDS_QUOTE = ['id', 'title', 'icon', 'path'];
+    const APP_FIELDS_CATEGORY = ['id', 'title', 'pid', 'path'];
     const PAGE_SIZE_DEFAULT = 12;
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
