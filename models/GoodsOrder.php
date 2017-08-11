@@ -1180,6 +1180,10 @@ class GoodsOrder extends ActiveRecord
     public static function supplierSalesVolumn($supplierId, $timeType)
     {
         list($startTime, $endTime) = StringService::startEndDate($timeType, true);
+        if (!$startTime && !$endTime) {
+            return 0;
+        }
+
         $retKeyName = 'sales_volumn';
         $query = new Query;
         return (int)$query
