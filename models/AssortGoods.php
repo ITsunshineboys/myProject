@@ -32,7 +32,19 @@ class AssortGoods extends ActiveRecord
         $res = $db
             ->createCommand()
             ->batchInsert(self::tableName(),self::FIELDS_NAME,$post)
-            ->getRawSql();
+            ->execute();
         return $res;
+    }
+
+    /**
+     * reason category_id query array
+     * @return array|ActiveRecord[]
+     */
+    public static function findByCategoryId()
+    {
+        return self::find()
+            ->asArray()
+            ->select('category_id')
+            ->all();
     }
 }

@@ -3988,7 +3988,7 @@ class MallController extends Controller
     {
         $series = Series::find()
             ->asArray()
-            ->select('series,creation_time,status')
+            ->select('id,series,creation_time,status')
             ->orderBy(['series_grade' => SORT_ASC])
             ->All();
         $all = [];
@@ -4101,7 +4101,7 @@ class MallController extends Controller
     {
         $style = Style::find()
             ->asArray()
-            ->select('style,creation_time,status')
+            ->select('id,style,creation_time,status')
             ->All();
         $all = [];
         foreach ($style as $one_style) {

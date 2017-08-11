@@ -20,6 +20,7 @@ use app\models\Series;
 use app\models\Style;
 use app\services\ExceptionHandleService;
 use app\services\SmValidationService;
+use Symfony\Component\Yaml\Tests\A;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -569,14 +570,19 @@ class QuoteController extends Controller
     public function actionAssortGoodsAdd()
     {
         $post = \Yii::$app->request->post();
-//        $user = \Yii::$app->user->identity;
-//        if (!$user) {
-//            $code = 1052;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $find = AssortGoods::findByCategoryId();
+        foreach ($find as $find_one) {
+            $id [] = $find_one['category_id'];
+        }
+        (new AssortGoods())->deleteAll(['category_id'=>$id]);
         $assort = (new AssortGoods())->add($post);
         if ($assort) {
             $code = 200;
