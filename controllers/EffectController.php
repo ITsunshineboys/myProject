@@ -330,7 +330,7 @@ class EffectController extends Controller
         ]);
     }
     /**
-     * 后台样板间列表搜索+分页
+     * 后台样板间列表搜索
      * @return string
      *
      */
