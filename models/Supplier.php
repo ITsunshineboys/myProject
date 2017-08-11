@@ -10,11 +10,13 @@ namespace app\models;
 
 use app\services\ModelService;
 use Yii;
+use yii\data\Pagination;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 
 class Supplier extends ActiveRecord
 {
+    const FIELDS_EXTRA=[];
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const STATUS_WAIT_REVIEW = 2;
@@ -43,13 +45,8 @@ class Supplier extends ActiveRecord
         self::STATUS_NOT_APPROVED => self::STATUS_DESC_NOT_APPROVED,
         self::STATUS_APPROVED => self::STATUS_DESC_ONLINE_APP,
     ];
-    const STATUSES_ONLINE_OFFLINE = [
-        self::STATUS_OFFLINE => self::STATUS_DESC_OFFLINE,
-        self::STATUS_ONLINE => self::STATUS_DESC_ONLINE_ADMIN,
-    ];
     const FIELDS_VIEW_ADMIN_MODEL = [
         'id',
-        'type_org',
         'name',
         'shop_no',
         'create_time',
@@ -107,14 +104,23 @@ class Supplier extends ActiveRecord
     ];
     const OFFLINE_SHOP_SUPPORT = 1; // 支持线下商店
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
-    const FIELDS_LIST = [
-        'id',
-        'type_shop',
-        'shop_name',
+    const PAGE_SIZE_DEFAULT=10;
+    const FIELDS_ADMIN=[
         'shop_no',
-        'category_id',
         'status',
+        'shop_name',
+        'balance',
+        'category_id',
+        'create_time',
+        'type_shop'
     ];
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'supplier';
+    }
 
     /**
      * Get delta number
@@ -234,80 +240,6 @@ class Supplier extends ActiveRecord
     }
 
     /**
-     * Check shop type
-     *
-     * @param $shopType shop type
-     * @return bool
-     */
-    public static function checkShopType($shopType)
-    {
-        return in_array($shopType,
-            array_merge(array_keys(Supplier::TYPE_SHOP), [Yii::$app->params['value_all']]));
-    }
-
-    /**
-     * Check status
-     *
-     * @param $status status
-     * @return bool
-     */
-    public static function checkStatus($status)
-    {
-        return in_array($status,
-            array_merge(array_keys(self::STATUSES_ONLINE_OFFLINE), [Yii::$app->params['value_all']]));
-    }
-
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'supplier';
-    }
-
-    /**
-     * Format data
-     *
-     * @param array $data data to format
-     */
-    public static function formatData(array &$data)
-    {
-        if (isset($data['create_time'])) {
-            $data['create_time'] = date('Y-m-d', $data['create_time']);
-        }
-
-        if (isset($data['status'])) {
-            $data['status'] = self::STATUSES[$data['status']];
-        }
-
-        if (isset($data['quality_guarantee_deposit'])) {
-            $data['quality_guarantee_deposit'] /= 100;
-        }
-
-        if (isset($data['type_org'])) {
-            $data['type_org'] = self::TYPE_ORG[$data['type_org']];
-        }
-
-        if (isset($data['category_id'])) {
-            static $categories = [];
-
-            if (in_array($data['category_id'], array_keys($categories))) {
-                $data['category_name'] = $categories[$data['category_id']];
-            } else {
-                $cat = GoodsCategory::findOne($data['category_id']);
-                $data['category_name'] = $cat->fullTitle();
-                $categories[$data['category_id']] = $data['category_name'];
-            }
-
-            unset($data['category_id']);
-        }
-
-        if (isset($data['type_shop'])) {
-            $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
-        }
-    }
-
-    /**
      * @return array the validation rules.
      */
     public function rules()
@@ -407,6 +339,40 @@ class Supplier extends ActiveRecord
     }
 
     /**
+     * Format data
+     *
+     * @param array $data data to format
+     */
+    private function _formatData(array &$data)
+    {
+        if (isset($data['create_time'])) {
+            $data['create_time'] = date('Y-m-d', $data['create_time']);
+        }
+
+        if (isset($data['status'])) {
+            $data['status'] = self::STATUSES[$data['status']];
+        }
+
+        if (isset($data['quality_guarantee_deposit'])) {
+            $data['quality_guarantee_deposit'] /= 100;
+        }
+
+        if (isset($data['type_org'])) {
+            $data['type_org'] = self::TYPE_ORG[$data['type_org']];
+        }
+
+        if (isset($data['category_id'])) {
+            $cat = GoodsCategory::findOne($data['category_id']);
+            $data['category_name'] = $cat->fullTitle();
+            unset($data['category_id']);
+        }
+
+        if (isset($data['type_shop'])) {
+            $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
+        }
+    }
+
+    /**
      * Get certification view data
      *
      * @return array
@@ -437,31 +403,104 @@ class Supplier extends ActiveRecord
     }
 
     /**
-     * Close supplier
-     *
-     * @param ActiveRecord $operator operator
-     * @return int
-     */
-    public function offline(ActiveRecord $operator)
+     * 已提现列表查询分页
+     * @return array
+     * */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-        $this->status = self::STATUS_OFFLINE;
+        $select = array_diff($select, self::FIELDS_EXTRA);
 
-        $tran = Yii::$app->db->beginTransaction();
-        $code = 500;
+        $offset = ($page - 1) * $size;
+        $supplierList = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
 
-        try {
-            if (!$this->save()) {
-                $tran->rollBack();
-                return $code;
+        foreach ($supplierList as &$supplier) {
+
+        if (isset($supplier['create_time'])) {
+            $supplier['create_time'] = date('Y-m-d H:i', $supplier['create_time']);
+        }
+
+        if (isset($supplier['status'])) {
+            $supplier['status'] = self::STATUSES[$supplier['status']];
+        }
+
+            if (isset($supplier['category_id'])) {
+                $cat = GoodsCategory::findOne($supplier['category_id']);
+                $supplier['category_name'] = $cat->fullTitle();
+                unset($supplier['category_id']);
             }
 
-            Goods::disableGoodsBySupplierId($this->id, $operator);
+            if (isset($supplier['type_shop'])) {
+                $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
+            }
+            }
+            $count=(int)self::find()->where($where)->asArray()->count();
+        $total_page = ceil($count / $size);
+        $data=[
 
-            $tran->commit();
-            return 200;
-        } catch (\Exception $e) {
-            $tran->rollBack();
-            return $code;
+            'details' => $supplierList
+        ];
+        $data['details']['page']=$page;
+        $data['details']['total_page']=$total_page;
+        $data['details']['total']=$count;
+
+        return $data;
+
+    }
+
+
+
+
+    public static function getsupplierdata($supplier_id){
+        $query=new Query();
+        $select='sc.cash_money,u.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
+        $array=$query->from('supplier as s')
+            ->select($select)
+            ->leftJoin('supplier_cashregister as sc','sc.supplier_id=s.id')
+            ->leftJoin('supplier_bankinformation as sb','sc.supplier_id=s.id')
+            ->leftJoin('supplier_freezelist as sf','sf.supplier_id=s.id')
+            ->leftJoin('user as u','u.id=s.uid')
+            ->where(['s.id'=>$supplier_id])
+
+            ->one();
+        $array['cashed_money']=$array['cash_money'];
+        $array['cashwithdrawal_money']=$array['balance'];
+        return $array;
+    }
+
+    public static function getcategory($pid){
+
+        $cate = GoodsCategory::findOne($pid);
+
+
+        $children = $cate->children;
+
+
+        if ($children) {
+            $child_id = [];
+            foreach ($children as $child) {
+                $category = $child->children;
+                if ($category) {
+                    foreach ($category as $cate) {
+                        $child_id[] = $cate->id;
+                    }
+
+                }
+                $child_id[] = $child->id;
+            }
+            return $child_id;
+
+
+        } else {
+
+
+            return $pid;
         }
     }
 }
