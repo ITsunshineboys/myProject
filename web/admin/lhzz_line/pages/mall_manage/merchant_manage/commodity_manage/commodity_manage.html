@@ -88,7 +88,7 @@
                 <td ng-if="show_11" class="green">上架</td>
                 <td ng-if="show_12">2017-08-07</td>
                 <td ng-if="show_13"><img id="img_size" src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="show_14" class="blue" ui-sref="commodity_detail">编辑</td>
+                <td ng-if="show_14" class="blue" ui-sref="commodity_detail_on">编辑</td>
                 <td ng-if="show_15" class="blue">下架</td>
             </tr>
             <tr class="table_content">
@@ -106,7 +106,7 @@
                 <td ng-if="show_11" class="green">上架</td>
                 <td ng-if="show_12">2017-08-07</td>
                 <td ng-if="show_13"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="show_14" class="blue" ui-view="commodity_detail">编辑</td>
+                <td ng-if="show_14" class="blue" ui-sref="commodity_detail_on">编辑</td>
                 <td ng-if="show_15" class="blue">下架</td>
             </tr>
         </table>
@@ -206,7 +206,7 @@
                 <td ng-if="down_13">运营01</td>
                 <td ng-if="down_14"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
                 <td ng-if="down_15" class="blue" data-toggle="modal" data-target="#down_shelves_reason_modal"><span class="wait_check">点击输入</span></td>
-                <td ng-if="down_16" class="blue">编辑</td>
+                <td ng-if="down_16" class="blue" ui-sref="commodity_detail_down">编辑</td>
                 <td ng-if="down_17" class="blue">
                     <span data-toggle="modal" data-target="#up_shelves_modal">上架</span>
                 </td>
@@ -228,7 +228,7 @@
                 <td ng-if="down_13">运营2</td>
                 <td ng-if="down_14"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
                 <td ng-if="down_15">品牌下架</td>
-                <td ng-if="down_16" class="blue">编辑</td>
+                <td ng-if="down_16" class="blue" ui-sref="commodity_detail_down">编辑</td>
                 <td ng-if="down_17" class="blue">
                     <span data-toggle="modal" data-target="#up_not_shelves_modal">上架</span>
                 </td>
@@ -363,7 +363,7 @@
                 <td ng-if="wait_12">发布时间</td>
                 <td ng-if="wait_13"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
                 <td ng-if="wait_14"  data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span class="wait_check">审核备注</span></td>
-                <td ng-if="wait_15" class="blue">编辑</td>
+                <td ng-if="wait_15" class="blue" ui-sref="commodity_detail_wait">编辑</td>
                 <td ng-if="wait_16" class="blue" data-toggle="modal" data-target="#up_shelves_modal">上架</td>
             </tr>
         </table>
@@ -449,7 +449,7 @@
                 <td ng-if="del_11">已删除</td>
                 <td ng-if="del_12" class="sky_blue">删除时间</td>
                 <td ng-if="del_13"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="del_14" class="blue">查看</td>
+                <td ng-if="del_14" class="blue" ui-sref="commodity_detail_del">查看</td>
             </tr>
         </table>
     </section>

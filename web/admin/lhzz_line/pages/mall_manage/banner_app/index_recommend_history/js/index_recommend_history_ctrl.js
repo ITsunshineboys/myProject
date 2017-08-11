@@ -1,4 +1,4 @@
-var index_recommend_history = angular.module("index_recommend_history_module", []);
+let index_recommend_history = angular.module("index_recommend_history_module", []);
 index_recommend_history.controller("index_recommend_history_ctrl", function ($scope, $http) {
   $scope.myng=$scope;
 
@@ -21,8 +21,6 @@ index_recommend_history.controller("index_recommend_history_ctrl", function ($sc
         'type': 2
       }
     }).then(function (response) {
-      console.log("推荐历史");
-      console.log(response);
       $scope.recommendList = response.data.data.recommend_history.details
     }, function (error) {
       console.log(error)
@@ -39,6 +37,8 @@ index_recommend_history.controller("index_recommend_history_ctrl", function ($sc
           'type': 2
         }
       }).then(function (response) {
+        console.log("推荐历史");
+        console.log(response);
         $scope.recommendList = response.data.data.recommend_history.details;
       }, function (error) {
         console.log(error)
