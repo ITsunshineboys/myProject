@@ -21,14 +21,13 @@ class SupplierCashController extends Controller
      * Actions accessed by logged-in users
      */
     const ACCESS_LOGGED_IN_USER = [
-        'logout',
-        'roles',
-        'reset-password',
-        'roles-status',
-        'time-types',
-        'upload',
-        'upload-delete',
-        'review-statuses',
+        'get-cash-list',
+        'get-cash',
+        'cash-index',
+        'order-list-today',
+        'cash-list-today',
+        'cash-action-detail',
+        'cash-deal'
     ];
 
     /**

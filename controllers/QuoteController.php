@@ -549,10 +549,15 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * assort goods list
+     * @return string
+     */
     public function actionAssortGoodsList()
     {
         return Json::encode([
            'list'=> AssortGoods::find()
+               ->select(['title','category_id as id','pid','path'])
                ->all(),
         ]);
     }
@@ -564,14 +569,14 @@ class QuoteController extends Controller
     public function actionAssortGoodsAdd()
     {
         $post = \Yii::$app->request->post();
-        $user = \Yii::$app->user->identity;
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//        $user = \Yii::$app->user->identity;
+//        if (!$user) {
+//            $code = 1052;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
         $assort = (new AssortGoods())->add($post);
         if ($assort) {
             $code = 200;

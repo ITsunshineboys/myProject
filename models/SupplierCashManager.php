@@ -336,9 +336,12 @@ class SupplierCashManager extends ActiveRecord
      */
     public function doCashDeal($cash_id, $status, $reason, $real_money)
     {
-        $cash_money = (new Query())->from(SUP_CASHREGISTER)
-            ->where(['id' => $cash_id])->select('cash_money')->one()['cash_money'];
-        if (!$cash_money) {
+        $supplier_cash = (new Query())->from(SUP_CASHREGISTER)
+            ->where(['id' => $cash_id])->select(['cash_money', 'supplier_id', 'status'])->one();
+        $cash_money = $supplier_cash['cash_money'];
+        $supplier_id = (int)$supplier_cash['supplier_id'];
+        $old_status = (int)$supplier_cash['status'];
+        if (!$cash_money || !$supplier_id || $old_status == 3 || $old_status == 4) {
             return null;
         }
         if ($status == 4) {
@@ -356,10 +359,19 @@ class SupplierCashManager extends ActiveRecord
             \Yii::$app->db->createCommand()
                 ->update(SUP_CASHREGISTER, ['status' => $status, 'supplier_reason' => $reason, 'real_money' => $real_money], ['id' => $cash_id])
                 ->execute();
-            $trans->commit();
+            $supplier = Supplier::find()->where(['id' => $supplier_id])->one();
+            if (!$supplier) {
+                return null;
+            }
+            if ($status == 4) {
+                $supplier->balance += $cash_money;
+                $supplier->availableamount += $cash_money;
+                $supplier->save(false);
+            }
         } catch (Exception $e) {
             $trans->rollBack();
         }
+        $trans->commit();
         return $e;
     }
 

@@ -22,17 +22,17 @@
     <dl >
         <dt ><i class="glyphicon glyphicon-home"></i> 首页</dt>
     </dl>
-    <dl >
+    <dl>
         <dt ><i class="glyphicon glyphicon-home"></i> 商城管理</dt>
-        <dd ><a ui-sref="banner_recommend">APP搜索位-banner管理</a></dd>
+        <dd ui-sref="banner_recommend"><a>APP搜索位-banner管理</a></dd>
         <dd><a >搜索页面</a></dd>
-        <dd><a ui-sref="commodity_manage">商城管理</a></dd>
+        <dd ui-sref="commodity_manage"><a>商家管理</a></dd>
         <dd><a href="">商家数据</a></dd>
-        <dd><a href="">品牌管理</a></dd>
+        <dd ui-sref="brand_index"><a href="">品牌管理</a></dd>
         <dd><a ui-sref="fenleiguanli">分类管理</a></dd>
         <dd><a href="">新品牌/新分类审核</a></dd>
         <dd><a href="">商家入驻审核</a></dd>
-        <dd><a href="">系列/风格/属性管理</a></dd>
+        <dd ui-sref="style_index"><a href="">系列/风格/属性管理</a></dd>
     </dl>
 
     <dl>
@@ -46,7 +46,7 @@
     </dl>
 
     <dl>
-        <dt><i class="glyphicon glyphicon-home"></i> 账户管理</dt>
+        <dt ui-sref="account_index"><i class="glyphicon glyphicon-home"></i> 账户管理</dt>
     </dl>
 </div>
 <!--左侧导航栏结束-->
@@ -61,16 +61,24 @@
 <script src="lib/js/controller.js"></script>
 <script src="lib/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
 <script src="lib/js/index.js"></script>
-<script src="lib/js/ng-file-upload-shim.js"></script>
 <script src="lib/js/ng-file-upload.js"></script>
+<script src="lib/js/ng-file-upload-shim.js"></script>
+
+<!--王杰-->
 
 <!--banner推荐--><script src="pages/mall_manage/banner_app/banner_recommend/js/banner_recommend_ctrl.js"></script>
 <!--首页推荐--><script src="pages/mall_manage/banner_app/index_recommend/js/index_recommend_ctrl.js"></script>
 <!--banner历史数据--><script src="pages/mall_manage/banner_app/banner_history/js/banner_history_ctrl.js"></script>
 <!--推荐 历史数据--><script src="pages/mall_manage/banner_app/index_recommend_history/js/index_recommend_history_ctrl.js"></script>
-<!--商品管理-->
-<script src="pages/mall_manage/merchant_manage/commodity_manage/js/commodity_manage.js"></script>
-<script src="pages/mall_manage/merchant_manage/commodity_detail/js/commodity_detail_ctrl.js"></script>
+<!--商品管理--><script src="pages/mall_manage/merchant_manage/commodity_manage/js/commodity_manage.js"></script>
+<!--商品详情（已上架）--><script src="pages/mall_manage/merchant_manage/commodity_detail_on/js/commodity_detail_on_ctrl.js"></script>
+<!--商品详情（已下架）--><script src="pages/mall_manage/merchant_manage/commodity_detail_down/js/commodity_detail_down_ctrl.js"></script>
+<!--商品详情（等待上架）--><script src="pages/mall_manage/merchant_manage/commodity_detail_wait/js/commodity_detail_wait_ctrl.js"></script>
+<!--商品详情（已删除）--><script src="pages/mall_manage/merchant_manage/commodity_detail_del/js/commodity_detail_del_ctrl.js"></script>
+<!--品牌管理--> <script src="pages/mall_manage/brand_manage/brand_index/js/brand_index.js"></script>
+<!--编辑属性--> <script src="pages/mall_manage/style_manage/edit_attribute/js/edit_attribute_ctrl.js"></script>
+<!--账户管理--> <script src="pages/account_manage/account_index/js/account_index_ctrl.js"></script>
+<!--添加用户--> <script src="pages/account_manage/add_user/js/add_user_ctrl.js"></script>
 <script src="lib/data_js/laydate.js"></script>
 <script src="pages/mall_manage/banner_app/index_recommend_history/js/directive.js"></script>
 <!--芳子-->
@@ -82,6 +90,31 @@
 <script src="pages/mall_manage/class_manage/onsale_edit/js/onsale_edit_ctrl.js"></script>
 <script src="pages/mall_manage/class_manage/offsale_edit/js/offsale_edit_ctrl.js"></script>
 <script src="pages/mall_manage/class_manage/add_class/js/add_class_ctrl.js"></script>
+<script src="pages/mall_manage/merchant_manage/merchant_comment/js/comment_ctrl.js"></script>
+<script src="pages/mall_manage/merchant_manage/merchant_comment/js/merchant_details_ctrl.js"></script>
+<script src="pages/mall_manage/merchant_manage/merchant_comment/js/brand_check_ctrl.js"></script>
+<script src="pages/mall_manage/merchant_manage/merchant_comment/js/check_right_ctrl.js"></script>
+<script src="pages/account_manage/account_comment/js/account_comment_ctrl.js"></script>
+<script src="pages/account_manage/account_comment/js/change_num_ctrl.js"></script>
+<script src="pages/account_manage/account_comment/js/bind_record_ctrl.js"></script>
+<script src="pages/account_manage/account_comment/js/operation_record_ctrl.js"></script>
+<script src="pages/account_manage/account_comment/js/idcard_right_ctrl.js"></script>
+
+<!--============================================================-->
+<script src="pages/mall_manage/merchant_manage/merchant_index/js/merchant_index_ctrl.js"></script><!--商城管理首页-->
+<script src="pages/mall_manage/merchant_manage/store_mag/js/store_mag_ctrl.js"></script><!--商家管理-->
+<script src="pages/mall_manage/merchant_manage/add_store/js/add_store_ctrl.js"></script><!--添加商家-->
+<script src="pages/mall_manage/brand_manage/online_edit/js/online_edit_ctrl.js"></script> <!--商家管理-已上架编辑-->
+<script src="pages/mall_manage/brand_manage/offline_edit/js/offline_edit_ctrl.js"></script> <!--商家管理-已上架编辑-->
+<script src="pages/mall_manage/brand_manage/add_brand/js/add_brand_ctrl.js"></script><!--添加品牌-->
+<script src="pages/mall_manage/style_manage/style_index/js/style_index_ctrl.js"></script><!--系列/风格/属性管理-->
+<script src="pages/mall_manage/style_manage/choose_series/js/choose_series_ctrl.js"></script><!--选择系列分类-->
+<script src="pages/mall_manage/style_manage/add_series/js/add_series_ctrl.js"></script><!--添加系列-->
+<script src="pages/mall_manage/style_manage/series_detail/js/series_detail_ctrl.js"></script><!--系列详情页-->
+<script src="pages/mall_manage/style_manage/add_style/js/add_style_ctrl.js"></script><!--添加新风格-->
+<script src="pages/mall_manage/style_manage/choose_style/js/choose_style_ctrl.js"></script><!--选择风格-->
+<script src="pages/mall_manage/style_manage/style_detail/js/style_detail_ctrl.js"></script><!--风格详情-->
+
 <script src="app.js"></script>
 </body>
 </html>

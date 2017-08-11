@@ -41,12 +41,13 @@
             </tr>
             <tr ng-repeat="item in recommendList">
                 <td>{{item.from_type}}</td>
-                <td>{{item.sku}}</td>
+                <td>{{item.sku=='0'?'无':item.sku}}</td>
                 <td>{{item.title}}</td>
-                <td><a href="">{{item.supplier_name}}</a></td>
+                <td><a href="">{{item.supplier_name==''?'链接':item.supplier_name}}</a></td>
                 <td>{{item.viewed_number}}</td>
                 <td>{{item.sold_number}}</td>
-                <td>{{item.show_price}}</td>
+                <td ng-if="item.sku!='0'">{{item.platform_price}}</td>
+                <td ng-if="item.sku=='0'">—</td>
                 <td>{{item.create_time}}</td>
                 <td><img id="show_img_size" ng-src="http://test.cdlhzz.cn:888/{{item.image}}" alt=""></td>
             </tr>

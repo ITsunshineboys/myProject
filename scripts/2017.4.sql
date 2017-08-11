@@ -424,17 +424,18 @@ CREATE TABLE `goods_order` (
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
   `amount_order` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '订单金额',
   `supplier_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `address_id` int(11) NOT NULL COMMENT '收货地址号',
-  `invoice_id` int(11) NOT NULL COMMENT '发票信息',
-  `pay_status` tinyint(1) NOT NULL COMMENT 'pay_status：0：未付款 1：已付款 2：已退款',
-  `user_id` int(11) NOT NULL,
-  `pay_name` varchar(120) NOT NULL,
-  `create_time` int(11) NOT NULL DEFAULT '0',
-  `paytime` int(11) NOT NULL DEFAULT '0',
+  `address_id` int(11) NOT NULL COMMENT '收货地址id',
+  `invoice_id` int(11) NOT NULL COMMENT '发票信息id',
+  `pay_status` tinyint(1) NOT NULL COMMENT 'pay_status：0：未付款 1：已付款',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `pay_name` varchar(120) NOT NULL COMMENT '支付方式',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `paytime` int(11) NOT NULL DEFAULT '0' COMMENT '支付时间',
   `order_refer` tinyint(1) NOT NULL COMMENT 'order_refer:1：线下店2：非线下店；',
-  `return_insurance` bigint(20) NOT NULL,
+  `return_insurance` bigint(20) NOT NULL COMMENT '退货保险费',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\r\n';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='\r\n';
 --5.5 end--
 
 --5.6 start--
