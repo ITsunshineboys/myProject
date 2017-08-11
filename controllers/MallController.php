@@ -2636,7 +2636,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'goods-attr-list-admin' => [
+                'goods_attr_list_admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
                     'details' => $details
                 ]
@@ -4975,7 +4975,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, new Supplier, $page, $size)
+                'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, Supplier::FIELDS_LIST_EXTRA, new Supplier, $page, $size)
             ],
         ]);
     }
