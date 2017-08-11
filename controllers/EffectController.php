@@ -352,50 +352,51 @@ class EffectController extends Controller
 
 
         $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $phone = trim(Yii::$app->request->get('phone', ''));
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
 
 
 
         $where = '1';
-        if($phone){
-            $where='phone';
-            $where .= " like '%{$phone}%'";
+        if(!$keyword){
+
+
+            if ($timeType == 'custom') {
+                $startTime = trim(Yii::$app->request->get('start_time', ''));
+                $endTime = trim(Yii::$app->request->get('end_time', ''));
 
 
 
-        }
+                if (($startTime && !StringService::checkDate($startTime))
+                    || ($endTime && !StringService::checkDate($endTime))
+                ) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            } else {
 
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
+                list($startTime, $endTime) = StringService::startEndDate($timeType);
 
+                $startTime = explode(' ', $startTime)[0];
+                $endTime = explode(' ', $endTime)[0];
 
-
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
             }
-        } else {
-
-         list($startTime, $endTime) = StringService::startEndDate($timeType);
-
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-
-        }
 //
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
+            if ($startTime) {
+                $startTime = (int)strtotime($startTime);
+                $startTime && $where .= " and create_time >= {$startTime}";
+            }
+            if ($endTime) {
+                $endTime = (int)strtotime($endTime);
+                $endTime && $where .= " and create_time <= {$endTime}";
+            }
+
+        }else{
+            $where=" name like '%{$keyword}%' or phone like '%{$keyword}%'";
         }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
+
+
 
         $page = (int)Yii::$app->request->get('page', 1);
 
