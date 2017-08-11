@@ -22,6 +22,7 @@ class ModelService
     const PAGE_SIZE_DEFAULT = 12;
     const ORDER_BY_DEFAULT = ['id' => SORT_DESC];
     const SUFFIX_FIELD_DESCRIPTION = '_desc';
+    const FORMAT_DATA_METHOD = 'formatData';
 
     /**
      * Generate sorting statements for query
@@ -152,19 +153,20 @@ class ModelService
     /**
      * Get model list
      *
-     * @param  Query $query query object
-     * @param  array $select select fields default all fields
-     * @param  string $from from table
-     * @param  int $page page number default 1
-     * @param  int $size page size default 12
-     * @param  array $orderBy order by fields default id desc
+     * @param Query $query query object
+     * @param array $select select fields default all fields
+     * @param ActiveRecord $model model
+     * @param string $formatMethod format method default 'formatData'
+     * @param int $page page number default 1
+     * @param int $size page size default 12
+     * @param array $orderBy order by fields default id desc
      * @return array
      */
-    public static function pagination(Query $query, $select = [], $from, $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ModelService::ORDER_BY_DEFAULT)
+    public static function pagination(Query $query, array $select = [], ActiveRecord $model, $page = 1, $size = self::PAGE_SIZE_DEFAULT, $formatMethod = self::FORMAT_DATA_METHOD, $orderBy = ModelService::ORDER_BY_DEFAULT)
     {
-        $query->select($select)->from($from);
+        $query->select($select)->from($model->tableName());
         $offset = ($page - 1) * $size;
-        return [
+        $data = [
             'total' => $query->count(),
             'details' => $query
                 ->orderBy($orderBy)
@@ -172,5 +174,13 @@ class ModelService
                 ->limit($size)
                 ->all()
         ];
+
+        if (method_exists($model, $formatMethod)) {
+            foreach ($data['details'] as &$row) {
+                $model::formatData($row);
+            }
+        }
+
+        return $data;
     }
 }
