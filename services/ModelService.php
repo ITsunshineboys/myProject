@@ -23,6 +23,8 @@ class ModelService
     const ORDER_BY_DEFAULT = ['id' => SORT_DESC];
     const SUFFIX_FIELD_DESCRIPTION = '_desc';
     const FORMAT_DATA_METHOD = 'formatData';
+    const PAGINATION_RETURN_ARRAY_KEY_TOTAL = 'total';
+    const PAGINATION_RETURN_ARRAY_KEY_DETAILS = 'details';
 
     /**
      * Generate sorting statements for query
@@ -167,8 +169,8 @@ class ModelService
         $query->select($select)->from($model->tableName());
         $offset = ($page - 1) * $size;
         $data = [
-            'total' => $query->count(),
-            'details' => $query
+            self::PAGINATION_RETURN_ARRAY_KEY_TOTAL => $query->count(),
+            self::PAGINATION_RETURN_ARRAY_KEY_DETAILS => $query
                 ->orderBy($orderBy)
                 ->offset($offset)
                 ->limit($size)
@@ -176,8 +178,8 @@ class ModelService
         ];
 
         if (method_exists($model, $formatMethod)) {
-            foreach ($data['details'] as &$row) {
-                $model::formatData($row);
+            foreach ($data[self::PAGINATION_RETURN_ARRAY_KEY_DETAILS] as &$row) {
+                $model::$formatMethod($row);
             }
         }
 
