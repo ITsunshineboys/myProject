@@ -4517,7 +4517,7 @@ class MallController extends Controller
         $code = 1000;
 
         $pid = (int)Yii::$app->request->get('pid', 0);
-        if ($pid <= 0 || !GoodsCategory::isLevel3()) {
+        if ($pid <= 0) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -4939,6 +4939,7 @@ class MallController extends Controller
         $code = 1000;
 
         $keyword = trim(Yii::$app->request->get('keyword', ''));
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
         $shopType = (int)Yii::$app->request->get('shop_type', 0);
         $status = (int)Yii::$app->request->get('status', 0);
         $page = (int)Yii::$app->request->get('page', 1);
@@ -4959,6 +4960,9 @@ class MallController extends Controller
             if ($status != Yii::$app->params['value_all']) {
                 $query->andWhere(['status' => $status]);
             }
+            if ($categoryId) {
+                $query->andWhere(['in', 'category_id', GoodsCategory::level23Ids($categoryId, true)]);
+            }
         } else {
             $query->andWhere(['like', 'shop_no', $keyword]);
             $query->orWhere(['like', 'shop_name', $keyword]);
@@ -4968,7 +4972,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-list' => Supplier::pagination($query, Supplier::FIELDS_LIST, $page, $size)
+                'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, new Supplier, $page, $size)
             ],
         ]);
     }
