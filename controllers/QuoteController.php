@@ -549,6 +549,10 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * assort goods list
+     * @return string
+     */
     public function actionAssortGoodsList()
     {
         return Json::encode([

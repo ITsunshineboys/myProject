@@ -3989,6 +3989,7 @@ class MallController extends Controller
         $series = Series::find()
             ->asArray()
             ->select('series,creation_time,status')
+            ->orderBy(['series_grade' => SORT_ASC])
             ->All();
         $all = [];
         foreach ($series as $one_series) {
