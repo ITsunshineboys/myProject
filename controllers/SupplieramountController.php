@@ -551,9 +551,20 @@ class SupplieramountController extends Controller
             ]);
         }
         $request = Yii::$app->request;
-        $transaction_no = (int)trim(htmlspecialchars($request->post('transaction_no' )), '');
+        $transaction_no = trim(htmlspecialchars($request->post('transaction_no' )), '');
+        if (!$transaction_no){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $data=(new Supplieramountmanage())->Accessinformation($transaction_no);
-
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' => $data
+        ]);
     }
 
 

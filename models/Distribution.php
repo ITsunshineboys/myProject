@@ -9,6 +9,7 @@ use yii\db\ActiveRecord;
 use yii\db\Query;
 use app\services\StringService;
 use yii\data\Pagination;
+use app\models\User;
 
 const  GOODS_ORDER = 'goods_order';
 const  DISTRIBUTTION = 'distribution';
@@ -116,6 +117,44 @@ class Distribution extends ActiveRecord
         $data['todayadd']=$nowday_user;
         $data['totaladd']=$total_user;
         return $data;
+    }
+
+    /**
+     * 获取分销详情
+     * @param $mobile
+     * @return array
+     */
+    public static  function Gettransactiondetail($mobile){
+        $data=Distribution::find()->where(['mobile'=>$mobile])->one();
+        $subset=Distribution::find()->select('mobile,applydis_time')->where(['parent_id'=>$data['id']])->asArray()->all();
+        //subset
+        $alist=array();
+        foreach ( $subset as $k =>$v){
+           $ares[$k]=(new Query())->from('user')->select('id,mobile')->where(['mobile'=>$subset[$k]['mobile']])->one();
+           if ($ares[$k]){
+               $order_list[$k]=(new Query())->from('goods_order as a')->leftJoin('order_goodslist as b','a.order_no=b.order_no')->select('a.order_no,a.amount_order,a.paytime,a.remarks,a.address_id')->where(['a.user_id'=>$ares[$k]['id'],'b.order_status'=>1])->all();
+               foreach ($order_list[$k] as $key =>$val){
+                   $order_list[$k][$key]['mobile']=$ares[$k]['mobile'];
+                   $alist[]=$order_list[$k][$key];
+               }
+           }else{
+                $auser_address[$k]=Addressadd::find()->where(['mobile'=>$subset[$k]['mobile']])->one();
+                if ($auser_address[$k]) {
+                    $order_list[$k]=(new Query())->from('goods_order as a')->leftJoin('order_goodslist as b','a.order_no=b.order_no')->select('a.order_no,a.amount_order,a.paytime,a.remarks,a.address_id')->where(['a.address_id'=>$auser_address[$k]['id'],'b.order_status'=>1])->all();
+                    foreach ($order_list[$k] as $key =>$val){
+                        $order_list[$k][$key]['mobile']=$auser_address[$k]['mobile'];
+                        $alist[]=$order_list[$k][$key];
+                    }
+                }
+           }
+        }
+        return $alist;
+    }
+
+    private static function Isuser($mobile)
+    {
+        $user=User::find()->select('id')->where(['mobile'=>$mobile])->asArray()->one();
+        return $user;
     }
 
     /**

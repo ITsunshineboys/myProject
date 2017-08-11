@@ -282,18 +282,43 @@ class Supplieramountmanage extends  ActiveRecord
          $arr=(new Query())->from('supplier_accessdetail')->where(['transaction_no'=>$transaction_no])->one();
          switch ($arr['access_type']){
              case 1:
-                 $arr['access_type']='货款';
+                 $getorderlist  = (new Query())->from('goods_order AS a')->leftJoin('order_goodslist AS b','b.order_no = a.order_no')->leftJoin('user_address as c','a.address_id=c.id')->leftJoin('express as d','d.order_no=a.order_no')->where(['a.order_no'=> $arr['order_no']])->select('b.goods_price,b.goods_name,b.sku,b.goods_number,a.pay_name,b.shipping_type,c.district,c.region,a.create_time,a.paytime,d.waybillname,d.waybillnumber')->all();
+                 foreach ($getorderlist as $k =>$v){
+                     $getorderlist[$k]['goods_price']=sprintf('%.2f', (float)$getorderlist[$k]['goods_price']*0.01);
+                     $getorderlist[$k]['create_time']=date('Y-m-d H:i',$getorderlist[$k]['create_time']);
+                     $getorderlist[$k]['paytime']=date('Y-m-d H:i',$getorderlist[$k]['paytime']);
+                     if ($getorderlist[$k]['shipping_type']==1){
+                         $getorderlist[$k]['shipping_way']='送货上门';
+                     }else{
+                         $getorderlist[$k]['shipping_way']=$getorderlist[$k]['waybillname'].'('.$getorderlist[$k]['number'].')';
+                     }
+                     $getorderlist[$k]['get_address']=(new LogisticsDistrict())->getdistrict($getorderlist[$k]['district']).$getorderlist[$k]['region'];
+                     unset($getorderlist[$k]['shipping_type']);
+                     unset($getorderlist[$k]['district']);
+                     unset($getorderlist[$k]['region']);
+
+                 }
+                 $data=$getorderlist;
                  break;
              case 2:
-                 $arr['access_type']='提现失败';
+                 $getcashlist  = (new Query())->from('supplier_cashregister AS a')->leftJoin('supplier_bankinformation as b','a.supplier_id=b.supplier_id')->select('a.cash_money,a.apply_time,a.status,a.handle_time,a.real_money,a.supplier_reason,b.bankcard')->where(['a.transaction_no'=>$arr['transaction_no']])->one();
+                 foreach ($getcashlist  as $k =>$v){
+                     $getcashlist[$k]['apply_time']=date('Y-m-d H:i',$getcashlist[$k]['apply_time']);
+                     $getcashlist[$k]['handle_time']=date('Y-m-d H:i',$getcashlist[$k]['handle_time']);
+                     $getcashlist[$k]['cash_money']=sprintf('%.2f', (float)$getcashlist[$k]['cash_money']*0.01);
+                     $getcashlist[$k]['real_money']=sprintf('%.2f', (float)$getcashlist[$k]['real_money']*0.01);
+                     $getcashlist[$k]['status']='提现失败';
+                 }
+                 $data=$getcashlist;
                  break;
              case 3:
-                 $arr['access_type']='充值';
+                 $data=array();
                  break;
              case 4:
-                 $arr['access_type']='扣款';
+                 $data=array();
                  break;
          }
+         return $data;
      }
     /**
      * 查询银行卡信息
