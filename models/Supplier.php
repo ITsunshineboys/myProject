@@ -11,6 +11,7 @@ namespace app\models;
 use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class Supplier extends ActiveRecord
 {
@@ -42,8 +43,13 @@ class Supplier extends ActiveRecord
         self::STATUS_NOT_APPROVED => self::STATUS_DESC_NOT_APPROVED,
         self::STATUS_APPROVED => self::STATUS_DESC_ONLINE_APP,
     ];
+    const STATUSES_ONLINE_OFFLINE = [
+        self::STATUS_OFFLINE => self::STATUS_DESC_OFFLINE,
+        self::STATUS_ONLINE => self::STATUS_DESC_ONLINE_ADMIN,
+    ];
     const FIELDS_VIEW_ADMIN_MODEL = [
         'id',
+        'type_org',
         'name',
         'shop_no',
         'create_time',
@@ -101,14 +107,14 @@ class Supplier extends ActiveRecord
     ];
     const OFFLINE_SHOP_SUPPORT = 1; // 支持线下商店
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
-
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'supplier';
-    }
+    const FIELDS_LIST = [
+        'id',
+        'type_shop',
+        'shop_name',
+        'shop_no',
+        'category_id',
+        'status',
+    ];
 
     /**
      * Get delta number
@@ -228,6 +234,80 @@ class Supplier extends ActiveRecord
     }
 
     /**
+     * Check shop type
+     *
+     * @param $shopType shop type
+     * @return bool
+     */
+    public static function checkShopType($shopType)
+    {
+        return in_array($shopType,
+            array_merge(array_keys(Supplier::TYPE_SHOP), [Yii::$app->params['value_all']]));
+    }
+
+    /**
+     * Check status
+     *
+     * @param $status status
+     * @return bool
+     */
+    public static function checkStatus($status)
+    {
+        return in_array($status,
+            array_merge(array_keys(self::STATUSES_ONLINE_OFFLINE), [Yii::$app->params['value_all']]));
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'supplier';
+    }
+
+    /**
+     * Format data
+     *
+     * @param array $data data to format
+     */
+    public static function formatData(array &$data)
+    {
+        if (isset($data['create_time'])) {
+            $data['create_time'] = date('Y-m-d', $data['create_time']);
+        }
+
+        if (isset($data['status'])) {
+            $data['status'] = self::STATUSES[$data['status']];
+        }
+
+        if (isset($data['quality_guarantee_deposit'])) {
+            $data['quality_guarantee_deposit'] /= 100;
+        }
+
+        if (isset($data['type_org'])) {
+            $data['type_org'] = self::TYPE_ORG[$data['type_org']];
+        }
+
+        if (isset($data['category_id'])) {
+            static $categories = [];
+
+            if (in_array($data['category_id'], array_keys($categories))) {
+                $data['category_name'] = $categories[$data['category_id']];
+            } else {
+                $cat = GoodsCategory::findOne($data['category_id']);
+                $data['category_name'] = $cat->fullTitle();
+                $categories[$data['category_id']] = $data['category_name'];
+            }
+
+            unset($data['category_id']);
+        }
+
+        if (isset($data['type_shop'])) {
+            $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
+        }
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
@@ -324,40 +404,6 @@ class Supplier extends ActiveRecord
         }
 
         return $extraData;
-    }
-
-    /**
-     * Format data
-     *
-     * @param array $data data to format
-     */
-    private function _formatData(array &$data)
-    {
-        if (isset($data['create_time'])) {
-            $data['create_time'] = date('Y-m-d', $data['create_time']);
-        }
-
-        if (isset($data['status'])) {
-            $data['status'] = self::STATUSES[$data['status']];
-        }
-
-        if (isset($data['quality_guarantee_deposit'])) {
-            $data['quality_guarantee_deposit'] /= 100;
-        }
-
-        if (isset($data['type_org'])) {
-            $data['type_org'] = self::TYPE_ORG[$data['type_org']];
-        }
-
-        if (isset($data['category_id'])) {
-            $cat = GoodsCategory::findOne($data['category_id']);
-            $data['category_name'] = $cat->fullTitle();
-            unset($data['category_id']);
-        }
-
-        if (isset($data['type_shop'])) {
-            $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
-        }
     }
 
     /**

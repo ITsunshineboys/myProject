@@ -214,7 +214,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getNotPayedCashesCountAll()
     {
-        return (new Query())->from(SUP_CASHREGISTER)->where(['status' => 1])->count();
+        return (new Query())->from(SUP_CASHREGISTER)->where(['<>', 'status', 3])->count();
     }
 
     /**

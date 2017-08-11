@@ -537,11 +537,23 @@ class QuoteController extends Controller
      */
     public function actionAssortGoods()
     {
+        $pid = (int)\Yii::$app->request->get('pid', 0);
+        $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS_CATEGORY, $pid);
+//        $pid == 0 && array_unshift($categories, GoodsCategory::forAll());
         return Json::encode([
-            'goods_category' => GoodsCategory::find()
-                ->select('title,path,id')
-                ->asArray()
-                ->all(),
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'categories' => $categories
+            ],
+        ]);
+    }
+
+    public function actionAssortGoodsList()
+    {
+        return Json::encode([
+           'list'=> AssortGoods::find()
+               ->all(),
         ]);
     }
 

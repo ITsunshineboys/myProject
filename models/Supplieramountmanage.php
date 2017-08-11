@@ -8,6 +8,7 @@ use yii\data\Pagination;
 use app\models\LogisticsDistrict;
 use app\services\StringService;
 use app\services\SmValidationService;
+use yii\db\Query;
 
 const  SUP_BANK_CARD='supplier_bankinformation';
 const  SUPPLIER='supplier';
@@ -40,7 +41,8 @@ class Supplieramountmanage extends  ActiveRecord
         //查询
         $data=$this->GetBankcard($supplier_id);
         if ($data){
-            return false;
+            $res=Yii::$app->db->createCommand()->update(SUP_BANK_CARD, ['bankname'   =>$bankname, 'bankcard'   =>$bankcard, 'username'   =>$username, 'position'   =>$position, 'bankbranch' =>$bankbranch],'supplier_id='.$supplier_id)->execute();
+            return $res;
         }else{
             $time=time();
             $res=Yii::$app->db->createCommand()->insert(SUP_BANK_CARD,[
@@ -106,8 +108,9 @@ class Supplieramountmanage extends  ActiveRecord
         $a=0;
         foreach($data AS $k=>$v){
             $a+= $data[$k]['freeze_money'];
-            $output['balance']=$data[$k]['freeze_money']*0.01;
-            $output['availableamount']=$data[$k]['availableamount']*0.01;
+            $output['balance']= sprintf('%.2f', (float)$data[$k]['freeze_money']*0.01);
+
+            $output['availableamount']= sprintf('%.2f', (float)$data[$k]['availableamount']*0.01);
         }
         $user = Yii::$app->user->identity;
         $cashregister=(new \yii\db\Query())->from(SUP_CASHREGISTER)->select('cash_money')->where(['supplier_id'=>$supplier_id,'status'=>3])->all();
@@ -115,8 +118,8 @@ class Supplieramountmanage extends  ActiveRecord
         foreach ($cashregister AS $k=>$v){
             $cash_money+=$cashregister[$k]['cash_money'];
         }
-        $output['cash_money']=$cash_money*0.01;
-        $output['freeze_money']=$a*0.01;
+        $output['cash_money']=sprintf('%.2f', (float)$cash_money*0.01);
+        $output['freeze_money']=sprintf('%.2f', (float)$a*0.01);
         return $output;
     }
 
@@ -153,41 +156,13 @@ class Supplieramountmanage extends  ActiveRecord
 
 
     /**
-     * 商家重设支付密码-不是第一次
-     * 1:成功  2：用户不存在 3：失败 4：短信验证失败
-     * @param $psw
-     * @param $supplier_id
-     * @param $code
-     * @return int
-     */
-    public function  Setpaypsw_sup_reset($psw,$supplier_id,$code){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            return 2;
-        }
-        $mobile=user::find()->select('mobile')->where(['id'=>$user->id])->one()['mobile'];
-        //验证短信验证码是否正确
-        $re=SmValidationService::validCode($mobile,$code);
-        if ($re==true){
-            $res=Yii::$app->db->createCommand()->update(SUPPLIER, ['pay_password' =>$psw],'id='.$supplier_id)->execute();
-            if($res){
-                return 1;
-            }else{
-                return 3;
-            }
-        }else{
-            return 4;
-        }
-    }
-
-    /**
      * 商家提现申请
      * @param $money
      * @return bool
      */
     public function Supplierwithdrawalsapply($money){
         $user = Yii::$app->user->identity;
-        $supplier=Supplier::find()->select('id,shop_no,availableamount')->where(['uid' => $user->id])->one();
+        $supplier=Supplier::find()->select('id,shop_no,availableamount,balance')->where(['uid' => $user->id])->one();
         $supplier_id=$supplier['id'];
         $time=time();
         $month=date('m',$time);
@@ -202,40 +177,124 @@ class Supplieramountmanage extends  ActiveRecord
             'apply_time'=>$time
         ])->execute();
         $availableamount=$supplier['availableamount']-$money*100;
+        $balance=$supplier['balance']-$money*100;
         if ($availableamount<0){
             return false;
         }
-        $re=Yii::$app->db->createCommand()->update(SUPPLIER, ['availableamount'=>$availableamount],'id='.$supplier_id)->execute();
+        $re=Yii::$app->db->createCommand()->update(SUPPLIER, ['availableamount'=>$availableamount,'balance'=>$balance],'id='.$supplier_id)->execute();
         if ($res && $re){
             return true;
         }else{
             return false;
         }
     }
-
     /**
      * 查询商家已冻结余额
      * @param $supplier_id
      * @return array|bool|null
      */
-    public function Getfreezelist($supplier_id,$page,$pagesize,$time_id,$time_start,$time_end){
-        if ($time_id==0){
-            $array=(new \yii\db\Query())->from(SUP_FREELIST)->where(['supplier_id'=>$supplier_id]);
-        }else{
-            $array=(new \yii\db\Query())->from(SUP_FREELIST)->where(['supplier_id'=>$supplier_id])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
+    public function Getfreezelist($supplier_id,$page,$page_size,$time_type,$time_start,$time_end){
+        $array=(new Query())->from(SUP_FREELIST)->where(['supplier_id'=>$supplier_id]);
+        $time_area = self::timeDeal($time_type, $time_start, $time_end);
+        $time_start = $time_area[0];
+        $time_end = $time_area[1];
+        if ($time_start && $time_end && $time_end > $time_start) {
+            $array->andWhere(['>', 'create_time', $time_start])
+                ->andWhere(['<', 'create_time', $time_end]);
         }
         $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $pagesize,'pageSizeParam'=>false]);
+        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $page_size,'pageSizeParam'=>false]);
         $arr=$array->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
         foreach ($arr as $k=>$v){
             $arr[$k]['create_time']=date('Y-m-d H:i',$arr[$k]['create_time']);
+            $arr[$k]['freeze_money']=sprintf('%.2f', (float)$arr[$k]['freeze_money']*0.01);
         }
-        $data=$this->page($count,$pagesize,$page,$arr);
+        $data=$this->page($count,$page_size,$page,$arr);
         return $data;
     }
 
+    /**
+     * 收支明细列表
+     * @param $supplier_id
+     * @param $page
+     * @param $page_size
+     * @param $time_type
+     * @param $time_start
+     * @param $time_end
+     * @param $access_type
+     * @param $search
+     * @param $order_type
+     * @return array
+     */
+    public function Accessdetails($supplier_id,$page,$page_size,$time_type,$time_start,$time_end,$access_type,$search,$order_type){
+
+        $array=(new Query())->from('supplier_accessdetail')->where(['supplier_id'=>$supplier_id]);
+        $time_area = self::timeDeal($time_type, $time_start, $time_end);
+        $time_start = $time_area[0];
+        $time_end = $time_area[1];
+        if ($time_start && $time_end && $time_end > $time_start) {
+            $array->andWhere(['>', 'create_time', $time_start])
+                ->andWhere(['<', 'create_time', $time_end]);
+        }
+        if ($search) {
+            $array->andFilterWhere(['like', 'order_no', $search])
+                ->orFilterWhere(['like', 'transaction_no', $search]);
+        }
+        if ($order_type==2){
+            $orderby='create_time desc';
+        }else {
+            $orderby='create_time asc';
+        }
+        if ($access_type!=0 && $access_type){
+            $array->andWhere(['=', 'access_type',$access_type]);
+        }
+        $count = $array->count();
+        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $page_size,'pageSizeParam'=>false]);
+        $arr=$array->orderby($orderby)->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        foreach ($arr as $k=>$v){
+            $arr[$k]['create_time']=date('Y-m-d H:i',$arr[$k]['create_time']);
+            $arr[$k]['access_money']=sprintf('%.2f', (float)$arr[$k]['access_money']*0.01);
+            switch ($arr[$k]['access_type']){
+                case 1:
+                    $arr[$k]['access_type']='货款';
+                    break;
+                case 2:
+                    $arr[$k]['access_type']='提现失败';
+                    break;
+                case 3:
+                    $arr[$k]['access_type']='充值';
+                    break;
+                case 4:
+                    $arr[$k]['access_type']='扣款';
+                    break;
+            }
+        }
+        $data=$this->page($count,$page_size,$page,$arr);
+        return $data;
+
+    }
+
+     public function Accessinformation($transaction_no){
+         $arr=(new Query())->from('supplier_accessdetail')->where(['transaction_no'=>$transaction_no])->one();
+         switch ($arr['access_type']){
+             case 1:
+                 $arr['access_type']='货款';
+                 break;
+             case 2:
+                 $arr['access_type']='提现失败';
+                 break;
+             case 3:
+                 $arr['access_type']='充值';
+                 break;
+             case 4:
+                 $arr['access_type']='扣款';
+                 break;
+         }
+     }
     /**
      * 查询银行卡信息
      * @param $supplier_id
@@ -246,38 +305,18 @@ class Supplieramountmanage extends  ActiveRecord
         return $data;
     }
 
-    private  function Timehandle($time_id,$time_start,$time_end){
-        if ($time_id==0){
-            return null;
-        }else if ($time_id==1){
-            $data='DATE(FROM_UNIXTIME(create_time))=CURDATE()';
-            return $data;
-        }else if ($time_id==2){
-            $data="DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= DATE(FROM_UNIXTIME(create_time))";
-            return $data;
-        }else if ($time_id==3){
-            $data="DATE_SUB(CURDATE(), INTERVAL 1 MONTH) <= DATE(FROM_UNIXTIME(create_time))";
-            return $data;
-        }else if($time_id==4){
-            $data="DATE_SUB(CURDATE(), INTERVAL 365 DAY) <= DATE(FROM_UNIXTIME(create_time))";
-            return $data;
-        }else if ($time_id==5){
-            $data="create_time>='".strtotime($time_start)."' and create_time<= '".strtotime($time_end)."'";
-            return $data;
-        }
-    }
     private  function page($count,$pagesize,$page,$arr){
         $totalpage=ceil($count/$pagesize);
-        if ($page>$totalpage){
-            $sd= array(
-                'freezelist'=>'',
-                'totalpage'=>$totalpage,
-                'count'=>$count,
-                'page'=>$page
+            if ($page>$totalpage){
+                $sd= array(
+                    'list'=>'',
+                    'totalpage'=>$totalpage,
+                    'count'=>$count,
+                    'page'=>$page
             );
         }else{
             $sd=array(
-                'freezelist'=>$arr,
+                'list'=>$arr,
                 'totalpage'=>$totalpage,
                 'count'=>$count,
                 'page'=>$page
@@ -285,6 +324,23 @@ class Supplieramountmanage extends  ActiveRecord
         }
         return $sd;
     }
-
-
+    /**
+     * 得到开始和结束时间
+     * @param $time_type
+     * @param $time_start
+     * @param $time_end
+     * @return array
+     */
+    private function timeDeal($time_type, $time_start, $time_end)
+    {
+        if ($time_type == 'custom' && $time_start && $time_end) {
+            $time_start = strtotime($time_start);
+            $time_end = strtotime($time_end);
+        } else {
+            $time_area = StringService::startEndDate($time_type, 1);
+            $time_start = $time_area[0];
+            $time_end = $time_area[1];
+        }
+        return [$time_start, $time_end];
+    }
 }

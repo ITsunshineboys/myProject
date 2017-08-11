@@ -9,6 +9,7 @@
 namespace app\services;
 
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class ModelService
 {
@@ -19,8 +20,11 @@ class ModelService
     ];
     const SEPARATOR_ERRCODE_ERRMSG = ':';
     const PAGE_SIZE_DEFAULT = 12;
-    const ORDER_BY_DEFAULT = ['id' => SORT_ASC];
+    const ORDER_BY_DEFAULT = ['id' => SORT_DESC];
     const SUFFIX_FIELD_DESCRIPTION = '_desc';
+    const FORMAT_DATA_METHOD = 'formatData';
+    const PAGINATION_RETURN_ARRAY_KEY_TOTAL = 'total';
+    const PAGINATION_RETURN_ARRAY_KEY_DETAILS = 'details';
 
     /**
      * Generate sorting statements for query
@@ -146,5 +150,39 @@ class ModelService
     {
         $errors = $model->errors;
         return isset($errors[$attr]) && false !== stripos($errors[$attr][0], 'has already been taken');
+    }
+
+    /**
+     * Get model list
+     *
+     * @param Query $query query object
+     * @param array $select select fields default all fields
+     * @param ActiveRecord $model model
+     * @param string $formatMethod format method default 'formatData'
+     * @param int $page page number default 1
+     * @param int $size page size default 12
+     * @param array $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function pagination(Query $query, array $select = [], ActiveRecord $model, $page = 1, $size = self::PAGE_SIZE_DEFAULT, $formatMethod = self::FORMAT_DATA_METHOD, $orderBy = ModelService::ORDER_BY_DEFAULT)
+    {
+        $query->select($select)->from($model->tableName());
+        $offset = ($page - 1) * $size;
+        $data = [
+            self::PAGINATION_RETURN_ARRAY_KEY_TOTAL => $query->count(),
+            self::PAGINATION_RETURN_ARRAY_KEY_DETAILS => $query
+                ->orderBy($orderBy)
+                ->offset($offset)
+                ->limit($size)
+                ->all()
+        ];
+
+        if (method_exists($model, $formatMethod)) {
+            foreach ($data[self::PAGINATION_RETURN_ARRAY_KEY_DETAILS] as &$row) {
+                $model::$formatMethod($row);
+            }
+        }
+
+        return $data;
     }
 }
