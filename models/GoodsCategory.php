@@ -939,4 +939,9 @@ class GoodsCategory extends ActiveRecord
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
     }
+
+    public function getChildren()
+{
+    return $this->hasMany(self::className(),['pid'=>'id']);
+}
 }
