@@ -1180,20 +1180,21 @@ class GoodsOrder extends ActiveRecord
     public static function supplierSalesVolumn($supplierId, $timeType)
     {
         list($startTime, $endTime) = StringService::startEndDate($timeType, true);
-        if (!$startTime && !$endTime) {
-            return 0;
-        }
 
         $retKeyName = 'sales_volumn';
         $query = new Query;
-        return (int)$query
+        $query
             ->select('sum(og.goods_number) as ' . $retKeyName)
             ->from(self::tableName() .' as t')
             ->leftJoin(OrderGoods::tableName() . ' as og', 'og.order_id = t.id')
-            ->where(['t.supplier_id' => $supplierId, 't.pay_status' => self::PAY_STATUS_PAID])
-            ->andWhere(['>=', 't.create_time', $startTime])
-            ->andWhere(['<=', 't.create_time', $endTime])
-            ->one()[$retKeyName];
+            ->where(['t.supplier_id' => $supplierId, 't.pay_status' => self::PAY_STATUS_PAID]);
+        if ($startTime + $endTime > 0) {
+            $query
+                ->andWhere(['>=', 't.create_time', $startTime])
+                ->andWhere(['<=', 't.create_time', $endTime]);
+        }
+
+        return (int)$query->one()[$retKeyName];
     }
 
     /**
