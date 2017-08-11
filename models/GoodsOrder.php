@@ -10,6 +10,7 @@ namespace app\models;
 use yii;
 use yii\db\ActiveRecord;
 use yii\data\Pagination;
+use yii\db\Query;
 use app\models\LogisticsDistrict;
 use app\services\StringService;
 use app\services\SmValidationService;
@@ -20,6 +21,17 @@ const  SUP_FREELIST='supplier_freezelist';
 const  SUP_CASHREGISTER='supplier_cashregister';
 class GoodsOrder extends ActiveRecord
 {
+    const PAY_STATUS_UNPAID = 0;
+    const PAY_STATUS_PAID = 1;
+    const PAY_STATUS_REFUNDED = 2;
+    const PAY_STATUS_DESC_UNPAID = '未付款';
+    const PAY_STATUS_DESC_PAID = '已付款';
+    const PAY_STATUS_DESC_REFUNDED = '已退款';
+    const PAY_STATUSES = [
+        self::PAY_STATUS_UNPAID => self::PAY_STATUS_DESC_UNPAID,
+        self::PAY_STATUS_PAID => self::PAY_STATUS_DESC_PAID,
+        self::PAY_STATUS_REFUNDED => self::PAY_STATUS_DESC_REFUNDED,
+    ];
 
     public $goods_id;
     /**
@@ -1158,6 +1170,48 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
+    /**
+     * Get supplier sales volumn
+     *
+     * @param int $supplierId supplier id
+     * @param string $timeType
+     * @return int
+     */
+    public static function supplierSalesVolumn($supplierId, $timeType)
+    {
+        list($startTime, $endTime) = StringService::startEndDate($timeType, true);
+        $retKeyName = 'sales_volumn';
+        $query = new Query;
+        return (int)$query
+            ->select('sum(og.goods_number) as ' . $retKeyName)
+            ->from(self::tableName() .' as t')
+            ->leftJoin(OrderGoods::tableName() . ' as og', 'og.order_id = t.id')
+            ->where(['t.supplier_id' => $supplierId, 't.pay_status' => self::PAY_STATUS_PAID])
+            ->andWhere(['>=', 't.create_time', $startTime])
+            ->andWhere(['<=', 't.create_time', $endTime])
+            ->one()[$retKeyName];
+    }
 
+    /**
+     * Get supplier sales volumn
+     *
+     * @param int $supplierId supplier id
+     * @param string $timeType
+     * @return int
+     */
+    public static function supplierSalesAmount($supplierId, $timeType)
+    {
+        list($startTime, $endTime) = StringService::startEndDate($timeType, true);
+        $retKeyName = 'sales_amount';
+        $query = new Query;
+        return (int)$query
+            ->select('sum(og.goods_number * og.goods_price) as ' . $retKeyName)
+            ->from(self::tableName() .' as t')
+            ->leftJoin(OrderGoods::tableName() . ' as og', 'og.order_id = t.id')
+            ->where(['t.supplier_id' => $supplierId, 't.pay_status' => self::PAY_STATUS_PAID])
+            ->andWhere(['>=', 't.create_time', $startTime])
+            ->andWhere(['<=', 't.create_time', $endTime])
+            ->one()[$retKeyName];
+    }
 
 }

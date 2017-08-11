@@ -115,6 +115,10 @@ class Supplier extends ActiveRecord
         'category_id',
         'status',
     ];
+    const FIELDS_LIST_EXTRA = [
+        'sales_volumn_month',
+        'sales_amount_month',
+    ];
 
     /**
      * Get delta number
@@ -398,6 +402,32 @@ class Supplier extends ActiveRecord
                 case 'identity_card_back_image':
                     $user = User::findOne($this->uid);
                     $extraData[$extraField] = $user->$extraField;
+                    break;
+            }
+
+        }
+
+        return $extraData;
+    }
+
+    /**
+     * Get extra fields
+     *
+     * @param int $id supplier id
+     * @param array $extraFields extra fields
+     * @return array
+     */
+    public static function extraData($id, array $extraFields)
+    {
+        $extraData = [];
+
+        foreach ($extraFields as $extraField) {
+            switch ($extraField) {
+                case 'sales_volumn_month':
+                    $extraData[$extraField] = GoodsOrder::supplierSalesVolumn($id, 'month');
+                    break;
+                case 'sales_amount_month':
+                    $extraData[$extraField] = GoodsOrder::supplierSalesAmount($id, 'month');
                     break;
             }
 

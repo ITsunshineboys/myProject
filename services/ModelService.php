@@ -23,8 +23,10 @@ class ModelService
     const ORDER_BY_DEFAULT = ['id' => SORT_DESC];
     const SUFFIX_FIELD_DESCRIPTION = '_desc';
     const FORMAT_DATA_METHOD = 'formatData';
+    const EXTRA_DATA_METHOD = 'extraData';
     const PAGINATION_RETURN_ARRAY_KEY_TOTAL = 'total';
     const PAGINATION_RETURN_ARRAY_KEY_DETAILS = 'details';
+    const FIELD_IDENTITY = 'id';
 
     /**
      * Generate sorting statements for query
@@ -157,15 +159,18 @@ class ModelService
      *
      * @param Query $query query object
      * @param array $select select fields default all fields
+     * @param array $extraFields extra fields default empty
      * @param ActiveRecord $model model
      * @param string $formatMethod format method default 'formatData'
+     * @param string $extraMethod extra method default 'extraData'
      * @param int $page page number default 1
      * @param int $size page size default 12
      * @param array $orderBy order by fields default id desc
      * @return array
      */
-    public static function pagination(Query $query, array $select = [], ActiveRecord $model, $page = 1, $size = self::PAGE_SIZE_DEFAULT, $formatMethod = self::FORMAT_DATA_METHOD, $orderBy = ModelService::ORDER_BY_DEFAULT)
+    public static function pagination(Query $query, array $select = [], array $extraFields = [], ActiveRecord $model, $page = 1, $size = self::PAGE_SIZE_DEFAULT, $formatMethod = self::FORMAT_DATA_METHOD, $extraMethod = self::EXTRA_DATA_METHOD, $orderBy = self::ORDER_BY_DEFAULT)
     {
+        !in_array(self::FIELD_IDENTITY, $select) && $select[] = self::FIELD_IDENTITY;
         $query->select($select)->from($model->tableName());
         $offset = ($page - 1) * $size;
         $data = [
@@ -177,8 +182,11 @@ class ModelService
                 ->all()
         ];
 
-        if (method_exists($model, $formatMethod)) {
-            foreach ($data[self::PAGINATION_RETURN_ARRAY_KEY_DETAILS] as &$row) {
+        foreach ($data[self::PAGINATION_RETURN_ARRAY_KEY_DETAILS] as &$row) {
+            if ($extraFields && method_exists($model, $extraMethod)) {
+                $row = array_merge($model::$extraMethod($row[self::FIELD_IDENTITY], $extraFields), $row);
+            }
+            if (method_exists($model, $formatMethod)) {
                 $model::$formatMethod($row);
             }
         }
