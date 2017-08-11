@@ -266,6 +266,48 @@ class Supplier extends ActiveRecord
     }
 
     /**
+     * Format data
+     *
+     * @param array $data data to format
+     */
+    public static function formatData(array &$data)
+    {
+        if (isset($data['create_time'])) {
+            $data['create_time'] = date('Y-m-d', $data['create_time']);
+        }
+
+        if (isset($data['status'])) {
+            $data['status'] = self::STATUSES[$data['status']];
+        }
+
+        if (isset($data['quality_guarantee_deposit'])) {
+            $data['quality_guarantee_deposit'] /= 100;
+        }
+
+        if (isset($data['type_org'])) {
+            $data['type_org'] = self::TYPE_ORG[$data['type_org']];
+        }
+
+        if (isset($data['category_id'])) {
+            static $categories = [];
+
+            if (in_array($data['category_id'], array_keys($categories))) {
+                $data['category_name'] = $categories[$data['category_id']];
+            } else {
+                $cat = GoodsCategory::findOne($data['category_id']);
+                $data['category_name'] = $cat->fullTitle();
+                $categories[$data['category_id']] = $data['category_name'];
+            }
+
+            unset($data['category_id']);
+        }
+
+        if (isset($data['type_shop'])) {
+            $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
+        }
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()
@@ -362,40 +404,6 @@ class Supplier extends ActiveRecord
         }
 
         return $extraData;
-    }
-
-    /**
-     * Format data
-     *
-     * @param array $data data to format
-     */
-    public static function formatData(array &$data)
-    {
-        if (isset($data['create_time'])) {
-            $data['create_time'] = date('Y-m-d', $data['create_time']);
-        }
-
-        if (isset($data['status'])) {
-            $data['status'] = self::STATUSES[$data['status']];
-        }
-
-        if (isset($data['quality_guarantee_deposit'])) {
-            $data['quality_guarantee_deposit'] /= 100;
-        }
-
-        if (isset($data['type_org'])) {
-            $data['type_org'] = self::TYPE_ORG[$data['type_org']];
-        }
-
-        if (isset($data['category_id'])) {
-            $cat = GoodsCategory::findOne($data['category_id']);
-            $data['category_name'] = $cat->fullTitle();
-            unset($data['category_id']);
-        }
-
-        if (isset($data['type_shop'])) {
-            $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
-        }
     }
 
     /**
