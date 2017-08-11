@@ -109,7 +109,7 @@ CREATE TABLE `supplier` (
   `licence_image` varchar(255) not null DEFAULT '营业执照图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
-  `status` tinyint(1) not null default 0,
+  `status` tinyint(1) unsigned not null default 2 comment '0: 已关闭，1：正常营业，2：等待审核，3：审核未通过，4：审核通过',
   `follower_number` int(11) unsigned not null default 0 comment '关注人数',
   `comprehensive_score` float unsigned not null default 10 comment '综合评分',
   `store_service_score` float unsigned not null default 10 comment '店家服务评分',

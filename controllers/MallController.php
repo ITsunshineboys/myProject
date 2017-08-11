@@ -4959,6 +4959,8 @@ class MallController extends Controller
             }
             if ($status != Yii::$app->params['value_all']) {
                 $query->andWhere(['status' => $status]);
+            } else {
+                $query->andWhere(['in', 'status', array_keys(Supplier::STATUSES_ONLINE_OFFLINE)]);
             }
             if ($categoryId) {
                 $query->andWhere(['in', 'category_id', GoodsCategory::level23Ids($categoryId, true)]);
