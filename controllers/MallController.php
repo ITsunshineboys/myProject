@@ -743,7 +743,7 @@ class MallController extends Controller
             return Json::encode($ret);
         }
 
-        $where = 'delete_time = 0 and type = ' . $type . ' and district_code = ' . $districtCode;
+        $where = 'delete_time > 0 and type = ' . $type . ' and district_code = ' . $districtCode;
 
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
