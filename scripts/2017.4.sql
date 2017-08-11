@@ -1064,5 +1064,17 @@ CREATE TABLE `distribution` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 --8.9  end
+--8.11 start
+CREATE TABLE `supplier_accessdetail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `access_type` tinyint(1) NOT NULL COMMENT '1:货款 2.提现失败  3.充值  4.扣款  ',
+  `access_money` bigint(20) NOT NULL COMMENT '收支金额',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `order_no` varchar(50) DEFAULT NULL COMMENT '订单号',
+  `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
+  `supplier_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+--8.11 end
 
 
