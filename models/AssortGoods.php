@@ -6,8 +6,8 @@ use yii\db\ActiveRecord;
 class AssortGoods extends ActiveRecord
 {
     const FIELDS_NAME = [
-        'title',
         'category_id',
+        'title',
         'pid',
         'path',
     ];
