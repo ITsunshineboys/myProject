@@ -185,4 +185,54 @@ class ModelService
 
         return $data;
     }
+
+    /**
+     * 得到开始和结束时间 戳
+     * @param $time_type
+     * @param $time_start
+     * @param $time_end
+     * @return array
+     */
+    public static function timeDeal($time_type, $time_start, $time_end)
+    {
+        if ($time_type == 'custom' && $time_start && $time_end) {
+            $time_start = strtotime($time_start);
+            $time_end = strtotime($time_end);
+        } else {
+            $time_area = StringService::startEndDate($time_type, 1);
+            $time_start = $time_area[0];
+            $time_end = $time_area[1];
+        }
+        return [$time_start, $time_end];
+    }
+
+    /**
+     * 简单的分页处理
+     * @param array $arr 数据数组
+     * @param $count
+     * @param $page_size
+     * @param $page
+     * @return array
+     */
+    public static function pageDeal(array $arr, $count, $page, $page_size = self::PAGE_SIZE_DEFAULT)
+    {
+        $total_page = ceil($count / $page_size);
+        $page = $page < 1 ? 1 : $page;
+        if ($page > $total_page) {
+            $sd = array(
+                'list' => '',
+                'total_page' => $total_page,
+                'count' => $count,
+                'page' => $page
+            );
+        } else {
+            $sd = array(
+                'list' => $arr,
+                'total_page' => $total_page,
+                'count' => $count,
+                'page' => $page
+            );
+        }
+        return $sd;
+    }
 }

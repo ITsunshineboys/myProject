@@ -7,6 +7,7 @@ use app\models\Supplier;
 use app\models\Supplieramountmanage;
 use app\models\SupplierCashManager;
 use app\services\ExceptionHandleService;
+use app\services\ModelService;
 use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -96,7 +97,7 @@ class SupplierCashController extends Controller
         }
         $request = \Yii::$app->request;
         $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
         $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -193,7 +194,7 @@ class SupplierCashController extends Controller
         }
         $request = \Yii::$app->request;
         $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -228,7 +229,7 @@ class SupplierCashController extends Controller
         }
         $request = \Yii::$app->request;
         $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -274,24 +275,34 @@ class SupplierCashController extends Controller
             if (!is_numeric($user)) {
                 return $user;
             }
+            $code = 1000;
             $request = \Yii::$app->request;
             $cash_id = (int)trim(htmlspecialchars($request->post('cash_id', '')), '');
             $status = (int)trim(htmlspecialchars($request->post('status', '')), '');
             $reason = trim(htmlspecialchars($request->post('reason', '')), '');
             $real_money = (int)trim(htmlspecialchars($request->post('real_money', '')), '');
+
             if (($status != 3 && $status != 4) || ($status == 3 && $real_money <= 0) || !$cash_id) {
-                $code = 1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
             }
             $data = (new SupplierCashManager())->doCashDeal($cash_id, $status, $reason, $real_money);
+
+            if ($data) {
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'ok',
+                    'data' => $data
+                ]);
+            }
+
             return Json::encode([
-                'code' => 200,
-                'msg' => 'ok',
-                'data' => $data
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
+
         }
         $code = 1050;
         return Json::encode([

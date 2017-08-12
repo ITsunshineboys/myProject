@@ -2636,7 +2636,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'goods-attr-list-admin' => [
+                'goods_attr_list_admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
                     'details' => $details
                 ]
@@ -3988,7 +3988,7 @@ class MallController extends Controller
     {
         $series = Series::find()
             ->asArray()
-            ->select('series,creation_time,status')
+            ->select('id,series,creation_time,status')
             ->orderBy(['series_grade' => SORT_ASC])
             ->All();
         $all = [];
@@ -4101,7 +4101,7 @@ class MallController extends Controller
     {
         $style = Style::find()
             ->asArray()
-            ->select('style,creation_time,status')
+            ->select('id,style,creation_time,status')
             ->All();
         $all = [];
         foreach ($style as $one_style) {
@@ -4975,7 +4975,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, new Supplier, $page, $size)
+                'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, Supplier::FIELDS_LIST_EXTRA, new Supplier, $page, $size)
             ],
         ]);
     }
