@@ -1,4 +1,4 @@
-var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router",
+var app = angular.module("app",["ueditor.directive","intelligent_directive","ui.router",
   "clamagModule","onsaleeditModule",
   "offsaleeditModule","addclassModule","comment",'merchant_details',
   'brand_check','check_right','account_comment','change_num',
@@ -94,12 +94,12 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       templateUrl:"pages/mall_manage/class_manage/cla_mag/cla_mag.html"
     })
     .state("onsale_edit",{
-    params:{"classtitle":null,"classid":null,"classlevel":null},
+    params:{"classtitle":null,"classid":null,"classlevel":null,"classpath":null,"iconpath":null},
     url:"/onsale_edit",
     templateUrl:"pages/mall_manage/class_manage/onsale_edit/onsale_edit.html"
     })
     .state("offsale_edit",{
-    params:{"classtitle":null,"classid":null,"classlevel":null},
+    params:{"classtitle":null,"classid":null,"classlevel":null,"classpath":null,"iconpath":null},
     url:"/offsale_edit",
     templateUrl:"pages/mall_manage/class_manage/offsale_edit/offsale_edit.html"
   })
