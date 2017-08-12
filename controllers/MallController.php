@@ -3052,13 +3052,7 @@ class MallController extends Controller
         }
 
         $now = time();
-
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            $operator = Supplier::find()->where(['uid' => $user->id])->one();
-        } else {
-            $operator = Lhzz::find()->where(['uid' => $user->id])->one();
-        }
-
+        $operator = UserRole::roleUser($user, Yii::$app->session[User::LOGIN_ROLE_ID]);
         if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])) {
             if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
                 $model->status = Goods::STATUS_ONLINE;
@@ -3130,12 +3124,7 @@ class MallController extends Controller
 
         $where = 'id in(' . $ids . ')';
         $user = Yii::$app->user->identity;
-
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            $operator = Supplier::find()->where(['uid' => $user->id])->one();
-        } else {
-            $operator = Lhzz::find()->where(['uid' => $user->id])->one();
-        }
+        $operator = UserRole::roleUser($user, Yii::$app->session[User::LOGIN_ROLE_ID]);
 
         $updates = [
             'status' => Goods::STATUS_OFFLINE,
