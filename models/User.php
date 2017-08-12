@@ -67,10 +67,10 @@ class User extends ActiveRecord implements IdentityInterface
         'review_time',
     ];
     const STATUS_OFFLINE = 0; // 关闭
-    const STATUS_ONLINE = 1; // 开启
+    const STATUS_ONLINE = 1; // 正常
     const STATUSES = [
         self::STATUS_OFFLINE => '关闭',
-        self::STATUS_ONLINE => '开启',
+        self::STATUS_ONLINE => '正常',
     ];
     const FIELDS_USER_DETAILS_MODEL_LHZZ = [
         'icon',
