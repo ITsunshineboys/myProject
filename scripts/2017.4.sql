@@ -1076,5 +1076,16 @@ CREATE TABLE `supplier_accessdetail` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 --8.11 end
+--8.12 start
+CREATE TABLE `express` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `waybillnumber` varchar(50) NOT NULL COMMENT '快递单号',
+  `waybillname` varchar(20) NOT NULL COMMENT '快递公司',
+  `sku` int(11) NOT NULL,
+  `order_no` varchar(50) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+--8.12 end
 
 
