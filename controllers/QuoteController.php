@@ -579,10 +579,16 @@ class QuoteController extends Controller
             ]);
         }
         $find = AssortGoods::findByCategoryId();
-        foreach ($find as $find_one) {
-            $id [] = $find_one['category_id'];
+
+        if (!empty($find))
+        {
+            $id = [];
+            foreach ($find as $find_one) {
+                $id [] = $find_one['category_id'];
+            }
+            (new AssortGoods())->deleteAll(['category_id'=>$id]);
         }
-        (new AssortGoods())->deleteAll(['category_id'=>$id]);
+
         $assort = (new AssortGoods())->add($post);
         if ($assort) {
             $code = 200;
