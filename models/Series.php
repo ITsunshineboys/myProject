@@ -63,6 +63,7 @@ class Series extends ActiveRecord
         return self::find()
             ->asArray()
             ->select(['id','series'])
+            ->where(['stairway'=>self::STATUS_ONLINE])
             ->orderBy(['id'=>SORT_ASC])
             ->all();
     }
