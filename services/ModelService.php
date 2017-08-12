@@ -222,7 +222,7 @@ class ModelService
      * @param $page
      * @return array
      */
-    public static function pageDeal(array $arr, $count, $page_size, $page)
+    public static function pageDeal(array $arr, $count, $page, $page_size = self::PAGE_SIZE_DEFAULT)
     {
         $total_page = ceil($count / $page_size);
         $page = $page < 1 ? 1 : $page;

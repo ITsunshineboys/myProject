@@ -7,6 +7,7 @@ use app\models\Supplier;
 use app\models\Supplieramountmanage;
 use app\models\SupplierCashManager;
 use app\services\ExceptionHandleService;
+use app\services\ModelService;
 use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -96,7 +97,7 @@ class SupplierCashController extends Controller
         }
         $request = \Yii::$app->request;
         $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
         $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -193,7 +194,7 @@ class SupplierCashController extends Controller
         }
         $request = \Yii::$app->request;
         $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -228,7 +229,7 @@ class SupplierCashController extends Controller
         }
         $request = \Yii::$app->request;
         $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');

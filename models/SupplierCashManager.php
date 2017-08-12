@@ -64,7 +64,7 @@ class SupplierCashManager extends ActiveRecord
                 $arr[$k]['real_money'] = sprintf('%.2f', 0);
             }
         }
-        $data = ModelService::pageDeal($arr, $count, $page_size, $page);
+        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;
     }
 
@@ -110,8 +110,7 @@ class SupplierCashManager extends ActiveRecord
             $arr['lost_money'] = sprintf('%.2f', 0);
             $arr['real_money'] = sprintf('%.2f', 0);
         }
-        $data = ModelService::pageDeal($arr, $count, $page_size, $page);
-        return $data;
+        return $arr;
     }
 
     /**
@@ -247,7 +246,7 @@ class SupplierCashManager extends ActiveRecord
             $arr[$k]['paytime'] = date('Y-m-d H:i', $arr[$k]['paytime']);
             $arr[$k]['amount_order'] = sprintf('%.2f', (float)$arr[$k]['amount_order'] / 100);
         }
-        $data = ModelService::pageDeal($arr, $count, $page_size, $page);
+        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;
     }
 
@@ -296,7 +295,7 @@ class SupplierCashManager extends ActiveRecord
                 $arr[$k]['real_money'] = sprintf('%.2f', 0);
             }
         }
-        $data = ModelService::pageDeal($arr, $count, $page_size, $page);
+        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;
     }
 
