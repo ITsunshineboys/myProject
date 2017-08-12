@@ -569,32 +569,7 @@ class QuoteController extends Controller
      */
     public function actionAssortGoodsAdd()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'assort'=>[
-               [
-                   'id'=>2,
-                'title'=>'阿萨德',
-                'pid'=>1,
-                'path'=>'1,7,8',
-                'as'=>"sadf",
-               ],
-            [
-                'id'=>1,
-                'title'=>'阿萨德',
-                'pid'=>1,
-                'path'=>'1,7,8',
-                'as'=>"sadf",
-            ],
-            [
-                'title'=>'阿萨德',
-                'id'=>8,
-                'pid'=>1,
-                'path'=>'1,7,8',
-                'as'=>"sadf",
-                ],
-                ],
-            ];
+        $post = \Yii::$app->request->post();
         $array = [];
         foreach ($post['assort'] as $one_post) {
             ksort($one_post);
