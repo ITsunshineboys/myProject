@@ -4810,15 +4810,17 @@ class MallController extends Controller
     {
         $code = 1000;
 
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+        $timeType = trim(Yii::$app->request->get('time_type'));
+        !$timeType && $timeType = 'all';
+        if (!in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $status = (int)(Yii::$app->request->get('status', 0));
+        $status = (int)(Yii::$app->request->get('status'));
+        !$status && $status = User::STATUS_ONLINE;
         if (!in_array($status, array_keys(User::STATUSES))) {
             return Json::encode([
                 'code' => $code,
