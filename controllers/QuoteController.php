@@ -570,7 +570,6 @@ class QuoteController extends Controller
     public function actionAssortGoodsAdd()
     {
         $post = \Yii::$app->request->post();
-        var_dump($post);exit;
         $user = \Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -590,7 +589,7 @@ class QuoteController extends Controller
             (new AssortGoods())->deleteAll(['category_id'=>$id]);
         }
 
-        $assort = (new AssortGoods())->add($post);
+        $assort = (new AssortGoods())->add($post['assort']);
         if ($assort) {
             $code = 200;
             return Json::encode([
