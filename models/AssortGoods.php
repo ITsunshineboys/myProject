@@ -7,9 +7,9 @@ class AssortGoods extends ActiveRecord
 {
     const FIELDS_NAME = [
         'category_id',
-        'title',
-        'pid',
         'path',
+        'pid',
+        'title',
     ];
 
     const APP_FIELDS = ['title','category_id','pid','path'];

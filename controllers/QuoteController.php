@@ -569,7 +569,37 @@ class QuoteController extends Controller
      */
     public function actionAssortGoodsAdd()
     {
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'assort'=>[
+               [
+                   'id'=>2,
+                'title'=>'阿萨德',
+                'pid'=>1,
+                'path'=>'1,7,8',
+                'as'=>"sadf",
+               ],
+            [
+                'id'=>1,
+                'title'=>'阿萨德',
+                'pid'=>1,
+                'path'=>'1,7,8',
+                'as'=>"sadf",
+            ],
+            [
+                'title'=>'阿萨德',
+                'id'=>8,
+                'pid'=>1,
+                'path'=>'1,7,8',
+                'as'=>"sadf",
+                ],
+                ],
+            ];
+        $array = [];
+        foreach ($post['assort'] as $one_post) {
+            ksort($one_post);
+            $array [] = $one_post;
+        }
         $user = \Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -589,7 +619,7 @@ class QuoteController extends Controller
             (new AssortGoods())->deleteAll(['category_id'=>$id]);
         }
 
-        $assort = (new AssortGoods())->add($post['assort']);
+        $assort = (new AssortGoods())->add($array);
         if ($assort) {
             $code = 200;
             return Json::encode([
