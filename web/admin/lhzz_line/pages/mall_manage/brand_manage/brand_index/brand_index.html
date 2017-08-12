@@ -1,0 +1,242 @@
+<link rel="stylesheet" href="pages/mall_manage/brand_manage/brand_index/css/brand_index.css">
+<div ng-controller="brand_index_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">商城管理</span>
+            <span class="commodity_manage">>品牌管理</span>
+            <img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""/>
+        </div>
+    </header>
+    <!--选项卡-->
+    <div class="tab">
+        <ul>
+            <li ng-class="{'tab_blue':(on_flag==true)}"  ng-click="on_shelves()">已上架</li>
+            <li ng-class="{'tab_blue':(down_flag==true)}" ng-click="down_shelves()">已下架</li>
+            <li ng-class="{'tab_blue':(check_flag==true)}" ng-click="wait_shelves()">品牌使用审核</li>
+        </ul>
+    </div>
+<!--已上架-->
+    <section ng-if="on_flag==true">
+        <div>
+            <span class="border">全选</span>
+            <span class="border">下架</span>
+            <span style="margin-right: 15px;">分类选择</span>
+            <select name="" class="time_select">
+                <option value="">1</option>
+            </select>
+            <select name="" class="time_select">
+                <option value="">2</option>
+            </select>
+            <select name="" class="time_select">
+                <option value="">3</option>
+            </select>
+            <!--表格-->
+            <table>
+                <tr class="th">
+                    <td>&nbsp;</td>
+                    <td>品牌LOGO</td>
+                    <td>品牌名称</td>
+                    <td>上架时间</td>
+                    <td>添加人员</td>
+                    <td>状态</td>
+                    <td>详情</td>
+                    <td>操作</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="1.jpg" alt=""></td>
+                    <td>森达321</td>
+                    <td>2017-08-10 12:02</td>
+                    <td>运营01</td>
+                    <td class="green">已上架</td>
+                    <td class="blue">编辑</td>
+                    <td class="blue">下架</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="1.jpg" alt=""></td>
+                    <td>森达321</td>
+                    <td>2017-08-10 12:02</td>
+                    <td>运营01</td>
+                    <td class="green">已上架</td>
+                    <td class="blue">编辑</td>
+                    <td class="blue">下架</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+<!--已下架-->
+    <section ng-if="down_flag==true">
+        <div>
+            <span class="border">添加</span>
+            <span class="border">全选</span>
+            <span class="border" data-toggle="modal" data-target="#on_shelves_modal">上架</span>
+            <span style="margin-right:15px;">分类选择</span>
+            <select name="" class="time_select">
+                <option value="">1</option>
+            </select>
+            <select name="" class="time_select">
+                <option value="">2</option>
+            </select>
+            <select name="" class="time_select">
+                <option value="">3</option>
+            </select>
+            <!--表格-->
+            <table>
+                <tr class="th">
+                    <td>&nbsp;</td>
+                    <td>品牌LOGO</td>
+                    <td>品牌名称</td>
+                    <td>下架时间</td>
+                    <td>添加人员</td>
+                    <td>下架原因</td>
+                    <td>状态</td>
+                    <td>详情</td>
+                    <td>操作</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="1.jpg" alt=""></td>
+                    <td>森达321</td>
+                    <td>2017-08-10 12:02</td>
+                    <td>运营01</td>
+                    <td class="red">已下架</td>
+                    <td><span class="gay_input" data-target="#down_shelves_reason_modal" data-toggle="modal">点击输入</span></td>
+                    <td class="blue">编辑</td>
+                    <td class="blue">下架</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!--上架模态框-->
+    <div class="modal fade" id="on_shelves_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>上架x个品牌，是否确认上架</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--下架原因 模态框-->
+    <div class="modal fade" id="down_shelves_reason_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">下架原因</h4>
+                </div>
+                <div class="modal-body">
+                    <span style="vertical-align: top">下架原因（选填）</span>
+                    <textarea name="" placeholder="请填写下架原因" cols="30" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--品牌审核内容 -->
+    <section ng-if="check_flag==true">
+        <!--申请-->
+        <div class="inline_block">
+            <i class="glyphicon glyphicon-th-large"></i>
+            <span style="color: #666F80;font-weight: bold">36个申请</span>
+        </div>
+        <!--时间-->
+        <div class="inline_block">
+            <select name="" id="" class="time_select">
+                <option value="全部" >全部</option>
+                <option value="">待审核</option>
+                <option value="">通过</option>
+            </select>
+        </div>
+        <input type="text" placeholder="开始时间" class="time_input">
+        <input type="text" placeholder="结束时间" class="time_input">
+        <!--搜索-->
+        <span class="menu">查询</span>
+        <div class="search_box">
+            <input class="search_input" type="text" placeholder="  搜索商品编号或名称">
+            <span class="glyphicon glyphicon-search search"></span>
+        </div>
+
+        <!--表格内容-->
+        <table>
+            <tr class="th">
+                <td>品牌LOGO</td>
+                <td>品牌名称</td>
+                <td>申请时间</td>
+                <td>商家名称</td>
+                <td>申请帐户</td>
+                <td>状态</td>
+                <td>审核备注</td>
+                <td>详情</td>
+                <td>操作</td>
+            </tr>
+            <tr class="table_content">
+                <td><img src="pages/mall_manage/brand_manage/brand_index/images/user.png" alt=""></td>
+                <td>森达123</td>
+                <td>2017-08-10 11:34</td>
+                <td>森达木地板</td>
+                <td>123456789</td>
+                <td class="green">通过</td>
+                <td><span class="gay_input" data-toggle="modal" data-target="#review_modal">点击输入</span></td>
+                <td class="blue">查看</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="table_content">
+                <td><img src="pages/mall_manage/brand_manage/brand_index/images/user.png" alt=""></td>
+                <td>森达123</td>
+                <td>2017-08-10 11:34</td>
+                <td>森达木地板</td>
+                <td>123456789</td>
+                <td class="red">不通过</td>
+                <td><span class="gay_input">身份证</span></td>
+                <td class="blue">查看</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="table_content">
+                <td><img src="pages/mall_manage/brand_manage/brand_index/images/user.png" alt=""></td>
+                <td>森达123</td>
+                <td>2017-08-10 11:34</td>
+                <td>森达木地板</td>
+                <td>123456789</td>
+                <td class="sky_blue">待审核</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class="blue">审核</td>
+            </tr>
+        </table>
+    </section>
+    <!--审核备注模态框-->
+    <div class="modal fade" id="review_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">审核备注</h4>
+                </div>
+                <div class="modal-body">
+                    <span style="vertical-align: top">说明（选填）</span>
+                    <textarea name="" placeholder="请填写审核不通过/通过原因" cols="30" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

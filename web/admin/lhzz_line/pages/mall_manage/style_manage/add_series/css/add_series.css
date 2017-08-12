@@ -1,0 +1,175 @@
+/*顶部导航*/
+ul{
+    padding: 0;
+    list-style: none;
+}
+
+.topnav {
+    width: 100%;
+    height: 60px;
+    border-bottom: 1px solid #999;
+    overflow: hidden;
+}
+
+.topnav span {
+    float: left;
+    margin: 20px 0 20px 40px;
+}
+
+.topnav h6 {
+    float: left;
+    font-size: 14px;
+    line-height: 36px;
+    margin-left: 5px;
+    font-family: PingFangSC-Semibold;
+    font-size: 14px;
+    font-weight: bold;
+    color: #2F3033;
+}
+
+.topnav h6:last-child{
+    font-weight: 400;
+}
+
+.topnav h6:last-child{
+    color: gray;
+}
+
+/*添加新系列内容*/
+.add_series{
+    padding-top: 50px;
+    padding-left: 40px;
+    color: #666F80;
+    font-size: 14px;
+}
+
+/*系列名称*/
+.red_mark {
+    color: #E51C23;
+    margin-left: -17px;
+}
+
+.series_name input {
+    margin-left: 87px;
+    width: 245px;
+    height: 31px;
+    margin-left: 87px;
+    border: 1px solid #999!important;
+    border-radius: 3px;
+    padding-left: 10px;
+    line-height: 31px;
+}
+
+#limitword {
+    margin-left: 20px;
+    font-size: 13px;
+    color: #ABABAB;
+}
+
+.series_name p {
+    font-size: 12px;
+    margin-left: 146px;
+    margin-top: 5px;
+}
+
+/*系列标签*/
+.series_tag img{
+    width: 24px;
+    height: 26px;
+    margin-left: 53px;
+    margin-right: 10px;
+}
+
+
+.series_tag{
+    margin-top: 35px;
+}
+
+.tags{
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.tags li{
+    float: left;
+    margin-right: 13px;
+}
+
+.tags li input{
+    width: 88px;
+    height: 31px;
+    /*text-align: center;*/
+    padding-left: 6px;
+    line-height: 31px;
+    color: #ABABAB;
+    border: 1px solid #666F80;
+    border-radius: 3px;
+}
+
+.tags span{
+    font-size: 13px;
+    color: #ABABAB;
+    margin-left: -5px;
+    vertical-align: sub;
+}
+
+/*所处等级*/
+.present_level{
+    margin-top: 52px;
+}
+
+#level_select{
+    margin-left: 87px;
+    width: 200px;
+    height: 30px;
+    padding-left: 5px;
+    border-radius: 3px;
+}
+
+/*系列介绍*/
+.series_intro{
+    margin-top: 48px;
+}
+
+.series_intro textarea{
+    width: 749px;
+    height: 145px;
+    vertical-align: top;
+    margin-left: 87px;
+    border-radius: 3px;
+}
+
+
+/*两个按钮*/
+.btn_sure{
+    margin-top: 70px;
+}
+
+
+.btn_sure button{
+    width: 80px;
+    height: 34px;
+    border: 1px solid #c2c2c2;
+    border-radius: 3px;
+    padding-left: 5px;
+    line-height: 34px;
+    font-size: 12px;
+    color: #5e6166;
+    background-color: white;
+    margin-right: 20px;
+}
+
+#save{
+    color:#487AF8;
+    background-color: #F2F4FF;
+    border: 1px solid #487AF8;
+}
+
+/*添加+按钮*/
+.visibility{
+    visibility: hidden;
+}
+.dis{
+    display: none;
+}

@@ -1,0 +1,176 @@
+<link rel="stylesheet" href="pages/mall_manage/style_manage/style_index/css/style_index.css">
+<div ng-controller="style_index">
+    <!--顶部导航-->
+    <div class="topnav">
+        <span class="glyphicon glyphicon-certificate"></span>
+        <h6>商城管理</h6>
+        <h6>> 系列/风格/属性管理 </h6>
+    </div>
+
+    <!--内容-->
+    <div class="style_content">
+        <!--选项卡-->
+        <div class="allstyle_tabtitle">
+            <span id="series_mag" ng-click="changeToseries()" ng-class="{clickstyle:showseries}">系列管理</span>
+            <span id="style_mag" ng-click="changeTostyle()" ng-class="{clickstyle:showstyle}">风格管理</span>
+            <span id="attr_mag" ng-click="changeToattr()" ng-class="{clickstyle:showattr}">属性管理</span>
+        </div>
+
+        <!--系列管理-->
+        <div ng-show="showseries" class="series_mag">
+            <!--按钮组-->
+            <div class="series_btn">
+            <div class="series_btn">
+                <button ui-sref="add_series({list:series_arr[0]})">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span>添加</span>
+                </button>
+                <button ui-sref="choose_series">选择系列</button>
+            </div>
+
+            <!--系列管理Table内容-->
+            <div class="series_mag_table">
+                <table>
+                    <tr class="th">
+                        <td width="224">系列名称</td>
+                        <td width="270">创建时间
+                            <img src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
+                        </td>
+                        <td width="224">状态</td>
+                        <td width="224">详情</td>
+                        <td>操作</td>
+                    </tr>
+
+                    <tr ng-repeat="item in series_arr[0]">
+                        <td>{{item.series}}</td>
+                        <td>{{item.creation_time}}</td>
+                        <td class="color_red" ng-if="item.status=='0'">关闭</td>
+                        <td class="color_skyblue" ng-if="item.status=='1'">启动中</td>
+                        <td class="color_blue" ui-sref="series_detail({item:item})">编辑</td>
+                        <td class="color_blue" ng-if="item.status=='0'" data-toggle="modal" data-target="#open_modal" ng-click="open_status(item)">开启</td>
+                        <td class="color_blue" ng-if="item.status=='1'" data-toggle="modal" data-target="#close_modal" ng-click="close_status(item)">关闭</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!--风格管理-->
+        <div ng-show="showstyle" class="series_mag">
+            <!--按钮组-->
+            <div class="series_btn">
+                <button ui-sref="add_style">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span>添加</span>
+                </button>
+                <button ui-sref="choose_style">选择风格</button>
+            </div>
+
+            <!--风格管理Table内容-->
+            <div class="series_mag_table">
+                <table>
+                    <tr class="th">
+                        <td width="224">风格名称</td>
+                        <td width="270">创建时间
+                            <img src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
+                        </td>
+                        <td width="224">状态</td>
+                        <td width="224">详情</td>
+                        <td>操作</td>
+                    </tr>
+
+                    <tr>
+                        <td>美式田园</td>
+                        <td>2017-09-05 10:45</td>
+                        <td class="color_red">关闭</td>
+                        <td class="color_blue" ui-sref="style_detail">编辑</td>
+                        <td class="color_blue">开启</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!--属性管理-->
+        <div ng-show="showattr" class="series_mag">
+            <!--属性管理按钮组-->
+            <div class="attr_btns">
+                <span>分类选择</span>
+                <select name="">
+                    <option value="">全部</option>
+                </select>
+
+                <select name="" >
+                    <option value="">全部</option>
+                </select>
+
+                <button>查询</button>
+            </div>
+
+            <!--属性管理表格-->
+            <!--风格管理Table内容-->
+            <div class="series_mag_table">
+                <table>
+                    <tr class="th">
+                        <td width="150">所属分类</td>
+                        <td width="148">分类名称</td>
+                        <td width="211">最后操作时间
+                            <img src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
+                        </td>
+                        <td width="217">最后操作账号</td>
+                        <td width="217">属性个数</td>
+                        <td>详情</td>
+                    </tr>
+
+                    <tr>
+                        <td>水电材料</td>
+                        <td>PVC管</td>
+                        <td>2017-09-05 10:45</td>
+                        <td>运营01</td>
+                        <td>2</td>
+                        <td class="color_blue" ui-sref="edit_attribute">编辑</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <!--开启 模态框-->
+        <div class="modal fade" id="open_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>是否确认开启</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="open_btn_ok()">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--关闭模态框-->
+        <div class="modal fade" id="close_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>是否确认关闭</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="close_btn_ok()">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
