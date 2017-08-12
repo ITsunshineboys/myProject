@@ -114,6 +114,7 @@ class Supplier extends ActiveRecord
         'create_time',
         'type_shop'
     ];
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -121,6 +122,11 @@ class Supplier extends ActiveRecord
     {
         return 'supplier';
     }
+
+    const FIELDS_LIST_EXTRA = [
+        'sales_volumn_month',
+        'sales_amount_month',
+    ];
 
     /**
      * Get delta number
@@ -371,6 +377,31 @@ class Supplier extends ActiveRecord
             $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
         }
     }
+    /* Get extra fields
+     *
+     * @param int $id supplier id
+     * @param array $extraFields extra fields
+     * @return array
+     */
+    public static function extraData($id, array $extraFields)
+    {
+        $extraData = [];
+
+        foreach ($extraFields as $extraField) {
+            switch ($extraField) {
+                case 'sales_volumn_month':
+                    $extraData[$extraField] = GoodsOrder::supplierSalesVolumn($id, 'month');
+                    break;
+                case 'sales_amount_month':
+                    $extraData[$extraField] = GoodsOrder::supplierSalesAmount($id, 'month');
+                    break;
+            }
+
+        }
+
+        return $extraData;
+
+    }
 
     /**
      * Get certification view data
@@ -469,8 +500,10 @@ class Supplier extends ActiveRecord
             ->where(['s.id'=>$supplier_id])
 
             ->one();
-        $array['cashed_money']=$array['cash_money'];
-        $array['cashwithdrawal_money']=$array['balance'];
+        $array['cash_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
+        $array['balance']=sprintf('%.2f',(float)$array['balance']*0.01);
+        $array['cashed_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
+        $array['cashwithdrawal_money']=sprintf('%.2f',(float)$array['balance']*0.01);
         return $array;
     }
 
@@ -486,6 +519,7 @@ class Supplier extends ActiveRecord
             $child_id = [];
             foreach ($children as $child) {
                 $category = $child->children;
+
                 if ($category) {
                     foreach ($category as $cate) {
                         $child_id[] = $cate->id;
@@ -494,6 +528,7 @@ class Supplier extends ActiveRecord
                 }
                 $child_id[] = $child->id;
             }
+
             return $child_id;
 
 
