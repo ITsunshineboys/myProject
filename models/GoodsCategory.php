@@ -618,8 +618,7 @@ class GoodsCategory extends ActiveRecord
             default:
                 $query->andWhere([
                     'or',
-                    ['has_style' => 1],
-                    ['has_series' => 1]
+                    ['has_style' => 1, 'has_series' => 1],
                 ]);
                 break;
         }
