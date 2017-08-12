@@ -3074,7 +3074,9 @@ class MallController extends Controller
             $model->offline_uid = $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0;
             $model->offline_person = $operator->nickname;
             if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
-                $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+                $offlineReason = Yii::$app->request->post('offline_reason', '');
+                !$offlineReason && $offlineReason = Yii::$app->params['lhzz']['offline_reason'];
+                $model->offline_reason = $offlineReason;
             }
         }
 
@@ -3142,7 +3144,9 @@ class MallController extends Controller
             'offline_person' => $operator->nickname
         ];
         if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
-            $updates['offline_reason'] = Yii::$app->request->post('offline_reason', '');
+            $offlineReason = Yii::$app->request->post('offline_reason', '');
+            !$offlineReason && $offlineReason = Yii::$app->params['lhzz']['offline_reason'];
+            $updates['offline_reason'] = $offlineReason;
         }
 
         $transaction = Yii::$app->db->beginTransaction();
