@@ -569,23 +569,7 @@ class QuoteController extends Controller
      */
     public function actionAssortGoodsAdd()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-               [
-                   'id'=>2,
-                'title'=>'阿萨德',
-                'pid'=>1,
-                'path'=>'1,7,8'],
-            [
-                'id'=>1,
-                'title'=>'阿萨德',
-                'pid'=>1,
-                'path'=>'1,7,8'],
-            [ 'id'=>8,
-                'title'=>'阿萨德',
-                'pid'=>1,
-                'path'=>'1,7,8'],
-            ];
+        $post = \Yii::$app->request->post();
         $user = \Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
