@@ -122,6 +122,9 @@ return [
     'supplier' => [
         'offline_reason' => '闭店下架',
     ],
+    'lhzz' => [
+        'offline_reason' => '运营下架',
+    ],
     'district_default' => 510100, // 成都
     'grade' => '白银',  //工人默认级别
     'carouselMaxNumber' => 3,
