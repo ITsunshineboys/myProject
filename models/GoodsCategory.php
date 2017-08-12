@@ -24,7 +24,7 @@ class GoodsCategory extends ActiveRecord
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
-    const APP_FIELDS = ['id', 'title', 'icon'];
+    const APP_FIELDS = ['id', 'title', 'icon', 'pid'];
     const APP_FIELDS_QUOTE = ['id', 'title', 'icon', 'path'];
     const APP_FIELDS_CATEGORY = ['id', 'title', 'pid', 'path'];
     const PAGE_SIZE_DEFAULT = 12;
@@ -975,5 +975,10 @@ class GoodsCategory extends ActiveRecord
 
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
+    }
+
+    public static function resetStyleCategoriesById(array $categoryIds)
+    {
+
     }
 }
