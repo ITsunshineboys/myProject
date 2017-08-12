@@ -128,6 +128,8 @@ class MallController extends Controller
         'index-admin-lhzz',
         'supplier-offline',
         'supplier-list',
+        'categories-have-style',
+        'categories-have-series',
     ];
 
     /**
@@ -4977,6 +4979,40 @@ class MallController extends Controller
             'data' => [
                 'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, Supplier::FIELDS_LIST_EXTRA, new Supplier, $page, $size)
             ],
+        ]);
+    }
+
+    /**
+     * Categories which have style
+     *
+     * @return string
+     */
+    public function actionCategoriesHaveStyle()
+    {
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'have_style_categories' => GoodsCategory::styleCategoriesByPid($pid)
+            ]
+        ]);
+    }
+
+    /**
+     * Categories which have style
+     *
+     * @return string
+     */
+    public function actionCategoriesHaveSeries()
+    {
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'have_series_categories' => GoodsCategory::seriesCategoriesByPid($pid)
+            ]
         ]);
     }
 }

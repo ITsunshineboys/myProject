@@ -11,6 +11,7 @@ namespace app\models;
 use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\helpers\HtmlPurifier;
 
 class GoodsCategory extends ActiveRecord
@@ -42,6 +43,8 @@ class GoodsCategory extends ActiveRecord
         'styles' => [],
         'series' => []
     ];
+    const FIELDS_HAVE_STYLE_CATEGORIES = ['id'];
+    const FIELDS_HAVE_SERIES_CATEGORIES = ['id'];
 
     /**
      * @var array admin fields
@@ -585,6 +588,40 @@ class GoodsCategory extends ActiveRecord
     public static function findByTitle($title, array $select = self::APP_FIELDS)
     {
         return self::find()->select($select)->where(['like', 'title', $title])->asArray()->all();
+    }
+
+    /**
+     * Get categories which have style
+     *
+     * @param int $pid parent category id
+     * @param array $select select fields default id
+     * @return array
+     */
+    public static function styleCategoriesByPid($pid, array $select = self::FIELDS_HAVE_STYLE_CATEGORIES)
+    {
+        $query = new Query;
+        return $query
+            ->select($select)
+            ->from(self::tableName())
+            ->where(['pid' => $pid, 'level' => self::LEVEL3, 'has_style' => 1])
+            ->all();
+    }
+
+    /**
+     * Get categories which have series
+     *
+     * @param int $pid parent category id
+     * @param array $select select fields default id
+     * @return array
+     */
+    public static function seriesCategoriesByPid($pid, array $select = self::FIELDS_HAVE_SERIES_CATEGORIES)
+    {
+        $query = new Query;
+        return $query
+            ->select($select)
+            ->from(self::tableName())
+            ->where(['pid' => $pid, 'level' => self::LEVEL3, 'has_series' => 1])
+            ->all();
     }
 
     /**
