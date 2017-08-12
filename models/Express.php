@@ -82,6 +82,9 @@ class Express extends ActiveRecord
     private function expressname($order)
     {
         $name   = json_decode($this->getcontent("http://www.kuaidi100.com/autonumber/auto?num=".$order), true);
+        if (empty($name)){
+            return false;
+        }
         $result = $name[0]['comCode'];
         if (empty($result)) {
             return false;
@@ -120,5 +123,55 @@ class Express extends ActiveRecord
         $count=count($data['data']);
         $data['data'][$count]=$arr;
         return $data;
+    }
+
+
+    /**
+     * 获取银行卡
+     * @return bool|mixed
+     */
+    public function actionGetbank($cardnum){
+        $sendUrl = 'http://api.avatardata.cn/Bank/Query'; //URL
+        $smsConf = array(
+            'key'=>'fc79d5cf0de64f9bb60759045e5977d0',
+            'cardnum'=>$cardnum,
+            'dtype'=>'JSON',
+            'format'=>true
+        );
+        $content =$this->datacurl($sendUrl,$smsConf,1);
+      return $content;
+    }
+
+    private function datacurl($url,$params=false,$ispost=0){
+        $httpInfo = array();
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
+        curl_setopt( $ch, CURLOPT_USERAGENT , 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22' );
+        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 30 );
+        curl_setopt( $ch, CURLOPT_TIMEOUT , 30);
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER , true );
+        if( $ispost )
+        {
+            curl_setopt( $ch , CURLOPT_POST , true );
+            curl_setopt( $ch , CURLOPT_POSTFIELDS , $params );
+            curl_setopt( $ch , CURLOPT_URL , $url );
+        }
+        else
+        {
+            if($params){
+                curl_setopt( $ch , CURLOPT_URL , $url.'?'.$params );
+            }else{
+                curl_setopt( $ch , CURLOPT_URL , $url);
+            }
+        }
+        $response = curl_exec( $ch );
+        if ($response === FALSE) {
+            //echo "cURL Error: " . curl_error($ch);
+            return false;
+        }
+        $httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
+        $httpInfo = array_merge( $httpInfo , curl_getinfo( $ch ) );
+        curl_close( $ch );
+        return $response;
     }
 }
