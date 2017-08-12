@@ -3,6 +3,7 @@
 namespace app\models;
 
 
+use app\services\ModelService;
 use app\services\StringService;
 use function GuzzleHttp\Psr7\str;
 use yii\data\Pagination;
@@ -34,7 +35,7 @@ class SupplierCashManager extends ActiveRecord
     public function getCashList($supplier_id, $page, $page_size, $time_type, $time_start, $time_end, $status)
     {
         $query = (new \yii\db\Query())->from(SUP_CASHREGISTER)->where(['supplier_id' => $supplier_id]);
-        $time_area = self::timeDeal($time_type, $time_start, $time_end);
+        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
         $time_start = $time_area[0];
         $time_end = $time_area[1];
         if ($time_start && $time_end && $time_end > $time_start) {
@@ -63,17 +64,8 @@ class SupplierCashManager extends ActiveRecord
                 $arr[$k]['real_money'] = sprintf('%.2f', 0);
             }
         }
-        $total_page = ceil($count / $page_size);
-        if ($page > $total_page) {
-            $page = $total_page;
-        }
-        if ($page < 1) {
-            $page = 1;
-        }
-        $arr['total_page'] = $total_page;
-        $arr['count'] = $count;
-        $arr['page'] = $page;
-        return $arr;
+        $data = ModelService::pageDeal($arr, $count, $page_size, $page);
+        return $data;
     }
 
     /**
@@ -118,7 +110,8 @@ class SupplierCashManager extends ActiveRecord
             $arr['lost_money'] = sprintf('%.2f', 0);
             $arr['real_money'] = sprintf('%.2f', 0);
         }
-        return $arr;
+        $data = ModelService::pageDeal($arr, $count, $page_size, $page);
+        return $data;
     }
 
     /**
@@ -232,7 +225,7 @@ class SupplierCashManager extends ActiveRecord
         $query = (new Query())->from(GOODS_ORDER . ' g')
             ->leftJoin(SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->where(['g.pay_status' => 1]);
-        $time_area = self::timeDeal($time_type, $time_start, $time_end);
+        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
         $time_start = $time_area[0];
         $time_end = $time_area[1];
         if ($time_start && $time_end && $time_end > $time_start) {
@@ -254,17 +247,8 @@ class SupplierCashManager extends ActiveRecord
             $arr[$k]['paytime'] = date('Y-m-d H:i', $arr[$k]['paytime']);
             $arr[$k]['amount_order'] = sprintf('%.2f', (float)$arr[$k]['amount_order'] / 100);
         }
-        $total_page = ceil($count / $page_size);
-        if ($page > $total_page) {
-            $page = $total_page;
-        }
-        if ($page < 1) {
-            $page = 1;
-        }
-        $arr['total_page'] = $total_page;
-        $arr['count'] = $count;
-        $arr['page'] = $page;
-        return $arr;
+        $data = ModelService::pageDeal($arr, $count, $page_size, $page);
+        return $data;
     }
 
     /**
@@ -285,7 +269,7 @@ class SupplierCashManager extends ActiveRecord
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
-        $time_area = self::timeDeal($time_type, $time_start, $time_end);
+        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
         $time_start = $time_area[0];
         $time_end = $time_area[1];
         if ($time_start && $time_end && $time_end > $time_start) {
@@ -312,17 +296,8 @@ class SupplierCashManager extends ActiveRecord
                 $arr[$k]['real_money'] = sprintf('%.2f', 0);
             }
         }
-        $total_page = ceil($count / $page_size);
-        if ($page > $total_page) {
-            $page = $total_page;
-        }
-        if ($page < 1) {
-            $page = 1;
-        }
-        $arr['total_page'] = $total_page;
-        $arr['count'] = $count;
-        $arr['page'] = $page;
-        return $arr;
+        $data = ModelService::pageDeal($arr, $count, $page_size, $page);
+        return $data;
     }
 
 
@@ -337,11 +312,13 @@ class SupplierCashManager extends ActiveRecord
     public function doCashDeal($cash_id, $status, $reason, $real_money)
     {
         $supplier_cash = (new Query())->from(SUP_CASHREGISTER)
-            ->where(['id' => $cash_id])->select(['cash_money', 'supplier_id', 'status'])->one();
+            ->where(['id' => $cash_id])->select(['cash_money', 'supplier_id', 'status', 'transaction_no'])->one();
         $cash_money = $supplier_cash['cash_money'];
         $supplier_id = (int)$supplier_cash['supplier_id'];
         $old_status = (int)$supplier_cash['status'];
-        if (!$cash_money || !$supplier_id || $old_status == 3 || $old_status == 4) {
+        $transaction_no = $supplier_cash['transaction_no'];
+        //初始状态不能为已经处理过的
+        if (!$cash_money || !$supplier_id || !$old_status || $old_status == 3 || $old_status == 4) {
             return null;
         }
         if ($status == 4) {
@@ -353,45 +330,44 @@ class SupplierCashManager extends ActiveRecord
                 $real_money = $cash_money;
             }
         }
+        $time = time();
         $trans = \Yii::$app->db->beginTransaction();
         $e = 1;
         try {
             \Yii::$app->db->createCommand()
-                ->update(SUP_CASHREGISTER, ['status' => $status, 'supplier_reason' => $reason, 'real_money' => $real_money], ['id' => $cash_id])
+                ->update(SUP_CASHREGISTER, [
+                    'status' => $status,
+                    'supplier_reason' => $reason,
+                    'real_money' => $real_money,
+                    'handle_time' => $time
+                ], [
+                    'id' => $cash_id
+                ])
                 ->execute();
-            $supplier = Supplier::find()->where(['id' => $supplier_id])->one();
-            if (!$supplier) {
-                return null;
-            }
             if ($status == 4) {
+                //钱退回供货商
+                $supplier = Supplier::find()->where(['id' => $supplier_id])->one();
+                if (!$supplier) {
+                    return null;
+                }
                 $supplier->balance += $cash_money;
                 $supplier->availableamount += $cash_money;
                 $supplier->save(false);
+                //新建一条明细单数据
+                $supplier_accessdetail = new SupplierAccessdetail();
+                $supplier_accessdetail->setAttributes([
+                    'access_type' => 4,
+                    'access_money' => $cash_money,
+                    'create_time' => $time,
+                    'transaction_no' => $transaction_no,
+                    'supplier_id' => $supplier_id
+                ]);
+                $supplier_accessdetail->save();
             }
         } catch (Exception $e) {
             $trans->rollBack();
         }
         $trans->commit();
         return $e;
-    }
-
-    /**
-     * 得到开始和结束时间
-     * @param $time_type
-     * @param $time_start
-     * @param $time_end
-     * @return array
-     */
-    private function timeDeal($time_type, $time_start, $time_end)
-    {
-        if ($time_type == 'custom' && $time_start && $time_end) {
-            $time_start = strtotime($time_start);
-            $time_end = strtotime($time_end);
-        } else {
-            $time_area = StringService::startEndDate($time_type, 1);
-            $time_start = $time_area[0];
-            $time_end = $time_area[1];
-        }
-        return [$time_start, $time_end];
     }
 }

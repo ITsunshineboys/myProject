@@ -274,24 +274,34 @@ class SupplierCashController extends Controller
             if (!is_numeric($user)) {
                 return $user;
             }
+            $code = 1000;
             $request = \Yii::$app->request;
             $cash_id = (int)trim(htmlspecialchars($request->post('cash_id', '')), '');
             $status = (int)trim(htmlspecialchars($request->post('status', '')), '');
             $reason = trim(htmlspecialchars($request->post('reason', '')), '');
             $real_money = (int)trim(htmlspecialchars($request->post('real_money', '')), '');
+
             if (($status != 3 && $status != 4) || ($status == 3 && $real_money <= 0) || !$cash_id) {
-                $code = 1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
             }
             $data = (new SupplierCashManager())->doCashDeal($cash_id, $status, $reason, $real_money);
+
+            if ($data) {
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'ok',
+                    'data' => $data
+                ]);
+            }
+
             return Json::encode([
-                'code' => 200,
-                'msg' => 'ok',
-                'data' => $data
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
+
         }
         $code = 1050;
         return Json::encode([
