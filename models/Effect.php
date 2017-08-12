@@ -159,7 +159,7 @@ class Effect extends ActiveRecord
         foreach ($effectList as &$effect) {
 
             if(isset($effect['add_time'])){
-                $effect['add_time']=date('Y-m-d H:i', $effect['create_time']);
+                $effect['add_time']=date('Y-m-d H:i', $effect['add_time']);
             }
 
         }

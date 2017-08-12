@@ -345,7 +345,7 @@ class QuoteController extends Controller
         $page = (int)\Yii::$app->request->get('page', 1);
         $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
         if (substr($post, 4) == 00) {
-            $where = "['city_code' => $post]";
+            $where = "city_code = $post";
             $effect = Effect::pagination($where,$page,$size);
             return Json::encode([
                 'code' => 200,
@@ -373,7 +373,7 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->get();
         $page = (int)\Yii::$app->request->get('page', 1);
         $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
-        $where = "['and', ['>=', 'add_time','%{$post['min']}%'], ['<=', 'add_time', '%{$post['max']}%'], ['city_code' => '%{$post['city']}%]]";
+        $where = "add_time >= '%{$post['min']}%' AND add_time <= '%{$post['max']}%' AND city_code = '%{$post['city']}%'";
         $effect = Effect::pagination($where,$page,$size);
         return Json::encode([
             'code' => 200,
@@ -391,7 +391,7 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->get();
         $page = (int)\Yii::$app->request->get('page', 1);
         $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
-        $where = "['and', ['like', 'toponymy', '%{$post['toponymy']}%'], ['city_code' => '%{$post['city']}%']]";
+        $where = "toponymy like '%{$post['toponymy']}%' and city_code = '%{$post['city']}%'";
         $effect = Effect::pagination($where,$page,$size);
         return Json::encode([
             'code' => 200,
