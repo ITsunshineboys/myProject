@@ -355,7 +355,7 @@ class QuoteController extends Controller
         }
         else
         {
-            $where = "district_code = $post]";
+            $where = "district_code = $post";
             $effect = Effect::pagination($where,$page,$size);
             return Json::encode([
                 'code' => 200,
