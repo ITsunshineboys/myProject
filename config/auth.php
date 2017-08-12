@@ -110,6 +110,5 @@ return [
     'mall/index-admin-lhzz' => [1],
 
     // style and series
-    'mall/categories-have-style' => [1],
-    'mall/categories-have-series' => [1],
+    'mall/categories-have-style-series' => [1],
 ];

@@ -43,8 +43,9 @@ class GoodsCategory extends ActiveRecord
         'styles' => [],
         'series' => []
     ];
-    const FIELDS_HAVE_STYLE_CATEGORIES = ['id'];
-    const FIELDS_HAVE_SERIES_CATEGORIES = ['id'];
+    const FIELDS_HAVE_STYLE_SERIES_CATEGORIES = ['id', 'title'];
+    const NAME_STYLE = 'style';
+    const NAME_SERIES = 'series';
 
     /**
      * @var array admin fields
@@ -591,37 +592,44 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
-     * Get categories which have style
+     * Get categories which have style or/and series
      *
-     * @param int $pid parent category id
-     * @param array $select select fields default id
+     * @param int $pid parent category id default 0
+     * @param string $type type(style, seires or both) default both
+     * @param array $select select fields default id and title
      * @return array
      */
-    public static function styleCategoriesByPid($pid, array $select = self::FIELDS_HAVE_STYLE_CATEGORIES)
+    public static function haveStyleSeriesCategoriesByPid($pid = 0, $type = '', array $select = self::FIELDS_HAVE_STYLE_SERIES_CATEGORIES)
     {
         $query = new Query;
-        return $query
+        $query
             ->select($select)
             ->from(self::tableName())
-            ->where(['pid' => $pid, 'level' => self::LEVEL3, 'has_style' => 1])
-            ->all();
+            ->where(['level' => self::LEVEL3]);
+        $pid > 0 && $query->andWhere(['pid' => $pid]);
+
+        switch ($type) {
+            case self::NAME_STYLE:
+                $query->andWhere(['has_style' => 1]);
+                break;
+            case self::NAME_SERIES:
+                $query->andWhere(['has_series' => 1]);
+                break;
+            default:
+                $query->andWhere([
+                    'or',
+                    ['has_style' => 1],
+                    ['has_series' => 1]
+                ]);
+                break;
+        }
+
+        return $query->all();
     }
 
-    /**
-     * Get categories which have series
-     *
-     * @param int $pid parent category id
-     * @param array $select select fields default id
-     * @return array
-     */
-    public static function seriesCategoriesByPid($pid, array $select = self::FIELDS_HAVE_SERIES_CATEGORIES)
+    public static function resetStyleCategoriesById(array $categoryIds)
     {
-        $query = new Query;
-        return $query
-            ->select($select)
-            ->from(self::tableName())
-            ->where(['pid' => $pid, 'level' => self::LEVEL3, 'has_series' => 1])
-            ->all();
+
     }
 
     /**
@@ -975,10 +983,5 @@ class GoodsCategory extends ActiveRecord
 
         $key = self::CACHE_PREFIX . $this->pid;
         Yii::$app->cache->delete($key);
-    }
-
-    public static function resetStyleCategoriesById(array $categoryIds)
-    {
-
     }
 }
