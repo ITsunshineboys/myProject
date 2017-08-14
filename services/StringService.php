@@ -327,4 +327,37 @@ class StringService
         unset($matches[0]);
         return implode($separator, $matches);
     }
+
+    /**
+     * Merge elements
+     *
+     * @param array $data data to merge
+     * @return array
+     */
+    public static function merge(array $data)
+    {
+        $arr = [];
+        array_map(function ($row) use (&$arr) {
+            $arr = array_merge($row, $arr);
+        }, $data);
+        return $arr;
+    }
+
+    /**
+     * Get values by key
+     *
+     * @param array $data data
+     * @param string $key key name
+     * @return array
+     */
+    public static function valuesByKey(array $data, $key)
+    {
+        if (!$key) {
+            return [];
+        }
+
+        return array_map(function ($row) use ($key) {
+            return $row[$key];
+        }, $data);
+    }
 }

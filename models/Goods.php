@@ -230,12 +230,13 @@ class Goods extends ActiveRecord
      * Disable goods by category ids
      *
      * @param array $categoryIds category ids
-     * @param ActiveRecord $lhzz lhzz model
+     * @param string $offlineReason offline reason default 分类下架
+     * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByCategoryIds(array $categoryIds, ActiveRecord $lhzz)
+    public static function disableGoodsByCategoryIds(array $categoryIds, ActiveRecord $operator, $offlineReason = '')
     {
         foreach ($categoryIds as $categoryId) {
-            self::disableGoodsByCategoryId($categoryId, $lhzz);
+            self::disableGoodsByCategoryId($categoryId, $operator, $offlineReason);
         }
     }
 
@@ -243,9 +244,10 @@ class Goods extends ActiveRecord
      * Disable goods by category id
      *
      * @param int $categoryId category id
-     * @param ActiveRecord $lhzz lhzz model
+     * @param string $offlineReason offline reason default 分类下架
+     * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByCategoryId($categoryId, ActiveRecord $lhzz)
+    public static function disableGoodsByCategoryId($categoryId, ActiveRecord $operator, $offlineReason = '')
     {
         $goodsIds = self::findIdsByCategoryId($categoryId);
         if ($goodsIds) {
@@ -254,9 +256,9 @@ class Goods extends ActiveRecord
             self::updateAll([
                 'status' => self::STATUS_OFFLINE,
                 'offline_time' => time(),
-                'offline_reason' => Yii::$app->params['category']['offline_reason'],
-                'offline_uid' => $lhzz->id,
-                'offline_person' => $lhzz->nickname,
+                'offline_reason' => $offlineReason ? $offlineReason : Yii::$app->params['category']['offline_reason'],
+                'offline_uid' => $operator->id,
+                'offline_person' => $operator->nickname,
             ], $where);
         }
     }
@@ -329,12 +331,12 @@ class Goods extends ActiveRecord
      * Disable goods by brand ids
      *
      * @param array $brandIds brand ids
-     * @param ActiveRecord $lhzz lhzz model
+     * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByBrandIds(array $brandIds, ActiveRecord $lhzz)
+    public static function disableGoodsByBrandIds(array $brandIds, ActiveRecord $operator)
     {
         foreach ($brandIds as $brandId) {
-            self::disableGoodsByBrandId($brandId, $lhzz);
+            self::disableGoodsByBrandId($brandId, $operator);
         }
     }
 
@@ -342,9 +344,9 @@ class Goods extends ActiveRecord
      * Disable goods by brand id
      *
      * @param int $brandId brand id
-     * @param ActiveRecord $lhzz lhzz model
+     * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByBrandId($brandId, ActiveRecord $lhzz)
+    public static function disableGoodsByBrandId($brandId, ActiveRecord $operator)
     {
         $goodsIds = self::findIdsByBrandId($brandId);
         if ($goodsIds) {
@@ -354,8 +356,8 @@ class Goods extends ActiveRecord
                 'status' => self::STATUS_OFFLINE,
                 'offline_time' => time(),
                 'offline_reason' => Yii::$app->params['brand']['offline_reason'],
-                'offline_uid' => $lhzz->id,
-                'offline_person' => $lhzz->nickname,
+                'offline_uid' => $operator->id,
+                'offline_person' => $operator->nickname,
             ], $where);
         }
     }

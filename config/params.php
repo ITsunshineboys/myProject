@@ -141,4 +141,7 @@ return [
             'app_name' => '111'
     ],
     'value_all' => -1, // 下拉框“全部”的值
+    'style_series' => [
+        'offline_reason' => '分类风格或系列移除',
+    ],
 ];

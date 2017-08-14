@@ -595,13 +595,14 @@ class GoodsCategory extends ActiveRecord
     /**
      * Reset category attribute has_style and/or has_series
      *
-     * @param array $categoryIds category id list
+     * @param ActiveRecord $operator operator
+     * @param array $newCatIds category id list to be reset
      * @param string $type $type type(style, seires or both) default both
      * @param int $hasStyle has_style field value default 0
      * @param int $hasSeries has_series field value default 0
      * @return int
      */
-    public static function resetStyleSeries(array $categoryIds = [], $type = '', $hasStyle = 0, $hasSeries = 0)
+    public static function resetStyleSeries(ActiveRecord $operator, array $newCatIds = [], $type = '', $hasStyle = 0, $hasSeries = 0)
     {
         switch ($type) {
             case self::NAME_STYLE:
@@ -619,7 +620,6 @@ class GoodsCategory extends ActiveRecord
         $fields = [$fieldName];
         $rows = self::haveStyleSeriesCategoriesByPid(0, $type, $fields);
         $catIds = StringService::valuesByKey($rows, $fieldName);
-        $newCatIds = StringService::merge($categoryIds);
 
         $tran = Yii::$app->db->beginTransaction();
         $code = 500;
@@ -635,7 +635,10 @@ class GoodsCategory extends ActiveRecord
                 }, $updateAttrs);
                 $increasedCatIds = array_diff($newCatIds, $catIds);
 
-                $reducedCatIds && self::updateAll($reducedAttrs, ['in', 'id', $reducedCatIds]);
+                if ($reducedCatIds) {
+                    self::updateAll($reducedAttrs, ['in', 'id', $reducedCatIds]);
+                    Goods::disableGoodsByCategoryIds($reducedCatIds, $operator, Yii::$app->params['style_series']['offline_reason']);
+                }
                 $increasedCatIds && self::updateAll($increasedAttrs, ['in', 'id', $increasedCatIds]);
             }
 
