@@ -26,7 +26,10 @@
             {
                 $style_id [] = $one['id'];
             }
-            $style_picture = self::find()->where(['in','style_id',$style_id])->asArray()->all();
+            $style_picture = self::find()
+                ->where(['in','style_id',$style_id])
+                ->asArray()
+                ->all();
          }
          return $style_picture;
      }
