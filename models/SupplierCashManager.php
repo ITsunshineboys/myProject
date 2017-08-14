@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\Query;
 
-const  SUP_BANK_CARD = 'supplier_bankinformation';
+const  USER_BANK = 'user_bankinfo';
 const  SUPPLIER = 'supplier';
 const  SUP_FREELIST = 'supplier_freezelist';
 const  SUP_CASHREGISTER = 'supplier_cashregister';
@@ -120,7 +120,12 @@ class SupplierCashManager extends ActiveRecord
      */
     private function GetBankcard($supplier_id)
     {
-        $data = (new Query())->from(SUP_BANK_CARD)->where(['supplier_id' => $supplier_id])->one();
+        $u_id = Supplier::find()->where(['id' => $supplier_id])->one()->uid;
+        $data = (new Query())->from(USER_BANK)
+            ->where(['u_id' => $u_id])
+            ->andWhere(['role_id' => 6])
+            ->limit(1)
+            ->one();
         return $data;
     }
 

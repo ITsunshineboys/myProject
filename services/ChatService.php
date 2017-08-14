@@ -456,7 +456,7 @@ class ChatService
      * @param $content
      * @return mixed
      */
-    function sendText($from = "admin", $target_type, $target, $content)
+    function sendText($target_type, $target, $content, $from = "admin")
     {
         $url = $this->url . 'messages';
         $body['target_type'] = $target_type;
@@ -481,7 +481,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendCmd($from = "admin", $target_type, $target, $action)
+    function sendCmd($target_type, $target, $action, $from = "admin")
     {
         $url = $this->url . 'messages';
         $body['target_type'] = $target_type;
@@ -507,7 +507,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendImage($filePath, $from = "admin", $target_type, $target, $filename)
+    function sendImage($filePath, $target_type, $target, $filename, $from = "admin")
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
@@ -546,7 +546,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendAudio($filePath, $from = "admin", $target_type, $target, $filename, $length)
+    function sendAudio($filePath, $target_type, $target, $filename, $length, $from = "admin")
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
@@ -582,7 +582,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendVedio($filePath, $from = "admin", $target_type, $target, $filename, $length, $thumb, $thumb_secret)
+    function sendVedio($filePath, $target_type, $target, $filename, $length, $thumb, $thumb_secret, $from = "admin")
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
@@ -618,7 +618,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendFile($filePath, $from = "admin", $target_type, $target, $filename, $length)
+    function sendFile($filePath, $target_type, $target, $filename, $length, $from = "admin")
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
