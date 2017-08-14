@@ -9,6 +9,7 @@
 namespace app\models;
 
 use app\services\ModelService;
+use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
@@ -43,7 +44,7 @@ class GoodsCategory extends ActiveRecord
         'styles' => [],
         'series' => []
     ];
-    const FIELDS_HAVE_STYLE_SERIES_CATEGORIES = ['id', 'title'];
+    const FIELDS_HAVE_STYLE_SERIES_CATEGORIES = ['id', 'title', 'pid'];
     const NAME_STYLE = 'style';
     const NAME_SERIES = 'series';
 
@@ -598,22 +599,10 @@ class GoodsCategory extends ActiveRecord
      * @param string $type $type type(style, seires or both) default both
      * @param int $hasStyle has_style field value default 0
      * @param int $hasSeries has_series field value default 0
+     * @return int
      */
     public static function resetStyleSeries(array $categoryIds = [], $type = '', $hasStyle = 0, $hasSeries = 0)
     {
-        $catIds = [];
-
-        if (!$categoryIds) {
-            $fieldName = 'id';
-            $fields = [$fieldName];
-            $rows = self::haveStyleSeriesCategoriesByPid(0, $type, $fields);
-            $catIds = array_map(function ($row) use ($fieldName) {
-                return $row[$fieldName];
-            }, $rows);
-        } else {
-            // todo
-        }
-
         switch ($type) {
             case self::NAME_STYLE:
                 $updateAttrs = ['has_style' => $hasStyle];
@@ -626,7 +615,36 @@ class GoodsCategory extends ActiveRecord
                 break;
         }
 
-        $catIds && self::updateAll($updateAttrs, ['in', 'id', $catIds]);
+        $fieldName = 'id';
+        $fields = [$fieldName];
+        $rows = self::haveStyleSeriesCategoriesByPid(0, $type, $fields);
+        $catIds = StringService::valuesByKey($rows, $fieldName);
+        $newCatIds = StringService::merge($categoryIds);
+
+        $tran = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!StringService::checkArrayIdentity($catIds, $newCatIds)) {
+                $reducedCatIds = array_diff($catIds, $newCatIds);
+                $reducedAttrs = array_map(function ($row) {
+                    return 0;
+                }, $updateAttrs);
+
+                $increasedAttrs = array_map(function ($row) {
+                    return 1;
+                }, $updateAttrs);
+                $increasedCatIds = array_diff($newCatIds, $catIds);
+
+                $reducedCatIds && self::updateAll($reducedAttrs, ['in', 'id', $reducedCatIds]);
+                $increasedCatIds && self::updateAll($increasedAttrs, ['in', 'id', $increasedCatIds]);
+            }
+
+            $tran->commit();
+            $code = 200;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+        }
+        return $code;
     }
 
     /**
