@@ -74,7 +74,7 @@ class Series extends ActiveRecord
         $offset = ($page - 1) * $size;
         $series = Series::find()
             ->asArray()
-            ->select('creation_time,theme,intro,series,id')
+            ->select('creation_time,theme,intro,series,id,status')
             ->offset($offset)
             ->limit($size)
             ->orderBy(['series_grade' => SORT_ASC])
