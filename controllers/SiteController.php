@@ -571,19 +571,7 @@ class SiteController extends Controller
      */
     public function actionResetNickname()
     {
-        $code = 1000;
-
         $nickname = Yii::$app->request->post('nickname', '');
-
-        if (strlen($nickname) < User::NICKNAME_MIN_LEN
-            || strlen($nickname) > User::NICKNAME_MAX_LEN
-        ) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $user = Yii::$app->user->identity;
         $code = $user->resetNickname($nickname);
         if (200 != $code) {
