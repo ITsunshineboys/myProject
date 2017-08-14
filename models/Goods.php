@@ -410,7 +410,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title]])
+            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title],['status'=>self::STATUS_ONLINE]])
             ->all();
         return $all;
     }
@@ -456,8 +456,7 @@ class Goods extends ActiveRecord
         }
         $id = implode(',', $goods_id);
         $db = \Yii::$app->db;
-        $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
-AND goods.id IN (" . $id . ")";
+        $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "AND goods.id IN (" . $id . ") and goods.status = " . self::STATUS_ONLINE;
         $all_goods = $db->createCommand($sql)->queryAll();
         return $all_goods;
     }
@@ -716,7 +715,7 @@ AND goods.id IN (" . $id . ")";
             ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all]])
+            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all],['status'=>self::STATUS_ONLINE]])
             ->all();
         return $all_goods;
     }
