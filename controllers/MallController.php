@@ -129,6 +129,7 @@ class MallController extends Controller
         'supplier-offline',
         'supplier-list',
         'categories-have-style-series',
+        'mall/categories-style-series-reset',
     ];
 
     /**
@@ -208,6 +209,7 @@ class MallController extends Controller
                     'user-disable-remark-reset' => ['post',],
                     'user-enable-batch' => ['post',],
                     'supplier-offline' => ['post',],
+                    'categories-style-series-reset' => ['post',]
                 ],
             ],
         ];

@@ -111,4 +111,5 @@ return [
 
     // style and series
     'mall/categories-have-style-series' => [1],
+    'mall/categories-style-series-reset' => [1],
 ];
