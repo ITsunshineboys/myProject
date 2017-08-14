@@ -364,7 +364,9 @@ class SiteController extends Controller
                     ]);
                 }
 
-                $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => $role->id])->one();
+                $userRole = UserRole::find()
+                    ->where(['user_id' => $user->id, 'role_id' => $role->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED])
+                    ->one();
                 if (!$userRole) {
                     return Json::encode([
                         'code' => $code,
