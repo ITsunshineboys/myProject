@@ -439,8 +439,8 @@ class SiteController extends Controller
         if (empty($postData['mobile'])
             || empty($postData['validation_code'])
             || empty($postData['new_password'])
-            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
-            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+            || mb_strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || mb_strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
         ) {
             return Json::encode([
                 'code' => $code,
@@ -512,8 +512,8 @@ class SiteController extends Controller
 
         if (empty($postData['new_password'])
             || empty($postData['validation_code'])
-            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
-            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+            || mb_strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || mb_strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
         ) {
             return Json::encode([
                 'code' => $code,
@@ -522,14 +522,6 @@ class SiteController extends Controller
         }
 
         $user = Yii::$app->user->identity;
-        if (!$user) {
-            $code = 403;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         if ($user->validatePassword($postData['new_password'])) {
             SmValidationService::deleteCode($user->mobile);
 
@@ -594,19 +586,7 @@ class SiteController extends Controller
      */
     public function actionResetSignature()
     {
-        $code = 1000;
-
         $signature = Yii::$app->request->post('signature', '');
-
-        if (!$signature
-            || strlen($signature) > User::SIGNATURE_MAX_LEN
-        ) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $user = Yii::$app->user->identity;
         $code = $user->resetSignature($signature);
         if (200 != $code) {
@@ -629,17 +609,7 @@ class SiteController extends Controller
      */
     public function actionResetDistrict()
     {
-        $code = 1000;
-
         $districtCode = (int)Yii::$app->request->post('district_code', 0);
-
-        if (!District::validateDistrictCode($districtCode)) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
         $user = Yii::$app->user->identity;
         $code = $user->resetDistrict($districtCode);
         if (200 != $code) {

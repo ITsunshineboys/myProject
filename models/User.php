@@ -197,8 +197,8 @@ class User extends ActiveRecord implements IdentityInterface
 
         if (empty($data['mobile'])
             || empty($data['password'])
-            || strlen(($data['password'])) < self::PASSWORD_MIN_LEN
-            || strlen(($data['password'])) > self::PASSWORD_MAX_LEN
+            || mb_strlen(($data['password'])) < self::PASSWORD_MIN_LEN
+            || mb_strlen(($data['password'])) > self::PASSWORD_MAX_LEN
         ) {
             return $code;
         }
@@ -655,7 +655,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function resetNickname($nickname)
     {
-        if (!$nickname) {
+        if (mb_strlen($nickname) < self::NICKNAME_MIN_LEN
+            || mb_strlen($nickname) > self::NICKNAME_MAX_LEN
+        ) {
             $code = 1000;
             return $code;
         }
@@ -683,12 +685,14 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Reset signature
      *
-     * @param string $signature nickname
+     * @param string $signature signature
      * @return int
      */
     public function resetSignature($signature)
     {
-        if (!$signature) {
+        if (!$signature
+            || mb_strlen($signature) > User::SIGNATURE_MAX_LEN
+        ) {
             $code = 1000;
             return $code;
         }
