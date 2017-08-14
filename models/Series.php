@@ -41,6 +41,7 @@ class Series extends ActiveRecord
         $select = 'series.id,series.series,series.intro,series.theme';
         $series = self::find()
             ->asArray()
+            ->where(['status'=>self::STATUS_ONLINE])
             ->select($select)
             ->all();
         return $series;

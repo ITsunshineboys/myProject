@@ -41,6 +41,7 @@ class Style extends ActiveRecord
         $select = 'style.id,style.style,style.intro,style.theme';
         $series = self::find()
             ->asArray()
+            ->where(['status'=>self::STATUS_ONLINE])
             ->select($select)
             ->all();
         return $series;
