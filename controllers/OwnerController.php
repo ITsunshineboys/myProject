@@ -1603,12 +1603,13 @@ class OwnerController extends Controller
     }
 
     /**
+     * 配套设备列表
      * @return string
      */
     public function actionAssortFacility()
     {
         $post = Yii::$app->request->post();
-        if (empty($post['effect'])) {
+        if (!empty($post['effect'])) {
             echo 11;exit;
         }else {
             $assort_material = MaterialPropertyClassify::find()
@@ -1622,10 +1623,29 @@ class OwnerController extends Controller
             }
             $goods = Goods::assortList($material_name,510100);
             $goods_price = BasisDecorationService::priceConversion($goods);
+            $bedroom_area = EngineeringUniversalCriterion::mudMakeArea('卧室', '卧室面积');
             $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price, $material_one, $post);
             $material[] = BasisDecorationService::capacity($goods_price, $material_one, $post);
             $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price, $material_one, $post);
             $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price, $material_one, $post);
+            $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price, $post, $material_one);
+            $material[] = BasisDecorationService::mild($goods_price, $post, $material_one);
+            $material[] = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one, $post, $bedroom_area);
+
+            if ($post['stairway_id'] == 1) {
+                $stairs = Goods::findByCategory('楼梯');
+                $stairs_price = BasisDecorationService::priceConversion($stairs);
+                foreach ($stairs_price as $one_stairs_price) {
+                    if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
+                        $one_stairs_price['show_quantity'] = $material_one['楼梯']['quantity'];
+                        $one_stairs_price['show_cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['show_quantity'];
+                        $condition_stairs [] = $one_stairs_price;
+                    }
+                }
+            } else {
+                $condition_stairs = null;
+            }
+            $material[] = BasisDecorationService::profitMargin($condition_stairs);
 
             return Json::encode([
                 'goods'=>$material
