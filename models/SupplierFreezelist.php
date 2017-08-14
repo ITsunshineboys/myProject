@@ -62,18 +62,19 @@ class SupplierFreezelist extends \yii\db\ActiveRecord
 
         foreach ($freezeList as &$freeze) {
             $freeze['create_time']=date('Y-m-d H:i',$freeze['create_time']);
-
+            $freeze['freeze_money']=sprintf('%.2f',(float)$freeze['freeze_money']*0.01);
         }
+
+        $data=[
+
+            'details' => $freezeList
+        ];
         $count=(int)self::find()->where($where)->asArray()->count();
         $total_page = ceil($count / $size);
 
         $data['details']['size']=$size;
         $data['details']['total_page']=$total_page;
         $data['details']['total']=$count;
-        $data=[
-
-            'details' => $freezeList
-        ];
         return $data;
 
     }

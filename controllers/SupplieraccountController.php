@@ -122,35 +122,34 @@ class SupplieraccountController extends  Controller{
             if ($pid) {
 
                 $cate_ids=Supplier::getcategory($pid);
+
                     if(is_array($cate_ids)){
+
                         foreach ($cate_ids as $cate_id) {
 
                             $cd=(new Query())->from('supplier')->select('category_id')->where(['category_id'=>$cate_id])->one();
 
                             if(!$cd==null){
-                                $where.=" and category_id ={$cd['category_id']}";
+                                $pid && $where.=" and category_id ={$cd['category_id']}";
 
                             }
 
                         }
                     }else{
-                        $where.=" and category_id ={$pid}";
+                        $pid && $where.=" and category_id ={$pid}";
                     }
             }
 
-            if($type_shop ){
+            if($type_shop){
 
-                 $where.= " and type_shop = {$type_shop}";
+                $type_shop && $where.= " and type_shop = {$type_shop}";
 
             }
 
-            if($status==self::STATUS_ONLINE){
+            if($status){
 
-                $where.= " and status =".self::STATUS_ONLINE;
-            }
-            if($status==self::STATUS_OFFLINE){
+                $where.= " and status ={$status}";
 
-                $where.= " and status =".self::STATUS_OFFLINE;
             }
 
 
@@ -209,6 +208,7 @@ class SupplieraccountController extends  Controller{
             $code=1000;
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
+
             if(!$supplier_id){
                 return json_encode([
                     'code' => $code,
@@ -216,15 +216,19 @@ class SupplieraccountController extends  Controller{
 
                 ]);
             }
-            $user=User::find()->where(['id'=>$supplier_id])->one();
+            $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
 
-            if(!$user){
+
+
+            if(!$supplier){
                 return json_encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
 
                 ]);
             }
+
+
             if($request->isPost){
                 $model=new SupplierFreezelist();
                 $model->supplier_id=$supplier_id;
@@ -235,24 +239,28 @@ class SupplieraccountController extends  Controller{
 
                $transaction=Yii::$app->db->beginTransaction();
                try{
-                   $code=1052;
+                   $code=1000;
 
-                   if($user->balance<$freeze_money){
+                   if($supplier->balance<$freeze_money){
                        return json_encode([
                            'code' => $code,
-                           'msg' => \Yii::$app->params['errorCodes'][$code],
+                           'msg' => '可冻结余额不足',
 
 
                        ]);
                    }
-                  $user->balance=$user->balance-$freeze_money;
+                   $supplier->availableamount=$supplier->availableamount-$freeze_money;
+
+
                    $model->save();
-                   $user->update();
+                   $supplier->update(false);
+
                 $transaction->commit();
 
                    return json_encode([
                        'code'=>200,
-                       'msg'=>'ok'
+                       'msg'=>'ok',
+
                    ]);
                }catch (Exception $e){
 
@@ -264,9 +272,6 @@ class SupplieraccountController extends  Controller{
                        'msg' => \Yii::$app->params['errorCodes'][$code],
                    ]);
                }
-
-
-
 
             }else{
                 $code=1050;
@@ -292,14 +297,6 @@ class SupplieraccountController extends  Controller{
 
 
                 $where = '1';
-
-                if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
-
-                    return json_encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
 
 
                 if ($timeType == 'custom') {
@@ -397,10 +394,10 @@ class SupplieraccountController extends  Controller{
 
             if($supplier){
 
-                $user=User::findOne($supplier->uid);
-                $user->balance+=$freeze->freeze_money;
 
-                 $user->update();
+                $supplier->availableamount+=$freeze->freeze_money;
+
+                $supplier->update(false);
                  return json_encode([
                      'code'=>200,
                      'msg'=>'ok',

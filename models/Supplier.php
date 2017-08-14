@@ -490,16 +490,16 @@ class Supplier extends ActiveRecord
 
     public static function getsupplierdata($supplier_id){
         $query=new Query();
-        $select='sc.cash_money,u.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
+        $select='sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
         $array=$query->from('supplier as s')
             ->select($select)
             ->leftJoin('supplier_cashregister as sc','sc.supplier_id=s.id')
             ->leftJoin('supplier_bankinformation as sb','sc.supplier_id=s.id')
             ->leftJoin('supplier_freezelist as sf','sf.supplier_id=s.id')
-            ->leftJoin('user as u','u.id=s.uid')
             ->where(['s.id'=>$supplier_id])
 
             ->one();
+        $array['freeze_money']=sprintf('%.2f',(float)$array['freeze_money']*0.01);
         $array['cash_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
         $array['balance']=sprintf('%.2f',(float)$array['balance']*0.01);
         $array['cashed_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
