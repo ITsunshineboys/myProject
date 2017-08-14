@@ -203,7 +203,6 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         //人工价格
         $workers = LaborCost::profession($post, '弱电');
-
         //      点位 和 材料查询
         if (!empty($post['effect_id'])) {
             $weak_points = Points::weakPoints($post['effect_id']);
@@ -213,7 +212,8 @@ class OwnerController extends Controller
             $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
             $goods = Goods::findQueryAll($weak, $post['city']);
             $weak_current = BasisDecorationService::priceConversion($goods);
-        } else {
+        }
+        else {
             $effect = Effect::find()->where(['id' => 1])->one();
             $points = Points::find()->where(['effect_id' => $effect['id']])->asArray()->all();
             $weak_current_all = [];
@@ -231,60 +231,64 @@ class OwnerController extends Controller
             $goods = Goods::priceDetail(3, $material);
             $judge = BasisDecorationService::priceConversion($goods);
             $weak_current = BasisDecorationService::judge($judge, $post);
-        }
+            //当地工艺
+            $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
 
-        //当地工艺
-        $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
+            //人工总费用
+            $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points, $workers);
+            $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
-        //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points, $workers);
-        $labor_all_cost['worker_kind'] = $workers['worker_kind'];
+            //材料总费用
+            $material_price = BasisDecorationService::quantity($weak_points, $weak_current, $craft);
+            $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
 
-        //材料总费用
-        $material_price = BasisDecorationService::quantity($weak_points, $weak_current, $craft);
-        $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
-
-        //添加材料
-        $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);
-        $add_price = [];
-        foreach ($add_price_area as $add_area) {
-            $sku_area = Goods::skuAll($add_area['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_area['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
+            //添加材料
+            $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);
+            $add_price = [];
+            foreach ($add_price_area as $add_area) {
+                $sku_area = Goods::skuAll($add_area['sku']);
+                if ($sku_area !== null) {
+                    $add_price [] = $add_area['quantity'] * $sku_area['platform_price'];
+                }
+                else {
+                    $add_price [] = 0;
+                }
             }
-        }
 
-        $add_price_series = DecorationAdd::AllSeries('弱电', $post['series'], $post['city']);
-        foreach ($add_price_series as $add_series) {
-            $sku_area = Goods::skuAll($add_series['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_series['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
+            $add_price_series = DecorationAdd::AllSeries('弱电', $post['series'], $post['city']);
+            foreach ($add_price_series as $add_series) {
+                $sku_area = Goods::skuAll($add_series['sku']);
+                if ($sku_area !== null) {
+                    $add_price [] = $add_series['quantity'] * $sku_area['platform_price'];
+                }
+                else {
+                    $add_price [] = 0;
+                }
             }
-        }
 
-        $add_price_style = DecorationAdd::AllStyle('弱电', $post['style'], $post['city']);
-        foreach ($add_price_style as $add_style) {
-            $sku_area = Goods::skuAll($add_style['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_style['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
+            $add_price_style = DecorationAdd::AllStyle('弱电', $post['style'], $post['city']);
+            foreach ($add_price_style as $add_style) {
+                $sku_area = Goods::skuAll($add_style['sku']);
+                if ($sku_area !== null) {
+                    $add_price [] = $add_style['quantity'] * $sku_area['platform_price'];
+                }
+                else {
+                    $add_price [] = 0;
+                }
             }
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => '成功',
+                'data' => [
+                    'weak_current_labor_price' => $labor_all_cost,
+                    'weak_current_material' => $material,
+                    'weak_current_add_price' => $add_price,
+                ]
+            ]);
         }
 
-        return Json::encode([
-            'code' => 200,
-            'msg' => '成功',
-            'data' => [
-                'weak_current_labor_price' => $labor_all_cost,
-                'weak_current_material' => $material,
-                'weak_current_add_price' => $add_price,
-            ]
-        ]);
+
     }
 
     /**

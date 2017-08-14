@@ -27,7 +27,10 @@ class Points extends ActiveRecord
     public static function weakPoints($id)
     {
         $sql = "place,weak_current_points";
-        $all = self::find()->select($sql)->where(['effect_id'=>$id])->all();
+        $all = self::find()
+            ->select($sql)
+            ->where(['effect_id'=>$id])
+            ->all();
         $weak_current = 0;
         foreach ($all as $number)
         {
