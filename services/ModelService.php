@@ -9,6 +9,7 @@
 namespace app\services;
 
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class ModelService
 {
@@ -19,8 +20,13 @@ class ModelService
     ];
     const SEPARATOR_ERRCODE_ERRMSG = ':';
     const PAGE_SIZE_DEFAULT = 12;
-    const ORDER_BY_DEFAULT = ['id' => SORT_ASC];
+    const ORDER_BY_DEFAULT = ['id' => SORT_DESC];
     const SUFFIX_FIELD_DESCRIPTION = '_desc';
+    const FORMAT_DATA_METHOD = 'formatData';
+    const EXTRA_DATA_METHOD = 'extraData';
+    const PAGINATION_RETURN_ARRAY_KEY_TOTAL = 'total';
+    const PAGINATION_RETURN_ARRAY_KEY_DETAILS = 'details';
+    const FIELD_IDENTITY = 'id';
 
     /**
      * Generate sorting statements for query
@@ -146,5 +152,95 @@ class ModelService
     {
         $errors = $model->errors;
         return isset($errors[$attr]) && false !== stripos($errors[$attr][0], 'has already been taken');
+    }
+
+    /**
+     * Get model list
+     *
+     * @param Query $query query object
+     * @param array $select select fields default all fields
+     * @param array $extraFields extra fields default empty
+     * @param ActiveRecord $model model
+     * @param string $formatMethod format method default 'formatData'
+     * @param string $extraMethod extra method default 'extraData'
+     * @param int $page page number default 1
+     * @param int $size page size default 12
+     * @param array $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function pagination(Query $query, array $select = [], array $extraFields = [], ActiveRecord $model, $page = 1, $size = self::PAGE_SIZE_DEFAULT, $formatMethod = self::FORMAT_DATA_METHOD, $extraMethod = self::EXTRA_DATA_METHOD, $orderBy = self::ORDER_BY_DEFAULT)
+    {
+        !in_array(self::FIELD_IDENTITY, $select) && $select[] = self::FIELD_IDENTITY;
+        $query->select($select)->from($model->tableName());
+        $offset = ($page - 1) * $size;
+        $data = [
+            self::PAGINATION_RETURN_ARRAY_KEY_TOTAL => $query->count(),
+            self::PAGINATION_RETURN_ARRAY_KEY_DETAILS => $query
+                ->orderBy($orderBy)
+                ->offset($offset)
+                ->limit($size)
+                ->all()
+        ];
+
+        foreach ($data[self::PAGINATION_RETURN_ARRAY_KEY_DETAILS] as &$row) {
+            if ($extraFields && method_exists($model, $extraMethod)) {
+                $row = array_merge($model::$extraMethod($row[self::FIELD_IDENTITY], $extraFields), $row);
+            }
+            if (method_exists($model, $formatMethod)) {
+                $model::$formatMethod($row);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * 得到开始和结束时间 戳
+     * @param $time_type
+     * @param $time_start
+     * @param $time_end
+     * @return array
+     */
+    public static function timeDeal($time_type, $time_start, $time_end)
+    {
+        if ($time_type == 'custom' && $time_start && $time_end) {
+            $time_start = strtotime($time_start);
+            $time_end = strtotime($time_end);
+        } else {
+            $time_area = StringService::startEndDate($time_type, 1);
+            $time_start = $time_area[0];
+            $time_end = $time_area[1];
+        }
+        return [$time_start, $time_end];
+    }
+
+    /**
+     * 简单的分页处理
+     * @param array $arr 数据数组
+     * @param $count
+     * @param $page_size
+     * @param $page
+     * @return array
+     */
+    public static function pageDeal(array $arr, $count, $page, $page_size = self::PAGE_SIZE_DEFAULT)
+    {
+        $total_page = ceil($count / $page_size);
+        $page = $page < 1 ? 1 : $page;
+        if ($page > $total_page) {
+            $sd = array(
+                'list' => '',
+                'total_page' => $total_page,
+                'count' => $count,
+                'page' => $page
+            );
+        } else {
+            $sd = array(
+                'list' => $arr,
+                'total_page' => $total_page,
+                'count' => $count,
+                'page' => $page
+            );
+        }
+        return $sd;
     }
 }

@@ -35,28 +35,34 @@ class Addressadd extends  ActiveRecord
      */
      public function insertaddress($mobile,$consignee,$region,$districtcode){
          $addresstoken= md5($mobile.$consignee.date('Y-m-d H:i:s', time()));
-         $res=Yii::$app->db->createCommand()->insert(USER_ADDRESS,[
-             'mobile'      => $mobile,
-             'consignee'   => $consignee,
-             'region'      => $region,
-             'district'    => $districtcode,
-             'addresstoken'=> $addresstoken,
-         ])->execute();
-         if ($res){
+         $data=self::find()->where(['mobile'=>$mobile,'consignee'=>$consignee,'district'=>$districtcode])->asArray()->one();
+         if ($data){
+             $res=Yii::$app->db->createCommand()->update(USER_ADDRESS, ['mobile'=>$mobile,'consignee'=>$consignee,'district'=>$districtcode,'region'=>$region,'addresstoken'=>$addresstoken],'id='.$data['id'])->execute();
              $session = Yii::$app->session;
              $session['addresstoken']=$addresstoken;
+             return true;
+         }else{
+             $res=Yii::$app->db->createCommand()->insert(USER_ADDRESS,[
+                 'mobile'      => $mobile,
+                 'consignee'   => $consignee,
+                 'region'      => $region,
+                 'district'    => $districtcode,
+                 'addresstoken'=>$addresstoken
+             ])->execute();
+             if ($res){
+                 $session = Yii::$app->session;
+                 $session['addresstoken']=$addresstoken;
+             }
          }
          return $res;
      }
-
     /**
      * 无登录app-获取收货地址
      * @param $addresstoken
      * @return array|null
      */
     public function getaddress($addresstoken){
-        $query=new \yii\db\Query();
-        $array  = self::find()->select('mobile,consignee,region,district,addresstoken')->where(['addresstoken' => $addresstoken])->limit(1)->asArray()->all();
+        $array  = self::find()->select('id,mobile,consignee,region,district')->where(['addresstoken' => $addresstoken])->limit(1)->asArray()->all();
         if ($array){
             foreach ($array as $k=>$v){
                 $model=new LogisticsDistrict();

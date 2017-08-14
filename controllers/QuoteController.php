@@ -20,6 +20,7 @@ use app\models\Series;
 use app\models\Style;
 use app\services\ExceptionHandleService;
 use app\services\SmValidationService;
+use Symfony\Component\Yaml\Tests\A;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -341,43 +342,25 @@ class QuoteController extends Controller
     public function actionPlotList()
     {
         $post = \Yii::$app->request->get('post');
+        $page = (int)\Yii::$app->request->get('page', 1);
+        $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
         if (substr($post, 4) == 00) {
-            $effect = Effect::find()->where(['city_code' => $post]);
-            $pages = new Pagination(['totalCount' => $effect->count(), 'pageSize' => 12]);
-            $model = $effect->offset($pages->offset)
-                ->limit($pages->limit)
-                ->asArray()
-                ->select('effect.toponymy,effect.add_time,effect.district')
-                ->groupBy('district')
-                ->orderBy(['add_time' => SORT_ASC])
-                ->all();
-            $list = [];
-            foreach ($model as $one_model) {
-                $one_model['add_time'] = date('Y-m-d H:i', $one_model['add_time']);
-                $list [] = $one_model;
-            }
+            $where = "city_code = $post";
+            $effect = Effect::pagination($where,$page,$size);
             return Json::encode([
-                'model' => $list,
-                'pages' => $pages
+                'code' => 200,
+                'msg' => 'OK',
+                'model' => $effect
             ]);
-        } else {
-            $effect = Effect::find()->where(['district_code' => $post]);
-            $pages = new Pagination(['totalCount' => $effect->count(), 'pageSize' => 12]);
-            $model = $effect->offset($pages->offset)
-                ->limit($pages->limit)
-                ->asArray()
-                ->select('effect.toponymy,effect.add_time,effect.district')
-                ->groupBy('district')
-                ->orderBy(['add_time' => SORT_ASC])
-                ->all();
-            $list = [];
-            foreach ($model as $one_model) {
-                $one_model['add_time'] = date('Y-m-d H:i', $one_model['add_time']);
-                $list [] = $one_model;
-            }
+        }
+        else
+        {
+            $where = "district_code = $post";
+            $effect = Effect::pagination($where,$page,$size);
             return Json::encode([
-                'model' => $list,
-                'pages' => $pages
+                'code' => 200,
+                'msg' => 'OK',
+                'model' => $effect
             ]);
         }
 
@@ -390,23 +373,14 @@ class QuoteController extends Controller
     public function actionPlotTimeGrabble()
     {
         $post = \Yii::$app->request->get();
-        $effect = Effect::find()->where(['and', ['>=', 'add_time', $post['min']], ['<=', 'add_time', $post['max']], ['city_code' => $post['city']]]);
-        $pages = new Pagination(['totalCount' => $effect->count(), 'pageSize' => 12]);
-        $model = $effect->offset($pages->offset)
-            ->limit($pages->limit)
-            ->asArray()
-            ->select('effect.toponymy,effect.add_time,effect.district')
-            ->groupBy('district')
-            ->orderBy(['add_time' => SORT_ASC])
-            ->all();
-        $list = [];
-        foreach ($model as $one_model) {
-            $one_model['add_time'] = date('Y-m-d H:i', $one_model['add_time']);
-            $list [] = $one_model;
-        }
+        $page = (int)\Yii::$app->request->get('page', 1);
+        $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
+        $where = "add_time >= {$post['min']} AND add_time <= {$post['max']} AND city_code = {$post['city']}";
+        $effect = Effect::pagination($where,$page,$size);
         return Json::encode([
-            'model' => $list,
-            'pages' => $pages
+            'code' => 200,
+            'msg' => 'OK',
+            'model' => $effect
         ]);
     }
 
@@ -417,23 +391,14 @@ class QuoteController extends Controller
     public function actionPlotGrabble()
     {
         $post = \Yii::$app->request->get();
-        $effect = Effect::find()->where(['and', ['like', 'toponymy', $post['toponymy']], ['city_code' => $post['city']]]);
-        $pages = new Pagination(['totalCount' => $effect->count(), 'pageSize' => 12]);
-        $model = $effect->offset($pages->offset)
-            ->limit($pages->limit)
-            ->asArray()
-            ->select('effect.toponymy,effect.add_time,effect.district')
-            ->groupBy('district')
-            ->orderBy(['add_time' => SORT_ASC])
-            ->all();
-        $list = [];
-        foreach ($model as $one_model) {
-            $one_model['add_time'] = date('Y-m-d H:i', $one_model['add_time']);
-            $list [] = $one_model;
-        }
+        $page = (int)\Yii::$app->request->get('page', 1);
+        $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
+        $where = "toponymy like '%{$post['toponymy']}%' and city_code = {$post['city']}";
+        $effect = Effect::pagination($where,$page,$size);
         return Json::encode([
-            'model' => $list,
-            'pages' => $pages
+            'code' => 200,
+            'msg' => 'OK',
+            'model' => $effect
         ]);
     }
 
@@ -537,11 +502,28 @@ class QuoteController extends Controller
      */
     public function actionAssortGoods()
     {
+        $pid = (int)\Yii::$app->request->get('pid', 0);
+        $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS_CATEGORY, $pid);
+//        $pid == 0 && array_unshift($categories, GoodsCategory::forAll());
         return Json::encode([
-            'goods_category' => GoodsCategory::find()
-                ->select('title,path,id')
-                ->asArray()
-                ->all(),
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'categories' => $categories
+            ],
+        ]);
+    }
+
+    /**
+     * assort goods list
+     * @return string
+     */
+    public function actionAssortGoodsList()
+    {
+        return Json::encode([
+           'list'=> AssortGoods::find()
+               ->select(['title','category_id as id','pid','path'])
+               ->all(),
         ]);
     }
 
@@ -552,6 +534,11 @@ class QuoteController extends Controller
     public function actionAssortGoodsAdd()
     {
         $post = \Yii::$app->request->post();
+        $array = [];
+        foreach ($post['assort'] as $one_post) {
+            ksort($one_post);
+            $array [] = $one_post;
+        }
         $user = \Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -560,7 +547,18 @@ class QuoteController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $assort = (new AssortGoods())->add($post);
+        $find = AssortGoods::findByCategoryId();
+
+        if (!empty($find))
+        {
+            $id = [];
+            foreach ($find as $find_one) {
+                $id [] = $find_one['category_id'];
+            }
+            (new AssortGoods())->deleteAll(['category_id'=>$id]);
+        }
+
+        $assort = (new AssortGoods())->add($array);
         if ($assort) {
             $code = 200;
             return Json::encode([

@@ -67,10 +67,10 @@ class User extends ActiveRecord implements IdentityInterface
         'review_time',
     ];
     const STATUS_OFFLINE = 0; // 关闭
-    const STATUS_ONLINE = 1; // 开启
+    const STATUS_ONLINE = 1; // 正常
     const STATUSES = [
         self::STATUS_OFFLINE => '关闭',
-        self::STATUS_ONLINE => '开启',
+        self::STATUS_ONLINE => '正常',
     ];
     const FIELDS_USER_DETAILS_MODEL_LHZZ = [
         'icon',
@@ -109,9 +109,9 @@ class User extends ActiveRecord implements IdentityInterface
         'status_operator',
         'status_remark',
     ];
-    const SESSION_KEY_LOGIN_ORIGIN = 'session_key_login_origin';
     const LOGIN_ORIGIN_ADMIN = 'login_origin_admin';
     const LOGIN_ORIGIN_APP = 'login_origin_app';
+    const LOGIN_ROLE_ID = 'login_role_id';
 
     /**
      * @inheritdoc
@@ -1263,6 +1263,7 @@ class User extends ActiveRecord implements IdentityInterface
             Yii::$app->session[self::LOGIN_ORIGIN_APP] = $this->id;
             $this->authKey = $sessionId;
         }
+        Yii::$app->session[self::LOGIN_ROLE_ID] = $roleId ? $roleId : Yii::$app->params['ownerRoleId'];
 
         return $this->save();
     }

@@ -1,0 +1,92 @@
+<link rel="stylesheet" href="pages/mall_manage/style_manage/add_style/css/add_style.css">
+<div ng-controller="add_style">
+    <!--顶部导航-->
+    <div class="topnav">
+        <span class="glyphicon glyphicon-certificate"></span>
+        <h6>商城管理</h6>
+        <h6>> 系列/风格/属性管理 </h6>
+        <h6>> 添加新风格 </h6>
+    </div>
+
+    <div class="add_series">
+        <!--系列名称-->
+        <div class="series_name">
+            <span class="glyphicon glyphicon-asterisk red_mark" ></span>
+            <span>风格名称</span>
+            <input type="text" placeholder="请输入系列名称">
+            <span id="limitword">*限1~10个字符</span>
+            <p class="red_mark">
+                <span class="glyphicon glyphicon-asterisk"></span>
+                该系列名称已存在，请重新填写
+            </p>
+        </div>
+
+        <!--系列标签-->
+        <div class="series_tag">
+            <span class="glyphicon glyphicon-asterisk red_mark" ></span>
+            <span>系列标签</span>
+            <img src="pages/mall_manage/style_manage/add_series/image/add.png" alt="">
+            <ul class="tags">
+                <li><input type="text" placeholder="请输入标签"></li>
+                <li><input type="text" placeholder="请输入标签"></li>
+                <li><input type="text" placeholder="请输入标签"></li>
+                <li><input type="text" placeholder="请输入标签"></li>
+                <li><input type="text" placeholder="请输入标签"></li>
+                <li><input type="text" placeholder="请输入标签"></li>
+
+                <li><input type="text" placeholder="请输入标签"></li>
+                <li><input type="text" placeholder="请输入标签"></li>
+                <li><input type="text" placeholder="请输入标签"></li>
+                <span>*限1~4个字符,最多9个标签</span>
+            </ul>
+        </div>
+
+        <!--风格效果图-->
+        <div class="brand_register brand_logo">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>风格效果图</span>
+
+            <div class="pic_right">
+                <img src="pages/mall_manage/style_manage/add_style/image/plus.png" alt="" id="logo">
+                <p>图片大小694×400，5M内，可上传3张图片，支持JPG、PNG、JPEG</p>
+                <p class="red_mark warning">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    上传图片格式不正确或尺寸不匹配，请重新上传
+                </p>
+            </div>
+        </div>
+
+        <!--系列介绍-->
+        <div class="series_intro">
+            <span class="glyphicon glyphicon-asterisk red_mark" ></span>
+            <span>风格介绍</span>
+            <textarea name="" placeholder="请输入添加风格的介绍内容"></textarea>
+        </div>
+
+        <!--按钮-->
+        <div class="btn_sure">
+            <button id="save" data-toggle="modal" data-target="#suremodal">确认</button>
+            <button ui-sref="style_index">返回</button>
+        </div>
+    </div>
+
+    <!--确认提示框-->
+    <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="save_content">
+                <div class="modal-header" id="save_header">
+                    <h4 class="modal-title" id="tishi">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body" id="save_body">
+                    <h6 id="tishi_wenzi">添加成功</h6>
+                </div>
+
+                <div class="btn_modal_two">
+                    <button id="caozuo_sure" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

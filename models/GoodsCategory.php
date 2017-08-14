@@ -11,6 +11,7 @@ namespace app\models;
 use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\helpers\HtmlPurifier;
 
 class GoodsCategory extends ActiveRecord
@@ -23,8 +24,9 @@ class GoodsCategory extends ActiveRecord
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
-    const APP_FIELDS = ['id', 'title', 'icon'];
+    const APP_FIELDS = ['id', 'title', 'icon', 'pid'];
     const APP_FIELDS_QUOTE = ['id', 'title', 'icon', 'path'];
+    const APP_FIELDS_CATEGORY = ['id', 'title', 'pid', 'path'];
     const PAGE_SIZE_DEFAULT = 12;
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
@@ -41,6 +43,9 @@ class GoodsCategory extends ActiveRecord
         'styles' => [],
         'series' => []
     ];
+    const FIELDS_HAVE_STYLE_SERIES_CATEGORIES = ['id', 'title'];
+    const NAME_STYLE = 'style';
+    const NAME_SERIES = 'series';
 
     /**
      * @var array admin fields
@@ -109,17 +114,6 @@ class GoodsCategory extends ActiveRecord
             'title' => Yii::$app->params['category']['admin']['allName'],
             'icon' => ''
         ];
-    }
-
-    /**
-     * Check if level 3
-     *
-     * @param bool $isOnline if online default true
-     * @return bool
-     */
-    public static function isLevel3($isOnline = true)
-    {
-        return self::find()->where(['deleted' => !$isOnline, 'level' => self::LEVEL3])->exists();
     }
 
     /**
@@ -410,10 +404,11 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
-     * Get all level 2 and 3 category ids by pid
+     * Get all level 3 and/or 2 category ids by pid
      *
-     * @param  int $pid parent category id
-     * @param int $onlyLevel3 if only get level3 categories
+     * @param int $pid parent category id
+     * @param bool $onlyLevel3 if only get level3 categories
+     * @param bool $onlyOnline if only get online categories
      * @return array
      */
     public static function level23Ids($pid, $onlyLevel3 = false, $onlyOnline = true)
@@ -432,9 +427,9 @@ class GoodsCategory extends ActiveRecord
 
         $sql = "select id from {{%" . self::tableName() . "}} where pid = {$pid}";
         $sql .= $onlyOnline ? ' and deleted = 0' : ' and review_status = ' . self::REVIEW_STATUS_APPROVE;
-        if ($category->level == self::LEVEL2) {
+        if ($category->isLevel2()) {
             return $db->createCommand($sql)->queryColumn();
-        } elseif ($category->level == self::LEVEL1) {
+        } elseif ($category->isLevel1()) {
             $pids = $db->createCommand($sql)->queryColumn();
             $ret = [];
             foreach ($pids as $pid) {
@@ -444,9 +439,46 @@ class GoodsCategory extends ActiveRecord
             }
 
             return array_unique($onlyLevel3 ? $ret : array_merge($ret, $pids));
+        } elseif ($category->isLevel3()) {
+            if ($onlyOnline) {
+                if ($category->deleted == 0) {
+                    return [$pid];
+                }
+            }
+            return [$pid];
         }
 
         return [];
+    }
+
+    /**
+     * Check if level 2
+     *
+     * @return bool
+     */
+    public function isLevel2()
+    {
+        return $this->level == self::LEVEL2;
+    }
+
+    /**
+     * Check if level 1
+     *
+     * @return bool
+     */
+    public function isLevel1()
+    {
+        return $this->level == self::LEVEL1;
+    }
+
+    /**
+     * Check if level 3
+     *
+     * @return bool
+     */
+    public function isLevel3()
+    {
+        return $this->level == self::LEVEL3;
     }
 
     /**
@@ -557,6 +589,46 @@ class GoodsCategory extends ActiveRecord
     public static function findByTitle($title, array $select = self::APP_FIELDS)
     {
         return self::find()->select($select)->where(['like', 'title', $title])->asArray()->all();
+    }
+
+    /**
+     * Get categories which have style or/and series
+     *
+     * @param int $pid parent category id default 0
+     * @param string $type type(style, seires or both) default both
+     * @param array $select select fields default id and title
+     * @return array
+     */
+    public static function haveStyleSeriesCategoriesByPid($pid = 0, $type = '', array $select = self::FIELDS_HAVE_STYLE_SERIES_CATEGORIES)
+    {
+        $query = new Query;
+        $query
+            ->select($select)
+            ->from(self::tableName())
+            ->where(['level' => self::LEVEL3]);
+        $pid > 0 && $query->andWhere(['pid' => $pid]);
+
+        switch ($type) {
+            case self::NAME_STYLE:
+                $query->andWhere(['has_style' => 1]);
+                break;
+            case self::NAME_SERIES:
+                $query->andWhere(['has_series' => 1]);
+                break;
+            default:
+                $query->andWhere([
+                    'or',
+                    ['has_style' => 1, 'has_series' => 1],
+                ]);
+                break;
+        }
+
+        return $query->all();
+    }
+
+    public static function resetStyleCategoriesById(array $categoryIds)
+    {
+
     }
 
     /**

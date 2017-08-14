@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="pages/mall_manage/style_manage/choose_series/css/choose_series.css">
+<div ng-controller="choose_series">
+    <!--顶部导航-->
+    <div class="topnav">
+        <span class="glyphicon glyphicon-certificate"></span>
+        <h6>商城管理</h6>
+        <h6>> 系列/风格/属性管理 </h6>
+        <h6>> 选择拥有系列的分类 </h6>
+    </div>
+
+    <!--内容-->
+    <div class="choose_series_content">
+        <p>选择拥有系列的分类</p>
+
+        <!--四个ul-->
+        <div class="ulright">
+            <ul>
+                <li>基础材料</li>
+                <li>主材料</li>
+                <li>固定家具</li>
+                <li>移动家具</li>
+                <li>家装配套</li>
+                <li>软装配套</li>
+                <li>智能配套</li>
+                <li>生活配套</li>
+            </ul>
+
+            <ul>
+                <li>墙面材料</li>
+                <li>板材材料</li>
+                <li>水电材料</li>
+                <li>防水材料</li>
+                <li>石膏、固化类材料</li>
+            </ul>
+
+            <ul class="thirdul">
+                <li><input type="checkbox">石膏粉</li>
+                <li><input type="checkbox">墙面附着剂</li>
+            </ul>
+
+            <ul class="lastul">
+                <li>
+                    墙地面附着剂
+                    <img src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">
+                </li>
+                <li>
+                    石膏粉
+                    <img src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">
+                </li>
+            </ul>
+        </div>
+
+        <div class="btn_sure">
+            <button id="save" data-toggle="modal" data-target="#suremodal">保存</button>
+            <button ui-sref="style_index">返回</button>
+        </div>
+    </div>
+
+    <!--保存提示框-->
+    <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="save_content">
+                <div class="modal-header" id="save_header">
+                    <h4 class="modal-title" id="tishi">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body" id="save_body">
+                    <h6 id="tishi_wenzi">保存成功</h6>
+                </div>
+
+                <div class="btn_modal_two">
+                    <button id="caozuo_sure" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

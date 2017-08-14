@@ -14,6 +14,8 @@ use yii\db\Query;
 class Effect extends ActiveRecord
 {
     const STATUS_STAIRWAY_YES = 1;
+    const PAGE_SIZE_DEFAULT = 12;
+    const FIELDS_EXTRA = [];
     const FIELDS_VIEW_ADMIN_MODEL = [
           'id',
           'series_id',
@@ -141,12 +143,33 @@ class Effect extends ActiveRecord
         return $list;
     }
 
-    public static function plotAdd($post)
+    public static function pagination($where,$page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
-        if ($post)
-        {
+        $offset = ($page - 1) * $size;
+        $effectList = self::find()
+            ->select('effect.toponymy,effect.add_time,effect.district')
+            ->where($where)
+            ->groupBy('district')
+            ->orderBy(['add_time' => SORT_ASC])
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+
+        foreach ($effectList as &$effect) {
+
+            if(isset($effect['add_time'])){
+                $effect['add_time']=date('Y-m-d H:i', $effect['add_time']);
+            }
 
         }
-        return 11;
+
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'page'=>$page,
+            'size'=>$size,
+            'details' => $effectList
+        ];
     }
+
 }

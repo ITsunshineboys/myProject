@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="pages/mall_manage/merchant_manage/store_mag/css/store_mag.css">
+<div ng-controller="store_mag">
+    <!--顶部导航-->
+    <div class="topnav">
+        <span class="glyphicon glyphicon-certificate"></span>
+        <h6>商城管理</h6>
+        <h6>> 商家管理 </h6>
+    </div>
+
+    <div class="store_mag_content">
+        <div>
+            <!--商家管理按钮组-->
+            <div class="store_mag_btngroup">
+                <button id="add_btn" ui-sref="add_store">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    添加
+                </button>
+                <span class="fenleichoose_span">分类选择</span>
+                <!--/*分类选择一级下拉框*/-->
+                <select name="" class="cailiaochoose">
+                    <option value="456">全部</option>
+                </select>
+                <!--/*分类选择二级菜单*/-->
+                <select name="" class="cailiaochoose">
+                    <option value="456">全部</option>
+                </select>
+                <!--分类选择三级下拉框-->
+                <select name="" class="cailiaochoose">
+                    <option value="456">全部</option>
+                </select>
+
+                <span class="fenleichoose_span" id="store_type">店铺类型</span>
+                <select name="" class="cailiaochoose">
+                    <option value="456">全部</option>
+                </select>
+
+                <span class="fenleichoose_span" id="store_state">状态</span>
+                <select name="" class="cailiaochoose">
+                    <option value="456">全部</option>
+                </select>
+
+
+                <div class="search_box">
+                    <input class="search_input" type="text" placeholder="搜索商品编号或名称">
+                    <span  class="glyphicon glyphicon-search search"></span>
+                </div>
+
+            </div>
+
+            <!--商家管理Table内容-->
+            <div class="store_mag_table">
+                <table>
+                    <tr class="th">
+                        <td>商家编号</td>
+                        <td>商家名称</td>
+                        <td>店铺类型</td>
+                        <td>所属类目</td>
+                        <td>本月业绩
+                            <img src="pages/mall_manage/merchant_manage/store_mag/images/arrow_up.png" alt="">
+                        </td>
+                        <td>
+                           本月销量
+                            <img src="pages/mall_manage/merchant_manage/store_mag/images/arrow_up.png" alt="">
+                        </td>
+                        <td>状态</td>
+                        <td>详情</td>
+                        <td>管理</td>
+                        <td>操作</td>
+                    </tr>
+
+                    <tr>
+                        <td>18258</td>
+                        <td>升达木地板专卖店</td>
+                        <td>专卖店</td>
+                        <td>基础装修-地面材料-腻子膏</td>
+                        <td>¥588.00</td>
+                        <td>1455</td>
+                        <td class="running">正常营业</td>
+                        <td class="color_blue">查看</td>
+                        <td>
+                            <span class="color_blue">商品管理</span>
+                            <span class="color_blue">订单管理</span>
+                            <span class="color_blue">数据</span>
+                        </td>
+                        <td class="color_blue">
+                            <span data-toggle="modal" data-target="#bidian_tishi">闭店</span>
+                        </td>
+
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!--闭店提示模态框-->
+    <div class="modal fade" id="bidian_tishi" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="save_content">
+                <div class="modal-header" id="save_header">
+                    <h4 class="modal-title" id="tishi">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body" id="save_body">
+                    <h6 id="tishi_wenzi">是否确认关闭页面</h6>
+                </div>
+
+                <div class="btn_modal_two">
+                    <button id="caozuo_sure" data-dismiss="modal">确认</button>
+                    <button id="caozuo_cancel" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,169 @@
+<link rel="stylesheet" href="pages/account_manage/account_index/css/account_index.css">
+<div ng-controller="account_index_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">账户管理</span>
+            <img src="pages/mall_manage/style_manage/edit_attribute/images/user.png" alt=""/>
+        </div>
+    </header>
+    <!--选项卡-->
+    <div class="tab">
+        <ul>
+            <li ng-class="{'tab_blue':(normal_flag==true)}"  ng-click="normal()">正常</li>
+            <li ng-class="{'tab_blue':(close_flag==true)}" ng-click="close()">关闭</li>
+        </ul>
+    </div>
+    <!--正常 内容-->
+    <section ng-if="normal_flag==true">
+            <span class="border"  ui-sref="add_user">添加新用户</span>
+            <span class="border">关闭</span>
+            <select name="" class="time_select">
+                <option value="">全部时间</option>
+                <option value="">其他时间</option>
+            </select>
+            <input type="text" class="time_input" placeholder="开始时间">
+            <input type="text" class="time_input" placeholder="结束时间">
+            <!--搜索-->
+            <span class="menu">查询</span>
+            <div class="search_box">
+                <input class="search_input" type="text" placeholder="  搜索商品编号或名称">
+                <span class="glyphicon glyphicon-search search"></span>
+            </div>
+
+            <!--表格-->
+            <table>
+                <tr class="th">
+                    <td>&nbsp;</td>
+                    <td>绑定手机号</td>
+                    <td>昵称</td>
+                    <td>魔方号</td>
+                    <td>注册时间</td>
+                    <td>状态</td>
+                    <td>拥有角色</td>
+                    <td>详情</td>
+                    <td>操作</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>123456789</td>
+                    <td>粉红少男</td>
+                    <td>987654321</td>
+                    <td>2017-08-10 12:02</td>
+                    <td>正常</td>
+                    <td>业主</td>
+                    <td class="blue">查看</td>
+                    <td class="blue" data-toggle="modal" data-target="#close_modal">关闭</td>
+                </tr>
+            </table>
+    </section>
+
+    <!--关闭模态框-->
+    <div class="modal fade" id="close_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">关闭原因</h4>
+                </div>
+                <div class="modal-body">
+                    <span style="vertical-align: top">关闭原因（选填）</span>
+                    <textarea name="" placeholder="资料违规,请重新修改" cols="30" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--关闭 内容-->
+    <section ng-if="close_flag==true">
+
+            <span class="border" ui-sref="add_user">添加新用户</span>
+            <span class="border">开启</span>
+            <select name="" class="time_select">
+                <option value="">全部时间</option>
+                <option value="">其他时间</option>
+            </select>
+            <input type="text" class="time_input" placeholder="开始时间">
+            <input type="text" class="time_input" placeholder="结束时间">
+            <!--搜索-->
+            <span class="menu">查询</span>
+            <div class="search_box">
+                <input class="search_input" type="text" placeholder="  搜索商品编号或名称">
+                <span class="glyphicon glyphicon-search search"></span>
+            </div>
+
+            <!--表格-->
+            <table>
+                <tr class="th">
+                    <td>&nbsp;</td>
+                    <td>绑定手机号</td>
+                    <td>昵称</td>
+                    <td>魔方号</td>
+                    <td>注册时间</td>
+                    <td>结束时间</td>
+                    <td>状态</td>
+                    <td>拥有角色</td>
+                    <td>关闭原因</td>
+                    <td>详情</td>
+                    <td>操作</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>123456789</td>
+                    <td>粉红少男</td>
+                    <td>987654321</td>
+                    <td>2017-08-10 12:02</td>
+                    <td>2017-08-11 9:44</td>
+                    <td>关闭</td>
+                    <td>业主</td>
+                    <td><span class="gay_input" data-toggle="modal" data-target="#close_reason_modal">资料违规</span></td>
+                    <td class="blue">查看</td>
+                    <td class="blue" data-toggle="modal" data-target="#start_modal">开启</td>
+                </tr>
+            </table>
+
+    </section>
+
+    <!--关闭原因 模态框-->
+    <div class="modal fade" id="close_reason_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">关闭原因</h4>
+                </div>
+                <div class="modal-body" style="height: 240px">
+                    <span style="margin-right: 30px">关闭原因（选填）</span>
+                    <span>如果你无法简洁的表达你的想法，那只能说你还不够了解它</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--开启模态框-->
+    <div class="modal fade" id="start_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body" style="height: 100px">
+                    <span>是否确认开启</span>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

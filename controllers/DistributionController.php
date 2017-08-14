@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Distribution;
+use app\models\GoodsOrder;
 use app\models\LoginForm;
 
 use Yii;
@@ -12,6 +13,7 @@ use yii\web\Controller;
 use yii\helpers\Json;
 
 use app\services\SmValidationService;
+use app\services\StringService;
 
 class DistributionController extends Controller
 {
@@ -110,43 +112,42 @@ class DistributionController extends Controller
             ]);
         }
         $time=time();
-       if ($session['distributionlastsendtime']){
-           if (($time-$session['distributionlastsendtime'])<60){
-               $code = 1020;
-               return Json::encode([
-                   'code' => $code,
-                   'msg' => Yii::$app->params['errorCodes'][$code],
-               ]);
-           }
-       }else{
-           $session['distributionlastsendtime']=$time;
-       }
-
-       if ($user){
-           $data['mobile']=$mobile;
-           $data['type']='register';
-           $res=new SmValidationService($data);
-           if ($res){
-               $code=200;
-               $session['distributionmobile']=$mobile;
-               return Json::encode([
-                   'code' => $code,
-                   'msg' =>'ok'
-               ]);
-           }
-       }else{
-           $data['mobile']=$mobile;
-           $data['type']='register';
-           $res=new SmValidationService($data);
-           if ($res){
-               $code=200;
-               $session['distributionmobile']=$mobile;
-               return Json::encode([
-                   'code' => $code,
-                   'msg' =>'ok'
-               ]);
-           }
-       }
+        if ($session['distributionlastsendtime']){
+            if (($time-$session['distributionlastsendtime'])<60){
+                $code = 1020;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            $session['distributionlastsendtime']=$time;
+        }
+        if ($user){
+            $data['mobile']=$mobile;
+            $data['type']='register';
+            $res=new SmValidationService($data);
+            if ($res){
+                $code=200;
+                $session['distributionmobile']=$mobile;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' =>'ok'
+                ]);
+            }
+        }else{
+            $data['mobile']=$mobile;
+            $data['type']='register';
+            $res=new SmValidationService($data);
+            if ($res){
+                $code=200;
+                $session['distributionmobile']=$mobile;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' =>'ok'
+                ]);
+            }
+        }
     }
 
     /**
@@ -158,14 +159,14 @@ class DistributionController extends Controller
         $mobile=$session['distributionmobile'];
         $request = Yii::$app->request;
         $code=trim(htmlspecialchars($request->post('code','')),'');
-       if (!SmValidationService::validCode($mobile, $code)) {
-           $code = 1002;
-           return Json::encode([
-               'code' => $code,
-               'msg' => Yii::$app->params['errorCodes'][$code],
-           ]);
-       }
-       SmValidationService::deleteCode($mobile);
+        if (!SmValidationService::validCode($mobile, $code)) {
+            $code = 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        SmValidationService::deleteCode($mobile);
         $time=time();
         $customer = new Distribution();
         $customer->mobile = $mobile;
@@ -252,7 +253,167 @@ class DistributionController extends Controller
        }
     }
 
+    /**
+     * 大后台获取分销列表订单
+     * @return array|string
+     */
+    public function actionGetdistributionlist(){
+        $request = Yii::$app->request;
+        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
+        $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
+        $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
+        if ($time_type == 'custom') {
+            if (!$time_start || !$time_end) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+
+        $search = trim(htmlspecialchars($request->post('search', '')), '');
+
+        if (!$page_size){
+            $page_size=15;
+        }
+        $list=Distribution::Getdistributionlist($page,$page_size,$time_type,$time_start,$time_end,$search);
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data' =>$list
+        ]);
+    }
 
 
+    /**
+     * 分销详情页
+     */
+    public function actionGetdistributiondetail(){
+        $request = Yii::$app->request;
+        $mobile= trim(htmlspecialchars($request->post('mobile', '')), '');
+        $data=Distribution::find()->where(['mobile'=>$mobile])->one();
+        $subset=Distribution::find()->select('mobile,applydis_time')->where(['parent_id'=>$data['id']])->limit(10)->asArray()->all();
+        foreach ($subset as $k =>$v){
+            $subset[$k]['add_time']=date('Y-m-d',$subset[$k]['applydis_time']);
+            unset($subset[$k]['applydis_time']);
+        }
+        $fatherset=Distribution::find()->where(['id'=>$data['parent_id']])->one();
+        $data=[
+            'myself'=>[
+                'mobile'=>$data['mobile'],
+                'add_time'=>date('Y-m-d',$data['create_time']),
+            ],
+            'fatherset'=>[
+                'mobile'=>$fatherset['mobile'],
+                'add_time'=>date('Y-m-d',$fatherset['applydis_time'])
+             ],
+            'subset'=>$subset
+        ];
+         return Json::encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data' =>$data
+        ]);
+    }
+
+    /**
+     *  分销详情页-查看全部
+     * @return string
+     */
+    public function actionSearchmore(){
+        $request = Yii::$app->request;
+        $mobile= trim(htmlspecialchars($request->post('mobile', '')), '');
+        $data=Distribution::find()->where(['mobile'=>$mobile])->one();
+        $subset=Distribution::find()->select('mobile,applydis_time')->where(['parent_id'=>$data['id']])->asArray()->all();
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data' =>$subset
+        ]);
+    }
+
+
+    /**
+     * 分销相关联交易订单列表
+     * @return string
+     */
+    public function actionGettransactiondetail(){
+        $request = Yii::$app->request;
+        $mobile= trim(htmlspecialchars($request->post('mobile', '')), '');
+        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        if (!$page_size){
+            $page_size=15;
+        }
+        if (!$mobile){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+        if ($page){
+            $page=1;
+        }
+        $list=Distribution::Gettransactiondetail($mobile);
+        $count=count($list);
+        $total_page=ceil($count/$page_size);
+        $data=array();
+        if ($page>$total_page){
+            $data=array();
+        }
+        for ($i=1; $i <= $page_size; $i++) {
+            if (($i*$page)>$count){
+                break;
+            }
+            $data[]=$list[$i*$page-1];
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data' =>[
+                'totalpage'=>$total_page,
+                'count'=>$count,
+                'pagesize'=>$page_size,
+                'page'=>$page,
+                'list'=>$data
+            ]
+        ]);
+    }
+
+    /**
+     * 修改分销备注
+     * @return string
+     */
+    public function actionEditremarks(){
+        $request = Yii::$app->request;
+        $order_no= trim(htmlspecialchars($request->post('order_no', '')), '');
+        $remarks= trim(htmlspecialchars($request->post('remarks', '')), '');
+        if (!$order_no  || !$remarks){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $res=Yii::$app->db->createCommand()->update('goods_order', ['remarks' => $remarks],'order_no='.$order_no)->execute();
+        if ($res){
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'ok',
+            ]);
+        }else{
+            $code=1051;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
 
 }

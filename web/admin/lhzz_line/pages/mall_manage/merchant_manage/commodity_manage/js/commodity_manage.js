@@ -1,11 +1,36 @@
 ;
 let commodity_manage = angular.module("commodity_manage_module",[]);
-commodity_manage.controller("commodity_manage_ctrl",function ($scope,$http) {
-    /*页面Menu切换 开始*/
+commodity_manage.controller("commodity_manage_ctrl",function ($scope,$http,$stateParams) {
+
+  /*页面Menu切换 开始*/
+    //页面初始化
     $scope.on_flag=true;
     $scope.down_flag=false;
     $scope.wait_flag=false;
     $scope.del_flag=false;
+  //页面传值判断
+  // $scope.on_flag=$stateParams.on_flag;
+  // $scope.down_flag=$stateParams.down_flag;
+  // $scope.wait_flag=$stateParams.wait_flag;
+  // $scope.del_flag=$stateParams.del_flag;
+  // if($scope.on_flag===true){
+  //   $scope.down_flag=false;
+  //   $scope.wait_flag=false;
+  //   $scope.del_flag=false;
+  // }
+  // else if($scope.down_flag===true){
+  //   $scope.on_flag=false;
+  //   $scope.wait_flag=false;
+  //   $scope.del_flag=false;
+  // }else if($scope.wait_flag===true){
+  //   $scope.on_flag=false;
+  //   $scope.down_flag=false;
+  //   $scope.del_flag=false;
+  // }else if($scope.del_flag===true){
+  //   $scope.on_flag=false;
+  //   $scope.down_flag=false;
+  //   $scope.wait_flag=false;
+  // }
     //已上架
     $scope.on_shelves=function () {
       $scope.on_flag=true;

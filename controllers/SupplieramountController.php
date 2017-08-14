@@ -228,16 +228,22 @@ class SupplieramountController extends Controller
         }
         $pay_password = Supplier::find()->select('pay_password')->where(['uid' => $user->id])->one()['pay_password'];
         if ($pay_password){
-            $key='2';
-            $data= Yii::$app->getSecurity()->generatePasswordHash($key);
+            $key=2;
+            $data= Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword');
+            $val='不是第一次';
         }else{
-            $key='1';
-            $data= Yii::$app->getSecurity()->generatePasswordHash($key);
+            $key=1;
+            $data= Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword');
+            $val='第一次';
         }
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-            'data'=>$data
+            'data'=>[
+                'type'=>$data,
+                'value'=>$val,
+                'key'=>$key,
+            ]
         ]);
     }
 
@@ -268,7 +274,6 @@ class SupplieramountController extends Controller
             ]);
         }
     }
-
     /**
      * 设置支付密码
      * @return string
@@ -284,26 +289,32 @@ class SupplieramountController extends Controller
             ]);
         }
         $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $key=trim(htmlspecialchars($request->post('key','')),'');
-        $newpassword=trim(htmlspecialchars($request->post('newpwd','')),'');
-        $oldpassword=trim(htmlspecialchars($request->post('oldpwd','')),'');
-        if (!$newpassword || !$oldpassword || !$key){
+        $type=trim(htmlspecialchars($request->post('type','')),'');
+        if (!$type){
             $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if ($newpassword !=$oldpassword){
-            $code=1053;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $smscode=trim(htmlspecialchars($request->post('code','')),'');
-        $psw = Yii::$app->getSecurity()->generatePasswordHash($newpassword);
-        if (Yii::$app->getSecurity()->validatePassword('1', $key)==true) {
+        if (Yii::$app->getSecurity()->validatePassword('firstsetpaypassword', $type)==true) {
+            $onepwd=trim(htmlspecialchars($request->post('onepwd','')),'');
+            $twopwd=trim(htmlspecialchars($request->post('twopwd','')),'');
+            $psw = Yii::$app->getSecurity()->generatePasswordHash($twopwd);
+            if (!$twopwd || !$onepwd){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            if ($onepwd !=$twopwd){
+                $code=1053;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $res=(new Supplieramountmanage())->Setpaypsw($psw,$supplier_id);
             if ($res==true){
                 return Json::encode([
@@ -317,36 +328,38 @@ class SupplieramountController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-        } else if (Yii::$app->getSecurity()->validatePassword('2', $key)){
-            $res=(new Supplieramountmanage())->Setpaypsw_sup_reset($psw,$supplier_id,$smscode);
-            switch ($res){
-                case 1:
-                    return Json::encode([
-                        'code' => 200,
-                        'msg' => 'ok'
-                    ]);
-                    break;
-                case 2:
-                    $code=1052;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                    break;
-                case 3:
-                    $code=1051;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                    break;
-                case 4:
-                    $code=1002;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                    break;
+        } else if (Yii::$app->getSecurity()->validatePassword('unfirstsetpaypassword', $type)==true){
+            $smscode=trim(htmlspecialchars($request->post('smscode','')),'');
+            $mobile=User::find()->select('mobile')->where(['id' => $user->id])->one()['mobile'];
+            $password=trim(htmlspecialchars($request->post('password','')),'');
+            if (!$smscode || !$password){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            $psw = Yii::$app->getSecurity()->generatePasswordHash($password);
+            if (!SmValidationService::validCode($mobile,$smscode)) {
+                $code = 1002;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            SmValidationService::deleteCode($mobile);
+            $res=(new Supplieramountmanage())->Setpaypsw($psw,$supplier_id);
+            if ($res==true){
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'ok'
+                ]);
+            }else{
+                $code=1051;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
             }
         }else{
             $code=1000;
@@ -371,7 +384,8 @@ class SupplieramountController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $money = Supplier::find()->select('availableamount')->where(['uid' => $user->id])->one()['availableamount']*0.01;
+        $m = Supplier::find()->select('availableamount')->where(['uid' => $user->id])->one()['availableamount']*0.01;
+        $money=sprintf('%.2f', (float)$m);
         $code=200;
         return Json::encode([
             'code' => $code,
@@ -441,32 +455,6 @@ class SupplieramountController extends Controller
      */
     public function actionGetfreezelist(){
         $user = Yii::$app->user->identity;
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $pagesize=trim(htmlspecialchars($request->get('pagesize','')),'');
-        $time_id=trim(htmlspecialchars($request->post('time_id','')),'');
-        if (!$time_id){
-            $time_id=0;
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-
-        if ($time_id==5){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$pagesize){
-            $pagesize=15;
-        }
-        if (!$page){
-            $page=1;
-        }
         if (!$user){
             $code=1052;
             return Json::encode([
@@ -474,12 +462,110 @@ class SupplieramountController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $request = Yii::$app->request;
+        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
+        $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
+        $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
+        if (!$page_size){
+            $page_size=15;
+        }
+        if (!$page){
+            $page=1;
+        }
+        if ($time_type == 'custom') {
+            if (!$time_start || !$time_end) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
         $supplier=Supplier::find()->select('id')->where(['uid' => $user->id])->one();
-        $data=(new Supplieramountmanage())->Getfreezelist($supplier['id'],$page,$pagesize,$time_id,$time_start,$time_end);
+        $data=(new Supplieramountmanage())->Getfreezelist($supplier['id'],$page,$page_size,$time_type,$time_start,$time_end);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
             'data' => $data
         ]);
     }
+
+    /**
+     * 收支明细列表
+     * @return string
+     */
+    public function actionAccessdetaillist(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
+        $page_size = (int)trim(htmlspecialchars($request->get('page_size', 15)), '');
+        $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
+        $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
+        $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
+        if (!$page_size){
+            $page_size=15;
+        }
+        if (!$page){
+            $page=1;
+        }
+        if ($time_type == 'custom') {
+            if (!$time_start || !$time_end) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+        $access_type = trim(htmlspecialchars($request->post('access_type', '')), '');
+        $search= trim(htmlspecialchars($request->post('search', '')), '');
+        $order_type=trim(htmlspecialchars($request->post('order_type', '')), '');
+        $supplier=Supplier::find()->select('id')->where(['uid' => $user->id])->one();
+        $data=(new Supplieramountmanage())->Accessdetails($supplier['id'],$page,$page_size,$time_type,$time_start,$time_end,$access_type,$search,$order_type);
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' => $data
+        ]);
+    }
+
+
+    public function actionAccessdetail(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $transaction_no = trim(htmlspecialchars($request->post('transaction_no' )), '');
+        if (!$transaction_no){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=(new Supplieramountmanage())->Accessinformation($transaction_no);
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' => $data
+        ]);
+    }
+
+
 }

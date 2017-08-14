@@ -2,17 +2,18 @@ create table role (
     id int PRIMARY key auto_increment,
     name varchar(25) not null default '',
     admin_module varchar(25) not null default '',
-    detail_table varchar(25) not null default ''
+    detail_table varchar(25) not null default '',
+    detail_model varchar(25) not null default ''
 ) default charset = utf8;
 
-insert into role(id, name, admin_module, detail_table) values
-(1, '公司后台管理员', 'lhzz', 'lhzz'),
-(2, '工人', 'worker', 'worker'),
-(3, '设计师', 'designer', 'designer'),
-(4, '项目经理', 'manager', 'project_manager'),
-(5, '装修公司', 'decoration_company','decoration_company'),
-(6, '供应商', 'supplier', 'supplier'),
-(7, '业主', 'owner', 'user')
+insert into role(id, name, admin_module, detail_table, detail_model) values
+(1, '公司后台管理员', 'lhzz', 'lhzz', 'Lhzz'),
+(2, '工人', 'worker', 'worker', 'Worker'),
+(3, '设计师', 'designer', 'designer', 'Designer'),
+(4, '项目经理', 'manager', 'project_manager', 'manager'),
+(5, '装修公司', 'decoration_company','decoration_company','DecorationCompany'),
+(6, '供应商', 'supplier', 'supplier', 'Supplier'),
+(7, '业主', 'owner', 'user', 'User')
 ;
 
 CREATE TABLE `user` (
@@ -108,7 +109,7 @@ CREATE TABLE `supplier` (
   `licence_image` varchar(255) not null DEFAULT '营业执照图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
-  `status` tinyint(1) not null default 0,
+  `status` tinyint(1) unsigned not null default 2 comment '0: 已关闭，1：正常营业，2：等待审核，3：审核未通过，4：审核通过',
   `follower_number` int(11) unsigned not null default 0 comment '关注人数',
   `comprehensive_score` float unsigned not null default 10 comment '综合评分',
   `store_service_score` float unsigned not null default 10 comment '店家服务评分',
@@ -423,17 +424,18 @@ CREATE TABLE `goods_order` (
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
   `amount_order` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '订单金额',
   `supplier_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `address_id` int(11) NOT NULL COMMENT '收货地址号',
-  `invoice_id` int(11) NOT NULL COMMENT '发票信息',
-  `pay_status` tinyint(1) NOT NULL COMMENT 'pay_status：0：未付款 1：已付款 2：已退款',
-  `user_id` int(11) NOT NULL,
-  `pay_name` varchar(120) NOT NULL,
-  `create_time` int(11) NOT NULL DEFAULT '0',
-  `paytime` int(11) NOT NULL DEFAULT '0',
+  `address_id` int(11) NOT NULL COMMENT '收货地址id',
+  `invoice_id` int(11) NOT NULL COMMENT '发票信息id',
+  `pay_status` tinyint(1) NOT NULL COMMENT 'pay_status：0：未付款 1：已付款',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `pay_name` varchar(120) NOT NULL COMMENT '支付方式',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `paytime` int(11) NOT NULL DEFAULT '0' COMMENT '支付时间',
   `order_refer` tinyint(1) NOT NULL COMMENT 'order_refer:1：线下店2：非线下店；',
-  `return_insurance` bigint(20) NOT NULL,
+  `return_insurance` bigint(20) NOT NULL COMMENT '退货保险费',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\r\n';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='\r\n';
 --5.5 end--
 
 --5.6 start--
@@ -1037,10 +1039,10 @@ CREATE TABLE `effect_earnst` (
 
 CREATE TABLE `assort_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `one_path` varchar(20) DEFAULT NULL COMMENT '一级分类',
-  `two_path` varchar(20) DEFAULT NULL COMMENT '二级分类',
-  `three_parh` varchar(20) DEFAULT NULL COMMENT '三级分类',
-  `add_path` varchar(20) DEFAULT NULL COMMENT '商品管理',
+  `title` varchar(20) DEFAULT NULL COMMENT '商品名称',
+  `category_id` int(10) DEFAULT NULL COMMENT '分类id',
+  `pid` int(10) DEFAULT NULL COMMENT '分类的父类id',
+  `path` varchar(20) DEFAULT NULL COMMENT '关系',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 --8.5 end
@@ -1062,5 +1064,28 @@ CREATE TABLE `distribution` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 --8.9  end
+--8.11 start
+CREATE TABLE `supplier_accessdetail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `access_type` tinyint(1) NOT NULL COMMENT '1:货款 2.提现失败  3.充值  4.扣款  ',
+  `access_money` bigint(20) NOT NULL COMMENT '收支金额',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `order_no` varchar(50) DEFAULT NULL COMMENT '订单号',
+  `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
+  `supplier_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+--8.11 end
+--8.12 start
+CREATE TABLE `express` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `waybillnumber` varchar(50) NOT NULL COMMENT '快递单号',
+  `waybillname` varchar(20) NOT NULL COMMENT '快递公司',
+  `sku` int(11) NOT NULL,
+  `order_no` varchar(50) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+--8.12 end
 
 

@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="pages/mall_manage/brand_manage/offline_edit/css/offline_edit.css">
+<div ng-controller="offlineedit">
+    <!--顶部导航-->
+    <div class="topnav">
+        <span class="glyphicon glyphicon-certificate"></span>
+        <h6>商城管理</h6>
+        <h6>> 品牌管理</h6>
+        <h6>> 品牌详情</h6>
+    </div>
+
+    <!--内容-->
+    <div class="onine_edit_content">
+        <!--店铺名称-->
+        <div class="company_type">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>品牌名称</span>
+            <input type="text" placeholder="森达">
+            <span id="limitword">*限1~10个字符</span>
+            <p class="red_mark">
+                <span class="glyphicon glyphicon-asterisk"></span>
+                该品牌名称已存在，请重新填写
+            </p>
+        </div>
+
+        <hr id="firsthr">
+
+        <!--商品注册证-->
+        <div class="brand_register">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>商品注册证</span>
+
+            <div class="pic_right">
+                <img src="" alt="">
+                <p>图片大小5M内，支持JPG、PNG、JPEG</p>
+                <div>上传</div>
+                <p class="red_mark warning">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    上传图片格式不正确或尺寸不匹配，请重新上传
+                </p>
+            </div>
+        </div>
+
+        <!--品牌LOGO-->
+        <div class="brand_register brand_logo">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>品牌LOGO</span>
+
+            <div class="pic_right">
+                <img src="" alt="" id="logo">
+                <p>图片大小5M内，支持JPG、PNG、JPEG</p>
+                <div>上传</div>
+                <p class="red_mark warning">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    上传图片格式不正确或尺寸不匹配，请重新上传
+                </p>
+            </div>
+        </div>
+
+        <hr id="sechr">
+
+        <!--选择品牌所在分类-->
+        <div class="brand_class">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>选择品牌所在分类</span>
+
+            <div class="ulright">
+                <ul>
+                    <li>基础材料</li>
+                    <li>主材料</li>
+                    <li>固定家具</li>
+                    <li>移动家具</li>
+                    <li>家装配套</li>
+                    <li>软装配套</li>
+                    <li>智能配套</li>
+                    <li>生活配套</li>
+                </ul>
+
+                <ul>
+                    <li>墙面材料</li>
+                    <li>板材材料</li>
+                    <li>水电材料</li>
+                    <li>防水材料</li>
+                    <li>石膏、固化类材料</li>
+                </ul>
+
+                <ul class="thirdul">
+                    <li><input type="checkbox">石膏粉</li>
+                    <li><input type="checkbox">石膏粉</li>
+                    <li><input type="checkbox">石膏粉</li>
+                    <li><input type="checkbox">石膏粉</li>
+                    <li><input type="checkbox">石膏粉</li>
+                </ul>
+
+                <ul class="lastul">
+                    <li>
+                        墙地面附着剂
+                        <img src="pages/mall_manage/brand_manage/online_edit/image/close.png" alt="">
+                    </li>
+                    <li>
+                        石膏粉
+                        <img src="pages/mall_manage/brand_manage/online_edit/image/close.png" alt="">
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr id="thirdhr">
+
+        <!--下架原因-->
+        <div class="offline_reason">
+            <span>下架原因</span>
+            <textarea name="" id=""></textarea>
+        </div>
+
+        <hr id="fourthhr">
+
+        <!--添加人员-->
+        <div class="add_people">
+            <span>操作人员</span>
+            <span>森达木地板专营店</span>
+        </div>
+
+        <!--上架人员-->
+        <div class="online_time">
+            <span>下架时间</span>
+            <span>2017-10-09 12:21</span>
+        </div>
+
+        <!--按钮组-->
+        <div class="btn_sure">
+            <button  id="save" data-toggle="modal" data-target="#save_tishi" ng-click="saveonline()">保存</button>
+            <button>返回</button>
+        </div>
+    </div>
+</div>

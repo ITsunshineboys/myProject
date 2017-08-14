@@ -37,6 +37,7 @@ return [
         1018 => '昵称已存在',
         1019 => '该手机号已被注册',
         1020 => '验证码超时',
+        1021 => '请上传jpg/jpeg/png类型的文件',
         1050 => '请求方式错误',
         1051 => '失败',
         1052 => '未登录',
@@ -62,7 +63,7 @@ return [
     ],
     'uploadPublic' => [
         'maxSize' => 5 * 1024 * 1024 , // 5M
-        'extensions' => ['png', 'jpg', 'gif'],
+        'extensions' => ['png', 'jpg', 'jpeg'],
     ],
     'sm' => [
         'appKey' => '23532528',
@@ -121,6 +122,9 @@ return [
     'supplier' => [
         'offline_reason' => '闭店下架',
     ],
+    'lhzz' => [
+        'offline_reason' => '运营下架',
+    ],
     'district_default' => 510100, // 成都
     'grade' => '白银',  //工人默认级别
     'carouselMaxNumber' => 3,
@@ -136,4 +140,5 @@ return [
             'org_name' => '1170170729178073',
             'app_name' => '111'
     ],
+    'value_all' => -1, // 下拉框“全部”的值
 ];

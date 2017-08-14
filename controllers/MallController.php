@@ -26,10 +26,6 @@ use app\models\GoodsOrder;
 use app\models\GoodsRecommendSupplier;
 use app\models\UserMobile;
 use app\models\UserStatus;
-use app\models\Designer;
-use app\models\Manager;
-use app\models\Worker;
-use app\models\DecorationCompany;
 use app\models\UserRole;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
@@ -40,6 +36,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use yii\db\Query;
 
 class MallController extends Controller
 {
@@ -129,6 +126,9 @@ class MallController extends Controller
         'reset-user-status-logs',
         'user-list',
         'index-admin-lhzz',
+        'supplier-offline',
+        'supplier-list',
+        'categories-have-style-series',
     ];
 
     /**
@@ -207,6 +207,7 @@ class MallController extends Controller
                     'user-disable-batch' => ['post',],
                     'user-disable-remark-reset' => ['post',],
                     'user-enable-batch' => ['post',],
+                    'supplier-offline' => ['post',],
                 ],
             ],
         ];
@@ -743,7 +744,7 @@ class MallController extends Controller
             return Json::encode($ret);
         }
 
-        $where = 'delete_time = 0 and type = ' . $type . ' and district_code = ' . $districtCode;
+        $where = 'delete_time > 0 and type = ' . $type . ' and district_code = ' . $districtCode;
 
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -2636,7 +2637,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'goods-attr-list-admin' => [
+                'goods_attr_list_admin' => [
                     'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
                     'details' => $details
                 ]
@@ -3050,13 +3051,7 @@ class MallController extends Controller
         }
 
         $now = time();
-
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            $operator = Supplier::find()->where(['uid' => $user->id])->one();
-        } else {
-            $operator = Lhzz::find()->where(['uid' => $user->id])->one();
-        }
-
+        $operator = UserRole::roleUser($user, Yii::$app->session[User::LOGIN_ROLE_ID]);
         if (in_array($model->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_OFFLINE])) {
             if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
                 $model->status = Goods::STATUS_ONLINE;
@@ -3072,7 +3067,9 @@ class MallController extends Controller
             $model->offline_uid = $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0;
             $model->offline_person = $operator->nickname;
             if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
-                $model->offline_reason = Yii::$app->request->post('offline_reason', '');
+                $offlineReason = Yii::$app->request->post('offline_reason', '');
+                !$offlineReason && $offlineReason = Yii::$app->params['lhzz']['offline_reason'];
+                $model->offline_reason = $offlineReason;
             }
         }
 
@@ -3126,12 +3123,7 @@ class MallController extends Controller
 
         $where = 'id in(' . $ids . ')';
         $user = Yii::$app->user->identity;
-
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            $operator = Supplier::find()->where(['uid' => $user->id])->one();
-        } else {
-            $operator = Lhzz::find()->where(['uid' => $user->id])->one();
-        }
+        $operator = UserRole::roleUser($user, Yii::$app->session[User::LOGIN_ROLE_ID]);
 
         $updates = [
             'status' => Goods::STATUS_OFFLINE,
@@ -3140,7 +3132,9 @@ class MallController extends Controller
             'offline_person' => $operator->nickname
         ];
         if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
-            $updates['offline_reason'] = Yii::$app->request->post('offline_reason', '');
+            $offlineReason = Yii::$app->request->post('offline_reason', '');
+            !$offlineReason && $offlineReason = Yii::$app->params['lhzz']['offline_reason'];
+            $updates['offline_reason'] = $offlineReason;
         }
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -3988,7 +3982,7 @@ class MallController extends Controller
     {
         $series = Series::find()
             ->asArray()
-            ->select('series,creation_time,status')
+            ->orderBy(['series_grade' => SORT_ASC])
             ->All();
         $all = [];
         foreach ($series as $one_series) {
@@ -4100,7 +4094,6 @@ class MallController extends Controller
     {
         $style = Style::find()
             ->asArray()
-            ->select('style,creation_time,status')
             ->All();
         $all = [];
         foreach ($style as $one_style) {
@@ -4517,7 +4510,7 @@ class MallController extends Controller
         $code = 1000;
 
         $pid = (int)Yii::$app->request->get('pid', 0);
-        if ($pid <= 0 || !GoodsCategory::isLevel3()) {
+        if ($pid <= 0) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -4807,15 +4800,17 @@ class MallController extends Controller
     {
         $code = 1000;
 
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        if (!$timeType || !in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+        $timeType = trim(Yii::$app->request->get('time_type'));
+        !$timeType && $timeType = 'all';
+        if (!in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $status = (int)(Yii::$app->request->get('status', 0));
+        $status = (int)(Yii::$app->request->get('status'));
+        !$status && $status = User::STATUS_ONLINE;
         if (!in_array($status, array_keys(User::STATUSES))) {
             return Json::encode([
                 'code' => $code,
@@ -4892,6 +4887,107 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'index_admin_lhzz' => User::totalNumberStat()
+            ]
+        ]);
+    }
+
+    /**
+     * Close supplier
+     *
+     * @return string
+     */
+    public function actionSupplierOffline()
+    {
+        $code = 1000;
+
+        $supplierId = (int)Yii::$app->request->post('supplier_id', 0);
+        if (!$supplierId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $supplier = Supplier::findOne($supplierId);
+        if (!$supplier) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
+        $res = $supplier->offline($operator);
+        return Json::encode([
+            'code' => $res,
+            'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res]
+        ]);
+    }
+
+    /**
+     * Supplier list action
+     *
+     * @return string
+     */
+    public function actionSupplierList()
+    {
+        $code = 1000;
+
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        $categoryId = (int)Yii::$app->request->get('category_id', 0);
+        $shopType = (int)Yii::$app->request->get('shop_type', 0);
+        $status = (int)Yii::$app->request->get('status', 0);
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+
+        if (!Supplier::checkShopType($shopType) || !Supplier::checkStatus($status)) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $query = new Query;
+        if (!$keyword) {
+            if ($shopType != Yii::$app->params['value_all']) {
+                $query->andWhere(['type_shop' => $shopType]);
+            }
+            if ($status != Yii::$app->params['value_all']) {
+                $query->andWhere(['status' => $status]);
+            } else {
+                $query->andWhere(['in', 'status', array_keys(Supplier::STATUSES_ONLINE_OFFLINE)]);
+            }
+            if ($categoryId) {
+                $query->andWhere(['in', 'category_id', GoodsCategory::level23Ids($categoryId, true)]);
+            }
+        } else {
+            $query->andWhere(['like', 'shop_no', $keyword]);
+            $query->orWhere(['like', 'shop_name', $keyword]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier-list' => ModelService::pagination($query, Supplier::FIELDS_LIST, Supplier::FIELDS_LIST_EXTRA, new Supplier, $page, $size)
+            ],
+        ]);
+    }
+
+    /**
+     * Categories which have style or/and series
+     *
+     * @return string
+     */
+    public function actionCategoriesHaveStyleSeries()
+    {
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        $type = trim(Yii::$app->request->get('type', ''));
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'have_style_series-categories' => GoodsCategory::haveStyleSeriesCategoriesByPid($pid, $type)
             ]
         ]);
     }

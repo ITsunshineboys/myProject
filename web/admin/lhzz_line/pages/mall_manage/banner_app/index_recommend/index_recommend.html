@@ -93,16 +93,20 @@
                 <td ng-if="show_1">{{item.from_type}}</td>
                 <td ng-if="show_2">{{item.sku=='0' ? '无':item.sku}}</td>
                 <td ng-if="show_3" class="ellipsis ellipsis_name" data-toggle="modal" data-target="#recommend_shop_modal_details" ng-click="shop_details(item)">{{item.title}}</td>
-                <td ng-if="show_4"><a href="" >{{item.supplier_name}}</a></td>
+                <td ng-if="show_4"><a href="" >{{item.supplier_name==''?'链接':item.supplier_name}}</a></td>
                 <td ng-if="show_5">{{item.viewed_number}}</td>
                 <td ng-if="show_6">{{item.sold_number}}</td>
                 <td ng-if="show_7" class="yesGreen" ng-class="{'noRed':(item.status=='停用')}">{{item.status}}</td>
                 <td ng-if="show_8" ng-click="recommend_sort(item)">{{item.create_time}}</td>
                 <td ng-if="show_9"><img id="show_img_size" ng-src="http://test.cdlhzz.cn:888/{{item.image}}"></td>
-                <td ng-if="show_10">{{item.left_number}}</td>
-                <td ng-if="show_11">{{item.supplier_price}}</td>
-                <td ng-if="show_12">{{item.platform_price}}</td>
-                <td ng-if="show_13">{{item.market_price}}</td>
+                <td ng-if="show_10&&item.sku!='0'">{{item.left_number}}</td>
+                <td ng-if="show_10&&item.sku=='0'">—</td>
+                <td ng-if="show_11&&item.sku!='0'">{{item.supplier_price}}</td>
+                <td ng-if="show_11&&item.sku=='0'">—</td>
+                <td ng-if="show_12&&item.sku!='0'">{{item.platform_price}}</td>
+                <td ng-if="show_12&&item.sku=='0'">—</td>
+                <td ng-if="show_13&&item.sku!='0'">{{item.market_price}}</td>
+                <td ng-if="show_13&&item.sku=='0'">—</td>
                 <td ng-if="show_14">
                     <a href="" ng-if="item.status=='停用'" ng-click="start_use(item)">启用</a>
                     <a href="" ng-if="item.status=='启用'" ng-click="stop_use(item)">停用</a>
@@ -536,7 +540,7 @@
                     <div class="details_big_div">
                         <div class="details_div">
                             <span>来源商家：</span>
-                            <span class="blue">{{link_details_supplier_name}}</span>
+                            <span class="blue">{{link_details_supplier_name==''?'链接':link_details_supplier_name}}</span>
                         </div>
                         <div class="details_div">
                             <span>创建时间：</span>

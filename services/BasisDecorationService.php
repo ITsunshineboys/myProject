@@ -2053,6 +2053,12 @@ class BasisDecorationService
         return $material;
     }
 
+    /**
+     * 水路材料
+     * @param $goods
+     * @param $material_price
+     * @return array
+     */
     public static function waterwayMaterial($goods,$material_price)
     {
         foreach ($goods as $one_waterway_current) {
@@ -2073,6 +2079,27 @@ class BasisDecorationService
         $material['total_cost'] = $material_price['total_cost'];
         $material [] = BasisDecorationService::profitMargin($ppr);
         $material [] = BasisDecorationService::profitMargin($pvc);
+        return $material;
+    }
+
+    public static function capacity($goods_price, $material_one, $post)
+    {
+        foreach ($goods_price as $one_goods) {
+            if ($one_goods['title'] == '智能配电箱') {
+                $one_goods['show_quantity'] = $material_one['智能配电箱']['quantity'];
+                $one_goods['show_cost'] = $one_goods['show_quantity'] * $one_goods['platform_price'];
+                $switch_box [] = $one_goods;
+            }
+            if ($one_goods['title'] == '背景音乐系统' && $one_goods['series_id'] == $post['series']) {
+                $one_goods['show_quantity'] = $material_one['背景音乐系统']['quantity'];
+                $one_goods['show_cost'] = $one_goods['show_quantity'] * $one_goods['platform_price'];
+                $background_music [] = $one_goods;
+            } else {
+                $background_music = null;
+            }
+        }
+        $material [] = BasisDecorationService::profitMargin($switch_box);
+        $material [] = BasisDecorationService::profitMargin($background_music);
         return $material;
     }
 }

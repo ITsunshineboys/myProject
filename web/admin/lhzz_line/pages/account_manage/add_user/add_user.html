@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="pages/account_manage/add_user/css/add_user.css">
+<div ng-controller="add_user_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">账户管理</span>
+            <span style="color: #8D9199">>添加新用户</span>
+            <img src="pages/account_manage/add_user/images/user.png" alt=""/>
+        </div>
+    </header>
+    <section>
+        <div>
+            <img src="pages/account_manage/add_user/images/red.png" alt="">
+            <span class="title">新手机号</span>
+            <div class="inline_block">
+                <input type="text" placeholder="请输入新手机号" class="input_style">
+                <div>
+                    <img src="pages/account_manage/add_user/images/red.png" alt="">
+                    <span>该手机号已被注册，请重新输入</span>
+                    <br/>
+                    <img src="pages/account_manage/add_user/images/red.png" alt="">
+                    <span>请输入11位数字</span>
+                </div>
+            </div>
+            <span class="margin_left">*限11位整数数字</span>
+        </div>
+        <div class="margin_top">
+            <img src="pages/account_manage/add_user/images/red.png" alt="">
+            <span class="title">登录密码</span>
+            <div class="inline_block">
+                <input type="password" placeholder="请输入登录密码" class="input_style">
+                <div>
+                    <img src="pages/account_manage/add_user/images/red.png" alt="">
+                    <span>该密码填写不符合规则，请重新填写</span>
+                </div>
+            </div>
+            <span class="margin_left">*6-25个字符，包含大小写字母、数字</span>
+        </div>
+
+        <span class="btn_style" data-toggle="modal" data-target="#ok_modal">确定</span>
+        <span class="btn_style" ui-sref="account_index">取消</span>
+        <!--添加成功-->
+        <div class="modal fade" id="ok_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body" style="height: 100px;">
+                        <span>添加成功</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ui-sref="account_index">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
