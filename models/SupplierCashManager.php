@@ -353,15 +353,17 @@ class SupplierCashManager extends ActiveRecord
                 $supplier->availableamount += $cash_money;
                 $supplier->save(false);
                 //新建一条明细单数据
-                $supplier_accessdetail = new SupplierAccessdetail();
-                $supplier_accessdetail->setAttributes([
-                    'access_type' => 4,
-                    'access_money' => $cash_money,
-                    'create_time' => $time,
-                    'transaction_no' => $transaction_no,
-                    'supplier_id' => $supplier_id
-                ]);
-                $supplier_accessdetail->save();
+                if (!SupplierAccessdetail::find()->where(['transaction_no' => $transaction_no])->one()) {
+                    $supplier_accessdetail = new SupplierAccessdetail();
+                    $supplier_accessdetail->setAttributes([
+                        'access_type' => 4,
+                        'access_money' => $cash_money,
+                        'create_time' => $time,
+                        'transaction_no' => $transaction_no,
+                        'supplier_id' => $supplier_id
+                    ]);
+                    $supplier_accessdetail->save();
+                }
             }
         } catch (Exception $e) {
             $trans->rollBack();
