@@ -1231,19 +1231,6 @@ class OwnerController extends Controller
     public function actionHandyman()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'province' => 510000,
-//            'city' => 510100,
-//            '12_dismantle' => 0,
-//            '24_dismantle' => 0,
-//            'repair' =>30,
-//            '12_new_construction' => 40,
-//            '24_new_construction' => 40,
-//            'building_scrap' => false,
-//            'area' =>60,
-//            'series' =>1,
-//            'style' =>1
-//        ];
         $handyman = '杂工';
         $labor = LaborCost::univalence($post, '杂工');
 
@@ -1706,6 +1693,4 @@ class OwnerController extends Controller
             ],
         ]);
     }
-
-
 }
