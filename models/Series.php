@@ -14,6 +14,7 @@ class Series extends ActiveRecord
 {
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
+    const PAGE_SIZE_DEFAULT = 10;
     const FIELDS_ADMIN= [
         'id',
         'series',
@@ -66,5 +67,28 @@ class Series extends ActiveRecord
             ->where(['status'=>self::STATUS_ONLINE])
             ->orderBy(['id'=>SORT_ASC])
             ->all();
+    }
+
+    public static function pagination($page = 1, $size = self::PAGE_SIZE_DEFAULT)
+    {
+        $offset = ($page - 1) * $size;
+        $series = Series::find()
+            ->asArray()
+            ->offset($offset)
+            ->limit($size)
+            ->orderBy(['series_grade' => SORT_ASC])
+            ->All();
+        $all = [];
+        foreach ($series as $one_series) {
+            $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);
+            $all [] = $one_series;
+        }
+
+        return [
+            'total' => (int)self::find()->where([])->asArray()->count(),
+            'page'=>$page,
+            'size'=>$size,
+            'details' => $all
+        ];
     }
 }
