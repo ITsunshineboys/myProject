@@ -179,11 +179,13 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("add_series",{ /*系列/风格/属性管理-添加新系列*/
         url:"/add_series",
-        templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html"
+        templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html",
+        params:{"list":""},
       })
       .state("series_detail",{ /*系列/风格/属性管理-系列详情页*/
         url:"/series_detail",
-        templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html"
+        templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html",
+        params:{item:''}
       })
       .state("add_style",{ /*系列/风格/属性管理-风格-添加新风格*/
         url:"/add_style",

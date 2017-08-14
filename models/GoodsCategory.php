@@ -24,7 +24,7 @@ class GoodsCategory extends ActiveRecord
     const LEVEL1 = 1;
     const LEVEL2 = 2;
     const LEVEL3 = 3;
-    const APP_FIELDS = ['id', 'title', 'icon'];
+    const APP_FIELDS = ['id', 'title', 'icon', 'pid'];
     const APP_FIELDS_QUOTE = ['id', 'title', 'icon', 'path'];
     const APP_FIELDS_CATEGORY = ['id', 'title', 'pid', 'path'];
     const PAGE_SIZE_DEFAULT = 12;
@@ -43,6 +43,9 @@ class GoodsCategory extends ActiveRecord
         'styles' => [],
         'series' => []
     ];
+    const FIELDS_HAVE_STYLE_SERIES_CATEGORIES = ['id', 'title'];
+    const NAME_STYLE = 'style';
+    const NAME_SERIES = 'series';
 
     /**
      * @var array admin fields
@@ -597,7 +600,7 @@ class GoodsCategory extends ActiveRecord
      */
     public static function styleCategoriesByPid($pid, array $select = self::FIELDS_HAVE_STYLE_CATEGORIES)
     {
-        $query = new Query();
+        $query = new Query;
         return $query
             ->select($select)
             ->from(self::tableName())

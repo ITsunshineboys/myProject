@@ -1,0 +1,189 @@
+<link rel="stylesheet" href="pages/mall_manage/merchant_manage/add_store/css/add_store.css">
+<div ng-controller="addstore">
+    <!--顶部导航-->
+    <div class="topnav">
+        <span class="glyphicon glyphicon-certificate"></span>
+        <h6>商城管理</h6>
+        <h6>> 商家管理</h6>
+        <h6>> 商家管理 </h6>
+    </div>
+
+    <div class="add_store_content">
+        <!--商家所属分类-->
+        <div class="belong_class">
+            <span>商家所属分类</span>
+            <div class="sel_group">
+                <select name="">
+                    <option value="">基础装修</option>
+                </select>
+
+                <select name="" id="sec_select">
+                    <option value="">基础装修</option>
+                </select>
+
+                <select name="" id="third_select">
+                    <option value="">基础装修</option>
+                </select>
+            </div>
+        </div>
+
+        <!--单位类型-->
+        <div class="company_type">
+            <span>单位类型</span>
+            <select name="" id="">
+                <option value="">个体工商户</option>
+            </select>
+        </div>
+
+        <!--店铺类型-->
+        <div class="company_type">
+            <span>店铺类型</span>
+            <select name="" id="">
+                <option value="">旗舰店</option>
+            </select>
+        </div>
+
+        <!--店铺名称-->
+        <div class="company_type">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>店铺名称</span>
+            <input type="text" placeholder="请输入店铺名称">
+            <span>旗舰店</span>
+            <p>
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                该店铺名称已存在，请重新填写
+            </p>
+        </div>
+
+        <!--是否支持无登录购买-->
+        <div class="without_log_buy">
+            <span>是否支持无登录购买</span>
+                <lable id="notsupport" class="radiogroup"></lable>
+                <input type="radio" id="notsupport" name="yorn">不支持
+                <lable id="support"></lable>
+                <input type="radio" id="support" name="yorn">支持
+        </div>
+
+        <hr>
+
+        <!--公司名称-->
+        <div class="company_type">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>公司名称/名称</span>
+            <input type="text" placeholder="请输入公司名称" id="companyname">
+        </div>
+
+        <!--社会信用代码/注册号-->
+        <div class="company_type">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>社会信用代码/注册号</span>
+            <input type="text" placeholder="请输入信用代码/注册号" id="registercode">
+            <p>
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                该代码已存在，请重新填写
+            </p>
+        </div>
+
+        <!--上传营业执照-->
+        <div class="cla_pic">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">上传营业执照</span>
+            <div class="upload_pic">
+                <img ngf-src="data.file"  src="pages/mall_manage/merchant_manage/add_store/images/default.png" alt="" id="cla_pic_uploadpic">
+                <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                <div id="upload">
+                    <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
+                </div>
+                <div class="reload_tishi">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                </div>
+            </div>
+        </div>
+
+        <!--登录账户-->
+        <div class="company_type login_account">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>登录账户</span>
+            <input type="text" placeholder="请输入电话号码">
+            <p>
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                该手机号已被注册，请重新输入
+            </p>
+        </div>
+
+        <!--法人名称-->
+        <div class="company_type">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>法人名称</span>
+            <input type="text" placeholder="请输入法人名称">
+        </div>
+
+        <!--法人身份证号-->
+        <div class="company_type">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>法人身份证号</span>
+            <input type="text" placeholder="请输入身份证号" id="idnum">
+        </div>
+
+        <!--上传法人身份证正面-->
+        <div class="cla_pic">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">上传法人身份证正面</span>
+            <div class="upload_pic">
+                <img ngf-src="data.file"  src="pages/mall_manage/merchant_manage/add_store/images/default.png" alt="" id="idfront">
+                <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                <div id="upload">
+                    <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
+                </div>
+                <div class="reload_tishi">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                </div>
+            </div>
+        </div>
+
+        <!--上传法人身份证背面-->
+        <div>
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">上传法人身份证背面</span>
+            <div class="upload_pic">
+                <img ngf-src="data.file"  src="pages/mall_manage/merchant_manage/add_store/images/default.png" alt="" id="idfront">
+                <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                <div id="upload">
+                    <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
+                </div>
+                <div class="reload_tishi">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="btns">
+            <button data-toggle="modal" data-target="#suremodal">确认</button>
+            <button ui-sref="store_mag">返回</button>
+        </div>
+    </div>
+
+    <!--闭店提示模态框-->
+    <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="save_content">
+                <div class="modal-header" id="save_header">
+                    <h4 class="modal-title" id="tishi">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body" id="save_body">
+                    <h6 id="tishi_wenzi">请上传图片</h6>
+                </div>
+
+                <div class="btn_modal_two">
+                    <button id="caozuo_sure" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

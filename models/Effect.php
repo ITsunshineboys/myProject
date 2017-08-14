@@ -166,6 +166,8 @@ class Effect extends ActiveRecord
 
         return [
             'total' => (int)self::find()->where($where)->asArray()->count(),
+            'page'=>$page,
+            'size'=>$size,
             'details' => $effectList
         ];
     }

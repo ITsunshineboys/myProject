@@ -1,0 +1,55 @@
+<link rel="stylesheet" href="pages/account_manage/account_comment/css/operation_record.css"/>
+<div ng-controller="operation_record_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">账户管理 ></span>
+            <span class="shop_manage">账户管理详情 ></span>
+            <span class="manage_child">过往绑定记录</span>
+            <img src="pages/mall_manage/merchant_manage/merchant_comment/images/user.png" alt=""/>
+        </div>
+    </header>
+    <section>
+        <div class="table_div">
+            <table class="table table-condensed">
+                <tr>
+                    <th>绑定手机号</th>
+                    <th>时间
+                        <img src="pages/account_manage/account_comment/images/mall_arrow_up.png" alt=""/>
+                    </th>
+                    <th>操作人员</th>
+                    <th>操作后状态</th>
+                    <th>关闭原因</th>
+                </tr>
+                <tr>
+                    <td>18780024175</td>
+                    <td>2017-09-10 10:35</td>
+                    <td>用户</td>
+                    <td>关闭</td>
+                    <td><input type="text" data-toggle="modal" data-target=".bs-example-modal-lg" placeholder="点击输入"/></td>
+                </tr>
+                <tr>
+                    <td>18780024175</td>
+                    <td>2017-09-10 10:35</td>
+                    <td>用户</td>
+                    <td>关闭</td>
+                    <td><input type="text" placeholder="点击输入"/></td>
+                </tr>
+            </table>
+        </div>
+        <!--模态框-->
+
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <h4>关闭原因</h4>
+                    <hr/>
+                    <div class="model_div">
+                        <span>资料违规，请重新修改</span>
+                    </div>
+                    <button class="btn_right" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

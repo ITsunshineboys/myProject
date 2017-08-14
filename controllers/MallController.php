@@ -128,8 +128,7 @@ class MallController extends Controller
         'index-admin-lhzz',
         'supplier-offline',
         'supplier-list',
-        'categories-have-style',
-        'categories-have-series',
+        'categories-have-style-series',
     ];
 
     /**
@@ -3983,7 +3982,6 @@ class MallController extends Controller
     {
         $series = Series::find()
             ->asArray()
-            ->select('id,series,creation_time,status')
             ->orderBy(['series_grade' => SORT_ASC])
             ->All();
         $all = [];
@@ -4096,7 +4094,6 @@ class MallController extends Controller
     {
         $style = Style::find()
             ->asArray()
-            ->select('id,style,creation_time,status')
             ->All();
         $all = [];
         foreach ($style as $one_style) {
@@ -4978,35 +4975,19 @@ class MallController extends Controller
     }
 
     /**
-     * Categories which have style
+     * Categories which have style or/and series
      *
      * @return string
      */
-    public function actionCategoriesHaveStyle()
+    public function actionCategoriesHaveStyleSeries()
     {
         $pid = (int)Yii::$app->request->get('pid', 0);
+        $type = trim(Yii::$app->request->get('type', ''));
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'have_style_categories' => GoodsCategory::styleCategoriesByPid($pid)
-            ]
-        ]);
-    }
-
-    /**
-     * Categories which have style
-     *
-     * @return string
-     */
-    public function actionCategoriesHaveSeries()
-    {
-        $pid = (int)Yii::$app->request->get('pid', 0);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'have_series_categories' => GoodsCategory::seriesCategoriesByPid($pid)
+                'have_style_series-categories' => GoodsCategory::haveStyleSeriesCategoriesByPid($pid, $type)
             ]
         ]);
     }
