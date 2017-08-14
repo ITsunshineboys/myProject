@@ -592,6 +592,44 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Reset category attribute has_style and/or has_series
+     *
+     * @param array $categoryIds category id list
+     * @param string $type $type type(style, seires or both) default both
+     * @param int $hasStyle has_style field value default 0
+     * @param int $hasSeries has_series field value default 0
+     */
+    public static function resetStyleSeries(array $categoryIds = [], $type = '', $hasStyle = 0, $hasSeries = 0)
+    {
+        $catIds = [];
+
+        if (!$categoryIds) {
+            $fieldName = 'id';
+            $fields = [$fieldName];
+            $rows = self::haveStyleSeriesCategoriesByPid(0, $type, $fields);
+            $catIds = array_map(function ($row) use ($fieldName) {
+                return $row[$fieldName];
+            }, $rows);
+        } else {
+            // todo
+        }
+
+        switch ($type) {
+            case self::NAME_STYLE:
+                $updateAttrs = ['has_style' => $hasStyle];
+                break;
+            case self::NAME_SERIES:
+                $updateAttrs = ['has_series' => $hasSeries];
+                break;
+            default:
+                $updateAttrs = ['has_style' => $hasStyle, 'has_series' => $hasSeries];
+                break;
+        }
+
+        $catIds && self::updateAll($updateAttrs, ['in', 'id', $catIds]);
+    }
+
+    /**
      * Get categories which have style or/and series
      *
      * @param int $pid parent category id default 0
@@ -618,17 +656,13 @@ class GoodsCategory extends ActiveRecord
             default:
                 $query->andWhere([
                     'or',
-                    ['has_style' => 1, 'has_series' => 1],
+                    ['has_style' => 1],
+                    ['has_series' => 1],
                 ]);
                 break;
         }
 
         return $query->all();
-    }
-
-    public static function resetStyleCategoriesById(array $categoryIds)
-    {
-
     }
 
     /**
