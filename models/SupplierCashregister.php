@@ -78,7 +78,10 @@ class SupplierCashregister extends \yii\db\ActiveRecord
                 $freeze['apply_time']=date('Y-m-d H:i',$freeze['apply_time']);
 
             }
-            $freeze['cost_money']=$freeze['cash_money']-$freeze['real_money'];
+            $freeze['real_money']=sprintf('%.2f',$freeze['real_money']*0.01);
+            $freeze['cash_money']=sprintf('%.2f',$freeze['cash_money']*0.01);
+            $freeze['cost_money']=sprintf('%.2f', $freeze['cash_money']-$freeze['real_money']*0.01
+            );
         }
         $count=(int)self::find()->where($where)->asArray()->count();
         $total_page = ceil($count / $size);
