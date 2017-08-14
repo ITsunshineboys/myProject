@@ -56,7 +56,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $attrAdminFields = ['id', 'title', 'parent_title', 'attr_op_time', 'attr_op_username', 'attr_number'];
+    public static $attrAdminFields = ['id', 'title', 'parent_title', 'attr_op_time', 'attr_op_username', 'attr_number', 'level', 'path'];
 
     /**
      * @var array online status list
@@ -230,7 +230,7 @@ class GoodsCategory extends ActiveRecord
                 $category['offline_time'] = date('Y-m-d H:i', $category['offline_time']);
             }
 
-            if (isset($category['level'])) {
+            if (isset($category['level']) && isset($category['path'])) {
                 $category['titles'] = '';
                 if ($category['level'] == self::LEVEL3) {
                     $path = trim($category['path'], ',');
