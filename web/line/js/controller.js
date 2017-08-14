@@ -6,9 +6,10 @@ angular.module("all_controller", [])
             url: "http://test.cdlhzz.cn:888/mall/carousel"
         }).then(function successCallback(response) {
             $scope.swiper_img = response.data.data.carousel;
-            //console.log( $scope.message);
+            console.log($scope.swiper_img);
+            console.log(response);
         }, function errorCallback(response) {
-
+            console.log(response);
         });
         $http({   //商品分类列表
             method: 'get',

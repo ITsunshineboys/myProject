@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="css/shop_front.css"/>
+<div ng-controller="shop_front_ctrl" class="back">
+     <header>
+         <div>
+             <img src="images/mall_nav_return.png" class="back_return" alt=""/>
+             <span>店铺首页</span>
+             <img src="images/mall_home.png" class="back_home" alt=""/>
+         </div>
+     </header>
+<section>
+    <!--头部-->
+    <div class="header_shop">
+        <img src="images/bed.png" alt=""/>
+        <span>深大地板直营店</span>
+        <div>
+            <p class="num">12k</p>
+            <p class="fan_count">粉丝数</p>
+        </div>
+    </div>
+   <!--tab切换-->
+    <div class="section_div">
+        <div>
+            <ul class="nav nav-tabs list_tab" ng-init="vm.activeTab=1">
+                <li ng-class="{active:vm.activeTab == 2}">
+                    <a href="javascript:;" ng-click="vm.activeTab = 1" >店铺首页</a>
+                    <span ng-class="{line_com:vm.activeTab==1}" ></span>
+                </li>
+                <li ng-class="{active: vm.activeTab == 1}">
+                    <a href="javascript:;" ng-click="vm.activeTab = 2">全部商品</a>
+                    <span ng-class="{line_com:vm.activeTab==2}" ></span>
+                </li>
+            </ul>
+            <div class="tab-content tab-bordered">
+                <div class="tab-panel" ng-show="vm.activeTab == 1">
+                    <!--banner图开始-->
+                    <div class="device">
+                        <div swiper>
+                            <div class="carousel">
+                                <div class="swiper-container">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide" >
+                                            <img src="images/banner1.png" alt="" class="size_img"/>
+                                        </div>
+                                    </div>
+                                    <!-- 如果需要分页器 -->
+                                    <div class="swiper-pagination size_div"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--推荐开始-->
+                    <div class="recommend_box">
+                        <!--推荐数据列表-->
+                        <div class="recommend2_box">
+                            <ul >
+                                <li ng-repeat="n in commodity">
+                                    <a ui-sref="product_details">
+                                        <img src="images/banner1.png" alt=""/>
+                                        <div class="title2">{{n.title}}</div>
+                                        <div class="describe2">{{n.description}}</div>
+                                        <div class="price2">¥ {{n.platform_price}}</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-panel" ng-show="vm.activeTab == 2">
+                    <!--筛选-->
+                    <div class="memo_pad">
+                        <ul>
+                        <li ng-click="changeOrder('sold_number',0)">销量优先</li>
+                        <li ng-click="changeOrder ('platform_price')">
+                            价格
+                            <img src="images/mall_arrow_up.png" alt=""/>
+                        </li>
+                        <li ng-click="changeOrder('favourable_comment_rate')">
+                            好评率
+                            <img src="images/mall_arrow_up.png" alt=""/>
+                        </li>
+                        </ul>
+                    </div>
+
+                    <!--商品展示列表-->
+                    <div class="mall_list">
+                        <div class="flex_div" >
+                            <div class="item_commodity"  ng-repeat="item in detailsList | orderBy:order+orderType" ng-click="go_three_details(item)">
+                                <div class="item_commodity_divimg">
+                                    <img src="images/bed.png" alt="" class="img_item " />
+                                </div>
+                                <div class="item_commodity_comment">
+                                    <p class="comment_one">{{item.title}}</p>
+                                    <p class="comment_two">{{item.subtitle}}</p>
+                                    <span class="comment_span">销量数：{{item.sold_number}}&nbsp;&nbsp;</span>
+                                    <span class="comment_span_two">{{item.favourable_comment_rate}}%好评</span>
+                                    <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">{{item.platform_price | currency : '￥'}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div style="width: 32rem;height: 1rem;background-color: #F6F6F6"></div>
+    <!--店铺介绍-->
+    <div class="shop_profile">
+        <span>店铺简介</span>
+    </div>
+</section>
+</div>

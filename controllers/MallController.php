@@ -4987,8 +4987,24 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'have_style_series-categories' => GoodsCategory::haveStyleSeriesCategoriesByPid($pid, $type)
+                'have_style_series_categories' => GoodsCategory::haveStyleSeriesCategoriesByPid($pid, $type)
             ]
+        ]);
+    }
+
+    /**
+     * Reset category attribute has_style and/or has_series action
+     *
+     * @return string
+     */
+    public function actionCategoriesStyleSeriesReset()
+    {
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        $type = trim(Yii::$app->request->get('type', ''));
+        $res = GoodsCategory::resetStyleSeries($pid, $type);
+        return Json::encode([
+            'code' => 200 == $res,
+            'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
         ]);
     }
 }

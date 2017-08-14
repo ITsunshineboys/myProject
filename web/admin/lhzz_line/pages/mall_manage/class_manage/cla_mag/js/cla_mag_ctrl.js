@@ -2,14 +2,14 @@
 * 控制器
 **/
 
-const config = {
-	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	transformRequest: function (data) {
-		return $.param(data)
-	}
-};
 var cla_mag = angular.module("clamagModule", []);
 cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
+	const config = {
+		headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+		transformRequest: function (data) {
+			return $.param(data)
+		}
+	};
 	/*当前页*/
 	$scope.firstselect = 1;
 	$scope.parentclass = [];
@@ -21,12 +21,13 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 	$scope.secclassidin_offfirst = [];/*下架的一级分类中的二级分类*/
 	$scope.allpages = 0;
 	$scope.offlinereason = '';/*已上架单个下架初始化下架原因*/
-	$scope.isSelected = false;
-	$scope.isSelectedtwo = false;
 	$scope.xiajiaarr = []; /*已上架批量下架初始化数组*/
 	$scope.shangjiaarr = [];
 	$scope.piliangofflinereason = '';/*已上架批量下架初始化下架原因*/
 	$scope.seloffPage = 1;
+	$scope.pids = []; /*path保存*/
+	$scope.selectAll = false;
+	$scope.selectoffAll = false;
 
 	$scope.showonsale = true;
 	$scope.showoffsale = false;
@@ -35,11 +36,15 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 	$scope.changeToonsale = function () {
 		$scope.showonsale = true;
 		$scope.showoffsale = false;
+		// $scope.firststyle = true;
+		// $scope.secstyle = false;
 	}
 
 	$scope.changeTooffsale = function () {
 		$scope.showonsale = false;
 		$scope.showoffsale = true;
+		// $scope.firststyle = false;
+		// $scope.secstyle = false;
 	}
 
 	/*已上架创建时间排序*/
@@ -113,16 +118,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 		})
 	})()
 
-	$scope.subClassDefault = (function () {
-		$http({
-			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
-			params: {pid: 0}
-		}).then(function (res) {
-			$scope.secondclass = res.data.data.categories;
-		})
-	})()
-
 	/*分类选择二级下拉框*/
 	$scope.subClass = function (obj) {
 		$http({
@@ -136,6 +131,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 
 	/*已上架table数据内容*/
 	$scope.tableContent = (function () {
+		$scope.pids = [];
 		$scope.pageSize = 5; /*显示的页数*/
 		$http({
 			method: "get",
@@ -186,7 +182,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 		})
 	}
 
-	/*已下架点击跳转至相应页数*/
+/*已下架点击跳转至相应页数*/
 	$scope.chooseOffPage = function (page) {
 		$http({
 			method: "get",
@@ -229,6 +225,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 			$scope.chooseOffPage($scope.seloffPage);
 		}
 	};
+
 /*点击页码加样式*/
 	$scope.isActivePage = function (page) {
 		return $scope.selPage == page;
@@ -263,6 +260,8 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 			$scope.isOffActivePage(page);
 		})
 	}
+
+
 /*===========================已上架 下架操作==========================*/
 	/*=已上架列表 单个下架*/
 
@@ -354,8 +353,22 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 		$scope.shangjiaarr.length = 0;
 	}
 
+	/*全选*/
+	$scope.all= function (m) {
+		for(let i=0;i<$scope.allonsalepro.length;i++){
+			if(m===true){
+				$scope.allonsalepro[i].state=false;
+				$scope.selectAll=false;
+			}else {
+				$scope.allonsalepro[i].state=true;
+				$scope.selectAll=true;
+			}
+		}
+	};
 
-		/*===========================下架/下架处理结束=======================*/
+
+
+	/*===========================下架/下架处理结束=======================*/
 
 	/*筛选查询*/
 	$scope.chaxun = function () {
@@ -489,6 +502,35 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $state) {
 		}
 	}
 
+	$scope.alloff = function (m) {
+		for(let i=0;i<$scope.alloffsalepro.length;i++){
+			if(m===true){
+				$scope.alloffsalepro[i].state=false;
+				$scope.selectoffAll=false;
+			}else {
+				$scope.alloffsalepro[i].state=true;
+				$scope.selectoffAll=true;
+			}
+		}
+	}
+
+	/*重设下架原因*/
+	$scope.resetOffReason = function (obj) {
+		$scope.resetid = Number(obj);
+	}
+
+	$scope.surereset = function () {
+		let url = "http://test.cdlhzz.cn:888/mall/category-offline-reason-reset";
+		let data =  {id:$scope.resetid,offline_reason:$scope.xiajiareason};
+		$http.post(url,data,config).then(function (res) {
+			console.log(res)
+			$scope.xiajiareason = '';
+		})
+	}
+
+	$scope.cancelReset = function () {
+		$scope.xiajiareason = '';
+	}
 })
 
 
