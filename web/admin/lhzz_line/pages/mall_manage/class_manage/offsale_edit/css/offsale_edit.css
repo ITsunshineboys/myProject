@@ -91,6 +91,7 @@
 #cla_pic_uploadpic{
     position: relative;
     top:40px;
+    width: 120px;
 }
 
 .upload_tishi{
@@ -223,6 +224,11 @@
     background-color: white;
     margin-left: 511px;
     margin-top: 54px;
+}
+
+.cla_name h6{
+    color: red;
+    margin-left: 172px;
 }
 
 

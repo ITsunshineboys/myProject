@@ -1,0 +1,327 @@
+.back{
+    background-color: #F6F6F6;
+}
+header{
+    height:3.8rem;
+    background-color: white;
+    line-height: 3.8rem;
+}
+.back_return{
+    margin-left: 1rem;
+}
+header div span{
+    font-size:1.5rem;
+    color: #4A4A4A;
+    margin-left: 11.5rem;
+    position: relative;
+    top: .3rem;
+}
+.back_home{
+    margin-left: 9rem;
+    height: 2rem;
+}
+.header_shop{
+    width: 32rem;
+    height: 7rem;
+    background-color: white;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    position: relative;
+}
+.header_shop div{
+    display: inline-block;
+    margin-left: 10rem;
+    color: #959292;
+    font-size: 1.3rem;
+    position: absolute;
+    top: 2rem;
+}
+.num{
+    margin-left: .7rem;
+}
+.fan_count{
+    color: #6C6C6C;
+}
+.header_shop span{
+    font-size: 1.3rem;
+    color: #6C6C6C;
+    margin-left: 1rem;
+}
+.line_com{
+    display: block;
+    width: 4.2rem;
+    height: .3rem;
+    background-color: #53A8F4;
+    margin-left: 5.7rem;
+    margin-top: .2rem;
+
+}
+.tab-content{
+    margin-top: .2rem;
+}
+.list_tab {
+    /*margin-bottom: 1.5rem;*/
+}
+.list_tab li{
+    width: 16rem;
+    text-align: center;
+    padding-top: .5rem;
+    background-color: white;
+}
+.list_tab li a{
+    color: #53A8F4;
+    font-size: 1.4rem;
+    background-color: white;
+}
+.active{
+    color: #53A8F4 ;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    background-color:white;
+}
+.comment_img{
+    width: 32rem;
+}
+.shop_two ul li span{
+    color: #6C6C6C!important;
+    font-size: 1.3rem;
+}
+.shop_two ul li {
+    border-bottom: 1px solid #CDD3D7;
+    height: 3rem;
+    padding-top: .7rem;
+}
+.shop_two ul {
+    padding-bottom: 2rem;
+}
+.comment_num{
+    color: #959292!important;
+    font-size: 1.3rem;
+}
+.size_img{
+    width: 32rem;
+}
+.tab-bordered{
+    background-color: white;
+}
+.section_div{
+    margin-top: 1rem;
+    background-color: white;
+
+}
+.nav-tabs {
+     border-bottom: none;
+}
+/*推荐开始*/
+.recommend_box{
+    width: auto;
+    height: auto;
+    padding: 0 0.5rem;
+    margin-top: 1rem;
+    background-color: #fff;
+    margin-bottom: 3rem;
+}
+.recommend_box .recommend1_box {
+    box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    border-right: 0.5rem solid #fff;
+    border-left: 0.5rem solid #fff;
+}
+.recommend_box .recommend1_box .title {
+    height: 4.5rem;
+    line-height: 4.5rem;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color:#6c6c6c;
+}
+.recommend_box .recommend1_box .primary_box{
+    width: auto;
+    height: 12.5rem;
+    display: block;
+    position: relative;
+    background-color: #F1C874;
+}
+.recommend_box .recommend1_box .primary_box .primary_left{
+    width: 16rem;
+    height: auto;
+    position: absolute;
+    left: 0.6rem;
+    top:3.2rem;
+}
+.small_title{
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    font-weight: 600;
+    color:#fff;
+}
+.describe{
+    font-size: 1.2rem;
+    line-height: 1.4rem;
+    color:#fff;
+}
+.price1{
+    margin-top: 1rem;
+}
+.price1>span:nth-child(2){
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    color:#F56A22;
+}
+.price1>span:nth-child(1){
+    display: inline-block;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    color:#F56A22;
+}
+.recommend_box .recommend1_box .primary_box .primary_right{
+    position: absolute;
+    width: 11.5rem;
+    height: 11.5rem;
+    right:0.6rem;
+}
+.recommend_box .recommend1_box .primary_box .primary_right>img{
+    width: 11.5rem;
+    height: 8.5rem;
+    margin-top: 1.5rem;
+}
+.recommend2_box{
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    clear: both;
+    margin-top: 1rem;
+}
+.recommend2_box ul{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.recommend2_box ul>li{
+    width: 50%;
+    height: auto;
+    float: left;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;   /* Firefox */
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    border-right: 0.5rem solid #fff;
+    border-left: 0.5rem solid #fff;
+    border-bottom: 0.7rem solid #fff;
+}
+.recommend2_box ul li a{
+    text-decoration: none;
+}
+.recommend2_box ul>li a img{
+    width: 14.4rem;
+    height: 13.6rem;
+}
+.recommend2_box ul>li a .title2{
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    margin-top: 0.3rem;
+    color: #6C6C6C;
+}
+.recommend2_box ul>li a .describe2{
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    margin-top: 0.3rem;
+    color:#B8B6B6;
+}
+.recommend2_box ul>li a .price2{
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    margin-top: 0.3em;
+    color:#F56A22
+}
+.nav-tabs>li>a {
+     border: none;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+     border: none;
+}
+/*结束*/
+
+/*全部商品开始*/
+.memo_pad{
+    background-color: white;
+    height:3rem;
+    line-height:3rem;
+    /*margin-bottom: 1rem;*/
+}
+.memo_pad ul {
+    margin-left: -2rem;
+}
+.memo_pad li{
+    font-size: 1.4rem;
+    margin-left: 5.5rem;
+    color: #B8B6B6;
+    display: inline-block;
+}
+.memo_pad li img{
+    width: .9rem;
+}
+
+/*商品展示*/
+.mall_list{
+    background-color: white;
+    /*height: 12rem;*/
+}
+.flex_div{
+    position: relative;
+    /*top:1rem;*/
+}
+.item_commodity{
+    position: relative;
+    top: .8rem;
+    border: 1px solid #E9EDEE;
+}
+.item_commodity div{
+    display: inline-block;
+}
+.item_commodity_divimg {
+    position: relative;
+    /*margin-left: 1rem;*/
+    /*top:1rem*/
+    left: 1rem;
+    top: 1rem;
+}
+.item_commodity_divimg img {
+    /*position: absolute;*/
+    /*top:-3.2rem;*/
+    margin-bottom: 3rem;
+    margin-top: .1rem;
+}
+.item_commodity_comment{
+    /*margin-left: 1rem;*/
+    position: absolute;
+    left: 12rem;
+    top: 1rem;
+
+}
+.item_commodity p,span{
+    font-size: 1.2rem;
+}
+.img_item{
+    width: 9rem;
+    margin-top: -1.2rem;
+    margin-left: .6rem;
+}
+.shop_profile{
+    height: 4rem;
+    width: 32rem;
+    background-color: white;
+    /*margin-top: 1rem;*/
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+}
+.shop_profile span{
+    font-size: 1.3rem;
+    color: #4A4A4A;
+    line-height: 4rem;
+}

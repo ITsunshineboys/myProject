@@ -1088,4 +1088,19 @@ CREATE TABLE `express` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 --8.12 end
 
+--8.13 start
+
+DROP TABLE IF EXISTS supplier_bankinformation;
+CREATE TABLE `user_bankinfo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `u_id` int(11) NOT NULL COMMENT '用户id',
+  `role_id` int(50) NOT NULL COMMENT '角色id',
+	`bankname` varchar(50) NOT NULL COMMENT '开户银行',
+  `bankcard` int(50) NOT NULL COMMENT '银行卡号',
+  `username` varchar(50) NOT NULL COMMENT '开户名',
+  `position` varchar(150) NOT NULL COMMENT '开户行所在地',
+  `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
+  `create_time` int(11) NOT NULL COMMENT '开户时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡信息';
 

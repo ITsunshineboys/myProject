@@ -14,7 +14,7 @@
         <div class="cla_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类名称</span>
-            <input type="text" placeholder={{offsaleclasstitle}}>
+            <input type="text" ng-model="class_name" ng-model="class_name" ng-blur="addClassName()">
             <span>*限1~10个字符</span>
             <h6 ng-if="showtishi" ng-bind="tishi"></h6>
         </div>
@@ -22,44 +22,45 @@
         <div class="divider"></div>
 
         <!--分类所属-->
-        <div class="cla_belong">
+        <div class="cla_belong" ng-if="finalpatharr.length>1">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类所属</span>
-            <select name="" class="belong first_select">
-                <option value="" selected="selected">基础材料</option>
-                <option value="">主材料</option>
+            <!--<select name="" class="belong first_select" ng-if="finalpatharr.length>1"  ng-model="firstselect" ng-init="firstselect=finalpatharr[0]" ng-change="subClass(firstselect)">-->
+                <!--<option ng-repeat="item in firstclass" value={{item.id}} >{{item.title}}</option>-->
+            <!--</select>-->
+            <select name="" class="belong first_select" ng-if="finalpatharr.length>1"  ng-model="changescope.firstselect"  ng-change="subClass(firstselect)">
+                <option ng-repeat="item in firstclass" value={{item.id}} >{{item.title}}</option>
             </select>
-            <select name="suoshukuang" class="belong">
-                <option value="" selected="selected">墙面材料</option>
-                <option value="">板材类</option>
+            <!--<select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-model="secselect" ng-init="secselect=finalpatharr[1]">-->
+                <!--<option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>-->
+            <!--</select>-->
+            <select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-model="changescope.secselect" ng-options="item.id as item.title for item in secondclass">
             </select>
         </div>
 
-        <!--分类图片-->
         <div class="cla_pic">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span class="each_title">上传图片</span>
+            <span class="each_title">分类图片</span>
             <div class="upload_pic">
-                <img src="pages/offsale_edit/images/egpic.png" alt="" id="cla_pic_uploadpic">
-                <span class="upload_tishi">一级分类上传图片，二三级上传图片</span>
+                <img ng-src="{{iconpath}}" alt="" id="cla_pic_uploadpic">
                 <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
                 <div id="upload">
-                    <button id="upload_btn">上传</button>
-                    <span id="pic_path">456456456456456.jpg</span>
+                    <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
                 </div>
-                <div class="reload_tishi">
+                <div class="reload_tishi" ng-show="picwarning">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
                 </div>
             </div>
         </div>
+
         <div class="divider"></div>
 
         <!--分类描述-->
         <div class="cla_des">
             <span class="each_title">分类描述</span>
             <div id="edit_tool">
-                <!--<div class="ueditor" ng-model="content" id="editor"></div>-->
+                <div ueditor id="Container" config="{{config}}"></div>
             </div>
         </div>
         <div class="divider"></div>
@@ -67,7 +68,7 @@
         <!--下架原因-->
         <div class="cla_des">
             <span class="each_title">下架原因</span>
-            <textarea name="" id="why_offline" cols="86" rows="10" placeholder="下架原因下架原因下架原因"></textarea>
+            <textarea name="" id="why_offline" cols="86" rows="10" placeholder="请输入下架原因" ng-modal="offlinereason"></textarea>
         </div>
         <div class="divider"></div>
 
@@ -84,8 +85,8 @@
         </div>
 
         <div class="btn_sure">
-            <button data-toggle="modal" data-target="#save_tishi">保存</button>
-            <button>返回</button>
+            <button data-toggle="modal" data-target={{savemodal}} ng-click="saveclass()">保存</button>
+            <button ui-sref="fenleiguanli">返回</button>
         </div>
 
         <!--保存提示模态框-->
@@ -98,11 +99,11 @@
                         </h4>
                     </div>
                     <div class="modal-body" id="save_body">
-                        <h6 id="tishi_wenzi">分类名称不正确，请重新填写</h6>
+                        <h6 id="tishi_wenzi">保存成功</h6>
                     </div>
 
                     <div class="btn_modal_two">
-                        <button id="caozuo_sure">确认</button>
+                        <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()">确认</button>
                     </div>
                 </div>
             </div>
