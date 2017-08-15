@@ -38,7 +38,7 @@ class User extends ActiveRecord implements IdentityInterface
         self::SEX_FEMALE => '女',
         self::SEX_UNKOWN => '保密',
     ];
-    const NICKNAME_MIN_LEN = 4;
+    const NICKNAME_MIN_LEN = 2;
     const NICKNAME_MAX_LEN = 20;
     const SIGNATURE_MAX_LEN = 20;
     const FIELDS_USER_CENTER_MODEL = [
