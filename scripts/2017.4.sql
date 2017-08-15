@@ -1104,3 +1104,17 @@ CREATE TABLE `user_bankinfo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡信息';
 
+--8.13 end
+
+--8.15 start
+
+CREATE TABLE `user_chat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `u_id` INT(11) NOT NULL COMMENT '用户id',
+  `role_id` INT(11) NOT NULL COMMENT '角色id',
+  `chat_username`  VARCHAR(100) NOT NULL COMMENT '环信用户名',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `login_time` int(11) DEFAULT NULL COMMENT '最后登录时间',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态  0:封禁 1:正常 ',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户对应环信表';
