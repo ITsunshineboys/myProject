@@ -935,28 +935,28 @@ create table district (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --7.27 end
 --7.30 start
-DROP TABLE IF EXISTS `order_goodslist`;
 CREATE TABLE `order_goodslist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
+  `order_no` varchar(50) NOT NULL,
   `goods_id` int(11) NOT NULL,
   `goods_number` int(8) NOT NULL,
   `goods_attr_id` varchar(50) NOT NULL,
   `create_time` int(11) NOT NULL,
   `goods_name` varchar(100) NOT NULL,
-  `goods_price` bigint(20) NOT NULL,
-  `sku` int(11) NOT NULL,
+  `goods_price` bigint(20) NOT NULL COMMENT '商品购买价格',
+  `sku` bigint(20) NOT NULL,
   `market_price` bigint(20) NOT NULL,
   `supplier_price` bigint(20) NOT NULL,
-  `shipping_type` tinyint(1) NOT NULL,
-  `order_status` tinyint(1) NOT NULL,
-  `shipping_status` tinyint(1) NOT NULL,
+  `shipping_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:快递物流   1：送货上门',
+  `order_status` tinyint(1) NOT NULL COMMENT '0:未完成 1:已完成 2:已取消',
+  `shipping_status` tinyint(1) NOT NULL COMMENT '0:未配送 1：配送中 2.配送完成',
   `customer_service` tinyint(1) NOT NULL,
-  `is_unusual` tinyint(1) NOT NULL,
+  `is_unusual` tinyint(1) NOT NULL COMMENT '0:无异常  1：请申退款 2： 退款失败',
   `freight` bigint(20) NOT NULL,
-  `comment` varchar(200) NOT NULL,
+  `comment_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 
 create table user_mobile (
   `id` int(11) unsigned NOT NULL auto_increment,
@@ -1073,11 +1073,12 @@ CREATE TABLE `supplier_accessdetail` (
 --8.12 start
 CREATE TABLE `express` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `waybillnumber` varchar(50) NOT NULL COMMENT '快递单号',
+  `waybillnumber` varchar(60) NOT NULL COMMENT '快递单号',
   `waybillname` varchar(20) NOT NULL COMMENT '快递公司',
   `sku` int(11) NOT NULL,
   `order_no` varchar(50) NOT NULL,
   `create_time` int(11) NOT NULL,
+  `receive_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 --8.12 end
@@ -1098,3 +1099,30 @@ CREATE TABLE `user_bankinfo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡信息';
 
+--8.13 end
+
+--8.15 start
+
+CREATE TABLE `user_chat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `u_id` INT(11) NOT NULL COMMENT '用户id',
+  `role_id` INT(11) NOT NULL COMMENT '角色id',
+  `chat_username`  VARCHAR(100) NOT NULL COMMENT '环信用户名',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `login_time` int(11) DEFAULT NULL COMMENT '最后登录时间',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态  0:封禁 1:正常 ',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户对应环信表';
+
+CREATE TABLE `order_platform_handle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(50) NOT NULL,
+  `sku` varchar(50) DEFAULT NULL,
+  `handle` tinyint(1) NOT NULL COMMENT '1:关闭订单退款 2：关闭订单线下退款 3：退货 4.换货 5：上门维修 6：上门退货 7：上门换货',
+  `reasons` varchar(300) NOT NULL,
+  `creat_time` int(11) NOT NULL,
+  `refund_result` tinyint(1) NOT NULL COMMENT '0：操作未进行 1：操作进行中 2：操作进行完成 3：操作进行失败',
+  `refund_type` tinyint(1) NOT NULL COMMENT '1:退至顾客钱包 2.线下自行退款 3.退至支付宝',
+  `refund_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8

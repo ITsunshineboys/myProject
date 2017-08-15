@@ -5,7 +5,8 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
-
+use yii\db\Query;
+use yii\helpers\Json;
 class Express extends ActiveRecord
 {
 
@@ -112,6 +113,56 @@ class Express extends ActiveRecord
         }
     }
 
+    public static  function Findexresslist($order_no,$sku)
+    {
+        $waybill=Express::find()->select('waybillnumber,waybillname,create_time')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+        if (!$waybill){
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '物流信息不存在'
+            ]);
+        }else {
+            $arr = array(
+                'time' => date('Y-m-d H:i:s', $waybill['create_time']),
+                'ftime' => date('Y-m-d H:i:s', $waybill['create_time']),
+                'context' => '卖家已发货'
+            );
+            $waybillnumber = $waybill['waybillnumber'];
+            $model = new Express();
+            $result = $model->getorder($waybillnumber);
+            $data = self::Expresslist($result, $arr);
+        }
+        return $data;
+    }
+
+    public static  function Findexpresslist_sendtohome($order_no,$sku){
+        $order=(new Query())->from(ORDER_GOODSLIST)->select('order_status,shipping_status')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+        $express=Express::find()->select('create_time,receive_time')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+        switch ($order['shipping_status']){
+            case 1:
+                $arr[] =[
+                    'time' => date('Y-m-d H:i:s', $express['create_time']),
+                    'ftime' => date('Y-m-d H:i:s', $express['create_time']),
+                    'context' => '您的商品已由工作人员派出，请注意查收'
+                ];
+                break;
+            case 2:
+                $arr[]=
+                    ['time' => date('Y-m-d H:i:s', $express['receive_time']),
+                        'ftime' => date('Y-m-d H:i:s', $express['receive_time']),
+                        'context' => '您的商品已签收 感谢使用 期待再次为您服务!'
+                    ];
+                $arr[]=
+                    ['time' => date('Y-m-d H:i:s', $express['create_time']),
+                    'ftime' => date('Y-m-d H:i:s', $express['create_time']),
+                    'context' => '您的商品已由工作人员派出，请注意查收'
+                ];
+                break;
+        }
+        return $arr;
+
+    }
 
     /**
      * 获取物流信息
