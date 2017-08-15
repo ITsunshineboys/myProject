@@ -108,12 +108,14 @@ public static function getcashviewdata($cash_id){
     $array=$query->from('supplier_cashregister as sc')
         ->select($select)
         ->leftJoin('supplier as s','sc.supplier_id=s.id')
-        ->leftJoin('supplier_bankinformation as sb','sc.supplier_id=sb.supplier_id')
+        ->leftJoin('user_bankinfo as sb','s.uid=sb.u_id')
         ->where(['sc.id'=>$cash_id])
         ->one();
     $array['apply_time']=date('Y-m-d H:i',$array['apply_time']);
     $array['handle_time']=date('Y-m-d H:i',$array['handle_time']);
+    $array['cash_money']=sprintf('%.2f',($array['cash_money'])*0.01);
     $array['cost_money']=sprintf('%.2f',($array['cash_money']-$array['real_money'])*0.01);
+    $array['real_money']=sprintf('%.2f',($array['real_money'])*0.01);
     $array['status']=self::STATUS_CSED;
 
 return $array;
