@@ -1404,7 +1404,7 @@ class MallController extends Controller
 
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
-                $ids = GoodsCategory::level23Ids($pid);
+                $ids = GoodsCategory::level23Ids($pid, false, (bool)$status);
                 if (!$ids) {
                     $where .= ' and 0';
                 } else {
