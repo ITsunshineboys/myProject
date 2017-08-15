@@ -1113,3 +1113,16 @@ CREATE TABLE `user_chat` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态  0:封禁 1:正常 ',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户对应环信表';
+
+CREATE TABLE `order_platform_handle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(50) NOT NULL,
+  `sku` varchar(50) DEFAULT NULL,
+  `handle` tinyint(1) NOT NULL COMMENT '1:关闭订单退款 2：关闭订单线下退款 3：退货 4.换货 5：上门维修 6：上门退货 7：上门换货',
+  `reasons` varchar(300) NOT NULL,
+  `creat_time` int(11) NOT NULL,
+  `refund_result` tinyint(1) NOT NULL COMMENT '0：操作未进行 1：操作进行中 2：操作进行完成 3：操作进行失败',
+  `refund_type` tinyint(1) NOT NULL COMMENT '1:退至顾客钱包 2.线下自行退款 3.退至支付宝',
+  `refund_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
