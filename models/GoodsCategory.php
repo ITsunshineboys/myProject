@@ -597,7 +597,7 @@ class GoodsCategory extends ActiveRecord
      *
      * @param ActiveRecord $operator operator
      * @param array $newCatIds category id list to be reset
-     * @param string $type $type type(style, seires or both) default both
+     * @param string $type type(style, seires or both) default both
      * @param int $hasStyle has_style field value default 0
      * @param int $hasSeries has_series field value default 0
      * @return int

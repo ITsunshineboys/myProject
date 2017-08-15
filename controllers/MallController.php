@@ -1196,17 +1196,16 @@ class MallController extends Controller
         }
 
         $now = time();
-        $user = Yii::$app->user->identity;
-        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+        $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
         if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
             $model->deleted = GoodsCategory::STATUS_OFFLINE;
             $model->online_time = $now;
-            $model->online_person = $lhzz->nickname;
+            $model->online_person = $operator->nickname;
         } else {
             $model->deleted = GoodsCategory::STATUS_ONLINE;
             $model->offline_time = $now;
             $model->offline_reason = Yii::$app->request->post('offline_reason', '');
-            $model->offline_person = $lhzz->nickname;
+            $model->offline_person = $operator->nickname;
         }
 
         $model->scenario = GoodsCategory::SCENARIO_TOGGLE_STATUS;
@@ -1232,7 +1231,7 @@ class MallController extends Controller
                 $categoryIds = GoodsCategory::level23Ids($model->id);
                 GoodsCategory::disableByIds($categoryIds);
             }
-            Goods::disableGoodsByCategoryIds($categoryIds, Lhzz::findByUser(Yii::$app->user->identity));
+            Goods::disableGoodsByCategoryIds($categoryIds, $operator);
         }
 
 //        new EventHandleService();

@@ -412,7 +412,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title],['status'=>self::STATUS_ONLINE]])
+            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title], ['status' => self::STATUS_ONLINE]])
             ->all();
         return $all;
     }
@@ -717,7 +717,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all],['status'=>self::STATUS_ONLINE]])
+            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all], ['status' => self::STATUS_ONLINE]])
             ->all();
         return $all_goods;
     }
@@ -934,6 +934,11 @@ class Goods extends ActiveRecord
                 $code = 1014;
                 return $code;
             }
+
+            if (!$this->validateCategoryStyleSeries('category_id')) {
+                $code = 1022;
+                return $code;
+            }
         } else {
             $code = 403;
         }
@@ -1008,6 +1013,46 @@ class Goods extends ActiveRecord
         }
 
         $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates category style or series
+     *
+     * @param string $attribute category_id to validate
+     * @return bool
+     */
+    public function validateCategoryStyleSeries($attribute)
+    {
+        if ($this->style_id + $this->series_id == 0) {
+            return true;
+        }
+
+        $where = [
+            'id' => $this->$attribute,
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'level' => GoodsCategory::LEVEL3,
+        ];
+
+        $category = GoodsCategory::find()->where($where)->exists();
+        if ($this->$attribute > 0 && $category) {
+            if ($this->style_id) {
+                $field = 'has_' . GoodsCategory::NAME_STYLE;
+                if (!$category->$field) {
+                    return false;
+                }
+            }
+
+            if ($this->series_id) {
+                $field = 'has_' . GoodsCategory::NAME_SERIES;
+                if (!$category->$field) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         return false;
     }
 
