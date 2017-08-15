@@ -1194,17 +1194,16 @@ class MallController extends Controller
         }
 
         $now = time();
-        $user = Yii::$app->user->identity;
-        $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
+        $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
         if ($model->deleted == GoodsCategory::STATUS_ONLINE) {
             $model->deleted = GoodsCategory::STATUS_OFFLINE;
             $model->online_time = $now;
-            $model->online_person = $lhzz->nickname;
+            $model->online_person = $operator->nickname;
         } else {
             $model->deleted = GoodsCategory::STATUS_ONLINE;
             $model->offline_time = $now;
             $model->offline_reason = Yii::$app->request->post('offline_reason', '');
-            $model->offline_person = $lhzz->nickname;
+            $model->offline_person = $operator->nickname;
         }
 
         $model->scenario = GoodsCategory::SCENARIO_TOGGLE_STATUS;
@@ -1230,7 +1229,7 @@ class MallController extends Controller
                 $categoryIds = GoodsCategory::level23Ids($model->id);
                 GoodsCategory::disableByIds($categoryIds);
             }
-            Goods::disableGoodsByCategoryIds($categoryIds, Lhzz::findByUser(Yii::$app->user->identity));
+            Goods::disableGoodsByCategoryIds($categoryIds, $operator);
         }
 
 //        new EventHandleService();
@@ -1403,7 +1402,7 @@ class MallController extends Controller
 
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
-                $ids = GoodsCategory::level23Ids($pid);
+                $ids = GoodsCategory::level23Ids($pid, false, (bool)$status);
                 if (!$ids) {
                     $where .= ' and 0';
                 } else {
@@ -4121,6 +4120,7 @@ class MallController extends Controller
         $style->style = $post['style'];
         $style->theme = $post['theme'];
         $style->intro = $post['intro'];
+        $style->imges = $post['imges'];
         $style->creation_time = time();
         $style->status = Style::STATUS_ONLINE;
         if (!$style->validate()) {
@@ -4137,25 +4137,6 @@ class MallController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        $style_picture = new StylePicture();
-        $style_picture->style_id = $style->attributes['id'];
-        $style_picture->picture = FileService::upload();
-        if (!$style_picture->validate()) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if (!$style_picture->save()) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
     }
 
     /**
@@ -4171,6 +4152,7 @@ class MallController extends Controller
         $style_edit->style = $post['style'];
         $style_edit->theme = $post['theme'];
         $style_edit->intro = $post['intro'];
+        $style_edit->imges = $post['imges'];
         if (!$style_edit->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -4179,24 +4161,6 @@ class MallController extends Controller
         }
 
         if (!$style_edit->save()) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $style_picture = new StylePicture();
-        $style_picture_edit = $style_picture->find()->asArray()->where(['style_id' => $post['id']])->one();
-        $style_picture_edit->picture = FileService::upload();
-        if (!$style_picture_edit->validate()) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if (!$style_picture_edit->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,

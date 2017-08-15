@@ -9,6 +9,7 @@
 namespace app\models;
 
 use app\services\ModelService;
+use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
@@ -43,7 +44,7 @@ class GoodsCategory extends ActiveRecord
         'styles' => [],
         'series' => []
     ];
-    const FIELDS_HAVE_STYLE_SERIES_CATEGORIES = ['id', 'title'];
+    const FIELDS_HAVE_STYLE_SERIES_CATEGORIES = ['id', 'title', 'pid'];
     const NAME_STYLE = 'style';
     const NAME_SERIES = 'series';
 
@@ -55,7 +56,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * @var array admin fields
      */
-    public static $attrAdminFields = ['id', 'title', 'parent_title', 'attr_op_time', 'attr_op_username', 'attr_number'];
+    public static $attrAdminFields = ['id', 'title', 'parent_title', 'attr_op_time', 'attr_op_username', 'attr_number', 'level', 'path'];
 
     /**
      * @var array online status list
@@ -229,7 +230,7 @@ class GoodsCategory extends ActiveRecord
                 $category['offline_time'] = date('Y-m-d H:i', $category['offline_time']);
             }
 
-            if (isset($category['level'])) {
+            if (isset($category['level']) && isset($category['path'])) {
                 $category['titles'] = '';
                 if ($category['level'] == self::LEVEL3) {
                     $path = trim($category['path'], ',');
@@ -592,6 +593,64 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Reset category attribute has_style and/or has_series
+     *
+     * @param ActiveRecord $operator operator
+     * @param array $newCatIds category id list to be reset
+     * @param string $type $type type(style, seires or both) default both
+     * @param int $hasStyle has_style field value default 0
+     * @param int $hasSeries has_series field value default 0
+     * @return int
+     */
+    public static function resetStyleSeries(ActiveRecord $operator, array $newCatIds = [], $type = '', $hasStyle = 0, $hasSeries = 0)
+    {
+        switch ($type) {
+            case self::NAME_STYLE:
+                $updateAttrs = ['has_style' => $hasStyle];
+                break;
+            case self::NAME_SERIES:
+                $updateAttrs = ['has_series' => $hasSeries];
+                break;
+            default:
+                $updateAttrs = ['has_style' => $hasStyle, 'has_series' => $hasSeries];
+                break;
+        }
+
+        $fieldName = 'id';
+        $fields = [$fieldName];
+        $rows = self::haveStyleSeriesCategoriesByPid(0, $type, $fields);
+        $catIds = StringService::valuesByKey($rows, $fieldName);
+
+        $tran = Yii::$app->db->beginTransaction();
+        $code = 500;
+        try {
+            if (!StringService::checkArrayIdentity($catIds, $newCatIds)) {
+                $reducedCatIds = array_diff($catIds, $newCatIds);
+                $reducedAttrs = array_map(function ($row) {
+                    return 0;
+                }, $updateAttrs);
+
+                $increasedAttrs = array_map(function ($row) {
+                    return 1;
+                }, $updateAttrs);
+                $increasedCatIds = array_diff($newCatIds, $catIds);
+
+                if ($reducedCatIds) {
+                    self::updateAll($reducedAttrs, ['in', 'id', $reducedCatIds]);
+                    Goods::disableGoodsByCategoryIds($reducedCatIds, $operator, Yii::$app->params['style_series']['offline_reason']);
+                }
+                $increasedCatIds && self::updateAll($increasedAttrs, ['in', 'id', $increasedCatIds]);
+            }
+
+            $tran->commit();
+            $code = 200;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+        }
+        return $code;
+    }
+
+    /**
      * Get categories which have style or/and series
      *
      * @param int $pid parent category id default 0
@@ -618,17 +677,13 @@ class GoodsCategory extends ActiveRecord
             default:
                 $query->andWhere([
                     'or',
-                    ['has_style' => 1, 'has_series' => 1],
+                    ['has_style' => 1],
+                    ['has_series' => 1],
                 ]);
                 break;
         }
 
         return $query->all();
-    }
-
-    public static function resetStyleCategoriesById(array $categoryIds)
-    {
-
     }
 
     /**

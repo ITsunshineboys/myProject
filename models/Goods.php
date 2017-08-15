@@ -230,12 +230,13 @@ class Goods extends ActiveRecord
      * Disable goods by category ids
      *
      * @param array $categoryIds category ids
-     * @param ActiveRecord $lhzz lhzz model
+     * @param string $offlineReason offline reason default 分类下架
+     * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByCategoryIds(array $categoryIds, ActiveRecord $lhzz)
+    public static function disableGoodsByCategoryIds(array $categoryIds, ActiveRecord $operator, $offlineReason = '')
     {
         foreach ($categoryIds as $categoryId) {
-            self::disableGoodsByCategoryId($categoryId, $lhzz);
+            self::disableGoodsByCategoryId($categoryId, $operator, $offlineReason);
         }
     }
 
@@ -243,9 +244,10 @@ class Goods extends ActiveRecord
      * Disable goods by category id
      *
      * @param int $categoryId category id
-     * @param ActiveRecord $lhzz lhzz model
+     * @param string $offlineReason offline reason default 分类下架
+     * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByCategoryId($categoryId, ActiveRecord $lhzz)
+    public static function disableGoodsByCategoryId($categoryId, ActiveRecord $operator, $offlineReason = '')
     {
         $goodsIds = self::findIdsByCategoryId($categoryId);
         if ($goodsIds) {
@@ -254,9 +256,9 @@ class Goods extends ActiveRecord
             self::updateAll([
                 'status' => self::STATUS_OFFLINE,
                 'offline_time' => time(),
-                'offline_reason' => Yii::$app->params['category']['offline_reason'],
-                'offline_uid' => $lhzz->id,
-                'offline_person' => $lhzz->nickname,
+                'offline_reason' => $offlineReason ? $offlineReason : Yii::$app->params['category']['offline_reason'],
+                'offline_uid' => $operator->id,
+                'offline_person' => $operator->nickname,
             ], $where);
         }
     }
@@ -329,12 +331,12 @@ class Goods extends ActiveRecord
      * Disable goods by brand ids
      *
      * @param array $brandIds brand ids
-     * @param ActiveRecord $lhzz lhzz model
+     * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByBrandIds(array $brandIds, ActiveRecord $lhzz)
+    public static function disableGoodsByBrandIds(array $brandIds, ActiveRecord $operator)
     {
         foreach ($brandIds as $brandId) {
-            self::disableGoodsByBrandId($brandId, $lhzz);
+            self::disableGoodsByBrandId($brandId, $operator);
         }
     }
 
@@ -342,9 +344,9 @@ class Goods extends ActiveRecord
      * Disable goods by brand id
      *
      * @param int $brandId brand id
-     * @param ActiveRecord $lhzz lhzz model
+     * @param ActiveRecord $operator operator
      */
-    public static function disableGoodsByBrandId($brandId, ActiveRecord $lhzz)
+    public static function disableGoodsByBrandId($brandId, ActiveRecord $operator)
     {
         $goodsIds = self::findIdsByBrandId($brandId);
         if ($goodsIds) {
@@ -354,8 +356,8 @@ class Goods extends ActiveRecord
                 'status' => self::STATUS_OFFLINE,
                 'offline_time' => time(),
                 'offline_reason' => Yii::$app->params['brand']['offline_reason'],
-                'offline_uid' => $lhzz->id,
-                'offline_person' => $lhzz->nickname,
+                'offline_uid' => $operator->id,
+                'offline_person' => $operator->nickname,
             ], $where);
         }
     }
@@ -410,7 +412,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title]])
+            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title], ['status' => self::STATUS_ONLINE]])
             ->all();
         return $all;
     }
@@ -456,8 +458,7 @@ class Goods extends ActiveRecord
         }
         $id = implode(',', $goods_id);
         $db = \Yii::$app->db;
-        $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "
-AND goods.id IN (" . $id . ")";
+        $sql = "SELECT goods.id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,goods_category.title,logistics_district.district_name,goods.category_id,goods_category.path,goods.cover_image FROM goods LEFT JOIN goods_brand ON goods.brand_id = goods_brand.id LEFT JOIN goods_category ON goods.category_id = goods_category.id LEFT JOIN logistics_template ON goods.supplier_id = logistics_template.supplier_id LEFT JOIN logistics_district ON logistics_template.id = logistics_district.template_id  WHERE logistics_district.district_code = " . $city . "AND goods.id IN (" . $id . ") and goods.status = " . self::STATUS_ONLINE;
         $all_goods = $db->createCommand($sql)->queryAll();
         return $all_goods;
     }
@@ -716,7 +717,7 @@ AND goods.id IN (" . $id . ")";
             ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all]])
+            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all], ['status' => self::STATUS_ONLINE]])
             ->all();
         return $all_goods;
     }
@@ -933,6 +934,11 @@ AND goods.id IN (" . $id . ")";
                 $code = 1014;
                 return $code;
             }
+
+            if (!$this->validateCategoryStyleSeries('category_id')) {
+                $code = 1022;
+                return $code;
+            }
         } else {
             $code = 403;
         }
@@ -1007,6 +1013,46 @@ AND goods.id IN (" . $id . ")";
         }
 
         $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates category style or series
+     *
+     * @param string $attribute category_id to validate
+     * @return bool
+     */
+    public function validateCategoryStyleSeries($attribute)
+    {
+        if ($this->style_id + $this->series_id == 0) {
+            return true;
+        }
+
+        $where = [
+            'id' => $this->$attribute,
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'level' => GoodsCategory::LEVEL3,
+        ];
+
+        $category = GoodsCategory::find()->where($where)->exists();
+        if ($this->$attribute > 0 && $category) {
+            if ($this->style_id) {
+                $field = 'has_' . GoodsCategory::NAME_STYLE;
+                if (!$category->$field) {
+                    return false;
+                }
+            }
+
+            if ($this->series_id) {
+                $field = 'has_' . GoodsCategory::NAME_SERIES;
+                if (!$category->$field) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         return false;
     }
 

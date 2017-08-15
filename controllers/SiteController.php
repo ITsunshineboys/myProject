@@ -455,8 +455,9 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($postData['mobile'], $postData['validation_code'])) {
-            $code = 1002;
+        $codeValidationRes = SmValidationService::validCode($postData['mobile'], $postData['validation_code']);
+        if ($codeValidationRes !== true) {
+            $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -537,8 +538,9 @@ class SiteController extends Controller
             ]);
         }
 
-        if (!SmValidationService::validCode($user->mobile, $postData['validation_code'])) {
-            $code = 1002;
+        $codeValidationRes = SmValidationService::validCode($user->mobile, $postData['validation_code']);
+        if ($codeValidationRes !== true) {
+            $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
