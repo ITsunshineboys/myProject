@@ -935,28 +935,28 @@ create table district (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --7.27 end
 --7.30 start
-DROP TABLE IF EXISTS `order_goodslist`;
 CREATE TABLE `order_goodslist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
+  `order_no` varchar(50) NOT NULL,
   `goods_id` int(11) NOT NULL,
   `goods_number` int(8) NOT NULL,
   `goods_attr_id` varchar(50) NOT NULL,
   `create_time` int(11) NOT NULL,
   `goods_name` varchar(100) NOT NULL,
-  `goods_price` bigint(20) NOT NULL,
-  `sku` int(11) NOT NULL,
+  `goods_price` bigint(20) NOT NULL COMMENT '商品购买价格',
+  `sku` bigint(20) NOT NULL,
   `market_price` bigint(20) NOT NULL,
   `supplier_price` bigint(20) NOT NULL,
-  `shipping_type` tinyint(1) NOT NULL,
-  `order_status` tinyint(1) NOT NULL,
-  `shipping_status` tinyint(1) NOT NULL,
+  `shipping_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:快递物流   1：送货上门',
+  `order_status` tinyint(1) NOT NULL COMMENT '0:未完成 1:已完成 2:已取消',
+  `shipping_status` tinyint(1) NOT NULL COMMENT '0:未配送 1：配送中 2.配送完成',
   `customer_service` tinyint(1) NOT NULL,
-  `is_unusual` tinyint(1) NOT NULL,
+  `is_unusual` tinyint(1) NOT NULL COMMENT '0:无异常  1：请申退款 2： 退款失败',
   `freight` bigint(20) NOT NULL,
-  `comment` varchar(200) NOT NULL,
+  `comment_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 
 create table user_mobile (
   `id` int(11) unsigned NOT NULL auto_increment,
@@ -1073,11 +1073,12 @@ CREATE TABLE `supplier_accessdetail` (
 --8.12 start
 CREATE TABLE `express` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `waybillnumber` varchar(50) NOT NULL COMMENT '快递单号',
+  `waybillnumber` varchar(60) NOT NULL COMMENT '快递单号',
   `waybillname` varchar(20) NOT NULL COMMENT '快递公司',
   `sku` int(11) NOT NULL,
   `order_no` varchar(50) NOT NULL,
   `create_time` int(11) NOT NULL,
+  `receive_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 --8.12 end
