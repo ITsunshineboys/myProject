@@ -1002,9 +1002,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->refresh();
 
-        if ($this->identity_no) {
-            return 200;
-        }
+//        if ($this->identity_no) {
+//            return 200;
+//        }
 
         $this->legal_person = $legalPerson;
         $this->identity_no = $identityNo;
