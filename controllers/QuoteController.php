@@ -423,6 +423,7 @@ class QuoteController extends Controller
     public function actionPlotAdd()
     {
         $request = \Yii::$app->request->post();
+        var_dump($request);exit;
         $user = \Yii::$app->user->identity();
         if (!$request) {
             $code = 1000;
@@ -504,7 +505,6 @@ class QuoteController extends Controller
     {
         $pid = (int)\Yii::$app->request->get('pid', 0);
         $categories = GoodsCategory::categoriesByPid(GoodsCategory::APP_FIELDS_CATEGORY, $pid);
-//        $pid == 0 && array_unshift($categories, GoodsCategory::forAll());
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -520,13 +520,20 @@ class QuoteController extends Controller
      */
     public function actionAssortGoodsList()
     {
+        $goods_list = AssortGoods::find()
+            ->select(['title','category_id as id','pid','path'])
+            ->asArray()
+            ->all();
+        $goods_classify = GoodsCategory::find()
+            ->select(['id','title'])
+            ->where(['in','level',[1,2]])
+            ->asArray()
+            ->all();
         return Json::encode([
-           'list'=> AssortGoods::find()
-               ->select(['title','category_id as id','pid','path'])
-               ->all(),
+           'list'=> $goods_list,
+            'classify'=>$goods_classify
         ]);
     }
-
     /**
      * add assort goods administration
      * @return string
@@ -572,7 +579,6 @@ class QuoteController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
     }
 
 }
