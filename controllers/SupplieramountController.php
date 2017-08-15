@@ -81,7 +81,7 @@ class SupplieramountController extends Controller
     }
 
     /**
-     * 添加银行卡
+     * 添加银行卡/修改
      * @return string
      */
     public function actionAddbankcard(){
@@ -106,8 +106,9 @@ class SupplieramountController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $res=(new Supplieramountmanage())->Bankcardadd($supplier_id,$bankname,$bankcard,$username,$position,$bankbranch);
+        $user_id=$user->id;
+        $supplier_id = Supplier::find()->where(['uid' => $user_id])->one()['id'];
+        $res=(new Supplieramountmanage())->Bankcardadd($user_id,$bankname,$bankcard,$username,$position,$bankbranch);
         if ($res){
             $code=200;
             return Json::encode([
@@ -137,8 +138,8 @@ class SupplieramountController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $data=(new Supplieramountmanage())->Getbankcardinformation($supplier_id);
+        $user_id=$user->id;
+        $data=(new Supplieramountmanage())->Getbankcardinformation($user_id);
         $code=200;
         return Json::encode([
             'code' => $code,
@@ -147,48 +148,7 @@ class SupplieramountController extends Controller
         ]);
     }
 
-    /**
-     * 重新绑定银行卡
-     * @return string
-     */
-    public function actionBankcardupdate(){
-        $request=Yii::$app->request;
-        $bankname=trim(htmlspecialchars($request->post('bankname','')),'');
-        $bankcard=trim(htmlspecialchars($request->post('bankcard','')),'');
-        $username=trim(htmlspecialchars($request->post('username','')),'');
-        $position=trim(htmlspecialchars($request->post('position','')),'');
-        $bankbranch=trim(htmlspecialchars($request->post('bankbranch','')),'');
-        $user = Yii::$app->user->identity;
-        if (!$bankname || !$bankcard || !$username || !$position || !$bankbranch){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $res=(new Supplieramountmanage())->Bankcardupdate($supplier_id,$bankname,$bankcard,$username,$position,$bankbranch);
-        if ($res ==true){
-            $code=200;
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok'
-            ]);
-        }else{
-            $code=1051;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-    }
+
 
     /**
      * 获取商家后台商家资金

@@ -52,7 +52,6 @@ class Distribution extends ActiveRecord
         $time_area = self::timeDeal($time_type, $time_start, $time_end);
         $time_start = $time_area[0];
         $time_end = $time_area[1];
-
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['>', 'create_time', $time_start])
                 ->andWhere(['<', 'create_time', $time_end]);
@@ -60,16 +59,13 @@ class Distribution extends ActiveRecord
         if ($search) {
             $query->andFilterWhere(['like', 'mobile', $search]);
         }
-
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->select('parent_id,mobile,create_time,id')
             ->all();
-
         foreach ($arr as $k =>$v){
-
            //自身所产生的订单
             $user[$k]=User::find()->select('mobile,id')->where(['mobile'=>$arr[$k]['mobile']])->asArray()->one();
            if ($user[$k]){

@@ -22,6 +22,8 @@ const  SUPPLIER='supplier';
 const  SUP_FREELIST='supplier_freezelist';
 const  SUP_CASHREGISTER='supplier_cashregister';
 const  ORDER_GOODSLIST='order_goodslist';
+const  ORDER_PLATFORM_HANDLE='order_platform_handle';
+const   EXPRESS='express';
 class GoodsOrder extends ActiveRecord
 {
 
@@ -209,265 +211,72 @@ class GoodsOrder extends ActiveRecord
             return $array;
         }
 
+
+
     /**
-     * 获取商品列表-大后台获取全部订单
-     * @param $pagesize
+     *  获取商品列表-大后台获取全部订单
+     * @param $page_size
      * @param $page
-     * @param $time_id
+     * @param $time_type
      * @param $time_start
      * @param $time_end
+     * @param $search
+     * @param $sort_money
+     * @param $sort_time
      * @return array
      */
-    public function Getallorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend){
-        if ($blend==0){
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id');
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where($this->Timehandle($time_id,$time_start,$time_end));
-            }
-
-        }else{
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where($this->ordercondition($blend));
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
-            }
-        }
-
-            $count = $array->count();
-            $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $pagesize,'pageSizeParam'=>false]);
-            $data=$array->offset($pagination->offset)
-                ->limit($pagination->limit)
-                ->all();
-            $arr=$this->getorderstatus($data);
-            foreach ($arr AS $k =>$v){
-                $arr[$k]['handle']='';
-                if ($arr[$k]['is_unusual']==1){
-                    $arr[$k]['unusual']='申请退款';
-                }else if ($arr[$k]['is_unusual']==0){
-                    $arr[$k]['unusual']='无异常';
-                }else if($arr[$k]['is_unusual']==2){
-                    $arr[$k]['unusual']='退款失败';
-                }
-                if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' ){
-                    $arr[$k]['handle']='平台介入';
-                }
-            }
-            $data=$this->page($count,$pagesize,$page,$arr);
+    public static function Getallorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+            $array=self::getorderlist();
+            $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
             return $data;
         }
-    /**
-         *
+        /**
          * 获取商品列表-大后台获取待付款全部订单
          */
-    public function Getallunpaidorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend){
-        if ($blend==0){
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>0,'z.order_status'=>0]);
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>0,'z.order_status'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
-            }
-
-        }else{
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>0,'z.order_status'=>0])->andwhere($this->ordercondition($blend));
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>0,'z.order_status'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
-            }
-        }
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $pagesize,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' ){
-                $arr[$k]['handle']='平台介入';
-            }
-        }
-        $data=$this->page($count,$pagesize,$page,$arr);
+    public static function Getallunpaidorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.pay_status'=>0,'z.order_status'=>0]);
+        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
         }
         /**
          *
          * 获取商品列表-大后台获取待发货全部订单
          */
-    public function Getallunshippedorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend){
-        if ($blend==0){
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
-            }
-
-        }else{
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0])->andwhere($this->ordercondition($blend));
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
-            }
-        }
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $pagesize,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' ){
-                $arr[$k]['handle']='平台介入';
-            }
-        }
-        $data=$this->page($count,$pagesize,$page,$arr);
+    public static function Getallunshippedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+         $array=self::getorderlist()->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
+        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
-        }
+    }
     /**
      *
      * 获取商品列表-大后台获取待收货全部订单
      */
-    public function Getallunreceivedorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend){
-        if ($blend==0){
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
-            }
-
-        }else{
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1])->andwhere($this->ordercondition($blend));
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
-            }
-
-        }
-
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $pagesize,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' ){
-                $arr[$k]['handle']='平台介入';
-            }
-        }
-        $data=$this->page($count,$pagesize,$page,$arr);
+    public static function Getallunreceivedorderdata($page_size=12,$page=1,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
+        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
     /**
      * 获取大后台已完成全部订单
      */
-    public function Getallcompeletedorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend){
-        if ($blend==0){
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
-            }
-
-        }else{
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0])->andwhere($this->ordercondition($blend));
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
-            }
-
-        }
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $pagesize,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' ){
-                $arr[$k]['handle']='平台介入';
-            }
-        }
-        $data=$this->page($count,$pagesize,$page,$arr);
+    public static function Getallcompeletedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
+        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
     /**
      * 获取大后台已取消订单
      */
-    public function  Getallcanceledorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend){
-        if ($blend==0){
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['z.order_status'=>2]);
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['z.order_status'=>2])->andwhere($this->Timehandle($time_id,$time_start,$time_end));
-            }
-
-        }else{
-            if ($time_id==0){
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['z.order_status'=>2])->andwhere($this->ordercondition($blend));
-            }else{
-                $array=$this->getorderlist()->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')->where(['z.order_status'=>2])->andwhere($this->Timehandle($time_id,$time_start,$time_end))->andwhere($this->ordercondition($blend));
-            }
-
-        }
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $pagesize,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' ){
-                $arr[$k]['handle']='平台介入';
-            }
-        }
-        $data=$this->page($count,$pagesize,$page,$arr);
+    public static function  Getallcanceledorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['z.order_status'=>2]);
+        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
     /**
      *大后台订单详情-获取订单详情
      */
     public function Getorderdetailsall($order_id){
-        $array= $this->getorderlist()->leftJoin('goods AS b','b.id = z.goods_id')->leftJoin('user_address AS c','a.address_id=c.id')->leftJoin('invoice AS d','a.invoice_id= d.id')->select('a.order_no,a.supplier_id,a.order_status,a.pay_status,a.paytime,a.shipping_status,a.customer_service,a.user_id,a.create_time,a.order_refer,a.comment,b.supplier_price,b.platform_price,b.market_price,b.purchase_price_decoration_company,b.logistics_template_id,b.purchase_price_designer,a.return_insurance,a.freight,c.address_name,c.consignee,c.mobile,c.district,c.region,d.invoice_header,d.invoice_content')->where(['a.id'=>$order_id]);
+        $array= self::getorderlist()->leftJoin('goods AS b','b.id = z.goods_id')->leftJoin('user_address AS c','a.address_id=c.id')->leftJoin('invoice AS d','a.invoice_id= d.id')->select('a.order_no,a.supplier_id,a.order_status,a.pay_status,a.paytime,a.shipping_status,a.customer_service,a.user_id,a.create_time,a.order_refer,a.comment,b.supplier_price,b.platform_price,b.market_price,b.purchase_price_decoration_company,b.logistics_template_id,b.purchase_price_designer,a.return_insurance,a.freight,c.address_name,c.consignee,c.mobile,c.district,c.region,d.invoice_header,d.invoice_content')->where(['a.id'=>$order_id]);
         $count=$array->count();
         $pagination = new Pagination(['totalCount'=> $count ,'pageSize'=>15,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)->limit($pagination->limit)->all();
@@ -483,91 +292,29 @@ class GoodsOrder extends ActiveRecord
      *
      * 获取大后台售后订单
      */
-    public function Getallcustomerserviceorderdata(){
-        $query=new \yii\db\Query();
-        $array  = $query->from('goods_order AS a')->select('a.id,a.order_status,a.customer_service,a.pay_status,a.address_id,a.order_status,a.create_time,a.user_id,a.shipping_status,a.amount_order,b.title')->leftJoin('goods AS b','b.id = a.goods_id')->where(['a.customer_service'=>0]);
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>15,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        return $arr;
+    public static function Getallcustomerserviceorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['z.order_status'=>1])->andwhere('z.customer_service!=0');
+        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        return $data;
     }
-    /**
-     * 获取商家后台全部订单
-     */
-//    public function Getbusinessorderlist(){
-//        $query=new \yii\db\Query();
-//        $array  = $query->from('goods_order AS a')->select('a.id,a.order_status,a.customer_service,a.pay_status,a.address_id,a.order_status,a.create_time,a.user_id,a.shipping_status,a.amount_order,b.title')->leftJoin('goods AS b','b.id = a.goods_id');
-//        $count = $array->count();
-//        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => 1,'pageSizeParam'=>false]);
-//        $data=$array->offset($pagination->offset)
-//            ->limit($pagination->limit)
-//            ->all();
-//        $arr=$this->getorderstatus($data);
-//        return $arr;
-//    }
+
+
     /**
      * 获取商家后台全部订单
      * @param $supplier_id
-     * @param $pagesize
+     * @param $page_size
      * @param $page
-     * @param $time_id
+     * @param $time_type
      * @param $time_start
      * @param $time_end
-     * @param $blend
+     * @param $search
+     * @param $sort_money
+     * @param $sort_time
      * @return array
      */
-    public function Businessgetallorderlist($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=$this->getorderlist()->where(['a.supplier_id'=>$supplier_id]);
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-        if ($sort_money==1 && $sort_time==1){
-            $sort='a.create_time asc,a.amount_order asc';
-        }else if ($sort_money==1 && $sort_time==2){
-            $sort='a.create_time asc,a.amount_order desc';
-        }
-        else if ($sort_money==2 && $sort_time==1){
-            $sort='a.create_time desc,a.amount_order asc';
-        }
-        else if ($sort_money==2 && $sort_time==2){
-            $sort='a.create_time desc,a.amount_order desc';
-        }else{
-            $sort='a.create_time desc,a.amount_order desc';
-        }
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')
-            ->orderBy($sort)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            $arr[$k]['unusual']=self::unusual($arr[$k]['is_unusual']);
-            if($arr[$k]['status']=='未发货'){
-                $arr[$k]['handle']='去发货';
-            }
-            if ($arr[$k]['status']=='售后中'){
-                $arr[$k]['handle']='售后处理';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01);
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+    public static function Businessgetallorderlist($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id]);
+        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
 
@@ -578,61 +325,9 @@ class GoodsOrder extends ActiveRecord
      * @param $pagesize
      * @return array
      */
-    public function Businessgetunpaidorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=$this->getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0]);
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-        if ($sort_money==1 && $sort_time==1){
-            $sort='a.create_time asc,a.amount_order asc';
-        }else if ($sort_money==1 && $sort_time==2){
-            $sort='a.create_time asc,a.amount_order desc';
-        }
-        else if ($sort_money==2 && $sort_time==1){
-            $sort='a.create_time desc,a.amount_order asc';
-        }
-        else if ($sort_money==2 && $sort_time==2){
-            $sort='a.create_time desc,a.amount_order desc';
-        }else{
-            $sort='a.create_time desc,a.amount_order desc';
-        }
-        $count=$array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')
-            ->orderBy($sort)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货'){
-                $arr[$k]['handle']='去发货';
-            }
-            if ($arr[$k]['status']=='售后中'){
-                $arr[$k]['handle']='售后处理';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01);
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+    public static function Businessgetunpaidorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0]);
+        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
 
@@ -642,193 +337,28 @@ class GoodsOrder extends ActiveRecord
      * @param $pagesize
      * @return array
      */
-    public  function Businessgetnotshippedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=$this->getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-        if ($sort_money==1 && $sort_time==1){
-            $sort='a.create_time asc,a.amount_order asc';
-        }else if ($sort_money==1 && $sort_time==2){
-            $sort='a.create_time asc,a.amount_order desc';
-        }
-        else if ($sort_money==2 && $sort_time==1){
-            $sort='a.create_time desc,a.amount_order asc';
-        }
-        else if ($sort_money==2 && $sort_time==2){
-            $sort='a.create_time desc,a.amount_order desc';
-        }else{
-            $sort='a.create_time desc,a.amount_order desc';
-        }
-        $count=$array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')
-            ->orderBy($sort)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货'){
-                $arr[$k]['handle']='去发货';
-            }
-            if ($arr[$k]['status']=='售后中'){
-                $arr[$k]['handle']='售后处理';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01);
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+    public static  function Businessgetnotshippedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
+        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
 
 
     /**
      * 商家后台待收货订单
-     * @param $supplier_id
-     * @param $pagesize
-     * @return array
      */
-    public function  Businessgetnotreceivedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=$this->getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-        if ($sort_money==1 && $sort_time==1){
-            $sort='a.create_time asc,a.amount_order asc';
-        }else if ($sort_money==1 && $sort_time==2){
-            $sort='a.create_time asc,a.amount_order desc';
-        }
-        else if ($sort_money==2 && $sort_time==1){
-            $sort='a.create_time desc,a.amount_order asc';
-        }
-        else if ($sort_money==2 && $sort_time==2){
-            $sort='a.create_time desc,a.amount_order desc';
-        }else{
-            $sort='a.create_time desc,a.amount_order desc';
-        }
-        $count=$array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')
-            ->orderBy($sort)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货'){
-                $arr[$k]['handle']='去发货';
-            }
-            if ($arr[$k]['status']=='售后中'){
-                $arr[$k]['handle']='售后处理';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01);
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+    public static function  Businessgetnotreceivedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
+        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
-
-
     /**
      *
      * 获取商家后台已完成列表
-     * @param $supplier_id
-     * @param $pagesize
-     * @return array
-     *
      */
-    public function Businessgetcompletedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=$this->getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-        if ($sort_money==1 && $sort_time==1){
-            $sort='a.create_time asc,a.amount_order asc';
-        }else if ($sort_money==1 && $sort_time==2){
-            $sort='a.create_time asc,a.amount_order desc';
-        }
-        else if ($sort_money==2 && $sort_time==1){
-            $sort='a.create_time desc,a.amount_order asc';
-        }
-        else if ($sort_money==2 && $sort_time==2){
-            $sort='a.create_time desc,a.amount_order desc';
-        }else{
-            $sort='a.create_time desc,a.amount_order desc';
-        }
-        $count=$array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')
-            ->orderBy($sort)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货'){
-                $arr[$k]['handle']='去发货';
-            }
-            if ($arr[$k]['status']=='售后中'){
-                $arr[$k]['handle']='售后处理';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01);
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+    public static function Businessgetcompletedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
+        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
 
@@ -839,61 +369,9 @@ class GoodsOrder extends ActiveRecord
      * @param $pagesize
      * @return array
      */
-    public function Businessgetcanceledorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=$this->getorderlist()->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2]);
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-        if ($sort_money==1 && $sort_time==1){
-            $sort='a.create_time asc,a.amount_order asc';
-        }else if ($sort_money==1 && $sort_time==2){
-            $sort='a.create_time asc,a.amount_order desc';
-        }
-        else if ($sort_money==2 && $sort_time==1){
-            $sort='a.create_time desc,a.amount_order asc';
-        }
-        else if ($sort_money==2 && $sort_time==2){
-            $sort='a.create_time desc,a.amount_order desc';
-        }else{
-            $sort='a.create_time desc,a.amount_order desc';
-        }
-        $count=$array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')
-            ->orderBy($sort)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货'){
-                $arr[$k]['handle']='去发货';
-            }
-            if ($arr[$k]['status']=='售后中'){
-                $arr[$k]['handle']='售后处理';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01);
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+    public static function Businessgetcanceledorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2]);
+        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
 
@@ -904,65 +382,11 @@ class GoodsOrder extends ActiveRecord
      * @param $pagesize
      * @return array
      */
-    public function  Businessgetcustomerserviceorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=$this->getorderlist()->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0');
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-        if ($sort_money==1 && $sort_time==1){
-            $sort='a.create_time asc,a.amount_order asc';
-        }else if ($sort_money==1 && $sort_time==2){
-            $sort='a.create_time asc,a.amount_order desc';
-        }
-        else if ($sort_money==2 && $sort_time==1){
-            $sort='a.create_time desc,a.amount_order asc';
-        }
-        else if ($sort_money==2 && $sort_time==2){
-            $sort='a.create_time desc,a.amount_order desc';
-        }else{
-            $sort='a.create_time desc,a.amount_order desc';
-        }
-        $count=$array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' =>$page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id')
-            ->orderBy($sort)
-            ->all();
-        $arr=$this->getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货'){
-                $arr[$k]['handle']='去发货';
-            }
-            if ($arr[$k]['status']=='售后中'){
-                $arr[$k]['handle']='售后处理';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01);
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+    public static function  Businessgetcustomerserviceorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0');
+        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
-
-
     /**
      * * 获取订单详情订单信息
      * @param $order_no
@@ -970,17 +394,17 @@ class GoodsOrder extends ActiveRecord
      * @return array
      */
     public function Getorderinformation($order_no){
-        $array=$this->getorderlist()->leftJoin('express AS b','b.order_no =a.order_no and b.sku=z.sku')->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.order_id,z.goods_price')->where(['a.order_no'=>$order_no])->all();
-        $arr=$this->getorderstatus($array);
+        $array=self::getorderlist()->leftJoin('express AS b','b.order_no =a.order_no and b.sku=z.sku')->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.order_id,z.goods_price,a.order_refer')->where(['a.order_no'=>$order_no])->all();
+        $arr=self::getorderstatus($array);
         $output=array();
         $goods_num=0;
         foreach($arr as $k=>$v){
             $arr[$k]['amount_order']= sprintf('%.2f', (float) $arr[$k]['amount_order']*0.01);
             $arr[$k]['freight']= sprintf('%.2f', (float)$arr[$k]['freight']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01);
-            $arr[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01);
+            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
             $output['amount_order']=$arr[$k]['amount_order'];
             $output['return_insurance']=$arr[$k]['return_insurance'];
             $output['freight']=$arr[$k]['freight'];
@@ -1002,14 +426,21 @@ class GoodsOrder extends ActiveRecord
             $output['waybillnumber']=$arr[$k]['waybillnumber'];
             $output['waybillname']=$arr[$k]['waybillname'];
             $output['shipping_type']=$arr[$k]['shipping_type'];
-            $output['username']=(new Query())->from('user')->where(['id'=>$arr[$k]['user_id']])->one()['nickname'];
+            $user=(new Query())->from('user')->where(['id'=>$arr[$k]['user_id']])->one();
+            $output['username']=$user['nickname'];
+
             if (empty($output['username'])){
                 $output['username']=(new Query())->from('user_address')->where(['id'=>$arr[$k]['address_id']])->one()['consignee'];
+                $output['role']='平台';
+            }else{
+                $output['role']=(new Query())->from('user_role as a')->select('b.name')->leftJoin('role as b','a.role_id=b.id')->where(['a.user_id'=>$arr[$k]['user_id']])->one()['role'];
+                if (!$output['role']){
+                    $output['role']='平台';
+                }
             }
             $goods_num+=$arr[$k]['goods_number'];
         }
         $output['goods_num']=$goods_num;
-
         if ($output['status']=='未付款'){
             $time=time();
             $pay_term=(strtotime($output['create_time'])+1800);
@@ -1028,6 +459,21 @@ class GoodsOrder extends ActiveRecord
     }
 
     /**
+     * 获取配送方式
+     * @param $order_no
+     * @param $sku
+     * @return array|bool
+     */
+    public  static  function  findshipping_type($order_no,$sku)
+    {
+        $data=(new Query())->from(ORDER_GOODSLIST)->select('shipping_type')->where(['order_no'=>$order_no,'sku'=>$sku])->one()['shipping_type'];
+        if (!$data){
+            $data=0;
+        }
+        return $data;
+    }
+
+    /**
      * 去发货
      * @param $sku
      * @param $order_no
@@ -1037,36 +483,57 @@ class GoodsOrder extends ActiveRecord
      * @return bool
      */
     public static function Supplierdelivery($sku,$order_no,$waybillname,$waybillnumber,$shipping_type){
+        $create_time=time();
         if($shipping_type==1){
-            $res1=Yii::$app->db->createCommand()->update(ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
-            if ($res1){
-                return true;
-            }else{
-                return false;
-            }
-        }else{
-            $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
-            if ($express){
-                return false;
-            }
-            $create_time=time();
-            $res1=Yii::$app->db->createCommand()->update(ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
-            if($res1){
-                $res=Yii::$app->db->createCommand()->insert('express',[
-                    'sku'    => $sku,
-                    'order_no' =>$order_no,
-                    'waybillname'      =>$waybillname,
-                    'waybillnumber'  =>$waybillnumber,
-                    'create_time'=>$create_time,
-                ])->execute();
-                if ($res){
-                    return true;
+            $trans = \Yii::$app->db->beginTransaction();
+            $e=1;
+            try {
+                \Yii::$app->db->createCommand()->update(ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
+
+                $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
+                if ($express){
+                    \Yii::$app->db->createCommand()->update(EXPRESS, [
+                        'waybillname'      =>'送货上门',
+                        'create_time'=>$create_time],'sku='.$sku.' and order_no='.$order_no)->execute();
                 }else{
-                    return false;
+                    \Yii::$app->db->createCommand()->insert(EXPRESS,[
+                        'sku'    => $sku,
+                        'order_no' =>$order_no,
+                        'waybillname'      =>'送货上门',
+                        'create_time'=>$create_time,
+                    ])->execute();
                 }
-            }else{
-                return false;
+            } catch (Exception $e) {
+                $trans->rollBack();
             }
+            $trans->commit();
+            return $e;
+        }else{
+            $trans = \Yii::$app->db->beginTransaction();
+            $e=1;
+            try {
+                $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
+                \Yii::$app->db->createCommand()->update(ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
+                if ($express){
+                    \Yii::$app->db->createCommand()->update(EXPRESS, [
+
+                        'waybillname'      =>$waybillname,
+                        'waybillnumber'  =>$waybillnumber,
+                        'create_time'=>$create_time],'sku='.$sku.' and order_no='.$order_no)->execute();
+                }else{
+                    \Yii::$app->db->createCommand()->insert('express',[
+                        'sku'    => $sku,
+                        'order_no' =>$order_no,
+                        'waybillname'      =>$waybillname,
+                        'waybillnumber'  =>$waybillnumber,
+                        'create_time'=>$create_time
+                    ])->execute();
+                }
+            } catch (Exception $e) {
+                $trans->rollBack();
+            }
+            $trans->commit();
+            return $e;
         }
     }
 
@@ -1081,226 +548,214 @@ class GoodsOrder extends ActiveRecord
      * @return array
      */
     public function Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
-        $goods=array();
-
+            $goods=array();
             $goods['goods_name']=$goods_name;
             $goods['goods_id']=$goods_id;
             $attr_id=explode(',',$goods_attr_id);
             $goods['attr']=array();
             foreach($attr_id AS $key =>$val){
-                $goods['attr'][$key]=(new \yii\db\Query())->select('name,value')->from('goods_attr')->where(['id'=>$attr_id[$key]])->one();
+                $goods['attr'][$key]=(new Query())->select('name,value')->from('goods_attr')->where(['id'=>$attr_id[$key]])->one();
 
             }
-
-
         return $goods;
     }
 
-//    /**
-//     * 添加银行卡-商家
-//     * @param $supplier_id
-//     * @param $bankname
-//     * @param $bankcard
-//     * @param $username
-//     * @param $position
-//     * @param $bankbranch
-//     * @return bool|int
-//     */
-//    public function Bankcardadd($supplier_id,$bankname,$bankcard,$username,$position,$bankbranch){
-//        //查询
-//        $data=$this->GetBankcard($supplier_id);
-//        if ($data){
-//            return false;
-//        }else{
-//            $time=time();
-//            $res=Yii::$app->db->createCommand()->insert(SUP_BANK_CARD,[
-//                'supplier_id'=>$supplier_id,
-//                'bankname'   =>$bankname,
-//                'bankcard'   =>$bankcard,
-//                'username'   =>$username,
-//                'position'   =>$position,
-//                'bankbranch' =>$bankbranch,
-//                'create_time'=>$time
-//            ])->execute();
-//            return $res;
-//        }
-//    }
-//
-//    /**
-//     * 查询银行卡
-//     * @param $supplier_id
-//     * @return array|null
-//     */
-//    public function Getbankcardinformation($supplier_id){
-//        $data=$this->GetBankcard($supplier_id);
-//        if ($data){
-//            return $data;
-//        }else{
-//            return null;
-//        }
-//    }
-//
-//    /**
-//     * 修改银行卡信息
-//     * @param $supplier_id
-//     * @param $bankname
-//     * @param $bankcard
-//     * @param $username
-//     * @param $position
-//     * @param $bankbranch
-//     * @return bool|int
-//     */
-//    public function Bankcardupdate($supplier_id,$bankname,$bankcard,$username,$position,$bankbranch)
-//    {
-//                //查询
-//                $data=$this->GetBankcard($supplier_id);
-//                if ($data){
-//                    $res=Yii::$app->db->createCommand()->update(SUP_BANK_CARD, ['bankname'   =>$bankname, 'bankcard'   =>$bankcard, 'username'   =>$username, 'position'   =>$position, 'bankbranch' =>$bankbranch],'supplier_id='.$supplier_id)->execute();
-//                    return $res;
-//                }else{
-//                    return false;
-//                }
-//    }
-//
-//    /**
-//     * 商家后台，获取商家余额，可用余额
-//     * @param $supplier_id
-//     * @return array|null
-//     */
-//    public function Getbalance($supplier_id){
-//        $data=(new \yii\db\Query())->from(SUPPLIER.' as a')->leftJoin(SUP_FREELIST.' as b','a.id=b.supplier_id')->select('a.type_shop,a.status,a.shop_no,a.balance,a.availableamount,b.freeze_money')->where(['a.id'=>$supplier_id])->all();
-//        if (!$data){
-//            return null;
-//        }
-//        $output=array();
-//        $a=0;
-//        foreach($data AS $k=>$v){
-//            $a+= $data[$k]['freeze_money'];
-//            $output['balance']=$data[$k]['freeze_money']*0.01;
-//            $output['availableamount']=$data[$k]['availableamount']*0.01;
-//        }
-//        $user = Yii::$app->user->identity;
-//        $cashregister=(new \yii\db\Query())->from(SUP_CASHREGISTER)->select('cash_money')->where(['supplier_id'=>$supplier_id,'status'=>3])->all();
-//        $cash_money=0;
-//        foreach ($cashregister AS $k=>$v){
-//            $cash_money+=$cashregister[$k]['cash_money'];
-//        }
-//        $output['cash_money']=$cash_money*0.01;
-//        $output['freeze_money']=$a*0.01;
-//        return $output;
-//    }
-//
-//
-//    /**
-//     * 验证是否设置支付密码
-//     * @param $supplier_id
-//     * @return int
-//     */
-//    public function Issetpaypsw($supplier_id){
-//        $data=(new \yii\db\Query())->from(SUPPLIER)->select('pay_password')->where(['id'=>$supplier_id])->one();
-//        if ($data['pay_password']){
-//            return 1;
-//        }else{
-//            return 2;
-//        }
-//    }
-//
-//
-//    /**
-//     * @param $psw
-//     * @param $supplier_id
-//     * @return bool
-//     */
-//    public function  Setpaypsw($psw,$supplier_id){
-//
-//      $res=Yii::$app->db->createCommand()->update(SUPPLIER, ['pay_password' =>$psw],'id='.$supplier_id)->execute();
-//       if($res){
-//           return true;
-//       }else{
-//           return false;
-//       }
-//    }
-//
-//
-//    /**
-//     * 商家重设支付密码-不是第一次
-//     * 1:成功  2：用户不存在 3：失败 4：短信验证失败
-//     * @param $psw
-//     * @param $supplier_id
-//     * @param $code
-//     * @return int
-//     */
-//    public function  Setpaypsw_sup_reset($psw,$supplier_id,$code){
-//        $user = Yii::$app->user->identity;
-//        if (!$user){
-//           return 2;
-//        }
-//        $mobile=user::find()->select('mobile')->where(['id'=>$user->id])->one()['mobile'];
-//        //验证短信验证码是否正确
-//        $re=SmValidationService::validCode($mobile,$code);
-//        if ($re==true){
-//            $res=Yii::$app->db->createCommand()->update(SUPPLIER, ['pay_password' =>$psw],'id='.$supplier_id)->execute();
-//            if($res){
-//                return 1;
-//            }else{
-//                return 3;
-//            }
-//        }else{
-//            return 4;
-//        }
-//    }
-//
-//    /**
-//     * 商家提现申请
-//     * @param $money
-//     * @return bool
-//     */
-//    public function Supplierwithdrawalsapply($money){
-//        $user = Yii::$app->user->identity;
-//        $supplier=Supplier::find()->select('id,shop_no,availableamount')->where(['uid' => $user->id])->one();
-//        $supplier_id=$supplier['id'];
-//        $time=time();
-//        $month=date('m',$time);
-//        $day=date('d',$time);
-//        $rand=rand(10000,99999);
-//        $transaction_no=$month.$day.$supplier['shop_no'].$rand;
-//        $res=Yii::$app->db->createCommand()->insert(SUP_CASHREGISTER,[
-//            'supplier_id'=>$supplier_id,
-//            'cash_money'=>$money*100,
-//            'status'    =>1,
-//            'transaction_no'=>$transaction_no,
-//            'apply_time'=>$time
-//        ])->execute();
-//        $availableamount=$supplier['availableamount']-$money*100;
-//        if ($availableamount<0){
-//            return false;
-//        }
-//        $re=Yii::$app->db->createCommand()->update(SUPPLIER, ['availableamount'=>$availableamount],'id='.$supplier_id)->execute();
-//        if ($res && $re){
-//            return true;
-//        }else{
-//            return false;
-//        }
-//    }
+    /**
+     * 平台介入
+     * @param $order_no
+     * @param $handle_type
+     * @param $reason
+     * @return Exception|\Exception|int
+     */
+    public static  function Platformadd($order_no,$handle_type,$reason,$sku){
+        switch ($handle_type){
+            case  2:
+                $res=self::platformhandle2($order_no,$handle_type,$reason,$sku);
+                break;
+        }
+        return $res;
+    }
 
-//    /**
-//     * 查询银行卡信息
-//     * @param $supplier_id
-//     * @return array
-//     */
-//    private function GetBankcard($supplier_id){
-//        $data=(new \yii\db\Query())->from(SUP_BANK_CARD)->where(['supplier_id'=>$supplier_id])->one();
-//        return $data;
-//    }
+    /**
+     * 获取平台介入信息
+     * @param $order_no
+     * @param $sku
+     * @return array|bool
+     */
+    public static  function Getplatformdetail($order_no,$sku){
+        $res=(new Query())
+            ->from(ORDER_PLATFORM_HANDLE)
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->one();
+        if (!$res){
+            return null;
+        }
+        $res['handle']=self::Gethanndletype($res['handle']);
+        $res['refund_result']=self::Getplatformresult($res['refund_result']);
+        $res['refund_type']=self::Getplatformtype($res['refund_type']);
+        $res['refund_time']=date('Y-m-d H:i',$res['refund_time']);
+        return $res;
+    }
+
+    /**
+     * @param $refund_type
+     * @return string
+     */
+    private  static  function Getplatformtype($refund_type)
+    {
+        switch ($refund_type){
+            case 1:
+                $res='退至顾客钱包 ';
+                break;
+            case 2:
+                $res='线下自行退款';
+                break;
+            case 3:
+                $res='退至支付宝';
+                break;
+        }
+        return $res;
+    }
+
+    /**
+     * @param $result
+     * @return string
+     */
+    private  static  function Getplatformresult($result){
+        switch ($result){
+            case 1:
+                $res='退款中';
+                break;
+            case 2:
+                $res='成功';
+                break;
+            case 3:
+                $res='失败';
+                break;
+        }
+        return $res;
+    }
+
+    /**获取平台介入类型
+     * @param $handle
+     * @return string
+     */
+    private  static  function Gethanndletype($handle){
+        switch ($handle){
+            case 0:
+                $res=null;
+                break;
+            case 1:
+                $res='关闭订单退款';
+                break;
+            case 2:
+                $res='关闭订单线下退款';
+                break;
+            case 3:
+                $res='退货';
+                break;
+            case 4:
+                $res='换货';
+                break;
+            case 5:
+                $res='上门维修';
+                break;
+            case 6:
+                $res='上门退货';
+                break;
+            case 7:
+                $res='上门换货';
+                break;
+        }
+        return $res;
+
+    }
+    /**
+     * 关闭订单，线下退款
+     * @param $order_no
+     * @param $handle_type
+     * @param $reason
+     * @return Exception|\Exception|int
+     */
+    private static  function  platformhandle2($order_no,$handle_type,$reason,$sku)
+    {
+        $order=(new Query())->from(ORDER_PLATFORM_HANDLE)->select('id')->where(['order_no'=>$order_no])->one();
+        $time=time();
+        if ($order){
+            $trans = \Yii::$app->db->beginTransaction();
+            $e=1;
+            try {
+                $res= \Yii::$app->db->createCommand()
+                    ->update(ORDER_PLATFORM_HANDLE, [
+                        'handle' =>$handle_type,
+                        'reasons' => $reason,
+                        'creat_time' => $time,
+                        'refund_result'=>2,
+                        'refund_type'=>2,
+                        'refund_time'=>$time
+                    ], [
+                        'sku'=>$sku,
+                        'order_no' =>$order_no
+                    ])
+                    ->execute();
+                $res2=\Yii::$app->db->createCommand()
+                    ->update(ORDER_GOODSLIST, [
+                        'order_status' =>2,
+                    ], [  'sku'=>$sku,
+                        'order_no' =>$order_no])
+                    ->execute();
+            } catch (Exception $e) {
+                $trans->rollBack();
+            }
+            $trans->commit();
+            return $e;
+        }else{
+            $trans = \Yii::$app->db->beginTransaction();
+            $e=1;
+            try {
+                $res= \Yii::$app->db->createCommand()
+                    ->insert(ORDER_PLATFORM_HANDLE, [
+                        'handle' =>$handle_type,
+                        'reasons' => $reason,
+                        'creat_time' => $time,
+                        'order_no'=>$order_no,
+                        'refund_result'=>2,
+                        'refund_type'=>2,
+                        'refund_time'=>$time,
+                        'sku'=>$sku
+                    ])
+                    ->execute();
+                $res2=\Yii::$app->db->createCommand()
+                    ->update(ORDER_GOODSLIST, [
+                        'order_status' =>2,
+                    ], [ 'sku'=>$sku,
+                        'order_no' =>$order_no])
+                    ->execute();
+            } catch (Exception $e) {
+                $trans->rollBack();
+            }
+            $trans->commit();
+            return $e;
+        }
+    }
     /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
      */
-    private function getorderstatus($data)
+    private static function getorderstatus($data)
     {
         foreach ($data as $k =>$v){
             $data[$k]['create_time']=date('Y-m-d H:i',$data[$k]['create_time']);
+            switch ($data[$k]['order_refer']){
+                case 1:
+                    $data[$k]['user_name']='无登录用户';
+                    break;
+                case 2:
+                    $data[$k]['user_name']=User::find()->select('username')->where(['id'=>$data[$k]['user_id']])->asArray()->one()['username'];
+                    break;
+            }
             switch ($data[$k]['order_status']){
                 case 0:
                     switch ($data[$k]['pay_status'])
@@ -1317,7 +772,7 @@ class GoodsOrder extends ActiveRecord
                                     $data[$k]['status']='待收货';
                                     break;
                                 case 2:
-                                            $data[$k]['status']='已完成';
+                                    $data[$k]['status']='已完成';
                                             break;
                             }
                             break;
@@ -1347,16 +802,28 @@ class GoodsOrder extends ActiveRecord
                if ($received[$k]['model']['ischeck']==1){
                    $data[$k]['status']='已完成';
                    $res=Yii::$app->db->createCommand()->update('order_goodslist', ['order_status' =>1,'shipping_status'=>2],'order_id='.$data[$k]['order_id'].' and sku='.$data[$k]['sku'])->execute();
+                   $supplier_id[$k]=self::find()->select('supplier_id')->where(['order_no'=>$data[$k]['order_no']])->asArray()->one()['supplier_id'];
+                   $supplier[$k]=Supplier::find()->where(['id'=>$supplier_id[$k]])->asArray()->one();
+                   $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
+                   $res1=Yii::$app->db->createCommand()->update('supplier', ['balance' =>($supplier[$k]['balance']+$money[$k]),'availableamount'=>($supplier[$k]['availableamount']+$money[$k])],'id='.$supplier[$k]['id'])->execute();
+                   $rand=rand(10000,99999);
+                   $time=time();
+                   $month=date('m',$time);
+                   $day=date('d',$time);
+                   do {
+                       $transaction_no=$month.$day.$supplier['shop_no'].$rand;
+                   } while ( $transaction_no==(new Query)->from('supplier_cashregister')->select('transaction_no')->where(['transaction_no'=>$transaction_no])->one()['transaction_no']);
+                   $res2=Yii::$app->db->createCommand()->insert('supplier_accessdetail',[
+                       'access_type'    => 1,
+                       'access_money' =>$money[$k],
+                       'create_time'      =>time(),
+                       'order_no'  =>$data[$k]['order_no'],
+                       'transaction_no'=>$transaction_no,
+                       'supplier_id'=>$supplier_id[$k]
+                   ])->execute();
                }
            };
-            //获取用户
-            $user=array();
-            $user[$k]=(new \yii\db\Query())->from('user')->select('id,username')->where(['id'=>$data[$k]['user_id']])->one();
-            if ($user[$k]){
-                $data[$k]['username']=$user[$k]['username'];
-            }else{
-                $data[$k]['username']=(new \yii\db\Query())->from('user_address')->select('id,consignee')->where(['id'=>$data[$k]['address_id']])->one()['consignee'];
-            }
+
             unset($data[$k]['customer_service']);
             unset($data[$k]['pay_status']);
             unset($data[$k]['order_status']);
@@ -1365,73 +832,17 @@ class GoodsOrder extends ActiveRecord
 
         return $data;
     }
-
-    private function getorderlist()
+    private static function getorderlist()
     {
         $getorderlist  =(new Query())->from('goods_order AS a')->leftJoin('order_goodslist AS z','z.order_no = a.order_no');
         return $getorderlist;
     }
-
-    private  function Timehandle($time_id,$time_start,$time_end){
-        if ($time_id==0){
-           return null;
-        }else if ($time_id==1){
-         $data='DATE(FROM_UNIXTIME(a.create_time))=CURDATE()';
-            return $data;
-        }else if ($time_id==2){
-            $data="DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= DATE(FROM_UNIXTIME(a.create_time))";
-            return $data;
-        }else if ($time_id==3){
-            $data="DATE_SUB(CURDATE(), INTERVAL 1 MONTH) <= DATE(FROM_UNIXTIME(a.create_time))";
-            return $data;
-        }else if($time_id==4){
-            $data="DATE_SUB(CURDATE(), INTERVAL 365 DAY) <= DATE(FROM_UNIXTIME(a.create_time))";
-            return $data;
-        }else if ($time_id==5){
-            $data="a.create_time>='".strtotime($time_start)."' and a.create_time<='".strtotime($time_end)."'";
-            return $data;
-        }
-    }
-
-    private function ordercondition($blend){
-        $ismobile = preg_match('/^0?1[3|4|5|8][0-9]\d{8}$/',$blend);
-        $isorderno= preg_match('/\b\d{10}\b/', $blend);
-        $ischina= preg_match('/[\x80-\xff]{6,30}/', $blend);
-        if ($isorderno==1){
-            $data="a.order_no'".$blend."'";
-            return $data;
-        }
-        if ($ischina==1){
-            $data="z.goods_name='".$blend."'";
-            return $data;
-        }
-    }
-    /**
-     * 得到开始和结束时间
-     * @param $time_type
-     * @param $time_start
-     * @param $time_end
-     * @return array
-     */
-    private  function timeDeal($time_type, $time_start, $time_end)
-    {
-        if ($time_type == 'custom' && $time_start && $time_end) {
-            $time_start = strtotime($time_start);
-            $time_end = strtotime($time_end);
-        } else {
-            $time_area = StringService::startEndDate($time_type, 1);
-            $time_start = $time_area[0];
-            $time_end = $time_area[1];
-        }
-        return [$time_start, $time_end];
-    }
-
     /**
      * 异常判断
      * @param $is_unusual
      * @return string
      */
-    private function unusual($is_unusual){
+    private static function unusual($is_unusual){
         if ($is_unusual==1){
             $unusual='申请退款';
         }else if ($is_unusual==0){
@@ -1442,35 +853,160 @@ class GoodsOrder extends ActiveRecord
         return $unusual;
     }
     /**
-     * 分页处理
-     * @param $count
-     * @param $page_size
-     * @param $page
-     * @param $arr
-     * @return array
+     * 商家附加条件
+     * @param $array
+     * @param $time_start
+     * @param $time_end
+     * @param $search
+     * @return mixed
      */
-    private   function page($count,$page_size,$page,$arr){
-        $total_page=ceil($count/$page_size);
-        if ($page>$total_page){
-            $sd= array(
-                'list'=>'',
-                'total_page'=>$total_page,
-                'count'=>$count,
-                'page_size'=>$page_size,
-                'page'=>$page
-            );
-        }else{
-            $sd=array(
-                'list'=>$arr,
-                'total_page'=>$total_page,
-                'count'=>$count,
-                'page_size'=>$page_size,
-                'page'=>$page
-            );
+    private static  function Business_increase_condition($array,$time_start,$time_end,$search){
+        if ($time_start && $time_end && $time_end > $time_start) {
+            $array->andWhere(['>', 'a.create_time', $time_start])
+                ->andWhere(['<', 'a.create_time', $time_end]);
         }
-        return $sd;
+        if ($search) {
+            $array->andFilterWhere(['like', 'a.order_no', $search])
+                ->orFilterWhere(['like', 'z.goods_name', $search]);
+        }
+        return $array;
     }
 
+    /**
+     * 商家排序
+     * @param $sort_money
+     * @param $sort_time
+     * @return string
+     */
+    private static  function sort_lhzz_busnessorder($sort_money,$sort_time){
+        if ($sort_money==1 && $sort_time==1){
+            $sort='a.create_time asc,a.amount_order asc';
+        }else if ($sort_money==1 && $sort_time==2){
+            $sort='a.create_time asc,a.amount_order desc';
+        }
+        else if ($sort_money==2 && $sort_time==1){
+            $sort='a.create_time desc,a.amount_order asc';
+        }
+        else if ($sort_money==2 && $sort_time==2){
+            $sort='a.create_time desc,a.amount_order desc';
+        }else{
+            $sort='a.create_time desc,a.amount_order desc';
+        }
+        return $sort;
+    }
+
+    /**
+     * 商家查询
+     * @param $array
+     * @param $supplier_id
+     * @param $page_size
+     * @param $page
+     * @param $time_type
+     * @param $time_start
+     * @param $time_end
+     * @param $search
+     * @param $sort_money
+     * @param $sort_time
+     * @return array
+     */
+    private  static  function Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time)
+    {
+        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
+        $time_start = $time_area[0];
+        $time_end = $time_area[1];
+        self::Business_increase_condition($array,$time_start,$time_end,$search);
+        $sort=self::sort_lhzz_busnessorder($sort_money,$sort_time);
+        $count = $array->count();
+        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $page_size,'pageSizeParam'=>false]);
+        $data=$array->offset($pagination->offset)
+            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id,a.order_refer')
+            ->orderBy($sort)
+            ->limit($pagination->limit)
+            ->all();
+        $arr=self::getorderstatus($data);
+        foreach ($arr AS $k =>$v){
+            $arr[$k]['handle']='';
+            $arr[$k]['unusual']=self::unusual($arr[$k]['is_unusual']);
+            if($arr[$k]['status']=='未发货'){
+                $arr[$k]['handle']='去发货';
+            }
+            if ($arr[$k]['status']=='售后中'){
+                $arr[$k]['handle']='售后处理';
+            }
+            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
+            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+        }
+        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+        return $data;
+
+    }
+
+    private static  function increase_condition($array,$time_start,$time_end,$search){
+        if ($time_start && $time_end && $time_end > $time_start) {
+            $array->andWhere(['>', 'a.create_time', $time_start])
+                ->andWhere(['<', 'a.create_time', $time_end]);
+        }
+        if ($search) {
+            $array->andFilterWhere(['like', 'a.order_no', $search])
+                ->orFilterWhere(['like', 'z.goods_name', $search])
+                ->orFilterWhere(['like', 'z.goods_name', $search]);
+        }
+    }
+
+    private static  function sort_lhzz_order($sort_money,$sort_time){
+        if ($sort_money==1 && $sort_time==1){
+            $sort='a.create_time asc,a.amount_order asc';
+        }else if ($sort_money==1 && $sort_time==2){
+            $sort='a.create_time asc,a.amount_order desc';
+        }
+        else if ($sort_money==2 && $sort_time==1){
+            $sort='a.create_time desc,a.amount_order asc';
+        }
+        else if ($sort_money==2 && $sort_time==2){
+            $sort='a.create_time desc,a.amount_order desc';
+        }else{
+            $sort='a.create_time desc,a.amount_order desc';
+        }
+        return $sort;
+    }
+
+    private static function gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
+        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
+        $time_start = $time_area[0];
+        $time_end = $time_area[1];
+        self::increase_condition($array,$time_start,$time_end,$search);
+        $sort=self::sort_lhzz_order($sort_money,$sort_time);
+        $count = $array->count();
+        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $page_size,'pageSizeParam'=>false]);
+        $data=$array->offset($pagination->offset)
+            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id,a.order_refer')
+            ->orderBy($sort)
+            ->limit($pagination->limit)
+            ->all();
+        $arr=self::getorderstatus($data);
+        foreach ($arr AS $k =>$v){
+            $arr[$k]['handle']='';
+            if ($arr[$k]['is_unusual']==1){
+                $arr[$k]['unusual']='申请退款';
+            }else if ($arr[$k]['is_unusual']==0){
+                $arr[$k]['unusual']='无异常';
+            }else if($arr[$k]['is_unusual']==2){
+                $arr[$k]['unusual']='退款失败';
+            }
+            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+                $arr[$k]['handle']='平台介入';
+            }
+            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
+            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['comment']='';
+        }
+        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+        return $data;
+    }
 
 
 }

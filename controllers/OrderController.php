@@ -12,6 +12,7 @@ use app\models\Express;
 use app\models\Goods;
 use app\models\Supplier;
 use app\models\LogisticsDistrict;
+use app\models\Lhzz;
 use app\services\SmValidationService;
 use app\services\AlipayTradeService;
 use app\services\ExceptionHandleService;
@@ -504,6 +505,9 @@ class OrderController extends Controller
         return Json::encode($result);
     }
 
+
+
+
     /**
      * 大后台获取全部订单列表
      * @copyright        艾特魔方
@@ -511,63 +515,19 @@ class OrderController extends Controller
      * @lastmodify       2017-7-19
      */
     public function actionGetallorderlist(){
-          $request = Yii::$app->request;
-          $page=trim(htmlspecialchars($request->get('page','')),'');
-          $pagesize=trim(htmlspecialchars($request->get('pagesize','')),'');
-          $time_id=trim(htmlspecialchars($request->post('time_id','')),'');
-              if (!$time_id){
-                  $time_id=0;
-              }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $blend=trim(htmlspecialchars($request->post('blend','')),'');
-        if (!$blend){
-            $blend=0;
-        }
-            if ($time_id==5){
-                if (!$time_start || !$time_end){
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code],
-                        'data' => null
-                    ]);
-                }
-            }
-            if (!$pagesize){
-                $pagesize=15;
-            }
-            if (!$page){
-                $page=1;
-            }
-          $model=new GoodsOrder();
-          $data=$model->Getallorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend);
-          return Json::encode([
-              'code'=>200,
-              'msg' =>'ok',
-              'data' => $data
-          ]);
-    }
-
-    /**
-     * 大后台获取待付款订单
-     * @return string
-     */
-    public function actionGetallunpaidorder(){
         $request = Yii::$app->request;
         $page=trim(htmlspecialchars($request->get('page','')),'');
-        $pagesize=trim(htmlspecialchars($request->get('pagesize','')),'');
-        $time_id=trim(htmlspecialchars($request->post('time_id','')),'');
-        if (!$time_id){
-            $time_id=0;
+        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
+        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
+        if (!$time_type){
+            $time_type='all';
         }
         $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
         $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $blend=trim(htmlspecialchars($request->post('blend','')),'');
-        if (!$blend){
-            $blend=0;
-        }
-        if ($time_id==5){
+        $search=trim(htmlspecialchars($request->post('search','')),'');
+        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
+        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
+        if ($time_type=='custom'){
             if (!$time_start || !$time_end){
                 $code=1000;
                 return Json::encode([
@@ -577,14 +537,151 @@ class OrderController extends Controller
                 ]);
             }
         }
-        if (!$pagesize){
-            $pagesize=15;
+        if (!$page_size){
+            $page_size=12;
         }
         if (!$page){
             $page=1;
         }
-        $model=new GoodsOrder();
-        $data=$model->Getallunpaidorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend);
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+             $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+          $data=GoodsOrder::Getallorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+          return Json::encode([
+              'code'=>200,
+              'msg' =>'ok',
+              'data' => $data
+          ]);
+    }
+
+    /**
+     * 大后台搜索界面
+     * @return string
+     */
+    public function actionOrder_search(){
+        $request = Yii::$app->request;
+        $page=trim(htmlspecialchars($request->get('page','')),'');
+        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
+        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
+        if (!$time_type){
+            $time_type='all';
+        }
+        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
+        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
+        $search=trim(htmlspecialchars($request->post('search','')),'');
+        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
+        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
+        if ($time_type=='custom'){
+            if (!$time_start || !$time_end){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+        if (!$search){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+        if (!$page_size){
+            $page_size=15;
+        }
+        if (!$page){
+            $page=1;
+        }
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=GoodsOrder::Getallorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 大后台获取待付款订单
+     * @return string
+     */
+    public function actionGetallunpaidorder(){
+        $request = Yii::$app->request;
+        $page=trim(htmlspecialchars($request->get('page','')),'');
+        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
+        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
+        if (!$time_type){
+            $time_type='all';
+        }
+        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
+        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
+        $search=trim(htmlspecialchars($request->post('search','')),'');
+        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
+        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
+        if ($time_type=='custom'){
+            if (!$time_start || !$time_end){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+        if (!$page_size){
+            $page_size=15;
+        }
+        if (!$page){
+            $page=1;
+        }
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=GoodsOrder::Getallunpaidorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
@@ -599,18 +696,17 @@ class OrderController extends Controller
     public function actionGetallunshippedorder(){
         $request = Yii::$app->request;
         $page=trim(htmlspecialchars($request->get('page','')),'');
-        $pagesize=trim(htmlspecialchars($request->get('pagesize','')),'');
-        $time_id=trim(htmlspecialchars($request->post('time_id','')),'');
-        if (!$time_id){
-            $time_id=0;
+        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
+        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
+        if (!$time_type){
+            $time_type='all';
         }
         $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
         $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $blend=trim(htmlspecialchars($request->post('blend','')),'');
-        if (!$blend){
-            $blend=0;
-        }
-        if ($time_id==5){
+        $search=trim(htmlspecialchars($request->post('search','')),'');
+        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
+        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
+        if ($time_type=='custom'){
             if (!$time_start || !$time_end){
                 $code=1000;
                 return Json::encode([
@@ -620,14 +716,29 @@ class OrderController extends Controller
                 ]);
             }
         }
-        if (!$pagesize){
-            $pagesize=15;
+        if (!$page_size){
+            $page_size=12;
         }
         if (!$page){
             $page=1;
         }
-        $model=new GoodsOrder();
-        $data=$model->Getallunshippedorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend);
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=GoodsOrder::Getallunshippedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
@@ -642,18 +753,17 @@ class OrderController extends Controller
     public function actionGetallunreceivedorder(){
         $request = Yii::$app->request;
         $page=trim(htmlspecialchars($request->get('page','')),'');
-        $pagesize=trim(htmlspecialchars($request->get('pagesize','')),'');
-        $time_id=trim(htmlspecialchars($request->post('time_id','')),'');
-        if (!$time_id){
-            $time_id=0;
+        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
+        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
+        if (!$time_type){
+            $time_type='all';
         }
         $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
         $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $blend=trim(htmlspecialchars($request->post('blend','')),'');
-        if (!$blend){
-            $blend=0;
-        }
-        if ($time_id==5){
+        $search=trim(htmlspecialchars($request->post('search','')),'');
+        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
+        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
+        if ($time_type=='custom'){
             if (!$time_start || !$time_end){
                 $code=1000;
                 return Json::encode([
@@ -663,14 +773,29 @@ class OrderController extends Controller
                 ]);
             }
         }
-        if (!$pagesize){
-            $pagesize=15;
+        if (!$page_size){
+            $page_size=15;
         }
         if (!$page){
             $page=1;
         }
-        $model=new GoodsOrder();
-        $data=$model->Getallunreceivedorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend);
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=GoodsOrder::Getallunreceivedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
@@ -685,18 +810,17 @@ class OrderController extends Controller
     public function actionGetallcompeleteorder(){
         $request = Yii::$app->request;
         $page=trim(htmlspecialchars($request->get('page','')),'');
-        $pagesize=trim(htmlspecialchars($request->get('pagesize','')),'');
-        $time_id=trim(htmlspecialchars($request->post('time_id','')),'');
-        if (!$time_id){
-            $time_id=0;
+        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
+        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
+        if (!$time_type){
+            $time_type='all';
         }
         $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
         $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $blend=trim(htmlspecialchars($request->post('blend','')),'');
-        if (!$blend){
-            $blend=0;
-        }
-        if ($time_id==5){
+        $search=trim(htmlspecialchars($request->post('search','')),'');
+        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
+        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
+        if ($time_type=='custom'){
             if (!$time_start || !$time_end){
                 $code=1000;
                 return Json::encode([
@@ -706,14 +830,29 @@ class OrderController extends Controller
                 ]);
             }
         }
-        if (!$pagesize){
-            $pagesize=15;
+        if (!$page_size){
+            $page_size=15;
         }
         if (!$page){
             $page=1;
         }
-        $model=new GoodsOrder();
-        $data=$model->Getallcompeletedorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend);
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=GoodsOrder::Getallcompeletedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
@@ -728,18 +867,17 @@ class OrderController extends Controller
     public function  actionGetallcanceledorder(){
         $request = Yii::$app->request;
         $page=trim(htmlspecialchars($request->get('page','')),'');
-        $pagesize=trim(htmlspecialchars($request->get('pagesize','')),'');
-        $time_id=trim(htmlspecialchars($request->post('time_id','')),'');
-        if (!$time_id){
-            $time_id=0;
+        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
+        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
+        if (!$time_type){
+            $time_type='all';
         }
         $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
         $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $blend=trim(htmlspecialchars($request->post('blend','')),'');
-        if (!$blend){
-            $blend=0;
-        }
-        if ($time_id==5){
+        $search=trim(htmlspecialchars($request->post('search','')),'');
+        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
+        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
+        if ($time_type=='custom'){
             if (!$time_start || !$time_end){
                 $code=1000;
                 return Json::encode([
@@ -749,14 +887,29 @@ class OrderController extends Controller
                 ]);
             }
         }
-        if (!$pagesize){
-            $pagesize=15;
+        if (!$page_size){
+            $page_size=15;
         }
         if (!$page){
             $page=1;
         }
-        $model=new GoodsOrder();
-        $data=$model->Getallcanceledorderdata($pagesize,$page,$time_id,$time_start,$time_end,$blend);
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=GoodsOrder::Getallcanceledorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
@@ -769,8 +922,51 @@ class OrderController extends Controller
      * @return string
      */
     public function actionGetallcustomerservicedorder(){
-        $model=new GoodsOrder();
-        $data=$model->Getallcustomerserviceorderdata();
+        $request = Yii::$app->request;
+        $page=trim(htmlspecialchars($request->get('page','')),'');
+        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
+        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
+        if (!$time_type){
+            $time_type='all';
+        }
+        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
+        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
+        $search=trim(htmlspecialchars($request->post('search','')),'');
+        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
+        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
+        if ($time_type=='custom'){
+            if (!$time_start || !$time_end){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+        if (!$page_size){
+            $page_size=15;
+        }
+        if (!$page){
+            $page=1;
+        }
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=GoodsOrder::Getallcustomerserviceorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
@@ -783,12 +979,16 @@ class OrderController extends Controller
      */
     public function actionGetorderdetailsall(){
         $request=Yii::$app->request;
-        $goods_id=trim(htmlspecialchars($request->get('goods_id','')),'');
-        $order_id=trim(htmlspecialchars($request->get('order_id','')),'');
-//        $goodsid=1;
-//        $order_id=1;
+        $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
+        if(!$order_no){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         //获取订单信息
-        $order_information=(new GoodsOrder())->Getorderinformation($order_id,$goodsid);
+        $order_information=(new GoodsOrder())->Getorderinformation($order_no);
         if (!$order_information) {
             $code = 500;
             return Json::encode([
@@ -838,6 +1038,15 @@ class OrderController extends Controller
         $receive_details['invoice_header']=$invoice['invoice_header'];
         $receive_details['invoice_header_type']=$invoice['invoice_header_type'];
         $receive_details['invoice_content']=$invoice['invoice_content'];
+        $receive_details['invoicer_card'] = $invoice['invoicer_card'];
+        switch ($invoice['invoice_header_type']){
+            case 1:
+                $receive_details['invoice_header_type']='个人';
+                break;
+            case 2:
+                $receive_details['invoice_header_type']='公司';
+                break;
+        }
         $goods_data=array();
         if ($order_information['goods_name']=='+'){
             $goods_data['goods_name']='';
@@ -848,14 +1057,16 @@ class OrderController extends Controller
         $goods_data['order_no']=$order_information['order_no'];
         $goods_data['username']=$order_information['username'];
         $goods_data['amount_order']=$order_information['amount_order'];
+        $goods_data['goods_price_type']=$order_information['role'].'价';
         $goods_data['goods_price']=$order_information['goods_price'];
         $goods_data['freight']=$order_information['freight'];
         $goods_data['return_insurance']=$order_information['return_insurance'];
         $goods_data['supplier_price']=$order_information['supplier_price'];
         $goods_data['market_price']=$order_information['market_price'];
-        $goods_data['goods_num']=$order_information['goods_num'];
-        $goods_data['waybillnumber']=$order_information['waybillnumber'];
-        $goods_data['waybillname']=$order_information['waybillname'];
+        $goods_data['shipping_way']=$order_information['waybillname'].'('.$order_information['waybillnumber'].')';
+        if ($order_information['shipping_type']==1){
+            $goods_data['shipping_way']='送货上门';
+        }
         if ($order_information['status']=='未付款'){
             $goods_data['pay_term']=$order_information['pay_term'];
         }else{
@@ -876,6 +1087,39 @@ class OrderController extends Controller
             'msg' => 'ok',
             'data' =>$data
         ]);
+    }
+    /**
+     * 订单平台介入-操作
+     * @return int|string
+     */
+    public function actionPlatformhandlesubmit(){
+        $user = self::userIdentity();
+        if (!is_numeric($user)) {
+            return $user;
+        }
+        $lhzz=self::lhzzidentity($user);
+        if (!is_numeric($lhzz)){
+            return $lhzz;
+        }
+        $request=Yii::$app->request;
+        $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
+        $sku=trim(htmlspecialchars($request->post('sku','')),'');
+        $handle_type=trim(htmlspecialchars($request->post('handle_type','')),'');
+        $reason=trim(htmlspecialchars($request->post('handle_type','')),'');
+        if (!$order_no || !$handle_type || !$reason || !$sku){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $res=GoodsOrder::Platformadd($order_no,$handle_type,$reason,$sku);
+        if ($res){
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok'
+            ]);
+        }
     }
 
     /**
@@ -953,7 +1197,7 @@ class OrderController extends Controller
             ]);
         }
         $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $data=(new GoodsOrder())->Businessgetallorderlist($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $data=GoodsOrder::Businessgetallorderlist($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -1004,7 +1248,7 @@ class OrderController extends Controller
             ]);
         }
         $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $data=(new GoodsOrder())->Businessgetunpaidorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $data=GoodsOrder::Businessgetunpaidorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -1054,7 +1298,7 @@ class OrderController extends Controller
             ]);
         }
         $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $data=(new GoodsOrder())->Businessgetnotshippedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+            $data=GoodsOrder::Businessgetnotshippedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -1104,8 +1348,7 @@ class OrderController extends Controller
             ]);
         }
         $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $model=new GoodsOrder();
-            $data=$model->Businessgetnotreceivedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $data=GoodsOrder::Businessgetnotreceivedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -1156,8 +1399,7 @@ class OrderController extends Controller
             ]);
         }
         $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $model=new GoodsOrder();
-            $data=$model->Businessgetcompletedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+            $data=GoodsOrder::Businessgetcompletedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -1207,7 +1449,7 @@ class OrderController extends Controller
             ]);
         }
         $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $data=(new GoodsOrder())->Businessgetcanceledorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+            $data=GoodsOrder::Businessgetcanceledorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -1258,7 +1500,7 @@ class OrderController extends Controller
             ]);
         }
         $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $data=(new GoodsOrder())->Businessgetcustomerserviceorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+            $data=GoodsOrder::Businessgetcustomerserviceorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -1394,6 +1636,7 @@ class OrderController extends Controller
         $waybillname = trim(htmlspecialchars($request->post('waybillname', '')), '');
         $waybillnumber = trim(htmlspecialchars($request->post('waybillnumber', '')), '');
         $shipping_type = trim(htmlspecialchars($request->post('shipping_type', '')), '');
+
         if ($shipping_type!=1){
             if (!$sku || !$waybillname || !$waybillnumber || !$order_no) {
                 $code = 1000;
@@ -1501,28 +1744,69 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $waybill=Express::find()->select('waybillnumber,waybillname,create_time')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
-        if (!$waybill){
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => '物流信息不存在'
-            ]);
-        }else{
-            $arr=array(
-                'time'=>date('Y-m-d H:i:s',$waybill['create_time']),
-                'ftime'=>date('Y-m-d H:i:s',$waybill['create_time']),
-                'context'=>'卖家已发货'
-            );
-        $waybillnumber=$waybill['waybillnumber'];
-        $model=new Express();
-        $result=$model->getorder($waybillnumber);
-        $data=Express::Expresslist($result,$arr);
-        return Json::encode([$data]);
+        $shipping_type=GoodsOrder::findshipping_type($order_no,$sku);
+        switch ($shipping_type){
+            case 0:
+                $data=Express::Findexresslist($order_no,$sku);
+                break;
+            case 1:
+                $data=Express::Findexpresslist_sendtohome($order_no,$sku);
+                break;
         }
+        return Json::encode($data);
+
+
     }
 
+    /**
+     * @return string
+     */
+    public function actionGetplatformdetail(){
+        $request=Yii::$app->request;
+        $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
+        $sku=trim(htmlspecialchars($request->post('sku','')),'');
+        if (!$sku || !$order_no){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $data=GoodsOrder::Getplatformdetail($order_no,$sku);
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
+    }
+    //判断用户是否登陆
+    private function userIdentity()
+    {
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => 1052,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return $user->getId();
+    }
 
+    private function lhzzidentity($user)
+    {
+        $lhzz=Lhzz::find()->select('id')->where(['uid'=>$user])->one();
+        if (!$lhzz){
+            $code = 1010;
+            return Json::encode([
+                'code' => 1052,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return $lhzz['id'];
+
+    }
 
 
 }
