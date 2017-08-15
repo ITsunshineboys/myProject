@@ -422,8 +422,44 @@ class QuoteController extends Controller
      */
     public function actionPlotAdd()
     {
-        $request = \Yii::$app->request->post();
-        var_dump($request);exit;
+//        $request = \Yii::$app->request->post();
+        $request = [
+            'house_name'=>'小区名称',
+            'cur_county_id'=>5101066,
+            'address'=>'小区详细地址',
+            'house_informations'=>
+            [
+                'area'=>60,
+                'balcony_area'=>20,
+                'cur_hall'=>1,
+                'cur_imgSrc'=>1,
+                'cur_kitchen'=>1,
+                'cur_room'=>1,
+                'cur_toilet'=>1,
+                'flattop_area'=>1,
+                'hall_area'=>1,
+                'hall_girth'=>1,
+                'have_stair'=>1,
+                'high'=>1,
+                'house_type_name'=>1,
+                'is_ordinary'=>1,
+                'kitchen_area'=>1,
+                'kitchen_girth'=>1,
+                'other_length'=>1,
+                'room_area'=>1,
+                'room_girth：'=>1,
+                'toilet_area'=>1,
+                'toilet_girth'=>1,
+                'window'=>1,
+                'cur_all_drawing'=>
+                [
+                    'drawing_list'=>1,
+                    'house_type_name'=>1,
+                    'series'=>1,
+                    'style'=>1,
+                ],
+            ]
+        ];
         $user = \Yii::$app->user->identity();
         if (!$request) {
             $code = 1000;
@@ -440,7 +476,6 @@ class QuoteController extends Controller
             ]);
         }
         $all [] = (new Effect())->plotAdd($request);
-        $all [] = (new EffectPicture())->plotAdd($request);
         $all [] = (new DecorationParticulars())->plotAdd($request);
         if ($all) {
             $code = 200;
@@ -534,6 +569,7 @@ class QuoteController extends Controller
             'classify'=>$goods_classify
         ]);
     }
+
     /**
      * add assort goods administration
      * @return string
