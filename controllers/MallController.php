@@ -141,6 +141,8 @@ class MallController extends Controller
                 'class' => AdminAuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     $code = 403;
+                    $args = func_get_args();
+                    !empty($args[0]) && $code = $args[0];
                     new ExceptionHandleService($code);
                     exit;
                 },

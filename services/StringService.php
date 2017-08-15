@@ -327,4 +327,77 @@ class StringService
         unset($matches[0]);
         return implode($separator, $matches);
     }
+
+    /**
+     * Merge elements
+     *
+     * @param array $data data to merge
+     * @return array
+     */
+    public static function merge(array $data)
+    {
+        $arr = [];
+        array_map(function ($row) use (&$arr) {
+            $arr = array_merge($row, $arr);
+        }, $data);
+        return $arr;
+    }
+
+    /**
+     * Get values by key
+     *
+     * @param array $data data
+     * @param string $key key name
+     * @return array
+     */
+    public static function valuesByKey(array $data, $key)
+    {
+        if (!$key) {
+            return [];
+        }
+
+        return array_map(function ($row) use ($key) {
+            return $row[$key];
+        }, $data);
+    }
+
+    /**
+     * Check if odd number
+     *
+     * @param int $number number to be checked
+     * @return bool
+     */
+    public static function isOdd($number)
+    {
+        return (int)$number % 2 == 1;
+    }
+
+    /**
+     * Get repeated times of some substring
+     *
+     * @param string $str
+     * @param string $needle
+     * @param bool $strict if strict mode
+     * @return int
+     */
+    public static function countSubstr($str, $needle, $strict = false)
+    {
+        if (!$str || !$needle) {
+            return 0;
+        }
+
+        if (!$strict) {
+            $str = strtolower($str);
+            $needle = strtolower($needle);
+        }
+
+        return substr_count($str, $needle);
+    }
+
+    public static function isTampered($str)
+    {
+        if (!$str) {
+            return -1;
+        }
+    }
 }

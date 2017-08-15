@@ -48,4 +48,13 @@ class ExceptionHandleService
         $errorCodes = Yii::$app->params['errorCodes'];
         echo Json::encode(['code' => $this->_code, 'msg' => $errorCodes[$this->_code]]);
     }
+
+    /**
+     * Handle 403 exception
+     */
+    public function handle1023()
+    {
+        $errorCodes = Yii::$app->params['errorCodes'];
+        echo Json::encode(['code' => $this->_code, 'msg' => $errorCodes[$this->_code]]);
+    }
 }
