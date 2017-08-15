@@ -527,6 +527,7 @@ CREATE TABLE `effect` (
   `house_image` varchar(20) DEFAULT NULL COMMENT '户型图一张',
   `effect_images` varchar(255) DEFAULT NULL COMMENT '效果图1-6张',
   `images_name` varchar(10) DEFAULT NULL COMMENT '图片名称',
+  `type` int(2) DEFAULT '0' COMMENT '0-普通，1-案列',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
