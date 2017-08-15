@@ -1026,7 +1026,6 @@ class User extends ActiveRecord implements IdentityInterface
                 ->where([
                     'user_id' => $this->id,
                     'role_id' => Yii::$app->params['ownerRoleId'],
-                    'review_status' => Role::AUTHENTICATION_STATUS_NO_APPLICATION
                 ])
                 ->one();
             if ($userRole) {
