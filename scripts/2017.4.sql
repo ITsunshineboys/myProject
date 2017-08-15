@@ -1028,7 +1028,7 @@ CREATE TABLE `effect_earnst` (
   `effect_id` int(11) DEFAULT NULL COMMENT '样板id',
   `phone` char(11) DEFAULT NULL COMMENT '电话号码',
   `name` varchar(255) DEFAULT NULL COMMENT '名字',
-  `earnest` decimal(9,2) DEFAULT '0.00' COMMENT '定金',
+  `earnest` bigint(20) DEFAULT NULL COMMENT '定金',
   `remark` text COMMENT '备注',
   `create_time` int(11) DEFAULT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
