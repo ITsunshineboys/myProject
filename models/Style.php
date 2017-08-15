@@ -26,6 +26,7 @@ class Style extends ActiveRecord
         'flat_day_coefficient',
         'status',
         'creation_time',
+        'imges'
     ];
 
     /**
@@ -78,7 +79,7 @@ class Style extends ActiveRecord
         $offset = ($page - 1) * $size;
         $style = Style::find()
             ->asArray()
-            ->select('creation_time,theme,intro,style,id,status')
+            ->select('creation_time,theme,intro,style,id,status,imges')
             ->offset($offset)
             ->limit($size)
             ->All();

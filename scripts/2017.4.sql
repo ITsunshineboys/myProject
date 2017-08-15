@@ -458,14 +458,6 @@ CREATE TABLE `user_residence` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `style_picture` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `style_id` int(11) DEFAULT NULL COMMENT '风格表id',
-  `picture` varchar(255) DEFAULT '' COMMENT '图片',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 CREATE TABLE `style` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `style` varchar(50) DEFAULT '' COMMENT '风格',
@@ -478,8 +470,10 @@ CREATE TABLE `style` (
   `category_id` int(11) DEFAULT NULL COMMENT '分类id',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 已停用 1: 已启用',
   `creation_time` int(11) DEFAULT NULL,
+  `imges` varchar(255) DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `series` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

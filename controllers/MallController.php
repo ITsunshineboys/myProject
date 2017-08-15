@@ -4112,6 +4112,7 @@ class MallController extends Controller
         $style->style = $post['style'];
         $style->theme = $post['theme'];
         $style->intro = $post['intro'];
+        $style->imges = $post['imges'];
         $style->creation_time = time();
         $style->status = Style::STATUS_ONLINE;
         if (!$style->validate()) {
@@ -4128,25 +4129,6 @@ class MallController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        $style_picture = new StylePicture();
-        $style_picture->style_id = $style->attributes['id'];
-        $style_picture->picture = FileService::upload();
-        if (!$style_picture->validate()) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if (!$style_picture->save()) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
     }
 
     /**
@@ -4162,6 +4144,7 @@ class MallController extends Controller
         $style_edit->style = $post['style'];
         $style_edit->theme = $post['theme'];
         $style_edit->intro = $post['intro'];
+        $style_edit->imges = $post['imges'];
         if (!$style_edit->validate()) {
             return Json::encode([
                 'code' => $code,
@@ -4170,24 +4153,6 @@ class MallController extends Controller
         }
 
         if (!$style_edit->save()) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $style_picture = new StylePicture();
-        $style_picture_edit = $style_picture->find()->asArray()->where(['style_id' => $post['id']])->one();
-        $style_picture_edit->picture = FileService::upload();
-        if (!$style_picture_edit->validate()) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if (!$style_picture_edit->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
