@@ -1256,6 +1256,9 @@ class User extends ActiveRecord implements IdentityInterface
         $roleId && $this->login_role_id = $roleId;
 
         $sessionId = Yii::$app->session->id;
+
+        $this->getAuthKey() != $sessionId && @unlink(Yii::$app->cache->cachePath . '/sess_' . $this->getAuthKey());
+
         if ($roleId) {
             $this->authKeyAdmin = $sessionId;
             Yii::$app->session[self::LOGIN_ORIGIN_ADMIN] = $this->id;
