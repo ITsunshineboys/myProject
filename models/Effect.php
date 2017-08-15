@@ -34,7 +34,10 @@ class Effect extends ActiveRecord
           'particulars',
           'site_particulars',
           'stairway',
-          'add_time'
+          'add_time',
+          'add_time',
+          'add_time',
+          'add_time',
         ];
     /**
      * @return string 返回该AR类关联的数据表名
