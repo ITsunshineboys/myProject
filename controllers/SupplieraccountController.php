@@ -117,34 +117,28 @@ class SupplieraccountController extends  Controller{
         $pid=(int)trim(\Yii::$app->request->get('pid',0),'');
 
         $where = '1';
+
         if(!$keyword) {
 
             if ($pid) {
 
                 $cate_ids=Supplier::getcategory($pid);
 
+
                     if(is_array($cate_ids)){
+                        $ids=  implode(',',$cate_ids);
+                        $where.=" and category_id in ({$ids}) ";
 
-                        foreach ($cate_ids as $cate_id) {
-
-                            $cd=(new Query())->from('supplier')->select('category_id')->where(['category_id'=>$cate_id])->one();
-
-                            if(!$cd==null){
-                                $pid && $where.=" and category_id ={$cd['category_id']}";
-
-                            }
-
-                        }
                     }else{
-                        $pid && $where.=" and category_id ={$pid}";
+                        $where.=" and category_id ={$pid}";
                     }
             }
 
-            if($type_shop){
+        if($type_shop){
 
-                $type_shop && $where.= " and type_shop = {$type_shop}";
+            $type_shop && $where.= " and type_shop = {$type_shop}";
 
-            }
+        }
 
             if($status){
 
