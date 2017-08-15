@@ -524,7 +524,9 @@ CREATE TABLE `effect` (
   `site_particulars` varchar(100) DEFAULT NULL COMMENT '地址详情',
   `stairway` tinyint(5) DEFAULT '0' COMMENT '楼梯信息 0：无 1：有',
   `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
-  `stairdetail` varchar(100)  DEFAULT NULL COMMENT '楼梯材料',
+  `house_image` varchar(20) DEFAULT NULL COMMENT '户型图一张',
+  `effect_images` varchar(255) DEFAULT NULL COMMENT '效果图1-6张',
+  `images_name` varchar(10) DEFAULT NULL COMMENT '图片名称',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
