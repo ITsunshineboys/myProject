@@ -523,6 +523,7 @@ CREATE TABLE `effect` (
   `particulars` varchar(50) DEFAULT NULL COMMENT '厅室详情',
   `site_particulars` varchar(100) DEFAULT NULL COMMENT '地址详情',
   `stairway` tinyint(5) DEFAULT '0' COMMENT '楼梯信息 0：无 1：有',
+  `stairdetail` varchar(20) DEFAULT NULL COMMENT '楼梯材料',
   `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
   `house_image` varchar(20) DEFAULT NULL COMMENT '户型图一张',
   `effect_images` varchar(255) DEFAULT NULL COMMENT '效果图1-6张',
