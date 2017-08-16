@@ -9,8 +9,8 @@
 namespace app\models;
 
 use app\services\ModelService;
+use app\services\StringService;
 use Yii;
-use yii\data\Pagination;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 
@@ -549,5 +549,43 @@ class Supplier extends ActiveRecord
 
 
 
+    }
+
+    /**
+     * Get supplier statistics during some time
+     *
+     * @param int $supplierId supplier id
+     * @param string $timeType timte type default today
+     * @return array
+     */
+    public static function statData($supplierId, $timeType = 'today')
+    {
+        list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+        $intStartTime = strtotime($startTime);
+        $intEndTime = strtotime($endTime);
+        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime, $supplierId);
+        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime, $supplierId);
+
+        $where = "supplier_id = {$supplierId}";
+
+        $startTime = explode(' ', $startTime)[0];
+        $endTime = explode(' ', $endTime)[0];
+
+        if ($startTime) {
+            $startTime = str_replace('-', '', $startTime);
+            $startTime && $where .= " and create_date >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = str_replace('-', '', $endTime);
+            $endTime && $where .= " and create_date <= {$endTime}";
+        }
+
+        return [
+            $timeType . '_amount_order' => $todayAmountOrder,
+            $timeType . '_order_number' => $todayOrderNumber,
+            $timeType . '_ip_number' => GoodsStat::totalIpNumber($where),
+            $timeType . '_viewed_number' => GoodsStat::totalViewedNumber($where),
+        ];
     }
 }

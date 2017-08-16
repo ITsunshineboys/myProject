@@ -6,6 +6,7 @@ use app\services\ExceptionHandleService;
 use app\models\Supplier;
 use app\models\Goods;
 use app\models\GoodsRecommendSupplier;
+use app\models\UserRole;
 use app\services\ModelService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -21,6 +22,7 @@ class SupplierController extends Controller
     const ACCESS_LOGGED_IN_USER = [
         'certification-view',
         'certification',
+        'index-app',
     ];
 
     /**
@@ -283,6 +285,29 @@ class SupplierController extends Controller
             'data' => [
                 'index' => $data
             ]
+        ]);
+    }
+
+    /**
+     * Shop index action(for app).
+     *
+     * @return string
+     */
+    public function actionIndexApp()
+    {
+        $user = Yii::$app->user->identity;
+        $supplier = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'supplier_index_app' => [
+                    'stat' => Supplier::statData($supplier->id),
+                    'aite_cube_no' => $user->aite_cube_no,
+                    'shop_name' => $supplier->shop_name,
+                    'shop_no' => $supplier->shop_no,
+                ]
+            ],
         ]);
     }
 }
