@@ -38,6 +38,7 @@ class Supplier extends ActiveRecord
         '专营店',
         '专卖店',
     ];
+
     const STATUSES = [
         self::STATUS_OFFLINE => self::STATUS_DESC_OFFLINE,
         self::STATUS_ONLINE => self::STATUS_DESC_ONLINE_ADMIN,
@@ -45,6 +46,8 @@ class Supplier extends ActiveRecord
         self::STATUS_NOT_APPROVED => self::STATUS_DESC_NOT_APPROVED,
         self::STATUS_APPROVED => self::STATUS_DESC_ONLINE_APP,
     ];
+
+
     const FIELDS_VIEW_ADMIN_MODEL = [
         'id',
         'name',
@@ -437,6 +440,7 @@ class Supplier extends ActiveRecord
      * 已提现列表查询分页
      * @return array
      * */
+
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
         $select = array_diff($select, self::FIELDS_EXTRA);
@@ -488,13 +492,14 @@ class Supplier extends ActiveRecord
 
 
 
+
     public static function getsupplierdata($supplier_id){
         $query=new Query();
         $select='sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
         $array=$query->from('supplier as s')
             ->select($select)
             ->leftJoin('supplier_cashregister as sc','sc.supplier_id=s.id')
-            ->leftJoin('supplier_bankinformation as sb','sc.supplier_id=s.id')
+            ->leftJoin('user_bankinfo as sb','sb.u_id=s.uid')
             ->leftJoin('supplier_freezelist as sf','sf.supplier_id=s.id')
             ->where(['s.id'=>$supplier_id])
 
@@ -528,14 +533,17 @@ class Supplier extends ActiveRecord
                 }
                 $child_id[] = $child->id;
             }
+          return $child_id;
 
-            return $child_id;
 
 
         } else {
 
+         return $pid;
 
-            return $pid;
         }
+
+
+
     }
 }
