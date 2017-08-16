@@ -90,6 +90,7 @@ class User extends ActiveRecord implements IdentityInterface
         'review_status',
         'status_operator',
         'status_remark',
+        'review_time',
     ];
     const FIELDS_USER_LIST_LHZZ = [
         'id',
@@ -108,10 +109,16 @@ class User extends ActiveRecord implements IdentityInterface
         'review_status',
         'status_operator',
         'status_remark',
+        'legal_person',
+        'identity_no',
+        'identity_card_front_image',
+        'identity_card_back_image',
+        'review_time',
     ];
     const LOGIN_ORIGIN_ADMIN = 'login_origin_admin';
     const LOGIN_ORIGIN_APP = 'login_origin_app';
     const LOGIN_ROLE_ID = 'login_role_id';
+    const PREFIX_SESSION_FILENAME = 'sess_';
 
     /**
      * @inheritdoc
@@ -513,6 +520,17 @@ class User extends ActiveRecord implements IdentityInterface
                 $detail['review_status' . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$reviewStatus];
             }
 
+            if (in_array('review_time', $selectOld)) {
+                $userRole = UserRole::find()
+                    ->where(['user_id' => $row->id, 'role_id' => Yii::$app->params['ownerRoleId']])
+                    ->one();
+                if ($userRole) {
+                    $detail['review_time'] = $userRole->review_time
+                        ? date('Y-m-d H:i', $userRole->review_time)
+                        : '';
+                }
+            }
+
             if (in_array('status_operator', $selectOld)) {
                 $userStatus = UserStatus::find()->where(['uid' => $row->id])->orderBy(['id' => SORT_DESC])->one();
                 if ($userStatus) {
@@ -842,14 +860,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
     }
 
     /**
@@ -1256,7 +1266,8 @@ class User extends ActiveRecord implements IdentityInterface
 
         $sessionId = Yii::$app->session->id;
 
-        $this->getAuthKey() != $sessionId && @unlink(Yii::$app->cache->cachePath . '/sess_' . $this->getAuthKey());
+        $sessFile = Yii::$app->cache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $this->getAuthKey();
+        $this->getAuthKey() != $sessionId && @unlink($sessFile);
 
         if ($roleId) {
             $this->authKeyAdmin = $sessionId;
@@ -1268,5 +1279,22 @@ class User extends ActiveRecord implements IdentityInterface
         Yii::$app->session[self::LOGIN_ROLE_ID] = $roleId ? $roleId : Yii::$app->params['ownerRoleId'];
 
         return $this->save();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    public function checkKickedout()
+    {
+        $sessFile = Yii::$app->cache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $this->oldAuthKey;
+        if ($this->oldAuthKey && !file_exists($sessFile)) {
+            return true;
+        }
+        return false;
     }
 }
