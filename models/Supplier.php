@@ -509,6 +509,7 @@ class Supplier extends ActiveRecord
             $array['cashed_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
             $array['cashwithdrawal_money']=sprintf('%.2f',(float)$array['balance']*0.01);
             return $array;
+
         }
 
        return null;
