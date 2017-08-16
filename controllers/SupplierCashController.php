@@ -96,8 +96,8 @@ class SupplierCashController extends Controller
             return $user;
         }
         $request = \Yii::$app->request;
-        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
         $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -132,7 +132,7 @@ class SupplierCashController extends Controller
             return $user;
         }
         $request = \Yii::$app->request;
-        $cash_id = (int)trim(htmlspecialchars($request->get('cash_id', '')), '');
+        $cash_id = (int)$request->get('cash_id', '');
         if (!$cash_id) {
             $code = 1000;
             return Json::encode([
@@ -193,8 +193,8 @@ class SupplierCashController extends Controller
             return $user;
         }
         $request = \Yii::$app->request;
-        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -228,8 +228,8 @@ class SupplierCashController extends Controller
             return $user;
         }
         $request = \Yii::$app->request;
-        $page = (int)trim(htmlspecialchars($request->get('page', 1)), '');
-        $page_size = (int)trim(htmlspecialchars($request->get('page_size', ModelService::PAGE_SIZE_DEFAULT)), '');
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -277,10 +277,10 @@ class SupplierCashController extends Controller
             }
             $code = 1000;
             $request = \Yii::$app->request;
-            $cash_id = (int)trim(htmlspecialchars($request->post('cash_id', '')), '');
-            $status = (int)trim(htmlspecialchars($request->post('status', '')), '');
+            $cash_id = (int)$request->post('cash_id', '');
+            $status = (int)$request->post('status', '');
             $reason = trim(htmlspecialchars($request->post('reason', '')), '');
-            $real_money = (int)trim(htmlspecialchars($request->post('real_money', '')), '');
+            $real_money = (int)$request->post('real_money', '');
 
             if (($status != 3 && $status != 4) || ($status == 3 && $real_money <= 0) || !$cash_id) {
                 return Json::encode([
