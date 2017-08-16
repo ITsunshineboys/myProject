@@ -78,16 +78,18 @@ class Effect extends ActiveRecord
 
         $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,t.style,s.series')->leftJoin('series As s','s.id = e.series_id')->leftJoin('style As t','t.id = e.style_id')->where(['e.id'=>$effect_id])->one();
         $array1=(new Query())->from('effect_earnst')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
+        if($array){
+            $array['phone']=$array1['phone'];
+            $array['create_time']=$array1['create_time'];
+            $array['earnest']=sprintf('%.2f',(float)$array1['earnest']*0.01);
+            $array['name']=$array1['name'];
+            $array['remark']=$array1['remark'];
 
-        $array['phone']=$array1['phone'];
-        $array['create_time']=$array1['create_time'];
-        $array['earnest']=$array1['earnest'];
-        $array['name']=$array1['name'];
-        $array['remark']=$array1['remark'];
 
+            return $array;
+        }
 
-        return $array;
-
+    return null;
     }
     public function beforeSave($insert)
     {
