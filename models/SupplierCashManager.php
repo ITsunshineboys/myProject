@@ -15,7 +15,6 @@ class SupplierCashManager extends ActiveRecord
 {
     const  SUP_BANK_CARD = 'supplier_bankinformation';
     const  SUPPLIER = 'supplier';
-    const  SUP_FREELIST = 'supplier_freezelist';
     const  SUP_CASHREGISTER = 'supplier_cashregister';
     const  GOODS_ORDER = 'goods_order';
 
@@ -32,10 +31,8 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getCashList($supplier_id, $page, $page_size, $time_type, $time_start, $time_end, $status)
     {
-        $query = (new \yii\db\Query())->from(SUP_CASHREGISTER)->where(['supplier_id' => $supplier_id]);
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
+        $query = (new \yii\db\Query())->from(self::SUP_CASHREGISTER)->where(['supplier_id' => $supplier_id]);
+        list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['>', 'apply_time', $time_start])
                 ->andWhere(['<', 'apply_time', $time_end]);
@@ -74,7 +71,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function GetCash($cash_id, $supplier_id = 0)
     {
-        $query = (new \yii\db\Query())->from(SUP_CASHREGISTER)->where(['id' => $cash_id]);
+        $query = (new \yii\db\Query())->from(self::SUP_CASHREGISTER)->where(['id' => $cash_id]);
         if ($supplier_id) {
             $query->andWhere(['supplier_id' => $supplier_id]);
         }
@@ -118,13 +115,13 @@ class SupplierCashManager extends ActiveRecord
      */
     private function GetBankcard($supplier_id)
     {
-        $data = (new Query())->from(SUP_BANK_CARD)->where(['supplier_id' => $supplier_id])->one();
+        $data = (new Query())->from(self::SUP_BANK_CARD)->where(['supplier_id' => $supplier_id])->one();
         return $data;
     }
 
     private function GetSupplier($supplier_id)
     {
-        $data = (new Query())->from(SUPPLIER)->where(['id' => $supplier_id])->one();
+        $data = (new Query())->from(self::SUPPLIER)->where(['id' => $supplier_id])->one();
         return $data;
     }
 
@@ -171,7 +168,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedCashesAll()
     {
-        $data = (new Query())->from(SUP_CASHREGISTER)->where(['status' => 3])->sum('cash_money');
+        $data = (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => 3])->sum('cash_money');
         if ($data == null) {
             return 0;
         }
@@ -184,7 +181,7 @@ class SupplierCashManager extends ActiveRecord
     public function getPayedCashesToday()
     {
         $today = $this->getToday();
-        $data = (new Query())->from(SUP_CASHREGISTER)->where(['status' => 3])->andwhere('handle_time >= ' . $today[0])->andWhere('handle_time <= ' . $today[1])->sum('cash_money');
+        $data = (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => 3])->andwhere('handle_time >= ' . $today[0])->andWhere('handle_time <= ' . $today[1])->sum('cash_money');
         if ($data == null) {
             return 0;
         }
@@ -196,7 +193,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedCashesCountAll()
     {
-        return (new Query())->from(SUP_CASHREGISTER)->where(['status' => 3])->count();
+        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => 3])->count();
     }
 
     /**
@@ -204,7 +201,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getNotPayedCashesCountAll()
     {
-        return (new Query())->from(SUP_CASHREGISTER)->where(['<>', 'status', 3])->count();
+        return (new Query())->from(self::SUP_CASHREGISTER)->where(['<>', 'status', 3])->count();
     }
 
     /**
@@ -219,12 +216,10 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search)
     {
-        $query = (new Query())->from(GOODS_ORDER . ' g')
-            ->leftJoin(SUPPLIER . ' s', 'g.supplier_id = s.id')
+        $query = (new Query())->from(self::GOODS_ORDER . ' g')
+            ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->where(['g.pay_status' => 1]);
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
+        list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['>', 'g.paytime', $time_start])
                 ->andWhere(['<', 'g.paytime', $time_end]);
@@ -261,14 +256,12 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
     {
-        $query = (new Query())->from(SUP_CASHREGISTER . ' as g')->leftJoin(SUPPLIER . ' s', 'g.supplier_id = s.id')
+        $query = (new Query())->from(self::SUP_CASHREGISTER . ' as g')->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 'g.supplier_id', 'g.status', 'g.real_money']);
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
+        list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['>', 'apply_time', $time_start])
                 ->andWhere(['<', 'apply_time', $time_end]);
@@ -308,7 +301,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function doCashDeal($cash_id, $status, $reason, $real_money)
     {
-        $supplier_cash = (new Query())->from(SUP_CASHREGISTER)
+        $supplier_cash = (new Query())->from(self::SUP_CASHREGISTER)
             ->where(['id' => $cash_id])->select(['cash_money', 'supplier_id', 'status', 'transaction_no'])->one();
         $cash_money = $supplier_cash['cash_money'];
         $supplier_id = (int)$supplier_cash['supplier_id'];
@@ -332,7 +325,7 @@ class SupplierCashManager extends ActiveRecord
         $e = 1;
         try {
             \Yii::$app->db->createCommand()
-                ->update(SUP_CASHREGISTER, [
+                ->update(self::SUP_CASHREGISTER, [
                     'status' => $status,
                     'supplier_reason' => $reason,
                     'real_money' => $real_money,
