@@ -361,16 +361,59 @@ class OrderController extends Controller
     }
 
     /**
+     * 智能报价-样板间支付定金提交
+     * @return string
+     */
+    public function actionAlipayeffect_earnstsubmit(){
+        $request=Yii::$app->request;
+        $effect_id = trim($request->post('effect_id', ''), '');
+        $name = trim($request->post('name', ''), '');
+        $phone = trim($request->post('phone', ''), '');
+        if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+        $out_trade_no =self::Setorder_no();
+        Alipay::effect_earnstsubmit($effect_id,$name,$phone,$out_trade_no);
+    }
+
+    /**
+     * 样板间支付订单异步返回
+     */
+    public function actionAlipayeffect_earnstnotify()
+    {
+        $post=Yii::$app->request->post();
+        $model=new Alipay();
+        $alipaySevice=$model->Alipaylinenotify();
+        $result = $alipaySevice->check($post);
+        if ($result){
+            if ($post['trade_status'] == 'TRADE_SUCCESS') {
+                $arr=explode('&',$post['passback_params']);
+                if ($post['total_amount'] !=89){
+                    exit;
+                }
+                $res=GoodsOrder::Alipayeffect_earnstnotifydatabase($arr,$post);
+                if ($res){
+                    echo "success";
+                }
+            }
+        }else{
+            //验证失败
+            echo "fail";	//请不要修改或删除
+        }
+    }
+
+    /**
      * 线下店商城支付宝支付提交订单
      */
     public function actionAlipaylinesubmit(){
         $request=Yii::$app->request;
         //商户订单号，商户网站订单系统中唯一订单号，必填
-
-            do {
-                $code=date('md',time()).'1'.rand(10000,99999);
-            } while ( $code==GoodsOrder::find()->select('order_no')->where(['order_no'=>$code])->asArray()->one()['order_no']);
-        $out_trade_no = $code;
+        $out_trade_no =self::Setorder_no();
         $subject=trim(htmlspecialchars($request->post('goods_name')),' ');
         //付款金额，必填
         $total_amount =trim(htmlspecialchars($request->post('order_price')),' ');
@@ -416,8 +459,6 @@ class OrderController extends Controller
                 $res=GoodsOrder::Alipaylinenotifydatabase($arr,$post);
                 if ($res==true){
                     echo "success";		//请不要修改或删除
-                }else{
-                    echo "fail";
                 }
             }
         }else{
@@ -1514,7 +1555,6 @@ class OrderController extends Controller
      */
     public function actionGetsupplierorderdetails(){
             $request=Yii::$app->request;
-
             $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
             if(!$order_no){
                 $code=1000;
@@ -1805,7 +1845,13 @@ class OrderController extends Controller
             ]);
         }
         return $lhzz['id'];
+    }
 
+    private function Setorder_no(){
+        do {
+            $code=date('md',time()).'1'.rand(10000,99999);
+        } while ( $code==GoodsOrder::find()->select('order_no')->where(['order_no'=>$code])->asArray()->one()['order_no']);
+        return $code;
     }
 
 

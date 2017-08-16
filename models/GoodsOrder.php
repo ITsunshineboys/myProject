@@ -70,6 +70,28 @@ class GoodsOrder extends ActiveRecord
             return (int)$query->count();
         }
 
+    public static function Alipayeffect_earnstnotifydatabase($arr,$post)
+    {
+        $effect_id=$arr[0];
+        $name=$arr[1];
+        $phone=$arr[2];
+        $trans = \Yii::$app->db->beginTransaction();
+        $e=1;
+        $time=time();
+        try {
+            Yii::$app->db->createCommand()->insert('effect_earnst',[
+                'effect_id' =>$effect_id,
+                'name'      =>$name,
+                'phone'     =>$phone,
+                'earnest'   =>$post['total_amount']*100,
+                'create_time'      =>$time
+            ])->execute();
+        } catch (Exception $e) {
+            $trans->rollBack();
+        }
+        $trans->commit();
+        return $e;
+    }
     /**
      * 支付宝线下商城数据库操作
      * @param $arr
@@ -117,7 +139,7 @@ class GoodsOrder extends ActiveRecord
                 'is_unusual'=>0,
                 'freight'=>$freight*100,
             ])->execute();
-            if (($freight*100+$return_insurance*100+$goods['platform_price'])!=$post['receipt_amount']*100){
+            if (($freight*100+$return_insurance*100+$goods['platform_price'])*$goods_num!=$post['receipt_amount']*100){
                 return false;
             }
             if ($res2 && $res1){
@@ -195,8 +217,8 @@ class GoodsOrder extends ActiveRecord
      * @return array|bool
      */
     public  function Getlinegoodsdata($goods_id, $goods_num){
-            $array  =(new \yii\db\Query())->from('goods AS a')->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.cover_image,b.icon,c.name,a.sku')->leftJoin('supplier AS b', 'b.id = a.supplier_id')->leftJoin('goods_brand AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])->one();
-                $logistics_template=(new \yii\db\Query())->from('logistics_template')->select('supplier_id,delivery_method,delivery_cost_default,delivery_number_default,delivery_cost_delta,delivery_number_delta,status')->where(['status'=>1,'id'=>$array['logistics_template_id']])->one();
+            $array  =(new Query())->from('goods AS a')->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.cover_image,b.icon,c.name,a.sku')->leftJoin('supplier AS b', 'b.id = a.supplier_id')->leftJoin('goods_brand AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])->one();
+                $logistics_template=(new Query())->from('logistics_template')->select('supplier_id,delivery_method,delivery_cost_default,delivery_number_default,delivery_cost_delta,delivery_number_delta,status')->where(['status'=>1,'id'=>$array['logistics_template_id']])->one();
             if ($logistics_template['delivery_method']==1){
                 $array['freight']=0;
             }else{
@@ -342,8 +364,6 @@ class GoodsOrder extends ActiveRecord
         $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
-
-
     /**
      * 商家后台待收货订单
      */
@@ -353,7 +373,6 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
     /**
-     *
      * 获取商家后台已完成列表
      */
     public static function Businessgetcompletedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
@@ -374,7 +393,6 @@ class GoodsOrder extends ActiveRecord
         $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
-
 
     /**
      * 获取售后服务订单
@@ -801,35 +819,40 @@ class GoodsOrder extends ActiveRecord
                $received[$k]['model']=(new Express())->getorder($waybillnumber);
                if ($received[$k]['model']['ischeck']==1){
                    $data[$k]['status']='已完成';
-                   $res=Yii::$app->db->createCommand()->update('order_goodslist', ['order_status' =>1,'shipping_status'=>2],'order_id='.$data[$k]['order_id'].' and sku='.$data[$k]['sku'])->execute();
+
                    $supplier_id[$k]=self::find()->select('supplier_id')->where(['order_no'=>$data[$k]['order_no']])->asArray()->one()['supplier_id'];
                    $supplier[$k]=Supplier::find()->where(['id'=>$supplier_id[$k]])->asArray()->one();
                    $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
-                   $res1=Yii::$app->db->createCommand()->update('supplier', ['balance' =>($supplier[$k]['balance']+$money[$k]),'availableamount'=>($supplier[$k]['availableamount']+$money[$k])],'id='.$supplier[$k]['id'])->execute();
-                   $rand=rand(10000,99999);
-                   $time=time();
-                   $month=date('m',$time);
-                   $day=date('d',$time);
-                   do {
-                       $transaction_no=$month.$day.$supplier['shop_no'].$rand;
-                   } while ( $transaction_no==(new Query)->from('supplier_cashregister')->select('transaction_no')->where(['transaction_no'=>$transaction_no])->one()['transaction_no']);
-                   $res2=Yii::$app->db->createCommand()->insert('supplier_accessdetail',[
-                       'access_type'    => 1,
-                       'access_money' =>$money[$k],
-                       'create_time'      =>time(),
-                       'order_no'  =>$data[$k]['order_no'],
-                       'transaction_no'=>$transaction_no,
-                       'supplier_id'=>$supplier_id[$k]
-                   ])->execute();
+                   $trans = \Yii::$app->db->beginTransaction();
+                   try {
+                       $res=Yii::$app->db->createCommand()->update('order_goodslist', ['order_status' =>1,'shipping_status'=>2],'order_id='.$data[$k]['order_id'].' and sku='.$data[$k]['sku'])->execute();
+                       $res1=Yii::$app->db->createCommand()->update('supplier', ['balance' =>($supplier[$k]['balance']+$money[$k]),'availableamount'=>($supplier[$k]['availableamount']+$money[$k])],'id='.$supplier[$k]['id'])->execute();
+                       $rand=rand(10000,99999);
+                       $time=time();
+                       $month=date('m',$time);
+                       $day=date('d',$time);
+                       do {
+                           $transaction_no=$month.$day.$supplier['shop_no'].$rand;
+                       } while ( $transaction_no==(new Query)->from('supplier_cashregister')->select('transaction_no')->where(['transaction_no'=>$transaction_no])->one()['transaction_no']);
+                       $res2=Yii::$app->db->createCommand()->insert('supplier_accessdetail',[
+                           'access_type'    => 1,
+                           'access_money' =>$money[$k],
+                           'create_time'      =>time(),
+                           'order_no'  =>$data[$k]['order_no'],
+                           'transaction_no'=>$transaction_no,
+                           'supplier_id'=>$supplier_id[$k]
+                       ])->execute();
+                   } catch (Exception $e) {
+                       $trans->rollBack();
+                   }
+                   $trans->commit();
                }
            };
-
             unset($data[$k]['customer_service']);
             unset($data[$k]['pay_status']);
             unset($data[$k]['order_status']);
             unset($data[$k]['shipping_status']);
         }
-
         return $data;
     }
     private static function getorderlist()

@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-
 use app\services\ModelService;
 use app\services\StringService;
 use function GuzzleHttp\Psr7\str;
@@ -12,14 +11,13 @@ use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\Query;
 
-const  SUP_BANK_CARD = 'supplier_bankinformation';
-const  SUPPLIER = 'supplier';
-const  SUP_FREELIST = 'supplier_freezelist';
-const  SUP_CASHREGISTER = 'supplier_cashregister';
-const  GOODS_ORDER = 'goods_order';
-
 class SupplierCashManager extends ActiveRecord
 {
+    const  SUP_BANK_CARD = 'supplier_bankinformation';
+    const  SUPPLIER = 'supplier';
+    const  SUP_FREELIST = 'supplier_freezelist';
+    const  SUP_CASHREGISTER = 'supplier_cashregister';
+    const  GOODS_ORDER = 'goods_order';
 
     /**
      * 查询商家提现列表
