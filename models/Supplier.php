@@ -502,12 +502,16 @@ class Supplier extends ActiveRecord
             ->where(['s.id'=>$supplier_id])
 
             ->one();
-        $array['freeze_money']=sprintf('%.2f',(float)$array['freeze_money']*0.01);
-        $array['cash_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
-        $array['balance']=sprintf('%.2f',(float)$array['balance']*0.01);
-        $array['cashed_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
-        $array['cashwithdrawal_money']=sprintf('%.2f',(float)$array['balance']*0.01);
-        return $array;
+        if($array){
+            $array['freeze_money']=sprintf('%.2f',(float)$array['freeze_money']*0.01);
+            $array['cash_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
+            $array['balance']=sprintf('%.2f',(float)$array['balance']*0.01);
+            $array['cashed_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
+            $array['cashwithdrawal_money']=sprintf('%.2f',(float)$array['balance']*0.01);
+            return $array;
+        }
+        return null;
+
     }
 
     public static function getcategory($pid){
