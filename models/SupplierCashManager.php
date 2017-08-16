@@ -156,7 +156,7 @@ class SupplierCashManager extends ActiveRecord
     public function getPayedOrdersToday()
     {
         $today = $this->getToday();
-        $data = (new Query())->from(GOODS_ORDER)->where(['pay_status' => 1])->andwhere('paytime >= ' . $today[0])->andWhere('paytime <= ' . $today[1])->sum('amount_order');
+        $data = (new Query())->from(self::GOODS_ORDER)->where(['pay_status' => 1])->andwhere('paytime >= ' . $today[0])->andWhere('paytime <= ' . $today[1])->sum('amount_order');
         if ($data == null) {
             return 0;
         }
