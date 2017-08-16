@@ -394,9 +394,9 @@ class OrderController extends Controller
         if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS') {
                 $arr=explode('&',$post['passback_params']);
-                if ($post['total_amount'] !=89){
-                    exit;
-                }
+                // if ($post['total_amount'] !=89){
+                //     exit;
+                // }
                 $res=GoodsOrder::Alipayeffect_earnstnotifydatabase($arr,$post);
                 if ($res){
                     echo "success";
