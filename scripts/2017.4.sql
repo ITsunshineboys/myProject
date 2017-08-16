@@ -1025,14 +1025,14 @@ CREATE TABLE `supplier_cashregister` (
 --8.5 start
 CREATE TABLE `effect_earnst` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `effect_id` int(11) DEFAULT NULL COMMENT '样板id',
-  `phone` char(11) DEFAULT NULL COMMENT '电话号码',
-  `name` varchar(255) DEFAULT NULL COMMENT '名字',
-  `earnest` decimal(9,2) DEFAULT '0.00' COMMENT '定金',
-  `remark` text COMMENT '备注',
-  `create_time` int(11) DEFAULT NULL COMMENT '申请时间',
+  `effect_id` int(11) NOT NULL COMMENT '样板id',
+  `phone` char(11) NOT NULL COMMENT '电话号码',
+  `name` varchar(255) NOT NULL COMMENT '名字',
+  `earnest` bigint(20) NOT NULL DEFAULT '0' COMMENT '定金',
+  `remark` text NOT NULL COMMENT '备注',
+  `create_time` int(11) NOT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 
 CREATE TABLE `assort_goods` (
