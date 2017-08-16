@@ -13,6 +13,8 @@ use yii\db\Query;
 
 class Effect extends ActiveRecord
 {
+    const TYPE_STATUS_YES = 1;
+    const TYPE_STATUS_NO = 0;
     const STATUS_STAIRWAY_YES = 1;
     const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_EXTRA = [];
@@ -35,9 +37,10 @@ class Effect extends ActiveRecord
           'site_particulars',
           'stairway',
           'add_time',
-          'add_time',
-          'add_time',
-          'add_time',
+          'house_image',
+          'effect_images',
+          'images_name',
+          'type',
         ];
     /**
      * @return string 返回该AR类关联的数据表名
