@@ -143,7 +143,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedOrdersAll()
     {
-        $data = (new Query())->from(GOODS_ORDER)->where(['pay_status' => 1])->sum('amount_order');
+        $data = (new Query())->from(self::GOODS_ORDER)->where(['pay_status' => 1])->sum('amount_order');
         if ($data == null) {
             return 0;
         }
