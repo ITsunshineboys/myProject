@@ -477,9 +477,7 @@ class Supplier extends ActiveRecord
             }
             $count=(int)self::find()->where($where)->asArray()->count();
         $total_page = ceil($count / $size);
-        $data=[
-
-            'details' => $supplierList
+        $data=['details' => $supplierList
         ];
         $data['details']['page']=$page;
         $data['details']['total_page']=$total_page;
