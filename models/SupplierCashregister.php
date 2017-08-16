@@ -113,9 +113,11 @@ public static function getcashviewdata($cash_id){
         ->one();
     $array['apply_time']=date('Y-m-d H:i',$array['apply_time']);
     $array['handle_time']=date('Y-m-d H:i',$array['handle_time']);
-    $array['cash_money']=sprintf('%.2f',($array['cash_money'])*0.01);
-    $array['cost_money']=sprintf('%.2f',($array['cash_money']-$array['real_money'])*0.01);
-    $array['real_money']=sprintf('%.2f',($array['real_money'])*0.01);
+    $array['cost_money']=sprintf('%.2f',(float)($array['cash_money']-$array['real_money'])*0.01);
+    $array['cash_money']=sprintf('%.2f',(float)($array['cash_money'])*0.01);
+
+
+    $array['real_money']=sprintf('%.2f',(float)($array['real_money'])*0.01);
     $array['status']=self::STATUS_CSED;
 
 return $array;
