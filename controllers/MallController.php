@@ -3887,42 +3887,12 @@ class MallController extends Controller
      */
     public function actionSupplierIndexAdmin()
     {
-        $timeType = 'today';
-
-        $user = Yii::$app->user->identity;
-        $supplierId = Supplier::find()->where(['uid' => $user->id])->one()->id;
-
-        list($startTime, $endTime) = StringService::startEndDate($timeType);
-
-        $intStartTime = strtotime($startTime);
-        $intEndTime = strtotime($endTime);
-        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime, $supplierId);
-        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime, $supplierId);
-
-        $where = "supplier_id = {$supplierId}";
-
-        $startTime = explode(' ', $startTime)[0];
-        $endTime = explode(' ', $endTime)[0];
-
-        if ($startTime) {
-            $startTime = str_replace('-', '', $startTime);
-            $startTime && $where .= " and create_date >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = str_replace('-', '', $endTime);
-            $endTime && $where .= " and create_date <= {$endTime}";
-        }
-
+        $supplier = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->params['supplierRoleId']);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-index-admin' => [
-                    'today_amount_order' => $todayAmountOrder,
-                    'today_order_number' => $todayOrderNumber,
-                    'today_ip_number' => GoodsStat::totalIpNumber($where),
-                    'today_viewed_number' => GoodsStat::totalViewedNumber($where),
-                ]
+                'supplier-index-admin' => Supplier::statData($supplier->id)
             ],
         ]);
     }
