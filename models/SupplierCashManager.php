@@ -13,7 +13,7 @@ use yii\db\Query;
 
 class SupplierCashManager extends ActiveRecord
 {
-    const  SUP_BANK_CARD = 'supplier_bankinformation';
+    const  USER_BANKINFO = 'user_bankinfo';
     const  SUPPLIER = 'supplier';
     const  SUP_CASHREGISTER = 'supplier_cashregister';
     const  GOODS_ORDER = 'goods_order';
@@ -115,7 +115,8 @@ class SupplierCashManager extends ActiveRecord
      */
     private function GetBankcard($supplier_id)
     {
-        $data = (new Query())->from(self::SUP_BANK_CARD)->where(['supplier_id' => $supplier_id])->one();
+        $u_id = self::GetSupplier($supplier_id)['uid'];
+        $data = (new Query())->from(self::USER_BANKINFO)->where(['u_id' => $u_id])->one();
         return $data;
     }
 
