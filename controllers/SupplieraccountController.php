@@ -21,7 +21,8 @@ use yii\web\Request;
 use yii\web\ViewAction;
 
 class SupplieraccountController extends  Controller{
-
+    const STATUS=[0,1];
+    const STHP_TYPE=[0,1,2,3];
     const STATUS_CG=3;
     const ACCESS_LOGGED_IN_USER = [
         'logout',
@@ -71,14 +72,20 @@ class SupplieraccountController extends  Controller{
     }
 
 
-
     /**
      * 获取分类列表
      * @return string
      */
 
     public function actionCategory(){
-
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
 
         $pid=(int)trim(\Yii::$app->request->get('pid',0),'');
 
@@ -106,15 +113,22 @@ class SupplieraccountController extends  Controller{
      * @return string
      */
     public function actionAccountList(){
-
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=1000;
 
-        $type_shop=(int)trim(\Yii::$app->request->get('type_shop',''),'');
-        $status=(int)trim(\Yii::$app->request->get('status',''),'');
+        $type_shop=(int)(\Yii::$app->request->get('type_shop'));
+        $status=(int)(\Yii::$app->request->get('status'));
         $keyword=trim(\Yii::$app->request->get('keyword',''),'');
 
 
-        $pid=(int)trim(\Yii::$app->request->get('pid',0),'');
+        $pid=(int)trim(\Yii::$app->request->get('pid',''),'');
 
         $where = '1';
 
@@ -134,13 +148,17 @@ class SupplieraccountController extends  Controller{
                     }
             }
 
+
+
+
         if($type_shop){
 
-            $type_shop && $where.= " and type_shop = {$type_shop}";
+             $where.= " and type_shop = {$type_shop}";
 
         }
 
-            if($status){
+            if(in_array($status,self::STATUS))
+               {
 
                 $where.= " and status ={$status}";
 
@@ -172,7 +190,14 @@ class SupplieraccountController extends  Controller{
      * @return array
      */
     public function actionAccountView(){
-
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
                 $code=1000;
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
@@ -198,7 +223,14 @@ class SupplieraccountController extends  Controller{
      * @return bool
      */
         public function actionFreezeMoney(){
-
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return json_encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $code=1000;
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
@@ -284,7 +316,14 @@ class SupplieraccountController extends  Controller{
      * @return array
      */
     public function actionFreezeList(){
-
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
                 $code = 1000;
 
                 $timeType = trim(Yii::$app->request->get('time_type', ''));
@@ -341,6 +380,14 @@ class SupplieraccountController extends  Controller{
      */
 
     public function actionFreezeReason(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=1000;
         $request=new Request();
 
@@ -372,6 +419,15 @@ class SupplieraccountController extends  Controller{
      */
 
     public function actionAccountThaw(){
+
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $request=new Request();
             $code=1000;
             $freeze_id=(int)trim($request->get('freeze_id',''),'');
@@ -414,6 +470,14 @@ class SupplieraccountController extends  Controller{
      */
     public function actionCashedList(){
 
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code = 1000;
 
         $timeType = trim(Yii::$app->request->get('time_type', ''));
@@ -473,7 +537,14 @@ class SupplieraccountController extends  Controller{
      */
 
     public function actionCashedView(){
-
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=1000;
         $request=new Request();
         $cash_id = trim($request->get('id', ''), '');

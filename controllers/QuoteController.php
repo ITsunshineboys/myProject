@@ -402,6 +402,17 @@ class QuoteController extends Controller
         ]);
     }
 
+    public function actionLaborList()
+    {
+        return Json::encode([
+            'labor_list'=>LaborCost::find()
+                ->distinct()
+                ->select('worker_kind')
+                ->orderBy('worker_kind')
+                ->all()
+        ]);
+    }
+
     /**
      * series and style show
      * @return string
@@ -425,39 +436,76 @@ class QuoteController extends Controller
 //        $request = \Yii::$app->request->post();
         $request = [
             'house_name'=>'小区名称',
+            'province_code'=>510000,
+            'city_code'=>510100,
             'cur_county_id'=>5101066,
             'address'=>'小区详细地址',
             'house_informations'=>
-            [
-                'area'=>60,
-                'balcony_area'=>20,
-                'cur_hall'=>1,
-                'cur_imgSrc'=>1,
-                'cur_kitchen'=>1,
-                'cur_room'=>1,
-                'cur_toilet'=>1,
-                'flattop_area'=>1,
-                'hall_area'=>1,
-                'hall_girth'=>1,
-                'have_stair'=>1,
-                'high'=>1,
-                'house_type_name'=>1,
-                'is_ordinary'=>1,
-                'kitchen_area'=>1,
-                'kitchen_girth'=>1,
-                'other_length'=>1,
-                'room_area'=>1,
-                'room_girth：'=>1,
-                'toilet_area'=>1,
-                'toilet_girth'=>1,
-                'window'=>1,
-                'cur_all_drawing'=>
+             [
                 [
-                    'drawing_list'=>1,
+                    'area'=>60,
+                    'balcony_area'=>20,
+                    'cur_hall'=>1,
+                    'cur_imgSrc'=>1,
+                    'cur_kitchen'=>1,
+                    'cur_room'=>1,
+                    'cur_toilet'=>1,
+                    'flattop_area'=>1,
+                    'hall_area'=>1,
+                    'hall_girth'=>1,
+                    'have_stair'=>1,
+                    'high'=>1,
                     'house_type_name'=>1,
-                    'series'=>1,
-                    'style'=>1,
+                    'is_ordinary'=>1,
+                    'kitchen_area'=>1,
+                    'kitchen_girth'=>1,
+                    'other_length'=>1,
+                    'room_area'=>1,
+                    'room_girth'=>1,
+                    'toilet_area'=>1,
+                    'toilet_girth'=>1,
+                    'window'=>1,
+                    'cur_all_drawing'=>
+                        [
+                            'drawing_name'=>123,
+                            'drawing_list'=>1,
+                            'house_type_name'=>1,
+                            'series'=>1,
+                            'style'=>1,
+                        ],
                 ],
+                 [
+                     'area'=>60,
+                     'balcony_area'=>20,
+                     'cur_hall'=>1,
+                     'cur_imgSrc'=>1,
+                     'cur_kitchen'=>1,
+                     'cur_room'=>1,
+                     'cur_toilet'=>1,
+                     'flattop_area'=>1,
+                     'hall_area'=>1,
+                     'hall_girth'=>1,
+                     'have_stair'=>1,
+                     'high'=>1,
+                     'house_type_name'=>1,
+                     'is_ordinary'=>1,
+                     'kitchen_area'=>1,
+                     'kitchen_girth'=>1,
+                     'other_length'=>1,
+                     'room_area'=>1,
+                     'room_girth'=>1,
+                     'toilet_area'=>1,
+                     'toilet_girth'=>1,
+                     'window'=>1,
+                     'cur_all_drawing'=>
+                         [
+                             'drawing_name'=>1212313,
+                             'drawing_list'=>1,
+                             'house_type_name'=>1,
+                             'series'=>1,
+                             'style'=>1,
+                         ],
+                 ],
             ]
         ];
 //        $user = \Yii::$app->user->identity();
@@ -475,7 +523,50 @@ class QuoteController extends Controller
 //                'msg' => \Yii::$app->params['errorCodes'][$code]
 //            ]);
 //        }
-        $all [] = (new Effect())->plotAdd($request);
+        $effect = new Effect();
+        foreach ($request['house_informations'] as $house)
+        {
+            $_effect = clone $effect;
+            $_effect->series_id = $house['cur_all_drawing']['series'];
+            $_effect->style_id = $house['cur_all_drawing']['style'];
+            $_effect->bedroom = $house['cur_room'];
+            $_effect->sittingRoom_diningRoom = $house['cur_hall'];
+            $_effect->toilet = $house['cur_toilet'];
+            $_effect->kitchen = $house['cur_kitchen'];
+            $_effect->window = $house['window'];
+            $_effect->area = $house['area'];
+            $_effect->high = $house['high'];
+            $_effect->province_code = $request['province_code'];
+            $_effect->city_code = $request['city_code'];
+            $_effect->district_code = $request['cur_county_id'];
+            $_effect->toponymy = $request['house_name'];
+            $_effect->street = $request['address'];
+            $_effect->particulars = $house['house_type_name'];
+            $_effect->stairway = $house['have_stair'];
+            $_effect->house_image = $house['cur_imgSrc'];
+            $_effect->effect_images = $house['cur_all_drawing']['drawing_list'];
+            $_effect->images_name = $house['cur_all_drawing']['drawing_name'];
+            $_effect->type = $house['is_ordinary'];
+            $_effect->add_time = time();
+            
+            $_effect->setAttributes($request);
+            $code = 1000;
+            if (!$_effect->validate()) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$_effect->save()) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
         $all [] = (new DecorationParticulars())->plotAdd($request);
         if ($all) {
             $code = 200;
