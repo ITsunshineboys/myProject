@@ -101,26 +101,30 @@ class SupplierCashregister extends \yii\db\ActiveRecord
      * 获取已提现商家账户信息
      * @return array
      * */
-public static function getcashviewdata($cash_id){
+public static function getcashviewdata($cash_id)
+{
 
-    $query=new Query();
-    $select='sc.cash_money,sc.apply_time,sc.real_money,sc.status,sc.supplier_reason,sc.transaction_no,sc.handle_time,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch';
-    $array=$query->from('supplier_cashregister as sc')
+    $query = new Query();
+    $select = 'sc.cash_money,sc.apply_time,sc.real_money,sc.status,sc.supplier_reason,sc.transaction_no,sc.handle_time,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch';
+    $array = $query->from('supplier_cashregister as sc')
         ->select($select)
-        ->leftJoin('supplier as s','sc.supplier_id=s.id')
-        ->leftJoin('user_bankinfo as sb','s.uid=sb.u_id')
-        ->where(['sc.id'=>$cash_id])
+        ->leftJoin('supplier as s', 'sc.supplier_id=s.id')
+        ->leftJoin('user_bankinfo as sb', 's.uid=sb.u_id')
+        ->where(['sc.id' => $cash_id])
         ->one();
-    $array['apply_time']=date('Y-m-d H:i',$array['apply_time']);
-    $array['handle_time']=date('Y-m-d H:i',$array['handle_time']);
-    $array['cost_money']=sprintf('%.2f',(float)($array['cash_money']-$array['real_money'])*0.01);
-    $array['cash_money']=sprintf('%.2f',(float)($array['cash_money'])*0.01);
+    if ($array) {
+        $array['apply_time'] = date('Y-m-d H:i', $array['apply_time']);
+        $array['handle_time'] = date('Y-m-d H:i', $array['handle_time']);
+        $array['cost_money'] = sprintf('%.2f', (float)($array['cash_money'] - $array['real_money']) * 0.01);
+        $array['cash_money'] = sprintf('%.2f', (float)($array['cash_money']) * 0.01);
+        $array['real_money'] = sprintf('%.2f', (float)($array['real_money']) * 0.01);
+        $array['status'] = self::STATUS_CSED;
+
+        return $array;
 
 
-    $array['real_money']=sprintf('%.2f',(float)($array['real_money'])*0.01);
-    $array['status']=self::STATUS_CSED;
-
-return $array;
-
+         }
+         return null;
     }
+
 }
