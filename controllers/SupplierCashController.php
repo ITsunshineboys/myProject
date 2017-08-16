@@ -102,15 +102,14 @@ class SupplierCashController extends Controller
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $status = trim(htmlspecialchars($request->post('status', '')), '');
-        if ($time_type == 'custom') {
-            if (!$time_start || !$time_end) {
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
+        if (($time_type == 'custom' && (!$time_start || !$time_end))
+            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
         }
         $supplier = Supplier::find()->select('id')->where(['uid' => $user])->one();
         $data = (new SupplierCashManager())->getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
@@ -199,15 +198,14 @@ class SupplierCashController extends Controller
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
-        if ($time_type == 'custom') {
-            if (!$time_start || !$time_end) {
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
+        if (($time_type == 'custom' && (!$time_start || !$time_end))
+            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
         }
         $data = (new SupplierCashManager())->getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
         return Json::encode([
@@ -235,15 +233,14 @@ class SupplierCashController extends Controller
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $status = trim(htmlspecialchars($request->post('status', 3)), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
-        if ($time_type == 'custom') {
-            if (!$time_start || !$time_end) {
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
+        if (($time_type == 'custom' && (!$time_start || !$time_end))
+            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
         }
         $data = (new SupplierCashManager())->getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search);
         return Json::encode([

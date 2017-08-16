@@ -16,6 +16,7 @@ use app\models\Lhzz;
 use app\services\SmValidationService;
 use app\services\AlipayTradeService;
 use app\services\ExceptionHandleService;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -393,9 +394,9 @@ class OrderController extends Controller
         if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS') {
                 $arr=explode('&',$post['passback_params']);
-                if ($post['total_amount'] !=89){
-                    exit;
-                }
+                // if ($post['total_amount'] !=89){
+                //     exit;
+                // }
                 $res=GoodsOrder::Alipayeffect_earnstnotifydatabase($arr,$post);
                 if ($res){
                     echo "success";
@@ -1767,6 +1768,13 @@ class OrderController extends Controller
                 'msg' => '修改失败，参数未做任何修改',
             ]);
         }
+    }
+    public function actionTesteffecf(){
+        $data=(new Query())->from('effect_earnst')->all();
+        return Json::encode([
+            'code' => 200,
+            'data' =>  $data,
+        ]);
     }
 
     /**
