@@ -16,7 +16,7 @@ use yii\db\Query;
 
 class Supplier extends ActiveRecord
 {
-    const FIELDS_EXTRA=[];
+    const FIELDS_EXTRA = [];
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const STATUS_WAIT_REVIEW = 2;
@@ -111,8 +111,8 @@ class Supplier extends ActiveRecord
     ];
     const OFFLINE_SHOP_SUPPORT = 1; // 支持线下商店
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
-    const PAGE_SIZE_DEFAULT=10;
-    const FIELDS_ADMIN=[
+    const PAGE_SIZE_DEFAULT = 10;
+    const FIELDS_ADMIN = [
         'shop_no',
         'status',
         'shop_name',
@@ -120,6 +120,18 @@ class Supplier extends ActiveRecord
         'category_id',
         'create_time',
         'type_shop'
+    ];
+    const FIELDS_LIST = [
+        'id',
+        'type_shop',
+        'shop_name',
+        'shop_no',
+        'category_id',
+        'status',
+    ];
+    const FIELDS_LIST_EXTRA = [
+        'sales_volumn_month',
+        'sales_amount_month',
     ];
 
     /**
@@ -129,11 +141,6 @@ class Supplier extends ActiveRecord
     {
         return 'supplier';
     }
-
-    const FIELDS_LIST_EXTRA = [
-        'sales_volumn_month',
-        'sales_amount_month',
-    ];
 
     /**
      * Get delta number
@@ -320,6 +327,181 @@ class Supplier extends ActiveRecord
         }
     }
 
+    public static function extraData($id, array $extraFields)
+    {
+        $extraData = [];
+
+        foreach ($extraFields as $extraField) {
+            switch ($extraField) {
+                case 'sales_volumn_month':
+                    $extraData[$extraField] = GoodsOrder::supplierSalesVolumn($id, 'month');
+                    break;
+                case 'sales_amount_month':
+                    $extraData[$extraField] = GoodsOrder::supplierSalesAmount($id, 'month');
+                    break;
+            }
+
+        }
+
+        return $extraData;
+
+    }
+
+    /**
+     * 已提现列表查询分页
+     * @return array
+     * */
+
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    {
+        $select = array_diff($select, self::FIELDS_EXTRA);
+
+        $offset = ($page - 1) * $size;
+        $supplierList = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+
+        foreach ($supplierList as &$supplier) {
+
+            if (isset($supplier['create_time'])) {
+                $supplier['create_time'] = date('Y-m-d H:i', $supplier['create_time']);
+            }
+
+            if (isset($supplier['status'])) {
+                $supplier['status'] = self::STATUSES[$supplier['status']];
+            }
+
+            if (isset($supplier['category_id'])) {
+                $cat = GoodsCategory::findOne($supplier['category_id']);
+                $supplier['category_name'] = $cat->fullTitle();
+                unset($supplier['category_id']);
+            }
+
+            if (isset($supplier['type_shop'])) {
+                $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
+            }
+        }
+        $count = (int)self::find()->where($where)->asArray()->count();
+        $total_page = ceil($count / $size);
+        $data = ['details' => $supplierList
+        ];
+        $data['details']['page'] = $page;
+        $data['details']['total_page'] = $total_page;
+        $data['details']['total'] = $count;
+
+        return $data;
+
+    }
+
+    public static function getsupplierdata($supplier_id)
+    {
+        $query = new Query();
+        $select = 'sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
+        $array = $query->from('supplier as s')
+            ->select($select)
+            ->leftJoin('supplier_cashregister as sc', 'sc.supplier_id=s.id')
+            ->leftJoin('user_bankinfo as sb', 'sb.u_id=s.uid')
+            ->leftJoin('supplier_freezelist as sf', 'sf.supplier_id=s.id')
+            ->where(['s.id' => $supplier_id])
+            ->one();
+        if ($array) {
+            $array['freeze_money'] = sprintf('%.2f', (float)$array['freeze_money'] * 0.01);
+            $array['cash_money'] = sprintf('%.2f', (float)$array['cash_money'] * 0.01);
+            $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
+            $array['cashed_money'] = sprintf('%.2f', (float)$array['cash_money'] * 0.01);
+            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
+            return $array;
+
+        }
+
+        return null;
+
+    }
+
+    public static function getcategory($pid)
+    {
+
+        $cate = GoodsCategory::findOne($pid);
+
+
+        $children = $cate->children;
+
+
+        if ($children) {
+            $child_id = [];
+            foreach ($children as $child) {
+                $category = $child->children;
+
+                if ($category) {
+                    foreach ($category as $cate) {
+                        $child_id[] = $cate->id;
+                    }
+
+                }
+                $child_id[] = $child->id;
+            }
+            return $child_id;
+
+
+        } else {
+
+            return $pid;
+
+        }
+
+
+    }
+
+    /**
+     * Get supplier statistics during some time
+     *
+     * @param int $supplierId supplier id
+     * @param string $timeType timte type default today
+     * @return array
+     */
+    public static function statData($supplierId, $timeType = 'today')
+    {
+        list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+        $intStartTime = strtotime($startTime);
+        $intEndTime = strtotime($endTime);
+        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime, $supplierId);
+        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime, $supplierId);
+
+        $where = "supplier_id = {$supplierId}";
+
+        $startTime = explode(' ', $startTime)[0];
+        $endTime = explode(' ', $endTime)[0];
+
+        if ($startTime) {
+            $startTime = str_replace('-', '', $startTime);
+            $startTime && $where .= " and create_date >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = str_replace('-', '', $endTime);
+            $endTime && $where .= " and create_date <= {$endTime}";
+        }
+
+        return [
+            $timeType . '_amount_order' => $todayAmountOrder,
+            $timeType . '_order_number' => $todayOrderNumber,
+            $timeType . '_ip_number' => GoodsStat::totalIpNumber($where),
+            $timeType . '_viewed_number' => GoodsStat::totalViewedNumber($where),
+        ];
+    }
+
+    /* Get extra fields
+     *
+     * @param int $id supplier id
+     * @param array $extraFields extra fields
+     * @return array
+     */
+
     /**
      * @return array the validation rules.
      */
@@ -419,7 +601,6 @@ class Supplier extends ActiveRecord
         return $extraData;
     }
 
-
     /**
      * Format data
      *
@@ -452,31 +633,6 @@ class Supplier extends ActiveRecord
         if (isset($data['type_shop'])) {
             $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
         }
-    }
-    /* Get extra fields
-     *
-     * @param int $id supplier id
-     * @param array $extraFields extra fields
-     * @return array
-     */
-    public static function extraData($id, array $extraFields)
-    {
-        $extraData = [];
-
-        foreach ($extraFields as $extraField) {
-            switch ($extraField) {
-                case 'sales_volumn_month':
-                    $extraData[$extraField] = GoodsOrder::supplierSalesVolumn($id, 'month');
-                    break;
-                case 'sales_amount_month':
-                    $extraData[$extraField] = GoodsOrder::supplierSalesAmount($id, 'month');
-                    break;
-            }
-
-        }
-
-        return $extraData;
-
     }
 
     /**
@@ -522,158 +678,20 @@ class Supplier extends ActiveRecord
 
         $tran = Yii::$app->db->beginTransaction();
         $code = 500;
-   
-    }
-    /**
-     * 已提现列表查询分页
-     * @return array
-     * */
 
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
-    {
-        $select = array_diff($select, self::FIELDS_EXTRA);
-
-        $offset = ($page - 1) * $size;
-        $supplierList = self::find()
-            ->select($select)
-            ->where($where)
-            ->orderBy($orderBy)
-            ->offset($offset)
-            ->limit($size)
-            ->asArray()
-            ->all();
-
-        foreach ($supplierList as &$supplier) {
-
-        if (isset($supplier['create_time'])) {
-            $supplier['create_time'] = date('Y-m-d H:i', $supplier['create_time']);
-        }
-
-        if (isset($supplier['status'])) {
-            $supplier['status'] = self::STATUSES[$supplier['status']];
-        }
-
-            if (isset($supplier['category_id'])) {
-                $cat = GoodsCategory::findOne($supplier['category_id']);
-                $supplier['category_name'] = $cat->fullTitle();
-                unset($supplier['category_id']);
+        try {
+            if (!$this->save()) {
+                $tran->rollBack();
+                return $code;
             }
 
-            if (isset($supplier['type_shop'])) {
-                $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
-            }
-            }
-            $count=(int)self::find()->where($where)->asArray()->count();
-        $total_page = ceil($count / $size);
-        $data=['details' => $supplierList
-        ];
-        $data['details']['page']=$page;
-        $data['details']['total_page']=$total_page;
-        $data['details']['total']=$count;
+            Goods::disableGoodsBySupplierId($this->id, $operator);
 
-        return $data;
-
-    }
-
-
-
-
-
-    public static function getsupplierdata($supplier_id){
-        $query=new Query();
-        $select='sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
-        $array=$query->from('supplier as s')
-            ->select($select)
-            ->leftJoin('supplier_cashregister as sc','sc.supplier_id=s.id')
-            ->leftJoin('user_bankinfo as sb','sb.u_id=s.uid')
-            ->leftJoin('supplier_freezelist as sf','sf.supplier_id=s.id')
-            ->where(['s.id'=>$supplier_id])
-
-            ->one();
-        if($array){
-            $array['freeze_money']=sprintf('%.2f',(float)$array['freeze_money']*0.01);
-            $array['cash_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
-            $array['balance']=sprintf('%.2f',(float)$array['balance']*0.01);
-            $array['cashed_money']=sprintf('%.2f',(float)$array['cash_money']*0.01);
-            $array['cashwithdrawal_money']=sprintf('%.2f',(float)$array['balance']*0.01);
-            return $array;
-
+            $tran->commit();
+            return 200;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+            return $code;
         }
-
-       return null;
-
-    }
-
-    public static function getcategory($pid){
-
-        $cate = GoodsCategory::findOne($pid);
-
-
-        $children = $cate->children;
-
-
-        if ($children) {
-            $child_id = [];
-            foreach ($children as $child) {
-                $category = $child->children;
-
-                if ($category) {
-                    foreach ($category as $cate) {
-                        $child_id[] = $cate->id;
-                    }
-
-                }
-                $child_id[] = $child->id;
-            }
-          return $child_id;
-
-
-
-        } else {
-
-         return $pid;
-
-        }
-
-
-
-    }
-
-    /**
-     * Get supplier statistics during some time
-     *
-     * @param int $supplierId supplier id
-     * @param string $timeType timte type default today
-     * @return array
-     */
-    public static function statData($supplierId, $timeType = 'today')
-    {
-        list($startTime, $endTime) = StringService::startEndDate($timeType);
-
-        $intStartTime = strtotime($startTime);
-        $intEndTime = strtotime($endTime);
-        $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime, $supplierId);
-        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime, $supplierId);
-
-        $where = "supplier_id = {$supplierId}";
-
-        $startTime = explode(' ', $startTime)[0];
-        $endTime = explode(' ', $endTime)[0];
-
-        if ($startTime) {
-            $startTime = str_replace('-', '', $startTime);
-            $startTime && $where .= " and create_date >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = str_replace('-', '', $endTime);
-            $endTime && $where .= " and create_date <= {$endTime}";
-        }
-
-        return [
-            $timeType . '_amount_order' => $todayAmountOrder,
-            $timeType . '_order_number' => $todayOrderNumber,
-            $timeType . '_ip_number' => GoodsStat::totalIpNumber($where),
-            $timeType . '_viewed_number' => GoodsStat::totalViewedNumber($where),
-        ];
     }
 }
