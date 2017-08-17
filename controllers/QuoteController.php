@@ -465,14 +465,10 @@ class QuoteController extends Controller
                     'toilet_area'=>1,
                     'toilet_girth'=>1,
                     'window'=>1,
-                    'cur_all_drawing'=>
-                        [
-                            'drawing_name'=>123,
-                            'drawing_list'=>1,
-                            'house_type_name'=>1,
-                            'series'=>1,
-                            'style'=>1,
-                        ],
+                    'drawing_name'=>123,
+                    'drawing_list'=>1,
+                    'series'=>1,
+                    'style'=>1,
                 ],
                  [
                      'area'=>60,
@@ -497,14 +493,10 @@ class QuoteController extends Controller
                      'toilet_area'=>1,
                      'toilet_girth'=>1,
                      'window'=>1,
-                     'cur_all_drawing'=>
-                         [
-                             'drawing_name'=>1212313,
-                             'drawing_list'=>1,
-                             'house_type_name'=>1,
-                             'series'=>1,
-                             'style'=>1,
-                         ],
+                     'drawing_name'=>1212313,
+                     'drawing_list'=>1,
+                     'series'=>1,
+                     'style'=>1,
                  ],
             ]
         ];
@@ -523,52 +515,51 @@ class QuoteController extends Controller
 //                'msg' => \Yii::$app->params['errorCodes'][$code]
 //            ]);
 //        }
-        $effect = new Effect();
         foreach ($request['house_informations'] as $house)
         {
-            $_effect = clone $effect;
-            $_effect->series_id = $house['cur_all_drawing']['series'];
-            $_effect->style_id = $house['cur_all_drawing']['style'];
-            $_effect->bedroom = $house['cur_room'];
-            $_effect->sittingRoom_diningRoom = $house['cur_hall'];
-            $_effect->toilet = $house['cur_toilet'];
-            $_effect->kitchen = $house['cur_kitchen'];
-            $_effect->window = $house['window'];
-            $_effect->area = $house['area'];
-            $_effect->high = $house['high'];
-            $_effect->province_code = $request['province_code'];
-            $_effect->city_code = $request['city_code'];
-            $_effect->district_code = $request['cur_county_id'];
-            $_effect->toponymy = $request['house_name'];
-            $_effect->street = $request['address'];
-            $_effect->particulars = $house['house_type_name'];
-            $_effect->stairway = $house['have_stair'];
-            $_effect->house_image = $house['cur_imgSrc'];
-            $_effect->effect_images = $house['cur_all_drawing']['drawing_list'];
-            $_effect->images_name = $house['cur_all_drawing']['drawing_name'];
-            $_effect->type = $house['is_ordinary'];
-            $_effect->add_time = time();
-            
-            $_effect->setAttributes($request);
-            $code = 1000;
-            if (!$_effect->validate()) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+            $series_id = $house['series'];
+            $style_id  = $house['style'];
+            $bedroom = $house['cur_room'];
+            $sittingRoom_diningRoom = $house['cur_hall'];
+            $toilet = $house['cur_toilet'];
+            $kitchen = $house['cur_kitchen'];
+            $window = $house['window'];
+            $area = $house['area'];
+            $high = $house['high'];
+            $province = '四川省';
+            $province_code = $request['province_code'];
+            $city = '成都市';
+            $city_code = $request['city_code'];
+            $district = '金牛区';
+            $district_code = $request['cur_county_id'];
+            $toponymy = $request['house_name'];
+            $street = $request['address'];
+            $particulars = $house['house_type_name'];
+            $stairway = $house['have_stair'];
+            $add_time = time();
+            $house_image = $house['cur_imgSrc'];
+            $effect_images = $house['drawing_list'];
+            $images_name = $house['drawing_name'];
+            $type = $house['is_ordinary'];
 
-            if (!$_effect->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+            $effect =(new Effect())->plotAdd($series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type);
+            $effect_id = \Yii::$app->db->getLastInsertID();
+            $hall_area = $house['hall_area'];
+            $hall_perimeter = $house['hall_girth'];
+            $bedroom_area = $house['room_area'];
+            $bedroom_perimeter = $house['room_girth'];
+            $toilet_area = $house['toilet_area'];
+            $toilet_perimeter = $house['toilet_girth'];
+            $kitchen_area = $house['kitchen_area'];
+            $kitchen_perimeter = $house['kitchen_girth'];
+            $modelling_length = $house['other_length'];
+            $flat_area = $house['flattop_area'];
+            $balcony_area = $house['balcony_area'];
+
+            $decoration_particulars = (new DecorationParticulars())->plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
+
         }
-
-        $all [] = (new DecorationParticulars())->plotAdd($request);
-        if ($all) {
+        if ($effect && $decoration_particulars) {
             $code = 200;
             return Json::encode([
                 'code' => $code,

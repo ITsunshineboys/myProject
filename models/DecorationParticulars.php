@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
 
 class DecorationParticulars extends ActiveRecord
 {
+    const SUP_BANK_CARD = 'decoration_particulars';
     const FIELDS_VIEW_ADMIN_MODEL = [
         'id',
         'decoration_list_id',
@@ -64,11 +65,23 @@ class DecorationParticulars extends ActiveRecord
         }
     }
 
-    public static function plotAdd($post)
+    public static function plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area)
     {
-        if ($post)
-        {
-            return 11;
-        }
+        $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
+            'effect_id' => $effect_id,
+            'hall_area' => $hall_area,
+            'hall_perimeter' => $hall_perimeter,
+            'bedroom_area' => $bedroom_area,
+            'bedroom_perimeter' => $bedroom_perimeter,
+            'toilet_area' => $toilet_area,
+            'toilet_perimeter' => $toilet_perimeter,
+            'kitchen_area' => $kitchen_area,
+            'kitchen_perimeter' => $kitchen_perimeter,
+            'modelling_length' => $modelling_length,
+            'flat_area' => $flat_area,
+            'balcony_area' => $balcony_area,
+        ])->execute();
+
+        return $res;
     }
 }

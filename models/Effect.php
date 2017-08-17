@@ -13,6 +13,7 @@ use yii\db\Query;
 
 class Effect extends ActiveRecord
 {
+    const  SUP_BANK_CARD='effect';
     const TYPE_STATUS_YES = 1;
     const TYPE_STATUS_NO = 0;
     const STATUS_STAIRWAY_YES = 1;
@@ -30,11 +31,14 @@ class Effect extends ActiveRecord
           'area',
           'high',
           'province',
+          'province_code',
           'city',
+          'city_code',
           'district',
+          'district_code',
           'toponymy',
+          'street',
           'particulars',
-          'site_particulars',
           'stairway',
           'add_time',
           'house_image',
@@ -53,8 +57,8 @@ class Effect extends ActiveRecord
     public function rules()
     {
         return [
-            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','city','district', 'toponymy','street','particulars','site_particulars'], 'required'],
-            [['province', 'city','district','toponymy','street','particulars','site_particulars'],'string'],
+            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','effect_images','images_name','type'], 'required'],
+            [['province', 'city','district','toponymy','street','particulars'],'string'],
             [['series_id','style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high'],'number']
         ];
     }
@@ -78,18 +82,16 @@ class Effect extends ActiveRecord
 
         $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,t.style,s.series')->leftJoin('series As s','s.id = e.series_id')->leftJoin('style As t','t.id = e.style_id')->where(['e.id'=>$effect_id])->one();
         $array1=(new Query())->from('effect_earnst')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
-        if($array){
-            $array['phone']=$array1['phone'];
-            $array['create_time']=$array1['create_time'];
-            $array['earnest']=sprintf('%.2f',(float)$array1['earnest']*0.01);
-            $array['name']=$array1['name'];
-            $array['remark']=$array1['remark'];
+
+        $array['phone']=$array1['phone'];
+        $array['create_time']=$array1['create_time'];
+        $array['earnest']=$array1['earnest'];
+        $array['name']=$array1['name'];
+        $array['remark']=$array1['remark'];
 
 
-            return $array;
-        }
+        return $array;
 
-    return null;
     }
     public function beforeSave($insert)
     {
@@ -180,4 +182,35 @@ class Effect extends ActiveRecord
         ];
     }
 
+    public function plotAdd($series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type)
+    {
+        $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
+            'series_id'     => $series_id,
+            'style_id'      => $style_id,
+            'bedroom'       => $bedroom,
+            'sittingRoom_diningRoom' => $sittingRoom_diningRoom,
+            'toilet'        => $toilet,
+            'kitchen'       => $kitchen,
+            'window'        => $window,
+            'area'          => $area,
+            'high'          => $high,
+            'province'      => $province,
+            'province_code' => $province_code,
+            'city'          => $city,
+            'city_code'     => $city_code,
+            'district'      => $district,
+            'district_code' => $district_code,
+            'toponymy'      => $toponymy,
+            'street'        => $street,
+            'particulars'   => $particulars,
+            'stairway'      => $stairway,
+            'add_time'      => $add_time,
+            'house_image'   => $house_image,
+            'effect_images' => $effect_images,
+            'images_name'   => $images_name,
+            'type'          => $type,
+        ])->execute();
+
+        return $res;
+    }
 }
