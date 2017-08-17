@@ -38,8 +38,11 @@ class Series extends ActiveRecord
 
     public static function findByAll()
     {
-        $select = 'series.id,series.series,series.intro,series.theme';
-        $series = self::find()->asArray()->select($select)->all();
+        $series = self::find()
+            ->asArray()
+            ->select("id,series,intro,theme")
+            ->orderBy(['id'=>SORT_ASC])
+            ->all();
         return $series;
     }
 

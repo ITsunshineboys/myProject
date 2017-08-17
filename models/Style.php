@@ -39,11 +39,11 @@ class Style extends ActiveRecord
 
     public static function findByAll()
     {
-        $select = 'style.id,style.style,style.intro,style.theme';
         $series = self::find()
             ->asArray()
+            ->select("id,style,intro,theme,images")
             ->where(['status'=>self::STATUS_ONLINE])
-            ->select($select)
+            ->orderBy(['id'=>SORT_ASC])
             ->all();
         return $series;
     }
