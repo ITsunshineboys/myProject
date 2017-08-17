@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
 
 class Series extends ActiveRecord
 {
+    const PAGE_SIZE_DEFAULT = 12;
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const FIELDS_ADMIN= [
@@ -66,5 +67,31 @@ class Series extends ActiveRecord
             ->where(['status'=>self::STATUS_ONLINE])
             ->orderBy(['id'=>SORT_ASC])
             ->all();
+    }
+
+    public static function pagination($page = 1, $size = self::PAGE_SIZE_DEFAULT)
+    {
+        $offset = ($page - 1) * $size;
+        $list = self::find()
+            ->orderBy(['series_grade' => SORT_ASC])
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+
+        foreach ($list as &$effect) {
+
+            if(isset($effect['creation_time'])){
+                $effect['creation_time']=date('Y-m-d H:i', $effect['creation_time']);
+            }
+
+        }
+
+        return [
+            'total' => (int)self::find()->where([])->asArray()->count(),
+            'page'=>$page,
+            'size'=>$size,
+            'details' => $list
+        ];
     }
 }

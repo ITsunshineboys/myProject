@@ -3951,15 +3951,10 @@ class MallController extends Controller
      */
     public function actionSeriesList()
     {
-        $series = Series::find()
-            ->asArray()
-            ->orderBy(['series_grade' => SORT_ASC])
-            ->All();
-        $all = [];
-        foreach ($series as $one_series) {
-            $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);
-            $all [] = $one_series;
-        }
+        $request = Yii::$app->request;
+        $pages = $request->get('page','1');
+        $size  = $request->get('size','12');
+        $all = Series::pagination($pages,$size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -4063,19 +4058,15 @@ class MallController extends Controller
      */
     public function actionStyleList()
     {
-        $style = Style::find()
-            ->asArray()
-            ->All();
-        $all = [];
-        foreach ($style as $one_style) {
-            $one_style['creation_time'] = date('Y-m-d H:i', $one_style['creation_time']);
-            $all [] = $one_style;
-        }
+        $request = Yii::$app->request;
+        $pages = $request->get('page','1');
+        $size  = $request->get('size','12');
+        $all = Style::pagination($pages,$size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'style_list' => $all
+                'series_list' => $all
             ]
         ]);
     }
