@@ -1327,6 +1327,10 @@ class User extends ActiveRecord implements IdentityInterface
     public static function SetPaypassword($postData,$user)
     {
         $key=trim(htmlspecialchars($postData['key']),'');
+        if (!$key){
+            $code=1000;
+            return $code;
+        }
         if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD, $key)==true){
             $code=self::setPaypassword_first($postData,$user);
 
@@ -1407,7 +1411,7 @@ class User extends ActiveRecord implements IdentityInterface
         $pay_pwd_first=trim(htmlspecialchars($postData['pay_pwd_first']),'');
         $pay_pwd_secend=trim(htmlspecialchars($postData['pay_pwd_secend']),'');
         $role_id=trim(htmlspecialchars($postData['role_id']),'');
-        if (empty($pay_pwd_first)||empty( $pay_pwd_secend) || empty($role_id) || !self::CheckPaypwdFormat($pay_pwd_first) || !self::CheckPaypwdFormat($pay_pwd_secend)){
+        if (!$pay_pwd_first||!$pay_pwd_secend||!$role_id|| !self::CheckPaypwdFormat($pay_pwd_first) || !self::CheckPaypwdFormat($pay_pwd_secend)){
             $code=1000;
             return $code;
         };
@@ -1465,7 +1469,7 @@ class User extends ActiveRecord implements IdentityInterface
          $pay_pwd=trim(htmlspecialchars($postData['pay_pwd']),'');
 
          $role_id=trim(htmlspecialchars($postData['role_id']),'');
-         if (empty($pay_pwd) || empty($role_id) || !self::CheckPaypwdFormat($pay_pwd)){
+         if (!$pay_pwd || !$role_id || !self::CheckPaypwdFormat($pay_pwd)){
              $code=1000;
              return $code;
          };
@@ -1484,13 +1488,15 @@ class User extends ActiveRecord implements IdentityInterface
              $code=1010;
              return $code;
          }
-         $key=self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id;
          $cache = Yii::$app->cache;
-         $data = $cache->get($key);
-         if ($data >=5){
-             $code=1024;
-             return $code;
+         $data = $cache->get(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
+         if ($data != false){
+             if ($data >=5){
+                 $code=1024;
+                 return $code;
+             }
          }
+
          $users=self::find()->select('mobile')->where(['id'=>$user->id])->one();
          $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd);
          $cache->set(self::CACHE_FREFIX_GET_PAY_PASSWORD.$user->id,$psw, 60*60);
