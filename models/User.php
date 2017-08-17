@@ -1502,7 +1502,7 @@ class User extends ActiveRecord implements IdentityInterface
          $cache->set(self::CACHE_FREFIX_GET_PAY_PASSWORD.$user->id,$psw, 60*60);
          $data=array();
          $data['mobile']=0;
-         $data['mobile']=13880414513;
+         $data['mobile']=$users['mobile'];
          $data['type']='resetPassword';
          $res=new SmValidationService($data);
          if ($res){
