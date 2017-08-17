@@ -1010,4 +1010,107 @@ class SiteController extends Controller
             ],
         ]);
     }
+
+    /**
+     * check Is it the first set pay_password
+     * @return string
+     */
+    public function actionCheckisfirstsetpaypwd()
+        {
+            $postData = Yii::$app->request->post();
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            if (empty($postData['role_id'])){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            };
+            $check_user=UserRole::find()
+                ->select('user_id')
+                ->where(['user_id'=>$user->id])
+                ->andWhere(['role_id'=>$postData['role_id']])
+                ->asArray()
+                ->one();
+            if (!$check_user){
+                $code=1010;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $model=Role::CheckUserRole($postData['role_id']);
+            $pay_password=$model->select('pay_password')->where(['uid'=>$user->id])->asArray()->one()['pay_password'];
+            $data['type']=empty($pay_password)?'first':'unfirst';
+            $data['key']=empty($pay_password)? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword'):\Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword');
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+                'data' =>$data
+            ]);
+        }
+
+        /**
+         * set  pay password  or Get set paypassword SMS code
+         * @return string
+         */
+        public function  actionSetPaypassword(){
+                $user = Yii::$app->user->identity;
+                if (!$user){
+                    $code=1052;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $postData= Yii::$app->request->post();
+                $code=User::SetPaypassword($postData,$user);
+                    if ($code==200){
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => 'ok'
+                        ]);
+                    }else{
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+        }
+
+
+        /**
+         * reset pay password
+         * @return string
+         */
+        public function  actionResetPaypassword(){
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $postData= Yii::$app->request->post();
+            $code=User::ResetPaypassword($postData,$user);
+            if ($code==200){
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => 'ok'
+                ]);
+            }else{
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
 }

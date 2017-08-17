@@ -90,4 +90,34 @@ class Role extends ActiveRecord
         return self::allRoles(true);
 //        return array_slice(self::allRoles(), 1);
     }
+
+    /**
+     * 
+     * [CheckUserRole description]
+     * @param [type] $role [description]
+     */
+    public  static  function CheckUserRole($role)
+    {
+        switch ($role){
+            case 2:
+                $model=Worker::find();
+                break;
+            case 3:
+                $model=Designer::find();
+                break;
+            case 4:
+                $model=Manager::find();
+                break;
+            case 5:
+                $model=DecorationCompany::find();
+                break;
+            case 6:
+                $model=Supplier::find();
+                break;
+            case 7:
+                $model=User::find();
+                break;
+        }
+        return $model;
+    }
 }

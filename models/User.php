@@ -13,6 +13,10 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const CACHE_PREFIX = 'user_';
     const CACHE_PREFIX_DAILY_FORGOT_PWD_CNT = 'daily_forgot_pwd_cnt_';
+    const CACHE_PREFIX_SET_PAYPASSWORD  = 'set_paypassword_';
+    const CACHE_FREFIX_GET_PAY_PASSWORD = 'get_paypassword';
+    const UNFIRST_SET_PAYPASSWORD='unfirstsetpaypassword';
+    const FIRST_SET_PAYPASSWORD='firstsetpaypassword';
     const PASSWORD_MIN_LEN = 6;
     const PASSWORD_MAX_LEN = 25;
     const PREFIX_DEFAULT_MOBILE = '18';
@@ -1312,5 +1316,200 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAuthKey()
     {
         return $this->authKey;
+    }
+
+     /**
+     * set pay password
+     * @param $postData
+     * @param $user
+     * @return int
+     */
+    public static function SetPaypassword($postData,$user)
+    {
+        $key=trim(htmlspecialchars($postData['key']),'');
+        if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD, $key)==true){
+            $code=self::setPaypassword_first($postData,$user);
+
+        }
+        if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD, $key)==true)
+        {
+            $code=self::setPaypassword_secend($postData,$user);
+        }
+        return $code;
+    }
+
+    /**
+     * update paypassword
+     * @param $postData
+     * @param $user
+     * @return int
+     */
+    public  static function  ResetPaypassword($postData,$user)
+    {
+        $role_id=trim(htmlspecialchars($postData['role_id']),'');
+        $smscode=trim(htmlspecialchars($postData['sms_code']),'');
+        $cache = Yii::$app->cache;
+        $psw = $cache->get(self::CACHE_FREFIX_GET_PAY_PASSWORD.$user->id);
+        if  (empty($role_id)){
+            $code=1000;
+            return $code;
+        };
+        $check_user=UserRole::find()
+            ->select('user_id')
+            ->where(['user_id'=>$user->id])
+            ->andWhere(['role_id'=>$role_id])
+            ->asArray()
+            ->one();
+        if (!$check_user){
+            $code=1010;
+            return $code;
+        }
+        $users=self::find()->select('mobile')->where(['id'=>$user->id])->one();
+        if (!SmValidationService::validCode($users['mobile'],$smscode)) {
+            $code = 1002;
+            return $code;
+        }
+        SmValidationService::deleteCode($users['mobile']);
+        $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+        if (!$userRole){
+            $code=1010;
+            return $code;
+        }
+        $data = $cache->get(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
+        if ($data === false) {
+            $cacheData = 1;
+            $cache->set(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id, $cacheData, 24*60*60);
+        }
+        else{
+            $cacheData = $data+1;
+            if ($cacheData>5){
+                $code=1024;
+                return $code;
+            }
+            $cache->set(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id,$cacheData, 24*60*60);
+        }
+            $userRole->pay_password=$psw;
+            $res=$userRole->save(false);
+            if ($res){
+                $code=200;
+                return $code;
+            }
+    }
+
+    /**
+     * set first pay password
+     * @param $postData
+     * @param $user
+     * @return int
+     */
+    private static  function setPaypassword_first($postData,$user)
+    {
+        $pay_pwd_first=trim(htmlspecialchars($postData['pay_pwd_first']),'');
+        $pay_pwd_secend=trim(htmlspecialchars($postData['pay_pwd_secend']),'');
+        $role_id=trim(htmlspecialchars($postData['role_id']),'');
+        if (empty($pay_pwd_first)||empty( $pay_pwd_secend) || empty($role_id) || !self::CheckPaypwdFormat($pay_pwd_first) || !self::CheckPaypwdFormat($pay_pwd_secend)){
+            $code=1000;
+            return $code;
+        };
+        if ($pay_pwd_first!=  $pay_pwd_secend){
+            $code=1053;
+            return $code;
+        }
+        $check_user=UserRole::find()
+            ->select('user_id')
+            ->where(['user_id'=>$user->id])
+            ->andWhere(['role_id'=>$role_id])
+            ->asArray()
+            ->one();
+        if (!$check_user){
+            $code=1010;
+            return $code;
+        }
+        $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+        if (!$userRole){
+            $code=1010;
+            return $code;
+        }
+        $cache = Yii::$app->cache;
+        $data = $cache->get(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
+        if ($data === false) {
+            $cacheData = 1;
+            $cache->set(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id, $cacheData, 24*60*60);
+        }
+        else{
+            $cacheData = $data+1;
+            if ($cacheData>5){
+                $code=1024;
+                return $code;
+            }
+            $cache->set(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id,$cacheData, 24*60*60);
+        }
+        $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd_secend);
+        $userRole->pay_password=$psw;
+        $res=$userRole->save(false);
+        if ($res){
+            $code=200;
+            return $code;
+        }
+    }
+
+    /**
+     * 获取修改交易密码验证码
+     * @param $postData
+     * @param $user
+     * @return int
+     */
+     private function setPaypassword_secend($postData,$user)
+     {
+
+         $pay_pwd=trim(htmlspecialchars($postData['pay_pwd']),'');
+
+         $role_id=trim(htmlspecialchars($postData['role_id']),'');
+         if (empty($pay_pwd) || empty($role_id) || !self::CheckPaypwdFormat($pay_pwd)){
+             $code=1000;
+             return $code;
+         };
+         $check_user=UserRole::find()
+             ->select('user_id')
+             ->where(['user_id'=>$user->id])
+             ->andWhere(['role_id'=>$role_id])
+             ->asArray()
+             ->one();
+         if (!$check_user){
+             $code=1010;
+             return $code;
+         }
+         $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+         if (!$userRole){
+             $code=1010;
+             return $code;
+         }
+         $key=self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id;
+         $cache = Yii::$app->cache;
+         $data = $cache->get($key);
+         if ($data >=5){
+             $code=1024;
+             return $code;
+         }
+         $users=self::find()->select('mobile')->where(['id'=>$user->id])->one();
+         $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd);
+         $cache->set(self::CACHE_FREFIX_GET_PAY_PASSWORD.$user->id,$psw, 60*60);
+         $data['mobile']=$users['mobile'];
+         $data['type']='resetPassword';
+         $res=new SmValidationService($data);
+         if ($res){
+             $code=200;
+             return $code;
+         }
+     }
+
+    /**
+     * check pay password
+     * @param $psw
+     * @return int
+     */
+    private static function CheckPaypwdFormat($psw){
+        $res = preg_match('/\b\d{6}\b/', $psw, $matches);
+        return $res;
     }
 }
