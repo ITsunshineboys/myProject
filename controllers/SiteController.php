@@ -53,8 +53,7 @@ class SiteController extends Controller
             'access' => [
                 'class' => AdminAuthService::className(),
                 'denyCallback' => function ($rule, $action) {
-                    $code = 403;
-                    new ExceptionHandleService($code);
+                    new ExceptionHandleService(func_get_args()[0]);
                     exit;
                 },
                 'only' => self::ACCESS_LOGGED_IN_USER,
@@ -152,15 +151,15 @@ class SiteController extends Controller
 
         $model = new LoginForm;
         if ($model->load($postData)) {
-            if ($model->isUserBlocked()) {
-                $code = 1015;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
             if ($model->login()) {
+                if ($model->isUserBlocked()) {
+                    $code = 1015;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
                 $user = Yii::$app->user->identity;
                 $user->afterLogin();
 
@@ -347,17 +346,17 @@ class SiteController extends Controller
         $code = 1001;
         $model = new LoginForm;
         if ($model->load($postData)) {
-            if ($model->isUserBlocked()) {
-                $code = 1015;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
             if ($model->login()) {
                 $user = Yii::$app->user->identity;
                 if (!$user) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if ($model->isUserBlocked()) {
+                    $code = 1015;
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code],

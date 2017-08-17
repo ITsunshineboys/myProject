@@ -140,10 +140,7 @@ class MallController extends Controller
             'access' => [
                 'class' => AdminAuthService::className(),
                 'denyCallback' => function ($rule, $action) {
-                    $code = 403;
-                    $args = func_get_args();
-                    !empty($args[0]) && $code = $args[0];
-                    new ExceptionHandleService($code);
+                    new ExceptionHandleService(func_get_args()[0]);
                     exit;
                 },
                 'only' => self::ACCESS_LOGGED_IN_USER,

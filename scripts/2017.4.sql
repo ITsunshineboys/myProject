@@ -22,6 +22,7 @@ CREATE TABLE `user` (
   `password` varchar(100) DEFAULT '',
   `authKey` varchar(30) DEFAULT '',
   `authKeyAdmin` varchar(30) DEFAULT '',
+  `oldAuthKey` varchar(30) DEFAULT '',
   `accessToken` varchar(255) DEFAULT '',
   `mobile` bigint DEFAULT 0,
   `nickname` varchar(20) DEFAULT '',

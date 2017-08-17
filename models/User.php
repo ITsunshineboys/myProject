@@ -600,6 +600,30 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Check if kicked out
+     *
+     * @return bool
+     */
+    public static function checkKickedout()
+    {
+        if (Yii::$app->session->getHasSessionId()) {
+            $sessId = Yii::$app->session->id;
+            $user = self::find()->where(['oldAuthKey' => $sessId])->one(); // todo: oldAuthKeyAdmin
+            if (
+                $user
+                && $user->authKey
+                && $user->oldAuthKey
+                && $user->authKey != $user->oldAuthKey
+                && $sessId == $user->oldAuthKey
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Reset user's new mobile
      *
      * @param int $mobile mobile
@@ -646,9 +670,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function adminLogout()
     {
-        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN])) {
-            unset(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN]);
-        }
+//        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN])) {
+//            unset(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN]);
+//        }
+        Yii::$app->user->logout();
         $this->authKeyAdmin = '';
         $this->save();
     }
@@ -658,9 +683,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function logout()
     {
-        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])) {
-            unset(Yii::$app->session[self::LOGIN_ORIGIN_APP]);
-        }
+//        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])) {
+//            unset(Yii::$app->session[self::LOGIN_ORIGIN_APP]);
+//        }
+        Yii::$app->user->logout();
         $this->authKey = '';
         $this->save();
     }
@@ -936,8 +962,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function checkLogin()
     {
-        $this->refresh();
-
         if ($this->deadtime > 0
             || !$this->authKey
             || empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])
@@ -955,8 +979,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function checkAdminLogin()
     {
-        $this->refresh();
-
         if ($this->deadtime > 0
             || !$this->authKeyAdmin
             || empty(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN])
@@ -1267,13 +1289,16 @@ class User extends ActiveRecord implements IdentityInterface
         $sessionId = Yii::$app->session->id;
 
         $sessFile = Yii::$app->cache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $this->getAuthKey();
-        $this->getAuthKey() != $sessionId && @unlink($sessFile);
+        if ($this->getAuthKey() != $sessionId) {
+            @unlink($sessFile);
+        }
 
         if ($roleId) {
             $this->authKeyAdmin = $sessionId;
             Yii::$app->session[self::LOGIN_ORIGIN_ADMIN] = $this->id;
         } else {
             Yii::$app->session[self::LOGIN_ORIGIN_APP] = $this->id;
+            $this->oldAuthKey = $this->authKey;
             $this->authKey = $sessionId;
         }
         Yii::$app->session[self::LOGIN_ROLE_ID] = $roleId ? $roleId : Yii::$app->params['ownerRoleId'];
@@ -1287,14 +1312,5 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAuthKey()
     {
         return $this->authKey;
-    }
-
-    public function checkKickedout()
-    {
-        $sessFile = Yii::$app->cache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $this->oldAuthKey;
-        if ($this->oldAuthKey && !file_exists($sessFile)) {
-            return true;
-        }
-        return false;
     }
 }
