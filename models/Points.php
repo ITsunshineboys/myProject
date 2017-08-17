@@ -57,8 +57,7 @@ class Points extends ActiveRecord
     {
         $strong_id = [];
         $all = self::find()->where(['effect_id'=>$id])->all();
-        foreach ($all as $one)
-        {
+        foreach ($all as $one) {
             $strong_id [] = $one['id'];
         }
 
