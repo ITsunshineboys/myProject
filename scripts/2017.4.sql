@@ -42,6 +42,7 @@ CREATE TABLE `user` (
   `district_code` int(6) unsigned not null default 0 comment '区域码',
   `district_name` varchar(50) NOT NULL DEFAULT '' comment '区域名',
   `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
+  `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -67,6 +68,7 @@ CREATE TABLE `decoration_company` (
   `licence_image` varchar(255) not null DEFAULT '营业执照图片',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
+  `pay_password` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -78,6 +80,7 @@ CREATE TABLE `designer` (
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
+  `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -89,6 +92,7 @@ CREATE TABLE `project_manager` (
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
+  `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -147,6 +151,7 @@ CREATE TABLE `worker` (
   `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
+  `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
