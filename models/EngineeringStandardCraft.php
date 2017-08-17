@@ -26,6 +26,12 @@ class EngineeringStandardCraft  extends ActiveRecord
         return 'engineering_standard_craft';
     }
 
+    /**
+     * condition find
+     * @param string $project
+     * @param int $district
+     * @return array|bool|ActiveRecord[]
+     */
     public static function findByAll($project='',$district =510100)
     {
         if($project) {
