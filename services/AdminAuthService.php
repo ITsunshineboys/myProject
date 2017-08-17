@@ -8,6 +8,7 @@
 
 namespace app\services;
 
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -15,25 +16,43 @@ class AdminAuthService extends AccessControl
 {
     public function beforeAction($action)
     {
-        parent::beforeAction($action);
-
         $user = Yii::$app->user->identity;
+        $denyCode = 403;
+        $kickedOutcode = 1023;
 
-        $path = Yii::$app->controller->id . '/' . $action->id;
-        if (isset(Yii::$app->params['auth'][$path])) {
-            if (!$user->checkAdminLogin()
-                || !in_array($user->login_role_id, Yii::$app->params['auth'][$path])
-            ) {
-                $code = null;
-                // todo: check 1023
-                if ($this->denyCallback !== null) {
-                    call_user_func($this->denyCallback, $code, $action);
+        if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_ADMIN])
+            || !empty(Yii::$app->session[User::LOGIN_ORIGIN_APP])
+        ) {
+            $path = Yii::$app->controller->id . '/' . $action->id;
+            if (isset(Yii::$app->params['auth'][$path])) {
+                if (!$user->checkAdminLogin()
+                    || !in_array($user->login_role_id, Yii::$app->params['auth'][$path])
+                ) {
+                    if ($this->denyCallback !== null) {
+                        call_user_func($this->denyCallback, $denyCode, $action);
+                    }
+
+                    return false;
                 }
-
-                return false;
             }
-        }
 
-        return true;
+            if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_APP])) {
+                if (!$user->checkLogin()) {
+                    if ($this->denyCallback !== null) {
+                        call_user_func($this->denyCallback, $denyCode, $action);
+                    }
+
+                    return false;
+                }
+            }
+
+            return true;
+        } else {
+            $code = User::checkKickedout() ? $kickedOutcode : $denyCode;
+            if ($this->denyCallback !== null) {
+                call_user_func($this->denyCallback, $code, $action);
+            }
+            return false;
+        }
     }
 }

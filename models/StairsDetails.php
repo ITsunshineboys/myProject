@@ -17,4 +17,16 @@ class StairsDetails extends ActiveRecord
     {
         return 'stairs_details';
     }
+
+    /**
+     * find all information
+     * @return array|ActiveRecord[]
+     */
+    public static function findByAll()
+    {
+        return StairsDetails::find()
+            ->orderBy(['id'=>SORT_ASC])
+            ->asArray()
+            ->all();
+    }
 }
