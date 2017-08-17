@@ -45,7 +45,7 @@ class ModelService
                 return false;
             }
 
-            if (!isset(self::SORT_DIRECTIONS[$direction])) {
+            if (!in_array($direction, array_keys(self::SORT_DIRECTIONS))) {
                 return false;
             }
 
