@@ -90,6 +90,10 @@ return [
             'templateId' => 'SMS_63905689',
             'signName' => '忘记密码验证码',
         ],
+        'resetPayPassword' => [
+            'templateId' => 'SMS_86645022',
+            'signName' => '修改交易密码验证码',
+        ],
     ],
     'timeTypes' => [
         'all' => '全部时间',
