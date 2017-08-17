@@ -1500,7 +1500,9 @@ class User extends ActiveRecord implements IdentityInterface
          $users=self::find()->select('mobile')->where(['id'=>$user->id])->asArray()->one();
          $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd);
          $cache->set(self::CACHE_FREFIX_GET_PAY_PASSWORD.$user->id,$psw, 60*60);
-         $data['mobile']=13880414513;;
+         $data=array();
+         $data['mobile']=0;
+         $data['mobile']=13880414513;
          $data['type']='resetPassword';
          $res=new SmValidationService($data);
          if ($res){
