@@ -68,18 +68,18 @@ class DecorationParticulars extends ActiveRecord
     public static function plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area)
     {
         $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
-            'effect_id' => $effect_id,
-            'hall_area' => $hall_area,
-            'hall_perimeter' => $hall_perimeter,
-            'bedroom_area' => $bedroom_area,
+            'effect_id'         => $effect_id,
+            'hall_area'         => $hall_area,
+            'hall_perimeter'    => $hall_perimeter,
+            'bedroom_area'      => $bedroom_area,
             'bedroom_perimeter' => $bedroom_perimeter,
-            'toilet_area' => $toilet_area,
-            'toilet_perimeter' => $toilet_perimeter,
-            'kitchen_area' => $kitchen_area,
+            'toilet_area'       => $toilet_area,
+            'toilet_perimeter'  => $toilet_perimeter,
+            'kitchen_area'      => $kitchen_area,
             'kitchen_perimeter' => $kitchen_perimeter,
-            'modelling_length' => $modelling_length,
-            'flat_area' => $flat_area,
-            'balcony_area' => $balcony_area,
+            'modelling_length'  => $modelling_length,
+            'flat_area'         => $flat_area,
+            'balcony_area'      => $balcony_area,
         ])->execute();
 
         return $res;
