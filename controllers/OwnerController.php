@@ -193,20 +193,20 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'area' => 60,
-            'bedroom' => 2,
-            'hall' => 1,
-            'toilet' => 1,
-            'kitchen' => 1,
-            'stairs_details_id' => 1,
-            'series' => 1,
-            'style' => 1,
-            'window' => 14,
-            'province' => 510000,
-            'city' => 510100,
-        ];
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'area' => 60,
+//            'bedroom' => 2,
+//            'hall' => 1,
+//            'toilet' => 1,
+//            'kitchen' => 1,
+//            'stairs_details_id' => 1,
+//            'series' => 1,
+//            'style' => 1,
+//            'window' => 14,
+//            'province' => 510000,
+//            'city' => 510100,
+//        ];
         //人工价格
         $workers = LaborCost::profession($post, '弱电');
 
