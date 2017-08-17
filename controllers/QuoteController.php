@@ -9,6 +9,7 @@ namespace app\controllers;
 use app\models\AssortGoods;
 use app\models\DecorationAdd;
 use app\models\DecorationParticulars;
+use app\models\District;
 use app\models\Effect;
 use app\models\EffectPicture;
 use app\models\EngineeringStandardCraft;
@@ -438,7 +439,7 @@ class QuoteController extends Controller
             'house_name'=>'小区名称',
             'province_code'=>510000,
             'city_code'=>510100,
-            'cur_county_id'=>5101066,
+            'cur_county_id'=>510106,
             'address'=>'小区详细地址',
             'house_informations'=>
              [
@@ -515,6 +516,9 @@ class QuoteController extends Controller
 //                'msg' => \Yii::$app->params['errorCodes'][$code]
 //            ]);
 //        }
+        $province_chinese = District::findByCode($request['province_code']);
+        $city_chinese = District::findByCode($request['city_code']);
+        $district_chinese = District::findByCode($request['cur_county_id']);
         foreach ($request['house_informations'] as $house)
         {
             $series_id = $house['series'];
@@ -526,11 +530,11 @@ class QuoteController extends Controller
             $window = $house['window'];
             $area = $house['area'];
             $high = $house['high'];
-            $province = '四川省';
+            $province = $province_chinese['name'];
             $province_code = $request['province_code'];
-            $city = '成都市';
+            $city = $city_chinese['name'];
             $city_code = $request['city_code'];
-            $district = '金牛区';
+            $district = $district_chinese['name'];
             $district_code = $request['cur_county_id'];
             $toponymy = $request['house_name'];
             $street = $request['address'];
