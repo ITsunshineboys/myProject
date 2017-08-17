@@ -62,5 +62,6 @@ class UserChat extends \yii\db\ActiveRecord
         }
         $this->login_time = $time;
         return parent::beforeSave($insert);
+
     }
 }
