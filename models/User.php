@@ -1497,7 +1497,7 @@ class User extends ActiveRecord implements IdentityInterface
              }
          }
 
-         $users=self::find()->select('mobile')->where(['id'=>$user->id])->one();
+         $users=self::find()->select('mobile')->where(['id'=>$user->id])->asArray()->one();
          $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd);
          $cache->set(self::CACHE_FREFIX_GET_PAY_PASSWORD.$user->id,$psw, 60*60);
          $data['mobile']=$users['mobile'];
