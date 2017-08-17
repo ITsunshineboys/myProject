@@ -507,7 +507,6 @@ class Supplier extends ActiveRecord
             : $modelData;
         $this->_formatData($viewData);
         return $viewData;
-
     }
 
     /**
