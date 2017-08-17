@@ -522,6 +522,7 @@ class Supplier extends ActiveRecord
 
         $tran = Yii::$app->db->beginTransaction();
         $code = 500;
+   
     }
     /**
      * 已提现列表查询分页
