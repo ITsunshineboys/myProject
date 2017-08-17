@@ -13,7 +13,7 @@ use app\services\FileService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\SmValidationService;
-use app\services\AdminAuthService;
+use app\services\AuthService;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -51,7 +51,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AdminAuthService::className(),
+                'class' => AuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     new ExceptionHandleService(func_get_args()[0]);
                     exit;

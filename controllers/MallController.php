@@ -11,7 +11,6 @@ use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\Series;
 use app\models\Style;
-use app\models\StylePicture;
 use app\models\Supplier;
 use app\models\Lhzz;
 use app\models\LogisticsTemplate;
@@ -28,10 +27,9 @@ use app\models\UserMobile;
 use app\models\UserStatus;
 use app\models\UserRole;
 use app\services\ExceptionHandleService;
-use app\services\FileService;
 use app\services\StringService;
 use app\services\ModelService;
-use app\services\AdminAuthService;
+use app\services\AuthService;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -138,7 +136,7 @@ class MallController extends Controller
     {
         return [
             'access' => [
-                'class' => AdminAuthService::className(),
+                'class' => AuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     new ExceptionHandleService(func_get_args()[0]);
                     exit;

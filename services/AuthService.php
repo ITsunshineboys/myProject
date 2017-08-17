@@ -12,7 +12,7 @@ use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 
-class AdminAuthService extends AccessControl
+class AuthService extends AccessControl
 {
     public function beforeAction($action)
     {
