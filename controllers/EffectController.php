@@ -129,6 +129,9 @@ class EffectController extends Controller
                 return json_encode([
                     'code' => 200,
                     'msg' => '样板间添加成功!',
+                    'data'=>[
+                        'id'=>Yii::$app->db->getLastInsertID()
+                    ]
 
                 ]);
             }
@@ -154,7 +157,7 @@ class EffectController extends Controller
         $request = new Request();
 
         if ($request->isPost) {
-            $model = new EffecteEarnst();
+            $model = new EffectEarnst();
             //保存样板Id
             $model->effect_id = trim($request->post('effect_id', ''), '');
             $name = $model->name = trim($request->post('name', ''), '');

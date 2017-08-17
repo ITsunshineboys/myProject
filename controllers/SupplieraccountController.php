@@ -157,7 +157,7 @@ class SupplieraccountController extends  Controller{
 
         }
 
-            if(in_array($status,self::STATUS))
+            if($status)
                {
 
                 $where.= " and status ={$status}";
