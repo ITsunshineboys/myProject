@@ -22,11 +22,14 @@ class PointsDetails extends ActiveRecord
 
     public static function AllQuantity($allId = [])
     {
-        $sql = "points_quantity";
-        $all_quantity = self::find()->asArray()->select($sql)->where(['in','place_id',$allId])->all();
+        $select = "points_quantity";
+        $all_quantity = self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['in','place_id',$allId])
+            ->all();
         $powerful_points = 0;
-        foreach ($all_quantity as $quantity)
-        {
+        foreach ($all_quantity as $quantity) {
             $powerful_points += $quantity['points_quantity'];
         }
         return $powerful_points;

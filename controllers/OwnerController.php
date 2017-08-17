@@ -369,6 +369,7 @@ class OwnerController extends Controller
                 $add_price [] = 0;
             }
         }
+        
         $add_price_style = DecorationAdd::AllStyle('弱电', $post['style'], $post['city']);
         foreach ($add_price_style as $add_style) {
             $sku_area = Goods::skuAll($add_style['sku']);

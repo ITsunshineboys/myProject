@@ -34,16 +34,9 @@ class EngineeringStandardCraft  extends ActiveRecord
      */
     public static function findByAll($project='',$district =510100)
     {
-        if($project) {
-            $craft = self::find()
-                ->asArray()
-                ->where(['and', ['district_code' => $district], ['project' => $project]])
-                ->all();
-            return $craft;
-        }else
-        {
-            return false;
-        }
-
+        return self::find()
+            ->asArray()
+            ->where(['and', ['district_code' => $district], ['project' => $project]])
+            ->all();
     }
 }

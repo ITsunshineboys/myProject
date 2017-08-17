@@ -41,21 +41,15 @@ class DecorationAdd extends ActiveRecord
      */
     public static function AllArea($str,$all_area,$city='510100')
     {
-        if($str)
-        {
-            $add = self::find()
-                ->asArray()
-                ->where(['and',['project'=>$str],['district_code'=>$city]])
-                ->all();
-            $add_prices = [];
-            foreach ($add as $one) {
-                if($one['max_area'] >= $all_area && $one['min_area'] <= $all_area){
-                    $add_prices [] = $one;
-                }
+        $add = self::find()
+            ->asArray()
+            ->where(['and',['project'=>$str],['district_code'=>$city]])
+            ->all();
+        $add_prices = [];
+        foreach ($add as $one) {
+            if($one['max_area'] >= $all_area && $one['min_area'] <= $all_area){
+                $add_prices [] = $one;
             }
-        }else
-        {
-            $add_prices = null;
         }
         return $add_prices;
     }
@@ -69,14 +63,10 @@ class DecorationAdd extends ActiveRecord
      */
     public static function AllSeries($str,$all_series,$city= '510100')
     {
-        if ($str && $all_series)
-        {
-            return self::find()
-                ->asArray()
-                ->where(['and',['project'=>$str],['district_code'=>$city],['series_id'=>$all_series]])
-                ->all();
-        }
-
+        return self::find()
+            ->asArray()
+            ->where(['and',['project'=>$str],['district_code'=>$city],['series_id'=>$all_series]])
+            ->all();
     }
 
     /**
@@ -88,14 +78,10 @@ class DecorationAdd extends ActiveRecord
      */
     public static function AllStyle($str,$all_style,$city= '510100')
     {
-        if ($str && $all_style)
-        {
-            return self::find()
-                ->asArray()
-                ->where(['and',['project'=>$str],['district_code'=>$city],['style_id'=>$all_style]])
-                ->all();
-        }
-
+        return self::find()
+            ->asArray()
+            ->where(['and',['project'=>$str],['district_code'=>$city],['style_id'=>$all_style]])
+            ->all();
     }
 
     /**
