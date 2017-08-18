@@ -1347,24 +1347,16 @@ class User extends ActiveRecord implements IdentityInterface
      */
    public static function SetPaypassword($postData,$user)
     {
-        $key=trim(htmlspecialchars($postData['key']),'');
-        if (!$postData['key']){
+        if(!array_key_exists('key', $postData)){
             $code=1000;
             return $code;
         }
+        $key=trim(htmlspecialchars($postData['key']),'');
         if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD.$user->id, $key)==true){
-            if (!$postData['pay_pwd_first'] || !$postData['pay_pwd_secend'] || !$postData['role_id']){
-                $code=1000;
-                return $code;
-            }
             $code=self::setPaypassword_first($postData,$user);
         }
         if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD.$user->id, $key)==true)
         {
-            if (!$postData['pay_pwd'] || !$postData['role_id']){
-                $code=1000;
-                return $code;
-            }
             $code=self::setPaypassword_secend($postData,$user);
         }
         return $code;
@@ -1378,14 +1370,15 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public  static function  ResetPaypassword($postData,$user)
     {
+        if(!array_key_exists('role_id', $postData)){
+            $code=1000;
+            return $code;
+        }
         $role_id=trim(htmlspecialchars($postData['role_id']),'');
         $smscode=trim(htmlspecialchars($postData['sms_code']),'');
         $cache = Yii::$app->cache;
         $psw = $cache->get(self::CACHE_FREFIX_GET_PAY_PASSWORD.$user->id);
-        if  (empty($role_id)){
-            $code=1000;
-            return $code;
-        };
+
          if ($postData['role_id']!=7){
                 $check_user=UserRole::find()
                     ->select('user_id')
@@ -1408,7 +1401,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
         SmValidationService::deleteCode($users['mobile']);
         if ($postData['role_id']==7){
-            $userRole=self::find()->where(['uid'=>$user->id])->one();
+            $userRole=self::find()->where(['id'=>$user->id])->one();
         }
         else{
             $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
@@ -1446,14 +1439,19 @@ class User extends ActiveRecord implements IdentityInterface
      */
     private static  function setPaypassword_first($postData,$user)
     {
+
+        if(!array_key_exists('pay_pwd_first', $postData)|| ! array_key_exists('pay_pwd_secend', $postData) || !array_key_exists('role_id', $postData)){
+            $code=1000;
+            return $code;
+        }
         $pay_pwd_first=trim(htmlspecialchars($postData['pay_pwd_first']),'');
         $pay_pwd_secend=trim(htmlspecialchars($postData['pay_pwd_secend']),'');
         $role_id=trim(htmlspecialchars($postData['role_id']),'');
-        if (!$pay_pwd_first||!$pay_pwd_secend||!$role_id|| !self::CheckPaypwdFormat($pay_pwd_first) || !self::CheckPaypwdFormat($pay_pwd_secend)){
+        if ( !self::CheckPaypwdFormat($pay_pwd_first) || !self::CheckPaypwdFormat($pay_pwd_secend)){
             $code=1000;
             return $code;
-        };
-        if ($pay_pwd_first!=  $pay_pwd_secend){
+        }
+        if ($pay_pwd_first !=  $pay_pwd_secend){
             $code=1053;
             return $code;
         }
@@ -1473,7 +1471,7 @@ class User extends ActiveRecord implements IdentityInterface
                 }
             }
         if ($postData['role_id']==7){
-            $userRole=self::find()->where(['uid'=>$user->id])->one();
+            $userRole=self::find()->where(['id'=>$user->id])->one();
         }
         else{
             $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
@@ -1513,12 +1511,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
      private function setPaypassword_secend($postData,$user)
      {
-         $pay_pwd=trim(htmlspecialchars($postData['pay_pwd']),'');
-         $role_id=trim(htmlspecialchars($postData['role_id']),'');
-         if (!$pay_pwd || !$role_id || !self::CheckPaypwdFormat($pay_pwd)){
+         if(!array_key_exists('pay_pwd', $postData)||  !array_key_exists('role_id', $postData)){
              $code=1000;
              return $code;
-         };
+         }
+         $pay_pwd=trim(htmlspecialchars($postData['pay_pwd']),'');
+         $role_id=trim(htmlspecialchars($postData['role_id']),'');
+
           if ($postData['role_id']!=7){
                 $check_user=UserRole::find()
                     ->select('user_id')
@@ -1535,7 +1534,7 @@ class User extends ActiveRecord implements IdentityInterface
                 }
         }
          if ($postData['role_id']==7){
-            $userRole=self::find()->where(['uid'=>$user->id])->one();
+            $userRole=self::find()->where(['id'=>$user->id])->one();
         }
         else{
             $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();

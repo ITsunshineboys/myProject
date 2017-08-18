@@ -1063,6 +1063,14 @@ class SiteController extends Controller
                     ]);
                 }
                 $postData= Yii::$app->request->post();
+                if (!$postData){
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+
                 $code=User::SetPaypassword($postData,$user);
                     if ($code==200){
                         return Json::encode([
