@@ -496,12 +496,19 @@ class OrderController extends Controller
         if (!$money){
             $money=89;
         }
-        if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone) || !$name  ||!$phone || !$effect_id) {
+       if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
             $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg'  => Yii::$app->params['errorCodes'][$code],
                 'data' => null
+            ]);
+        }
+        if ( !$name  ||!$phone || !$effect_id){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $res=Wxpay::effect_earnstsubmit($effect_id,$name,$phone,$money);
