@@ -95,6 +95,7 @@ class User extends ActiveRecord implements IdentityInterface
         'status_operator',
         'status_remark',
         'review_time',
+        'close_time',
     ];
     const FIELDS_USER_LIST_LHZZ = [
         'id',
@@ -118,6 +119,7 @@ class User extends ActiveRecord implements IdentityInterface
         'identity_card_front_image',
         'identity_card_back_image',
         'review_time',
+        'close_time',
     ];
     const LOGIN_ORIGIN_ADMIN = 'login_origin_admin';
     const LOGIN_ORIGIN_APP = 'login_origin_app';
@@ -556,6 +558,16 @@ class User extends ActiveRecord implements IdentityInterface
             if (isset($row['deadtime'])) {
                 $detail['status'] = self::STATUSES[$row['deadtime'] > 0 ? self::STATUS_OFFLINE : self::STATUS_ONLINE];
                 $row['deadtime'] = date('Y-m-d H:i', $row['deadtime']);
+            }
+
+            if (in_array('close_time', $selectOld)) {
+                $userStatus = UserStatus::find()
+                    ->where(['uid' => $row->id, 'status' => self::STATUS_OFFLINE])
+                    ->orderBy(['id' => SORT_DESC])
+                    ->one();
+                if ($userStatus) {
+                    $detail['close_time'] = date('Y-m-d H:i', $userStatus->create_time);
+                }
             }
 
             $detail = array_merge(array_filter($row->getAttributes()), $detail);
@@ -1155,6 +1167,15 @@ class User extends ActiveRecord implements IdentityInterface
                     $userStatus = UserStatus::find()->where(['uid' => $this->id])->orderBy(['id' => SORT_DESC])->one();
                     if ($userStatus) {
                         $extraData[$extraField] = $userStatus->remark;
+                    }
+                    break;
+                case 'close_time':
+                    $userStatus = UserStatus::find()
+                        ->where(['uid' => $this->id, 'status' => self::STATUS_OFFLINE])
+                        ->orderBy(['id' => SORT_DESC])
+                        ->one();
+                    if ($userStatus) {
+                        $extraData[$extraField] = date('Y-m-d H:i', $userStatus->create_time);
                     }
                     break;
             }
