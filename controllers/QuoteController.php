@@ -19,6 +19,7 @@ use app\models\GoodsCategory;
 use app\models\LaborCost;
 use app\models\Series;
 use app\models\Style;
+use app\models\WorksData;
 use app\services\ExceptionHandleService;
 use app\services\SmValidationService;
 use Symfony\Component\Yaml\Tests\A;
@@ -650,10 +651,13 @@ class QuoteController extends Controller
                     $goods_three = $goods['three_name'];
                     $goods_code = $goods['good_code'];
                     $goods_quantity = $goods['good_quantity'];
+                    $works_data = (new WorksData())->plotAdd($effect_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity);
                 }
+
+                foreach ($house['all_goods'] as $goods)
             }
         }
-        if ($effect && $decoration_particulars) {
+        if ($effect && $decoration_particulars && $works_data) {
             $code = 200;
             return Json::encode([
                 'code' => $code,
