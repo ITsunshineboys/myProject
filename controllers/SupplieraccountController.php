@@ -158,7 +158,7 @@ class SupplieraccountController extends  Controller{
 
                     if(is_array($cate_ids)){
                         $ids=  implode(',',$cate_ids);
-                        $where.=" and category_id in ({$ids}) ";
+                        $where.=" and category_id in ({$ids})";
 
                     }else{
                         $where.=" and category_id ={$pid}";
