@@ -1511,7 +1511,7 @@ class MallController extends Controller
         }
 
         $brand->scenario = GoodsBrand::SCENARIO_ADD;
-        if (!$brand->validate()) {
+        if (!$brand->validate()) {echo 'aa';print_r($brand->errors);
             if (isset($brand->errors['name'])) {
                 $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
                 if ($customErrCode !== false) {
@@ -1558,7 +1558,7 @@ class MallController extends Controller
             $brandCategory->category_id_level2 = $parentCategoryId;
 
             $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
-            if (!$brandCategory->validate()) {
+            if (!$brandCategory->validate()) {echo 'bb';print_r($brandCategory->errors);
                 $transaction->rollBack();
 
                 return Json::encode([
