@@ -21,8 +21,8 @@ use yii\web\Request;
 use yii\web\ViewAction;
 
 class SupplieraccountController extends  Controller{
-    const STATUS=[0,1];
-    const STHP_TYPE=[0,1,2,3];
+
+
     const STATUS_CG=3;
     const ACCESS_LOGGED_IN_USER = [
         'logout',
@@ -122,18 +122,35 @@ class SupplieraccountController extends  Controller{
             ]);
         }
         $code=1000;
-
-        $type_shop=(int)(\Yii::$app->request->get('type_shop'));
-        $status=(int)(\Yii::$app->request->get('status'));
+        $vaue_all=Yii::$app->params['value_all'];
+        $type_shop=(int)(\Yii::$app->request->get('type_shop',$vaue_all));
+        $status=(int)(\Yii::$app->request->get('status',$vaue_all));
         $keyword=trim(\Yii::$app->request->get('keyword',''),'');
-
-
         $pid=(int)trim(\Yii::$app->request->get('pid',''),'');
-
+        if (!Supplier::checkShopType($type_shop) || !Supplier::checkStatus($status)) {
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $where = '1';
 
         if(!$keyword) {
+            if ($type_shop != $vaue_all){
+                $where.= " and type_shop = {$type_shop}";
+            }else{
+                $keys=implode(',',array_keys(Supplier::TYPE_SHOP));
+                $where.= " and type_shop in ({$keys}) ";
 
+            }
+
+            if ($status != $vaue_all){
+                $where.= " and status ={$status} ";
+            }else{
+                $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
+                $where.= " and  status in ({$keys}) ";
+
+            }
             if ($pid) {
 
                 $cate_ids=Supplier::getcategory($pid);
@@ -148,31 +165,11 @@ class SupplieraccountController extends  Controller{
                     }
             }
 
-
-
-
-        if($type_shop){
-
-             $where.= " and type_shop = {$type_shop}";
-
-        }
-
-            if($status)
-               {
-
-                $where.= " and status ={$status}";
-
-            }
-
-
         }else{
             $where=" shop_no like '%{$keyword}%' or shop_name like '%{$keyword}%'";
         }
 
-
-
         $page = (int)Yii::$app->request->get('page', 1);
-
         $size = (int)Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
         $paginationData = Supplier::pagination($where, Supplier::FIELDS_ADMIN, $page, $size);
 
@@ -267,7 +264,7 @@ class SupplieraccountController extends  Controller{
                try{
                    $code=1000;
 
-                   if($supplier->balance<$freeze_money){
+                   if($supplier->availableamount<$freeze_money){
                        return json_encode([
                            'code' => $code,
                            'msg' => '可冻结余额不足',
