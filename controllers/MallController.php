@@ -4857,8 +4857,8 @@ class MallController extends Controller
 
         $keyword = trim(Yii::$app->request->get('keyword', ''));
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
-        $shopType = (int)Yii::$app->request->get('shop_type', 0);
-        $status = (int)Yii::$app->request->get('status', 0);
+        $shopType = (int)Yii::$app->request->get('shop_type', Yii::$app->params['value_all']);
+        $status = (int)Yii::$app->request->get('status', Yii::$app->params['value_all']);
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
 
