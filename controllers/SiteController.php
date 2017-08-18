@@ -1016,18 +1016,20 @@ class SiteController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             };
-            $check_user=UserRole::find()
-                ->select('user_id')
-                ->where(['user_id'=>$user->id])
-                ->andWhere(['role_id'=>$postData['role_id']])
-                ->asArray()
-                ->one();
-            if (!$check_user){
-                $code=1010;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
+             if ($postData['role_id']!=7){
+                $check_user=UserRole::find()
+                    ->select('user_id')
+                    ->where(['user_id'=>$user->id])
+                    ->andWhere(['role_id'=>$postData['role_id']])
+                    ->asArray()
+                    ->one();
+                if (!$check_user){
+                    $code=1010;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
             }
             $model=Role::CheckUserRole($postData['role_id']);
             $pay_password=$model->select('pay_password')->where(['uid'=>$user->id])->asArray()->one()['pay_password'];
