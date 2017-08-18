@@ -14,6 +14,7 @@ use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\SmValidationService;
 use app\services\AuthService;
+use app\services\ModelService;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -640,29 +641,11 @@ class SiteController extends Controller
      */
     public function actionResetDistrict()
     {
-        $code = 1000;
-
         $districtCode = (int)Yii::$app->request->post('district_code', 0);
-
-        if (!District::validateDistrictCode($districtCode)) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $user = Yii::$app->user->identity;
-        $code = $user->resetDistrict($districtCode);
-        if (200 != $code) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
+        $res = ModelService::resetDistrict(Yii::$app->user->identity, $districtCode);
         return Json::encode([
-            'code' => 200,
-            'msg' => '修改地区成功',
+            'code' => $res,
+            'msg' => 200 == $res ? '修改地区成功' : Yii::$app->params['errorCodes'][$res],
         ]);
     }
 
