@@ -1386,15 +1386,20 @@ class User extends ActiveRecord implements IdentityInterface
             $code=1000;
             return $code;
         };
-        $check_user=UserRole::find()
-            ->select('user_id')
-            ->where(['user_id'=>$user->id])
-            ->andWhere(['role_id'=>$role_id])
-            ->asArray()
-            ->one();
-        if (!$check_user){
-            $code=1010;
-            return $code;
+         if ($postData['role_id']!=7){
+                $check_user=UserRole::find()
+                    ->select('user_id')
+                    ->where(['user_id'=>$user->id])
+                    ->andWhere(['role_id'=>$postData['role_id']])
+                    ->asArray()
+                    ->one();
+                if (!$check_user){
+                    $code=1010;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
         }
         $users=self::find()->select('mobile')->where(['id'=>$user->id])->one();
         if (!SmValidationService::validCode($users['mobile'],$smscode)) {
@@ -1402,7 +1407,12 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
         SmValidationService::deleteCode($users['mobile']);
-        $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+        if ($postData['role_id']==7){
+            $userRole=self::find()->where(['uid'=>$user->id])->one();
+        }
+        else{
+            $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+        }
         if (!$userRole){
             $code=1010;
             return $code;
@@ -1447,17 +1457,27 @@ class User extends ActiveRecord implements IdentityInterface
             $code=1053;
             return $code;
         }
-        $check_user=UserRole::find()
-            ->select('user_id')
-            ->where(['user_id'=>$user->id])
-            ->andWhere(['role_id'=>$role_id])
-            ->asArray()
-            ->one();
-        if (!$check_user){
-            $code=1010;
-            return $code;
+        if ($postData['role_id']!=7){
+                $check_user=UserRole::find()
+                    ->select('user_id')
+                    ->where(['user_id'=>$user->id])
+                    ->andWhere(['role_id'=>$postData['role_id']])
+                    ->asArray()
+                    ->one();
+                if (!$check_user){
+                    $code=1010;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+        if ($postData['role_id']==7){
+            $userRole=self::find()->where(['uid'=>$user->id])->one();
         }
-        $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+        else{
+            $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+        }
         if (!$userRole){
             $code=1010;
             return $code;
@@ -1499,17 +1519,27 @@ class User extends ActiveRecord implements IdentityInterface
              $code=1000;
              return $code;
          };
-         $check_user=UserRole::find()
-             ->select('user_id')
-             ->where(['user_id'=>$user->id])
-             ->andWhere(['role_id'=>$role_id])
-             ->asArray()
-             ->one();
-         if (!$check_user){
-             $code=1010;
-             return $code;
-         }
-         $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+          if ($postData['role_id']!=7){
+                $check_user=UserRole::find()
+                    ->select('user_id')
+                    ->where(['user_id'=>$user->id])
+                    ->andWhere(['role_id'=>$postData['role_id']])
+                    ->asArray()
+                    ->one();
+                if (!$check_user){
+                    $code=1010;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+        }
+         if ($postData['role_id']==7){
+            $userRole=self::find()->where(['uid'=>$user->id])->one();
+        }
+        else{
+            $userRole=Role::CheckUserRole($role_id)->where(['uid'=>$user->id])->one();
+        }
          if (!$userRole){
              $code=1010;
              return $code;
