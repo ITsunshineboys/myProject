@@ -23,6 +23,7 @@ class SupplierController extends Controller
         'certification-view',
         'certification',
         'index-app',
+        'reset-district',
     ];
 
     /**
@@ -51,6 +52,7 @@ class SupplierController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'certification' => ['post',],
+                    'reset-district' => ['post',],
                 ],
             ],
         ];
@@ -308,6 +310,23 @@ class SupplierController extends Controller
                     'shop_no' => $supplier->shop_no,
                 ]
             ],
+        ]);
+    }
+
+    /**
+     * Reset district action.
+     *
+     * @return string
+     */
+    public function actionResetDistrict()
+    {
+        $districtCode = (int)Yii::$app->request->post('district_code', 0);
+        $address = trim(Yii::$app->request->post('address', ''));
+        $supplier = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->params['supplierRoleId']);
+        $res = ModelService::resetDistrict($supplier, $districtCode, $address);
+        return Json::encode([
+            'code' => $res,
+            'msg' => 200 == $res ? '修改地区成功' : Yii::$app->params['errorCodes'][$res],
         ]);
     }
 }

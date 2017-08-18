@@ -8,6 +8,7 @@
 
 namespace app\services;
 
+use app\models\District;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 
@@ -27,6 +28,9 @@ class ModelService
     const PAGINATION_RETURN_ARRAY_KEY_TOTAL = 'total';
     const PAGINATION_RETURN_ARRAY_KEY_DETAILS = 'details';
     const FIELD_IDENTITY = 'id';
+    const FIELD_DISTRICT_CODE = 'district_code';
+    const FIELD_DISTRICT_NAME = 'district_name';
+    const FIELD_ADDRESS = 'address';
 
     /**
      * Generate sorting statements for query
@@ -242,5 +246,42 @@ class ModelService
             );
         }
         return $sd;
+    }
+
+    /**
+     * Reset some model's district
+     *
+     * @param ActiveRecord $model model
+     * @param string $districtCode district code
+     * @param string $address address
+     * @param string $districtCodeField district code field default district_code
+     * @param string $districtNameField district name field default district_name
+     * @param string $addressField address field default address
+     * @return int
+     */
+    public static function resetDistrict(ActiveRecord $model, $districtCode, $address = '', $districtCodeField = self::FIELD_DISTRICT_CODE, $districtNameField = self::FIELD_DISTRICT_NAME, $addressField = self::FIELD_ADDRESS)
+    {
+        $district = District::validateDistrictCode($districtCode);
+        $modelAttrs = $model->getAttributes();
+        if (!$district
+            || !in_array($districtCodeField, $modelAttrs)
+            || ($districtNameField && !in_array($districtNameField, $modelAttrs))
+            || ($addressField && !in_array($addressField, $modelAttrs))
+        ) {
+            return 1000;
+        }
+
+        if ($model->$districtCodeField == $districtCode) {
+            return 200;
+        }
+
+        $model->$districtCodeField = $districtCode;
+        $districtNameField && $model->$districtNameField = District::fullNameByCode($districtCode);
+        $address && $model->$addressField = $address;
+        if (!$model->save()) {
+            return 500;
+        }
+
+        return 200;
     }
 }
