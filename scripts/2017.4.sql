@@ -1138,3 +1138,18 @@ CREATE TABLE `order_platform_handle` (
   `refund_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- 8.15 end
+
+--8.18 start
+
+CREATE TABLE `works_data` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `effect_id` int(10) DEFAULT NULL COMMENT '效果图ID',
+  `goods_first` varchar(20) DEFAULT NULL COMMENT '一级商品',
+  `goods_second` varchar(20) DEFAULT NULL COMMENT '二级商品',
+  `goods_three` varchar(20) DEFAULT NULL COMMENT '三级商品',
+  `goods_code` int(10) DEFAULT NULL COMMENT '商品编码',
+  `goods_quantity` int(10) DEFAULT NULL COMMENT '商品数量',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
