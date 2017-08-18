@@ -168,7 +168,7 @@ CREATE TABLE `lhzz` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
---5.5 start--
+-- 5.5 start--
 CREATE TABLE `goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` int unsigned not null default 0,
@@ -442,9 +442,9 @@ CREATE TABLE `goods_order` (
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='\r\n';
---5.5 end--
+-- 5.5 end--
 
---5.6 start--
+-- 5.6 start--
 CREATE TABLE `user_residence` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `province` varchar(20) DEFAULT NULL COMMENT '省份',
@@ -685,9 +685,9 @@ CREATE TABLE `points_total` (
   `points_total` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
---5.6 end--
+-- 5.6 end--
 
---5.26 start--
+-- 5.26 start--
 CREATE TABLE `decoration_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `effect_id` int(11) DEFAULT NULL COMMENT '效果图',
@@ -714,7 +714,6 @@ CREATE TABLE `decoration_particulars` (
   `hallway_area` int(10) DEFAULT NULL COMMENT '玄关地面面积',
   `hall_perimeter` int(10) DEFAULT NULL COMMENT '客餐厅及过道周长',
   `bedroom_perimeter` int(10) DEFAULT NULL COMMENT '卧室周长',
-  `toilet_perimeter` int(10) DEFAULT NULL COMMENT '卫生间周长',
   `toilet_perimeter` int(10) DEFAULT NULL COMMENT '卫生间周长',
   `kitchen_perimeter` int(10) DEFAULT NULL COMMENT '厨房周长',
   `hallway_perimeter` int(10) DEFAULT NULL COMMENT '玄关地面周长',
@@ -821,9 +820,9 @@ CREATE TABLE `cleaning` (
   `project` varchar(50) DEFAULT NULL COMMENT '项目',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
---5.26 end--
+-- 5.26 end--
 
---6.26 start --
+-- 6.26 start --
 CREATE TABLE `decoration_add` (
   `id` int(11) NOT NULL,
   `series_id` int(11) DEFAULT '0' COMMENT '系列',
@@ -886,7 +885,7 @@ CREATE TABLE `material_property_classify` (
   `quantity` int(10) DEFAULT '1' COMMENT '数量',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
---6.26 end--
+-- 6.26 end--
 
 CREATE TABLE `goods_recommend_supplier` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -909,7 +908,7 @@ CREATE TABLE `goods_recommend_supplier` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
---7.21 start--
+-- 7.21 start--
 DROP TABLE IF EXISTS `invoice`;
 CREATE TABLE `invoice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -934,17 +933,17 @@ CREATE TABLE `user_address` (
   `addresstoken` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
---7.21 end
+-- 7.21 end
 
---7.27 start
+-- 7.27 start
 create table district (
   `id` int(11) unsigned NOT NULL DEFAULT 0,
   `pid` int(11) unsigned NOT NULL DEFAULT 0,
   `name` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
---7.27 end
---7.30 start
+-- 7.27 end
+-- 7.30 start
 CREATE TABLE `order_goodslist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
@@ -966,7 +965,7 @@ CREATE TABLE `order_goodslist` (
   `freight` bigint(20) NOT NULL,
   `comment_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 create table user_mobile (
   `id` int(11) unsigned NOT NULL auto_increment,
@@ -977,9 +976,9 @@ create table user_mobile (
   `op_username` varchar(20) not null DEFAULT '' comment '操作人员名称',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
---7.30 end
+-- 7.30 end
 
---8.1 start
+-- 8.1 start
 create table user_status (
   `id` int(11) unsigned NOT NULL auto_increment,
   `uid` int(11) unsigned NOT NULL DEFAULT 0,
@@ -1012,8 +1011,8 @@ CREATE TABLE `supplier_freezelist` (
   `freeze_reason` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
---8.1 end
---8.3 start
+-- 8.1 end
+-- 8.3 start
 CREATE TABLE `supplier_cashregister` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) NOT NULL,
@@ -1027,8 +1026,8 @@ CREATE TABLE `supplier_cashregister` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---8.3 end
---8.5 start
+-- 8.3 end
+-- 8.5 start
 CREATE TABLE `effect_earnst` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `effect_id` int(11) NOT NULL COMMENT '样板id',
@@ -1038,7 +1037,7 @@ CREATE TABLE `effect_earnst` (
   `remark` text NOT NULL COMMENT '备注',
   `create_time` int(11) NOT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `assort_goods` (
@@ -1049,16 +1048,16 @@ CREATE TABLE `assort_goods` (
   `path` varchar(20) DEFAULT NULL COMMENT '关系',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
---8.5 end
+-- 8.5 end
 
---8.7  start
+-- 8.7  start
 CREATE TABLE `alipayreturntest` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `content` varchar(3000) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
---8.7  end
---8.9  start
+-- 8.7  end
+-- 8.9  start
 CREATE TABLE `distribution` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) NOT NULL COMMENT '绑定手机号父id',
@@ -1067,8 +1066,8 @@ CREATE TABLE `distribution` (
   `applydis_time` int(11) DEFAULT NULL COMMENT '绑定父id时间',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
---8.9  end
---8.11 start
+-- 8.9  end
+-- 8.11 start
 CREATE TABLE `supplier_accessdetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `access_type` tinyint(1) NOT NULL COMMENT '1:货款 2.提现失败  3.充值  4.扣款  ',
@@ -1079,8 +1078,8 @@ CREATE TABLE `supplier_accessdetail` (
   `supplier_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
---8.11 end
---8.12 start
+-- 8.11 end
+-- 8.12 start
 CREATE TABLE `express` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `waybillnumber` varchar(60) NOT NULL COMMENT '快递单号',
@@ -1090,10 +1089,10 @@ CREATE TABLE `express` (
   `create_time` int(11) NOT NULL,
   `receive_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
---8.12 end
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+-- 8.12 end
 
---8.13 start
+-- 8.13 start
 
 DROP TABLE IF EXISTS supplier_bankinformation;
 CREATE TABLE `user_bankinfo` (
@@ -1109,9 +1108,9 @@ CREATE TABLE `user_bankinfo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡信息';
 
---8.13 end
+-- 8.13 end
 
---8.15 start
+-- 8.15 start
 
 CREATE TABLE `user_chat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1135,4 +1134,4 @@ CREATE TABLE `order_platform_handle` (
   `refund_type` tinyint(1) NOT NULL COMMENT '1:退至顾客钱包 2.线下自行退款 3.退至支付宝',
   `refund_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
