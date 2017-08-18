@@ -1318,7 +1318,7 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->authKey;
     }
 
-     /**
+/**
      * set pay password
      * @param $postData
      * @param $user
@@ -1327,16 +1327,23 @@ class User extends ActiveRecord implements IdentityInterface
     public static function SetPaypassword($postData,$user)
     {
         $key=trim(htmlspecialchars($postData['key']),'');
-        if (!$key){
+        if (!$postData['key']){
             $code=1000;
             return $code;
         }
         if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD, $key)==true){
+            if (!$postData['pay_pwd_first'] || !$postData['pay_pwd_secend'] || !$postData['role_id']){
+                $code=1000;
+                return $code;
+            }
             $code=self::setPaypassword_first($postData,$user);
-
         }
         if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD, $key)==true)
         {
+            if (!$postData['pay_pwd'] || !$postData['role_id']){
+                $code=1000;
+                return $code;
+            }
             $code=self::setPaypassword_secend($postData,$user);
         }
         return $code;
@@ -1458,16 +1465,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * 获取修改交易密码验证码
+     * update pay password
      * @param $postData
      * @param $user
      * @return int
      */
      private function setPaypassword_secend($postData,$user)
      {
-
          $pay_pwd=trim(htmlspecialchars($postData['pay_pwd']),'');
-
          $role_id=trim(htmlspecialchars($postData['role_id']),'');
          if (!$pay_pwd || !$role_id || !self::CheckPaypwdFormat($pay_pwd)){
              $code=1000;
@@ -1491,19 +1496,18 @@ class User extends ActiveRecord implements IdentityInterface
          $cache = Yii::$app->cache;
          $data = $cache->get(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
          if ($data != false){
-             if ($data >=5){
+             if ((int)$data >(int)4){
                  $code=1024;
                  return $code;
              }
          }
-
          $users=self::find()->select('mobile')->where(['id'=>$user->id])->asArray()->one();
          $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd);
          $cache->set(self::CACHE_FREFIX_GET_PAY_PASSWORD.$user->id,$psw, 60*60);
          $data=array();
          $data['mobile']=0;
          $data['mobile']=$users['mobile'];
-         $data['type']='resetPassword';
+         $data['type']='resetPayPassword';
          $res=new SmValidationService($data);
          if ($res){
              $code=200;
