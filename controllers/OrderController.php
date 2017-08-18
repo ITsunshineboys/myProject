@@ -483,6 +483,36 @@ class OrderController extends Controller
     }
 
     /**
+     * wxpay effect sub
+     * 微信样板间支付
+     * @return string
+     */
+    public function actionWxpayEffectEarnstSub(){
+        $request=Yii::$app->request;
+        $effect_id = trim($request->post('effect_id', ''), '');
+        $name = trim($request->post('name', ''), '');
+        $phone = trim($request->post('phone', ''), '');
+        $money= trim($request->post('money', ''), '');
+        if (!$money){
+            $money=89;
+        }
+        if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone) || !$name  ||!$phone || !$effect_id) {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+        $res=Wxpay::effect_earnstsubmit($effect_id,$name,$phone,$money);
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data' => $res
+        ]);
+    }
+
+    /**
      *提交订单-线下店商城-微信支付
      */
     public function  actionLineplaceorder(){
@@ -520,6 +550,31 @@ class OrderController extends Controller
             'msg' =>'ok',
             'data'=>$data
         ]);
+    }
+    /**
+     * 微信公众号样板间申请定金异步返回
+     * wxpay notify action
+     * wxpay nityfy apply Deposit database
+     * @return bool
+     */
+    public function actionWxpayeffect_earnstnotify(){
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $res=(new wxpay())->Orderlinewxpaynotify($msg);
+        if ($res==true){
+            $arr=explode('&',$msg['attach']);
+//             if ($msg['total_fee'] !=8900){
+//                    exit;
+//             }
+            $result=GoodsOrder::Wxpayeffect_earnstnotify($arr,$msg);
+            if ($result==true){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
     /**
      *微信线下支付异步操作

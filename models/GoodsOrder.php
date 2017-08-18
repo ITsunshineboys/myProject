@@ -160,6 +160,36 @@ class GoodsOrder extends ActiveRecord
             }
     }
 
+    /**
+     * 微信样板间申请异步操作
+     * @param $arr
+     * @param $msg
+     * @return Exception|\Exception|int
+     */
+     public  static function Wxpayeffect_earnstnotify($arr,$msg)
+     {
+         $effect_id=$arr[0];
+         $name=$arr[1];
+         $phone=$arr[2];
+         $trans = \Yii::$app->db->beginTransaction();
+         $e=1;
+         $time=time();
+         try {
+             $effect_earnst = new EffectEarnst();
+             $effect_earnst->setAttributes([
+                 'effect_id' =>$effect_id,
+                 'name'      =>$name,
+                 'phone'     =>$phone,
+                 'earnest'   =>$msg['total_fee'],
+                 'create_time'      =>$time
+             ]);
+             $effect_earnst->save();
+         } catch (Exception $e) {
+             $trans->rollBack();
+         }
+         $trans->commit();
+         return $e;
+     }
 
     /**
      * 微信线下商城数据库操作

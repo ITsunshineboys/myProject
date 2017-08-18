@@ -60,6 +60,45 @@ class Wxpay  extends ActiveRecord
 </script>";
         }
 
+        /**
+         * 样板间申请支付定金
+         * @param $effect_id
+         * @param $name
+         * @param $phone
+         * @param $money
+         * @return \app\services\json数据，可直接填入js函数作为参数1
+         */
+        public static  function effect_earnstsubmit($effect_id,$name,$phone,$money)
+        {
+            ini_set('date.timezone','Asia/Shanghai');
+            //打印输出数组信息
+            function printf_info($data)
+            {
+                foreach($data as $key=>$value){
+                    echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+                }
+            }
+            //、获取用户openid
+            $tools = new PayService();
+            $openId = $tools->GetOpenid();
+            $input = new WxPayUnifiedOrder();
+            $attach=$effect_id.'&'.$name.'&'.$phone;
+            $input->SetBody('样板间申请费');
+            $input->SetAttach($attach);
+            $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+            $input->SetTotal_fee($money*100);
+            $input->SetTime_start(date("YmdHis"));
+            $input->SetTime_expire(date("YmdHis", time() + 600));
+            $input->SetGoods_tag("goods");
+            $input->SetNotify_url('http://common.cdlhzz.cn/order/wxpayeffect_earnstnotify');
+            $input->SetTrade_type("JSAPI");
+            $input->SetOpenid($openId);
+            $order = WxPayApi::unifiedOrder($input);
+            $jsApiParameters = $tools->GetJsApiParameters($order);
+            $editAddress = $tools->GetEditAddressParameters();
+            return  $jsApiParameters;
+        }
+
 
         public function Wxpay(){
             ini_set('date.timezone','Asia/Shanghai');
