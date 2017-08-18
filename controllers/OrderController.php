@@ -421,7 +421,7 @@ class OrderController extends Controller
         $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
         $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
         $address_id=trim(htmlspecialchars($request->post('address_id')),' ');
-        $pay_name='支付宝支付';
+        $pay_name='线上支付-支付宝支付';
         $invoice_id=trim(htmlspecialchars($request->post('invoice_id')),' ');
         $supplier_id=trim(htmlspecialchars($request->post('supplier_id')),' ');
         $freight=trim(htmlspecialchars($request->post('freight')),' ');
@@ -436,6 +436,15 @@ class OrderController extends Controller
                 'data' => null
             ]);
 
+        }
+        $iscorrect_money=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
+        if ($iscorrect_money!=true)
+        {
+            $c=1000;
+            return Json::encode([
+                'code' =>  $c,
+                'msg'  => Yii::$app->params['errorCodes'][$c]
+            ]);
         }
         $model=new Alipay();
         $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance);

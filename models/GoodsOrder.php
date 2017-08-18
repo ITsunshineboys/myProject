@@ -626,6 +626,24 @@ class GoodsOrder extends ActiveRecord
         $res['refund_time']=date('Y-m-d H:i',$res['refund_time']);
         return $res;
     }
+    /**
+     * check is correct money
+     * 判断是否是正确的金额
+     * @param $goods_id
+     * @param $total_amount
+     * @param $goods_num
+     * @param $return_insurance
+     * @param $freight
+     * @return bool
+     */
+    public static  function judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight)
+    {
+        $goods=Goods::find()->select('platform_price,market_price,supplier_price')->where(['id'=>$goods_id])->asArray()->one();
+        $money=(float)$goods['platform_price']*$goods_num+(float)$return_insurance*100+(float)$freight*100;
+        if ($money==$total_amount*100){
+            return true;
+        }
+    }
 
     /**
      * @param $refund_type
