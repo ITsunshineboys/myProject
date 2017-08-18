@@ -678,8 +678,7 @@ class QuoteController extends Controller
         }
         $find = AssortGoods::findByCategoryId();
 
-        if (!empty($find))
-        {
+        if (!empty($find)) {
             $id = [];
             foreach ($find as $find_one) {
                 $id [] = $find_one['category_id'];
