@@ -1324,21 +1324,21 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $user
      * @return int
      */
-    public static function SetPaypassword($postData,$user)
+   public static function SetPaypassword($postData,$user)
     {
         $key=trim(htmlspecialchars($postData['key']),'');
         if (!$postData['key']){
             $code=1000;
             return $code;
         }
-        if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD, $key)==true){
+        if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD.$user->id, $key)==true){
             if (!$postData['pay_pwd_first'] || !$postData['pay_pwd_secend'] || !$postData['role_id']){
                 $code=1000;
                 return $code;
             }
             $code=self::setPaypassword_first($postData,$user);
         }
-        if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD, $key)==true)
+        if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD.$user->id, $key)==true)
         {
             if (!$postData['pay_pwd'] || !$postData['role_id']){
                 $code=1000;

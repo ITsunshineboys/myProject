@@ -1032,7 +1032,9 @@ class SiteController extends Controller
             $model=Role::CheckUserRole($postData['role_id']);
             $pay_password=$model->select('pay_password')->where(['uid'=>$user->id])->asArray()->one()['pay_password'];
             $data['type']=empty($pay_password)?'first':'unfirst';
-            $data['key']=empty($pay_password)? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword'):\Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword');
+            $data['key']=empty($pay_password)? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword'.$user->id):\Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword'.$user->id);
+            $users=User::find()->where(['id'=>$user->id])->select('mobile')->one();
+            $data['mobile']=$users['mobile'];
             return Json::encode([
                 'code' => 200,
                 'msg' => 'OK',
