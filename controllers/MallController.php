@@ -4626,7 +4626,7 @@ class MallController extends Controller
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
-        $userStatus = UserStatus::findOne($id);
+        $userStatus = UserStatus::find()->where(['uid' => $id])->one();
         if (!$userStatus) {
             return Json::encode([
                 'code' => $code,
