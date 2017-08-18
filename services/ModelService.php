@@ -31,6 +31,7 @@ class ModelService
     const FIELD_DISTRICT_CODE = 'district_code';
     const FIELD_DISTRICT_NAME = 'district_name';
     const FIELD_ADDRESS = 'address';
+    const FIELD_ICON = 'icon';
 
     /**
      * Generate sorting statements for query
@@ -278,6 +279,35 @@ class ModelService
         $model->$districtCodeField = $districtCode;
         $districtNameField && $model->$districtNameField = District::fullNameByCode($districtCode);
         $address && $model->$addressField = $address;
+        if (!$model->save()) {
+            return 500;
+        }
+
+        return 200;
+    }
+
+    /**
+     * Reset some model's icon
+     *
+     * @param ActiveRecord $model model
+     * @param string $icon icon
+     * @param string $iconField icon field default icon
+     * @return int
+     */
+    public static function resetIcon(ActiveRecord $model, $icon, $iconField = self::FIELD_ICON)
+    {
+        $modelAttrs = $model->getAttributes();
+        if (!$icon
+            || !in_array($iconField, $modelAttrs)
+        ) {
+            return 1000;
+        }
+
+        if ($model->icon == $icon) {
+            return 200;
+        }
+
+        $model->icon = $icon;
         if (!$model->save()) {
             return 500;
         }

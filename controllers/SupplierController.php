@@ -24,6 +24,7 @@ class SupplierController extends Controller
         'certification',
         'index-app',
         'reset-district',
+        'reset-icon',
     ];
 
     /**
@@ -53,6 +54,7 @@ class SupplierController extends Controller
                 'actions' => [
                     'certification' => ['post',],
                     'reset-district' => ['post',],
+                    'reset-icon' => ['post',],
                 ],
             ],
         ];
@@ -327,6 +329,22 @@ class SupplierController extends Controller
         return Json::encode([
             'code' => $res,
             'msg' => 200 == $res ? '修改地区成功' : Yii::$app->params['errorCodes'][$res],
+        ]);
+    }
+
+    /**
+     * Reset icon action.
+     *
+     * @return string
+     */
+    public function actionResetIcon()
+    {
+        $icon = trim(Yii::$app->request->post('icon', ''));
+        $supplier = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->params['supplierRoleId']);
+        $res = ModelService::resetIcon($supplier, $icon);
+        return Json::encode([
+            'code' => $res,
+            'msg' => 200 == $res ? '修改Logo成功' : Yii::$app->params['errorCodes'][$res],
         ]);
     }
 }
