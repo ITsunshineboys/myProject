@@ -1035,7 +1035,7 @@ class SiteController extends Controller
             if ($postData['role_id']==7){
                 $pay_password=User::find()->select('pay_password')->where(['id'=>$user->id])->asArray()->one()['pay_password'];
             }
-            {
+            else{
                 $pay_password=$model->select('pay_password')->where(['uid'=>$user->id])->asArray()->one()['pay_password'];
             }
             $data['type']=empty($pay_password)?'first':'unfirst';
