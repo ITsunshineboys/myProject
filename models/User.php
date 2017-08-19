@@ -1593,7 +1593,7 @@ class User extends ActiveRecord implements IdentityInterface
             else{
                 $cacheData = $data+1;
                 if ($cacheData>3){
-                    $code=1024;
+                    $code=1026;
                     $tran->rollBack();
                     return $code;
                 }
