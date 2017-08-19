@@ -1097,47 +1097,58 @@ class SiteController extends Controller
             }
         }
 
-           /**
-         * get reset code smscode
+        /**
+         * get sms code to reset mobile
          * @return string
          */
         public function actionGetresetmobilesmscode(){
-                $user = Yii::$app->user->identity;
-                if (!$user){
-                    $code=1052;
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $sms['mobile']=$user->mobile;
+            $sms['type']='resetPayPassword';
+            try {
+                new SmValidationService($sms);
+            } catch (\InvalidArgumentException $e) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            } catch (ServerErrorHttpException $e) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            } catch (\Exception $e) {
+                $code = 1020;
+                if ($code == $e->getCode()) {
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                $mobile=trim(htmlspecialchars(Yii::$app->request->post('mobile','')),'');
-                if (!$mobile || ! preg_match('/^[1][3,5,7,8]\d{9}$/',$mobile)){
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $code=User::ResetMobileByUserToSmsCode($mobile,$user);
-                if ($code == 200){
-                    return Json::encode(
-                        [
-                            'code'=>$code,
-                            'msg'=>'ok'
-                        ]
-                    );
-                }else{
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-         }
+            }
+            $code=200;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>'ok'
+                ]
+            );
+        }
 
-        /**Reset Mobile By User
-         * @return string
-         */
-        public function actionResetMobileByUser()
+    /**
+     * check user reset mobile's sms code is correct
+     * @return string
+     */
+     public function actionCheckresetmobilesmscode()
         {
             $user = Yii::$app->user->identity;
             if (!$user) {
@@ -1155,15 +1166,80 @@ class SiteController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $code = User::ResetMobileByUser($SmsCode, $user);
-            if ($code == 200) {
+            if (!SmValidationService::validCode($user->mobile,$SmsCode)) {
+                $code = 1002;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            SmValidationService::deleteCode($user->mobile);
+            $cache = Yii::$app->cache;
+            $cacheData='ResetmobileSmscode'.$user->id.date('Y-m-d',time());
+            $data = $cache->set(User::CACHE_PREFIX_GET_MOBILE.$user->id,$cacheData,60*60);
+            if ($data==true){
+                $code=200;
                 return Json::encode(
                     [
-                        'code' => $code,
-                        'msg' => 'ok'
+                        'code'=>$code,
+                        'msg'=>'ok'
                     ]
                 );
-            } else {
+            }else{
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+
+    /**
+     * reset mobile by user
+     * @return string
+     */
+        public function actionResetMobileByUser()
+        {
+            $user = Yii::$app->user->identity;
+            if (!$user) {
+                $code = 1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $mobile=trim(htmlspecialchars(Yii::$app->request->post('mobile', '')), '');
+            if (!$mobile || ! preg_match('/^[1][3,5,7,8]\d{9}$/',$mobile)){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $check_mobile=User::CheckMobileIsExists($mobile,$user);
+            if ($check_mobile!=200){
+                return Json::encode([
+                    'code' => $check_mobile,
+                    'msg' => Yii::$app->params['errorCodes'][$check_mobile]
+                ]);
+            }
+            $cache = Yii::$app->cache;
+            $cacheData='ResetmobileSmscode'.$user->id.date('Y-m-d',time());
+            $data = $cache->get(User::CACHE_PREFIX_GET_MOBILE.$user->id);
+            if ($cacheData != $data){
+                $code=403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $code=User::ResetMobileByUser($mobile,$user);
+            if ($code==200){
+                return Json::encode([
+                    'code' => $code,
+                    'msg' =>'ok'
+                ]);
+            }else{
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
