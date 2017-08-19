@@ -704,28 +704,11 @@ class SiteController extends Controller
      */
     public function actionResetIcon()
     {
-        $code = 1000;
-
         $icon = trim(Yii::$app->request->post('icon', ''));
-        if (!$icon) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $user = Yii::$app->user->identity;
-        $code = $user->resetIcon($icon);
-        if (200 != $code) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
+        $res = ModelService::resetIcon(Yii::$app->user->identity, $icon);
         return Json::encode([
-            'code' => 200,
-            'msg' => '修改头像成功',
+            'code' => $res,
+            'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
         ]);
     }
 
