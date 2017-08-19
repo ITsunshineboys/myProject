@@ -1153,3 +1153,19 @@ CREATE TABLE `works_data` (
   `goods_quantity` int(10) DEFAULT NULL COMMENT '商品数量',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `works_worker_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `effect_id` int(11) DEFAULT NULL,
+  `worker_kind` varchar(10) DEFAULT NULL COMMENT '工作种类',
+  `worker_price` bigint(20) DEFAULT NULL COMMENT '工人费用 unit： fen',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `works_backman_data` (
+  `id` int(11) NOT NULL,
+  `effect_id` int(11) DEFAULT NULL,
+  `backman_option` varchar(10) DEFAULT NULL COMMENT '杂工选项',
+  `backman_value` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

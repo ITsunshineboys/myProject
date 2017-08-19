@@ -654,8 +654,10 @@ class QuoteController extends Controller
                     $works_data = (new WorksData())->plotAdd($effect_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity);
                 }
 
-                foreach ($house['all_goods'] as $goods){
-                    $a = 1;
+                foreach ($house['worker_list'] as $worker){
+                    $effect_id = \Yii::$app->db->getLastInsertID();
+                    $worker_kind = $worker['worker_kind'];
+                    $worker_price = $worker['worker_price'];
                 }
             }
         }
