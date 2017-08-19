@@ -1558,47 +1558,6 @@ class User extends ActiveRecord implements IdentityInterface
              return $code;
          }
      }
-     /**
-     * @param $mobile
-     * @param $user
-     * @return int
-     */
-    public static  function ResetMobileByUserToSmsCode($mobile,$user)
-    {
-        $CheckMobileIsExists=self::CheckMobileIsExists($mobile,$user);
-        if ($CheckMobileIsExists != 200){
-            return $CheckMobileIsExists;
-        }
-        $cache = Yii::$app->cache;
-        $data = $cache->get(self::CACHE_PREFIX_RESET_MOBILE.$user->id);
-        if ($data != false){
-            if ($data >3){
-                $code=1024;
-                return $code;
-            }
-        }
-        $users=self::find()->asArray()->select('mobile')->where(['id'=>$user->id])->one();
-        $sms=array();
-        $sms['mobile']=$users['mobile'];
-        $sms['type']='resetPayPassword';
-        try {
-            $cache->set(self::CACHE_PREFIX_GET_MOBILE.$user->id,$mobile,10*60);
-            new SmValidationService($sms);
-        } catch (\InvalidArgumentException $e) {
-            $code = 1000;
-            return $code;
-        } catch (ServerErrorHttpException $e) {
-            $code = 500;
-            return $code;
-        } catch (\Exception $e) {
-            $code = 1020;
-            if ($code == $e->getCode()) {
-                return $code;
-            }
-        }
-        $code=200;
-        return $code;
-    }
 
       /**
      * check mobile by user
@@ -1614,13 +1573,18 @@ class User extends ActiveRecord implements IdentityInterface
         $time=time();
         $e = 1;
         try {
-            $users->mobile=$user->mobile;
-            $users->save(false);
+            $users->mobile=$mobile;
+            $res1=$users->save();
             $UserMobile = new UserMobile();
             $UserMobile->uid=$user->id;
             $UserMobile->mobile=$mobile;
             $UserMobile->create_time=$time;
-            $UserMobile->save();
+            $res2=$UserMobile->save();
+            if (! $res1 || !$res2){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
             $data = $cache->get(self::CACHE_PREFIX_RESET_MOBILE.$user->id);
             if ($data === false) {
                 $cacheData = 1;
@@ -1630,6 +1594,7 @@ class User extends ActiveRecord implements IdentityInterface
                 $cacheData = $data+1;
                 if ($cacheData>3){
                     $code=1024;
+                    $tran->rollBack();
                     return $code;
                 }
                 $cache->set(self::CACHE_PREFIX_RESET_MOBILE.$user->id,$cacheData, strtotime(date('Y-m-d',time()+23*60*60+59*60))-time());
@@ -1652,8 +1617,8 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public  static  function CheckMobileIsExists($mobile,$user)
     {
-        $users=self::find()->select('mobile')->where(['id'=>$user->id])->asArray()->one();
-        if ($mobile == $users['mobile']){
+        
+        if ($mobile == $user->mobile){
             $code=1025;
             return $code;
         }

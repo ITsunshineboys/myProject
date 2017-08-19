@@ -1096,8 +1096,7 @@ class SiteController extends Controller
                 ]);
             }
         }
-
-        /**
+/**Getresetmobilesmscode
          * get sms code to reset mobile
          * @return string
          */
@@ -1109,6 +1108,17 @@ class SiteController extends Controller
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
+            }
+            $cache = Yii::$app->cache;
+            $data = $cache->get(User::CACHE_PREFIX_RESET_MOBILE.$user->id);
+            if ($data != false){
+                if ($data >3){
+                    $code=1024;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
             }
             $sms['mobile']=$user->mobile;
             $sms['type']='resetPayPassword';
@@ -1175,7 +1185,7 @@ class SiteController extends Controller
             }
             SmValidationService::deleteCode($user->mobile);
             $cache = Yii::$app->cache;
-            $cacheData='ResetmobileSmscode'.$user->id.date('Y-m-d',time());
+            $cacheData='ResetmobileSmscode'.$user->id.date('Y-m-d H',time());
             $data = $cache->set(User::CACHE_PREFIX_GET_MOBILE.$user->id,$cacheData,60*60);
             if ($data==true){
                 $code=200;
@@ -1193,11 +1203,10 @@ class SiteController extends Controller
                 ]);
             }
         }
-
-    /**
-     * reset mobile by user
-     * @return string
-     */
+        /**
+         * reset mobile by user
+         * @return string
+         */
         public function actionResetMobileByUser()
         {
             $user = Yii::$app->user->identity;
@@ -1224,7 +1233,7 @@ class SiteController extends Controller
                 ]);
             }
             $cache = Yii::$app->cache;
-            $cacheData='ResetmobileSmscode'.$user->id.date('Y-m-d',time());
+            $cacheData='ResetmobileSmscode'.$user->id.date('Y-m-d H',time());
             $data = $cache->get(User::CACHE_PREFIX_GET_MOBILE.$user->id);
             if ($cacheData != $data){
                 $code=403;
