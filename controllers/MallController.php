@@ -205,6 +205,7 @@ class MallController extends Controller
                     'user-disable-remark-reset' => ['post',],
                     'user-enable-batch' => ['post',],
                     'supplier-offline' => ['post',],
+                    'categories-have-style-series' => ['post',],
                 ],
             ],
         ];
