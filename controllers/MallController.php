@@ -4924,7 +4924,7 @@ class MallController extends Controller
         $type = trim(Yii::$app->request->get('type', ''));
         $categoryIds = Yii::$app->request->get('category_ids', []);print_r($categoryIds);
         $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
-        $res = GoodsCategory::resetStyleSeries($operator, $categoryIds, $type);
+        $res = GoodsCategory::resetStyleSeries($operator, StringService::merge($categoryIds), $type);
         return Json::encode([
             'code' => 200,
             'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],

@@ -598,21 +598,19 @@ class GoodsCategory extends ActiveRecord
      * @param ActiveRecord $operator operator
      * @param array $newCatIds category id list to be reset
      * @param string $type $type type(style, seires or both) default both
-     * @param int $hasStyle has_style field value default 0
-     * @param int $hasSeries has_series field value default 0
      * @return int
      */
-    public static function resetStyleSeries(ActiveRecord $operator, array $newCatIds = [], $type = '', $hasStyle = 0, $hasSeries = 0)
+    public static function resetStyleSeries(ActiveRecord $operator, array $newCatIds = [], $type = '')
     {
         switch ($type) {
             case self::NAME_STYLE:
-                $updateAttrs = ['has_style' => $hasStyle];
+                $updateAttrs = ['has_style' => 0];
                 break;
             case self::NAME_SERIES:
-                $updateAttrs = ['has_series' => $hasSeries];
+                $updateAttrs = ['has_series' => 0];
                 break;
             default:
-                $updateAttrs = ['has_style' => $hasStyle, 'has_series' => $hasSeries];
+                $updateAttrs = ['has_style' => 0, 'has_series' => 0];
                 break;
         }
 
