@@ -89,12 +89,12 @@ class Supplier extends ActiveRecord
         'icon',
         'shop_name',
         'follower_number',
-        'create_time',
         'comprehensive_score',
         'store_service_score',
         'logistics_speed_score',
         'delivery_service_score',
         'quality_guarantee_deposit',
+        'district_name',
     ];
     const FIELDS_VIEW_APP_EXTRA = [
         'legal_person',
@@ -103,6 +103,7 @@ class Supplier extends ActiveRecord
         'identity_card_back_image',
     ];
     const FIELDS_VIEW_MALL_EXTRA = [
+        'open_shop_time',
     ];
     const FIELDS_SHOP_INDEX_MODEL = [
         'icon',
@@ -593,6 +594,12 @@ class Supplier extends ActiveRecord
                 case 'identity_card_back_image':
                     $user = User::findOne($this->uid);
                     $extraData[$extraField] = $user->$extraField;
+                    break;
+                case 'open_shop_time':
+                    $userRole = UserRole::find()
+                        ->where(['user_id' => $this->uid, 'role_id' => Yii::$app->params['supplierRoleId']])
+                        ->one();
+                    $extraData[$extraField] = date('Y-m-d H:i:s', $userRole->review_time);
                     break;
             }
 
