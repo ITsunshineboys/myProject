@@ -86,11 +86,13 @@ class EffectEarnst extends \yii\db\ActiveRecord
             if(isset($effect['create_time'])){
                 $effect['create_time']=date('Y-m-d H:i', $effect['create_time']);
             }
-
+            $effect['earnest']=sprintf('%.2f',(float)$effect['earnest']*0.01);
         }
 
         return [
             'total' => (int)self::find()->where($where)->asArray()->count(),
+            'page'=>$page,
+            'size'=>$size,
             'details' => $effectList
         ];
     }
@@ -136,7 +138,8 @@ class EffectEarnst extends \yii\db\ActiveRecord
 
         $today=self::getToday();
 
-        return $sum=(new Query())->from('effect_earnst')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->sum("earnest");
+        $sum=(new Query())->from('effect_earnst')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->sum("earnest");
+        return sprintf('%.2f',(float)$sum*0.01);
     }
 
     /**
@@ -146,6 +149,7 @@ class EffectEarnst extends \yii\db\ActiveRecord
      */
     public static function getallearnest(){
 
-        return $sum=(new Query())->from('effect_earnst')->sum("earnest");
+         $sum=(new Query())->from('effect_earnst')->sum("earnest");
+        return sprintf('%.2f',(float)$sum*0.01);
     }
 }

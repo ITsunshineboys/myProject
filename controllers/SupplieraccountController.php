@@ -177,7 +177,7 @@ class SupplieraccountController extends  Controller{
             'code' => 200,
             'msg' => 'OK',
             'data' =>
-                $paginationData['details']
+                $paginationData
 
         ]);
 
@@ -521,7 +521,7 @@ class SupplieraccountController extends  Controller{
         return json_encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>$paginationData['details']
+            'data'=>$paginationData
         ]);
 
 

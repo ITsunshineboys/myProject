@@ -83,16 +83,12 @@ class SupplierCashregister extends \yii\db\ActiveRecord
             $freeze['cost_money']=sprintf('%.2f', $freeze['cash_money']-$freeze['real_money']*0.01
             );
         }
-        $count=(int)self::find()->where($where)->asArray()->count();
-        $total_page = ceil($count / $size);
-        $data=[
-
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'page'=>$page,
+            'size'=>$size,
             'details' => $freezeList
         ];
-        $data['details']['page']=$page;
-        $data['details']['total_page']=$total_page;
-        $data['details']['total']=$count;
-        return $data;
 
 
     }

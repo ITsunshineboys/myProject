@@ -65,17 +65,12 @@ class SupplierFreezelist extends \yii\db\ActiveRecord
             $freeze['freeze_money']=sprintf('%.2f',(float)$freeze['freeze_money']*0.01);
         }
 
-        $data=[
-
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'page'=>$page,
+            'size'=>$size,
             'details' => $freezeList
         ];
-        $count=(int)self::find()->where($where)->asArray()->count();
-        $total_page = ceil($count / $size);
-
-        $data['details']['size']=$size;
-        $data['details']['total_page']=$total_page;
-        $data['details']['total']=$count;
-        return $data;
 
     }
 //

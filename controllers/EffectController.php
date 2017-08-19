@@ -280,10 +280,7 @@ class EffectController extends Controller
 
         }
             $model = new Effect();
-
-
             $data = $model->geteffectdata($effect_id);
-//            var_dump($data);exit;
             if (!$effect_id) {
                 return json_encode([
                     'code' => $code,
@@ -351,13 +348,8 @@ class EffectController extends Controller
             ]);
         }
         $code = 1000;
-
-
-
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $keyword = trim(Yii::$app->request->get('keyword', ''));
-
-
 
         $where = '1';
         if(!$keyword){
@@ -411,9 +403,7 @@ class EffectController extends Controller
             'msg' => 'OK',
             'data' =>
 
-                $paginationData['details']
-
-
+                $paginationData
 
         ]);
     }
