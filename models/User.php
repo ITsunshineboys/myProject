@@ -1640,4 +1640,29 @@ class User extends ActiveRecord implements IdentityInterface
         $res = preg_match('/\b\d{6}\b/', $psw, $matches);
         return $res;
     }
+
+    /**
+     * Switch user role
+     *
+     * @param int $roleId role id
+     * @return int
+     */
+    public function switchRole($roleId)
+    {
+        $roleId = (int)$roleId;
+
+        if ($this->last_role_id_app == $roleId) {
+            return 200;
+        }
+
+        if (!$roleId
+            || in_array($roleId, [Yii::$app->params['ownerRoleId'], Yii::$app->params['lhzzRoleId']])
+            || !in_array($roleId, UserRole::findRoleIdsByUserIdAndReviewStatus($this->id))
+        ) {
+            return 1000;
+        }
+
+        $this->last_role_id_app = $roleId;
+        return $this->save() ? 200 : 500;
+    }
 }

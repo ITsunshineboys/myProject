@@ -43,6 +43,7 @@ class SiteController extends Controller
         'reset-district',
         'reset-icon',
         'user-view',
+        'switch-role',
     ];
 
     /**
@@ -80,6 +81,7 @@ class SiteController extends Controller
                     'reset-birthday' => ['post',],
                     'reset-district' => ['post',],
                     'reset-icon' => ['post',],
+                    'switch-role' => ['post',],
                 ],
             ],
         ];
@@ -1255,4 +1257,19 @@ class SiteController extends Controller
                 ]);
             }
         }
+
+    /**
+     * Switch user role
+     *
+     * @return string
+     */
+    public function actionSwitchRole()
+    {
+        $roleId = (int)Yii::$app->request->post('role_id', 0);
+        $res = Yii::$app->user->identity->switchRole($roleId);
+        return Json::encode([
+            'code' => $res,
+            'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
+        ]);
+    }
 }

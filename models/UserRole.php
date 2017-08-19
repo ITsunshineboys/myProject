@@ -131,4 +131,17 @@ class UserRole extends ActiveRecord
             return $detail::find()->where(['uid' => $user->id])->one();
         }
     }
+
+    /**
+     * @param int $userId user id
+     * @param int $reviewStatus review status default 2 anthorized
+     * @return array
+     */
+    public static function findRoleIdsByUserIdAndReviewStatus($userId, $reviewStatus = Role::AUTHENTICATION_STATUS_APPROVED)
+    {
+        return self::find()
+            ->select(['role_id'])
+            ->where(['user_id' => $userId, 'review_status' => $reviewStatus])
+            ->column();
+    }
 }
