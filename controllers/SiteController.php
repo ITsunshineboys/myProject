@@ -169,6 +169,9 @@ class SiteController extends Controller
                 return Json::encode([
                     'code' => 200,
                     'msg' => '登录成功',
+                    'data' => [
+                        'last_role_id' => $user->last_role_id_app,
+                    ],
                 ]);
             }
         }
