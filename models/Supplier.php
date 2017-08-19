@@ -599,7 +599,7 @@ class Supplier extends ActiveRecord
                     $userRole = UserRole::find()
                         ->where(['user_id' => $this->uid, 'role_id' => Yii::$app->params['supplierRoleId']])
                         ->one();
-                    $extraData[$extraField] = date('Y-m-d H:i:s', $userRole->review_time);
+                    $extraData[$extraField] = date('Y-m-d', $userRole->review_time);
                     break;
             }
 
