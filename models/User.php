@@ -1370,7 +1370,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public  static function  ResetPaypassword($postData,$user)
     {
-        if(!array_key_exists('role_id', $postData)){
+        if(!array_key_exists('role_id', $postData)|| !array_key_exists('sms_code', $postData)){
             $code=1000;
             return $code;
         }
@@ -1388,10 +1388,7 @@ class User extends ActiveRecord implements IdentityInterface
                     ->one();
                 if (!$check_user){
                     $code=1010;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                  return $code;
                 }
         }
         $users=self::find()->select('mobile')->where(['id'=>$user->id])->one();
@@ -1464,10 +1461,7 @@ class User extends ActiveRecord implements IdentityInterface
                     ->one();
                 if (!$check_user){
                     $code=1010;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                    return $code;
                 }
             }
         if ($postData['role_id']==7){
@@ -1527,10 +1521,7 @@ class User extends ActiveRecord implements IdentityInterface
                     ->one();
                 if (!$check_user){
                     $code=1010;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                    return $code;
                 }
         }
          if ($postData['role_id']==7){
