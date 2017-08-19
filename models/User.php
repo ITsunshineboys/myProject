@@ -17,6 +17,8 @@ class User extends ActiveRecord implements IdentityInterface
     const CACHE_FREFIX_GET_PAY_PASSWORD = 'get_paypassword';
     const UNFIRST_SET_PAYPASSWORD='unfirstsetpaypassword';
     const FIRST_SET_PAYPASSWORD='firstsetpaypassword';
+    const CACHE_PREFIX_RESET_MOBILE='reset_mobile_';
+    const CACHE_PREFIX_GET_MOBILE='get_mobile_';
     const PASSWORD_MIN_LEN = 6;
     const PASSWORD_MAX_LEN = 25;
     const PREFIX_DEFAULT_MOBILE = '18';
@@ -1537,7 +1539,7 @@ class User extends ActiveRecord implements IdentityInterface
          $cache = Yii::$app->cache;
          $data = $cache->get(self::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
          if ($data != false){
-             if ((int)$data >(int)4){
+             if ($data >5){
                  $code=1024;
                  return $code;
              }
@@ -1555,6 +1557,117 @@ class User extends ActiveRecord implements IdentityInterface
              return $code;
          }
      }
+     /**
+     * @param $mobile
+     * @param $user
+     * @return int
+     */
+    public static  function ResetMobileByUserToSmsCode($mobile,$user)
+    {
+        $CheckMobileIsExists=self::CheckMobileIsExists($mobile,$user);
+        if ($CheckMobileIsExists != 200){
+            return $CheckMobileIsExists;
+        }
+        $cache = Yii::$app->cache;
+        $data = $cache->get(self::CACHE_PREFIX_RESET_MOBILE.$user->id);
+        if ($data != false){
+            if ($data >3){
+                $code=1024;
+                return $code;
+            }
+        }
+        $users=self::find()->asArray()->select('mobile')->where(['id'=>$user->id])->one();
+        $sms=array();
+        $sms['mobile']=$users['mobile'];
+        $sms['type']='resetPayPassword';
+        try {
+            $cache->set(self::CACHE_PREFIX_GET_MOBILE.$user->id,$mobile,10*60);
+            new SmValidationService($sms);
+        } catch (\InvalidArgumentException $e) {
+            $code = 1000;
+            return $code;
+        } catch (ServerErrorHttpException $e) {
+            $code = 500;
+            return $code;
+        } catch (\Exception $e) {
+            $code = 1020;
+            if ($code == $e->getCode()) {
+                return $code;
+            }
+        }
+        $code=200;
+        return $code;
+    }
+
+    /**
+     * @param $SmsCode
+     * @param $user
+     * @return int
+     */
+    public static  function ResetMobileByUser($SmsCode,$user)
+    {
+        $cache = Yii::$app->cache;
+        $mobile= $cache->get(self::CACHE_PREFIX_GET_MOBILE.$user->id);
+        $users=self::find()->where(['id'=>$user->id])->one();
+        if (!SmValidationService::validCode($users['mobile'],$SmsCode)) {
+            $code = 1002;
+            return $code;
+        }
+        SmValidationService::deleteCode($users['mobile']);
+        $time=time();
+        $tran = Yii::$app->db->beginTransaction();
+        $e = 1;
+        try {
+            $users->mobile= $mobile;
+            $users->save(false);
+            $UserMobile = new UserMobile();
+            $UserMobile->uid=$user->id;
+            $UserMobile->mobile=$mobile;
+            $UserMobile->create_time=$time;
+            $UserMobile->save();
+            $data = $cache->get(self::CACHE_PREFIX_RESET_MOBILE.$user->id);
+            if ($data === false) {
+                $cacheData = 1;
+                $cache->set(self::CACHE_PREFIX_RESET_MOBILE.$user->id, $cacheData, strtotime(date('Y-m-d',time()+23*60*60+59*60))-time());
+            }
+            else{
+                $cacheData = $data+1;
+                if ($cacheData>3){
+                    $code=1024;
+                    return $code;
+                }
+                $cache->set(self::CACHE_PREFIX_RESET_MOBILE.$user->id,$cacheData, strtotime(date('Y-m-d',time()+23*60*60+59*60))-time());
+            }
+        } catch (Exception $e) {
+            $tran->rollBack();
+        }
+        $tran->commit();
+        if ($e){
+            $code=200;
+            return $code;
+        }
+    }
+
+    /**
+     * @param $mobile
+     * @param $user
+     * @return int
+     */
+    private  static  function CheckMobileIsExists($mobile,$user)
+    {
+        $users=self::find()->select('mobile')->where(['id'=>$user->id])->asArray()->one();
+        if ($mobile == $users['mobile']){
+            $code=1025;
+            return $code;
+        }
+        $check=self::find()->select('mobile')->asArray()->where(['mobile'=>$mobile])->andWhere("id!={$user->id}")->one();
+        if ($check){
+            $code=1019;
+            return $code;
+        }
+        $code=200;
+        return $code;
+    }
 
     /**
      * check pay password
