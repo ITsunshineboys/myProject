@@ -4922,8 +4922,9 @@ class MallController extends Controller
     public function actionCategoriesStyleSeriesReset()
     {
         $type = trim(Yii::$app->request->get('type', ''));
+        $categoryIds = Yii::$app->request->get('category_ids', []);
         $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
-        $res = GoodsCategory::resetStyleSeries($operator, $type);
+        $res = GoodsCategory::resetStyleSeries($operator, $categoryIds, $type);
         return Json::encode([
             'code' => 200 == $res,
             'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
