@@ -4926,7 +4926,7 @@ class MallController extends Controller
         $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
         $res = GoodsCategory::resetStyleSeries($operator, $categoryIds, $type);
         return Json::encode([
-            'code' => 200 == $res,
+            'code' => 200,
             'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
         ]);
     }
