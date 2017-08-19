@@ -310,6 +310,7 @@ class SupplierController extends Controller
                     'aite_cube_no' => $user->aite_cube_no,
                     'shop_name' => $supplier->shop_name,
                     'shop_no' => $supplier->shop_no,
+                    'icon' => $supplier->icon,
                 ]
             ],
         ]);
