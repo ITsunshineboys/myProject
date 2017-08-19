@@ -4733,7 +4733,6 @@ class MallController extends Controller
         }
 
         $status = (int)(Yii::$app->request->get('status'));
-        !$status && $status = User::STATUS_ONLINE;
         if (!in_array($status, array_keys(User::STATUSES))) {
             return Json::encode([
                 'code' => $code,
