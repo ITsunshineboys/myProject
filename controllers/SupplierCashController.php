@@ -111,8 +111,10 @@ class SupplierCashController extends Controller
                 'data' => null
             ]);
         }
-        $supplier = Supplier::find()->select('id')->where(['uid' => $user])->one();
-        $data = (new SupplierCashManager())->getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
+        $supplier = Supplier::find()
+            ->select('id')->where(['uid' => $user])->one();
+        $data = (new SupplierCashManager())
+            ->getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -199,7 +201,8 @@ class SupplierCashController extends Controller
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
         if (($time_type == 'custom' && (!$time_start || !$time_end))
-            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))) {
+            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))
+        ) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -207,7 +210,8 @@ class SupplierCashController extends Controller
                 'data' => null
             ]);
         }
-        $data = (new SupplierCashManager())->getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
+        $data = (new SupplierCashManager())
+            ->getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -234,7 +238,8 @@ class SupplierCashController extends Controller
         $status = trim(htmlspecialchars($request->post('status', 3)), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
         if (($time_type == 'custom' && (!$time_start || !$time_end))
-            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))) {
+            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))
+        ) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
