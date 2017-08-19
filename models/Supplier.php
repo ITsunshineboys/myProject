@@ -164,9 +164,11 @@ class Supplier extends ActiveRecord
      * Add supplier and have it certificated if necessary
      *
      * @param ActiveRecord $user user
+     * @param array $attrs attributes to add
+     * @param ActiveRecord $operator operator default null
      * @return int
      */
-    public static function add(ActiveRecord $user, array $attrs)
+    public static function add(ActiveRecord $user, array $attrs, ActiveRecord $operator = null)
     {
         $supplier = new self;
         $supplier->type_org = isset($attrs['type_org']) ? (int)$attrs['type_org'] : 0;
@@ -211,6 +213,11 @@ class Supplier extends ActiveRecord
         $userRole = new UserRole;
         $userRole->user_id = $user->id;
         $userRole->role_id = Yii::$app->params['supplierRoleId'];
+        if ($operator) {
+            $userRole->review_time = time();
+            $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
+            $userRole->reviewer_uid = $operator->id;
+        }
         if (!$userRole->save()) {
             $transaction->rollBack();
 

@@ -3600,7 +3600,8 @@ class MallController extends Controller
 
         $data = Yii::$app->request->post();
         $data['status'] = Supplier::STATUS_ONLINE;
-        $code = Supplier::add($checkRoleRes, $data);
+        $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
+        $code = Supplier::add($checkRoleRes, $data, $operator);
         if (200 != $code) {
             return Json::encode([
                 'code' => $code,
