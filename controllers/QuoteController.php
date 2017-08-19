@@ -19,7 +19,9 @@ use app\models\GoodsCategory;
 use app\models\LaborCost;
 use app\models\Series;
 use app\models\Style;
+use app\models\WorksBackmanData;
 use app\models\WorksData;
+use app\models\WorksWorkerData;
 use app\services\ExceptionHandleService;
 use app\services\SmValidationService;
 use Symfony\Component\Yaml\Tests\A;
@@ -435,126 +437,7 @@ class QuoteController extends Controller
      */
     public function actionPlotAdd()
     {
-//        $request = \Yii::$app->request->post();
-        $request =
-        [
-            'house_name'=>'小区名称',
-            'province_code'=>510000,
-            'city_code'=>510100,
-            'cur_county_id'=>510106,
-            'address'=>'小区详细地址',
-            'house_informations'=>
-             [
-                [
-                    'area'=>60,
-                    'balcony_area'=>20,
-                    'cur_hall'=>1,
-                    'cur_imgSrc'=>1,
-                    'cur_kitchen'=>1,
-                    'cur_room'=>1,
-                    'cur_toilet'=>1,
-                    'flattop_area'=>1,
-                    'hall_area'=>1,
-                    'hall_girth'=>1,
-                    'have_stair'=>1,
-                    'high'=>1,
-                    'house_type_name'=>1,
-                    'is_ordinary'=>0,
-                    'kitchen_area'=>1,
-                    'kitchen_girth'=>1,
-                    'other_length'=>1,
-                    'room_area'=>1,
-                    'room_girth'=>1,
-                    'toilet_area'=>1,
-                    'toilet_girth'=>1,
-                    'window'=>1,
-                    'drawing_name'=>123,
-                    'drawing_list'=>1,
-                    'series'=>1,
-                    'style'=>1,
-                ],
-                 [
-                     'area'=>60,
-                     'balcony_area'=>20,
-                     'cur_hall'=>1,
-                     'cur_imgSrc'=>1,
-                     'cur_kitchen'=>1,
-                     'cur_room'=>1,
-                     'cur_toilet'=>1,
-                     'flattop_area'=>1,
-                     'hall_area'=>1,
-                     'hall_girth'=>1,
-                     'have_stair'=>1,
-                     'high'=>1,
-                     'house_type_name'=>1,
-                     'is_ordinary'=>0,
-                     'kitchen_area'=>1,
-                     'kitchen_girth'=>1,
-                     'other_length'=>1,
-                     'room_area'=>1,
-                     'room_girth'=>1,
-                     'toilet_area'=>1,
-                     'toilet_girth'=>1,
-                     'window'=>1,
-                     'drawing_name'=>1212313,
-                     'drawing_list'=>1,
-                     'series'=>1,
-                     'style'=>1,
-                 ],
-                 [
-                     'house_type_name'=>"阿萨德",
-                     'area'=>60,
-                     'cur_room'=>1,
-                     'cur_hall'=>1,
-                     'cur_toilet'=>1,
-                     'cur_kitchen'=>1,
-                     'cur_imgSrc'=>1,
-                     'have_stair'=>1,
-                     'high'=>1,
-                     'window'=>1,
-                     'series'=>1,
-                     'style'=>1,
-                     'is_ordinary'=>1,
-                     'drawing_list'=>1,
-                     'all_goods'=>
-                         [
-                             [
-                                'first_name'=>1,
-                                'second_name'=>1,
-                                'three_name'=>1,
-                                'good_code'=>1,
-                                'good_quantity'=>1,
-                             ],
-                             [
-                                 'first_name'=>1,
-                                 'second_name'=>1,
-                                 'three_name'=>1,
-                                 'good_code'=>1,
-                                 'good_quantity'=>1,
-                             ],
-                         ],
-                     'worker_list'=>
-                         [
-                             [
-                                 'worker_kind'=>"木工",
-                                 'price'=>300,
-                             ],
-                             [
-                                 'worker_kind'=>"水电",
-                                 'price'=>300,
-                             ],
-                         ],
-                     'backman_option'=>
-                         [
-                             [
-                                 'name'=>"asd",
-                                 'num'=>1,
-                             ],
-
-                         ],
-                 ],
-             ],
-        ];
+        $request = \Yii::$app->request->post();
         $user = \Yii::$app->user->identity();
         if (!$request) {
             $code = 1000;
@@ -657,11 +540,19 @@ class QuoteController extends Controller
                 foreach ($house['worker_list'] as $worker){
                     $effect_id = \Yii::$app->db->getLastInsertID();
                     $worker_kind = $worker['worker_kind'];
-                    $worker_price = $worker['worker_price'];
+                    $worker_price = $worker['price'];
+                    $worker_worker_data = (new WorksWorkerData())->plotAdd($effect_id,$worker_kind,$worker_price);
+                }
+
+                foreach ($house['backman_option'] as $backman){
+                    $effect_id = \Yii::$app->db->getLastInsertID();
+                    $backman_option = $backman['name'];
+                    $backman_value  = $backman['num'];
+                    $worker_backman_data = (new WorksBackmanData())->plotAdd($effect_id,$backman_option,$backman_value);
                 }
             }
         }
-        if ($effect && $decoration_particulars && $works_data) {
+        if ($effect && $decoration_particulars && $works_data && $worker_worker_data && $worker_backman_data) {
             $code = 200;
             return Json::encode([
                 'code' => $code,

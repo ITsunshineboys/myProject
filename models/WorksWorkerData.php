@@ -1,0 +1,34 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2017/8/19 0019
+ * Time: 下午 14:35
+ */
+namespace app\models;
+
+use yii\db\ActiveRecord;
+
+class WorksWorkerData extends ActiveRecord
+{
+    const  SUP_BANK_CARD = 'works_worker_data';
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'works_worker_data';
+    }
+
+    public static function plotAdd($effect_id,$worker_kind,$worker_price)
+    {
+        $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
+            'effect_id'     => $effect_id,
+            'worker_kind'   => $worker_kind,
+            'worker_price'  => $worker_price,
+        ])->execute();
+
+        return $res;
+    }
+}
