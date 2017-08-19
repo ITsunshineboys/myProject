@@ -654,7 +654,9 @@ class QuoteController extends Controller
                     $works_data = (new WorksData())->plotAdd($effect_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity);
                 }
 
-                foreach ($house['all_goods'] as $goods)
+                foreach ($house['all_goods'] as $goods){
+                    $a = 1;
+                }
             }
         }
         if ($effect && $decoration_particulars && $works_data) {
