@@ -1141,7 +1141,7 @@ CREATE TABLE `order_platform_handle` (
 
 -- 8.15 end
 
---8.18 start
+-- 8.18 start
 
 CREATE TABLE `works_data` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

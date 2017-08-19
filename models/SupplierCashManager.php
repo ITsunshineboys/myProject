@@ -34,8 +34,7 @@ class SupplierCashManager extends ActiveRecord
         $query = (new \yii\db\Query())->from(self::SUP_CASHREGISTER)->where(['supplier_id' => $supplier_id]);
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
-            $query->andWhere(['>', 'apply_time', $time_start])
-                ->andWhere(['<', 'apply_time', $time_end]);
+            $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
         }
         if ($status) {
             $query->andWhere(['status' => $status]);
@@ -45,18 +44,18 @@ class SupplierCashManager extends ActiveRecord
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-        foreach ($arr as $k => $v) {
-            $arr[$k]['apply_time'] = date('Y-m-d H:i', $arr[$k]['apply_time']);
-            if ($arr[$k]['handle_time']) {
-                $arr[$k]['handle_time'] = date('Y-m-d H:i', $arr[$k]['handle_time']);
+        foreach ($arr as &$v) {
+            $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
+            if ($v['handle_time']) {
+                $v['handle_time'] = date('Y-m-d H:i', $v['handle_time']);
             }
-            $arr[$k]['cash_money'] = sprintf('%.2f', (float)$arr[$k]['cash_money'] / 100);
-            if ($arr[$k]['real_money']) {
-                $arr[$k]['real_money'] = sprintf('%.2f', (float)$arr[$k]['real_money'] / 100);
-                $arr[$k]['lost_money'] = sprintf('%.2f', $arr[$k]['cash_money'] - $arr[$k]['real_money']);
+            $v['cash_money'] = sprintf('%.2f', (float)$v['cash_money'] / 100);
+            if ($v['real_money']) {
+                $v['real_money'] = sprintf('%.2f', (float)$v['real_money'] / 100);
+                $v['lost_money'] = sprintf('%.2f', $v['cash_money'] - $v['real_money']);
             } else {
-                $arr[$k]['lost_money'] = sprintf('%.2f', 0);
-                $arr[$k]['real_money'] = sprintf('%.2f', 0);
+                $v['lost_money'] = sprintf('%.2f', 0);
+                $v['real_money'] = sprintf('%.2f', 0);
             }
         }
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
@@ -222,8 +221,7 @@ class SupplierCashManager extends ActiveRecord
             ->where(['g.pay_status' => 1]);
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
-            $query->andWhere(['>', 'g.paytime', $time_start])
-                ->andWhere(['<', 'g.paytime', $time_end]);
+            $query->andWhere(['between', 'g.paytime', $time_start, $time_end]);
         }
         if ($search) {
             $query->andFilterWhere(['like', 'g.supplier_id', $search])
@@ -236,9 +234,9 @@ class SupplierCashManager extends ActiveRecord
             ->limit($pagination->limit)
             ->select(['g.id', 'g.order_no', 'g.amount_order', 'g.paytime', 's.shop_name', 'g.supplier_id'])
             ->all();
-        foreach ($arr as $k => $v) {
-            $arr[$k]['paytime'] = date('Y-m-d H:i', $arr[$k]['paytime']);
-            $arr[$k]['amount_order'] = sprintf('%.2f', (float)$arr[$k]['amount_order'] / 100);
+        foreach ($arr as &$v) {
+            $v['paytime'] = date('Y-m-d H:i', $v['paytime']);
+            $v['amount_order'] = sprintf('%.2f', (float)$v['amount_order'] / 100);
         }
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;
@@ -264,8 +262,7 @@ class SupplierCashManager extends ActiveRecord
         }
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
-            $query->andWhere(['>', 'apply_time', $time_start])
-                ->andWhere(['<', 'apply_time', $time_end]);
+            $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
         }
         if ($search) {
             $query->andFilterWhere(['like', 'g.supplier_id', $search])
@@ -276,15 +273,15 @@ class SupplierCashManager extends ActiveRecord
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-        foreach ($arr as $k => $v) {
-            $arr[$k]['apply_time'] = date('Y-m-d H:i', $arr[$k]['apply_time']);
-            $arr[$k]['cash_money'] = sprintf('%.2f', (float)$arr[$k]['cash_money'] / 100);
-            if ($arr[$k]['real_money']) {
-                $arr[$k]['real_money'] = sprintf('%.2f', (float)$arr[$k]['real_money'] / 100);
-                $arr[$k]['lost_money'] = sprintf('%.2f', $arr[$k]['cash_money'] - $arr[$k]['real_money']);
+        foreach ($arr as &$v) {
+            $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
+            $v['cash_money'] = sprintf('%.2f', (float)$v['cash_money'] / 100);
+            if ($v['real_money']) {
+                $v['real_money'] = sprintf('%.2f', (float)$v['real_money'] / 100);
+                $v['lost_money'] = sprintf('%.2f', $v['cash_money'] - $v['real_money']);
             } else {
-                $arr[$k]['lost_money'] = sprintf('%.2f', 0);
-                $arr[$k]['real_money'] = sprintf('%.2f', 0);
+                $v['lost_money'] = sprintf('%.2f', 0);
+                $v['real_money'] = sprintf('%.2f', 0);
             }
         }
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
