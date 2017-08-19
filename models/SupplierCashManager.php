@@ -312,12 +312,11 @@ class SupplierCashManager extends ActiveRecord
         if ($status == 4) {
             $real_money = 0;
         }
-        if ($real_money) {
-            $real_money = $real_money * 100;
-            if ($status == 3 && $real_money > $cash_money) {
-                $real_money = $cash_money;
-            }
+        if ($status == 3) {
+            $real_money && $real_money *= 100;
+            $real_money > $cash_money && $real_money = $cash_money;
         }
+
         $time = time();
         $trans = \Yii::$app->db->beginTransaction();
         $e = 1;
