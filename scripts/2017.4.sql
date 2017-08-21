@@ -1071,7 +1071,7 @@ CREATE TABLE `distribution` (
   `create_time` int(11) NOT NULL COMMENT '创建时间',
   `applydis_time` int(11) DEFAULT NULL COMMENT '绑定父id时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- 8.9  end
 -- 8.11 start
 CREATE TABLE `supplier_accessdetail` (
