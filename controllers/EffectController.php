@@ -437,6 +437,13 @@ class EffectController extends Controller
         }
 
         $model=EffectEarnst::findone(['id'=>$effect_id]);
+        if(!$model){
+            return json_encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'data'=>null
+            ]);
+        }
         if($request->isPost){
             $model->remark=trim($request->post('remark',''),'');
             $model->save();
