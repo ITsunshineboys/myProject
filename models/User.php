@@ -626,15 +626,24 @@ class User extends ActiveRecord implements IdentityInterface
     {
         if (Yii::$app->session->getHasSessionId()) {
             $sessId = Yii::$app->session->id;
-            $user = self::find()->where(['oldAuthKey' => $sessId])->one(); // todo: oldAuthKeyAdmin
-            if (
-                $user
-                && $user->authKey
-                && $user->oldAuthKey
-                && $user->authKey != $user->oldAuthKey
-                && $sessId == $user->oldAuthKey
-            ) {
-                return true;
+            $user = self::find()
+                ->where(['oldAuthKey' => $sessId])
+                ->orWhere(['oldAuthKeyAdmin' => $sessId])
+                ->one();
+            if ($user) {
+                if ($user->oldAuthKey
+                    && $user->authKey
+                    && $user->authKey != $user->oldAuthKey
+                    && $sessId == $user->oldAuthKey
+                ) {
+                    return true;
+                } elseif ($user->oldAuthKeyAdmin
+                    && $user->authKeyAdmin
+                    && $user->authKeyAdmin != $user->oldAuthKeyAdmin
+                    && $sessId == $user->oldAuthKeyAdmin
+                ) {
+                    return true;
+                }
             }
         }
 

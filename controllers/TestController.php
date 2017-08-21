@@ -144,4 +144,14 @@ class TestController extends Controller
     {
         return $this->render('upload');
     }
+
+    /**
+     * Login test
+     *
+     * @return string
+     */
+    public function actionLogin()
+    {
+        return $this->render('login');
+    }
 }
