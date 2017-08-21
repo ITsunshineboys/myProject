@@ -134,14 +134,14 @@ class OrderController extends Controller
         $user_id=$user['id'];
         $review_status=2;
         $time=time();
-        $review_apply_time=$time;
-        $review_time=$time;
-        $users=new UserRole();
-        $users->user_id=$user_id;
-        $users->review_status=$review_status;
-        $users->review_apply_time=$time;
-        $users->review_time=$time;
-        $res=$users->save();
+
+        $res= \Yii::$app->db->createCommand()->insert('user_role',[
+                        'user_id'    =>$user_id,
+                        'review_status' =>2,
+                        'review_apply_time'      =>$time,
+                        'review_time'=>$time,
+                        'role_id'=>6
+                    ])->execute();
         if($res){
             echo 1;
         }
