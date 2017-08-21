@@ -4,7 +4,7 @@
 /*已下架 编辑*/
 
 var offsale_edit = angular.module("offsaleeditModule",['ngFileUpload']);
-offsale_edit.controller("offsaleEdit",function ($scope,$state, $stateParams, $http,Upload) {
+offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http,Upload) {
 	let pattern = /^[\u4e00-\u9fa5]{1,10}$/;
 	const picprefix = "http://test.cdlhzz.cn:888/";
 	$scope.showtishi = false;
@@ -21,6 +21,8 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state, $stateParams, $ht
 	$scope.picwarning = false;
 	$scope.changescope = $scope;
 	$scope.class_name = $stateParams.classtitle; /*分类名称*/
+	$scope.addperson = $stateParams.addperson; /*添加人员*/
+	$scope.offline_time = $stateParams.offline_time; /*下架时间*/
 	let pid;
 	$scope.offlinereason = '';
 	const config = {
@@ -31,34 +33,42 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state, $stateParams, $ht
 	};
 
 	/*富文本编辑器*/
-	$scope.config = {
-		//初始化编辑器内容
-		// content : '<p>test1</p>',
-		//是否聚焦 focus默认为false
-		// focus : true,
-		//首行缩进距离,默认是2em
-		indentValue:'2em',
-		//初始化编辑器宽度,默认1000
-		initialFrameWidth:800,
-		//初始化编辑器高度,默认320
-		initialFrameHeight:320,
-		//编辑器初始化结束后,编辑区域是否是只读的，默认是false
-		readonly : false ,
-		//启用自动保存
-		enableAutoSave: false,
-		//自动保存间隔时间， 单位ms
-		saveInterval:1000,
-		//是否开启初始化时即全屏，默认关闭
-		fullscreen : false,
-		//图片操作的浮层开关，默认打开
-		imagePopup:true,
-		//提交到后台的数据是否包含整个html字符串
-		allHtmlEnabled:false,
-		//额外功能添加
-		functions :['insertimage','insertvideo','attachment',
-			,'insertcode','webapp','template',
-			'background','wordimage']
-	}
+    $scope.config = {
+        // 定制图标
+        toolbars: [
+            ['Undo','Redo','formatmatch','removeformat', 'Bold','italic','underline','strikethrough','fontborder',
+                'horizontal','fontfamily', 'fontsize','justifyleft', 'justifyright',
+                'justifycenter', 'justifyjustify', 'forecolor',  'backcolor','insertorderedlist', 'insertunorderedlist',
+                'rowspacingtop','rowspacingbottom','attachment','imagecenter','simpleupload', 'time', 'date', 'preview']
+        ],
+
+        //初始化编辑器内容
+        // content : '<p>test1</p>',
+        //是否聚焦 focus默认为false
+        // focus : true,
+        //首行缩进距离,默认是2em
+        indentValue:'2em',
+        //初始化编辑器宽度,默认1000
+        initialFrameWidth:800,
+        //初始化编辑器高度,默认320
+        initialFrameHeight:320,
+        //编辑器初始化结束后,编辑区域是否是只读的，默认是false
+        readonly : false ,
+        //启用自动保存
+        enableAutoSave: false,
+        //自动保存间隔时间， 单位ms
+        saveInterval:1000,
+        //是否开启初始化时即全屏，默认关闭
+        fullscreen : false,
+        //图片操作的浮层开关，默认打开
+        imagePopup:true,
+        //提交到后台的数据是否包含整个html字符串
+        allHtmlEnabled:false,
+        //是否启用元素路径，默认是显示
+        elementPathEnabled:false,
+        //是否开启字数统计
+        wordCount:false
+    }
 
 
 
@@ -188,7 +198,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state, $stateParams, $ht
 			}
 			$scope.sureoffline()
 			let url = "http://test.cdlhzz.cn:888/mall/category-edit";
-			let data =  {id:$scope.onsaleclassid,title:$scope.class_name,pid:pid,icon:$scope.classicon||$stateParams.iconpath};
+			let data =  {id:$scope.onsaleclassid,title:$scope.class_name,pid:pid,icon:$scope.classicon||$stateParams.iconpath,description:$scope.offlinedes};
 			$http.post(url,data,config).then(function (res) {
 				// console.log(res)
 			})
@@ -198,15 +208,14 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state, $stateParams, $ht
 	}
 
 	//*保存模态框确认*/
-	$scope.suresave = function () {
+        $scope.suresave = function () {
 		setTimeout(function () {
-			$state.go("fenleiguanli");
+			$state.go("fenleiguanli",{showoffsale});
 		},200)
 	}
 
 	/*下架原因的处理*/
 	$scope.sureoffline = function () {
-		console.log($scope.offlinereason)
 		let url = "http://test.cdlhzz.cn:888/mall/category-status-toggle";
 		let data =  {id:$scope.onsaleclassid,offline_reason:$scope.offlinereason};
 		$http.post(url,data,config).then(function (res) {

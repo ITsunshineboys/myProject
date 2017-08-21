@@ -4,7 +4,7 @@
     <div class="topnav">
         <span class="glyphicon glyphicon-certificate"></span>
         <h6>商城管理 ></h6>
-        <h6>首页推荐</h6>
+        <h6>分类管理</h6>
         <h6>> 分类详情 </h6>
     </div>
 
@@ -28,12 +28,8 @@
             <select name="" class="belong first_select" ng-if="finalpatharr.length>1"  ng-model="changescope.firstselect"  ng-change="subClass(firstselect)">
                 <option ng-repeat="item in firstclass" value={{item.id}} >{{item.title}}</option>
             </select>
-            <!--<select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-init="secselect=finalpatharr[1]" ng-model="changeabc.choosewhat">-->
-                <!--<option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>-->
-            <!--</select>-->
             <select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-model="changescope.secselect" ng-options="item.id as item.title for item in secondclass">
                 <!--<option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>-->
-
             </select>
         </div>
 
@@ -47,8 +43,8 @@
                     <div id="upload">
                         <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
                     </div>
-                    <div class="reload_tishi" ng-show="picwarning">
-                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    <div ng-show="picwarning" class="red_mark warning">
+                        <span class="glyphicon glyphicon-asterisk"></span>
                         <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
                     </div>
                 </div>
@@ -60,7 +56,7 @@
         <div class="cla_des">
             <span class="each_title" id="describclass">分类描述</span>
             <div id="edit_tool">
-                <div ueditor id="Container" config="{{config}}" toolbar="{{toolbar}}"></div>
+                <div class="ueditor" ng-model="onlinedes" config="config"></div>
             </div>
         </div>
         <div class="divider"></div>
@@ -68,12 +64,12 @@
         <div class="info">
             <p>
                 <span>添加人员</span>
-                <span>森林木地板专营店</span>
+                <span ng-bind="addperson"></span>
             </p>
 
             <p>
                 <span>上架时间</span>
-                <span>2017-05-21 12:21</span>
+                <span ng-bind="online_time"></span>
             </p>
         </div>
 
@@ -120,7 +116,7 @@
                 </div>
 
                 <div class="btn_modal">
-                    <button id="shuru_cancel" data-dismiss="modal">取消</button>
+                    <button id="shuru_cancel" data-dismiss="modal" ng-click="cancelOffInEdit()">取消</button>
                     <button id="shuru_sure" data-dismiss="modal" ng-click="sureoffline()">确认</button>
                 </div>
             </div>

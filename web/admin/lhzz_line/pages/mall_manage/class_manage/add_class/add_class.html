@@ -4,10 +4,12 @@
     <div class="topnav">
         <span class="glyphicon glyphicon-certificate"></span>
         <h6>商城管理 ></h6>
-        <h6>首页推荐</h6>
+        <h6>分类管理</h6>
         <h6>> 添加分类 </h6>
     </div>
 
+
+    <div class=class_detail>
     <!--分类详情-->
     <div class="cla_detail">
         <!--分类名称-->
@@ -44,7 +46,7 @@
             <div id="upload">
                 <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
             </div>
-            <div class="reload_tishi" ng-show="picwarning">
+            <div class="red_mark warning" ng-show="picwarning">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
                 <span>{{picwarningtext}}</span>
             </div>
@@ -57,28 +59,19 @@
         <div class="cla_des">
             <span class="each_title">分类描述</span>
             <div id="edit_tool">
-                <div ueditor id="Container" config="{{config}}"></div>
+                <div class="ueditor" ng-model="addclassdes" config="config"></div>
             </div>
         </div>
         <div class="divider"></div>
 
-        <div class="info">
-            <p>
-                <span>添加人员</span>
-                <span>森林木地板专营店</span>
-            </p>
-
-            <p>
-                <span>上架时间</span>
-                <span>2017-05-21 12:21</span>
-            </p>
-        </div>
 
         <div class="btn_sure">
             <!--#save_tishi-->
             <button ng-click="sureaddclass()" data-toggle="modal" data-target={{savemodal}}>确认</button>
             <button ui-sref="fenleiguanli">返回</button>
         </div>
+
+    </div>
 
     <!--保存提示模态框-->
     <div class="modal fade" id="save_tishi">

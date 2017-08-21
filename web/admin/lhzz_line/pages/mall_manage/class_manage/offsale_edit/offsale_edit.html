@@ -4,7 +4,7 @@
     <div class="topnav">
         <span class="glyphicon glyphicon-certificate"></span>
         <h6>商城管理 ></h6>
-        <h6>首页推荐</h6>
+        <h6>分类管理</h6>
         <h6>> 分类详情 </h6>
     </div>
 
@@ -25,15 +25,9 @@
         <div class="cla_belong" ng-if="finalpatharr.length>1">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类所属</span>
-            <!--<select name="" class="belong first_select" ng-if="finalpatharr.length>1"  ng-model="firstselect" ng-init="firstselect=finalpatharr[0]" ng-change="subClass(firstselect)">-->
-                <!--<option ng-repeat="item in firstclass" value={{item.id}} >{{item.title}}</option>-->
-            <!--</select>-->
             <select name="" class="belong first_select" ng-if="finalpatharr.length>1"  ng-model="changescope.firstselect"  ng-change="subClass(firstselect)">
                 <option ng-repeat="item in firstclass" value={{item.id}} >{{item.title}}</option>
             </select>
-            <!--<select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-model="secselect" ng-init="secselect=finalpatharr[1]">-->
-                <!--<option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>-->
-            <!--</select>-->
             <select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-model="changescope.secselect" ng-options="item.id as item.title for item in secondclass">
             </select>
         </div>
@@ -47,7 +41,7 @@
                 <div id="upload">
                     <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
                 </div>
-                <div class="reload_tishi" ng-show="picwarning">
+                <div class="red_mark warning" ng-show="picwarning">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
                 </div>
@@ -60,7 +54,7 @@
         <div class="cla_des">
             <span class="each_title">分类描述</span>
             <div id="edit_tool">
-                <div ueditor id="Container" config="{{config}}"></div>
+                <div class="ueditor" ng-model="offlinedes" config="config"></div>
             </div>
         </div>
         <div class="divider"></div>
@@ -75,18 +69,18 @@
         <div class="info">
             <p>
                 <span>添加人员</span>
-                <span>森林木地板专营店</span>
+                <span ng-bind="addperson"></span>
             </p>
 
             <p>
-                <span>上架时间</span>
-                <span>2017-05-21 12:21</span>
+                <span>下架时间</span>
+                <span ng-bind="offline_time"></span>
             </p>
         </div>
 
         <div class="btn_sure">
             <button data-toggle="modal" data-target={{savemodal}} ng-click="saveclass()">保存</button>
-            <button ui-sref="fenleiguanli">返回</button>
+            <button ui-sref="fenleiguanli({showoffsale:true})">返回</button>
         </div>
 
         <!--保存提示模态框-->
