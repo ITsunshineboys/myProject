@@ -216,6 +216,39 @@ class Effect extends ActiveRecord
         return $res;
     }
 
+    public function plotEdit($id,$series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type)
+    {
+        $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
+            'id'            => $id,
+            'series_id'     => $series_id,
+            'style_id'      => $style_id,
+            'bedroom'       => $bedroom,
+            'sittingRoom_diningRoom' => $sittingRoom_diningRoom,
+            'toilet'        => $toilet,
+            'kitchen'       => $kitchen,
+            'window'        => $window,
+            'area'          => $area,
+            'high'          => $high,
+            'province'      => $province,
+            'province_code' => $province_code,
+            'city'          => $city,
+            'city_code'     => $city_code,
+            'district'      => $district,
+            'district_code' => $district_code,
+            'toponymy'      => $toponymy,
+            'street'        => $street,
+            'particulars'   => $particulars,
+            'stairway'      => $stairway,
+            'add_time'      => $add_time,
+            'house_image'   => $house_image,
+            'effect_images' => $effect_images,
+            'images_name'   => $images_name,
+            'type'          => $type,
+        ])->execute();
+
+        return $res;
+    }
+
     public static function condition($street,$toponymy,$district)
     {
         return self::find()
