@@ -161,7 +161,7 @@ class Effect extends ActiveRecord
         $effectList = self::find()
             ->select('id,toponymy,add_time,district,street')
             ->where($where)
-            ->groupBy('district')
+            ->groupBy('toponymy')
             ->orderBy(['add_time' => SORT_ASC])
             ->offset($offset)
             ->limit($size)
