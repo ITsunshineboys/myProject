@@ -8,8 +8,11 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
+use yii\base\Model;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class BrandCategory extends ActiveRecord
 {
@@ -31,6 +34,38 @@ class BrandCategory extends ActiveRecord
         return Yii::$app->db
             ->createCommand("select category_id from {{%brand_category}} where brand_id = {$brandId} order by category_id_level2 asc")
             ->queryColumn();
+    }
+
+    /**
+     * Get category by brand id
+     *
+     * @param int $brandId brand id
+     * @param array $select select fields default all fields
+     * @return array
+     */
+    public static function categoriesByBrandId($brandId, array $select = [])
+    {
+        $brandId = (int)$brandId;
+        if ($brandId <= 0) {
+            return [];
+        }
+
+        $goodsCategoryTblAs = 'gc';
+
+        return (new Query)
+            ->select(ModelService::addTableAbbreviationPrefixToSelectFields($select, $goodsCategoryTblAs))
+            ->from(self::tableName() . ' as ' . ModelService::MAIN_TABLE_AS)
+            ->leftJoin(GoodsCategory::tableName() . ' as ' . $goodsCategoryTblAs, ModelService::MAIN_TABLE_AS . ".category_id = {$goodsCategoryTblAs}.id")
+            ->where([ModelService::MAIN_TABLE_AS . '.brand_id' => $brandId, $goodsCategoryTblAs . '.deleted' => 0])
+            ->all();
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'brand_category';
     }
 
     /**
@@ -82,15 +117,13 @@ class BrandCategory extends ActiveRecord
         $sql = "select b.id, b.name";
         $from = " from {{%" . self::tableName() . "}} bc
             ,{{%" . GoodsBrand::tableName() . "}} b
-            ,{{%" . GoodsCategory::tableName() . "}} c"
-        ;
+            ,{{%" . GoodsCategory::tableName() . "}} c";
         $sql .= $from;
         $where = " where bc.brand_id = b.id 
             and bc.category_id = c.id 
             and b.status = " . GoodsBrand::STATUS_ONLINE . " 
             and c.deleted = 0
-            and bc.category_id = {$categoryId}"
-        ;
+            and bc.category_id = {$categoryId}";
         $sql .= $where;
         $orderBy = " order by convert(b.name using gbk) asc";
         $sql .= $orderBy;
@@ -98,14 +131,6 @@ class BrandCategory extends ActiveRecord
         return Yii::$app->db
             ->createCommand($sql)
             ->queryAll();
-    }
-
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'brand_category';
     }
 
     /**

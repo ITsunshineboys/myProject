@@ -32,6 +32,7 @@ class ModelService
     const FIELD_DISTRICT_NAME = 'district_name';
     const FIELD_ADDRESS = 'address';
     const FIELD_ICON = 'icon';
+    const MAIN_TABLE_AS = 't';
 
     /**
      * Generate sorting statements for query
@@ -313,5 +314,23 @@ class ModelService
         }
 
         return 200;
+    }
+
+    /**
+     * Add table abbreviation prefix to select fields
+     *
+     * @param array $select select fields
+     * @param string $tblAs table abbreviation
+     * @return array
+     */
+    public static function addTableAbbreviationPrefixToSelectFields(array $select, $tblAs = self::MAIN_TABLE_AS)
+    {
+        if (!$select) {
+            return [];
+        }
+
+        return array_map(function ($v) use ($tblAs) {
+            return $tblAs . '.' . $v;
+        }, $select);
     }
 }

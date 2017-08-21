@@ -1542,10 +1542,9 @@ class MallController extends Controller
         $categoryIdsArr = explode(',', $categoryIds);
         foreach ($categoryIdsArr as $categoryId) {
             $category = GoodsCategory::findOne($categoryId);
-            if (!$category || $category->level != GoodsCategory::LEVEL3) {
+            if (!$category || $category->level != GoodsCategory::LEVEL3 || $category->deleted != 0) {
                 $transaction->rollBack();
 
-                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],

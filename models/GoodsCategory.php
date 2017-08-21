@@ -47,6 +47,11 @@ class GoodsCategory extends ActiveRecord
     const FIELDS_HAVE_STYLE_SERIES_CATEGORIES = ['id', 'title', 'pid'];
     const NAME_STYLE = 'style';
     const NAME_SERIES = 'series';
+    const FIELDS_EDIT_BRAND_SELECTED_CATEGORIES = [
+        'id',
+        'pid',
+        'title',
+    ];
 
     /**
      * @var array admin fields
