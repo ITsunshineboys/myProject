@@ -538,20 +538,26 @@ class QuoteController extends Controller
                 }
 
                 foreach ($house['worker_list'] as $worker){
-                    $effect_id = \Yii::$app->db->getLastInsertID();
+                    $id = $effect_id;
                     $worker_kind = $worker['worker_kind'];
                     $worker_price = $worker['price'];
-                    $worker_worker_data = (new WorksWorkerData())->plotAdd($effect_id,$worker_kind,$worker_price);
+                    $worker_worker_data = (new WorksWorkerData())->plotAdd($id,$worker_kind,$worker_price);
                 }
 
                 foreach ($house['backman_option'] as $backman){
-                    $effect_id = \Yii::$app->db->getLastInsertID();
+                    $id = $effect_id;
                     $backman_option = $backman['name'];
                     $backman_value  = $backman['num'];
-                    $worker_backman_data = (new WorksBackmanData())->plotAdd($effect_id,$backman_option,$backman_value);
+                    $worker_backman_data = (new WorksBackmanData())->plotAdd($id,$backman_option,$backman_value);
                 }
             }
         }
+        var_dump($effect);
+        var_dump($decoration_particulars);
+        var_dump($works_data);
+        var_dump($worker_worker_data);
+        var_dump($worker_backman_data);
+        exit;
         if ($effect && $decoration_particulars && $works_data && $worker_worker_data && $worker_backman_data) {
             $code = 200;
             return Json::encode([
