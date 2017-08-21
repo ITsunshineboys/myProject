@@ -215,6 +215,8 @@ class SupplieraccountController extends  Controller{
 
             ]);
         }
+
+
     /**
      * 商家账户冻结金额
      * @return bool
@@ -232,26 +234,10 @@ class SupplieraccountController extends  Controller{
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
 
-            if(!$supplier_id){
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-
-                ]);
-            }
             $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
 
 
-
-            if(!$supplier){
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-
-                ]);
-            }
-
-
+            $freezed_money=sprintf('%.2f',(float)$supplier->availableamount*0.01);
             if($request->isPost){
                 $model=new SupplierFreezelist();
                 $model->supplier_id=$supplier_id;
@@ -264,7 +250,7 @@ class SupplieraccountController extends  Controller{
                try{
                    $code=1000;
 
-                   if($supplier->availableamount<$freeze_money){
+                   if($freezed_money<$freeze_money){
                        return json_encode([
                            'code' => $code,
                            'msg' => '可冻结余额不足',
@@ -272,9 +258,9 @@ class SupplieraccountController extends  Controller{
 
                        ]);
                    }
-                   $supplier->availableamount=$supplier->availableamount-$freeze_money;
 
-
+                   $supplier->availableamount-=$freeze_money*100;
+                   $model->freeze_money=$freeze_money*100;
                    $model->save();
                    $supplier->update(false);
 
@@ -297,14 +283,25 @@ class SupplieraccountController extends  Controller{
                }
 
             }else{
-                $code=1050;
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
 
-                ]);
+                if(!$supplier_id){
+                    return json_encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+
+                    ]);
+                }
+
+                if($supplier){
+                    return json_encode([
+                        'code' => 200,
+                        'msg' => 'ok',
+                        'data'=>$freezed_money
+
+                    ]);
+
+                }
             }
-
 
         }
 

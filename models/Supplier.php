@@ -17,6 +17,7 @@ use yii\db\Query;
 class Supplier extends ActiveRecord
 {
     const FIELDS_EXTRA = [];
+    const STATUS_CASHED=3;
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const STATUS_WAIT_REVIEW = 2;
@@ -415,7 +416,7 @@ class Supplier extends ActiveRecord
             ->where(['s.id' => $supplier_id])
             ->one();
         $freeze_money=(new Query())->from('supplier_freezelist')->where(['supplier_id'=>$supplier_id])->sum('freeze_money');
-        $cashed_money=(new Query())->from('supplier_cashregister')->where(['supplier_id'=>$supplier_id])->sum('cash_money');
+        $cashed_money=(new Query())->from('supplier_cashregister')->where(['supplier_id'=>$supplier_id])->andWhere(['status'=>self::STATUS_CASHED])->sum('cash_money');
         if ($array) {
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
             $array['cash_money'] = sprintf('%.2f', (float)$array['cash_money'] * 0.01);
