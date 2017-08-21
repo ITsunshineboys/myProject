@@ -445,6 +445,7 @@ CREATE TABLE `goods_order` (
   `order_refer` tinyint(1) NOT NULL COMMENT 'order_refer:1：线下店2：非线下店；',
   `return_insurance` bigint(20) NOT NULL COMMENT '退货保险费',
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
+  `buyer_message` varchar(255) NOT NULL COMMENT '买家留言',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='\r\n';
 -- 5.5 end--
@@ -924,7 +925,7 @@ CREATE TABLE `invoice` (
   `creat_time` datetime NOT NULL,
   `invoicetoken` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_address`;
 CREATE TABLE `user_address` (
@@ -937,7 +938,7 @@ CREATE TABLE `user_address` (
   `region` varchar(150) NOT NULL,
   `addresstoken` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- 7.21 end
 
 -- 7.27 start
@@ -1006,7 +1007,7 @@ CREATE TABLE `supplier_bankinformation` (
   `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
   `create_time` int(11) NOT NULL COMMENT '开户时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `supplier_freezelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1015,7 +1016,7 @@ CREATE TABLE `supplier_freezelist` (
   `create_time` int(11) NOT NULL,
   `freeze_reason` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 8.1 end
 -- 8.3 start
 CREATE TABLE `supplier_cashregister` (
@@ -1082,7 +1083,7 @@ CREATE TABLE `supplier_accessdetail` (
   `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
   `supplier_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- 8.11 end
 -- 8.12 start
 CREATE TABLE `express` (
