@@ -159,7 +159,7 @@ class Effect extends ActiveRecord
     {
         $offset = ($page - 1) * $size;
         $effectList = self::find()
-            ->select('id,effect.toponymy,effect.add_time,effect.district,street')
+            ->select('id,toponymy,add_time,district,street')
             ->where($where)
             ->groupBy('district')
             ->orderBy(['add_time' => SORT_ASC])
@@ -215,4 +215,13 @@ class Effect extends ActiveRecord
 
         return $res;
     }
+
+    public static function condition($street,$toponymy,$district)
+    {
+        return self::find()
+            ->asArray()
+            ->where(['and',['street'=>$street],['toponymy'=>$toponymy],['district'=>$district]])
+            ->all();
+    }
+
 }

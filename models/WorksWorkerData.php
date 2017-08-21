@@ -31,4 +31,12 @@ class WorksWorkerData extends ActiveRecord
 
         return $res;
     }
+
+    public static function findById($id)
+    {
+        return self::find()
+            ->asArray()
+            ->where(['effect_id'=>$id])
+            ->all();
+    }
 }

@@ -438,21 +438,21 @@ class QuoteController extends Controller
     public function actionPlotAdd()
     {
         $request = \Yii::$app->request->post();
-        $user = \Yii::$app->user->identity();
-        if (!$request) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//        $user = \Yii::$app->user->identity();
+//        if (!$request) {
+//            $code = 1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        if (!$user) {
+//            $code = 1052;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
         $province_chinese = District::findByCode($request['province_code']);
         $city_chinese = District::findByCode($request['city_code']);
         $district_chinese = District::findByCode($request['cur_county_id']);
@@ -568,48 +568,52 @@ class QuoteController extends Controller
     }
 
     /**
-     * plot edit function
+     * plot edit page view
      * @return string
      */
-    public function actionPlotEdit()
+    public function actionPlotEditView()
     {
         $post = \Yii::$app->request->post();
-        $post = [
-            ''
-        ];
-//        $user = \Yii::$app->user->identity();
-//        if (!$post) {
-//            $code = 1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        if (!$user) {
-//            $code = 1052;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-        $all [] = (new Effect())->plotAdd($post);
-        $all [] = (new EffectPicture())->plotAdd($post);
-        $all [] = (new DecorationParticulars())->plotAdd($post);
-        if ($all) {
-            $code = 200;
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok'
-            ]);
-        } else {
-            $code = 1051;
+        $user = \Yii::$app->user->identity();
+        if (!$post) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $public_message = [];
+        $public_message['effect'] = Effect::condition($post['street'],$post['toponymy'],$post['district']);
+        $public_message['street'] =  $public_message['effect'][0]['street'];
+        $public_message['toponymy'] =  $public_message['effect'][0]['toponymy'];
+        $public_message['district_code'] =  $public_message['effect'][0]['district_code'];
+        $public_message['province_code'] =  $public_message['effect'][0]['province_code'];
+        $public_message['city_code'] =  $public_message['effect'][0]['city_code'];
+        foreach ($public_message['effect'] as $one_effect){
+            $id[] = $one_effect['id'];
+        }
+        $public_message['decoration_particulars'] = DecorationParticulars::findById($id);
+
+        $public_message['works_data'] = WorksData::findById($id);
+        $public_message['worker_worker_data'] = WorksWorkerData::findById($id);
+        $public_message['workes_backman_data'] = WorksBackmanData::findById($id);
+        return Json::encode([
+            'effect'=>$public_message,
+
+        ]);
     }
 
+    public function actionPlotEdit()
+    {
+
+    }
     /**
      * assort goods statistics list port
      * @return string
