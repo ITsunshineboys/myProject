@@ -574,7 +574,6 @@ class QuoteController extends Controller
     public function actionPlotEditView()
     {
         $post = \Yii::$app->request->post();
-        var_dump($post);exit;
 //        $post = [
 //            'street'=>'一品天下大街88号',
 //            'toponymy'=>'今日花园',
@@ -597,7 +596,6 @@ class QuoteController extends Controller
 //        }
         $public_message = [];
         $public_message['effect'] = Effect::condition($post['street'],$post['toponymy'],$post['district']);
-        var_dump($public_message['effect']);exit;
         $public_message['street'] =  $public_message['effect'][0]['street'];
         $public_message['toponymy'] =  $public_message['effect'][0]['toponymy'];
         $public_message['district_code'] =  $public_message['effect'][0]['district_code'];
