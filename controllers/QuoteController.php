@@ -574,6 +574,11 @@ class QuoteController extends Controller
     public function actionPlotEditView()
     {
         $post = \Yii::$app->request->post();
+//        $post = [
+//            'street'=>'一品天下大街88号',
+//            'toponymy'=>'今日花园',
+//            'district_code'=>510106,
+//        ];
 //        $user = \Yii::$app->user->identity();
 //        if (!$post) {
 //            $code = 1000;
@@ -590,7 +595,7 @@ class QuoteController extends Controller
 //            ]);
 //        }
         $public_message = [];
-        $public_message['effect'] = Effect::condition($post['street'],$post['toponymy'],$post['district']);
+        $public_message['effect'] = Effect::condition($post['street'],$post['toponymy'],$post['district_code']);
         $public_message['street'] =  $public_message['effect'][0]['street'];
         $public_message['toponymy'] =  $public_message['effect'][0]['toponymy'];
         $public_message['district_code'] =  $public_message['effect'][0]['district_code'];
@@ -614,6 +619,7 @@ class QuoteController extends Controller
     {
 
     }
+
     /**
      * assort goods statistics list port
      * @return string
