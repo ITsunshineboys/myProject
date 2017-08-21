@@ -462,86 +462,89 @@ class QuoteController extends Controller
                 'address'=>'因门口',
                 'house_informations'=>
                     [
-                        'house_type_name'=>'阿萨德',
-                        'area'=>60,
-                        'cur_room'=>60,
-                        'cur_hall'=>60,
-                        'cur_toilet'=>60,
-                        'cur_kitchen'=>60,
-                        'cur_imgSrc'=>60,
-                        'have_stair'=>60,
-                        'high'=>60,
-                        'window'=>60,
-                        'series'=>60,
-                        'style'=>60,
-                        'is_ordinary'=>1,
-                        'drawing_list'=>60,
-                        'all_goods'=>
-                            [
+                        ['house_type_name'=>'阿萨德',
+                            'area'=>60,
+                            'cur_room'=>60,
+                            'cur_hall'=>60,
+                            'cur_toilet'=>60,
+                            'cur_kitchen'=>60,
+                            'cur_imgSrc'=>60,
+                            'have_stair'=>60,
+                            'high'=>60,
+                            'window'=>60,
+                            'series'=>60,
+                            'style'=>60,
+                            'is_ordinary'=>1,
+                            'drawing_list'=>60,
+                            'all_goods'=>
                                 [
-                                'first_name'=>1,
-                                'second_name'=>1,
-                                'three_name'=>1,
-                                'good_code'=>1,
-                                'good_quantity'=>1,
-                                ],
-                                [
+                                    [
+                                        'first_name'=>1,
+                                        'second_name'=>1,
+                                        'three_name'=>1,
+                                        'good_code'=>1,
+                                        'good_quantity'=>1,
+                                    ],
+                                    [
 
-                                    'first_name'=>1,
-                                    'second_name'=>1,
-                                    'three_name'=>1,
-                                    'good_code'=>1,
-                                    'good_quantity'=>1,
+                                        'first_name'=>1,
+                                        'second_name'=>1,
+                                        'three_name'=>1,
+                                        'good_code'=>1,
+                                        'good_quantity'=>1,
+                                    ],
                                 ],
-                            ],
-                        'worker_list'=>
-                        [
-                            [
-                                'worker_kind'=>'木工',
-                                'price'=>300,
-                            ],
-                            [
-                                'worker_kind'=>'水电',
-                                'price'=>300,
-                            ],
+                            'worker_list'=>
+                                [
+                                    [
+                                        'worker_kind'=>'木工',
+                                        'price'=>300,
+                                    ],
+                                    [
+                                        'worker_kind'=>'水电',
+                                        'price'=>300,
+                                    ],
+                                ],
+                            'backman_option'=>
+                                [
+                                    [
+                                        'name'=>'123',
+                                        'num'=>1,
+                                    ],
+
+                                ]
                         ],
-                        'backman_option'=>
                         [
-                            [
-                                'name'=>'123',
-                                'num'=>1,
-                            ],
-
-                        ]
+                            'area'=>60,
+                            'balcony_area'=>1,
+                            'cur_hall'=>1,
+                            'cur_imgSrc'=>1,
+                            'cur_kitchen'=>1,
+                            'cur_room'=>1,
+                            'cur_toilet'=>1,
+                            'flattop_area'=>1,
+                            'hall_area'=>1,
+                            'hall_girth'=>1,
+                            'have_stair'=>1,
+                            'high'=>1,
+                            'house_type_name'=>1,
+                            'is_ordinary'=>0,
+                            'kitchen_area'=>1,
+                            'kitchen_girth'=>1,
+                            'other_length'=>1,
+                            'room_area'=>1,
+                            'room_girth'=>1,
+                            'toilet_area'=>1,
+                            'toilet_girth'=>1,
+                            'window'=>1,
+                            'drawing_name'=>1,
+                            'drawing_list'=>1,
+                            'series'=>1,
+                            'style'=>1,
+                        ],
                     ],
-                [
-                    'area'=>60,
-                    'balcony_area'=>1,
-                    'cur_hall'=>1,
-                    'cur_imgSrc'=>1,
-                    'cur_kitchen'=>1,
-                    'cur_room'=>1,
-                    'cur_toilet'=>1,
-                    'flattop_area'=>1,
-                    'hall_area'=>1,
-                    'hall_girth'=>1,
-                    'have_stair'=>1,
-                    'high'=>1,
-                    'house_type_name'=>1,
-                    'is_ordinary'=>0,
-                    'kitchen_area'=>1,
-                    'kitchen_girth'=>1,
-                    'other_length'=>1,
-                    'room_area'=>1,
-                    'room_girth'=>1,
-                    'toilet_area'=>1,
-                    'toilet_girth'=>1,
-                    'window'=>1,
-                    'drawing_name'=>1,
-                    'drawing_list'=>1,
-                    'series'=>1,
-                    'style'=>1,
-                ],
+
+
             ];
 
         $province_chinese = District::findByCode($request['province_code']);
