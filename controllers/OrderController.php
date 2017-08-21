@@ -122,6 +122,30 @@ class OrderController extends Controller
 
     }
 
+    public function actionSetuserrole()
+    {
+        $mobile=18208142446;
+        $user=User::find()->where(['mobile'=>$mobile])->asArray()->one();
+        if (!$user) {
+            echo 2;
+            exit;
+        }
+        $user_id=$user['id'];
+        $review_status=2;
+        $time=time();
+        $review_apply_time=$time;
+        $review_time=$time;
+        $users=new UserRole();
+        $users->user_id=$user_id;
+        $users->review_status=$review_status;
+        $users->review_apply_time=$time;
+        $users->review_time=$time;
+        $res=$users->save();
+        if($res){
+            echo 1;
+        }
+    }
+
     /**
      * 获取商品id
      * @return string
