@@ -73,7 +73,8 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
         url:"/brand_index",
         templateUrl:"pages/mall_manage/brand_manage/brand_index/brand_index.html"
       })
-      .state("edit_attribute",{   //商城管理——品牌管理
+      .state("edit_attribute",{   //属性管理——属性编辑
+        params:{titles:'',propattrs:'',propid:''},
         url:"/edit_attribute",
         templateUrl:"pages/mall_manage/style_manage/edit_attribute/edit_attribute.html"
       })
@@ -90,16 +91,17 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
 
 
     .state("fenleiguanli",{
+      params:{'showoffsale':null},
       url:"/fenleiguanli",
       templateUrl:"pages/mall_manage/class_manage/cla_mag/cla_mag.html"
     })
     .state("onsale_edit",{
-    params:{"classtitle":null,"classid":null,"classlevel":null},
+    params:{"classtitle":'',"classid":'',"classlevel":'',"classpath":'',"iconpath":'',"addperson":'',"online_time":''},
     url:"/onsale_edit",
     templateUrl:"pages/mall_manage/class_manage/onsale_edit/onsale_edit.html"
     })
     .state("offsale_edit",{
-    params:{"classtitle":null,"classid":null,"classlevel":null},
+    params:{"classtitle":'',"classid":'',"classlevel":'',"classpath":'',"iconpath":'',"addperson":'',"offline_time":''},
     url:"/offsale_edit",
     templateUrl:"pages/mall_manage/class_manage/offsale_edit/offsale_edit.html"
   })
@@ -179,13 +181,11 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("add_series",{ /*系列/风格/属性管理-添加新系列*/
         url:"/add_series",
-        templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html",
-        params:{"list":""},
+        templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html"
       })
       .state("series_detail",{ /*系列/风格/属性管理-系列详情页*/
         url:"/series_detail",
-        templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html",
-        params:{item:''}
+        templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html"
       })
       .state("add_style",{ /*系列/风格/属性管理-风格-添加新风格*/
         url:"/add_style",
