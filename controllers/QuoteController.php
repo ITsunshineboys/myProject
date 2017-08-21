@@ -574,21 +574,21 @@ class QuoteController extends Controller
     public function actionPlotEditView()
     {
         $post = \Yii::$app->request->post();
-        $user = \Yii::$app->user->identity();
-        if (!$post) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//        $user = \Yii::$app->user->identity();
+//        if (!$post) {
+//            $code = 1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        if (!$user) {
+//            $code = 1052;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
         $public_message = [];
         $public_message['effect'] = Effect::condition($post['street'],$post['toponymy'],$post['district']);
         $public_message['street'] =  $public_message['effect'][0]['street'];
