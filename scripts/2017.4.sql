@@ -537,7 +537,7 @@ CREATE TABLE `effect` (
   `stairway` tinyint(5) DEFAULT '0' COMMENT '楼梯信息 0：无 1：有',
   `stairdetail` varchar(20) DEFAULT NULL COMMENT '楼梯材料',
   `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
-  `house_image` varchar(20) DEFAULT NULL COMMENT '户型图一张',
+  `house_image` varchar(50) DEFAULT NULL COMMENT '户型图一张',
   `effect_images` varchar(255) DEFAULT NULL COMMENT '效果图1-6张',
   `images_name` varchar(10) DEFAULT NULL COMMENT '图片名称',
   `type` int(2) DEFAULT '0' COMMENT '0-普通，1-案列',
