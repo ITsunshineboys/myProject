@@ -552,12 +552,6 @@ class QuoteController extends Controller
                 }
             }
         }
-        var_dump($effect);
-        var_dump($decoration_particulars);
-        var_dump($works_data);
-        var_dump($worker_worker_data);
-        var_dump($worker_backman_data);
-        exit;
         if ($effect && $decoration_particulars && $works_data && $worker_worker_data && $worker_backman_data) {
             $code = 200;
             return Json::encode([
