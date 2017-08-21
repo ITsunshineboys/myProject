@@ -574,6 +574,7 @@ class QuoteController extends Controller
     public function actionPlotEditView()
     {
         $post = \Yii::$app->request->post();
+        var_dump($post);exit;
 //        $post = [
 //            'street'=>'一品天下大街88号',
 //            'toponymy'=>'今日花园',
