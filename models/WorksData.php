@@ -34,6 +34,20 @@ class WorksData extends ActiveRecord
         return $res;
     }
 
+    public static function plotEdit($id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity)
+    {
+        $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
+            'id'=>$id,
+            'goods_first'=>$goods_first,
+            'goods_second'=>$goods_second,
+            'goods_three'=>$goods_three,
+            'goods_code'=>$goods_code,
+            'goods_quantity'=>$goods_quantity,
+        ])->execute();
+
+        return $res;
+    }
+
     public static function findById($id)
     {
         return self::find()

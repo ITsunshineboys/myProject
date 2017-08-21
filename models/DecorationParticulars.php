@@ -85,6 +85,26 @@ class DecorationParticulars extends ActiveRecord
         return $res;
     }
 
+    public static function plotEdit($id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area)
+    {
+        $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
+            'id'                =>$id,
+            'hall_area'         => $hall_area,
+            'hall_perimeter'    => $hall_perimeter,
+            'bedroom_area'      => $bedroom_area,
+            'bedroom_perimeter' => $bedroom_perimeter,
+            'toilet_area'       => $toilet_area,
+            'toilet_perimeter'  => $toilet_perimeter,
+            'kitchen_area'      => $kitchen_area,
+            'kitchen_perimeter' => $kitchen_perimeter,
+            'modelling_length'  => $modelling_length,
+            'flat_area'         => $flat_area,
+            'balcony_area'      => $balcony_area,
+        ])->execute();
+
+        return $res;
+    }
+
     public static function findById($id)
     {
         return self::find()
