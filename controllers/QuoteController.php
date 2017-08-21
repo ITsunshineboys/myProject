@@ -574,11 +574,6 @@ class QuoteController extends Controller
     public function actionPlotEditView()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'street'=>'一品天下大街88号',
-//            'toponymy'=>'今日花园',
-//            'district_code'=>510106,
-//        ];
 //        $user = \Yii::$app->user->identity();
 //        if (!$post) {
 //            $code = 1000;
@@ -599,8 +594,7 @@ class QuoteController extends Controller
         $public_message['street'] =  $public_message['effect'][0]['street'];
         $public_message['toponymy'] =  $public_message['effect'][0]['toponymy'];
         $public_message['district_code'] =  $public_message['effect'][0]['district_code'];
-        $public_message['province_code'] =  $public_message['effect'][0]['province_code'];
-        $public_message['city_code'] =  $public_message['effect'][0]['city_code'];
+        $public_message['district'] = $public_message['effect'][0]['district'];
         foreach ($public_message['effect'] as $one_effect){
             $id[] = $one_effect['id'];
         }
@@ -611,13 +605,12 @@ class QuoteController extends Controller
         $public_message['workes_backman_data'] = WorksBackmanData::findById($id);
         return Json::encode([
             'effect'=>$public_message,
-
         ]);
     }
 
     public function actionPlotEdit()
     {
-
+        $post = \Yii::$app->request->post();
     }
 
     /**
