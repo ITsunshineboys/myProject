@@ -574,21 +574,24 @@ class QuoteController extends Controller
     public function actionPlotEdit()
     {
         $post = \Yii::$app->request->post();
-        $user = \Yii::$app->user->identity();
-        if (!$post) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+        $post = [
+            ''
+        ];
+//        $user = \Yii::$app->user->identity();
+//        if (!$post) {
+//            $code = 1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        if (!$user) {
+//            $code = 1052;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
         $all [] = (new Effect())->plotAdd($post);
         $all [] = (new EffectPicture())->plotAdd($post);
         $all [] = (new DecorationParticulars())->plotAdd($post);
