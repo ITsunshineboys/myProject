@@ -1315,7 +1315,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         $sessionId = Yii::$app->session->id;
 
-        $appOrAdminAuthKey = $roleId ? $this->adminAuthKey : $this->authKey;
+        $appOrAdminAuthKey = $roleId ? $this->authKeyAdmin : $this->authKey;
         $sessFile = Yii::$app->cache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $appOrAdminAuthKey;
         if ($appOrAdminAuthKey != $sessionId) {
             @unlink($sessFile);
