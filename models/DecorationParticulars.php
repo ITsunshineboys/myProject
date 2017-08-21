@@ -89,6 +89,7 @@ class DecorationParticulars extends ActiveRecord
     {
         return self::find()
             ->asArray()
+            ->select('id,effect_id,hall_area,bedroom_area,toilet_area,kitchen_area,hall_perimeter,bedroom_perimeter,toilet_perimeter,kitchen_perimeter,modelling_length,flat_area,balcony_area')
             ->where(['effect_id'=>$id])
             ->all();
     }
