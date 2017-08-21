@@ -136,20 +136,19 @@ class Wxpay  extends ActiveRecord
         }
 
         private static function Queryorder($transaction_id)
-    {
-        $input = new WxPayOrderQuery();
-        $input->SetTransaction_id($transaction_id);
-        $result = WxPayApi::orderQuery($input);
-        Log::DEBUG("query:" . json_encode($result));
-        if(array_key_exists("return_code", $result)
-            && array_key_exists("result_code", $result)
-            && $result["return_code"] == "SUCCESS"
-            && $result["result_code"] == "SUCCESS")
         {
-            return true;
+            $input = new WxPayOrderQuery();
+            $input->SetTransaction_id($transaction_id);
+            $result = WxPayApi::orderQuery($input);
+            if(array_key_exists("return_code", $result)
+                && array_key_exists("result_code", $result)
+                && $result["return_code"] == "SUCCESS"
+                && $result["result_code"] == "SUCCESS")
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
 
     //重写回调处理函数
     public static function NotifyProcess($data)

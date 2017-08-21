@@ -123,29 +123,29 @@ class OrderController extends Controller
 
     }
 
-    public function actionSetuserrole()
-    {
-        $mobile=18208142446;
-        $user=User::find()->where(['mobile'=>$mobile])->asArray()->one();
-        if (!$user) {
-            echo 2;
-            exit;
-        }
-        $user_id=$user['id'];
-        $review_status=2;
-        $time=time();
+    // public function actionSetuserrole()
+    // {
+    //     $mobile=18208142446;
+    //     $user=User::find()->where(['mobile'=>$mobile])->asArray()->one();
+    //     if (!$user) {
+    //         echo 2;
+    //         exit;
+    //     }
+    //     $user_id=$user['id'];
+    //     $review_status=2;
+    //     $time=time();
 
-        $res= \Yii::$app->db->createCommand()->insert('user_role',[
-                        'user_id'    =>$user_id,
-                        'review_status' =>2,
-                        'review_apply_time'      =>$time,
-                        'review_time'=>$time,
-                        'role_id'=>6
-                    ])->execute();
-        if($res){
-            echo 1;
-        }
-    }
+    //     $res= \Yii::$app->db->createCommand()->insert('user_role',[
+    //                     'user_id'    =>$user_id,
+    //                     'review_status' =>2,
+    //                     'review_apply_time'      =>$time,
+    //                     'review_time'=>$time,
+    //                     'role_id'=>6
+    //                 ])->execute();
+    //     if($res){
+    //         echo 1;
+    //     }
+    // }
 
     /**
      * 获取商品id
