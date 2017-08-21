@@ -23,44 +23,40 @@ class Invoice extends ActiveRecord
      * @param   线下商城添加发票信息
      * @return array
      */
-    public function addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card)
+    public static function addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card)
     {
-        $array=array();
-        if (empty($invoice_type)||empty($invoice_header_type)||empty($invoice_header)||empty($invoice_content))
-        {
-            $code=1000;
-            $array['code']=$code;
-            $array['data']=null;
-            return $array;
-        }else{
+            $array=array();
             $creat_time=date('Y-m-d H:i:s',time());
             $invoicetoken=md5($invoice_type.$invoice_header.$creat_time);
             $data=self::find()->where(['invoice_type'=>$invoice_type,'invoice_header_type'=>$invoice_header_type,'invoice_header'=>$invoice_header,'invoice_content'=>$invoice_content,'invoicer_card'=>$invoicer_card])->asArray()->one();
             if ($data){
-                $res=Yii::$app->db->createCommand()->update('invoice', [
-                    'invoice_header_type'   => $invoice_header_type,
-                    'invoice_header'        => $invoice_header,
-                    'invoice_type'          => $invoice_type,
-                    'invoice_content'       => $invoice_content,
-                    'creat_time'            => $creat_time,
-                    'invoicer_card'         => $invoicer_card,
-                    'invoicetoken'          => $invoicetoken],'id='.$data['id'])->execute();
+                $invoice=self::find()->where(['id'=>$data['id']])->one();
+                $invoice->invoice_header_type=$invoice_header_type;
+                $invoice->invoice_header=$invoice_header;
+                $invoice->invoice_type=$invoice_type;
+                $invoice->invoice_content=$invoice_content;
+                $invoice->creat_time=$creat_time;
+                $invoice->invoicer_card=$invoicer_card;
+                $invoice->invoicetoken=$invoicetoken;
+                $res=$invoice->save();
+                if ($res==true){
                     $session = Yii::$app->session;
                     $session['invoicetoken']=$invoicetoken;
                     $code =200;
                     $array['code']=$code;
                     $array['data']=$res;
                     return $array;
+                }
             }else{
-                $res=Yii::$app->db->createCommand()->insert('invoice',[
-                    'invoice_header_type'   => $invoice_header_type,
-                    'invoice_header'        => $invoice_header,
-                    'invoice_type'          => $invoice_type,
-                    'invoice_content'       => $invoice_content,
-                    'creat_time'            => $creat_time,
-                    'invoicer_card'         => $invoicer_card,
-                    'invoicetoken'          =>$invoicetoken
-                ])->execute();
+                $model=new self();
+                $model->invoice_header_type=$invoice_header_type;
+                $model->invoice_header=$invoice_header;
+                $model->invoice_type=$invoice_type;
+                $model->invoice_content=$invoice_content;
+                $model->creat_time=$creat_time;
+                $model->invoicer_card=$invoicer_card;
+                $model->invoicetoken=$invoicetoken;
+                $res=$model->save();
                 if ($res==true){
                     $session = Yii::$app->session;
                     $session['invoicetoken']=$invoicetoken;
@@ -75,8 +71,6 @@ class Invoice extends ActiveRecord
                     return $array;
                 }
             }
-
-        }
     }
 
 

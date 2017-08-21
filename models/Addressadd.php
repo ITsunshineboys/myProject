@@ -6,10 +6,11 @@ use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
 use app\models\LogisticsDistrict;
-const USER_ADDRESS = 'user_address';
+
 
 class Addressadd extends  ActiveRecord
 {
+    const USER_ADDRESS = 'user_address';
     public $mobile;
     public $region;
     public $district;
@@ -24,6 +25,7 @@ class Addressadd extends  ActiveRecord
     }
 
 
+  
     /**
      * 8.31
      * 无登录App-添加收货地址
@@ -33,16 +35,24 @@ class Addressadd extends  ActiveRecord
      * @param $districtcode
      * @return int
      */
-     public function insertaddress($mobile,$consignee,$region,$districtcode){
+     public static function insertaddress($mobile,$consignee,$region,$districtcode){
          $addresstoken= md5($mobile.$consignee.date('Y-m-d H:i:s', time()));
          $data=self::find()->where(['mobile'=>$mobile,'consignee'=>$consignee,'district'=>$districtcode])->asArray()->one();
          if ($data){
-             $res=Yii::$app->db->createCommand()->update(USER_ADDRESS, ['mobile'=>$mobile,'consignee'=>$consignee,'district'=>$districtcode,'region'=>$region,'addresstoken'=>$addresstoken],'id='.$data['id'])->execute();
+             $res=Yii::$app->db->createCommand()->update(self::USER_ADDRESS,[
+                 'mobile'      => $mobile,
+                 'consignee'   => $consignee,
+                 'region'      => $region,
+                 'district'    => $districtcode,
+                 'addresstoken'=>$addresstoken
+             ],['id'=>$data['id']])->execute();
              $session = Yii::$app->session;
              $session['addresstoken']=$addresstoken;
-             return true;
+             if ($res){
+                 return true;
+             }
          }else{
-             $res=Yii::$app->db->createCommand()->insert(USER_ADDRESS,[
+             $res=Yii::$app->db->createCommand()->insert(self::USER_ADDRESS,[
                  'mobile'      => $mobile,
                  'consignee'   => $consignee,
                  'region'      => $region,
@@ -52,16 +62,18 @@ class Addressadd extends  ActiveRecord
              if ($res){
                  $session = Yii::$app->session;
                  $session['addresstoken']=$addresstoken;
+                 return true;
              }
+
          }
-         return $res;
+
      }
     /**
      * 无登录app-获取收货地址
      * @param $addresstoken
      * @return array|null
      */
-    public function getaddress($addresstoken){
+    public static function getaddress($addresstoken){
         $array  = self::find()->select('id,mobile,consignee,region,district')->where(['addresstoken' => $addresstoken])->limit(1)->asArray()->all();
         if ($array){
             foreach ($array as $k=>$v){

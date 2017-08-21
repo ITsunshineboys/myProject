@@ -119,20 +119,31 @@ class GoodsOrder extends ActiveRecord
         $supplier_id=$arr[5];
         $freight=$arr[6];
         $return_insurance=$arr[7];
-        $goods=Goods::find()->where(['id'=>$goods_id])->leftJoin('logistic_template','logistic_template.id=goods.logistics_template_id')->asArray()->one();
-        $res1=Yii::$app->db->createCommand()->insert('goods_order',[
-                'order_no'=>$post['out_trade_no'],
-                'amount_order'   =>$post['receipt_amount']*100,
-                'supplier_id'   =>$supplier_id,
-                'invoice_id'   =>$invoice_id,
-                'address_id'   =>$address_id,
-                'pay_status' =>1,
-                'create_time'=>strtotime($post['gmt_create']),
-                'paytime'   =>strtotime($post['gmt_payment']),
-                'order_refer'=>1,
-                'return_insurance'=>$return_insurance*100,
-                'pay_name'=>$pay_name
-            ])->execute();
+        $goods=(new Query())->from('goods as a')->where(['a.id'=>$goods_id])->leftJoin('logistics_template as b','b.id=a.logistics_template_id')->one();
+        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100){
+            return false;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        $time=time();
+        $e = 1;
+        try{
+            $goods_order=new self();
+            $goods_order->order_no=$post['out_trade_no'];
+            $goods_order->amount_order=$post['total_amount']*100;
+            $goods_order->supplier_id=$supplier_id;
+            $goods_order->invoice_id=$invoice_id;
+            $goods_order->address_id=$address_id;
+            $goods_order->pay_status=1;
+            $goods_order->create_time=strtotime($post['gmt_create']);
+            $goods_order->paytime=strtotime($post['gmt_payment']);
+            $goods_order->order_refer=1;
+            $goods_order->return_insurance=$return_insurance*100;
+            $goods_order->pay_name=$pay_name;
+            $res1=$goods_order->save();
+            if (!$res1){
+                $tran->rollBack();
+                return false;
+            }
             $res2=Yii::$app->db->createCommand()->insert('order_goodslist',[
                 'order_no'=>$post['out_trade_no'],
                 'goods_id'   =>$goods['id'],
@@ -150,14 +161,18 @@ class GoodsOrder extends ActiveRecord
                 'is_unusual'=>0,
                 'freight'=>$freight*100,
             ])->execute();
-            if (($freight*100+$return_insurance*100+$goods['platform_price'])*$goods_num!=$post['receipt_amount']*100){
-                return false;
-            }
-            if ($res2 && $res1){
-                return true;
-            }else{
-                return false;
-            }
+                if (!$res2){
+                    $tran->rollBack();
+                    return false;
+                }
+        }catch (Exception $e) {
+            $tran->rollBack();
+        }
+        $tran->commit();
+        if ($e){
+         return true;
+        }
+
     }
 
     /**

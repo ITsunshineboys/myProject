@@ -187,12 +187,11 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }else{
-                $Addressadd = new Addressadd();
-                $res=$Addressadd->insertaddress($mobile,$consignee,$region,$districtcode);
+                $res=Addressadd::insertaddress($mobile,$consignee,$region,$districtcode);
                 if ($res==true){
                     return Json::encode([
                         'code' => 200,
-                        'msg' => '添加收货地址成功',
+                        'msg' => 'ok',
                         'data' => '添加收货地址成功'
                     ]);
                 }else
@@ -222,8 +221,7 @@ class OrderController extends Controller
     public function actionGetaddress(){
         $session = Yii::$app->session;
         $addresstoken=$session['addresstoken'];
-        $model = new Addressadd();
-        $user_address=$model->getaddress($addresstoken);
+        $user_address=Addressadd::getaddress($addresstoken);
         if ($user_address){
             return Json::encode([
                 'code' => 200,
@@ -244,13 +242,22 @@ class OrderController extends Controller
      * @return string
      */
     public function actionOrderinvoicelineadd(){
-        $request = \Yii::$app->request->post();
-        $invoice_type        = trim(htmlspecialchars($request['invoice_type']),' ');
+        $request = \Yii::$app->request;
+        $invoice_type        = trim(htmlspecialchars($request->post('invoice_type')));
+
         $invoice_header_type = 1;
-        $invoice_header      = trim(htmlspecialchars($request['invoice_header']),' ');
-        $invoice_content     = trim(htmlspecialchars($request['invoice_content']),' ');
-        $invoicer_card = trim(htmlspecialchars($request['invoicer_card']),' ');
-        if (!empty($invoicer_card)){
+        $invoice_header      = trim(htmlspecialchars($request->post('invoice_header')));
+        $invoice_content     = trim(htmlspecialchars($request->post('invoice_content')));
+        if (!$invoice_type||!$invoice_header||!$invoice_content )
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $invoicer_card =trim(htmlspecialchars($request->post('invoicer_card')));
+        if ($invoicer_card){
             $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
             if ($isMatched==false){
                 $code=1000;
@@ -261,8 +268,7 @@ class OrderController extends Controller
                 ]);
             }
         }
-        $model = new Invoice();
-        $res=$model->addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
+        $res=Invoice::addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
         if ($res['code']==200){
             return Json::encode([
                 'code' => 200,
@@ -288,8 +294,6 @@ class OrderController extends Controller
         if ($request->isPost) {
             $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
             $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
-            $model=new GoodsOrder();
-            $data=$model->getlinegoodsdata($goods_id,$goods_num);
             if (!$goods_id || !$goods_num){
                 $code=1000;
                 return Json::encode([
@@ -298,6 +302,7 @@ class OrderController extends Controller
                     'data' => null
                 ]);
             }
+            $data=GoodsOrder::getlinegoodsdata($goods_id,$goods_num);
             if ($data){
                 return Json::encode([
                     'code' => 200,
@@ -404,7 +409,7 @@ class OrderController extends Controller
             }
         }else{
             //验证失败
-            echo "fail";	//请不要修改或删除
+            echo "fail";    //请不要修改或删除
         }
     }
 
@@ -428,14 +433,13 @@ class OrderController extends Controller
         $return_insurance=trim(htmlspecialchars($request->post('return_insurance')),' ');
         //商品描述，可空
         $body = trim(htmlspecialchars($request->post('body')),' ');
-        if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id|! $invoice_id||$supplier_id||!$freight ||!$return_insurance){
+        if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id||! $invoice_id||!$supplier_id||!$freight ){
             $c=1000;
             return Json::encode([
                 'code' =>  $c,
                 'msg'  => Yii::$app->params['errorCodes'][$c],
                 'data' => null
             ]);
-
         }
         $iscorrect_money=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
         if ($iscorrect_money!=true)
@@ -468,12 +472,14 @@ class OrderController extends Controller
                 }
                 $res=GoodsOrder::Alipaylinenotifydatabase($arr,$post);
                 if ($res==true){
-                    echo "success";		//请不要修改或删除
+                    echo "success";     //请不要修改或删除
+                }else{
+                    echo "fail";
                 }
             }
         }else{
             //验证失败
-            echo "fail";	//请不要修改或删除
+            echo "fail";    //请不要修改或删除
         }
     }
 
