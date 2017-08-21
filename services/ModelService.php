@@ -308,7 +308,7 @@ class ModelService
         }
 
         $model->icon = $icon;
-        if (!$model->save()) {print_r($model->errors);
+        if (!$model->save()) {
             return 500;
         }
 
