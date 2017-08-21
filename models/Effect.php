@@ -220,7 +220,7 @@ class Effect extends ActiveRecord
     {
         return self::find()
             ->asArray()
-            ->where(['and',['street'=>$street],['toponymy'=>$toponymy],['district_code'=>$district]])
+            ->where(['and',['street'=>$street],['toponymy'=>$toponymy],['district'=>$district]])
             ->all();
     }
 
