@@ -166,11 +166,18 @@ class SiteController extends Controller
                 $user = Yii::$app->user->identity;
                 $user->afterLogin();
 
+                if ($user->last_role_id_app != Yii::$app->params['ownerRoleId']) {
+                    $userRole = UserRole::roleUser($user, $user->last_role_id_app);
+                }
+
                 return Json::encode([
                     'code' => 200,
                     'msg' => '登录成功',
                     'data' => [
-                        'last_role_id' => $user->last_role_id_app,
+                        'last_role' => [
+                            'role_id' => $user->last_role_id_app,
+                            'id' => $userRole ? $userRole->id : $user->id,
+                        ],
                     ],
                 ]);
             }
@@ -1269,10 +1276,21 @@ class SiteController extends Controller
     public function actionSwitchRole()
     {
         $roleId = (int)Yii::$app->request->post('role_id', 0);
-        $res = Yii::$app->user->identity->switchRole($roleId);
-        return Json::encode([
+        $user = Yii::$app->user->identity;
+        $res = $user->switchRole($roleId);
+        $data = [
             'code' => $res,
             'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
-        ]);
+        ];
+
+        if (200 == $res) {
+            $data['data'] = [
+                'switch_role' => [
+                    'id' => UserRole::roleUser($user, $roleId)->id,
+                ],
+            ];
+        }
+
+        return Json::encode($data);
     }
 }
