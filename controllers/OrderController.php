@@ -620,8 +620,9 @@ class OrderController extends Controller
     public function actionOrderlinewxpaynotify(){
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $res=(new wxpay())->Orderlinewxpaynotify($msg);
+        $res=Wxpay::NotifyProcess($msg);
         if ($res==true){
+            $msg= Yii::$app->request->post();
             $arr=explode('&',$msg['attach']);
             $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$arr[8]])->asArray()->one();
             if ($order){
@@ -636,17 +637,6 @@ class OrderController extends Controller
         }else{
             return false;
         }
-    }
-    /**
-     * 快递查询类-物流跟踪接口
-     *
-     */
-    public function  actionExpress(){
-
-        $order="3933267921506";
-        $express = new Express();
-        $result  = $express -> getorder($order);
-        return Json::encode($result);
     }
 
 

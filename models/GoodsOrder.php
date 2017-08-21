@@ -223,44 +223,59 @@ class GoodsOrder extends ActiveRecord
             $freight=$arr[6];
             $return_insurance=$arr[7];
             $order_no=$arr[8];
-        $goods=Goods::find()->where(['id'=>$goods_id])->leftJoin('logistic_template','logistic_template.id=goods.logistics_template_id')->asArray()->one();
-        $res1=Yii::$app->db->createCommand()->insert('goods_order',[
-            'order_no'=> $order_no,
-            'amount_order'   =>$msg['total_fee'],
-            'supplier_id'   =>$supplier_id,
-            'invoice_id'   =>$invoice_id,
-            'address_id'   =>$address_id,
-            'pay_status' =>1,
-            'create_time'=>time(),
-            'paytime'   =>time(),
-            'order_refer'=>1,
-            'return_insurance'=>$return_insurance*100,
-            'pay_name'=>$pay_name
-        ])->execute();
-        $res2=Yii::$app->db->createCommand()->insert('order_goodslist',[
-            'order_no'=> $order_no,
-            'goods_id'   =>$goods['id'],
-            'goods_number'=>$goods_num,
-            'create_time'=>time(),
-            'goods_name'=>$goods['title'],
-            'goods_price'=>$goods['platform_price'],
-            'sku'=>$goods['sku'],
-            'market_price'=>$goods['market_price'],
-            'supplier_price'=>$goods['supplier_price'],
-            'shipping_type'=>$goods['delivery_method'],
-            'order_status'=>0,
-            'shipping_status'=>0,
-            'customer_service'=>0,
-            'is_unusual'=>0,
-            'freight'=>$freight*100,
-        ])->execute();
-        if (($freight*100+$return_insurance*100+$goods['platform_price'])!=$msg['total_fee']){
+        $goods=(new Query())->from('goods as a')->where(['a.id'=>$goods_id])->leftJoin('logistics_template as b','b.id=a.logistics_template_id')->one();
+        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
             return false;
         }
-        if ($res2 && $res1){
+        $tran = Yii::$app->db->beginTransaction();
+        $time=time();
+        $e = 1;
+        try{
+
+            $goods_order=new self();
+            $goods_order->order_no=$order_no;
+            $goods_order->amount_order=$msg['total_fee'];
+            $goods_order->supplier_id=$supplier_id;
+            $goods_order->invoice_id=$invoice_id;
+            $goods_order->address_id=$address_id;
+            $goods_order->pay_status=1;
+            $goods_order->create_time=$time;
+            $goods_order->paytime=$time;
+            $goods_order->order_refer=1;
+            $goods_order->return_insurance=$return_insurance*100;
+            $goods_order->pay_name=$pay_name;
+            $res1=$goods_order->save();
+            if (!$res1){
+                $tran->rollBack();
+                return false;
+            }
+            $res2=Yii::$app->db->createCommand()->insert('order_goodslist',[
+                'order_no'=> $order_no,
+                'goods_id'   =>$goods['id'],
+                'goods_number'=>$goods_num,
+                'create_time'=>time(),
+                'goods_name'=>$goods['title'],
+                'goods_price'=>$goods['platform_price'],
+                'sku'=>$goods['sku'],
+                'market_price'=>$goods['market_price'],
+                'supplier_price'=>$goods['supplier_price'],
+                'shipping_type'=>$goods['delivery_method'],
+                'order_status'=>0,
+                'shipping_status'=>0,
+                'customer_service'=>0,
+                'is_unusual'=>0,
+                'freight'=>$freight*100,
+            ])->execute();
+            if (!$res2){
+                $tran->rollBack();
+                return false;
+            }
+        }catch (Exception $e) {
+            $tran->rollBack();
+        }
+        $tran->commit();
+        if ($e){
             return true;
-        }else{
-            return false;
         }
     }
 
