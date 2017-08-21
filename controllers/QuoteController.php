@@ -527,6 +527,7 @@ class QuoteController extends Controller
 
                 $effect =(new Effect())->plotAdd($series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type);
 
+                $effect_id = '';
                 foreach ($house['all_goods'] as $goods){
                     $effect_id = \Yii::$app->db->getLastInsertID();
                     $goods_first = $goods['first_name'];
@@ -599,10 +600,10 @@ class QuoteController extends Controller
             $id[] = $one_effect['id'];
         }
         $public_message['decoration_particulars'] = DecorationParticulars::findById($id);
-
         $public_message['works_data'] = WorksData::findById($id);
         $public_message['worker_worker_data'] = WorksWorkerData::findById($id);
         $public_message['workes_backman_data'] = WorksBackmanData::findById($id);
+
         return Json::encode([
             'effect'=>$public_message,
         ]);
@@ -611,6 +612,10 @@ class QuoteController extends Controller
     public function actionPlotEdit()
     {
         $post = \Yii::$app->request->post();
+//        $post =
+//        [
+//
+//        ];
     }
 
     /**
