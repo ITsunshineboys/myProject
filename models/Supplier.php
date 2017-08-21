@@ -414,12 +414,14 @@ class Supplier extends ActiveRecord
             ->leftJoin('supplier_freezelist as sf', 'sf.supplier_id=s.id')
             ->where(['s.id' => $supplier_id])
             ->one();
+        $freeze_money=(new Query())->from('supplier_freezelist')->where(['supplier_id'=>$supplier_id])->sum('freeze_money');
+        $cashed_money=(new Query())->from('supplier_cashregister')->where(['supplier_id'=>$supplier_id])->sum('cash_money');
         if ($array) {
-            $array['freeze_money'] = sprintf('%.2f', (float)$array['freeze_money'] * 0.01);
+            $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
             $array['cash_money'] = sprintf('%.2f', (float)$array['cash_money'] * 0.01);
             $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
-            $array['cashed_money'] = sprintf('%.2f', (float)$array['cash_money'] * 0.01);
-            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
+            $array['cashed_money'] = sprintf('%.2f', (float) $cashed_money * 0.01);
+            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['balance']);
             return $array;
 
         }
