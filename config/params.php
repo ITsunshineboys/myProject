@@ -137,7 +137,7 @@ return [
     'grade' => '白银',  //工人默认级别
     'carouselMaxNumber' => 3,
     'user' => [
-        'daily_forgot_pwd_cnt_max' => 5,
+        'daily_forgot_pwd_cnt_max' => 500, // for test
         'default_nickname' => 'default nickname', // 待定
         'deault_icon_path' => 'uploads/user_icon_default.png', // 默认头像
     ],
