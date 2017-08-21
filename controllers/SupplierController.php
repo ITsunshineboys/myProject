@@ -311,6 +311,7 @@ class SupplierController extends Controller
                     'shop_name' => $supplier->shop_name,
                     'shop_no' => $supplier->shop_no,
                     'icon' => $supplier->icon,
+                    'id' => $supplier->id,
                 ]
             ],
         ]);
