@@ -44,6 +44,7 @@ class SiteController extends Controller
         'reset-icon',
         'user-view',
         'switch-role',
+        'last-login-role',
     ];
 
     /**
@@ -987,279 +988,283 @@ class SiteController extends Controller
      * @return string
      */
     public function actionCheckisfirstsetpaypwd()
-        {
-            $postData = Yii::$app->request->post();
-            $user = Yii::$app->user->identity;
-            if (!$user){
-                $code=1052;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            if (empty($postData['role_id'])){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            };
-             if ($postData['role_id']!=7){
-                $check_user=UserRole::find()
-                    ->select('user_id')
-                    ->where(['user_id'=>$user->id])
-                    ->andWhere(['role_id'=>$postData['role_id']])
-                    ->asArray()
-                    ->one();
-                if (!$check_user){
-                    $code=1010;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
-            $model=Role::CheckUserRole($postData['role_id']);
-            if ($postData['role_id']==7){
-                $pay_password=User::find()->select('pay_password')->where(['id'=>$user->id])->asArray()->one()['pay_password'];
-            }
-            else{
-                $pay_password=$model->select('pay_password')->where(['uid'=>$user->id])->asArray()->one()['pay_password'];
-            }
-            $data['type']=empty($pay_password)?'first':'unfirst';
-            $data['key']=empty($pay_password)? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword'.$user->id):\Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword'.$user->id);
-            $users=User::find()->where(['id'=>$user->id])->select('mobile')->one();
-            $data['mobile']=$users['mobile'];
+    {
+        $postData = Yii::$app->request->post();
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
             return Json::encode([
-                'code' => 200,
-                'msg' => 'OK',
-                'data' =>$data
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (empty($postData['role_id'])) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        };
+        if ($postData['role_id'] != 7) {
+            $check_user = UserRole::find()
+                ->select('user_id')
+                ->where(['user_id' => $user->id])
+                ->andWhere(['role_id' => $postData['role_id']])
+                ->asArray()
+                ->one();
+            if (!$check_user) {
+                $code = 1010;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+        $model = Role::CheckUserRole($postData['role_id']);
+        if ($postData['role_id'] == 7) {
+            $pay_password = User::find()->select('pay_password')->where(['id' => $user->id])->asArray()->one()['pay_password'];
+        } else {
+            $pay_password = $model->select('pay_password')->where(['uid' => $user->id])->asArray()->one()['pay_password'];
+        }
+        $data['type'] = empty($pay_password) ? 'first' : 'unfirst';
+        $data['key'] = empty($pay_password) ? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword' . $user->id) : \Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword' . $user->id);
+        $users = User::find()->where(['id' => $user->id])->select('mobile')->one();
+        $data['mobile'] = $users['mobile'];
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * set  pay password  or Get set paypassword SMS code
+     * @return string
+     */
+    public function actionSetPaypassword()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        if (!$postData) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
 
-        /**
-         * set  pay password  or Get set paypassword SMS code
-         * @return string
-         */
-        public function  actionSetPaypassword(){
-                $user = Yii::$app->user->identity;
-                if (!$user){
-                    $code=1052;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $postData= Yii::$app->request->post();
-                if (!$postData){
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-
-                $code=User::SetPaypassword($postData,$user);
-                    if ($code==200){
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => 'ok'
-                        ]);
-                    }else{
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
+        $code = User::SetPaypassword($postData, $user);
+        if ($code == 200) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        } else {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
+    }
 
 
-        /**
-         * reset pay password
-         * @return string
-         */
-        public function  actionResetPaypassword(){
-            $user = Yii::$app->user->identity;
-            if (!$user){
-                $code=1052;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $postData= Yii::$app->request->post();
-            $code=User::ResetPaypassword($postData,$user);
-            if ($code==200){
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => 'ok'
-                ]);
-            }else{
+    /**
+     * reset pay password
+     * @return string
+     */
+    public function actionResetPaypassword()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        $code = User::ResetPaypassword($postData, $user);
+        if ($code == 200) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        } else {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+    /**Getresetmobilesmscode
+     * get sms code to reset mobile
+     * @return string
+     */
+    public function actionGetresetmobilesmscode()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $cache = Yii::$app->cache;
+        $data = $cache->get(User::CACHE_PREFIX_RESET_MOBILE . $user->id);
+        if ($data != false) {
+            if ($data > 3) {
+                $code = 1026;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
         }
-/**Getresetmobilesmscode
-         * get sms code to reset mobile
-         * @return string
-         */
-        public function actionGetresetmobilesmscode(){
-            $user = Yii::$app->user->identity;
-            if (!$user){
-                $code=1052;
+        $sms['mobile'] = $user->mobile;
+        $sms['type'] = 'resetPayPassword';
+        try {
+            new SmValidationService($sms);
+        } catch (\InvalidArgumentException $e) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        } catch (ServerErrorHttpException $e) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        } catch (\Exception $e) {
+            $code = 1020;
+            if ($code == $e->getCode()) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $cache = Yii::$app->cache;
-            $data = $cache->get(User::CACHE_PREFIX_RESET_MOBILE.$user->id);
-            if ($data != false){
-                if ($data >3){
-                    $code=1026;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
-            $sms['mobile']=$user->mobile;
-            $sms['type']='resetPayPassword';
-            try {
-                new SmValidationService($sms);
-            } catch (\InvalidArgumentException $e) {
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            } catch (ServerErrorHttpException $e) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            } catch (\Exception $e) {
-                $code = 1020;
-                if ($code == $e->getCode()) {
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
-            $code=200;
-            return Json::encode(
-                [
-                    'code'=>$code,
-                    'msg'=>'ok'
-                ]
-            );
         }
+        $code = 200;
+        return Json::encode(
+            [
+                'code' => $code,
+                'msg' => 'ok'
+            ]
+        );
+    }
 
     /**
      * check user reset mobile's sms code is correct
      * @return string
      */
-     public function actionCheckresetmobilesmscode()
-        {
-            $user = Yii::$app->user->identity;
-            if (!$user) {
-                $code = 1052;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $SmsCode = trim(htmlspecialchars(Yii::$app->request->post('smscode', '')), '');
-            if (!$SmsCode) {
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            if (!SmValidationService::validCode($user->mobile,$SmsCode)) {
-                $code = 1002;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            SmValidationService::deleteCode($user->mobile);
-            $cache = Yii::$app->cache;
-            $cacheData='ResetmobileSmscode'.$user->id.date('Y-m-d H',time());
-            $data = $cache->set(User::CACHE_PREFIX_GET_MOBILE.$user->id,$cacheData,60*60);
-            if ($data==true){
-                $code=200;
-                return Json::encode(
-                    [
-                        'code'=>$code,
-                        'msg'=>'ok'
-                    ]
-                );
-            }else{
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
+    public function actionCheckresetmobilesmscode()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
-        /**
-         * reset mobile by user
-         * @return string
-         */
-        public function actionResetMobileByUser()
-        {
-            $user = Yii::$app->user->identity;
-            if (!$user) {
-                $code = 1052;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $mobile=trim(htmlspecialchars(Yii::$app->request->post('mobile', '')), '');
-            if (!$mobile || ! preg_match('/^[1][3,5,7,8]\d{9}$/',$mobile)){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $check_mobile=User::CheckMobileIsExists($mobile,$user);
-            if ($check_mobile!=200){
-                return Json::encode([
-                    'code' => $check_mobile,
-                    'msg' => Yii::$app->params['errorCodes'][$check_mobile]
-                ]);
-            }
-            $cache = Yii::$app->cache;
-            $cacheData='ResetmobileSmscode'.$user->id.date('Y-m-d H',time());
-            $data = $cache->get(User::CACHE_PREFIX_GET_MOBILE.$user->id);
-            if ($cacheData != $data){
-                $code=403;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $code=User::ResetMobileByUser($mobile,$user);
-            if ($code==200){
-                return Json::encode([
-                    'code' => $code,
-                    'msg' =>'ok'
-                ]);
-            }else{
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
+        $SmsCode = trim(htmlspecialchars(Yii::$app->request->post('smscode', '')), '');
+        if (!$SmsCode) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
+        if (!SmValidationService::validCode($user->mobile, $SmsCode)) {
+            $code = 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        SmValidationService::deleteCode($user->mobile);
+        $cache = Yii::$app->cache;
+        $cacheData = 'ResetmobileSmscode' . $user->id . date('Y-m-d H', time());
+        $data = $cache->set(User::CACHE_PREFIX_GET_MOBILE . $user->id, $cacheData, 60 * 60);
+        if ($data == true) {
+            $code = 200;
+            return Json::encode(
+                [
+                    'code' => $code,
+                    'msg' => 'ok'
+                ]
+            );
+        } else {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+    /**
+     * reset mobile by user
+     * @return string
+     */
+    public function actionResetMobileByUser()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $mobile = trim(htmlspecialchars(Yii::$app->request->post('mobile', '')), '');
+        if (!$mobile || !preg_match('/^[1][3,5,7,8]\d{9}$/', $mobile)) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $check_mobile = User::CheckMobileIsExists($mobile, $user);
+        if ($check_mobile != 200) {
+            return Json::encode([
+                'code' => $check_mobile,
+                'msg' => Yii::$app->params['errorCodes'][$check_mobile]
+            ]);
+        }
+        $cache = Yii::$app->cache;
+        $cacheData = 'ResetmobileSmscode' . $user->id . date('Y-m-d H', time());
+        $data = $cache->get(User::CACHE_PREFIX_GET_MOBILE . $user->id);
+        if ($cacheData != $data) {
+            $code = 403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code = User::ResetMobileByUser($mobile, $user);
+        if ($code == 200) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        } else {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
 
     /**
      * Switch user role
@@ -1276,5 +1281,25 @@ class SiteController extends Controller
             'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
         ];
         return Json::encode($data);
+    }
+
+    /**
+     * Get last login role
+     *
+     * @return string
+     */
+    public function actionLastLoginRole()
+    {
+        return Json::encode(
+            [
+                'code' => 200,
+                'msg' => 'OK',
+                'data' => [
+                    'last_login_role' => [
+                        'id' => Yii::$app->user->identity->last_role_id_app,
+                    ],
+                ],
+            ]
+        );
     }
 }
