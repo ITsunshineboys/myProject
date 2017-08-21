@@ -13,6 +13,7 @@ use app\models\Goods;
 use app\models\Supplier;
 use app\models\LogisticsDistrict;
 use app\models\Lhzz;
+use app\models\UserRole;
 use app\services\SmValidationService;
 use app\services\AlipayTradeService;
 use app\services\ExceptionHandleService;
