@@ -126,7 +126,7 @@ class SupplieraccountController extends  Controller{
         $type_shop=(int)(\Yii::$app->request->get('type_shop',$vaue_all));
         $status=(int)(\Yii::$app->request->get('status',$vaue_all));
         $keyword=trim(\Yii::$app->request->get('keyword',''),'');
-        $pid=(int)trim(\Yii::$app->request->get('pid',''),'');
+        $category_id=(int)trim(\Yii::$app->request->get('category_id',''),'');
         if (!Supplier::checkShopType($type_shop) || !Supplier::checkStatus($status)) {
             return json_encode([
                 'code' => $code,
@@ -151,9 +151,9 @@ class SupplieraccountController extends  Controller{
                 $where.= " and  status in ({$keys}) ";
 
             }
-            if ($pid) {
+            if ($category_id) {
 
-                $cate_ids=Supplier::getcategory($pid);
+                $cate_ids=Supplier::getcategory($category_id);
 
 
                     if(is_array($cate_ids)){
@@ -161,12 +161,12 @@ class SupplieraccountController extends  Controller{
                         $where.=" and category_id in ({$ids})";
 
                     }else{
-                        $where.=" and category_id ={$pid}";
+                        $where.=" and category_id ={$category_id}";
                     }
             }
 
         }else{
-            $where=" shop_no like '%{$keyword}%' or shop_name like '%{$keyword}%'";
+            $where=" shop_no like '%{$keyword}' or shop_name like '%{$keyword}'";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
