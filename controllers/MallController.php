@@ -3800,7 +3800,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-view-admin' => $supplier->viewAdmin(),
+                'supplier_view_admin' => $supplier->viewAdmin(),
             ],
         ]);
     }
