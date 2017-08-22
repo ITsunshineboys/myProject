@@ -2126,7 +2126,7 @@ class MallController extends Controller
             ]);
         }
 
-        $reviewStatus = (int)Yii::$app->request->get('review_status', GoodsCategory::REVIEW_STATUS_NOT_REVIEWED);
+        $reviewStatus = (int)Yii::$app->request->get('review_status', GoodsBrand::REVIEW_STATUS_NOT_REVIEWED);
         if (!in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
             return Json::encode([
                 'code' => $code,
