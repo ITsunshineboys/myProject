@@ -171,7 +171,9 @@ class SiteController extends Controller
                     'code' => 200,
                     'msg' => '登录成功',
                     'data' => [
-                        'last_role_id' => $user->last_role_id_app,
+                        'last_login_role' => [
+                            'id' => $user->last_role_id_app,
+                        ],
                     ],
                 ]);
             }
