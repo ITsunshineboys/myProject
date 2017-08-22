@@ -71,10 +71,10 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("brand_index",{   //商城管理——品牌管理
         url:"/brand_index",
-        templateUrl:"pages/mall_manage/brand_manage/brand_index/brand_index.html"
+        templateUrl:"pages/mall_manage/brand_manage/brand_index/brand_index.html",
+        params:{down_flag:''}
       })
-      .state("edit_attribute",{   //属性管理——属性编辑
-        params:{titles:'',propattrs:'',propid:''},
+      .state("edit_attribute",{   //商城管理——品牌管理
         url:"/edit_attribute",
         templateUrl:"pages/mall_manage/style_manage/edit_attribute/edit_attribute.html"
       })
@@ -91,17 +91,16 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
 
 
     .state("fenleiguanli",{
-      params:{'showoffsale':null},
       url:"/fenleiguanli",
       templateUrl:"pages/mall_manage/class_manage/cla_mag/cla_mag.html"
     })
     .state("onsale_edit",{
-    params:{"classtitle":'',"classid":'',"classlevel":'',"classpath":'',"iconpath":'',"addperson":'',"online_time":''},
+    params:{"classtitle":null,"classid":null,"classlevel":null},
     url:"/onsale_edit",
     templateUrl:"pages/mall_manage/class_manage/onsale_edit/onsale_edit.html"
     })
     .state("offsale_edit",{
-    params:{"classtitle":'',"classid":'',"classlevel":'',"classpath":'',"iconpath":'',"addperson":'',"offline_time":''},
+    params:{"classtitle":null,"classid":null,"classlevel":null},
     url:"/offsale_edit",
     templateUrl:"pages/mall_manage/class_manage/offsale_edit/offsale_edit.html"
   })
@@ -161,11 +160,13 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("online_edit",{/*品牌管理-已上架编辑*/
         url:"/online_edit",
-        templateUrl:"pages/mall_manage/brand_manage/online_edit/online_edit.html"
+        templateUrl:"pages/mall_manage/brand_manage/online_edit/online_edit.html",
+        params:{item:''}
       })
       .state("offline_edit",{ /*品牌管理-已下架编辑*/
         url:"/offline_edit",
-        templateUrl:"pages/mall_manage/brand_manage/offline_edit/offline_edit.html"
+        templateUrl:"pages/mall_manage/brand_manage/offline_edit/offline_edit.html",
+        params:{down_shelves_list:'',index:''}
       })
       .state("add_brand",{ /*品牌管理-添加品牌*/
         url:"/add_brand",
@@ -173,7 +174,8 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("style_index",{ /*系列/风格/属性管理*/
         url:"/style_index",
-        templateUrl:"pages/mall_manage/style_manage/style_index/style_index.html"
+        templateUrl:"pages/mall_manage/style_manage/style_index/style_index.html",
+        params:{showstyle:''}
       })
       .state("choose_series",{ /*系列/风格/属性管理-选择拥有系列的分类*/
         url:"/choose_series",
@@ -181,15 +183,18 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("add_series",{ /*系列/风格/属性管理-添加新系列*/
         url:"/add_series",
-        templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html"
+        templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html",
+        params:{"list":""},
       })
       .state("series_detail",{ /*系列/风格/属性管理-系列详情页*/
         url:"/series_detail",
-        templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html"
+        templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html",
+        params:{item:'',ser_arr:'',index:''}
       })
       .state("add_style",{ /*系列/风格/属性管理-风格-添加新风格*/
         url:"/add_style",
-        templateUrl:"pages/mall_manage/style_manage/add_style/add_style.html"
+        templateUrl:"pages/mall_manage/style_manage/add_style/add_style.html",
+        params:{style_arr:''}
       })
       .state("choose_style",{ /*系列/风格/属性管理-风格-选择拥有风格的分类*/
         url:"/choose_style",
@@ -197,7 +202,8 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("style_detail",{ /*系列/风格/属性管理-风格-风格详情*/
         url:"/style_detail",
-        templateUrl:"pages/mall_manage/style_manage/style_detail/style_detail.html"
+        templateUrl:"pages/mall_manage/style_manage/style_detail/style_detail.html",
+        params:{style_item:'',style_arr:'',index:''}
       })
   //============================================================
 })
