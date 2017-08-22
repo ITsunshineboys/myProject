@@ -1175,7 +1175,7 @@ CREATE TABLE `works_backman_data` (
 
 -- 8.22 start
 
-CREATE TABLE `user_follows` (
+CREATE TABLE `user_follow` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `role_id` int(11) NOT NULL DEFAULT '0' COMMENT '3: 设计师 5: 装修公司 6: 店铺',
