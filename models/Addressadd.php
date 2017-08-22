@@ -11,11 +11,6 @@ use app\models\LogisticsDistrict;
 class Addressadd extends  ActiveRecord
 {
     const USER_ADDRESS = 'user_address';
-    public $mobile;
-    public $region;
-    public $district;
-    public $consignee;
-
     /**
      * @return string 返回该AR类关联的数据表名
      */
