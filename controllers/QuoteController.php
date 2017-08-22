@@ -578,7 +578,7 @@ class QuoteController extends Controller
                 $type = $house['is_ordinary'];
 
                 $effect =(new Effect())->plotAdd($series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type);
-                $effect_id = \Yii::$app->db->getLastInsertID();
+                $_effect_id = \Yii::$app->db->getLastInsertID();
                 $hall_area = $house['hall_area'];
                 $hall_perimeter = $house['hall_girth'];
                 $bedroom_area = $house['room_area'];
@@ -645,8 +645,8 @@ class QuoteController extends Controller
                 }
             }
         }
-        $decoration_particulars = (new DecorationParticulars())->plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
-        if ($effect && $decoration_particulars && $works_data && $worker_worker_data && $worker_backman_data) {
+        $decoration_particulars = (new DecorationParticulars())->plotAdd($_effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
+        if ($effect && $decoration_particulars || $works_data || $worker_worker_data || $worker_backman_data) {
             $code = 200;
             return Json::encode([
                 'code' => $code,
