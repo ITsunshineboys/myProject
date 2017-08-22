@@ -590,8 +590,6 @@ class QuoteController extends Controller
                 $modelling_length = $house['other_length'];
                 $flat_area = $house['flattop_area'];
                 $balcony_area = $house['balcony_area'];
-
-                $decoration_particulars = (new DecorationParticulars())->plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
             }
             else {
                 $series_id = $house['series'];
@@ -647,6 +645,7 @@ class QuoteController extends Controller
                 }
             }
         }
+        $decoration_particulars = (new DecorationParticulars())->plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
         if ($effect && $decoration_particulars && $works_data && $worker_worker_data && $worker_backman_data) {
             $code = 200;
             return Json::encode([
@@ -770,7 +769,6 @@ class QuoteController extends Controller
                                 ]
                         ],
                         [
-
                             'area'=>60,
                             'balcony_area'=>1,
                             'cur_hall'=>1,
