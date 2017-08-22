@@ -380,6 +380,9 @@ class Supplier extends ActiveRecord
             if (isset($supplier['create_time'])) {
                 $supplier['create_time'] = date('Y-m-d H:i', $supplier['create_time']);
             }
+            if(isset($supplier['balance'])){
+                $supplier['balance']=sprintf('%.2f',(float)$supplier['balance']*0.01);
+            }
 
             if (isset($supplier['status'])) {
                 $supplier['status'] = self::STATUSES[$supplier['status']];
