@@ -3949,9 +3949,9 @@ class MallController extends Controller
     public function actionSeriesList()
     {
         $request = Yii::$app->request;
-        $pages = $request->get('page','1');
-        $size  = $request->get('size','12');
-        $all = Series::pagination($pages,$size);
+        $pages = $request->get('page', '1');
+        $size = $request->get('size', '12');
+        $all = Series::pagination($pages, $size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -4056,9 +4056,9 @@ class MallController extends Controller
     public function actionStyleList()
     {
         $request = Yii::$app->request;
-        $pages = $request->get('page','1');
-        $size  = $request->get('size','12');
-        $all = Style::pagination($pages,$size);
+        $pages = $request->get('page', '1');
+        $size = $request->get('size', '12');
+        $all = Style::pagination($pages, $size);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -4870,6 +4870,16 @@ class MallController extends Controller
             ]);
         }
 
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new Supplier;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $query = new Query;
         if (!$keyword) {
             if ($shopType != Yii::$app->params['value_all']) {
@@ -4892,7 +4902,16 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier_list' => ModelService::pagination($query, Supplier::FIELDS_LIST, Supplier::FIELDS_LIST_EXTRA, new Supplier, $page, $size)
+                'supplier_list' => ModelService::pagination(
+                    $query,
+                    Supplier::FIELDS_LIST,
+                    Supplier::FIELDS_LIST_EXTRA,
+                    new Supplier,
+                    $page,
+                    $size,
+                    ModelService::FORMAT_DATA_METHOD,
+                    ModelService::EXTRA_DATA_METHOD,
+                    $orderBy)
             ],
         ]);
     }

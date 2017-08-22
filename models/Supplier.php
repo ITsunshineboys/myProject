@@ -130,10 +130,13 @@ class Supplier extends ActiveRecord
         'shop_no',
         'category_id',
         'status',
-    ];
-    const FIELDS_LIST_EXTRA = [
         'sales_volumn_month',
         'sales_amount_month',
+        'month',
+    ];
+    const FIELDS_LIST_EXTRA = [
+//        'sales_volumn_month',
+//        'sales_amount_month',
     ];
 
     /**
@@ -334,6 +337,21 @@ class Supplier extends ActiveRecord
 
         if (isset($data['type_shop'])) {
             $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
+        }
+
+        $ym = date('Ym');
+        if (isset($data['sales_amount_month'])) {
+            if ($ym == $data['month']) {
+                $data['sales_amount_month'] /= 100;
+            } else {
+                $data['sales_amount_month'] = 0;
+            }
+        }
+
+        if (isset($data['sales_volumn_month'])) {
+            if ($ym != $data['month']) {
+                $data['sales_volumn_month'] = 0;
+            }
         }
     }
 
@@ -650,6 +668,25 @@ class Supplier extends ActiveRecord
 
         if (isset($data['type_shop'])) {
             $data['type_shop'] = self::TYPE_SHOP[$data['type_shop']];
+        }
+
+        if (isset($data['sales_amount_month'])) {
+            $data['sales_amount_month'] /= 100;
+        }
+
+        $ym = date('Ym');
+        if (isset($data['sales_amount_month'])) {
+            if ($ym == $data['month']) {
+                $data['sales_amount_month'] /= 100;
+            } else {
+                $data['sales_amount_month'] = 0;
+            }
+        }
+
+        if (isset($data['sales_volumn_month'])) {
+            if ($ym != $data['month']) {
+                $data['sales_volumn_month'] = 0;
+            }
         }
     }
 
