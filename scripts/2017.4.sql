@@ -1170,3 +1170,21 @@ CREATE TABLE `works_backman_data` (
   `backman_value` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 8.18 end
+
+-- 8.22 start
+
+CREATE TABLE `user_follows` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `role_id` int(11) NOT NULL DEFAULT '0' COMMENT '3: 设计师 5: 装修公司 6: 店铺',
+  `follow_id` int(11) NOT NULL DEFAULT '0',
+  `follow_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关注时间',
+  `unfollow_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '取关时间',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0: 不关注 1: 关注 ',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter TABLE designer ADD COLUMN `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数';
+alter TABLE decoration_company ADD COLUMN `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数';
