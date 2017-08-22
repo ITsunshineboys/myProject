@@ -35,10 +35,9 @@ class WorksBackmanData extends ActiveRecord
     public static function plotEdit($id,$backman_option,$backman_value)
     {
         $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
-            'id'     => $id,
             'backman_option'   => $backman_option,
             'backman_value'  => $backman_value,
-        ])->execute();
+        ],'id='. $id)->execute();
 
         return $res;
     }

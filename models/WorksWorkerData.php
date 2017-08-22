@@ -35,10 +35,10 @@ class WorksWorkerData extends ActiveRecord
     public static function plotEdit($id,$worker_kind,$worker_price)
     {
         $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
-            'id'            => $id,
+
             'worker_kind'   => $worker_kind,
             'worker_price'  => $worker_price,
-        ])->execute();
+        ],'id='. $id)->execute();
 
         return $res;
     }
