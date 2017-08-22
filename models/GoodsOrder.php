@@ -139,7 +139,6 @@ class GoodsOrder extends ActiveRecord
         }
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
-        $e = 1;
         try{
             $goods_order=new self();
             $goods_order->order_no=$post['out_trade_no'];
@@ -153,12 +152,13 @@ class GoodsOrder extends ActiveRecord
             $goods_order->order_refer=1;
             $goods_order->return_insurance=$return_insurance*100;
             $goods_order->pay_name=$pay_name;
+            $goods_order->buyer_message=$post['body'];
             $res1=$goods_order->save();
             if (!$res1){
                 $tran->rollBack();
                 return false;
             }
-            $res2=Yii::$app->db->createCommand()->insert('order_goodslist',[
+            $res2=Yii::$app->db->createCommand()->insert(self::ORDER_GOODS_LIST,[
                 'order_no'=>$post['out_trade_no'],
                 'goods_id'   =>$goods['id'],
                 'goods_number'=>$goods_num,
@@ -179,13 +179,26 @@ class GoodsOrder extends ActiveRecord
                     $tran->rollBack();
                     return false;
                 }
+            $time=time();
+            $month=date('Ym',$time);
+            $supplier=Supplier::find()->where(['id'=>$goods['supplier_id']])->one();
+            $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
+            $supplier->sales_amount_month=$supplier->sales_amount_month+$goods['platform_price']*$goods_num;
+            $supplier->month=$month;
+            $res3=$supplier->save(false);
+            if (!$res3){
+                $tran->rollBack();
+                return false;
+            }
+            $tran->commit();
+            return true;
         }catch (Exception $e) {
             $tran->rollBack();
+            return false;
         }
-        $tran->commit();
-        if ($e){
-         return true;
-        }
+
+
+
 
     }
 
@@ -220,7 +233,7 @@ class GoodsOrder extends ActiveRecord
          return $e;
      }
 
-    /**
+     /**
      * 微信线下商城数据库操作
      * @param $arr
      * @param $msg
@@ -237,6 +250,7 @@ class GoodsOrder extends ActiveRecord
             $freight=$arr[6];
             $return_insurance=$arr[7];
             $order_no=$arr[8];
+            $body=$arr[9];
         $goods=(new Query())->from('goods as a')->where(['a.id'=>$goods_id])->leftJoin('logistics_template as b','b.id=a.logistics_template_id')->one();
         if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
             return false;
@@ -258,12 +272,13 @@ class GoodsOrder extends ActiveRecord
             $goods_order->order_refer=1;
             $goods_order->return_insurance=$return_insurance*100;
             $goods_order->pay_name=$pay_name;
+            $goods_order->buyer_message=$body;
             $res1=$goods_order->save();
             if (!$res1){
                 $tran->rollBack();
                 return false;
             }
-            $res2=Yii::$app->db->createCommand()->insert('order_goodslist',[
+            $res2=Yii::$app->db->createCommand()->insert(self::ORDER_GOODS_LIST,[
                 'order_no'=> $order_no,
                 'goods_id'   =>$goods['id'],
                 'goods_number'=>$goods_num,
@@ -281,6 +296,16 @@ class GoodsOrder extends ActiveRecord
                 'freight'=>$freight*100,
             ])->execute();
             if (!$res2){
+                $tran->rollBack();
+                return false;
+            }
+            $month=date('Ym',$time);
+            $supplier=Supplier::find()->where(['id'=>$goods['supplier_id']])->one();
+            $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
+            $supplier->sales_amount_month=$supplier->sales_amount_month+$goods['platform_price']*$goods_num;
+            $supplier->month=$month;
+            $res3=$supplier->save(false);
+            if (!$res3){
                 $tran->rollBack();
                 return false;
             }
