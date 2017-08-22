@@ -135,6 +135,8 @@ CREATE TABLE `supplier` (
   `district_code` int(6) unsigned NOT NULL DEFAULT 0 COMMENT '区域码',
   `district_name` varchar(50) NOT NULL DEFAULT '' COMMENT '区域名称',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
+  `sales_volumn_month` int unsigned not null default 0 comment '本月销量',
+  `sales_amount_month` bigint unsigned not null default 0 comment '本月业绩, 单位: 分',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
