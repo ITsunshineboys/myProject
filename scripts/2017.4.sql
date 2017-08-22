@@ -531,18 +531,16 @@ CREATE TABLE `effect` (
   `district` varchar(10) DEFAULT NULL COMMENT '区',
   `district_code` int(11) DEFAULT NULL COMMENT '区编码',
   `toponymy` varchar(10) DEFAULT NULL COMMENT '小区名称',
-  `street` varchar(10) DEFAULT NULL COMMENT '街道',
+  `street` varchar(50) DEFAULT NULL COMMENT '街道',
   `particulars` varchar(50) DEFAULT NULL COMMENT '厅室详情',
-  `site_particulars` varchar(100) DEFAULT NULL COMMENT '地址详情',
   `stairway` tinyint(5) DEFAULT '0' COMMENT '楼梯信息 0：无 1：有',
-  `stairdetail` varchar(20) DEFAULT NULL COMMENT '楼梯材料',
   `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
   `house_image` varchar(50) DEFAULT NULL COMMENT '户型图一张',
   `effect_images` varchar(255) DEFAULT NULL COMMENT '效果图1-6张',
   `images_name` varchar(10) DEFAULT NULL COMMENT '图片名称',
   `type` int(2) DEFAULT '0' COMMENT '0-普通，1-案列',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `labor_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
