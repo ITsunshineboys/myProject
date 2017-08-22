@@ -315,6 +315,7 @@ class Supplier extends ActiveRecord
 
         if (isset($data['type_org'])) {
             $data['type_org'] = self::TYPE_ORG[$data['type_org']];
+
         }
 
         if (isset($data['category_id'])) {
