@@ -515,6 +515,7 @@ CREATE TABLE `effect_picture` (
 
 CREATE TABLE `effect` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `decoration_articulars_id` int(11) DEFAULT NULL,
   `series_id` int(11) DEFAULT NULL COMMENT '系列id',
   `style_id` int(11) DEFAULT NULL COMMENT '风格id',
   `bedroom` int(5) DEFAULT NULL COMMENT '卧室',
@@ -540,7 +541,7 @@ CREATE TABLE `effect` (
   `images_name` varchar(10) DEFAULT NULL COMMENT '图片名称',
   `type` int(2) DEFAULT '0' COMMENT '0-普通，1-案列',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `labor_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -710,7 +711,6 @@ CREATE TABLE `decoration_list` (
 
 CREATE TABLE `decoration_particulars` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `decoration_list_id` int(11) DEFAULT NULL COMMENT '装修列表',
   `hall_area` int(10) DEFAULT NULL COMMENT '客餐厅及过道地面面积',
   `bedroom_area` int(10) DEFAULT NULL COMMENT '卧室地面面积',
   `toilet_area` int(10) DEFAULT NULL COMMENT '卫生间地面面积',
