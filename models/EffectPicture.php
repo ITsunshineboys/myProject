@@ -11,12 +11,14 @@ use yii\db\ActiveRecord;
 
 class EffectPicture extends ActiveRecord
 {
+    const SUP_BANK_CARD = 'effect_picture';
     const FIELDS_ADMIN = [
         'id',
         'effect_id',
-        'house_pictrue',
-        'vr_pictrue',
+        'effect_images',
         'images_user',
+        'series_id',
+        'style_id',
     ];
     /**
      * @return string 返回该AR类关联的数据表名
@@ -26,11 +28,16 @@ class EffectPicture extends ActiveRecord
         return 'effect_picture';
     }
 
-    public static  function plotAdd($post)
+    public static  function plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user)
     {
-        if ($post)
-        {
-            return 11;exit;
-        }
+        $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
+            'effect_id'      => $effect_id,
+            'effect_images'  => $effect_images,
+            'images_user'    => $images_user,
+            'series_id'      => $series_id,
+            'style_id'       => $style_id,
+        ])->execute();
+
+        return $res;
     }
 }

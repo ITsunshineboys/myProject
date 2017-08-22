@@ -552,8 +552,6 @@ class QuoteController extends Controller
         $district_chinese = District::findByCode($request['cur_county_id']);
         foreach ($request['house_informations'] as $house) {
             if ($house['is_ordinary'] != 1 ){
-                $series_id = $house['series'];
-                $style_id  = $house['style'];
                 $bedroom = $house['cur_room'];
                 $sittingRoom_diningRoom = $house['cur_hall'];
                 $toilet = $house['cur_toilet'];
@@ -573,9 +571,8 @@ class QuoteController extends Controller
                 $stairway = $house['have_stair'];
                 $add_time = time();
                 $house_image = $house['cur_imgSrc'];
-                $effect_images = $house['drawing_list'];
-                $images_name = $house['drawing_name'];
                 $type = $house['is_ordinary'];
+
                 $hall_area = $house['hall_area'];
                 $hall_perimeter = $house['hall_girth'];
                 $bedroom_area = $house['room_area'];
@@ -587,6 +584,19 @@ class QuoteController extends Controller
                 $modelling_length = $house['other_length'];
                 $flat_area = $house['flattop_area'];
                 $balcony_area = $house['balcony_area'];
+
+                $effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$type);
+
+                $effect_id = \Yii::$app->db->getLastInsertID();
+                (new DecorationParticulars())->plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
+
+                foreach ($house['drawing_list'] as $images){
+                    $effect_images = $images['all_drawing '];
+                    $series_id = $images['series'];
+                    $style_id = $images['style'];
+                    $images_user = $images['drawing_name'];
+                    ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
+                }
             }
             else {
                 $series_id = $house['series'];
@@ -614,7 +624,7 @@ class QuoteController extends Controller
                 $images_name = '案列';
                 $type = $house['is_ordinary'];
 
-                $case =(new Effect())->plotAdd(1,$series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type);
+                $_effect =(new Effect())->plotAdd($series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type);
 
                 $effect_id = \Yii::$app->db->getLastInsertID();
                 foreach ($house['all_goods'] as $goods){
@@ -624,28 +634,25 @@ class QuoteController extends Controller
                     $goods_three = $goods['three_name'];
                     $goods_code = $goods['good_code'];
                     $goods_quantity = $goods['good_quantity'];
-                    $works_data = (new WorksData())->plotAdd($goods_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity);
+                    (new WorksData())->plotAdd($goods_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity);
                 }
 
                 foreach ($house['worker_list'] as $worker){
                     $worker_id = $effect_id;
                     $worker_kind = $worker['worker_kind'];
                     $worker_price = $worker['price'];
-                    $worker_worker_data = (new WorksWorkerData())->plotAdd($worker_id,$worker_kind,$worker_price);
+                    (new WorksWorkerData())->plotAdd($worker_id,$worker_kind,$worker_price);
                 }
 
                 foreach ($house['backman_option'] as $backman){
                     $backman_id = $effect_id;
                     $backman_option = $backman['name'];
                     $backman_value  = $backman['num'];
-                    $worker_backman_data = (new WorksBackmanData())->plotAdd($backman_id,$backman_option,$backman_value);
+                    (new WorksBackmanData())->plotAdd($backman_id,$backman_option,$backman_value);
                 }
             }
         }
-        $decoration_particulars = (new DecorationParticulars())->plotAdd($hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
-        $house_type = \Yii::$app->db->getLastInsertID();
-        $effect =(new Effect())->plotAdd($house_type,$series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type);
-        if ($effect && $decoration_particulars || $case ||$works_data || $worker_worker_data || $worker_backman_data) {
+        if ($effect && $_effect) {
             $code = 200;
             return Json::encode([
                 'code' => $code,

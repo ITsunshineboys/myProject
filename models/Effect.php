@@ -184,12 +184,9 @@ class Effect extends ActiveRecord
         ];
     }
 
-    public function plotAdd($house_type,$series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type)
+    public function plotAdd($series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type)
     {
         $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
-            'decoration_articulars_id'=>$house_type,
-            'series_id'     => $series_id,
-            'style_id'      => $style_id,
             'bedroom'       => $bedroom,
             'sittingRoom_diningRoom' => $sittingRoom_diningRoom,
             'toilet'        => $toilet,
@@ -209,8 +206,6 @@ class Effect extends ActiveRecord
             'stairway'      => $stairway,
             'add_time'      => $add_time,
             'house_image'   => $house_image,
-            'effect_images' => $effect_images,
-            'images_name'   => $images_name,
             'type'          => $type,
         ])->execute();
 
