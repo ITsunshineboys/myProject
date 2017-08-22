@@ -319,15 +319,15 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    /**
+     /**
       * 获取商品信息-线下店商城
      * @param $goods_id
      * @param $goods_num
      * @param $goods_attr
      * @return array|bool
      */
-    public  function Getlinegoodsdata($goods_id, $goods_num){
-            $array  =(new Query())->from('goods AS a')->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.cover_image,b.icon,c.name,a.sku')->leftJoin('supplier AS b', 'b.id = a.supplier_id')->leftJoin('goods_brand AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])->one();
+    public static  function Getlinegoodsdata($goods_id, $goods_num){
+            $array  =(new Query())->from('goods AS a')->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.cover_image,b.icon,c.name,a.sku')->leftJoin(self::SUPPLIER.' AS b', 'b.id = a.supplier_id')->leftJoin('goods_brand AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])->one();
                 $logistics_template=(new Query())->from('logistics_template')->select('supplier_id,delivery_method,delivery_cost_default,delivery_number_default,delivery_cost_delta,delivery_number_delta,status')->where(['status'=>1,'id'=>$array['logistics_template_id']])->one();
             if ($logistics_template['delivery_method']==1){
                 $array['freight']=0;
@@ -522,7 +522,7 @@ class GoodsOrder extends ActiveRecord
      * @return array
      */
     public function Getorderinformation($order_no){
-        $array=self::getorderlist()->leftJoin('express AS b','b.order_no =a.order_no and b.sku=z.sku')->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.order_id,z.goods_price,a.order_refer')->where(['a.order_no'=>$order_no])->all();
+        $array=self::getorderlist()->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.order_id,z.goods_price,a.order_refer,a.buyer_message')->where(['a.order_no'=>$order_no])->all();
         $arr=self::getorderstatus($array);
         $output=array();
         $goods_num=0;
@@ -594,7 +594,7 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function  findshipping_type($order_no,$sku)
     {
-        $data=(new Query())->from(self::ORDER_GOODSLIST)->select('shipping_type')->where(['order_no'=>$order_no,'sku'=>$sku])->one()['shipping_type'];
+        $data=(new Query())->from(self::ORDER_GOODS_LIST)->select('shipping_type')->where(['order_no'=>$order_no,'sku'=>$sku])->one()['shipping_type'];
         if (!$data){
             $data=0;
         }
@@ -616,7 +616,7 @@ class GoodsOrder extends ActiveRecord
             $trans = \Yii::$app->db->beginTransaction();
             $e=1;
             try {
-                \Yii::$app->db->createCommand()->update(self::ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
+                \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
 
                 $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
                 if ($express){
@@ -641,7 +641,7 @@ class GoodsOrder extends ActiveRecord
             $e=1;
             try {
                 $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
-                \Yii::$app->db->createCommand()->update(self::ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
+                \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
                 if ($express){
                     \Yii::$app->db->createCommand()->update(EXPRESS, [
 
@@ -704,7 +704,7 @@ class GoodsOrder extends ActiveRecord
         return $res;
     }
 
-    /**
+   /**
      * 获取平台介入信息
      * @param $order_no
      * @param $sku
@@ -1008,7 +1008,7 @@ class GoodsOrder extends ActiveRecord
     }
     private static function getorderlist()
     {
-        $getorderlist  =(new Query())->from('goods_order AS a')->leftJoin('order_goodslist AS z','z.order_no = a.order_no');
+        $getorderlist  =(new Query())->from('goods_order AS a')->leftJoin(self::ORDER_GOODS_LIST.' AS z','z.order_no = a.order_no');
         return $getorderlist;
     }
     /**
@@ -1093,7 +1093,7 @@ class GoodsOrder extends ActiveRecord
         $count = $array->count();
         $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $page_size,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id,a.order_refer')
+            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id,a.order_refer,z.freight,a.return_insurance')
             ->orderBy($sort)
             ->limit($pagination->limit)
             ->all();
