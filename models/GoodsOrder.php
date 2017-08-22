@@ -569,7 +569,7 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function  findshipping_type($order_no,$sku)
     {
-        $data=(new Query())->from(ORDER_GOODSLIST)->select('shipping_type')->where(['order_no'=>$order_no,'sku'=>$sku])->one()['shipping_type'];
+        $data=(new Query())->from(self::ORDER_GOODSLIST)->select('shipping_type')->where(['order_no'=>$order_no,'sku'=>$sku])->one()['shipping_type'];
         if (!$data){
             $data=0;
         }
@@ -591,15 +591,15 @@ class GoodsOrder extends ActiveRecord
             $trans = \Yii::$app->db->beginTransaction();
             $e=1;
             try {
-                \Yii::$app->db->createCommand()->update(ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
+                \Yii::$app->db->createCommand()->update(self::ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
 
                 $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
                 if ($express){
-                    \Yii::$app->db->createCommand()->update(EXPRESS, [
+                    \Yii::$app->db->createCommand()->update(self::EXPRESS, [
                         'waybillname'      =>'送货上门',
                         'create_time'=>$create_time],'sku='.$sku.' and order_no='.$order_no)->execute();
                 }else{
-                    \Yii::$app->db->createCommand()->insert(EXPRESS,[
+                    \Yii::$app->db->createCommand()->insert(self::EXPRESS,[
                         'sku'    => $sku,
                         'order_no' =>$order_no,
                         'waybillname'      =>'送货上门',
@@ -616,7 +616,7 @@ class GoodsOrder extends ActiveRecord
             $e=1;
             try {
                 $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
-                \Yii::$app->db->createCommand()->update(ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
+                \Yii::$app->db->createCommand()->update(self::ORDER_GOODSLIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
                 if ($express){
                     \Yii::$app->db->createCommand()->update(EXPRESS, [
 
@@ -687,7 +687,7 @@ class GoodsOrder extends ActiveRecord
      */
     public static  function Getplatformdetail($order_no,$sku){
         $res=(new Query())
-            ->from(ORDER_PLATFORM_HANDLE)
+            ->from(self::ORDER_PLATFORM_HANDLE)
             ->where(['order_no'=>$order_no])
             ->andWhere(['sku'=>$sku])
             ->one();
@@ -801,14 +801,14 @@ class GoodsOrder extends ActiveRecord
      */
     private static  function  platformhandle2($order_no,$handle_type,$reason,$sku)
     {
-        $order=(new Query())->from(ORDER_PLATFORM_HANDLE)->select('id')->where(['order_no'=>$order_no])->one();
+        $order=(new Query())->from(self::ORDER_PLATFORM_HANDLE)->select('id')->where(['order_no'=>$order_no])->one();
         $time=time();
         if ($order){
             $trans = \Yii::$app->db->beginTransaction();
             $e=1;
             try {
                 $res= \Yii::$app->db->createCommand()
-                    ->update(ORDER_PLATFORM_HANDLE, [
+                    ->update(self::ORDER_PLATFORM_HANDLE, [
                         'handle' =>$handle_type,
                         'reasons' => $reason,
                         'creat_time' => $time,
@@ -821,7 +821,7 @@ class GoodsOrder extends ActiveRecord
                     ])
                     ->execute();
                 $res2=\Yii::$app->db->createCommand()
-                    ->update(ORDER_GOODSLIST, [
+                    ->update(self::ORDER_GOODS_LIST, [
                         'order_status' =>2,
                     ], [  'sku'=>$sku,
                         'order_no' =>$order_no])
@@ -836,7 +836,7 @@ class GoodsOrder extends ActiveRecord
             $e=1;
             try {
                 $res= \Yii::$app->db->createCommand()
-                    ->insert(ORDER_PLATFORM_HANDLE, [
+                    ->insert(self::ORDER_PLATFORM_HANDLE, [
                         'handle' =>$handle_type,
                         'reasons' => $reason,
                         'creat_time' => $time,
@@ -848,7 +848,7 @@ class GoodsOrder extends ActiveRecord
                     ])
                     ->execute();
                 $res2=\Yii::$app->db->createCommand()
-                    ->update(ORDER_GOODSLIST, [
+                    ->update(self::ORDER_GOODS_LIST, [
                         'order_status' =>2,
                     ], [ 'sku'=>$sku,
                         'order_no' =>$order_no])
