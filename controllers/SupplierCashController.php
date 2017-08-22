@@ -92,7 +92,7 @@ class SupplierCashController extends Controller
     public function actionGetCashList()
     {
         $user = self::userIdentity();
-        if (!is_numeric($user)) {
+        if (!is_int($user)) {
             return $user;
         }
         $request = \Yii::$app->request;
@@ -103,7 +103,9 @@ class SupplierCashController extends Controller
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $status = trim(htmlspecialchars($request->post('status', '')), '');
         if (($time_type == 'custom' && (!$time_start || !$time_end))
-            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))) {
+            || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))
+            || !in_array($status, array_keys(\Yii::$app->params['supplier_cash_statuses']))
+        ) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -129,7 +131,7 @@ class SupplierCashController extends Controller
     public function actionGetCash($admin = 0)
     {
         $user = self::userIdentity();
-        if (!is_numeric($user)) {
+        if (!is_int($user)) {
             return $user;
         }
         $request = \Yii::$app->request;
@@ -164,7 +166,7 @@ class SupplierCashController extends Controller
     public function actionCashIndex()
     {
         $user = self::userIdentity();
-        if (!is_numeric($user)) {
+        if (!is_int($user)) {
             return $user;
         }
         $cash_manager = new SupplierCashManager();
@@ -190,7 +192,7 @@ class SupplierCashController extends Controller
     public function actionOrderListToday()
     {
         $user = self::userIdentity();
-        if (!is_numeric($user)) {
+        if (!is_int($user)) {
             return $user;
         }
         $request = \Yii::$app->request;
@@ -226,7 +228,7 @@ class SupplierCashController extends Controller
     public function actionCashListToday()
     {
         $user = self::userIdentity();
-        if (!is_numeric($user)) {
+        if (!is_int($user)) {
             return $user;
         }
         $request = \Yii::$app->request;
@@ -239,6 +241,7 @@ class SupplierCashController extends Controller
         $search = trim(htmlspecialchars($request->post('search', '')), '');
         if (($time_type == 'custom' && (!$time_start || !$time_end))
             || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))
+            || !in_array($status, array_keys(\Yii::$app->params['supplier_cash_statuses']))
         ) {
             $code = 1000;
             return Json::encode([
@@ -274,7 +277,7 @@ class SupplierCashController extends Controller
     {
         if (\Yii::$app->request->isPost) {
             $user = self::userIdentity();
-            if (!is_numeric($user)) {
+            if (!is_int($user)) {
                 return $user;
             }
             $code = 1000;

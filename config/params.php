@@ -118,6 +118,12 @@ return [
         '2' => '审核通过',
         '3' => '未认证',
     ],
+    'supplier_cash_statuses' => [
+        '1' => '未提现',
+        '2' => '提现中',
+        '3' => '已提现',
+        '4' => '提现失败',
+    ],
     'districts' => $districts,
 //    'pinyin'=>$pinyin,
     'auth' => $auth,

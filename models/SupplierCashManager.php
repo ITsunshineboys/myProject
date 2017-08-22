@@ -3,10 +3,7 @@
 namespace app\models;
 
 use app\services\ModelService;
-use app\services\StringService;
-use function GuzzleHttp\Psr7\str;
 use yii\data\Pagination;
-use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\Query;
@@ -189,11 +186,11 @@ class SupplierCashManager extends ActiveRecord
     }
 
     /**
-     * 获取所有已提现的提现单数量
+     * 获取所有已处理的提现单数量
      */
     public function getPayedCashesCountAll()
     {
-        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => 3])->count();
+        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => [3, 4]])->count();
     }
 
     /**
@@ -201,7 +198,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getNotPayedCashesCountAll()
     {
-        return (new Query())->from(self::SUP_CASHREGISTER)->where(['<>', 'status', 3])->count();
+        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => [1, 2]])->count();
     }
 
     /**
@@ -255,7 +252,9 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
     {
-        $query = (new Query())->from(self::SUP_CASHREGISTER . ' as g')->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
+        $query = (new Query())
+            ->from(self::SUP_CASHREGISTER . ' as g')
+            ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 'g.supplier_id', 'g.status', 'g.real_money']);
         if ($status) {
             $query->andWhere(['g.status' => $status]);
@@ -264,7 +263,7 @@ class SupplierCashManager extends ActiveRecord
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
         }
-        if ($search) {
+        if (isset($search) && trim($search) == $search) {
             $query->andFilterWhere(['like', 'g.supplier_id', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);
         }
@@ -299,7 +298,8 @@ class SupplierCashManager extends ActiveRecord
      */
     public function doCashDeal($cash_id, $status, $reason, $real_money)
     {
-        $supplier_cash = (new Query())->from(self::SUP_CASHREGISTER)
+        $supplier_cash = (new Query())
+            ->from(self::SUP_CASHREGISTER)
             ->where(['id' => $cash_id])->select(['cash_money', 'supplier_id', 'status', 'transaction_no'])->one();
         $cash_money = $supplier_cash['cash_money'];
         $supplier_id = (int)$supplier_cash['supplier_id'];
