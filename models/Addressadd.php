@@ -63,6 +63,7 @@ class Addressadd extends  ActiveRecord
          }
 
      }
+     
     /**
      * 无登录app-获取收货地址
      * @param $addresstoken

@@ -26,6 +26,10 @@ const  ORDER_PLATFORM_HANDLE='order_platform_handle';
 const   EXPRESS='express';
 class GoodsOrder extends ActiveRecord
 {
+    const SUPPLIER='supplier';
+    const ORDER_PLATFORM_HANDLE='order_platform_handle';
+    const EXPRESS='express';
+    const ORDER_GOODS_LIST='order_goodslist';
     const PAY_STATUS_UNPAID = 0;
     const PAY_STATUS_PAID = 1;
     const PAY_STATUS_REFUNDED = 2;
@@ -81,6 +85,11 @@ class GoodsOrder extends ActiveRecord
             return (int)$query->count();
         }
 
+    /**
+     * [Alipayeffect_earnstnotifydatabase description]
+     * @param [type] $arr  [description]
+     * @param [type] $post [description]
+     */
     public static function Alipayeffect_earnstnotifydatabase($arr,$post)
     {
         $effect_id=$arr[0];
@@ -89,19 +98,24 @@ class GoodsOrder extends ActiveRecord
         $trans = \Yii::$app->db->beginTransaction();
         $e=1;
         $time=time();
-        try {
-            Yii::$app->db->createCommand()->insert('effect_earnst',[
-                'effect_id' =>$effect_id,
-                'name'      =>$name,
-                'phone'     =>$phone,
-                'earnest'   =>$post['total_amount']*100,
-                'create_time'      =>$time
-            ])->execute();
+         try {
+            $effect_earnst = new EffectEarnst();
+            $effect_earnst->effect_id=$effect_id;
+            $effect_earnst->name=$name;
+            $effect_earnst->phone=$phone;
+            $effect_earnst->earnest=$post['total_amount']*100;
+            $effect_earnst->create_time=$time;
+            $res=$effect_earnst->save();
+            if (!$res){
+                $trans->rollBack();
+                return false;
+            }
+            $trans->commit();
+            return true;
         } catch (Exception $e) {
             $trans->rollBack();
+            return false;
         }
-        $trans->commit();
-        return $e;
     }
     /**
      * 支付宝线下商城数据库操作
@@ -846,7 +860,7 @@ class GoodsOrder extends ActiveRecord
             return $e;
         }
     }
-    /**
+   /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
@@ -903,46 +917,69 @@ class GoodsOrder extends ActiveRecord
                     break;
             }
             $received=array();
-           if ($data[$k]['status']=='待收货'){
-               $waybillnumber=Express::find()->select('waybillnumber')->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])->one()['waybillnumber'];
-               $received[$k]['model']=(new Express())->getorder($waybillnumber);
-               if ($received[$k]['model']['ischeck']==1){
-                   $data[$k]['status']='已完成';
-
-                   $supplier_id[$k]=self::find()->select('supplier_id')->where(['order_no'=>$data[$k]['order_no']])->asArray()->one()['supplier_id'];
-                   $supplier[$k]=Supplier::find()->where(['id'=>$supplier_id[$k]])->asArray()->one();
-                   $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
-                   $trans = \Yii::$app->db->beginTransaction();
-                   try {
-                       $res=Yii::$app->db->createCommand()->update('order_goodslist', ['order_status' =>1,'shipping_status'=>2],'order_id='.$data[$k]['order_id'].' and sku='.$data[$k]['sku'])->execute();
-                       $res1=Yii::$app->db->createCommand()->update('supplier', ['balance' =>($supplier[$k]['balance']+$money[$k]),'availableamount'=>($supplier[$k]['availableamount']+$money[$k])],'id='.$supplier[$k]['id'])->execute();
-                       $rand=rand(10000,99999);
-                       $time=time();
-                       $month=date('m',$time);
-                       $day=date('d',$time);
-                       do {
-                           $transaction_no=$month.$day.$supplier['shop_no'].$rand;
-                       } while ( $transaction_no==(new Query)->from('supplier_cashregister')->select('transaction_no')->where(['transaction_no'=>$transaction_no])->one()['transaction_no']);
-                       $res2=Yii::$app->db->createCommand()->insert('supplier_accessdetail',[
-                           'access_type'    => 1,
-                           'access_money' =>$money[$k],
-                           'create_time'      =>time(),
-                           'order_no'  =>$data[$k]['order_no'],
-                           'transaction_no'=>$transaction_no,
-                           'supplier_id'=>$supplier_id[$k]
-                       ])->execute();
-                   } catch (Exception $e) {
-                       $trans->rollBack();
+            if ($data[$k]['status']=='待收货'){
+                   $waybillnumber=Express::find()->select('waybillnumber')->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])->one()['waybillnumber'];
+                   $received[$k]['model']=(new Express())->getorder($waybillnumber);
+                   if ($received[$k]['model']['ischeck']==1){
+                       $data[$k]['status']='已完成';
+//                       var_dump($data);
+//                       exit;
+                       $supplier_id[$k]=self::find()->select('supplier_id')->where(['order_no'=>$data[$k]['order_no']])->asArray()->one()['supplier_id'];
+                       $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
+                       $res[$k]=self::changeOrderStatus($data[$k]['order_no'],$data[$k]['sku'],$supplier_id[$k],$money[$k]);
+                       if (!$res || $res==false){
+                           return false;
+                       }
                    }
-                   $trans->commit();
-               }
-           };
+               };
             unset($data[$k]['customer_service']);
             unset($data[$k]['pay_status']);
             unset($data[$k]['order_status']);
             unset($data[$k]['shipping_status']);
         }
         return $data;
+    }
+
+
+    /**
+     * @param $order_no
+     * @param $sku
+     * @param $supplier_id
+     * @param $money
+     * @return bool
+     */
+    private static  function  changeOrderStatus($order_no,$sku,$supplier_id,$money){
+        $trans = \Yii::$app->db->beginTransaction();
+        $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
+        $rand=rand(10000,99999);
+        $time=time();
+        $month=date('m',$time);
+        $day=date('d',$time);
+        do {
+            $transaction_no=$month.$day.$supplier->shop_no.$rand;
+        } while ( $transaction_no==SupplierCashregister::find()->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no']);
+        try {
+            \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
+            $supplier->balance=$supplier->balance+$money;
+            $supplier->availableamount=$supplier->availableamount+$money;
+            $ress=Yii::$app->db->createCommand()->insert('supplier_accessdetail',[
+                'access_type'    => 1,
+                'access_money' =>$money,
+                'create_time'      =>$time,
+                'order_no'  =>$order_no,
+                'transaction_no'=>$transaction_no,
+                'supplier_id'=>$supplier_id
+            ])->execute();
+            if (!$ress){
+                $trans->rollBack();
+                return false;
+            }
+            $supplier->save(false);
+            $trans->commit();
+        } catch (Exception $e) {
+            $trans->rollBack();
+            return false;
+        }
     }
     private static function getorderlist()
     {
