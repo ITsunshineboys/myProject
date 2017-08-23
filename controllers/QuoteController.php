@@ -599,8 +599,6 @@ class QuoteController extends Controller
                 }
             }
             else {
-                $series_id = $house['series'];
-                $style_id  = $house['style'];
                 $bedroom = $house['cur_room'];
                 $sittingRoom_diningRoom = $house['cur_hall'];
                 $toilet = $house['cur_toilet'];
@@ -620,11 +618,9 @@ class QuoteController extends Controller
                 $stairway = $house['have_stair'];
                 $add_time = time();
                 $house_image = $house['cur_imgSrc'];
-                $effect_images = $house['drawing_list'];
-                $images_name = '案列';
                 $type = $house['is_ordinary'];
 
-                $_effect =(new Effect())->plotAdd($series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type);
+                $_effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$type);
 
                 $effect_id = \Yii::$app->db->getLastInsertID();
                 foreach ($house['all_goods'] as $goods){
@@ -652,7 +648,7 @@ class QuoteController extends Controller
                 }
             }
         }
-        if ($effect && $_effect) {
+        if ($effect || $_effect) {
             $code = 200;
             return Json::encode([
                 'code' => $code,
