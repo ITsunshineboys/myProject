@@ -524,7 +524,7 @@ class QuoteController extends Controller
                         $effect_images = $images['all_drawing'];
                         $series_id     = $images['series'];
                         $style_id      = $images['style'];
-                        $images_user   = '案例';
+                        $images_user   = '张放添加案例图片';
                         ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
                     }
                 }
