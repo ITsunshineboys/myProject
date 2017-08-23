@@ -441,117 +441,9 @@ class QuoteController extends Controller
     {
         $request = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
-//        if (!$request) {
-//            $code = 1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        if (!$user) {
-//            $code = 1052;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        $request =
-//            [
-//                'house_name'=>'孩子不哭',
-//                'province_code'=>510000,
-//                'city_code'=>510000,
-//                'cur_county_id'=>510000,
-//                'address'=>'因门口',
-//                'house_informations'=>
-//                    [
-//                        ['house_type_name'=>'阿萨德',
-//                            'area'=>60,
-//                            'cur_room'=>60,
-//                            'cur_hall'=>60,
-//                            'cur_toilet'=>60,
-//                            'cur_kitchen'=>60,
-//                            'cur_imgSrc'=>60,
-//                            'have_stair'=>60,
-//                            'high'=>60,
-//                            'window'=>60,
-//                            'series'=>60,
-//                            'style'=>60,
-//                            'is_ordinary'=>1,
-//                            'drawing_list'=>60,
-//                            'all_goods'=>
-//                                [
-//                                    [
-//                                        'first_name'=>1,
-//                                        'second_name'=>1,
-//                                        'three_name'=>1,
-//                                        'good_code'=>1,
-//                                        'good_quantity'=>1,
-//                                    ],
-//                                    [
-//
-//                                        'first_name'=>1,
-//                                        'second_name'=>1,
-//                                        'three_name'=>1,
-//                                        'good_code'=>1,
-//                                        'good_quantity'=>1,
-//                                    ],
-//                                ],
-//                            'worker_list'=>
-//                                [
-//                                    [
-//                                        'worker_kind'=>'木工',
-//                                        'price'=>300,
-//                                    ],
-//                                    [
-//                                        'worker_kind'=>'水电',
-//                                        'price'=>300,
-//                                    ],
-//                                ],
-//                            'backman_option'=>
-//                                [
-//                                    [
-//                                        'name'=>'123',
-//                                        'num'=>1,
-//                                    ],
-//
-//                                ]
-//                        ],
-//                        [
-//                            'area'=>60,
-//                            'balcony_area'=>1,
-//                            'cur_hall'=>1,
-//                            'cur_imgSrc'=>1,
-//                            'cur_kitchen'=>1,
-//                            'cur_room'=>1,
-//                            'cur_toilet'=>1,
-//                            'flattop_area'=>1,
-//                            'hall_area'=>1,
-//                            'hall_girth'=>1,
-//                            'have_stair'=>1,
-//                            'high'=>1,
-//                            'house_type_name'=>1,
-//                            'is_ordinary'=>0,
-//                            'kitchen_area'=>1,
-//                            'kitchen_girth'=>1,
-//                            'other_length'=>1,
-//                            'room_area'=>1,
-//                            'room_girth'=>1,
-//                            'toilet_area'=>1,
-//                            'toilet_girth'=>1,
-//                            'window'=>1,
-//                            'drawing_name'=>1,
-//                            'drawing_list'=>1,
-//                            'series'=>1,
-//                            'style'=>1,
-//                        ],
-//                    ],
-//
-//
-//            ];
-
-        $province_chinese = District::findByCode($request['province_code']);
-        $city_chinese = District::findByCode($request['city_code']);
-        $district_chinese = District::findByCode($request['cur_county_id']);
+        $province_chinese = District::findByCode((int)$request['province_code']);
+        $city_chinese = District::findByCode((int)$request['city_code']);
+        $district_chinese = District::findByCode((int)$request['cur_county_id']);
         foreach ($request['house_informations'] as $house) {
             if ($house['is_ordinary'] != 1 ){
                 $bedroom = $house['cur_room'];
@@ -571,7 +463,6 @@ class QuoteController extends Controller
                 $street = $request['address'];
                 $particulars = $house['house_type_name'];
                 $stairway = $house['have_stair'];
-                $add_time = time();
                 $house_image = $house['cur_imgSrc'];
                 $type = $house['is_ordinary'];
 
@@ -587,7 +478,7 @@ class QuoteController extends Controller
                 $flat_area = $house['flattop_area'];
                 $balcony_area = $house['balcony_area'];
 
-                $effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$type);
+                $effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,0);
 
                 $effect_id = \Yii::$app->db->getLastInsertID();
                 (new DecorationParticulars())->plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
@@ -601,7 +492,6 @@ class QuoteController extends Controller
                         ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
                     }
                 }
-
             }
             else {
                 $bedroom = $house['cur_room'];
@@ -621,11 +511,11 @@ class QuoteController extends Controller
                 $street = $request['address'];
                 $particulars = $house['house_type_name'];
                 $stairway = $house['have_stair'];
-                $add_time = time();
                 $house_image = $house['cur_imgSrc'];
                 $type = $house['is_ordinary'];
+                $stair_id = $house['stair'];
 
-                $_effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$type);
+                $_effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$stair_id);
 
                 $effect_id = \Yii::$app->db->getLastInsertID();
                 foreach ($house['all_goods'] as $goods){

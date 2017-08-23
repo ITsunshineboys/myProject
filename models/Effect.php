@@ -181,7 +181,7 @@ class Effect extends ActiveRecord
         ];
     }
 
-    public function plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$type)
+    public function plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$stair_id = 0)
     {
         $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
             'bedroom'       => $bedroom,
@@ -201,9 +201,10 @@ class Effect extends ActiveRecord
             'street'        => $street,
             'particulars'   => $particulars,
             'stairway'      => $stairway,
-            'add_time'      => $add_time,
+            'add_time'      => time(),
             'house_image'   => $house_image,
             'type'          => $type,
+            'stair_id'      => $stair_id,
         ])->execute();
 
         return $res;
