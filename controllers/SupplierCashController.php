@@ -92,6 +92,7 @@ class SupplierCashController extends Controller
         if (!is_int($user)) {
             return $user;
         }
+
         $request = \Yii::$app->request;
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
@@ -99,6 +100,7 @@ class SupplierCashController extends Controller
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $status = trim(htmlspecialchars($request->post('status', '')), '');
+
         if (($time_type == 'custom' && (!$time_start || !$time_end))
             || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))
             || !in_array($status, array_keys(\Yii::$app->params['supplier_cash_statuses']))
@@ -110,10 +112,12 @@ class SupplierCashController extends Controller
                 'data' => null
             ]);
         }
+
         $supplier = Supplier::find()
             ->select('id')->where(['uid' => $user])->one();
         $data = (new SupplierCashManager())
             ->getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -131,6 +135,7 @@ class SupplierCashController extends Controller
         if (!is_int($user)) {
             return $user;
         }
+
         $request = \Yii::$app->request;
         $cash_id = (int)$request->get('cash_id', '');
         if (!$cash_id) {
@@ -141,11 +146,13 @@ class SupplierCashController extends Controller
                 'data' => null
             ]);
         }
+
         $supplier = Supplier::find()->select('id')->where(['uid' => $user])->one();
         if ($admin) {
             $supplier['id'] = 0;
         }
         $data = (new SupplierCashManager())->GetCash($cash_id, $supplier['id']);
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -166,6 +173,7 @@ class SupplierCashController extends Controller
         if (!is_int($user)) {
             return $user;
         }
+
         $cash_manager = new SupplierCashManager();
         $data = [];
         $data['orders_all'] = $cash_manager->getPayedOrdersAll();
@@ -174,6 +182,7 @@ class SupplierCashController extends Controller
         $data['cashes_today'] = $cash_manager->getPayedCashesToday();
         $data['payed_cashes_count'] = $cash_manager->getPayedCashesCountAll();
         $data['not_payed_cashes_count'] = $cash_manager->getNotPayedCashesCountAll();
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -192,6 +201,7 @@ class SupplierCashController extends Controller
         if (!is_int($user)) {
             return $user;
         }
+
         $request = \Yii::$app->request;
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
@@ -199,6 +209,7 @@ class SupplierCashController extends Controller
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
+
         if (($time_type == 'custom' && (!$time_start || !$time_end))
             || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))
         ) {
@@ -209,8 +220,10 @@ class SupplierCashController extends Controller
                 'data' => null
             ]);
         }
+
         $data = (new SupplierCashManager())
             ->getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -228,6 +241,7 @@ class SupplierCashController extends Controller
         if (!is_int($user)) {
             return $user;
         }
+
         $request = \Yii::$app->request;
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
@@ -236,6 +250,7 @@ class SupplierCashController extends Controller
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $status = trim(htmlspecialchars($request->post('status', 3)), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
+
         if (($time_type == 'custom' && (!$time_start || !$time_end))
             || !in_array($time_type, array_keys(\Yii::$app->params['timeTypes']))
             || !in_array($status, array_keys(\Yii::$app->params['supplier_cash_statuses']))
@@ -247,7 +262,10 @@ class SupplierCashController extends Controller
                 'data' => null
             ]);
         }
-        $data = (new SupplierCashManager())->getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search);
+
+        $data = (new SupplierCashManager())
+            ->getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search);
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -277,6 +295,7 @@ class SupplierCashController extends Controller
             if (!is_int($user)) {
                 return $user;
             }
+
             $code = 1000;
             $request = \Yii::$app->request;
             $cash_id = (int)$request->post('cash_id', '');
@@ -290,6 +309,7 @@ class SupplierCashController extends Controller
                     'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+
             $data = (new SupplierCashManager())->doCashDeal($cash_id, $status, $reason, $real_money);
 
             if ($data) {
@@ -306,6 +326,7 @@ class SupplierCashController extends Controller
             ]);
 
         }
+
         $code = 1050;
         return Json::encode([
             'code' => $code,

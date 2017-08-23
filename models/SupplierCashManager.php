@@ -28,7 +28,10 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getCashList($supplier_id, $page, $page_size, $time_type, $time_start, $time_end, $status)
     {
-        $query = (new \yii\db\Query())->from(self::SUP_CASHREGISTER)->where(['supplier_id' => $supplier_id]);
+        $query = (new \yii\db\Query())
+            ->from(self::SUP_CASHREGISTER)
+            ->where(['supplier_id' => $supplier_id]);
+
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
@@ -36,11 +39,13 @@ class SupplierCashManager extends ActiveRecord
         if ($status) {
             $query->andWhere(['status' => $status]);
         }
+
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
+
         foreach ($arr as &$v) {
             $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
             if ($v['handle_time']) {
@@ -55,6 +60,7 @@ class SupplierCashManager extends ActiveRecord
                 $v['real_money'] = sprintf('%.2f', 0);
             }
         }
+
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;
     }
@@ -67,7 +73,10 @@ class SupplierCashManager extends ActiveRecord
      */
     public function GetCash($cash_id, $supplier_id = 0)
     {
-        $query = (new \yii\db\Query())->from(self::SUP_CASHREGISTER)->where(['id' => $cash_id]);
+        $query = (new \yii\db\Query())
+            ->from(self::SUP_CASHREGISTER)
+            ->where(['id' => $cash_id]);
+
         if ($supplier_id) {
             $query->andWhere(['supplier_id' => $supplier_id]);
         }
@@ -81,12 +90,14 @@ class SupplierCashManager extends ActiveRecord
         if ($arr['handle_time']) {
             $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
         }
+
         $supplier_id = $arr['supplier_id'];
         $bankcard = self::GetBankcard($supplier_id);
         $supplier = self::GetSupplier($supplier_id);
         if (!$bankcard) {
             return null;
         }
+
         $arr['card_no'] = $bankcard['bankcard'];
         $arr['supplier_name'] = $supplier['shop_name'];
         $arr['bank_name'] = $bankcard['bankname'];
@@ -111,15 +122,13 @@ class SupplierCashManager extends ActiveRecord
      */
     private function GetBankcard($supplier_id)
     {
-        $u_id = self::GetSupplier($supplier_id)['uid'];
-        $data = (new Query())->from(self::USER_BANKINFO)->where(['u_id' => $u_id])->one();
-        return $data;
+        $u_id = (int)self::GetSupplier($supplier_id)['uid'];
+        return (new Query())->from(self::USER_BANKINFO)->where(['u_id' => $u_id])->one();
     }
 
     private function GetSupplier($supplier_id)
     {
-        $data = (new Query())->from(self::SUPPLIER)->where(['id' => $supplier_id])->one();
-        return $data;
+        return (new Query())->from(self::SUPPLIER)->where(['id' => $supplier_id])->one();
     }
 
     /**
@@ -140,7 +149,11 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedOrdersAll()
     {
-        $data = (new Query())->from(self::GOODS_ORDER)->where(['pay_status' => 1])->sum('amount_order');
+        $data = (new Query())
+            ->from(self::GOODS_ORDER)
+            ->where(['pay_status' => 1])
+            ->sum('amount_order');
+
         if ($data == null) {
             return 0;
         }
@@ -153,7 +166,13 @@ class SupplierCashManager extends ActiveRecord
     public function getPayedOrdersToday()
     {
         $today = $this->getToday();
-        $data = (new Query())->from(self::GOODS_ORDER)->where(['pay_status' => 1])->andwhere('paytime >= ' . $today[0])->andWhere('paytime <= ' . $today[1])->sum('amount_order');
+        $data = (new Query())
+            ->from(self::GOODS_ORDER)
+            ->where(['pay_status' => 1])
+            ->andwhere('paytime >= ' . $today[0])
+            ->andWhere('paytime <= ' . $today[1])
+            ->sum('amount_order');
+
         if ($data == null) {
             return 0;
         }
@@ -165,7 +184,11 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedCashesAll()
     {
-        $data = (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => 3])->sum('cash_money');
+        $data = (new Query())
+            ->from(self::SUP_CASHREGISTER)
+            ->where(['status' => 3])
+            ->sum('cash_money');
+
         if ($data == null) {
             return 0;
         }
@@ -178,7 +201,13 @@ class SupplierCashManager extends ActiveRecord
     public function getPayedCashesToday()
     {
         $today = $this->getToday();
-        $data = (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => 3])->andwhere('handle_time >= ' . $today[0])->andWhere('handle_time <= ' . $today[1])->sum('cash_money');
+        $data = (new Query())
+            ->from(self::SUP_CASHREGISTER)
+            ->where(['status' => 3])
+            ->andwhere('handle_time >= ' . $today[0])
+            ->andWhere('handle_time <= ' . $today[1])
+            ->sum('cash_money');
+
         if ($data == null) {
             return 0;
         }
@@ -213,18 +242,22 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search)
     {
-        $query = (new Query())->from(self::GOODS_ORDER . ' g')
+        $query = (new Query())
+            ->from(self::GOODS_ORDER . ' g')
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->where(['g.pay_status' => 1]);
+
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['between', 'g.paytime', $time_start, $time_end]);
         }
+
         if ($search) {
             $query->andFilterWhere(['like', 'g.supplier_id', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search])
                 ->orFilterWhere(['like', 'g.order_no', $search]);
         }
+
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
@@ -235,8 +268,8 @@ class SupplierCashManager extends ActiveRecord
             $v['paytime'] = date('Y-m-d H:i', $v['paytime']);
             $v['amount_order'] = sprintf('%.2f', (float)$v['amount_order'] / 100);
         }
-        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
-        return $data;
+
+        return ModelService::pageDeal($arr, $count, $page, $page_size);
     }
 
     /**
@@ -259,6 +292,7 @@ class SupplierCashManager extends ActiveRecord
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
+
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
@@ -267,11 +301,13 @@ class SupplierCashManager extends ActiveRecord
             $query->andFilterWhere(['like', 'g.supplier_id', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);
         }
+
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
+
         foreach ($arr as &$v) {
             $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
             $v['cash_money'] = sprintf('%.2f', (float)$v['cash_money'] / 100);
@@ -283,8 +319,8 @@ class SupplierCashManager extends ActiveRecord
                 $v['real_money'] = sprintf('%.2f', 0);
             }
         }
-        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
-        return $data;
+
+        return ModelService::pageDeal($arr, $count, $page, $page_size);
     }
 
 
@@ -300,11 +336,15 @@ class SupplierCashManager extends ActiveRecord
     {
         $supplier_cash = (new Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['id' => $cash_id])->select(['cash_money', 'supplier_id', 'status', 'transaction_no'])->one();
+            ->where(['id' => $cash_id])
+            ->select(['cash_money', 'supplier_id', 'status', 'transaction_no'])
+            ->one();
+
         $cash_money = $supplier_cash['cash_money'];
         $supplier_id = (int)$supplier_cash['supplier_id'];
         $old_status = (int)$supplier_cash['status'];
         $transaction_no = $supplier_cash['transaction_no'];
+
         //初始状态不能为已经处理过的
         if (!$cash_money || !$supplier_id || !$old_status || $old_status == 3 || $old_status == 4) {
             return null;
@@ -356,6 +396,7 @@ class SupplierCashManager extends ActiveRecord
         } catch (Exception $e) {
             $trans->rollBack();
         }
+
         $trans->commit();
         return $e;
     }
