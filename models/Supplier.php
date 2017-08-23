@@ -85,6 +85,7 @@ class Supplier extends ActiveRecord
         'name',
         'licence',
         'licence_image',
+        'reject_reason',
     ];
     const FIELDS_VIEW_MALL_MODEL = [
         'icon',
