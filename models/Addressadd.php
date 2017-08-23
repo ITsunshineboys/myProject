@@ -84,7 +84,7 @@ class Addressadd extends  ActiveRecord
     }
 
 
-     /**
+      /**
      * @param $district_code
      * @param $region
      * @param $consignee
@@ -94,6 +94,11 @@ class Addressadd extends  ActiveRecord
      */
     public static function UserAddressAdd($district_code,$region,$consignee,$mobile,$user_id)
     {
+            $address_count=self::find()->where(['uid'=>$user_id])->count();
+            if ($address_count>=6){
+                $code=1026;
+                return $code;
+            }
             $tran = Yii::$app->db->beginTransaction();
             try{
                 $address=self::find()->where(['uid'=>$user_id])->all();
@@ -129,6 +134,91 @@ class Addressadd extends  ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+    }
+
+
+    /**
+     * select Default receive addres
+     * @param $address_id
+     * @param $user
+     * @return int
+     */
+    public  static function  SetDefaultAddress($address_id,$user)
+    {
+        $user_address=self::find()->where(['id'=>$address_id])->one();
+        if ($user->id!=$user_address->uid){
+            $code=403;
+            return $code;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $user_address->default=1;
+            $res =$user_address->save();
+            if (!$res){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+
+            $address=self::find()
+                ->where("id != {$address_id}")
+                ->andWhere(['uid'=>$user->id])
+                ->all();
+            foreach ($address as $k =>$v)
+            {
+                $address[$k]->default=0;
+                $res[$k]=$address[$k]->save();
+                if (!$res[$k]){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e)
+        {
+            $code=500;
+            $tran->rollBack();
+            return $code;
+        }
+    }
+
+
+    /**
+     * @param $consignee
+     * @param $address_id
+     * @param $district_code
+     * @param $mobile
+     * @param $region
+     * @return int
+     */
+    public static  function  updateAddress($consignee,$address_id,$district_code,$mobile,$region)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+
+            $user_address=self::find()->where(['id'=>$address_id])->one();
+            $user_address->consignee=$consignee;
+            $user_address->region=$region;
+            $user_address->mobile=$mobile;
+            $user_address->district=$district_code;
+            $res =$user_address->save();
+            if (!$res){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e)
+        {
+            $code=500;
+            $tran->rollBack();
+            return $code;
+        }
     }
 
 

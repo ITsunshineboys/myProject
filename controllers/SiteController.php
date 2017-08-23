@@ -8,7 +8,9 @@ use app\models\User;
 use app\models\Role;
 use app\models\District;
 use app\models\UserRole;
+use app\models\LogisticsDistrict;
 use app\models\Addressadd;
+use app\models\Invoice;
 use app\services\BasisDecorationService;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
@@ -1308,10 +1310,10 @@ class SiteController extends Controller
 
 
     /**
-     * user add address
+     * add receive user address
      * @return string
      */
-    public function actionUserReceiveAddressAdd(){
+    public function actionAddReceiveAddress(){
         $user = Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -1333,6 +1335,110 @@ class SiteController extends Controller
             ]);
         }
         $code=Addressadd::UserAddressAdd($district_code,$region,$consignee,$mobile,$user->id);
+        if ($code == 200){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+    
+    /**
+     * get receive  address by user  and  default
+     * @return string
+     */
+    public function actionGetReceiveAddress()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $addressList=Addressadd::find()->where(['uid'=>$user->id])->all();
+        foreach ($addressList as $k =>$v)
+        {
+            $addressList[$k]['district']=LogisticsDistrict::getdistrict($addressList[$k]['district']);
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' =>'ok',
+            'data'=>$addressList
+        ]);
+    }
+
+    /**
+     * select default address
+     * @return string
+     */
+    public function actionSetDefaultAddress(){
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $address_id=trim($request->post('address_id',''));
+        if (!$address_id){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=Addressadd::SetDefaultAddress($address_id,$user);
+        if ($code == 200){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function actionUpdateReceiveAddress()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $address_id=trim($request->post('address_id',''));
+        $consignee=trim($request->post('consignee',''));
+        $district_code=trim($request->post('district_code'));
+        $mobile=trim($request->post('mobile',''));
+        $region=trim($request->post('region',''));
+        if (!$consignee || !$address_id  || !$district_code || !$mobile || !$region)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=Addressadd::updateAddress($consignee,$address_id,$district_code,$mobile,$region);
         if ($code == 200){
             return Json::encode([
                 'code' => $code,
