@@ -31,11 +31,11 @@ class Alipay extends  ActiveRecord
 //        }
     }
 
-    public function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance){
+    public function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
         $notify_url='http://test.cdlhzz.cn:888/order/alipayeffect_earnstnotify';
         $return_url='http://test.cdlhzz.cn:888/line/effect_earnstsuccess_pay';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
-        $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id.'&'.$supplier_id.'&'.$freight.'&'.$return_insurance;
+        $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id.'&'.$supplier_id.'&'.$freight.'&'.$return_insurance.'&'.$buyer_message;
         $passback_params=urlencode($str);
         //超时时间
         $timeout_express="1m";

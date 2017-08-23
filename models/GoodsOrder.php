@@ -233,7 +233,7 @@ class GoodsOrder extends ActiveRecord
          return $e;
      }
 
-     /**
+    /**
      * 微信线下商城数据库操作
      * @param $arr
      * @param $msg
@@ -250,7 +250,7 @@ class GoodsOrder extends ActiveRecord
             $freight=$arr[6];
             $return_insurance=$arr[7];
             $order_no=$arr[8];
-            $body=$arr[9];
+            $buyer_message=$arr[9];
         $goods=(new Query())->from('goods as a')->where(['a.id'=>$goods_id])->leftJoin('logistics_template as b','b.id=a.logistics_template_id')->one();
         if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
             return false;
@@ -259,7 +259,6 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $e = 1;
         try{
-
             $goods_order=new self();
             $goods_order->order_no=$order_no;
             $goods_order->amount_order=$msg['total_fee'];
@@ -272,7 +271,7 @@ class GoodsOrder extends ActiveRecord
             $goods_order->order_refer=1;
             $goods_order->return_insurance=$return_insurance*100;
             $goods_order->pay_name=$pay_name;
-            $goods_order->buyer_message=$body;
+            $goods_order->buyer_message=$buyer_message;
             $res1=$goods_order->save();
             if (!$res1){
                 $tran->rollBack();

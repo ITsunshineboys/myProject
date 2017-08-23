@@ -29,10 +29,8 @@ class OrderController extends Controller
 {
 
 
-    public function init(){
-        parent::init();
-    }
-
+    const WXPAY_LINE_GOODS='线下店商城';
+ 
 
     /**
      * Actions accessed by logged-in users
@@ -445,19 +443,20 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         //商户订单号，商户网站订单系统中唯一订单号，必填
         $out_trade_no =self::Setorder_no();
-        $subject=trim(htmlspecialchars($request->post('goods_name')),' ');
+        $subject=trim($request->post('goods_name'),' ');
         //付款金额，必填
-        $total_amount =trim(htmlspecialchars($request->post('order_price')),' ');
-        $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
-        $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
-        $address_id=trim(htmlspecialchars($request->post('address_id')),' ');
+        $total_amount =trim($request->post('order_price'),' ');
+        $goods_id=trim($request->post('goods_id'),' ');
+        $goods_num=trim($request->post('goods_num'),' ');
+        $address_id=trim($request->post('address_id'),' ');
         $pay_name='线上支付-支付宝支付';
-        $invoice_id=trim(htmlspecialchars($request->post('invoice_id')),' ');
-        $supplier_id=trim(htmlspecialchars($request->post('supplier_id')),' ');
-        $freight=trim(htmlspecialchars($request->post('freight')),' ');
-        $return_insurance=trim(htmlspecialchars($request->post('return_insurance')),' ');
+        $invoice_id=trim($request->post('invoice_id'),' ');
+        $supplier_id=trim($request->post('supplier_id'),' ');
+        $freight=trim($request->post('freight'),' ');
+        $return_insurance=trim($request->post('return_insurance'),' ');
+        $buyer_message=trim($request->post('buyer_message','0'));
         //商品描述，可空
-        $body = trim(htmlspecialchars($request->post('body')),' ');
+        $body = trim($request->post('body'),' ');
         if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id||! $invoice_id||!$supplier_id||!$freight ){
             $c=1000;
             return Json::encode([
@@ -476,7 +475,7 @@ class OrderController extends Controller
             ]);
         }
         $model=new Alipay();
-        $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance);
+        $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
     }
 
     /**
@@ -550,7 +549,7 @@ class OrderController extends Controller
             'data' => $res
         ]);
     }
-    /**
+   /**
      *提交订单-线下店商城-微信支付
      */
     public function  actionLineplaceorder(){
@@ -561,13 +560,24 @@ class OrderController extends Controller
         $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
         $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
         $address_id=trim(htmlspecialchars($request->post('address_id')),' ');
-        $pay_name='微信支付';
+        $pay_name='线上支付-微信支付';
         $invoice_id=trim(htmlspecialchars($request->post('invoice_id')),' ');
         $supplier_id=trim(htmlspecialchars($request->post('supplier_id')),' ');
         $freight=trim(htmlspecialchars($request->post('freight')),' ');
-        $return_insurance=trim(htmlspecialchars($request->post('return_insurance')),' ');
+        $return_insurance=trim(htmlspecialchars($request->post('return_insurance')),'0');
+        $buyer_message=trim($request->post('buyer_message','0'));
+        if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name || $invoice_id || !$supplier_id || !$freight )
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+        $order_no =self::Setorder_no();
         //商品描述，可空
-        $body = trim(htmlspecialchars($request->post('body')),' ');
+        $body =self::WXPAY_LINE_GOODS.'-'.$subject;
         $orders=array(
             'address_id'=>$address_id,
             'invoice_id'=>$invoice_id,
@@ -579,7 +589,9 @@ class OrderController extends Controller
             'supplier_id'=>$supplier_id,
             'freight'=>$freight,
             'return_insurance'=>$return_insurance,
-            'body'=>$body
+            'body'=>$body,
+            'order_no'=>$order_no,
+            'buyer_message'=>$buyer_message
         );
         $model=new Wxpay();
         $data=$model->Wxlineapipay($orders);

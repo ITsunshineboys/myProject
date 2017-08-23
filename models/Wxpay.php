@@ -14,10 +14,14 @@ use vendor\wxpay\lib\CLogFileHandler;
 use app\services\PayService;
 use yii\db\ActiveRecord;
 
+
 class Wxpay  extends ActiveRecord
 {
 
 
+    const  EFFECT_NOTIFY_URL='http://common.cdlhzz.cn/order/wxpayeffect_earnstnotify';
+    const  LINEPAY_NOTIFY_URL='http://common.cdlhzz.cn/order/orderlinewxpaynotify';
+    const  EFFECT_BODY='样板间申请费';
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -25,7 +29,7 @@ class Wxpay  extends ActiveRecord
     {
         return 'goods_order';
     }
-    /**
+  /**
      *无登录-微信公众号支付接口
      */
     public function Wxlineapipay($orders){
@@ -42,7 +46,7 @@ class Wxpay  extends ActiveRecord
         $openId = $tools->GetOpenid();
         //②、统一下单
         $input = new WxPayUnifiedOrder();
-        $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'];
+        $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
         $input->SetBody($orders['body']);
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
@@ -50,15 +54,13 @@ class Wxpay  extends ActiveRecord
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
-        $input->SetNotify_url('http://common.cdlhzz.cn/order/orderlinewxpaynotify');
+        $input->SetNotify_url(self::LINEPAY_NOTIFY_URL);
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
         $editAddress = $tools->GetEditAddressParameters();
-        echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){WeixinJSBridge.log(res.err_msg);alert(res.err_code+res.err_desc+res.err_msg);});}
-</script>";
+        return $jsApiParameters;
         }
 
         /**
@@ -91,7 +93,7 @@ class Wxpay  extends ActiveRecord
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("goods");
-            $input->SetNotify_url('http://common.cdlhzz.cn/order/wxpayeffect_earnstnotify');
+            $input->SetNotify_url(self::EFFECT_NOTIFY_URL);
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
