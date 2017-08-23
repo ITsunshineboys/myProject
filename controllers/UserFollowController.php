@@ -6,8 +6,6 @@ namespace app\controllers;
 use app\models\UserFollow;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
-use yii\db\Exception;
-use yii\db\Transaction;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
