@@ -9,6 +9,7 @@ use app\models\StairsDetails;
 use app\services\AdminAuthService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -126,7 +127,7 @@ class EffectController extends Controller
             $effect_picture->save(false);
                 return json_encode([
                     'code' => 200,
-                    'msg' => '样板间添加成功!',
+                    'msg' => 'ok',
                     'data'=>[
                         'id'=>$effect->id
                     ]
@@ -142,6 +143,25 @@ class EffectController extends Controller
         }
     }
 
+    /**
+     * 获取楼梯材质
+     * @return string
+     *
+     */
+    public function actionGetstair(){
+
+        $stairway=(int)trim(Yii::$app->request->get('stairway',''),'');
+        if($stairway==1){
+
+            $data=(new Query())->from('stairs_details')->select('*')->all();
+            return json_encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
+
+    }
     /**
      * 支付定金/获取用户信息
      * @return string
@@ -177,7 +197,7 @@ class EffectController extends Controller
                 $model->save();
                 return json_encode([
                     'code' => 200,
-                    'msg' => '申请成功!',
+                    'msg' => 'ok',
                     'data' => $model->toArray(),
 
                 ]);
@@ -288,7 +308,7 @@ class EffectController extends Controller
             }else{
                 return json_encode([
                     'code' => 200,
-                    'msg' => '成功!',
+                    'msg' => 'ok!',
                     'data' => $data
 
                 ]);
