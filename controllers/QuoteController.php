@@ -671,7 +671,12 @@ class QuoteController extends Controller
      */
     public function actionPlotEditView()
     {
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post = [
+            'street'=>'一品天下大街88号',
+            'toponymy'=>'今日花园',
+            'district'=>'金牛区',
+        ];
 //        $user = \Yii::$app->user->identity();
 //        if (!$post) {
 //            $code = 1000;
@@ -696,6 +701,7 @@ class QuoteController extends Controller
         foreach ($public_message['effect'] as $one_effect){
             $id[] = $one_effect['id'];
         }
+        $public_message['images'] = EffectPicture::findById($id);
         $public_message['decoration_particulars'] = DecorationParticulars::findById($id);
         $public_message['works_data'] = WorksData::findById($id);
         $public_message['worker_worker_data'] = WorksWorkerData::findById($id);
