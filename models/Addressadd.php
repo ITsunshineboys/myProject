@@ -84,5 +84,52 @@ class Addressadd extends  ActiveRecord
     }
 
 
+     /**
+     * @param $district_code
+     * @param $region
+     * @param $consignee
+     * @param $mobile
+     * @param $user_id
+     * @return int
+     */
+    public static function UserAddressAdd($district_code,$region,$consignee,$mobile,$user_id)
+    {
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $address=self::find()->where(['uid'=>$user_id])->all();
+                foreach ($address as $k =>$v)
+                {
+                    $address[$k]->default=0;
+                    $res[$k]=$address[$k]->save();
+                    if (!$res[$k]){
+                        $code=500;
+                        $tran->rollBack();
+                        return $code;
+                    }
+                }
+                $user_address=new self;
+                $user_address->consignee=$consignee;
+                $user_address->region=$region;
+                $user_address->mobile=$mobile;
+                $user_address->district=$district_code;
+                $user_address->uid=$user_id;
+                $user_address->default=1;
+                $res =$user_address->save();
+                if (!$res){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+                $tran->commit();
+                $code=200;
+                return $code;
+            }catch (Exception $e)
+            {
+                $tran->rollBack();
+                return $code;
+            }
+    }
+
+
 
 }

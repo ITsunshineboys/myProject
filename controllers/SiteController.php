@@ -8,6 +8,7 @@ use app\models\User;
 use app\models\Role;
 use app\models\District;
 use app\models\UserRole;
+use app\models\Addressadd;
 use app\services\BasisDecorationService;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
@@ -1304,4 +1305,45 @@ class SiteController extends Controller
             ]
         );
     }
+
+
+    /**
+     * user add address
+     * @return string
+     */
+    public function actionUserReceiveAddressAdd(){
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $district_code=trim($request->post('district_code',''));
+        $region=trim($request->post('region',''));
+        $consignee=trim($request->post('consignee',''));
+        $mobile=trim($request->post('mobile',''));
+        if (!$district_code || !$region || !$consignee || !$mobile){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=Addressadd::UserAddressAdd($district_code,$region,$consignee,$mobile,$user->id);
+        if ($code == 200){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
 }
