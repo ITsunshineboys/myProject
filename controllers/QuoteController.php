@@ -24,9 +24,6 @@ use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\ExceptionHandleService;
-use app\services\SmValidationService;
-use Symfony\Component\Yaml\Tests\A;
-use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -449,6 +446,8 @@ class QuoteController extends Controller
         $district_chinese = District::findByCode((int)$request['cur_county_id']);
         foreach ($request['house_informations'] as $house) {
             if ($house['is_ordinary'] != 1 ){
+
+                //普通户型添加
                 $bedroom = $house['cur_room'];
                 $sittingRoom_diningRoom = $house['cur_hall'];
                 $toilet = $house['cur_toilet'];
@@ -497,6 +496,8 @@ class QuoteController extends Controller
                 }
             }
             else {
+
+                // 案例添加
                 $bedroom = $house['cur_room'];
                 $sittingRoom_diningRoom = $house['cur_hall'];
                 $toilet = $house['cur_toilet'];
@@ -526,8 +527,6 @@ class QuoteController extends Controller
                 $_effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$stair_id);
 
                 $effect_id = \Yii::$app->db->getLastInsertID();
-
-                //图片添加
                 if (!empty($house['drawing_list'])){
                     foreach ($house['drawing_list'] as $images){
                         $effect_images = $images['all_drawing'];
@@ -800,6 +799,17 @@ class QuoteController extends Controller
 //                    $_effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $add_time, $house_image, $type);
 //
 //                    $effect_id = \Yii::$app->db->getLastInsertID();
+//
+//                    if (!empty($house['drawing_list'])){
+//                        foreach ($house['drawing_list'] as $images){
+//                            $effect_images = $images['all_drawing'];
+//                            $series_id     = $images['series'];
+//                            $style_id      = $images['style'];
+//                            $images_user   = '案例图片';
+//                            ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
+//                        }
+//                    }
+//
 //                    foreach ($house['all_goods'] as $goods) {
 //                        $goods_id = $effect_id;
 //                        $goods_first = $goods['first_name'];
@@ -827,6 +837,7 @@ class QuoteController extends Controller
             } else{
 
             }
+            // 删除功能
 
         }
         if ($effect || $_effect ) {
