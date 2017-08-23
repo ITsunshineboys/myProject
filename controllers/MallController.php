@@ -2134,7 +2134,7 @@ class MallController extends Controller
             ]);
         }
 
-        $where = '1';
+        $where = 'approve_time = 0 and reject_time = 0';
         if ($reviewStatus != Yii::$app->params['value_all']) {
             $where .= " and review_status = {$reviewStatus}";
         }
