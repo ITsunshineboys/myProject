@@ -45,6 +45,7 @@ class Effect extends ActiveRecord
           'effect_images',
           'images_name',
           'type',
+          'stair_id',
         ];
     /**
      * @return string 返回该AR类关联的数据表名

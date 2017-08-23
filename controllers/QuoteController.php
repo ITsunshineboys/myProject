@@ -518,6 +518,17 @@ class QuoteController extends Controller
                 $_effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$stair_id);
 
                 $effect_id = \Yii::$app->db->getLastInsertID();
+
+                if (!empty($house['drawing_list'])){
+                    foreach ($house['drawing_list'] as $images){
+                        $effect_images = $images['all_drawing'];
+                        $series_id     = $images['series'];
+                        $style_id      = $images['style'];
+                        $images_user   = '案例';
+                        ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
+                    }
+                }
+
                 foreach ($house['all_goods'] as $goods){
                     $goods_id = $effect_id;
                     $goods_first = $goods['first_name'];
@@ -703,20 +714,6 @@ class QuoteController extends Controller
 
             ];
         //        $user = \Yii::$app->user->identity();
-//        if (!$request) {
-//            $code = 1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        if (!$user) {
-//            $code = 1052;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
         $province_chinese = District::findByCode($request['province_code']);
         $city_chinese = District::findByCode($request['city_code']);
         $district_chinese = District::findByCode($request['cur_county_id']);
@@ -819,8 +816,9 @@ class QuoteController extends Controller
 //                    }
 //                }
             } else{
-                    var_dump($house);exit;
+
             }
+
         }
         if ($effect || $_effect ) {
             $code = 200;
