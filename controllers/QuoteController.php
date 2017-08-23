@@ -592,7 +592,7 @@ class QuoteController extends Controller
                 $effect_id = \Yii::$app->db->getLastInsertID();
                 (new DecorationParticulars())->plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
 
-                if (empty($house['drawing_list'])){
+                if (!empty($house['drawing_list'])){
                     foreach ($house['drawing_list'] as $images){
                         $effect_images = $images['all_drawing'];
                         $series_id     = $images['series'];
