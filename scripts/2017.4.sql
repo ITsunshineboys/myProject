@@ -541,7 +541,7 @@ CREATE TABLE `effect` (
   `house_image` varchar(50) DEFAULT NULL COMMENT '户型图一张',
   `type` int(2) DEFAULT '0' COMMENT '0-普通，1-案列',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `labor_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
