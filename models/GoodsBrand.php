@@ -217,7 +217,7 @@ class GoodsBrand extends ActiveRecord
             }
 
             if (isset($brand['id'])) {
-//                $brand['category_titles'] = BrandCategory::categoryNamesByBrandId($brand['id']);
+                $brand['category_titles'] = BrandCategory::categoryNamesByBrandId($brand['id']);
                 $brand['categories'] = BrandCategory::categoriesByBrandId($brand['id'], GoodsCategory::FIELDS_EDIT_BRAND_SELECTED_CATEGORIES);
             }
         }
