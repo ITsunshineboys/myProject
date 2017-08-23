@@ -650,7 +650,7 @@ class Supplier extends ActiveRecord
         }
 
         if (isset($data['status'])) {
-            $data['status'] = self::STATUSES[$data['status']];
+            $data['status_desc'] = self::STATUSES[$data['status']];
         }
 
         if (isset($data['quality_guarantee_deposit'])) {
