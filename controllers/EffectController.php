@@ -130,9 +130,7 @@ class EffectController extends Controller
                     'data'=>[
                         'id'=>$effect->id
                     ]
-
                 ]);
-
 
         } else {
             $code=500;

@@ -21,6 +21,8 @@ class Effect extends ActiveRecord
     const FIELDS_EXTRA = [];
     const FIELDS_VIEW_ADMIN_MODEL = [
           'id',
+          'series_id',
+          'style_id',
           'bedroom',
           'sittingRoom_diningRoom',
           'toilet',
@@ -55,7 +57,7 @@ class Effect extends ActiveRecord
     public function rules()
     {
         return [
-            [['bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','effect_images','images_name','type'], 'required'],
+            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','effect_images','images_name','type'], 'required'],
             [['province', 'city','district','toponymy','street','particulars'],'string'],
             [['bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high'],'number']
         ];
@@ -75,7 +77,6 @@ class Effect extends ActiveRecord
     }
 
     public function geteffectdata($effect_id){
-
         $query=new Query();
         $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,t.style,s.series')->leftJoin('effect_picture as ep','e.id=ep.effect_id')->leftJoin('series As s','s.id = ep.series_id')->leftJoin('style As t','t.id = ep.style_id')->where(['e.id'=>$effect_id])->one();
         $array1=(new Query())->from('effect_earnst')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
@@ -85,7 +86,6 @@ class Effect extends ActiveRecord
             $array['earnest']=sprintf('%.2f',(float)$array1['earnest']*0.01);
             $array['name']=$array1['name'];
             $array['remark']=$array1['remark'];
-
 
             return $array;
         }
