@@ -76,7 +76,6 @@ class SupplieraccountController extends  Controller{
      * 获取分类列表
      * @return string
      */
-
     public function actionCategory(){
         $user = Yii::$app->user->identity;
         if (!$user){

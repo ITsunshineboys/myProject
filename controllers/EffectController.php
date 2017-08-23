@@ -145,7 +145,6 @@ class EffectController extends Controller
     /**
      * 获取系列
      * @return string
-     *
      */
     public function actionGetseries(){
 
