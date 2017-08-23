@@ -125,6 +125,7 @@ class Addressadd extends  ActiveRecord
                 return $code;
             }catch (Exception $e)
             {
+                $code=500;
                 $tran->rollBack();
                 return $code;
             }
