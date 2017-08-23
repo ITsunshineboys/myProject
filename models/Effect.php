@@ -21,8 +21,6 @@ class Effect extends ActiveRecord
     const FIELDS_EXTRA = [];
     const FIELDS_VIEW_ADMIN_MODEL = [
           'id',
-          'series_id',
-          'style_id',
           'bedroom',
           'sittingRoom_diningRoom',
           'toilet',
@@ -42,8 +40,6 @@ class Effect extends ActiveRecord
           'stairway',
           'add_time',
           'house_image',
-          'effect_images',
-          'images_name',
           'type',
         ];
     /**
@@ -57,9 +53,9 @@ class Effect extends ActiveRecord
     public function rules()
     {
         return [
-            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','effect_images','images_name','type'], 'required'],
+            [['bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','type'], 'required'],
             [['province', 'city','district','toponymy','street','particulars'],'string'],
-            [['series_id','style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high'],'number']
+            [['bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high'],'number']
         ];
     }
 
@@ -117,17 +113,15 @@ class Effect extends ActiveRecord
         $basis_condition ['area'] = $arr['area'];
         $basis_condition ['high'] = $arr['high'];
         $basis_condition ['window'] = $arr['window'];
-        $basis_condition ['series_id'] = $arr['series'];
-        $basis_condition ['style_id'] = $arr['style'];
 
-        $effect = self::find()->where(['and','room'=> $basis_condition ['room'],
-            'hall'=> $basis_condition ['hall'],
-            'toilet'=> $basis_condition ['toilet'],
-            'kitchen'=> $basis_condition ['kitchen'],
-            'high'=> $basis_condition ['high'],
-            'window'=> $basis_condition ['window'],
-            'series'=> $basis_condition ['series_id'],
-            'style'=> $basis_condition ['style_id']])->one();
+        $effect = self::find()->where([
+            'and','room'   => $basis_condition ['room'],
+            'hall'         => $basis_condition ['hall'],
+            'toilet'       => $basis_condition ['toilet'],
+            'kitchen'      => $basis_condition ['kitchen'],
+            'high'         => $basis_condition ['high'],
+            'window'       => $basis_condition ['window']])
+            ->one();
         return $effect;
     }
 
@@ -212,11 +206,9 @@ class Effect extends ActiveRecord
         return $res;
     }
 
-    public function plotEdit($id,$series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type)
+    public function plotEdit($id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$type)
     {
         $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
-            'series_id'     => $series_id,
-            'style_id'      => $style_id,
             'bedroom'       => $bedroom,
             'sittingRoom_diningRoom' => $sittingRoom_diningRoom,
             'toilet'        => $toilet,
@@ -236,8 +228,6 @@ class Effect extends ActiveRecord
             'stairway'      => $stairway,
             'add_time'      => $add_time,
             'house_image'   => $house_image,
-            'effect_images' => $effect_images,
-            'images_name'   => $images_name,
             'type'          => $type,
         ],'id='. $id)->execute();
 
