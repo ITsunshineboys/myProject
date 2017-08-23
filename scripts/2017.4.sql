@@ -922,6 +922,8 @@ CREATE TABLE `invoice` (
   `invoice_content` varchar(30) NOT NULL,
   `creat_time` datetime NOT NULL,
   `invoicetoken` varchar(32) NOT NULL,
+  `default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 未默认  1：  默认',
+  `uid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -935,6 +937,7 @@ CREATE TABLE `user_address` (
   `district` int(6) NOT NULL,
   `region` varchar(150) NOT NULL,
   `addresstoken` varchar(32) NOT NULL,
+  `default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0：未默认  1 ： 默认',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- 7.21 end
