@@ -71,7 +71,6 @@ class SupplieraccountController extends  Controller{
         ];
     }
 
-
     /**
      * 获取分类列表
      * @return string
