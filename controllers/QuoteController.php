@@ -376,10 +376,12 @@ class QuoteController extends Controller
      */
     public function actionPlotTimeGrabble()
     {
-        $post = \Yii::$app->request->get();
+        $city = (int)\Yii::$app->request->get('city');
+        $min_time = (int)strtotime(\Yii::$app->request->get('min'));
+        $max_time = (int)strtotime(\Yii::$app->request->get('max'));
         $page = (int)\Yii::$app->request->get('page', 1);
         $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
-        $where = "add_time >= {$post['min']} AND add_time <= {$post['max']} AND city_code = {$post['city']}";
+        $where = "add_time >= {$min_time} AND add_time <= {$max_time} AND city_code = {$city}";
         $effect = Effect::pagination($where,$page,$size);
         return Json::encode([
             'code' => 200,
@@ -704,6 +706,10 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * plot  edit find
+     * @return string
+     */
     public function actionPlotEdit()
     {
 //        $request = \Yii::$app->request->post();
