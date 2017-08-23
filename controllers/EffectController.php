@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use app\models\Effect;
 use app\models\EffectEarnst;
+use app\models\EffectPicture;
 use app\models\GoodsCategory;
 use app\models\StairsDetails;
 use app\services\AdminAuthService;
@@ -73,35 +74,37 @@ class EffectController extends Controller
         $code = 1000;
         $request = \Yii::$app->request;
         if ($request->isPost) {
+            $effect_picture=new EffectPicture();
+           $series_id= $effect_picture->series_id = trim($request->post('series_id', ''), '');
+           $style_id= $effect_picture->style_id = trim($request->post('style_id', ''), '');
             $effect = new Effect();
-            $effect->series_id = trim($request->post('series_id', ''), '');
-            $effect->style_id = trim($request->post('style_id', ''), '');
-            $effect->bedroom = trim($request->post('bedroom', ''), '');
+            $bedroom=$effect->bedroom = trim($request->post('bedroom', ''), '');
 
-
-            $effect->sittingRoom_diningRoom = trim($request->post('sittingRoom_diningRoom', ''), '');
+            $sittingRoom_diningRoom= $effect->sittingRoom_diningRoom = trim($request->post('sittingRoom_diningRoom', ''), '');
             $effect->toilet = trim($request->post('toilet', ''), '');
             $window =$effect->window = trim($request->post('window', ''), '');
-            $effect->kitchen = trim($request->post('kitchen', ''), '');
+            $kitchen=$effect->kitchen = trim($request->post('kitchen', ''), '');
             $area= $effect->area = trim($request->post('area', ''), '');
-           $effect->high = trim($request->post('high', ''), '');
-            $effect->province = trim($request->post('province', ''), '');
-            $effect->city = trim($request->post('city', ''), '');
-            $effect->district = trim($request->post('district', ''), '');
-            $effect->toponymy = trim($request->post('toponymy', ''), '');
-            $effect->street = trim($request->post('street', ''), '');
-            $effect->particulars = trim($request->post('particulars', ''), '');
-            $effect->site_particulars = trim($request->post('site_particulars', ''), '');
+            $high= $effect->high = trim($request->post('high', ''), '');
+            $province=$effect->province = trim($request->post('province', ''), '');
+            $city =$effect->city = trim($request->post('city', ''), '');
+           $district= $effect->district = trim($request->post('district', ''), '');
+            $toponymy= $effect->toponymy = trim($request->post('toponymy', ''), '');
+            $street=$effect->street = trim($request->post('street', ''), '');
+            $particulars= $effect->particulars = trim($request->post('particulars', ''), '');
+            $site_particulars= $effect->site_particulars = trim($request->post('site_particulars', ''), '');
            $stairway= $effect->stairway = trim($request->post('stairway', ''), '');
-
-
-            if($stairway=='1'){
+            if (!$series_id || !$style_id ||!$sittingRoom_diningRoom||!$kitchen||!$bedroom || !$window || !$high ||!$area || !$province || !$city ||!$district ||!$toponymy|| !$street|| !$particulars || !$site_particulars) {
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            if($stairway==1){
 
                  $stair_id=trim($request->post('stair_id',''),'');
 
-                $stairdetail=StairsDetails::findOne(['id'=>$stair_id])->toArray();
-
-                $effect->stairdetail=$stairdetail['attribute'];
+                $effect->stair_id=$stair_id;
 
             }
 
@@ -118,23 +121,18 @@ class EffectController extends Controller
                     'msg' => '飘窗不能超过20',
                 ]);
             }
-
-            if (!$effect->validate()) {
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            } else {
-                $effect->save();
+            $effect->save(false);
+            $effect_picture->effect_id=$effect->id;
+            $effect_picture->save(false);
                 return json_encode([
                     'code' => 200,
                     'msg' => '样板间添加成功!',
                     'data'=>[
-                        'id'=>Yii::$app->db->getLastInsertID()
+                        'id'=>$effect->id
                     ]
 
                 ]);
-            }
+
 
         } else {
             $code=500;

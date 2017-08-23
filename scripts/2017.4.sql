@@ -536,6 +536,7 @@ CREATE TABLE `effect` (
   `street` varchar(50) DEFAULT NULL COMMENT '街道',
   `particulars` varchar(50) DEFAULT NULL COMMENT '厅室详情',
   `stairway` tinyint(5) DEFAULT '0' COMMENT '楼梯信息 0：无 1：有',
+  `stair_id` tinyint(5) DEFAULT '0' COMMIT '楼梯材料',
   `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
   `house_image` varchar(50) DEFAULT NULL COMMENT '户型图一张',
   `type` int(2) DEFAULT '0' COMMENT '0-普通，1-案列',
