@@ -31,6 +31,7 @@ class GoodsBrand extends ActiveRecord
      * @var array admin fields
      */
     public static $adminFields = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'status'];
+    const FIELDS_REVIEW_LIST = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person'];
 
     /**
      * @var array online status list
@@ -196,7 +197,7 @@ class GoodsBrand extends ActiveRecord
 
             if (!empty($brand['supplier_name'])) {
                 $brand['applicant'] = $brand['supplier_name'];
-            } else {
+            } elseif (isset($brand['status'])) {
                 if ($brand['status'] == self::STATUS_ONLINE) {
                     $brand['applicant'] = $brand['online_person'];
                 } else {

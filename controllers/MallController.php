@@ -2126,15 +2126,18 @@ class MallController extends Controller
             ]);
         }
 
-        $reviewStatus = (int)Yii::$app->request->get('review_status', GoodsBrand::REVIEW_STATUS_NOT_REVIEWED);
-        if (!in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
+        $reviewStatus = (int)Yii::$app->request->get('review_status', Yii::$app->params['value_all']);
+        if ($reviewStatus != Yii::$app->params['value_all'] && !in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        $where = "review_status = {$reviewStatus}";
+        $where = '1';
+        if ($reviewStatus != Yii::$app->params['value_all']) {
+            $where .= " and review_status = {$reviewStatus}";
+        }
 
         $startTime = trim(Yii::$app->request->get('start_time', ''));
         $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -2168,7 +2171,7 @@ class MallController extends Controller
             'data' => [
                 'brand_review_list' => [
                     'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
-                    'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size, $orderBy)
+                    'details' => GoodsBrand::pagination($where, GoodsBrand::FIELDS_REVIEW_LIST, $page, $size, $orderBy)
                 ]
             ],
         ]);
