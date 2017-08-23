@@ -31,7 +31,7 @@ class GoodsBrand extends ActiveRecord
      * @var array admin fields
      */
     public static $adminFields = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'status'];
-    const FIELDS_REVIEW_LIST = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person'];
+    const FIELDS_REVIEW_LIST = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'supplier_id'];
 
     /**
      * @var array online status list
@@ -219,6 +219,11 @@ class GoodsBrand extends ActiveRecord
             if (isset($brand['id'])) {
                 $brand['category_titles'] = BrandCategory::categoryNamesByBrandId($brand['id']);
                 $brand['categories'] = BrandCategory::categoriesByBrandId($brand['id'], GoodsCategory::FIELDS_EDIT_BRAND_SELECTED_CATEGORIES);
+            }
+
+            if (!empty($brand['supplier_id'])) {
+                $supplier = Supplier::findOne($brand['supplier_id']);
+                $brand['mobile'] = User::findOne($supplier->uid)->mobile;
             }
         }
 
