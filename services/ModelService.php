@@ -232,22 +232,14 @@ class ModelService
     {
         $total_page = ceil($count / $page_size);
         $page = $page < 1 ? 1 : $page;
-        if ($page > $total_page) {
-            $sd = array(
-                'list' => '',
-                'total_page' => $total_page,
-                'count' => $count,
-                'page' => $page
-            );
-        } else {
-            $sd = array(
-                'list' => $arr,
-                'total_page' => $total_page,
-                'count' => $count,
-                'page' => $page
-            );
-        }
-        return $sd;
+        $arr = $page > $total_page ? '' : $arr;
+        $return = [
+            'list' => $arr,
+            'total_page' => $total_page,
+            'count' => $count,
+            'page' => $page
+        ];
+        return $return;
     }
 
     /**
