@@ -18,6 +18,7 @@ use app\models\GoodsAttr;
 use app\models\GoodsCategory;
 use app\models\LaborCost;
 use app\models\Series;
+use app\models\StairsDetails;
 use app\models\Style;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
@@ -425,11 +426,13 @@ class QuoteController extends Controller
      */
     public function actionSeriesAndStyle()
     {
+        $stairs_details = StairsDetails::findByAll();
         $series = Series::findBySeries();
         $style = Style::findByStyle();
         return Json::encode([
             'series' => $series,
-            'style' => $style
+            'style' => $style,
+            'stairs_details'=>$stairs_details,
         ]);
     }
 
@@ -513,18 +516,24 @@ class QuoteController extends Controller
                 $stairway = $house['have_stair'];
                 $house_image = $house['cur_imgSrc'];
                 $type = $house['is_ordinary'];
-                $stair_id = $house['stair'];
+                if ($stairway != 1){
+                    $stair_id = 0;
+                }else{
+                    $stair_id = $house['stair'];
+                }
+
 
                 $_effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$stair_id);
 
                 $effect_id = \Yii::$app->db->getLastInsertID();
 
+                //图片添加
                 if (!empty($house['drawing_list'])){
                     foreach ($house['drawing_list'] as $images){
                         $effect_images = $images['all_drawing'];
                         $series_id     = $images['series'];
                         $style_id      = $images['style'];
-                        $images_user   = '张放添加案例图片';
+                        $images_user   = '案例图片';
                         ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
                     }
                 }
