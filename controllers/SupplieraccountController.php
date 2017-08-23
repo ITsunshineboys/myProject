@@ -86,26 +86,23 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
         $pid=(int)trim(\Yii::$app->request->get('pid',0),'');
-
-        if($pid){
-
-
-            $cate_title=(new Query())->from('goods_category')->select('title,pid,id')->where(['pid'=>$pid])->all();
+        $cate_title=(new Query())->from('goods_category')->select('title,pid,id')->where(['pid'=>$pid])->all();
+        if($cate_title){
             return json_encode([
                 'code' => 200,
                 'msg' => 'OK',
                 'data' =>$cate_title
-                ]);
+            ]);
         }else{
-            $code=1000;
             return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-
+                'code' => 200,
+                'msg' => 'OK',
+                'data' =>null
             ]);
         }
+
+
     }
 
     /**

@@ -142,10 +142,35 @@ class EffectController extends Controller
             ]);
         }
     }
+    /**
+     * 获取系列
+     * @return string
+     *
+     */
+    public function actionGetseries(){
 
+        return json_encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data=(new Query())->from('series')->select('series,id')->all()
+        ]);
+    }
+    /**
+     * 获取风格
+     * @return string
+     *
+     */
+    public function actionGetstyle(){
+
+        return json_encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data=(new Query())->from('style')->select('style')->all()
+        ]);
+    }
     /**
      * 获取楼梯材质
-     * @return string
+     * @return array
      *
      */
     public function actionGetstair(){
@@ -164,7 +189,7 @@ class EffectController extends Controller
     }
     /**
      * 支付定金/获取用户信息
-     * @return string
+     * @return array
      *
      */
     public function actionEffectEarnest()
