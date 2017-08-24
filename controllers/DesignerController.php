@@ -1,4 +1,4 @@
-eeeeeeeeeeeeeeeeeeeeeeeeee<?php
+<?php
 
 namespace app\controllers;
 
