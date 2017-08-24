@@ -148,18 +148,11 @@ class UserFollowController extends Controller
         }
 
         $code = (new UserFollow())->toggleStatus($id);
-        if ($code == 200) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok'
-            ]);
-        } else {
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-                'data' => null
-            ]);
-        }
+
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
+        ]);
     }
 
 }
