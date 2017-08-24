@@ -180,4 +180,45 @@ class Invoice extends ActiveRecord
             return $code;
         }
     }
+
+
+    /**
+     * @param $invoice_type
+     * @param $invoice_header_type
+     * @param $invoice_header
+     * @param $invoice_content
+     * @param $invoicer_card
+     * @param $user
+     * @param $invoice_id
+     * @return int
+     */
+    public static function  updateUserInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card,$user,$invoice_id)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $time=date('Y-m-d H:i:s',time());
+            $invoice_up=self::find()->where(['id'=>$invoice_id])->one();
+            $invoice_up->invoice_type=$invoice_type;
+            $invoice_up->invoice_header_type=$invoice_header_type;
+            $invoice_up->invoice_header=$invoice_header;
+            $invoice_up->invoicer_card=$invoicer_card;
+            $invoice_up->invoice_content=$invoice_content;
+            $invoice_up->uid=$user->id;
+            $invoice_up->create_time=$time;
+            $res=$invoice_up->save();
+            if (!$res){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e)
+        {
+            $code=500;
+            $tran->rollBack();
+            return $code;
+        }
+    }
 }

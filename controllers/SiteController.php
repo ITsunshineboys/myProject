@@ -1561,4 +1561,50 @@ class SiteController extends Controller
         }
     }
 
+     /**
+     *  update invoice by user
+     * @return string
+     */
+    public function actionUpdateInvoice(){
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $invoice_id=trim($request->post('invoice_id',''));
+        $invoice_type=trim($request->post('invoice_type',''));
+        $invoice_header_type=trim($request->post('invoice_header_type',''));
+        $invoice_header=trim($request->post('invoice_header',''));
+        $invoicer_card =trim(htmlspecialchars($request->post('invoicer_card')));
+        $invoice_content=trim($request->post('invoice_content',''));
+        if ($invoicer_card){
+            $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
+            if ($isMatched==false){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+        $code=Invoice::updateUserInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card,$user,$invoice_id);
+        if ($code==200){
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+    }
+
 }
