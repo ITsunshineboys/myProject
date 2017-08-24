@@ -2126,40 +2126,47 @@ class MallController extends Controller
             ]);
         }
 
-        $reviewStatus = (int)Yii::$app->request->get('review_status', Yii::$app->params['value_all']);
-        if ($reviewStatus != Yii::$app->params['value_all'] && !in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        if (!$keyword) {
+            $reviewStatus = (int)Yii::$app->request->get('review_status', Yii::$app->params['value_all']);
+            if ($reviewStatus != Yii::$app->params['value_all'] && !in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
 
-        $where = 'approve_time = 0 and reject_time = 0';
-        if ($reviewStatus != Yii::$app->params['value_all']) {
-            $where .= " and review_status = {$reviewStatus}";
-        }
+            $where = 'approve_time = 0 and reject_time = 0';
+            if ($reviewStatus != Yii::$app->params['value_all']) {
+                $where .= " and review_status = {$reviewStatus}";
+            }
 
-        $startTime = trim(Yii::$app->request->get('start_time', ''));
-        $endTime = trim(Yii::$app->request->get('end_time', ''));
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
 
-        if (($startTime && !StringService::checkDate($startTime))
-            || ($endTime && !StringService::checkDate($endTime))
-        ) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
 
-        $endTime && $endTime .= ' 23:59:59';
+            $endTime && $endTime .= ' 23:59:59';
 
-        if ($startTime) {
-            $startTime = strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
+            if ($startTime) {
+                $startTime = strtotime($startTime);
+                $startTime && $where .= " and create_time >= {$startTime}";
+            }
+            if ($endTime) {
+                $endTime = strtotime($endTime);
+                $endTime && $where .= " and create_time <= {$endTime}";
+            }
+        } else {
+            $where = "supplier_name like '%{$keyword}%'";
+            $ids = GoodsBrand::findIdsByMobile($keyword);
+            $ids && $where .= " or id in(" . implode(',', $ids) . ")";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);

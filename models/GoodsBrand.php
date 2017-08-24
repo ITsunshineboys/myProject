@@ -26,13 +26,11 @@ class GoodsBrand extends ActiveRecord
     const REVIEW_STATUS_NOT_REVIEWED = 0;
     const PAGE_SIZE_DEFAULT = 12;
     const ERROR_CODE_SAME_NAME = 1007;
-
+    const FIELDS_REVIEW_LIST = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'supplier_id'];
     /**
      * @var array admin fields
      */
     public static $adminFields = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'status'];
-    const FIELDS_REVIEW_LIST = ['id', 'name', 'logo', 'certificate', 'create_time', 'online_time', 'offline_time', 'approve_time', 'reject_time', 'review_status', 'reason', 'offline_reason', 'supplier_name', 'online_person', 'offline_person', 'supplier_id'];
-
     /**
      * @var array online status list
      */
@@ -79,6 +77,22 @@ class GoodsBrand extends ActiveRecord
             }
         }
         return self::find()->where(['in', 'id', $id])->all();
+    }
+
+    /**
+     * Find ids by mobile
+     *
+     * @param int $mobile
+     * @return array
+     */
+    public static function findIdsByMobile($mobile)
+    {
+        if (empty($mobile)) {
+            return [];
+        }
+        $uids = User::find()->select(['id'])->where(['like', 'mobile', $mobile])->column();
+        $supplierIds = Supplier::find()->select(['id'])->where(['in', 'uid', $uids])->column();
+        return self::find()->select(['id'])->where(['in', 'supplier_id', $supplierIds])->column();
     }
 
     /**
