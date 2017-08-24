@@ -1167,9 +1167,9 @@ CREATE TABLE `works_worker_data` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `works_backman_data` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `effect_id` int(11) DEFAULT NULL,
-  `backman_option` varchar(10) DEFAULT NULL COMMENT '杂工选项',
+  `backman_option` varchar(20) DEFAULT NULL COMMENT '杂工选项',
   `backman_value` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
