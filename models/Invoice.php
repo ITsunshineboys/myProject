@@ -73,21 +73,111 @@ class Invoice extends ActiveRecord
             }
     }
 
-
+    /**
+     * @param $invoice_type
+     * @param $invoice_header_type
+     * @param $invoice_header
+     * @param $invoice_content
+     * @param $invoicer_card
+     * @param $user
+     * @return int
+     */
+    public static  function  AddUserInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card,$user)
+    {
+        $address_count=self::find()->where(['uid'=>$user->id])->count();
+        if ($address_count>=6){
+            $code=1026;
+            return $code;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $invoice=self::find()->where(['uid'=>$user->id])->all();
+            foreach ($invoice as $k =>$v)
+            {
+                $invoice[$k]->default=0;
+                $res[$k]=$invoice[$k]->save();
+                if (!$res[$k]){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }
+            $time=date('Y-m-d H:i:s',time());
+            $invoice_add=new self;
+            $invoice_add->invoice_type=$invoice_type;
+            $invoice_add->invoice_header_type=$invoice_header_type;
+            $invoice_add->invoice_header=$invoice_header;
+            $invoice_add->invoicer_card=$invoicer_card;
+            $invoice_add->invoice_content=$invoice_content;
+            $invoice_add->uid=$user->id;
+            $invoice_add->create_time=$time;
+            $invoice_add->default=1;
+            $res =$invoice_add->save();
+            if (!$res){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e)
+        {
+            $code=500;
+            $tran->rollBack();
+            return $code;
+        }
+    }
 
     /**
      * 获取线下店商城-发票信息
      *
      */
     public function  getlineinvoice($invoicetoken){
-        $query=new \yii\db\Query();
-        $array  = $query->from('invoice')->select('invoice_content,invoice_header')->where(['invoicetoken' => $invoicetoken])->limit(1)->all();
-//        $array=self::find()->select('invoice_content,invoice_header')->where(['invoicetoken' => $invoicetoken])->limit(1)->asArray()->all();
+        $array  = self::find()->select('invoice_content,invoice_header')->where(['invoicetoken' => $invoicetoken])->one();
         if ($array){
             return $array;
         }else
         {
             return null;
+        }
+    }
+
+    /**
+     * @param $invoice_id
+     * @param $user
+     * @return int
+     */
+    public static  function  setDefaultInvoice($invoice_id,$user)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $invoice=self::find()->where("id !=  {$invoice_id}")->andWhere(['uid'=>$user->id])->all();
+            foreach ( $invoice as $k =>$v){
+                $invoice[$k]->default=0;
+                $res[$k]=$invoice[$k]->save();
+                if (!$res[$k]){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }
+            $invoice_set=self::find()->where(['id'=>$invoice_id])->andWhere(['uid'=>$user->id])->one();
+            $invoice_set->default=1;
+            $res1=$invoice_set->save();
+            if (!$res1){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e)
+        {
+            $code=500;
+            $tran->rollBack();
+            return $code;
         }
     }
 }

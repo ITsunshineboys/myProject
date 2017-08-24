@@ -1452,4 +1452,113 @@ class SiteController extends Controller
         }
     }
 
+
+    /**
+     *  get user invoice list
+     * @return string
+     */
+    public function actionGetInvoice(){
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $invoiceList=Invoice::find()->where(['uid'=>$user->id])->all();
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' =>'ok',
+            'data'=>$invoiceList
+        ]);
+    }
+
+
+    /**
+     * @return string
+     */
+    public function actionAddInvoice()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $invoice_type=trim($request->post('invoice_type',''));
+        $invoice_header_type=trim($request->post('invoice_header_type',''));
+        $invoice_header=trim($request->post('invoice_header',''));
+        $invoicer_card =trim(htmlspecialchars($request->post('invoicer_card')));
+        $invoice_content=trim($request->post('invoice_content',''));
+        if ($invoicer_card){
+            $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
+            if ($isMatched==false){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
+        }
+        $code=Invoice::AddUserInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card,$user);
+        if ($code==200){
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+    }
+
+    /**
+     * set default invoice
+     * @return string
+     */
+    public function actionSetDefaultInvoice()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $invoice_id=trim($request->post('invoice_id',''));
+        if (!$invoice_id)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+        $code=Invoice::setDefaultInvoice($invoice_id,$user);
+        if ($code==200){
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+    }
+
 }
