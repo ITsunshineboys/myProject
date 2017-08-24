@@ -4,9 +4,8 @@ namespace app\controllers;
 use app\models\Effect;
 use app\models\EffectEarnst;
 use app\models\EffectPicture;
-use app\models\GoodsCategory;
-use app\models\StairsDetails;
-use app\services\AdminAuthService;
+use app\models\Series;
+use app\models\Style;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use yii\db\Query;
@@ -19,7 +18,7 @@ use Yii;
 
 class EffectController extends Controller
 {
-
+    const STATUST_ON=1;
     const PAGE_SIZE = 10;
     const ACCESS_LOGGED_IN_USER = [
         'logout',
@@ -151,7 +150,7 @@ class EffectController extends Controller
         return json_encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>$data=(new Query())->from('series')->select('series,id')->all()
+            'data'=>Style::findByStyle()
         ]);
     }
     /**
@@ -164,7 +163,7 @@ class EffectController extends Controller
         return json_encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>$data=(new Query())->from('style')->select('style')->all()
+            'data'=>Series::findBySeries()
         ]);
     }
     /**
