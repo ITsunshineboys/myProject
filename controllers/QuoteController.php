@@ -583,20 +583,6 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
-//        if (!$post) {
-//            $code = 1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        if (!$user) {
-//            $code = 1052;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
         $public_message = [];
         $public_message['effect'] = Effect::condition($post['street'],$post['toponymy'],$post['district']);
         $public_message['street'] =  $public_message['effect'][0]['street'];
@@ -609,8 +595,8 @@ class QuoteController extends Controller
         $public_message['images'] = EffectPicture::findById($id);
         $public_message['decoration_particulars'] = DecorationParticulars::findById($id);
         $public_message['works_data'] = WorksData::findById($id);
-        $public_message['worker_worker_data'] = WorksWorkerData::findById($id);
-        $public_message['workes_backman_data'] = WorksBackmanData::findById($id);
+        $public_message['works_worker_data'] = WorksWorkerData::findById($id);
+        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
 
         return Json::encode([
             'effect'=>$public_message,
