@@ -531,7 +531,7 @@ class QuoteController extends Controller
                         $effect_images = $house['drawing_list'];
                         $series_id     = $house['series'];
                         $style_id      = $house['style'];
-                        $images_user   = '案例图片';
+                        $images_user   = '张放添加色情图';
                         ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
                 }
 
