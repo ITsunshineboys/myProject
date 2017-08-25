@@ -139,6 +139,9 @@ class Supplier extends ActiveRecord
 //        'sales_volumn_month',
 //        'sales_amount_month',
     ];
+    const ERROR_CODE_SAME_SHOP_NAME = 1028;
+    const ERROR_CODE_SAME_LICENCE = 1029;
+    const ERROR_CODE_SAME_NAME = 1030;
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -193,6 +196,24 @@ class Supplier extends ActiveRecord
         $supplier->scenario = self::SCENARIO_ADD;
         if (!$supplier->validate()) {
             $code = 1000;
+
+            if (isset($supplier->errors['shop_name'])) {
+                $customErrCode = ModelService::customErrCode($supplier->errors['shop_name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
+            } elseif (isset($supplier->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($supplier->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
+            } elseif (isset($supplier->errors['licence'])) {
+                $customErrCode = ModelService::customErrCode($supplier->errors['licence'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
+            }
+
             return $code;
         }
 
@@ -540,7 +561,9 @@ class Supplier extends ActiveRecord
     {
         return [
             [['type_org', 'category_id', 'type_shop', 'shop_name', 'name', 'licence', 'licence_image', 'shop_name'], 'required'],
-            [['name', 'licence', 'shop_name'], 'unique', 'on' => self::SCENARIO_ADD],
+            [['shop_name'], 'unique', 'on' => self::SCENARIO_ADD, 'message' => self::ERROR_CODE_SAME_SHOP_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_SHOP_NAME]],
+            [['licence'], 'unique', 'on' => self::SCENARIO_ADD, 'message' => self::ERROR_CODE_SAME_LICENCE . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_LICENCE]],
+            [['name'], 'unique', 'on' => self::SCENARIO_ADD, 'message' => self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]],
             ['category_id', 'validateCategoryId'],
             ['type_org', 'in', 'range' => array_keys(self::TYPE_ORG)],
             ['type_shop', 'in', 'range' => array_keys(self::TYPE_SHOP)],
