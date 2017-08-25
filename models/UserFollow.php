@@ -122,7 +122,7 @@ class UserFollow extends \yii\db\ActiveRecord
         $follow_id = (int)$follow->follow_id;
         $status = (int)$follow->status;
 
-        if (!in_array($role_id, array_keys(self::TABLE_BY_ROLE_ID))) {
+        if (!array_key_exists($role_id, self::TABLE_BY_ROLE_ID)) {
             return 1000;
         }
 
