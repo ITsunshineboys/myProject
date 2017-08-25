@@ -703,7 +703,7 @@ class QuoteController extends Controller
 
                     $effect_id = \Yii::$app->db->getLastInsertID();
                     if (!empty($house['drawing_list'])){
-                            $effect_images = $house['all_drawing'];
+                            $effect_images = $house['drawing_list'];
                             $series_id     = $house['series'];
                             $style_id      = $house['style'];
                             $images_user   = '案例图片';
