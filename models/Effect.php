@@ -220,11 +220,9 @@ class Effect extends ActiveRecord
         return $res;
     }
 
-    public function plotEdit($id,$series_id,$style_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$add_time,$house_image,$effect_images,$images_name,$type)
+    public function plotEdit($id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$stair_id)
     {
         $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
-            'series_id'     => $series_id,
-            'style_id'      => $style_id,
             'bedroom'       => $bedroom,
             'sittingRoom_diningRoom' => $sittingRoom_diningRoom,
             'toilet'        => $toilet,
@@ -242,10 +240,9 @@ class Effect extends ActiveRecord
             'street'        => $street,
             'particulars'   => $particulars,
             'stairway'      => $stairway,
-            'add_time'      => $add_time,
+            'add_time'      => time(),
             'house_image'   => $house_image,
-            'effect_images' => $effect_images,
-            'images_name'   => $images_name,
+            'stair_id'      => $stair_id,
             'type'          => $type,
         ],'id='. $id)->execute();
 
