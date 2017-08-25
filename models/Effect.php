@@ -79,7 +79,7 @@ class Effect extends ActiveRecord
 
     public function geteffectdata($effect_id){
         $query=new Query();
-        $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,t.style,s.series')->leftJoin('effect_picture as ep','e.id=ep.effect_id')->leftJoin('series As s','s.id = ep.series_id')->leftJoin('style As t','t.id = ep.style_id')->where(['e.id'=>$effect_id])->one();
+        $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,e.stairway,t.style,s.series')->leftJoin('effect_picture as ep','e.id=ep.effect_id')->leftJoin('series As s','s.id = ep.series_id')->leftJoin('style As t','t.id = ep.style_id')->where(['e.id'=>$effect_id])->one();
         $array1=(new Query())->from('effect_earnst')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
         if($array){
             $array['phone']=$array1['phone'];
@@ -87,7 +87,12 @@ class Effect extends ActiveRecord
             $array['earnest']=sprintf('%.2f',(float)$array1['earnest']*0.01);
             $array['name']=$array1['name'];
             $array['remark']=$array1['remark'];
-
+            if($array['stairway']){
+                $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
+                $array['stairway']=$stairway_cl['attribute'];
+            }else{
+                $array['stairway']=null;
+            }
             return $array;
         }
 
