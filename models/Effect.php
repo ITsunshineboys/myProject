@@ -191,7 +191,7 @@ class Effect extends ActiveRecord
         ];
     }
 
-    public function plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$stair_id = 0)
+    public function plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id = 0)
     {
         $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
             'bedroom'       => $bedroom,
@@ -215,12 +215,13 @@ class Effect extends ActiveRecord
             'house_image'   => $house_image,
             'type'          => $type,
             'stair_id'      => $stair_id,
+            'sort_id'      => $sort_id,
         ])->execute();
 
         return $res;
     }
 
-    public function plotEdit($id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$stair_id)
+    public function plotEdit($id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id)
     {
         $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
             'bedroom'       => $bedroom,
@@ -244,6 +245,7 @@ class Effect extends ActiveRecord
             'house_image'   => $house_image,
             'stair_id'      => $stair_id,
             'type'          => $type,
+            'sort_id'       => $sort_id
         ],'id='. $id)->execute();
 
         return $res;
@@ -254,6 +256,7 @@ class Effect extends ActiveRecord
         return self::find()
             ->asArray()
             ->where(['and',['street'=>$street],['toponymy'=>$toponymy],['district'=>$district]])
+            ->orderBy(['sort_id'=>SORT_ASC])
             ->all();
     }
 
