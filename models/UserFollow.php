@@ -154,12 +154,14 @@ class UserFollow extends \yii\db\ActiveRecord
             \Yii::$app->db->createCommand()
                 ->update($table, ['follower_number' => $follower_number,], ['id' => $follow_id])
                 ->execute();
+
+            $trans->commit();
+
         } catch (Exception $e) {
             $trans->rollBack();
             return 1000;
         }
 
-        $trans->commit();
         return 200;
     }
 }

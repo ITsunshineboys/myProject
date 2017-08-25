@@ -393,11 +393,13 @@ class SupplierCashManager extends ActiveRecord
                     $supplier_accessdetail->save();
                 }
             }
+
+            $trans->commit();
+
         } catch (Exception $e) {
             $trans->rollBack();
         }
 
-        $trans->commit();
         return $e;
     }
 }
