@@ -1206,5 +1206,5 @@ CREATE TABLE `order_refund` (
   `handle_time` int(11) NOT NULL,
   `refund_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 --8.25 end
