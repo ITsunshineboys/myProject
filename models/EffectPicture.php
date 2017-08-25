@@ -41,6 +41,18 @@ class EffectPicture extends ActiveRecord
         return $res;
     }
 
+    public static  function plotEdit($id,$effect_images,$series_id,$style_id,$images_user)
+    {
+        $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
+            'effect_images'  => $effect_images,
+            'images_user'    => $images_user,
+            'series_id'      => $series_id,
+            'style_id'       => $style_id,
+        ],'id'.$id)->execute();
+
+        return $res;
+    }
+
     public static function findById($id)
     {
         return self::find()
