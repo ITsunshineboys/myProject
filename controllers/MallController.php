@@ -2126,7 +2126,7 @@ class MallController extends Controller
             ]);
         }
 
-        $where = 'approve_time = 0 and reject_time = 0';
+        $where = '1';
 
         $keyword = trim(Yii::$app->request->get('keyword', ''));
         if (!$keyword) {
