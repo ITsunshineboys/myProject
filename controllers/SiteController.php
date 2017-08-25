@@ -1127,7 +1127,7 @@ class SiteController extends Controller
         $data = $cache->get(User::CACHE_PREFIX_RESET_MOBILE . $user->id);
         if ($data != false) {
             if ($data > 3) {
-                $code = 1026;
+                $code = 1027;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
