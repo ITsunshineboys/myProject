@@ -2091,7 +2091,7 @@ class OrderController extends Controller
             ->one();
         if ($order_refund)
         {
-            $code=1029;
+            $code=1032;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]

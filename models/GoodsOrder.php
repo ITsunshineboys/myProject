@@ -1277,7 +1277,7 @@ class GoodsOrder extends ActiveRecord
             ->andWhere('handle = 0')
             ->one();
         if ($refunds){
-            $code=1028;
+            $code=1031;
             return $code;
         }
         $time=time();
