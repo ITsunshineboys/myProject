@@ -533,7 +533,7 @@ class QuoteController extends Controller
                         $effect_images = $house['drawing_list'];
                         $series_id     = $house['series'];
                         $style_id      = $house['style'];
-                        $images_user   = '张放添加色情图';
+                        $images_user   = '案例添加';
                         ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
                 }
 
@@ -703,13 +703,11 @@ class QuoteController extends Controller
 
                     $effect_id = \Yii::$app->db->getLastInsertID();
                     if (!empty($house['drawing_list'])){
-                        foreach ($house['drawing_list'] as $images){
-                            $effect_images = $images['all_drawing'];
-                            $series_id     = $images['series'];
-                            $style_id      = $images['style'];
+                            $effect_images = $house['all_drawing'];
+                            $series_id     = $house['series'];
+                            $style_id      = $house['style'];
                             $images_user   = '案例图片';
                             ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
-                        }
                     }
 
                     foreach ($house['all_goods'] as $goods){
