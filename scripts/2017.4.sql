@@ -1192,3 +1192,19 @@ CREATE TABLE `user_follow` (
 
 alter TABLE designer ADD COLUMN `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数';
 alter TABLE decoration_company ADD COLUMN `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数';
+
+--8.25 start
+CREATE TABLE `order_refund` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(50) NOT NULL,
+  `sku` varchar(50) NOT NULL,
+  `status` tinyint(1) NOT NULL COMMENT '1:  商家待处理  2.处理完成',
+  `apply_reason` varchar(100) NOT NULL,
+  `handle` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未处理  1：同意  2：驳回',
+  `handle_reason` varchar(100) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `handle_time` int(11) NOT NULL,
+  `refund_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8
+--8.25 end

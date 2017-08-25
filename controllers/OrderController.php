@@ -1967,4 +1967,149 @@ class OrderController extends Controller
     }
 
 
+     /**
+     * user apply refund
+     * @return string
+     */
+    public  function  actionUserCancelOrder(){
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => 1052,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+        $apply_reason=trim($request->post('apply_reason',''));
+        if(!$order_no ||!$sku || !$apply_reason){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user);
+           if ($code ==200){
+               return Json::encode([
+                   'code' => $code,
+                   'msg' => 'ok'
+               ]);
+           }else{
+               return Json::encode([
+                   'code' => $code,
+                   'msg' => \Yii::$app->params['errorCodes'][$code]
+               ]);
+           }
+    }
+
+    /**
+     * get refund list
+     * by order_no and sku
+     * @return string
+     */
+    public  function  actionGetOrderRefundList()
+    {
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=yii::$app->request;
+        $order_no=$request->post('order_no','');
+        $sku=$request->post('sku','');
+        if (!$order_no  || ! $sku)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $order_refund=OrderRefund::find()
+            ->select('order_no,sku,handle,apply_reason,create_time,handle_time,refund_time,handle_reason')
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->asArray()
+            ->all();
+        $arr=OrderRefund::SetRefundparameter($order_refund);
+        $code=200;
+        return  Json::encode([
+                'code'=>$code,
+                'msg'=>'ok',
+                'data'=>$arr
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function  actionRefundhandle(){
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=yii::$app->request;
+        $order_no=$request->post('order_no','');
+        $sku=$request->post('sku','');
+        $handle_reason=$request->post('$handle_reason
+','');
+        $handle=$request->post('handle','');
+
+        if (!$order_no  || ! $sku || !$handle)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        $order=GoodsOrder::find()->select('id')->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])->one();
+        if (!$supplier || !$order){
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $order_refund=OrderRefund::find()
+            ->select('order_no,sku,handle,apply_reason,create_time,handle_time,refund_time,handle_reason')
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->andWhere(['handle'=>GoodsOrder::REFUND_HANDLE_STATUS_AGREE])
+            ->asArray()
+            ->one();
+        if ($order_refund)
+        {
+            $code=1029;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=GoodsOrder::RefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
+        if ($code ==200){
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok',
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+
 }

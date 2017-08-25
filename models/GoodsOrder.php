@@ -17,13 +17,6 @@ use app\services\StringService;
 use app\services\SmValidationService;
 use app\services\ModelService;
 
-const  SUP_BANK_CARD='supplier_bankinformation';
-const  SUPPLIER='supplier';
-const  SUP_FREELIST='supplier_freezelist';
-const  SUP_CASHREGISTER='supplier_cashregister';
-const  ORDER_GOODSLIST='order_goodslist';
-const  ORDER_PLATFORM_HANDLE='order_platform_handle';
-const   EXPRESS='express';
 class GoodsOrder extends ActiveRecord
 {
     const SUPPLIER='supplier';
@@ -36,13 +29,42 @@ class GoodsOrder extends ActiveRecord
     const PAY_STATUS_DESC_UNPAID = '未付款';
     const PAY_STATUS_DESC_PAID = '已付款';
     const PAY_STATUS_DESC_REFUNDED = '已退款';
+    const SHIPPING_STATUS_UNSHIPPED=0;
+    const SHIPPING_STATUS_SHIPPED=1;
+    const SHIPPING_STATUS_SHIPPEDCOMPLETE=2;
+    const SHIPPING_STATUS_DESC_UNSHIPPED='未发货';
+    const SHIPPING_STATUS_DESC_SHIPPED='已发货';
+    const SHIPPING_STATUS_DESC_SHIPPEDCOMPLETE='已收货';
+    const ORDER_STATUS_UNCOMPLETE=0;
+    const ORDER_STATUS_COMPLETE=1;
+    const ORDER_STATUS_CANCEL=2;
+    const ORDER_STATUS_DESC_UNCOMPLETE='未完成';
+    const ORDER_STATUS_DESC_COMPLETE='已完成';
+    const ORDER_STATUS_DESC_CANCEL='已取消';
+    const UNUSUAL_STATUS_REFUND=1;
+    const UNUSUAL_STATUS_DESC_REFUND='申请退款';
+    const REFUND_HANDLE_STATUS_AGREE=1;
+    const REFUND_HANDLE_STATUS_DISAGREE=2;
+    const REFUND_HANDLE_STATUS_DESC_AGREE='同意';
+    const REFUND_HANDLE_STATUS_DESC_DISAGREE='驳回';
     const PAY_STATUSES = [
         self::PAY_STATUS_UNPAID => self::PAY_STATUS_DESC_UNPAID,
         self::PAY_STATUS_PAID => self::PAY_STATUS_DESC_PAID,
         self::PAY_STATUS_REFUNDED => self::PAY_STATUS_DESC_REFUNDED,
     ];
 
-    public $goods_id;
+    const ORDER_STATUS=[
+        self::ORDER_STATUS_UNCOMPLETE=>self::ORDER_STATUS_DESC_UNCOMPLETE,
+        self::ORDER_STATUS_COMPLETE=>self::ORDER_STATUS_DESC_COMPLETE,
+        self::ORDER_STATUS_CANCEL=>self::ORDER_STATUS_DESC_CANCEL,
+    ];
+    const SHIPPED_STATUS=[
+        self::SHIPPING_STATUS_UNSHIPPED=>self::SHIPPING_STATUS_DESC_UNSHIPPED,
+        self::SHIPPING_STATUS_SHIPPED=>self::SHIPPING_STATUS_DESC_SHIPPED,
+        self::SHIPPING_STATUS_SHIPPEDCOMPLETE=>self::SHIPPING_STATUS_DESC_SHIPPEDCOMPLETE,
+    ];
+
+
     /**
          * @return string 返回该AR类关联的数据表名
          */
@@ -1233,5 +1255,248 @@ class GoodsOrder extends ActiveRecord
         }
 
         return (int)$query->one()[$retKeyName];
+    }
+
+     /**user apply refund
+     * @param $order_no
+     * @param $sku
+     * @param $apply_reason
+     * @param $user
+     * @return int
+     */
+    public static function  applyRefund($order_no,$sku,$apply_reason,$user)
+    {
+        $code=self::CheckJurisdiction($order_no,$sku,$user);
+        if ($code !=200){
+            return $code;
+        }
+        $refunds=OrderRefund::find()
+            ->select('id')
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->andWhere('handle = 0')
+            ->one();
+        if ($refunds){
+            $code=1028;
+            return $code;
+        }
+        $time=time();
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $order_refund=new OrderRefund();
+            $order_refund->order_no=$order_no;
+            $order_refund->sku=$sku;
+            $order_refund->apply_reason=$apply_reason;
+            $order_refund->create_time=$time;
+            $res=$order_refund->save();
+            if (!$res){
+                $code=500;
+                $trans->rollBack();
+                return $code;
+            }
+            $order=OrderGoods::find()
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
+                ->one();
+            $order->is_unusual=self::UNUSUAL_STATUS_REFUND;
+            $res2=$order->save();
+            if (!$res2){
+                $code=500;
+                $trans->rollBack();
+                return $code;
+            }
+            $trans->commit();
+            $code=200;
+            return $code;
+        } catch (Exception $e) {
+            $trans->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+
+    /**
+     * set transaction no
+     * @return string
+     */
+    public static  function SetTransaction_no($supplier){
+        $time=time();
+        $month=date('m',$time);
+        $day=date('d',$time);
+        $rand=rand(10000,99999);
+        do {
+            $transaction_no=$month.$day.$supplier->shop_no.$rand;
+        } while ( $transaction_no==SupplierCashregister::find()
+            ->select('transaction_no')
+            ->where(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one()['transaction_no']);
+
+        return $transaction_no;
+    }
+    /**
+     * @param $order_no
+     * @param $sku
+     * @param $handle
+     * @param $handle_reason
+     * @return int
+     */
+    public  static  function RefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
+    {
+           if ($handle ==self::REFUND_HANDLE_STATUS_AGREE)
+           {
+               $code=self::AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
+               return $code;
+           }
+           if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE){
+               $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
+               return $code;
+           }
+    }
+
+    /**
+     * @param $order_no
+     * @param $sku
+     * @param $handle
+     * @param $handle_reason
+     * @param $user
+     * @param $supplier
+     * @return int
+     */
+    public static function  disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        $time=time();
+        try{
+
+            $order_goodslist=OrderGoods::find()->where(['order_no','sku'=>$sku])->one();
+            $order_goodslist->isunusual=0;
+            $res1=$order_goodslist->save();
+            if (!$res1){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $order_refund=OrderRefund::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
+            $order_refund->handle=$handle;
+            $order_refund->handle_reason=$handle_reason;
+            $order_refund->handle_time=$time;
+            $res2=$order_refund->save();
+            if(!$res2){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+    /**
+     * @param $order_no
+     * @param $sku
+     * @param $handle
+     * @param $handle_reason
+     * @param $user
+     * @param $supplier
+     * @return int
+     */
+    public static function AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
+    {
+        $time=time();
+        $transaction_no=self::SetTransaction_no($supplier);
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $order_goodslist=OrderGoods::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
+            $order_goodslist->order_status=self::ORDER_STATUS_CANCEL;
+            $res1=$order_goodslist->save();
+            if (!$res1){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $supplier->balance=$supplier->balance-$order_goodslist->freight-$order_goodslist->supplier_price*$order_goodslist->goods_number;
+            $supplier->availableamount=$supplier->balance-$order_goodslist->freight-$order_goodslist->supplier_price*$order_goodslist->goods_number;
+            $res2=$supplier->save(false);
+            if (!$res2){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $supplier_accessdetail=new SupplierAccessdetail();
+            $supplier_accessdetail->access_type=4;
+            $supplier_accessdetail->access_money=$order_goodslist->freight+$order_goodslist->supplier_price*$order_goodslist->goods_number;
+            $supplier_accessdetail->order_no=$order_no;
+            $supplier_accessdetail->supplier_id=$supplier->id;
+            $supplier_accessdetail->create_time=$time;
+            $supplier_accessdetail->transaction_no=$transaction_no;
+            $res3=$supplier_accessdetail->save(false);
+            if (!$res3){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $order_refund=OrderRefund::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
+            $order_refund->handle=$handle;
+            $order_refund->handle_reason=$handle_reason;
+            $order_refund->handle_time=$time;
+            $res4=$order_refund->save();
+            if (!$res4){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+    /** check user Jurisdiction
+     * @param $order_no
+     * @param $user
+     * @return int
+     */
+    private static  function CheckJurisdiction($order_no,$sku,$user)
+    {
+        $order=GoodsOrder::find()
+            ->select('user_id')
+            ->where(['order_no'=>$order_no])
+            ->one();
+        $order_goodslist=OrderGoods::find()
+            ->select('id,order_status')
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->one();
+        if ($order_goodslist['order_status']!=0)
+        {
+            $code=403;
+            return $code;
+        }
+        if (!$order || !$order_goodslist)
+        {
+            $code=1000;
+            return $code;
+        }
+        if ($order->user_id == $user->id){
+            $code= 200;
+        }
+        else{
+            $code=403;
+        }
+        return $code;
     }
 }
