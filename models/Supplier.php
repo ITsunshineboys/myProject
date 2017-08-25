@@ -750,4 +750,31 @@ class Supplier extends ActiveRecord
             return $code;
         }
     }
+
+    /**
+     * Open supplier
+     *
+     * @param ActiveRecord $operator operator
+     * @return int
+     */
+    public function online(ActiveRecord $operator)
+    {
+        $this->status = self::STATUS_ONLINE;
+
+        $tran = Yii::$app->db->beginTransaction();
+        $code = 500;
+
+        try {
+            if (!$this->save()) {
+                $tran->rollBack();
+                return $code;
+            }
+
+            $tran->commit();
+            return 200;
+        } catch (\Exception $e) {
+            $tran->rollBack();
+            return $code;
+        }
+    }
 }

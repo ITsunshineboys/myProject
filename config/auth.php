@@ -88,7 +88,7 @@ return [
     'mall/shop-data' => [1, 6],
     'mall/supplier-index-admin' => [6],
     'mall/check-role-get-identity' => [1],
-    'mall/supplier-offline' => [1],
+    'mall/supplier-status-toggle' => [1],
     'mall/supplier-list' => [1],
 
     // mall

@@ -124,7 +124,7 @@ class MallController extends Controller
         'reset-user-status-logs',
         'user-list',
         'index-admin-lhzz',
-        'supplier-offline',
+        'supplier-status-toggle',
         'supplier-list',
         'categories-have-style-series',
         'categories-style-series-reset',
@@ -205,7 +205,7 @@ class MallController extends Controller
                     'user-disable-batch' => ['post',],
                     'user-disable-remark-reset' => ['post',],
                     'user-enable-batch' => ['post',],
-                    'supplier-offline' => ['post',],
+                    'supplier-status-toggle' => ['post',],
                     'categories-style-series-reset' => ['post',],
                 ],
             ],
@@ -4825,11 +4825,11 @@ class MallController extends Controller
     }
 
     /**
-     * Close supplier
+     * Toggle supplier status
      *
      * @return string
      */
-    public function actionSupplierOffline()
+    public function actionSupplierStatusToggle()
     {
         $code = 1000;
 
@@ -4841,7 +4841,10 @@ class MallController extends Controller
             ]);
         }
 
-        $supplier = Supplier::findOne($supplierId);
+        $supplier = Supplier::find()
+            ->where(['id' => $supplierId])
+            ->andWhere(['in', 'status', array_keys(Supplier::STATUSES_ONLINE_OFFLINE)])
+            ->one();
         if (!$supplier) {
             return Json::encode([
                 'code' => $code,
@@ -4850,7 +4853,9 @@ class MallController extends Controller
         }
 
         $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
-        $res = $supplier->offline($operator);
+        $res = $supplier->status == Supplier::STATUS_OFFLINE
+            ? $supplier->online($operator)
+            : $supplier->offline($operator);
         return Json::encode([
             'code' => $res,
             'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res]
