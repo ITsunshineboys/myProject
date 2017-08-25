@@ -2126,6 +2126,8 @@ class MallController extends Controller
             ]);
         }
 
+        $where = 'approve_time = 0 and reject_time = 0';
+
         $keyword = trim(Yii::$app->request->get('keyword', ''));
         if (!$keyword) {
             $reviewStatus = (int)Yii::$app->request->get('review_status', Yii::$app->params['value_all']);
@@ -2135,8 +2137,6 @@ class MallController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-
-            $where = 'approve_time = 0 and reject_time = 0';
             if ($reviewStatus != Yii::$app->params['value_all']) {
                 $where .= " and review_status = {$reviewStatus}";
             }
@@ -2164,7 +2164,7 @@ class MallController extends Controller
                 $endTime && $where .= " and create_time <= {$endTime}";
             }
         } else {
-            $where = "supplier_name like '%{$keyword}%'";
+            $where .= " and supplier_name like '%{$keyword}%'";
             $ids = GoodsBrand::findIdsByMobile($keyword);
             $ids && $where .= " or id in(" . implode(',', $ids) . ")";
         }
