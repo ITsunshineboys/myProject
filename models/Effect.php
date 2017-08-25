@@ -76,7 +76,11 @@ class Effect extends ActiveRecord
             ->all();
         return $detail;
     }
-
+    /**
+     * get effect view info
+     * @param int $effect_id
+     * @return array
+     */
     public function geteffectdata($effect_id){
         $query=new Query();
         $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,e.stairway,t.style,s.series')->leftJoin('effect_picture as ep','e.id=ep.effect_id')->leftJoin('series As s','s.id = ep.series_id')->leftJoin('style As t','t.id = ep.style_id')->where(['e.id'=>$effect_id])->one();
