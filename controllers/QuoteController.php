@@ -654,7 +654,7 @@ class QuoteController extends Controller
                     $flat_area = $house['flattop_area'];
                     $balcony_area = $house['balcony_area'];
 
-                    $effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,0);
+                    $effect = (new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,0);
 
                     $effect_id = \Yii::$app->db->getLastInsertID();
                     (new DecorationParticulars())->plotAdd($effect_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
@@ -699,7 +699,7 @@ class QuoteController extends Controller
                     }
 
 
-                    $effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id);
+                    $effect = (new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id);
 
                     $effect_id = \Yii::$app->db->getLastInsertID();
                     if (!empty($house['drawing_list'])){
@@ -772,7 +772,7 @@ class QuoteController extends Controller
                     $flat_area = $house['flattop_area'];
                     $balcony_area = $house['balcony_area'];
 
-                    $_effect = (new Effect())->plotEdit($house_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,0);
+                    $effect = (new Effect())->plotEdit($house_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,0);
                     (new DecorationParticulars())->plotEdit($other_id,$hall_area,$hall_perimeter,$bedroom_area,$bedroom_perimeter,$toilet_area,$toilet_perimeter,$kitchen_area,$kitchen_perimeter,$modelling_length,$flat_area,$balcony_area);
 
                     if (!empty($house['drawing_list'])){
@@ -816,7 +816,7 @@ class QuoteController extends Controller
                     }else{
                         $stair_id = $house['stair'];
                     }
-                    $_effect = (new Effect())->plotEdit($house_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id);
+                    $effect = (new Effect())->plotEdit($house_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id);
 
                     if (!empty($house['drawing_list'])){
                             if (!empty($house['id'])){
@@ -881,9 +881,8 @@ class QuoteController extends Controller
             if (!empty($request['delete_drawing'])){
                 EffectPicture::deleteAll(['id'=>$request['delete_drawing']]);
             }
-
         }
-        if ($effect  || $_effect) {
+        if ($effect) {
             $code = 200;
             return Json::encode([
                 'code' => $code,
