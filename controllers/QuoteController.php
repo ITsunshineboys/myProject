@@ -699,7 +699,7 @@ class QuoteController extends Controller
                     }
 
 
-                    $effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id);
+                    $_effect =(new Effect())->plotAdd($bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id);
 
                     $effect_id = \Yii::$app->db->getLastInsertID();
                     if (!empty($house['drawing_list'])){
@@ -883,7 +883,7 @@ class QuoteController extends Controller
             }
 
         }
-        if ($effect) {
+        if ($effect  || $_effect) {
             $code = 200;
             return Json::encode([
                 'code' => $code,
