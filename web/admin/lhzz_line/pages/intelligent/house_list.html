@@ -1,0 +1,42 @@
+<div>
+    <div class="house_list">
+        <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{cur_province.name}}-{{cur_city.name}}</h6>
+        <form>
+            <button class="add_garden" ng-click="go_to_add()"><i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>添加小区</button>
+            <select class="choose_area" ng-model="ctrlScope.cur_county" ng-click="cur_county_to_house()" ng-options="item.name for item in county">
+                <option value="全市"></option>
+            </select>
+            <input type="text" class="start_time" placeholder="开始时间" ng-model="ctrlScope.start_time" id="start_time" ngc-lay-date>
+            <input type="text" class="end_time" placeholder="结束时间" ng-model="ctrlScope.end_time" id="end_time" ngc-lay-date>
+            <label for="search">
+            <input id="search" type="text" placeholder="搜索小区名称" ng-model="ctrlScope.search_txt">
+            </label>
+            <button class="search_btn" ng-click="search_house()">查询</button>
+        </form>
+        <table class="table">
+            <tr>
+                <th>小区名称</th>
+                <th>创建日期</th>
+                <th>所在区域</th>
+                <th>详情</th>
+            </tr>
+            <tr ng-repeat="item in house_detail">
+                <td class="text-left">{{item.toponymy}}</td>
+                <td class="text-left">{{item.add_time}}</td>
+                <td class="text-left">{{item.district}}</td>
+                <td class="text-left" style="color: #3F94F6;" ng-click="go_edit_house(item)">编辑</td>
+            </tr>
+        </table>
+        <!--分页开始-->
+        <ul class="pages">
+            <li ng-click="Previous()" ng-if="cur_page != 1">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
+            <li class="pagenum" ng-repeat="page in total_pages" ng-click="choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
+            <!--<li id="omit" ng-show="allpages>5">...</li>-->
+            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
+            <li ng-click="Next()" ng-if="cur_page != total_pages.length">下一页</li>
+            <li id="jumpto"><input type="text" ng-model="topage"></li>
+            <li ng-click="choosePage(topage)">跳转</li>
+        </ul>
+        <!--分页结束-->
+    </div>
+</div>

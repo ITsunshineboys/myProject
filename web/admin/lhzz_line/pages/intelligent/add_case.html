@@ -1,0 +1,210 @@
+<div class="add_case">
+    <form class="form-horizontal" name="curForm" novalidate >
+        <div class="all">
+            <h1>户型信息</h1>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型名称</label>
+                <div class="col-md-3">
+                    <input ng-class="{'error':(curForm.houseName.$invalid&&submitted) || ((curForm.houseName.$error.required || curForm.houseName.$error.pattern)&&change)}"
+                           ng-pattern="/^[\d\D]{1,12}$/" ng-blur="change=!!curForm.houseName.$error" autocomplete="off"
+                           type="text" id="houseName" name="houseName" required placeholder="请输入户型名称" minlength="1" maxlength="12"
+                           ng-model="cur_house_information.house_type_name" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋面积</label>
+                <div class="col-md-3">
+                    <input id="houseArea" autocomplete="off" type="text" name="houseArea" ng-pattern="/^[1-9]$|^[1-9]\d$|^1[0-7]\d$|^[1-9]\.\d{1,2}$|^[1-9]\d\.\d{1,2}$|^1[0-7]\d.\d{1,2}$|^180$/"
+                           required class="form-control" ng-model="cur_house_information.area" placeholder="请输入面积数值" ng-blur="change1=!!curForm.houseArea.$error"
+                           ng-class="{'error':(curForm.houseArea.$invalid&&submitted) ||((curForm.houseArea.$error.required || curForm.houseArea.$error.pattern)&&change1)}">
+                </div>
+                <span class="unit">m<sup>2</sup></span>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋户型</label>
+                <div class="col-md-3">
+                    <label for="room" class="col-md-6 left_house_type">
+                        <input id="room" type="text" disabled class="form-control" ng-model="cur_house_information.cur_room">
+                        <span>室</span>
+                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_room',6,1)"></button>
+                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_room',1,0)"></button>
+                    </label>
+                    <label for="hall" class="col-md-6 right_house_type">
+                        <input id="hall" type="text" disabled class="form-control" ng-model="cur_house_information.cur_hall">
+                        <span>厅</span>
+                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_hall',3,1)"></button>
+                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_hall',1,0)"></button>
+                    </label>
+                    <label for="toilet" class="col-md-6 left_house_type">
+                        <input id="toilet" type="text" disabled class="form-control" ng-model="cur_house_information.cur_toilet">
+                        <span>卫</span>
+                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_toilet',4,1)"></button>
+                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_toilet',1,0)"></button>
+                    </label>
+                    <label for="kitchen" class="col-md-6 right_house_type">
+                        <input id="kitchen" type="text" disabled class="form-control" ng-model="cur_house_information.cur_kitchen">
+                        <span>厨</span>
+                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_kitchen',2,1)"></button>
+                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_kitchen',1,0)"></button>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型图</label>
+                <div class="col-md-3">
+                    <div style="width: 100px;height: 100px;">
+                        <!--<img src="pages\intelligent\images\default.png" ng-if="!data.file" alt=""  width="100px" height="100px">-->
+                        <img ng-src="http://test.cdlhzz.cn:888/{{cur_house_information.cur_imgSrc}}" ng-if="cur_house_information.cur_imgSrc!=''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
+                        <img ng-if="cur_house_information.cur_imgSrc==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
+                    </div>
+                    <span class="upload_msg">图片大小176x176，5M内，可传1张图片，支持JPG、PNG、JPGE</span>
+                    <button type="button" class="button" ng-change="upload(data.file)" ngf-pattern="image/*"  ngf-select="" ngf-multiple="false" ng-model="data.file">
+                        上传</button>
+                    <p class="pic_error" ng-if="!!a_pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{a_pic_error}}</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>是否有楼梯</label>
+                <div class="col-md-4 special_radio">
+                    <label for="have_stair" ng-click="cur_house_information.have_stair = 1;cur_house_information.stair = 1" class="col-md-3">
+                        <input id="have_stair" type="radio" ng-checked="cur_house_information.have_stair==1" name="if_stair">
+                        有
+                    </label>
+                    <label for="no_stair" ng-click="cur_house_information.have_stair = 0;cur_house_information.stair = 0" class="col-md-3">
+                        <input id="no_stair" type="radio" ng-checked="cur_house_information.have_stair==0" name="if_stair">
+                        无
+                    </label>
+                    <div class="row col-md-12 structure" ng-if="cur_house_information.have_stair == 1">
+                        <label for="structure{{item.id}}" ng-click="cur_house_information.stair=+item.id" class="col-md-4" ng-repeat="item in cur_all_stair">
+                            <input  type="radio" ng-checked="cur_house_information.stair == item.id" id="structure{{item.id}}"  name="stair_structure">
+                            {{item.attribute}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>层高</label>
+                <div class="col-md-4 special_radio">
+                    <label for="first_high" ng-click="cur_house_information.high = 2.8" class="col-md-3">
+                        <input id="first_high" ng-checked="cur_house_information.high == 2.8" type="radio" name="high">
+                        2.8m
+                    </label>
+                    <label for="second_high" ng-click="cur_house_information.high = 3" class="col-md-3">
+                        <input id="second_high" ng-checked="cur_house_information.high == 3" type="radio" name="high">
+                        3m
+                    </label>
+                    <label for="three_high" ng-click="cur_house_information.high = 3.3" class="col-md-3">
+                        <input id="three_high" ng-checked="cur_house_information.high == 3.3" type="radio" name="high">
+                        3.3m
+                    </label>
+                    <label for="four_high" ng-click="cur_house_information.high = 4.5" class="col-md-3">
+                        <input id="four_high" ng-checked="cur_house_information.high == 4.5" type="radio" name="high">
+                        >4.5m(跃层商铺等)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>飘窗</label>
+                <div class="col-md-3">
+                    <input id="window" autocomplete="off" type="text" required ng-pattern="/^\d$|^1\d$|^20$|^\d\.\d{1,2}$|^1\d\.\d{1,2}$/" ng-blur="change2=!!curForm.window.$error"
+                           placeholder="请输入长度数值" class="form-control" ng-model="cur_house_information.window" name="window"
+                           ng-class="{'error':(curForm.window.$invalid&&submitted) ||(
+                           (curForm.window.$error.required || curForm.window.$error.pattern)&&change2)}">
+                </div>
+                <span class="unit">m</span>
+            </div>
+        </div>
+        <div class="all">
+            <h1>图纸信息</h1>
+            <div class="form-group">
+                <label class="col-md-2 text-left">系列选择</label>
+                <div class="col-md-3">
+                    <select class="form-control" ng-model="ctrlScope.cur_series" ng-options="item.series for item in cur_all_series"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left">风格选择</label>
+                <div class="col-md-3">
+                    <select class="form-control" ng-model="ctrlScope.cur_style" ng-options="item.style for item in cur_all_style"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>图纸</label>
+                <div class="col-md-10">
+                    <div class="cur_drawing" ng-repeat="item in all_drawing">
+                        <img ng-src="http://test.cdlhzz.cn:888/{{item}}" width="100px" height="100px">
+                        <div class="text-center" ng-click="upload_delete(item)">&times;</div>
+                    </div>
+                    <div style="width: 100px;height: 100px;display: inline-block" ngf-pattern="image/*" ng-change="arr_upload(data.file)"  ngf-select="" ng-model="data.file" ngf-multiple="false" ng-if="all_drawing.length<6">
+                        <img src="pages/intelligent/images/add.png" alt="" width="100px" height="100px">
+                    </div>
+                    <p class="upload_msg">图片大小347x190，5M内，可传1-6张图片，支持JPG、PNG、JPGE</p>
+                    <p class="pic_error" ng-if="!!pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{pic_error}}</p>
+                </div>
+            </div>
+            <span></span>
+        </div>
+        <div class="all">
+            <h1>户型商品</h1>
+            <div ng-repeat="item in all_materials">
+                <h2>{{all_num[$index]}}、{{item.title}}</h2>
+                <div ng-repeat="item2 in item.second_level | orderBy :'id'">
+                    <h3 class="second_level">{{$index+1}}、{{item2.title}}</h3>
+                    <ul class="three_level">
+                        <li ng-repeat="item3 in item2.three_level | orderBy :'id'">
+                            <div class="form-group">
+                                <label class="col-md-2 text-left goods">{{item3.title}}</label>
+                                <div class="col-md-3">
+                                    <input type="text" ng-class="{'error': (curForm['good{{item3.id}}'].$error.pattern)}" name="good{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品编码" class="form-control" ng-model="item3.good_id">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" ng-class="{'error': (curForm['quantity{{item3.id}}'].$error.pattern)}" name="quantity{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品数量" class="form-control" ng-model="item3.good_quantity">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="item.id==1">
+                    <h3 class="second_level">{{item.second_level.length+1}}、工人费用</h3>
+                    <ul class="three_level">
+                        <li ng-repeat="item2 in worker_list track by $index">
+                            <div class="form-group">
+                                <label class="col-md-2 text-left goods">{{item2.worker_kind}}</label>
+                                <div class="col-md-3">
+                                    <input type="text" placeholder="请输入用人费用" class="form-control" ng-model="item2.price">
+                                </div>
+                                <p class="col-md-2" >元</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-group">
+                                <label class="col-md-2 text-left goods">杂工选项</label>
+                                <div class="col-md-3">
+                                    <div class="form-group backman" ng-repeat="item in backman_option track by $index">
+                                    <p class="col-md-4" ng-if="item.name!='有无建渣点'">{{item.name}}</p>
+                                    <div class="col-md-8" ng-if="item.name!='有无建渣点'">
+                                        <input type="text" placeholder="请输入数值" class="form-control" ng-model="item.num">
+                                    </div>
+                                        <span class="unit1" ng-if="item.name!='有无建渣点'">m<sup ng-if="item.name!='补烂'">2</sup></span>
+                                        <label class="col-md-12" ng-click="item.num = 1" ng-if="item.name=='有无建渣点'">
+                                        <input type="radio" name="building_slag" ng-checked="item.num == 1">
+                                        小区有建渣点
+                                        </label>
+                                        <label class="col-md-12" ng-click="item.num = 0" ng-if="item.name=='有无建渣点'">
+                                        <input type="radio" name="building_slag" ng-checked="item.num == 0">
+                                        小区无建渣点
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="from-group submit">
+            <button class="remove" type="button" ng-click="get_case_tips(curForm.$valid,curForm.$error)">确认</button>
+            <button type="button" ng-click="houseReturn()">返回</button>
+        </div>
+    </form>
+</div>

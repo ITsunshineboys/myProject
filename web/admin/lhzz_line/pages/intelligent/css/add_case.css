@@ -1,0 +1,209 @@
+/*头部样式修改*/
+header{
+    height: 60px;
+    line-height:60px;
+    font-size:14px!important;
+    border-bottom:1px solid #E6E9F0;
+    padding:0 40px;
+    position: relative;
+    text-align: right;
+}
+.header_title{
+    position: absolute;
+    left:0;
+    margin-left:40px;
+}
+header button{
+    width:40px;
+    height: 40px;
+    border-radius:50% ;
+    line-height: 40px;
+    border:.5px solid #ccc;
+    background: none;
+}
+.highLight{
+    color: #000!important;
+    font-weight:bold!important;
+}
+.dark{
+    color: #2F3033!important;
+    font-weight: normal!important;
+}
+/*编辑户型样式*/
+.add_case input,.add_case input:focus{
+    outline:0!important;
+    border-color: #ccc;
+    box-shadow:none;
+}
+.add_case .form-horizontal .form-group{
+    margin-left:0px!important;
+}
+.add_case{
+    padding-left:40px;
+    padding-right:40px;
+}
+.add_case h1{
+    font-size:18px !important;
+}
+.add_case h2{
+    font-size:16px !important;
+}
+.add_case h3{
+    font-size:14px !important;
+}
+.add_case .form-group{
+    margin-top:30px !important;
+}
+.add_case button{
+    width:70px;
+    height: 32px;
+    font-size:12px;
+    background: none;
+    border:.5px solid #ccc;
+    margin-left:10px;
+    margin-right:10px;
+    border-radius:2px;
+}
+.add_case .remove{
+    border-color: #3F94F6!important;
+    color: #3F94F6;
+}
+.add_case a{
+    color: #3F94F6;
+}
+.add_case .submit{
+    margin-top:100px;
+}
+.add_case .all{
+    border-bottom:1px solid #ccc;
+}
+.add_case .red_mark{
+    color: red;
+}
+.add_case .left_house_type{
+    width: 45%;
+    position: relative;
+    margin-right:10%;
+}
+.add_case .right_house_type{
+    width: 45%;
+    position: relative;
+}
+.add_case .left_house_type button,.add_case .right_house_type button{
+    width:32px;
+    position: absolute;
+    top: 0;
+}
+.add_case button:first-of-type{
+    right:-5px;
+}
+.add_case  button:last-of-type{
+    right:32px;
+}
+.add_case .left_house_type input,.add_case .right_house_type input{
+    font-size:16px;
+    color: #666;
+    font-weight:normal;
+}
+.add_case .left_house_type span,.add_case .right_house_type span{
+    position: absolute;
+    top:6px;
+    font-size:16px;
+    color: #666;
+    font-weight:normal;
+    right:calc(50% + 25px);
+}
+.add_case .unit{
+    line-height:32px;
+}
+.add_case label{
+    padding:0!important;
+}
+.add_case .special{
+    width:100px;
+}
+.add_case .special_radio > label{
+    width:80px;
+}
+.add_case .special_radio > label:last-of-type{
+    width:140px;
+}
+.add_case .button{
+    width: 75px !important;
+    height: 25px !important;
+    margin-top:5px;
+    margin-left:0!important;
+    padding-left:0!important;
+}
+.add_case .upload_msg{
+    font-size:12px;
+    color: #ccc;
+    white-space:nowrap;
+}
+.add_case .pic_error{
+    font-size:12px;
+    margin-top:5px;
+    color: red;
+}
+.add_case .cur_drawing{
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    position: relative;
+}
+.add_case .cur_drawing img{
+    border:1px solid #ccc!important;
+}
+.add_case .cur_drawing div{
+    position: absolute;
+    width:100px;
+    height:25px;
+    line-height: 25px;
+    bottom:0;
+    background-color:#fff;
+    color: red;
+    border:1px solid #ccc!important;
+    font-weight:bold;
+    font-size:20px;
+}
+.add_case .second_level{
+    padding-left:10px !important;
+}
+.add_case .three_level{
+    padding-left:30px !important;
+}
+.add_case .goods{
+    font-weight: normal;
+    margin-right:-30px !important;
+}
+.add_case .backman{
+    margin-top: 0!important;
+    position: relative;
+}
+.add_case .backman label{
+    font-size:14px !important;
+    font-weight:normal;
+    margin-bottom:15px;
+}
+.add_case p{
+    margin:10px 0 !important;
+}
+.add_case .backman p{
+    margin:0 0 10px  !important;
+    padding-left:0!important;
+}
+.add_case div{
+    padding-left: -15px !important;
+}
+.add_case .unit1{
+    position: absolute;
+    right:-33px;
+}
+.add_case .structure{
+    border:1px solid #ccc;
+    border-radius:5px;
+    padding:10px;
+}
+.add_case .structure label{
+    margin-bottom:10px;
+}

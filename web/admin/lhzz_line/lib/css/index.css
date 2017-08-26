@@ -8,6 +8,22 @@ a{
 a:hover{
   text-decoration: none!important;
 }
+/*公共输入框样式*/
+input,select,button,textarea{
+  outline:none;
+}
+input[disabled]{
+  background: none!important;
+}
+textarea{
+  resize: none;
+}
+.error{
+  border-color: red!important;
+}
+li{
+  list-style: none!important;
+}
 /*导航栏*/
 .nav_box{
   width: 200px;

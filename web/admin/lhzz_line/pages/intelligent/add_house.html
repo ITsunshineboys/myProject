@@ -1,0 +1,81 @@
+<div class="add_house">
+    <form class="form-horizontal" novalidate name="submitForm">
+        <div class="all">
+                <h1>基本信息</h1>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区名称</label>
+                <div class="col-md-3">
+                <input type="text" name="districtName" ng-class="{'error':(submitForm.districtName.$invalid&&submitted) ||
+                (submitForm.districtName.$error.required&&change)}" ng-blur="change=!!submitForm.districtName.$error"
+                       ng-model="ctrlScope.house_name" class="form-control" required maxlength="14">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区地址</label>
+                <div class="col-md-3">
+                    <label>选择区县</label>
+                    <select ng-model="ctrlScope.cur_house_county" class="form-control" ng-options="item.name for item in house_county"></select>
+                    <!--<input type="text" class="form-control">-->
+                    <label>详细地址</label>
+                    <textarea class="form-control" name="address" ng-class="{'error':(submitForm.address.$invalid&&submitted) ||
+                (submitForm.address.$error.required&&change1)}" ng-blur="change1=!!submitForm.address.$error" placeholder="请输入详细地址" required ng-model="ctrlScope.address" cols="30" rows="5"></textarea>
+                    <span class="address_num">{{ctrlScope.cur_num}}/45</span>
+                </div>
+            </div>
+        </div>
+        <div class="all">
+            <div class="house_msg_header">
+            <h1>房屋信息</h1>
+                <div class="house_msg_btn ">
+                    <button ng-click="add_ordinary_house()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
+                    <button ng-click="add_case()"><i class="glyphicon glyphicon-plus"></i>案例添加</button>
+                </div>
+                </div>
+            <div class="form-group" ng-repeat="item in house_informations track by $index">
+                <label class="col-md-2 text-left" ng-if="!item.is_ordinary"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型名称</label>
+                <label class="col-md-2 text-left" ng-if="!!item.is_ordinary"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型名称-案例</label>
+                <div class="col-md-3">
+                <input type="text" name="houseName{{$index}}" ng-class="{'error':(submitForm['houseName{{$index}}'].$invalid&&submitted) ||
+                (submitForm['houseName{{$index}}'].$error.required&&change2)}" ng-blur="change2=!!submitForm['houseName{{$index}}'].$error" disabled required class="form-control" ng-model="item.house_type_name">
+                </div>
+                <div class="col-md-3">
+                    <div class="all_btn">
+                    <button ng-click="delete_house(item)" class="cur_delete" ng-if="$index!=0"><i class="glyphicon glyphicon-minus"></i></button>
+                    <button class="remove btn_up" ng-if="!$first" ng-click="house_sort(item,'up')"><i class="glyphicon glyphicon-arrow-up"></i>上移</button>
+                    <button class="remove btn_down" ng-if="house_informations.length!=1&&!$last" ng-click="house_sort(item,'down')"><i class="glyphicon glyphicon-arrow-down"></i>下移</button>
+                    <a ng-click="go_to_edit(item,$index)">编辑</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="all">
+            <div class="house_msg_header">
+                <h1>图纸信息</h1>
+                <div class="house_msg_btn ">
+                    <button ng-click="add_drawing()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
+                </div>
+            </div>
+
+            <div class="form-group" ng-repeat="item in drawing_informations">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>图纸名称</label>
+                <div class="col-md-3">
+                <input type="text" name="drawingName" disabled ng-class="{'error':(submitForm.drawingName.$invalid&&submitted) ||
+                (submitForm.drawingName.$error.required&&change3)}" ng-blur="change3=!!submitForm.drawingName.$error" required class="form-control" ng-model="item.drawing_name">
+                </div>
+                <div class="col-md-3">
+                    <div class="all_btn">
+                        <button ng-click="delete_drawing(item)" class="cur_delete"><i class="glyphicon glyphicon-minus"></i></button>
+                        <a ng-click="go_to_drawing(item,$index)">编辑</a>
+                    </div>
+                    <!--<div class="pull-right">-->
+                        <!--<a ng-click="go_to_drawing(item,$index)">编辑</a></div>-->
+                </div>
+            </div>
+        </div>
+        <div class="from-group submit">
+            <button class="remove" type="button" ng-click="add_house(submitForm.$valid,submitForm.$error)">确认</button>
+            <button type="button" ng-click="returnPrev()">返回</button>
+        </div>
+    </form>
+</div>

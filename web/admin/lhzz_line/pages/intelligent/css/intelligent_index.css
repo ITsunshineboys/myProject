@@ -1,0 +1,76 @@
+/*头部样式修改*/
+header{
+    height: 60px;
+    line-height:60px;
+    font-size:14px!important;
+    border-bottom:1px solid #E6E9F0;
+    padding:0 40px;
+    position: relative;
+    text-align: right;
+}
+.header_title{
+    position: absolute;
+    left:0;
+    margin-left:40px;
+}
+header button{
+    width:40px;
+    height: 40px;
+    border-radius:50% ;
+    line-height: 40px;
+    border:.5px solid #ccc;
+    background: none;
+}
+.highLight{
+    color: #000!important;
+    font-weight:bold!important;
+}
+.dark{
+    color: #2F3033!important; ;
+    font-weight: normal!important;
+}
+/*=智能报价主页*/
+.intelligent_index{
+    margin-left:40px;
+    margin-right:40px;
+    border-bottom:.5px solid #E6E9F0;
+}
+.intelligent_index button{
+    background: none;
+    border:.5px solid #ccc;
+    padding:6px;
+    font-size:14px;
+    margin-top:60px;
+    border-radius:2px;
+}
+.intelligent_index label{
+    font-size:12px;
+    margin-right:10px;
+}
+.intelligent_index  select{
+    width:150px;
+    height: 32px;
+    color: #666F80;
+    font-weight:normal!important;
+    margin-left:5px;
+    border-radius:2px;
+    border:.5px solid #ccc;
+}
+.intelligent_index form{
+    margin:20px 0;
+}
+
+.all_btn{
+    margin-left:40px;
+    margin-right:40px;
+    padding-top:30px;
+}
+.all_btn button{
+    color: #3F94F6 ;
+    border:.5px solid #3F94F6;
+    background: #eee;
+    font-size:8px;
+    padding:7px;
+    margin-right:5px;
+    border-radius:2px;
+}

@@ -1,0 +1,23 @@
+  <div>
+<div class="intelligent_index">
+        <button><i style="margin-right: 5px;" class="fa fa-cog" aria-hidden="true"></i>通用管理</button>
+      <form action="">
+        <label>
+            选择省份
+            <select ng-model="cur_province" ng-options="item.name for item in province"
+                    ng-change="getCity(cur_province)"></select>
+        </label>
+        <label>
+            选择城市
+            <select ng-model="cur_city" ng-options="item.name for item in city" ng-change="getCounty(cur_city)"></select>
+        </label>
+      </form>
+    </div>
+  <div class="all_btn">
+    <button>资费/做工标准</button>
+    <button>工程标准</button>
+    <button ng-click="goHouseList()">小区列表</button>
+    <button>智能报价配套商品管理</button>
+    <button ng-click="goSupportGoods()">案例/社区店配套商品管理</button>
+  </div>
+  </div>

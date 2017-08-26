@@ -7,6 +7,8 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
   "addseriesModule",
   "seriesdetailModule","addstyleModule","choose_styleModule","styledetailModule",
 
+   'index_module','intelligent_index','angularCSS','intelligent_directive',
+
   //  王杰 开始
   "index_module",
   "banner_recommend_module",
@@ -206,6 +208,46 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
         params:{style_item:'',style_arr:'',index:''}
       })
   //============================================================
+      .state('intelligent',{
+          url:'/intelligent/',
+          templateUrl:'pages/intelligent/index.html',
+          css:'pages/intelligent/css/intelligent_header.css',
+      })
+      .state('intelligent.intelligent_index',{
+          url:'index',
+          templateUrl:'pages/intelligent/intelligent_index.html',
+          css:'pages/intelligent/css/intelligent_index.css'
+      })
+      .state('intelligent.house_list',{
+          url:'house_list',
+          templateUrl:'pages/intelligent/house_list.html',
+          css:'pages/intelligent/css/house_list.css'
+      })
+      .state('intelligent.add_house',{
+          url:'add_house',
+          templateUrl:'pages/intelligent/add_house.html',
+          css:'pages/intelligent/css/add_house.css'
+      })
+      .state('intelligent.add_case',{
+          url:'add_case',
+          templateUrl:'pages/intelligent/add_case.html',
+          css:'pages/intelligent/css/add_case.css'
+      })
+      .state('intelligent.edit_house',{
+          url:'edit_house',
+          templateUrl:'pages/intelligent/edit_house.html',
+          css:'pages/intelligent/css/edit_house.css'
+      })
+      .state('intelligent.add_drawing',{
+          url:'add_drawing',
+          templateUrl:'pages/intelligent/add_drawing.html',
+          css:'pages/intelligent/css/add_drawing.css'
+      })
+      .state('intelligent.add_support_goods',{
+          url:'add_support_goods',
+          templateUrl:'pages/intelligent/add_support_goods.html',
+          css:'pages/intelligent/css/add_support_goods.css'
+      })
 })
   .directive('wdatePicker',function(){
     return{
