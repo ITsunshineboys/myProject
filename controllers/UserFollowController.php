@@ -211,4 +211,12 @@ class UserFollowController extends Controller
 
         echo "ok";
     }
+
+    public function actionTry()
+    {
+        $data1 = Supplier::find()->asArray()->all();
+        $data2 = Designer::find()->asArray()->all();
+        $data3 = DecorationCompany::find()->asArray()->all();
+        var_dump(['supplier'=>$data1, 'designer'=> $data2,'decorationcompany'=>$data3]);
+    }
 }
