@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 
+use app\models\DecorationCompany;
+use app\models\Designer;
 use app\models\Supplier;
 use app\models\UserFollow;
 use app\services\ExceptionHandleService;
@@ -181,5 +183,30 @@ class UserFollowController extends Controller
         }
         //如果没有关注 add follow ,follower_number+1
         //
+        $supplier_ids = Designer::find()->select(['id'])->asArray()->all();
+        foreach ($supplier_ids as $supplier_id) {
+            $ids[] = $supplier_id['id'];
+            $user_follow = new UserFollow();
+            $user_follow->role_id = 3;
+            $user_follow->user_id = 1;
+            $user_follow->follow_id = $supplier_id['id'];
+            $user_follow->save(false);
+            $supplier = Designer::find()->where(['id'=> $supplier_id['id']])->one();
+            $supplier->follower_number = 1;
+            $supplier->save(false);
+        }
+
+        $supplier_ids = DecorationCompany::find()->select(['id'])->asArray()->all();
+        foreach ($supplier_ids as $supplier_id) {
+            $ids[] = $supplier_id['id'];
+            $user_follow = new UserFollow();
+            $user_follow->role_id = 3;
+            $user_follow->user_id = 1;
+            $user_follow->follow_id = $supplier_id['id'];
+            $user_follow->save(false);
+            $supplier = DecorationCompany::find()->where(['id'=> $supplier_id['id']])->one();
+            $supplier->follower_number = 1;
+            $supplier->save(false);
+        }
     }
 }
