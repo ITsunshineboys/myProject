@@ -619,7 +619,8 @@ class QuoteController extends Controller
         foreach ($request['house_informations'] as $house) {
             //添加功能
             if (in_array("id",$house)) {
-                var_dump('无id');exit;
+                echo '无id';
+                var_dump($house);exit;
                 if ($house['is_ordinary'] != 1 ){
                     //普通户型添加
                     $bedroom = $house['cur_room'];
@@ -736,7 +737,8 @@ class QuoteController extends Controller
                     }
                 }
             } else{
-                var_dump('有id');exit;
+                echo '有id';
+                var_dump($house);exit;
                 if ($house['is_ordinary'] != 1 ){
                     //普通户型修改
                     $house_id = $house['id'];
