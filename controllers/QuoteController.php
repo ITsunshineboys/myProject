@@ -819,16 +819,14 @@ class QuoteController extends Controller
                     $effect = (new Effect())->plotEdit($house_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id);
 
                     if (!empty($house['drawing_list'])){
-                        foreach ($house['drawing_list'] as $images){
                             if (!empty($house['id'])){
-                                $images_id     = $images['id'];
-                                $effect_images = $images['all_drawing'];
-                                $series_id     = $images['series'];
-                                $style_id      = $images['style'];
+                                $images_id     = $house['id'];
+                                $effect_images = $house['drawing_list'];
+                                $series_id     = $house['series'];
+                                $style_id      = $house['style'];
                                 $images_user   = '案例图片';
                                 ( new EffectPicture())->plotEdit($images_id,$effect_images,$series_id,$style_id,$images_user);
                             }
-                        }
                     }
 
                     foreach ($house['all_goods'] as $goods){
