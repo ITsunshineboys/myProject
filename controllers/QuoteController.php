@@ -817,6 +817,7 @@ class QuoteController extends Controller
                         $stair_id = $house['stair'];
                     }
                     $effect = (new Effect())->plotEdit($house_id,$bedroom,$sittingRoom_diningRoom,$toilet,$kitchen,$window,$area,$high,$province,$province_code,$city,$city_code,$district,$district_code,$toponymy,$street,$particulars,$stairway,$house_image,$type,$sort_id,$stair_id);
+                    var_dump($effect);exit;
 
                     if (!empty($house['drawing_list'])){
                         foreach ($house['drawing_list'] as $images){

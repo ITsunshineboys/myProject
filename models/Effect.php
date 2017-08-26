@@ -241,12 +241,11 @@ class Effect extends ActiveRecord
             'street'        => $street,
             'particulars'   => $particulars,
             'stairway'      => $stairway,
-            'add_time'      => time(),
             'house_image'   => $house_image,
             'stair_id'      => $stair_id,
             'type'          => $type,
             'sort_id'       => $sort_id
-        ],'id='. $id)->execute();
+        ],'id='. $id)->getRawSql();
 
         return $res;
     }
