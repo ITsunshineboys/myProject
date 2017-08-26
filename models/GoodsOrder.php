@@ -1132,10 +1132,16 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+
         }
         $data=ModelService::pageDeal($arr, $count, $page, $page_size);
+        $sales=Supplier::find()
+            ->select('sales_volumn_month,sales_amount_month')
+            ->where(['id'=>$supplier_id])
+            ->one();
+        $data['sales_volumn_month']=$sales->sales_volumn_month;
+        $data['sales_amount_month']=sprintf('%.2f', (float)$sales->sales_amount_month*0.01);
         return $data;
-
     }
 
     private static  function increase_condition($array,$time_start,$time_end,$search){
