@@ -3,9 +3,6 @@
 namespace app\controllers;
 
 
-use app\models\DecorationCompany;
-use app\models\Designer;
-use app\models\Supplier;
 use app\models\UserFollow;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -157,13 +154,5 @@ class UserFollowController extends Controller
             'msg' => 200 == $code ? 'OK' : \Yii::$app->params['errorCodes'][$code]
         ]);
     }
-
-    //删除所有关注
-//    public function actionDeleteFollow()
-//    {
-//        if (UserFollow::deleteAll()){
-//            echo 'ok';
-//        }
-//    }
 
 }

@@ -96,7 +96,7 @@ class UserFollow extends \yii\db\ActiveRecord
 
         $query = (new Query())->from(self::USER_FOLLOW . ' u')
             ->leftJoin($table . ' f', 'u.follow_id = f.id')
-            ->select(['u.id', 'u.follow_id', 'u.role_id', 'u.status', 'f.' . $nickname, 'f.icon', 'f.follower_number'])
+            ->select(['u.id', 'u.follow_id', 'u.role_id', 'u.status', 'f.' . $nickname . ' as nickname', 'f.icon', 'f.follower_number'])
             ->where(['u.role_id' => $role_id, 'u.status' => 1, 'u.user_id' => $user_id]);
 
         $count = $query->count();
