@@ -612,15 +612,29 @@ class QuoteController extends Controller
     public function actionPlotEdit()
     {
         $request = \Yii::$app->request->post();
+//        $request = [
+//            'house_informations'=>
+//            [
+//                [
+//                    'id'=>1,
+//                    'is_ordinary'=>3,
+//                ],
+//                [
+//                    'is_ordinary'=>1,
+//                ],
+//                [
+//                    'id'=>3,
+//                    'is_ordinary'=>2,
+//                ],
+//            ]
+//        ];
 //        $user = \Yii::$app->user->identity();
         $province_chinese = District::findByCode($request['province_code']);
         $city_chinese = District::findByCode($request['city_code']);
         $district_chinese = District::findByCode($request['cur_county_id']);
         foreach ($request['house_informations'] as $house) {
             //添加功能
-            if (in_array("id",$house)) {
-                echo '无id';
-                var_dump($house);exit;
+            if (!isset($house['id'])) {
                 if ($house['is_ordinary'] != 1 ){
                     //普通户型添加
                     $bedroom = $house['cur_room'];
@@ -737,8 +751,6 @@ class QuoteController extends Controller
                     }
                 }
             } else{
-                echo '有id';
-                var_dump($house);exit;
                 if ($house['is_ordinary'] != 1 ){
                     //普通户型修改
                     $house_id = $house['id'];
