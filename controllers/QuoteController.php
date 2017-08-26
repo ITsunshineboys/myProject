@@ -612,22 +612,6 @@ class QuoteController extends Controller
     public function actionPlotEdit()
     {
         $request = \Yii::$app->request->post();
-//        $request = [
-//            'house_informations'=>
-//            [
-//                [
-//                    'id'=>1,
-//                    'is_ordinary'=>3,
-//                ],
-//                [
-//                    'is_ordinary'=>1,
-//                ],
-//                [
-//                    'id'=>3,
-//                    'is_ordinary'=>2,
-//                ],
-//            ]
-//        ];
 //        $user = \Yii::$app->user->identity();
         $province_chinese = District::findByCode($request['province_code']);
         $city_chinese = District::findByCode($request['city_code']);
