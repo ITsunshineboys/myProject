@@ -618,8 +618,7 @@ class QuoteController extends Controller
         $district_chinese = District::findByCode($request['cur_county_id']);
         foreach ($request['house_informations'] as $house) {
             //添加功能
-            if (!in_array("id",$house)) {
-                echo 1111;exit;
+            if (in_array("id",$house)) {
                 if ($house['is_ordinary'] != 1 ){
                     //普通户型添加
                     $bedroom = $house['cur_room'];
@@ -736,7 +735,6 @@ class QuoteController extends Controller
                     }
                 }
             } else{
-                echo 2222;exit;
                 if ($house['is_ordinary'] != 1 ){
                     //普通户型修改
                     $house_id = $house['id'];
