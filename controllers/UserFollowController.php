@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 
+use app\models\Supplier;
 use app\models\UserFollow;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -155,4 +156,30 @@ class UserFollowController extends Controller
         ]);
     }
 
+    //删除所有关注
+    public function actionDeleteFollow()
+    {
+        if (UserFollow::deleteAll()){
+            echo 'ok';
+        }
+    }
+
+    //全部关注
+    public function actionAddFollow()
+    {
+        $supplier_ids = Supplier::find()->select(['id'])->asArray()->all();
+        foreach ($supplier_ids as $supplier_id) {
+            $ids[] = $supplier_id['id'];
+            $user_follow = new UserFollow();
+            $user_follow->role_id = 6;
+            $user_follow->user_id = 1;
+            $user_follow->follow_id = $supplier_id['id'];
+            $user_follow->save(false);
+            $supplier = Supplier::find()->where(['id'=> $supplier_id['id']])->one();
+            $supplier->follower_number = 1;
+            $supplier->save(false);
+        }
+        //如果没有关注 add follow ,follower_number+1
+        //
+    }
 }

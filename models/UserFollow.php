@@ -72,7 +72,10 @@ class UserFollow extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert)
     {
-        $insert && $this->follow_time = time();
+        if ($insert) {
+            $this->follow_time = time();
+            $this->status = 1;
+        }
         return parent::beforeSave($insert);
     }
 
