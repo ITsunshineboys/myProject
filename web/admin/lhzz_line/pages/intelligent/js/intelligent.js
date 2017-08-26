@@ -242,6 +242,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     }
                 }).then(function (response) {
                     console.log(response)
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
                     $scope.house_detail = response.data.model.details
                 }, function (error) {
                     console.log(error)
@@ -265,9 +270,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 //改变市获取全市小区信息
                 $http.get('/quote/plot-list', {
                     params: {
-                        'post': $scope.cur_county.id
+                        'post': $scope.cur_county.id,
+                        'page':$scope.cur_page
                     }
                 }).then(function (response) {
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
                     $scope.house_detail = response.data.model.details
                     console.log(response)
                 }, function (error) {
@@ -281,17 +292,56 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         $scope.topage = ''
         $scope.choosePage = function (page) {
             $scope.cur_page = page
-            $http.get('/quote/plot-list', {
-                params: {
-                    'post': $scope.cur_county.id,
-                    'page':$scope.cur_page
-                }
-            }).then(function (response) {
-                console.log(response)
-                $scope.house_detail = response.data.model.details
-            }, function (error) {
-                console.log(error)
-            })
+            if($scope.start_time!=''&&$scope.end_time!=''){
+                $http.get('/quote/plot-time-grabble', {
+                    params: {
+                        'city': $scope.cur_city.id,
+                        'min': $scope.start_time,
+                        'max': $scope.end_time,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    $scope.house_detail = response.data.model.details
+                    console.log(response)
+                }, function (error) {
+                    console.log(error)
+                })
+            }else if($scope.search_txt!=''){
+                $http.get('/quote/plot-grabble', {
+                    params: {
+                        'city': $scope.cur_city.id,
+                        'toponymy': $scope.search_txt,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
+                    $scope.house_detail = response.data.model.details
+                    console.log(response)
+                }, function (error) {
+                    console.log(error)
+                })
+            }else{
+                $http.get('/quote/plot-list', {
+                    params: {
+                        'post': $scope.cur_county.id,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    console.log(response)
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
+                    $scope.house_detail = response.data.model.details
+                }, function (error) {
+                    console.log(error)
+                })
+            }
         }
         //上一页
         $scope.Previous = function () {
@@ -301,17 +351,56 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 $scope.cur_page--
             }
             console.log($scope.cur_page)
-            $http.get('/quote/plot-list', {
-                params: {
-                    'post': $scope.cur_county.id,
-                    'page':$scope.cur_page
-                }
-            }).then(function (response) {
-                console.log(response)
-                $scope.house_detail = response.data.model.details
-            }, function (error) {
-                console.log(error)
-            })
+            if($scope.start_time!=''&&$scope.end_time!=''){
+                $http.get('/quote/plot-time-grabble', {
+                    params: {
+                        'city': $scope.cur_city.id,
+                        'min': $scope.start_time,
+                        'max': $scope.end_time,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    $scope.house_detail = response.data.model.details
+                    console.log(response)
+                }, function (error) {
+                    console.log(error)
+                })
+            }else if(($scope.start_time!=''||$scope.end_time!='')&&$scope.search_txt!=''){
+                $http.get('/quote/plot-grabble', {
+                    params: {
+                        'city': $scope.cur_city.id,
+                        'toponymy': $scope.search_txt,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
+                    $scope.house_detail = response.data.model.details
+                    console.log(response)
+                }, function (error) {
+                    console.log(error)
+                })
+            }else{
+                $http.get('/quote/plot-list', {
+                    params: {
+                        'post': $scope.cur_county.id,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    console.log(response)
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
+                    $scope.house_detail = response.data.model.details
+                }, function (error) {
+                    console.log(error)
+                })
+            }
         }
         //下一页
         $scope.Next = function () {
@@ -320,17 +409,56 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             }else{
                 $scope.cur_page++
             }
-            $http.get('/quote/plot-list', {
-                params: {
-                    'post': $scope.cur_county.id,
-                    'page':$scope.cur_page
-                }
-            }).then(function (response) {
-                console.log(response)
-                $scope.house_detail = response.data.model.details
-            }, function (error) {
-                console.log(error)
-            })
+            if($scope.start_time!=''&&$scope.end_time!=''){
+                $http.get('/quote/plot-time-grabble', {
+                    params: {
+                        'city': $scope.cur_city.id,
+                        'min': $scope.start_time,
+                        'max': $scope.end_time,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    $scope.house_detail = response.data.model.details
+                    console.log(response)
+                }, function (error) {
+                    console.log(error)
+                })
+            }else if($scope.search_txt!=''){
+                $http.get('/quote/plot-grabble', {
+                    params: {
+                        'city': $scope.cur_city.id,
+                        'toponymy': $scope.search_txt,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
+                    $scope.house_detail = response.data.model.details
+                    console.log(response)
+                }, function (error) {
+                    console.log(error)
+                })
+            }else{
+                $http.get('/quote/plot-list', {
+                    params: {
+                        'post': $scope.cur_county.id,
+                        'page':$scope.cur_page
+                    }
+                }).then(function (response) {
+                    console.log(response)
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
+                    $scope.house_detail = response.data.model.details
+                }, function (error) {
+                    console.log(error)
+                })
+            }
         }
         //所有搜索小区的方式
         //切换区域获取小区列表
@@ -362,6 +490,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                             'page':$scope.cur_page
                         }
                     }).then(function (response) {
+                        $scope.total_pages = []
+                        let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                        for (let i = 1; i <= num; i++) {
+                            $scope.total_pages.push(i)
+                        }
                         $scope.house_detail = response.data.model.details
                         console.log(response)
                     }, function (error) {
@@ -381,6 +514,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                         'max': newVal
                     }
                 }).then(function (response) {
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
                     $scope.house_detail = response.data.model.details
                     console.log(response)
                 }, function (error) {
@@ -400,6 +538,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                         'max': $scope.end_time
                     }
                 }).then(function (response) {
+                    $scope.total_pages = []
+                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                    for (let i = 1; i <= num; i++) {
+                        $scope.total_pages.push(i)
+                    }
                     $scope.house_detail = response.data.model.details
                     console.log(response)
                 }, function (error) {
@@ -418,6 +561,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     'toponymy': $scope.search_txt
                 }
             }).then(function (response) {
+                $scope.total_pages = []
+                let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                for (let i = 1; i <= num; i++) {
+                    $scope.total_pages.push(i)
+                }
                 $scope.house_detail = response.data.model.details
                 console.log(response)
             }, function (error) {
