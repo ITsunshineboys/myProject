@@ -29,11 +29,11 @@
         </table>
         <!--分页开始-->
         <ul class="pages">
-            <li ng-click="Previous()" ng-if="cur_page != 1&&total_pages.length!=1">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
+            <li ng-click="Previous()" ng-if="cur_page != 1&&total_pages.length>1">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
             <li class="pagenum" ng-repeat="page in total_pages" ng-click="choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
             <!--<li id="omit" ng-show="allpages>5">...</li>-->
             <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="Next()" ng-if="cur_page != total_pages.length&&total_pages.length!=1">下一页</li>
+            <li ng-click="Next()" ng-if="cur_page != total_pages.length&&total_pages.length>1">下一页</li>
             <li id="jumpto"><input type="text" ng-model="topage"></li>
             <li ng-click="choosePage(topage)">跳转</li>
         </ul>
