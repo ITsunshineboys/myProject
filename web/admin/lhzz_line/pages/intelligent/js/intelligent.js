@@ -1048,10 +1048,39 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             $scope.four_title = ''
             $scope.submitted = false
         }
+        //添加或编辑页面返回
+        $scope.addHouseReturn =function () {
+            $state.go('intelligent.house_list')
+        }
+        //跳转智能报价首页
+        $scope.go_index = function () {
+            $scope.second_title = ''
+            $scope.three_title = ''
+            $scope.four_title = ''
+            $state.go('intelligent.intelligent_index')
+        }
+        //跳转二级页面
+        $scope.go_second = function () {
+            $scope.three_title = ''
+            $scope.four_title = ''
+            if($scope.second_title == '案例/社区配套商品管理'){
+                $state.go('intelligent.add_support_goods')
+            }else if($scope.second_title == '小区列表页'){
+                $state.go('intelligent.house_list')
+            }
+        }
+        //跳转三级页面
+        $scope.go_three = function () {
+            $scope.four_title = ''
+            if($scope.three_title == '添加小区信息' || $scope.three_title == '编辑小区信息'){
+                $state.go('intelligent.add_house')
+            }
+        }
 
         //跳转案例社区配套商品管理
         $scope.check_item = []
         $scope.goSupportGoods = function () {
+            $scope.second_title = '案例/社区配套商品管理'
             //初始化数据
             $http.get('/quote/assort-goods-list').then(function (response) {//已选中三级
                 console.log(response)
@@ -1721,6 +1750,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
 
         //编辑所有页面配置
         $scope.go_edit_house = function (item) {
+            $scope.three_title='编辑小区详情'
             $scope.delete_house_list = []
             $scope.delete_drawing_list = []
             $scope.is_add = 0

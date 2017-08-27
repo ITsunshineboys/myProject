@@ -207,7 +207,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
         templateUrl:"pages/mall_manage/style_manage/style_detail/style_detail.html",
         params:{style_item:'',style_arr:'',index:''}
       })
-  //============================================================
+  //========================张放====================================
       .state('intelligent',{
           url:'/intelligent/',
           templateUrl:'pages/intelligent/index.html',
