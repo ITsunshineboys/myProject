@@ -2467,7 +2467,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'logistics-template' => $logisticsTemplate
+                'logistics_template' => $logisticsTemplate
             ],
         ]);
     }
