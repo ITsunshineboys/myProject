@@ -131,7 +131,7 @@ CREATE TABLE `supplier` (
   `support_offline_shop` tinyint(1) not null DEFAULT 0 comment '0: 不支持, 1: 支持',
   `balance` bigint(20) NOT NULL DEFAULT 0 COMMENT '账户总余额',
   `availableamount` bigint(20) NOT NULL DEFAULT 0 COMMENT '可用金额',
-  `pay_password` varchar(100) NOT NULL COMMENT '支付密码' ,
+  `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
   `district_code` int(6) unsigned NOT NULL DEFAULT 0 COMMENT '区域码',
   `district_name` varchar(50) NOT NULL DEFAULT '' COMMENT '区域名称',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',

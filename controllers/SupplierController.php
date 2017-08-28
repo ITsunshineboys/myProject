@@ -88,13 +88,15 @@ class SupplierController extends Controller
 
         $user = Yii::$app->user->identity;
 
-        if (Supplier::find()->where(['uid' => $user->id])->exists()) {
+        $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+        if ($supplier && $supplier->status == Supplier::STATUS_APPROVED) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
+        $supplier && Supplier::deleteAll(['id' => $supplier->id]);
         $code = Supplier::add($user, Yii::$app->request->post());
         if (200 != $code) {
             return Json::encode([

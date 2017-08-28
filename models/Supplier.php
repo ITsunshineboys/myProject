@@ -218,69 +218,84 @@ class Supplier extends ActiveRecord
         }
 
         $transaction = Yii::$app->db->beginTransaction();
-
-        if (!$supplier->save()) {
-            $transaction->rollBack();
-
-            $code = 500;
-            return $code;
-        }
-
-        $supplier->shop_no = Yii::$app->params['supplierRoleId']
-            . (Yii::$app->params['offsetGeneral'] + $supplier->id);
-
-        if (!$supplier->save()) {
-            $transaction->rollBack();
-
-            $code = 500;
-            return $code;
-        }
-
-        $userRole = new UserRole;
-        $userRole->user_id = $user->id;
-        $userRole->role_id = Yii::$app->params['supplierRoleId'];
-        if ($operator) {
-            $userRole->review_time = time();
-            $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
-            $userRole->reviewer_uid = $operator->id;
-        }
-        if (!$userRole->save()) {
-            $transaction->rollBack();
-
-            $code = 500;
-            return $code;
-        }
-
-        $user->refresh();
-        if (empty($user->identity_no)) {
-            $user->legal_person = isset($attrs['legal_person']) ? trim($attrs['legal_person']) : '';
-            $user->identity_no = isset($attrs['identity_no']) ? trim($attrs['identity_no']) : '';
-            $user->identity_card_front_image = isset($attrs['identity_card_front_image'])
-                ? trim($attrs['identity_card_front_image'])
-                : '';
-            $user->identity_card_back_image = isset($attrs['identity_card_back_image'])
-                ? trim($attrs['identity_card_back_image'])
-                : '';
-
-            if (!$user->validateIdentity()) {
-                $transaction->rollBack();
-
-                $code = 1000;
-                return $code;
-            }
-
-            if (!$user->save()) {
+        try {
+            if (!$supplier->save()) {
                 $transaction->rollBack();
 
                 $code = 500;
                 return $code;
             }
+
+            $supplier->shop_no = Yii::$app->params['supplierRoleId']
+                . (Yii::$app->params['offsetGeneral'] + $supplier->id);
+            if (!$supplier->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
+
+            UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['supplierRoleId']]);
+            $userRole = new UserRole;
+            $userRole->user_id = $user->id;
+            $userRole->role_id = Yii::$app->params['supplierRoleId'];
+            $userRole->review_apply_time = time();
+            if ($operator) {
+                $userRole->review_time = time();
+                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
+                $userRole->reviewer_uid = $operator->id;
+
+                $supplier->status = self::STATUS_APPROVED;
+                if (!$supplier->save()) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return $code;
+                }
+            }
+            if (!$userRole->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
+
+            $user->refresh();
+            if (empty($user->identity_no)) {
+                $user->legal_person = isset($attrs['legal_person']) ? trim($attrs['legal_person']) : '';
+                $user->identity_no = isset($attrs['identity_no']) ? trim($attrs['identity_no']) : '';
+                $user->identity_card_front_image = isset($attrs['identity_card_front_image'])
+                    ? trim($attrs['identity_card_front_image'])
+                    : '';
+                $user->identity_card_back_image = isset($attrs['identity_card_back_image'])
+                    ? trim($attrs['identity_card_back_image'])
+                    : '';
+
+                if (!$user->validateIdentity()) {
+                    $transaction->rollBack();
+
+                    $code = 1000;
+                    return $code;
+                }
+
+                if (!$user->save()) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return $code;
+                }
+            }
+
+            $transaction->commit();
+
+            $code = 200;
+            return $code;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return $code;
         }
-
-        $transaction->commit();
-
-        $code = 200;
-        return $code;
     }
 
     /**
