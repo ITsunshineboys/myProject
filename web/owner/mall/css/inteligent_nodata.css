@@ -2,9 +2,6 @@
 input[disabled]{
     background: none;
 }
-button[disabled]{
-
-}
 h1{
     font-family: PingFangSC-Regular;
     font-weight: 400!important;
@@ -157,7 +154,7 @@ header div i{
     height: 1.5rem;
     background-color:#53A8F4;
     position: absolute;
-    left: .9rem
+    left: .9rem;
     margin-top: 1.4rem;
 }
 .shu_house_3{

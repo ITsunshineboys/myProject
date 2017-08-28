@@ -1288,9 +1288,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                         for (let [key1, value1] of value.worker_list.entries()) {
                             if (!!value1.price) {
                                 worker.push(value1)
-                                value['worker_list'] = worker
                             }
                         }
+                        value['worker_list'] = worker
                     }
                 }
                 //处理杂工选项
@@ -1449,7 +1449,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                                         'price':value1.worker_kind,
                                         'id':value1.cur_id
                                     })
-                                    value['worker_list'] = worker
                                 }else{
                                     value.delete_workers.push(value1.cur_id)
                                 }
@@ -1460,6 +1459,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                                 }
                             }
                         }
+                        value['worker_list'] = worker
                     }
                 }
                 //处理杂工选项
@@ -1652,80 +1652,80 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             all_modal.$inject = ['$scope', '$uibModalInstance']
             if (valid) {
                 console.log(arr)
-                if($scope.is_add){
-                    $http.post('/quote/plot-add', {
-                        'province_code': $scope.cur_province.id,
-                        'city_code': $scope.cur_city.id,
-                        'house_name': $scope.house_name,
-                        'cur_county_id': $scope.cur_house_county.id,
-                        'address': $scope.address,
-                        'house_informations': arr
-                    }, config).then(function (response) {
-                        //请求小区数据
-                        $http.get('/quote/plot-list', {
-                            params: {
-                                'post': $scope.cur_county.id,
-                                'page':$scope.cur_page
-                            }
-                        }).then(function (response) {
-                            $scope.house_detail = response.data.model.details
-                            $scope.total_pages = []
-                            let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                            for (let i = 1; i <= num; i++) {
-                                $scope.total_pages.push(i)
-                            }
-                            console.log(response)
-                        }, function (error) {
-                            console.log(error)
-                        })
-                        console.log(response)
-                        //弹出保存成功模态框
-                        $uibModal.open({
-                            templateUrl: 'pages/intelligent/cur_model.html',
-                            controller: all_modal
-                        })
-                    }, function (error) {
-                        console.log(error)
-                    })
-                }else{
-                    $http.post('/quote/plot-edit',{
-                        'province_code': $scope.cur_province.id,
-                        'city_code': $scope.cur_city.id,
-                        'house_name': $scope.house_name,
-                        'cur_county_id': $scope.cur_house_county.id,
-                        'address': $scope.address,
-                        'house_informations': arr,
-                        'delete_house':$scope.delete_house_list,
-                        'delete_drawing':$scope.delete_drawing_list
-                    },config).then(function (response) {
-                        console.log(response)
-                        //请求小区数据
-                        $http.get('/quote/plot-list', {
-                            params: {
-                                'post': $scope.cur_county.id,
-                                'page':$scope.cur_page
-                            }
-                        }).then(function (response) {
-                            $scope.house_detail = response.data.model.details
-                            $scope.total_pages = []
-                            let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                            for (let i = 1; i <= num; i++) {
-                                $scope.total_pages.push(i)
-                            }
-                            console.log(response)
-                        }, function (error) {
-                            console.log(error)
-                        })
-                        console.log(response)
-                        //弹出保存成功模态框
-                        $uibModal.open({
-                            templateUrl: 'pages/intelligent/cur_model.html',
-                            controller: all_modal
-                        })
-                    },function (error) {
-                        console.log(error)
-                    })
-                }
+                // if($scope.is_add){
+                //     $http.post('/quote/plot-add', {
+                //         'province_code': $scope.cur_province.id,
+                //         'city_code': $scope.cur_city.id,
+                //         'house_name': $scope.house_name,
+                //         'cur_county_id': $scope.cur_house_county.id,
+                //         'address': $scope.address,
+                //         'house_informations': arr
+                //     }, config).then(function (response) {
+                //         //请求小区数据
+                //         $http.get('/quote/plot-list', {
+                //             params: {
+                //                 'post': $scope.cur_county.id,
+                //                 'page':$scope.cur_page
+                //             }
+                //         }).then(function (response) {
+                //             $scope.house_detail = response.data.model.details
+                //             $scope.total_pages = []
+                //             let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                //             for (let i = 1; i <= num; i++) {
+                //                 $scope.total_pages.push(i)
+                //             }
+                //             console.log(response)
+                //         }, function (error) {
+                //             console.log(error)
+                //         })
+                //         console.log(response)
+                //         //弹出保存成功模态框
+                //         $uibModal.open({
+                //             templateUrl: 'pages/intelligent/cur_model.html',
+                //             controller: all_modal
+                //         })
+                //     }, function (error) {
+                //         console.log(error)
+                //     })
+                // }else{
+                //     $http.post('/quote/plot-edit',{
+                //         'province_code': $scope.cur_province.id,
+                //         'city_code': $scope.cur_city.id,
+                //         'house_name': $scope.house_name,
+                //         'cur_county_id': $scope.cur_house_county.id,
+                //         'address': $scope.address,
+                //         'house_informations': arr,
+                //         'delete_house':$scope.delete_house_list,
+                //         'delete_drawing':$scope.delete_drawing_list
+                //     },config).then(function (response) {
+                //         console.log(response)
+                //         //请求小区数据
+                //         $http.get('/quote/plot-list', {
+                //             params: {
+                //                 'post': $scope.cur_county.id,
+                //                 'page':$scope.cur_page
+                //             }
+                //         }).then(function (response) {
+                //             $scope.house_detail = response.data.model.details
+                //             $scope.total_pages = []
+                //             let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                //             for (let i = 1; i <= num; i++) {
+                //                 $scope.total_pages.push(i)
+                //             }
+                //             console.log(response)
+                //         }, function (error) {
+                //             console.log(error)
+                //         })
+                //         console.log(response)
+                //         //弹出保存成功模态框
+                //         $uibModal.open({
+                //             templateUrl: 'pages/intelligent/cur_model.html',
+                //             controller: all_modal
+                //         })
+                //     },function (error) {
+                //         console.log(error)
+                //     })
+                // }
 
             } else {
                 $scope.submitted = true//判断是否提交

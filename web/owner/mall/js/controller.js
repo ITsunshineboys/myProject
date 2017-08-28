@@ -3167,3 +3167,16 @@ angular.module("all_controller", [])
             )
         }
     })
+    .controller('nodata_ctrl',function ($scope) {
+        $scope.toponymy = ''//小区名称
+        $scope.message = ''//小区地址
+        $scope.area = 60//房屋面积
+        $scope.house_bedroom = 1//室
+        $scope.house_hall = 1//厅
+        $scope.house_toilet = 1 //卫
+        $scope.house_kitchen = 1//厨
+        $scope.highCrtl = 2.8//层高
+        $scope.window = 0//飘窗
+        $scope.choose_stairs = 0 //有无楼梯
+        $scope.nowStairs = '实木构造'//楼梯结构
+    })
