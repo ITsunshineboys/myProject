@@ -2515,7 +2515,6 @@ class MallController extends Controller
             ]);
         }
 
-//        $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
         if ($model->status == LogisticsTemplate::STATUS_OFFLINE) {
             $model->status = LogisticsTemplate::STATUS_ONLINE;
         } else {
