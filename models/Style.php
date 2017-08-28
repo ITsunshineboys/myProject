@@ -79,7 +79,7 @@ class Style extends ActiveRecord
         $offset = ($page - 1) * $size;
         $style = Style::find()
             ->asArray()
-            ->select('creation_time,theme,intro,style,id,status,imges')
+            ->select('creation_time,theme,intro,style,id,status,images')
             ->offset($offset)
             ->limit($size)
             ->All();
