@@ -196,19 +196,6 @@ class OwnerController extends Controller
     public function actionWeakCurrent()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'area' => 60,
-//            'bedroom' => 2,
-//            'hall' => 1,
-//            'toilet' => 1,
-//            'kitchen' => 1,
-//            'stairs_details_id' => 1,
-//            'series' => 1,
-//            'style' => 1,
-//            'window' => 14,
-//            'province' => 510000,
-//            'city' => 510100,
-//        ];
         //人工价格
         $workers = LaborCost::profession($post, '弱电');
 
@@ -302,19 +289,6 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>2,
-//            'hall'=>1,
-//            'toilet'=>1,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>14,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
         $workers = LaborCost::profession($post, '强电');
 
         //点位 和材料查询
@@ -400,19 +374,6 @@ class OwnerController extends Controller
     public function actionWaterway()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>2,
-//            'kitchen'=>2,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>14,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
         //人工价格
         $waterway_labor = LaborCost::profession($post, '水路工');
 
@@ -505,19 +466,6 @@ class OwnerController extends Controller
     public function actionWaterproof()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>2,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>14,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
         //人工价格
         $waterproof_labor = LaborCost::profession($post, '防水工');
         //防水所需材料
@@ -621,19 +569,6 @@ class OwnerController extends Controller
     public function actionCarpentry()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>1,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>2,
-//            'window'=>10,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
         $labor_cost = LaborCost::univalence($post, '木工');
         foreach ($labor_cost as $one_labor) {
             $price = $one_labor['univalence'];
@@ -757,19 +692,6 @@ class OwnerController extends Controller
     public function actionCoating()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>1,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>2,
-//            'window'=>10,
-//            'province'=>510000,
-//            'city'=>510100,
-//        ];
         $arr['worker_kind'] = '油漆工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -985,20 +907,6 @@ class OwnerController extends Controller
     public function actionMudMake()
     {
         $post = \Yii::$app->request->post();
-//                $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>1,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>2,
-//            'window'=>10,
-//            'province'=>510000,
-//            'city'=>510100,
-//            'waterproof_total_area' =>32.58,
-//        ];
         $arr['worker_kind'] = '泥工';
         //工人一天单价
         $labor_costs = LaborCost::univalence($post, $arr['worker_kind']);
@@ -1333,20 +1241,6 @@ class OwnerController extends Controller
     public function actionPrincipalMaterial()
     {
         $post = Yii::$app->request->post();
-//        $post = [
-//            'area'=>60,
-//            'bedroom'=>1,
-//            'hall'=>1,
-//            'toilet'=>2,
-//            'kitchen'=>1,
-//            'stairs_details_id'=>1,
-//            'series'=>1,
-//            'style'=>1,
-//            'window'=>0,
-//            'province'=>510000,
-//            'city'=>510100,
-//            'waterproof_total_area' => 1,
-//            ];
         $material = '主材';
         $material_property_classify = MaterialPropertyClassify::findByAll($material);
         $one_add = [];
@@ -1397,14 +1291,6 @@ class OwnerController extends Controller
     public function actionFixationFurniture()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-////            'effect_id' => 1,
-//            'bedroom' => 2,
-//            'stairway_id'=>0,
-//            'stairs' =>'玻璃金属',
-//            'style' =>2,
-//            'series'=>1
-//        ];
         $classify = '固定家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
@@ -1447,14 +1333,6 @@ class OwnerController extends Controller
     public function actionMoveFurniture()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'effect_id' => 1,
-//            'bedroom' => 2,
-//            'hall'=> 2,
-//            'style' =>1,
-//            'series'=>1
-//        ];
-
         $classify = '移动家具';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
@@ -1481,16 +1359,6 @@ class OwnerController extends Controller
     public function actionAppliancesAssort()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-////            'effect_id' => 1,
-//            'kitchen' => 1,
-//            'bedroom' =>2,
-//            'toilet' => 1,
-//            'hall' => 1,
-//            'style' =>1,
-//            'series'=>2
-//        ];
-
         $classify = '家电配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $one_material = [];
@@ -1517,14 +1385,6 @@ class OwnerController extends Controller
     public function actionLifeAssort()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-////            'effect_id' => 1,
-//            'bedroom' => 2,
-//            'toilet' => 3,
-//            'style' =>1,
-//            'series'=>1
-//        ];
-
         $classify = '生活配套';
         $material_property_classify = MaterialPropertyClassify::findByAll($classify);
         $material_one = [];
