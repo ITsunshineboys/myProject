@@ -1497,7 +1497,6 @@ class OwnerController extends Controller
 
     }
 
-
     /**
      * Owner certification action(app)
      *
