@@ -41,6 +41,7 @@ class Series extends ActiveRecord
         $series = self::find()
             ->asArray()
             ->select("id,series,intro,theme")
+            ->where(['status'=>self::STATUS_ONLINE])
             ->orderBy(['id'=>SORT_ASC])
             ->all();
         return $series;
