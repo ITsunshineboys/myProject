@@ -35,9 +35,9 @@ class Supplier extends ActiveRecord
     ];
     const TYPE_SHOP = [
         '旗舰店',
-        '自营店',
-        '专营店',
         '专卖店',
+        '专营店',
+//        '自营店',
     ];
 
     const STATUSES = [

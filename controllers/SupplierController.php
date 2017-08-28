@@ -25,6 +25,7 @@ class SupplierController extends Controller
         'index-app',
         'reset-district',
         'reset-icon',
+        'shop-types',
     ];
 
     /**
@@ -348,5 +349,32 @@ class SupplierController extends Controller
             'code' => $res,
             'msg' => 200 == $res ? '修改Logo成功' : Yii::$app->params['errorCodes'][$res],
         ]);
+    }
+
+    /**
+     * Shop types action.
+     *
+     * @return string
+     */
+    public function actionShopTypes()
+    {
+        $i = 0;
+        $shopTypes = [];
+        array_map(function ($type) use (&$i, &$shopTypes) {
+            $shopTypes[] = [
+                'id' => $i,
+                'type' => $type,
+            ];
+            $i++;
+        }, Supplier::TYPE_SHOP);
+
+        return Json::encode(
+            [
+                'code' => 200,
+                'msg' => 'OK',
+                'data' => [
+                    'shop_types' => $shopTypes
+                ],
+            ]);
     }
 }
