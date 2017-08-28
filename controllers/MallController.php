@@ -4137,7 +4137,7 @@ class MallController extends Controller
         $style->style = $post['style'];
         $style->theme = $post['theme'];
         $style->intro = $post['intro'];
-        $style->imges = $post['imges'];
+        $style->images = $post['images'];
         $style->creation_time = time();
         $style->status = Style::STATUS_ONLINE;
         if (!$style->validate()) {
@@ -4169,7 +4169,7 @@ class MallController extends Controller
         $style_edit->style = $post['style'];
         $style_edit->theme = $post['theme'];
         $style_edit->intro = $post['intro'];
-        $style_edit->imges = $post['imges'];
+        $style_edit->images = $post['images'];
         if (!$style_edit->validate()) {
             return Json::encode([
                 'code' => $code,
