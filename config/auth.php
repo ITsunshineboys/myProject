@@ -61,6 +61,7 @@ return [
     'mall/logistics-template-edit' => [6],
     'mall/logistics-template-view' => [6],
     'mall/logistics-templates-supplier' => [6],
+    'mall/logistics-template-status-toggle' => [6],
 
     // goods attribute
     'mall/goods-attr-add' => [1],

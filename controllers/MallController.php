@@ -89,6 +89,7 @@ class MallController extends Controller
         'logistics-template-edit',
         'logistics-template-view',
         'logistics-templates-supplier',
+        'logistics-template-status-toggle',
         'goods-attr-add',
         'goods-attr-list-admin',
         'goods-add',
@@ -187,6 +188,7 @@ class MallController extends Controller
                     'brand-application-add' => ['post',],
                     'logistics-template-add' => ['post',],
                     'logistics-template-edit' => ['post',],
+                    'logistics-template-status-toggle' => ['post',],
                     'goods-attr-add' => ['post',],
                     'goods-add' => ['post',],
                     'goods-edit' => ['post',],
@@ -2484,6 +2486,53 @@ class MallController extends Controller
             'data' => [
                 'logistics_templates_supplier' => LogisticsTemplate::findBySupplierId($operator->id, LogisticsTemplate::FIELDS_LIST_ADMIN)
             ],
+        ]);
+    }
+
+    /**
+     * Toggle logistics template status action.
+     *
+     * @return string
+     */
+    public function actionLogisticsTemplateStatusToggle()
+    {
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $code = 1000;
+
+        if (!$id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $model = LogisticsTemplate::findOne($id);
+        if (!$model) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+//        $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
+        if ($model->status == LogisticsTemplate::STATUS_OFFLINE) {
+            $model->status = LogisticsTemplate::STATUS_ONLINE;
+        } else {
+            $model->status = LogisticsTemplate::STATUS_OFFLINE;
+        }
+
+        if (!$model->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK'
         ]);
     }
 
