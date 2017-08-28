@@ -42,6 +42,8 @@ class LogisticsTemplate extends ActiveRecord
      * Get template list by supplier id
      *
      * @param  int $supplierId supplier id
+     * @param array $select select fields default all
+     * @param int $status status default only online template
      * @return array
      */
     public static function findBySupplierId($supplierId, $select = [], $status = self::STATUS_ONLINE)
@@ -53,8 +55,10 @@ class LogisticsTemplate extends ActiveRecord
 
         $select = $select ? implode(',', $select) : '*';
 
+        $where = "supplier_id = {$supplierId}";
+        $status && $where .= " and status = {$status}";
         return Yii::$app->db
-            ->createCommand("select {$select} from {{%" . self::tableName() . "}} where supplier_id = {$supplierId} and status = {$status}")
+            ->createCommand("select {$select} from {{%" . self::tableName() . "}} where {$where}")
             ->queryAll();
     }
 
