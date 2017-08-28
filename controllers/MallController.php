@@ -4062,7 +4062,7 @@ class MallController extends Controller
         $series_edit->series = $post['series'];
         $series_edit->theme = $post['theme'];
         $series_edit->intro = $post['intro'];
-        $series->series_grade = $post['series_grade'];
+        $series_edit->series_grade = $post['series_grade'];
         if (!$series_edit->validate()) {
             return Json::encode([
                 'code' => $code,

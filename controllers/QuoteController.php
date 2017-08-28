@@ -980,4 +980,8 @@ class QuoteController extends Controller
             ]);
         }
     }
+
+    public function actionHomePageList(){
+        $reuest = \Yii::$app->request;
+    }
 }
