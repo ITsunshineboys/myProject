@@ -539,7 +539,7 @@ CREATE TABLE `effect` (
   `stair_id` tinyint(5) DEFAULT '0' COMMENT '楼梯材料',
   `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
   `house_image` varchar(50) DEFAULT NULL COMMENT '户型图一张',
-  `type` int(2) DEFAULT '0' COMMENT '0-普通，1-案列',
+  `type` int(2) DEFAULT '0' COMMENT '0-普通，1-案列，2-样板间',
   `sort_id` int(10) unsigned DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
