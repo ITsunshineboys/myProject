@@ -127,6 +127,20 @@ class EffectController extends Controller
         }
     }
     /**
+     * 获取户型列表
+     * @return string
+     */
+    public function actionGetparticulars(){
+        $particulars=(new Query())->select('particulars')->from('effect')->distinct()->all();
+
+        return json_encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$particulars
+        ]);
+
+    }
+    /**
      * 获取系列
      * @return string
      */
@@ -206,7 +220,6 @@ class EffectController extends Controller
                 return json_encode([
                     'code' => 200,
                     'msg' => 'ok',
-                    'data' => $model->toArray(),
 
                 ]);
 
