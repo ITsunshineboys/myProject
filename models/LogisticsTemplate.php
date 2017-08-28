@@ -25,6 +25,10 @@ class LogisticsTemplate extends ActiveRecord
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
     const ERROR_CODE_SAME_NAME = 1008;
+    const FIELDS_LIST_ADMIN = [
+        'id',
+        'name',
+    ];
 
     /**
      * @return \yii\db\ActiveQuery
@@ -40,7 +44,7 @@ class LogisticsTemplate extends ActiveRecord
      * @param  int $supplierId supplier id
      * @return array
      */
-    public static function findBySupplierId($supplierId, $select = [])
+    public static function findBySupplierId($supplierId, $select = [], $status = self::STATUS_ONLINE)
     {
         $supplierId = (int)$supplierId;
         if ($supplierId <= 0) {
@@ -50,7 +54,7 @@ class LogisticsTemplate extends ActiveRecord
         $select = $select ? implode(',', $select) : '*';
 
         return Yii::$app->db
-            ->createCommand("select {$select} from {{%" . self::tableName() . "}} where supplier_id = {$supplierId}")
+            ->createCommand("select {$select} from {{%" . self::tableName() . "}} where supplier_id = {$supplierId} and status = {$status}")
             ->queryAll();
     }
 

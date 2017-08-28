@@ -2477,13 +2477,12 @@ class MallController extends Controller
      */
     public function actionLogisticsTemplatesSupplier()
     {
-        $user = Yii::$app->user->identity;
-        $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+        $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'logistics_templates_supplier' => LogisticsTemplate::findBySupplierId($supplier->id, ['id', 'name'])
+                'logistics_templates_supplier' => LogisticsTemplate::findBySupplierId($operator->id, LogisticsTemplate::FIELDS_LIST_ADMIN)
             ],
         ]);
     }
