@@ -98,7 +98,7 @@ class OwnerController extends Controller
     }
 
     /**
-     * Series and style
+     * Series style and  stair list interface
      * @return string
      */
     public function actionSeriesAndStyle()

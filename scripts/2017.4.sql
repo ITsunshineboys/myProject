@@ -485,7 +485,7 @@ CREATE TABLE `style` (
   `category_id` int(11) DEFAULT NULL COMMENT '分类id',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 已停用 1: 已启用',
   `creation_time` int(11) DEFAULT NULL,
-  `imges` varchar(255) DEFAULT NULL COMMENT '图片',
+  `images` varchar(255) DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
