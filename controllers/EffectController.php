@@ -18,6 +18,9 @@ use Yii;
 
 class EffectController extends Controller
 {
+    const HIGH=2.8;
+    const WINDOW=2;
+    const TYPE_EFFECT=2;
     const STATUST_ON=1;
     const PAGE_SIZE = 10;
     const ACCESS_LOGGED_IN_USER = [
@@ -78,23 +81,18 @@ class EffectController extends Controller
            $series_id= $effect_picture->series_id = trim($request->post('series_id', ''), '');
            $style_id= $effect_picture->style_id = trim($request->post('style_id', ''), '');
             $effect = new Effect();
-            $bedroom=$effect->bedroom = trim($request->post('bedroom', ''), '');
-
-            $sittingRoom_diningRoom= $effect->sittingRoom_diningRoom = trim($request->post('sittingRoom_diningRoom', ''), '');
-            $effect->toilet = trim($request->post('toilet', ''), '');
-            $window =$effect->window = trim($request->post('window', ''), '');
-            $kitchen=$effect->kitchen = trim($request->post('kitchen', ''), '');
-            $area= $effect->area = trim($request->post('area', ''), '');
-            $high= $effect->high = trim($request->post('high', ''), '');
-            $province=$effect->province = trim($request->post('province', ''), '');
-            $city =$effect->city = trim($request->post('city', ''), '');
-           $district= $effect->district = trim($request->post('district', ''), '');
-            $toponymy= $effect->toponymy = trim($request->post('toponymy', ''), '');
-            $street=$effect->street = trim($request->post('street', ''), '');
-            $particulars= $effect->particulars = trim($request->post('particulars', ''), '');
+            $high=$effect->high=self::HIGH;
+            $window=$effect->window=self::WINDOW;
             $site_particulars= $effect->site_particulars = trim($request->post('site_particulars', ''), '');
+            $effect->city = mb_substr($site_particulars,0,2,'utf8');
+             $effect->district = mb_substr($site_particulars,3,2,'utf8');
+            $effect->street = mb_substr($site_particulars,6,null,'utf8');
+            $particulars= $effect->particulars = trim($request->post('particulars', ''), '');
+            preg_match('/\d+/',$particulars,$area);
+            $area=$effect->area=$area[0];
+            $toponymy= $effect->toponymy = trim($request->post('toponymy', ''), '');
            $stairway= $effect->stairway = trim($request->post('stairway', ''), '');
-            if (!$series_id || !$style_id ||!$sittingRoom_diningRoom||!$kitchen||!$bedroom || !$window || !$high ||!$area || !$province || !$city ||!$district ||!$toponymy|| !$street|| !$particulars || !$site_particulars) {
+            if (!$series_id || !$style_id ||!$area ||!$high || !$window  ||!$toponymy||  !$particulars || !$site_particulars) {
                 return json_encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -107,20 +105,7 @@ class EffectController extends Controller
                 $effect->stair_id=$stair_id;
 
             }
-
-            if($area>180){
-
-                return json_encode([
-                    'code' => $code,
-                    'msg' => '面积不能超过180',
-                ]);
-            }
-            if($window>20){
-                return json_encode([
-                    'code' => $code,
-                    'msg' => '飘窗不能超过20',
-                ]);
-            }
+            $effect->type=self::TYPE_EFFECT;
             $effect->save(false);
             $effect_picture->effect_id=$effect->id;
             $effect_picture->save(false);
