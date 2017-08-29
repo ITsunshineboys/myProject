@@ -3167,7 +3167,20 @@ angular.module("all_controller", [])
             )
         }
     })
+
+
+
+
+
+
     .controller('nodata_ctrl',function ($scope,$http) {
+        //post请求配置
+        let config = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function (data) {
+                return $.param(data)
+            }
+        }
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
         $scope.area = 60//房屋面积
@@ -3179,6 +3192,7 @@ angular.module("all_controller", [])
         $scope.window = 0//飘窗
         $scope.choose_stairs = 0 //有无楼梯，默认无楼梯
         $scope.nowStairs = 0//楼梯结构,，默认无楼梯结构
+        $scope.all_goods = []
         //请求后台数据
         $http.get('/owner/series-and-style').then(function (response) {
             console.log(response)
@@ -3215,5 +3229,158 @@ angular.module("all_controller", [])
             $scope.cur_series = item
         }
         //切换风格
-        $scope.
+        $scope.toggleStyle = function (item) {
+            $scope.cur_style = item
+        }
+        //室厅卫厨操作
+        $scope.operate = function (type,is_add,limit) {
+            if(!!is_add){
+                if($scope[type] == limit){
+                    $scope[type] = limit
+                }else{
+                    $scope[type]++
+                }
+            }else{
+                if($scope[type] == limit){
+                    $scope[type] = limit
+                }else{
+                    $scope[type]--
+                }
+            }
+        }
+        //一级、二级分类
+        $http.post('/owner/classify',{},config).then(function (response) {
+            console.log(response)
+            $scope.stair = response.data.data.pid.stair//一级
+            $scope.level = response.data.data.pid.level//二级
+        },function (error) {
+            console.log(error)
+        })
+        //无资料计算
+        $scope.get_goods = function (valid) {
+            if(valid){
+
+            }else{
+                $scope.submitted = true
+            }
+            let data = {
+                bedroom: $scope.house_bedroom,//卧室
+                area: $scope.area,      //面积
+                hall: $scope.house_hall,       //餐厅
+                toilet: $scope.house_toilet,   // 卫生间
+                kitchen: $scope.house_kitchen,  //厨房
+                series:+$scope.cur_series.id ,   //系列
+                style:+$scope.cur_style.id ,  //风格
+                window: $scope.window,//飘窗
+                high: $scope.highCrtl, //层高
+                province: 510000,   //省编码
+                city: 510100,      // 市编码
+                stairway_id: $scope.choose_stairs,//有无楼梯
+                stairs: $scope.nowStairs//楼梯结构
+            }
+            let data1 = data
+            //弱电
+            $http.post('/owner/weak-current',data,config).then(function (response) {
+                console.log('弱电')
+                console.log(response)
+                // for(let [key,value] of $scope.stair.entries()){
+                //     for(let [key1,value1] of $scope.level.entries()){
+                //         for(let [key2,value2] of response.data.data.weak_current_material.material.entries()){
+                //             if(value2.path.split(',')[0]==value.id&&value2.path.split(',')[1]==value1.id){
+                //                if($scope.all_goods.length == 0){
+                //
+                //                }
+                //             }
+                //         }
+                //     }
+                // }
+            },function (error) {
+                console.log(error)
+            })
+            //强电
+            $http.post('/owner/strong-current',data,config).then(function (response) {
+                console.log('强电')
+                console.log(response)
+                // for(let [key,value] of $scope.stair.entries()){
+                //     for(let [key1,value1] of $scope.level.entries()){
+                //         for(let [key2,value2] of response.data.data.strong_current_material.entries()){
+                //
+                //         }
+                //     }
+                // }
+            },function (error) {
+                console.log(error)
+            })
+            //水路
+            $http.post('/owner/waterway',data,config).then(function (response) {
+                console.log('水路')
+                console.log(response)
+                // for(let [key,value] of $scope.stair.entries()){
+                //     for(let [key1,value1] of $scope.level.entries()){
+                //         for(let [key2,value2] of response.data.data.waterway_material_price.entries()){
+                //
+                //         }
+                //     }
+                // }
+            },function (error) {
+                console.log(error)
+            })
+            //防水
+            $http.post('/owner/waterproof',data,config).then(function (response) {
+                console.log('防水')
+                console.log(response)
+                // for(let [key,value] of $scope.stair.entries()){
+                //     for(let [key1,value1] of $scope.level.entries()){
+                //         for(let [key2,value2] of response.data.data.waterproof_material.entries()){
+                //
+                //         }
+                //     }
+                // }
+                data1['waterproof_total_area'] = response.data.data.total_area
+                //泥作
+                $http.post('/owner/mud-make',data1,config).then(function (response) {
+                    console.log('泥作')
+                    console.log(response)
+                    // for(let [key,value] of $scope.stair.entries()){
+                    //     for(let [key1,value1] of $scope.level.entries()){
+                    //         for(let [key2,value2] of response.data.data.mud_make_material.entries()){
+                    //
+                    //         }
+                    //     }
+                    // }
+                },function (error) {
+                    console.log(error)
+                })
+            },function (error) {
+                console.log(error)
+            })
+            //木作
+            $http.post('/owner/carpentry',data,config).then(function (response) {
+                console.log('木作')
+                console.log(response)
+                // for(let [key,value] of $scope.stair.entries()){
+                //     for(let [key1,value1] of $scope.level.entries()){
+                //         for(let [key2,value2] of response.data.data.carpentry_material.entries()){
+                //
+                //         }
+                //     }
+                // }
+            },function (error) {
+                console.log(error)
+            })
+            //乳胶漆
+            $http.post('/owner/coating',data,config).then(function (response) {
+                console.log('乳胶漆')
+                console.log(response)
+                // for(let [key,value] of $scope.stair.entries()){
+                //     for(let [key1,value1] of $scope.level.entries()){
+                //         for(let [key2,value2] of response.data.data.coating_material.entries()){
+                //
+                //         }
+                //     }
+                // }
+            },function (error) {
+                console.log(error)
+            })
+        }
     })
