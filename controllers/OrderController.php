@@ -554,6 +554,7 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        echo $name.'<br>'.$phone.'<br>'.$effect_id;
         $res=Wxpay::effect_earnstsubmit($effect_id,$name,$phone,$money);
         return Json::encode([
             'code' => 200,
