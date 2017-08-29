@@ -996,4 +996,9 @@ class QuoteController extends Controller
             'list' =>  (new BrainpowerInitalSupervise())->findByCode($province_code,$city_code)
         ]);
     }
+
+    public function actionHomePageAdd()
+    {
+
+    }
 }
