@@ -2521,7 +2521,7 @@ class MallController extends Controller
             $model->status = LogisticsTemplate::STATUS_OFFLINE;
         }
 
-        if (!$model->save()) {
+        if (!$model->save()) {print_r($model->errors);
             $code = 500;
             return Json::encode([
                 'code' => $code,
