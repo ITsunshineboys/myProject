@@ -548,6 +548,7 @@ class OwnerController extends Controller
                 'waterproof_labor_price' => $labor_all_cost,
                 'waterproof_material' => $material_total,
                 'waterproof_add_price' => $add_price,
+                'total_area' => $total_area,
             ]
         ]);
     }

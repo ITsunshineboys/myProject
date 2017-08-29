@@ -11,6 +11,22 @@ use yii\db\ActiveRecord;
 
 class BrainpowerInitalSupervise extends ActiveRecord
 {
+    const FIELDS_NAME = [
+        'province',
+        'province_code',
+        'city',
+        'city_code',
+        'district',
+        'district_code',
+        'street',
+        'toponymy',
+        'image',
+        'add_time',
+        'sort',
+        'house_type_name',
+        'recommend_name',
+    ];
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -18,6 +34,8 @@ class BrainpowerInitalSupervise extends ActiveRecord
     {
         return 'brainpower_inital_supervise';
     }
+
+
 
     public static function findByCode($province_code,$city_code)
     {
