@@ -393,7 +393,7 @@ class OrderController extends Controller
      * 智能报价-样板间支付定金提交
      * @return string
      */
-    public function actionAlipayeffect_earnstsubmit(){
+    public function actionEffectEarnstAlipaySub(){
         $request=Yii::$app->request;
         $effect_id = trim($request->post('effect_id', ''), '');
         $name = trim($request->post('name', ''), '');
