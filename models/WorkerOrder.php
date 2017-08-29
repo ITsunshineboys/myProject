@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use app\controllers\WorkerController;
+use app\services\ModelService;
 use Yii;
+use yii\data\Pagination;
 
 /**
  * This is the model class for table "worker_order".
@@ -25,6 +28,21 @@ use Yii;
  */
 class WorkerOrder extends \yii\db\ActiveRecord
 {
+
+    const WORKER_ORDER_STATUS = [
+        0 => '完工',
+        1 => '接单中',
+        2 => '施工中',
+        3 => '完工'
+    ];
+
+    const USER_WORKER_ORDER_STATUS = [
+        0 => '已取消',
+        1 => '未开始',
+        2 => '施工中',
+        3 => '完工'
+    ];
+
     /**
      * @inheritdoc
      */
@@ -70,5 +88,42 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'front_money' => '订金',
             'status' => '0: 已取消(完成)，1：未开始(接单中)，2：施工中，3：已完工(完成)',
         ];
+    }
+
+    /**
+     * 工人智管工地列表
+     * @param $uid
+     * @param $status
+     * @param $page
+     * @param $page_size
+     * @return array
+     */
+    public function getWorkerOrderList($uid, $status, $page, $page_size)
+    {
+        $worker = (new Worker())->getWorkerByUid($uid);
+        $worker_id = $worker->id;
+        $query = self::find()
+            ->select(['create_time', 'amount', 'status'])
+            ->where(['uid' => $uid, 'worker_id' => $worker_id]);
+        if ($status != WorkerController::STATUS_ALL) {
+            $query->andWhere(['status' => $status]);
+        }
+
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->asArray()
+            ->all();
+
+        foreach ($arr as &$v) {
+            $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
+            $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
+            $v['status'] = self::WORKER_ORDER_STATUS[$v['status']];
+        }
+        $arr['worker_type'] = (new Worker())->getWorkerTypeByWorkerId($worker_id);
+
+        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
+        return $data;
     }
 }
