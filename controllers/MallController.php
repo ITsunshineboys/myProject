@@ -1611,7 +1611,7 @@ class MallController extends Controller
         $brand->reason = trim(Yii::$app->request->post('reason', ''));
 
         $brand->scenario = GoodsBrand::SCENARIO_REVIEW;
-        if (!$brand->validate()) {print_r($brand->errors);
+        if (!$brand->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
