@@ -2047,9 +2047,9 @@ class BasisDecorationService
             }
         }
         $material ['total_cost'] = $material_price['total_cost'];
-        $material [] = BasisDecorationService::profitMargin($wire);
-        $material [] = BasisDecorationService::profitMargin($spool);
-        $material [] = BasisDecorationService::profitMargin($bottom);
+        $material ['material'] [] = BasisDecorationService::profitMargin($wire);
+        $material ['material'] []= BasisDecorationService::profitMargin($spool);
+        $material ['material'] []= BasisDecorationService::profitMargin($bottom);
         return $material;
     }
 

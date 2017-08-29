@@ -221,12 +221,12 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
 
         //人工总费用
-        $list['price'] = BasisDecorationService::laborFormula($weak_points, $workers);
-        $list['worker_kind'] = $workers['worker_kind'];
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points, $workers);
+        $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($weak_points, $weak_current, $craft);
-        $list['material'] = BasisDecorationService::electricianMaterial($weak_current, $material_price);
+        $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
 
         //添加材料
         $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);
@@ -259,11 +259,13 @@ class OwnerController extends Controller
                 $add_price [] = 0;
             }
         }
+
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'list' => $list,
+                'weak_current_labor_price' => $labor_all_cost,
+                'weak_current_material' => $material,
                 'weak_current_add_price' => $add_price,
             ]
         ]);
