@@ -7,6 +7,7 @@
  */
 namespace app\controllers;
 use app\models\AssortGoods;
+use app\models\BrainpowerInitalSupervise;
 use app\models\DecorationAdd;
 use app\models\DecorationParticulars;
 use app\models\District;
@@ -958,7 +959,7 @@ class QuoteController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $find = AssortGoods::findByCategoryId();
+        $find = AssortGoods::findAll([]);
 
         if (!empty($find)) {
             $id = [];
@@ -988,5 +989,11 @@ class QuoteController extends Controller
         $request = \Yii::$app->request;
         $province_code = trim($request->post('province',''));
         $city_code = trim($request->post('city',''));
+        $code = 200;
+        return Json::encode([
+            'code' => $code,
+            'msg'  => 'ok',
+            'list' =>  (new BrainpowerInitalSupervise())->findByCode($province_code,$city_code)
+        ]);
     }
 }
