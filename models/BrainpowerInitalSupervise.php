@@ -35,7 +35,12 @@ class BrainpowerInitalSupervise extends ActiveRecord
         return 'brainpower_inital_supervise';
     }
 
-
+    public function rules()
+    {
+        return  [
+            ['province','province_code','city','city_code','district','district_code','street','toponymy','image','add_time','sort','house_type_name','recommend_name','required']
+        ];
+    }
 
     public static function findByCode($province_code,$city_code)
     {
