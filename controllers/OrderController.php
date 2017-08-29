@@ -535,10 +535,10 @@ class OrderController extends Controller
      */
     public function actionWxpayEffectEarnstSub(){
         $request=Yii::$app->request;
-        $effect_id = trim($request->post('effect_id', ''), '');
-        $name = trim($request->post('name', ''), '');
-        $phone = trim($request->post('phone', ''), '');
-        $money=0.01;
+        // $effect_id = trim($request->post('effect_id', ''), '');
+        // $name = trim($request->post('name', ''), '');
+        // $phone = trim($request->post('phone', ''), '');
+        // $money=0.01;
         // if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
         //     $code=1000;
         //     return Json::encode([
@@ -553,8 +553,11 @@ class OrderController extends Controller
         //         'code' => $code,
         //         'msg'  => Yii::$app->params['errorCodes'][$code]
         //     ]);
-        // }
-        echo $name.'<br>'.$phone.'<br>'.$effect_id;exit;
+        // }\
+        $money=0.01;
+        $effect_id=1;
+        $name='何友志';
+        $phone='13880414513';
         $res=Wxpay::effect_earnstsubmit($effect_id,$name,$phone,$money);
         return Json::encode([
             'code' => 200,
