@@ -537,23 +537,26 @@ class QuoteController extends Controller
                         ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
                 }
 
-                foreach ($house['all_goods'] as $goods){
-                    $goods_id = $effect_id;
-                    $goods_first = $goods['first_name'];
-                    $goods_second = $goods['second_name'];
-                    $goods_three = $goods['three_name'];
-                    $goods_code = $goods['good_code'];
-                    $goods_quantity = $goods['good_quantity'];
-                    (new WorksData())->plotAdd($goods_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity);
+                if (!empty($house['all_goods'])) {
+                    foreach ($house['all_goods'] as $goods) {
+                        $goods_id = $effect_id;
+                        $goods_first = $goods['first_name'];
+                        $goods_second = $goods['second_name'];
+                        $goods_three = $goods['three_name'];
+                        $goods_code = $goods['good_code'];
+                        $goods_quantity = $goods['good_quantity'];
+                        (new WorksData())->plotAdd($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity);
+                    }
                 }
 
-                foreach ($house['worker_list'] as $worker){
-                    $worker_id = $effect_id;
-                    $worker_kind = $worker['worker_kind'];
-                    $worker_price = $worker['price'];
-                    (new WorksWorkerData())->plotAdd($worker_id,$worker_kind,$worker_price);
+                if (!empty($house['worker_list'])) {
+                    foreach ($house['worker_list'] as $worker) {
+                        $worker_id = $effect_id;
+                        $worker_kind = $worker['worker_kind'];
+                        $worker_price = $worker['price'];
+                        (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
+                    }
                 }
-
                 foreach ($house['backman_option'] as $backman){
                     $backman_id = $effect_id;
                     $backman_option = $backman['name'];
@@ -982,6 +985,8 @@ class QuoteController extends Controller
     }
 
     public function actionHomePageList(){
-        $reuest = \Yii::$app->request;
+        $request = \Yii::$app->request;
+        $province_code = trim($request->post('province',''));
+        $city_code = trim($request->post('city',''));
     }
 }
