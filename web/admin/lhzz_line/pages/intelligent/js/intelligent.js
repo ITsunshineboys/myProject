@@ -1274,11 +1274,12 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                                             'good_code': value3.good_id,
                                             'good_quantity': value3.good_quantity
                                         })
-                                        value['all_goods'] = goods
+                                        // value['all_goods'] = goods
                                     }
                                 }
                             }
                         }
+                        value['all_goods'] = goods
                     }
                 }
                 //处理工人数据
@@ -1749,7 +1750,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
 
         //编辑所有页面配置
         $scope.go_edit_house = function (item) {
-            $scope.three_title='编辑小区详情'
+            $scope.three_title='编辑小区信息'
             $scope.delete_house_list = []
             $scope.delete_drawing_list = []
             $scope.is_add = 0
