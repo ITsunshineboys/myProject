@@ -1208,3 +1208,21 @@ CREATE TABLE `order_refund` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 --8.25 end
+
+--8.29 start
+CREATE TABLE `brainpower_inital_supervise` (
+  `id` int(11) NOT NULL,
+  `province` varchar(20) DEFAULT NULL COMMENT '省',
+  `province_code` int(20) DEFAULT NULL COMMENT '省编码',
+  `city` varchar(20) DEFAULT NULL COMMENT '市',
+  `city_code` int(20) DEFAULT NULL COMMENT '市编码',
+  `district` varchar(20) DEFAULT NULL COMMENT '区',
+  `district_code` int(20) DEFAULT NULL COMMENT '区编码',
+  `street` varchar(100) DEFAULT NULL COMMENT '街道地址',
+  `toponymy` varchar(20) DEFAULT NULL COMMENT '小区名称',
+  `image` varchar(255) DEFAULT NULL COMMENT '图片名称',
+  `add_time` int(11) DEFAULT NULL COMMENT '添加时间',
+  `sort` int(11) DEFAULT NULL COMMENT '排序',
+  `house_type_name` varchar(50) DEFAULT NULL COMMENT '户型名称',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
