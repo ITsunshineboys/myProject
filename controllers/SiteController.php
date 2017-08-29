@@ -1203,7 +1203,7 @@ class SiteController extends Controller
         $cache = Yii::$app->cache;
         $cacheData = 'ResetmobileSmscode' . $user->id . date('Y-m-d H', time());
         $data = $cache->set(User::CACHE_PREFIX_GET_MOBILE . $user->id, $cacheData, 60 * 60);
-        if ($data == true) {
+        if ($data == true) { 
             $code = 200;
             return Json::encode(
                 [
@@ -1253,7 +1253,7 @@ class SiteController extends Controller
         $cacheData = 'ResetmobileSmscode' . $user->id . date('Y-m-d H', time());
         $data = $cache->get(User::CACHE_PREFIX_GET_MOBILE . $user->id);
         if ($cacheData != $data) {
-            $code = 403;
+            $code = 1020;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
