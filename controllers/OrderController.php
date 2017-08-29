@@ -4,7 +4,7 @@ namespace app\controllers;
 use app\models\Addressadd;
 use app\models\Supplieramountmanage;
 use app\models\Wxpay;
-use app\models\EffectEarnst
+use app\models\EffectEarnst;
 use app\models\User;
 use app\models\Alipay;
 use app\models\GoodsOrder;
