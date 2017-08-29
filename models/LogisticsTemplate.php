@@ -79,7 +79,7 @@ class LogisticsTemplate extends ActiveRecord
             [['name', 'delivery_method'], 'required'],
             ['name', 'string', 'length' => [1, 10]],
             [['name'], 'validateName'],
-            [['delivery_method', 'delivery_cost_default', 'delivery_number_default', 'delivery_cost_delta', 'delivery_number_delta'], 'number', 'integerOnly' => true, 'min' => 0],
+            [['delivery_method', 'delivery_cost_default', 'delivery_number_default', 'delivery_cost_delta', 'delivery_number_delta'], 'number', 'min' => 0],
             ['delivery_method', 'in', 'range' => array_keys(self::DELIVERY_METHOD)],
             ['delivery_method', 'validateDeliveryMethod'],
             [['delivery_cost_default', 'delivery_number_default', 'delivery_cost_delta', 'delivery_number_delta'], 'default', 'value' => 0]
