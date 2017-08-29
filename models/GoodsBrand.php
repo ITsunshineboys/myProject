@@ -286,7 +286,7 @@ class GoodsBrand extends ActiveRecord
      * @return bool
      */
     public function validateReviewStatus($attribute)
-    {var_dump($this->$attribute);
+    {
         if (in_array($this->$attribute, [
             self::REVIEW_STATUS_REJECT,
             self::REVIEW_STATUS_APPROVE
