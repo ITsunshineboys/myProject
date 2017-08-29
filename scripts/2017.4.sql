@@ -1241,6 +1241,7 @@ CREATE TABLE `worker` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT '0: 已封号，1：正常作业，2：等待审核，3：审核未通过，4：审核通过',
   `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数',
   `comprehensive_score` float unsigned NOT NULL DEFAULT '10' COMMENT '综合评分',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `deadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '封号时间',
   `signature` varchar(100) NOT NULL DEFAULT '' COMMENT '个性签名',
   `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: 男, 1: 女, 2: 保密',
