@@ -1243,6 +1243,7 @@ CREATE TABLE `worker` (
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
+  `status` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '接单状态: 1,接单 0,不接单',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
