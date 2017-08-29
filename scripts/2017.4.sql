@@ -1193,7 +1193,7 @@ CREATE TABLE `user_follow` (
 alter TABLE designer ADD COLUMN `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数';
 alter TABLE decoration_company ADD COLUMN `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数';
 
---8.25 start
+-- 8.25 start
 CREATE TABLE `order_refund` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_no` varchar(50) NOT NULL,
@@ -1207,9 +1207,9 @@ CREATE TABLE `order_refund` (
   `refund_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8
---8.25 end
+-- 8.25 end
 
---8.29 start
+-- 8.29 start
 CREATE TABLE `brainpower_inital_supervise` (
   `id` int(11) NOT NULL,
   `province` varchar(20) DEFAULT NULL COMMENT '省',
@@ -1226,3 +1226,72 @@ CREATE TABLE `brainpower_inital_supervise` (
   `house_type_name` varchar(50) DEFAULT NULL COMMENT '户型名称',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `worker`;
+
+CREATE TABLE `worker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL DEFAULT '0',
+  `project_manager_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '项目经理id',
+  `labor_cost_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工费地区id (包含工人类型和等级)',
+  `nickname` varchar(25) NOT NULL DEFAULT '' COMMENT '工人名字',
+  `icon` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
+  `approve_reason` varchar(100) NOT NULL DEFAULT '' COMMENT '同意原因',
+  `reject_reason` varchar(100) NOT NULL DEFAULT '' COMMENT '拒绝原因',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT '0: 已封号，1：正常作业，2：等待审核，3：审核未通过，4：审核通过',
+  `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数',
+  `comprehensive_score` float unsigned NOT NULL DEFAULT '10' COMMENT '综合评分',
+  `deadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '封号时间',
+  `signature` varchar(100) NOT NULL DEFAULT '' COMMENT '个性签名',
+  `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: 男, 1: 女, 2: 保密',
+  `birthday` int(8) unsigned NOT NULL DEFAULT '0',
+  `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
+  `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
+  `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `worker_order`;
+
+CREATE TABLE `worker_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `worker_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工人id',
+  `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `start_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
+  `end_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
+  `need_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工期(天数)',
+  `map_location` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '地图定位',
+  `address` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '施工详细地址',
+  `con_people` VARCHAR(25) NOT NULL DEFAULT '' COMMENT '联系人',
+  `con_tel` CHAR(11) NOT NULL COMMENT '联系电话',
+  `amount` bigint(20) NOT NULL DEFAULT '0' COMMENT '订单总金额',
+  `front_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '订金',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0: 已取消(完成)，1：未开始(接单中)，2：施工中，3：已完工(完成)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `worker_type`;
+DROP TABLE IF EXISTS `work_type`;
+
+CREATE TABLE `worker_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` INT(1) NOT NULL DEFAULT '0' COMMENT '所属上级工种id',
+  `worker_type` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '工种名字',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `labor_cost_detail`;
+
+CREATE TABLE `labor_cost_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `worker_tpye_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工种id',
+  `province_code` char(6) NOT NULL COMMENT '省份编码',
+  `city_code` char(6) NOT NULL COMMENT '市编码',
+  `place` VARCHAR(25) NOT NULL DEFAULT '' COMMENT '具体地点',
+  `craft` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '工艺',
+  `price` bigint(20) NOT NULL DEFAULT '0' COMMENT '价格 (分)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
