@@ -198,35 +198,24 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         //人工价格
         $workers = LaborCost::profession($post, '弱电');
-
         //      点位 和 材料查询
-        if (!empty($post['effect_id'])) {
-            $weak_points = Points::weakPoints($post['effect_id']);
-
-            //查询弱电所需要材料
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $weak = CircuitryReconstruction::findByAll($decoration_list, '弱电');
-            $goods = Goods::findQueryAll($weak, $post['city']);
-            $weak_current = BasisDecorationService::priceConversion($goods);
-        } else {
-            $effect = Effect::find()->where(['id' => 1])->one();
-            $points = Points::find()->where(['effect_id' => $effect['id']])->asArray()->all();
-            $weak_current_all = [];
-            foreach ($points as $v => $k) {
-                if ($k['weak_current_points'] !== 0) {
-                    $weak_current_all[$k['place']] = $k['weak_current_points'];
-                }
+        $effect = Effect::find()->where(['id' => 1])->one();
+        $points = Points::find()->where(['effect_id' => $effect['id']])->asArray()->all();
+        $weak_current_all = [];
+        foreach ($points as $v => $k) {
+            if ($k['weak_current_points'] !== 0) {
+                $weak_current_all[$k['place']] = $k['weak_current_points'];
             }
-            $sitting_room = $weak_current_all['客餐厅'] * $post['hall'];
-            $secondary_bedroom = $weak_current_all['卧室'] * $post['bedroom'];
-            $weak_points = $sitting_room + $secondary_bedroom;
-
-            //查询弱电所需要材料
-            $material = ['网线', '线管', '底盒'];
-            $goods = Goods::priceDetail(3, $material);
-            $judge = BasisDecorationService::priceConversion($goods);
-            $weak_current = BasisDecorationService::judge($judge, $post);
         }
+        $sitting_room = $weak_current_all['客餐厅'] * $post['hall'];
+        $secondary_bedroom = $weak_current_all['卧室'] * $post['bedroom'];
+        $weak_points = $sitting_room + $secondary_bedroom;
+
+        //查询弱电所需要材料
+        $material = ['网线', '线管', '底盒'];
+        $goods = Goods::priceDetail(3, $material);
+        $judge = BasisDecorationService::priceConversion($goods);
+        $weak_current = BasisDecorationService::judge($judge, $post);
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
