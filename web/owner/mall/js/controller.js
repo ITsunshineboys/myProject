@@ -3167,7 +3167,7 @@ angular.module("all_controller", [])
             )
         }
     })
-    .controller('nodata_ctrl',function ($scope) {
+    .controller('nodata_ctrl',function ($scope,$http) {
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
         $scope.area = 60//房屋面积
@@ -3177,6 +3177,43 @@ angular.module("all_controller", [])
         $scope.house_kitchen = 1//厨
         $scope.highCrtl = 2.8//层高
         $scope.window = 0//飘窗
-        $scope.choose_stairs = 0 //有无楼梯
-        $scope.nowStairs = '实木构造'//楼梯结构
+        $scope.choose_stairs = 0 //有无楼梯，默认无楼梯
+        $scope.nowStairs = 0//楼梯结构,，默认无楼梯结构
+        //请求后台数据
+        $http.get('/owner/series-and-style').then(function (response) {
+            console.log(response)
+            $scope.stairs_details = response.data.data.show.stairs_details;//楼梯数据
+            $scope.series = response.data.data.show.series;//系列数据
+            $scope.style = response.data.data.show.style;//风格数据
+            $scope.cur_series = $scope.series[0]//默认选择第一个系列
+            $scope.cur_style = $scope.style[0]//默认选择第一个风格
+            // $scope.nowStairs = $scope.stairs_details[0].id//楼梯结构
+        }, function (error) {
+            console.log(error)
+        })
+        //风格轮播图
+        $scope.$watch('cur_style',function (newVal,oldVal) {
+            if(newVal!=''||newVal!=undefined){
+                var mySwiper = new Swiper('.swiper-container', {
+                    direction: 'horizontal',
+                    loop: true,
+                    autoplay: 1000,
+                    observe:true,
+                    observeParents:true,
+
+                    // 如果需要分页器
+                    pagination: '.swiper-pagination'
+                })
+            }
+        })
+        //切换楼梯结构
+        $scope.toggleStairs = function (item) {
+            $scope.nowStairs = +item.id
+        }
+        //切换系列
+        $scope.toggleSeries = function (item) {
+            $scope.cur_series = item
+        }
+        //切换风格
+        $scope.
     })

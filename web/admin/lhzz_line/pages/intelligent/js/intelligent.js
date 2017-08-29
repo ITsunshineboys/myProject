@@ -1052,6 +1052,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         $scope.addHouseReturn =function () {
             $state.go('intelligent.house_list')
         }
+        //返回首页
+        $scope.go_index = function () {
+            $state.go('intelligent.intelligent_index')
+        }
         //跳转智能报价首页
         $scope.go_index = function () {
             $scope.second_title = ''
