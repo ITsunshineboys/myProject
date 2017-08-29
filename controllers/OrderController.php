@@ -410,6 +410,21 @@ class OrderController extends Controller
         Alipay::effect_earnstsubmit($effect_id,$name,$phone,$out_trade_no);
     }
 
+      public function actionGetEffectlist(){
+        $effect=EffectEarnst::find()
+            ->asArray()
+            ->all();
+        foreach ($effect as $k  =>$v)
+        {
+            $effect[$k]['create_time']=date('Y-m-d H:i',$effect[$k]['create_time']);
+        }
+        return Json::encode([
+            'code' =>  200,
+            'msg'  => 'ok',
+            'data' => $effect
+        ]);
+    }
+
     /**
      * 样板间支付订单异步返回
      */
