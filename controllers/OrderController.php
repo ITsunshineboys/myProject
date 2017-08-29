@@ -677,101 +677,8 @@ class OrderController extends Controller
      * @lastmodify       2017-7-19
      */
     public function actionGetallorderlist(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=12;
-        }
-        if (!$page){
-            $page=1;
-        }
         $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-             $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-          $data=GoodsOrder::Getallorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-          return Json::encode([
-              'code'=>200,
-              'msg' =>'ok',
-              'data' => $data
-          ]);
-    }
-
-    /**
-     * 大后台搜索界面
-     * @return string
-     */
-    public function actionOrder_search(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$search){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
-            ]);
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
-        $user = Yii::$app->user->identity;
-        if (!$user){
+        if (!$user ){
             $code=1052;
             return Json::encode([
                 'code' => $code,
@@ -786,11 +693,118 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=GoodsOrder::Getallorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where='';
+        if($keyword){
+            $where .=" z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
         return Json::encode([
-            'code'=>200,
-            'msg' =>'ok',
-            'data' => $data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
+    }
+
+    /**
+     * 大后台搜索界面
+     * @return string
+     */
+    public function actionOrder_search(){
+        $user = Yii::$app->user->identity;
+        if (!$user || !$user->checklogin()){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$lhzz){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where='';
+        if($keyword){
+            $where .=" z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
         ]);
     }
 
@@ -799,34 +813,6 @@ class OrderController extends Controller
      * @return string
      */
     public function actionGetallunpaidorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -843,11 +829,50 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=GoodsOrder::Getallunpaidorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where='a.pay_status=0 and z.order_status=0';
+        if($keyword){
+            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
         return Json::encode([
-            'code'=>200,
-            'msg' =>'ok',
-            'data' => $data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
         ]);
     }
 
@@ -856,34 +881,6 @@ class OrderController extends Controller
      * @return string
      */
     public function actionGetallunshippedorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=12;
-        }
-        if (!$page){
-            $page=1;
-        }
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -900,11 +897,50 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=GoodsOrder::Getallunshippedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=0';
+        if($keyword){
+            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
         return Json::encode([
-            'code'=>200,
-            'msg' =>'ok',
-            'data' => $data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
         ]);
     }
 
@@ -913,34 +949,6 @@ class OrderController extends Controller
      * @return string
      */
     public function actionGetallunreceivedorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -957,11 +965,50 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=GoodsOrder::Getallunreceivedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=1';
+        if($keyword){
+            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
         return Json::encode([
-            'code'=>200,
-            'msg' =>'ok',
-            'data' => $data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
         ]);
     }
 
@@ -970,34 +1017,6 @@ class OrderController extends Controller
      * @return string
      */
     public function actionGetallcompeleteorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -1014,11 +1033,50 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=GoodsOrder::Getallcompeletedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=1  and z.customer_service=0';
+        if($keyword){
+            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
         return Json::encode([
-            'code'=>200,
-            'msg' =>'ok',
-            'data' => $data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
         ]);
     }
 
@@ -1027,34 +1085,6 @@ class OrderController extends Controller
      * @return string
      */
     public function  actionGetallcanceledorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -1071,47 +1101,58 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=GoodsOrder::Getallcanceledorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where=' z.order_status=2';
+        if($keyword){
+            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
         return Json::encode([
-            'code'=>200,
-            'msg' =>'ok',
-            'data' => $data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
         ]);
     }
-
+    
     /**
      * 大后台获取售后订单
      * @return string
      */
     public function actionGetallcustomerservicedorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -1128,11 +1169,50 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=GoodsOrder::Getallcustomerserviceorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where=' z.order_status=1 and z.customer_service!=0';
+        if($keyword){
+            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
+        }
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
         return Json::encode([
-            'code'=>200,
-            'msg' =>'ok',
-            'data' => $data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
         ]);
     }
 

@@ -120,4 +120,32 @@ class GoodsComment extends ActiveRecord
 
         return $stat;
     }
+
+    /**
+     * @param $comment_id
+     * @return string
+     */
+    public static function findCommentGrade($comment_id)
+    {
+        $comment=self::find()
+            ->select('score')
+            ->where(['id'=>$comment_id])
+            ->one();
+        if (!$comment){
+            $grade='';
+        }else{
+            $score=$comment->score;
+            if ($score==8 || $score==10){
+                $grade='好评';
+            }else if ($score ==4 && $score ==6)
+            {
+                $grade='中评';
+            }else if ($score ==2){
+                $grade='差评';
+            }else{
+                $grade='';
+            }
+        }
+        return $grade;
+    }
 }

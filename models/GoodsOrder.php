@@ -64,6 +64,41 @@ class GoodsOrder extends ActiveRecord
         self::SHIPPING_STATUS_SHIPPEDCOMPLETE=>self::SHIPPING_STATUS_DESC_SHIPPEDCOMPLETE,
     ];
 
+    const FIELDS_ORDERLIST_ADMIN = [
+        'a.order_no',
+        'a.id',
+        'z.customer_service',
+        'a.pay_status',
+        'a.address_id',
+        'z.order_status',
+        'a.create_time',
+        'a.user_id',
+        'z.shipping_status',
+        'a.amount_order',
+        'z.goods_name',
+        'z.goods_price',
+        'z.goods_number',
+        'z.is_unusual',
+        'z.market_price',
+        'z.supplier_price',
+        'z.sku',
+        'z.order_id',
+        'z.comment_id',
+        'a.order_refer',
+        'z.freight',
+        'a.return_insurance',
+    ];
+     const AFTER_SALE_SERVICES = [
+        '提供发票',
+        '上门安装',
+        '上门维修',
+        '上门退货',
+        '上门换货',
+        '退货',
+        '换货',
+    ];
+    const PAGE_SIZE_DEFAULT = 12;
+
 
     /**
          * @return string 返回该AR类关联的数据表名
@@ -224,6 +259,58 @@ class GoodsOrder extends ActiveRecord
 
     }
 
+     /**
+     * find by pagination
+     * @param array $where
+     * @param array $select
+     * @param int $page
+     * @param int $size
+     * @param $sort
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort)
+    {
+        $offset = ($page - 1) * $size;
+        $OrderList = (new Query())
+            ->from(self::tableName().' AS a')
+            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
+            ->select($select)
+            ->where($where)
+            ->orderBy($sort)
+            ->offset($offset)
+            ->limit($size)
+            ->all();
+        $arr=self::getorderstatus($OrderList);
+        foreach ($arr AS $k =>$v){
+            $arr[$k]['handle']='';
+            if ($arr[$k]['is_unusual']==1){
+                $arr[$k]['unusual']='申请退款';
+            }else if ($arr[$k]['is_unusual']==0){
+                $arr[$k]['unusual']='无异常';
+            }else if($arr[$k]['is_unusual']==2){
+                $arr[$k]['unusual']='退款失败';
+            }
+            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+                $arr[$k]['handle']='平台介入';
+            }
+            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
+            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+        }
+        $count=(new Query())
+            ->from(self::tableName().' AS a')
+            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
+            ->select($select)
+            ->where($where)
+            ->count();
+        return [
+            'total_page' =>ceil($count/$size),
+            'count'=>$count,
+            'details' => $arr
+        ];
+    }
+
     /**
      * 微信样板间申请异步操作
      * @param $arr
@@ -363,68 +450,6 @@ class GoodsOrder extends ActiveRecord
             $array['return_insurance']=0;
             return $array;
         }
-
-
-
-    /**
-     *  获取商品列表-大后台获取全部订单
-     * @param $page_size
-     * @param $page
-     * @param $time_type
-     * @param $time_start
-     * @param $time_end
-     * @param $search
-     * @param $sort_money
-     * @param $sort_time
-     * @return array
-     */
-    public static function Getallorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-            $array=self::getorderlist();
-            $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-            return $data;
-        }
-        /**
-         * 获取商品列表-大后台获取待付款全部订单
-         */
-    public static function Getallunpaidorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.pay_status'=>0,'z.order_status'=>0]);
-        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-        }
-        /**
-         *
-         * 获取商品列表-大后台获取待发货全部订单
-         */
-    public static function Getallunshippedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-         $array=self::getorderlist()->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
-        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-    /**
-     *
-     * 获取商品列表-大后台获取待收货全部订单
-     */
-    public static function Getallunreceivedorderdata($page_size=12,$page=1,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
-        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-    /**
-     * 获取大后台已完成全部订单
-     */
-    public static function Getallcompeletedorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
-        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-    /**
-     * 获取大后台已取消订单
-     */
-    public static function  Getallcanceledorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['z.order_status'=>2]);
-        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
     /**
      *大后台订单详情-获取订单详情
      */
@@ -978,6 +1003,7 @@ class GoodsOrder extends ActiveRecord
                        }
                    }
                };
+            $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             unset($data[$k]['customer_service']);
             unset($data[$k]['pay_status']);
             unset($data[$k]['order_status']);
