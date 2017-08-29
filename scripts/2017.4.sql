@@ -1206,7 +1206,7 @@ CREATE TABLE `order_refund` (
   `handle_time` int(11) NOT NULL,
   `refund_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- 8.25 end
 
 -- 8.29 start
@@ -1236,16 +1236,10 @@ CREATE TABLE `worker` (
   `labor_cost_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工费地区id (包含工人类型和等级)',
   `nickname` varchar(25) NOT NULL DEFAULT '' COMMENT '工人名字',
   `icon` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
-  `approve_reason` varchar(100) NOT NULL DEFAULT '' COMMENT '同意原因',
-  `reject_reason` varchar(100) NOT NULL DEFAULT '' COMMENT '拒绝原因',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT '0: 已封号，1：正常作业，2：等待审核，3：审核未通过，4：审核通过',
   `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数',
   `comprehensive_score` float unsigned NOT NULL DEFAULT '10' COMMENT '综合评分',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
-  `deadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '封号时间',
   `signature` varchar(100) NOT NULL DEFAULT '' COMMENT '个性签名',
-  `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: 男, 1: 女, 2: 保密',
-  `birthday` int(8) unsigned NOT NULL DEFAULT '0',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
@@ -1258,11 +1252,11 @@ CREATE TABLE `worker_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `worker_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工人id',
-  `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
+  `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '工单号',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `start_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
   `end_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
-  `need_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工期(天数)',
+  `need_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '工期(天数)',
   `map_location` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '地图定位',
   `address` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '施工详细地址',
   `con_people` VARCHAR(25) NOT NULL DEFAULT '' COMMENT '联系人',
@@ -1296,3 +1290,25 @@ CREATE TABLE `labor_cost_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `work_result` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `work_des` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工作描述',
+  `create_time` INT(10) NOT NULL DEFAULT '0' COMMENT '提交时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `worker_order_img` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `worker_order_no` INT(11) NOT NULL DEFAULT '0' COMMENT '工单号',
+  `order_img_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '工单图片名称',
+  `order_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工单图片地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `work_result_img` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `work_result_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工作成果id',
+  `result_img_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '工作成果图片名称',
+  `result_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工作单成果图片地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
