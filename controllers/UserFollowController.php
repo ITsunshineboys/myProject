@@ -84,7 +84,7 @@ class UserFollowController extends Controller
         if (!$user) {
             $code = 1052;
             return Json::encode([
-                'code' => 1052,
+                'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
