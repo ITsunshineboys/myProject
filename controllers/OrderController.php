@@ -543,21 +543,21 @@ class OrderController extends Controller
 //            $money=89;
             $money=0.01;
         }
-        if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
-            ]);
-        }
-        if ( !$name  ||!$phone || !$effect_id){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+        // if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
+        //     $code=1000;
+        //     return Json::encode([
+        //         'code' => $code,
+        //         'msg'  => Yii::$app->params['errorCodes'][$code],
+        //         'data' => null
+        //     ]);
+        // }
+        // if ( !$name  ||!$phone || !$effect_id){
+        //     $code=1000;
+        //     return Json::encode([
+        //         'code' => $code,
+        //         'msg'  => Yii::$app->params['errorCodes'][$code]
+        //     ]);
+        // }
         $res=Wxpay::effect_earnstsubmit($effect_id,$name,$phone,$money);
         return Json::encode([
             'code' => 200,
