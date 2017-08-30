@@ -470,7 +470,7 @@ class Goods extends ActiveRecord
         foreach ($all as $one) {
             $material [] = $one['material'];
         }
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image";
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name";
         $all_goods = self::find()
             ->select($select)
             ->asArray()
@@ -478,6 +478,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+            ->leftJoin('supplier','goods.supplier_id = supplier.id')
             ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $material]])
             ->all();
         return $all_goods;
@@ -867,7 +868,7 @@ class Goods extends ActiveRecord
     public static function seriesAndStyle($level, $title, $post)
     {
         if ($title) {
-            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image";
+            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
             $goods = self::find()
                 ->asArray()
                 ->select($select)
@@ -875,6 +876,7 @@ class Goods extends ActiveRecord
                 ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
                 ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
                 ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+                ->leftJoin('supplier','goods.supplier_id = supplier.id')
                 ->where(['and', ['gc.title' => $title], ['gc.level' => $level], ['goods.series_id' => $post['series']], ['goods.style_id' => $post['style']]])
                 ->all();
             return $goods;

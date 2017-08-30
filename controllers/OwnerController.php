@@ -708,16 +708,9 @@ class OwnerController extends Controller
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
-        //材料
-        if (!empty($post['effect_id'])) {
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $paint_reconstruction = PaintReconstruction::find()->where(['decoration_list_id' => $decoration_list])->all();
-            $goods_price = Goods::findQueryAll($paint_reconstruction);
-        } else {
-            $material = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
-            $goods = Goods::priceDetail(3, $material);
-            $goods_price = BasisDecorationService::priceConversion($goods);
-        }
+        $material = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
+        $goods = Goods::priceDetail(3, $material);
+        $goods_price = BasisDecorationService::priceConversion($goods);
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll('乳胶漆', $post['city']);
@@ -1387,7 +1380,6 @@ class OwnerController extends Controller
         $goods_price = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea('卧室', '卧室面积');
         $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$material_one,$post);
-        var_dump($material);exit;
         $material[] = BasisDecorationService::capacity($goods_price, $material_one, $post);
         $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price, $material_one,$post);
         $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price, $material_one,$post);
