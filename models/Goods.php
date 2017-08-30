@@ -404,7 +404,7 @@ class Goods extends ActiveRecord
      */
     public static function priceDetail($level, $title, $city = 510100)
     {
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image";
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $all = self::find()
             ->select($select)
             ->asArray()
@@ -412,6 +412,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+            ->leftJoin('supplier','goods.supplier_id = supplier.id')
             ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title], ['goods.status' => self::STATUS_ONLINE]])
             ->all();
         return $all;
