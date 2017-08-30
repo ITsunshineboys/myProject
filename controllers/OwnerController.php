@@ -199,8 +199,7 @@ class OwnerController extends Controller
         //人工价格
         $workers = LaborCost::profession($post, '弱电');
         //      点位 和 材料查询
-        $effect = Effect::find()->where(['id' => 1])->one();
-        $points = Points::find()->where(['effect_id' => $effect['id']])->asArray()->all();
+        $points = Points::weakPoints();
         $weak_current_all = [];
         foreach ($points as $v => $k) {
             if ($k['weak_current_points'] !== 0) {
@@ -279,29 +278,15 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         $workers = LaborCost::profession($post, '强电');
+        $points = Points::strongPointsAll();
+        $points_total = PointsTotal::findByAll($points);
+        $points_details = BasisDecorationService::strongCurrentPoints($points_total, $post);
 
-        //点位 和材料查询
-        if (!empty($post['effect_id'])) {
-            $points = Points::strongPoints($post['effect_id']);
-            $points_details = PointsDetails::AllQuantity($points);
-
-            //查询弱电所需要材料
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $weak = CircuitryReconstruction::findByAll($decoration_list, '强电');
-            $strong_current = Goods::findQueryAll($weak, $post['city']);
-        } else {
-            $effect = Effect::find()->where(['id' => 1])->one();
-            $points = Points::strongPointsAll($effect);
-            $points_total = PointsTotal::findByAll($points);
-            $points_details = BasisDecorationService::strongCurrentPoints($points_total, $post);
-
-            //查询弱电所需要材料
-            $material = ['电线', '线管', '底盒'];
-            $goods = Goods::priceDetail(3, $material);
-            $judge = BasisDecorationService::priceConversion($goods);
-            $strong_current = BasisDecorationService::judge($judge, $post);
-        }
-
+        //查询弱电所需要材料
+        $material = ['电线', '线管', '底盒'];
+        $goods = Goods::priceDetail(3, $material);
+        $judge = BasisDecorationService::priceConversion($goods);
+        $strong_current = BasisDecorationService::judge($judge, $post);
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('强电', $post['city']);
@@ -367,34 +352,25 @@ class OwnerController extends Controller
         $waterway_labor = LaborCost::profession($post, '水路工');
 
         //点位 和材料 查询
-        if (!empty($post['effect_id'])) {
-            $waterway_points = Points::waterwayPoints($post['effect_id']);
-
-            $decoration_list = DecorationList::findById($post['effect_id']);
-            $weak = WaterwayReconstruction::findByAll($decoration_list);
-            $waterway_current = Goods::findQueryAll($weak, $post['city']);
-        } else {
-            $effect = Effect::find()->where(['id' => 1])->one();
-            $points = Points::find()->where(['effect_id' => $effect['id']])->all();
-            $other = 0;
-            foreach ($points as $v => $k) {
-                if ($k['waterway_points'] !== 0) {
-                    $waterway_current_all[$k['place']] = $k['waterway_points'];
-                }
-                if ($k['place'] !== '厨房' && $k['place'] !== '卫生间') {
-                    $other += $k['waterway_points'];
-                }
+        $points = Points::waterwayPoints();
+        $other = 0;
+        foreach ($points as $v => $k) {
+            if ($k['waterway_points'] !== 0) {
+                $waterway_current_all[$k['place']] = $k['waterway_points'];
             }
-            $kitchen = $waterway_current_all['厨房'] * $post['kitchen'];
-            $toilet = $waterway_current_all['卫生间'] * $post['toilet'];
-            $waterway_points = $kitchen + $toilet + $other;
-
-            //查询弱电所需要材料
-            $material = ['PPR水管', 'PVC管'];
-            $goods = Goods::priceDetail(3, $material);
-            $judge = BasisDecorationService::priceConversion($goods);
-            $waterway_current = BasisDecorationService::judge($judge, $post);
+            if ($k['place'] !== '厨房' && $k['place'] !== '卫生间') {
+                $other += $k['waterway_points'];
+            }
         }
+        $kitchen = $waterway_current_all['厨房'] * $post['kitchen'];
+        $toilet = $waterway_current_all['卫生间'] * $post['toilet'];
+        $waterway_points = $kitchen + $toilet + $other;
+
+        //查询弱电所需要材料
+        $material = ['PPR水管', 'PVC管'];
+        $goods = Goods::priceDetail(3, $material);
+        $judge = BasisDecorationService::priceConversion($goods);
+        $waterway_current = BasisDecorationService::judge($judge, $post);
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll('水路', $post['city']);
@@ -507,8 +483,8 @@ class OwnerController extends Controller
                 $goods_max [] = $one_waterproof;
             }
         }
-        $material_total [] = BasisDecorationService::profitMargin($goods_max);
-        $material_total['total_cost'] = $material_price['cost'];
+        $material_total ['material'][] = BasisDecorationService::profitMargin($goods_max);
+        $material_total['total_cost'][] = $material_price['cost'];
 
         //添加材料费用
         $add_price_area = DecorationAdd::AllArea('防水', $post['area'], $post['city']);
