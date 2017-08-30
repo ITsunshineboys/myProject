@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "worker_type".
@@ -13,6 +14,7 @@ use Yii;
  */
 class WorkerType extends \yii\db\ActiveRecord
 {
+    const WORKER_TYPE='worker_type';
     /**
      * @inheritdoc
      */
@@ -43,4 +45,18 @@ class WorkerType extends \yii\db\ActiveRecord
             'worker_type' => '工种名字',
         ];
     }
+
+    /**
+     * 根据父级工种找子级
+     *@return string
+     */
+    public static function getworkertype($parents){
+         foreach ($parents as $k=>$chlid){
+            $data[$k]=self::find()->select('worker_type')->where(['pid'=>$chlid['id']])->asArray()->all();
+
+        }
+        return $data;
+    }
+
+
 }
