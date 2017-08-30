@@ -640,6 +640,179 @@ class Goods extends ActiveRecord
         return false;
     }
 
+    /**
+     * Check if can enable goods records in batch
+     *
+     * @param array $ids goods ids
+     * @param User $user user model
+     * @return int
+     */
+    public static function canEnableBatch(array $ids, User $user)
+    {
+        if (!$ids) {
+            return 1000;
+        }
+
+        foreach ($ids as $id) {
+            $goods = self::findOne($id);
+            $res = $goods->canOnline($user);
+            if (200 != $res) {
+                return $res;
+            }
+        }
+
+        return 200;
+    }
+
+    /**
+     * Check if can make goods online
+     *
+     * @param ActiveRecord $user user model
+     * @return int
+     */
+    public function canOnline(ActiveRecord $user)
+    {
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']
+            && in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE])
+        ) {
+            $code = 200;
+
+            if (!$this->validateCategoryId('category_id')) {
+                $code = 1012;
+                return $code;
+            }
+
+            if (!$this->validateBrandId('brand_id')) {
+                $code = 1013;
+                return $code;
+            }
+
+            if (!$this->validateSupplierId('supplier_id')) {
+                $code = 1014;
+                return $code;
+            }
+
+            if (!$this->validateCategoryStyleSeries('category_id')) {
+                $code = 1022;
+                return $code;
+            }
+        } else {
+            $code = 403;
+        }
+
+        return $code;
+    }
+
+    /**
+     * Validates category_id
+     *
+     * @param string $attribute category_id to validate
+     * @return bool
+     */
+    public function validateCategoryId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'level' => GoodsCategory::LEVEL3
+        ];
+
+        if ($this->$attribute > 0
+            && GoodsCategory::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates brand_id
+     *
+     * @param string $attribute brand_id to validate
+     * @return bool
+     */
+    public function validateBrandId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'status' => GoodsBrand::STATUS_ONLINE,
+        ];
+
+        if ($this->$attribute > 0
+            && GoodsBrand::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates supplier_id
+     *
+     * @param string $attribute supplier_id to validate
+     * @return bool
+     */
+    public function validateSupplierId($attribute)
+    {
+        $where = [
+            'id' => $this->$attribute,
+            'status' => Supplier::STATUS_ONLINE,
+        ];
+
+        if ($this->$attribute > 0
+            && Supplier::find()->where($where)->exists()
+        ) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
+    /**
+     * Validates category style or series
+     *
+     * @param string $attribute category_id to validate
+     * @return bool
+     */
+    public function validateCategoryStyleSeries($attribute)
+    {
+        if ($this->style_id + $this->series_id == 0) {
+            return true;
+        }
+
+        $where = [
+            'id' => $this->$attribute,
+            'deleted' => GoodsCategory::STATUS_OFFLINE,
+            'level' => GoodsCategory::LEVEL3,
+        ];
+
+        $category = GoodsCategory::find()->where($where)->exists();
+        if ($this->$attribute > 0 && $category) {
+            if ($this->style_id) {
+                $field = 'has_' . GoodsCategory::NAME_STYLE;
+                if (!$category->$field) {
+                    return false;
+                }
+            }
+
+            if ($this->series_id) {
+                $field = 'has_' . GoodsCategory::NAME_SERIES;
+                if (!$category->$field) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public static function skuAll($sku = '')
     {
         if (!$sku) {
@@ -717,7 +890,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all], ['status' => self::STATUS_ONLINE]])
+            ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all], ['goods.status' => self::STATUS_ONLINE]])
             ->all();
         return $all_goods;
     }
@@ -905,155 +1078,6 @@ class Goods extends ActiveRecord
         }
 
         return true;
-    }
-
-    /**
-     * Check if can make goods online
-     *
-     * @param ActiveRecord $user user model
-     * @return int
-     */
-    public function canOnline(ActiveRecord $user)
-    {
-        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']
-            && in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE])
-        ) {
-            $code = 200;
-
-            if (!$this->validateCategoryId('category_id')) {
-                $code = 1012;
-                return $code;
-            }
-
-            if (!$this->validateBrandId('brand_id')) {
-                $code = 1013;
-                return $code;
-            }
-
-            if (!$this->validateSupplierId('supplier_id')) {
-                $code = 1014;
-                return $code;
-            }
-
-            if (!$this->validateCategoryStyleSeries('category_id')) {
-                $code = 1022;
-                return $code;
-            }
-        } else {
-            $code = 403;
-        }
-
-        return $code;
-    }
-
-    /**
-     * Validates category_id
-     *
-     * @param string $attribute category_id to validate
-     * @return bool
-     */
-    public function validateCategoryId($attribute)
-    {
-        $where = [
-            'id' => $this->$attribute,
-            'deleted' => GoodsCategory::STATUS_OFFLINE,
-            'level' => GoodsCategory::LEVEL3
-        ];
-
-        if ($this->$attribute > 0
-            && GoodsCategory::find()->where($where)->exists()
-        ) {
-            return true;
-        }
-
-        $this->addError($attribute);
-        return false;
-    }
-
-    /**
-     * Validates brand_id
-     *
-     * @param string $attribute brand_id to validate
-     * @return bool
-     */
-    public function validateBrandId($attribute)
-    {
-        $where = [
-            'id' => $this->$attribute,
-            'status' => GoodsBrand::STATUS_ONLINE,
-        ];
-
-        if ($this->$attribute > 0
-            && GoodsBrand::find()->where($where)->exists()
-        ) {
-            return true;
-        }
-
-        $this->addError($attribute);
-        return false;
-    }
-
-    /**
-     * Validates supplier_id
-     *
-     * @param string $attribute supplier_id to validate
-     * @return bool
-     */
-    public function validateSupplierId($attribute)
-    {
-        $where = [
-            'id' => $this->$attribute,
-            'status' => Supplier::STATUS_ONLINE,
-        ];
-
-        if ($this->$attribute > 0
-            && Supplier::find()->where($where)->exists()
-        ) {
-            return true;
-        }
-
-        $this->addError($attribute);
-        return false;
-    }
-
-    /**
-     * Validates category style or series
-     *
-     * @param string $attribute category_id to validate
-     * @return bool
-     */
-    public function validateCategoryStyleSeries($attribute)
-    {
-        if ($this->style_id + $this->series_id == 0) {
-            return true;
-        }
-
-        $where = [
-            'id' => $this->$attribute,
-            'deleted' => GoodsCategory::STATUS_OFFLINE,
-            'level' => GoodsCategory::LEVEL3,
-        ];
-
-        $category = GoodsCategory::find()->where($where)->exists();
-        if ($this->$attribute > 0 && $category) {
-            if ($this->style_id) {
-                $field = 'has_' . GoodsCategory::NAME_STYLE;
-                if (!$category->$field) {
-                    return false;
-                }
-            }
-
-            if ($this->series_id) {
-                $field = 'has_' . GoodsCategory::NAME_SERIES;
-                if (!$category->$field) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     /**

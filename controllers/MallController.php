@@ -3230,11 +3230,11 @@ class MallController extends Controller
             ]);
         }
 
-        $canEnable = Goods::canEnable($ids);
-        if (!$canEnable) {
+        $res = Goods::canEnableBatch(explode(',', $ids), Yii::$app->user->identity);
+        if (200 != $res) {
             return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
+                'code' => $res,
+                'msg' => Yii::$app->params['errorCodes'][$res],
             ]);
         }
 
