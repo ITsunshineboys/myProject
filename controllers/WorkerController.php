@@ -186,7 +186,7 @@ class WorkerController extends Controller
     }
 
     /**
-     * 智管工地列表
+     * 工程订单列表
      * @return int|string
      */
     public function actionUserWorkerOrderList()
@@ -212,6 +212,43 @@ class WorkerController extends Controller
         }
 
         $data = (new WorkerOrder())->getUserWorkerOrderList($user, $status, $page, $page_size);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 工程订单详情
+     * @return int|string
+     */
+    public function actionUserWorkerOrderDetail()
+    {
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+
+        $order_id = (int)$request->get('order_id', 0);
+        if (!$order_id) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $data = (new WorkerOrder())->getUserWorkerOrderDetail($order_id);
+        if (is_int($data)) {
+            return Json::encode([
+                'code' => $data,
+                'msg' => \Yii::$app->params['errorCodes'][$data]
+            ]);
+        }
 
         return Json::encode([
             'code' => 200,

@@ -31,16 +31,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
     const WORKER_ORDER_STATUS = [
         0 => '完工',
-        1 => '接单中',
+        1 => '未开始',
         2 => '施工中',
         3 => '完工'
     ];
 
     const USER_WORKER_ORDER_STATUS = [
         0 => '已取消',
-        1 => '未开始',
+        1 => '接单中',
         2 => '施工中',
-        3 => '完工'
+        3 => '已完工'
     ];
 
     /**
@@ -106,6 +106,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->select(['create_time', 'amount', 'status'])
             ->where(['uid' => $uid, 'worker_id' => $worker_id]);
         if ($status != WorkerController::STATUS_ALL) {
+            if ($status == 0 || $status == 3) {
+                $status = [0, 3];
+            }
             $query->andWhere(['status' => $status]);
         }
 
@@ -130,10 +133,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $data;
     }
 
+    /**
+     * 用户工程订单列表
+     * @param $uid
+     * @param $status
+     * @param $page
+     * @param $page_size
+     * @return array
+     */
     public function getUserWorkerOrderList($uid, $status, $page, $page_size)
     {
-//        $worker = (new Worker())->getWorkerByUid($uid);
-//        $worker_id = $worker->id;
         $query = self::find()
             ->select(['create_time', 'amount', 'status', 'worker_id'])
             ->where(['uid' => $uid]);
@@ -148,12 +157,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
-//        $worker_type = (new Worker())->getWorkerTypeByWorkerId($worker_id);
-
         foreach ($arr as &$v) {
-//            $v['worker_type'] = $worker_type;
-            //得到工人的类型
-            //$v['worker_type'] = WorkerType::find()->where(['id' => $v['worker_type_id']])->one()->worker_type;
             $worker_type_id = Worker::find()->where(['id' => $v['worker_id']])->one()->worker_type_id;
             $v['worker_type'] = WorkerType::find()->where(['id' => $worker_type_id])->one()->worker_type;
             $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
@@ -163,5 +167,32 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;
+    }
+
+    /**
+     * get User worker_order detail
+     * @param $order_id
+     * @return array|int
+     */
+    public function getUserWorkerOrderDetail($order_id)
+    {
+        $order = self::find()->where(['id' => $order_id])->one();
+        if ($order == null) {
+            return 1000;
+        }
+
+        $order->create_time = date('Y-m-d H:i', $order->create_time);
+        $order->start_time = date('Y-m-d H:i', $order->start_time);
+        $order->end_time = date('Y-m-d H:i', $order->end_time);
+        $order->amount = sprintf('%.2f', (float)$order->amount / 100);
+        $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
+        $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
+
+        $order_img = WorkerOrderImg::find()->where(['worker_order_id' => $order_id])->all();
+
+        return [
+            'order' => $order,
+            'order_img' => $order_img,
+        ];
     }
 }
