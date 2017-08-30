@@ -120,8 +120,6 @@ class SupplierController extends Controller
     {
         $user = Yii::$app->user->identity;
         $supplier = Supplier::find()->where(['uid' => $user->id])->one();
-        $supplier->status = Supplier::STATUS_APPROVED;
-
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
