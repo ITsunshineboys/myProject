@@ -1266,6 +1266,7 @@ CREATE TABLE `worker_order` (
   `amount` bigint(20) NOT NULL DEFAULT '0' COMMENT '订单总金额',
   `front_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '订金',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0: 已取消(完成)，1：未开始(接单中)，2：施工中，3：已完工(完成)',
+  `describe` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '订单描述',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1302,7 +1303,7 @@ CREATE TABLE `work_result` (
 
 CREATE TABLE `worker_order_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `worker_order_no` INT(11) NOT NULL DEFAULT '0' COMMENT '工单号',
+  `worker_order_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工单id',
   `order_img_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '工单图片名称',
   `order_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工单图片地址',
   PRIMARY KEY (`id`)
@@ -1313,5 +1314,33 @@ CREATE TABLE `work_result_img` (
   `work_result_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工作成果id',
   `result_img_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '工作成果图片名称',
   `result_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工作单成果图片地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 8.29 end
+
+-- 8.30 start
+
+CREATE TABLE `worker_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(25) NOT NULL DEFAULT '' COMMENT '条目名字',
+  `unit` tinyint(1) not null DEFAULT 0 comment '0: 无, 1: L, 2: M, 3: M^2, 4: Kg, 5: MM',
+  `pid` INT(11) NOT NULL DEFAULT 0 COMMENT '父id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `worker_craft` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `item_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工种条目id',
+  `craft` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '工艺',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `worker_order_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `worker_order_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工单id',
+  `worker_item_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工人条目id',
+  `worker_craft_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工艺id',
+  `area` BIGINT(20) NOT NULL DEFAULT '0' COMMENT '面积,单位: dm^2',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
