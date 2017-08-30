@@ -105,6 +105,7 @@ class GoodsOrder extends ActiveRecord
     const ORDER_TYPE_DESC_CANCEL='已取消';
     const ORDER_TYPE_DESC_CUSTOMER_SERVICE='售后';
     const PAGE_SIZE_DEFAULT = 12;
+    const ORDER_TYPE_ALL='all';
     const ORDER_TYPE_UNPAID='unpaid';
     const ORDER_TYPE_UNSHIPPED='unshipped';
     const ORDER_TYPE_UNRECEIVED='unreceived';
