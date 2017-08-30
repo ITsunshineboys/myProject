@@ -97,7 +97,29 @@ class GoodsOrder extends ActiveRecord
         '退货',
         '换货',
     ];
+    const ORDER_TYPE_DESC_ALL='全部';
+    const ORDER_TYPE_DESC_UNPAID='待付款';
+    const ORDER_TYPE_DESC_UNSHIPPED='待发货';
+    const ORDER_TYPE_DESC_UNRECEIVED='待收货';
+    const ORDER_TYPE_DESC_COMPLETED='已完成';
+    const ORDER_TYPE_DESC_CANCEL='已取消';
+    const ORDER_TYPE_DESC_CUSTOMER_SERVICE='售后';
     const PAGE_SIZE_DEFAULT = 12;
+    const ORDER_TYPE_UNPAID='unpaid';
+    const ORDER_TYPE_UNSHIPPED='unshipped';
+    const ORDER_TYPE_UNRECEIVED='unreceived';
+    const ORDER_TYPE_COMPLETED='completed';
+    const ORDER_TYPE_CANCEL='cancel';
+    const ORDER_TYPE_CUSTOMER_SERVICE='customer_service';
+    const ORDER_TYPE_LIST=[
+        self::ORDER_TYPE_DESC_ALL=>self::ORDER_TYPE_ALL,
+        self::ORDER_TYPE_DESC_UNPAID=>self::ORDER_TYPE_UNPAID,
+        self::ORDER_TYPE_DESC_UNSHIPPED=>self::ORDER_TYPE_UNSHIPPED,
+        self::ORDER_TYPE_DESC_UNRECEIVED=>self::ORDER_TYPE_UNRECEIVED,
+        self::ORDER_TYPE_DESC_COMPLETED=>self::ORDER_TYPE_COMPLETED,
+        self::ORDER_TYPE_DESC_CANCEL=>self::ORDER_TYPE_CANCEL,
+        self::ORDER_TYPE_DESC_CUSTOMER_SERVICE=>self::ORDER_TYPE_CUSTOMER_SERVICE
+    ];
 
 
     /**
