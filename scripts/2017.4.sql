@@ -1253,6 +1253,7 @@ CREATE TABLE `worker_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `worker_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工人id',
+  `worker_type_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工种id',
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '工单号',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `start_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
