@@ -1055,9 +1055,10 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $legalPerson
      * @param string $identityCardFrontImage
      * @param string $identityCardBackImage
+     * @param ActiveRecord $operator operator default null
      * @return int
      */
-    public function certificate($identityNo, $legalPerson, $identityCardFrontImage, $identityCardBackImage)
+    public function certificate($identityNo, $legalPerson, $identityCardFrontImage, $identityCardBackImage, ActiveRecord $operator = null)
     {
         $this->refresh();
 
@@ -1088,8 +1089,14 @@ class User extends ActiveRecord implements IdentityInterface
                 ])
                 ->one();
             if ($userRole) {
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
                 $userRole->review_apply_time = time();
+                if ($operator) {
+                    $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
+                    $userRole->reviewer_uid = $operator->id;
+                } else {
+                    $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
+                }
+
                 if (!$userRole->save()) {
                     $tran->rollBack();
                     return $code;

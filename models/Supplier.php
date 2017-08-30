@@ -271,7 +271,7 @@ class Supplier extends ActiveRecord
                     ? trim($attrs['identity_card_back_image'])
                     : '';
 
-                if (!$user->validateIdentity()) {
+                if (!$user->validateIdentity($operator)) {
                     $transaction->rollBack();
 
                     $code = 1000;
