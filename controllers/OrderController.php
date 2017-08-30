@@ -740,7 +740,21 @@ class OrderController extends Controller
         ]);
     }
 
+
+ /**
+     * find order type
+     * @return string
+     */
+    public function  actionFindOrderType(){
+        $order_type_list=GoodsOrder::ORDER_TYPE_LIST;
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$order_type_list
+        ]);
+    }
     /**
+     * find order list
      * @return string
      */
     public function actionFindOrderList(){
