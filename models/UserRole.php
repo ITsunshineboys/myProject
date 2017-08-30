@@ -48,6 +48,8 @@ class UserRole extends ActiveRecord
     {
         foreach (Role::appRoles() as $role) {
             $status = Role::AUTHENTICATION_STATUS_NO_APPLICATION;
+            $userRole = self::find()->where(['user_id' => $userId, 'role_id' => $role['id']])->one();
+            $userRole && $status = $userRole->review_status;
             $rolesStatus[] = [
                 'role_id' => $role['id'],
                 'role_name' => $role['name'],

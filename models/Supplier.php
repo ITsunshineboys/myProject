@@ -286,8 +286,9 @@ class Supplier extends ActiveRecord
                 }
             }
 
-            $transaction->commit();
+            Yii::$app->cache->delete(UserRole::CACHE_KEY_PREFIX_ROLES_STATUS . $user->id);
 
+            $transaction->commit();
             $code = 200;
             return $code;
         } catch (\Exception $e) {
