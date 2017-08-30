@@ -116,7 +116,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
-        $worker_type = (new Worker())->getWorkerTypeByWorkerId($worker_id);
+        $worker_type_id = Worker::find()->where(['id' => $worker_id])->one()->worker_type_id;
+        $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one()->worker_type;
 
         foreach ($arr as &$v) {
             $v['worker_type'] = $worker_type;
@@ -134,7 +135,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 //        $worker = (new Worker())->getWorkerByUid($uid);
 //        $worker_id = $worker->id;
         $query = self::find()
-            ->select(['create_time', 'amount', 'status'])
+            ->select(['create_time', 'amount', 'status', 'worker_id'])
             ->where(['uid' => $uid]);
         if ($status != WorkerController::STATUS_ALL) {
             $query->andWhere(['status' => $status]);
@@ -152,6 +153,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
         foreach ($arr as &$v) {
 //            $v['worker_type'] = $worker_type;
             //得到工人的类型
+            //$v['worker_type'] = WorkerType::find()->where(['id' => $v['worker_type_id']])->one()->worker_type;
+            $worker_type_id = Worker::find()->where(['id' => $v['worker_id']])->one()->worker_type_id;
+            $v['worker_type'] = WorkerType::find()->where(['id' => $worker_type_id])->one()->worker_type;
             $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
             $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
             $v['status'] = self::USER_WORKER_ORDER_STATUS[$v['status']];

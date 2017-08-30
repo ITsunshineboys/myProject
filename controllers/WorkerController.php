@@ -184,4 +184,39 @@ class WorkerController extends Controller
             'data' => $data
         ]);
     }
+
+    /**
+     * 智管工地列表
+     * @return int|string
+     */
+    public function actionUserWorkerOrderList()
+    {
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+        $status = (int)$request->get('status', self::STATUS_ALL);
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+        if ($status
+            && $status != self::STATUS_ALL
+            && !array_key_exists($status, WorkerOrder::USER_WORKER_ORDER_STATUS)
+        ) {
+            $code = 1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $data = (new WorkerOrder())->getUserWorkerOrderList($user, $status, $page, $page_size);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
 }

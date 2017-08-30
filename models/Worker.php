@@ -98,12 +98,6 @@ class Worker extends \yii\db\ActiveRecord
         return self::find()->where(['uid' => $uid])->one();
     }
 
-    public function getWorkerTypeByWorkerId($worker_id)
-    {
-        $labor_cost = self::getLaborByWorkerId($worker_id);
-        return $labor_cost->worker_kind;
-    }
-
     public function getLaborByWorkerId($worker_id)
     {
         $worker = self::find()->where(['id' => $worker_id])->one();
