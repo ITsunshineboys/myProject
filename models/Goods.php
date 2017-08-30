@@ -908,7 +908,7 @@ class Goods extends ActiveRecord
     }
 
     /**
-     * Check if can enable goods
+     * Check if can make goods online
      *
      * @param ActiveRecord $user user model
      * @return int

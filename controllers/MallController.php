@@ -3493,7 +3493,7 @@ class MallController extends Controller
         $where = "status = {$status}";
         $keyword = trim(Yii::$app->request->get('keyword', ''));
         if ($keyword) {
-            $where .= " and (sku like '{$keyword}%' or title like '{$keyword}%')";
+            $where .= " and (sku like '%{$keyword}%' or title like '%{$keyword}%')";
         }
 
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
@@ -3507,6 +3507,16 @@ class MallController extends Controller
             }
 
             $where .= " and supplier_id = {$supplier->id}";
+        } else {
+            $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
+            if (!$supplierId) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $where .= " and supplier_id = {$supplierId}";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
