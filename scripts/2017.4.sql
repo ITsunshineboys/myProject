@@ -1274,6 +1274,7 @@ DROP TABLE IF EXISTS `work_type`;
 CREATE TABLE `worker_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` INT(1) NOT NULL DEFAULT '0' COMMENT '所属上级工种id',
+  `images` VARCHAR (255) NOT NULL DEFAULT '' COMMENT '服务工种图片',
   `worker_type` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '工种名字',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
