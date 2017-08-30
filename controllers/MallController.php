@@ -2740,12 +2740,12 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'category-attrs' => []
+                'category_attrs' => []
             ],
         ];
 
         $categoryId = (int)Yii::$app->request->get('category_id', 0);
-        $categoryId > 0 && $ret['data']['category-attrs'] = GoodsAttr::detailsByCategoryId($categoryId);
+        $categoryId > 0 && $ret['data']['category_attrs'] = GoodsAttr::detailsByCategoryId($categoryId);
         return Json::encode($ret);
     }
 
