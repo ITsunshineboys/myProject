@@ -1554,4 +1554,37 @@ class GoodsOrder extends ActiveRecord
         }
         return $code;
     }
+
+    /**
+     *find order type
+     * @param $type
+     * @return string
+     */
+    public static function GetTypeWhere($type){
+        switch ($type){
+            case self::ORDER_TYPE_ALL:
+                $where='';
+                break;
+            case self::ORDER_TYPE_UNPAID:
+                $where='a.pay_status=0 and z.order_status=0';
+                break;
+            case self::ORDER_TYPE_UNSHIPPED:
+                $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=0';
+                break;
+            case self::ORDER_TYPE_UNRECEIVED:
+                $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=1';
+                break;
+            case self::ORDER_TYPE_COMPLETED:
+                $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=1  and z.customer_service=0';
+                break;
+            case  self::ORDER_TYPE_CANCEL:
+                $where='z.order_status=2';
+                break;
+            case self::ORDER_TYPE_CUSTOMER_SERVICE:
+                $where='z.order_status=1 and z.customer_service!=0';
+                break;
+        }
+
+        return $where;
+    }
 }
