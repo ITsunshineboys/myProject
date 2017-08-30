@@ -1276,7 +1276,7 @@ DROP TABLE IF EXISTS `work_type`;
 
 CREATE TABLE `worker_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` INT(11) NOT NULL DEFAULT '0' COMMENT '所属上级工种id',
+  `pid` INT(11) NOT NULL DEFAULT '0' COMMENT '所属上级工种id',
   `image` VARCHAR (255) NOT NULL DEFAULT '' COMMENT '服务工种图片',
   `worker_type` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '工种名字',
   PRIMARY KEY (`id`)
@@ -1343,5 +1343,12 @@ CREATE TABLE `worker_order_item` (
   `worker_item_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工人条目id',
   `worker_craft_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工艺id',
   `area` BIGINT(20) NOT NULL DEFAULT '0' COMMENT '面积,单位: dm^2',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `worker_type_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `worker_type_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工种id(只能选pid为0的)',
+  `worker_item_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工人条目id(只能选pid为0的)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
