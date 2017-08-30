@@ -1386,13 +1386,14 @@ class OwnerController extends Controller
         $goods = Goods::assortList($material_name,510100);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea('卧室', '卧室面积');
-        $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price, $material_one, $post);
+        $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$material_one,$post);
+        var_dump($material);exit;
         $material[] = BasisDecorationService::capacity($goods_price, $material_one, $post);
-        $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price, $material_one, $post);
-        $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price, $material_one, $post);
-        $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price, $post, $material_one);
-        $material[] = BasisDecorationService::mild($goods_price, $post, $material_one);
-        $material[] = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one, $post, $bedroom_area);
+        $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price, $material_one,$post);
+        $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price, $material_one,$post);
+        $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price, $post,$material_one);
+        $material[] = BasisDecorationService::mild($goods_price, $post,$material_one);
+        $material[] = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
 
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory('楼梯');

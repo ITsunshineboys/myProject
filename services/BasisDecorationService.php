@@ -1904,6 +1904,7 @@ class BasisDecorationService
         {
             $toilet = $post['toilet'] - 1;
         }
+
         $material = [];
         foreach ($goods as $one_goods)
         {
@@ -2001,11 +2002,17 @@ class BasisDecorationService
             }
         }
         $material [] = self::profitMargin($water_channel);
+
         $material [] = self::profitMargin($cutter);
+
         $material [] = self::profitMargin($disinfection_cabinet);
+
         $material [] = self::profitMargin($lavatory);
+
         $material [] = self::profitMargin($mattress);
+
         $material [] = self::profitMargin($floor_drain);
+        var_dump($material);exit;
         $material [] = self::profitMargin($bibcock);
         $material [] = self::profitMargin($mop);
         $material [] = self::profitMargin($high_voltage_tube);

@@ -21,27 +21,17 @@ EngineeringUniversalCriterion extends ActiveRecord
 
     public static function findByAll($str)
     {
-        if ($str){
-            $all = self::find()
-                ->asArray()
-                ->where(['project'=>$str])
-                ->all();
-        }
-        return $all;
+        return self::find()
+            ->asArray()
+            ->where(['project'=>$str])
+            ->all();
     }
 
     public static function mudMakeArea($str,$area)
     {
-        if ($str)
-        {
-            return self::find()
-                ->asArray()
-                ->where(['and',['project'=>$str],['project_particulars'=>$area]])
-                ->one();
-        }else
-        {
-            return false;
-        }
-
+        return self::find()
+            ->asArray()
+            ->where(['and',['project'=>$str],['project_particulars'=>$area]])
+            ->one();
     }
 }
