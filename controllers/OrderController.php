@@ -671,75 +671,6 @@ class OrderController extends Controller
 
 
 
-    /**
-     * 大后台获取全部订单列表
-     * @copyright        艾特魔方
-     * @license
-     * @lastmodify       2017-7-19
-     */
-    public function actionGetallorderlist(){
-        $user = Yii::$app->user->identity;
-        if (!$user ){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request = Yii::$app->request;
-        $page=trim($request->get('page',1));
-        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-        $keyword = trim($request->get('keyword', ''));
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where='';
-        if($keyword){
-            $where .=" z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
-        }
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }else{
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-        }
-
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
-    }
 
     /**
      * 大后台搜索界面
@@ -810,10 +741,9 @@ class OrderController extends Controller
     }
 
     /**
-     * 大后台获取待付款订单
      * @return string
      */
-    public function actionGetallunpaidorder(){
+    public function actionFindOrderList(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -834,28 +764,29 @@ class OrderController extends Controller
         $page=trim($request->get('page',1));
         $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
         $keyword = trim($request->get('keyword', ''));
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where='a.pay_status=0 and z.order_status=0';
-        if($keyword){
-            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
-        }
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
+        $timeType = trim($request->get('time_type', ''));
+        $type=trim($request->post('type','all'));
+        $where=GoodsOrder::GetTypeWhere($type);
+            if($keyword){
+                $where .=" z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
             }
-        }else{
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-        }
+            if ($timeType == 'custom') {
+                $startTime = trim(Yii::$app->request->get('start_time', ''));
+                $endTime = trim(Yii::$app->request->get('end_time', ''));
+                if (($startTime && !StringService::checkDate($startTime))
+                    || ($endTime && !StringService::checkDate($endTime))
+                ) {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }else{
+                list($startTime, $endTime) = StringService::startEndDate($timeType);
+                $startTime = explode(' ', $startTime)[0];
+                $endTime = explode(' ', $endTime)[0];
+            }
 
         if ($startTime) {
             $startTime = (int)strtotime($startTime);
@@ -871,347 +802,7 @@ class OrderController extends Controller
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
         $code=200;
         return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
-    }
-
-    /**
-     * 大后台获取待发货订单
-     * @return string
-     */
-    public function actionGetallunshippedorder(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request = Yii::$app->request;
-        $page=trim($request->get('page',1));
-        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-        $keyword = trim($request->get('keyword', ''));
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=0';
-        if($keyword){
-            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
-        }
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }else{
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-        }
-
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
-    }
-
-    /**
-     * 大后台获取待收货订单
-     * @return string
-     */
-    public function actionGetallunreceivedorder(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request = Yii::$app->request;
-        $page=trim($request->get('page',1));
-        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-        $keyword = trim($request->get('keyword', ''));
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=1';
-        if($keyword){
-            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
-        }
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }else{
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-        }
-
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
-    }
-
-    /**
-     * 大后台获取已完成订单
-     * @return string
-     */
-    public function actionGetallcompeleteorder(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request = Yii::$app->request;
-        $page=trim($request->get('page',1));
-        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-        $keyword = trim($request->get('keyword', ''));
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=1  and z.customer_service=0';
-        if($keyword){
-            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
-        }
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }else{
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-        }
-
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
-    }
-
-    /**
-     * 大后台获取已取消订单
-     * @return string
-     */
-    public function  actionGetallcanceledorder(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request = Yii::$app->request;
-        $page=trim($request->get('page',1));
-        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-        $keyword = trim($request->get('keyword', ''));
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where=' z.order_status=2';
-        if($keyword){
-            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
-        }
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }else{
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-        }
-
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
-    }
-    
-    /**
-     * 大后台获取售后订单
-     * @return string
-     */
-    public function actionGetallcustomerservicedorder(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request = Yii::$app->request;
-        $page=trim($request->get('page',1));
-        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-        $keyword = trim($request->get('keyword', ''));
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where=' z.order_status=1 and z.customer_service!=0';
-        if($keyword){
-            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
-        }
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }else{
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-        }
-
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
+             'code'=>$code,
             'msg'=>'ok',
             'data'=>$paginationData
         ]);
@@ -1397,40 +988,11 @@ class OrderController extends Controller
         }
     }
 
-
     /**
-     * 商家后台-获取全部订单信息
+     * supplier order list
      * @return string
      */
-    public function actionBusinessgetallorderlist(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
+    public  function actionFindSuppierOrderList(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -1439,315 +1001,60 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $data=GoodsOrder::Businessgetallorderlist($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>$data
-        ]);
-    }
-
-
-    /**
-     * 获取待付款订单列表_商家后台
-     * @return string
-     */
-    public function actionBusinessgetunpaidorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
+        $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+        if(!$supplier){
+            $code=1010;
             return Json::encode([
-                'code' => $code,
+                'code'=>$code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $data=GoodsOrder::Businessgetunpaidorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>$data
-        ]);
-    }
-
-    /**
-     * 商家后台-获取待发货订单
-     * @return string
-     */
-    public function actionBusinessgetnotshippedorder(){
         $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim($request->get('time_type', ''));
+        $type=trim($request->post('type','all'));
+        $where=GoodsOrder::GetTypeWhere($type);
+        $where .=" and a.supplier_id={$supplier->id}";
+        if($keyword){
+            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
         }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
+                    'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+            $startTime = explode(' ', $startTime)[0];
+            $endTime = explode(' ', $endTime)[0];
         }
-        if (!$page_size){
-            $page_size=15;
+
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
         }
-        if (!$page){
-            $page=1;
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
         }
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $data=GoodsOrder::Businessgetnotshippedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
+        $sort_money=trim($request->post('sort_money',''));
+        $sort_time=trim($request->post('sort_time',''));
+        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $code=200;
         return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>$data
-        ]);
-    }
-
-    /**
-     * 商家后台-获取待收货列表
-     * @return string
-     */
-    public function actionBusinessgetnotreceivedorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-        $data=GoodsOrder::Businessgetnotreceivedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>$data
-        ]);
-
-    }
-
-    /**
-     * 获取商家后台已完成订单列表
-     * @return string
-     */
-    public function actionBusinessgetcompletedorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $data=GoodsOrder::Businessgetcompletedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>$data
-        ]);
-    }
-
-    /**
-     * 获取商家后台已取消订单
-     * @return string
-     */
-    public function actionBusinessgetcanceledorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $data=GoodsOrder::Businessgetcanceledorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>$data
-        ]);
-    }
-
-
-    /**
-     * 获取已完成售后处理订单
-     * @return string
-     */
-    public function actionBusinessgetcustomerserviceorder(){
-        $request = Yii::$app->request;
-        $page=trim(htmlspecialchars($request->get('page','')),'');
-        $page_size=trim(htmlspecialchars($request->get('page_size','')),'');
-        $time_type=trim(htmlspecialchars($request->post('time_type','')),'');
-        if (!$time_type){
-            $time_type='all';
-        }
-        $time_start=trim(htmlspecialchars($request->post('time_start','')),'');
-        $time_end=trim(htmlspecialchars($request->post('time_end','')),'');
-        $search=trim(htmlspecialchars($request->post('search','')),'');
-        $sort_money=trim(htmlspecialchars($request->post('sort_money','')),'');
-        $sort_time=trim(htmlspecialchars($request->post('sort_time','')),'');
-        if ($time_type=='custom'){
-            if (!$time_start || !$time_end){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        if (!$page_size){
-            $page_size=15;
-        }
-        if (!$page){
-            $page=1;
-        }
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier_id = Supplier::find()->where(['uid' => $user->id])->one()['id'];
-            $data=GoodsOrder::Businessgetcustomerserviceorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>$data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
         ]);
     }
 
