@@ -73,6 +73,7 @@ class Goods extends ActiveRecord
         'offline_reason',
         'offline_person',
         'offline_uid',
+        'online_person',
     ];
 
     /**
