@@ -181,18 +181,33 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return 1000;
         }
 
+        //TODO worker_order 表也要加上 worker_type_id 查出对应的 worker_type 下的所有项目
+
         $order->create_time = date('Y-m-d H:i', $order->create_time);
         $order->start_time = date('Y-m-d H:i', $order->start_time);
         $order->end_time = date('Y-m-d H:i', $order->end_time);
         $order->amount = sprintf('%.2f', (float)$order->amount / 100);
         $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
-        $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
 
+        //TODO 查出工人的labor_cost_id(等级，省，市)，(成交数量，风格)待定， 调整历史单独分出来(对应订单)
+        //TODO 如果状态是0  查出取消时间和取消原因   worker_order 表需要加上cancel_time 和 cancel_reason字段
+
+        $worker = [];
+        //未接单和已取消 不显示工人信息
+        if ($order->worker_id && $order->status != 0 && $order->status != 1) {
+            $worker = Worker::find()
+                ->where(['id' => $order->worker_id])
+                ->select(['id', 'nickname', 'work_year', 'comprehensive_score', 'icon'])
+                ->one();
+        }
+
+        $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
         $order_img = WorkerOrderImg::find()->where(['worker_order_id' => $order_id])->all();
 
         return [
             'order' => $order,
             'order_img' => $order_img,
+            'worker' => $worker
         ];
     }
 }
