@@ -116,12 +116,46 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
+        $worker_type = (new Worker())->getWorkerTypeByWorkerId($worker_id);
+
         foreach ($arr as &$v) {
+            $v['worker_type'] = $worker_type;
             $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
             $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
             $v['status'] = self::WORKER_ORDER_STATUS[$v['status']];
         }
-        $arr['worker_type'] = (new Worker())->getWorkerTypeByWorkerId($worker_id);
+
+        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
+        return $data;
+    }
+
+    public function getUserWorkerOrderList($uid, $status, $page, $page_size)
+    {
+//        $worker = (new Worker())->getWorkerByUid($uid);
+//        $worker_id = $worker->id;
+        $query = self::find()
+            ->select(['create_time', 'amount', 'status'])
+            ->where(['uid' => $uid]);
+        if ($status != WorkerController::STATUS_ALL) {
+            $query->andWhere(['status' => $status]);
+        }
+
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->asArray()
+            ->all();
+
+//        $worker_type = (new Worker())->getWorkerTypeByWorkerId($worker_id);
+
+        foreach ($arr as &$v) {
+//            $v['worker_type'] = $worker_type;
+            //得到工人的类型
+            $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
+            $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
+            $v['status'] = self::USER_WORKER_ORDER_STATUS[$v['status']];
+        }
 
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;

@@ -1,6 +1,8 @@
 <?php
 
 namespace app\models;
+use app\services\ChatService;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "user_chat".
@@ -62,5 +64,34 @@ class UserChat extends \yii\db\ActiveRecord
         }
         $this->login_time = $time;
         return parent::beforeSave($insert);
+    }
+
+    /**
+     * @param $u_id
+     * @param $role_id
+     * @return array|bool
+     */
+    public function newChatUser($u_id, $role_id)
+    {
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $chat = new self();
+            $chat->u_id = $u_id;
+            $chat->role_id = $role_id;
+            $chat->save();
+            $trans->commit();
+        } catch (Exception $e) {
+            $trans->rollBack();
+            return false;
+        }
+        //创建环信号
+        $chat_online = new ChatService();
+        $username = $chat->chat_username;
+        if ($chat_online->getUser($username)) {
+            return false;
+        }
+        $password = \Yii::$app->security->generatePasswordHash($username);
+        $hx = $chat_online->createUser($username, $password);
+        return [$chat, $hx];
     }
 }
