@@ -12,6 +12,7 @@ class Role extends ActiveRecord
     const AUTHENTICATION_STATUS_IN_PROCESS = 0;
     const AUTHENTICATION_STATUS_APPROVED = 2;
     const AUTHENTICATION_STATUS_REJECTED = 1;
+    const FIELDS_ROLES = ['id', 'name'];
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -50,7 +51,7 @@ class Role extends ActiveRecord
             $where = $onlyApp
                 ? ['not in', 'id', [Yii::$app->params['lhzzRoleId']]]
                 : [];
-            $roles = self::find()->where($where)->asArray()->orderBy('id')->all();
+            $roles = self::find()->select(self::FIELDS_ROLES)->where($where)->asArray()->orderBy('id')->all();
             if ($roles) {
                 $cache->set($key, $roles);
             }
