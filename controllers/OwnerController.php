@@ -1368,19 +1368,15 @@ class OwnerController extends Controller
     public function actionAssortFacility()
     {
         $post = Yii::$app->request->post();
-
-        //有计算公式分类
-        $have_assort = [];
-        //无计算公式分类
-        $without_assort = [];
         $assort_material = MaterialPropertyClassify::findByStatus();
         foreach ($assort_material as $assort){
-            if ($assort['status'] !== MaterialPropertyClassify::DEFAULT_STATUS){
+            if ($assort['status'] != MaterialPropertyClassify::DEFAULT_STATUS){
                 $have_assort[] = $assort;
             }else{
                 $without_assort[] = $assort;
             }
         }
+
         //有计算公式
         foreach ($have_assort as $one_have_assort){
             $material_name[] = $one_have_assort['material'];
@@ -1389,15 +1385,13 @@ class OwnerController extends Controller
         $goods = Goods::assortList($material_name,510100);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea('卧室', '卧室面积');
-        $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$material_one,$post);
-        $material[] = BasisDecorationService::capacity($goods_price, $material_one, $post);
+        $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
+        $material[] = BasisDecorationService::capacity($goods_price, $post);
         $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price, $material_one,$post);
         $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price, $material_one,$post);
-        $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price, $post,$material_one);
-        $material[] = BasisDecorationService::mild($goods_price, $post,$material_one);
+        $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post,$material_one);
+        $material[] = BasisDecorationService::mild($goods_price, $post);
         $material[] = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
-        var_dump($material);exit;
-
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory('楼梯');
             $stairs_price = BasisDecorationService::priceConversion($stairs);
@@ -1413,8 +1407,22 @@ class OwnerController extends Controller
         }
         $material[] = BasisDecorationService::profitMargin($condition_stairs);
 
+        //无计算公式
+        foreach ($without_assort as $one_without_assort){
+            $without_assort_name[] = $one_without_assort['material'];
+            $without_assort_one[$one_without_assort['material']] = $one_without_assort;
+        }
+        $without_assort_goods = Goods::assortList($without_assort_name,510100);
+        $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
+        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$without_assort_one,$post);
+
+
         return Json::encode([
-            'goods'=>$material
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+                'goods' => $material,
+            ]
         ]);
     }
 
@@ -1470,7 +1478,10 @@ class OwnerController extends Controller
         ]);
     }
 
-
+    /**
+     * homepage   list
+     * @return string
+     */
     public function actionHomePage()
     {
        return Json::encode([
@@ -1482,4 +1493,5 @@ class OwnerController extends Controller
                ->all()
        ]);
     }
+
 }
