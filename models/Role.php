@@ -48,7 +48,7 @@ class Role extends ActiveRecord
         $roles = $cache->get($key);
         if (!$roles) {
             $where = $onlyApp
-                ? ['not in', 'id', [Yii::$app->params['ownerRoleId'], Yii::$app->params['lhzzRoleId']]]
+                ? ['not in', 'id', [Yii::$app->params['lhzzRoleId']]]
                 : [];
             $roles = self::find()->where($where)->asArray()->orderBy('id')->all();
             if ($roles) {
