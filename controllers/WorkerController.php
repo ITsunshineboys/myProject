@@ -14,6 +14,7 @@ use yii\web\Controller;
 class WorkerController extends Controller
 {
     const STATUS_ALL = 4;
+
     /**
      * @inheritdoc
      */
@@ -120,7 +121,7 @@ class WorkerController extends Controller
             return $user;
         }
 
-        $worker = (new Worker())->getWorkerByUid($user);
+        $worker = Worker::getWorkerByUid($user);
         $signature = $worker->signature;
         return Json::encode([
             'code' => 200,
@@ -142,7 +143,7 @@ class WorkerController extends Controller
 
         $signature = trim(\Yii::$app->request->get('signature', ''), '');
 
-        $code = (new Worker())->setSignature($user, $signature);
+        $code = Worker::setSignature($user, $signature);
 
         return Json::encode([
             'code' => $code,
@@ -176,7 +177,7 @@ class WorkerController extends Controller
             ]);
         }
 
-        $data = (new WorkerOrder())->getWorkerOrderList($user, $status, $page, $page_size);
+        $data = WorkerOrder::getWorkerOrderList($user, $status, $page, $page_size);
 
         return Json::encode([
             'code' => 200,
@@ -211,7 +212,7 @@ class WorkerController extends Controller
             ]);
         }
 
-        $data = (new WorkerOrder())->getUserWorkerOrderList($user, $status, $page, $page_size);
+        $data = WorkerOrder::getUserWorkerOrderList($user, $status, $page, $page_size);
 
         return Json::encode([
             'code' => 200,
@@ -242,7 +243,7 @@ class WorkerController extends Controller
             ]);
         }
 
-        $data = (new WorkerOrder())->getUserWorkerOrderDetail($order_id);
+        $data = WorkerOrder::getUserWorkerOrderDetail($order_id);
         if (is_int($data)) {
             return Json::encode([
                 'code' => $data,
@@ -256,4 +257,5 @@ class WorkerController extends Controller
             'data' => $data
         ]);
     }
+
 }

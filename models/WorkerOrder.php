@@ -98,9 +98,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $page_size
      * @return array
      */
-    public function getWorkerOrderList($uid, $status, $page, $page_size)
+    public static function getWorkerOrderList($uid, $status, $page, $page_size)
     {
-        $worker = (new Worker())->getWorkerByUid($uid);
+        $worker = Worker::getWorkerByUid($uid);
         $worker_id = $worker->id;
         $query = self::find()
             ->select(['create_time', 'amount', 'status'])
@@ -141,7 +141,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $page_size
      * @return array
      */
-    public function getUserWorkerOrderList($uid, $status, $page, $page_size)
+    public static function getUserWorkerOrderList($uid, $status, $page, $page_size)
     {
         $query = self::find()
             ->select(['create_time', 'amount', 'status', 'worker_id'])
@@ -174,7 +174,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return array|int
      */
-    public function getUserWorkerOrderDetail($order_id)
+    public static function getUserWorkerOrderDetail($order_id)
     {
         $order = self::find()->where(['id' => $order_id])->one();
         if ($order == null) {
@@ -193,8 +193,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
         //TODO 如果状态是0  查出取消时间和取消原因   worker_order 表需要加上cancel_time 和 cancel_reason字段
 
         $worker = [];
-        //未接单和已取消 不显示工人信息
-        if ($order->worker_id && $order->status != 0 && $order->status != 1) {
+        //只要有工人id,便显示工人信息
+        if ($order->worker_id) {
             $worker = Worker::find()
                 ->where(['id' => $order->worker_id])
                 ->select(['id', 'nickname', 'work_year', 'comprehensive_score', 'icon'])
@@ -210,4 +210,5 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'worker' => $worker
         ];
     }
+
 }

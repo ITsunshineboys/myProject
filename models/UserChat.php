@@ -71,7 +71,7 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $role_id
      * @return array|bool
      */
-    public function newChatUser($u_id, $role_id)
+    public static function newChatUser($u_id, $role_id)
     {
         $trans = \Yii::$app->db->beginTransaction();
         try {

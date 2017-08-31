@@ -86,7 +86,7 @@ class UserFollow extends \yii\db\ActiveRecord
      * @param $page_size
      * @return array
      */
-    public function getFollowList($user_id, $role_id, $page, $page_size)
+    public static function getFollowList($user_id, $role_id, $page, $page_size)
     {
         $table = self::TABLE_BY_ROLE_ID[$role_id];
         $nickname = 'nickname';
@@ -113,7 +113,7 @@ class UserFollow extends \yii\db\ActiveRecord
      * @param $id
      * @return int 200 成功 1000 失败
      */
-    public function toggleStatus($id)
+    public static function toggleStatus($id)
     {
 
         $follow = self::find()->where(['id' => $id])->one();

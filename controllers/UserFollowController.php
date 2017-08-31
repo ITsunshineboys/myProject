@@ -117,7 +117,7 @@ class UserFollowController extends Controller
             ]);
         }
 
-        $data = (new UserFollow())->getFollowList($user, $role_id, $page, $page_size);
+        $data = UserFollow::getFollowList($user, $role_id, $page, $page_size);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -147,7 +147,7 @@ class UserFollowController extends Controller
             ]);
         }
 
-        $code = (new UserFollow())->toggleStatus($id);
+        $code = UserFollow::toggleStatus($id);
 
         return Json::encode([
             'code' => $code,

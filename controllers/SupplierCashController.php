@@ -115,8 +115,7 @@ class SupplierCashController extends Controller
 
         $supplier = Supplier::find()
             ->select('id')->where(['uid' => $user])->one();
-        $data = (new SupplierCashManager())
-            ->getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
+        $data = SupplierCashManager::getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
 
         return Json::encode([
             'code' => 200,
@@ -151,7 +150,7 @@ class SupplierCashController extends Controller
         if ($admin) {
             $supplier['id'] = 0;
         }
-        $data = (new SupplierCashManager())->GetCash($cash_id, $supplier['id']);
+        $data = SupplierCashManager::GetCash($cash_id, $supplier['id']);
 
         return Json::encode([
             'code' => 200,
@@ -221,8 +220,7 @@ class SupplierCashController extends Controller
             ]);
         }
 
-        $data = (new SupplierCashManager())
-            ->getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
+        $data = SupplierCashManager::getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
 
         return Json::encode([
             'code' => 200,
@@ -263,8 +261,7 @@ class SupplierCashController extends Controller
             ]);
         }
 
-        $data = (new SupplierCashManager())
-            ->getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search);
+        $data = SupplierCashManager::getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search);
 
         return Json::encode([
             'code' => 200,
@@ -310,7 +307,7 @@ class SupplierCashController extends Controller
                 ]);
             }
 
-            $data = (new SupplierCashManager())->doCashDeal($cash_id, $status, $reason, $real_money);
+            $data = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
 
             if ($data) {
                 return Json::encode([

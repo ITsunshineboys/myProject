@@ -26,7 +26,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $status int 状态
      * @return array
      */
-    public function getCashList($supplier_id, $page, $page_size, $time_type, $time_start, $time_end, $status)
+    public static function getCashList($supplier_id, $page, $page_size, $time_type, $time_start, $time_end, $status)
     {
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
@@ -71,7 +71,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $cash_id
      * @return array|bool
      */
-    public function GetCash($cash_id, $supplier_id = 0)
+    public static function GetCash($cash_id, $supplier_id = 0)
     {
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
@@ -240,7 +240,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
-    public function getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search)
+    public static function getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search)
     {
         $query = (new Query())
             ->from(self::GOODS_ORDER . ' g')
@@ -283,7 +283,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
-    public function getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
+    public static function getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
     {
         $query = (new Query())
             ->from(self::SUP_CASHREGISTER . ' as g')
@@ -332,7 +332,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $real_money
      * @return \Exception|int|null|Exception
      */
-    public function doCashDeal($cash_id, $status, $reason, $real_money)
+    public static function doCashDeal($cash_id, $status, $reason, $real_money)
     {
         $supplier_cash = (new Query())
             ->from(self::SUP_CASHREGISTER)
