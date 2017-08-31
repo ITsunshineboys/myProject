@@ -1348,7 +1348,7 @@ class BasisDecorationService
      * @param $post
      * @return array
      */
-    public static function fixationFurnitureSeriesStyle($goods,$post,$material_one)
+    public static function fixationFurnitureSeriesStyle($goods,$post)
     {
         $material = [];
         foreach ($goods as $one_goods) {
@@ -1610,7 +1610,7 @@ class BasisDecorationService
      * @param $post
      * @return array
      */
-    public static function moveFurnitureSeriesStyle($goods,$add,$post)
+    public static function moveFurnitureSeriesStyle($goods,$post)
     {
         if ($goods)
         {
@@ -1660,7 +1660,7 @@ class BasisDecorationService
      * @param $post
      * @return array
      */
-    public static function appliancesAssortSeriesStyle($goods,$add,$post)
+    public static function appliancesAssortSeriesStyle($goods,$post)
     {
         $material = [];
         switch ($post['hall']) {
@@ -1706,7 +1706,7 @@ class BasisDecorationService
             }
             switch ($one_goods) {
                 case $one_goods['title'] == '中央空调' && $one_goods['series_id'] == $post['series']:
-                    $one_goods['show_quantity'] = $add['中央空调']['quantity'];
+                    $one_goods['show_quantity'] = 1;
                     $one_goods['show_cost'] = $one_goods['platform_price'] * $one_goods['show_quantity'];
                     $central_air_conditioning [] = $one_goods;
                     break;
@@ -1874,15 +1874,11 @@ class BasisDecorationService
         return $material;
     }
 
-    public static function withoutAssortGoods($without_assort_goods_price,$without_assort_one,$post)
+    public static function withoutAssortGoods($without_assort_goods_price,$bedroom_area,$post)
     {
+        var_dump($bedroom_area);exit;
         foreach ($without_assort_goods_price as &$one){
-            if ($one['series_id'] == $post['series'] && $one['style_id'] == $post['style']){
-                $one_goods['show_quantity'] = $without_assort_one;
-                $one_goods['show_cost'] = $one_goods['show_quantity'] * $one_goods['platform_price'];
-                $elbow [] = $one_goods;
-            }
-
+            $one['show_quantity'] = $without_assort_one['']
         }
         var_dump($a);exit;
     }

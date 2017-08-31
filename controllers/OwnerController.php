@@ -1387,9 +1387,9 @@ class OwnerController extends Controller
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea('卧室', '卧室面积');
         $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
         $material[] = BasisDecorationService::capacity($goods_price, $post);
-        $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price, $material_one,$post);
-        $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price, $material_one,$post);
-        $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post,$material_one);
+        $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
+        $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
+        $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
         $material[] = BasisDecorationService::mild($goods_price, $post);
         $material[] = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
         if ($post['stairway_id'] == 1) {
@@ -1414,7 +1414,7 @@ class OwnerController extends Controller
         }
         $without_assort_goods = Goods::assortList($without_assort_name,510100);
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
-        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$without_assort_one,$post);
+        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$bedroom_area,$post);
 
 
         return Json::encode([
