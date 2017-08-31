@@ -240,6 +240,7 @@ class Supplier extends ActiveRecord
             $userRole->user_id = $user->id;
             $userRole->role_id = Yii::$app->params['supplierRoleId'];
             $userRole->review_apply_time = time();
+            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
             if ($operator) {
                 $userRole->review_time = time();
                 $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
