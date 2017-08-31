@@ -1470,15 +1470,16 @@ class OwnerController extends Controller
         ]);
     }
 
-    /**
-     *
-     * @return array|\yii\db\ActiveRecord[]
-     */
+
     public function actionHomePage()
     {
-        return BrainpowerInitalSupervise::find()
-            ->select('id,image')
-            ->orderBy(['sort' => SORT_ASC])
-            ->all();
+       return Json::encode([
+          'code' =>200,
+           'msg'=>'ok',
+           'data'=> BrainpowerInitalSupervise::find()
+               ->select('id,image')
+               ->orderBy(['sort' => SORT_ASC])
+               ->all()
+       ]);
     }
 }
