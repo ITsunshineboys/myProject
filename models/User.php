@@ -1673,7 +1673,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if (!$roleId
-            || in_array($roleId, [Yii::$app->params['ownerRoleId'], Yii::$app->params['lhzzRoleId']])
+            || in_array($roleId, [Yii::$app->params['lhzzRoleId']])
             || !in_array($roleId, UserRole::findRoleIdsByUserIdAndReviewStatus($this->id))
         ) {
             return 1000;
