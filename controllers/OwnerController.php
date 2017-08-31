@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\BrainpowerInitalSupervise;
 use app\models\CarpentryAdd;
 use app\models\CarpentryReconstruction;
 use app\models\CircuitryReconstruction;
@@ -1367,14 +1368,23 @@ class OwnerController extends Controller
     public function actionAssortFacility()
     {
         $post = Yii::$app->request->post();
-        $assort_material = MaterialPropertyClassify::find()
-            ->asArray()
-            ->all();
-        $material_name = [];
-        $material_one = [];
-        foreach ($assort_material as $one_material) {
-            $material_one[$one_material['material']] = $one_material;
-            $material_name [] = $one_material['material'];
+
+        //有计算公式分类
+        $have_assort = [];
+        //无计算公式分类
+        $without_assort = [];
+        $assort_material = MaterialPropertyClassify::findByStatus();
+        foreach ($assort_material as $assort){
+            if ($assort['status'] !== MaterialPropertyClassify::DEFAULT_STATUS){
+                $have_assort[] = $assort;
+            }else{
+                $without_assort[] = $assort;
+            }
+        }
+        //有计算公式
+        foreach ($have_assort as $one_have_assort){
+            $material_name[] = $one_have_assort['material'];
+            $material_one[$one_have_assort['material']] = $one_have_assort;
         }
         $goods = Goods::assortList($material_name,510100);
         $goods_price = BasisDecorationService::priceConversion($goods);
@@ -1386,6 +1396,7 @@ class OwnerController extends Controller
         $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price, $post,$material_one);
         $material[] = BasisDecorationService::mild($goods_price, $post,$material_one);
         $material[] = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
+        var_dump($material);exit;
 
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory('楼梯');
@@ -1457,5 +1468,17 @@ class OwnerController extends Controller
                 'view-identity' => Yii::$app->user->identity->viewIdentity()
             ],
         ]);
+    }
+
+    /**
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function actionHomePage()
+    {
+        return BrainpowerInitalSupervise::find()
+            ->select('id,image')
+            ->orderBy(['sort' => SORT_ASC])
+            ->all();
     }
 }

@@ -10,6 +10,8 @@ use yii\db\ActiveRecord;
 
 class MaterialPropertyClassify extends ActiveRecord
 {
+    const DEFAULT_STATUS = 0;
+    const CHANGE_STATE =1;
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -25,13 +27,19 @@ class MaterialPropertyClassify extends ActiveRecord
      */
     public static function findByAll($classify)
     {
-        $select = "material_property_classify.material,material_property_classify.quantity";
         $all = self::find()
             ->asArray()
-            ->select($select)
+            ->select(['material,quantity'])
             ->where(['classify'=>$classify])
             ->all();
         return $all;
     }
 
+    public static function findByStatus()
+    {
+        return self::find()
+            ->where([])
+            ->asArray()
+            ->all();
+    }
 }
