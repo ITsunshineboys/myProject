@@ -77,6 +77,8 @@ class Goods extends ActiveRecord
         'category_id',
         'brand_id',
         'after_sale_services',
+        'cover_image',
+        'logistics_template_id',
     ];
 
     /**
@@ -208,7 +210,8 @@ class Goods extends ActiveRecord
             }
 
             if (isset($goods['after_sale_services'])) {
-                $goods['after_sale_services'] = self::afterSaleServicesReadableCls($goods['after_sale_services']);
+                $goods['after_sale_services_desc'] = self::afterSaleServicesReadableCls($goods['after_sale_services']);
+                $goods['after_sale_services'] = explode(',', $goods['after_sale_services']);
             }
         }
         return $goodsList;
