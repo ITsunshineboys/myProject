@@ -3572,9 +3572,14 @@ class MallController extends Controller
             ]);
         }
 
-        $goods = Goods::find()
-            ->where(['id' => $id, 'status' => Goods::STATUS_ONLINE])
-            ->one();
+        $where['id'] = $id;
+        $where['status'] = Goods::STATUS_ONLINE;
+        if (!empty(Yii::$app->session[User::LOGIN_ROLE_ID])
+            && Yii::$app->session[User::LOGIN_ROLE_ID] == Yii::$app->params['supplierRoleId']
+        ) {
+            unset($where['status']);
+        }
+        $goods = Goods::find()->where($where)->one();
 
         if (!$goods) {
             return Json::encode([
