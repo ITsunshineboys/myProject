@@ -1870,6 +1870,7 @@ class BasisDecorationService
                 $elbow [] = $one_goods;
             }
         }
+        var_dump($elbow);exit;
         if (!isset($elbow)){
             $material [] = BasisDecorationService::profitMargin($elbow);
         }else{
