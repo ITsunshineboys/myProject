@@ -29,7 +29,7 @@ class WorkerType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id'], 'integer'],
+            [['pid'], 'integer'],
             [['worker_type'], 'string', 'max' => 20],
         ];
     }
@@ -41,7 +41,7 @@ class WorkerType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'parent_id' => '所属上级工种id',
+            'pid' => '所属上级工种id',
             'worker_type' => '工种名字',
         ];
     }

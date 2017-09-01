@@ -15,6 +15,8 @@ use yii\db\Query;
  */
 class WorkerItem extends \yii\db\ActiveRecord
 {
+
+    const PARENT=0;
     /**
      * @inheritdoc
      */
@@ -40,7 +42,7 @@ class WorkerItem extends \yii\db\ActiveRecord
      */
     public static function getparent($worker_type_id){
         $data=(new Query())
-            ->select('title')
+            ->select('wi.title,wi.id')
             ->from('worker_item as wi')
             ->leftJoin('worker_type_item as wti','wi.id=wti.worker_item_id')
             ->where(['wti.worker_type_id'=>$worker_type_id])
@@ -49,20 +51,53 @@ class WorkerItem extends \yii\db\ActiveRecord
     }
 
 
+    /**
+     * get craft by item_id
+     * @param $item_id
+     * @return array|null
+     */
+    public static  function getcraft($item_id){
+        $kt=self::find()
+            ->where(['id'=>$item_id])
+            ->andWhere(['pid'=>self::PARENT])
+            ->one();
+        if(!$kt){
+            return null;
+        }
+        $array = (new Query())
+            ->from('worker_item as wi')
+            ->select('wc.craft,wc.id')
+            ->leftJoin('worker_craft as wc','wi.id=wc.item_id')
+            ->where(['wi.pid' => $kt->id])
+            ->andWhere('wi.id=wc.item_id')
+            ->all();
+        if($array){
+            return $array;
+        }
+   return null;
+    }
+    /**
+     * get chlid item by item_id
+     * @param $item_id
+     * @return array|null
+     */
 
-//    public static  function getktcraft($title){
-//        $kt=self::find()->where(['title'=>$title])->one();
-//
-//        $array = (new Query())
-//            ->from('worker_item as wi')
-//            ->select('wc.craft')
-//            ->leftJoin('worker_craft as wc','wi.id=wc.item_id')
-//            ->where(['wi.pid' => $kt->id])
-//            ->all();
-//        if($array){
-//            return $array;
-//        }
-//   return null;
-//    }
+    public static function getchliditem($item_id)
+    {
 
+        $parent=self::find()
+            ->where(['id'=>$item_id])
+            ->one();
+        if(!$parent){
+            return null;
+        }
+            $data = self::find()
+                ->select('title,id')
+                ->where(['pid' => $item_id])
+                ->asArray()
+                ->all();
+
+        return $data;
+
+    }
 }

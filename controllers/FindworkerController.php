@@ -2,6 +2,8 @@
 namespace app\controllers;
 
 use app\models\WorkerItem;
+use app\models\WorkerOrder;
+use app\models\WorkerOrderItem;
 use app\models\WorkerType;
 use app\services\ExceptionHandleService;
 use yii\db\Query;
@@ -87,7 +89,7 @@ class FindworkerController extends Controller{
      *@return string
      */
 
-    public function actionGetHomeInfo(){
+    public function actionGetHomeItem(){
 
         $code=1000;
         $request=new Request();
@@ -99,18 +101,98 @@ class FindworkerController extends Controller{
             ]);
         }
          $data=WorkerItem::getparent($worker_type_id);
-
                return json_encode([
                    'code'=>200,
                    'msg'=>'ok',
-                   'data'=>$data
+                   'data'=>[
+                       'worker_type_id'=>$worker_type_id,
+                       'item'=>$data
+                   ]
                ]);
 
          }
 
     /**
-     *get home info by worker type
+     *get carft by home info
      *@return string
      */
+    public function actionGetcarftinfo()
+    {
+        $code = 1000;
+        $item_id = trim(\Yii::$app->request->get('item_id', ''), '');
+        if (!$item_id) {
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data = WorkerItem::getcraft($item_id);
+        return json_encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
 
+    }
+
+
+    /**
+     *get chlid item
+     *@return string
+     */
+    public function actionGetChliditem(){
+        $code=1000;
+        $item_id = trim(\Yii::$app->request->get('item_id', ''), '');
+        if (!$item_id) {
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=WorkerItem::getchliditem($item_id);
+
+            return json_encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'data' => $data
+            ]);
+        }
+    /**
+     * add mud info
+     * @return string
+     */
+    public function actionAddMudHomeinfo()
+    {
+        $user_id = \Yii::$app->user->identity;
+        if (!$user_id){
+        $code=1052;
+        return json_encode([
+            'code' => $code,
+            'msg' =>\ Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+        $code = 1000;
+        $array = \Yii::$app->request->post();
+        if ($array == null) {
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $data = WorkerOrderItem::addMudorderitem($array);
+
+        $code = WorkerOrder::addorderinfo($user_id, $data);
+
+
+        return json_encode([
+            'code' => $code,
+            'msg' => $code == 200 ? 'ok' : \Yii::$app->params['errorCodes'][$code],
+            'data' => $code == 200 ? $data : null
+        ]);
+    }
+    public function actionAddHomeimages(){
+
+
+    }
 }

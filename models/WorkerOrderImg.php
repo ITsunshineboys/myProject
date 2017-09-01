@@ -14,6 +14,8 @@ use Yii;
  */
 class WorkerOrderImg extends \yii\db\ActiveRecord
 {
+
+    const IMAGES_COUNT=10;
     /**
      * @inheritdoc
      */
@@ -45,5 +47,14 @@ class WorkerOrderImg extends \yii\db\ActiveRecord
             'order_img_name' => '工单图片名称',
             'order_img' => '工单图片地址',
         ];
+    }
+    /**
+     * @param array $images
+     * @return bool
+     */
+
+    public static function validateImages(array $images)
+    {
+        return count($images) <= self::IMAGES_COUNT;
     }
 }

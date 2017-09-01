@@ -25,6 +25,7 @@ use yii\data\Pagination;
  * @property string $amount
  * @property string $front_money
  * @property integer $status
+ * @property integer $worker_type_id
  */
 class WorkerOrder extends \yii\db\ActiveRecord
 {
@@ -209,6 +210,35 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'order_img' => $order_img,
             'worker' => $worker
         ];
+    }
+
+    public static function addorderinfo($uid,$array){
+
+        $code=1000;
+        $worker_order=new self();
+        $worker_order->uid=$uid;
+        $worker_order->worker_type_id=WorkerType::find()
+            ->where(['worker_type'=>$array['worker_type']])
+            ->one()->id;
+        $worker_order->order_no=date('md',time()).'1'.rand(10000,99999);
+        $worker_order->create_time=time();
+        if(!isset($array['start_time'])){
+            return $code;
+        }
+        $worker_order->start_time=strtotime($array['start_time']);
+        $worker_order->end_time=strtotime($array['end_time']);
+        $worker_order->need_time=$array['need_time'];
+        $worker_order->status=self::USER_WORKER_ORDER_STATUS[1];
+
+        if(!$worker_order->save(false)){
+            return 500;
+        }else{
+            return 200;
+        }
+
+
+
+
     }
 
 }
