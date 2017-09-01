@@ -1029,8 +1029,12 @@ class OrderController extends Controller
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
         $type=trim($request->post('type','all'));
-        $where=GoodsOrder::GetTypeWhere($type);
-        $where .=" and a.supplier_id={$supplier->id}";
+        if ($type=='all'){
+            $where ="a.supplier_id={$supplier->id}";
+        }else{
+            $where=GoodsOrder::GetTypeWhere($type);
+            $where .=" and a.supplier_id={$supplier->id}";
+        }
         if($keyword){
             $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
         }
@@ -1527,6 +1531,37 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+    }
+     /**
+     * @return string
+     */
+    public function  actionFindUserOrder(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $type=$request->get('type','all');
+        $page=$request->get('page','1');
+        $size=$request->get('size','10');
+        if ($type=='all'){
+            $where ="a.user_id={$user->id}";
+        }else{
+            $where=GoodsOrder::GetTypeWhere($type);
+            $where .=" and a.user_id={$user->id}  and order_refer = 2";
+        }
+        $sort=' a.create_time  desc';
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$sort);
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
     }
 
 
