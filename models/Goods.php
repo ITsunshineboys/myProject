@@ -74,6 +74,9 @@ class Goods extends ActiveRecord
         'offline_person',
         'offline_uid',
         'online_person',
+        'category_id',
+        'brand_id',
+        'after_sale_services',
     ];
 
     /**
@@ -127,81 +130,85 @@ class Goods extends ActiveRecord
             ->limit($size)
             ->asArray()
             ->all();
-        if (!$select
-            || in_array('platform_price', $select)
-            || in_array('supplier_price', $select)
-            || in_array('market_price', $select)
-            || in_array('purchase_price_decoration_company', $select)
-            || in_array('purchase_price_manager', $select)
-            || in_array('purchase_price_designer', $select)
-            || in_array('create_time', $select)
-            || in_array('online_time', $select)
-            || in_array('offline_time', $select)
-            || in_array('delete_time', $select)
-            || in_array('status', $select)
-        ) {
-            foreach ($goodsList as &$goods) {
-                isset($goods['platform_price']) && $goods['platform_price'] /= 100;
-                isset($goods['supplier_price']) && $goods['supplier_price'] /= 100;
-                isset($goods['market_price']) && $goods['market_price'] /= 100;
-                isset($goods['purchase_price_decoration_company']) && $goods['purchase_price_decoration_company'] /= 100;
-                isset($goods['purchase_price_manager']) && $goods['purchase_price_manager'] /= 100;
-                isset($goods['purchase_price_designer']) && $goods['purchase_price_designer'] /= 100;
+        foreach ($goodsList as &$goods) {
+            isset($goods['platform_price']) && $goods['platform_price'] /= 100;
+            isset($goods['supplier_price']) && $goods['supplier_price'] /= 100;
+            isset($goods['market_price']) && $goods['market_price'] /= 100;
+            isset($goods['purchase_price_decoration_company']) && $goods['purchase_price_decoration_company'] /= 100;
+            isset($goods['purchase_price_manager']) && $goods['purchase_price_manager'] /= 100;
+            isset($goods['purchase_price_designer']) && $goods['purchase_price_designer'] /= 100;
 
-                if (isset($goods['create_time'])) {
-                    $goods['create_time'] = $goods['create_time']
-                        ? date('Y-m-d H:i', $goods['create_time'])
-                        : '';
-                }
+            if (isset($goods['create_time'])) {
+                $goods['create_time'] = $goods['create_time']
+                    ? date('Y-m-d H:i', $goods['create_time'])
+                    : '';
+            }
 
-                if (isset($goods['online_time'])) {
-                    $goods['online_time'] = $goods['online_time']
-                        ? date('Y-m-d H:i', $goods['online_time'])
-                        : '';
-                }
+            if (isset($goods['online_time'])) {
+                $goods['online_time'] = $goods['online_time']
+                    ? date('Y-m-d H:i', $goods['online_time'])
+                    : '';
+            }
 
-                if (isset($goods['offline_time'])) {
-                    $goods['offline_time'] = $goods['offline_time']
-                        ? date('Y-m-d H:i', $goods['offline_time'])
-                        : '';
-                }
+            if (isset($goods['offline_time'])) {
+                $goods['offline_time'] = $goods['offline_time']
+                    ? date('Y-m-d H:i', $goods['offline_time'])
+                    : '';
+            }
 
-                if (isset($goods['delete_time'])) {
-                    $goods['delete_time'] = $goods['delete_time']
-                        ? date('Y-m-d H:i', $goods['delete_time'])
-                        : '';
-                }
+            if (isset($goods['delete_time'])) {
+                $goods['delete_time'] = $goods['delete_time']
+                    ? date('Y-m-d H:i', $goods['delete_time'])
+                    : '';
+            }
 
-                if ($fromLhzz) {
-                    if (isset($goods['status'])) {
-                        if ($goods['status'] == self::STATUS_OFFLINE) {
-                            $goods['operator'] = $goods['offline_person'];
-                        } elseif ($goods['status'] == self::STATUS_ONLINE) {
-                            $goods['operator'] = $goods['online_person'];
-                        }
-                    }
-                } else {
-                    if (isset($goods['offline_person'])
-                        && isset($goods['status'])
-                        && $goods['status'] == self::STATUS_OFFLINE
-                    ) {
-                        $goods['operator'] = $goods['offline_uid'] > 0 ? '系统下架' : $goods['offline_person'];
+            if ($fromLhzz) {
+                if (isset($goods['status'])) {
+                    if ($goods['status'] == self::STATUS_OFFLINE) {
+                        $goods['operator'] = $goods['offline_person'];
+                    } elseif ($goods['status'] == self::STATUS_ONLINE) {
+                        $goods['operator'] = $goods['online_person'];
                     }
                 }
-
-                if (isset($goods['offline_uid'])) {
-                    unset($goods['offline_uid']);
+            } else {
+                if (isset($goods['offline_person'])
+                    && isset($goods['status'])
+                    && $goods['status'] == self::STATUS_OFFLINE
+                ) {
+                    $goods['operator'] = $goods['offline_uid'] > 0 ? '系统下架' : $goods['offline_person'];
                 }
+            }
 
-                if (isset($goods['offline_person'])) {
-                    unset($goods['offline_person']);
-                }
+            if (isset($goods['offline_uid'])) {
+                unset($goods['offline_uid']);
+            }
 
-                if (isset($goods['online_person'])) {
-                    unset($goods['online_person']);
-                }
+            if (isset($goods['offline_person'])) {
+                unset($goods['offline_person']);
+            }
 
-                isset($goods['status']) && $goods['status'] = self::$statuses[$goods['status']];
+            if (isset($goods['online_person'])) {
+                unset($goods['online_person']);
+            }
+
+            isset($goods['status']) && $goods['status'] = self::$statuses[$goods['status']];
+
+            if (isset($goods['category_id'])) {
+                $goodsCatgory = GoodsCategory::findOne($goods['category_id']);
+                $goods['category_title'] = $goodsCatgory->fullTitle();
+            }
+
+            if (isset($goods['brand_id'])) {
+                $goods['brand_name'] = GoodsBrand::findOne($goods['brand_id'])->name;
+            }
+
+            if (isset($goods['id'])) {
+                $goods['images'] = GoodsImage::imagesByGoodsId($goods['id']);
+                $goods['qr_code'] = UploadForm::DIR_PUBLIC . '/goods_' . $goods['id'] . '.png';
+            }
+
+            if (isset($goods['after_sale_services'])) {
+                $goods['after_sale_services'] = self::afterSaleServicesReadableCls($goods['after_sale_services']);
             }
         }
         return $goodsList;
@@ -545,6 +552,12 @@ class Goods extends ActiveRecord
             }
 
             isset($goods['status']) && $goods['status'] = self::$statuses[$goods['status']];
+
+            if (isset($goods['category_id'])) {
+                $goodsCatgory = GoodsCategory::findOne($goods['category_id']);
+                $goods['category_title'] = $goodsCatgory->fullTitle();
+                unset($goods['category_id']);
+            }
         }
 
         return $goodsList;
@@ -1212,6 +1225,21 @@ class Goods extends ActiveRecord
     {
         $readableServices = [];
         $services = explode(',', $this->after_sale_services);
+        foreach ($services as $service) {
+            $readableServices[] = self::AFTER_SALE_SERVICES[$service];
+        }
+        return $readableServices;
+    }
+
+    /**
+     * Get readable after sale services
+     *
+     * @return array
+     */
+    public static function afterSaleServicesReadableCls($afterSaleServices)
+    {
+        $readableServices = [];
+        $services = explode(',', $afterSaleServices);
         foreach ($services as $service) {
             $readableServices[] = self::AFTER_SALE_SERVICES[$service];
         }
