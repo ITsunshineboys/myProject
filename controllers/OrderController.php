@@ -123,29 +123,7 @@ class OrderController extends Controller
 
     }
 
-    // public function actionSetuserrole()
-    // {
-    //     $mobile=18208142446;
-    //     $user=User::find()->where(['mobile'=>$mobile])->asArray()->one();
-    //     if (!$user) {
-    //         echo 2;
-    //         exit;
-    //     }
-    //     $user_id=$user['id'];
-    //     $review_status=2;
-    //     $time=time();
 
-    //     $res= \Yii::$app->db->createCommand()->insert('user_role',[
-    //                     'user_id'    =>$user_id,
-    //                     'review_status' =>2,
-    //                     'review_apply_time'      =>$time,
-    //                     'review_time'=>$time,
-    //                     'role_id'=>6
-    //                 ])->execute();
-    //     if($res){
-    //         echo 1;
-    //     }
-    // }
 
     /**
      * 获取商品id
@@ -1468,7 +1446,7 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
+     /**
      * @return string
      */
     public function  actionRefundhandle(){
@@ -1523,7 +1501,7 @@ class OrderController extends Controller
         if ($code ==200){
             return Json::encode([
                 'code' => $code,
-                'msg' => 'ok',
+                'msg'  => 'ok',
             ]);
         }else{
             return Json::encode([
@@ -1532,8 +1510,9 @@ class OrderController extends Controller
             ]);
         }
     }
-     /**
-     * @return string
+    
+    /**
+     *@return string
      */
     public function  actionFindUserOrder(){
         $user = Yii::$app->user->identity;
@@ -1547,20 +1526,33 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $type=$request->get('type','all');
         $page=$request->get('page','1');
-        $size=$request->get('size','10');
-        if ($type=='all'){
+        $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
+        if ($type==GoodsOrder::ORDER_TYPE_ALL){
             $where ="a.user_id={$user->id}";
         }else{
             $where=GoodsOrder::GetTypeWhere($type);
             $where .=" and a.user_id={$user->id}  and order_refer = 2";
         }
         $sort=' a.create_time  desc';
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$sort);
+        $paginationData = GoodsOrder::paginationByUserorder($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$sort);
         $code=200;
         return Json::encode([
             'code'=>$code,
             'msg'=>'ok',
             'data'=>$paginationData
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionGetordergoodslist(){
+        $data= OrderGoods::find()->asArray()->all();
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>['balance'=>$data]
         ]);
     }
 
