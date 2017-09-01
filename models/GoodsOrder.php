@@ -1694,13 +1694,20 @@ class GoodsOrder extends ActiveRecord
                 ->one();
             $tran = Yii::$app->db->beginTransaction();
             try{
+                $order_money=$goodsOrder->amount_order;
                 $goodsOrder->pay_status=1;
-                $res=$tran->commit();
-                if (!$res){
+                $res=$goodsOrder->save();
+                $user=User::find()
+                    ->where(['id'=>$user->id])
+                    ->one();
+                $user->balance=($user->balance-$order_money);
+                $res2=$user->save(false);
+                if (!$res || !$res2){
                     $tran->rollBack();
                     $code=500;
                     return $code;
                 }
+                $tran->commit();
             }catch (Exception $e){
                 $tran->rollBack();
                 $code=500;
