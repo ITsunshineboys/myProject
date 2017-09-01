@@ -945,7 +945,7 @@ class User extends ActiveRecord implements IdentityInterface
             || !$this->identity_card_back_image
             || !$this->validateIdentityNo()
             || !$this->validateLegalPerson()
-        ) {
+        ) {var_dump($this->validateIdentityNo());echo '|';var_dump($this->validateLegalPerson());
             return false;
         }
 
