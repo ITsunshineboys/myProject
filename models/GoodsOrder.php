@@ -1669,4 +1669,78 @@ class GoodsOrder extends ActiveRecord
 
         return $where;
     }
+
+    /**
+     * @param $postData
+     * @param $user
+     * @return int
+     */
+    public  static  function orderBalanceSub($postData,$user)
+    {
+        $orders=$postData['orders'];
+        if ($postData['total_amount']<= $user->balance){
+            $code=1033;
+            return $code;
+        }
+        //计算费用
+        $costs=self::CalculationCost($orders);
+        if ($postData['total_amount']*100  !=($costs['freight'] + $costs['order_amount'])){
+             $code=1000;
+             return $code;
+        };
+        foreach ($orders as $k =>$v){
+            $goodsOrder=self::find()
+                ->where(['order_no'=>$orders[$k]['order_no']])
+                ->one();
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $goodsOrder->pay_status=1;
+                $res=$tran->commit();
+                if (!$res){
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+            }catch (Exception $e){
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+        }
+        $code=200;
+        return $code;
+    }
+
+    /**
+     * @param $orders
+     * @return array|int
+     */
+    public  static  function CalculationCost($orders)
+    {
+        $orderAmount=0;
+        $freight=0;
+        foreach ($orders as $k =>$v){
+            $goodsOrder=self::find()
+                ->where(['order_no'=>$orders[$k]['order_no']])
+                ->one();
+            if(!$goodsOrder){
+                $code=1000;
+                return $code;
+            }
+            $orderAmount+=$goodsOrder['amount_order'];
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$orders[$k]['order_no']])
+                ->asArray()
+                ->all();
+            foreach ($OrderGoods as $key =>$val){
+                $freight+=$OrderGoods[$key]['freight'];
+            }
+
+        }
+        $data=[
+            'freight'=>$freight,
+            'order_amount'=>$orderAmount
+        ];
+        return $data;
+    }
 }

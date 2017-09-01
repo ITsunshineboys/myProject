@@ -1557,5 +1557,32 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * @return string
+     */
+    public  function  actionBalancePay(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        $code=GoodsOrder::orderBalanceSub($postData,$user);
+        if ($code==200){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
 
 }
