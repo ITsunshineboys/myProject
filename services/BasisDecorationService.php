@@ -1737,6 +1737,7 @@ class BasisDecorationService
         }else {
             $toilet = $post['toilet'] - 1;
         }
+        var_dump($goods);exit;
         $material = [];
         foreach ($goods as $one_goods) {
             switch ($one_goods) {
