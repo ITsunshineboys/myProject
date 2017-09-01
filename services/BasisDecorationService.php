@@ -1732,7 +1732,6 @@ class BasisDecorationService
      */
     public static function lifeAssortSeriesStyle($goods,$post)
     {
-        var_dump($goods);exit;
         if ($post['toilet'] <= 2) {
             $toilet = 1;
         }else {
