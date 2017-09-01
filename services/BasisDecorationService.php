@@ -1878,7 +1878,7 @@ class BasisDecorationService
     {
         var_dump($bedroom_area);exit;
         foreach ($without_assort_goods_price as &$one){
-            $one['show_quantity'] = $without_assort_one['']
+            $one['show_quantity'] = $without_assort_one['1'];
         }
         var_dump($a);exit;
     }
