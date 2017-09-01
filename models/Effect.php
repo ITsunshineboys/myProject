@@ -250,6 +250,13 @@ class Effect extends ActiveRecord
         return $res;
     }
 
+    /**
+     * according to condition find
+     * @param $street
+     * @param $toponymy
+     * @param $district
+     * @return array|ActiveRecord[]
+     */
     public static function condition($street,$toponymy,$district)
     {
         return self::find()
@@ -259,4 +266,8 @@ class Effect extends ActiveRecord
             ->all();
     }
 
+    public static function findById($id)
+    {
+        return self::findOne(['id'=>$id]);
+    }
 }

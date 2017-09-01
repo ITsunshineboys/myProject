@@ -1414,9 +1414,7 @@ class OwnerController extends Controller
         }
         $without_assort_goods = Goods::assortList($without_assort_name,510100);
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
-        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$bedroom_area,$post);
-
-
+        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
@@ -1492,6 +1490,12 @@ class OwnerController extends Controller
                ->orderBy(['sort' => SORT_ASC])
                ->all()
        ]);
+    }
+
+    public function actionCaseList(){
+        $case_id  = trim(Yii::$app->request->get('id',''));
+        $case_all = Effect::findById($case_id);
+        
     }
 
 }

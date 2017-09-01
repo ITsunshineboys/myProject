@@ -1874,12 +1874,27 @@ class BasisDecorationService
         return $material;
     }
 
-    public static function withoutAssortGoods($without_assort_goods_price,$bedroom_area,$post)
+    public static function withoutAssortGoods($without_assort_goods_price,$assort_material,$post)
     {
-        var_dump($bedroom_area);exit;
         foreach ($without_assort_goods_price as &$one){
-            $one['show_quantity'] = $without_assort_one['1'];
+            foreach ($assort_material as $value){
+                if ($one['title'] == $value['material']){
+                    $one['show_quantity'] =$value['quantity'];
+                    $one['show_cost'] = $one['show_quantity'] * $one['platform_price'];
+                }
+            }
         }
-        var_dump($a);exit;
+        foreach ($without_assort_goods_price as $goods_value){
+            if ($goods_value['series_id'] == $post['series'] && $goods_value['style_id'] == $post['style']){
+                $series_style_goods[] =  $goods_value;
+            }elseif ($goods_value['series_id'] == $post['series'] && $goods_value['style_id'] == 0){
+                $series_style_goods[] =  $goods_value;
+            }elseif ($goods_value['style_id'] == $post['style'] && $goods_value['series_id'] == 0){
+                $series_style_goods[] =  $goods_value;
+            }elseif ($goods_value['series_id'] == 0 && $goods_value['style_id'] == 0){
+                $series_style_goods[] =  $goods_value;
+            }
+        }
+        return $series_style_goods;
     }
 }
