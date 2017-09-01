@@ -7,6 +7,7 @@ use app\models\Wxpay;
 use app\models\EffectEarnst;
 use app\models\User;
 use app\models\Alipay;
+use app\models\OrderGoods;
 use app\models\GoodsOrder;
 use app\models\Invoice;
 use app\models\Express;
