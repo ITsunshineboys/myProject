@@ -1487,7 +1487,6 @@ class OwnerController extends Controller
           'code' =>200,
            'msg'=>'ok',
            'data'=> BrainpowerInitalSupervise::find()
-               ->select('id,image')
                ->orderBy(['sort' => SORT_ASC])
                ->all()
        ]);
