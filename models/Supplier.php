@@ -194,7 +194,7 @@ class Supplier extends ActiveRecord
             : self::OFFLINE_SHOP_NOT_SUPPORT;
 
         $supplier->scenario = self::SCENARIO_ADD;
-        if (!$supplier->validate()) {
+        if (!$supplier->validate()) {echo 'aa';print_r($supplier->errors);
             $code = 1000;
 
             if (isset($supplier->errors['shop_name'])) {
@@ -272,7 +272,7 @@ class Supplier extends ActiveRecord
                     ? trim($attrs['identity_card_back_image'])
                     : '';
 
-                if (!$user->validateIdentity($operator)) {
+                if (!$user->validateIdentity($operator)) {echo 'bb';print_r($user->errors);
                     $transaction->rollBack();
 
                     $code = 1000;
