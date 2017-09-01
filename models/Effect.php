@@ -266,8 +266,11 @@ class Effect extends ActiveRecord
             ->all();
     }
 
-    public static function findById($id)
+    public static function findByCode($district_code,$street,$toponymy)
     {
-        return self::findOne(['id'=>$id]);
+        return self::find()
+            ->asArray()
+            ->where(['and',['district_code'=>$district_code],['street'=>$street],['toponymy'=>$toponymy],['type'=>self::TYPE_STATUS_YES]])
+            ->one();
     }
 }

@@ -31,6 +31,8 @@ use app\models\StylePicture;
 use app\models\WaterproofReconstruction;
 use app\models\WaterwayReconstruction;
 use app\models\User;
+use app\models\WorksBackmanData;
+use app\models\WorksData;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -1493,9 +1495,20 @@ class OwnerController extends Controller
     }
 
     public function actionCaseList(){
-        $case_id  = trim(Yii::$app->request->get('id',''));
-        $case_all = Effect::findById($case_id);
+        $code  = trim(Yii::$app->request->get('code',''));
+        $street         = trim(Yii::$app->request->get('street',''));
+        $toponymy       = trim(Yii::$app->request->get('toponymy',''));
+        $effect['case_effect'] = Effect::findByCode($code,$street,$toponymy);
+        $effect['case_picture'] = EffectPicture::findById( $effect['case_effect']['id']);
+        $effect['case_works_backman_data'] = WorksBackmanData::findById($effect['case_effect']['id']);
+        $effect['case_works_data'] = WorksData::findById($effect['case_effect']['id']);
+        $effect['case_works_worker_data'] = WorksBackmanData::findById($effect['case_effect']['id']);
 
+        return Json::encode([
+            'code' =>200,
+            'msg'=>'ok',
+            'data'=> $effect
+        ]);
     }
 
 }
