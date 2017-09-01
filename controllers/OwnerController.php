@@ -1385,9 +1385,6 @@ class OwnerController extends Controller
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
         $goods = Goods::assortList($material_name,510100);
-        var_dump($goods);
-        var_dump($material_name);
-        exit;
         $goods_price = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea('卧室', '卧室面积');
         $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
