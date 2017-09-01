@@ -1861,7 +1861,7 @@ class BasisDecorationService
      * @param $post
      * @return array
      */
-    public static function capacity($goods_price, $post)
+    public static function capacity($goods_price,$post)
     {
         foreach ($goods_price as $one_goods) {
             if ($one_goods['title'] == '弯头') {
@@ -1870,7 +1870,12 @@ class BasisDecorationService
                 $elbow [] = $one_goods;
             }
         }
-        $material [] = BasisDecorationService::profitMargin($elbow);
+        if (isset($elbow)){
+            $material [] = BasisDecorationService::profitMargin($elbow);
+        }else{
+            $material = false;
+        }
+
         return $material;
     }
 

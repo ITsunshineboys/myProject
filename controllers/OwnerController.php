@@ -1495,7 +1495,7 @@ class OwnerController extends Controller
     public function actionCaseList(){
         $case_id  = trim(Yii::$app->request->get('id',''));
         $case_all = Effect::findById($case_id);
-        
+
     }
 
 }
