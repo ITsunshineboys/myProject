@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
 
 class BrainpowerInitalSupervise extends ActiveRecord
 {
+    const STATUS_OPEN = 1;
     const FIELDS_NAME = [
         'province',
         'province_code',
@@ -48,7 +49,7 @@ class BrainpowerInitalSupervise extends ActiveRecord
             ->asArray()
             ->select('recommend_name,add_time,toponymy,district')
             ->orderBy(['sort'=>SORT_ASC])
-            ->where(['and',['province_code'=>$province_code],['city_code'=>$city_code]])
+            ->where(['and',['province_code'=>$province_code],['city_code'=>$city_code],['status'=>self::STATUS_OPEN]])
             ->all();
         foreach ($res as &$list) {
             if(isset($list['add_time'])){
