@@ -985,6 +985,10 @@ class QuoteController extends Controller
         }
     }
 
+    /**
+     * home page list show
+     * @return string
+     */
     public function actionHomePageList(){
         $request = \Yii::$app->request;
         $province_code = trim($request->post('province',''));
@@ -997,6 +1001,10 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * home page add function
+     * @return string
+     */
     public function actionHomePageAdd()
     {
         $request = \Yii::$app->request;
@@ -1034,6 +1042,10 @@ class QuoteController extends Controller
         }
     }
 
+    /**
+     * home page status edit function
+     * @return string
+     */
     public function actionHomePageStatus()
     {
         $code = 1000;
@@ -1056,6 +1068,10 @@ class QuoteController extends Controller
         }
     }
 
+    /**
+     * home page edit function
+     * @return string
+     */
     public function actionHomePageEdit()
     {
         $request = \Yii::$app->request;
