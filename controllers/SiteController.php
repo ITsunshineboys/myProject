@@ -1614,10 +1614,10 @@ class SiteController extends Controller
      * [actionGetCache description]
      * @return [type] [description]
      */
-    public function  actionGetCache(){
+     public function  actionDeleteCache(){
         $user = Yii::$app->user->identity;
         $cache = Yii::$app->cache;
-        $data = $cache->get(User::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
+        $data = $cache->delete(User::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
         var_dump($data);
     }
 
