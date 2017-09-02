@@ -1609,4 +1609,14 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * find bug
+     * [actionGetCache description]
+     * @return [type] [description]
+     */
+    public function  actionGetCache(){
+        $user = Yii::$app->user->identity;
+        echo $user->id;
+    }
+
 }
