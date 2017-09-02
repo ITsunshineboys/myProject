@@ -1033,4 +1033,26 @@ class QuoteController extends Controller
             ]);
         }
     }
+
+    public function actionHomePageStatus()
+    {
+        $code = 1000;
+        $id = trim(\Yii::$app->request->get('id',''));
+        $status = trim(\Yii::$app->request->get('status',''));
+        $find_one = BrainpowerInitalSupervise::findOne(['id'=>$id]);
+        $find_one->status = $status;
+        if (!$find_one->validate()){
+            return Json::encode([
+                'code' =>  $code,
+                'msg' => '请求的参数不正确'
+            ]);
+        }
+
+        if ($find_one->save()){
+            return Json::encode([
+                'code' => 200,
+                'mag' => 'ok'
+            ]);
+        }
+    }
 }
