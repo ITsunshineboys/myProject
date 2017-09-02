@@ -1,3 +1,4 @@
+/*头部开始*/
 header{
     width: 32rem;
     height: 4rem;
@@ -5,24 +6,67 @@ header{
     position: fixed;
     top: 0;
     z-index: 100;
-    border-bottom: 0.85rem solid #F6F6F6;
-    padding-bottom:3.7rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
-
-header div{
+header > div{
+    position: relative;
+}
+.return_btn{
+    /*display: inline-block;*/
+    position: absolute;
+    left: 0;
+    /*top:1rem;*/
+    width:3rem;
+    height: 4rem;
+    line-height: 4rem;
+    /*border:2px solid red;*/
+}
+section{
+    margin-top: 1rem;
+}
+header div {
     line-height: 4rem;
 }
 
-header div span{
+header div span {
     font-size: 1.4rem;
 }
+.postion_span{
+    color: #53A8F4;
+    font-size: 1.2rem;
+    margin-left: .2rem;
+}
+.cur_location{
+    position: absolute;
+    top: 0;
+    right:1.4rem;
+    height: 4rem;
+    /*lh4rem*/
+}
+.in_span {
+    margin-left: 1rem;
+    color: #53A8F4 ;
+}
 
-.back{
-    background-color: #f4f4f4;
+.pic_span {
+    margin-left: 12.8rem;
+    font-size: 1.5rem;
 }
-.top_in{
-    margin-top: 4rem!important;
+.pos_span{
+    color:#53A8F4;
+    margin-left: .3rem;
+    font-size: 1.1rem;
 }
+.map {
+    margin-left: 8rem;
+    /*width: 1rem;*/
+    color: #53A8F4;
+}
+header div i{
+    margin-left: 7.8rem;
+    color: #53A8F4;
+}
+/*头部结束*/
 
 .shu {
     width: .3rem;
@@ -166,12 +210,14 @@ header div span{
     /*margin-top: 1rem;*/
     padding-left: 1rem;
 }
-.handyman_sec{
-    display: inline-block;
-    margin-left:26rem;
-    margin-top: -1rem;
+.sheet_material li{
+    height: 6rem;
+    line-height: 6rem;
     position: relative;
-    top: -2rem;
+}
+.handyman_sec{
+    position: absolute;
+    right:3.5rem;
 }
 
 #zagong{
@@ -184,6 +230,15 @@ header div span{
     color:#C2C2C2 ;
     font-size: 1rem;
 }
+.zagong_check ~ img{
+    position: absolute;
+    left:.5rem;
+    top:2.5rem;
+    display: none;
+}
+.zagong_check:checked ~ img{
+    display: inline-block;
+}
 .handyman{
     position: relative;
     margin-top: 3.5rem;
@@ -191,10 +246,19 @@ header div span{
 
 .handyman li{
     padding-top: 2rem;
-    padding-bottom: 0;
+    padding-bottom: 3rem;
     position: relative;
 }
-
+.error_tips{
+    position: absolute;
+    bottom:.5rem;
+    font-size:1rem;
+    color: #F55122;
+    line-height:0;
+}
+.big_error{
+    bottom:0;
+}
 .handyman_input{
     width:12rem;
     position: relative;
@@ -229,27 +293,27 @@ input[type='checkbox']{
     border-radius: 1px;
     transform: translateY(8px);
 }
-.handyman li input[type='checkbox'] ~img{
-    position: absolute;
-    top:2.7rem;
-    left:.23rem;
-    display: none;
-}
-.handyman li input[type='radio'] ~img{
-    position: absolute;
-    top:2.46rem;
-    left:.02rem;
-    display: none;
-}
-.handyman li input[type='radio']:checked ~ img{
-    display: inline-block;
-}
-.handyman li input[type='checkbox']{
-    margin-left:-.3rem;
-}
-.handyman li input[type='checkbox']:checked ~ img{
-    display: inline-block;
-}
+/*.handyman li input[type='checkbox'] ~img{*/
+    /*position: absolute;*/
+    /*top:2.7rem;*/
+    /*left:.23rem;*/
+    /*display: none;*/
+/*}*/
+/*.handyman li input[type='radio'] ~img{*/
+    /*position: absolute;*/
+    /*top:2.46rem;*/
+    /*left:.02rem;*/
+    /*display: none;*/
+/*}*/
+/*.handyman li input[type='radio']:checked ~ img{*/
+    /*display: inline-block;*/
+/*}*/
+/*.handyman li input[type='checkbox']{*/
+    /*margin-left:-.3rem;*/
+/*}*/
+/*.handyman li input[type='checkbox']:checked ~ img{*/
+    /*display: inline-block;*/
+/*}*/
 .check_word{
    display: inline-block;
     margin-top: -2px;

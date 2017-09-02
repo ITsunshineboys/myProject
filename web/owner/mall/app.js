@@ -4,19 +4,29 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate",'a
         $stateProvider
             .state("home", {
                 url: "/",
-                templateUrl: "intelligent_index.html",
-                controller: "intelligent_index_ctrl"
+                templateUrl: "intelligent.html",
+                controller:'nodata_ctrl',
+                css:['css/intelligent_index.css','zui-1.7.0-dist/dist/css/zui.min.css']
             })
             .state('nodata',{
                 url:'/nodata',
                 templateUrl:'nodata.html',
-                controller:'nodata_ctrl',
                 // css:'css/inteligent_nodata.css'
             })
             .state('nodata.house_list',{
                 url:'/nodata_house_list',
                 templateUrl:'nodata_house.html',
-                css:['css/inteligent_nodata.css','zui-1.7.0-dist/dist/css/zui.min.css']
+                css:['css/inteligent_nodata.css','zui-1.7.0-dist/dist/css/zui.min.css'],
+            })
+            .state('nodata.cell_search',{
+                url:'/cell_search',
+                templateUrl:'cell_search.html',
+                css:'css/cell_search.css',
+            })
+            .state('nodata.basics_decoration',{
+                url:'/basics_decoration',
+                templateUrl:'all_basics.html',
+                css:['css/basics.css','zui-1.7.0-dist/dist/css/zui.min.css'],
             })
             // .state("have_data",{   //有资料
             //     url:"/have_data",

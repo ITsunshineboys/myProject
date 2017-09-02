@@ -1,0 +1,104 @@
+<section>
+    <form name="handyman_options" novalidate>
+    <!--辅材-->
+    <div class="wall_material" ng-repeat="item in cur_item.second_level">
+        <!--<div class="divide"></div>-->
+        <div class="shu"></div>
+        <h1>{{item.title}}</h1>
+        <ul class="wall_ul">
+            <div ng-repeat="item1 in item.three_level">
+                <li data-toggle="modal" data-target="#myModal" ng-repeat="item2 in item1.goods_detail" ng-click="get_details(item2,item1.title)">
+                    <span class="wall_span">{{item1.title}}x{{item2.quantity}}</span><br/>
+                    <span class="wall_brand">{{item2.name}}</span>
+                    <span class="wall_money">{{item2.cost | currency:"￥"}} <img
+                            class="right_arrow" src="images/left_more.png" alt=""></span>
+                </li>
+            </div>
+        </ul>
+    </div>
+
+    <!--工人费用-->
+    <div class="sheet_material" style="font-size: 1.3rem!important;">
+        <div class="shu"></div>
+        <h1>杂工</h1>
+                    <ul class="wall_ul">
+                        <li>
+                            <span class="check_word">12墙拆除</span>
+                            <input type="text" name="twelve_dismantle" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_span" ng-model="ctrlScope.twelve_dismantle"/>
+                            <span class="handyman_sec">m <sup>2</sup></span>
+                            <p class="error_tips" ng-if="handyman_options.twelve_dismantle.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
+                        </li>
+                        <li>
+                            <span class="check_word">24墙拆除</span>
+                            <input type="text" name="twenty_four_dismantle" placeholder="请输入数值" class="handyman_span" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
+                                   ng-model="ctrlScope.twenty_four_dismantle"/>
+                            <span class="handyman_sec">m <sup>2</sup></span>
+                            <p class="error_tips" ng-if="handyman_options.twenty_four_dismantle.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
+                        </li>
+                        <li>
+                            <span class="check_word" id="bulan">补烂</span>
+                            <input type="text" name="repair" placeholder="请输入数值" class="handyman_span" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" ng-model="ctrlScope.repair"/>
+                            <span class="handyman_sec">m&nbsp;&ensp;</span>
+                            <p class="error_tips" ng-if="handyman_options.repair.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
+                        </li>
+                        <li>
+                            <span class="check_word">12墙新建</span>
+                            <span class="two-sided">(含双面抹灰)</span>
+                            <input type="text" name="twelve_new_construction" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_input"
+                                   ng-model="ctrlScope.twelve_new_construction"/>
+                            <span class="handyman_sec">m <sup>2</sup></span>
+                            <p class="error_tips big_error" ng-if="handyman_options.twelve_new_construction.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
+                        </li>
+                        <li>
+                            <span class="check_word">24墙新建</span>
+                            <span class="two-sided">(含双面抹灰)</span>
+                            <input type="text" name="twenty_four_new_construction" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_input"
+                                   ng-model="ctrlScope.twenty_four_new_construction"/>
+                            <span class="handyman_sec">m <sup>2</sup></span>
+                            <p class="error_tips big_error" ng-if="handyman_options.twenty_four_new_construction.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
+                        </li>
+                        <li>
+                            <input type="radio" name="building_scrap" id="yes" ng-checked="building_scrap"
+                                   ng-click="building_scrap = true" class="zagong_check zagong_radio"/>
+                            <img src="images/mall_list_radio.png" alt=""/>
+                            <label class="jianzha" for="yes">小区有建渣</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="building_scrap" id="no" ng-checked="!building_scrap"
+                                   ng-click="building_scrap = false" class="zagong_check zagong_radio"/>
+                            <img src="images/mall_list_radio.png" alt=""/>
+                            <label class="jianzha" for="no">小区无建渣</label>
+                        </li>
+                    </ul>
+            </div>
+    </div>
+    <div style="height: 4rem"></div>
+    <!--按钮、-->
+    <div class="preservation">
+        <span>合计：</span>
+        <span class="money_col">{{cur | currency:'￥'}}</span>
+        <button ng-click="go_handyman_options()">保存</button>
+    </div>
+    </form>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="whit">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <div class="comment_img">
+                    <img src="images/all.png" alt=""/>
+                </div>
+                <div class="comment">
+                    <p class="good_title">
+                        <span class="comment_span">{{cur_goods_detail.name}}</span>
+                        <span class="comment_se">{{cur_goods_detail.cost | currency:'￥'}}</span>
+                    </p>
+                    <p class="comment_square">产品类别：{{cur_three_level}}</p>
+
+
+                    <p class="comment_p">{{cur_goods_detail.shop_name}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
