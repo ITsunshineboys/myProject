@@ -1616,7 +1616,9 @@ class SiteController extends Controller
      */
     public function  actionGetCache(){
         $user = Yii::$app->user->identity;
-        echo $user->id;
+        $cache = Yii::$app->cache;
+        $data = $cache->get(User::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
+        var_dump($data);
     }
 
 }
