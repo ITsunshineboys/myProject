@@ -182,7 +182,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return 1000;
         }
 
-        //TODO worker_order 表也要加上 worker_type_id 查出对应的 worker_type 下的所有项目
+        $worker_type_id = $order->worker_type_id;
+
+        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
+        $worker_items = [];
+        foreach ($worker_type_items as $worker_type_item) {
+            $worker_item_id = $worker_type_item->worker_item_id;
+            $worker_item = WorkerItem::find()
+                ->where(['id' => $worker_item_id])
+                ->select(['id', 'title'])
+                ->asArray()->one();
+//            var_dump($worker_item);
+            $worker_items[] = $worker_item;
+        }
 
         $order->create_time = date('Y-m-d H:i', $order->create_time);
         $order->start_time = date('Y-m-d H:i', $order->start_time);
@@ -207,36 +219,36 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         return [
             'order' => $order,
+            'worker_items' => $worker_items,
             'order_img' => $order_img,
             'worker' => $worker
         ];
     }
 
-    public static function addorderinfo($uid,$array){
+    public static function addorderinfo($uid, $array)
+    {
 
-        $code=1000;
-        $worker_order=new self();
-        $worker_order->uid=$uid;
-        $worker_order->worker_type_id=WorkerType::find()
-            ->where(['worker_type'=>$array['worker_type']])
+        $code = 1000;
+        $worker_order = new self();
+        $worker_order->uid = $uid;
+        $worker_order->worker_type_id = WorkerType::find()
+            ->where(['worker_type' => $array['worker_type']])
             ->one()->id;
-        $worker_order->order_no=date('md',time()).'1'.rand(10000,99999);
-        $worker_order->create_time=time();
-        if(!isset($array['start_time'])){
+        $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
+        $worker_order->create_time = time();
+        if (!isset($array['start_time'])) {
             return $code;
         }
-        $worker_order->start_time=strtotime($array['start_time']);
-        $worker_order->end_time=strtotime($array['end_time']);
-        $worker_order->need_time=$array['need_time'];
-        $worker_order->status=self::USER_WORKER_ORDER_STATUS[1];
+        $worker_order->start_time = strtotime($array['start_time']);
+        $worker_order->end_time = strtotime($array['end_time']);
+        $worker_order->need_time = $array['need_time'];
+        $worker_order->status = self::USER_WORKER_ORDER_STATUS[1];
 
-        if(!$worker_order->save(false)){
+        if (!$worker_order->save(false)) {
             return 500;
-        }else{
+        } else {
             return 200;
         }
-
-
 
 
     }

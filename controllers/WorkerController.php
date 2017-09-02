@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Worker;
+use app\models\WorkerItem;
 use app\models\WorkerOrder;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -223,7 +224,7 @@ class WorkerController extends Controller
 
     /**
      * 工程订单详情
-     * @return int|string
+     * @return string
      */
     public function actionUserWorkerOrderDetail()
     {
@@ -258,4 +259,41 @@ class WorkerController extends Controller
         ]);
     }
 
+    /**
+     * 订单条目详情
+     * @return string
+     */
+    public function actionItemDetail()
+    {
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+
+        $worker_item_id = (int)$request->get('worker_item_id', 0);
+
+        if (!$worker_item_id) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $data = WorkerItem::getchliditem($worker_item_id);
+        if (is_int($data)) {
+            return Json::encode([
+                'code' => $data,
+                'msg' => \Yii::$app->params['errorCodes'][$data]
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
 }
