@@ -1211,7 +1211,7 @@ CREATE TABLE `order_refund` (
 
 -- 8.29 start
 CREATE TABLE `brainpower_inital_supervise` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `province` varchar(20) DEFAULT NULL COMMENT '省',
   `province_code` int(20) DEFAULT NULL COMMENT '省编码',
   `city` varchar(20) DEFAULT NULL COMMENT '市',
@@ -1224,8 +1224,10 @@ CREATE TABLE `brainpower_inital_supervise` (
   `add_time` int(11) DEFAULT NULL COMMENT '添加时间',
   `sort` int(11) DEFAULT NULL COMMENT '排序',
   `house_type_name` varchar(50) DEFAULT NULL COMMENT '户型名称',
+  `recommend_name` varchar(50) DEFAULT NULL COMMENT '推荐名称',
+  `status` tinyint(2) DEFAULT '0' COMMENT '0-下架 1-上架',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `worker`;
 

@@ -1495,7 +1495,7 @@ class OwnerController extends Controller
     }
 
     public function actionCaseList(){
-        $code  = trim(Yii::$app->request->get('code',''));
+        $code           = trim(Yii::$app->request->get('code',''));
         $street         = trim(Yii::$app->request->get('street',''));
         $toponymy       = trim(Yii::$app->request->get('toponymy',''));
         $effect['case_effect'] = Effect::findByCode($code,$street,$toponymy);
