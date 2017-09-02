@@ -1055,4 +1055,42 @@ class QuoteController extends Controller
             ]);
         }
     }
+
+    public function actionHomePageEdit()
+    {
+        $request = \Yii::$app->request;
+        $id = trim($request->post('id',''));
+        $province_code = District::findByCode(trim($request->post('province')));
+        $city_code = District::findByCode(trim($request->post('city')));
+        $district_code = District::findByCode(trim($request->post('district')));
+
+        $add_item = new BrainpowerInitalSupervise();
+        $item = $add_item->findOne(['id'=>$id]);
+        $item->recommend_name  = trim($request->post('recommend_name',''));
+        $item->district_code   = trim($request->post('district',''));
+        $item->toponymy        = trim($request->post('toponymy',''));
+        $item->street          = trim($request->post('street',''));
+        $item->house_type_name = trim($request->post('house_type_name',''));
+        $item->image           = trim($request->post('image',''));
+        $item->province_code   = trim($request->post('province',''));
+        $item->city_code       = trim($request->post('city',''));
+        $item->sort            = trim($request->post('sort',''));
+        $item->province        = $province_code;
+        $item->city            = $city_code ;
+        $item->district        = $district_code;
+        $code = 1000;
+        if (!$item->validate()){
+            return Json::encode([
+                'code' =>  $code,
+                'msg' => '请求的参数不正确'
+            ]);
+        }
+
+        if ($item->save()){
+            return Json::encode([
+                'code' => 200,
+                'mag' => 'ok'
+            ]);
+        }
+    }
 }
