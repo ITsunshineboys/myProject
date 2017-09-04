@@ -263,7 +263,7 @@ class WorkerController extends Controller
      * 订单条目详情
      * @return string
      */
-    public function actionItemDetail()
+    public function actionOrderItemDetail()
     {
         $user = self::userIdentity();
         if (!is_int($user)) {
@@ -272,9 +272,10 @@ class WorkerController extends Controller
 
         $request = \Yii::$app->request;
 
-        $worker_item_id = (int)$request->get('worker_item_id', 0);
+        $order_id = (int)$request->get('order_id', 0);
+        $item_id = (int)$request->get('item_id', 0);
 
-        if (!$worker_item_id) {
+        if (!$item_id || !$order_id) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -282,7 +283,7 @@ class WorkerController extends Controller
             ]);
         }
 
-        $data = WorkerItem::getchliditem($worker_item_id);
+        $data = WorkerOrder::getOrderItemDetail($order_id, $item_id);
         if (is_int($data)) {
             return Json::encode([
                 'code' => $data,

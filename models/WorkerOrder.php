@@ -196,11 +196,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $worker_items[] = $worker_item;
         }
 
-        $order->create_time = date('Y-m-d H:i', $order->create_time);
-        $order->start_time = date('Y-m-d H:i', $order->start_time);
-        $order->end_time = date('Y-m-d H:i', $order->end_time);
-        $order->amount = sprintf('%.2f', (float)$order->amount / 100);
-        $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
+        $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
+        $order->start_time && $order->start_time = date('Y-m-d H:i', $order->start_time);
+        $order->end_time && $order->end_time = date('Y-m-d H:i', $order->end_time);
+        $order->amount && $order->amount = sprintf('%.2f', (float)$order->amount / 100);
+        $order->front_money && $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
 
         //TODO 查出工人的labor_cost_id(等级，省，市)，(成交数量，风格)待定， 调整历史单独分出来(对应订单)
         //TODO 如果状态是0  查出取消时间和取消原因   worker_order 表需要加上cancel_time 和 cancel_reason字段
@@ -223,6 +223,35 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'order_img' => $order_img,
             'worker' => $worker
         ];
+    }
+
+    /**
+     * 得到订单条目详情
+     * @param $order_id
+     * @param $worker_item_id
+     * @return array|int
+     */
+    public static function getOrderItemDetail($order_id, $item_id)
+    {
+        $worker_items = WorkerItem::find()->where(['pid' => $item_id])->asArray()->all();
+
+        foreach ($worker_items as &$worker_item) {
+            $worker_order_item = WorkerOrderItem::find()
+                ->where(['worker_order_id' => $order_id, 'worker_item_id' => $worker_item['id']])
+                ->one();
+            if ($worker_order_item) {
+                if ($worker_order_item->worker_craft_id) {
+                    $craft_id = (int)$worker_order_item->worker_craft_id;
+                    $worker_item['craft'] = WorkerCraft::find()
+                        ->where(['id'=> $craft_id])
+                        ->select('craft')
+                        ->one()['craft'];
+                } elseif ($worker_order_item->area) {
+                    $worker_item['area'] = $worker_order_item->area;
+                }
+            }
+        }
+        return $worker_items;
     }
 
     public static function addorderinfo($uid, $array)
