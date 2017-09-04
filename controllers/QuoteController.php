@@ -1002,6 +1002,75 @@ class QuoteController extends Controller
     }
 
     /**
+     * the area of the page where the page is added
+     * @return string
+     */
+    public function actionHomepageDistrict()
+    {
+        $request = \Yii::$app->request;
+        $province_code = trim($request->get('province',''));
+        $city_code = trim($request->get('city',''));
+        $code = 200;
+        return Json::encode([
+            'code' => $code,
+            'msg'  => 'ok',
+            'list' => (new Effect)->findCode($province_code,$city_code),
+        ]);
+
+    }
+
+    public function actionHomepageToponymy()
+    {
+        $request = \Yii::$app->request;
+        $province = trim($request->post('province',''));
+        $city = trim($request->post('city',''));
+        $district = trim($request->post('district',''));
+        $code = 200;
+        return Json::encode([
+            'code' => $code,
+            'msg'  => 'ok',
+            'list' => (new Effect)->findToponymy($province,$city,$district),
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionHomepageStreet()
+    {
+        $request = \Yii::$app->request;
+        $province = trim($request->post('province',''));
+        $city = trim($request->post('city',''));
+        $district = trim($request->post('district',''));
+        $toponymy = trim($request->post('toponymy',''));
+        $code = 200;
+        return Json::encode([
+            'code' => $code,
+            'msg'  => 'ok',
+            'list' => (new Effect)->findStreet($province,$city,$district,$toponymy),
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionHomepageCase()
+    {
+        $request  = \Yii::$app->request;
+        $province = trim($request->post('province',''));
+        $city     = trim($request->post('city',''));
+        $district = trim($request->post('district',''));
+        $toponymy = trim($request->post('toponymy',''));
+        $street   = trim($request->post('street',''));
+        $code = 200;
+        return Json::encode([
+            'code' => $code,
+            'msg'  => 'ok',
+            'list' => (new Effect)->findCase($province,$city,$district,$toponymy,$street),
+        ]);
+    }
+
+    /**
      * homepage add function
      * @return string
      */

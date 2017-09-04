@@ -7,7 +7,6 @@
  */
 namespace app\models;
 
-use yii\data\Pagination;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 
@@ -266,11 +265,95 @@ class Effect extends ActiveRecord
             ->all();
     }
 
+    /**
+     *
+     * @param $district_code
+     * @param $street
+     * @param $toponymy
+     * @return array|null|ActiveRecord
+     */
     public static function findByCode($district_code,$street,$toponymy)
     {
         return self::find()
             ->asArray()
             ->where(['and',['district_code'=>$district_code],['street'=>$street],['toponymy'=>$toponymy],['type'=>self::TYPE_STATUS_YES]])
             ->one();
+    }
+
+    /**
+     * @param $province
+     * @param $city
+     * @return array|ActiveRecord[]
+     */
+    public static function findCode($province,$city)
+    {
+        return self::find()
+            ->asArray()
+            ->select('district,district_code')
+            ->where(['and',['province_code'=>$province],['city_code'=>$city],['type'=>self::TYPE_STATUS_YES]])
+            ->groupBy('district')
+            ->all();
+    }
+
+
+    /**
+     *
+     * @param $province
+     * @param $city
+     * @param $district
+     * @return array|ActiveRecord[]
+     */
+    public static function findToponymy($province,$city,$district)
+    {
+        return self::find()
+            ->asArray()
+            ->select('toponymy')
+            ->where(['and',
+                ['province_code'=>$province],
+                ['city_code'=>$city],
+                ['district_code'=>$district],
+                ['type'=>self::TYPE_STATUS_YES]
+            ])
+            ->groupBy('toponymy')
+            ->all();
+    }
+
+    /**
+     * @param $province
+     * @param $city
+     * @param $district
+     * @param $toponymy
+     * @return array|ActiveRecord[]
+     */
+    public static function findStreet($province,$city,$district,$toponymy)
+    {
+        return self::find()
+            ->asArray()
+            ->select('street')
+            ->where(['and',
+                ['province_code'=>$province],
+                ['city_code'=>$city],
+                ['district_code'=>$district],
+                ['toponymy'=>$toponymy],
+                ['type'=>self::TYPE_STATUS_YES]
+            ])
+            ->groupBy('street')
+            ->all();
+    }
+
+    public static function findCase($province,$city,$district,$toponymy,$street)
+    {
+        return self::find()
+            ->asArray()
+            ->select('particulars')
+            ->where(['and',
+                ['province_code'=>$province],
+                ['city_code'=>$city],
+                ['district_code'=>$district],
+                ['toponymy'=>$toponymy],
+                ['street'=>$street],
+                ['type'=>self::TYPE_STATUS_YES]
+            ])
+            ->all();
     }
 }
