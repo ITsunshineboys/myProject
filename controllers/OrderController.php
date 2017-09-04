@@ -1368,7 +1368,7 @@ class OrderController extends Controller
     }
 
 
-     /**
+    /**
      * user apply refund
      * @return string
      */
@@ -1391,6 +1391,47 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        $OrderGoods=(new Query())
+            ->from(OrderGoods::tableName().' as a')
+            ->leftJoin(GoodsOrder::tableName().' as b','a.order_no=b.order_no')
+            ->select(['b.pay_status,a.order_status'])
+            ->where(['a.sku'=>$sku,'a.order_no'=>$order_no])
+            ->one();
+        $GoodsOrder=GoodsOrder::find()
+            ->select('pay_status')
+            ->where(['order_no'=>$order_no])
+            ->one();
+        if ($GoodsOrder->pay_status==0)
+        {
+            $trans = \Yii::$app->db->beginTransaction();
+            try {
+                $OrderGoods=OrderGoods::find()
+                    ->where(['order_no'=>$order_no,'sku'=>$sku])
+                    ->one();
+                $OrderGoods->order_status=2;
+                $res=$OrderGoods->save();
+                if (!$res){
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $trans->commit();
+                $code=200;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => 'ok'
+                ]);
+            } catch (Exception $e) {
+                $trans->rollBack();
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user);
            if ($code ==200){
