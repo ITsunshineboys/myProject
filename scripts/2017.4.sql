@@ -379,6 +379,10 @@ create table goods_comment (
   `score` tinyint(2) not null default 0,
   `create_time` int not null DEFAULT 0,
   `goods_id` int(11) unsigned not null default 0,
+  `store_service_score` float NOT NULL DEFAULT '0',
+  `shipping_score` float NOT NULL DEFAULT '0',
+  `logistics_speed_score` float NOT NULL DEFAULT '0',
+  `is_anonymous` tinyint(1) NOT NULL COMMENT '1:匿名  2： 实名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
