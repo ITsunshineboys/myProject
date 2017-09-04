@@ -246,14 +246,16 @@ class GoodsComment extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            foreach ($uploadsData as &$uploads){
-                $comment_image=new CommentImage();
-                $comment_image->comment_id=$comment->id;
-                $comment_image->image=$uploads;
-                if (!$comment_image->save()){
-                    $code=500;
-                    return $code;
-                };
+            if (is_array($uploadsData)){
+                foreach ($uploadsData as &$uploads){
+                    $comment_image=new CommentImage();
+                    $comment_image->comment_id=$comment->id;
+                    $comment_image->image=$uploads;
+                    if (!$comment_image->save()){
+                        $code=500;
+                        return $code;
+                    };
+                }
             }
             $tran->commit();
             $code=200;

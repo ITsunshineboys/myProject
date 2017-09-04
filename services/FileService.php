@@ -120,11 +120,12 @@ class FileService
     public static  function uploadMore(){
         $model = new UploadForm;
         $model->file = UploadedFile::getInstances($model, 'file');
-        foreach ($model->file as  &$model->file){
-            $code = 1000;
+         $code = 1000;
             if (!$model->file || !$model->file->extension) {
                 return $code;
             }
+        foreach ($model->file as  &$model->file){
+           
             if (!$model->validate()) {
                 if (!self::checkUploadSize($model)) {
                     $code = 1004;
