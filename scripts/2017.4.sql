@@ -449,6 +449,15 @@ CREATE TABLE `goods_order` (
   `return_insurance` bigint(20) NOT NULL COMMENT '退货保险费',
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
   `buyer_message` varchar(255) NOT NULL COMMENT '买家留言',
+  `consigenee` varchar(45) NOT NULL COMMENT '收货人姓名',
+  `district_code` varchar(10) NOT NULL COMMENT '收货人地区编号',
+  `region` varchar(90) NOT NULL COMMENT '收货人详细地址',
+  `consignee_mobile` int(11) NOT NULL COMMENT '收货人手机号',
+  `invoice_type` tinyint(1) NOT NULL COMMENT '1:普通发票  2： 电子发票',
+  `invoice_header_type` tinyint(1) NOT NULL COMMENT '1:个人发票  2.公司发票',
+  `invoice_header` varchar(50) NOT NULL COMMENT '发票抬头',
+  `incoicer_card` varchar(18) DEFAULT NULL COMMENT '发票纳税人识别号',
+  `invoice_content` varchar(30) DEFAULT NULL COMMENT '发票内容',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='\r\n';
 -- 5.5 end--
