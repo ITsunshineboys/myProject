@@ -810,7 +810,7 @@ class Goods extends ActiveRecord
             'level' => GoodsCategory::LEVEL3,
         ];
 
-        $category = GoodsCategory::find()->where($where)->exists();
+        $category = GoodsCategory::find()->where($where)->one();
         if ($this->$attribute > 0 && $category) {
             if ($this->style_id) {
                 $field = 'has_' . GoodsCategory::NAME_STYLE;
