@@ -3,6 +3,8 @@
 namespace app\controllers;
 use app\models\Addressadd;
 use app\models\Supplieramountmanage;
+use app\models\CommentImage;
+use app\models\GoodsComment;
 use app\models\Wxpay;
 use app\models\EffectEarnst;
 use app\models\User;
@@ -1694,6 +1696,43 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+    }
+
+
+    /**
+     * get order comment
+     * @return int|string
+     */
+    public function  actionGetComment(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData=yii::$app->request->post();
+        if (!array_key_exists('order_no',$postData) || ! array_key_exists('sku',$postData)){
+            $code=1000;
+            return $code;
+        }
+        $order=OrderGoods::find()->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])->one();
+        if (!$order){
+            $code=1000;
+            return $code;
+        }
+        $comment=GoodsComment::find()->where(['id'=>$order['comment_id']])->asArray()->one();
+        $comment['image']=CommentImage::find()
+            ->select('image')
+            ->where(['comment_id'=>$order['comment_id']])
+            ->all();
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$comment
+        ]);
     }
 
 }
