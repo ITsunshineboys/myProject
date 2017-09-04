@@ -1392,12 +1392,7 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $OrderGoods=(new Query())
-            ->from(OrderGoods::tableName().' as a')
-            ->leftJoin(GoodsOrder::tableName().' as b','a.order_no=b.order_no')
-            ->select(['b.pay_status,a.order_status'])
-            ->where(['a.sku'=>$sku,'a.order_no'=>$order_no])
-            ->one();
+
         $GoodsOrder=GoodsOrder::find()
             ->select('pay_status')
             ->where(['order_no'=>$order_no])
@@ -1598,10 +1593,11 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
+     /**
      * @return string
      */
     public  function  actionBalancePay(){
+
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -1611,6 +1607,20 @@ class OrderController extends Controller
             ]);
         }
         $postData = Yii::$app->request->post();
+        if(!array_key_exists('pay_password', $postData)){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (Yii::$app->getSecurity()->validatePassword($postData,$user->pay_password)==false){
+            $code=1055;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }
         $code=GoodsOrder::orderBalanceSub($postData,$user);
         if ($code==200){
             return Json::encode([
