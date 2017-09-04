@@ -624,7 +624,7 @@ class SiteController extends Controller
         $signature = Yii::$app->request->post('signature', '');
 
         if (!$signature
-            || strlen($signature) > User::SIGNATURE_MAX_LEN
+            || mb_strlen($signature) > User::SIGNATURE_MAX_LEN
         ) {
             return Json::encode([
                 'code' => $code,
