@@ -986,10 +986,10 @@ class QuoteController extends Controller
     }
 
     /**
-     * home page list show
+     * homepage list show
      * @return string
      */
-    public function actionHomePageList(){
+    public function actionHomepageList(){
         $request = \Yii::$app->request;
         $province_code = trim($request->post('province',''));
         $city_code = trim($request->post('city',''));
@@ -1002,10 +1002,10 @@ class QuoteController extends Controller
     }
 
     /**
-     * home page add function
+     * homepage add function
      * @return string
      */
-    public function actionHomePageAdd()
+    public function actionHomepageAdd()
     {
         $request = \Yii::$app->request;
         $province_code = District::findByCode(trim($request->post('province')));
@@ -1043,10 +1043,10 @@ class QuoteController extends Controller
     }
 
     /**
-     * home page status edit function
+     * homepage status edit function
      * @return string
      */
-    public function actionHomePageStatus()
+    public function actionHomepageStatus()
     {
         $code = 1000;
         $id = trim(\Yii::$app->request->get('id',''));
@@ -1069,10 +1069,10 @@ class QuoteController extends Controller
     }
 
     /**
-     * home page edit function
+     * homepage edit function
      * @return string
      */
-    public function actionHomePageEdit()
+    public function actionHomepageEdit()
     {
         $request = \Yii::$app->request;
         $id = trim($request->post('id',''));

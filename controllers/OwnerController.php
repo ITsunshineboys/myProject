@@ -1483,7 +1483,7 @@ class OwnerController extends Controller
      * homepage   list
      * @return string
      */
-    public function actionHomePage()
+    public function actionHomepage()
     {
        return Json::encode([
           'code' =>200,
