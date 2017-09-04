@@ -450,8 +450,8 @@ class SiteController extends Controller
         if (empty($postData['mobile'])
             || empty($postData['validation_code'])
             || empty($postData['new_password'])
-            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
-            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+            || mb_strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || mb_strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
         ) {
             return Json::encode([
                 'code' => $code,
@@ -524,8 +524,8 @@ class SiteController extends Controller
 
         if (empty($postData['new_password'])
             || empty($postData['validation_code'])
-            || strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
-            || strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+            || mb_strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || mb_strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
         ) {
             return Json::encode([
                 'code' => $code,
@@ -588,8 +588,8 @@ class SiteController extends Controller
 
         $nickname = Yii::$app->request->post('nickname', '');
 
-        if (strlen($nickname) < User::NICKNAME_MIN_LEN
-            || strlen($nickname) > User::NICKNAME_MAX_LEN
+        if (mb_strlen($nickname) < User::NICKNAME_MIN_LEN
+            || mb_strlen($nickname) > User::NICKNAME_MAX_LEN
         ) {
             return Json::encode([
                 'code' => $code,

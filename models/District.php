@@ -25,7 +25,7 @@ class District extends ActiveRecord
      */
     public static function validateDistrictCode($districtCode)
     {
-        if (self::CODE_LEN != strlen($districtCode)) {
+        if (self::CODE_LEN != mb_strlen($districtCode)) {
             return false;
         }
 
@@ -57,11 +57,11 @@ class District extends ActiveRecord
         $district = self::findByCode($code);
         if ($district) {
             $names[] = $district->name;
-            if (strlen($district->pid) == self::CODE_LEN) {
+            if (mb_strlen($district->pid) == self::CODE_LEN) {
                 $parentDistrict = self::findByCode($district->pid);
                 if ($parentDistrict) {
                     $names[] = $parentDistrict->name;
-                    if (strlen($parentDistrict->pid) == self::CODE_LEN) {
+                    if (mb_strlen($parentDistrict->pid) == self::CODE_LEN) {
                         $rootDistrict = self::findByCode($parentDistrict->pid);
                         $names[] = $rootDistrict->name;
                     }

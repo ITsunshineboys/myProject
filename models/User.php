@@ -212,8 +212,8 @@ class User extends ActiveRecord implements IdentityInterface
 
         if (empty($data['mobile'])
             || empty($data['password'])
-            || strlen(($data['password'])) < self::PASSWORD_MIN_LEN
-            || strlen(($data['password'])) > self::PASSWORD_MAX_LEN
+            || mb_strlen(($data['password'])) < self::PASSWORD_MIN_LEN
+            || mb_strlen(($data['password'])) > self::PASSWORD_MAX_LEN
         ) {
             return $code;
         }

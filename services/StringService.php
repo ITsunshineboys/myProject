@@ -181,7 +181,7 @@ class StringService
         $parentCodeLastCodes = '0000';
 
         $code = trim($code);
-        if (!$code || strlen($code) != $codeLen) {
+        if (!$code || mb_strlen($code) != $codeLen) {
             return false;
         }
 
@@ -320,7 +320,7 @@ class StringService
     {
         $birthday = trim($birthday);
         $pattern = '/(\d{4})(\d{2})(\d{2})/';
-        if (!$birthday || strlen($birthday) != User::BIRTHDAY_LEN || !preg_match($pattern, $birthday, $matches)) {
+        if (!$birthday || mb_strlen($birthday) != User::BIRTHDAY_LEN || !preg_match($pattern, $birthday, $matches)) {
             return '';
         }
 
