@@ -121,6 +121,218 @@ class GoodsComment extends ActiveRecord
         return $stat;
     }
 
+     /**
+     * @param $postData
+     * @param $user
+     * @return int
+     */
+    public  static  function  addComment($postData,$user,$uploadsData)
+    {
+        if(!array_key_exists('store_service_score', $postData)|| !array_key_exists('shipping_score', $postData)|| !array_key_exists('score', $postData)|| !array_key_exists('logistics_speed_score', $postData) || !array_key_exists('sku',$postData) || !array_key_exists('order_no',$postData) || ! array_key_exists('content',$postData) || !array_key_exists('anonymous',$postData))
+        {
+            $code=1000;
+            return $code;
+        }
+        $code=self::checkIsSetComment($postData,$user);
+        if ($code !=200){
+            return $code;
+        }
+        $goods=Goods::find()
+            ->where(['sku'=>$postData['sku']])
+            ->one();
+        $list=self::GetAverageScore($postData,$goods->supplier_id);
+
+        $time=time();
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $res1=self::AddCommentData($postData,$user,$goods,$time,$uploadsData);
+            if ($res1!=200){
+                $tran->rollBack();
+                return $res1;
+            }
+            $commendSupplierDatabase=self::commendSupplierDatabase($postData,$goods,$time,$list);
+            if ($commendSupplierDatabase!=200){
+                $tran->rollBack();
+                return $commendSupplierDatabase;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e) {
+            $code=500;
+        $tran->rollBack();
+            return $code;
+        }
+
+    }
+
+
+    /**
+     * @param $postData
+     * @param $user
+     * @param $goods
+     * @param $time
+     * @param $list
+     * @return int
+     */
+    public static  function commendSupplierDatabase($postData,$goods,$time,$list)
+    {
+        $GetComment=self::find()
+            ->select('id')
+            ->where(['create_time'=>$time])
+            ->asArray()
+            ->one();
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            $orderGoods=OrderGoods::find()
+                ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
+                ->one();
+            $orderGoods->comment_id=$GetComment['id'];
+            $res1=$orderGoods->save();
+            if (!$res1){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $supplier=Supplier::find()
+                ->where(['id'=>$goods->supplier_id])
+                ->one();
+            $supplier->comprehensive_score=$list['score'];
+            $supplier->logistics_speed_score=$list['logistics_speed_score'];
+            $res2=$supplier->save(false);
+            if (!$res2){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+
+     /**
+     * add comment --goods_comment  table action
+     * @param $postData
+     * @param $user
+     * @param $goods
+     * @param $time
+     * @return int
+     */
+    public static  function  AddCommentData($postData,$user,$goods,$time,$uploadsData)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $comment=new self;
+            $comment->goods_id=$goods->id;
+            $comment->uid=$user->id;
+            $comment->role_id=$user->last_role_id_app;
+            $comment->create_time=$time;
+            $comment->content=$postData['content'];
+            $comment->is_anonymous=$postData['anonymous'];
+            $comment->name =$user->nickname;
+            $comment->store_service_score=$postData['store_service_score'];
+            $comment->logistics_speed_score=$postData['logistics_speed_score'];
+            $comment->shipping_score=$postData['shipping_score'];
+            $comment->score=$postData['score'];
+            $res=$comment->save();
+            if (!$res){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            foreach ($uploadsData as &$uploads){
+                $comment_image=new CommentImage();
+                $comment_image->comment_id=$comment->id;
+                $comment_image->image=$uploads;
+                if (!$comment_image->save()){
+                    $code=500;
+                    return $code;
+                };
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+
+    /**
+     * @param $postData
+     * @param $user
+     * @return int
+     */
+    public  static  function  checkIsSetComment($postData,$user)
+    {
+        $orderGoods=OrderGoods::find()
+            ->select('comment_id')
+            ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
+            ->one();
+        if ($orderGoods['comment_id']==0){
+            $code=200;
+            return $code;
+        }else{
+            $code=1032;
+            return $code;
+        }
+    }
+
+
+     /**
+     * @param $postData
+     * @param $supplier_id
+     * @return array
+     */
+    public  static  function GetAverageScore($postData,$supplier_id){
+        $orders=(new Query())
+            ->from(GoodsOrder::tableName().' as a')
+            ->select('c.comment_id')
+            ->leftJoin(OrderGoods::tableName().' as c','a.order_no = c.order_no')
+            ->where(['a.supplier_id'=>$supplier_id])
+            ->all();
+        $order=[];
+        foreach ($orders as $k =>$v){
+            if ($orders[$k]['comment_id']){
+                $order[$k]=self::find()->where(['id'=>$orders[$k]['comment_id']])->one();
+            }else{
+                unset($order[$k]['comment_id']);
+            }
+
+        }
+        $count=count($order);
+        $score_list=[];
+        $score_list['shipping_score']=0;
+        $score_list['store_service_score']=0;
+        $score_list['logistics_speed_score']=0;
+        $score_list['score']=0;
+        $score_list['good_score']=0;
+        foreach ($order as $k =>$v){
+            $score_list['shipping_score']+=$order[$k]['shipping_score'];
+            $score_list['store_service_score']+=$order[$k]['store_service_score'];
+            $score_list['logistics_speed_score']+=$order[$k]['logistics_speed_score'];
+            $score_list['score']+=$order[$k]['score'];
+            if ($order[$k]['score']>=8){
+                $score_list['good_score']= $score_list['good_score']+1;
+            }
+        }
+        $data['well_probability']=round($score_list['good_score']/$count,2)*100;
+        $data['shipping_score']=round(($score_list['shipping_score']+$postData['shipping_score'])/$count+1,1);
+        $data['store_service_score']=round(($score_list['store_service_score']+$postData['store_service_score'])/$count+1,1);
+        $data['logistics_speed_score']=round(($score_list['logistics_speed_score']+$postData['logistics_speed_score'])/$count+1,1);
+        $data['score']=round(($score_list['score']+$postData['score'])/$count+1,1);
+        $data['count']=$count;
+      return $data;
+    }
+
     /**
      * @param $comment_id
      * @return string
@@ -148,4 +360,6 @@ class GoodsComment extends ActiveRecord
         }
         return $grade;
     }
+
+
 }

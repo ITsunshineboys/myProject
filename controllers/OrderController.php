@@ -17,6 +17,7 @@ use app\models\LogisticsDistrict;
 use app\models\Lhzz;
 use app\models\UserRole;
 use app\services\StringService;
+use app\services\FileService;
 use app\services\SmValidationService;
 use app\services\AlipayTradeService;
 use app\services\ExceptionHandleService;
@@ -1663,6 +1664,36 @@ class OrderController extends Controller
             'msg'=>'ok',
             'data'=>$data
         ]);
+    }
+
+    /**
+     * user add comment
+     * @return string
+     */
+    public function actionCommentSub(){
+        $user = Yii::$app->user->identity;
+        if (!$user->checklogin()){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData=yii::$app->request->post();
+        $uploadsData=FileService::uploadMore();
+        $code=GoodsComment::addComment($postData,$user,$uploadsData);
+        if($code==200)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
     }
 
 }
