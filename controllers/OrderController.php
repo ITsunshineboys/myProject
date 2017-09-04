@@ -1584,5 +1584,34 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * @return string
+     */
+    public function  actionUserOrderDetails(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        if(!array_key_exists('order_no', $postData)){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $arr=GoodsOrder::FindUserOrderDetails($postData,$user);
+        $data=GoodsOrder::GetOrderDetailsData($arr,$user);
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
 
 }
