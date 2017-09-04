@@ -1495,6 +1495,10 @@ class OwnerController extends Controller
        ]);
     }
 
+    /**
+     * case list
+     * @return string
+     */
     public function actionCaseList(){
         $code           = trim(Yii::$app->request->get('code',''));
         $street         = trim(Yii::$app->request->get('street',''));
