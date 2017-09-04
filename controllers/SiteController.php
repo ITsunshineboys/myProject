@@ -38,6 +38,7 @@ class SiteController extends Controller
         'upload',
         'upload-delete',
         'review-statuses',
+        'reset-password-check',
         'reset-password',
         'reset-nickname',
         'reset-signature',
@@ -505,10 +506,25 @@ class SiteController extends Controller
         }
 
         SmValidationService::deleteCode($postData['mobile']);
+        $user->setDailyForgotPwdCnt();
 
         return Json::encode([
             'code' => 200,
             'msg' => '重设密码成功',
+        ]);
+    }
+
+    /**
+     * Reset password check action.
+     *
+     * @return string
+     */
+    public function actionResetPasswordCheck()
+    {
+        $res = Yii::$app->user->identity->checkDailyResetPwdCnt();
+        return Json::encode([
+            'code' => $res ? 200 : 1024,
+            'msg' => $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
         ]);
     }
 
@@ -544,6 +560,7 @@ class SiteController extends Controller
 
         if ($user->validatePassword($postData['new_password'])) {
             SmValidationService::deleteCode($user->mobile);
+            $user->setDailyResetPwdCnt();
 
             return Json::encode([
                 'code' => 200,
@@ -570,6 +587,7 @@ class SiteController extends Controller
         }
 
         SmValidationService::deleteCode($user->mobile);
+        $user->setDailyResetPwdCnt();
 
         return Json::encode([
             'code' => 200,
