@@ -4972,8 +4972,7 @@ class MallController extends Controller
             }
         } else {
             $query->andWhere(['in', 'status', array_keys(Supplier::STATUSES_ONLINE_OFFLINE)]);
-            $query->andWhere(['like', 'shop_no', $keyword]);
-            $query->orWhere(['like', 'shop_name', $keyword]);
+            $query->andWhere(['or', ['like', 'shop_no', $keyword], ['like', 'shop_name', $keyword]]);
         }
 
         return Json::encode([
