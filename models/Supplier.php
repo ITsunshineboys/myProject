@@ -348,7 +348,7 @@ class Supplier extends ActiveRecord
         }
 
         if (isset($data['status'])) {
-            $data['status'] = self::STATUSES[$data['status']];
+            $data['status'] = self::STATUSES_ONLINE_OFFLINE[$data['status']];
         }
 
         if (isset($data['quality_guarantee_deposit'])) {
