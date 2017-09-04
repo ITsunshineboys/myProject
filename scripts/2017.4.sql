@@ -981,6 +981,7 @@ CREATE TABLE `order_goodslist` (
   `is_unusual` tinyint(1) NOT NULL COMMENT '0:无异常  1：请申退款 2： 退款失败',
   `freight` bigint(20) NOT NULL,
   `comment_id` int(11) NOT NULL,
+  `cover_image` varchar(100) NOT NULL COMMENT '订单商品封面图',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
