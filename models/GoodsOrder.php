@@ -1750,7 +1750,7 @@ class GoodsOrder extends ActiveRecord
         ];
         return $data;
     }
-    
+
     /**
      * @param array $where
      * @param array $select
@@ -1833,4 +1833,128 @@ class GoodsOrder extends ActiveRecord
             'details' => $data
         ];
     }
+
+    /**
+     * @param $postData
+     * @param $user
+     * @return array|mixed|null
+     */
+   public  static  function  FindUserOrderDetails($postData,$user)
+   {
+       $array=self::getorderlist()
+           ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
+           ->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.order_id,z.goods_price,a.order_refer,a.buyer_message,z.comment_id,a.consignee,a.district_code,a.region,a.consignee_mobile,a.invoice_type,a.invoice_header_type,a.invoice_header,a.invoicer_card,a.invoice_content,z.cover_image');
+       if(array_key_exists('sku', $postData)){
+
+           $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id,'z.sku'=>$postData['sku']])
+               ->all();
+       }else{
+           $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id])
+               ->all();
+       };
+       $arr=self::getorderstatus($array);
+       if(!$arr){
+           return null;
+       }
+       return $arr;
+   }
+
+    /**
+     * @param array $arr
+     * @param $user
+     * @return mixed
+     */
+   public static  function GetOrderDetailsData($arr=[],$user)
+   {
+       foreach ( $arr as $k =>$v){
+           $arr[$k]['freight']= sprintf('%.2f', (float)$arr[$k]['freight']*0.01);
+           $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+           $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
+           $arr[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01*$arr[$k]['goods_number']);
+           $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+           switch ($arr[$k]['shipping_type']){
+               case 0:
+                   $arr[$k]['shipping_type']='快递物流';
+                   break;
+               case 1:
+                   $arr[$k]['shipping_type']='送货上门';
+                   break;
+           }
+           $output[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']);
+           $output[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']);
+           $output[$k]['freight']=sprintf('%.2f', (float)$arr[$k]['freight']);
+           $output[$k]['goods_price']=$arr[$k]['goods_price'];
+           $output[$k]['supplier_price']=$arr[$k]['supplier_price'];
+           $output[$k]['market_price']=$arr[$k]['market_price'];
+           $output[$k]['order_no']=$arr[$k]['order_no'];
+           $output[$k]['buyer_message']=$arr[$k]['buyer_message'];
+           $output[$k]['create_time']=$arr[$k]['create_time'];
+           $output[$k]['pay_name']=$arr[$k]['pay_name'];
+           $output[$k]['paytime']=date('Y-m-d H:i:s',$arr[$k]['paytime']);
+           $output[$k]['status']=$arr[$k]['status'];
+           $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
+           $output[$k]['order_no']=$arr[$k]['order_no'];
+           $output[$k]['goods_id']=$arr[$k]['goods_id'];
+           $output[$k]['sku']=$arr[$k]['sku'];
+           $output[$k]['goods_name']=$arr[$k]['goods_name'];
+           $output[$k]['waybillnumber']=$arr[$k]['waybillnumber'];
+           $output[$k]['waybillname']=$arr[$k]['waybillname'];
+           $output[$k]['shipping_type']=$arr[$k]['shipping_type'];
+           $output[$k]['username']=$user->nickname;
+           $output[$k]['comment_grade']=$arr[$k]['comment_grade'];
+           $output[$k]['consignee']=$arr[$k]['consignee'];
+           $output[$k]['district_code']=$arr[$k]['district_code'];
+           $output[$k]['region']=$arr[$k]['region'];
+           $output[$k]['invoice_content']=$arr[$k]['invoice_content'];
+           $output[$k]['invoicer_card']=$arr[$k]['invoicer_card'];
+           $output[$k]['invoice_header']=$arr[$k]['invoice_header'];
+           $output[$k]['consignee_mobile']=$arr[$k]['consignee_mobile'];
+           $output[$k]['cover_image']=$arr[$k]['cover_image'];
+           $output[$k]['goods_number']=$arr[$k]['goods_number'];
+           $output[$k]['invoice_header_type']=$arr[$k]['invoice_header_type'];
+           $output[$k]=self::SetUnpaidContinuedTime($output[$k],$arr[$k]);
+       }
+       return $output;
+   }
+
+    /**
+     * @param array $output
+     * @param $arr
+     * @return array
+     */
+   public function SetUnpaidContinuedTime($output=[],$arr){
+       if (empty($output['username'])){
+           $output['username']=(new Query())
+               ->from('user_address')
+               ->where(['id'=>$arr['address_id']])
+               ->one()['consignee'];
+           $output['role']='平台';
+       }else{
+           $output['role']=(new Query())
+               ->from(UserRole::tableName().' as a')
+               ->select('b.name')
+               ->leftJoin(Role::tableName().' as b','a.role_id=b.id')
+               ->where(['a.user_id'=>$arr['user_id']])
+               ->one()['name'];
+           if (!$output['role']){
+               $output['role']='平台';
+           }
+       }
+
+       if ($output['status']=='未付款'){
+           $time=time();
+           $pay_term=(strtotime($output['create_time'])+1800);
+           if (($pay_term-$time)<0){
+               $res=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
+               $output['pay_term']=0;
+               $output['status']='已取消';
+           }else{
+               $output['pay_term']=$pay_term-$time;
+           }
+       }
+       if ($output['status']=='已取消'){
+           $output['pay_term']=0;
+       }
+       return $output;
+   }
 }
