@@ -4971,6 +4971,7 @@ class MallController extends Controller
                 $query->andWhere(['in', 'category_id', GoodsCategory::level23Ids($categoryId, true)]);
             }
         } else {
+            $query->andWhere(['in', 'status', array_keys(Supplier::STATUSES_ONLINE_OFFLINE)]);
             $query->andWhere(['like', 'shop_no', $keyword]);
             $query->orWhere(['like', 'shop_name', $keyword]);
         }
