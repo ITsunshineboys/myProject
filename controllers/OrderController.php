@@ -1513,7 +1513,7 @@ class OrderController extends Controller
     }
     
     /**
-     *@return string
+     * @return string
      */
     public function  actionFindUserOrder(){
         $user = Yii::$app->user->identity;
@@ -1535,7 +1535,7 @@ class OrderController extends Controller
             $where .=" and a.user_id={$user->id}  and order_refer = 2";
         }
         $sort=' a.create_time  desc';
-        $paginationData = GoodsOrder::paginationByUserorder($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$sort);
+        $paginationData = GoodsOrder::paginationByUserorderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$sort,$user);
         $code=200;
         return Json::encode([
             'code'=>$code,

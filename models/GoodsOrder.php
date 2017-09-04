@@ -1750,4 +1750,87 @@ class GoodsOrder extends ActiveRecord
         ];
         return $data;
     }
+    
+    /**
+     * @param array $where
+     * @param array $select
+     * @param int $page
+     * @param int $size
+     * @param $sort
+     * @param $user
+     * @return array
+     */
+    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort,$user)
+    {
+        $OrderList = (new Query())
+            ->from(self::tableName().' AS a')
+            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
+            ->select($select)
+            ->where($where)
+            ->all();
+        $arr=self::getorderstatus($OrderList);
+        foreach ($arr as $k=>$v){
+            if ($arr[$k]['status']=='未付款'){
+                unset($arr[$k]);
+            }
+        }
+        foreach ($arr AS $k =>$v){
+            $arr[$k]['handle']='';
+            if ($arr[$k]['is_unusual']==1){
+                $arr[$k]['unusual']='申请退款';
+            }else if ($arr[$k]['is_unusual']==0){
+                $arr[$k]['unusual']='无异常';
+            }else if($arr[$k]['is_unusual']==2){
+                $arr[$k]['unusual']='退款失败';
+            }
+            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+                $arr[$k]['handle']='平台介入';
+            }
+            if ($arr[$k]['status']=='已完成'){
+                if (!$arr[$k]['comment_id']){
+                    $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                }
+            }
+            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
+            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+        }
+
+        $GoodsOrder=self::find()
+            ->select('order_no,user_id,pay_status,create_time,amount_order,pay_name,buyer_message,order_refer,paytime,remarks,supplier_id')
+            ->where(['pay_status'=>0,'user_id'=>$user->id])
+            ->asArray()
+            ->all();
+        foreach ($GoodsOrder AS $k =>$v){
+            $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
+            $GoodsOrder[$k]['status']='待付款';
+            $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
+            $GoodsOrder[$k]['user_name']=$user->nickname;
+            $GoodsOrder[$k]['list']=OrderGoods::find()
+                ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
+                ->select('goods_price,goods_number,market_price,supplier_price,sku,is_unusual,freight,')
+                ->asArray()
+                ->all();
+            foreach ($GoodsOrder[$k]['list'] as $key =>$val){
+                $GoodsOrder[$k]['list'][$key]['freight']=sprintf('%.2f', (float) $GoodsOrder[$k]['list'][$key]['freight']*0.01);
+                $GoodsOrder[$k]['list'][$key]['goods_price']=sprintf('%.2f', (float) $GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
+                $GoodsOrder[$k]['list'][$key]['freight']='无异常';
+            }
+            $arr[]=$GoodsOrder[$k];
+        }
+        foreach ($arr as $key => $row)
+        {
+            $create_time[$key]  = $arr[$key]['create_time'];
+        }
+        array_multisort($create_time, SORT_DESC, $arr);
+        $count=count($arr);
+        $total_page=ceil($count/$size);
+        $data=array_slice($arr, ($page-1)*$size,$size);
+        return [
+            'total_page' =>$total_page,
+            'count'=>$count,
+            'details' => $data
+        ];
+    }
 }
