@@ -59,7 +59,7 @@ return [
     // logistics template
     'mall/logistics-template-add' => [6],
     'mall/logistics-template-edit' => [6],
-    'mall/logistics-template-view' => [6],
+    'mall/logistics-template-view' => [1, 6],
     'mall/logistics-templates-supplier' => [6],
     'mall/logistics-template-status-toggle' => [6],
 
