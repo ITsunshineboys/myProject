@@ -102,6 +102,10 @@ return [
             'templateId' => 'SMS_86645022',
             'signName' => '修改交易密码验证码',
         ],
+        'resetMobile' => [
+            'templateId' => 'SMS_92765021',
+            'signName' => '修改手机号验证码',
+        ],
     ],
     'timeTypes' => [
         'all' => '全部时间',
