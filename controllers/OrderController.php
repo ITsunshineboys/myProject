@@ -1775,24 +1775,4 @@ class OrderController extends Controller
     }
 
 
-    public function actionGetorder()
-    {
-          $data = Yii::$app->db->createCommand('  alter table order_goodslist add `order_no` varchar(50) NOT NULL')
-            ->queryColumn();
-            var_dump($data);
-    }
-    
-     public function actionCheckOrder()
-    {
-
-        $orderGoodsList=OrderGoods::find()
-            ->asArray()
-            ->all();
-        return Json::encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>$orderGoodsList
-        ]);
-    }
-
 }
