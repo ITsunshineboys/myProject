@@ -1256,7 +1256,7 @@ class OwnerController extends Controller
     }
 
     /**
-     * homepage   list
+     * homepage  list
      * @return string
      */
     public function actionHomepage()
