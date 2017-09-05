@@ -1776,6 +1776,10 @@ class OrderController extends Controller
 
      public function actionCheckOrder()
     {
+        $order=new OrderGoods();
+        $order->sku=1;
+        $order->comment_id=2;
+        $order->save();
         $orderGoodsList=OrderGoods::find()
             ->asArray()
             ->all();
