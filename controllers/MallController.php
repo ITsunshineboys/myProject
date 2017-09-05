@@ -3596,7 +3596,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'goods-view' => $goods->view(Yii::$app->request->userIP),
+                'goods_view' => $goods->view(Yii::$app->request->userIP),
             ],
         ]);
     }
