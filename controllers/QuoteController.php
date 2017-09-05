@@ -6,6 +6,7 @@
  * Time: 上午 11:48
  */
 namespace app\controllers;
+
 use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
 use app\models\DecorationAdd;
@@ -407,6 +408,10 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * plot list all
+     * @return string
+     */
     public function actionLaborList()
     {
         return Json::encode([
@@ -1019,6 +1024,10 @@ class QuoteController extends Controller
 
     }
 
+    /**
+     * homepage toponymy find
+     * @return string
+     */
     public function actionHomepageToponymy()
     {
         $request = \Yii::$app->request;
@@ -1034,6 +1043,7 @@ class QuoteController extends Controller
     }
 
     /**
+     * homepage street find
      * @return string
      */
     public function actionHomepageStreet()
@@ -1052,6 +1062,7 @@ class QuoteController extends Controller
     }
 
     /**
+     * homepage case find
      * @return string
      */
     public function actionHomepageCase()
