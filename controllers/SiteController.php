@@ -314,7 +314,7 @@ class SiteController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'roles' => Role::appRoles(),
+                'roles' => Role::appRoles(true),
             ],
         ]);
     }

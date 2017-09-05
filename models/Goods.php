@@ -711,7 +711,7 @@ class Goods extends ActiveRecord
                 return $code;
             }
 
-            if (!$this->validateCategoryStyleSeries('category_id')) {
+            if (!$this->validateCategoryStyleSeries()) {
                 $code = 1022;
                 return $code;
             }
@@ -798,7 +798,7 @@ class Goods extends ActiveRecord
      * @param string $attribute category_id to validate
      * @return bool
      */
-    public function validateCategoryStyleSeries($attribute)
+    public function validateCategoryStyleSeries($attribute = 'category_id')
     {
         if ($this->style_id + $this->series_id == 0) {
             return true;
@@ -932,8 +932,8 @@ class Goods extends ActiveRecord
             ['after_sale_services', 'validateAfterSaleServices'],
             [['category_id'], 'validateCategoryId'],
             [['brand_id'], 'validateBrandId'],
-            [['style_id'], 'validateStyleId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
-            [['series_id'], 'validateSeriesId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
+//            [['style_id'], 'validateStyleId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
+            [['style_id', 'series_id'], 'validateCategoryStyleSeries', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             [['logistics_template_id'], 'validateLogisticsTemplateId'],
             ['description', 'safe']
         ];

@@ -40,17 +40,24 @@ class Role extends ActiveRecord
      * Get all roles
      *
      * @param bool $onlyApp if only app fields
+     * @param bool $includeOwnerRole if includes owner role
      * @return array|mixed|ActiveRecord[]
      */
-    public static function allRoles($onlyApp = false)
+    public static function allRoles($onlyApp = false, $includeOwnerRole = false)
     {
         $key = self::CACHE_KEY_ALL;
         $cache = Yii::$app->cache;
         $roles = $cache->get($key);
         if (!$roles) {
-            $where = $onlyApp
-                ? ['not in', 'id', [Yii::$app->params['lhzzRoleId']]]
-                : [];
+            if ($onlyApp) {
+                if (!$includeOwnerRole) {
+                    $where = ['not in', 'id', [Yii::$app->params['ownerRoleId'], Yii::$app->params['lhzzRoleId']]];
+                } else {
+                    $where = ['not in', 'id', [Yii::$app->params['lhzzRoleId']]];
+                }
+            } else {
+                $where = [];
+            }
             $roles = self::find()->select(self::FIELDS_ROLES)->where($where)->asArray()->orderBy('id')->all();
             if ($roles) {
                 $cache->set($key, $roles);
@@ -84,11 +91,12 @@ class Role extends ActiveRecord
     /**
      * Get roles for app
      *
+     * @param bool $includeOwnerRole if includes owner role
      * @return array
      */
-    public static function appRoles()
+    public static function appRoles($includeOwnerRole = false)
     {
-        return self::allRoles(true);
+        return self::allRoles(true, $includeOwnerRole);
 //        return array_slice(self::allRoles(), 1);
     }
 

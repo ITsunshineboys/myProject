@@ -2836,17 +2836,29 @@ class MallController extends Controller
         $names = Yii::$app->request->post('names', []);
         $values = Yii::$app->request->post('values', []);
 
-        $attrCnt = count($names);
-        if ($attrCnt > 0) {
-            if ($attrCnt != count($values)) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
+        if (!StringService::checkEmptyElement($names)) {
+            $attrCnt = count($names);
+            if ($attrCnt > 0) {
+                if ($attrCnt != count($values)) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!GoodsAttr::validateNames($names)) {
+                    $code = 1009;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
             }
 
-            if (!GoodsAttr::validateNames($names)) {
-                $code = 1009;
+            $code = GoodsAttr::addByAttrs($goods, $names, $values);
+            if (200 != $code) {
+                $transaction->rollBack();
+
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2854,24 +2866,16 @@ class MallController extends Controller
             }
         }
 
-        $code = GoodsAttr::addByAttrs($goods, $names, $values);
-        if (200 != $code) {
-            $transaction->rollBack();
+        if (!StringService::checkEmptyElement($images)) {
+            $code = GoodsImage::addByAttrs($goods, $images);
+            if (200 != $code) {
+                $transaction->rollBack();
 
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $code = GoodsImage::addByAttrs($goods, $images);
-        if (200 != $code) {
-            $transaction->rollBack();
-
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
 
         $transaction->commit();
