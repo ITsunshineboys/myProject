@@ -55,6 +55,7 @@ class Goods extends ActiveRecord
         'id',
         'sku',
         'title',
+        'subtitle',
         'supplier_price',
         'platform_price',
         'market_price',
