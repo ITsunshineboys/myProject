@@ -731,11 +731,22 @@ class User extends ActiveRecord implements IdentityInterface
             }
             $cache->set(self::CACHE_PREFIX_SET_PAYPASSWORD . $user->id, $cacheData, 24 * 60 * 60);
         }
-        $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd_secend);
-        $userRole->pay_password = $psw;
-        $res = $userRole->save(false);
-        if ($res) {
-            $code = 200;
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd_secend);
+            $userRole->pay_password=$psw;
+            $res=$userRole->save(false);
+            if (!$res){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
             return $code;
         }
     }
