@@ -94,7 +94,7 @@ class WorkerController extends Controller
 
         $worker = Worker::find()->where(['uid' => $user])->one();
         if ($worker == null) {
-            $code = 1010;
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
@@ -171,7 +171,7 @@ class WorkerController extends Controller
             && $status != self::STATUS_ALL
             && !array_key_exists($status, WorkerOrder::WORKER_ORDER_STATUS)
         ) {
-            $code = 1010;
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
@@ -206,7 +206,7 @@ class WorkerController extends Controller
             && $status != self::STATUS_ALL
             && !array_key_exists($status, WorkerOrder::USER_WORKER_ORDER_STATUS)
         ) {
-            $code = 1010;
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]

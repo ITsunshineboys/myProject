@@ -1271,6 +1271,7 @@ CREATE TABLE `worker_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `worker_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工人id',
+  `worker_type_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工人类型id',
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '工单号',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `start_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
@@ -1284,7 +1285,6 @@ CREATE TABLE `worker_order` (
   `front_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '订金',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0: 已取消(完成)，1：未开始(接单中)，2：施工中，3：已完工(完成)',
   `describe` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '订单描述',
-  `worker_type_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工人类型id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
