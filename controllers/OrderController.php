@@ -5,6 +5,7 @@ use app\models\Addressadd;
 use app\models\Supplieramountmanage;
 use app\models\CommentImage;
 use app\models\CommentReply;
+use app\models\OrderAfterSale;
 use app\models\GoodsComment;
 use app\models\Wxpay;
 use app\models\EffectEarnst;
@@ -1774,20 +1775,45 @@ class OrderController extends Controller
         }
     }
 
-    /**test goods data
-     *
+  
+    /**
+     *用户申请售后
      * @return string
      */
-    public function  actionGetGoods(){
-       $goods=Goods::find()
-            ->where("after_sale_services!='0'")
-            ->asArray()
-            ->all();
-        return Json::encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>$goods
-        ]);
+    public  function  actionApplyAfterSale()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $postData = Yii::$app->request->post();
+        $uploadsData=FileService::uploadMore();
+        if ($uploadsData !=1000){
+            if (is_numeric($uploadsData)){
+                $code=$uploadsData;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+        $code=OrderAfterSale::UserApplyAfterSale($postData,$user,$uploadsData);
+        if($code==200){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
     }
 
 
