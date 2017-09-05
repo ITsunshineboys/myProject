@@ -1370,3 +1370,24 @@ CREATE TABLE `worker_type_item` (
   `worker_item_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工人条目id(只能选pid为0的)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--9.5 start
+CREATE TABLE `order_after_sale` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(50) NOT NULL,
+  `sku` varchar(20) NOT NULL,
+  `type` tinyint(1) NOT NULL COMMENT '1. 退货  2.换货  3.上门维修  4. 上门换货   5.上门退货  ',
+  `description` varchar(600) NOT NULL COMMENT '问题描述',
+  `create_time` int(11) NOT NULL,
+  `supplier_handle` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+
+
+CREATE TABLE `order_after_sale_image` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `after_sale_id` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
