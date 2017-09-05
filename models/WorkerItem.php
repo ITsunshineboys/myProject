@@ -100,4 +100,14 @@ class WorkerItem extends \yii\db\ActiveRecord
         return $data;
 
     }
+    /**
+     * @param $pid
+     * @return array|null
+     */
+    public static function parenttitle($pid){
+      return  self::find()
+            ->select('id,title')
+            ->where(['id'=>$pid])
+            ->one();
+    }
 }

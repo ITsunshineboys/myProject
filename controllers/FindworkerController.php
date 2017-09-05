@@ -6,6 +6,7 @@ use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\models\WorkerType;
 use app\services\ExceptionHandleService;
+use app\services\FileService;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -173,26 +174,96 @@ class FindworkerController extends Controller{
     }
         $code = 1000;
         $array = \Yii::$app->request->post();
-        if ($array == null) {
+
+        if (!$array) {
             return json_encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $keys=array_keys($array);
+        foreach ($keys as $k=>&$key){
+            if(preg_match('/(area)/',$key,$m)){
+                if($array[$key]>200){
+                    return json_encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+        }
+        $data= WorkerOrderItem::addMudorderitem($array);//房屋信息
 
-        $data = WorkerOrderItem::addMudorderitem($array);
 
-        $code = WorkerOrder::addorderinfo($user_id, $data);
-
+        \Yii::$app->cache->set('homeinfos',$data);
 
         return json_encode([
-            'code' => $code,
-            'msg' => $code == 200 ? 'ok' : \Yii::$app->params['errorCodes'][$code],
-            'data' => $code == 200 ? $data : null
+            'code' => 200,
+            'msg' => 'ok',
+
         ]);
     }
-    public function actionAddHomeimages(){
+    /**
+     * get owner infos
+     * @return string
+     */
+    public function actionOwnerinfos(){
+        $user_id = \Yii::$app->user->identity;
+                if (!$user_id){
+        $code=1052;
+        return json_encode([
+            'code' => $code,
+            'msg' =>\ Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+        $code=1000;
+        $request=new Request();
+        $con_people=trim($request->post('con_people',''),'');
+        $con_tel=trim($request->post('con_tel',''),'');
+        $address=trim($request->post('address',''),'');
+        $map_location=trim($request->post('map_location',''),'');
+        $infos=[];
+        $code=WorkerOrderItem::addownerinfo($con_people,$con_tel,$address,$map_location);
+        if($code!=1000){
+            $infos['con_people']=$con_people;
+            $infos['con_tel']=$con_tel;
+            $infos['address']=$address;
+            $infos['map_location']=$map_location;
+        }
+
+        \Yii::$app->cache->set('ownerinfos',$infos);
+        return json_encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+
+        ]);
+    }
+     public function actionGenerateOrder(){
+         $user_id = \Yii::$app->user->identity;
+         $code=1000;
+         $front_money=trim(\Yii::$app->request->post('front_money',''),'');
+         $amount=trim(\Yii::$app->request->post('amount',''),'');
+         $homeinfos=\Yii::$app->cache->get('homeinfos');
+        $ownerinfos=\Yii::$app->cache->get('ownerinfos');
+
+         $code=WorkerOrder::addorderinfo($user_id,$homeinfos,$ownerinfos,$front_money,$amount);
+         return json_encode([
+             'code' => $code,
+             'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+
+         ]);
+    }
+
+    /**
+     * add
+     */
+    public function actionAddHomeimages()
+    {
+        $code = 1000;
+        $images = \Yii::$app->request->post('images', []);
 
 
     }
+
+
 }

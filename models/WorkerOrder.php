@@ -26,6 +26,7 @@ use yii\data\Pagination;
  * @property string $front_money
  * @property integer $status
  * @property integer $worker_type_id
+ * @property string $describe
  */
 class WorkerOrder extends \yii\db\ActiveRecord
 {
@@ -253,31 +254,68 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
         return $worker_items;
     }
+    /**
+     * 生成订单
+     * @param $uid
+     * @param $homeinfos
+     * @param $ownerinfos
+     * @param $front_money
+     * @param $amount
+     * @return int
+     */
 
-    public static function addorderinfo($uid, $array)
-    {
+    public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount){
 
-        $code = 1000;
         $worker_order = new self();
-        $worker_order->uid = $uid;
-        $worker_order->worker_type_id = WorkerType::find()
-            ->where(['worker_type' => $array['worker_type']])
-            ->one()->id;
+        $worker_order->uid =$uid;
+        $worker_order->worker_type_id = $homeinfos['worker_type_id'];
         $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
         $worker_order->create_time = time();
-        if (!isset($array['start_time'])) {
-            return $code;
-        }
-        $worker_order->start_time = strtotime($array['start_time']);
-        $worker_order->end_time = strtotime($array['end_time']);
-        $worker_order->need_time = $array['need_time'];
+        $worker_order->start_time = $homeinfos['start_time'];
+        $worker_order->end_time = $homeinfos['end_time'];
+        $worker_order->need_time = $homeinfos['need_time'];
         $worker_order->status = self::USER_WORKER_ORDER_STATUS[1];
-
-        if (!$worker_order->save(false)) {
-            return 500;
-        } else {
-            return 200;
+        $worker_order->map_location=$ownerinfos['map_location'];
+        $worker_order->address=$ownerinfos['address'];
+        $worker_order->con_people=$ownerinfos['con_people'];
+        $worker_order->con_tel=$ownerinfos['con_tel'];
+        $worker_order->amount=$amount;
+        $worker_order->front_money=$front_money;
+        if(isset($homeinfos['describe'])){
+            $worker_order->describe=$homeinfos['describe'];
         }
+        if(!$worker_order->save(false)){
+            return 500;
+        }
+
+            $data=[];
+            $worker_order_item=new WorkerOrderItem();
+            $id=$worker_order_item->id=$worker_order->id;
+            $keys=array_keys($homeinfos);
+            foreach ($keys as $k=>&$key){
+                if(preg_match('/(item)/',$key,$m)){
+                    $data[$k]=$homeinfos[$key];
+                    foreach ($data as $k=>&$dat){
+                        $dat['id']=$id;
+                    }
+                }
+            }
+
+            $connection = \Yii::$app->db;
+            $connection
+                ->createCommand()
+                ->batchInsert(
+                'worker_order_item',
+                ['worker_item_id','area','worker_craft_id','worker_order_id'],
+                $data
+            )->execute();
+
+
+        if(!$worker_order->save(false)){
+            return 500;
+        }
+
+        return 200;
 
 
     }

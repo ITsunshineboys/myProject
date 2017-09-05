@@ -15,7 +15,7 @@ use Yii;
 class WorkerOrderImg extends \yii\db\ActiveRecord
 {
 
-    const IMAGES_COUNT=10;
+    const IMAGES_COUNT=9;
     /**
      * @inheritdoc
      */
@@ -49,6 +49,7 @@ class WorkerOrderImg extends \yii\db\ActiveRecord
         ];
     }
     /**
+     * count
      * @param array $images
      * @return bool
      */
