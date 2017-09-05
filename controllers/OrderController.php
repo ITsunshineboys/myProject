@@ -1780,6 +1780,7 @@ class OrderController extends Controller
      */
     public function  actionGetGoods(){
         $goods=Goods::find()
+            ->where('after_sale_services!=0')
             ->asArray()
             ->all();
         return Json::encode([
