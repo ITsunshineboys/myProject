@@ -1774,4 +1774,16 @@ class OrderController extends Controller
         }
     }
 
+     public function actionCheckOrder()
+    {
+        $orderGoodsList=OrderGoods::find()
+            ->asArray()
+            ->all();
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$orderGoodsList
+        ]);
+    }
+
 }
