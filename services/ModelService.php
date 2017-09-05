@@ -47,6 +47,10 @@ class ModelService
         $orderBy = [];
 
         foreach ($sort as $v) {
+            if (stripos($v, self::SEPARATOR_SORT) === false) {
+                return false;
+            }
+
             list($field, $direction) = explode(self::SEPARATOR_SORT, $v);
             !$direction && $direction = SORT_DESC;
             if (!$field) {

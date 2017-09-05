@@ -68,6 +68,7 @@ class Goods extends ActiveRecord
         'online_time',
         'offline_time',
         'delete_time',
+        'publish_time',
         'description',
         'reason',
         'offline_reason',
@@ -161,6 +162,12 @@ class Goods extends ActiveRecord
             if (isset($goods['delete_time'])) {
                 $goods['delete_time'] = $goods['delete_time']
                     ? date('Y-m-d H:i', $goods['delete_time'])
+                    : '';
+            }
+
+            if (isset($goods['publish_time'])) {
+                $goods['publish_time'] = $goods['publish_time']
+                    ? date('Y-m-d H:i', $goods['publish_time'])
                     : '';
             }
 
