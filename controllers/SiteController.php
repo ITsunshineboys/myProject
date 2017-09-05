@@ -1155,7 +1155,7 @@ class SiteController extends Controller
             }
         }
         $sms['mobile'] = $user->mobile;
-        $sms['type'] = 'resetPayPassword';
+        $sms['type'] = 'resetMobile';
         try {
             new SmValidationService($sms);
         } catch (\InvalidArgumentException $e) {
