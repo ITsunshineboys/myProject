@@ -1272,6 +1272,7 @@ class Goods extends ActiveRecord
             $user = Yii::$app->user->identity;
 
             $this->description && $this->description = HtmlPurifier::process($this->description);
+            $this->publish_time = $now;
 
             if ($insert) {
                 $this->create_time = $now;

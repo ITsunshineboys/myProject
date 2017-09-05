@@ -205,6 +205,7 @@ CREATE TABLE `goods` (
   `offline_time` int not null DEFAULT 0,
   `online_time` int not null DEFAULT 0,
   `delete_time` int not null DEFAULT 0,
+  `publish_time` int not null DEFAULT 0,
   `status` tinyint(1) not null DEFAULT 0 comment '0：已下架, 1：等待上架, 2：已上架, 3：已删除',
   `after_sale_services` set('0', '1', '2', '3', '4') not null DEFAULT '0' comment '0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货',
   `logistics_template_id` int(11) unsigned not null default 0,
