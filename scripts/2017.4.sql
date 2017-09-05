@@ -1382,7 +1382,7 @@ CREATE TABLE `order_after_sale` (
   `create_time` int(11) NOT NULL,
   `supplier_handle` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `order_after_sale_image` (
@@ -1390,4 +1390,4 @@ CREATE TABLE `order_after_sale_image` (
   `after_sale_id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
