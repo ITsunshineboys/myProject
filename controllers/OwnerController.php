@@ -1276,9 +1276,9 @@ class OwnerController extends Controller
      * @return string
      */
     public function actionCaseList(){
-        $code           = trim(Yii::$app->request->get('code',''));
-        $street         = trim(Yii::$app->request->get('street',''));
-        $toponymy       = trim(Yii::$app->request->get('toponymy',''));
+        $code     = trim(Yii::$app->request->get('code',''));
+        $street   = trim(Yii::$app->request->get('street',''));
+        $toponymy = trim(Yii::$app->request->get('toponymy',''));
         $effect['case_effect'] = Effect::findByCode($code,$street,$toponymy);
         $effect['case_picture'] = EffectPicture::findById( $effect['case_effect']['id']);
         $effect['case_works_backman_data'] = WorksBackmanData::findById($effect['case_effect']['id']);
