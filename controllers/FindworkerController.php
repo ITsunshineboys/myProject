@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
+use app\models\WorkerOrderImg;
 use app\models\WorkerOrderItem;
 use app\models\WorkerType;
 use app\services\ExceptionHandleService;
@@ -175,12 +176,13 @@ class FindworkerController extends Controller{
         $code = 1000;
         $array = \Yii::$app->request->post();
 
-        if (!$array) {
+        if (!$array || !$array['start_time']) {
             return json_encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $sum=0;
         $keys=array_keys($array);
         foreach ($keys as $k=>&$key){
             if(preg_match('/(area)/',$key,$m)){
@@ -190,9 +192,11 @@ class FindworkerController extends Controller{
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
+                $sum+=$array[$key];
+                $need_time=ceil($sum/12+1);
             }
         }
-        $data= WorkerOrderItem::addMudorderitem($array);//房屋信息
+        $data= WorkerOrderItem::addMudorderitem($array,$need_time);//房屋信息
 
 
         \Yii::$app->cache->set('homeinfos',$data);
@@ -209,9 +213,9 @@ class FindworkerController extends Controller{
      */
     public function actionOwnerinfos(){
         $user_id = \Yii::$app->user->identity;
-                if (!$user_id){
         $code=1052;
-        return json_encode([
+        if (!$user_id){
+            return json_encode([
             'code' => $code,
             'msg' =>\ Yii::$app->params['errorCodes'][$code]
         ]);
@@ -238,11 +242,28 @@ class FindworkerController extends Controller{
 
         ]);
     }
+    /**
+     * Generate Order
+     * @return string
+     */
      public function actionGenerateOrder(){
          $user_id = \Yii::$app->user->identity;
+         $code=1052;
+         if(!$user_id){
+             return json_encode([
+                 'code' => $code,
+                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
+             ]);
+         }
          $code=1000;
          $front_money=trim(\Yii::$app->request->post('front_money',''),'');
          $amount=trim(\Yii::$app->request->post('amount',''),'');
+         if(!$front_money || !$amount ){
+             return json_encode([
+                 'code' => $code,
+                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
+             ]);
+         }
          $homeinfos=\Yii::$app->cache->get('homeinfos');
         $ownerinfos=\Yii::$app->cache->get('ownerinfos');
 
@@ -253,15 +274,20 @@ class FindworkerController extends Controller{
 
          ]);
     }
-
     /**
-     * add
+     *add home images
+     *@return string
      */
     public function actionAddHomeimages()
     {
         $code = 1000;
         $images = \Yii::$app->request->post('images', []);
-
+        if(!WorkerOrderImg::validateImages($images) || ! \Yii::$app->params['uploadPublic']['maxSize'] || !\Yii::$app->params['uploadPublic']['extensions'] ){
+                return json_encode([
+                    'code'=>$code,
+                    'msg'=>\Yii::$app->params['errorCodes'][$code]
+                ]);
+        }
 
     }
 

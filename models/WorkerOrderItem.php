@@ -70,11 +70,10 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
      * @param $array
      * @return array
      */
-    public static function addMudorderitem(array $array){
+    public static function addMudorderitem(array $array,$need_time){
 
         $data=[];
         $data['worker_type_id']=$array['worker_type_id'];
-
         //客厅
       if(isset($array['hall_area'])){
           $hall_item=(new Query())
@@ -85,10 +84,8 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
           $worker_item=self::getpidbyitem($hall_item['item_id']);
 
           $data['hall_item']['hall_item_id']=WorkerItem::parenttitle($worker_item['pid'])['id'];
-          $data['hall_item']['hall_area']=$array['hall_area'];
           $data['hall_item']['hall_craft_id']=$array['hall_craft_id'];
-
-
+          $data['hall_item']['hall_area']=$array['hall_area'];
       }
         //厨房
       if(isset($array['kitchen_area'])){
@@ -106,7 +103,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         //卫生间
         if(isset($array['toilet_area'])){
             $toilet_item=(new Query())
-                ->from('worker_craft,univalent')
+                ->from('worker_craft')
                 ->where(['id'=>$array['toilet_craft_id']])
                 ->select('item_id')
                 ->one();
@@ -120,7 +117,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         //阳台
         if(isset($array[' ']['balcony_area'])){
             $balcony_item=(new Query())
-                ->from('worker_craft,univalent')
+                ->from('worker_craft')
                 ->where(['id'=>$array['balcony_craft_id']])
                 ->select('item_id')
                 ->one();
@@ -131,7 +128,8 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         }
         //补烂
         if(isset($array['fill_area'])){
-
+            $data['fill_item']['fill_item_id']=WorkerItem::parenttitle($worker_item['pid'])['id'];
+            $data['fill_item']['fill_craft_id']=0;
             $data['fill_item']['fill_area']=$array['fill_area'];
         }
         //包管
@@ -142,7 +140,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             $data['chip_item']['chip']=self::STATUS[$array['chip']];
         }
 
-        $data['need_time']=$array['need_time'];
+        $data['need_time']=$need_time;
        if(isset($array['demand'])){
             $data['demand']=$array['demand'];
         }
@@ -154,10 +152,6 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
           $data['start_time']=strtotime($array['start_time']);
           $data['end_time']=strtotime($array['end_time']);
       }
-
-
-
-
         return $data;
     }
     /**
