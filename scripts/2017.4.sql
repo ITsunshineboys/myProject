@@ -1284,6 +1284,7 @@ CREATE TABLE `worker_order` (
   `front_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '订金',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0: 已取消(完成)，1：未开始(接单中)，2：施工中，3：已完工(完成)',
   `describe` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '订单描述',
+  `worker_type_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工人类型id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
