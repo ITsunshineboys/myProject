@@ -38,4 +38,44 @@ class CommentReply extends ActiveRecord
             ->createCommand("select content from {{%" . self::tableName() . "}} where comment_id = {$commentId}")
             ->queryColumn();
     }
+
+    /**
+         * @param $postData
+         * @param $user
+         * @return int
+         */
+       public static function  CommentReplyAction($postData)
+       {
+           if (!array_key_exists('reply_content',$postData) || !array_key_exists('order_no',$postData) || !array_key_exists('sku',$postData))
+           {
+               $code=100;
+               return $code;
+           }
+           $OrderGoods=OrderGoods::find()
+               ->where(['order_no'=>$postData['ordeR_no'],'sku'=>$postData['sku']])
+               ->one();
+           if ($OrderGoods->comment_id==0){
+               $code=1000;
+               return $code;
+           }
+           $tran = Yii::$app->db->beginTransaction();
+           try{
+               $commentReply=new self;
+               $commentReply->comment_id=$OrderGoods->comment_id;
+               $commentReply->content=$postData['reply_content'];
+               $res=$commentReply->save();
+               if (!$res){
+                   $tran->rollBack();
+                   $code=500;
+                   return $code;
+               }
+               $tran->commit();
+               $code=200;
+               return $code;
+           }catch (Exception $e){
+               $tran->rollBack();
+               $code=500;
+               return $code;
+           }
+       }
 }

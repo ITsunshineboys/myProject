@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\models\Addressadd;
 use app\models\Supplieramountmanage;
 use app\models\CommentImage;
+use app\models\CommentReply;
 use app\models\GoodsComment;
 use app\models\Wxpay;
 use app\models\EffectEarnst;
@@ -1742,6 +1743,35 @@ class OrderController extends Controller
             'msg'=>'ok',
             'data'=>$comment
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function  actionCommentReply()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user->checklogin()){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData=yii::$app->request->post();
+        $code=CommentReply::CommentReplyAction($postData);
+        if ($code==200)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
     }
 
 }
