@@ -664,11 +664,12 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
         $key = trim(htmlspecialchars($postData['key']), '');
-        if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD . $user->id, $key) == true) {
-            $code = self::setPaypassword_first($postData, $user);
+         if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true){
+            $code=self::setPaypassword_first($postData,$user);
         }
-        if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD . $user->id, $key) == true) {
-            $code = self::setPaypassword_secend($postData, $user);
+        if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true)
+        {
+            $code=self::setPaypassword_secend($postData,$user);
         }
         return $code;
     }

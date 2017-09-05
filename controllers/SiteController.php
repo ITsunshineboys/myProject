@@ -1052,7 +1052,7 @@ class SiteController extends Controller
             $pay_password = $model->select('pay_password')->where(['uid' => $user->id])->asArray()->one()['pay_password'];
         }
         $data['type'] = empty($pay_password) ? 'first' : 'unfirst';
-        $data['key'] = empty($pay_password) ? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword' . $user->id) : \Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword' . $user->id);
+        $data['key']=empty($pay_password)? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword'.$user->id.date('Y-m-d',time())):\Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword'.$user->id.date('Y-m-d',time()));
         $users = User::find()->where(['id' => $user->id])->select('mobile')->one();
         $data['mobile'] = $users['mobile'];
         return Json::encode([
