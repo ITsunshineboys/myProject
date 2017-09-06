@@ -38,7 +38,7 @@ class Goods extends ActiveRecord
         'left_number',
     ];
 
-    const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'sold_number', 'favourable_comment_rate', 'cover_image', 'market_price', 'purchase_price_decoration_company'];
+    const CATEGORY_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'sold_number', 'favourable_comment_rate', 'cover_image', 'market_price', 'purchase_price_decoration_company', 'supplier_price'];
     const BRAND_GOODS_APP = ['id', 'title', 'subtitle', 'platform_price', 'comment_number', 'favourable_comment_rate', 'cover_image'];
 
     const AFTER_SALE_SERVICES = [
@@ -1211,7 +1211,7 @@ class Goods extends ActiveRecord
             'after_sale_services' => $this->afterSaleServicesReadable(),
             'supplier' => [
                 'id' => $supplier->id,
-                'name' => $supplier->nickname,
+                'shop_name' => $supplier->shop_name,
                 'icon' => $supplier->icon,
                 'goods_number' => self::find()
                     ->where(['supplier_id' => $this->supplier_id, 'status' => self::STATUS_ONLINE])
