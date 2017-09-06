@@ -818,4 +818,30 @@ class Supplier extends ActiveRecord
             return $code;
         }
     }
+
+      /** check  supplier handle  order  Jurisdiction
+     * 商家处理订单权限
+     * @param $user
+     * @param $postData
+     * @return int
+     */
+    public static function CheckOrderJurisdiction($user,$postData)
+    {
+        if(!array_key_exists('order_no', $postData)){
+            $code=1000;
+            return $code;
+        }
+        $supplier=self::find()
+            ->where(['uid'=>$user->id])
+            ->one();
+        $GoodsOrder=GoodsOrder::find()
+            ->where(['order_no'=>$postData['order_no']])
+            ->one();
+        if ($supplier->id != $GoodsOrder->supplier_id){
+            $code=1034;
+            return $code;
+        }
+        $code=200;
+        return $code;
+    }
 }

@@ -1775,6 +1775,35 @@ class OrderController extends Controller
         }
     }
 
+
+    /**
+     * @return string
+     */
+    public  function  actionSupplierFindAfterSaleData()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        $data=OrderAfterSale::FindAfterSaleData($postData,$user);
+        if (is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
   
     /**
      *用户申请售后
@@ -1816,5 +1845,40 @@ class OrderController extends Controller
         }
     }
 
+
+    /**
+     * 商家售后操作-- 同意  or  驳回 
+     * @return string
+     */
+    public function  actionSupplierAfterSaleHandle(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        $code=Supplier::CheckOrderJurisdiction($user,$postData);
+        if ($code !=200){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=OrderAfterSale::SupplierAfterSaleHandle($postData);
+        if($code==200){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
 
 }
