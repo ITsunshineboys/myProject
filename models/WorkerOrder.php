@@ -6,7 +6,6 @@ use app\controllers\WorkerController;
 use app\services\ModelService;
 use Yii;
 use yii\data\Pagination;
-use yii\db\Query;
 
 /**
  * This is the model class for table "worker_order".
@@ -159,7 +158,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->where(['id' => $worker_item_id])
                 ->select(['id', 'title'])
                 ->asArray()->one();
-//            var_dump($worker_item);
             $worker_items[] = $worker_item;
         }
 

@@ -1250,12 +1250,15 @@ CREATE TABLE `worker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned NOT NULL DEFAULT '0',
   `project_manager_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '项目经理id',
+  `province_code` varchar(20) DEFAULT NULL COMMENT '省份编码',
+  `city_code` varchar(20) DEFAULT NULL COMMENT '市编码',
   `labor_cost_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工费地区id (包含工人类型和等级)',
   `worker_type_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工种id(只能选pid为0的)',
   `nickname` varchar(25) NOT NULL DEFAULT '' COMMENT '工人名字',
   `icon` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
   `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数',
   `comprehensive_score` float unsigned NOT NULL DEFAULT '10' COMMENT '综合评分',
+  `level` tinyint(1) NOT NULL DEFAULT '1' COMMENT '工人级别',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `signature` varchar(100) NOT NULL DEFAULT '' COMMENT '个性签名',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
@@ -1372,7 +1375,7 @@ CREATE TABLE `worker_type_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
---9.5 start
+-- 9.6 start
 CREATE TABLE `order_after_sale` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_no` varchar(50) NOT NULL,
@@ -1391,3 +1394,12 @@ CREATE TABLE `order_after_sale_image` (
   `image` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `craft_cost` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `worker_craft_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '具体工艺id',
+  `province_code` varchar(20) DEFAULT NULL COMMENT '省份编码',
+  `city_code` varchar(20) DEFAULT NULL COMMENT '市编码',
+  `price` bigint(20) NOT NULL COMMENT '工人价格',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
