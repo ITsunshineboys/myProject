@@ -272,6 +272,27 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $worker_items;
     }
     /**
+     * save images
+     * @param array $images
+     * @param $order_id
+     * @return bool
+     */
+    public static function saveorderimgs(array $images,$order_id){
+        $worker_order_img=new WorkerOrderImg();
+        foreach($images as $attributes)
+        {
+            $_model = clone $worker_order_img;
+            $_model->order_img=$attributes;
+            $_model->worker_order_id=$order_id;
+           $res= $_model->save();
+        }
+        if(!$res){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    /**
      * 生成订单
      * @param $uid
      * @param $homeinfos
@@ -284,7 +305,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount){
 
         $worker_order = new self();
-        $worker_order->uid =1;
+        $worker_order->uid =$uid;
         $worker_order->worker_type_id = $homeinfos['worker_type_id'];
         $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
         $worker_order->create_time = time();
@@ -306,34 +327,37 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $code = 500;
             return $code;
         }
-            $data=[];
-            $worker_order_item=new WorkerOrderItem();
-            $id=$worker_order_item->id=$worker_order->id;
-            $keys=array_keys($homeinfos);
-            foreach ($keys as $k=>&$key){
-                if(preg_match('/(item)/',$key,$m)){
-                    $data[$k]=$homeinfos[$key];
-                    foreach ($data as $k=>&$dat){
-                        $dat['id']=$id;
-                    }
+        $worker_order_img=new WorkerOrderImg();
+       $order_id= $worker_order_img->worker_order_id=$worker_order->id;
+
+       $rest=self::saveorderimgs($homeinfos['images'],$order_id);
+        if($rest==false){
+            $transaction->rollBack();
+            $code = 500;
+            return $code;
+        }
+        $data=[];
+        $worker_order_item=new WorkerOrderItem();
+       $id=$worker_order_item->worker_order_id=$worker_order->id;
+        $keys=array_keys($homeinfos);
+        foreach ($keys as $k=>&$key){
+            if(preg_match('/(item)/',$key,$m)){
+                $data[$k]=$homeinfos[$key];
+                foreach ($data as &$dat) {
+                    $dat['id'] = $id;
+
                 }
             }
-            $connection = \Yii::$app->db;
-            $connection
-                ->createCommand()
-                ->batchInsert(
+        }
+
+        $connection = \Yii::$app->db;
+        $connection
+            ->createCommand()
+            ->batchInsert(
                 'worker_order_item',
                 ['worker_item_id','worker_craft_id','area','worker_order_id'],
                 $data
             )->execute();
-
-
-        if(!$worker_order->save(false)){
-            $transaction->rollBack();
-
-            $code = 500;
-            return $code;
-        }
         $transaction->commit();
         return 200;
 

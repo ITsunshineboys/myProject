@@ -19,10 +19,7 @@ use yii\web\UploadedFile;
  */
 class WorkerOrderItem extends \yii\db\ActiveRecord
 {
-    const STATUS=[
-        0=>'否',
-        1=>'是'
-    ];
+
     const UNITS = [
         '无',
         'L',
@@ -31,6 +28,8 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         'Kg',
         'MM'
     ];
+    const STATUSTNULL=0;
+    const STATUSNOTNULL=1;
     const UNITXG='/';
     const PEOPL_LEN=15;
     const ADDRESS_LEN=45;
@@ -64,80 +63,62 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
 
         return $worker_item;
     }
-
+    public static function craftprice($craft_id){
+        $price=(new Query())->from('craft_cost')
+            ->select('price')
+            ->where(['worker_craft_id'=>$craft_id])
+            ->one();
+            return $price;
+    }
     /**
      * 泥作类添加
      * @param $array
      * @return array
      */
-    public static function addMudorderitem(array $array,$need_time){
+    public static function addMudorderitem(array $array,$need_time,array $images){
 
         $data=[];
         $data['worker_type_id']=$array['worker_type_id'];
         //客厅
-      if(isset($array['hall_area'])){
-          $hall_item=(new Query())
-              ->from('worker_craft')
-              ->where(['id'=>$array['hall_craft_id']])
-              ->select('*')
-              ->one();
-          $worker_item=self::getpidbyitem($hall_item['item_id']);
-
-          $data['hall_item']['hall_item_id']=WorkerItem::parenttitle($worker_item['pid'])['id'];
+      if(isset($array['hall_id'])){
+          $data['hall_item']['hall_item_id']=$array['hall_id'];
           $data['hall_item']['hall_craft_id']=$array['hall_craft_id'];
           $data['hall_item']['hall_area']=$array['hall_area'];
       }
         //厨房
-      if(isset($array['kitchen_area'])){
-          $kitchen_item=(new Query())
-              ->from('worker_craft')
-              ->where(['id'=>$array['kitchen_craft_id']])
-              ->select('*')
-              ->one();
-
-          $worker_item=self::getpidbyitem($kitchen_item['item_id']);
-          $data['kitchen_item']['kitchen_item_id']=WorkerItem::parenttitle($worker_item['pid'])['id'];
+      if(isset($array['kitchen_id'])){
+          $data['kitchen_item']['kitchen_item_id']=$array['kitchen_id'];
           $data['kitchen_item']['kitchen_craft_id']=$array['kitchen_craft_id'];
           $data['kitchen_item']['kitchen_area']=$array['kitchen_area'];
+
       }
         //卫生间
-        if(isset($array['toilet_area'])){
-            $toilet_item=(new Query())
-                ->from('worker_craft')
-                ->where(['id'=>$array['toilet_craft_id']])
-                ->select('item_id')
-                ->one();
-            $worker_item=self::getpidbyitem($toilet_item['item_id']);
-
-            $data['toilet_item']['toilet_item_id']=WorkerItem::parenttitle($worker_item['pid'])['id'];
-
+        if(isset($array['toilet_id'])){
+            $data['toilet_item']['toilet_item_id']=$array['toilet_id'];
             $data['toilet_item']['toilet_craft_id']=$array['toilet_craft_id'];
             $data['toilet_item']['toilet_area']=$array['kitchen_area'];
+
         }
         //阳台
-        if(isset($array[' ']['balcony_area'])){
-            $balcony_item=(new Query())
-                ->from('worker_craft')
-                ->where(['id'=>$array['balcony_craft_id']])
-                ->select('item_id')
-                ->one();
-            $worker_item=self::getpidbyitem($balcony_item['item_id']);
-            $data['balcony_item']['balcony_item_id']=WorkerItem::parenttitle($worker_item['pid'])['id'];
+        if(isset($array['balcony_id'])){
+            $data['balcony_item']['balcony_item_id']=$array['balcony_id'];
             $data['balcony_item']['balcony_craft_id']=$array['balcony_craft_id'];
             $data['balcony_item']['balcony_area']=$array['balcony_area'];
         }
         //补烂
-        if(isset($array['fill_area'])){
-            $data['fill_item']['fill_item_id']=WorkerItem::parenttitle($worker_item['pid'])['id'];
-            $data['fill_item']['fill_craft_id']=0;
+        if(isset($array['fill_id'])){
+            $data['fill_item']['fill_item_id']=$array['fill_id'];
+            $data['fill_item']['fill_craft_id']=self::STATUSTNULL;
             $data['fill_item']['fill_area']=$array['fill_area'];
         }
         //包管
-        if(isset($array['guarantee'])){
-            $data['guarantee_item']['guarantee']=self::STATUS[$array['guarantee']];
+        if(isset($array['guarantee_id'])){
+            $data['guarantee_item']['guarantee_item_id']=$array['guarantee_id'];
+            $data['guarantee_item']['guarantee']=$array['guarantee'];
         }
-        if(isset($array['chip'])){
-            $data['chip_item']['chip']=self::STATUS[$array['chip']];
+        if(isset($array['chip_id'])){
+            $data['chip_item_id']=$array['chip_id'];
+            $data['chip']=$array['chip'];
         }
 
         $data['need_time']=$need_time;
@@ -147,11 +128,12 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         if(isset($array['remark'])){
             $data['remark']=$array['remark'];
         }
-
+        $data['images']=$images;
       if(isset($array['start_time']) && isset($array['end_time'])){
           $data['start_time']=strtotime($array['start_time']);
           $data['end_time']=strtotime($array['end_time']);
       }
+
         return $data;
     }
     /**
@@ -199,7 +181,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
 //
 //
 //            }
-//            if(preg_match('/[_]+[area]/',$key,$m)){
+//            if(preg_match('/(area)/',$key,$m)){
 //                $data['area']= $infos[$key].self::UNITS[3];
 //            }
 //

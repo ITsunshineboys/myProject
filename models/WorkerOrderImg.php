@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "worker_order_img".
  *
  * @property integer $id
- * @property integer $worker_order_no
+ * @property integer $worker_order_id
  * @property string $order_img_name
  * @property string $order_img
  */
@@ -30,8 +30,7 @@ class WorkerOrderImg extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_order_no'], 'integer'],
-            [['order_img_name'], 'string', 'max' => 50],
+            [['worker_order_id'], 'integer'],
             [['order_img'], 'string', 'max' => 255],
         ];
     }
@@ -43,8 +42,7 @@ class WorkerOrderImg extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'worker_order_no' => '工单号',
-            'order_img_name' => '工单图片名称',
+            'worker_order_id' => '工单号',
             'order_img' => '工单图片地址',
         ];
     }

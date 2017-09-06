@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 
+use app\models\UploadForm;
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderImg;
@@ -13,6 +14,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Request;
+use yii\web\UploadedFile;
 
 class FindworkerController extends Controller{
 
@@ -115,7 +117,7 @@ class FindworkerController extends Controller{
          }
 
     /**
-     *get carft by home info
+     *根据厅室获取工艺信息
      *@return string
      */
     public function actionGetcarftinfo()
@@ -136,7 +138,26 @@ class FindworkerController extends Controller{
         ]);
 
     }
-
+    /**
+     * 获取当前选择工艺的价格
+     * @return string
+     */
+    public function actionGetCraftprice(){
+        $code=1000;
+        $craft_id=trim(\Yii::$app->request->get('craft_id',''),'');
+        if (!$craft_id) {
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data = WorkerOrderItem::craftprice($craft_id);
+        return json_encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
 
     /**
      *get chlid item
@@ -175,7 +196,7 @@ class FindworkerController extends Controller{
     }
         $code = 1000;
         $array = \Yii::$app->request->post();
-
+        $images=\Yii::$app->request->post('images',[]);
         if (!$array || !$array['start_time']) {
             return json_encode([
                 'code' => $code,
@@ -196,7 +217,7 @@ class FindworkerController extends Controller{
                 $need_time=ceil($sum/12+1);
             }
         }
-        $data= WorkerOrderItem::addMudorderitem($array,$need_time);//房屋信息
+        $data= WorkerOrderItem::addMudorderitem($array,$need_time,$images);//房屋信息
 
 
         \Yii::$app->cache->set('homeinfos',$data);
@@ -220,7 +241,6 @@ class FindworkerController extends Controller{
             'msg' =>\ Yii::$app->params['errorCodes'][$code]
         ]);
     }
-        $code=1000;
         $request=new Request();
         $con_people=trim($request->post('con_people',''),'');
         $con_tel=trim($request->post('con_tel',''),'');
@@ -280,16 +300,23 @@ class FindworkerController extends Controller{
      */
     public function actionAddHomeimages()
     {
-        $code = 1000;
-        $images = \Yii::$app->request->post('images', []);
-        if(!WorkerOrderImg::validateImages($images) || ! \Yii::$app->params['uploadPublic']['maxSize'] || !\Yii::$app->params['uploadPublic']['extensions'] ){
+
+        $files=FileService::uploadMore();
+            if (is_numeric($files)){
+                $code=$files;
                 return json_encode([
-                    'code'=>$code,
-                    'msg'=>\Yii::$app->params['errorCodes'][$code]
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
-        }
+            }else{
+                return json_encode([
+                    'code' => 200,
+                    'msg' => 'ok',
+                    'data'=>$files
+                ]);
+            }
+
 
     }
-
 
 }
