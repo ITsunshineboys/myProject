@@ -814,11 +814,22 @@ class User extends ActiveRecord implements IdentityInterface
         $data['mobile'] = 0;
         $data['mobile'] = $users['mobile'];
         $data['type'] = 'resetPayPassword';
-        $res = new SmValidationService($data);
-        if ($res) {
-            $code = 200;
+        try {
+             new SmValidationService($data);
+         } catch (\InvalidArgumentException $e) {
+            $code = 1000;
             return $code;
+        } catch (ServerErrorHttpException $e) {
+            $code = 500;
+            return $code;
+        } catch (\Exception $e) {
+            $code = 1020;
+            if ($code == $e->getCode()) {
+                return $code;
+            }
         }
+         $code=200;
+         return $code;
     }
 
     /**
