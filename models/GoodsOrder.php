@@ -1560,7 +1560,7 @@ class GoodsOrder extends ActiveRecord
                 return $code;
             }
             $supplier->balance=$supplier->balance-$order_goodslist->freight-$order_goodslist->supplier_price*$order_goodslist->goods_number;
-            $supplier->availableamount=$supplier->balance-$order_goodslist->freight-$order_goodslist->supplier_price*$order_goodslist->goods_number;
+            $supplier->availableamount=$supplier->availableamount-$order_goodslist->freight-$order_goodslist->supplier_price*$order_goodslist->goods_number;
             $res2=$supplier->save(false);
             if (!$res2){
                 $code=500;

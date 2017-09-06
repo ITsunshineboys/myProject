@@ -1881,4 +1881,62 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * @return array|string
+     */
+    public  function   actionUserAfterSaleDetail(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+        if(!$order_no || !$sku){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $OrderAfterSale=OrderAfterSale::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
+        if (!$OrderAfterSale){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        switch ($OrderAfterSale->supplier_handle){
+            case 0:
+                $data=OrderAfterSale::findUnhandleAfterSale($OrderAfterSale);
+                break;
+            case 1:
+                $data=OrderAfterSale::findHandleAfterSaleAgree($OrderAfterSale);
+                break;
+            case 2:
+                $data=OrderAfterSale::findHandleAfterSaleDisagree($OrderAfterSale);
+                break;
+        }
+        if (is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+
 }
