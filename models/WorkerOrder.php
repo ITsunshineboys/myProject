@@ -6,6 +6,7 @@ use app\controllers\WorkerController;
 use app\services\ModelService;
 use Yii;
 use yii\data\Pagination;
+use yii\db\Query;
 
 /**
  * This is the model class for table "worker_order".
@@ -136,6 +137,41 @@ class WorkerOrder extends \yii\db\ActiveRecord
     }
 
     /**
+     * 订单详情除了工人信息
+     *
+     * @param $order_id
+     * @return array|int
+     */
+    private static function getOrderDetail($order_id)
+    {
+        $order = self::find()->where(['id' => $order_id])->one();
+        if ($order == null) {
+            return 1000;
+        }
+
+        $worker_type_id = $order->worker_type_id;
+
+        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
+        $worker_items = [];
+        foreach ($worker_type_items as $worker_type_item) {
+            $worker_item_id = $worker_type_item->worker_item_id;
+            $worker_item = WorkerItem::find()
+                ->where(['id' => $worker_item_id])
+                ->select(['id', 'title'])
+                ->asArray()->one();
+//            var_dump($worker_item);
+            $worker_items[] = $worker_item;
+        }
+
+        $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
+        $order->start_time && $order->start_time = date('Y-m-d H:i', $order->start_time);
+        $order->end_time && $order->end_time = date('Y-m-d H:i', $order->end_time);
+        $order->amount && $order->amount = sprintf('%.2f', (float)$order->amount / 100);
+        $order->front_money && $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
+
+        return [$order, $worker_items];
+    }
+    /**
      * 用户工程订单列表
      * @param $uid
      * @param $status
@@ -178,40 +214,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     public static function getUserWorkerOrderDetail($order_id)
     {
-        $order = self::find()->where(['id' => $order_id])->one();
-        if ($order == null) {
-            return 1000;
-        }
 
-        $worker_type_id = $order->worker_type_id;
-
-        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
-        $worker_items = [];
-        foreach ($worker_type_items as $worker_type_item) {
-            $worker_item_id = $worker_type_item->worker_item_id;
-            $worker_item = WorkerItem::find()
-                ->where(['id' => $worker_item_id])
-                ->select(['id', 'title'])
-                ->asArray()->one();
-//            var_dump($worker_item);
-            $worker_items[] = $worker_item;
-        }
-
-        $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
-        $order->start_time && $order->start_time = date('Y-m-d H:i', $order->start_time);
-        $order->end_time && $order->end_time = date('Y-m-d H:i', $order->end_time);
-        $order->amount && $order->amount = sprintf('%.2f', (float)$order->amount / 100);
-        $order->front_money && $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
-
+        list($order, $worker_items) = self::getOrderDetail($order_id);
         //TODO 查出工人的labor_cost_id(等级，省，市)，(成交数量，风格)待定， 调整历史单独分出来(对应订单)
         //TODO 如果状态是0  查出取消时间和取消原因   worker_order 表需要加上cancel_time 和 cancel_reason字段
-
         $worker = [];
         //只要有工人id,便显示工人信息
         if ($order->worker_id) {
             $worker = Worker::find()
                 ->where(['id' => $order->worker_id])
-                ->select(['id', 'nickname', 'work_year', 'comprehensive_score', 'icon'])
+                ->select(['id', 'nickname', 'work_year', 'comprehensive_score', 'icon', 'province_code', 'city_code', 'level'])
                 ->one();
         }
 
