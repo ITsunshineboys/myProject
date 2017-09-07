@@ -3,12 +3,11 @@
 namespace app\controllers;
 
 use app\models\Worker;
-use app\models\WorkerItem;
+use app\models\WorkerCraft;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
-use yii\db\Transaction;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -312,14 +311,18 @@ class WorkerController extends Controller
                 return $user;
             }
             $request = \Yii::$app->request;
-            $post = \Yii::$app->request->post();
-            $order_no = (int)$request->get('order_no', 0);
-            $order_id = (int)$request->get('order_id', 0);
+//            $post = \Yii::$app->request->post();
 
-            if (!$order_no
-                || !$order_id
-                || !isset($post['homeinfos'])
-            ) {
+            //TODO 传值的格式暂定 $post[order_id, items, new_amount, reason, work_days]
+            //TODO 其中 items[[$id, worker_craft_id, area], [$id, worker_craft_id, area] ...]   work_days[day1, day2, day3, day...]
+
+            $order_id = (int)$request->post('order_id', 0);
+            $items = trim($request->post('items', ''));
+            $new_amount = trim($request->post('new_amount', 0));
+            $reason = trim($request->post('reason', ''));
+            $work_days = trim($request->post('work_days', ''));
+
+            if (!$order_id) {
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
@@ -329,7 +332,7 @@ class WorkerController extends Controller
 
 
             $order_old = WorkerOrder::find()
-                ->where(['order_no' => $order_no, 'id' => $order_id])
+                ->where(['id' => $order_id])
                 ->asArray()
                 ->one();
 
@@ -350,11 +353,61 @@ class WorkerController extends Controller
             unset($data['id']);
 
             //改变数据
+            if ($items) {
+                //alter item data
+                if (!is_array($items)) {
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
 
-            $home_info = $post['homeinfos'];
+                foreach ($items as $item) {
+                    $craft_id = $item['worker_craft_id'];
+                    $item_id = $item['id'];
+                    $items_old = WorkerOrder::getOrderItemDetail($order_id, $item_id);
 
-            $need_time = FindworkerController::getOrderNeedTime($home_info);
-            $home_info = WorkerOrderItem::addMudorderitem($home_info, $need_time);
+                    foreach ($items_old as $item_old) {
+
+                    }
+//                    $worker_item_id = WorkerCraft::find()
+//                        ->where(['id' => $craft_id])
+//                        ->asArray()
+//                        ->one()['item_id'];
+//
+//                    $worker_order_item = WorkerOrderItem::find()->where([''])
+//                    $area = $item['area'];
+                }
+
+
+
+//                $worker_order_img=new WorkerOrderImg();
+//                foreach($images as $attributes)
+//                {
+//                    $_model = clone $worker_order_img;
+//                    $_model->order_img=$attributes;
+//                    $_model->worker_order_id=$order_id;
+//                    $res= $_model->save();
+//                }
+            }
+
+            if ($new_amount) {
+                if (!$reason) {
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                //alter amount data
+            }
+
+            if ($work_days) {
+
+                //alter work_days data
+            }
+
 
             $order_old['is_old'] = 1;
             $data['is_old'] = 0;

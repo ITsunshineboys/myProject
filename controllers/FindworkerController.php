@@ -195,7 +195,7 @@ class FindworkerController extends Controller{
          $front_money=trim(\Yii::$app->request->post('front_money',''),'');
          $amount=trim(\Yii::$app->request->post('amount',''),'');
          $need_time = self::getOrderNeedTime($post['homeinfos']);
-         $homeinfos=WorkerOrderItem::addMudorderitem($post['homeinfos'],$need_time);
+         $homeinfos=WorkerOrderItem::addMudorderitem($post['homeinfos']);
          if($homeinfos!=1000){
             if(is_numeric($homeinfos)){
                 $code=$homeinfos;
@@ -215,6 +215,7 @@ class FindworkerController extends Controller{
                     ]);
                 }
             }
+         $homeinfos['need_time'] = $need_time;
          $code=WorkerOrder::addorderinfo($user_id,$homeinfos,$ownerinfos,$front_money,$amount);
          return json_encode([
              'code' => $code,
