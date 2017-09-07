@@ -354,8 +354,7 @@ class GoodsAttr extends ActiveRecord
     {
         if (is_array($goods_id)) {
             $str_id = implode(',',$goods_id);
-        }else
-        {
+        } else {
             $str_id = $goods_id;
         }
 
