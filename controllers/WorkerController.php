@@ -7,6 +7,7 @@ use app\models\WorkerItem;
 use app\models\WorkerOrder;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
+use yii\db\Transaction;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -295,6 +296,65 @@ class WorkerController extends Controller
             'code' => 200,
             'msg' => 'ok',
             'data' => $data
+        ]);
+    }
+
+    /**
+     * 工人修改订单
+     * @return int|string
+     */
+    public function actionChangeWorkerOrder()
+    {
+        if (\Yii::$app->request->isPost) {
+            $user = self::userIdentity();
+            if (!is_int($user)) {
+                return $user;
+            }
+            $request = \Yii::$app->request;
+            $order_no = (int)$request->get('order_no', 0);
+            $order_id = (int)$request->get('order_id', 0);
+
+            if (!$order_no || !$order_id) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            $order_old = WorkerOrder::find()
+                ->where(['order_no' => $order_no, 'id' => $order_id])
+                ->asArray()
+                ->one();
+
+            if ($order_old == null) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            $order_new = new WorkerOrder();
+
+            //得到之前的数据
+            $data = $order_old;
+
+            unset($data['id']);
+
+            //改变数据
+
+            $data['is_old'] = 1;
+            $trans = new Transaction();
+
+
+
+
+        }
+        $code = 1050;
+        return Json::encode([
+            'code' => $code,
+            'msg' => \Yii::$app->params['errorCodes'][$code]
         ]);
     }
 }
