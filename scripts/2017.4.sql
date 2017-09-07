@@ -1385,7 +1385,6 @@ CREATE TABLE `order_after_sale` (
   `create_time` int(11) NOT NULL,
   `supplier_handle` tinyint(1) NOT NULL,
   `supplier_handle_reason` varchar(50) NOT NULL,
-  `create_time` int(11) NOT NULL,
   `supplier_handle_time` int(11) NOT NULL,
   `complete_time` int(11) NOT NULL,
   `buyer_express_id` int(11) NOT NULL,
