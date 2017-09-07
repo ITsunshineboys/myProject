@@ -236,7 +236,7 @@ class ModelService
     {
         $total_page = ceil($count / $page_size);
         $page = $page < 1 ? 1 : $page;
-        $arr = $page > $total_page ? '' : $arr;
+        $arr = $page > $total_page ? [] : $arr;
         $return = [
             'list' => $arr,
             'total_page' => $total_page,

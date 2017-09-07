@@ -271,7 +271,8 @@ class FindworkerController extends Controller{
         $code = 1000;
         $keys = array_keys($home_info);
         foreach ($keys as $k => &$key) {
-            if (preg_match('/(area)/',$key,$m)) {
+
+            if (preg_match('/(area)/', $key, $m)) {
                 if ($home_info[$key] > 200) {
                     return json_encode([
                         'code' => $code,
