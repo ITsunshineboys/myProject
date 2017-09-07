@@ -691,7 +691,7 @@ class Supplier extends ActiveRecord
         }
 
         if (isset($data['status'])) {
-            $data['status_desc'] = self::STATUSES[$data['status']];
+            $data['status_desc'] = Yii::$app->params['reviewStatuses'][$data['status']];
         }
 
         if (isset($data['quality_guarantee_deposit'])) {
