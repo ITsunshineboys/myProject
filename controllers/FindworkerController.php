@@ -192,24 +192,8 @@ class FindworkerController extends Controller{
              ]);
          }
          $post=\Yii::$app->request->post();
-
-         $code=1000;
          $front_money=trim(\Yii::$app->request->post('front_money',''),'');
          $amount=trim(\Yii::$app->request->post('amount',''),'');
-//         $sum=0;
-//         $keys=array_keys($post['homeinfos']);
-//         foreach ($keys as $k=>&$key){
-//             if(preg_match('/(area)/',$key,$m)){
-//                 if($post['homeinfos'][$key]>200){
-//                     return json_encode([
-//                         'code' => $code,
-//                         'msg' => \Yii::$app->params['errorCodes'][$code]
-//                     ]);
-//                 }
-//                 $sum+=$post['homeinfos'][$key];
-//                 $need_time=ceil($sum/12+1);
-//             }
-//         }
          $need_time = self::getOrderNeedTime($post['homeinfos']);
          $homeinfos=WorkerOrderItem::addMudorderitem($post['homeinfos'],$need_time);
          if($homeinfos!=1000){
