@@ -349,7 +349,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 }
             }
         }
-
         $connection = \Yii::$app->db;
         $connection
             ->createCommand()

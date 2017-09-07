@@ -75,41 +75,68 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
      * @param $array
      * @return array
      */
-    public static function addMudorderitem(array $array,$need_time,array $images){
+    public static function addMudorderitem(array $array,$need_time){
 
         $data=[];
         $data['worker_type_id']=$array['worker_type_id'];
         //客厅
       if(isset($array['hall_id'])){
-          $data['hall_item']['hall_item_id']=$array['hall_id'];
-          $data['hall_item']['hall_craft_id']=$array['hall_craft_id'];
-          $data['hall_item']['hall_area']=$array['hall_area'];
+          if(!isset($array['hall_area']) ||!isset($array['hall_craft_id']) ){
+              $code=1000;
+              return $code;
+          }else{
+              $data['hall_item']['hall_item_id']=$array['hall_id'];
+              $data['hall_item']['hall_craft_id']=$array['hall_craft_id'];
+              $data['hall_item']['hall_area']=$array['hall_area'];
+          }
+
+
       }
         //厨房
       if(isset($array['kitchen_id'])){
-          $data['kitchen_item']['kitchen_item_id']=$array['kitchen_id'];
-          $data['kitchen_item']['kitchen_craft_id']=$array['kitchen_craft_id'];
-          $data['kitchen_item']['kitchen_area']=$array['kitchen_area'];
+          if(!isset($array['kitchen_area']) ||!isset($array['kitchen_craft_id']) ){
+              $code=1000;
+              return $code;
+          }else{
+              $data['kitchen_item']['kitchen_item_id']=$array['kitchen_id'];
+              $data['kitchen_item']['kitchen_craft_id']=$array['kitchen_craft_id'];
+              $data['kitchen_item']['kitchen_area']=$array['kitchen_area'];
+          }
+
 
       }
         //卫生间
         if(isset($array['toilet_id'])){
-            $data['toilet_item']['toilet_item_id']=$array['toilet_id'];
-            $data['toilet_item']['toilet_craft_id']=$array['toilet_craft_id'];
-            $data['toilet_item']['toilet_area']=$array['kitchen_area'];
-
+            if(!isset($array['toilet_area']) ||!isset($array['toilet_craft_id']) ){
+                $code=1000;
+                return $code;
+            }else {
+                $data['toilet_item']['toilet_item_id'] = $array['toilet_id'];
+                $data['toilet_item']['toilet_craft_id'] = $array['toilet_craft_id'];
+                $data['toilet_item']['toilet_area'] = $array['kitchen_area'];
+            }
         }
         //阳台
-        if(isset($array['balcony_id'])){
-            $data['balcony_item']['balcony_item_id']=$array['balcony_id'];
-            $data['balcony_item']['balcony_craft_id']=$array['balcony_craft_id'];
-            $data['balcony_item']['balcony_area']=$array['balcony_area'];
-        }
-        //补烂
+        if(isset($array['balcony_id'])) {
+            if (!isset($array['balcony_area']) || !isset($array['balcony_craft_id'])) {
+                $code = 1000;
+                return $code;
+            } else {
+                $data['balcony_item']['balcony_item_id'] = $array['balcony_id'];
+                $data['balcony_item']['balcony_craft_id'] = $array['balcony_craft_id'];
+                $data['balcony_item']['balcony_area'] = $array['balcony_area'];
+            }
+        }  //补烂
         if(isset($array['fill_id'])){
-            $data['fill_item']['fill_item_id']=$array['fill_id'];
-            $data['fill_item']['fill_craft_id']=self::STATUSTNULL;
-            $data['fill_item']['fill_area']=$array['fill_area'];
+            if (!isset($array['fill_area'])) {
+                $code = 1000;
+                return $code;
+            }else{
+                $data['fill_item']['fill_item_id']=$array['fill_id'];
+                $data['fill_item']['fill_craft_id']=self::STATUSTNULL;
+                $data['fill_item']['fill_area']=$array['fill_area'];
+            }
+
         }
         //包管
         if(isset($array['guarantee_id'])){
@@ -128,7 +155,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         if(isset($array['remark'])){
             $data['remark']=$array['remark'];
         }
-        $data['images']=$images;
+        $data['images']=$array['images'];
       if(isset($array['start_time']) && isset($array['end_time'])){
           $data['start_time']=strtotime($array['start_time']);
           $data['end_time']=strtotime($array['end_time']);
@@ -137,59 +164,28 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         return $data;
     }
     /**
-     * @param $con_people
-     * @param $con_tel
-     * @param $address
-     * @param $map_location
+     * @param array $ownerinfos
      * @return int
      */
-    public static function addownerinfo($con_people,$con_tel,$address,$map_location){
+    public static function addownerinfo(array $ownerinfos){
+
       $code=1000;
-      if(!$con_people || mb_strlen($con_people)>self::PEOPL_LEN){
+      if(!$ownerinfos['con_people'] || mb_strlen($ownerinfos['con_people'])>self::PEOPL_LEN){
           return $code;
       }
-        if(!$con_tel || !StringService::isMobile($con_tel)){
+        if(!$ownerinfos['con_tel'] || !StringService::isMobile($ownerinfos['con_tel'])){
         return $code;
        }
-       if(mb_strlen($map_location)>self::ADDRESS_LEN){
+       if(mb_strlen($ownerinfos['map_location'])>self::ADDRESS_LEN){
            return $code;
        }
 
-        if(!$address){
+        if(!$ownerinfos['address']){
            return $code;
         }
 
-        return 200;
+        return $ownerinfos;
     }
 
-//    public static function indexinfos(array $infos){
-//        $data=[];
-//
-//        $data['worker_type']=WorkerType::find()
-//            ->select('worker_type')
-//            ->where(['id'=>$infos['worker_type_id']])
-//            ->one()['worker_type'];
-//
-//        $keys=array_keys($infos);
-//
-//        foreach ($keys as $k=>&$key){
-//            if(preg_match('/[_]+[craft]+[_]+[id]/',$key,$m)){
-//                $data['craft']=WorkerCraft::find()
-//                    ->where(['id'=>$infos[$key]])
-//                    ->select('craft')
-//                    ->one()['craft'];
-//
-//
-//            }
-//            if(preg_match('/(area)/',$key,$m)){
-//                $data['area']= $infos[$key].self::UNITS[3];
-//            }
-//
-//         }
-//         $data['start_time']=date('Y-m-d',$infos['start_time']);
-//         $data['end_time']=date('Y-m-d',$infos['end_time']);
-//
-//        var_dump($data);
-//    }
 
 }
