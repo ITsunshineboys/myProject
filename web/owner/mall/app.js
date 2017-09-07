@@ -28,6 +28,31 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate",'a
                 templateUrl:'all_basics.html',
                 css:['css/basics.css','zui-1.7.0-dist/dist/css/zui.min.css'],
             })
+            .state('nodata.main_material',{
+                url:'/main_material',
+                templateUrl:'main_goods.html',
+                css:['css/main.css','zui-1.7.0-dist/dist/css/zui.min.css']
+            })
+            .state('nodata.other_material',{
+                url:'/other_material',
+                templateUrl:'other_goods.html',
+                css:'css/other.css'
+            })
+            .state('nodata.product_detail',{
+                url:'/product_detail',
+                templateUrl:'cur_product_detail.html',
+                css:'css/product_details.css'
+            })
+            .state('nodata.all_goods',{
+                url:'/all_goods',
+                templateUrl:'get_all_goods.html',
+                css:'css/commodify.css'
+            })
+            .state('nodata.second_level',{
+                url:'/second_level',
+                templateUrl:'second_level.html',
+                css:'css/movefurniture.css'
+            })
             // .state("have_data",{   //有资料
             //     url:"/have_data",
             //     views:{

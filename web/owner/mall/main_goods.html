@@ -1,0 +1,55 @@
+<div class="main_body">
+    <div class="fill"></div>
+    <section>
+        <!--地面材料-->
+        <div ng-repeat="item in cur_item.second_level" class="detail_block">
+            <span class="second_title">{{item.title}}</span>
+            <div ng-repeat="item1 in item.three_level">
+                <ul>
+                    <li data-toggle="modal" data-target="#myModal" ng-click="get_details(item2,item1.title,item1.id)"
+                        ng-repeat="item2 in item1.goods_detail" class="main_details">
+                        <span class="wall_span">{{item1.title}}&times;{{item2.quantity}}</span><br/>
+                        <span class="wall_brand">{{item2.name}}</span>
+                        <span class="wall_money">{{item2.cost | currency:'￥'}}
+                    <img src="images/left_more.png" alt=""></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+
+        <!--按钮、-->
+        <div class="preservation">
+            <span>合计：</span>
+            <span class="money_col">{{cur_item.cost | currency:'￥'}}</span>
+            <button ng-click="save()">保存</button>
+        </div>
+        <div class="footer_fill"></div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="whit" >
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="comment_img">
+                        <img ng-src="http://test.cdlhzz.cn:888/{{cur_goods_detail.image}}" alt=""/>
+                    </div>
+                    <div class="comment">
+                        <p class="good_title">
+                            <span class="comment_span">{{cur_goods_detail.name}}</span>
+                            <span class="comment_se">{{cur_goods_detail.cost | currency:'￥'}}</span>
+                        </p>
+                        <p class="comment_square">产品类别：{{cur_three_level}}</p>
+
+
+                        <p class="comment_p">{{cur_goods_detail.shop_name}}</p>
+                    </div>
+                    <button type="button" class="go_detail" ng-click="go_details()">查看详情</button>
+                    <button type="button" class="go_replace" ng-click="replace_material()">更换</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

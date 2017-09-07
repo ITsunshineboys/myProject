@@ -864,15 +864,16 @@ button[disabled]{
     border-bottom: none;
 }
 .basis_decoration{
-    column-count: 2;
-    column-gap: 0;
-    background-color: white;
-    overflow: hidden;
-    margin-top: 1rem;
+    /*column-count: 2;*/
+    /*column-gap: 0;*/
+    /*background-color: white;*/
+    /*overflow: hidden;*/
+    /*margin-top: 1rem;*/
+    position: relative;
 }
-.pic {
-    margin-bottom:1rem;
-    padding:0!important;
+.basis_decoration > div{
+    position: absolute;
+    width:47%;
 }
 .basis_decoration ul{
     padding:0;

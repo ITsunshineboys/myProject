@@ -76,7 +76,7 @@
     <!--按钮、-->
     <div class="preservation">
         <span>合计：</span>
-        <span class="money_col">{{cur | currency:'￥'}}</span>
+        <span class="money_col">{{cur_item.cost | currency:'￥'}}</span>
         <button ng-click="go_handyman_options()">保存</button>
     </div>
     </form>
@@ -86,7 +86,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
                 <div class="comment_img">
-                    <img src="images/all.png" alt=""/>
+                    <img ng-src="http://test.cdlhzz.cn:888/{{cur_goods_detail.image}}" alt=""/>
                 </div>
                 <div class="comment">
                     <p class="good_title">
@@ -94,10 +94,9 @@
                         <span class="comment_se">{{cur_goods_detail.cost | currency:'￥'}}</span>
                     </p>
                     <p class="comment_square">产品类别：{{cur_three_level}}</p>
-
-
                     <p class="comment_p">{{cur_goods_detail.shop_name}}</p>
                 </div>
+                <button type="button" class="go_detail" ng-click="go_details()">查看详情</button>
             </div>
         </div>
     </div>

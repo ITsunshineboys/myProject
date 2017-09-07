@@ -1,31 +1,72 @@
+/*头部开始*/
 header{
     width: 32rem;
-    height:4rem;
-    border-bottom: 1px solid #C2C2C2;
+    height: 4rem;
     background-color: white;
     position: fixed;
     top: 0;
     z-index: 100;
     box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
-.back{
-    background-color: #f4f4f4;
+header > div{
+    position: relative;
 }
-header div{
+.return_btn{
+    /*display: inline-block;*/
+    position: absolute;
+    left: 0;
+    /*top:1rem;*/
+    width:3rem;
+    height: 4rem;
+    line-height: 4rem;
+    /*border:2px solid red;*/
+}
+section{
+    margin-top: 1rem;
+}
+header div {
     line-height: 4rem;
 }
-header div span{
-    font-size: 1.2rem;
+
+header div span {
+    font-size: 1.4rem;
 }
-.in_span{
-    margin-left: 1.2rem;
+.postion_span{
+    color: #53A8F4;
+    font-size: 1.2rem;
+    margin-left: .2rem;
+}
+.cur_location{
+    position: absolute;
+    top: 0;
+    right:1.4rem;
+    height: 4rem;
+    /*lh4rem*/
+}
+.in_span {
+    margin-left: 1rem;
+    color: #53A8F4 ;
+}
+
+.pic_span {
+    margin-left: 12.8rem;
+    font-size: 1.5rem;
+}
+.pos_span{
+    color:#53A8F4;
+    margin-left: .3rem;
+    font-size: 1.1rem;
+}
+.map {
+    margin-left: 8rem;
+    /*width: 1rem;*/
     color: #53A8F4;
 }
-.pic_span{
-    margin-left: 11rem;
-    font-size: 1.5rem;
-    color: #4A4A4A;
+header div i{
+    margin-left: 7.8rem;
+    color: #53A8F4;
 }
+/*头部结束*/
 .wall_material h1 {
     padding-bottom: 1rem;
     padding-left: 1rem;

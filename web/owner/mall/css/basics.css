@@ -121,10 +121,10 @@ header div i{
     margin-left: 1.3rem;
     color:#53A8F4;
 }
-.pic_span{
-    margin-left: 11rem;
-    font-size: 1.5rem;
-}
+/*.pic_span{*/
+    /*margin-left: 11rem;*/
+    /*font-size: 1.5rem;*/
+/*}*/
 .wall_material h1 {
     padding-bottom: 1rem;
     padding-left: 2rem;
@@ -493,4 +493,11 @@ input[type='checkbox']{
     background-color: #53A8F4;
     color: #fff;
     font-size:1.19rem!important;
+}
+.go_detail{
+    width:100%;
+    height: 3rem;
+    font-size:1.2rem;
+    color: #fff;
+    background-color: #53A8F4;
 }

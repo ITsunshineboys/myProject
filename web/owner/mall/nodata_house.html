@@ -209,7 +209,7 @@
                     <h1>风格选择</h1>
                     <ul>
                         <li ng-repeat="item in style">
-                            <button ng-cloak ng-class="{'btn_checked':(item.id==cur_style.id)}"
+                            <button type="button" ng-cloak ng-class="{'btn_checked':(item.id==cur_style.id)}"
                                     ng-click="toggleStyle(item)">{{item.style}}
                             </button>
                         </li>
@@ -254,7 +254,7 @@
                         <!--<span  class="comment_span">点击以下版块查看详情和编辑</span>-->
 
                         <div class="basis_decoration">
-                            <div class="grid" ng-repeat="item in all_goods" ng-click="go_inner(item)">
+                            <div class="grid" water ng-repeat="item in ctrlScope.all_goods" ng-click="go_inner(item)">
                                 <!--<a ui-sref="basics_decoration({first_level:item,second_level:level})">-->
                                 <div class="basis_item" id="bottom{{item.id}}">
                                     <p ng-if="item.title == '辅材'" class="basis_title">基础装修 <span

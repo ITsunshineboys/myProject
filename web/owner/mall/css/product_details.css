@@ -164,7 +164,7 @@
    font-size: 1.3rem
 }
 .shop_header{
-    height: 15rem;
+    height: 12rem;
     width: auto;
     background-color: white;
     margin-bottom: 2rem;
@@ -173,12 +173,12 @@
     margin-top: 1rem;
 }
 .shop_header_child img{
-    padding-left: 1rem;
     margin-top: .8rem;
+    margin-left: 1rem;
 }
 .shop_header_child span{
     position: relative;
-    /*top:-2rem;*/
+    top:.8rem;
     font-size:1.2rem;
     margin-left: 1rem;
 }
@@ -186,12 +186,18 @@
     margin-top: .6rem;
 }
 .shop_number ul{
-    margin-left: .6rem;
+    margin-top: 2rem;
 }
 .shop_number ul li {
-    display: inline-block;
+    width:50%;
+    position: relative;
+    float: left;
     font-size: 1.2rem;
-    margin-left: 3rem;
+    text-align: center;
+    /*margin-left: 3rem;*/
+}
+.shop_number ul li:first-child{
+    border-right:.5px solid #CDD3D7;
 }
 .Stroll{
     margin-left:11rem;
@@ -213,7 +219,9 @@
 }
 .num_shop {
     color: #5677FC;
-    margin-left: 1.3rem;
+    position: absolute;
+    left: calc(50% - 1rem);
+    top: -.5rem;
 }
 .line{
     display: inline-block;
@@ -228,11 +236,6 @@
     font-size: 1.2rem;
     text-align: center;
 }
-.active{
-    /*background-color:#738FFE;*/
-    color: #53A8F4 ;
-
-}
 .tab_one img{
     width: 100%;
 }
@@ -243,9 +246,13 @@
 .shop_two ul li{
     font-size: 1.2rem;
     padding-left: 1.2rem;
+    position: relative;
+    color: #6C6C6C;
 }
 .comment_num {
-  margin-left: 18rem;
+    position: absolute;
+    right:1rem;
+    color: #959292;
 }
 .img_size_3{
     width:1.8rem!important;
@@ -384,6 +391,10 @@
     color: #999;
     margin-left: 1rem;
 }
+.service_item ul li:last-child{
+    float: right;
+    margin-right: 1rem;
+}
 .service_item ul li img {
     width: 2rem;
 }
@@ -451,4 +462,19 @@
 .btn_color{
     background-color: #53A8F4;
     height: 3.5rem;
+}
+.nav-tabs > li > a{
+    line-height:2rem;
+    border-bottom:none;
+    color:#B8B6B6;
+}
+.active > a{
+    color: #53A8F4!important;
+}
+.active hr{
+    width:3rem;
+    height:.1rem;
+    position: relative;
+    bottom:.5rem;
+    background-color: #53A8F4;
 }
