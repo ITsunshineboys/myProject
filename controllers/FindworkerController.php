@@ -87,6 +87,7 @@ class FindworkerController extends Controller{
     }
 
     /**
+     *
      *get home info by worker type
      *@return string
      */
@@ -115,8 +116,7 @@ class FindworkerController extends Controller{
          }
 
     /**
-     *
-     * get craft info by item_id
+     *根据厅室获取所有工艺
      *@return string
      */
     public function actionGetcraftinfo()

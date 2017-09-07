@@ -15,8 +15,8 @@ use yii\db\Query;
  * @property integer $worker_item_id
  * @property integer $worker_craft_id
  * @property string $area
- * @property string $guarantee
- * @property string $chip
+ * @property string $status
+ *
  */
 class WorkerOrderItem extends \yii\db\ActiveRecord
 {

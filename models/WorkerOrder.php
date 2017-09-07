@@ -299,14 +299,14 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $guarantee
      * @return bool
      */
-    public static function inserguarantee($id,$item_id,$guarantee){
+    public static function inserstatus($id,$item_id,$status){
         $connection = \Yii::$app->db;
         $res= $connection->createCommand()
             ->insert('worker_order_item',
                 [
                     'worker_order_id'=>$id,
                     'worker_item_id'=>$item_id,
-                    'guarantee'=>$guarantee
+                    'status'=>$status
                 ])
             ->execute();
         if($res){
@@ -315,29 +315,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return false;
         }
     }
-    /**
-     * add chip info into worker_order_item
-     * @param $id
-     * @param $item_id
-     * @param $chip
-     * @return bool
-     */
-    public static function inserchip($id,$item_id,$chip){
-        $connection = \Yii::$app->db;
-        $res= $connection->createCommand()
-            ->insert('worker_order_item',
-                [
-                    'worker_order_id'=>$id,
-                    'worker_item_id'=>$item_id,
-                    'chip'=>$chip
-                ])
-            ->execute();
-        if($res){
-            return true;
-        }else{
-            return false;
-        }
-    }
+
 
     /**
      * 生成订单
@@ -391,8 +369,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
             if(preg_match('/(item)/',$key,$m) ) {
                 if (preg_match('/(guarantee)/', $key, $m)) {
                     $item_id= $worker_order_item->worker_item_id = $homeinfos[$key]['guarantee_item_id'];
-                    $guarantee= $worker_order_item->guarantee = $homeinfos[$key]['guarantee'];
-                    $res=self::inserguarantee($id,$item_id,$guarantee);
+                    $status= $worker_order_item->status = $homeinfos[$key]['guarantee'];
+                    $res=self::inserstatus($id,$item_id,$status);
                     if ($res==false) {
                         $transaction->rollBack();
                         $code = 500;
@@ -401,8 +379,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 }
                 if (preg_match('/(chip)/', $key, $m)) {
                     $item_id= $worker_order_item->worker_item_id = $homeinfos[$key]['chip_item_id'];
-                    $chip= $worker_order_item->guarantee = $homeinfos[$key]['chip'];
-                    $res=self::inserchip($id,$item_id,$chip);
+                    $status= $worker_order_item->status = $homeinfos[$key]['chip'];
+                    $res=self::inserstatus($id,$item_id,$status);
                     if ($res==false) {
                         $transaction->rollBack();
                         $code = 500;
