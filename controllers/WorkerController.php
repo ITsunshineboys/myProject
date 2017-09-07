@@ -311,6 +311,7 @@ class WorkerController extends Controller
                 return $user;
             }
             $request = \Yii::$app->request;
+            $post = \Yii::$app->request->post();
             $order_no = (int)$request->get('order_no', 0);
             $order_id = (int)$request->get('order_id', 0);
 
@@ -326,6 +327,9 @@ class WorkerController extends Controller
                 ->where(['order_no' => $order_no, 'id' => $order_id])
                 ->asArray()
                 ->one();
+
+            $order_old['is_old'] = 1;
+            $order_old->update();
 
             if ($order_old == null) {
                 $code = 1000;
@@ -344,7 +348,7 @@ class WorkerController extends Controller
 
             //改变数据
 
-            $data['is_old'] = 1;
+            $data['is_old'] = 0;
             $trans = new Transaction();
 
 

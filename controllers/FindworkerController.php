@@ -196,20 +196,21 @@ class FindworkerController extends Controller{
          $code=1000;
          $front_money=trim(\Yii::$app->request->post('front_money',''),'');
          $amount=trim(\Yii::$app->request->post('amount',''),'');
-         $sum=0;
-         $keys=array_keys($post['homeinfos']);
-         foreach ($keys as $k=>&$key){
-             if(preg_match('/(area)/',$key,$m)){
-                 if($post['homeinfos'][$key]>200){
-                     return json_encode([
-                         'code' => $code,
-                         'msg' => \Yii::$app->params['errorCodes'][$code]
-                     ]);
-                 }
-                 $sum+=$post['homeinfos'][$key];
-                 $need_time=ceil($sum/12+1);
-             }
-         }
+//         $sum=0;
+//         $keys=array_keys($post['homeinfos']);
+//         foreach ($keys as $k=>&$key){
+//             if(preg_match('/(area)/',$key,$m)){
+//                 if($post['homeinfos'][$key]>200){
+//                     return json_encode([
+//                         'code' => $code,
+//                         'msg' => \Yii::$app->params['errorCodes'][$code]
+//                     ]);
+//                 }
+//                 $sum+=$post['homeinfos'][$key];
+//                 $need_time=ceil($sum/12+1);
+//             }
+//         }
+         $need_time = self::getOrderNeedTime($post['homeinfos']);
          $homeinfos=WorkerOrderItem::addMudorderitem($post['homeinfos'],$need_time);
          if($homeinfos!=1000){
             if(is_numeric($homeinfos)){
@@ -257,6 +258,30 @@ class FindworkerController extends Controller{
                     'data'=>$files
                 ]);
             }
+    }
+
+    /**
+     * 计算出需要的天数
+     * @param $home_info
+     * @return string
+     */
+    public static function getOrderNeedTime($home_info)
+    {
+        $sum = 0;
+        $code = 1000;
+        $keys = array_keys($home_info);
+        foreach ($keys as $k => &$key) {
+            if (preg_match('/(area)/',$key,$m)) {
+                if ($home_info[$key] > 200) {
+                    return json_encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $sum += $home_info[$key];
+            }
         }
+        return  ceil($sum / 12 + 1);
+    }
 
 }
