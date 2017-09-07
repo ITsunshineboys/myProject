@@ -1939,4 +1939,174 @@ class OrderController extends Controller
         ]);
     }
 
+    /**售后详情 -- 商家派出人员
+     * 上门服务
+     * @return string
+     */
+    public function actionAfterSaleSupplierSendMan()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+        if(!$order_no || !$sku){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $OrderAfterSale=OrderAfterSale::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
+        if (!$OrderAfterSale){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData['order_no']=$order_no;
+        $code=Supplier::CheckOrderJurisdiction($user,$postData);
+        if ($code !=200){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=OrderAfterSale::SupplierSendMan($OrderAfterSale);
+        if ($code==200){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+    /**售后详情 -- 商家确认
+     * 上门服务
+     * @return string
+     */
+    public function actionAfterSaleSupplierConfirm()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+        if(!$order_no || !$sku){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $OrderAfterSale=OrderAfterSale::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
+        if (!$OrderAfterSale){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData['order_no']=$order_no;
+        $code=Supplier::CheckOrderJurisdiction($user,$postData);
+        if ($code !=200){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=OrderAfterSale::SupplierConfirm($OrderAfterSale);
+        if ($code==200){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+
+    /**订单详情 -- 用户确认
+     * 上门服务
+     * @return string
+     */
+    public function actionAfterSaleUserConfirm()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+        if(!$order_no || !$sku){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $OrderAfterSale=OrderAfterSale::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
+        if (!$OrderAfterSale){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData['order_no']=$order_no;
+        $code=User::CheckOrderJurisdiction($user,$postData);
+        if ($code !=200){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $code=OrderAfterSale::userConfirm($OrderAfterSale);
+        if ($code==200){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
 }

@@ -1739,4 +1739,26 @@ class User extends ActiveRecord implements IdentityInterface
         $this->last_role_id_app = $roleId;
         return $this->save() ? 200 : 500;
     }
+
+    /**
+     * @param $user
+     * @param $postData
+     * @return int
+     */
+    public static function CheckOrderJurisdiction($user,$postData)
+    {
+        if(!array_key_exists('order_no', $postData)){
+            $code=1000;
+            return $code;
+        }
+        $GoodsOrder=GoodsOrder::find()
+            ->where(['order_no'=>$postData['order_no']])
+            ->one();
+        if ($user->id != $GoodsOrder->user_id){
+            $code=1034;
+            return $code;
+        }
+        $code=200;
+        return $code;
+    }
 }
