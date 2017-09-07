@@ -1364,7 +1364,7 @@ CREATE TABLE `worker_order_item` (
   `worker_item_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工人条目id',
   `worker_craft_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工艺id',
   `area` BIGINT(20) NOT NULL DEFAULT '0' COMMENT '面积,单位: dm^2',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0: 否，1：是',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: 否，1：是',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
