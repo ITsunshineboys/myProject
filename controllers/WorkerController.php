@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Worker;
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
+use app\models\WorkerOrderItem;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use yii\db\Transaction;
@@ -315,7 +316,10 @@ class WorkerController extends Controller
             $order_no = (int)$request->get('order_no', 0);
             $order_id = (int)$request->get('order_id', 0);
 
-            if (!$order_no || !$order_id) {
+            if (!$order_no
+                || !$order_id
+                || !isset($post['homeinfos'])
+            ) {
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
@@ -323,13 +327,12 @@ class WorkerController extends Controller
                 ]);
             }
 
+
             $order_old = WorkerOrder::find()
                 ->where(['order_no' => $order_no, 'id' => $order_id])
                 ->asArray()
                 ->one();
 
-            $order_old['is_old'] = 1;
-            $order_old->update();
 
             if ($order_old == null) {
                 $code = 1000;
@@ -348,13 +351,18 @@ class WorkerController extends Controller
 
             //改变数据
 
+            $home_info = $post['homeinfos'];
+
+            $need_time = FindworkerController::getOrderNeedTime($home_info);
+            $home_info = WorkerOrderItem::addMudorderitem($home_info, $need_time);
+
+            $order_old['is_old'] = 1;
             $data['is_old'] = 0;
-            $trans = new Transaction();
 
-
-
-
+            $trans = \Yii::$app->db->beginTransaction();
+            $order_old->update();
         }
+
         $code = 1050;
         return Json::encode([
             'code' => $code,

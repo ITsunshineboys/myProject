@@ -75,7 +75,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
      * @param $array
      * @return array
      */
-    public static function addMudorderitem(array $array,$need_time){
+    public static function addMudorderitem(array $array){
 
         $data=[];
         $data['worker_type_id']=$array['worker_type_id'];
@@ -147,7 +147,6 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             $data['chip']=$array['chip'];
         }
 
-        $data['need_time']=$need_time;
        if(isset($array['demand'])){
             $data['demand']=$array['demand'];
         }
