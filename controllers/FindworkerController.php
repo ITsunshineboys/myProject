@@ -230,12 +230,10 @@ class FindworkerController extends Controller{
                     ]);
                 }
             }
-
          $code=WorkerOrder::addorderinfo($user_id,$homeinfos,$ownerinfos,$front_money,$amount);
          return json_encode([
              'code' => $code,
              'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
-
          ]);
     }
     /**

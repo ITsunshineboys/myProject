@@ -303,7 +303,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
 
     public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount){
-
         $worker_order = new self();
         $worker_order->uid =$uid;
         $worker_order->worker_type_id = $homeinfos['worker_type_id'];

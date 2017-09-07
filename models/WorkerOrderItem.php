@@ -136,7 +136,6 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
                 $data['fill_item']['fill_craft_id']=self::STATUSTNULL;
                 $data['fill_item']['fill_area']=$array['fill_area'];
             }
-
         }
         //包管
         if(isset($array['guarantee_id'])){
