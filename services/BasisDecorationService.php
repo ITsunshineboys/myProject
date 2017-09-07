@@ -759,11 +759,9 @@ class BasisDecorationService
             $goods_value_one = '';
             foreach ($goods_value as $value) {
                 if ($goods['title'] == '阴角线') {
-                    if ($value['name'] == '长度' && $value['title'] =='阴角线')
-                    {
+                    if ($value['name'] == '长度' && $value['title'] =='阴角线') {
                         $goods_value_one = $value['value'];
-                    }elseif($value['name'] !=='材质')
-                    {
+                    } elseif($value['name'] !=='材质') {
                         $goods_value_one = $value['value'];
                     }
                 } else {
