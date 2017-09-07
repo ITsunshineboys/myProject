@@ -1384,6 +1384,20 @@ CREATE TABLE `order_after_sale` (
   `description` varchar(600) NOT NULL COMMENT '问题描述',
   `create_time` int(11) NOT NULL,
   `supplier_handle` tinyint(1) NOT NULL,
+  `supplier_handle_reason` varchar(50) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `supplier_handle_time` int(11) NOT NULL,
+  `complete_time` int(11) NOT NULL,
+  `buyer_express_id` int(11) NOT NULL,
+  `buyer_express_confirm` tinyint(1) NOT NULL COMMENT '0:未确认  1:已确认',
+  `supplier_express_confirm` tinyint(1) NOT NULL COMMENT '0 :未确认  1：已确认',
+  `supplier_express_id` int(11) NOT NULL,
+  `supplier_send_man` tinyint(1) NOT NULL COMMENT '0:派人  1：已派出人员',
+  `supplier_send_time` int(11) NOT NULL COMMENT '商家派出工作人员时间',
+  `buyer_confirm` tinyint(1) NOT NULL COMMENT '0 :未确认  1：已确认',
+  `buyer_confirm_time` int(11) NOT NULL COMMENT '顾客确认时间',
+  `supplier_confirm` tinyint(1) NOT NULL COMMENT '0: 未确认  1：已确认',
+  `supplier_confirm_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -1395,6 +1409,7 @@ CREATE TABLE `order_after_sale_image` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+--9.6 end
 CREATE TABLE `craft_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `worker_craft_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '具体工艺id',
