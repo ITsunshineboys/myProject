@@ -769,13 +769,10 @@ class BasisDecorationService
         }
 //        个数：（腻子面积×【0.33kg】÷抓取的商品的规格重量）
         $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods_value_one);
-        var_dump($area);
-        var_dump($craft);
-        var_dump($craft['material']);
-        var_dump($goods_value_one);
-        var_dump( $putty_cost ['quantity']);
-        exit;
 //        腻子费用：个数×商品价格
+        var_dump($putty_cost['quantity']);
+        var_dump($goods['platform_price']);
+        exit;
         $putty_cost ['cost']  =  $putty_cost['quantity'] * $goods['platform_price'];
         return $putty_cost;
     }
