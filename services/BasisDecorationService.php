@@ -754,14 +754,11 @@ class BasisDecorationService
      */
     public static function paintedCost($goods,$craft,$area)
     {
-        if ($goods && $craft && $area)
-        {
+        if ($goods && $craft && $area) {
             $goods_value = GoodsAttr::findByGoodsIdUnit($goods['id']);
             $goods_value_one = '';
-            foreach ($goods_value as $value)
-            {
-                if ($goods['title'] == '阴角线')
-                {
+            foreach ($goods_value as $value) {
+                if ($goods['title'] == '阴角线') {
                     if ($value['name'] == '长度' && $value['title'] =='阴角线')
                     {
                         $goods_value_one = $value['value'];
@@ -769,8 +766,7 @@ class BasisDecorationService
                     {
                         $goods_value_one = $value['value'];
                     }
-                }else
-                {
+                } else {
                     $goods_value_one = $value['value'];
                 }
             }
