@@ -325,7 +325,7 @@ class OrderAfterSale extends ActiveRecord
 
     /**
      * @param $OrderAfterSale
-     * @return array
+     * @return array|int
      */
     public static  function  findHandleAfterSaleDisagree($OrderAfterSale)
     {
@@ -340,12 +340,68 @@ class OrderAfterSale extends ActiveRecord
             'reason'=>$OrderAfterSale->supplier_handle_reason,
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_handle_time),
         ];
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+                ->one();
+            $OrderGoods->customer_service=2;
+            $res=$OrderGoods->save();
+            if (!$res){
+                $tran->rollBack();
+            }
+            $tran->commit();
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
         $data[]=[
             'stage'=>'售后完成',
             'type'=>'ok',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_handle_time),
         ];
-        return $data;
+        $PlatForm=OrderPlatForm::find()->where(['ordeR_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+        ->one();
+        if (!$PlatForm){
+            return $data;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+                ->one();
+            $OrderGoods->customer_service=1;
+            $res=$OrderGoods->save();
+            if (!$res){
+                $tran->rollBack();
+            }
+            $tran->commit();
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+        $res=[];
+        switch ($PlatForm->handle)
+        {
+            case 3:
+                $res=self::ReturnGoodsHandleDetail($res,$OrderAfterSale);
+                break;
+            case 4:
+                $res=self::ExangeGoodsHandleDetail($res,$OrderAfterSale);
+                break;
+            case 5:
+                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale);
+                break;
+            case 6:
+                $res=self::ToDoorReturnGoodsHandleDetail($res,$OrderAfterSale);
+                break;
+            case 7:
+                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale);
+                break;
+        }
+        return ['data'=>$data,'platform'=>$res];
     }
 
     /**
@@ -656,7 +712,6 @@ class OrderAfterSale extends ActiveRecord
      */
     public static  function  ExangeGoodsHandleDetail($data,$OrderAfterSale)
     {
-
         if (!$OrderAfterSale->buyer_express_id){
             $data[]=[
                 'stage'=>'顾客待发货'

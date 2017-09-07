@@ -839,7 +839,7 @@ class GoodsOrder extends ActiveRecord
         return $goods;
     }
 
-    /**
+  /**
      * 平台介入
      * @param $order_no
      * @param $handle_type
@@ -847,12 +847,38 @@ class GoodsOrder extends ActiveRecord
      * @return Exception|\Exception|int
      */
     public static  function Platformadd($order_no,$handle_type,$reason,$sku){
+        $OrderPlatForm=OrderPlatForm::find()
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->one();
+        if ($OrderPlatForm){
+            $code=1035;
+            return $code;
+        }
         switch ($handle_type){
+            case  1:
+                $code=OrderPlatForm::platformHandleCloseOrderRefundToUser($order_no,$handle_type,$reason,$sku);
+                break;
             case  2:
-                $res=self::platformhandle2($order_no,$handle_type,$reason,$sku);
+                $code=OrderPlatForm::platformhandle2($order_no,$handle_type,$reason,$sku);
+                break;
+            case  3:
+                $code=OrderPlatForm::platformHandReturnGoods($order_no,$handle_type,$reason,$sku);
+                break;
+            case  4:
+                $code=OrderPlatForm::platformHandReturnGoods($order_no,$handle_type,$reason,$sku);
+                break;
+            case  5:
+                $code=OrderPlatForm::platformHandReturnGoods($order_no,$handle_type,$reason,$sku);
+                break;
+            case  6:
+                $code=OrderPlatForm::platformHandReturnGoods($order_no,$handle_type,$reason,$sku);
+                break;
+            case  7:
+                $code=OrderPlatForm::platformHandReturnGoods($order_no,$handle_type,$reason,$sku);
                 break;
         }
-        return $res;
+        return $code;
     }
 
    /**
@@ -968,74 +994,7 @@ class GoodsOrder extends ActiveRecord
         return $res;
 
     }
-    /**
-     * 关闭订单，线下退款
-     * @param $order_no
-     * @param $handle_type
-     * @param $reason
-     * @return Exception|\Exception|int
-     */
-    private static  function  platformhandle2($order_no,$handle_type,$reason,$sku)
-    {
-        $order=(new Query())->from(self::ORDER_PLATFORM_HANDLE)->select('id')->where(['order_no'=>$order_no])->one();
-        $time=time();
-        if ($order){
-            $trans = \Yii::$app->db->beginTransaction();
-            $e=1;
-            try {
-                $res= \Yii::$app->db->createCommand()
-                    ->update(self::ORDER_PLATFORM_HANDLE, [
-                        'handle' =>$handle_type,
-                        'reasons' => $reason,
-                        'creat_time' => $time,
-                        'refund_result'=>2,
-                        'refund_type'=>2,
-                        'refund_time'=>$time
-                    ], [
-                        'sku'=>$sku,
-                        'order_no' =>$order_no
-                    ])
-                    ->execute();
-                $res2=\Yii::$app->db->createCommand()
-                    ->update(self::ORDER_GOODS_LIST, [
-                        'order_status' =>2,
-                    ], [  'sku'=>$sku,
-                        'order_no' =>$order_no])
-                    ->execute();
-            } catch (Exception $e) {
-                $trans->rollBack();
-            }
-            $trans->commit();
-            return $e;
-        }else{
-            $trans = \Yii::$app->db->beginTransaction();
-            $e=1;
-            try {
-                $res= \Yii::$app->db->createCommand()
-                    ->insert(self::ORDER_PLATFORM_HANDLE, [
-                        'handle' =>$handle_type,
-                        'reasons' => $reason,
-                        'creat_time' => $time,
-                        'order_no'=>$order_no,
-                        'refund_result'=>2,
-                        'refund_type'=>2,
-                        'refund_time'=>$time,
-                        'sku'=>$sku
-                    ])
-                    ->execute();
-                $res2=\Yii::$app->db->createCommand()
-                    ->update(self::ORDER_GOODS_LIST, [
-                        'order_status' =>2,
-                    ], [ 'sku'=>$sku,
-                        'order_no' =>$order_no])
-                    ->execute();
-            } catch (Exception $e) {
-                $trans->rollBack();
-            }
-            $trans->commit();
-            return $e;
-        }
-    }
+
    /**
      * 获取后台订单状态
      * @param $data

@@ -920,7 +920,7 @@ class OrderController extends Controller
             'data' =>$data
         ]);
     }
-    /**
+   /**
      * 订单平台介入-操作
      * @return int|string
      */
@@ -933,11 +933,11 @@ class OrderController extends Controller
         if (!is_numeric($lhzz)){
             return $lhzz;
         }
-        $request=Yii::$app->request;
-        $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
-        $sku=trim(htmlspecialchars($request->post('sku','')),'');
-        $handle_type=trim(htmlspecialchars($request->post('handle_type','')),'');
-        $reason=trim(htmlspecialchars($request->post('handle_type','')),'');
+        $request    =Yii::$app->request;
+        $order_no   =trim($request->post('order_no',''));
+        $sku        =trim($request->post('sku',''));
+        $handle_type=trim($request->post('handle_type',''));
+        $reason     =trim($request->post('handle_type',''));
         if (!$order_no || !$handle_type || !$reason || !$sku){
             $code=1000;
             return Json::encode([
@@ -945,11 +945,16 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $res=GoodsOrder::Platformadd($order_no,$handle_type,$reason,$sku);
-        if ($res){
+        $code=GoodsOrder::Platformadd($order_no,$handle_type,$reason,$sku);
+        if ($code==200){
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
     }
