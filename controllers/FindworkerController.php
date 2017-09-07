@@ -115,10 +115,11 @@ class FindworkerController extends Controller{
          }
 
     /**
-     *根据厅室获取工艺信息
+     *
+     * get craft info by item_id
      *@return string
      */
-    public function actionGetcarftinfo()
+    public function actionGetcraftinfo()
     {
         $code = 1000;
         $item_id = trim(\Yii::$app->request->get('item_id', ''), '');
@@ -137,7 +138,8 @@ class FindworkerController extends Controller{
 
     }
     /**
-     * 获取当前选择工艺的价格
+     *
+     * get craft price by craft_id
      * @return string
      */
     public function actionGetCraftprice(){
@@ -158,7 +160,7 @@ class FindworkerController extends Controller{
     }
 
     /**
-     *get chlid item
+     *get chlid item by parent item_id
      *@return string
      */
     public function actionGetChliditem(){

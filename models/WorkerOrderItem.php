@@ -2,11 +2,10 @@
 
 namespace app\models;
 
-use app\services\FileService;
+
 use app\services\StringService;
-use Yii;
 use yii\db\Query;
-use yii\web\UploadedFile;
+
 
 /**
  * This is the model class for table "worker_order_item".
@@ -16,6 +15,8 @@ use yii\web\UploadedFile;
  * @property integer $worker_item_id
  * @property integer $worker_craft_id
  * @property string $area
+ * @property string $guarantee
+ * @property string $chip
  */
 class WorkerOrderItem extends \yii\db\ActiveRecord
 {
@@ -143,8 +144,8 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             $data['guarantee_item']['guarantee']=$array['guarantee'];
         }
         if(isset($array['chip_id'])){
-            $data['chip_item_id']=$array['chip_id'];
-            $data['chip']=$array['chip'];
+            $data['chip_item']['chip_item_id']=$array['chip_id'];
+            $data['chip_item']['chip']=$array['chip'];
         }
 
        if(isset($array['demand'])){

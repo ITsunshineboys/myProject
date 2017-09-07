@@ -293,6 +293,53 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
     }
     /**
+     * add guarantee info into worker_order_item
+     * @param $id
+     * @param $item_id
+     * @param $guarantee
+     * @return bool
+     */
+    public static function inserguarantee($id,$item_id,$guarantee){
+        $connection = \Yii::$app->db;
+        $res= $connection->createCommand()
+            ->insert('worker_order_item',
+                [
+                    'worker_order_id'=>$id,
+                    'worker_item_id'=>$item_id,
+                    'guarantee'=>$guarantee
+                ])
+            ->execute();
+        if($res){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    /**
+     * add chip info into worker_order_item
+     * @param $id
+     * @param $item_id
+     * @param $chip
+     * @return bool
+     */
+    public static function inserchip($id,$item_id,$chip){
+        $connection = \Yii::$app->db;
+        $res= $connection->createCommand()
+            ->insert('worker_order_item',
+                [
+                    'worker_order_id'=>$id,
+                    'worker_item_id'=>$item_id,
+                    'chip'=>$chip
+                ])
+            ->execute();
+        if($res){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
      * 生成订单
      * @param $uid
      * @param $homeinfos
@@ -303,6 +350,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
 
     public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount){
+
         $worker_order = new self();
         $worker_order->uid =$uid;
         $worker_order->worker_type_id = $homeinfos['worker_type_id'];
@@ -340,8 +388,30 @@ class WorkerOrder extends \yii\db\ActiveRecord
        $id=$worker_order_item->worker_order_id=$worker_order->id;
         $keys=array_keys($homeinfos);
         foreach ($keys as $k=>&$key){
-            if(preg_match('/(item)/',$key,$m)){
-                $data[$k]=$homeinfos[$key];
+            if(preg_match('/(item)/',$key,$m) ) {
+                if (preg_match('/(guarantee)/', $key, $m)) {
+                    $item_id= $worker_order_item->worker_item_id = $homeinfos[$key]['guarantee_item_id'];
+                    $guarantee= $worker_order_item->guarantee = $homeinfos[$key]['guarantee'];
+                    $res=self::inserguarantee($id,$item_id,$guarantee);
+                    if ($res==false) {
+                        $transaction->rollBack();
+                        $code = 500;
+                        return $code;
+                    }
+                }
+                if (preg_match('/(chip)/', $key, $m)) {
+                    $item_id= $worker_order_item->worker_item_id = $homeinfos[$key]['chip_item_id'];
+                    $chip= $worker_order_item->guarantee = $homeinfos[$key]['chip'];
+                    $res=self::inserchip($id,$item_id,$chip);
+                    if ($res==false) {
+                        $transaction->rollBack();
+                        $code = 500;
+                        return $code;
+                    }
+                }
+                if(count($homeinfos[$key])>2){
+                    $data[$k] = $homeinfos[$key];
+                }
                 foreach ($data as &$dat) {
                     $dat['id'] = $id;
 
