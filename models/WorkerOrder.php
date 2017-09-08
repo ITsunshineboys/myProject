@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\controllers\WorkerController;
 use app\services\ModelService;
+use Codeception\Lib\Generator\Helper;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Exception;
@@ -32,6 +33,7 @@ use yii\db\Exception;
  */
 class WorkerOrder extends \yii\db\ActiveRecord
 {
+    const TIMESTYPE='~';
     const STATUS_INSERT=1;
     const WORKER_ORDER_STATUS = [
         0 => '完工',
@@ -343,8 +345,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order->address=$ownerinfos['address'];
         $worker_order->con_people=$ownerinfos['con_people'];
         $worker_order->con_tel=$ownerinfos['con_tel'];
-        $worker_order->amount=$amount;
-        $worker_order->front_money=$front_money;
+        $worker_order->amount=$amount*100;
+        $worker_order->front_money=$front_money*100;
         if(isset($describe)){
             $worker_order->describe=$describe;
         }
@@ -417,8 +419,54 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return 1000;
         }
 
-
-
     }
+    /**
+     * 刷新订单随机
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public static function getorderinfo()
+    {
+        $data = self::find()
+            ->asArray()
+            ->where(['is_old' => 0])
+            ->all();
+        foreach ($data as $key=>&$v){
+
+            $ids[]=$v['id'];
+        }
+        $rand_keys=array_rand($ids,1);
+        $id=$ids[$rand_keys];
+        $info=self::find()
+            ->asArray()
+            ->where(['is_old'=>0])
+            ->andWhere(['id'=>$id])
+            ->one();
+        if(empty($info)){
+            return null;
+       }else{
+           return $info;
+       }
+    }
+    /**
+     * 时间格式
+     * @param $order_id
+     * @return null|string
+     */
+    public static function timedata($order_id){
+        $order_info=self::find()
+            ->select('start_time,end_time,need_time')
+            ->where(['id'=>$order_id])
+            ->asArray()
+            ->one();
+        if(!$order_info){
+            return null;
+        }
+        $start_time=date('m.j',$order_info['start_time']);
+        $end_time=date('m.j',$order_info['end_time']);
+
+        $time=$start_time.self::TIMESTYPE.$end_time."({$order_info['need_time']}天)";
+       return $time;
+    }
+
 
 }

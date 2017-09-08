@@ -6,6 +6,7 @@ use app\models\WorkerItem;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\models\WorkerType;
+use app\models\WorkerTypeItem;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use yii\filters\AccessControl;
@@ -186,13 +187,13 @@ class FindworkerController extends Controller{
      */
      public function actionGenerateOrder(){
          $user_id = \Yii::$app->user->identity;
-//         $code=1052;
-//         if(!$user_id){
-//             return json_encode([
-//                 'code' => $code,
-//                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
-//             ]);
-//         }
+         $code=1052;
+         if(!$user_id){
+             return json_encode([
+                 'code' => $code,
+                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
+             ]);
+         }
          $post=\Yii::$app->request->post();
          $front_money=trim(\Yii::$app->request->post('front_money',''),'');
          $amount=trim(\Yii::$app->request->post('amount',''),'');
@@ -273,9 +274,36 @@ class FindworkerController extends Controller{
         }
         return  ceil($sum / 12 + 1);
     }
-
+    /**
+     *抢单信息
+     * @return string
+     */
     public function actionLaborGrabsheet(){
 
+        $order_info=WorkerOrder::getorderinfo();
+        if($order_info==null){
+            return json_encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>null
+            ]);
+        }
+        $woker_type=WorkerType::gettype($order_info['worker_type_id']);
+        $servicstyle=WorkerItem::getparent($order_info['worker_type_id']);
+        $time=WorkerOrder::timedata($order_info['id']);
 
+       return json_encode([
+            'code'=>200,
+           'msg'=>'ok',
+           'data'=>[
+               'order_id'=>$order_info['id'],
+               'worker_type'=>$woker_type,
+               'servicstyle'=>$servicstyle,
+               'time'=>$time,
+               'demand'=>$order_info['demand'],
+               'money'=>sprintf('%.2f',(float)$order_info['amount']*0.01)
+           ]
+
+       ]);
     }
 }
