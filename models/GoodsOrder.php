@@ -199,7 +199,7 @@ class GoodsOrder extends ActiveRecord
         public  static  function  FindByOrderNo($order_no)
         {
             $data=self::find()
-                ->where(['order_no'])
+                ->where(['order_no'=>$order_no])
                 ->asArray()
                 ->one();
             return $data;
