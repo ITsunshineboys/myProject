@@ -565,7 +565,6 @@ CREATE TABLE `labor_cost` (
   `univalence` bigint(10) NOT NULL COMMENT '工人单价',
   `worker_kind` varchar(20) DEFAULT NULL COMMENT '工人种类',
   `quantity` int(10) NOT NULL DEFAULT '0' COMMENT '每天完成的数量',
-  `unit` varchar(10) DEFAULT NULL COMMENT '单位',
   `rank` varchar(20) DEFAULT NULL COMMENT '工人级别',
   `worker_kind_details` varchar(20) DEFAULT NULL COMMENT '工种详情',
   PRIMARY KEY (`id`)

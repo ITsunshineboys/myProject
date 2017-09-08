@@ -98,14 +98,14 @@ class QuoteController extends Controller
     public function actionLaborCostAdd()
     {
         $quest = \Yii::$app->request;
-        $worker_kind = $quest->post('worker_kind','');
-        $province_code = $quest->post('province','');
-        $city_code = $quest->post('city','');
-        $rank = $quest->post('rank','');
-        $univalence = $quest->post('univalence','');
-        $weak_quantity = $quest->post('weak','');
-        $strong_quantity = $quest->post('strong','');
-        $waterway_quantity = $quest->post('waterway','');
+        $worker_kind = trim($quest->post('worker_kind',''));
+        $province_code = trim($quest->post('province',''));
+        $city_code = trim($quest->post('city',''));
+        $rank = trim($quest->post('rank',''));
+        $univalence = trim($quest->post('univalence',''));
+        $weak_quantity = trim($quest->post('weak',''));
+        $strong_quantity = trim($quest->post('strong',''));
+        $waterway_quantity = trim($quest->post('waterway',''));
         $user = \Yii::$app->user->identity;
         if (!$worker_kind || !$province_code || !$city_code || !$rank || !$univalence || !$weak_quantity || !$strong_quantity || $waterway_quantity) {
             $code=1000;
