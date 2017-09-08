@@ -11,6 +11,7 @@ namespace app\services;
 use app\models\District;
 use yii\db\ActiveRecord;
 use yii\db\Query;
+use Yii;
 
 class ModelService
 {
@@ -328,5 +329,18 @@ class ModelService
         return array_map(function ($v) use ($tblAs) {
             return $tblAs . '.' . $v;
         }, $select);
+    }
+
+    /**
+     * Get raw sql by query object
+     *
+     * @param Query $query query object
+     * @return string
+     */
+    public static function getSqlByQuery(Query $query)
+    {
+        $db = Yii::$app->db;
+        list ($sql, $params) = $db->getQueryBuilder()->build($query);
+        return $db->createCommand($sql, $params)->getRawSql();
     }
 }
