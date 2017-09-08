@@ -92,7 +92,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * 做工标准添加
+     * 做工标准添加 水电工添加
      * @return string
      */
     public function actionLaborCostAdd()

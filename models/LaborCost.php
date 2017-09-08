@@ -77,12 +77,24 @@ class LaborCost extends ActiveRecord
     {
         return  self::find()
             ->distinct()
-            ->select('worker_kind,rank')
+            ->select([])
             ->asArray()
             ->all();
 
     }
 
+    /**
+     * labor cost add
+     * @param $worker_kind
+     * @param $province_code
+     * @param $city_code
+     * @param $rank
+     * @param $univalence
+     * @param $weak_quantity
+     * @param $strong_quantity
+     * @param $waterway_quantity
+     * @return array
+     */
     public static function weakAdd($worker_kind,$province_code,$city_code,$rank,$univalence,$weak_quantity,$strong_quantity,$waterway_quantity)
     {
         $labor_const = \Yii::$app->db;
