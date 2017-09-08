@@ -106,8 +106,7 @@ class QuoteController extends Controller
         $weak_quantity = $quest->post('weak','');
         $strong_quantity = $quest->post('strong','');
         $user = \Yii::$app->user->identity;
-        if (!$worker_kind || !$province_code || !$city_code || !$rank || !$univalence || !$weak_quantity || !$strong_quantity)
-        {
+        if (!$worker_kind || !$province_code || !$city_code || !$rank || !$univalence || !$weak_quantity || !$strong_quantity) {
             $code=1000;
             return Json::encode([
                 'code' => $code,

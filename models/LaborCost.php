@@ -83,7 +83,7 @@ class LaborCost extends ActiveRecord
     {
         return  self::find()
             ->distinct()
-            ->select('worker_kind')
+            ->select('worker_kind,rank')
             ->asArray()
             ->all();
 

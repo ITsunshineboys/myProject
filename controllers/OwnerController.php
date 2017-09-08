@@ -1200,6 +1200,15 @@ class OwnerController extends Controller
     }
 
     /**
+     * noopsyche quote total
+     */
+    public function actionNoopsycheTotal()
+    {
+        $post = Yii::$app->request->post();
+
+    }
+
+    /**
      * Owner certification action(app)
      *
      * @return string
