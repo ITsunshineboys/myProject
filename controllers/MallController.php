@@ -2912,7 +2912,7 @@ class MallController extends Controller
         if (!GoodsImage::validateImages($images)
             || !$goods
             || !$goods->canEdit($user)
-        ) {var_dump(GoodsImage::validateImages($images));var_dump($goods->canEdit($user));
+        ) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2929,7 +2929,7 @@ class MallController extends Controller
 
         $goods->scenario = Goods::SCENARIO_ADD;
 
-        if (!$goods->validate()) {echo 'bbb';
+        if (!$goods->validate()) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2957,7 +2957,7 @@ class MallController extends Controller
 
             $attrCnt = count($names);
             if ($attrCnt > 0) {
-                if ($attrCnt != count($values)) {echo 'ccc';
+                if ($attrCnt != count($values)) {
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2974,7 +2974,7 @@ class MallController extends Controller
             }
 
             $code = GoodsAttr::addByAttrs($goods, $names, $values);
-            if (200 != $code) {echo 'ddd';
+            if (200 != $code) {
                 $transaction->rollBack();
 
                 return Json::encode([
@@ -2992,7 +2992,7 @@ class MallController extends Controller
             ]);
 
             $code = GoodsImage::addByAttrs($goods, $images);
-            if (200 != $code) {echo 'eee';
+            if (200 != $code) {
                 $transaction->rollBack();
 
                 return Json::encode([

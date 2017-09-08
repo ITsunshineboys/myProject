@@ -1095,13 +1095,13 @@ class Goods extends ActiveRecord
             self::STATUS_OFFLINE
         ];
 
-        if (!in_array($this->status, $statuses)) {
+        if (!in_array($this->status, $statuses)) {echo '1111';
             return false;
         }
 
         if ($this->status == self::STATUS_OFFLINE
             && $user->login_role_id == Yii::$app->params['supplierRoleId']
-        ) {
+        ) {var_dump($this->status == self::STATUS_OFFLINE);var_dump($user->login_role_id);
             return false;
         }
 
