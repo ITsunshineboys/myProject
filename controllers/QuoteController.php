@@ -97,12 +97,18 @@ class QuoteController extends Controller
      */
     public function actionLaborCostEdit()
     {
-       $request = \Yii::$app->request;
+        $request = \Yii::$app->request;
+        $get_id = trim($request->get('id',''));
         $province = trim($request->get('province',''));
-       $city = trim($request->get('city',''));
-       $worker_kind = trim($request->get('worker_kind',''));
-       $labor_cost = LaborCost::workerKind($province,$city,$worker_kind);
+        $city = trim($request->get('city',''));
+        $worker_kind = trim($request->get('worker_kind',''));
+        $labor_cost = LaborCost::workerKind($province,$city,$worker_kind);
+        foreach ($labor_cost as $labor){
+            if ($labor['id'] = $get_id){
 
+            }
+        }
+        var_dump($id);exit;
     }
 
     /*

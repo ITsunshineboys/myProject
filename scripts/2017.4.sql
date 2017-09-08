@@ -560,13 +560,13 @@ CREATE TABLE `effect` (
 
 CREATE TABLE `labor_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `province` varchar(20) DEFAULT NULL,
   `province_code` varchar(20) DEFAULT NULL COMMENT '省份编码',
+  `city` varchar(20) DEFAULT NULL,
   `city_code` varchar(20) DEFAULT NULL COMMENT '市编码',
   `univalence` bigint(10) NOT NULL COMMENT '工人单价',
   `worker_kind` varchar(20) DEFAULT NULL COMMENT '工人种类',
-  `quantity` int(10) NOT NULL DEFAULT '0' COMMENT '每天完成的数量',
   `rank` varchar(20) DEFAULT NULL COMMENT '工人级别',
-  `worker_kind_details` varchar(20) DEFAULT NULL COMMENT '工种详情',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1427,5 +1427,13 @@ CREATE TABLE `worker_grade_supervise` (
   `max_value` int(4) unsigned zerofill DEFAULT '0100' COMMENT '最大值',
   `province_code` int(10) DEFAULT '510000' COMMENT '省编码',
   `city_code` int(10) DEFAULT '510100' COMMENT '市编码',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `worker_craft_norm` (
+  `id` int(11) NOT NULL,
+  `labor_cost_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL COMMENT '每天完成的数量',
+  `worker_kind_details` varchar(20) DEFAULT NULL COMMENT '工种详情',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

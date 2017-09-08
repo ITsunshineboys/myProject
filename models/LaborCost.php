@@ -89,7 +89,7 @@ class LaborCost extends ActiveRecord
     {
         return self::find()
             ->asArray()
-            ->select('province,city,univalence,worker_kind,quantity,worker_kind_details')
+            ->select('id,province,city,univalence,worker_kind,quantity,worker_kind_details')
             ->where(['and',['province_code'=>$province],['city_code'=>$city],['worker_kind'=>$worker_kind]])
             ->all();
     }
