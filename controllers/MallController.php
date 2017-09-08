@@ -2912,7 +2912,7 @@ class MallController extends Controller
         if (!GoodsImage::validateImages($images)
             || !$goods
             || !$goods->canEdit($user)
-        ) {echo 'aaa';
+        ) {var_dump(GoodsImage::validateImages($images));var_dump($goods->canEdit($user));
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
