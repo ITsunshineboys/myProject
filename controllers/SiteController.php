@@ -566,15 +566,7 @@ class SiteController extends Controller
             ]);
         }
 
-        if ($user->validatePassword($postData['new_password'])) {
-            SmValidationService::deleteCode($user->mobile);
-            $user->setDailyResetPwdCnt();
-
-            return Json::encode([
-                'code' => 200,
-                'msg' => '重设密码成功',
-            ]);
-        }
+        
 
         $codeValidationRes = SmValidationService::validCode($user->mobile, $postData['validation_code']);
         if ($codeValidationRes !== true) {
@@ -582,6 +574,16 @@ class SiteController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($user->validatePassword($postData['new_password'])) {
+            SmValidationService::deleteCode($user->mobile);
+            $user->setDailyResetPwdCnt();
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => '重设密码成功',
             ]);
         }
 
