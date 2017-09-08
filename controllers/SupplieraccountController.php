@@ -218,13 +218,13 @@ class SupplieraccountController extends  Controller{
      */
         public function actionFreezeMoney(){
             $user = Yii::$app->user->identity;
-            if (!$user){
-                $code=1052;
-                return json_encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
+//            if (!$user){
+//                $code=1052;
+//                return json_encode([
+//                    'code' => $code,
+//                    'msg' => Yii::$app->params['errorCodes'][$code]
+//                ]);
+//            }
             $code=1000;
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
@@ -246,6 +246,7 @@ class SupplieraccountController extends  Controller{
                    $code=1000;
 
                    if($freezed_money<$freeze_money){
+                       $transaction->rollBack();
                        return json_encode([
                            'code' => $code,
                            'msg' => '可冻结余额不足',
@@ -253,14 +254,18 @@ class SupplieraccountController extends  Controller{
 
                        ]);
                    }
-
                    $supplier->availableamount-=$freeze_money*100;
                    $model->freeze_money=$freeze_money*100;
-                   $model->save();
-                   $supplier->update(false);
+                   if(!$model->save() || !$supplier->update(false)){
+                       $transaction->rollBack();
+                       return json_encode([
+                           'code'=>$code,
+                           'msg' => \Yii::$app->params['errorCodes'][$code],
+                       ]);
+
+                   }
 
                 $transaction->commit();
-
                    return json_encode([
                        'code'=>200,
                        'msg'=>'ok',
