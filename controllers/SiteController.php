@@ -1609,7 +1609,7 @@ class SiteController extends Controller
         $invoice_type=trim($request->post('invoice_type',''));
         $invoice_header_type=trim($request->post('invoice_header_type',''));
         $invoice_header=trim($request->post('invoice_header',''));
-        $invoicer_card =trim(htmlspecialchars($request->post('invoicer_card')));
+        $invoicer_card =trim($request->post('invoicer_card'));
         $invoice_content=trim($request->post('invoice_content',''));
         if ($invoicer_card){
             $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
