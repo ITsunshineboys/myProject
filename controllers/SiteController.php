@@ -577,7 +577,7 @@ class SiteController extends Controller
         }
 
         $codeValidationRes = SmValidationService::validCode($user->mobile, $postData['validation_code']);
-        if ($codeValidationRes !== true) {
+        if ($codeValidationRes != true) {
             $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
             return Json::encode([
                 'code' => $code,
