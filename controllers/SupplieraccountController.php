@@ -218,13 +218,13 @@ class SupplieraccountController extends  Controller{
      */
         public function actionFreezeMoney(){
             $user = Yii::$app->user->identity;
-//            if (!$user){
-//                $code=1052;
-//                return json_encode([
-//                    'code' => $code,
-//                    'msg' => Yii::$app->params['errorCodes'][$code]
-//                ]);
-//            }
+            if (!$user){
+                $code=1052;
+                return json_encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $code=1000;
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
@@ -233,6 +233,8 @@ class SupplieraccountController extends  Controller{
 
 
             $freezed_money=sprintf('%.2f',(float)$supplier->availableamount*0.01);
+            $transaction=Yii::$app->db->beginTransaction();
+            try{
             if($request->isPost){
                 $model=new SupplierFreezelist();
                 $model->supplier_id=$supplier_id;
@@ -240,9 +242,6 @@ class SupplieraccountController extends  Controller{
                 $model->freeze_reason=trim($request->post('freeze_reason',''),'');
                 $model->create_time=time();
 
-
-               $transaction=Yii::$app->db->beginTransaction();
-               try{
                    $code=1000;
 
                    if($freezed_money<$freeze_money){
@@ -264,27 +263,17 @@ class SupplieraccountController extends  Controller{
                        ]);
 
                    }
-
                 $transaction->commit();
                    return json_encode([
                        'code'=>200,
                        'msg'=>'ok',
 
                    ]);
-               }catch (Exception $e){
 
-                   $transaction->rollBack();
-
-                   return json_encode([
-
-                       'code'=>$code,
-                       'msg' => \Yii::$app->params['errorCodes'][$code],
-                   ]);
-               }
 
             }else{
-
                 if(!$supplier_id){
+                    $transaction->rollBack();
                     return json_encode([
                         'code' => $code,
                         'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -302,8 +291,14 @@ class SupplieraccountController extends  Controller{
 
                 }
             }
-
+        }catch (Exception $e){
+            $transaction->rollBack();
+                return json_encode([
+                    'code'=>$code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
         }
+    }
 
     /**
      * 商家账户冻结列表
@@ -322,9 +317,7 @@ class SupplieraccountController extends  Controller{
 
                 $timeType = trim(Yii::$app->request->get('time_type', ''));
 
-
                 $where = '1';
-
 
                 if ($timeType == 'custom') {
                     $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -345,7 +338,6 @@ class SupplieraccountController extends  Controller{
                     $startTime = explode(' ', $startTime)[0];
                     $endTime = explode(' ', $endTime)[0];
                 }
-            //
                 if ($startTime) {
                     $startTime = strtotime($startTime);
                     $startTime && $where .= " and create_time >= {$startTime}";
@@ -362,7 +354,7 @@ class SupplieraccountController extends  Controller{
                 return json_encode([
                     'code'=>200,
                     'msg'=>'ok',
-                    'data'=>$paginationData['details']
+                    'data'=>$paginationData
                 ]);
             }
 
@@ -429,31 +421,48 @@ class SupplieraccountController extends  Controller{
             if(!$freeze_id){
                 return json_encode([
                     'code'=>$code,
-                    'msg'=>Yii::$app->params['errorCodes']['code']
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+
             $freeze=SupplierFreezelist::findOne($freeze_id);
 
             $supplier=Supplier::findOne($freeze->supplier_id);
-
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
             if($supplier){
-
-
                 $supplier->availableamount+=$freeze->freeze_money;
+                if(!$supplier->update(false)){
+                    $transaction->rollBack();
+                    $code=500;
+                    return json_encode([
+                        'code'=>$code,
+                        'msg'=>Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $transaction->commit();
+                return json_encode([
+                    'code'=>200,
+                    'msg'=>'ok',
 
-                $supplier->update(false);
-                 return json_encode([
-                     'code'=>200,
-                     'msg'=>'ok',
-
-                 ]);
+                ]);
             }else{
-
+                $transaction->rollBack();
+                $code=1000;
                 return json_encode([
                     'code'=>$code,
-                    'msg'=>Yii::$app->params['errorCodes']['code']
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+
+        }catch (Exception $e){
+            $transaction->rollBack();
+            $code=1000;
+            return json_encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
 
 
     }

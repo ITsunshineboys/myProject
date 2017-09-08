@@ -105,10 +105,25 @@ class EffectController extends Controller
                 $effect->stair_id=$stair_id;
 
             }
+            $transaction=Yii::$app->db->beginTransaction();
             $effect->type=self::TYPE_EFFECT;
-            $effect->save(false);
+            if(!$effect->save(false)){
+                $transaction->rollBack();
+                $code=500;
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
             $effect_picture->effect_id=$effect->id;
-            $effect_picture->save(false);
+            if(!$effect_picture->save(false)){
+                $transaction->rollBack();
+                $code=500;
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
                 return json_encode([
                     'code' => 200,
                     'msg' => 'ok',
@@ -303,10 +318,13 @@ class EffectController extends Controller
             $remark=EffectEarnst::findOne(['effect_id'=>$effect_id]);
 
           $res=$remark->remark= trim($request->post('remark',''),'');
-
-        $remark->save();
-
-
+            if(!$remark->save()){
+                $code=500;
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
             return json_encode([
                 'code' => 200,
                 'msg' => 'ok',
@@ -323,13 +341,11 @@ class EffectController extends Controller
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
 
-
-
                 ]);
             }else{
                 return json_encode([
                     'code' => 200,
-                    'msg' => 'ok!',
+                    'msg' => 'ok',
                     'data' => $data
 
                 ]);
@@ -414,7 +430,7 @@ class EffectController extends Controller
                 $endTime = explode(' ', $endTime)[0];
 
             }
-//
+
             if ($startTime) {
                 $startTime = (int)strtotime($startTime);
                 $startTime && $where .= " and create_time >= {$startTime}";
@@ -427,11 +443,7 @@ class EffectController extends Controller
         }else{
             $where=" name like '%{$keyword}%' or phone like '%{$keyword}%'";
         }
-
-
-
         $page = (int)Yii::$app->request->get('page', 1);
-
         $size = (int)Yii::$app->request->get('size', EffectEarnst::PAGE_SIZE_DEFAULT);
         $paginationData = EffectEarnst::pagination($where, EffectEarnst::FIELDS_ADMIN, $page, $size);
 
@@ -489,7 +501,6 @@ class EffectController extends Controller
                 'msg' => 'ok',
             ]);
         }else{
-
             return json_encode([
                 'code' => $code,
                 'msg' => 'ok',

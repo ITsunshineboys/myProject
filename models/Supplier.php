@@ -457,13 +457,8 @@ class Supplier extends ActiveRecord
                 $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
             }
         }
-        return [
-            'total' => (int)self::find()->where($where)->asArray()->count(),
-            'page'=>$page,
-            'size'=>$size,
-            'details' => $supplierList
-        ];
-
+        $total=(int)self::find()->where($where)->asArray()->count();
+        return ModelService::pageDeal($supplierList, $total, $page, $size);
     }
 
     public static function getsupplierdata($supplier_id)

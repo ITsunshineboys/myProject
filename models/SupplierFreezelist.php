@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 
 /**
@@ -64,14 +65,9 @@ class SupplierFreezelist extends \yii\db\ActiveRecord
             $freeze['create_time']=date('Y-m-d H:i',$freeze['create_time']);
             $freeze['freeze_money']=sprintf('%.2f',(float)$freeze['freeze_money']*0.01);
         }
-
-        return [
-            'total' => (int)self::find()->where($where)->asArray()->count(),
-            'page'=>$page,
-            'size'=>$size,
-            'details' => $freezeList
-        ];
+        $total=(int)self::find()->where($where)->asArray()->count();
+        return ModelService::pageDeal($freezeList, $total, $page, $size);
 
     }
-//
+
 }

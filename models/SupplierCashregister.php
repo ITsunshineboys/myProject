@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 use yii\db\Query;
 
@@ -83,12 +84,8 @@ class SupplierCashregister extends \yii\db\ActiveRecord
             $freeze['cost_money']=sprintf('%.2f', $freeze['cash_money']-$freeze['real_money']*0.01
             );
         }
-        return [
-            'total' => (int)self::find()->where($where)->asArray()->count(),
-            'page'=>$page,
-            'size'=>$size,
-            'details' => $freezeList
-        ];
+        $total=(int)self::find()->where($where)->asArray()->count();
+        return ModelService::pageDeal($freezeList, $total, $page, $size);
 
 
     }

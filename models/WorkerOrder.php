@@ -6,6 +6,7 @@ use app\controllers\WorkerController;
 use app\services\ModelService;
 use Yii;
 use yii\data\Pagination;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "worker_order".
@@ -347,65 +348,71 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $worker_order->describe=$homeinfos['describe'];
         }
         $transaction = Yii::$app->db->beginTransaction();
-        if(!$worker_order->save(false)){
-            $transaction->rollBack();
-            $code = 500;
-            return $code;
-        }
-        $worker_order_img=new WorkerOrderImg();
-       $order_id= $worker_order_img->worker_order_id=$worker_order->id;
+        try{
+            if(!$worker_order->save(false)){
+                $transaction->rollBack();
+                $code = 500;
+                return $code;
+            }
+            $worker_order_img=new WorkerOrderImg();
+            $order_id= $worker_order_img->worker_order_id=$worker_order->id;
 
-       $rest=self::saveorderimgs($homeinfos['images'],$order_id);
-        if($rest==false){
-            $transaction->rollBack();
-            $code = 500;
-            return $code;
-        }
-        $data=[];
-        $worker_order_item=new WorkerOrderItem();
-       $id=$worker_order_item->worker_order_id=$worker_order->id;
-        $keys=array_keys($homeinfos);
-        foreach ($keys as $k=>&$key){
-            if(preg_match('/(item)/',$key,$m) ) {
-                if (preg_match('/(guarantee)/', $key, $m)) {
-                    $item_id= $worker_order_item->worker_item_id = $homeinfos[$key]['guarantee_item_id'];
-                    $status= $worker_order_item->status = $homeinfos[$key]['guarantee'];
-                    $res=self::inserstatus($id,$item_id,$status);
-                    if ($res==false) {
-                        $transaction->rollBack();
-                        $code = 500;
-                        return $code;
+            $rest=self::saveorderimgs($homeinfos['images'],$order_id);
+            if($rest==false){
+                $transaction->rollBack();
+                $code = 500;
+                return $code;
+            }
+            $data=[];
+            $worker_order_item=new WorkerOrderItem();
+            $id=$worker_order_item->worker_order_id=$worker_order->id;
+            $keys=array_keys($homeinfos);
+            foreach ($keys as $k=>&$key){
+                if(preg_match('/(item)/',$key,$m) ) {
+                    if (preg_match('/(guarantee)/', $key, $m)) {
+                        $item_id= $worker_order_item->worker_item_id = $homeinfos[$key]['guarantee_item_id'];
+                        $status= $worker_order_item->status = $homeinfos[$key]['guarantee'];
+                        $res=self::inserstatus($id,$item_id,$status);
+                        if ($res==false) {
+                            $transaction->rollBack();
+                            $code = 500;
+                            return $code;
+                        }
                     }
-                }
-                if (preg_match('/(chip)/', $key, $m)) {
-                    $item_id= $worker_order_item->worker_item_id = $homeinfos[$key]['chip_item_id'];
-                    $status= $worker_order_item->status = $homeinfos[$key]['chip'];
-                    $res=self::inserstatus($id,$item_id,$status);
-                    if ($res==false) {
-                        $transaction->rollBack();
-                        $code = 500;
-                        return $code;
+                    if (preg_match('/(chip)/', $key, $m)) {
+                        $item_id= $worker_order_item->worker_item_id = $homeinfos[$key]['chip_item_id'];
+                        $status= $worker_order_item->status = $homeinfos[$key]['chip'];
+                        $res=self::inserstatus($id,$item_id,$status);
+                        if ($res==false) {
+                            $transaction->rollBack();
+                            $code = 500;
+                            return $code;
+                        }
                     }
-                }
-                if(count($homeinfos[$key])>2){
-                    $data[$k] = $homeinfos[$key];
-                }
-                foreach ($data as &$dat) {
-                    $dat['id'] = $id;
+                    if(count($homeinfos[$key])>2){
+                        $data[$k] = $homeinfos[$key];
+                    }
+                    foreach ($data as &$dat) {
+                        $dat['id'] = $id;
 
+                    }
                 }
             }
+            $connection = \Yii::$app->db;
+            $connection
+                ->createCommand()
+                ->batchInsert(
+                    'worker_order_item',
+                    ['worker_item_id','worker_craft_id','area','worker_order_id'],
+                    $data
+                )->execute();
+            $transaction->commit();
+            return 200;
+        }catch (Exception $e){
+            $transaction->rollBack();
+            return 1000;
         }
-        $connection = \Yii::$app->db;
-        $connection
-            ->createCommand()
-            ->batchInsert(
-                'worker_order_item',
-                ['worker_item_id','worker_craft_id','area','worker_order_id'],
-                $data
-            )->execute();
-        $transaction->commit();
-        return 200;
+
 
 
     }

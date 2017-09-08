@@ -187,12 +187,12 @@ class FindworkerController extends Controller{
      public function actionGenerateOrder(){
          $user_id = \Yii::$app->user->identity;
          $code=1052;
-         if(!$user_id){
-             return json_encode([
-                 'code' => $code,
-                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
-             ]);
-         }
+//         if(!$user_id){
+//             return json_encode([
+//                 'code' => $code,
+//                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
+//             ]);
+//         }
          $post=\Yii::$app->request->post();
          $front_money=trim(\Yii::$app->request->post('front_money',''),'');
          $amount=trim(\Yii::$app->request->post('amount',''),'');
