@@ -98,6 +98,7 @@ class Supplier extends ActiveRecord
         'quality_guarantee_deposit',
         'district_name',
         'district_code',
+        'address',
     ];
     const FIELDS_VIEW_APP_EXTRA = [
         'legal_person',
