@@ -522,6 +522,8 @@ class SiteController extends Controller
     public function actionResetPasswordCheck()
     {
         $res = Yii::$app->user->identity->checkDailyResetPwdCnt();
+        $res = Yii::$app->user->identity->checkDailyResetPwdCnt();
+        var_dump($res);exit;
         return Json::encode([
             'code' => $res ? 200 : 1024,
             'msg' => $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
