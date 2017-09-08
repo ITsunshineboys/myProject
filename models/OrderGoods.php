@@ -19,4 +19,18 @@ class OrderGoods extends ActiveRecord
     {
         return 'order_goodslist';
     }
+
+    /**
+     * @param $order_no
+     * @param $sku
+     * @return array|null|ActiveRecord
+     */
+    public static  function  FindByOrderNoAndSku($order_no,$sku){
+        $data=self::find()
+            ->where(['order_no'])
+            ->andWhere(['sku'=>$sku])
+            ->asArray()
+            ->one();
+        return $data;
+    }
 }

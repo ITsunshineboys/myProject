@@ -192,6 +192,19 @@ class GoodsOrder extends ActiveRecord
             return (int)$query->count();
         }
 
+        /**
+         * @param $order_no
+         * @return array|null|ActiveRecord
+         */
+        public  static  function  FindByOrderNo($order_no)
+        {
+            $data=self::find()
+                ->where(['order_no'])
+                ->asArray()
+                ->one();
+            return $data;
+        }
+
     /**
      * [Alipayeffect_earnstnotifydatabase description]
      * @param [type] $arr  [description]
