@@ -167,7 +167,9 @@ class SmValidationService
         if (!$realCode && $cache->get($flgKey)) {
             return 1020;
         }
-
+        if ($realCode != $validationCode){
+            return false;
+        }
         return $realCode == $validationCode;
     }
 
