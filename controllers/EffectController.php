@@ -141,10 +141,10 @@ class EffectController extends Controller
 
     }
     /**
-     * 获取系列
+     * 获取风格
      * @return string
      */
-    public function actionGetseries(){
+    public function actionGetstyle(){
 
         return json_encode([
             'code'=>200,
@@ -153,11 +153,11 @@ class EffectController extends Controller
         ]);
     }
     /**
-     * 获取风格
+     * 获取系列
      * @return string
      *
      */
-    public function actionGetstyle(){
+    public function actionGetseries(){
 
         return json_encode([
             'code'=>200,
