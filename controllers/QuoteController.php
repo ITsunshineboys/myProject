@@ -92,50 +92,17 @@ class QuoteController extends Controller
     }
 
     /**
-     * 做工标准添加 水电工添加
+     * 做工标准修改
      * @return string
      */
-    public function actionLaborCostAdd()
+    public function actionLaborCostEdit()
     {
-        $quest = \Yii::$app->request;
-        $worker_kind = trim($quest->post('worker_kind',''));
-        $province_code = trim($quest->post('province',''));
-        $city_code = trim($quest->post('city',''));
-        $rank = trim($quest->post('rank',''));
-        $univalence = trim($quest->post('univalence',''));
-        $weak_quantity = trim($quest->post('weak',''));
-        $strong_quantity = trim($quest->post('strong',''));
-        $waterway_quantity = trim($quest->post('waterway',''));
-        $user = \Yii::$app->user->identity;
-        if (!$worker_kind || !$province_code || !$city_code || !$rank || !$univalence || !$weak_quantity || !$strong_quantity || $waterway_quantity) {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+       $request = \Yii::$app->request;
+        $province = trim($request->get('province',''));
+       $city = trim($request->get('city',''));
+       $worker_kind = trim($request->get('worker_kind',''));
+       $labor_cost = LaborCost::workerKind($province,$city,$worker_kind);
 
-        $res = (new LaborCost())->weakAdd($worker_kind,$province_code,$city_code,$rank,$univalence,$weak_quantity,$strong_quantity,$waterway_quantity);
-        if ($res[0] == true && $res[1] == true){
-            $code=200;
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok'
-            ]);
-        }else{
-            $code=1051;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
     }
 
     /*

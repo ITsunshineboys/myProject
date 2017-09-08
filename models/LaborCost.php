@@ -77,45 +77,21 @@ class LaborCost extends ActiveRecord
     {
         return  self::find()
             ->distinct()
-            ->select([])
+            ->select('worker_kind')
             ->groupBy('worker_kind')
             ->asArray()
             ->all();
 
     }
 
-    /**
-     * labor cost add
-     * @param $worker_kind
-     * @param $province_code
-     * @param $city_code
-     * @param $rank
-     * @param $univalence
-     * @param $weak_quantity
-     * @param $strong_quantity
-     * @param $waterway_quantity
-     * @return array
-     */
-    public static function weakAdd($worker_kind,$province_code,$city_code,$rank,$univalence,$weak_quantity,$strong_quantity,$waterway_quantity)
+
+    public static function workerKind($province,$city,$worker_kind)
     {
-        $labor_const = \Yii::$app->db;
-        // 弱电添加
-        $labor_const_add [] = $labor_const
-            ->createCommand()
-            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$weak_quantity,'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['weak']])
-            ->execute();
-
-        $labor_const_add [] = $labor_const
-            ->createCommand()
-            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$strong_quantity,'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['strong']])
-            ->execute();
-
-        $labor_const_add [] = $labor_const
-            ->createCommand()
-            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$waterway_quantity,'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['waterway']])
-            ->execute();
-
-        return $labor_const_add;
+        return self::find()
+            ->asArray()
+            ->select('province,city,univalence,worker_kind,quantity,worker_kind_details')
+            ->where(['and',['province_code'=>$province],['city_code'=>$city],['worker_kind'=>$worker_kind]])
+            ->all();
     }
 }
 
