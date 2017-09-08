@@ -3131,7 +3131,8 @@ class MallController extends Controller
             }
         }
 
-        if (!$model->validate()) {echo $code;print_r($model->errors);die;
+        if (!$model->validate()) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
