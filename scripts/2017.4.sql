@@ -1418,3 +1418,14 @@ CREATE TABLE `craft_cost` (
   `price` bigint(20) NOT NULL COMMENT '工人价格',
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `worker_grade_supervise` (
+  `id` int(11) NOT NULL,
+  `work_type` varchar(10) DEFAULT NULL COMMENT '工作种类',
+  `grade` varchar(10) DEFAULT NULL COMMENT '级别',
+  `min_value` int(4) unsigned zerofill DEFAULT '0001' COMMENT '最小值',
+  `max_value` int(4) unsigned zerofill DEFAULT '0100' COMMENT '最大值',
+  `province_code` int(10) DEFAULT '510000' COMMENT '省编码',
+  `city_code` int(10) DEFAULT '510100' COMMENT '市编码',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
