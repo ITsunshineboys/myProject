@@ -28,6 +28,7 @@ use yii\db\Exception;
  * @property integer $status
  * @property integer $worker_type_id
  * @property string $describe
+ * @property string $demand
  */
 class WorkerOrder extends \yii\db\ActiveRecord
 {
@@ -328,10 +329,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return int
      */
 
-    public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount){
+    public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe){
 
         $worker_order = new self();
-        $worker_order->uid =$uid;
+        $worker_order->uid =1;
         $worker_order->worker_type_id = $homeinfos['worker_type_id'];
         $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
         $worker_order->create_time = time();
@@ -344,8 +345,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order->con_tel=$ownerinfos['con_tel'];
         $worker_order->amount=$amount;
         $worker_order->front_money=$front_money;
-        if(isset($homeinfos['describe'])){
-            $worker_order->describe=$homeinfos['describe'];
+        if(isset($describe)){
+            $worker_order->describe=$describe;
+        }
+        if(isset($demand)){
+            $worker_order->demand=$demand;
         }
         $transaction = Yii::$app->db->beginTransaction();
         try{

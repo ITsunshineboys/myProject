@@ -108,7 +108,7 @@ class FindworkerController extends Controller{
                    'code'=>200,
                    'msg'=>'ok',
                    'data'=>[
-                       'worker_type_id'=>$worker_type_id,
+                       'worker_type_id'=>WorkerType::gettype($worker_type_id),
                        'item'=>$data
                    ]
                ]);
@@ -186,7 +186,7 @@ class FindworkerController extends Controller{
      */
      public function actionGenerateOrder(){
          $user_id = \Yii::$app->user->identity;
-         $code=1052;
+//         $code=1052;
 //         if(!$user_id){
 //             return json_encode([
 //                 'code' => $code,
@@ -196,6 +196,8 @@ class FindworkerController extends Controller{
          $post=\Yii::$app->request->post();
          $front_money=trim(\Yii::$app->request->post('front_money',''),'');
          $amount=trim(\Yii::$app->request->post('amount',''),'');
+         $demand=trim(\Yii::$app->request->post('demand',''),'');
+         $describe=trim(\Yii::$app->request->post('describe',''),'');
          $need_time = self::getOrderNeedTime($post['homeinfos']);
          $homeinfos=WorkerOrderItem::addMudorderitem($post['homeinfos']);
          if($homeinfos!=1000){
@@ -218,7 +220,7 @@ class FindworkerController extends Controller{
                 }
             }
          $homeinfos['need_time'] = $need_time;
-         $code=WorkerOrder::addorderinfo($user_id,$homeinfos,$ownerinfos,$front_money,$amount);
+         $code=WorkerOrder::addorderinfo($user_id,$homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe);
          return json_encode([
              'code' => $code,
              'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
@@ -272,4 +274,8 @@ class FindworkerController extends Controller{
         return  ceil($sum / 12 + 1);
     }
 
+    public function actionLaborGrabsheet(){
+
+
+    }
 }

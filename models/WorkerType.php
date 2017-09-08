@@ -57,6 +57,16 @@ class WorkerType extends \yii\db\ActiveRecord
         }
         return $data;
     }
-
-
+    /**
+     * 获取工种名称
+     * @param $worker_type_id
+     * @return mixed
+     */
+    public static function gettype($worker_type_id){
+        return self::find()
+            ->select('worker_type')
+            ->asArray()
+            ->where(['id'=>$worker_type_id])
+            ->one()['worker_type'];
+    }
 }
