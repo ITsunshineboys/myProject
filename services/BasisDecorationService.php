@@ -1060,27 +1060,21 @@ class BasisDecorationService
      */
     public static function riverSandCost($get_area,$goods,$craft,$goods_attr)
     {
-        if ($get_area && $goods && $craft)
-        {
-            foreach ($craft as $one_craft)
-            {
-                if ($one_craft['project_details'] == '12墙河沙用量')
-                {
+        if ($get_area && $goods && $craft) {
+            foreach ($craft as $one_craft) {
+                if ($one_craft['project_details'] == '12墙河沙用量') {
                     $river_sand_12 = $one_craft['material'];
                 }
-                if ($one_craft['project_details'] == '24墙河沙用量')
-                {
+                if ($one_craft['project_details'] == '24墙河沙用量') {
                     $river_sand_24 = $one_craft['material'];
                 }
-                if ($one_craft['project_details'] == '补烂河沙用量')
-                {
+                if ($one_craft['project_details'] == '补烂河沙用量') {
                     $river_sand_repair = $one_craft['material'];
                 }
             }
 
             $value = '';
-            foreach ($goods_attr as $one_goods_attr)
-            {
+            foreach ($goods_attr as $one_goods_attr) {
                 $value = $one_goods_attr['value'];
             }
 //              河沙用量=新建用量+补烂用量
@@ -1093,8 +1087,7 @@ class BasisDecorationService
             $river_sand['quantity'] =  ceil($river_sand_dosage / $value);
 //              河沙费用：个数×抓取的商品价格
             $river_sand['cost'] =   $river_sand['quantity'] * $goods['platform_price'];
-        }else
-        {
+        } else {
             $river_sand['quantity'] =  0;
             $river_sand['cost'] =  0;
         }
