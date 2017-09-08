@@ -78,6 +78,7 @@ class LaborCost extends ActiveRecord
         return  self::find()
             ->distinct()
             ->select([])
+            ->groupBy('worker_kind')
             ->asArray()
             ->all();
 
