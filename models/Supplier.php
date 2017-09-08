@@ -97,6 +97,7 @@ class Supplier extends ActiveRecord
         'delivery_service_score',
         'quality_guarantee_deposit',
         'district_name',
+        'district_code',
     ];
     const FIELDS_VIEW_APP_EXTRA = [
         'legal_person',
