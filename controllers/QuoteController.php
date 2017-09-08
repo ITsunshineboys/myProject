@@ -22,6 +22,7 @@ use app\models\LaborCost;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
+use app\models\WorkerCraftNorm;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
@@ -92,23 +93,27 @@ class QuoteController extends Controller
     }
 
     /**
-     * 做工标准修改
+     * 做工标准修改列表
      * @return string
      */
-    public function actionLaborCostEdit()
+    public function actionLaborCostEditList()
     {
         $request = \Yii::$app->request;
-        $get_id = trim($request->get('id',''));
         $province = trim($request->get('province',''));
         $city = trim($request->get('city',''));
         $worker_kind = trim($request->get('worker_kind',''));
         $labor_cost = LaborCost::workerKind($province,$city,$worker_kind);
-        foreach ($labor_cost as $labor){
-            if ($labor['id'] = $get_id){
+        $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
+        return Json::encode([
+            'labor_cost'=> $labor_cost,
+            'worker_craft_norm'=>$worker_craft_norm
+        ]);
+    }
 
-            }
-        }
-        var_dump($id);exit;
+    public function actionLaborCostEdit()
+    {
+        $post = \Yii::$app->request->post();
+        
     }
 
     /*
