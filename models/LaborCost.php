@@ -18,17 +18,10 @@ class LaborCost extends ActiveRecord
         'univalence',
         'worker_kind',
         'quantity',
-        'unit',
         'rank',
         'worker_kind_details'
     ];
     const LABOR_COST ='labor_cost';
-
-    const UNIT = [
-        'day' => '天',
-        'square' => 'M2',
-        'number'=>'个'
-    ];
 
     const WORKER_KIND_DETAILS = [
             'weak'=> '弱电',
@@ -96,17 +89,17 @@ class LaborCost extends ActiveRecord
         // 弱电添加
         $labor_const_add [] = $labor_const
             ->createCommand()
-            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$weak_quantity,'unit'=>self::UNIT['number'],'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['weak']])
+            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$weak_quantity,'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['weak']])
             ->execute();
 
         $labor_const_add [] = $labor_const
             ->createCommand()
-            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$strong_quantity,'unit'=>self::UNIT['number'],'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['strong']])
+            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$strong_quantity,'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['strong']])
             ->execute();
 
         $labor_const_add [] = $labor_const
             ->createCommand()
-            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$waterway_quantity,'unit'=>self::UNIT['number'],'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['waterway']])
+            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$waterway_quantity,'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['waterway']])
             ->execute();
 
         return $labor_const_add;
