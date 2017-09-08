@@ -32,7 +32,8 @@ class LaborCost extends ActiveRecord
 
     const WORKER_KIND_DETAILS = [
             'weak'=> '弱电',
-            'strong' => '强电'
+            'strong' => '强电',
+            'waterway'=>'水路'
         ];
 
     /**
@@ -89,7 +90,7 @@ class LaborCost extends ActiveRecord
 
     }
 
-    public static function weakAdd($worker_kind,$province_code,$city_code,$rank,$univalence,$weak_quantity,$strong_quantity)
+    public static function weakAdd($worker_kind,$province_code,$city_code,$rank,$univalence,$weak_quantity,$strong_quantity,$waterway_quantity)
     {
         $labor_const = \Yii::$app->db;
         // 弱电添加
@@ -101,6 +102,11 @@ class LaborCost extends ActiveRecord
         $labor_const_add [] = $labor_const
             ->createCommand()
             ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$strong_quantity,'unit'=>self::UNIT['number'],'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['strong']])
+            ->execute();
+
+        $labor_const_add [] = $labor_const
+            ->createCommand()
+            ->insert(self::LABOR_COST,['province_code'=>$province_code,'city_code'=>$city_code,'univalence'=>$univalence,'worker_kind'=>$worker_kind,'quantity'=>$waterway_quantity,'unit'=>self::UNIT['number'],'rank'=>$rank,'worker_kind_details'=>self::WORKER_KIND_DETAILS['waterway']])
             ->execute();
 
         return $labor_const_add;
