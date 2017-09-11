@@ -840,6 +840,23 @@ class QuoteController extends Controller
     }
 
     /**
+     * 首页管理排序
+     * @return string
+     */
+    public function actionHomepageSort(){
+        $post = \Yii::$app->request->post();
+        foreach ($post['sort'] as $one_post){
+            $sort_message = BrainpowerInitalSupervise::findOne($one_post['id']);
+            $sort_message->sort = $one_post['sort'];
+            $sort_message->save();
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'OK'
+        ]);
+    }
+
+    /**
      * the area of the page where the page is added
      * @return string
      */
