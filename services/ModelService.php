@@ -37,6 +37,11 @@ class ModelService
     const REVIEW_STATUS_APPROVE = 2;
     const REVIEW_STATUS_REJECT = 1;
     const REVIEW_STATUS_NOT_REVIEWED = 0;
+    const REVIEW_STATUSES = [
+        self::REVIEW_STATUS_REJECT,
+        self::REVIEW_STATUS_APPROVE,
+    ];
+    const SCENARIO_REVIEW = 'review';
 
     /**
      * Generate sorting statements for query

@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -165,6 +166,7 @@ class BrandApplication extends ActiveRecord
             [['category_id', 'brand_id', 'authorization_start', 'authorization_end'], 'required'],
             [['brand_id'], 'validateBrandId'],
             [['category_id'], 'validateCategoryId'],
+            [['review_status'], 'in', 'range' => ModelService::REVIEW_STATUSES, 'on' => ModelService::SCENARIO_REVIEW],
         ];
     }
 
