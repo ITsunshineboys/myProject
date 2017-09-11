@@ -585,20 +585,15 @@ class BasisDecorationService
     public static function carpentryPlasterboardCost($modelling_length,$flat_area,$goods,$crafts ,$video_wall = 1)
     {
         $plasterboard = [];
-        foreach ($goods as $goods_price )
-        {
-            if($goods_price['title'] == '石膏板')
-            {
+        foreach ($goods as $goods_price ) {
+            if($goods_price['title'] == '石膏板') {
                 $plasterboard = $goods_price;
-            }else
-            {
+            }else {
                 $plasterboard = null;
             }
         }
-        foreach ($crafts as $craft)
-        {
-            switch ($craft)
-            {
+        foreach ($crafts as $craft) {
+            switch ($craft) {
                 case $craft['project_details'] == '造型长度石膏板':
                     $plasterboard_material = $craft['material'];
                     break;
@@ -626,21 +621,16 @@ class BasisDecorationService
      */
     public static function carpentryKeelCost($modelling_length,$flat_area,$goods,$crafts)
     {
-        if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods))
-        {
-            foreach ($goods as $price)
-            {
-                if($price['title'] == '龙骨')
-                {
+        if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods)) {
+            foreach ($goods as $price) {
+                if($price['title'] == '龙骨') {
                     $goods_price = $price;
                 }
             }
 
             $plasterboard_material = 0;
-            foreach ($crafts as $craft)
-            {
-                if($craft['project_details'] == '龙骨')
-                {
+            foreach ($crafts as $craft) {
+                if($craft['project_details'] == '龙骨') {
                     $plasterboard_material = $craft['material'];
                 }
             }
@@ -666,20 +656,15 @@ class BasisDecorationService
      */
     public static function carpentryPoleCost($modelling_length,$flat_area,$goods,$crafts)
     {
-        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods))
-        {
-            foreach ($goods as $price)
-            {
-                if($price['title'] == '丝杆')
-                {
+        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)) {
+            foreach ($goods as $price) {
+                if($price['title'] == '丝杆') {
                     $goods_price = $price;
                 }
             }
             $plasterboard_material = 0;
-            foreach ($crafts as $craft)
-            {
-                if($craft['project_details'] == '丝杆')
-                {
+            foreach ($crafts as $craft) {
+                if($craft['project_details'] == '丝杆') {
                     $plasterboard_material = $craft['material'];
                 }
             }
@@ -687,7 +672,6 @@ class BasisDecorationService
 //            个数1：（造型长度÷【2m】）
 //            个数2：（平顶面积÷【2m²】
             $pole_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
-
 //            丝杆费用：个数×抓取的商品价格
             $pole_cost['cost'] = $pole_cost['quantity'] * $goods_price['platform_price'];
         }

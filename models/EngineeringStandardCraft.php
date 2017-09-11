@@ -39,4 +39,12 @@ class EngineeringStandardCraft  extends ActiveRecord
             ->where(['and', ['district_code' => $district], ['project' => $project]])
             ->all();
     }
+
+    public static function findByList(){
+        return self::find()
+            ->asArray()
+            ->distinct()
+            ->select('project')
+            ->all();
+    }
 }

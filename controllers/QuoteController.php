@@ -15,6 +15,7 @@ use app\models\District;
 use app\models\Effect;
 use app\models\EffectPicture;
 use app\models\EngineeringStandardCraft;
+use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
@@ -134,205 +135,43 @@ class QuoteController extends Controller
         }
     }
 
-    /*
-     * 电工、油漆工、木工、泥瓦工、杂工做工标准修改
-     */
-    public function actionMultitermEdit()
-    {
-        $code = 1000;
-        $post = \Yii::$app->request->post();
-        $labor_cost = new LaborCost();
-        foreach ($post as $one_data) {
-            $_labor_cost = clone $labor_cost;
-            $a = $_labor_cost->findOne($one_data['id']);
-            $a->univalence = $one_data['univalence'];
-            $a->quantity = $one_data['points'];
-            $a->setAttributes($one_data);
-            if (!$a->validate()) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$a->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }
-    }
-
     /**
-     * 水路和防水做工标准修改
+     * 工程标准列表
      * @return string
      */
-    public function actionMonomialEdit()
-    {
-        $code = 1000;
-        $post = \Yii::$app->request->post();
-        $labor_cost = new LaborCost();
-        $_labor_cost = $labor_cost->findOne($post['id']);
-        $_labor_cost->univalence = $post['univalence'];
-        $_labor_cost->quantity = $post['points'];
-        if (!$_labor_cost->validate()) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        if (!$_labor_cost->save()) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-    }
-
-    /**
-     * 工程标准工艺标准修改
-     * @return string
-     */
-    public function actionCraftEdit()
-    {
-        $code = 1000;
-        $post = \Yii::$app->request->post();
-        $engineering_standard_craft = new EngineeringStandardCraft();
-        foreach ($post as $one_data) {
-            $craft = clone $engineering_standard_craft;
-            $_craft = $craft->findOne($one_data['id']);
-            $_craft->material = $one_data['material'];
-            $_craft->setAttributes($one_data);
-            if (!$_craft->validate()) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$_craft->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }
-    }
-
-    /**
-     * 工程标准添加材料项
-     * @return string
-     */
-    public function actionMaterialAddInquire()
-    {
-        $post = \Yii::$app->request->post();
-        $goods = Goods::newMaterialAdd(3, $post);
-        $goods_attr = GoodsAttr::findByGoodsId($goods['id']);
-
+    public function actionProjectNormList(){
         return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' => [
-                'goods' => [
-                    'goods' => $goods,
-                    'goods_attr' => $goods_attr,
-                ],
-            ],
+            'list'=>EngineeringStandardCraft::findByList(),
         ]);
     }
 
     /**
-     * 工程标准添加材料项
+     * 工程标准修改列表
      * @return string
      */
-    public function actionMaterialAdd()
-    {
-        $code = 1000;
-        $post = \Yii::$app->request->post();
-        $decoration_add = new DecorationAdd();
-        foreach ($post as $one_data) {
-            $add = clone $decoration_add;
-            if (array_key_exists('series_id', $one_data) == true) {
-                $add->series_id = $one_data['series_id'];
-            }
-            if (array_key_exists('style_id', $one_data) == true) {
-                $add->style_id = $one_data['style_id'];
-            }
-            if (array_key_exists('min_area', $one_data) == true) {
-                $add->min_area = $one_data['min_area'];
-                $add->max_area = $one_data['max_area'];
-            }
-            $add->project = $one_data['project'];
-            $add->material = $one_data['material'];
-            $add->sku = $one_data['sku'];
-            $add->district_code = $one_data['district_code'];
-            $add->quantity = $one_data['quantity'];
-            $add->setAttributes($one_data);
-            if (!$add->validate()) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$add->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }
+    public function actionProjectNormEditList(){
+        $city = trim(\Yii::$app->request->get('city',''));
+        $project = trim(\Yii::$app->request->get('project',''));
+        return Json::encode([
+           'list'=>EngineeringStandardCraft::findByAll($project,$city),
+        ]);
     }
 
     /**
-     * 工程标准修改材料项
+     * 工程标准修改
      * @return string
      */
-    public function actionMaterialEdit()
-    {
-        $code = 1000;
+    public function actionProjectNormEdit(){
         $post = \Yii::$app->request->post();
-        $decoration_add = new DecorationAdd();
-        foreach ($post as $one_data) {
-            $add = clone $decoration_add;
-            $_add = $add->findOne($one_data['id']);
-            if (array_key_exists('series_id', $one_data) == true) {
-                $_add->series_id = $one_data['series_id'];
-            }
-            if (array_key_exists('style_id', $one_data) == true) {
-                $_add->style_id = $one_data['style_id'];
-            }
-            if (array_key_exists('min_area', $one_data) == true) {
-                $_add->min_area = $one_data['min_area'];
-                $_add->max_area = $one_data['max_area'];
-            }
-            $_add->project = $one_data['project'];
-            $_add->material = $one_data['material'];
-            $_add->sku = $one_data['sku'];
-            $_add->district_code = $one_data['district_code'];
-            $_add->quantity = $one_data['quantity'];
-            $_add->setAttributes($one_data);
-            if (!$_add->validate()) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$_add->save()) {
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        foreach ($post['material'] as $one_material){
+            $material = EngineeringStandardCraft::findOne($one_material['id']);
+            $material->material = $one_material['material'];
+            $material->save();
         }
+        return Json::encode([
+           'code'=>200,
+            'msg'=>'ok'
+        ]);
     }
 
     /**
@@ -352,9 +191,7 @@ class QuoteController extends Controller
                 'msg' => 'OK',
                 'model' => $effect
             ]);
-        }
-        else
-        {
+        } else {
             $where = "district_code = $post";
             $effect = Effect::pagination($where,$page,$size);
             return Json::encode([
