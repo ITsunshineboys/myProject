@@ -86,6 +86,7 @@ class MallController extends Controller
         'brand-list-admin',
         'brand-application-add',
         'brand-application-list-admin',
+        'brand-application-review-list',
         'logistics-template-add',
         'logistics-template-edit',
         'logistics-template-view',
@@ -2182,6 +2183,81 @@ class MallController extends Controller
                 'brand_review_list' => [
                     'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
                     'details' => GoodsBrand::pagination($where, GoodsBrand::FIELDS_REVIEW_LIST, $page, $size, $orderBy)
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Brand application review list action
+     *
+     * @return string
+     */
+    public function actionBrandApplicationReviewList()
+    {
+        $code = 1000;
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new GoodsBrand;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where = '1';
+
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        if (!$keyword) {
+            $reviewStatus = (int)Yii::$app->request->get('review_status', Yii::$app->params['value_all']);
+            if ($reviewStatus != Yii::$app->params['value_all'] && !in_array($reviewStatus, array_keys(Yii::$app->params['reviewStatuses']))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            if ($reviewStatus != Yii::$app->params['value_all']) {
+                $where .= " and review_status = {$reviewStatus}";
+            }
+
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $endTime && $endTime .= ' 23:59:59';
+
+            if ($startTime) {
+                $startTime = strtotime($startTime);
+                $startTime && $where .= " and create_time >= {$startTime}";
+            }
+            if ($endTime) {
+                $endTime = strtotime($endTime);
+                $endTime && $where .= " and create_time <= {$endTime}";
+            }
+        } else {
+            $where .= " and (supplier_name like '%{$keyword}%' or mobile like '%{$keyword}%')";
+        }
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsBrand::PAGE_SIZE_DEFAULT);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'brand_application_review_list' => [
+                    'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
+                    'details' => BrandApplication::pagination($where, BrandApplication::FIELDS_REVIEW_ADMIN, $page, $size, $orderBy)
                 ]
             ],
         ]);

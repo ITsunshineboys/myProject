@@ -31,6 +31,25 @@ class BrandApplication extends ActiveRecord
         'review_time',
         'images',
     ];
+
+    /**
+     * @var array admin fields
+     */
+    const FIELDS_REVIEW_ADMIN = [
+        'id',
+        'brand_name',
+        'brand_logo',
+        'create_time',
+        'authorization_start',
+        'authorization_end',
+        'review_status',
+        'review_note',
+        'category_title',
+        'supplier_name',
+        'mobile',
+        'review_time',
+        'images',
+    ];
     const FIELDS_EXTRA = ['images'];
 
     /**
@@ -58,7 +77,7 @@ class BrandApplication extends ActiveRecord
         $brandApplication->authorization_end = strtotime($brandApplication->authorization_end);
         $brandApplication->mobile = $user->mobile;
         $brandApplication->supplier_id = $supplier->id;
-        $brandApplication->supplier_name = $supplier->name;
+        $brandApplication->supplier_name = $supplier->shop_name;
         $brandApplication->create_time = time();
 
         if (!$brandApplication->validate()) {
@@ -70,6 +89,7 @@ class BrandApplication extends ActiveRecord
         $brand = GoodsBrand::findOne($brandApplication->brand_id);
 
         $brandApplication->brand_name = $brand->name;
+        $brandApplication->brand_logo = $brand->brand_logo;
         $brandApplication->category_title = $category->fullTitle();
         if (!$brandApplication->save()) {
             $code = 500;

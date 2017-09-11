@@ -55,6 +55,7 @@ return [
     'mall/brand-list-admin' => [1, 6],
     'mall/brand-application-add' => [6],
     'mall/brand-application-list-admin' => [1, 6],
+    'mall/brand-application-review-list' => [1],
 
     // logistics template
     'mall/logistics-template-add' => [6],
