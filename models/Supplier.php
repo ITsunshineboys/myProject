@@ -77,7 +77,7 @@ class Supplier extends ActiveRecord
         'identity_card_back_image',
     ];
     const FIELDS_VIEW_APP_MODEL = [
-        'status',
+//        'status',
         'type_org',
         'shop_name',
         'category_id',
@@ -672,7 +672,8 @@ class Supplier extends ActiveRecord
                     break;
                 case 'review_status':
                     $userRole = UserRole::find()->where(['user_id' => $this->uid, 'role_id' => Yii::$app->params['supplierRoleId']])->one();
-                    $extraData[$extraField] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
+                    $extraData[$extraField] = $userRole->review_status;
+                    $extraData[$extraField . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
                     break;
             }
         }
