@@ -88,17 +88,19 @@ class GoodsOrder extends ActiveRecord
         'z.freight',
         'a.return_insurance',
     ];
-    const FIELDS_USERORDER_ADMIN = [
+  const FIELDS_USERORDER_ADMIN = [
         'a.order_no',
-        'a.id',
         'z.customer_service',
         'a.pay_status',
-        'a.address_id',
         'z.order_status',
         'a.create_time',
         'a.user_id',
         'z.shipping_status',
         'a.amount_order',
+        'a.pay_name',
+        'a.buyer_message',
+        'a.order_refer',
+        'a.paytime',
         'z.goods_name',
         'z.goods_price',
         'z.goods_number',
@@ -108,7 +110,6 @@ class GoodsOrder extends ActiveRecord
         'z.sku',
         'z.order_id',
         'z.comment_id',
-        'a.order_refer',
         'z.freight',
         'a.return_insurance',
     ];
@@ -1707,7 +1708,7 @@ class GoodsOrder extends ActiveRecord
         return $orderAmount;
     }
 
-    /**
+     /**
      * @param array $where
      * @param array $select
      * @param int $page
@@ -1731,6 +1732,7 @@ class GoodsOrder extends ActiveRecord
             }
         }
         foreach ($arr AS $k =>$v){
+            $arr[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
             $arr[$k]['handle']='';
             if ($arr[$k]['is_unusual']==1){
                 $arr[$k]['unusual']='申请退款';
@@ -1751,28 +1753,57 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+            $arr_list=[];
+            $arr_list['goods_name']=$arr[$k]['goods_name'];
+            $arr_list['goods_price']=$arr[$k]['goods_price'];
+            $arr_list['goods_number']=$arr[$k]['goods_number'];
+            $arr_list['market_price']=$arr[$k]['market_price'];
+            $arr_list['supplier_price']=$arr[$k]['supplier_price'];
+            $arr_list['sku']=$arr[$k]['sku'];
+            $arr_list['freight']=$arr[$k]['freight'];
+            $arr_list['unusual']=$arr[$k]['unusual'];
+            unset($arr[$k]['goods_name']);
+            unset($arr[$k]['goods_price']);
+            unset($arr[$k]['goods_number']);
+            unset($arr[$k]['market_price']);
+            unset($arr[$k]['supplier_price']);
+            unset($arr[$k]['sku']);
+            unset($arr[$k]['freight']);
+            unset($arr[$k]['unusual']);
+            unset($arr[$k]['order_id']);
+            unset($arr[$k]['is_unusual']);
+            unset($arr[$k]['comment_id']);
+            unset($arr[$k]['return_insurance']);
+            $arr[$k]['list']=[$arr_list];
+
         }
 
         $GoodsOrder=self::find()
-            ->select('order_no,user_id,pay_status,create_time,amount_order,pay_name,buyer_message,order_refer,paytime,remarks,supplier_id')
+            ->select('order_no,create_time,user_id,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
             ->where(['pay_status'=>0,'user_id'=>$user->id])
             ->asArray()
             ->all();
         foreach ($GoodsOrder AS $k =>$v){
             $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
-            $GoodsOrder[$k]['status']='待付款';
+
             $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
+            $GoodsOrder[$k]['paytime']=date('Y-m-d h:i',$GoodsOrder[$k]['paytime']);
             $GoodsOrder[$k]['user_name']=$user->nickname;
+            $GoodsOrder[$k]['status']='待付款';
+            $GoodsOrder[$k]['comment_grade']='';
+            $GoodsOrder[$k]['handle']='';
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->select('goods_price,goods_number,market_price,supplier_price,sku,is_unusual,freight,')
+                ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight')
                 ->asArray()
                 ->all();
             foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                 $GoodsOrder[$k]['list'][$key]['freight']=sprintf('%.2f', (float) $GoodsOrder[$k]['list'][$key]['freight']*0.01);
                 $GoodsOrder[$k]['list'][$key]['goods_price']=sprintf('%.2f', (float) $GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
-                $GoodsOrder[$k]['list'][$key]['freight']='无异常';
+                $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
             }
+            unset($GoodsOrder[$k]['pay_status']);
+            unset($GoodsOrder[$k]['supplier_id']);
             $arr[]=$GoodsOrder[$k];
         }
         foreach ($arr as $key => $row)
