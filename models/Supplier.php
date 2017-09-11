@@ -105,6 +105,7 @@ class Supplier extends ActiveRecord
         'identity_no',
         'identity_card_front_image',
         'identity_card_back_image',
+        'review_status',
     ];
     const FIELDS_VIEW_MALL_EXTRA = [
         'open_shop_time',
@@ -669,8 +670,11 @@ class Supplier extends ActiveRecord
                         ->one();
                     $extraData[$extraField] = date('Y-m-d', $userRole->review_time);
                     break;
+                case 'review_status':
+                    $userRole = UserRole::find()->where(['user_id' => $this->uid, 'role_id' => Yii::$app->params['supplierRoleId']])->one();
+                    $extraData[$extraField] = Yii::$app->params['reviewStatuses'][$userRole->review_status];
+                    break;
             }
-
         }
 
         return $extraData;
@@ -688,7 +692,7 @@ class Supplier extends ActiveRecord
         }
 
         if (isset($data['status'])) {
-            $data['status_desc'] = Yii::$app->params['reviewStatuses'][$data['status']];
+            $data['status_desc'] = self::STATUSES[$data['status']];
         }
 
         if (isset($data['quality_guarantee_deposit'])) {
