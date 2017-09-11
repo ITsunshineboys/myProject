@@ -3798,7 +3798,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'brand-application-list-admin' => [
+                'brand_application_list_admin' => [
                     'total' => (int)BrandApplication::find()->where([])->asArray()->count(),
                     'details' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
                 ]
