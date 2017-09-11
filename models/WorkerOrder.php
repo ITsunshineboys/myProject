@@ -63,9 +63,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'worker_id', 'create_time', 'start_time', 'end_time', 'need_time', 'amount', 'front_money', 'status'], 'integer'],
+            [['uid', 'worker_id', 'create_time', 'modify_time', 'start_time', 'end_time', 'need_time', 'amount', 'front_money', 'status', 'worker_type_id', 'is_old'], 'integer'],
             [['con_tel'], 'required'],
             [['order_no'], 'string', 'max' => 50],
+            [['describe'], 'string', 'max' => 350],
+            [['reason'], 'string', 'max' => 350],
+            [['demand'], 'string', 'max' => 300],
             [['map_location', 'address'], 'string', 'max' => 100],
             [['con_people'], 'string', 'max' => 25],
             [['con_tel'], 'string', 'max' => 11],
@@ -166,6 +169,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
 
         $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
+        $order->modify_time && $order->modify_time = date('Y-m-d H:i', $order->modify_time);
         $order->start_time && $order->start_time = date('Y-m-d H:i', $order->start_time);
         $order->end_time && $order->end_time = date('Y-m-d H:i', $order->end_time);
 //        状态是0的时候有取消时间和取消原因

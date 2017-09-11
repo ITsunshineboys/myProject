@@ -321,7 +321,7 @@ class WorkerController extends Controller
             $items = trim($request->post('items', ''));
             $new_amount = trim($request->post('new_amount', 0));
             $reason = trim($request->post('reason', ''));
-            $work_days = trim($request->post('work_days', ''));
+            $need_time = trim($request->post('need_time', ''));
 
             if (!$order_id) {
                 $code = 1000;
@@ -331,12 +331,12 @@ class WorkerController extends Controller
                 ]);
             }
 
-
             $order_old = WorkerOrder::find()
                 ->where(['id' => $order_id])
                 ->asArray()
                 ->one();
 
+//            var_dump($order_old);exit();
 
             if ($order_old == null) {
                 $code = 1000;
@@ -346,13 +346,12 @@ class WorkerController extends Controller
                 ]);
             }
 
-            $order_new = new WorkerOrder();
 
             //得到之前的数据
             $data = $order_old;
-
             unset($data['id']);
 
+            //alter amount data
             if ($new_amount) {
                 if (!$reason) {
                     $code = 1000;
@@ -361,21 +360,26 @@ class WorkerController extends Controller
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                //todo alter amount data
                 $data['amount'] = $new_amount * 100;
+                $data['reason'] = $reason;
             }
 
-            if ($work_days) {
-                //todo alter work_days data  修改工作时间表  新加一条数据， 旧的改变is_old状态为1
+            //alter work_days data  修改工作时间表  新加一条数据， 旧的改变is_old状态为1
+            if ($need_time && $need_time != $order_old['need_time']) {
+                $data['need_time'] = $need_time;
             }
 
 
-            $order_old['is_old'] = 1;
+//            $order_old['is_old'] = 1;
             $data['is_old'] = 0;
+
+//            var_dump($data);exit();
+            $order_new = new WorkerOrder();
+//            var_dump($data);exit();
 
             $trans = \Yii::$app->db->beginTransaction();
             try {
-                $order_old->update();
+                WorkerOrder::updateAll(['is_old' => 1], ['id' => $order_old['id']]);
                 $order_new->setAttributes($data);
                 $order_new->save();
                 $trans->commit();
@@ -384,8 +388,8 @@ class WorkerController extends Controller
             }
 
             $order_id_new = $order_new->id;
-
-            $new_items = [];
+//
+//            $new_items = [];
 
             //worker_order_item表对应订单号的全部 数据查出来   $old_items
             $old_items = WorkerOrderItem::find()
@@ -400,6 +404,8 @@ class WorkerController extends Controller
                 }
             }
 
+
+//            var_dump($new_items);exit();
             //$new_items  所有新的数据
 
             //改变数据

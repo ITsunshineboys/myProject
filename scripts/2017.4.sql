@@ -1290,6 +1290,7 @@ CREATE TABLE `worker_order` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0: 已取消(完成)，1：未开始(接单中)，2：施工中，3：已完工(完成)',
   `describe` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '订单描述',
   `demand` varchar(300) NOT NULL DEFAULT '' COMMENT '个性需求',
+  `reason` varchar(350) NOT NULL DEFAULT '' COMMENT '修改原因',
   `is_old` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否旧数据，0：不是，  1：是',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1410,7 +1411,7 @@ CREATE TABLE `order_after_sale_image` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
---9.6 end
+-- 9.6 end
 CREATE TABLE `craft_cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `worker_craft_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '具体工艺id',
