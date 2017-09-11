@@ -3758,9 +3758,7 @@ class MallController extends Controller
 
         $where['id'] = $id;
         $where['status'] = Goods::STATUS_ONLINE;
-        if (!empty(Yii::$app->session[User::LOGIN_ROLE_ID])
-            && Yii::$app->session[User::LOGIN_ROLE_ID] == Yii::$app->params['supplierRoleId']
-        ) {
+        if (Yii::$app->user->identity) {
             unset($where['status']);
         }
         $goods = Goods::find()->where($where)->one();
