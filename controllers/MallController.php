@@ -2460,7 +2460,7 @@ class MallController extends Controller
 
         unset($logisticsTemplate->id);
         unset($logisticsTemplate->supplier_id);
-        unset($logisticsTemplate->name);
+//        unset($logisticsTemplate->name);
         unset($logisticsTemplate->status);
 
         return Json::encode([
