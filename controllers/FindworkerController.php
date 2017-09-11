@@ -2,15 +2,16 @@
 namespace app\controllers;
 
 
+use app\models\Worker;
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\models\WorkerType;
-use app\models\WorkerTypeItem;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Request;
 
@@ -18,6 +19,8 @@ use yii\web\Request;
 class FindworkerController extends Controller{
 
     const PARENT=0;
+    const STATUS_SINGLE=1;
+
     /**
      * @inheritdoc
      */
@@ -78,7 +81,7 @@ class FindworkerController extends Controller{
                     $parents[$i]['worker_type']=>$data[$i],
                 ];
             }
-        return json_encode([
+        return Json::encode([
             'code'=>200,
             'msg'=>'ok',
             'data'=>$parent
@@ -99,13 +102,13 @@ class FindworkerController extends Controller{
         $request=new Request();
         $worker_type_id=trim($request->get('worker_type_id',''),'');
         if(!$worker_type_id){
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
          $data=WorkerItem::getparent($worker_type_id);
-               return json_encode([
+               return Json::encode([
                    'code'=>200,
                    'msg'=>'ok',
                    'data'=>[
@@ -125,13 +128,13 @@ class FindworkerController extends Controller{
         $code = 1000;
         $item_id = trim(\Yii::$app->request->get('item_id', ''), '');
         if (!$item_id) {
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $data = WorkerItem::getcraft($item_id);
-        return json_encode([
+        return Json::encode([
             'code' => 200,
             'msg' => 'ok',
             'data' => $data
@@ -147,13 +150,13 @@ class FindworkerController extends Controller{
         $code=1000;
         $craft_id=trim(\Yii::$app->request->get('craft_id',''),'');
         if (!$craft_id) {
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $data = WorkerOrderItem::craftprice($craft_id);
-        return json_encode([
+        return Json::encode([
             'code' => 200,
             'msg' => 'ok',
             'data' => $data
@@ -168,14 +171,14 @@ class FindworkerController extends Controller{
         $code=1000;
         $item_id = trim(\Yii::$app->request->get('item_id', ''), '');
         if (!$item_id) {
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $data=WorkerItem::getchliditem($item_id);
 
-            return json_encode([
+            return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
                 'data' => $data
@@ -189,7 +192,7 @@ class FindworkerController extends Controller{
          $user_id = \Yii::$app->user->identity;
          $code=1052;
          if(!$user_id){
-             return json_encode([
+             return Json::encode([
                  'code' => $code,
                  'msg' =>\ Yii::$app->params['errorCodes'][$code]
              ]);
@@ -204,7 +207,7 @@ class FindworkerController extends Controller{
          if($homeinfos!=1000){
             if(is_numeric($homeinfos)){
                 $code=$homeinfos;
-                return json_encode([
+                return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
@@ -214,7 +217,7 @@ class FindworkerController extends Controller{
             if($ownerinfos!=1000){
                 if(is_numeric($ownerinfos)){
                     $code=$ownerinfos;
-                    return json_encode([
+                    return Json::encode([
                         'code' => $code,
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
@@ -222,7 +225,7 @@ class FindworkerController extends Controller{
             }
          $homeinfos['need_time'] = $need_time;
          $code=WorkerOrder::addorderinfo($user_id,$homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe);
-         return json_encode([
+         return Json::encode([
              'code' => $code,
              'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
          ]);
@@ -237,12 +240,12 @@ class FindworkerController extends Controller{
         $files=FileService::uploadMore();
             if (is_numeric($files)){
                 $code=$files;
-                return json_encode([
+                return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
             }else{
-                return json_encode([
+                return Json::encode([
                     'code' => 200,
                     'msg' => 'ok',
                     'data'=>$files
@@ -264,7 +267,7 @@ class FindworkerController extends Controller{
 
             if (preg_match('/(area)/', $key, $m)) {
                 if ($home_info[$key] > 200) {
-                    return json_encode([
+                    return Json::encode([
                         'code' => $code,
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
@@ -282,7 +285,7 @@ class FindworkerController extends Controller{
 
         $order_info=WorkerOrder::getorderinfo();
         if($order_info==null){
-            return json_encode([
+            return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
                 'data'=>null
@@ -292,7 +295,7 @@ class FindworkerController extends Controller{
         $servicstyle=WorkerItem::getparent($order_info['worker_type_id']);
         $time=WorkerOrder::timedata($order_info['id']);
 
-       return json_encode([
+       return Json::encode([
             'code'=>200,
            'msg'=>'ok',
            'data'=>[
@@ -305,5 +308,54 @@ class FindworkerController extends Controller{
            ]
 
        ]);
+    }
+    /**
+     * 工人抢单
+     * @return string
+     */
+    public function actionGrabsingle(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $order_id=trim(\Yii::$app->request->get('order_id',''),'');
+        if(!$order_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $worker_id=Worker::find()
+            ->select('id')
+            ->where(['uid'=>$user_id])
+            ->asArray()
+            ->one();
+        $orderdata=WorkerOrder::find()
+            ->where(['id'=>$order_id])
+            ->andWhere(['status'=>self::STATUS_SINGLE])
+            ->one();
+        $orderdata->is_old=self::STATUS_SINGLE;
+        $orderdata->worker_id=$worker_id['id'];
+        if(!$orderdata->save(false)){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data'=>[
+                'tel'=>$orderdata->con_tel,
+                'name'=>$orderdata->con_people
+            ]
+        ]);
     }
 }

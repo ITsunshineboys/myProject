@@ -35,6 +35,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 {
     const TIMESTYPE='~';
     const STATUS_INSERT=1;
+    const ORDER_OLD=0;
     const WORKER_ORDER_STATUS = [
         0 => '完工',
         1 => '未开始',
@@ -338,7 +339,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe){
 
         $worker_order = new self();
-        $worker_order->uid =1;
+        $worker_order->uid =$uid;
         $worker_order->worker_type_id = $homeinfos['worker_type_id'];
         $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
         $worker_order->create_time = time();
@@ -432,7 +433,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
         $data = self::find()
             ->asArray()
-            ->where(['is_old' => 0])
+            ->where(['is_old' =>self::ORDER_OLD])
+            ->andWhere(['status'=>self::STATUS_INSERT])
             ->all();
         foreach ($data as $key=>&$v){
 
@@ -442,7 +444,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $id=$ids[$rand_keys];
         $info=self::find()
             ->asArray()
-            ->where(['is_old'=>0])
+            ->where(['is_old'=>self::ORDER_OLD])
             ->andWhere(['id'=>$id])
             ->one();
         if(empty($info)){
