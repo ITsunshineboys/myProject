@@ -8,6 +8,7 @@ use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -314,7 +315,7 @@ class WorkerController extends Controller
 //            $post = \Yii::$app->request->post();
 
             //TODO 传值的格式暂定 $post[order_id, items, new_amount, reason, work_days]
-            //TODO 其中 items[[$id, worker_craft_id, area], [$id, worker_craft_id, area] ...]   work_days[day1, day2, day3, day...]
+            //TODO 其中 items[   [id, craft_id, area], [id, area] ...]   work_days[day1, day2, day3, day...]
 
             $order_id = (int)$request->post('order_id', 0);
             $items = trim($request->post('items', ''));
@@ -352,6 +353,55 @@ class WorkerController extends Controller
 
             unset($data['id']);
 
+            if ($new_amount) {
+                if (!$reason) {
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                //todo alter amount data
+                $data['amount'] = $new_amount * 100;
+            }
+
+            if ($work_days) {
+                //todo alter work_days data  修改工作时间表  新加一条数据， 旧的改变is_old状态为1
+            }
+
+
+            $order_old['is_old'] = 1;
+            $data['is_old'] = 0;
+
+            $trans = \Yii::$app->db->beginTransaction();
+            try {
+                $order_old->update();
+                $order_new->setAttributes($data);
+                $order_new->save();
+                $trans->commit();
+            } catch (Exception $e) {
+                $trans->rollBack();
+            }
+
+            $order_id_new = $order_new->id;
+
+            $new_items = [];
+
+            //worker_order_item表对应订单号的全部 数据查出来   $old_items
+            $old_items = WorkerOrderItem::find()
+                ->where(['worker_order_id' => $order_old['id']])
+                ->asArray()
+                ->all();
+            if ($old_items) {
+                foreach ($old_items as &$old_item) {
+                    unset($old_item['id']);
+                    $old_item['worker_order_id'] = $order_id_new;
+                    $new_items[] = $old_item;
+                }
+            }
+
+            //$new_items  所有新的数据
+
             //改变数据
             if ($items) {
                 //alter item data
@@ -363,57 +413,22 @@ class WorkerController extends Controller
                     ]);
                 }
 
-                foreach ($items as $item) {
-                    $craft_id = $item['worker_craft_id'];
-                    $item_id = $item['id'];
-                    $items_old = WorkerOrder::getOrderItemDetail($order_id, $item_id);
 
-                    foreach ($items_old as $item_old) {
+                //判断是否需要改动
+                foreach ($items as $item) {
+//                    $craft_id = $item['craft_id'];
+                    $item_id = $item['id'];
+                    //craft_id
+//                    $item
+                    if (isset($item['craft_id'])) {
+                        //
+                    } elseif (isset($item['area'])) {
+
+                    } elseif (isset($item['status'])) {
 
                     }
-//                    $worker_item_id = WorkerCraft::find()
-//                        ->where(['id' => $craft_id])
-//                        ->asArray()
-//                        ->one()['item_id'];
-//
-//                    $worker_order_item = WorkerOrderItem::find()->where([''])
-//                    $area = $item['area'];
                 }
-
-
-
-//                $worker_order_img=new WorkerOrderImg();
-//                foreach($images as $attributes)
-//                {
-//                    $_model = clone $worker_order_img;
-//                    $_model->order_img=$attributes;
-//                    $_model->worker_order_id=$order_id;
-//                    $res= $_model->save();
-//                }
             }
-
-            if ($new_amount) {
-                if (!$reason) {
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                //alter amount data
-            }
-
-            if ($work_days) {
-
-                //alter work_days data
-            }
-
-
-            $order_old['is_old'] = 1;
-            $data['is_old'] = 0;
-
-            $trans = \Yii::$app->db->beginTransaction();
-            $order_old->update();
         }
 
         $code = 1050;
