@@ -47,7 +47,7 @@ class BrandApplication extends ActiveRecord
         'category_title',
         'supplier_name',
         'mobile',
-        'review_time',
+//        'review_time',
         'images',
     ];
     const FIELDS_EXTRA = ['images'];
