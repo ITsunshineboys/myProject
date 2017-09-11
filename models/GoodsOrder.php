@@ -1789,7 +1789,7 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
             $GoodsOrder[$k]['paytime']=date('Y-m-d h:i',$GoodsOrder[$k]['paytime']);
             $GoodsOrder[$k]['user_name']=$user->nickname;
-            $GoodsOrder[$k]['status']='待付款';
+            $GoodsOrder[$k]['status']='未付款';
             $GoodsOrder[$k]['comment_grade']='';
             $GoodsOrder[$k]['handle']='';
             $GoodsOrder[$k]['list']=OrderGoods::find()
@@ -1810,11 +1810,14 @@ class GoodsOrder extends ActiveRecord
         {
             $create_time[$key]  = $arr[$key]['create_time'];
         }
+        $arr=self::switchStatus($arr);
         if ($arr){
             array_multisort($create_time, SORT_DESC, $arr);
+
             $count=count($arr);
             $total_page=ceil($count/$size);
             $data=array_slice($arr, ($page-1)*$size,$size);
+
             return [
                 'total_page' =>$total_page,
                 'count'=>$count,
@@ -1827,6 +1830,42 @@ class GoodsOrder extends ActiveRecord
                 'details' => []
             ];
         }
+    }
+
+    /**
+     * @param $arr
+     * @return mixed
+     */
+    public static  function switchStatus($arr)
+    {
+        foreach ($arr as $k =>$v)
+        {
+            switch ($arr[$k]['status'])
+            {
+                case '未付款':
+                    $arr[$k]['status']='unpaid';
+                    break;
+                case '未发货':
+                    $arr[$k]['status']='unshipped';
+                    break;
+                case  '待收货':
+                    $arr[$k]['status']='unreceiveded';
+                    break;
+                case  '已取消':
+                    $arr[$k]['status']='cancel';
+                    break;
+                case  '售后中':
+                    $arr[$k]['status']='after_saled';
+                    break;
+                case  '售后结束':
+                    $arr[$k]['status']='after_sale_completed';
+                    break;
+                case  '已完成':
+                    $arr[$k]['status']='completed';
+                    break;
+            }
+        }
+        return $arr;
     }
 
     /**

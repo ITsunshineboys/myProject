@@ -1558,10 +1558,11 @@ class OrderController extends Controller
         }
     }
     
-    /**
+   /**
+     * app端  用户获取订单列表
      * @return string
      */
-    public function  actionFindUserOrder(){
+    public function  actionFindOrder(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -1574,11 +1575,33 @@ class OrderController extends Controller
         $type=$request->get('type','all');
         $page=$request->get('page','1');
         $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
-        if ($type==GoodsOrder::ORDER_TYPE_ALL){
-            $where ="a.user_id={$user->id}";
-        }else{
-            $where=GoodsOrder::GetTypeWhere($type);
-            $where .=" and a.user_id={$user->id}  and order_refer = 2";
+        $role=$request->get('role','user');
+        switch ($role){
+            case 'user':
+                if ($type==GoodsOrder::ORDER_TYPE_ALL){
+                    $where ="a.user_id={$user->id}";
+                }else{
+                    $where=GoodsOrder::GetTypeWhere($type);
+                    $where .=" and a.user_id={$user->id}  and order_refer = 2";
+                }
+                break;
+            case 'supplier':
+                $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+                if(!$supplier)
+                {
+                    $code=1010;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                if ($type==GoodsOrder::ORDER_TYPE_ALL){
+                    $where ="a.supplier_id={$supplier->id}";
+                }else{
+                    $where=GoodsOrder::GetTypeWhere($type);
+                    $where .=" and a.supplier_id={$supplier->id}  and order_refer = 2";
+                }
+                break;
         }
         $sort=' a.create_time  desc';
         $paginationData = GoodsOrder::paginationByUserorderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$sort,$user);
@@ -1589,6 +1612,7 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
+
 
     /**
      * app端  商家获取订单列表
