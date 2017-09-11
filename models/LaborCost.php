@@ -37,6 +37,13 @@ class LaborCost extends ActiveRecord
         return 'labor_cost';
     }
 
+    public function rules()
+    {
+        return [
+            ['univalence','integer']
+        ];
+    }
+
     /**
      * 根据地名查询
      * @param array $arr

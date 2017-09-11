@@ -110,10 +110,28 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 做工标准修改
+     * @return string
+     */
     public function actionLaborCostEdit()
     {
         $post = \Yii::$app->request->post();
-        
+        foreach ($post['else'] as $one_post){
+            if ($one_post['quantity']){
+                $worker_craft_norm = WorkerCraftNorm::findOne($one_post['id']);
+                $worker_craft_norm->quantity = $one_post['quantity'];
+                $worker_craft_norm->save();
+            }
+        }
+        $labor_cost = LaborCost::findOne($post['id']);
+        $labor_cost->univalence = $post['univalence'];
+        if ($labor_cost->save()){
+            return Json::encode([
+               'code' =>200,
+                'msg'=>'OK'
+            ]);
+        }
     }
 
     /*
