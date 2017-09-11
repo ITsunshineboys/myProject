@@ -26,6 +26,7 @@ use app\models\GoodsRecommendSupplier;
 use app\models\UserMobile;
 use app\models\UserStatus;
 use app\models\UserRole;
+use app\models\Role;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use app\services\ModelService;
@@ -3791,6 +3792,11 @@ class MallController extends Controller
             ]);
         }
 
+        $where = ['supplier_id' => $supplierId];
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $where = array_merge($where, ['review_status' => Role::AUTHENTICATION_STATUS_APPROVED]);
+        }
+
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', BrandApplication::PAGE_SIZE_DEFAULT);
 
@@ -3799,8 +3805,8 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'brand_application_list_admin' => [
-                    'total' => (int)BrandApplication::find()->where([])->asArray()->count(),
-                    'details' => BrandApplication::pagination([], BrandApplication::FIELDS_ADMIN, $page, $size)
+                    'total' => (int)BrandApplication::find()->where($where)->asArray()->count(),
+                    'details' => BrandApplication::pagination($where, BrandApplication::FIELDS_ADMIN, $page, $size)
                 ]
             ],
         ]);
