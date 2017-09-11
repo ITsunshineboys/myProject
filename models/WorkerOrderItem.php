@@ -141,26 +141,55 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         //包管
         if(isset($array['guarantee_id'])){
             $data['guarantee_item']['guarantee_item_id']=$array['guarantee_id'];
-            $data['guarantee_item']['guarantee']=$array['guarantee'];
+            $data['guarantee_item']['guarantee_status']=$array['guarantee_status'];
         }
         if(isset($array['chip_id'])){
             $data['chip_item']['chip_item_id']=$array['chip_id'];
-            $data['chip_item']['chip']=$array['chip'];
+            $data['chip_item']['chip_status']=$array['chip_status'];
         }
 
-       if(isset($array['demand'])){
+        if(isset($array['demand'])){
             $data['demand']=$array['demand'];
         }
         if(isset($array['remark'])){
             $data['remark']=$array['remark'];
         }
         $data['images']=$array['images'];
-      if(isset($array['start_time']) && isset($array['end_time'])){
-          $data['start_time']=strtotime($array['start_time']);
-          $data['end_time']=strtotime($array['end_time']);
-      }
-
+        if(isset($array['start_time']) && isset($array['end_time'])){
+            $data['start_time']=strtotime($array['start_time']);
+            $data['end_time']=strtotime($array['end_time']);
+        }
         return $data;
+    }
+
+
+    public static function addhydropowerdata(array $array){
+
+        $data=[];
+        if(isset($array['demand'])){
+            $data['demand']=$array['demand'];
+        }
+        if(isset($array['remark'])){
+            $data['remark']=$array['remark'];
+        }
+        $data['images']=$array['images'];
+        if(isset($array['start_time']) && isset($array['end_time'])){
+            $data['start_time']=strtotime($array['start_time']);
+            $data['end_time']=strtotime($array['end_time']);
+        }
+        if(isset($array['slotting_id'])) {
+            if (!isset($array['slotting_craft_id']) || !isset($array['slotting_length'])) {
+                $code = 1000;
+                return $code;
+            } else {
+                $data['slotting_item']['slotting_item_id'] = $array['slotting_id'];
+                $data['slotting_item']['slotting_craft_id'] = $array['slotting_craft_id'];
+                $data['slotting_item']['slotting_length'] = $array['slotting_length'];
+            }
+
+            var_dump($data);die;
+            return $data;
+        }
     }
     /**
      * @param array $ownerinfos
@@ -186,5 +215,21 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         return $ownerinfos;
     }
 
+    public static function getWorkeitem($id,$post){
+        $type=WorkerType::getparenttype($id);
+        if(!$type){
+            return null;
+        }
+        switch ($type){
+            case '泥工';
+                $homeinfos=WorkerOrderItem::addMudorderitem($post['homeinfos']);
+                break;
+            case '水电工';
+                $homeinfos=WorkerOrderItem::addhydropowerdata($post['homeinfos']);
+                break;
 
+        }
+
+        return $homeinfos;
+    }
 }

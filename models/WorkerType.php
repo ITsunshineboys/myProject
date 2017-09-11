@@ -15,6 +15,7 @@ use yii\db\Query;
 class WorkerType extends \yii\db\ActiveRecord
 {
     const WORKER_TYPE='worker_type';
+    const PARENT=0;
     /**
      * @inheritdoc
      */
@@ -67,6 +68,18 @@ class WorkerType extends \yii\db\ActiveRecord
             ->select('worker_type')
             ->asArray()
             ->where(['id'=>$worker_type_id])
+            ->one()['worker_type'];
+    }
+    /**
+     * @param $worker_type_id
+     * @return mixed
+     */
+    public static function getparenttype($worker_type_id){
+        return self::find()
+            ->select('worker_type')
+            ->asArray()
+            ->where(['id'=>$worker_type_id])
+            ->andWhere(['pid'=>self::PARENT])
             ->one()['worker_type'];
     }
 }

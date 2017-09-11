@@ -7,6 +7,7 @@ use app\models\WorkerItem;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\models\WorkerType;
+use app\models\WorkerTypeItem;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use yii\filters\AccessControl;
@@ -203,7 +204,7 @@ class FindworkerController extends Controller{
          $demand=trim(\Yii::$app->request->post('demand',''),'');
          $describe=trim(\Yii::$app->request->post('describe',''),'');
          $need_time = self::getOrderNeedTime($post['homeinfos']);
-         $homeinfos=WorkerOrderItem::addMudorderitem($post['homeinfos']);
+         $homeinfos=WorkerOrderItem::getWorkeitem($post['homeinfos']['worker_type_id'],$post);
          if($homeinfos!=1000){
             if(is_numeric($homeinfos)){
                 $code=$homeinfos;
@@ -224,7 +225,7 @@ class FindworkerController extends Controller{
                 }
             }
          $homeinfos['need_time'] = $need_time;
-         $code=WorkerOrder::addorderinfo($user_id,$homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe);
+         $code=WorkerOrder::addorderinfo($user_id->getId(),$homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe);
          return Json::encode([
              'code' => $code,
              'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
