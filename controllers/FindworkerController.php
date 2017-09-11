@@ -205,25 +205,22 @@ class FindworkerController extends Controller{
          $describe=trim(\Yii::$app->request->post('describe',''),'');
          $need_time = self::getOrderNeedTime($post['homeinfos']);
          $homeinfos=WorkerOrderItem::getWorkeitem($post['homeinfos']['worker_type_id'],$post);
-         if($homeinfos!=1000){
-            if(is_numeric($homeinfos)){
-                $code=$homeinfos;
+         if(is_numeric($homeinfos)){
+            $code=$homeinfos;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+         }
+         $ownerinfos=WorkerOrderItem::addownerinfo($post['ownerinfos']);
+            if(is_numeric($ownerinfos)){
+                $code=$ownerinfos;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-         }
-         $ownerinfos=WorkerOrderItem::addownerinfo($post['ownerinfos']);
-            if($ownerinfos!=1000){
-                if(is_numeric($ownerinfos)){
-                    $code=$ownerinfos;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
+
          $homeinfos['need_time'] = $need_time;
          $code=WorkerOrder::addorderinfo($user_id->getId(),$homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe);
          return Json::encode([

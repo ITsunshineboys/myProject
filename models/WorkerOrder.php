@@ -35,7 +35,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
 {
     const TIMESTYPE='~';
     const STATUS_INSERT=1;
-    const ORDER_OLD=0;
+    const ORDER_OLD=1;
+    const ORDER_NEW=0;
     const WORKER_ORDER_STATUS = [
         0 => '完工',
         1 => '未开始',
@@ -337,7 +338,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
 
     public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe){
-
         $worker_order = new self();
         $worker_order->uid =$uid;
         $worker_order->worker_type_id = $homeinfos['worker_type_id'];
@@ -367,7 +367,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
             $worker_order_img=new WorkerOrderImg();
             $order_id= $worker_order_img->worker_order_id=$worker_order->id;
-
             $rest=self::saveorderimgs($homeinfos['images'],$order_id);
             if($rest==false){
                 $transaction->rollBack();
@@ -386,6 +385,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     }
                 }
             }
+
             $infos=self::saveMudorderitems($data,$id);
             if ($infos==false) {
                 $transaction->rollBack();
@@ -431,6 +431,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 if(preg_match('/(status)/',$k)){
                     $_model->status=$attributes[$k];
                 }
+                if(preg_match('/(length)/',$k)){
+                    $_model->length=$attributes[$k];
+                }
+                if(preg_match('/(count)/',$k)){
+                    $_model->count=$attributes[$k];
+                }
+                if(preg_match('/(electricity)/',$k)){
+                    $_model->electricity=$attributes[$k];
+                }
             }
            $res= $_model->save();
         }
@@ -450,7 +459,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
         $data = self::find()
             ->asArray()
-            ->where(['is_old' =>self::ORDER_OLD])
+            ->where(['is_old' =>self::ORDER_NEW])
             ->andWhere(['status'=>self::STATUS_INSERT])
             ->all();
         foreach ($data as $key=>&$v){
@@ -461,7 +470,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $id=$ids[$rand_keys];
         $info=self::find()
             ->asArray()
-            ->where(['is_old'=>self::ORDER_OLD])
+            ->where(['is_old'=>self::ORDER_NEW])
             ->andWhere(['id'=>$id])
             ->one();
         if(empty($info)){

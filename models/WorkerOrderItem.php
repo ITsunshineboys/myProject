@@ -16,6 +16,9 @@ use yii\db\Query;
  * @property integer $worker_craft_id
  * @property string $area
  * @property string $status
+ * @property string $length
+ * @property string $count
+ * @property string $electricity
  *
  */
 class WorkerOrderItem extends \yii\db\ActiveRecord
@@ -134,7 +137,6 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
                 return $code;
             }else{
                 $data['fill_item']['fill_item_id']=$array['fill_id'];
-                $data['fill_item']['fill_craft_id']=self::STATUSTNULL;
                 $data['fill_item']['fill_area']=$array['fill_area'];
             }
         }
@@ -166,6 +168,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
     public static function addhydropowerdata(array $array){
 
         $data=[];
+        $data['worker_type_id']=$array['worker_type_id'];
         if(isset($array['demand'])){
             $data['demand']=$array['demand'];
         }
@@ -178,18 +181,29 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             $data['end_time']=strtotime($array['end_time']);
         }
         if(isset($array['slotting_id'])) {
-            if (!isset($array['slotting_craft_id']) || !isset($array['slotting_length'])) {
+            if (!isset($array['slotting_craft_id']) || !isset($array['slotting_length']) ||!isset($array['slotting_electricity'])) {
                 $code = 1000;
                 return $code;
             } else {
                 $data['slotting_item']['slotting_item_id'] = $array['slotting_id'];
                 $data['slotting_item']['slotting_craft_id'] = $array['slotting_craft_id'];
                 $data['slotting_item']['slotting_length'] = $array['slotting_length'];
+                $data['slotting_item']['slotting_electricity']=$array['slotting_electricity'];
             }
-
-            var_dump($data);die;
-            return $data;
         }
+        if(isset($array['point_id'])) {
+            if (!isset($array['point_count']) || !isset($array['point_electricity'])) {
+                $code = 1000;
+                return $code;
+            } else {
+                $data['point_item']['point_item_id'] = $array['point_id'];
+                $data['point_item']['point_electricity']=$array['point_electricity'];
+                $data['point_item']['point_count'] = $array['point_count'];
+            }
+        }
+
+
+        return $data;
     }
     /**
      * @param array $ownerinfos
@@ -227,9 +241,23 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             case '水电工';
                 $homeinfos=WorkerOrderItem::addhydropowerdata($post['homeinfos']);
                 break;
-
+            case '木工';
+                $homeinfos=WorkerOrderItem::addcarpentrydata($post['homeinfos']);
+                break;
+            case '防水工';
+                $homeinfos=WorkerOrderItem::addcarpentrydata($post['homeinfos']);
+                break;
+            case '油漆工';
+                $homeinfos=WorkerOrderItem::addcarpentrydata($post['homeinfos']);
+                break;
+            case '杂工';
+                $homeinfos=WorkerOrderItem::addcarpentrydata($post['homeinfos']);
+                break;
         }
-
+        if($homeinfos==1000){
+            $code=$homeinfos;
+            return $code;
+        }
         return $homeinfos;
     }
 }
