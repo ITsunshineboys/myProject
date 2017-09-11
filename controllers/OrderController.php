@@ -1591,6 +1591,48 @@ class OrderController extends Controller
     }
 
     /**
+     * app端  商家获取订单列表
+     * @return string
+     */
+    public function  actionFindSupplierOrder(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $type=$request->get('type','all');
+        $page=$request->get('page','1');
+        $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
+        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        if(!$supplier)
+        {
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if ($type==GoodsOrder::ORDER_TYPE_ALL){
+            $where ="a.supplier_id={$supplier->id}";
+        }else{
+            $where=GoodsOrder::GetTypeWhere($type);
+            $where .=" and a.supplier_id={$supplier->id}  and order_refer = 2";
+        }
+        $sort=' a.create_time  desc';
+        $paginationData = GoodsOrder::paginationByUserorderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$sort,$user);
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
+    }
+
+    /**
      * @return string
      */
     public function actionGetordergoodslist(){
