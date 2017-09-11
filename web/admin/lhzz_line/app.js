@@ -208,45 +208,70 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
         params:{style_item:'',style_arr:'',index:''}
       })
   //========================张放====================================
-      .state('intelligent',{
+      .state('intelligent',{//智能报价头部
           url:'/intelligent/',
           templateUrl:'pages/intelligent/index.html',
           css:'pages/intelligent/css/intelligent_header.css',
       })
-      .state('intelligent.intelligent_index',{
+      .state('intelligent.intelligent_index',{//智能报价首页
           url:'index',
           templateUrl:'pages/intelligent/intelligent_index.html',
           css:'pages/intelligent/css/intelligent_index.css'
       })
-      .state('intelligent.house_list',{
+      .state('intelligent.house_list',{//智能报价小区列表
           url:'house_list',
           templateUrl:'pages/intelligent/house_list.html',
           css:'pages/intelligent/css/house_list.css'
       })
-      .state('intelligent.add_house',{
+      .state('intelligent.add_house',{//智能报价添加/编辑小区
           url:'add_house',
           templateUrl:'pages/intelligent/add_house.html',
           css:'pages/intelligent/css/add_house.css'
       })
-      .state('intelligent.add_case',{
+      .state('intelligent.add_case',{//智能报价添加/编辑案例
           url:'add_case',
           templateUrl:'pages/intelligent/add_case.html',
           css:'pages/intelligent/css/add_case.css'
       })
-      .state('intelligent.edit_house',{
+      .state('intelligent.edit_house',{//智能报价添加/编辑普通小区
           url:'edit_house',
           templateUrl:'pages/intelligent/edit_house.html',
           css:'pages/intelligent/css/edit_house.css'
       })
-      .state('intelligent.add_drawing',{
+      .state('intelligent.add_drawing',{//智能报价添加/编辑普通小区图纸
           url:'add_drawing',
           templateUrl:'pages/intelligent/add_drawing.html',
           css:'pages/intelligent/css/add_drawing.css'
       })
-      .state('intelligent.add_support_goods',{
+      .state('intelligent.add_support_goods',{//智能报价案列/社区店配套商品管理
           url:'add_support_goods',
           templateUrl:'pages/intelligent/add_support_goods.html',
           css:'pages/intelligent/css/add_support_goods.css'
+      })
+      .state('intelligent.worker_price_list',{//智能报价工人资费列表
+          url:'worker_price_list',
+          templateUrl:'pages/intelligent/worker_price_list.html',
+          css:'pages/intelligent/css/worker_price_list.css'
+      })
+      .state('intelligent.edit_worker',{//智能报价工人资费编辑
+          url:'edit_worker',
+          templateUrl:'pages/intelligent/edit_worker.html',
+          css:'pages/intelligent/css/edit_worker.css'
+      })
+      // .state('intelligent.add_worker',{
+      //     url:'add_worker',
+      //     templateUrl:'pages/intelligent/add_worker.html',
+      //     css:'pages/intelligent/css/add_worker.css'
+      // })
+      .state('intelligent.home_manage',{//智能报价首页管理
+          url:'home_manage',
+          templateUrl:'pages/intelligent/home_manage.html',
+          css:'pages/intelligent/css/home_manage.css'
+      })
+      .state('intelligent.add_manage',{//添加推荐
+          url:'add_manage',
+          templateUrl:'pages/intelligent/add_manage.html',
+          css:'pages/intelligent/css/add_manage.css'
       })
 })
   .directive('wdatePicker',function(){

@@ -18,6 +18,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         $scope.address = ''//小区详细地址
         $scope.house_name = ''//小区名称
         $scope.all_num = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]//中文排序
+        let all_level = ['白银', '黄金', '钻石']
         let arr = []
         //获取案例需要添加的商品编号和数量
         $http.get('/quote/assort-goods-list').then(function (response) {
@@ -105,10 +106,18 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     data: {'UploadForm[file]': file}
                 }).then(function (response) {
                     if (!!response.data.data) {
-                        $scope.cur_house_information.cur_imgSrc = response.data.data.file_path
+                        if($scope.cur_house_information!=undefined){
+                            $scope.cur_house_information.cur_imgSrc = response.data.data.file_path
+                        }else if($scope.cur_image!=undefined){
+                            $scope.cur_image = response.data.data.file_path
+                        }
                         $scope.a_pic_error = ''
                     } else {
-                        $scope.cur_house_information.cur_imgSrc = ''
+                        if($scope.cur_house_information!=undefined){
+                            $scope.cur_house_information.cur_imgSrc = ''
+                        }else if($scope.cur_image!=undefined){
+                            $scope.cur_image = ''
+                        }
                         $scope.a_pic_error = '上传图片格式不正确或尺寸不匹配,请重新上传'
                     }
                     console.log(response)
@@ -197,7 +206,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             $http.get('/quote/plot-list', {
                 params: {
                     'post': $scope.cur_county.id,
-                    'page':$scope.cur_page
+                    'page': $scope.cur_page
                 }
             }).then(function (response) {
                 $scope.total_pages = []
@@ -238,7 +247,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 $http.get('/quote/plot-list', {
                     params: {
                         'post': $scope.cur_county.id,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     console.log(response)
@@ -271,7 +280,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 $http.get('/quote/plot-list', {
                     params: {
                         'post': $scope.cur_county.id,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     $scope.total_pages = []
@@ -292,13 +301,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         $scope.topage = ''
         $scope.choosePage = function (page) {
             $scope.cur_page = page
-            if($scope.start_time!=''&&$scope.end_time!=''){
+            if ($scope.start_time != '' && $scope.end_time != '') {
                 $http.get('/quote/plot-time-grabble', {
                     params: {
                         'city': $scope.cur_city.id,
                         'min': $scope.start_time,
                         'max': $scope.end_time,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     $scope.house_detail = response.data.model.details
@@ -306,12 +315,12 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 }, function (error) {
                     console.log(error)
                 })
-            }else if($scope.search_txt!=''){
+            } else if ($scope.search_txt != '') {
                 $http.get('/quote/plot-grabble', {
                     params: {
                         'city': $scope.cur_city.id,
                         'toponymy': $scope.search_txt,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     $scope.total_pages = []
@@ -324,11 +333,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 }, function (error) {
                     console.log(error)
                 })
-            }else{
+            } else {
                 $http.get('/quote/plot-list', {
                     params: {
                         'post': $scope.cur_county.id,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     console.log(response)
@@ -345,19 +354,19 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         }
         //上一页
         $scope.Previous = function () {
-            if($scope.cur_page == 1){
+            if ($scope.cur_page == 1) {
                 $scope.cur_page = 1
-            }else{
+            } else {
                 $scope.cur_page--
             }
             console.log($scope.cur_page)
-            if($scope.start_time!=''&&$scope.end_time!=''){
+            if ($scope.start_time != '' && $scope.end_time != '') {
                 $http.get('/quote/plot-time-grabble', {
                     params: {
                         'city': $scope.cur_city.id,
                         'min': $scope.start_time,
                         'max': $scope.end_time,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     $scope.house_detail = response.data.model.details
@@ -365,12 +374,12 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 }, function (error) {
                     console.log(error)
                 })
-            }else if(($scope.start_time!=''||$scope.end_time!='')&&$scope.search_txt!=''){
+            } else if (($scope.start_time != '' || $scope.end_time != '') && $scope.search_txt != '') {
                 $http.get('/quote/plot-grabble', {
                     params: {
                         'city': $scope.cur_city.id,
                         'toponymy': $scope.search_txt,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     $scope.total_pages = []
@@ -383,11 +392,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 }, function (error) {
                     console.log(error)
                 })
-            }else{
+            } else {
                 $http.get('/quote/plot-list', {
                     params: {
                         'post': $scope.cur_county.id,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     console.log(response)
@@ -404,18 +413,18 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         }
         //下一页
         $scope.Next = function () {
-            if($scope.cur_page == $scope.total_pages.length){
+            if ($scope.cur_page == $scope.total_pages.length) {
                 $scope.cur_page = $scope.total_pages.lengt
-            }else{
+            } else {
                 $scope.cur_page++
             }
-            if($scope.start_time!=''&&$scope.end_time!=''){
+            if ($scope.start_time != '' && $scope.end_time != '') {
                 $http.get('/quote/plot-time-grabble', {
                     params: {
                         'city': $scope.cur_city.id,
                         'min': $scope.start_time,
                         'max': $scope.end_time,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     $scope.house_detail = response.data.model.details
@@ -423,12 +432,12 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 }, function (error) {
                     console.log(error)
                 })
-            }else if($scope.search_txt!=''){
+            } else if ($scope.search_txt != '') {
                 $http.get('/quote/plot-grabble', {
                     params: {
                         'city': $scope.cur_city.id,
                         'toponymy': $scope.search_txt,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     $scope.total_pages = []
@@ -441,11 +450,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 }, function (error) {
                     console.log(error)
                 })
-            }else{
+            } else {
                 $http.get('/quote/plot-list', {
                     params: {
                         'post': $scope.cur_county.id,
-                        'page':$scope.cur_page
+                        'page': $scope.cur_page
                     }
                 }).then(function (response) {
                     console.log(response)
@@ -482,24 +491,24 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         // })
         $scope.cur_county_to_house = function () {
             $scope.start_time = ''
-                $scope.end_time  = ''
-                $scope.search_txt = ''
-                    $http.get('/quote/plot-list', {
-                            params: {
-                            'post': $scope.cur_county.id,
-                            'page':$scope.cur_page
-                        }
-                    }).then(function (response) {
-                        $scope.total_pages = []
-                        let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                        for (let i = 1; i <= num; i++) {
-                            $scope.total_pages.push(i)
-                        }
-                        $scope.house_detail = response.data.model.details
-                        console.log(response)
-                    }, function (error) {
-                        console.log(error)
-                    })
+            $scope.end_time = ''
+            $scope.search_txt = ''
+            $http.get('/quote/plot-list', {
+                params: {
+                    'post': $scope.cur_county.id,
+                    'page': $scope.cur_page
+                }
+            }).then(function (response) {
+                $scope.total_pages = []
+                let num = Math.ceil(+response.data.model.total / +response.data.model.size)
+                for (let i = 1; i <= num; i++) {
+                    $scope.total_pages.push(i)
+                }
+                $scope.house_detail = response.data.model.details
+                console.log(response)
+            }, function (error) {
+                console.log(error)
+            })
         }
         //日期筛选小区
         //改变结束时间
@@ -553,7 +562,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         //输入小区名模糊筛选小区
         $scope.search_house = function () {
             $scope.start_time = ''
-            $scope.end_time  = ''
+            $scope.end_time = ''
             $scope.cur_county = $scope.county[0]
             $http.get('/quote/plot-grabble', {
                 params: {
@@ -666,14 +675,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 $scope.four_title = '案例详情'
                 console.log(item)
                 $scope.cur_series = $scope.cur_all_series[0]//当前案例图纸系列
-                for(let [key,value] of $scope.cur_all_series.entries()){
-                    if(value.id == item.series){
+                for (let [key, value] of $scope.cur_all_series.entries()) {
+                    if (value.id == item.series) {
                         $scope.cur_series = value
                     }
                 }
                 $scope.cur_style = $scope.cur_all_style[0]//当前案例图纸风格
-                for(let [key,value] of $scope.cur_all_style.entries()){
-                    if(value.id == item.style){
+                for (let [key, value] of $scope.cur_all_style.entries()) {
+                    if (value.id == item.style) {
                         $scope.cur_style = value
                     }
                 }
@@ -794,7 +803,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         $scope.delete_house = function (item) {
             console.log(item)
             $scope.house_informations.splice($scope.house_informations.indexOf(item), 1)
-            if(item.id != undefined){
+            if (item.id != undefined) {
                 $scope.delete_house_list.push(item.id)
             }
         }
@@ -953,7 +962,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         $scope.delete_drawing = function (item) {
             console.log(item)
             $scope.drawing_informations.splice($scope.drawing_informations.indexOf(item), 1)
-            if(item.id != undefined){
+            if (item.id != undefined) {
                 $scope.delete_drawing_list.push(item.id)
             }
         }
@@ -1049,7 +1058,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             $scope.submitted = false
         }
         //添加或编辑页面返回
-        $scope.addHouseReturn =function () {
+        $scope.addHouseReturn = function () {
             $state.go('intelligent.house_list')
         }
         //返回首页
@@ -1067,16 +1076,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         $scope.go_second = function () {
             $scope.three_title = ''
             $scope.four_title = ''
-            if($scope.second_title == '案例/社区配套商品管理'){
+            if ($scope.second_title == '案例/社区配套商品管理') {
                 $state.go('intelligent.add_support_goods')
-            }else if($scope.second_title == '小区列表页'){
+            } else if ($scope.second_title == '小区列表页') {
                 $state.go('intelligent.house_list')
+            }else if($scope.second_title == '首页管理'){
+                $state.go('intelligent.home_manage')
+            }else if($scope.second_title == '资费/做工标准'){
+                $state.go('intelligent.worker_price_list')
             }
         }
         //跳转三级页面
         $scope.go_three = function () {
             $scope.four_title = ''
-            if($scope.three_title == '添加小区信息' || $scope.three_title == '编辑小区信息'){
+            if ($scope.three_title == '添加小区信息' || $scope.three_title == '编辑小区信息') {
                 $state.go('intelligent.add_house')
             }
         }
@@ -1262,7 +1275,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             let arr = []
             //添加小区保存数据处理
             //处理案例商品数据
-            if($scope.is_add){
+            if ($scope.is_add) {
                 // 处理商品信息
                 for (let [key, value] of $scope.house_informations.entries()) {
                     let goods = []
@@ -1316,15 +1329,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                         for (let [key1, value1] of $scope.drawing_informations.entries()) {
                             if (value1.house_type_name.index == value.index) {
                                 console.log(value.drawing_list)
-                                if(!!value1.cur_id){
+                                if (!!value1.cur_id) {
                                     value.drawing_list.push({
-                                        'id':value1.cur_id,
+                                        'id': value1.cur_id,
                                         'all_drawing': value1.drawing_list.join(','),
                                         'series': value1.series.id,
                                         'style': value1.style.id,
                                         'drawing_name': value1.drawing_name
                                     })
-                                }else{
+                                } else {
                                     value.drawing_list.push({
                                         'all_drawing': value1.drawing_list.join(','),
                                         'series': value1.series.id,
@@ -1351,7 +1364,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                             'cur_imgSrc': value.cur_imgSrc,//户型图
                             'have_stair': value.have_stair,//是否有楼梯
                             'high': value.high,//层高
-                            'sort_id':arr.length+1,
+                            'sort_id': arr.length + 1,
                             'window': value.window,//飘窗长度
                             'hall_area': value.hall_area,//
                             'hall_girth': value.hall_girth,
@@ -1386,7 +1399,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                             'cur_kitchen': value.cur_kitchen,
                             'cur_imgSrc': value.cur_imgSrc,
                             'have_stair': value.have_stair,
-                            'sort_id':arr.length+1,
+                            'sort_id': arr.length + 1,
                             'stair': value.stair,
                             'high': value.high,
                             'window': value.window,
@@ -1400,7 +1413,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                         })
                     }
                 }
-            }else{//编辑小区保存
+            } else {//编辑小区保存
                 // 处理商品信息
                 for (let [key, value] of $scope.house_informations.entries()) {
                     let goods = []
@@ -1411,10 +1424,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                         for (let [key1, value1] of value.all_materials.entries()) {
                             for (let [key2, value2] of value1.second_level.entries()) {
                                 for (let [key3, value3] of value2.three_level.entries()) {
-                                    if(!!value3.cur_id || value3.cur_id == 0){
+                                    if (!!value3.cur_id || value3.cur_id == 0) {
                                         if (!!value3.good_id && !!value3.good_quantity) {
                                             goods.push({
-                                                'id':value3.cur_id,
+                                                'id': value3.cur_id,
                                                 'first_name': value1.title,
                                                 'second_name': value2.title,
                                                 'three_name': value3.title,
@@ -1422,10 +1435,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                                                 'good_quantity': value3.good_quantity
                                             })
                                             value['all_goods'] = goods
-                                        }else{
+                                        } else {
                                             value.delete_goods.push(value3.cur_id)
                                         }
-                                    }else{
+                                    } else {
                                         if (!!value3.good_id && !!value3.good_quantity) {
                                             goods.push({
                                                 'first_name': value1.title,
@@ -1447,17 +1460,17 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     let worker = []
                     if (value.is_ordinary && !!value.worker_list) {
                         for (let [key1, value1] of value.worker_list.entries()) {
-                            if(!!value1.cur_id){
+                            if (!!value1.cur_id) {
                                 if (!!value1.price) {
                                     worker.push({
-                                        'worker_kind':value1.worker_kind,
-                                        'price':value1.worker_kind,
-                                        'id':value1.cur_id
+                                        'worker_kind': value1.worker_kind,
+                                        'price': value1.worker_kind,
+                                        'id': value1.cur_id
                                     })
-                                }else{
+                                } else {
                                     value.delete_workers.push(value1.cur_id)
                                 }
-                            }else{
+                            } else {
                                 if (!!value1.price) {
                                     worker.push(value1)
                                 }
@@ -1471,19 +1484,19 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     let backman_list = []
                     if (value.is_ordinary) {
                         for (let [key1, value1] of value.backman_option.entries()) {
-                            if(!!value1.cur_id){
-                                if (!!value1.num || (value1.num == 0&&value1.name == '有无建渣点')) {
+                            if (!!value1.cur_id) {
+                                if (!!value1.num || (value1.num == 0 && value1.name == '有无建渣点')) {
                                     backman_list.push({
-                                        'name':value1.name,
-                                        'num':value1.num,
-                                        'id':value1.cur_id
+                                        'name': value1.name,
+                                        'num': value1.num,
+                                        'id': value1.cur_id
                                     })
                                     value['backman_list'] = backman_list
-                                }else{
+                                } else {
                                     value.delete_backman.push(value1.cur_id)
                                 }
-                            }else{
-                                if (!!value1.num || (value1.num == 0&&value1.name == '有无建渣点')) {
+                            } else {
+                                if (!!value1.num || (value1.num == 0 && value1.name == '有无建渣点')) {
                                     backman_list.push(value1)
                                     value['backman_list'] = backman_list
                                 }
@@ -1509,21 +1522,21 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     }
                 }
                 for (let [key, value] of $scope.house_informations.entries()) {
-                    if(!!value.id){
+                    if (!!value.id) {
                         if (!value.is_ordinary) {
                             // for (let [key1, value1] of $scope.drawing_informations.entries()) {
                             //     if (value1.index == key) {
                             arr.push({
-                                'id':value.id,
+                                'id': value.id,
                                 'house_type_name': value.house_type_name,//户型名
-                                'other_id':value.id,
+                                'other_id': value.id,
                                 'area': value.area,//房屋面积
                                 'cur_room': value.cur_room,//室
                                 'cur_hall': value.cur_hall,//厅
                                 'cur_toilet': value.cur_toilet,//卫
                                 'cur_kitchen': value.cur_kitchen,//厨
                                 'cur_imgSrc': value.cur_imgSrc,//户型图
-                                'sort_id':arr.length+1,
+                                'sort_id': arr.length + 1,
                                 'have_stair': value.have_stair,//是否有楼梯
                                 'high': value.high,//层高
                                 'window': value.window,//飘窗长度
@@ -1553,7 +1566,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                         } else {
                             console.log($scope.house_informations)
                             arr.push({
-                                'id':value.id,
+                                'id': value.id,
                                 'house_type_name': value.house_type_name,
                                 'area': value.area,
                                 'cur_room': value.cur_room,
@@ -1567,11 +1580,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                                 'window': value.window,
                                 'series': value.series.id,
                                 'style': value.style.id,
-                                'sort_id':arr.length+1,
-                                'delete_goods':value.delete_goods,
-                                'delete_workers':value.delete_workers,
-                                'delete_backman':value.delete_backman,
-                                'drawing_id':value.drawing_id,
+                                'sort_id': arr.length + 1,
+                                'delete_goods': value.delete_goods,
+                                'delete_workers': value.delete_workers,
+                                'delete_backman': value.delete_backman,
+                                'drawing_id': value.drawing_id,
                                 'all_goods': value.all_goods || [],
                                 'drawing_list': value.drawing_list.join(','),
                                 'worker_list': value.worker_list || [],
@@ -1580,7 +1593,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                             })
                             console.log(111)
                         }
-                    }else{
+                    } else {
                         if (!value.is_ordinary) {
                             // for (let [key1, value1] of $scope.drawing_informations.entries()) {
                             //     if (value1.index == key) {
@@ -1603,7 +1616,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                                 'toilet_girth': value.toilet_girth,
                                 'kitchen_area': value.kitchen_area,
                                 'kitchen_girth': value.kitchen_girth,
-                                'sort_id':arr.length+1,
+                                'sort_id': arr.length + 1,
                                 'other_length': value.other_length,
                                 'flattop_area': value.flattop_area,
                                 'balcony_area': value.balcony_area,
@@ -1631,7 +1644,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                                 'have_stair': value.have_stair,
                                 'stair': value.stair,
                                 'high': value.high,
-                                'sort_id':arr.length+1,
+                                'sort_id': arr.length + 1,
                                 'window': value.window,
                                 'series': value.series.id,
                                 'style': value.style.id,
@@ -1656,7 +1669,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             all_modal.$inject = ['$scope', '$uibModalInstance']
             if (valid) {
                 console.log(arr)
-                if($scope.is_add){
+                if ($scope.is_add) {
                     $http.post('/quote/plot-add', {
                         'province_code': $scope.cur_province.id,
                         'city_code': $scope.cur_city.id,
@@ -1669,7 +1682,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                         $http.get('/quote/plot-list', {
                             params: {
                                 'post': $scope.cur_county.id,
-                                'page':$scope.cur_page
+                                'page': $scope.cur_page
                             }
                         }).then(function (response) {
                             $scope.house_detail = response.data.model.details
@@ -1691,23 +1704,23 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     }, function (error) {
                         console.log(error)
                     })
-                }else{
-                    $http.post('/quote/plot-edit',{
+                } else {
+                    $http.post('/quote/plot-edit', {
                         'province_code': $scope.cur_province.id,
                         'city_code': $scope.cur_city.id,
                         'house_name': $scope.house_name,
                         'cur_county_id': $scope.cur_house_county.id,
                         'address': $scope.address,
                         'house_informations': arr,
-                        'delete_house':$scope.delete_house_list,
-                        'delete_drawing':$scope.delete_drawing_list
-                    },config).then(function (response) {
+                        'delete_house': $scope.delete_house_list,
+                        'delete_drawing': $scope.delete_drawing_list
+                    }, config).then(function (response) {
                         console.log(response)
                         //请求小区数据
                         $http.get('/quote/plot-list', {
                             params: {
                                 'post': $scope.cur_county.id,
-                                'page':$scope.cur_page
+                                'page': $scope.cur_page
                             }
                         }).then(function (response) {
                             $scope.house_detail = response.data.model.details
@@ -1726,7 +1739,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                             templateUrl: 'pages/intelligent/cur_model.html',
                             controller: all_modal
                         })
-                    },function (error) {
+                    }, function (error) {
                         console.log(error)
                     })
                 }
@@ -1754,7 +1767,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
 
         //编辑所有页面配置
         $scope.go_edit_house = function (item) {
-            $scope.three_title='编辑小区信息'
+            $scope.three_title = '编辑小区信息'
             $scope.delete_house_list = []
             $scope.delete_drawing_list = []
             $scope.is_add = 0
@@ -1780,65 +1793,67 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 $scope.address = response.data.effect.street//小区详细地址
                 //获取小区户型信息
                 for (let [key, value] of response.data.effect.effect.entries()) {
-                    if(!+value.type){
-                    for (let [key1, value1] of response.data.effect.decoration_particulars.entries()) {
-                        if (!+value.type && value.id == value1.effect_id) {
-                            $scope.house_informations.push({
-                                'id': value.id,
-                                'other_id': value1.id,
-                                'house_type_name': value.particulars,//户型名
-                                'area': value.area,//房屋面积
-                                'cur_room': value.bedroom,//室
-                                'cur_hall': value.sittingRoom_diningRoom,//厅
-                                'cur_toilet': value.toilet,//卫
-                                'cur_kitchen': value.kitchen,//厨
-                                'cur_imgSrc': value.house_image,//户型图
-                                'have_stair': value.stairway,//是否有楼梯
-                                'high': value.high,//层高
-                                'window': value.window,//飘窗长度
-                                'hall_area': value1.hall_area,
-                                'hall_girth': value1.hall_perimeter,
-                                'room_area': value1.bedroom_area,
-                                'room_girth': value1.bedroom_perimeter,
-                                'toilet_area': value1.toilet_area,
-                                'toilet_girth': value1.toilet_perimeter,
-                                'kitchen_area': value1.kitchen_area,
-                                'kitchen_girth': value1.kitchen_perimeter,
-                                'other_length': value1.modelling_length,
-                                'index':$scope.house_informations.length,
-                                'drawing_list':[],
-                                'flattop_area': value1.flat_area,
-                                'balcony_area': value1.balcony_area,
-                                'is_ordinary': 0
-                            })
-                        }}} else if (!!+value.type) {
-                            // console.log(value.effect_images.split(','))
-                            $scope.house_informations.push({
-                                'id': value.id,
-                                'house_type_name': value.particulars,
-                                'area': value.area,
-                                'cur_room': value.bedroom,
-                                'cur_hall': value.sittingRoom_diningRoom,
-                                'cur_toilet': value.toilet,
-                                'cur_kitchen': value.kitchen,
-                                'cur_imgSrc': value.house_image,
-                                'have_stair': value.stairway,
-                                'stair': +value.stair_id,
-                                'all_materials':angular.copy($scope.all_materials_copy),
-                                'worker_list':angular.copy($scope.common_worker),
-                                'backman_option': [
-                                    {name: '12墙拆除', num: ''},
-                                    {name: '24墙拆除', num: ''},
-                                    {name: '补烂', num: ''},
-                                    {name: '12墙新建(含双面抹灰)', num: ''},
-                                    {name: '24墙新建(含双面抹灰)', num: ''},
-                                    {name: '有无建渣点', num: 1},
-                                ],
-                                'high': value.high,
-                                'window': value.window,
-                                'is_ordinary': 1
-                            })
-                            console.log($scope.house_informations)
+                    if (!+value.type) {
+                        for (let [key1, value1] of response.data.effect.decoration_particulars.entries()) {
+                            if (!+value.type && value.id == value1.effect_id) {
+                                $scope.house_informations.push({
+                                    'id': value.id,
+                                    'other_id': value1.id,
+                                    'house_type_name': value.particulars,//户型名
+                                    'area': value.area,//房屋面积
+                                    'cur_room': value.bedroom,//室
+                                    'cur_hall': value.sittingRoom_diningRoom,//厅
+                                    'cur_toilet': value.toilet,//卫
+                                    'cur_kitchen': value.kitchen,//厨
+                                    'cur_imgSrc': value.house_image,//户型图
+                                    'have_stair': value.stairway,//是否有楼梯
+                                    'high': value.high,//层高
+                                    'window': value.window,//飘窗长度
+                                    'hall_area': value1.hall_area,
+                                    'hall_girth': value1.hall_perimeter,
+                                    'room_area': value1.bedroom_area,
+                                    'room_girth': value1.bedroom_perimeter,
+                                    'toilet_area': value1.toilet_area,
+                                    'toilet_girth': value1.toilet_perimeter,
+                                    'kitchen_area': value1.kitchen_area,
+                                    'kitchen_girth': value1.kitchen_perimeter,
+                                    'other_length': value1.modelling_length,
+                                    'index': $scope.house_informations.length,
+                                    'drawing_list': [],
+                                    'flattop_area': value1.flat_area,
+                                    'balcony_area': value1.balcony_area,
+                                    'is_ordinary': 0
+                                })
+                            }
+                        }
+                    } else if (!!+value.type) {
+                        // console.log(value.effect_images.split(','))
+                        $scope.house_informations.push({
+                            'id': value.id,
+                            'house_type_name': value.particulars,
+                            'area': value.area,
+                            'cur_room': value.bedroom,
+                            'cur_hall': value.sittingRoom_diningRoom,
+                            'cur_toilet': value.toilet,
+                            'cur_kitchen': value.kitchen,
+                            'cur_imgSrc': value.house_image,
+                            'have_stair': value.stairway,
+                            'stair': +value.stair_id,
+                            'all_materials': angular.copy($scope.all_materials_copy),
+                            'worker_list': angular.copy($scope.common_worker),
+                            'backman_option': [
+                                {name: '12墙拆除', num: ''},
+                                {name: '24墙拆除', num: ''},
+                                {name: '补烂', num: ''},
+                                {name: '12墙新建(含双面抹灰)', num: ''},
+                                {name: '24墙新建(含双面抹灰)', num: ''},
+                                {name: '有无建渣点', num: 1},
+                            ],
+                            'high': value.high,
+                            'window': value.window,
+                            'is_ordinary': 1
+                        })
+                        console.log($scope.house_informations)
                     }
                 }
                 //获取普通户型图纸信息
@@ -1848,7 +1863,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                             if (!value.is_ordinary) {
                                 $scope.drawing_informations.push({
                                     'index': value.index,
-                                    'id':value1.id,
+                                    'id': value1.id,
                                     'drawing_name': value1.images_user,
                                     'house_type_name': value,
                                     'series': value1.series_id,
@@ -1857,16 +1872,16 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                                 })
                             } else {
                                 value['drawing_id'] = value1.id
-                                 value['drawing_list'] = value1.effect_images.split(',')
+                                value['drawing_list'] = value1.effect_images.split(',')
                                 value['series'] = value1.series_id
                                 value['style'] = value1.style_id
-                                for(let [key2,value2] of $scope.cur_all_series.entries()){
-                                    if(value.series == value2.id){
+                                for (let [key2, value2] of $scope.cur_all_series.entries()) {
+                                    if (value.series == value2.id) {
                                         value.series = value2
                                     }
                                 }
-                                for(let [key2,value2] of $scope.cur_all_style.entries()){
-                                    if(value.style == value2.id){
+                                for (let [key2, value2] of $scope.cur_all_style.entries()) {
+                                    if (value.style == value2.id) {
                                         value.style = value2
                                     }
                                 }
@@ -1876,26 +1891,26 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     }
                 }
                 //整合普通户型图纸信息
-                for(let [key,value] of $scope.drawing_informations.entries()){
-                    for(let [key1,value1] of $scope.cur_all_series.entries()){
-                        if(value.series == value1.id){
+                for (let [key, value] of $scope.drawing_informations.entries()) {
+                    for (let [key1, value1] of $scope.cur_all_series.entries()) {
+                        if (value.series == value1.id) {
                             value.series = value1
                         }
                     }
-                    for(let [key1,value1] of $scope.cur_all_style.entries()){
-                        if(value.style == value1.id){
+                    for (let [key1, value1] of $scope.cur_all_style.entries()) {
+                        if (value.style == value1.id) {
                             value.style = value1
                         }
                     }
                 }
                 //获取案例户型材料及费用
-                for(let [key,value] of $scope.house_informations.entries()){
-                    if(value.is_ordinary){
-                        for(let [key1,value1] of value.all_materials.entries()){
-                            for(let [key2,value2] of value1.second_level.entries()){
-                                for(let [key3,value3] of value2.three_level.entries()){
-                                    for(let [key4,value4] of response.data.effect.works_data.entries()){
-                                        if(value3.title == value4.goods_three){
+                for (let [key, value] of $scope.house_informations.entries()) {
+                    if (value.is_ordinary) {
+                        for (let [key1, value1] of value.all_materials.entries()) {
+                            for (let [key2, value2] of value1.second_level.entries()) {
+                                for (let [key3, value3] of value2.three_level.entries()) {
+                                    for (let [key4, value4] of response.data.effect.works_data.entries()) {
+                                        if (value3.title == value4.goods_three) {
                                             value3.good_id = value4.goods_code
                                             value3.good_quantity = value4.goods_quantity
                                             value3['cur_id'] = value4.id
@@ -1907,11 +1922,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     }
                 }
                 //获取案例工人费用
-                for(let [key,value] of $scope.house_informations.entries()){
-                    if(value.is_ordinary){
-                        for(let [key1,value1] of value.worker_list.entries()){
-                            for(let [key2,value2] of response.data.effect.works_worker_data.entries()){
-                                if(value1.worker_kind == value2.worker_kind){
+                for (let [key, value] of $scope.house_informations.entries()) {
+                    if (value.is_ordinary) {
+                        for (let [key1, value1] of value.worker_list.entries()) {
+                            for (let [key2, value2] of response.data.effect.works_worker_data.entries()) {
+                                if (value1.worker_kind == value2.worker_kind) {
                                     value1.price = value2.worker_price
                                     value1['cur_id'] = value2.id
                                 }
@@ -1920,11 +1935,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                     }
                 }
                 //获取案例杂工选项
-                for(let [key,value] of $scope.house_informations.entries()){
-                    if(value.is_ordinary){
-                        for(let [key1,value1] of value.backman_option.entries()){
-                            for(let [key2,value2] of response.data.effect.works_backman_data.entries()){
-                                if(value1.name == value2.backman_option){
+                for (let [key, value] of $scope.house_informations.entries()) {
+                    if (value.is_ordinary) {
+                        for (let [key1, value1] of value.backman_option.entries()) {
+                            for (let [key2, value2] of response.data.effect.works_backman_data.entries()) {
+                                if (value1.name == value2.backman_option) {
                                     value1.num = value2.backman_value
                                     value1['cur_id'] = value2.id
                                 }
@@ -1941,5 +1956,282 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             }, function (error) {
                 console.log(error)
             })
+        }
+
+        /*资费管理*/
+        //跳转资费/做工标准页面
+        $scope.go_worker_list = function () {
+            $scope.second_title = '资费/做工标准'
+            $scope.three_title = ''
+            $scope.four_title = ''
+            $http.get('/quote/labor-cost-list').then(function (response) {
+                console.log(response)
+                $scope.cur_worker_list = response.data.list
+                $state.go('intelligent.worker_price_list')
+            }, function (error) {
+                console.log(error)
+            })
+        }
+        // //添加工种状态
+        // $scope.add_worker = function(){
+        //     for(let [key,value] of $scope.cur_worker_list.entries()){
+        //         // if(value.)
+        //     }
+        // }
+        //计算各种工种资费
+        $scope.edit_worker = function (item) {
+            $scope.submitted = false
+            $scope.cur_worker = item
+            $scope.second_title = '资费/做工标准'
+            $scope.three_title = '资费/做工标准详情'
+            $scope.four_title = ''
+            $http.get('/quote/labor-cost-edit-list', {
+                params: {
+                    province: $scope.cur_province.id,
+                    city: $scope.cur_city.id,
+                    worker_kind: item.worker_kind
+                }
+            }).then(function (response) {
+                console.log(response)
+                $scope.worker_id = response.data.labor_cost.id
+                $scope.daily_cost = response.data.labor_cost.univalence == 0 ? '' : response.data.labor_cost.univalence
+                $scope.other_items = response.data.worker_craft_norm
+                //简单0处理
+                for (let [key, value] of $scope.other_items.entries()) {
+                    if (value.quantity == 0) {
+                        value.quantity = ''
+                    }
+                    value['flag'] = false
+                    value['name'] = 'name' + value.id
+                }
+            }, function (error) {
+                console.log(error)
+            })
+            $state.go('intelligent.edit_worker')
+        }
+        //保存工人资费
+        $scope.get_worker_tips = function (valid) {
+            console.log($scope.other_items)
+            let arr = []
+            for (let [key, value] of $scope.other_items.entries()) {
+                arr.push({
+                    id: value.id,
+                    quantity: value.quantity
+                })
+            }
+            console.log(arr)
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.cur_title = '保存成功'
+                $scope.common_house = function () {
+                    $uibModalInstance.close()
+                    $state.go('intelligent.worker_price_list')
+                }
+            }
+            all_modal.$inject = ['$scope', '$uibModalInstance']
+            if (valid) {
+                $http.post('/quote/labor-cost-edit', {
+                    id: $scope.worker_id,
+                    univalence: $scope.daily_cost,
+                    else: arr
+                }, config).then(function (response) {
+                    console.log(response)
+                    $scope.second_title = '资费/做工标准'
+                    $scope.three_title = ''
+                    $scope.four_title = ''
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
+                }, function (error) {
+                    console.log(error)
+                })
+            } else {
+                $scope.submitted = true
+            }
+        }
+        //返回工人列表页
+        $scope.returnWorkerList = function () {
+            $scope.second_title = '资费/做工标准'
+            $scope.three_title = ''
+            $scope.four_title = ''
+            $state.go('intelligent.worker_price_list')
+        }
+
+        /*首页管理*/
+        //    跳转首页管理
+        $scope.go_home_manage = function () {
+            $scope.second_title = '首页管理'
+            $scope.cur_county = $scope.county[0]
+            $scope.three_title = ''
+            $scope.four_title = ''
+            $http.get('/quote/homepage-list', {
+                params: {
+                    province: $scope.cur_province.id,
+                    city: $scope.cur_city.id
+                }
+            }).then(function (response) {
+                console.log(response)
+            }, function (error) {
+                console.log(error)
+            })
+            $state.go('intelligent.home_manage')
+        }
+        //添加推荐
+        //跳转添加页面
+        $scope.add_manage = function () {
+            //初始化页面
+            $scope.cur_image = ''
+            $scope.a_pic_error = ''
+            $scope.submitted = false
+            $scope.second_title = '首页管理'
+            $scope.three_title = '添加推荐'
+            $scope.four_title = ''
+            $http.get('/quote/homepage-district', {
+                params: {
+                    province: $scope.cur_province.id,
+                    city: $scope.cur_city.id
+                }
+            }).then(function (response) {
+                console.log(response)
+                $scope.all_house_city = response.data.list
+                $scope.cur_house_city = $scope.all_house_city[0]
+                $http.post('/quote/homepage-toponymy', {
+                    province: $scope.cur_province.id,
+                    city: $scope.cur_city.id,
+                    district: $scope.cur_house_city.district_code
+                }, config).then(function (response) {
+                    console.log(response)
+                    $scope.all_toponymy = response.data.list
+                    $scope.cur_toponymy_house = $scope.all_toponymy[0]
+                    $http.post('/quote/homepage-street', {
+                        province: $scope.cur_province.id,
+                        city: $scope.cur_city.id,
+                        district: $scope.cur_house_city.district_code,
+                        toponymy: $scope.cur_toponymy_house.toponymy
+                    }, config).then(function (response) {
+                        console.log(response)
+                        $scope.all_street = response.data.list
+                        $scope.cur_street = $scope.all_street[0]
+                        $http.post('/quote/homepage-case', {
+                            province: $scope.cur_province.id,
+                            city: $scope.cur_city.id,
+                            district: $scope.cur_house_city.district_code,
+                            toponymy: $scope.cur_toponymy_house.toponymy,
+                            street: $scope.cur_street.street
+                        }, config).then(function (response) {
+                            console.log(response)
+                            $scope.all_case = response.data.list
+                            $scope.cur_case = $scope.all_case[0]
+                        }, function (error) {
+                            console.log(error)
+                        })
+                    }, function (error) {
+                        console.log(error)
+                    })
+                }, function (error) {
+                    console.log(error)
+                })
+            }, function (error) {
+                console.log(error)
+            })
+            $state.go('intelligent.add_manage')
+        }
+        //当修改区县
+        $scope.change_county = function (item) {
+            $http.post('/quote/homepage-toponymy', {
+                province: $scope.cur_province.id,
+                city: $scope.cur_city.id,
+                district: item.district_code
+            }, config).then(function (response) {
+                console.log(response)
+                $scope.all_toponymy = response.data.list
+                $scope.cur_toponymy_house = $scope.all_toponymy[0]
+                $http.post('/quote/homepage-street', {
+                    province: $scope.cur_province.id,
+                    city: $scope.cur_city.id,
+                    district: $scope.cur_house_city.district_code,
+                    toponymy: $scope.cur_toponymy_house.toponymy
+                }, config).then(function (response) {
+                    console.log(response)
+                    $scope.all_street = response.data.list
+                    $scope.cur_street = $scope.all_street[0]
+                    $http.post('/quote/homepage-case', {
+                        province: $scope.cur_province.id,
+                        city: $scope.cur_city.id,
+                        district: $scope.cur_house_city.district_code,
+                        toponymy: $scope.cur_toponymy_house.toponymy,
+                        street: $scope.cur_street.street
+                    }, config).then(function (response) {
+                        console.log(response)
+                        $scope.all_case = response.data.list
+                        $scope.cur_case = $scope.all_case[0]
+                    }, function (error) {
+                        console.log(error)
+                    })
+                }, function (error) {
+                    console.log(error)
+                })
+            }, function (error) {
+                console.log(error)
+            })
+        }
+        //当修改小区
+        $scope.change_toponymy = function(item){
+            $http.post('/quote/homepage-street', {
+                province: $scope.cur_province.id,
+                city: $scope.cur_city.id,
+                district: $scope.cur_house_city.district_code,
+                toponymy: item.toponymy
+            }, config).then(function (response) {
+                console.log(response)
+                $scope.all_street = response.data.list
+                $scope.cur_street = $scope.all_street[0]
+                $http.post('/quote/homepage-case', {
+                    province: $scope.cur_province.id,
+                    city: $scope.cur_city.id,
+                    district: $scope.cur_house_city.district_code,
+                    toponymy: $scope.cur_toponymy_house.toponymy,
+                    street: $scope.cur_street.street
+                }, config).then(function (response) {
+                    console.log(response)
+                    $scope.all_case = response.data.list
+                    $scope.cur_case = $scope.all_case[0]
+                }, function (error) {
+                    console.log(error)
+                })
+            }, function (error) {
+                console.log(error)
+            })
+        }
+        //当修改街道
+        $scope.change_street = function (item) {
+            $http.post('/quote/homepage-case', {
+                province: $scope.cur_province.id,
+                city: $scope.cur_city.id,
+                district: $scope.cur_house_city.district_code,
+                toponymy: $scope.cur_toponymy_house.toponymy,
+                street: item.street
+            }, config).then(function (response) {
+                console.log(response)
+                $scope.all_case = response.data.list
+                $scope.cur_case = $scope.all_case[0]
+            }, function (error) {
+                console.log(error)
+            })
+        }
+        //保存添加推荐
+        $scope.save_manage = function(valid){
+            if(valid&&$scope.cur_image!=''){
+
+            }else{
+                $scope.submitted = true
+            }
+            if($scope.cur_image==''){
+                $scope.a_pic_error = '请上传图片'
+            }
+        }
+        //返回首页管理页
+        $scope.returnHomeManage = function () {
+            $state.go('intelligent.home_manage')
         }
     })

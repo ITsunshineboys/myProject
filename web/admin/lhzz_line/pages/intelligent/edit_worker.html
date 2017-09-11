@@ -1,0 +1,47 @@
+<div class="edit_worker">
+    <form name="edit_worker">
+    <div class="detail">
+    <div class="row">
+        <p class="col-md-2">工种名称</p>
+        <p class="col-md-10">{{cur_worker.worker_kind}}</p>
+    </div>
+    <div class="row">
+        <p class="col-md-2">所在区域</p>
+        <p class="col-md-10">{{cur_province.name}}-{{cur_city.name}}</p>
+    </div>
+    <!--<div class="row">-->
+        <!--<p class="col-md-2">工人级别</p>-->
+        <!--<p class="col-md-10">11</p>-->
+    <!--</div>-->
+    </div>
+    <div class="choose_item">
+    <div class="row">
+        <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>每日费用</p>
+        <p class="col-md-2 enter">
+            <input class="form-control" name="daily_cost" ng-model="daily_cost" type="text" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="change=!!edit_worker.daily_cost.$error"
+                required   ng-class="{'error':(edit_worker.daily_cost.$invalid&&submitted) || ((edit_worker.daily_cost.$error.required || edit_worker.daily_cost.$error.pattern)&&change)}">
+        </p>
+        <p class="col-md-8 text-left">元/天</p>
+    </div>
+    <div class="row" ng-repeat="item in other_items">
+        <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item.worker_kind_details}}</p>
+        <p class="col-md-2 enter">
+            <input class="form-control" name="{{item.name}}" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="item.flag = !!edit_worker[item.name].$error" required
+                   ng-class="{'error':(edit_worker[item.name].$invalid&&submitted) || ((edit_worker[item.name].$error.required || edit_worker[item.name].$error.pattern)&&item.flag)}"
+                   ng-model="item.quantity" type="text">
+        </p>
+        <p class="col-md-8 text-left" ng-if="item.worker_kind_details.indexOf('长度')!=-1">m/天</p>
+        <p class="col-md-8 text-left" ng-if="item.worker_kind_details.indexOf('面积')!=-1">m<sup>2</sup>/天</p>
+        <p class="col-md-8 text-left" ng-if="item.worker_kind_details.indexOf('长度')==-1&&item.worker_kind_details.indexOf('面积')==-1">个/天</p>
+    </div>
+    </div>
+    <div class="from-group submit">
+        <button class="remove" type="button" ng-click="get_worker_tips(edit_worker.$valid,edit_worker.$error)">确认</button>
+        <button type="button" ng-click="returnWorkerList()">返回</button>
+    </div>
+    </form>
+    <!--<div class="row">-->
+        <!--<p class="col-md-2"></p>-->
+        <!--<p class="col-md-10"></p>-->
+    <!--</div>-->
+</div>
