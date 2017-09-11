@@ -3776,6 +3776,21 @@ class MallController extends Controller
      */
     public function actionBrandApplicationListAdmin()
     {
+        $user = Yii::$app->user->identity;
+        if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
+            $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
+        } else {
+            $supplierId = UserRole::roleUser($user, Yii::$app->params['supplierRoleId'])->id;
+        }
+
+        if (!$supplierId) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', BrandApplication::PAGE_SIZE_DEFAULT);
 
