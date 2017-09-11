@@ -87,6 +87,7 @@ class MallController extends Controller
         'brand-application-add',
         'brand-application-list-admin',
         'brand-application-review-list',
+        'brand-application-review-note-reset',
         'logistics-template-add',
         'logistics-template-edit',
         'logistics-template-view',
@@ -1842,6 +1843,55 @@ class MallController extends Controller
         }
 
         if (!$goodsBrand->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Reset brand application review note action
+     *
+     * @return string
+     */
+    public function actionBrandApplicationReviewNoteReset()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+
+        $brandApplication = BrandApplication::find()
+            ->where(['id' => $id])
+            ->andWhere(['in', 'review_status', [
+                ModelService::REVIEW_STATUS_APPROVE,
+                ModelService::REVIEW_STATUS_REJECT,
+            ]])
+            ->one();
+
+        if (!$brandApplication) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $brandApplication->review_note = trim(Yii::$app->request->post('review_note', ''));
+
+        if (!$brandApplication->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$brandApplication->save()) {
             $code = 500;
             return Json::encode([
                 'code' => $code,

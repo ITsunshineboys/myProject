@@ -34,6 +34,9 @@ class ModelService
     const FIELD_ADDRESS = 'address';
     const FIELD_ICON = 'icon';
     const MAIN_TABLE_AS = 't';
+    const REVIEW_STATUS_APPROVE = 2;
+    const REVIEW_STATUS_REJECT = 1;
+    const REVIEW_STATUS_NOT_REVIEWED = 0;
 
     /**
      * Generate sorting statements for query
