@@ -1810,15 +1810,23 @@ class GoodsOrder extends ActiveRecord
         {
             $create_time[$key]  = $arr[$key]['create_time'];
         }
-        array_multisort($create_time, SORT_DESC, $arr);
-        $count=count($arr);
-        $total_page=ceil($count/$size);
-        $data=array_slice($arr, ($page-1)*$size,$size);
-        return [
-            'total_page' =>$total_page,
-            'count'=>$count,
-            'details' => $data
-        ];
+        if ($arr){
+            array_multisort($create_time, SORT_DESC, $arr);
+            $count=count($arr);
+            $total_page=ceil($count/$size);
+            $data=array_slice($arr, ($page-1)*$size,$size);
+            return [
+                'total_page' =>$total_page,
+                'count'=>$count,
+                'details' => $data
+            ];
+        }else{
+            return [
+                'total_page' =>0,
+                'count'=>0,
+                'details' => []
+            ];
+        }
     }
 
     /**
