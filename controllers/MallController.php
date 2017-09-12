@@ -3106,7 +3106,6 @@ class MallController extends Controller
         $goods->scenario = Goods::SCENARIO_ADD;
 
         if (!$goods->validate()) {
-            echo 'aaaa';
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -3152,7 +3151,6 @@ class MallController extends Controller
 
             $code = GoodsAttr::addByAttrs($goods, $names, $values);
             if (200 != $code) {
-                echo 'ccc';
                 $transaction->rollBack();
 
                 return Json::encode([
@@ -3171,7 +3169,6 @@ class MallController extends Controller
 
             $code = GoodsImage::addByAttrs($goods, $images);
             if (200 != $code) {
-                echo 'dddd';
                 $transaction->rollBack();
 
                 return Json::encode([
