@@ -1708,7 +1708,7 @@ class GoodsOrder extends ActiveRecord
         return $orderAmount;
     }
 
-     /**
+  /**
      * @param array $where
      * @param array $select
      * @param int $page
@@ -1726,58 +1726,7 @@ class GoodsOrder extends ActiveRecord
             ->where($where)
             ->all();
         $arr=self::getorderstatus($OrderList);
-        foreach ($arr as $k=>$v){
-            if ($arr[$k]['status']=='未付款'){
-                unset($arr[$k]);
-            }
-        }
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
-                $arr[$k]['handle']='平台介入';
-            }
-            if ($arr[$k]['status']=='已完成'){
-                if (!$arr[$k]['comment_id']){
-                    $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
-                }
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
-            $arr_list=[];
-            $arr_list['goods_name']=$arr[$k]['goods_name'];
-            $arr_list['goods_price']=$arr[$k]['goods_price'];
-            $arr_list['goods_number']=$arr[$k]['goods_number'];
-            $arr_list['market_price']=$arr[$k]['market_price'];
-            $arr_list['supplier_price']=$arr[$k]['supplier_price'];
-            $arr_list['sku']=$arr[$k]['sku'];
-            $arr_list['freight']=$arr[$k]['freight'];
-            $arr_list['unusual']=$arr[$k]['unusual'];
-            unset($arr[$k]['goods_name']);
-            unset($arr[$k]['goods_price']);
-            unset($arr[$k]['goods_number']);
-            unset($arr[$k]['market_price']);
-            unset($arr[$k]['supplier_price']);
-            unset($arr[$k]['sku']);
-            unset($arr[$k]['freight']);
-            unset($arr[$k]['unusual']);
-            unset($arr[$k]['order_id']);
-            unset($arr[$k]['is_unusual']);
-            unset($arr[$k]['comment_id']);
-            unset($arr[$k]['return_insurance']);
-            $arr[$k]['list']=[$arr_list];
-
-        }
-
+        $arr=self::findOrderData($arr);
         $GoodsOrder=self::find()
             ->select('order_no,create_time,user_id,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
             ->where(['pay_status'=>0,'user_id'=>$user->id])
@@ -1798,8 +1747,10 @@ class GoodsOrder extends ActiveRecord
                 ->asArray()
                 ->all();
             foreach ($GoodsOrder[$k]['list'] as $key =>$val){
-                $GoodsOrder[$k]['list'][$key]['freight']=sprintf('%.2f', (float) $GoodsOrder[$k]['list'][$key]['freight']*0.01);
-                $GoodsOrder[$k]['list'][$key]['goods_price']=sprintf('%.2f', (float) $GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
+                $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
+                $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
+                $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
+                $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                 $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
             }
             unset($GoodsOrder[$k]['pay_status']);
@@ -1831,7 +1782,73 @@ class GoodsOrder extends ActiveRecord
             ];
         }
     }
-
+    /**
+     * @param $arr
+     * @return mixed
+     */
+    public static function  findOrderData($arr)
+    {
+        foreach ($arr as $k=>$v){
+            if ($arr[$k]['status']=='未付款'){
+                unset($arr[$k]);
+            }
+        }
+        foreach ($arr AS $k =>$v){
+            $arr[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
+            $arr[$k]['handle']='';
+            if ($arr[$k]['is_unusual']==1){
+                $arr[$k]['unusual']='申请退款';
+            }else if ($arr[$k]['is_unusual']==0){
+                $arr[$k]['unusual']='无异常';
+            }else if($arr[$k]['is_unusual']==2){
+                $arr[$k]['unusual']='退款失败';
+            }
+            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+                $arr[$k]['handle']='平台介入';
+            }
+            if ($arr[$k]['status']=='已完成'){
+                if (!$arr[$k]['comment_id']){
+                    $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                }
+            }
+            $arr[$k]['amount_order']=self::switchMoney(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+            $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
+            $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
+            $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
+            $arr_list=[];
+            $arr_list['goods_name']=$arr[$k]['goods_name'];
+            $arr_list['goods_price']=$arr[$k]['goods_price'];
+            $arr_list['goods_number']=$arr[$k]['goods_number'];
+            $arr_list['market_price']=$arr[$k]['market_price'];
+            $arr_list['supplier_price']=$arr[$k]['supplier_price'];
+            $arr_list['sku']=$arr[$k]['sku'];
+            $arr_list['freight']=$arr[$k]['freight'];
+            $arr_list['unusual']=$arr[$k]['unusual'];
+            unset($arr[$k]['goods_name']);
+            unset($arr[$k]['goods_price']);
+            unset($arr[$k]['goods_number']);
+            unset($arr[$k]['market_price']);
+            unset($arr[$k]['supplier_price']);
+            unset($arr[$k]['sku']);
+            unset($arr[$k]['freight']);
+            unset($arr[$k]['unusual']);
+            unset($arr[$k]['order_id']);
+            unset($arr[$k]['is_unusual']);
+            unset($arr[$k]['comment_id']);
+            unset($arr[$k]['return_insurance']);
+            $arr[$k]['list']=[$arr_list];
+        }
+        return $arr;
+    }
+    /**
+     * @param $data
+     * @return string
+     */
+    public  static  function  switchMoney($data)
+    {
+        $data=sprintf('%.2f', (float)$data);
+        return $data;
+    }
     /**
      * @param $arr
      * @return mixed

@@ -1288,7 +1288,7 @@ CREATE TABLE `worker_order` (
   `con_tel` CHAR(11) NOT NULL COMMENT '联系电话',
   `amount` bigint(20) NOT NULL DEFAULT '0' COMMENT '订单总金额',
   `front_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '订金',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0: 已取消(完成)，1：未开始(接单中)，2：施工中，3：已完工(完成)',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0: 已取消(完成)，1：未开始(接单中)，2：未开始(已接单)，3：施工中，4：已完工(完成)',
   `describe` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '订单描述',
   `demand` varchar(300) NOT NULL DEFAULT '' COMMENT '个性需求',
   `reason` varchar(350) NOT NULL DEFAULT '' COMMENT '修改原因',

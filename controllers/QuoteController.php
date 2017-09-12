@@ -1029,7 +1029,6 @@ class QuoteController extends Controller
         $item->image           = trim($request->post('image',''));
         $item->province_code   = trim($request->post('province',''));
         $item->city_code       = trim($request->post('city',''));
-        $item->sort            = trim($request->post('sort',''));
         $item->province        = $province_code;
         $item->city            = $city_code ;
         $item->district        = $district_code;
