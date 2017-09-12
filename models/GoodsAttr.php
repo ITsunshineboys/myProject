@@ -364,6 +364,10 @@ class GoodsAttr extends ActiveRecord
         return $standard;
     }
 
+    /**
+     * @param $goods
+     * @return array|ActiveRecord[]
+     */
     public static function goodsIdUnit($goods)
     {
         $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
@@ -375,4 +379,13 @@ class GoodsAttr extends ActiveRecord
         return $standard;
     }
 
+    public static function goodsByIds($ids)
+    {
+        $select = 'id,name,value';
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['goods_id'=>$ids])
+            ->all();
+    }
 }

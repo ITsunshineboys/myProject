@@ -174,6 +174,17 @@ class QuoteController extends Controller
         ]);
     }
 
+    public function actionProjectNormWoodworkList()
+    {
+        $material = ['石膏板', '龙骨', '丝杆'];
+        $goods = Goods::priceDetail(3,$material);
+        foreach ($goods as $one_goods){
+            $ids[] = $one_goods['id'];
+        }
+        $goods_attr = GoodsAttr::goodsByIds($ids);
+        var_dump($goods_attr);exit;
+    }
+
     /**
      * plot list and pages
      * @return string
@@ -952,7 +963,6 @@ class QuoteController extends Controller
         $add_item->province_code   = trim($request->post('province',''));
         $add_item->city_code       = trim($request->post('city',''));
         $add_item->add_time        = time();
-        $add_item->sort            = trim($request->post('sort',''));
         $add_item->province        = $province_code;
         $add_item->city            = $city_code ;
         $add_item->district        = $district_code;
