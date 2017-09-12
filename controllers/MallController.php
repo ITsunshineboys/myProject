@@ -1711,8 +1711,8 @@ class MallController extends Controller
             ]);
         }
 
-        if ($brand->status == GoodsBrand::STATUS_OFFLINE) {
-            $brand->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
+        if ($brand->status == GoodsBrand::STATUS_OFFLINE && !empty(Yii::$app->request->post('offline_reason'))) {
+            $brand->offline_reason = trim(Yii::$app->request->post('offline_reason'));
         }
 
         $brand->name = trim(Yii::$app->request->post('name', ''));
