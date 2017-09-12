@@ -1638,15 +1638,31 @@ class SiteController extends Controller
     }
 
     /**
-     * find bug
-     * [actionGetCache description]
+     * [actionCheck description]
      * @return [type] [description]
      */
-     public function  actionDeleteCache(){
-        $user = Yii::$app->user->identity;
-        $cache = Yii::$app->cache;
-        $data = $cache->delete(User::CACHE_PREFIX_SET_PAYPASSWORD.$user->id);
-        var_dump($data);
+    public function actionCheck(){
+
+         $ip=self::getClientIP();
+         echo $ip;
+
+     }
+
+    /**
+     * [getClientIP description]
+     * @return [type] [description]
+     */
+    private static  function getClientIP()
+    {
+        global $ip;
+        if (getenv("HTTP_CLIENT_IP"))
+            $ip = getenv("HTTP_CLIENT_IP");
+        else if(getenv("HTTP_X_FORWARDED_FOR"))
+            $ip = getenv("HTTP_X_FORWARDED_FOR");
+        else if(getenv("REMOTE_ADDR"))
+            $ip = getenv("REMOTE_ADDR");
+        else $ip = "Unknow";
+        return $ip;
     }
 
 }
