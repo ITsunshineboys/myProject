@@ -208,8 +208,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->all();
 
         foreach ($arr as &$v) {
-            $worker_type_id = Worker::find()->where(['id' => $v['worker_id']])->one()->worker_type_id;
-            $v['worker_type'] = WorkerType::find()->where(['id' => $worker_type_id])->one()->worker_type;
+            $worker = Worker::find()->where(['id' => $v['worker_id']])->one();
+            $worker && $worker_type_id = $worker->worker_type_id;
+            $worker_type_id && $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one();
+            $worker_type && $v['worker_type'] = $worker_type->worker_type;
             $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
             $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
             $v['status'] = self::USER_WORKER_ORDER_STATUS[$v['status']];
