@@ -952,7 +952,6 @@ class QuoteController extends Controller
         $province_code = District::findByCode(trim($request->post('province')));
         $city_code = District::findByCode(trim($request->post('city')));
         $district_code = District::findByCode(trim($request->post('district')));
-
         $add_item = new BrainpowerInitalSupervise();
         $add_item->recommend_name  = trim($request->post('recommend_name',''));
         $add_item->district_code   = trim($request->post('district',''));
@@ -963,9 +962,9 @@ class QuoteController extends Controller
         $add_item->province_code   = trim($request->post('province',''));
         $add_item->city_code       = trim($request->post('city',''));
         $add_item->add_time        = time();
-        $add_item->province        = $province_code;
-        $add_item->city            = $city_code ;
-        $add_item->district        = $district_code;
+        $add_item->province        = $province_code['name'];
+        $add_item->city            = $city_code['name'] ;
+        $add_item->district        = $district_code['name'];
         $code = 1000;
         if (!$add_item->validate()){
             return Json::encode([
