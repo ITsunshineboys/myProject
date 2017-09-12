@@ -4232,6 +4232,15 @@ class MallController extends Controller
         ]);
     }
 
+    public function actionSeriesTimeSort()
+    {
+        $sort = trim(Yii::$app->request->get('sort',''));
+        $series = Series::findByTimeSort($sort);
+        return Json::encode([
+            'list'=> $series
+        ]);
+    }
+
     /**
      * series add
      * @return string
@@ -4336,6 +4345,15 @@ class MallController extends Controller
             'data' => [
                 'series_list' => $all
             ]
+        ]);
+    }
+
+    public function actionStyleTimeSort()
+    {
+        $sort = trim(Yii::$app->request->get('sort',''));
+        $style = Style::findByTimeSort($sort);
+        return Json::encode([
+            'list'=> $style
         ]);
     }
 
