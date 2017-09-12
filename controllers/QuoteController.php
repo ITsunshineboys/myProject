@@ -855,12 +855,7 @@ class QuoteController extends Controller
      * @return string
      */
     public function actionHomepageSort(){
-//        $post = \Yii::$app->request->post();
-        $post = [
-          'sort'=>[
-              [1],[2],[3],
-          ]
-        ];
+        $post = \Yii::$app->request->post();
         foreach ($post['sort'] as $one_post){
             $sort = 1;
             $sort_message = BrainpowerInitalSupervise::findOne($one_post['id']);
