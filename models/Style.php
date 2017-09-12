@@ -96,4 +96,19 @@ class Style extends ActiveRecord
             'details' => $all
         ];
     }
+
+    public static function findByTimeSort($sort)
+    {
+        if ($sort  == self::STATUS_OFFLINE){
+            return self::find()
+                ->asArray()
+                ->orderBy(['creation_time'=>SORT_DESC])
+                ->all();
+        }elseif ($sort  == self::STATUS_ONLINE){
+            return self::find()
+                ->asArray()
+                ->orderBy(['creation_time'=>SORT_ASC])
+                ->all();
+        }
+    }
 }
