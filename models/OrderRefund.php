@@ -37,5 +37,54 @@ class OrderRefund extends ActiveRecord
         return $order_refund;
     }
 
+     /**
+     * @param $order_no
+     * @param $sku
+     * @return array|int
+     */
+    public  static  function  FindRefundDetail($order_no,$sku)
+    {
+        $OrderGoods=OrderGoods::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->asArray()
+            ->all();
+        if (!$OrderGoods)
+        {
+            $code=1000;
+            return $code;
+        }
+        //退款详情
+        $order_refund=self::find()
+            ->select('create_time,handle_time,refund_time,apply_reason,handle_reason,handle')
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->asArray()
+            ->all();
+        foreach ($order_refund  as &$orderRefund)
+        {
+            $orderRefund['create_time']=date('Y-m-d H:i',$orderRefund['create_time']);
+            if ($orderRefund['handle']!=0){
+                $orderRefund['handle_time']=date('Y-m-d H:i',$orderRefund['handle_time']);
+            }
+            if ($orderRefund['handle']==1){
+                $orderRefund['refund_time']=date('Y-m-d H:i',$orderRefund['refund_time']);
+            }
+        }
+        if (!$order_refund)
+        {
+           $code=1000;
+           return $code;
+        }
+        $OrderPlatform=OrderPlatForm::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
+        if (!$OrderPlatform)
+        {
+            $OrderPlatform=[];
+        }
+        $OrderPlatform->creat_time=date('Y-m-d H:i',$OrderPlatform->creat_time);
+        $OrderPlatform->refund_time=date('Y-m-d H:i',$OrderPlatform->refund_time);
+        return ['data'=>$order_refund,'platform'=>$OrderPlatform];
+    }
+
 
 }

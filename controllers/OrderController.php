@@ -1490,6 +1490,7 @@ class OrderController extends Controller
     }
 
      /**
+     用户退款操作
      * @return string
      */
     public function  actionRefundhandle(){
@@ -1554,6 +1555,45 @@ class OrderController extends Controller
         }
     }
     
+     /**获取退款详情
+     * @return string
+     */
+    public function  actionFindRefundDetail()
+    {
+        $user=Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+        if (!$order_no || ! $sku)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data= OrderRefund::FindRefundDetail($order_no,$sku);
+        if (is_numeric($data))
+        {
+            $code=$data;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' =>$data
+        ]);
+    }
    /**
      * app端  用户获取订单列表
      * @return string

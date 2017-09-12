@@ -361,7 +361,7 @@ class OrderAfterSale extends ActiveRecord
             'type'=>'ok',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_handle_time),
         ];
-        $PlatForm=OrderPlatForm::find()->where(['ordeR_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+        $PlatForm=OrderPlatForm::find()->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
         ->one();
         if (!$PlatForm){
             return $data;
