@@ -48,7 +48,7 @@ class BrainpowerInitalSupervise extends ActiveRecord
     {
         $res = self::find()
             ->asArray()
-            ->select('recommend_name,add_time,toponymy,district,status')
+            ->select([])
             ->orderBy(['sort'=>SORT_ASC])
             ->where(['and',['province_code'=>$province_code],['city_code'=>$city_code],['status'=>self::STATUS_OPEN]])
             ->all();
