@@ -855,10 +855,16 @@ class QuoteController extends Controller
      * @return string
      */
     public function actionHomepageSort(){
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post = [
+          'sort'=>[
+              [1],[2],[3],
+          ]
+        ];
         foreach ($post['sort'] as $one_post){
+            $sort = 1;
             $sort_message = BrainpowerInitalSupervise::findOne($one_post['id']);
-            $sort_message->sort = $one_post['sort'];
+            $sort_message->sort = $sort + 1;
             $sort_message->save();
         }
         return Json::encode([
