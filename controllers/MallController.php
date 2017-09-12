@@ -3310,7 +3310,7 @@ class MallController extends Controller
             }
         }
 
-        if (!$model->validate()) {print_r($model->errors);
+        if (!$model->validate()) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
