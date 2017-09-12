@@ -177,13 +177,8 @@ class QuoteController extends Controller
     public function actionProjectNormWoodworkList()
     {
         $material = ['石膏板', '龙骨', '丝杆'];
-        $goods = Goods::priceDetail(3,$material);
-        var_dump($goods);
-        foreach ($goods as $one_goods){
-            $ids[] = $one_goods['id'];
-        }
-        $goods_attr = GoodsAttr::goodsByIds($ids);
-        var_dump($goods_attr);exit;
+        $goods = GoodsCategory::GoodsAttrValue(3,$material);
+        var_dump($goods);exit;
     }
 
     /**
