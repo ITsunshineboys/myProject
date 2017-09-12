@@ -50,7 +50,7 @@ class BrainpowerInitalSupervise extends ActiveRecord
             ->asArray()
             ->select([])
             ->orderBy(['sort'=>SORT_ASC])
-            ->where(['and',['province_code'=>$province_code],['city_code'=>$city_code],['status'=>self::STATUS_OPEN]])
+            ->where(['and',['province_code'=>$province_code],['city_code'=>$city_code]])
             ->all();
         foreach ($res as &$list) {
             if(isset($list['add_time'])){
