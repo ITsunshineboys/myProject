@@ -942,7 +942,7 @@ class Goods extends ActiveRecord
             [['brand_id'], 'validateBrandId'],
 //            [['style_id'], 'validateStyleId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             [['style_id', 'series_id'], 'validateCategoryStyleSeries', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
-            [['logistics_template_id'], 'validateLogisticsTemplateId'],
+            [['logistics_template_id'], 'validateLogisticsTemplateId', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             ['description', 'safe']
         ];
     }
