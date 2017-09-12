@@ -2620,7 +2620,7 @@ class MallController extends Controller
         $code = 1000;
 
         $id = (int)Yii::$app->request->get('id', 0);
-        $logisticsTemplate = LogisticsTemplate::findOnline()->andWhere(['id' => $id])->one();
+        $logisticsTemplate = LogisticsTemplate::findOne();
         if (!$logisticsTemplate) {
             return Json::encode([
                 'code' => $code,
