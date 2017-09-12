@@ -381,7 +381,7 @@ class GoodsAttr extends ActiveRecord
 
     public static function goodsByIds($ids)
     {
-        $select = 'id,name,value';
+        $select = 'id,name,value,goods_id';
         return self::find()
             ->asArray()
             ->select($select)

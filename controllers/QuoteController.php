@@ -178,6 +178,7 @@ class QuoteController extends Controller
     {
         $material = ['石膏板', '龙骨', '丝杆'];
         $goods = Goods::priceDetail(3,$material);
+        var_dump($goods);
         foreach ($goods as $one_goods){
             $ids[] = $one_goods['id'];
         }
