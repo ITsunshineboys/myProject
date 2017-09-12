@@ -1048,6 +1048,10 @@ class QuoteController extends Controller
         }
     }
 
+    /**
+     * homepage delete function
+     * @return string
+     */
     public function actionHomepageDelete()
     {
         $id = trim(\Yii::$app->request->post('id',''));

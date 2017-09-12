@@ -102,15 +102,25 @@ class Series extends ActiveRecord
     public static function findByTimeSort($sort)
     {
         if ($sort  == self::STATUS_OFFLINE){
-            return self::find()
+            $series= self::find()
                 ->asArray()
                 ->orderBy(['creation_time'=>SORT_DESC])
                 ->all();
+            foreach ($series as $one_series){
+                $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);
+                $all [] = $one_series;
+            }
+            return $all;
         }elseif ($sort  == self::STATUS_ONLINE){
-            return self::find()
+            $series =  self::find()
                 ->asArray()
                 ->orderBy(['creation_time'=>SORT_ASC])
                 ->all();
+            foreach ($series as $one_series){
+                $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);
+                $all [] = $one_series;
+            }
+            return $all;
         }
     }
 }
