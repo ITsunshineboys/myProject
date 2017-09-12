@@ -1748,6 +1748,7 @@ class OrderController extends Controller
     }
 
     /**
+     *获取订单详情
      * @return string
      */
     public function  actionUserOrderDetails(){
@@ -2215,7 +2216,7 @@ class OrderController extends Controller
             ]);
         }
     }
-    /**
+     /**
      * @return string
      */
     public function actionAddTestOrderData(){
@@ -2274,6 +2275,7 @@ class OrderController extends Controller
             $GoodsOrder->invoice_type=$invoice->invoice_type;
             $GoodsOrder->invoice_header_type=$invoice->invoice_header_type;
             $GoodsOrder->invoicer_card=$invoice->invoicer_card;
+            $GoodsOrder->invoice_header=$invoice->invoice_header;
             $GoodsOrder->invoice_content=$invoice->invoice_content;
             $res1=$GoodsOrder->save();
             $OrderGoods=new  OrderGoods();

@@ -1956,9 +1956,8 @@ class GoodsOrder extends ActiveRecord
            $output[$k]['consignee']=$arr[$k]['consignee'];
            $output[$k]['district_code']=$arr[$k]['district_code'];
            $output[$k]['region']=$arr[$k]['region'];
-           $output[$k]['invoice_content']=$arr[$k]['invoice_content'];
+           $output[$k]['invoice_information']=$arr[$k]['invoice_content'].'-'.$arr[$k]['invoice_header'];
            $output[$k]['invoicer_card']=$arr[$k]['invoicer_card'];
-           $output[$k]['invoice_header']=$arr[$k]['invoice_header'];
            $output[$k]['consignee_mobile']=$arr[$k]['consignee_mobile'];
            $output[$k]['cover_image']=$arr[$k]['cover_image'];
            $output[$k]['goods_number']=$arr[$k]['goods_number'];
