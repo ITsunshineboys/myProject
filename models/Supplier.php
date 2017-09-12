@@ -56,6 +56,7 @@ class Supplier extends ActiveRecord
         'id',
         'type_org',
         'name',
+        'shop_name',
         'shop_no',
         'create_time',
         'status',
