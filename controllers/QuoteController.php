@@ -840,8 +840,8 @@ class QuoteController extends Controller
      */
     public function actionHomepageList(){
         $request = \Yii::$app->request;
-        $province_code = trim($request->post('province',''));
-        $city_code = trim($request->post('city',''));
+        $province_code = trim($request->get('province',''));
+        $city_code = trim($request->get('city',''));
         $code = 200;
         return Json::encode([
             'code' => $code,
