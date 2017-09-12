@@ -16,7 +16,7 @@ use yii\web\Controller;
 
 class WorkerController extends Controller
 {
-    const STATUS_ALL = 4;
+    const STATUS_ALL = 5;
 
     /**
      * @inheritdoc
