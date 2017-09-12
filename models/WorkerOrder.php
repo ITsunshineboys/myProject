@@ -386,7 +386,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 }
             }
 
-            $infos=self::saveMudorderitems($data,$id);
+            $infos=self::saveorderitems($data,$id);
             if ($infos==false) {
                 $transaction->rollBack();
                 $code = 500;
@@ -402,12 +402,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
     }
 
     /**
-     * 泥作添加订单工艺，条目，面积信息
+     * 添加订单工艺，条目，面积，长度信息
      * @param $items
      * @param $order_id
      * @return bool
      */
-    public static function saveMudorderitems($items,$order_id){
+    public static function saveorderitems($items,$order_id){
 
         $worker_order_item=new WorkerOrderItem();
         foreach($items as $attributes)
@@ -417,13 +417,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $_model->worker_order_id=$order_id;
             foreach (array_keys($attributes) as &$k){
                 if(preg_match('/(item)/',$k,$m)){
-
                     $_model->worker_item_id=$attributes[$k];
-
                 }
                 if(preg_match('/(craft)/',$k,$m)){
                    $_model->worker_craft_id=$attributes[$k];
-
                 }
                 if(preg_match('/(area)/',$k,$m)){
                     $_model->area=$attributes[$k];
@@ -485,6 +482,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return null|string
      */
     public static function timedata($order_id){
+        $time=[];
         $order_info=self::find()
             ->select('start_time,end_time,need_time')
             ->where(['id'=>$order_id])
@@ -495,8 +493,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
         $start_time=date('m.j',$order_info['start_time']);
         $end_time=date('m.j',$order_info['end_time']);
-
-        $time=$start_time.self::TIMESTYPE.$end_time."({$order_info['need_time']}天)";
+        $time['need_time']=$order_info['need_time'];
+        $time['time_length']=$start_time.self::TIMESTYPE.$end_time;
        return $time;
     }
 
