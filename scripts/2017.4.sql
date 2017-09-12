@@ -1363,11 +1363,14 @@ CREATE TABLE `worker_craft` (
 
 CREATE TABLE `worker_order_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `worker_order_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工单id',
-  `worker_item_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工人条目id',
-  `worker_craft_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工艺id',
-  `area` BIGINT(20) NOT NULL DEFAULT '0' COMMENT '面积,单位: dm^2',
+  `worker_order_id` int(11) NOT NULL DEFAULT '0' COMMENT '工单id',
+  `worker_item_id` int(11) NOT NULL DEFAULT '0' COMMENT '工人条目id',
+  `worker_craft_id` int(11) NOT NULL DEFAULT '0' COMMENT '工艺id',
+  `area` bigint(20) NOT NULL DEFAULT '0' COMMENT '面积,单位: dm^2',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: 否，1：是',
+  `length` bigint(20) NOT NULL DEFAULT '0' COMMENT '长度（水电）',
+  `electricity` tinyint(1) NOT NULL DEFAULT '0' COMMENT '（水电：0:弱电,1:强电）',
+  `count` int(11) NOT NULL DEFAULT '0' COMMENT '(水电：个数)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
