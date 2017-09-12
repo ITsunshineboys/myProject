@@ -78,10 +78,13 @@ class FindworkerController extends Controller{
         $data=WorkerType::getworkertype($parents);
             $parent=[];
             for ($i=0;$i<count($data);$i++){
-                $parent[]=[
-                    $parents[$i]['worker_type']=>$data[$i],
-                ];
+
+                  $parent[]=[$parents[$i]['worker_type']=>$data[$i]];
+
+
             }
+
+
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
@@ -113,7 +116,8 @@ class FindworkerController extends Controller{
                    'code'=>200,
                    'msg'=>'ok',
                    'data'=>[
-                       'worker_type_id'=>WorkerType::gettype($worker_type_id),
+                       'worker_type_id'=>$worker_type_id,
+                       'worker_type'=>WorkerType::gettype($worker_type_id),
                        'item'=>$data
                    ]
                ]);

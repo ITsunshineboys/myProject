@@ -67,12 +67,20 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
 
         return $worker_item;
     }
+    /**
+     * 对应工艺的价格
+     * @param $craft_id
+     * @return array|bool
+     */
     public static function craftprice($craft_id){
         $price=(new Query())->from('craft_cost')
             ->select('price')
             ->where(['worker_craft_id'=>$craft_id])
             ->one();
+        if($price){
             return $price;
+        }
+         return null;
     }
     /**
      * 泥作类添加
@@ -164,7 +172,11 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         return $data;
     }
 
-
+    /**
+     * 水电工 添加
+     * @param array $array
+     * @return array|int
+     */
     public static function addhydropowerdata(array $array){
 
         $data=[];
@@ -206,6 +218,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         return $data;
     }
     /**
+     * 业主联系信息
      * @param array $ownerinfos
      * @return int
      */
@@ -228,7 +241,12 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
 
         return $ownerinfos;
     }
-
+    /**
+     *
+     * @param $id
+     * @param $post
+     * @return array|int|null
+     */
     public static function getWorkeitem($id,$post){
         $type=WorkerType::getparenttype($id);
         if(!$type){
