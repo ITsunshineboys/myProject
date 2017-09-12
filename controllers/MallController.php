@@ -2355,7 +2355,7 @@ class MallController extends Controller
             'msg' => 'OK',
             'data' => [
                 'brand_application_review_list' => [
-                    'total' => (int)GoodsBrand::find()->where($where)->asArray()->count(),
+                    'total' => (int)BrandApplication::find()->where($where)->asArray()->count(),
                     'details' => BrandApplication::pagination($where, BrandApplication::FIELDS_REVIEW_ADMIN, $page, $size, $orderBy)
                 ]
             ],
