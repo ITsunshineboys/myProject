@@ -97,12 +97,15 @@ class Style extends ActiveRecord
         ];
     }
 
-    public static function findByTimeSort($sort)
+    public static function findByTimeSort($sort,$page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
+        $offset = ($page - 1) * $size;
         if ($sort  == self::STATUS_OFFLINE){
             $style = self::find()
                 ->asArray()
                 ->orderBy(['creation_time'=>SORT_DESC])
+                ->offset($offset)
+                ->limit($size)
                 ->all();
             foreach ($style as $one_series){
                 $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);
@@ -113,6 +116,8 @@ class Style extends ActiveRecord
             $style= self::find()
                 ->asArray()
                 ->orderBy(['creation_time'=>SORT_ASC])
+                ->offset($offset)
+                ->limit($size)
                 ->all();
             foreach ($style as $one_series){
                 $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);

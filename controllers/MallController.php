@@ -4235,7 +4235,9 @@ class MallController extends Controller
     public function actionSeriesTimeSort()
     {
         $sort = trim(Yii::$app->request->get('sort',''));
-        $series = Series::findByTimeSort($sort);
+        $pages = trim(Yii::$app->request->get('page','1'));
+        $size = trim(Yii::$app->request->get('size','12'));
+        $series = Series::findByTimeSort($sort,$pages,$size);
         return Json::encode([
             'list'=> $series
         ]);
@@ -4351,7 +4353,9 @@ class MallController extends Controller
     public function actionStyleTimeSort()
     {
         $sort = trim(Yii::$app->request->get('sort',''));
-        $style = Style::findByTimeSort($sort);
+        $pages = trim(Yii::$app->request->get('page','1'));
+        $size = trim(Yii::$app->request->get('size','12'));
+        $style = Style::findByTimeSort($sort,$pages,$size);
         return Json::encode([
             'list'=> $style
         ]);
