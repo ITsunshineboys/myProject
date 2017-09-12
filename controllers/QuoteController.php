@@ -1029,9 +1029,9 @@ class QuoteController extends Controller
         $item->image           = trim($request->post('image',''));
         $item->province_code   = trim($request->post('province',''));
         $item->city_code       = trim($request->post('city',''));
-        $item->province        = $province_code;
-        $item->city            = $city_code ;
-        $item->district        = $district_code;
+        $item->province        = $province_code['name'];
+        $item->city            = $city_code['name'] ;
+        $item->district        = $district_code['name'];
         $code = 1000;
         if (!$item->validate()){
             return Json::encode([
@@ -1046,5 +1046,16 @@ class QuoteController extends Controller
                 'mag' => 'ok'
             ]);
         }
+    }
+
+    public function actionHomepageDelete()
+    {
+        $id = trim(\Yii::$app->request->post('id',''));
+        BrainpowerInitalSupervise::findOne($id)->delete();
+        return  Json::encode([
+           'code'=>200,
+            'msg'=>'OK'
+        ]);
+
     }
 }
