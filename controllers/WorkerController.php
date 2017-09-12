@@ -433,6 +433,8 @@ class WorkerController extends Controller
                             isset($item['craft_id']) && $new_item['worker_craft_id'] = $item['craft_id'];
                             isset($item['area']) && $new_item['area'] = $item['area'];
                             isset($item['status']) && $new_item['status'] = $item['status'];
+                            isset($item['electricity']) && $new_item['electricity'] = $item['electricity'];
+                            isset($item['count']) && $new_item['count'] = $item['count'];
                         }
                         $item_exists[] = $new_item['worker_item_id'];
                     }
@@ -446,6 +448,8 @@ class WorkerController extends Controller
                         isset($item['craft_id']) && $new_item_add['worker_craft_id'] = $item['craft_id'];
                         isset($item['area']) && $new_item_add['area'] = $item['area'];
                         isset($item['status']) && $new_item_add['status'] = $item['status'];
+                        isset($item['electricity']) && $new_item_add['electricity'] = $item['electricity'];
+                        isset($item['count']) && $new_item_add['count'] = $item['count'];
                         $new_item_adds[] = $new_item_add;
                     }
                 }
