@@ -2277,6 +2277,7 @@ class OrderController extends Controller
             $GoodsOrder->order_refer=2;
             $GoodsOrder->return_insurance=0;
             $GoodsOrder->role_id=7;
+            $GoodsOrder->supplier_id=$goods->supplier_id;
             $GoodsOrder->user_id=$user->id;
             $GoodsOrder->buyer_message='请发快递给我';
             $GoodsOrder->consignee=$address->consignee;
