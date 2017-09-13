@@ -138,19 +138,19 @@ class LogisticsTemplate extends ActiveRecord
             return false;
         }
 
-        if ($this->isNewRecord) {
-            if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
-                return false;
-            }
-        } else {
-            if ($this->isAttributeChanged($attribute)) {
-                if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
-                    $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
-                    return false;
-                }
-            }
-        }
+//        if ($this->isNewRecord) {
+//            if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
+//                $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
+//                return false;
+//            }
+//        } else {
+//            if ($this->isAttributeChanged($attribute)) {
+//                if (self::find()->where(['supplier_id' => $supplier->id, $attribute => $this->$attribute])->exists()) {
+//                    $this->addError($attribute, self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]);
+//                    return false;
+//                }
+//            }
+//        }
 
         return true;
     }
