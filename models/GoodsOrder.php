@@ -1009,7 +1009,7 @@ class GoodsOrder extends ActiveRecord
 
     }
 
-  /**
+     /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
@@ -1100,7 +1100,7 @@ class GoodsOrder extends ActiveRecord
                         }
                     }
                };
-             if ($data[$k]['status']=='已完成')
+            if ($data[$k]['status']=='已完成')
             {
                 $waybillnumber=Express::find()
                     ->select('waybillnumber')
@@ -1111,9 +1111,22 @@ class GoodsOrder extends ActiveRecord
                 $data[$k]['send_time']=$express->create_time;
                 $data[$k]['RemainingTime']=Express::findRemainingTime($express);
                 $data[$k]['complete_time']=$express->receive_time;
+            };
+            $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
+            $data[$k]['pay_term']=0;
+            if ($data[$k]['status']=='未付款'){
+                $time=time();
+                $pay_term=(strtotime($data[$k]['create_time'])+24*60*60);
+                if (($pay_term-$time)<=0){
+                    $res=Yii::$app->db
+                        ->createCommand()
+                        ->update(self::ORDER_GOODS_LIST, ['order_status' => 2],'order_no='.$data[$k]['order_no'].' and sku='.$data[$k]['sku'])
+                        ->execute();
+                    $data[$k]['status']='已取消';
+                }else{
+                    $data[$k]['pay_term']=$pay_term-$time;
+                }
             }
-                $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
-
             unset($data[$k]['customer_service']);
             unset($data[$k]['pay_status']);
             unset($data[$k]['order_status']);
@@ -1989,6 +2002,7 @@ class GoodsOrder extends ActiveRecord
            }else{
                $output[$k]['automatic_receive_time']=date('Y-m-d H:i',$arr[$k]['RemainingTime']);
            }
+           $output[$k]['pay_term']=$arr[$k]['pay_term'];
            $output[$k]['status']=$arr[$k]['status'];
            $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
            $output[$k]['order_no']=$arr[$k]['order_no'];
@@ -2013,8 +2027,8 @@ class GoodsOrder extends ActiveRecord
        }
        return $output;
    }
-    /**
-     * 设置未付款持续时间
+     /**
+     * 设置平台角色
      * @param array $output
      * @param $arr
      * @return array
@@ -2035,18 +2049,6 @@ class GoodsOrder extends ActiveRecord
                ->one()['name'];
            if (!$output['role']){
                $output['role']='平台';
-           }
-       }
-       $output['pay_term']=0;
-       if ($output['status']=='未付款'){
-           $time=time();
-           $pay_term=(strtotime($output['create_time'])+60*60*24);
-           if (($pay_term-$time)<=0){
-               $res=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
-
-               $output['status']='已取消';
-           }else{
-               $output['pay_term']=$pay_term-$time;
            }
        }
        return $output;
