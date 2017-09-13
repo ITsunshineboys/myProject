@@ -1058,4 +1058,13 @@ class GoodsCategory extends ActiveRecord
             ->where(['and',['level' => $level],['goods_id' => 0],['in', 'title', $material]])
             ->all();
     }
+
+    public static function findByHeadTitle()
+    {
+        return self::find()
+            ->asArray()
+            ->select('title')
+            ->where(['and',['level'=>1]])
+            ->all();
+    }
 }

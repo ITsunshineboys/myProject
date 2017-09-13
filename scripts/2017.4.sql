@@ -1484,11 +1484,10 @@ CREATE TABLE `engineering_standard_carpentry_coefficient` (
 
 CREATE TABLE `engineering_standard_carpentry_craft` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `plasterboard_specifincation` float(11,2) DEFAULT NULL COMMENT '石膏板规格',
-  `keel_specifincation` float(11,2) DEFAULT NULL COMMENT '龙骨规格',
-  `lead_screw_specifincation` float(11,2) DEFAULT NULL COMMENT '丝杆规格',
+  `title` varchar(255) DEFAULT NULL COMMENT '名称',
+  `value` float(11,2) DEFAULT NULL COMMENT '值',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `coefficient_management` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

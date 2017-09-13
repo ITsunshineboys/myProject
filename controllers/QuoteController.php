@@ -203,6 +203,17 @@ class QuoteController extends Controller
 
     }
 
+
+    /**
+     * 系数管理 列表
+     * @return string
+     */
+    public function actionCoefficientList()
+    {
+        return Json::encode([
+           'list'=> GoodsCategory::findByHeadTitle(),
+        ]);
+    }
     /**
      * plot list and pages
      * @return string
