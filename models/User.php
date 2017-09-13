@@ -1254,18 +1254,20 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Validates identity info
      *
+     * @param ActiveRecord $operator operator default null
      * @return bool
      */
-    public function validateIdentity()
+    public function validateIdentity(ActiveRecord $operator = null)
     {
+        if ($operator) {
+            return true;
+        }
+
         if (!$this->identity_card_front_image
             || !$this->identity_card_back_image
             || !$this->validateIdentityNo()
             || !$this->validateLegalPerson()
         ) {
-            var_dump($this->validateIdentityNo());
-            echo '|';
-            var_dump($this->validateLegalPerson());
             return false;
         }
 
