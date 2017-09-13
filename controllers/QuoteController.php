@@ -200,7 +200,7 @@ class QuoteController extends Controller
     public function actionProjectNormWoodworkEdit()
     {
         $post = \Yii::$app->request->post();
-        
+
     }
 
     /**
