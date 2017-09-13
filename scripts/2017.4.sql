@@ -1472,3 +1472,20 @@ CREATE TABLE `user_cashregister` (
   `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `engineering_standard_carpentry_coefficient` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `project` varchar(10) DEFAULT NULL COMMENT '项目名称',
+  `value` float(10,2) DEFAULT NULL COMMENT '值',
+  `coefficient` int(5) DEFAULT NULL COMMENT '系数',
+  `series_or_style` tinyint(4) DEFAULT NULL COMMENT '0-系数，1-风格',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `engineering_standard_carpentry_craft` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `plasterboard_specifincation` int(11) DEFAULT NULL COMMENT '石膏板规格',
+  `keel_specifincation` int(11) DEFAULT NULL COMMENT '龙骨规格',
+  `lead_screw_specifincation` int(11) DEFAULT NULL COMMENT '丝杆规格',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
