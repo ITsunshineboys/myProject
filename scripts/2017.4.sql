@@ -1443,3 +1443,32 @@ CREATE TABLE `worker_craft_norm` (
   `worker_kind_details` varchar(20) DEFAULT NULL COMMENT '工种详情',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 9.13 start
+
+CREATE TABLE `user_accessdetail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
+  `role_id` int(50) NOT NULL DEFAULT 0 COMMENT '角色id',
+  `access_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款',
+  `access_money` bigint(20) NOT NULL DEFAULT 0 COMMENT '收支金额',
+  `create_time` int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
+  `transaction_no` varchar(50) NOT NULL DEFAULT '' COMMENT '交易单号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `user_cashregister` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
+  `role_id` int(50) NOT NULL DEFAULT 0 COMMENT '角色id',
+  `cash_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '申请提现金额',
+  `real_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '实际到账金额',
+  `apply_time` int(11) NOT NULL COMMENT '申请提现时间',
+  `handle_time` int(11) DEFAULT NULL COMMENT '处理提现时间',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '提现状态  1:未提现 2:提现中 3:已提现 4:提现失败',
+  `supplier_reason` varchar(150) NOT NULL COMMENT '提现操作原因',
+  `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
