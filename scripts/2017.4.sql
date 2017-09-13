@@ -1329,7 +1329,7 @@ CREATE TABLE `work_result` (
 
 CREATE TABLE `worker_order_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `worker_order_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工单id',
+  `worker_order_no` INT(11) NOT NULL DEFAULT '0' COMMENT '工人订单号',
   `order_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工单图片地址',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
