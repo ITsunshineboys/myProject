@@ -240,7 +240,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
 
         $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
-        $order_img = WorkerOrderImg::find()->where(['worker_order_id' => $order_id])->all();
+        $order_img = WorkerOrderImg::find()->where(['worker_order_no' => $order_no])->all();
 
         return [
             'order' => $order,
@@ -516,5 +516,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
        return $time;
     }
 
-
+    /**
+     * @param int $order_id
+     */
+    public static function getOrderNoById($order_id)
+    {
+        $order = self::find()->where(['id' => $order_id])->one();
+        if ($order) {
+            return $order->order_no;
+        }
+        return null;
+    }
 }
