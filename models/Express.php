@@ -20,7 +20,7 @@ class Express extends ActiveRecord
     }
 
     
-    /**
+ /**
      * @param $num
      * @return array|null|ActiveRecord
      */
@@ -242,4 +242,16 @@ class Express extends ActiveRecord
         curl_close( $ch );
         return $response;
     }
+
+    
+        /**获取收获剩余时间
+         * @param $express
+         * @return int
+         */
+      public  static  function  findRemainingTime($express)
+      {
+          $time=time();
+          $RemainingTime=$time-$express->create_time-15*24*60*60;
+          return $RemainingTime;
+      }
 }

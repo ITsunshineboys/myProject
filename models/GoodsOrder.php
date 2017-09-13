@@ -1009,12 +1009,12 @@ class GoodsOrder extends ActiveRecord
 
     }
 
-   /**
+  /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
      */
-    private static function getorderstatus($data)
+    public static function  getorderstatus($data)
     {
         foreach ($data as $k =>$v){
             $data[$k]['create_time']=date('Y-m-d H:i',$data[$k]['create_time']);
@@ -1023,7 +1023,11 @@ class GoodsOrder extends ActiveRecord
                     $data[$k]['user_name']='无登录用户';
                     break;
                 case 2:
-                    $data[$k]['user_name']=User::find()->select('username')->where(['id'=>$data[$k]['user_id']])->asArray()->one()['username'];
+                    $data[$k]['user_name']=User::find()
+                        ->select('username')
+                        ->where(['id'=>$data[$k]['user_id']])
+                        ->asArray()
+                        ->one()['username'];
                     break;
             }
             switch ($data[$k]['order_status']){
@@ -1065,8 +1069,7 @@ class GoodsOrder extends ActiveRecord
                     $data[$k]['status']='已取消';
                     break;
             }
-            $received=array();
-           $data[$k]['send_time']=0;
+            $data[$k]['send_time']=0;
             $data[$k]['complete_time']=0;
             if ($data[$k]['status']=='待收货'){
                    $waybillnumber=Express::find()
@@ -1074,25 +1077,32 @@ class GoodsOrder extends ActiveRecord
                        ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
                        ->asArray()
                        ->one()['waybillnumber'];
-                    $express=Express::findByWayBillNumber($waybillnumber);
-                    $data[$k]['send_time']=$express->create_time;
-                    $data[$k]['RemainingTime']=Express::findRemainingTime($express);
-                   if ($data[$k]['RemainingTime']<=0){
-                       $data[$k]['complete_time']=$express->receive_time;
-                       $data[$k]['status']='已完成';
-                       $supplier_id[$k]=self::find()
-                           ->select('supplier_id')
-                           ->where(['order_no'=>$data[$k]['order_no']])
-                           ->asArray()
-                           ->one()['supplier_id'];
-                       $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
-                       $res[$k]=self::changeOrderStatus($data[$k]['order_no'],$data[$k]['sku'],$supplier_id[$k],$money[$k]);
-                       if (!$res || $res==false){
-                           return false;
-                       }
-                   }
+                    if ($waybillnumber)
+                    {
+                        $express=Express::findByWayBillNumber($waybillnumber);
+                        $data[$k]['send_time']=$express->create_time;
+                        $data[$k]['RemainingTime']=Express::findRemainingTime($express);
+
+                        if ($data[$k]['RemainingTime']>=0){
+                            $data[$k]['complete_time']=$express->receive_time;
+                            $data[$k]['status']='已完成';
+                            $supplier_id[$k]=self::find()
+                                ->select('supplier_id')
+                                ->where(['order_no'=>$data[$k]['order_no']])
+                                ->asArray()
+                                ->one()['supplier_id'];
+                            $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
+                            $res[$k]=self::changeOrderStatus($data[$k]['order_no'],$data[$k]['sku'],$supplier_id[$k],$money[$k]);
+                            if (!$res || $res==false){
+                                return false;
+                            }
+                        }
+                    }
+
+
                };
-            $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
+                $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
+
             unset($data[$k]['customer_service']);
             unset($data[$k]['pay_status']);
             unset($data[$k]['order_status']);
@@ -1896,7 +1906,7 @@ class GoodsOrder extends ActiveRecord
         return $arr;
     }
 
-    /**
+     /**获取订单详情信息1
      * @param $postData
      * @param $user
      * @return array|mixed|null
@@ -1921,7 +1931,7 @@ class GoodsOrder extends ActiveRecord
        return $arr;
    }
 
-    /**
+   /**获取订单详情信息2
      * @param array $arr
      * @param $user
      * @return mixed
@@ -1942,8 +1952,8 @@ class GoodsOrder extends ActiveRecord
                    $arr[$k]['shipping_type']='送货上门';
                    break;
            }
-            $output[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-           $output[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']);
+           $output[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
+           $output[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
            $output[$k]['freight']=sprintf('%.2f', (float)$arr[$k]['freight']);
            $output[$k]['goods_price']=$arr[$k]['goods_price'];
            $output[$k]['supplier_price']=$arr[$k]['supplier_price'];
@@ -1953,7 +1963,16 @@ class GoodsOrder extends ActiveRecord
            $output[$k]['create_time']=$arr[$k]['create_time'];
            $output[$k]['pay_name']=$arr[$k]['pay_name'];
            $output[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
-            $output[$k]['send_time']=$arr[$k]['send_time'];
+            if ($arr[$k]['send_time']==0){
+               $output[$k]['send_time']=$arr[$k]['send_time'];
+           }else{
+               $output[$k]['send_time']=date('Y-m-d H:i',$arr[$k]['send_time']);
+           }
+           if ($arr[$k]['complete_time']==0){
+               $output[$k]['complete_time']=$arr[$k]['complete_time'];
+           }else{
+               $output[$k]['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
+           }
            $output[$k]['status']=$arr[$k]['status'];
            $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
            $output[$k]['order_no']=$arr[$k]['order_no'];
@@ -1978,7 +1997,6 @@ class GoodsOrder extends ActiveRecord
        }
        return $output;
    }
-
     /**
      * @param array $output
      * @param $arr
