@@ -19,6 +19,19 @@ class Express extends ActiveRecord
         return 'express';
     }
 
+    
+    /**
+     * @param $num
+     * @return array|null|ActiveRecord
+     */
+    public  static  function  findByWayBillNumber($num)
+    {
+        $data=self::find()
+            ->where(['waybillnumber'=>$num])
+            ->one();
+        return $data;
+    }
+
     /**
      * 添加快递单号
      * @param $sku
