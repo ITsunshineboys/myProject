@@ -1489,3 +1489,10 @@ CREATE TABLE `engineering_standard_carpentry_craft` (
   `lead_screw_specifincation` float(11,2) DEFAULT NULL COMMENT '丝杆规格',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `coefficient_management` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `classify` varchar(5) DEFAULT NULL COMMENT '分类',
+  `coefficient` float(10,2) DEFAULT NULL COMMENT '系数值',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
