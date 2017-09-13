@@ -1288,14 +1288,14 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
+     /**
      * 获取物流信息
      * @return string
      */
     public function actionGetexpress(){
         $request=Yii::$app->request;
-        $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
-        $sku=trim(htmlspecialchars($request->post('sku','')),'');
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
         if (!$order_no  || !$sku) {
             $code=1000;
             return Json::encode([
@@ -1307,15 +1307,25 @@ class OrderController extends Controller
         switch ($shipping_type){
             case 0:
                 $data=Express::Findexresslist($order_no,$sku);
+                if (is_numeric($data))
+                {
+                    $code=$data;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
                 break;
             case 1:
                 $data=Express::Findexpresslist_sendtohome($order_no,$sku);
                 break;
         }
-        return Json::encode($data);
-
-
+        return Json::encode([
+            'code' => 200,
+            'data' =>  $data,
+        ]);
     }
+
 
     /**
      * @return string
