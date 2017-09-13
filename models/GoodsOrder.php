@@ -2013,10 +2013,7 @@ class GoodsOrder extends ActiveRecord
        }
        return $output;
    }
-
-   
     /**
-     * 设置未付款持续时间
      * @param array $output
      * @param $arr
      * @return array
@@ -2039,17 +2036,20 @@ class GoodsOrder extends ActiveRecord
                $output['role']='平台';
            }
        }
-       $output['pay_term']=0;
+
        if ($output['status']=='未付款'){
            $time=time();
-           $pay_term=(strtotime($output['create_time'])+60*60*24);
-           if (($pay_term-$time)<=0){
+            $pay_term=(strtotime($output['create_time'])+60*60*24);
+           if (($pay_term-$time)<0){
                $res=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
-
+               $output['pay_term']=0;
                $output['status']='已取消';
            }else{
                $output['pay_term']=$pay_term-$time;
            }
+       }
+       if ($output['status']=='已取消'){
+           $output['pay_term']=0;
        }
        return $output;
    }
