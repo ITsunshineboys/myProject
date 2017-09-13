@@ -1120,7 +1120,7 @@ CREATE TABLE `express` (
 DROP TABLE IF EXISTS supplier_bankinformation;
 CREATE TABLE `user_bankinfo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `u_id` int(11) NOT NULL COMMENT '用户id',
+  `uid` int(11) NOT NULL COMMENT '用户id',
   `role_id` int(50) NOT NULL COMMENT '角色id',
 	`bankname` varchar(50) NOT NULL COMMENT '开户银行',
   `bankcard` int(50) NOT NULL COMMENT '银行卡号',
