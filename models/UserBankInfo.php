@@ -10,6 +10,8 @@ use yii\db\Exception;
 class UserBankInfo extends \yii\db\ActiveRecord
 {
 
+
+
     /**
      * @inheritdoc
      */
