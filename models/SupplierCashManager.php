@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\controllers\SupplierCashController;
 use app\services\ModelService;
 use yii\data\Pagination;
 use yii\db\ActiveRecord;
@@ -12,8 +13,9 @@ class SupplierCashManager extends ActiveRecord
 {
     const  USER_BANKINFO = 'user_bankinfo';
     const  SUPPLIER = 'supplier';
-    const  SUP_CASHREGISTER = 'supplier_cashregister';
+    const  SUP_CASHREGISTER = 'user_cashregister';
     const  GOODS_ORDER = 'goods_order';
+    const  ROLE_ID = 6;
 
     /**
      * 查询商家提现列表
@@ -30,7 +32,7 @@ class SupplierCashManager extends ActiveRecord
     {
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['supplier_id' => $supplier_id]);
+            ->where(['uid' => $supplier_id, 'role_id' => self::ROLE_ID]);
 
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
@@ -75,10 +77,10 @@ class SupplierCashManager extends ActiveRecord
     {
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['id' => $cash_id]);
+            ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID]);
 
         if ($supplier_id) {
-            $query->andWhere(['supplier_id' => $supplier_id]);
+            $query->andWhere(['uid' => $supplier_id]);
         }
         $arr = $query->one();
         if (!$arr) {
@@ -120,13 +122,13 @@ class SupplierCashManager extends ActiveRecord
      * @param $supplier_id
      * @return array
      */
-    private function GetBankcard($supplier_id)
+    public static function GetBankcard($supplier_id)
     {
-        $u_id = (int)self::GetSupplier($supplier_id)['uid'];
-        return (new Query())->from(self::USER_BANKINFO)->where(['u_id' => $u_id])->one();
+        $uid = (int)self::GetSupplier($supplier_id)['uid'];
+        return (new Query())->from(self::USER_BANKINFO)->where(['uid' => $uid])->one();
     }
 
-    private function GetSupplier($supplier_id)
+    public static function GetSupplier($supplier_id)
     {
         return (new Query())->from(self::SUPPLIER)->where(['id' => $supplier_id])->one();
     }
@@ -186,7 +188,7 @@ class SupplierCashManager extends ActiveRecord
     {
         $data = (new Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['status' => 3])
+            ->where(['status' => 3, 'role_id' => self::ROLE_ID])
             ->sum('cash_money');
 
         if ($data == null) {
@@ -203,7 +205,7 @@ class SupplierCashManager extends ActiveRecord
         $today = $this->getToday();
         $data = (new Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['status' => 3])
+            ->where(['status' => 3, 'role_id' => self::ROLE_ID])
             ->andwhere('handle_time >= ' . $today[0])
             ->andWhere('handle_time <= ' . $today[1])
             ->sum('cash_money');
@@ -219,7 +221,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedCashesCountAll()
     {
-        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => [3, 4]])->count();
+        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => [3, 4], 'role_id' => self::ROLE_ID])->count();
     }
 
     /**
@@ -227,7 +229,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getNotPayedCashesCountAll()
     {
-        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => [1, 2]])->count();
+        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => [1, 2], 'role_id' => self::ROLE_ID])->count();
     }
 
     /**
@@ -287,6 +289,7 @@ class SupplierCashManager extends ActiveRecord
     {
         $query = (new Query())
             ->from(self::SUP_CASHREGISTER . ' as g')
+            ->where(['g.role_id' => self::ROLE_ID])
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 'g.supplier_id', 'g.status', 'g.real_money']);
         if ($status) {
@@ -336,7 +339,7 @@ class SupplierCashManager extends ActiveRecord
     {
         $supplier_cash = (new Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['id' => $cash_id])
+            ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID])
             ->select(['cash_money', 'supplier_id', 'status', 'transaction_no'])
             ->one();
 
@@ -346,15 +349,26 @@ class SupplierCashManager extends ActiveRecord
         $transaction_no = $supplier_cash['transaction_no'];
 
         //初始状态不能为已经处理过的
-        if (!$cash_money || !$supplier_id || !$old_status || $old_status == 3 || $old_status == 4) {
+        if (!$cash_money || !$supplier_id || !$old_status
+            || $old_status == SupplierCashController::CASH_STATUS_DONE
+            || $old_status == SupplierCashController::CASH_STATUS_FAIL) {
             return null;
         }
-        if ($status == 4) {
+        //提现失败
+        if ($status == SupplierCashController::CASH_STATUS_FAIL) {
             $real_money = 0;
         }
-        if ($status == 3) {
+        //提现成功
+        if ($status == SupplierCashController::CASH_STATUS_DONE) {
             $real_money && $real_money *= 100;
             $real_money > $cash_money && $real_money = $cash_money;
+        }
+
+        $supplier_accessdetail = UserAccessdetail::find()
+            ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID])
+            ->one();
+        if ($supplier_accessdetail == null) {
+            return false;
         }
 
         $time = time();
@@ -371,7 +385,8 @@ class SupplierCashManager extends ActiveRecord
                     'id' => $cash_id
                 ])
                 ->execute();
-            if ($status == 4) {
+            //提现失败
+            if ($status == SupplierCashController::CASH_STATUS_FAIL) {
                 //钱退回供货商
                 $supplier = Supplier::find()->where(['id' => $supplier_id])->one();
                 if (!$supplier) {
@@ -380,18 +395,13 @@ class SupplierCashManager extends ActiveRecord
                 $supplier->balance += $cash_money;
                 $supplier->availableamount += $cash_money;
                 $supplier->save(false);
-                //新建一条明细单数据
-                if (!SupplierAccessdetail::find()->where(['transaction_no' => $transaction_no])->one()) {
-                    $supplier_accessdetail = new SupplierAccessdetail();
-                    $supplier_accessdetail->setAttributes([
-                        'access_type' => 4,
-                        'access_money' => $cash_money,
-                        'create_time' => $time,
-                        'transaction_no' => $transaction_no,
-                        'supplier_id' => $supplier_id
-                    ]);
-                    $supplier_accessdetail->save();
-                }
+                //修改明细单数据
+                $supplier_accessdetail->access_type = SupplierCashController::ACCESS_TYPE_REJECT;
+                $supplier_accessdetail->update(false);
+            }
+            //提现成功
+            if ($status == SupplierCashController::CASH_STATUS_DONE) {
+                $supplier_accessdetail->access_type = SupplierCashController::ACCESS_TYPE_CASH_DONE;
             }
 
             $trans->commit();
