@@ -188,10 +188,12 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             $data['remark']=$array['remark'];
         }
         $data['images']=$array['images'];
-        if(isset($array['start_time']) && isset($array['end_time'])){
-            $data['start_time']=strtotime($array['start_time']);
-            $data['end_time']=strtotime($array['end_time']);
+        if(!isset($array['start_time'])){
+            $code = 1000;
+            return $code;
         }
+        $data['start_time']=strtotime($array['start_time']);
+        $data['end_time']=strtotime($array['end_time']);
         if(isset($array['slotting_id'])) {
             if (!isset($array['slotting_craft_id']) || !isset($array['slotting_length']) ||!isset($array['slotting_electricity'])) {
                 $code = 1000;
@@ -213,8 +215,6 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
                 $data['point_item']['point_count'] = $array['point_count'];
             }
         }
-
-
         return $data;
     }
     /**
