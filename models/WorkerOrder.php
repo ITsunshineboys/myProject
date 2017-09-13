@@ -305,13 +305,13 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return bool
      */
-    public static function saveorderimgs(array $images,$order_id){
+    public static function saveorderimgs(array $images,$order_no){
         $worker_order_img=new WorkerOrderImg();
         foreach($images as $attributes)
         {
             $_model = clone $worker_order_img;
             $_model->order_img=$attributes;
-            $_model->worker_order_id=$order_id;
+            $_model->worker_order_no=$order_no;
            $res= $_model->save();
         }
         if(!$res){
@@ -384,8 +384,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 return $code;
             }
             $worker_order_img=new WorkerOrderImg();
-            $order_id= $worker_order_img->worker_order_id=$worker_order->id;
-            $rest=self::saveorderimgs($homeinfos['images'],$order_id);
+            $order_no= $worker_order_img->worker_order_no=$worker_order->order_no;
+            $rest=self::saveorderimgs($homeinfos['images'],$order_no);
             if($rest==false){
                 $transaction->rollBack();
                 $code = 500;
