@@ -2013,6 +2013,8 @@ class GoodsOrder extends ActiveRecord
        }
        return $output;
    }
+
+   
     /**
      * 设置未付款持续时间
      * @param array $output
