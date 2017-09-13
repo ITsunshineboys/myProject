@@ -18,4 +18,11 @@ class CoefficientManagement extends ActiveRecord
     {
         return 'coefficient_management';
     }
+
+    public static function findByAll()
+    {
+        return self::find()
+            ->asArray()
+            ->all();
+    }
 }

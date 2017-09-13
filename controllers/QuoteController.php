@@ -9,6 +9,7 @@ namespace app\controllers;
 
 use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
+use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
 use app\models\DecorationParticulars;
 use app\models\District;
@@ -211,9 +212,16 @@ class QuoteController extends Controller
     public function actionCoefficientList()
     {
         return Json::encode([
+            'coefficient'=>CoefficientManagement::findByAll(),
            'list'=> GoodsCategory::findByHeadTitle(),
         ]);
     }
+
+    public function actionCoefficientAdd()
+    {
+        $post = \Yii::$app->request->post();
+    }
+
     /**
      * plot list and pages
      * @return string
