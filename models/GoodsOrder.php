@@ -1931,7 +1931,7 @@ class GoodsOrder extends ActiveRecord
                    $arr[$k]['shipping_type']='送货上门';
                    break;
            }
-           $output[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']);
+            $output[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
            $output[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']);
            $output[$k]['freight']=sprintf('%.2f', (float)$arr[$k]['freight']);
            $output[$k]['goods_price']=$arr[$k]['goods_price'];
