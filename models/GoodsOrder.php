@@ -1100,9 +1100,14 @@ class GoodsOrder extends ActiveRecord
                         }
                     }
                };
-            if ($data[$k]['status']=='已完成')
+             if ($data[$k]['status']=='已完成')
             {
-                $express=Express::findByWayBillNumber($data[$k]['waybillnumber']);
+                $waybillnumber=Express::find()
+                    ->select('waybillnumber')
+                    ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                    ->asArray()
+                    ->one()['waybillnumber'];
+                $express=Express::findByWayBillNumber($waybillnumber);
                 $data[$k]['send_time']=$express->create_time;
                 $data[$k]['RemainingTime']=Express::findRemainingTime($express);
                 $data[$k]['complete_time']=$express->receive_time;
