@@ -1320,10 +1320,11 @@ class OrderController extends Controller
                 $data=Express::Findexpresslist_sendtohome($order_no,$sku);
                 break;
         }
-        return Json::encode([
+         return Json::encode([
             'code' => 200,
+            'msg' =>'ok',
             'data' =>  $data,
-        ]);
+         ]);
     }
 
 
