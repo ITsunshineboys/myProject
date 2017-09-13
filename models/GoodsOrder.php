@@ -1941,7 +1941,8 @@ class GoodsOrder extends ActiveRecord
            $output[$k]['buyer_message']=$arr[$k]['buyer_message'];
            $output[$k]['create_time']=$arr[$k]['create_time'];
            $output[$k]['pay_name']=$arr[$k]['pay_name'];
-           $output[$k]['paytime']=date('Y-m-d H:i:s',$arr[$k]['paytime']);
+           $output[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
+           $output[$k]['send_time']=date('Y-m-d H:i',Express::findByWayBillNumber($arr[$k]['waybillnumber'])->create_time);
            $output[$k]['status']=$arr[$k]['status'];
            $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
            $output[$k]['order_no']=$arr[$k]['order_no'];
