@@ -1066,14 +1066,25 @@ class GoodsOrder extends ActiveRecord
                     break;
             }
             $received=array();
+           $data[$k]['send_time']=0;
+            $data[$k]['complete_time']=0;
             if ($data[$k]['status']=='待收货'){
-                   $waybillnumber=Express::find()->select('waybillnumber')->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])->one()['waybillnumber'];
-                   $received[$k]['model']=(new Express())->getorder($waybillnumber);
-                   if ($received[$k]['model']['ischeck']==1){
+                   $waybillnumber=Express::find()
+                       ->select('waybillnumber')
+                       ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                       ->asArray()
+                       ->one()['waybillnumber'];
+                    $express=Express::findByWayBillNumber($waybillnumber);
+                    $data[$k]['send_time']=$express->create_time;
+                    $data[$k]['RemainingTime']=Express::findRemainingTime($express);
+                   if ($data[$k]['RemainingTime']<=0){
+                       $data[$k]['complete_time']=$express->receive_time;
                        $data[$k]['status']='已完成';
-//                       var_dump($data);
-//                       exit;
-                       $supplier_id[$k]=self::find()->select('supplier_id')->where(['order_no'=>$data[$k]['order_no']])->asArray()->one()['supplier_id'];
+                       $supplier_id[$k]=self::find()
+                           ->select('supplier_id')
+                           ->where(['order_no'=>$data[$k]['order_no']])
+                           ->asArray()
+                           ->one()['supplier_id'];
                        $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
                        $res[$k]=self::changeOrderStatus($data[$k]['order_no'],$data[$k]['sku'],$supplier_id[$k],$money[$k]);
                        if (!$res || $res==false){
@@ -1942,7 +1953,7 @@ class GoodsOrder extends ActiveRecord
            $output[$k]['create_time']=$arr[$k]['create_time'];
            $output[$k]['pay_name']=$arr[$k]['pay_name'];
            $output[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
-           $output[$k]['send_time']=date('Y-m-d H:i',Express::findByWayBillNumber($arr[$k]['waybillnumber'])->create_time);
+            $output[$k]['send_time']=$arr[$k]['send_time'];
            $output[$k]['status']=$arr[$k]['status'];
            $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
            $output[$k]['order_no']=$arr[$k]['order_no'];
