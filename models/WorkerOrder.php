@@ -42,7 +42,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         1 => '未开始',
         2 => '未开始',
         3 => '施工中',
-        4 => '已完成'
+        4 => '完工'
     ];
 
     const USER_WORKER_ORDER_STATUS = [
