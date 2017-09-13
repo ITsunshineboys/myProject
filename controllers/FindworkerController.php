@@ -361,11 +361,4 @@ class FindworkerController extends Controller{
         ]);
     }
 
-    public function actionordertakingView(){
-
-        $code=1000;
-        $order_id=trim(\Yii::$app->request->get('order_id',''),'');
-
-
-    }
 }
