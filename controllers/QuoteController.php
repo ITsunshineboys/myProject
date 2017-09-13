@@ -198,6 +198,10 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 工程标准修改 木作修改
+     * @return string
+     */
     public function actionProjectNormWoodworkEdit()
     {
         $post = \Yii::$app->request->post();
@@ -236,7 +240,10 @@ class QuoteController extends Controller
                 $coefficient->save();
             }
         }
-
+        return Json::encode([
+           'code'=>200,
+            'msg'=>'OK'
+        ]);
     }
 
 
