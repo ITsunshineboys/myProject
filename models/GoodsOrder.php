@@ -1942,7 +1942,7 @@ class GoodsOrder extends ActiveRecord
        return $arr;
    }
 
-   /**获取订单详情信息2
+    /**获取订单详情信息2
      * @param array $arr
      * @param $user
      * @return mixed
@@ -1950,11 +1950,12 @@ class GoodsOrder extends ActiveRecord
    public static  function GetOrderDetailsData($arr=[],$user)
    {
        foreach ( $arr as $k =>$v){
-           $arr[$k]['freight']= sprintf('%.2f', (float)$arr[$k]['freight']*0.01);
-           $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
-           $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
-           $arr[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01*$arr[$k]['goods_number']);
-           $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+           $output[$k]['amount_order']=self::switchMoney(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+           $arr[$k]['freight']= self::switchMoney($arr[$k]['freight']*0.01);
+           $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
+           $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
+           $arr[$k]['return_insurance']=self::switchMoney($arr[$k]['return_insurance']*0.01);
+           $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
            switch ($arr[$k]['shipping_type']){
                case 0:
                    $arr[$k]['shipping_type']='快递物流';
@@ -1963,7 +1964,6 @@ class GoodsOrder extends ActiveRecord
                    $arr[$k]['shipping_type']='送货上门';
                    break;
            }
-           $output[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
            $output[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
            $output[$k]['freight']=sprintf('%.2f', (float)$arr[$k]['freight']);
            $output[$k]['goods_price']=$arr[$k]['goods_price'];
@@ -1984,7 +1984,7 @@ class GoodsOrder extends ActiveRecord
            }else{
                $output[$k]['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
            }
-            if ($arr[$k]['RemainingTime']<=0){
+           if ($arr[$k]['RemainingTime']<=0){
                $output[$k]['automatic_receive_time']=0;
            }else{
                $output[$k]['automatic_receive_time']=date('Y-m-d H:i',$arr[$k]['RemainingTime']);
