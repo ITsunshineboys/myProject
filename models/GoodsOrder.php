@@ -1071,6 +1071,7 @@ class GoodsOrder extends ActiveRecord
             }
             $data[$k]['send_time']=0;
             $data[$k]['complete_time']=0;
+            $data[$k]['RemainingTime']=0;
             if ($data[$k]['status']=='待收货'){
                    $waybillnumber=Express::find()
                        ->select('waybillnumber')
@@ -1083,7 +1084,7 @@ class GoodsOrder extends ActiveRecord
                         $data[$k]['send_time']=$express->create_time;
                         $data[$k]['RemainingTime']=Express::findRemainingTime($express);
 
-                        if ($data[$k]['RemainingTime']>=0){
+                        if ($data[$k]['RemainingTime']<=0){
                             $data[$k]['complete_time']=$express->receive_time;
                             $data[$k]['status']='已完成';
                             $supplier_id[$k]=self::find()
@@ -1098,9 +1099,14 @@ class GoodsOrder extends ActiveRecord
                             }
                         }
                     }
-
-
                };
+            if ($data[$k]['status']=='已完成')
+            {
+                $express=Express::findByWayBillNumber($data[$k]['waybillnumber']);
+                $data[$k]['send_time']=$express->create_time;
+                $data[$k]['RemainingTime']=Express::findRemainingTime($express);
+                $data[$k]['complete_time']=$express->receive_time;
+            }
                 $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
 
             unset($data[$k]['customer_service']);
@@ -1972,6 +1978,11 @@ class GoodsOrder extends ActiveRecord
                $output[$k]['complete_time']=$arr[$k]['complete_time'];
            }else{
                $output[$k]['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
+           }
+            if ($arr[$k]['RemainingTime']<=0){
+               $output[$k]['automatic_receive_time']=0;
+           }else{
+               $output[$k]['automatic_receive_time']=date('Y-m-d H:i',$arr[$k]['RemainingTime']);
            }
            $output[$k]['status']=$arr[$k]['status'];
            $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
