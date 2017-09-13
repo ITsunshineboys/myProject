@@ -14,6 +14,8 @@ use app\models\DecorationParticulars;
 use app\models\District;
 use app\models\Effect;
 use app\models\EffectPicture;
+use app\models\EngineeringStandardCarpentryCoefficient;
+use app\models\EngineeringStandardCarpentryCraft;
 use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;
@@ -174,12 +176,31 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 工程标准修改 木作列表
+     * @return string
+     */
     public function actionProjectNormWoodworkList()
     {
         $material = ['石膏板', '龙骨', '丝杆'];
-        $goods  = GoodsCategory::GoodsAttrValue(3,$material);
+        $goods['specification']  = GoodsCategory::GoodsAttrValue(3,$material);
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
+        $coefficient    = EngineeringStandardCarpentryCoefficient::findByAll();
+        $goods['find_specification']   = EngineeringStandardCarpentryCraft::findByAll();
+
+        return Json::encode([
+           'specification'=>$goods,
+            'series'=>$series,
+            'style'=>$style,
+            'coefficient'=>$coefficient
+        ]);
+    }
+
+    public function actionProjectNormWoodworkEdit()
+    {
+        $post = \Yii::$app->request->post();
+        
     }
 
     /**
