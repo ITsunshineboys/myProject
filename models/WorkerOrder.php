@@ -228,7 +228,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     public static function getUserWorkerOrderDetail($order_id)
     {
-        list($order, $worker_items) = self::getOrderDetail($order_id);
+        $order_detail = self::getOrderDetail($order_id);
+        if (is_int($order_detail)) {
+            return 1000;
+        }
+        list($order, $worker_items) = $order_detail;
         //TODO 查出工人的(成交数量，风格)待定， 调整历史单独分出来(对应订单) 好评率
         $worker = [];
         //只要有工人id,便显示工人信息
@@ -240,6 +244,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
 
         $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
+        $order_no = self::getOrderNoById($order_id);
         $order_img = WorkerOrderImg::find()->where(['worker_order_no' => $order_no])->all();
 
         return [
