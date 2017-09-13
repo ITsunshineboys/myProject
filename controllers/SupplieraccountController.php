@@ -7,6 +7,7 @@ use app\models\Supplier;
 use app\models\SupplierCashregister;
 use app\models\SupplierFreezelist;
 use app\models\User;
+use app\models\UserCashregister;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use yii\db\Exception;
@@ -202,7 +203,7 @@ class SupplieraccountController extends  Controller{
             }
 
             $model=new Supplier();
-            $data= $model::getsupplierdata($supplier_id);
+            $data= $model::getsupplierdata($supplier_id,$user->getId());
             return json_encode([
                 'code' => 200,
                 'msg' => 'ok',
@@ -484,12 +485,6 @@ class SupplieraccountController extends  Controller{
         $code = 1000;
 
         $timeType = trim(Yii::$app->request->get('time_type', ''));
-
-
-        $where = '1';
-
-
-
         $where=" status=".self::STATUS_CG;
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -523,7 +518,7 @@ class SupplieraccountController extends  Controller{
         $page = (int)Yii::$app->request->get('page', 1);
 
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
-        $paginationData = SupplierCashregister::pagination($where, SupplierCashregister::FIELDS_ADMIN, $page, $size);
+        $paginationData = UserCashregister::pagination($where, SupplierCashregister::FIELDS_ADMIN, $page, $size);
         return json_encode([
             'code'=>200,
             'msg'=>'ok',
@@ -559,7 +554,7 @@ class SupplieraccountController extends  Controller{
             ]);
         }
 
-       $model=new SupplierCashregister();
+       $model=new UserCashregister();
           $data=$model::getcashviewdata($cash_id);
 
         return json_encode([

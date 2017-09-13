@@ -464,26 +464,33 @@ class Supplier extends ActiveRecord
         $total=(int)self::find()->where($where)->asArray()->count();
         return ModelService::pageDeal($supplierList, $total, $page, $size);
     }
-
-    public static function getsupplierdata($supplier_id)
+    /**
+     * supplier view
+     * @param $supplier_id
+     * @param $uid
+     * @return array|bool|null
+     */
+    public static function getsupplierdata($supplier_id,$uid)
     {
         $query = new Query();
         $select = 'sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
         $array = $query->from('supplier as s')
             ->select($select)
-            ->leftJoin('supplier_cashregister as sc', 'sc.supplier_id=s.id')
+            ->leftJoin('user_cashregister as sc', 'sc.uid=s.id')
             ->leftJoin('user_bankinfo as sb', 'sb.u_id=s.uid')
             ->leftJoin('supplier_freezelist as sf', 'sf.supplier_id=s.id')
             ->where(['s.id' => $supplier_id])
             ->one();
+
         $freeze_money=(new Query())->from('supplier_freezelist')->where(['supplier_id'=>$supplier_id])->sum('freeze_money');
-        $cashed_money=(new Query())->from('supplier_cashregister')->where(['supplier_id'=>$supplier_id])->andWhere(['status'=>self::STATUS_CASHED])->sum('cash_money');
+        $cashed_money=(new Query())->from('user_cashregister')->where(['uid'=>$uid])->andWhere(['status'=>self::STATUS_CASHED])->sum('cash_money');
         if ($array) {
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
             $array['cash_money'] = sprintf('%.2f', (float)$array['cash_money'] * 0.01);
             $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
             $array['cashed_money'] = sprintf('%.2f', (float) $cashed_money * 0.01);
             $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['balance']);
+
             return $array;
 
         }
@@ -491,16 +498,15 @@ class Supplier extends ActiveRecord
         return null;
 
     }
-
+    /**
+     * get category by pid
+     * @param $pid
+     * @return array
+     */
     public static function getcategory($pid)
     {
-
         $cate = GoodsCategory::findOne($pid);
-
-
         $children = $cate->children;
-
-
         if ($children) {
             $child_id = [];
             foreach ($children as $child) {
@@ -510,20 +516,14 @@ class Supplier extends ActiveRecord
                     foreach ($category as $cate) {
                         $child_id[] = $cate->id;
                     }
-
                 }
                 $child_id[] = $child->id;
             }
             return $child_id;
-
-
         } else {
 
             return $pid;
-
         }
-
-
     }
 
     /**
