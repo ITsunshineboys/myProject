@@ -73,7 +73,12 @@
 .divider{
     height: 1px;
     width: 90%;
+<<<<<<< Updated upstream
     margin: 26px 0 19px 19px;
+=======
+    margin-top: 34px;
+    margin-left: 19px;
+>>>>>>> Stashed changes
     background-color: #BFC0C2;
 }
 
@@ -96,7 +101,12 @@
 
 /*分类图片*/
 .cla_pic{
+<<<<<<< Updated upstream
     margin-top: 66px;
+=======
+    height: 220px;
+    margin-top: 40px;
+>>>>>>> Stashed changes
 }
 
 .upload_pic{
@@ -104,9 +114,15 @@
     vertical-align: top;
 }
 
+<<<<<<< Updated upstream
 .upload_pic img{
     width: 120px;
     height: 120px;
+=======
+#cla_pic_uploadpic{
+    position: relative;
+    top: 40px;
+>>>>>>> Stashed changes
 }
 
 
@@ -171,6 +187,7 @@
     display: inline-block;
     width: 623px;
     height: 337px;
+    /*background-color: #7A8599;*/
 }
 
 /*确认信息*/
@@ -305,8 +322,4 @@
     position: relative!important;
     top:-362px;
     left: 0;
-}
-
-.ueditor{
-    width: 80%;
 }

@@ -1,4 +1,4 @@
-/*头部导航开始*/
+/*头部导航 开始*/
 .header_box{
   height: 60px;
   border-bottom: 1px solid #cccccc;
@@ -11,23 +11,21 @@
 }
 /*头部导航 结束*/
 
-/*选择时间 开始*/
+/*公用CSS样式 开始*/
 .head_nav_font_weight{
   font-weight: bold;
 }
 .gray{
   color: #cccccc;
 }
-table{
-  width: 100%;
-}
 /*公用CSS样式 结束*/
+
 .content{
   /*margin-left: 200px;*/
   /*border: 2px solid blue;*/
   height: 500px;
 }
-/*APP推荐-banner开始*/
+/*选择时间开始*/
 .city{
   width: 90%;
   margin: 20px auto;
@@ -64,7 +62,7 @@ table{
   border: 1px solid #BFC0C2;
   border-radius: 3px;
 }
-/*选择时间 结束*/
+/*选择时间结束*/
 
 /*Table内容 开始-*/
 .tabTable{
@@ -79,23 +77,14 @@ table{
   font-family: Helvetica;
   font-size: 14px;
   color: #666F80;
-  line-height: 14px;
   /*padding: 0 22px;*/
 }
 .tabTable table tr td a{
   color: #3F94F6;
 }
-.th td{
-  font-family: Helvetica;
-  font-size: 14px;
-  color: #7A8599!important;
-}
-#show_img_size{
-  width: 30px;
-  height: 30px;
-}
 /*Table内容 结束-*/
 
+<<<<<<< Updated upstream
 /*分页*/
 /*分页处理*/
 .pages{
@@ -151,3 +140,6 @@ table{
   background:#487af8!important;
   color: white!important;
 }
+=======
+
+>>>>>>> Stashed changes

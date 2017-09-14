@@ -1,8 +1,11 @@
 let index_recommend = angular.module("index_recommend_module",['ngFileUpload']);
 index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload) {
   $scope.myng=$scope;//原形继承转换，解决ng-model 无效问题
-
   //选择城市开始
+  // $scope.second_title='';//二级列表项初始化
+  // $scope.three_title='';//三级列表项初始化
+  // // $scope.ctrlScope = $scope;
+  // $scope.search_txt = '';
   //初始化省市区县;
   $http.get('districts2.json').then(function (response) {
     // console.log((response.data[0]['86']))

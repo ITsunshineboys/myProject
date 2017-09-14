@@ -88,9 +88,15 @@
     vertical-align: top;
 }
 
+<<<<<<< Updated upstream
 .upload_pic img{
     width: 120px;
     height: 120px;
+=======
+#cla_pic_uploadpic{
+    position: relative;
+    top:40px;
+>>>>>>> Stashed changes
 }
 
 
@@ -221,11 +227,6 @@
     background-color: white;
     margin-left: 511px;
     margin-top: 54px;
-}
-
-.cla_name h6{
-    color: red;
-    margin-left: 172px;
 }
 
 

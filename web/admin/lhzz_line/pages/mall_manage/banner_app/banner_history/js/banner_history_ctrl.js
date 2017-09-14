@@ -1,5 +1,6 @@
-let banner_history= angular.module("banner_history_module", []);
+var banner_history = angular.module("banner_history_module", []);
 banner_history.controller("banner_history_ctrl", function ($scope, $http) {
+<<<<<<< Updated upstream
   $scope.myng=$scope;
 
   //POST请求的响应头
@@ -156,4 +157,7 @@ banner_history.controller("banner_history_ctrl", function ($scope, $http) {
   });
 });
 
+=======
+>>>>>>> Stashed changes
 
+});

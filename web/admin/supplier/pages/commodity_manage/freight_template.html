@@ -1,0 +1,121 @@
+<link rel="stylesheet" href="pages/commodity_manage/css/freight_template.css"/>
+<div ng-controller="freight_template_ctrl" class="">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">商品管理 ></span>
+            <span class="manage_child">添加物流模板</span>
+            <img src="image/user.png" alt=""/>
+        </div>
+    </header>
+    <section>
+        <!--模板名称-->
+        <from name="formNum" novalidate>
+        <div class="class_name">
+            <img src="pages/commodity_manage/image/red.png" alt=""/>
+            <span>模板名称</span>
+            <input type="text" name="textContent" placeholder="请输入模板名称"
+                   maxlength="10"
+                   ng-model="textContent" required/>
+            <span>*限1～10个字符，不含特殊字符</span>
+            <br/>
+            <span class="span_left" ng-show="airHidden == false">*不能为空</span>
+         <br/>
+        </div>
+
+        <!--配送方式-->
+        <div class="distribution">
+            <span>配送方式</span>
+            <input type="radio" name="radio" ng-click="changeView (way)" ng-checked="test == 0 "  ng-model="way" value="0"/>
+            <span>快递物流</span>
+            <input type="radio" name="radio" ng-click="changeViewMore (way)" ng-checked="test == 1" ng-model="way" value="1"/>
+            <span>送货上门</span>
+            <div class="distribution_div">
+                <img src="pages/commodity_manage/image/red.png" alt=""/>
+                <span>服务地区选择</span>
+                <span>{{chooseCity}}</span>
+                <a data-toggle="modal" data-target="#detate_modal"><span>编辑</span></a>
+                <br/><br/>
+                <div ng-show="test==0">
+                    <span class="left_way">收费方式</span>
+                    <input type="radio" name="a" ng-click="changeStatus ()"  ng-checked="hidden_way"/>
+                    <span class="input_span">不包邮</span>
+                    <input type="radio" name="a" ng-click="changeStatusHidden ()" ng-checked="!hidden_way"/>
+                    <span class="input_span">包邮</span>
+                    <div  class="charge" ng-show="hidden_way">
+                        <img src="pages/commodity_manage/image/red.png" alt=""/>
+                        <span>默认运费</span>
+                        <input type="text" ng-model="cost"  placeholder="{{costView}}"/>
+                        <span>元</span>
+                        <input type="text" ng-model="num" placeholder="{{numView}}"/>
+                        <span>件</span>
+                        <br/><br/>
+                        <img src="pages/commodity_manage/image/red.png" alt=""/>
+                        <span>每增加</span>
+                        <input type="text" class="input_left" ng-model="dete" placeholder="{{detaeView}}"/>
+                        <span>件</span>
+                        <input type="text" class="input_left1" ng-model="ber" placeholder="{{berView}}"/>
+                        <span>元</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!--服务器城市选择  模态框 -->
+            <div class="modal fade" id="detate_modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">选择区域</h4>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="city_ul">
+                                <li ng-repeat="n in province">
+                                    <input type="checkbox" ng-model="changeStatus"  ng-checked="n.flag"/>
+                                    <span>{{n.name}}</span>
+                                    <img src="pages/commodity_manage/image/down_red.png"
+                                         data-toggle="modal" data-target="#sed_modal"
+                                         ng-click="getMoreCity (n)" alt=""/>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default"  data-dismiss="modal" ng-click="addCity ()" >确认</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--物流模板城市选择二级  模态框 -->
+            <div class="modal fade" id="sed_modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">选择区域</h4>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="sec_ul">
+                                <li ng-repeat=" n in city" >
+                                    <input type="checkbox" ng-checked="n.flag" ng-click="getSecondId (n)"/>
+                                    <span>{{n.name}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" ng-click="getCity ()" data-dismiss="modal">确认</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--按钮-->
+        <div class="btn_back">
+            <button ng-click="getReally ()" type="submit" ng-disabled="formNum.textContent.$dirty && formNum.textContent.$invalid">确认</button>
+            <button ng-click="getBack ()">返回</button>
+        </div>
+        </from>
+    </section>
+</div>

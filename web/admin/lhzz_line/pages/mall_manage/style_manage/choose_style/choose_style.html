@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/choose_style/css/choose_style.css">
-<div ng-controller="choose_series">
 <div ng-controller="choose_style">
     <!--顶部导航-->
     <div class="topnav">
@@ -15,44 +14,45 @@
 
         <!--四个ul-->
         <div class="ulright">
+            <!--一级-->
             <ul>
-                <li>基础材料</li>
-                <li>主材料</li>
-                <li>固定家具</li>
-                <li>移动家具</li>
-                <li>家装配套</li>
-                <li>软装配套</li>
-                <li>智能配套</li>
-                <li>生活配套</li>
+                <li ng-repeat="n in details track by $index" ng-class="{'active':oneColor== n}" ng-click="getMore (n)">
+                    {{n.title}}
+                </li>
             </ul>
 
-            <ul>
-                <li>墙面材料</li>
-                <li>板材材料</li>
-                <li>水电材料</li>
-                <li>防水材料</li>
-                <li>石膏、固化类材料</li>
+            <!--二级-->
+            <ul >
+                <!--ng-click="getMoreThree (n.id)"-->
+                <li ng-repeat=" n in second track by $index" ng-class="{'active':twoColor== n}" ng-click="getMoreThree (n)">
+                    {{n.title}}
+                </li>
             </ul>
 
+            <!--三级-->
             <ul class="thirdul">
-                <li><input type="checkbox">石膏粉</li>
-                <li><input type="checkbox">墙面附着剂</li>
+                <li ng-repeat="n in three track by $index" ng-class="{'active':threeColor==n}">
+                    <input type="checkbox" ng-click="check_item(n)" ng-model="n.complete">
+                    {{n.title}}
+                </li>
+                <!--<li><input type="checkbox">墙面附着剂</li>-->
             </ul>
 
             <ul class="lastul">
-                <li>
-                    墙地面附着剂
-                    <img src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">
+
+                <li ng-repeat="item in item_check track by $index">
+                    {{item.title}}
+                    <img ng-click="delete_item(item)" src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">
                 </li>
-                <li>
-                    石膏粉
-                    <img src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">
-                </li>
+                <!--<li>-->
+                <!--石膏粉-->
+                <!--<img src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">-->
+                <!--</li>-->
             </ul>
         </div>
 
         <div class="btn_sure">
-            <button id="save" data-toggle="modal" data-target="#suremodal">保存</button>
+            <button id="save" data-toggle="modal" ng-click="send_series()" data-target="#suremodal">保存</button>
             <button ui-sref="style_index">返回</button>
         </div>
     </div>
@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal">确认</button>
+                    <button id="caozuo_sure" data-dismiss="modal" ng-click="back_return()">确认</button>
                 </div>
             </div>
         </div>

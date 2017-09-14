@@ -1,0 +1,291 @@
+/*头部开始*/
+header{
+  height: 60px;
+  line-height: 60px;
+  padding-left: 40px;
+  border-bottom: 1px solid #E6E9F0 ;
+}
+.shop_manage{
+  font-size: 14px;
+  color: #2F3033;
+  line-height: 14px;
+  font-weight: bold;
+}
+
+header img{
+  margin-left:80%;
+}
+/*头部结束*/
+section{
+  padding-left: 40px;
+}
+/*选项卡开始*/
+.tab{
+  width: 90%;
+  height: 60px;
+  margin-left: 40px;
+  border-bottom: 1px solid #E6E9F0 ;
+}
+.tab ul{
+  list-style: none;
+  padding: 0;
+}
+.tab ul:after{
+  content: "";
+  display: table;
+  clear: both;
+}
+.tab ul li{
+  float: left;
+  height: 60px;
+  line-height: 60px;
+  margin-right: 25px;
+}
+.tab_blue{
+  color: #5677FC;
+  border-bottom: 1px solid #5677FC ;
+}
+/*上架选项卡*/
+.on_menu{
+  border: 1px solid black;
+  background-color: white;
+  width: 180px;
+  position: absolute;
+  top:40px;
+  right:0;
+}
+.on_menu ul{
+  list-style: none;
+  float: none!important;
+  padding: 0;
+  margin-left: 20px;
+}
+.on_menu li{
+  font-size: 14px!important;
+  float: none!important;
+  margin-right: 0!important;
+  text-align: left!important;
+  padding: 0!important;
+  height: auto!important;
+  border: 0!important;
+  color: #666F80;
+}
+/*选项卡结束*/
+
+/*操作菜单开始*/
+.operating{
+  margin-top: 35px;
+  width: 90%;
+  height: 35px;
+  position: relative;
+}
+.operating ul{
+  list-style: none;
+  padding: 0;
+  float: left;
+}
+.operating ul:after{
+  content: "";
+  display: table;
+  clear: both;
+}
+.operating ul li{
+  float: left;
+  height: 35px;
+  margin-right: 25px;
+  text-align: center;
+  border: 1px solid #666F80;
+  border-radius: 2px;
+  padding: 10px;
+  font-size: 12px;
+}
+.search_box{
+  display: inline-block;
+  float: right;
+  margin-right: 50px;
+  position: relative;
+}
+.search_input{
+  width: 250px;
+  height: 35px;
+  border:1px solid #8D9199;
+  border-radius: 20px;
+  outline: 0;
+  padding-left: 5px;
+}
+.search{
+  position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+  right:10px;
+}
+.menu{
+  float: right;
+  height: 35px;
+  text-align: center;
+  border: 1px solid #666F80;
+  border-radius: 2px;
+  padding: 10px;
+
+}
+/*操作菜单结束*/
+
+/*表格内容开始*/
+.blue{
+  color: #5677FC;
+}
+.td_size{
+  width: 75px;
+  display:block;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.sky_blue{
+  color: #03A9F4;
+}
+.green{
+  color: #8BC34A;
+}
+.red{
+  color:#FF5722;
+}
+.img_size{
+  height:20px;
+  width: 10px;
+}
+.stock{
+  width: 50px;
+  border-radius: 3px;
+  border: 1px solid #666F80;
+  text-align: center;
+}
+table{
+  width: 90%;
+  color: #7A8599
+;
+}
+table tr{
+  height: 40px;
+}
+.table_content{
+  border-top:1px solid #e6e6e6;
+}
+/*表格内容结束*/
+
+/*添加模态框开始*/
+.add_box{
+  float: left;
+  list-style: none;
+  border: 1px solid #cccccc;
+  padding: 0;
+  margin-right: 20px;
+  width: 160px;
+  height: 250px;
+}
+.add_box li:nth-child(1){
+  border-top:0;
+}
+.add_box li{
+  margin-left: 10px;
+  padding: 5px;
+  height: 30px;
+  border-top: 1px solid #cccccc;
+}
+.modal-body:after{
+  content: "";
+  display: table;
+  clear: both;
+}
+.right_input{
+  margin-right: 5px!important;
+}
+.arrow_img_size{
+  width: 10px;
+  height: 16px;
+}
+
+/*添加模态框结束*/
+/*分页处理*/
+.pages{
+  margin-top: 20px;
+  /*outline: 1px solid red;*/
+  overflow: hidden;
+  padding-left: 0;
+}
+
+.pages>div{
+  float: left;
+  overflow: hidden;
+}
+
+.pages li{
+  float: left;
+  margin-right:5px;
+  font-size: 12px;
+  color: #999;
+  line-height: 12px;
+  padding: 6px 18px;
+  background-color: white;
+  /*border: 1px solid #5677FC;*/
+  border-radius: 3px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.pages #jumpto{
+  border: none;
+  padding:0 0 0 2px;
+}
+.size_input{
+  width: 50px;
+  height: 20px;
+}
+#jumpto input{
+  height: 25px;
+  width: 62px;
+}
+
+.pagenum{
+  padding-left: 9px!important;
+  padding-right: 9px!important;
+}
+
+#omit,#off{
+  border:none;!important;
+  padding:6px 0 0 0;
+  cursor: default;
+}
+
+
+.pages #offjumpto{
+  border: none;
+  padding:0 0 0 5px;
+}
+
+#offjumpto input{
+  height: 25px;
+}
+
+.active{
+  background:#487af8!important;
+  color: white!important;
+}
+
+
+/*等待上架*/
+.img_cover_size{
+  width: 30px;
+  height: 30px;
+}
+.search_txt{
+  display: inline-block;
+  float: right;
+  height: 35px;
+  margin-right: 25px;
+  text-align: center;
+  border: 1px solid #666F80;
+  border-radius: 3px;
+  padding: 10px;
+  font-size: 12px;
+}

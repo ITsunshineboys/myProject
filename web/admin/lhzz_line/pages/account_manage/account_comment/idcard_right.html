@@ -12,36 +12,36 @@
     <section>
         <div  class="shop_more">
             <span>名称</span>
-            <span>盲僧</span>
+            <span>{{legal_person}}</span>
         </div>
         <!--身份证号码-->
         <div  class="shop_na">
             <span>身份证号码</span>
-            <span>513022196658625</span>
+            <span>{{identity_no}}</span>
         </div>
         <!--正面-->
         <div  class="shop_img">
             <span>身份证正面</span>
-            <img src="" alt=""/>
+            <img src="http://test.cdlhzz.cn:888/{{identity_card_front_image}}" alt=""/>
         </div>
         <!--反面-->
         <div  class="shop_img">
             <span>身份证反面</span>
-            <img src="" alt=""/>
+            <img src="http://test.cdlhzz.cn:888/{{identity_card_back_image}}" alt=""/>
         </div>
         <!--认证状态-->
         <div  class="shop_name">
             <span>认证状态</span>
-            <span>已认证</span>
+            <span>{{review_status_desc}}</span>
         </div>
         <!--认证时间-->
         <div class="shop_name">
             <span>认证时间</span>
-            <span>2017-02-03</span>
+            <span>{{review_time}}</span>
         </div>
         <!--按钮-->
         <div class="btn_back">
-            <button>返回</button>
+            <button ng-click="getBack ()">返回</button>
         </div>
     </section>
 </div>

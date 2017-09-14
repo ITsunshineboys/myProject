@@ -47,21 +47,26 @@ ul{
     font-size: 14px;
     color: #666F80;
     padding-bottom: 16px;
-    font-weight: bold;
 }
 
 .cla_mag_tabtitle span:nth-child(1){
     margin-right: 40px;
     padding-left: 10px;
     padding-right: 10px;
+<<<<<<< Updated upstream
     border-bottom: 2px solid transparent;
     cursor: pointer;
+=======
+    color: #3F94F6;
+    border-bottom: 2px solid #3F94F6;
+>>>>>>> Stashed changes
 }
 
 .cla_mag_tabtitle span:nth-child(2){
     margin-right: 40px;
     padding-left: 10px;
     padding-right: 10px;
+<<<<<<< Updated upstream
     border-bottom: 2px solid transparent;
     cursor: pointer;
 }
@@ -69,6 +74,10 @@ ul{
 .clickstyle{
     color: #3F94F6!important;
     border-bottom: 2px solid #3F94F6!important;
+=======
+    color: #3F94F6;
+    border-bottom: 2px solid #3F94F6;
+>>>>>>> Stashed changes
 }
 
 /*按钮组*/
@@ -131,8 +140,7 @@ ul{
 }
 
 .onsale_table table img{
-    width: 30px;
-    height: 30px;
+    width: 10px;
 }
 
 input[type="checkbox"]{
@@ -162,11 +170,6 @@ input[type="checkbox"]{
 .onsale_table .xiajia{
     color: #5677FC;
     cursor: pointer;
-}
-
-.sort img{
-    width: 13px!important;
-    height: 15px!important;
 }
 
 /*已下架tab样式*/

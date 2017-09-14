@@ -20,8 +20,7 @@
         <div ng-show="showseries" class="series_mag">
             <!--按钮组-->
             <div class="series_btn">
-            <div class="series_btn">
-                <button ui-sref="add_series({list:series_arr[0]})">
+                <button ui-sref="add_series">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span>添加</span>
                 </button>
@@ -41,14 +40,13 @@
                         <td>操作</td>
                     </tr>
 
-                    <tr ng-repeat="item in series_arr[0]">
-                        <td>{{item.series}}</td>
-                        <td>{{item.creation_time}}</td>
-                        <td class="color_red" ng-if="item.status=='0'">关闭</td>
-                        <td class="color_skyblue" ng-if="item.status=='1'">启动中</td>
-                        <td class="color_blue" ui-sref="series_detail({item:item})">编辑</td>
-                        <td class="color_blue" ng-if="item.status=='0'" data-toggle="modal" data-target="#open_modal" ng-click="open_status(item)">开启</td>
-                        <td class="color_blue" ng-if="item.status=='1'" data-toggle="modal" data-target="#close_modal" ng-click="close_status(item)">关闭</td>
+                    <tr>
+                        <td>齐家</td>
+                        <td>2017-09-05 10:45</td>
+                        <td class="color_red">关闭</td>
+                        <td class="color_blue" ui-sref="series_detail">编辑</td>
+                        <td class="color_blue">开启</td>
+
                     </tr>
                 </table>
             </div>
@@ -133,42 +131,6 @@
 
         </div>
 
-        <!--开启 模态框-->
-        <div class="modal fade" id="open_modal" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">提示</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>是否确认开启</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="open_btn_ok()">确认</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--关闭模态框-->
-        <div class="modal fade" id="close_modal" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">提示</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>是否确认关闭</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="close_btn_ok()">确认</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
     </div>

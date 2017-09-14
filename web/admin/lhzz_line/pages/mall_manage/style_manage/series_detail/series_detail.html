@@ -13,24 +13,24 @@
         <div class="series_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>系列名称</span>
-            <input type="text" disabled="disabled" ng-model="ser_name">
+            <input type="text" placeholder="请输入系列名称">
             <!--<span id="limitword">*限1~10个字符</span>-->
-            <!--<p class="red_mark">-->
-                <!--<span class="glyphicon glyphicon-asterisk"></span>-->
-                <!--该系列名称已存在，请重新填写-->
-            <!--</p>-->
+            <p class="red_mark">
+                <span class="glyphicon glyphicon-asterisk"></span>
+                该系列名称已存在，请重新填写
+            </p>
         </div>
 
         <!--创建时间-->
         <div class="create_time">
             <span>创建时间</span>
-            <span >{{sec_time}}</span>
+            <span>2017-10-09 12:21</span>
         </div>
+
         <!--状态-->
         <div class="state">
             <span>状态</span>
-            <span class="red_mark" ng-if="items.status=='0'">关闭</span>
-            <span class="color_skyblue" ng-if="items.status=='1'">启用中</span>
+            <span class="red_mark">关闭</span>
         </div>
 
         <!--系列标签-->
@@ -40,27 +40,27 @@
             <img src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
             <ul class="tags">
                 <li>
-                    <input type="text">
+                    健康
                     <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
                 </li>
                 <li>
-                    <input type="text">
+                    标准
                     <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
                 </li>
                 <li>
-                    <input type="text">
+                    完备
                     <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
                 </li>
                 <li>
-                    <input type="text">
+                    健康
                     <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
                 </li>
                 <li>
-                    <input type="text">
+                    健康
                     <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
                 </li>
                 <li>
-                    <input type="text">
+                    标准
                     <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
                 </li>
 
@@ -72,8 +72,11 @@
         <div class="present_level">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>所处等级</span>
+
             <select name="" id="level_select">
-                <option value="">{{items.series_grade}}</option>
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
             </select>
         </div>
 

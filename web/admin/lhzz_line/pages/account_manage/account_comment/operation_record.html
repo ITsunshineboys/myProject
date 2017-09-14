@@ -5,7 +5,7 @@
             <i class="glyphicon glyphicon-home"></i>
             <span class="shop_manage">账户管理 ></span>
             <span class="shop_manage">账户管理详情 ></span>
-            <span class="manage_child">过往绑定记录</span>
+            <span class="manage_child">过往操作记录</span>
             <img src="pages/mall_manage/merchant_manage/merchant_comment/images/user.png" alt=""/>
         </div>
     </header>
@@ -15,27 +15,38 @@
                 <tr>
                     <th>绑定手机号</th>
                     <th>时间
-                        <img src="pages/account_manage/account_comment/images/mall_arrow_up.png" alt=""/>
+                        <img ng-show=flag ng-click="changePic ()"  src="pages/account_manage/account_comment/images/mall_arrow_up.png" alt=""/>
+                        <img ng-show=strat ng-click="changePicse ()"  src="pages/account_manage/account_comment/images/mall_filter_sor.png" alt=""/>
                     </th>
                     <th>操作人员</th>
                     <th>操作后状态</th>
                     <th>关闭原因</th>
                 </tr>
-                <tr>
-                    <td>18780024175</td>
-                    <td>2017-09-10 10:35</td>
-                    <td>用户</td>
+                <tr ng-repeat=" n in past_record">
+                    <td>{{n.mobile}}</td>
+                    <td>{{n.create_time}}</td>
+                    <td>{{n.op_username}}</td>
                     <td>关闭</td>
-                    <td><input type="text" data-toggle="modal" data-target=".bs-example-modal-lg" placeholder="点击输入"/></td>
+                    <td><input type="text" data-toggle="modal" ng-click="getRemark (n.remark)"
+                               data-target=".bs-example-modal-lg" placeholder="{{n.remark}}"/></td>
                 </tr>
-                <tr>
-                    <td>18780024175</td>
-                    <td>2017-09-10 10:35</td>
-                    <td>用户</td>
-                    <td>关闭</td>
-                    <td><input type="text" placeholder="点击输入"/></td>
-                </tr>
+
             </table>
+            <!--分页开始-->
+            <ul class="pages">
+                <li ng-click="Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
+                <li class="pagenum" ng-repeat="page in history_list_colse" ng-click="choosePageColse(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
+                <!--<li id="omit" ng-show="allpages>5">...</li>-->
+                <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
+                <li ng-click="Next()">下一页</li>
+                <li id="jumpto"><input type="text" ng-model="topage"></li>
+                <li ng-click="choosePageColse(topage)">跳转</li>
+            </ul>
+            <!--分页结束-->
+        </div>
+
+        <div class="btn_back">
+            <button ng-click="getBack ()">返回</button>
         </div>
         <!--模态框-->
 
@@ -44,8 +55,10 @@
                 <div class="modal-content">
                   <h4>关闭原因</h4>
                     <hr/>
+                    <span style="margin-left: 20px">关闭原因(选填)</span>
                     <div class="model_div">
-                        <span>资料违规，请重新修改</span>
+
+                        <span>{{remark}}</span>
                     </div>
                     <button class="btn_right" data-dismiss="modal">确认</button>
                 </div>

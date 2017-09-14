@@ -44,9 +44,7 @@ ul{
     color: #E51C23;
     margin-left: -17px;
 }
-.color_skyblue{
-    color:#03A9F4!important;
-}
+
 .series_name input {
     margin-left: 87px;
     width: 245px;
@@ -114,20 +112,11 @@ ul{
     text-align: center;
     line-height: 31px;
     color: #ABABAB;
-    /*border: 1px solid #666F80;*/
+    border: 1px solid #666F80;
     border-radius: 3px;
     position: relative;
 }
-.tags li input{
-    width: 88px;
-    height: 31px;
-    /*text-align: center;*/
-    padding-left: 6px;
-    line-height: 31px;
-    color: #ABABAB;
-    border: 1px solid #666F80;
-    border-radius: 3px;
-}
+
 .tags span{
     font-size: 13px;
     color: #ABABAB;

@@ -43,6 +43,7 @@ section{
   width: 220px;
   height: 35px;
   border-radius: 3px;
+  padding-left: 5px;
 }
 .btn_style{
   display: inline-block;

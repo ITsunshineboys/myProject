@@ -5,7 +5,7 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
   'bind_record','operation_record',"mallmagModule","storemagModule","addstoreModule",
   "onlineeditModule","offlineeditModule","addbrandModule","styleindexModule","chooseseriesModule",
   "addseriesModule",
-  "seriesdetailModule","addstyleModule","choose_styleModule","styledetailModule",
+  "seriesdetailModule","addstyleModule","choose_styleModule","styledetailModule","idcard_right",
 
    'index_module','intelligent_index','angularCSS','intelligent_directive',
 
@@ -82,7 +82,16 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("account_index",{   //账户管理
         url:"/account_index",
-        templateUrl:"pages/account_manage/account_index/account_index.html"
+        templateUrl:"pages/account_manage/account_index/account_index.html",
+        params:{icon:'icon',nickname:'nickname'
+          ,old_nickna:'old_nickname',district_name:'district_name',birthday:'birthday',
+          signature:'signature',mobile:'mobile',aite_cube_no:'aite_cube_no',
+          create_time:'create_time',role_names:'role_names',review_status_desc:'review_status_desc',
+          status:'status',legal_person:'legal_person',identity_no:'identity_no'
+          ,identity_card_front_imagen:'identity_card_front_image',identity_card_back_image:
+           'identity_card_back_image',review_time:'review_time',
+          status_remark:'status_remark',status_operator:'status_operator',
+           a:''}
       })
       .state("add_user",{   //账户管理——添加新用户
         url:"/add_user",
@@ -128,23 +137,64 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
   })
     .state("account_comment",{
     url:"/account_comment",
-    templateUrl:"pages/account_manage/account_comment/account_comment.html"
+    templateUrl:"pages/account_manage/account_comment/account_comment.html",
+    params:{icon:'icon',nickname:'nickname'
+          ,old_nickna:'old_nickname',district_name:'district_name',birthday:'birthday',
+          signature:'signature',mobile:'mobile',aite_cube_no:'aite_cube_no',
+          create_time:'create_time',names:'names',review_status_desc:'review_status_desc',
+          status:'status',id:'id',legal_person:'legal_person',identity_no:'identity_no'
+      ,identity_card_front_imagen:'identity_card_front_image',identity_card_back_image:
+          'identity_card_back_image',review_time:'review_time',status_remark:'status_remark',status_operator:'status_operator',
+      a:''}
+
   })
-    .state("change_num",{
+    .state("change_num",{  //更换手机号码
     url:"/change_num",
-    templateUrl:"pages/account_manage/account_comment/change_num.html"
+    templateUrl:"pages/account_manage/account_comment/change_num.html",
+    params:{icon:'icon',nickname:'nickname'
+      ,old_nickna:'old_nickname',district_name:'district_name',birthday:'birthday',
+      signature:'signature',mobile:'mobile',aite_cube_no:'aite_cube_no',
+      create_time:'create_time',names:'names',review_status_desc:'review_status_desc',
+      status:'status',id:'id',legal_person:'legal_person',identity_no:'identity_no'
+      ,identity_card_front_imagen:'identity_card_front_image',identity_card_back_image:
+          'identity_card_back_image',review_time:'review_time',
+      status_remark:'status_remark',status_operator:'status_operator',a:''}
   })
-      .state("bind_record",{
+    .state("bind_record",{
     url:"/bind_record",
-    templateUrl:"pages/account_manage/account_comment/bind_record.html"
+    templateUrl:"pages/account_manage/account_comment/bind_record.html",
+        params:{icon:'icon',nickname:'nickname'
+          ,old_nickna:'old_nickname',district_name:'district_name',birthday:'birthday',
+          signature:'signature',mobile:'mobile',aite_cube_no:'aite_cube_no',
+          create_time:'create_time',names:'names',review_status_desc:'review_status_desc',
+          status:'status',id:'id',legal_person:'legal_person',identity_no:'identity_no'
+          ,identity_card_front_imagen:'identity_card_front_image',identity_card_back_image:
+              'identity_card_back_image',review_time:'review_time',
+          status_remark:'status_remark',status_operator:'status_operator',a:''}
   })
     .state("operation_record",{
     url:"/operation_record",
-    templateUrl:"pages/account_manage/account_comment/operation_record.html"
+    templateUrl:"pages/account_manage/account_comment/operation_record.html",
+        params:{icon:'icon',nickname:'nickname'
+          ,old_nickna:'old_nickname',district_name:'district_name',birthday:'birthday',
+          signature:'signature',mobile:'mobile',aite_cube_no:'aite_cube_no',
+          create_time:'create_time',names:'names',review_status_desc:'review_status_desc',
+          status:'status',id:'id',legal_person:'legal_person',identity_no:'identity_no'
+          ,identity_card_front_imagen:'identity_card_front_image',identity_card_back_image:
+              'identity_card_back_image',review_time:'review_time',
+          status_remark:'status_remark',status_operator:'status_operator',a:''}
   })
-      .state("idcard_right",{
+    .state("idcard_right",{
     url:"/idcard_right",
-    templateUrl:"pages/account_manage/account_comment/idcard_right.html"
+    templateUrl:"pages/account_manage/account_comment/idcard_right.html",
+        params:{icon:'icon',nickname:'nickname'
+          ,old_nickna:'old_nickname',district_name:'district_name',birthday:'birthday',
+          signature:'signature',mobile:'mobile',aite_cube_no:'aite_cube_no',
+          create_time:'create_time',names:'names',review_status_desc:'review_status_desc',
+          status:'status',id:'id',legal_person:'legal_person',identity_no:'identity_no'
+          ,identity_card_front_imagen:'identity_card_front_image',identity_card_back_image:
+              'identity_card_back_image',review_time:'review_time',
+          status_remark:'status_remark',status_operator:'status_operator',a:''}
   })
 
   //===============================================
@@ -185,13 +235,16 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("add_series",{ /*系列/风格/属性管理-添加新系列*/
         url:"/add_series",
-        templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html",
-        params:{"list":""},
+        templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html"
       })
       .state("series_detail",{ /*系列/风格/属性管理-系列详情页*/
         url:"/series_detail",
+
         templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html",
-        params:{item:'',ser_arr:'',index:''}
+        params:{item:'',ser_arr:'',index:''},
+
+        templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html"
+
       })
       .state("add_style",{ /*系列/风格/属性管理-风格-添加新风格*/
         url:"/add_style",
@@ -204,6 +257,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("style_detail",{ /*系列/风格/属性管理-风格-风格详情*/
         url:"/style_detail",
+
         templateUrl:"pages/mall_manage/style_manage/style_detail/style_detail.html",
         params:{style_item:'',style_arr:'',index:''}
       })
@@ -211,7 +265,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       .state('intelligent',{//智能报价头部
           url:'/intelligent/',
           templateUrl:'pages/intelligent/index.html',
-          css:'pages/intelligent/css/intelligent_header.css',
+          css:'pages/intelligent/css/intelligent_header.css'
       })
       .state('intelligent.intelligent_index',{//智能报价首页
           url:'index',
@@ -273,7 +327,9 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
           templateUrl:'pages/intelligent/add_manage.html',
           css:'pages/intelligent/css/add_manage.css'
       })
-})
+
+      })
+
   .directive('wdatePicker',function(){
     return{
       restrict:"A",

@@ -1,4 +1,4 @@
-<link rel="stylesheet"href="pages/account_manage/account_comment/css/account_comment.css"/>
+<link rel="stylesheet" href="pages/account_manage/account_comment/css/account_comment.css"/>
 <div ng-controller="account_comment_ctrl">
     <header>
         <div>
@@ -15,33 +15,33 @@
         <!--信息-->
         <div class="shop_img_more">
             <span>头像</span>
-            <img src="" alt=""/>
+            <img src="http://test.cdlhzz.cn:888/{{icon}}" alt=""/>
         </div>
 
         <!--昵称-->
         <div class="shop_name">
             <span>昵称</span>
-            <span>傻逼</span>
+            <span>{{nickname}}</span>
         </div>
         <!--曾用昵称-->
         <div class="shop_more">
             <span>曾用昵称</span>
-            <span>傻逼</span>
+            <span>{{old_nickname}}</span>
         </div>
         <!--地区-->
         <div class="shop_name">
             <span>地区</span>
-            <span>四川省-成都市-金牛区</span>
+            <span>{{district_name}}</span>
         </div>
         <!--出生年月日-->
         <div class="shop_time">
             <span>出生年月日</span>
-            <span>2017-02-03</span>
+            <span>{{birthday}}</span>
         </div>
         <!--个性签名-->
         <div class="shop_more">
             <span>个性签名</span>
-            <span>何以解忧，唯有暴富</span>
+            <span>{{signature}}</span>
         </div>
         <hr/>
 
@@ -52,19 +52,28 @@
         <!--绑定手机号-->
         <div class="shop_num">
             <span>绑定手机号</span>
-            <span>1878022055</span>
-            <button><a ui-sref="change_num">更换</a></button>
-            <span><a ui-sref="bind_record">过往绑定记录</a></span>
+            <span>{{mobile}}</span>
+            <!--<span>{{id}}</span>-->
+            <button><a ui-sref="change_num({icon,nickname
+          ,old_nickna,district_name,birthday,
+          signature,mobile,aite_cube_no,
+          create_time,names,review_status_desc,
+          status,id,status_remark,status_operator,a})">更换</a></button>
+            <span><a ui-sref="bind_record({icon,nickname
+          ,old_nickna,district_name,birthday,
+          signature,mobile,aite_cube_no,
+          create_time,names,review_status_desc,
+          status,id,status_remark,status_operator,a})">过往绑定记录</a></span>
         </div>
         <!--魔方号-->
         <div class="shop_m">
             <span>魔方号</span>
-            <span>158258268</span>
+            <span>{{aite_cube_no}}</span>
         </div>
         <!--注册时间-->
         <div class="shop_more">
             <span>注册时间</span>
-            <span>2017-03-06 10:30</span>
+            <span>{{create_time}}</span>
         </div>
         <hr/>
         <!--角色信息-->
@@ -73,8 +82,8 @@
         </div>
          <!--业主-->
         <div class="shop_name">
-            <span>业主</span>
-            <span>商城商家</span>
+            <span>{{names}}</span>
+            <!--<span>商城商家</span>-->
         </div>
         <hr/>
         <!--实名认证-->
@@ -83,21 +92,34 @@
         </div>
         <!--已认证-->
         <div class="yes_no">
-            <span><a ui-sref="idcard_right">已认证</a></span>
-            <span>未认证</span>
+            <span ng-click="goJump ()">
+                {{review_status_desc}}
+            </span>
+
         </div>
         <hr/>
         <!--账户状态-->
         <div>
             <span>账户状态</span>
+
         </div>
         <div class="flag">
             <span>正常</span>
-            <span> <a ui-sref="operation_record">过往操作记录</a></span>
+            <span> <a ui-sref="operation_record({icon,nickname
+          ,old_nickna,district_name,birthday,
+          signature,mobile,aite_cube_no,
+          create_time,names,review_status_desc,
+          status,id,status_remark,status_operator,a})">过往操作记录</a></span>
         </div>
+        <div ng-if="a" class="last_div">
+            <span>操作人员</span>
+            <span>{{status_operator}}</span> <br/> <br/>
+            <span>关闭原因</span>
+            <span>{{status_remark}}</span>
+        </div >
 
         <!--按钮-->
-        <div class="btn_back">
+        <div class="btn_back" ng-click="back_page()">
             <button>返回</button>
         </div>
     </section>

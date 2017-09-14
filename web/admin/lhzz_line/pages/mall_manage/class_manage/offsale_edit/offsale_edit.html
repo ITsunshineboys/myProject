@@ -14,7 +14,7 @@
         <div class="cla_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类名称</span>
-            <input type="text" ng-model="class_name" ng-model="class_name" ng-blur="addClassName()">
+            <input type="text" placeholder={{offsaleclasstitle}}>
             <span>*限1~10个字符</span>
             <h6 ng-if="showtishi" ng-bind="tishi"></h6>
         </div>
@@ -22,39 +22,59 @@
         <div class="divider"></div>
 
         <!--分类所属-->
-        <div class="cla_belong" ng-if="finalpatharr.length>1">
+        <div class="cla_belong">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类所属</span>
+<<<<<<< Updated upstream
             <select name="" class="belong first_select" ng-if="finalpatharr.length>1"  ng-model="changescope.firstselect"  ng-change="subClass(firstselect)">
                 <option ng-repeat="item in firstclass" value={{item.id}} >{{item.title}}</option>
             </select>
             <select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-model="changescope.secselect" ng-options="item.id as item.title for item in secondclass">
+=======
+            <select name="" class="belong first_select">
+                <option value="" selected="selected">基础材料</option>
+                <option value="">主材料</option>
+            </select>
+            <select name="suoshukuang" class="belong">
+                <option value="" selected="selected">墙面材料</option>
+                <option value="">板材类</option>
+>>>>>>> Stashed changes
             </select>
         </div>
 
+        <!--分类图片-->
         <div class="cla_pic">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span class="each_title">分类图片</span>
+            <span class="each_title">上传图片</span>
             <div class="upload_pic">
-                <img ng-src="{{iconpath}}" alt="" id="cla_pic_uploadpic">
+                <img src="pages/offsale_edit/images/egpic.png" alt="" id="cla_pic_uploadpic">
+                <span class="upload_tishi">一级分类上传图片，二三级上传图片</span>
                 <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
                 <div id="upload">
-                    <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
+                    <button id="upload_btn">上传</button>
+                    <span id="pic_path">456456456456456.jpg</span>
                 </div>
+<<<<<<< Updated upstream
                 <div class="red_mark warning" ng-show="picwarning">
+=======
+                <div class="reload_tishi">
+>>>>>>> Stashed changes
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
                 </div>
             </div>
         </div>
-
         <div class="divider"></div>
 
         <!--分类描述-->
         <div class="cla_des">
             <span class="each_title">分类描述</span>
             <div id="edit_tool">
+<<<<<<< Updated upstream
                 <div class="ueditor" ng-model="offlinedes" config="config"></div>
+=======
+                <!--<div class="ueditor" ng-model="content" id="editor"></div>-->
+>>>>>>> Stashed changes
             </div>
         </div>
         <div class="divider"></div>
@@ -62,7 +82,7 @@
         <!--下架原因-->
         <div class="cla_des">
             <span class="each_title">下架原因</span>
-            <textarea name="" id="why_offline" cols="86" rows="10" placeholder="请输入下架原因" ng-modal="offlinereason"></textarea>
+            <textarea name="" id="why_offline" cols="86" rows="10" placeholder="下架原因下架原因下架原因"></textarea>
         </div>
         <div class="divider"></div>
 
@@ -79,8 +99,13 @@
         </div>
 
         <div class="btn_sure">
+<<<<<<< Updated upstream
             <button data-toggle="modal" data-target={{savemodal}} ng-click="saveclass()">保存</button>
             <button ui-sref="fenleiguanli({showoffsale:true})">返回</button>
+=======
+            <button data-toggle="modal" data-target="#save_tishi">保存</button>
+            <button>返回</button>
+>>>>>>> Stashed changes
         </div>
 
         <!--保存提示模态框-->
@@ -93,11 +118,11 @@
                         </h4>
                     </div>
                     <div class="modal-body" id="save_body">
-                        <h6 id="tishi_wenzi">保存成功</h6>
+                        <h6 id="tishi_wenzi">分类名称不正确，请重新填写</h6>
                     </div>
 
                     <div class="btn_modal_two">
-                        <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()">确认</button>
+                        <button id="caozuo_sure">确认</button>
                     </div>
                 </div>
             </div>

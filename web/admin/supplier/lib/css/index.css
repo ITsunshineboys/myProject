@@ -1,0 +1,81 @@
+/*导航栏开始*/
+.nav_box{
+    width: 200px;
+    height:100% !important;
+    overflow:visible !important;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index: 200;
+    background-color: #F5F7FA;
+}
+.nav_box .logo{
+    width: auto;
+    height: 150px;
+    text-align: center;
+    line-height: 150px;
+}
+.nav_box dl {
+    height: auto;
+    margin: 0;
+}
+.nav_box dl a{
+    color: #ABABAB;
+}
+.nav_box dt{
+    height: 40px;
+    padding-left:14px;
+    padding-right:10px;
+    font-size:16px;
+    position:relative;
+    line-height:40px;
+    cursor:pointer;
+    background-color: #F5F7FA;;
+}
+/*一级导航栏的hover和当前页面的样式*/
+.nav_box .on{
+    color: #5677FC;
+    background-color: #E6E9F0;
+}
+.nav_box dt>a:hover,.nav_box .on>a{
+    color: #5677FC;
+}
+.nav_box dd{
+    margin: 0;
+    height: 30px;
+    position: relative;
+    line-height: 30px;
+    background-color:#F5F7FA;
+    padding-left:44px;
+
+}
+.nav_box dd:hover{
+    background-color: #E6E9F0;
+    transition: all .3s linear;
+
+}
+
+.nav_box dd a{
+    color: #ABABAB;
+    font-size: 16px;
+    line-height:20px;
+}
+.nav_box dd .dd_on {
+    color: #5677FC;
+}
+.nav_box dd:hover a{
+    color: #5677FC;
+    /*transition: all .3s linear;*/
+}
+.nav_box dt img{
+    position:absolute;
+    left:15px;top:15px;
+}
+/*导航栏样式结束*/
+
+/*右侧路由切换大小*/
+#content{
+    margin-left: 200px!important;
+    width: 85%;
+    height: 636px;
+}

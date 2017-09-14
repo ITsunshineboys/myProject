@@ -1,0 +1,278 @@
+<link rel="stylesheet" href="pages/commodity_manage/css/wait_online.css"/>
+<div ng-controller="wait_online" class="container_left">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">商品管理 ></span>
+            <span class="manage_child">等待上架商品详情</span>
+            <img src="image/user.png" alt=""/>
+        </div>
+    </header>
+    <section>
+        <form name="form" novalidate>
+        <!--商品分类-->
+        <div class="class_shop">
+            <span>商品分类</span>
+            <span>{{category_title}}</span>
+        </div>
+        <!--商品名称-->
+        <div class="class_name">
+            <img src="pages/commodity_manage/image/red.png" alt=""/>
+            <span>商品名称</span>
+            <input type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name" id="goods_name" name="goods_name" required ng-class="{'border_red':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur)}" ng-blur="title_blur=!!form.goods_name.$error"/>
+            <span>*限1~32个字符，不含特殊字符</span>
+        </div>
+        <!--商品特色 -->
+        <div class="class_name">
+            <img src="pages/commodity_manage/image/red.png" alt=""/>
+            <span>商品特色</span>
+            <input type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name" id="des_name" name="des_name" required ng-class="{'border_red':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)}" ng-blur="des_blur=!!form.des_name.$error"/>
+            <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
+        </div>
+        <!--选择品牌-->
+        <div class="class_name"  ng-if="brands_arr.length>0">
+            <span>选择品牌</span>
+            <select ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr">
+            </select>
+        </div>
+            <!--选择系列-->
+            <div class="class_name" ng-if="series_arr.length>0">
+                <span>选择系列</span>
+                <select ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr">
+                </select>
+            </div>
+            <!--选择风格-->
+            <div class="class_name" ng-if="styles_arr.length>0">
+                <span>选择风格</span>
+                <select ng-model="myng.style_model" ng-options="item.id as item.style for item in styles_arr">
+                </select>
+            </div>
+
+        <!--属性设置-->
+        <div class="attr_set">
+            <span>属性设置</span>
+            <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-click="add_own_attrs()"></span>
+            <span>属性名称</span>
+            <span>属性内容</span>
+            <span>单位</span>
+            <!--普通文本框-->
+            <div ng-repeat="item in goods_input_attrs">
+                <img src="pages/commodity_manage/image/red.png" alt=""/>
+                <span ng-model="myng.attr_name">{{item.name}}</span>
+                <input type="text" placeholder="请输入属性内容" maxlength="6" ng-model="item.value"/>
+                <span class="unit">{{item.unit}}</span>
+                <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+            </div>
+            <!--下拉框-->
+            <div ng-repeat="item in goods_select_attrs">
+                <img src="pages/commodity_manage/image/red.png" alt=""/>
+                <span style="display: inline-block;width: 140px" ng-model="myng.goods_select_name">{{goods_select_name}}</span>
+                <select style="margin-left: 35px" ng-model="myng.goods_select_model" ng-options="item for item in goods_select_value"></select>
+                <span class="unit">{{item.unit}}</span>
+                <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+            </div>
+            <div class="new_attr" ng-repeat="item in own_attrs_arr track by $index">
+                <img src="pages/commodity_manage/image/red.png" alt=""/>
+                <span class="glyphicon glyphicon-minus" ng-click="del_own_attrs($index)"></span>
+                <input type="text" placeholder="请输入属性名称" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'border_red':form.{{item.name_model}}.$invalid &&submitted||(form.{{item.name_model}}.$error.required && submitted)}"/>
+                <input type="text" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'border_red':form.{{item.value_model}}.$invalid &&submitted||(form.{{item.value_model}}.$error.required && submitted)}"/>
+                <span class="unit">&nbsp;</span>
+                <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+            </div>
+
+        </div>
+        <hr/>
+
+        <!--封面上传图片-->
+            <div class="filter_pic">
+                <img class="filter_pic_red" src="pages/commodity_manage/image/red.png" alt=""/>
+                <span class="class_name_span">上传图片</span>
+                <div class="pic_right">
+                    <img ng-if="!!upload_cover_src" ng-src="http://test.cdlhzz.cn:888/{{upload_cover_src}}"/>
+                    <img ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
+                    <p class="def_gray">图片大小5M内，支持JPG、PNG、JPEG</p>
+                    <div class="upload_btn" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">
+                        <span>上传</span>
+                    </div>
+                    <p class="red_mark warning" ng-if="!!cover_flag">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        {{cover_flag}}
+                    </p>
+                </div>
+            </div>
+
+            <!--上传图片-->
+            <div class="filter_pic">
+                <span>上传图片</span>
+                <div class="pic_right">
+                    <div class="img_list" ng-repeat="item in upload_img_arr" style="width: 120px;height: 120px;">
+                        <img ng-src="http://test.cdlhzz.cn:888/{{item}}" class="logo">
+                        <span class="img_times" ng-click="del_img(item)">&times;</span>
+                    </div>
+                    <img ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
+                    <p class="def_gray">图片大小694×400，5M内，可上传3张图片，支持JPG、PNG、JPEG</p>
+                    <p class="red_mark warning" ng-if="!!img_flag">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        {{img_flag}}
+                    </p>
+                </div>
+            </div>
+
+        <!--价格库存-->
+            <div class="price_stock">
+                <img src="pages/commodity_manage/image/red.png" alt=""/>
+                <span>价格库存</span>
+                <ul>
+                    <li>供货价格</li>
+                    <li>平台价格</li>
+                    <li>市场价格</li>
+                    <li>库存</li>
+                </ul>
+                <p></p>
+                <br/>
+                <div>
+                    <input type="number" string-to-number2 ng-change="my_supplier_price()" placeholder="￥45" ng-model="supplier_price" id="supplier_price" name="supplier_price" required ng-class="{'border_red':(form.supplier_price.$invalid && submitted)||(form.supplier_price.$error.required && supplier_blur) || price_flag}" ng-blur="supplier_blur=!!form.supplier_price.$error"/>
+                    <input type="number" string-to-number2 ng-change="my_platform_price()" placeholder="￥45" ng-model="platform_price" id="platform_price" name="platform_price" required ng-class="{'border_red':(form.platform_price.$invalid && submitted)||(form.platform_price.$error.required && plat_blur) || price_flag}" ng-blur="plat_blur=!!form.platform_price.$error"/>
+                    <input type="number" string-to-number2 ng-change="my_market_price()" placeholder="￥45" ng-model="market_price"  id="market_price" name="market_price" required ng-class="{'border_red':(form.market_price.$invalid && submitted)||(form.market_price.$error.required && market_blur) || price_flag}" ng-blur="market_blur=!!form.market_price.$error"/>
+                    <input type="number" string-to-number2 placeholder="5" ng-model="left_number" id="left_number" name="left_number" required ng-class="{'border_red':(form.left_number.$invalid && submitted)||(form.left_number.$error.required && left_blur)}" ng-blur="left_blur=!!form.left_number.$error"/>
+                </div>
+                <span class="pic_rule">*价格，供货价≤平台价≤市场价</span>
+            </div>
+
+        <!--采购价-->
+            <div class="buy_price">
+                <span>采购价</span>
+                <ul>
+                    <li>装修公司采购价</li>
+                    <li>项目经理采购价</li>
+                    <li>设计师采购价</li>
+                </ul>
+                <p></p>
+                <br/>
+                <ul>
+                    <li>￥{{purchase_price_decoration_company}}</li>
+                    <li>￥{{purchase_price_manager}}</li>
+                    <li>￥{{purchase_price_designer}}</li>
+                </ul>
+            </div>
+
+        <!--物流模板-->
+            <div class="template">
+                <img src="pages/commodity_manage/image/red.png" alt=""/>
+                <span>商品物流</span>
+                <select ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics">
+                </select>
+                <br/>
+                <div class="template_div">
+                    <span class="margin_r">快递方式</span>
+                    <span>{{logistics_method}}</span>
+                    <br/>
+                    <br/>
+                    <span  class="margin_r">城市选择</span>
+                    <span class="template_span" ng-repeat="item in district_names.slice(0,3)">{{item}}</span>
+                    <span class="span_color" ng-if= 'viewTo' data-toggle="modal" data-target="#detate_modal">查看</span>
+                    <br/>
+                    <br/>
+                    <span class="margin_r">是否包邮</span>
+                    <span ng-if="delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0">包邮</span>
+                    <span ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">不包邮</span>
+                    <br/>
+                    <br/>
+                    <div ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">
+                        <span class="margin_r">收费金额</span>
+                        <div style="display: inline-block; vertical-align: top;">
+                            <p>默认{{delivery_number_default}}件商品:￥{{delivery_cost_default}}</p>
+                            <p >每增加{{delivery_number_delta}}件商品，运费增加:￥{{delivery_cost_delta}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+        <!--售后-->
+            <div class="service">
+                <span>售后</span>
+                <ul>
+                    <li><input type="checkbox" ng-model="myng.door_service_check"/><span>上门维修</span></li>
+                    <li><input type="checkbox" ng-model="myng.door_return_check" /><span>上门退货</span></li>
+                    <li><input type="checkbox" ng-model="myng.door_replacement_check"/><span>上门换货</span></li>
+                    <li><input type="checkbox" ng-model="myng.return_check"/><span>退货</span></li>
+                    <li><input type="checkbox" ng-model="myng.replacement_check"/><span>换货</span></li>
+                </ul>
+
+            </div>
+        <!--保障-->
+            <div class="service">
+                <span>保障</span>
+                <ul>
+                    <li><input type="checkbox" ng-model="myng.invoice_check" ng-checked="true" disabled="disabled"/><span>提供发票</span></li>
+                    <li><input type="checkbox"  ng-model="myng.door_instal_model"/><span>上门安装</span></li>
+                </ul>
+            </div>
+            <hr/>
+
+            <div class="erweima">
+                <span>线下商城二维码</span>
+                <img ng-src="http://test.cdlhzz.cn:888/{{qr_code}}" alt="二维码">
+            </div>
+
+        <!--详情描述-->
+            <div class="detail">
+                <span>详情描述</span>
+                <textarea style="vertical-align: top;margin-left: 85px" cols="30" rows="10" ng-model="detail_description"></textarea>
+            </div>
+
+        <div class="done_stuff">
+            <span>审核备注</span>
+            <span class="sec">{{reason}}</span>
+        </div>
+
+        <!--按钮-->
+        <div class="btn_back">
+            <button data-target="{{change_ok}}" data-toggle="modal" ng-click="edit_confirm(form.$valid,form.$error.required)">保存</button>
+            <button ng-click="back_cm()">返回</button>
+        </div>
+       </form>
+    </section>
+
+    <!--保存成功模态框-->
+    <div class="modal fade" id="change_ok" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <h5>保存成功</h5>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal" ng-click="change_go()">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--物流模板城市选择  模态框 -->
+    <div class="modal fade" id="detate_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">已选择区域</h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="city_ul">
+                        <li ng-repeat="item in district_names">
+                            {{item}}
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"  data-dismiss="modal" ng-click="addCity ()" >确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

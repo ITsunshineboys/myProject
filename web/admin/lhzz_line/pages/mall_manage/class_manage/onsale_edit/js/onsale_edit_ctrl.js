@@ -1,25 +1,15 @@
 /**
- * Created by hulingfangzi on 2017/7/27.
+ * Created by Administrator on 2017/7/27.
  */
-/*已上架 编辑*/
-var onsale_edit = angular.module("onsaleeditModule", ['ngFileUpload']);
-onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$http,Upload) {
-	const picprefix = "http://test.cdlhzz.cn:888/";
-	const config = {
-		headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-		transformRequest: function (data) {
-			return $.param(data)
-		}
-	};
-	let pid;
+var onsale_edit = angular.module("onsaleeditModule", []);
+onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams, $http) {
 	let pattern = /^[\u4e00-\u9fa5]{0,10}$/;
-	$scope.changescope = $scope;
 	$scope.showtishi = false;
 	$scope.idarr = [];
-	$scope.firstclass = []; /*一级下拉框*/
-	$scope.subClass = [];/*二级下拉框*/
+	$scope.offsaleclasstitle = $stateParams.classtitle;
 	$scope.offsaleclasslevel = $stateParams.classlevel;
 	$scope.offsaleclassid = $stateParams.classid;
+<<<<<<< Updated upstream
 	$scope.offsaleclasstitle = $stateParams.classtitle;
 	$scope.class_name = $stateParams.classtitle;
 	$scope.onlinetitles = $stateParams.classtitles;
@@ -93,21 +83,46 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 
 
 	/*分类名称是否存在的判断*/
+=======
+	/*获取分类名称*/
+	$http({
+		method: "get",
+		url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
+		params: {status: 1}
+	}).then(function (res) {
+		$scope.allonsalepro = res.data.data.category_list_admin.details;
+	})
+
+	/*分类名称判断*/
+>>>>>>> Stashed changes
 	$scope.addClassName = function () {
-		if (!pattern.test($scope.class_name)||$scope.class_name=='') {
+		if (!pattern.test($scope.class_name)) {
 			$scope.tishi = "您的输入不满足条件,请重新输入"
 			$scope.showtishi = true;
 		} else {
+			$http({
+				method: "get",
+				url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			}).then(function (res) {
+				for (let key in res.data.data.categories) {
+					$scope.idarr.push(res.data.data.categories[key].title)
+					$http({
+						method: "get",
+						url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+						params: {pid: res.data.data.categories[key].id}
+					}).then(function (res) {
+						for (let key in res.data.data.categories) {
+							$scope.idarr.push(res.data.data.categories[key].title)
+						}
+					})
+				}
+			})
+
 			for (let i = 0; i < $scope.idarr.length; i++) {
 				if ($scope.class_name == $scope.idarr[i]) {
-					if ($scope.class_name == $scope.onsaleclasstitle) {
-						$scope.showtishi = false;
-						break;
-					} else {
-						$scope.tishi = "分类名称不能重复，请重新输入";
-						$scope.showtishi = true;
-						break;
-					}
+					$scope.tishi = "分类名称不能重复，请重新输入";
+					$scope.showtishi = true;
+					break;
 				} else {
 					$scope.showtishi = false;
 				}
@@ -115,77 +130,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 		}
 	}
 
-	/*分类所属 第一个下拉框的值*/
-	$scope.findParentClass =  (function () {
-			$http({
-				method: "get",
-				url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
-			}).then(function (res) {
-				$scope.firstclass = res.data.data.categories.splice(1);
-				for(let i=0;i<$scope.firstclass.length;i++){
-					if($scope.firstclass[i].id==$scope.finalpatharr[0]){
-						$scope.firstselect=$scope.firstclass[i].id;
-						break;
-					}
-				}
-			})
-	})()
-
-	/*二级默认*/
-	$scope.subClassDefault = (function () {
-		$http({
-			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
-			params: {pid: $scope.finalpatharr[0]}
-		}).then(function (res) {
-			$scope.secondclass = res.data.data.categories.splice(1);
-			for(let i=0;i<$scope.secondclass.length;i++){
-				if($scope.secondclass[i].id==$scope.finalpatharr[1]){
-					$scope.secselect=$scope.secondclass[i].id;
-					break;
-				}
-			}
-		})
-	})()
-
-	/*一级选择后的二级*/
-	$scope.subClass = function (obj) {
-		$http({
-			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
-			params: {pid: obj}
-		}).then(function (response) {
-			$scope.secondclass = response.data.data.categories.splice(1);
-			$scope.secselect = $scope.secondclass[0].id
-		})
-	}
-
-	//上传图片
-	$scope.data = {
-		file:null
-	}
-	$scope.upload = function (file) {
-		if(!$scope.data.file){
-			return
-		}
-		// console.log($scope.data)
-		Upload.upload({
-			url:'http://test.cdlhzz.cn:888/site/upload',
-			data:{'UploadForm[file]':file}
-		}).then(function (response) {
-			if(!response.data.data){
-					$scope.picwarning = true;
-					$scope.iconpath = 'pages/mall_manage/class_manage/onsale_edit/images/default.png';
-			}else{
-				$scope.picwarning = false;
-				$scope.iconpath = picprefix + response.data.data.file_path;
-				$scope.classicon = response.data.data.file_path;
-			}
-		},function (error) {
-			console.log(error)
-		})
-	}
-
+<<<<<<< Updated upstream
 
 	/*编辑里的下架*/
 	$scope.sureoffline = function () {
@@ -224,11 +169,21 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 			$scope.savesuccess = true;
 		}
 	}
+=======
+	/**/
+	$scope.findParentClass = (function () {
+		// console.log($scope.onsaleclasslevel)
+			if($scope.offsaleclasslevel=="三级"){
+				$http({
+					method: "get",
+					url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+					params: {pid:$scope.offsaleclassid}
+				}).then(function (res) {
+					// $scope.allonsalepro = res.data.data.category_list_admin.details;
+					console.log(res);
+				})
+			}
+	})()
+>>>>>>> Stashed changes
 
-	/*保存模态框确认*/
-	$scope.suresave = function () {
-		setTimeout(function () {
-			$state.go("fenleiguanli");
-		},200)
-	}
 })

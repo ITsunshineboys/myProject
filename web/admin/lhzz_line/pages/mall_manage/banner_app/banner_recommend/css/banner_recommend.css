@@ -1,4 +1,4 @@
-/*头部导航开始*/
+/*头部导航*/
 .header_box{
   height: 60px;
   border-bottom: 1px solid #cccccc;
@@ -9,8 +9,8 @@
   margin: 0 auto;
   line-height: 60px;
 }
-/*头部导航 结束*/
 
+<<<<<<< Updated upstream
 
 /* 分类菜单开始*/
 .classification_menu{
@@ -77,17 +77,24 @@
   color:#3F94F6;
   border-bottom: 1px solid #3F94F6;
 }
+=======
+/*公用CSS样式  开始*/
+>>>>>>> Stashed changes
 .head_nav_font_weight{
   font-weight: bold;
 }
 .gray{
   color: #cccccc;
 }
-table{
-  width: 100%;
+.ellipsis{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
-.no_radio{
-  margin-left: 40px!important;
+.ellipsis_name{
+  display: block;
+  width: 120px;
+  line-height: 42px!important;
 }
 .yesGreen{
   color: #92C661!important;
@@ -102,32 +109,15 @@ table{
 .blue{
   color: #3F94F6;
 }
-.still{
-  background-color: #F0F0F0!important;
-}
-.ellipsis{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.ellipsis_name{
-  display: block;
-  width: 120px;
-  line-height: 42px!important;
-}
-/*公用CSS样式 结束*/
+/*公用CSS样式  结束*/
 
 /*APP推荐-banner开始*/
-.rmd_content{
+.content{
   /*margin-left: 200px;*/
 }
 .city{
   width: 90%;
   margin: 20px auto;
-  /*border: 1px solid red;*/
-}
-.changeCity{
-  /*padding: 0 5px;*/
 }
 .citySelect{
   padding: 6px 10px 10px 18px;
@@ -159,24 +149,14 @@ table{
   padding: 10px 0;
   cursor: pointer;
 }
-
+.bottom_blue{
+  color:#3F94F6;
+  border-bottom: 1px solid #3F94F6;
+}
 /*选项卡内容*/
 .tabContent{
   width: 90%;
   margin:20px auto;
-}
-.all_check_span{
-  position: relative;
-}
-.all_check{
-  display: inline-block!important;
-  width: 15px!important;
-  height: 15px!important;
-  /*margin-left: 10px!important;*/
-  line-height: 32px!important;
-  position: absolute;
-  top:50%;
-  transform: translateY(-50%);
 }
 .topTab span{
   display: inline-block;
@@ -191,7 +171,6 @@ table{
   font-size: 12px;
   color: #666F80;
   cursor: pointer;
-  position: relative;
 }
 .topTab a{
   display: inline-block;
@@ -230,7 +209,7 @@ table{
   font-size: 14px;
   color: #666F80;
   line-height: 14px;
-  padding: 0 22px;
+  padding: 0 20px;
 }
 .tabTable table tr td a{
   color: #3F94F6;
@@ -250,10 +229,11 @@ input[type="checkbox"]{
   color: #7A8599;
   line-height: 14px;
 }
+
 /*模态框居中*/
 .modelCenter{
   width: 650px;
-  height: 750px;
+  height: 680px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -261,42 +241,44 @@ input[type="checkbox"]{
 }
 
 /*添加模态框*/
-.modal_tab{
-  height: 50px;
-}
-#my_modal_add{
-  height: 650px;
-}
-.modal_tab span{
-  display: inline-block;
-  text-align: center;
-  width: 68px;
-  height: 28px;
-  line-height: 28px;
-  border-radius: 3px;
-  font-family: Helvetica-Bold;
-  font-size: 14px;
-}
-.modal_tab_active{
-  color: #3F94F6;
-  border: 1px solid #89C0FF;
-  background: #EFF7FF;
-}
+ .modal_tab{
+   height: 50px;
+ }
+ #my_modal_add{
+   height: 650px;
+ }
+ .modal_tab span{
+   display: inline-block;
+   text-align: center;
+   width: 68px;
+   height: 28px;
+   line-height: 28px;
+   border-radius: 3px;
+   font-family: Helvetica-Bold;
+   font-size: 14px;
+ }
+ .modal_tab_active{
+   color: #3F94F6;
+   border: 1px solid #89C0FF;
+   background: #EFF7FF;
+   cursor: pointer;
+ }
 .modal_txt_one{
   margin-top: 10px;
 }
-.modal_txt_one span{
-  display: inline-block;
-  width: 64px;
-  height: 32px;
-  line-height: 32px;
-}
+ .modal_txt_one span{
+   display: inline-block;
+   width: 64px;
+   height: 32px;
+   line-height: 32px;
+ }
 .modal_txt_one span:nth-child(4){
   background: #FFFFFF;
   border: 1px solid #BFC0C2;
   border-radius: 3px;
   text-align: center;
 }
+<<<<<<< Updated upstream
 .modal_txt_one input[type="text"]{
   width: 395px;
   height: 32px;
@@ -334,7 +316,47 @@ input[type="checkbox"]{
   border-radius: 3px;
   text-align: center;
 }
+=======
+ .modal_txt_one input[type="text"]{
+   width: 395px;
+   height: 32px;
+   background: #FFFFFF;
+   border: 1px solid #E6E9F0;
+   box-shadow: inset 0 2px 3px 0 #EEF1F8;
+   border-radius: 3px;
+ }
+>>>>>>> Stashed changes
 
+ .modal_txt_two input[type="text"],.modal_txt_one_del input[type="text"]{
+   width: 460px;
+ }
+ .no_radio{
+   margin-left: 40px!important;
+ }
+ .modal_img_box{
+   overflow: hidden;
+ }
+ .modal_img_box span{
+   float: left;
+ }
+ .modal_img{
+   display: inline-block;
+   float: left;
+   width: 240px;
+   height: 140px;
+   border: 1px solid #ccc;
+ }
+ .clear{
+   clear: both;
+ }
+ .modal_img_btn{
+   margin: 10px 0 0 70px;
+ }
+ .modal_img_btn span:nth-child(1){
+   border: 1px solid #ccc;
+   border-radius: 3px;
+   text-align: center;
+ }
 /*链接详情开始*/
 .details_big_div{
   width: 100%;

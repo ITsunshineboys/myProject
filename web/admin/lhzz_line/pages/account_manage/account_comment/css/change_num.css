@@ -43,6 +43,10 @@ section{
     margin-left: 20px;
     color:#ABABAB;
 }
+.span_left{
+    margin-left: 160px;
+    color:red;
+}
 .btn_back{
     margin-top: 550px;
     margin-bottom: 40px;
