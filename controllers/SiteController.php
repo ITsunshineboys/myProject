@@ -1637,12 +1637,6 @@ class SiteController extends Controller
         }
     }
 
-   public function actionCheck(){
-    $data=new  Invoice();
-        $data->invoicer_card=11111;
-        $res=$data->save();
-        var_dump($res);
-     }
 
 
 }

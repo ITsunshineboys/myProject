@@ -922,19 +922,19 @@ CREATE TABLE `goods_recommend_supplier` (
 
 
 -- 7.21 start--
-DROP TABLE IF EXISTS `invoice`;
 CREATE TABLE `invoice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `invoice_type` varchar(5) NOT NULL,
-  `invoice_header_type` int(1) NOT NULL DEFAULT '0',
-  `invoice_header` varchar(50) NOT NULL,
-  `invoice_content` varchar(30) NOT NULL,
-  `creat_time` datetime NOT NULL,
+  `invoice_type` tinyint(1) NOT NULL COMMENT '1:普通发票  2： 电子发票',
+  `invoice_header_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1:个人发票  2.公司发票',
+  `invoice_header` varchar(50) NOT NULL COMMENT '发票抬头',
+  `invoicer_card` varchar(18) NOT NULL COMMENT '发票纳税人识别号',
+  `invoice_content` varchar(30) NOT NULL COMMENT '发票内容',
+  `creat_time` int(11) NOT NULL,
   `invoicetoken` varchar(32) NOT NULL,
   `default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 未默认  1：  默认',
-  `uid` int(11) NOT NULL,
+  `uid` int(11) NOT NULL COMMENT '用户ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 
 DROP TABLE IF EXISTS `user_address`;
 CREATE TABLE `user_address` (
