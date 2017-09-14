@@ -54,7 +54,7 @@ ul{
     width: 245px;
     height: 31px;
     margin-left: 87px;
-    border: 1px solid #999!important;
+    border: 1px solid #999;
     border-radius: 3px;
     padding-left: 10px;
     line-height: 31px;
@@ -86,7 +86,7 @@ ul{
 }
 
 .tags{
-    overflow: hidden;
+    /*overflow: hidden;*/
     display: inline-block;
     vertical-align: top;
 }
@@ -94,6 +94,8 @@ ul{
 .tags li{
     float: left;
     margin-right: 13px;
+    margin-bottom: 19px;
+    position: relative;
 }
 
 .tags li input{
@@ -113,7 +115,13 @@ ul{
     margin-left: -5px;
     vertical-align: sub;
 }
-
+.closetag{
+    position: absolute;
+    left: 25px;
+    top: -10px;
+    width: 21px!important;
+    height: 21px!important;
+}
 /*所处等级*/
 .present_level{
     margin-top: 52px;
@@ -165,25 +173,6 @@ ul{
     background-color: #F2F4FF;
     border: 1px solid #487AF8;
 }
-
-/*确认*/
-/*确认提示框*/
-#save_content{
-    width: 636px;
-    height: 256px;
-}
-
-#tishi{
-    padding-left: 13px;
-    padding-top: 6px;
-    font-weight: bold;
-}
-
-#tishi_wenzi{
-    font-size: 16px;
-    padding-left: 13px;
-}
-
 #caozuo_sure{
     width: 80px;
     height: 34px;
@@ -195,11 +184,32 @@ ul{
     line-height: 34px;
     font-size: 12px;
     margin-top: 54px;
-}
-
-#caozuo_sure{
     float: right;
     margin-right: 40px;
 }
+#save_content{
+    width: 636px;
+    height: 256px;
+}
+#tishi{
+    padding-left: 13px;
+    padding-top: 6px;
+    font-weight: bold;
+}
 
+#tishi_wenzi{
+    font-size: 16px;
+    padding-left: 13px;
+}
 
+/*添加+按钮*/
+.visibility{
+    visibility: hidden;
+}
+.border_red{
+    border: 1px solid red!important;
+    outline:0;
+}
+.dis{
+    display: none;
+}

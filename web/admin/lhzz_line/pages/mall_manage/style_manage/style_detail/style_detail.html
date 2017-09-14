@@ -9,13 +9,14 @@
     </div>
 
     <div class="series_detail_content">
+        <form name="form" novalidate>
         <!--系列名称-->
         <div class="series_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格名称</span>
-            <input type="text" placeholder="请输入风格名称">
+            <input name="style_name" required ng-class="{'border_red':(form.style_name.$invalid &&submitted)||(form.style_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.style_name.$error" maxlength=10 type="text" placeholder="请输入系列名称" ng-model="style_name">
             <span id="limitword">*限1~10个字符</span>
-            <p class="red_mark">
+            <p class="red_mark" ng-show="name_flag">
                 <span class="glyphicon glyphicon-asterisk"></span>
                 该风格名称已存在，请重新填写
             </p>
@@ -24,53 +25,26 @@
         <!--创建时间-->
         <div class="create_time">
             <span>创建时间</span>
-            <span>2017-10-09 12:21</span>
+            <span>{{style_item.creation_time}}</span>
         </div>
 
         <!--状态-->
         <div class="state">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>状态</span>
-            <span class="red_mark">关闭</span>
+            <span class="red_mark" ng-if="style_item.status=='0'">关闭</span>
+            <span class="color_skyblue" ng-if="style_item.status=='1'">启用中</span>
         </div>
 
         <!--系列标签-->
         <div class="series_tag">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格标签</span>
-            <img src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
+            <img ng-click="label_add()" ng-class="{'vis':style_label_arr.length>=6}" src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
             <ul class="tags">
-                <li>
-                    外形简约
-                    <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
-                </li>
-                <li>
-                    易清洗
-                    <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
-                </li>
-                <li>
-                    折叠
-                    <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
-                </li>
-                <li>
-                    多功能
-                    <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
-                </li>
-                <li>
-                    不占面积
-                    <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
-                </li>
-                <li>
-                    永不过时
-                    <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
-                </li>
-                <li>
-                    永不过时
-                    <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
-                </li>
-                <li>
-                    永不过时
-                    <img src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
+                <li ng-repeat="item in style_label_arr track by $index">
+                    <input ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required)}" type="text" maxlength="4" placeholder="请输入标签">
+                    <img ng-if="style_label_arr.length!=1" ng-click="close_label($index)" src="pages/mall_manage/style_manage/add_style/image/close.png" class="closetag">
                 </li>
                 <span>*限1~3个字符,最多6个标签</span>
             </ul>
@@ -82,12 +56,15 @@
             <span>风格效果图</span>
 
             <div class="pic_right">
-                <img src="pages/mall_manage/style_manage/add_style/image/plus.png" alt="" id="logo" class="stylepic">
-                <img src="pages/mall_manage/style_manage/add_style/image/plus.png" alt="" class="stylepic">
-                <p>图片大小694×400，5M内，可上传3张图片，支持JPG、PNG、JPEG</p>
-                <p class="red_mark warning">
+                <div class="img_list" ng-repeat="item in img_list">
+                    <img ng-src="http://test.cdlhzz.cn:888/{{item}}" class="logo">
+                    <div class="img_times" ng-click="del_img(item)">&times;</div>
+                </div>
+                <img  class="logo" ng-if="img_list.length!=3" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/mall_manage/style_manage/add_style/image/plus.png">
+                <p style="margin-top: 20px">图片大小694×400，5M内，可上传3张图片，支持JPG、PNG、JPEG</p>
+                <p class="red_mark warning" ng-if="!!img_flag">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                    上传图片格式不正确或尺寸不匹配，请重新上传
+                    {{img_flag}}
                 </p>
             </div>
         </div>
@@ -96,19 +73,19 @@
         <div class="series_intro">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>系列介绍</span>
-
-            <textarea name="" placeholder="适合关注健康的小仙女"></textarea>
+            <textarea name="style_txt" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_txt"></textarea>
         </div>
 
         <!--按钮-->
         <div class="btn_sure">
-            <button id="save" data-toggle="modal" data-target="#suremodal">保存</button>
-            <button ui-sref="style_index">返回</button>
+            <button id="save" data-toggle="modal" data-target="#suremodal" ng-click="style_det_ok(form.$valid)">保存</button>
+            <button ui-sref="style_index({showstyle:true})">返回</button>
         </div>
+        </form>
     </div>
 
     <!--确认提示框-->
-    <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="{{sur_id}}" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content" id="save_content">
                 <div class="modal-header" id="save_header">
@@ -121,7 +98,7 @@
                 </div>
 
                 <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal">确认</button>
+                    <button id="caozuo_sure" data-dismiss="modal" ng-click="style_go()">确认</button>
                 </div>
             </div>
         </div>
