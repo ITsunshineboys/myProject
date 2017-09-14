@@ -39,7 +39,6 @@ class GoodsOrder extends ActiveRecord
     const ORDER_STATUS_COMPLETE=1;
     const ORDER_STATUS_CANCEL=2;
     const ORDER_STATUS_DESC_UNCOMPLETE='未完成';
-    const ORDER_STATUS_DESC_COMPLETE='已完成';
     const ORDER_STATUS_DESC_CANCEL='已取消';
     const UNUSUAL_STATUS_REFUND=1;
     const UNUSUAL_STATUS_DESC_REFUND='申请退款';
@@ -52,10 +51,9 @@ class GoodsOrder extends ActiveRecord
         self::PAY_STATUS_PAID => self::PAY_STATUS_DESC_PAID,
         self::PAY_STATUS_REFUNDED => self::PAY_STATUS_DESC_REFUNDED,
     ];
-
     const ORDER_STATUS=[
         self::ORDER_STATUS_UNCOMPLETE=>self::ORDER_STATUS_DESC_UNCOMPLETE,
-        self::ORDER_STATUS_COMPLETE=>self::ORDER_STATUS_DESC_COMPLETE,
+        self::ORDER_STATUS_COMPLETE=>self::ORDER_TYPE_DESC_COMPLETED,
         self::ORDER_STATUS_CANCEL=>self::ORDER_STATUS_DESC_CANCEL,
     ];
     const SHIPPED_STATUS=[
@@ -88,7 +86,7 @@ class GoodsOrder extends ActiveRecord
         'z.freight',
         'a.return_insurance',
     ];
-  const FIELDS_USERORDER_ADMIN = [
+    const FIELDS_USERORDER_ADMIN = [
         'a.order_no',
         'z.customer_service',
         'a.pay_status',
@@ -113,7 +111,7 @@ class GoodsOrder extends ActiveRecord
         'z.freight',
         'a.return_insurance',
     ];
-     const AFTER_SALE_SERVICES = [
+    const AFTER_SALE_SERVICES = [
         '提供发票',
         '上门安装',
         '上门维修',
@@ -130,7 +128,6 @@ class GoodsOrder extends ActiveRecord
     const ORDER_TYPE_DESC_CANCEL='已取消';
     const ORDER_TYPE_DESC_CUSTOMER_SERVICE='售后';
     const ORDER_TYPE_DESC_UNCOMMENT='待评论';
-    const PAGE_SIZE_DEFAULT = 12;
     const ORDER_TYPE_ALL='all';
     const ORDER_TYPE_UNPAID='unpaid';
     const ORDER_TYPE_UNSHIPPED='unshipped';
@@ -139,7 +136,7 @@ class GoodsOrder extends ActiveRecord
     const ORDER_TYPE_CANCEL='cancel';
     const ORDER_TYPE_CUSTOMER_SERVICE='customer_service';
     const ORDER_TYPE_UNCOMMENT='uncomment';
-     const ORDER_TYPE_LIST=[
+    const ORDER_TYPE_LIST=[
         self::ORDER_TYPE_DESC_ALL=>self::ORDER_TYPE_ALL,
         self::ORDER_TYPE_DESC_UNPAID=>self::ORDER_TYPE_UNPAID,
         self::ORDER_TYPE_DESC_UNSHIPPED=>self::ORDER_TYPE_UNSHIPPED,
@@ -1009,7 +1006,7 @@ class GoodsOrder extends ActiveRecord
 
     }
 
-     /**
+      /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
@@ -1030,44 +1027,40 @@ class GoodsOrder extends ActiveRecord
                         ->one()['username'];
                     break;
             }
-            switch ($data[$k]['order_status']){
-                case 0:
-                    switch ($data[$k]['pay_status'])
-                    {
-                        case  0:
-                            $data[$k]['status']='未付款';
-                            break;
-                        case  1:
-                            switch ($data[$k]['shipping_status']){
-                                case 0:
-                                    $data[$k]['status']='未发货';
-                                    break;
-                                case 1:
-                                    $data[$k]['status']='待收货';
-                                    break;
-                                case 2:
-                                    $data[$k]['status']='已完成';
-                                            break;
-                            }
-                            break;
-                    }
-                    break;
-                case 1:
-                    switch($data[$k]['customer_service']){
-                        case 0:
-                            $data[$k]['status']='已完成';
-                            break;
-                        case 1:
-                            $data[$k]['status']='售后中';
-                            break;
-                        case 2:
-                            $data[$k]['status']='售后结束';
-                            break;
-                    }
-                    break;
-                case 2:
-                    $data[$k]['status']='已取消';
-                    break;
+            if ($data[$k]['pay_status']==0){
+                $data[$k]['status']='未付款';
+            }else{
+                switch ($data[$k]['order_status']){
+                    case 0:
+                                switch ($data[$k]['shipping_status']){
+                                    case 0:
+                                        $data[$k]['status']='未发货';
+                                        break;
+                                    case 1:
+                                        $data[$k]['status']='待收货';
+                                        break;
+                                    case 2:
+                                        $data[$k]['status']='已完成';
+                                        break;
+                                }
+                                break;
+                    case 1:
+                        switch($data[$k]['customer_service']){
+                            case 0:
+                                $data[$k]['status']='已完成';
+                                break;
+                            case 1:
+                                $data[$k]['status']='售后中';
+                                break;
+                            case 2:
+                                $data[$k]['status']='售后结束';
+                                break;
+                        }
+                        break;
+                    case 2:
+                        $data[$k]['status']='已取消';
+                        break;
+                }
             }
             $data[$k]['send_time']=0;
             $data[$k]['complete_time']=0;
@@ -1083,7 +1076,6 @@ class GoodsOrder extends ActiveRecord
                         $express=Express::findByWayBillNumber($waybillnumber);
                         $data[$k]['send_time']=$express->create_time;
                         $data[$k]['RemainingTime']=Express::findRemainingTime($express);
-
                         if ($data[$k]['RemainingTime']<=0){
                             $data[$k]['complete_time']=$express->receive_time;
                             $data[$k]['status']='已完成';
@@ -1894,7 +1886,8 @@ class GoodsOrder extends ActiveRecord
         $data=sprintf('%.2f', (float)$data);
         return $data;
     }
-    /**
+
+   /**
      * @param $arr
      * @return mixed
      */
@@ -1904,17 +1897,17 @@ class GoodsOrder extends ActiveRecord
         {
             switch ($arr[$k]['status'])
             {
-                case '未付款':
-                    $arr[$k]['status']='unpaid';
+                case self::PAY_STATUS_DESC_UNPAID:
+                    $arr[$k]['status']=self::ORDER_TYPE_UNPAID;
                     break;
-                case '未发货':
-                    $arr[$k]['status']='unshipped';
+                case self::SHIPPING_STATUS_DESC_UNSHIPPED:
+                    $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED;
                     break;
-                case  '待收货':
-                    $arr[$k]['status']='unreceiveded';
+                case  self::ORDER_TYPE_DESC_UNRECEIVED:
+                    $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED;
                     break;
-                case  '已取消':
-                    $arr[$k]['status']='cancel';
+                case  self::ORDER_TYPE_DESC_CANCEL:
+                    $arr[$k]['status']=self::ORDER_TYPE_CANCEL;
                     break;
                 case  '售后中':
                     $arr[$k]['status']='after_saled';
@@ -1922,8 +1915,11 @@ class GoodsOrder extends ActiveRecord
                 case  '售后结束':
                     $arr[$k]['status']='after_sale_completed';
                     break;
-                case  '已完成':
-                    $arr[$k]['status']='completed';
+                case self::ORDER_TYPE_DESC_COMPLETED:
+                    $arr[$k]['status']=self::ORDER_TYPE_COMPLETED;
+                    break;
+                case self::ORDER_TYPE_DESC_UNCOMMENT:
+                    $arr[$k]['status']=self::ORDER_TYPE_UNCOMMENT;
                     break;
             }
         }
