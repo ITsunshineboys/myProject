@@ -236,19 +236,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 			console.log(err);
 		})
 	};
-	//市场价
-	$scope.price_flag=false;
-	$scope.my_market_price=function () {
-		(+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
-	};
-//平台价
-	$scope.my_platform_price=function () {
-		(+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
-	};
-//供货商价
-	$scope.my_supplier_price=function () {
-		(+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
-	};
+
 	//售后、保障
 	$scope.after_sale_services=[];//售后、保障传值数组
 	$scope.invoice_check=true;
@@ -293,9 +281,28 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 	},function (err) {
 		console.log(err)
 	});
+    //市场价
+    $scope.price_flag=false;
+    $scope.my_market_price=function () {
+        (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+    };
+//平台价
+    $scope.my_platform_price=function () {
+        (+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+    };
+//供货商价
+    $scope.my_supplier_price=function () {
+        (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+    };
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
-		if(valid && $scope.upload_cover_src && $scope.price_flag){
+
+		console.log(121212)
+		console.log($scope.upload_cover_src)
+		console.log($scope.price_flag)
+
+		if(valid && $scope.upload_cover_src && !$scope.price_flag){
+			console.log(1212121212121212)
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
 			//提供发票
@@ -426,21 +433,12 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 	};
 	/*-----------------------保存成功跳转--------------------------------*/
 	$scope.change_go=function () {
+		console.log(666);
 		setTimeout(function () {
 			$state.go('commodity_manage',{down_flag:true})
 		},300)
 	}
 
-     /*=================物流模板=================*/
-     //$scope.viewTo = false;
-	//let arrLen =[];
-	//$scope.district_names = arrLen;
 
-	//if($scope.district_names.length > 3){
-	//	$scope.viewTo = true
-	//	console.log(111)
-	//}else{
-	//	$scope.viewTo = false;
-	//	console.log(2222)
-	//}
+
 })
