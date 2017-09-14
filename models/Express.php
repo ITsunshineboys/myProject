@@ -126,7 +126,12 @@ class Express extends ActiveRecord
         }
     }
 
-   public static  function Findexresslist($order_no,$sku)
+   /**
+     * @param $order_no
+     * @param $sku
+     * @return int
+     */
+    public static  function Findexresslist($order_no,$sku)
     {
         $waybill=Express::find()->select('waybillnumber,waybillname,create_time')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
         if (!$waybill){
@@ -134,7 +139,6 @@ class Express extends ActiveRecord
             return $code;
         }else {
             $arr = array(
-                'day' => date('Y-m-d H:i:s', $waybill['create_time']),
                 'time' => date('Y-m-d H:i:s', $waybill['create_time']),
                 'context' => '卖家已发货'
             );
@@ -145,34 +149,37 @@ class Express extends ActiveRecord
         }
         foreach ($data['data'] as &$datum)
         {
-            $datum['day']=date('Y-m-d',strtotime($datum['time']));
-            $datum['time']=date('H:i:s',strtotime($datum['time']));
+            $datum['time']=date('Y-m-d H:i:s',strtotime($datum['time']));
             unset($datum['ftime']);
             unset($datum['location']);
         }
         return $data['data'];
     }
 
+    /**
+     * @param $order_no
+     * @param $sku
+     * @return array
+     */
     public static  function Findexpresslist_sendtohome($order_no,$sku){
         $order=(new Query())->from(ORDER_GOODSLIST)->select('order_status,shipping_status')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
         $express=Express::find()->select('create_time,receive_time')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
         switch ($order['shipping_status']){
             case 1:
                 $arr[] =[
-                    'day' => date('Y-m-d', $express['create_time']),
-                    'time' => date('H:i:s', $express['create_time']),
+                    'time' => date('Y-m-d H:i:s', $express['create_time']),
                     'context' => '您的商品已由工作人员派出，请注意查收'
                 ];
                 break;
             case 2:
                 $arr[]=
-                    ['day' => date('Y-m-d', $express['receive_time']),
-                        'time' => date('H:i:s', $express['receive_time']),
+                    [
+                        'time' => date('Y-m-d H:i:s', $express['receive_time']),
                         'context' => '您的商品已签收 感谢使用 期待再次为您服务!'
                     ];
                 $arr[]=
-                    ['day' => date('Y-m-d', $express['create_time']),
-                    'time' => date('H:i:s', $express['create_time']),
+                    [
+                    'time' => date('Y-m-d H:i:s', $express['create_time']),
                     'context' => '您的商品已由工作人员派出，请注意查收'
                 ];
                 break;
@@ -180,6 +187,7 @@ class Express extends ActiveRecord
         return $arr;
 
     }
+
 
     /**
      * 获取物流信息

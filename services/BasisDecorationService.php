@@ -822,19 +822,19 @@ class BasisDecorationService
     {
         foreach ($day_area as $skill) {
             switch ($skill) {
-                case $skill['worker_kind_details'] == '拆除12墙':
+                case $skill['worker_kind_details'] == '拆除12墙面积':
                     $dismantle_12 = $skill;
                     break;
-                case $skill['worker_kind_details'] == '拆除24墙':
+                case $skill['worker_kind_details'] == '拆除24墙面积':
                     $dismantle_24 = $skill;
                     break;
-                case $skill['worker_kind_details'] == '新建12墙':
+                case $skill['worker_kind_details'] == '新建12墙面积':
                     $new_construction_12 = $skill;
                     break;
-                case $skill['worker_kind_details'] == '新建24墙':
+                case $skill['worker_kind_details'] == '新建24墙面积':
                     $new_construction_24 = $skill;
                     break;
-                case $skill['worker_kind_details'] == '补烂':
+                case $skill['worker_kind_details'] == '补烂长度':
                     $repair = $skill;
                     break;
             }

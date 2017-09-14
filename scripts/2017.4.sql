@@ -1322,14 +1322,14 @@ CREATE TABLE `labor_cost_detail` (
 
 CREATE TABLE `worker_order_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `worker_order_no` INT(11) NOT NULL DEFAULT '0' COMMENT '工人订单号',
+  `worker_order_no` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '工人订单号',
   `order_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工单图片地址',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `work_result_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_day_id` int(11) NOT NULL DEFAULT '0' COMMENT '工作日期id',
+  `order_day_result_id` int(11) NOT NULL DEFAULT '0' COMMENT '工作日期id',
   `result_img_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '工作成果图片名称',
   `result_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工作单成果图片地址',
   PRIMARY KEY (`id`)
@@ -1497,4 +1497,33 @@ CREATE TABLE `user_freezelist` (
   `create_time` int(11) NOT NULL,
   `freeze_reason` varchar(255) NOT NULL COMMENT '冻结原因',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 9.14 start
+
+CREATE TABLE `worker_skill` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `skill` varchar(50) NOT NULL DEFAULT '' COMMENT '工人特长',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `worker_works_review` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `works_id` int(11) NOT NULL DEFAULT 0 COMMENT '工人作品id',
+  `star` tinyint(2) NOT NULL DEFAULT 15 COMMENT '作品评分',
+  `uid` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
+  `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '用户角色id',
+  `review` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '评论内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '工人作品评论表';
+
+
+CREATE TABLE `worker_order_day_result` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` VARCHAR(50) NOT NULL DEFAULT 0 COMMENT '订单号',
+  `work_desc` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '工作描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
