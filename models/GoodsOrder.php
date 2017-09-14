@@ -1685,14 +1685,14 @@ class GoodsOrder extends ActiveRecord
         return $where;
     }
 
-     /**
+    /**余额支付
      * @param $postData
      * @param $user
      * @return int
      */
     public  static  function  orderBalanceSub($postData,$user){
         $orders=$postData['orders'];
-        if ($postData['total_amount']<= $user->balance){
+        if ($postData['total_amount']<= $user->availableamount){
             $code=1033;
             return $code;
         }
@@ -1714,6 +1714,7 @@ class GoodsOrder extends ActiveRecord
                     ->where(['id'=>$user->id])
                     ->one();
                 $user->balance=($user->balance-$order_money);
+                $user->availableamount=($user->availableamount-$order_money);
                 $res2=$user->save(false);
                 if (!$res || !$res2){
                     $tran->rollBack();
