@@ -8,6 +8,7 @@ use app\models\SupplierCashregister;
 use app\models\SupplierFreezelist;
 use app\models\User;
 use app\models\UserCashregister;
+use app\models\UserFreezelist;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use yii\db\Exception;
@@ -229,28 +230,30 @@ class SupplieraccountController extends  Controller{
             $code=1000;
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
-
+            if(!$supplier_id){
+                return json_encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
-
-
             $freezed_money=sprintf('%.2f',(float)$supplier->availableamount*0.01);
             $transaction=Yii::$app->db->beginTransaction();
             try{
             if($request->isPost){
-                $model=new SupplierFreezelist();
-                $model->supplier_id=$supplier_id;
-              $freeze_money=  $model->freeze_money=trim($request->post('freeze_money',''),'');
+                $model=new UserFreezelist();
+                $model->uid=$user->getId();
+                $model->role_id=Supplier::ROLE_SUPPLIER;
+                $freeze_money=  $model->freeze_money=trim($request->post('freeze_money',''),'');
                 $model->freeze_reason=trim($request->post('freeze_reason',''),'');
                 $model->create_time=time();
-
-                   $code=1000;
-
-                   if($freezed_money<$freeze_money){
+                $code=1000;
+                    if($freezed_money<$freeze_money){
                        $transaction->rollBack();
+                        $code=500;
                        return json_encode([
                            'code' => $code,
-                           'msg' => '可冻结余额不足',
-
+                           'msg' => \Yii::$app->params['errorCodes'][$code],
 
                        ]);
                    }
@@ -258,6 +261,7 @@ class SupplieraccountController extends  Controller{
                    $model->freeze_money=$freeze_money*100;
                    if(!$model->save() || !$supplier->update(false)){
                        $transaction->rollBack();
+                       $code=500;
                        return json_encode([
                            'code'=>$code,
                            'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -275,6 +279,7 @@ class SupplieraccountController extends  Controller{
             }else{
                 if(!$supplier_id){
                     $transaction->rollBack();
+                    $code=500;
                     return json_encode([
                         'code' => $code,
                         'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -294,6 +299,7 @@ class SupplieraccountController extends  Controller{
             }
         }catch (Exception $e){
             $transaction->rollBack();
+            $code=500;
                 return json_encode([
                     'code'=>$code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -315,17 +321,11 @@ class SupplieraccountController extends  Controller{
             ]);
         }
                 $code = 1000;
-
                 $timeType = trim(Yii::$app->request->get('time_type', ''));
-
-                $where = '1';
-
+                $where=" role_id=".Supplier::ROLE_SUPPLIER;
                 if ($timeType == 'custom') {
                     $startTime = trim(Yii::$app->request->get('start_time', ''));
                     $endTime = trim(Yii::$app->request->get('end_time', ''));
-
-
-
                     if (($startTime && !StringService::checkDate($startTime))
                         || ($endTime && !StringService::checkDate($endTime))
                     ) {
@@ -350,8 +350,8 @@ class SupplieraccountController extends  Controller{
 
                 $page = (int)Yii::$app->request->get('page', 1);
 
-                $size = (int)Yii::$app->request->get('size', SupplierFreezelist::PAGE_SIZE_DEFAULT);
-            $paginationData = SupplierFreezelist::pagination($where, SupplierFreezelist::FIELDS_ADMIN, $page, $size);
+                $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
+            $paginationData = UserFreezelist::pagination($where, UserFreezelist::FIELDS_ADMIN, $page, $size);
                 return json_encode([
                     'code'=>200,
                     'msg'=>'ok',
@@ -377,19 +377,14 @@ class SupplieraccountController extends  Controller{
         }
         $code=1000;
         $request=new Request();
-
         $id = trim($request->get('id', ''), '');
         if (!$id) {
             return json_encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
-
-
             ]);
         }else{
-
-            $model=SupplierFreezelist::find()->where(['id'=>$id])->one();
-
+            $model=UserFreezelist::find()->where(['id'=>$id])->one();
             return json_encode([
                 'code' => 200,
                 'msg' => 'ok',
@@ -425,10 +420,8 @@ class SupplieraccountController extends  Controller{
                     'msg'=>Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-
-            $freeze=SupplierFreezelist::findOne($freeze_id);
-
-            $supplier=Supplier::findOne($freeze->supplier_id);
+            $freeze=UserFreezelist::findOne($freeze_id);
+            $supplier=Supplier::findOne($freeze->uid);
         $transaction = Yii::$app->db->beginTransaction();
         try{
             if($supplier){
@@ -449,7 +442,7 @@ class SupplieraccountController extends  Controller{
                 ]);
             }else{
                 $transaction->rollBack();
-                $code=1000;
+                $code=500;
                 return json_encode([
                     'code'=>$code,
                     'msg'=>Yii::$app->params['errorCodes'][$code]
@@ -458,7 +451,7 @@ class SupplieraccountController extends  Controller{
 
         }catch (Exception $e){
             $transaction->rollBack();
-            $code=1000;
+            $code=500;
             return json_encode([
                 'code'=>$code,
                 'msg'=>Yii::$app->params['errorCodes'][$code]
@@ -518,7 +511,7 @@ class SupplieraccountController extends  Controller{
         $page = (int)Yii::$app->request->get('page', 1);
 
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
-        $paginationData = UserCashregister::pagination($where, SupplierCashregister::FIELDS_ADMIN, $page, $size);
+        $paginationData = UserCashregister::pagination($where, UserCashregister::FIELDS_ADMIN, $page, $size);
         return json_encode([
             'code'=>200,
             'msg'=>'ok',
@@ -553,8 +546,7 @@ class SupplieraccountController extends  Controller{
 
             ]);
         }
-
-       $model=new UserCashregister();
+        $model=new UserCashregister();
           $data=$model::getcashviewdata($cash_id);
 
         return json_encode([

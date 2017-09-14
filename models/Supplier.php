@@ -16,6 +16,7 @@ use yii\db\Query;
 
 class Supplier extends ActiveRecord
 {
+    const ROLE_SUPPLIER=6;
     const FIELDS_EXTRA = [];
     const STATUS_CASHED = 3;
     const STATUS_OFFLINE = 0;
@@ -479,11 +480,11 @@ class Supplier extends ActiveRecord
             ->select($select)
             ->leftJoin('user_cashregister as sc', 'sc.uid=s.id')
             ->leftJoin('user_bankinfo as sb', 'sb.u_id=s.uid')
-            ->leftJoin('supplier_freezelist as sf', 'sf.supplier_id=s.id')
+            ->leftJoin('user_freezelist as sf', 'sf.uid=s.id')
             ->where(['s.id' => $supplier_id])
             ->one();
 
-        $freeze_money = (new Query())->from('supplier_freezelist')->where(['supplier_id' => $supplier_id])->sum('freeze_money');
+        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id'=>self::ROLE_SUPPLIER])->sum('freeze_money');
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
         if ($array) {
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
