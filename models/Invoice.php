@@ -110,7 +110,6 @@ class Invoice extends ActiveRecord
             $invoice_add->invoicer_card=$invoicer_card;
             $invoice_add->invoice_content=$invoice_content;
             $invoice_add->uid=$user->id;
-            $invoice_add->create_time=$time;
             $invoice_add->default=1;
             $res =$invoice_add->save();
             if (!$res){
