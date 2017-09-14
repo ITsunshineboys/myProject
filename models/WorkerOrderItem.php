@@ -76,7 +76,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         $price=(new Query())->from('craft_cost')
             ->select('price')
             ->where(['worker_craft_id'=>$craft_id])
-            ->one();
+            ->one()['price'];
         if($price){
             return $price;
         }
@@ -277,5 +277,42 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             return $code;
         }
         return $homeinfos;
+    }
+    /**
+     * 订单某条目详情
+     * @param $order_id
+     * @param $item_id
+     * @return array|int
+     */
+    public static function getorderitemview($order_id,$item_id){
+        $data=[];
+        $items=self::find()
+            ->asArray()
+            ->where(['worker_order_id'=>$order_id])
+            ->andWhere(['worker_item_id'=>$item_id])
+            ->one();
+        if(!$items){
+            $code=1000;
+            return $code;
+        }
+        $carft_info=WorkerCraft::getcraftitle($items['worker_craft_id']);
+        if($carft_info){
+            $unit=WorkerItem::find()->select('unit')
+                ->asArray()
+                ->where(['id'=>$carft_info['item_id']])
+                ->one();
+            $data['craft']=$carft_info['craft'].self::UNITS[$unit['unit']];
+            $data['price']=self::craftprice($carft_info['id']).self::UNITXG.self::UNITS[3];
+        }
+        if($items['area']){
+            $data['area']=$items['area'].self::UNITS['3'];
+        }
+        if($items['length']){
+            $data['length']=$items['length'].self::UNITS['2'];
+        }
+       return $data;
+
+
+
     }
 }
