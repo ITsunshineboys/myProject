@@ -29,6 +29,12 @@ class WorkerCraftNorm extends ActiveRecord
         return self::findAll(['labor_cost_id'=>$id]);
     }
 
+    /**
+     * Find labor cost by id
+     * @param $id
+     * @param $details
+     * @return array|null|ActiveRecord
+     */
     public static function findByLaborCostId($id,$details)
     {
         return self::find()
