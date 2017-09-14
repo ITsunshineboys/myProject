@@ -1258,6 +1258,9 @@ CREATE TABLE `worker` (
   `icon` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
   `follower_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关注人数',
   `comprehensive_score` float unsigned NOT NULL DEFAULT '10' COMMENT '综合评分',
+  `feedback` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '好评率',
+  `order_total` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '总接单数',
+  `order_done` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '完成订单数',
   `level` tinyint(1) NOT NULL DEFAULT '1' COMMENT '工人级别',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `signature` varchar(100) NOT NULL DEFAULT '' COMMENT '个性签名',
@@ -1265,6 +1268,7 @@ CREATE TABLE `worker` (
   `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
   `status` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '接单状态: 1,接单 0,不接单',
+  `skill_ids` varchar(255) NOT NULL DEFAULT '' COMMENT '特长的id',
   `work_year` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '工龄：单位(年)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1282,6 +1286,7 @@ CREATE TABLE `worker_order` (
   `start_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
   `end_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
   `need_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '工期(天数)',
+  `days` varchar(1000) NOT NULL DEFAULT '' COMMENT '工作的具体日期(很多天,逗号分隔)',
   `map_location` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '地图定位',
   `address` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '施工详细地址',
   `con_people` VARCHAR(25) NOT NULL DEFAULT '' COMMENT '联系人',
