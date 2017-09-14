@@ -1320,13 +1320,6 @@ CREATE TABLE `labor_cost_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `work_result` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `work_des` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工作描述',
-  `create_time` INT(10) NOT NULL DEFAULT '0' COMMENT '提交时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `worker_order_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `worker_order_no` INT(11) NOT NULL DEFAULT '0' COMMENT '工人订单号',
@@ -1336,7 +1329,7 @@ CREATE TABLE `worker_order_img` (
 
 CREATE TABLE `work_result_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `work_result_id` INT(11) NOT NULL DEFAULT '0' COMMENT '工作成果id',
+  `order_day_id` int(11) NOT NULL DEFAULT '0' COMMENT '工作日期id',
   `result_img_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '工作成果图片名称',
   `result_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工作单成果图片地址',
   PRIMARY KEY (`id`)
