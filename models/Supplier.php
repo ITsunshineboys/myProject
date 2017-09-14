@@ -17,7 +17,7 @@ use yii\db\Query;
 class Supplier extends ActiveRecord
 {
     const FIELDS_EXTRA = [];
-    const STATUS_CASHED=3;
+    const STATUS_CASHED = 3;
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
     const STATUS_WAIT_REVIEW = 2;
@@ -443,8 +443,8 @@ class Supplier extends ActiveRecord
             if (isset($supplier['create_time'])) {
                 $supplier['create_time'] = date('Y-m-d H:i', $supplier['create_time']);
             }
-            if(isset($supplier['balance'])){
-                $supplier['balance']=sprintf('%.2f',(float)$supplier['balance']*0.01);
+            if (isset($supplier['balance'])) {
+                $supplier['balance'] = sprintf('%.2f', (float)$supplier['balance'] * 0.01);
             }
 
             if (isset($supplier['status'])) {
@@ -461,16 +461,17 @@ class Supplier extends ActiveRecord
                 $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
             }
         }
-        $total=(int)self::find()->where($where)->asArray()->count();
+        $total = (int)self::find()->where($where)->asArray()->count();
         return ModelService::pageDeal($supplierList, $total, $page, $size);
     }
+
     /**
      * supplier view
      * @param $supplier_id
      * @param $uid
      * @return array|bool|null
      */
-    public static function getsupplierdata($supplier_id,$uid)
+    public static function getsupplierdata($supplier_id, $uid)
     {
         $query = new Query();
         $select = 'sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
@@ -482,13 +483,13 @@ class Supplier extends ActiveRecord
             ->where(['s.id' => $supplier_id])
             ->one();
 
-        $freeze_money=(new Query())->from('supplier_freezelist')->where(['supplier_id'=>$supplier_id])->sum('freeze_money');
-        $cashed_money=(new Query())->from('user_cashregister')->where(['uid'=>$uid])->andWhere(['status'=>self::STATUS_CASHED])->sum('cash_money');
+        $freeze_money = (new Query())->from('supplier_freezelist')->where(['supplier_id' => $supplier_id])->sum('freeze_money');
+        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
         if ($array) {
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
             $array['cash_money'] = sprintf('%.2f', (float)$array['cash_money'] * 0.01);
             $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
-            $array['cashed_money'] = sprintf('%.2f', (float) $cashed_money * 0.01);
+            $array['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
             $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['balance']);
 
             return $array;
@@ -498,6 +499,7 @@ class Supplier extends ActiveRecord
         return null;
 
     }
+
     /**
      * get category by pid
      * @param $pid
@@ -570,6 +572,32 @@ class Supplier extends ActiveRecord
      * @param array $extraFields extra fields
      * @return array
      */
+
+    /** check  supplier handle  order  Jurisdiction
+     * 商家处理订单权限
+     * @param $user
+     * @param $postData
+     * @return int
+     */
+    public static function CheckOrderJurisdiction($user, $postData)
+    {
+        if (!array_key_exists('order_no', $postData)) {
+            $code = 1000;
+            return $code;
+        }
+        $supplier = self::find()
+            ->where(['uid' => $user->id])
+            ->one();
+        $GoodsOrder = GoodsOrder::find()
+            ->where(['order_no' => $postData['order_no']])
+            ->one();
+        if ($supplier->id != $GoodsOrder->supplier_id) {
+            $code = 1034;
+            return $code;
+        }
+        $code = 200;
+        return $code;
+    }
 
     /**
      * @return array the validation rules.
@@ -803,6 +831,13 @@ class Supplier extends ActiveRecord
      */
     public function online(ActiveRecord $operator)
     {
+        if (User::find()->where(['id' => $this->uid])
+            ->andWhere(['>', 'deadtime', 0])
+            ->exists()
+        ) {
+            return 1037;
+        }
+
         $this->status = self::STATUS_ONLINE;
 
         $tran = Yii::$app->db->beginTransaction();
@@ -820,31 +855,5 @@ class Supplier extends ActiveRecord
             $tran->rollBack();
             return $code;
         }
-    }
-
-      /** check  supplier handle  order  Jurisdiction
-     * 商家处理订单权限
-     * @param $user
-     * @param $postData
-     * @return int
-     */
-    public static function CheckOrderJurisdiction($user,$postData)
-    {
-        if(!array_key_exists('order_no', $postData)){
-            $code=1000;
-            return $code;
-        }
-        $supplier=self::find()
-            ->where(['uid'=>$user->id])
-            ->one();
-        $GoodsOrder=GoodsOrder::find()
-            ->where(['order_no'=>$postData['order_no']])
-            ->one();
-        if ($supplier->id != $GoodsOrder->supplier_id){
-            $code=1034;
-            return $code;
-        }
-        $code=200;
-        return $code;
     }
 }
