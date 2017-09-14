@@ -19,6 +19,7 @@ use app\models\PointsTotal;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
+use app\models\WorkerCraftNorm;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\services\BasisDecorationService;
@@ -186,7 +187,9 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $workers = LaborCost::profession($post, '弱电');
+        $workers = LaborCost::profession($post['city'], '水电工');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],'弱电点位');
+
         //      点位 和 材料查询
         $points = Points::weakPoints();
         $weak_current_all = [];
@@ -209,7 +212,7 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
 
         //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points, $workers);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points,$workers,$worker_kind_details);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
@@ -266,7 +269,8 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->post();
-        $workers = LaborCost::profession($post, '强电');
+        $workers = LaborCost::profession($post, '水电工');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],'强电点位');
         $points = Points::strongPointsAll();
         $points_total = PointsTotal::findByAll($points);
         $points_details = BasisDecorationService::strongCurrentPoints($points_total, $post);
@@ -281,7 +285,7 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('强电', $post['city']);
 
         //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points_details, $workers);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points_details,$workers,$worker_kind_details);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
@@ -338,7 +342,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $waterway_labor = LaborCost::profession($post, '水路工');
+        $waterway_labor = LaborCost::profession($post, '水电工');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],'水路点位');
 
         //点位 和材料 查询
         $points = Points::waterwayPoints();
@@ -365,7 +370,7 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('水路', $post['city']);
 
         //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($waterway_points, $waterway_labor);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($waterway_points, $waterway_labor,$worker_kind_details);
         $labor_all_cost['worker_kind'] = $waterway_labor['worker_kind'];
         //材料总费用
         $material_price = BasisDecorationService::waterwayGoods($waterway_points, $waterway_current, $craft);
@@ -422,6 +427,7 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         //人工价格
         $waterproof_labor = LaborCost::profession($post, '防水工');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],'做工面积');
         //防水所需材料
 
         //查询弱电所需要材料
@@ -443,7 +449,7 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll('防水', $post['city']);
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost['price'] = ceil($total_area / $waterproof_labor['quantity']) * $waterproof_labor['univalence'];
+        $labor_all_cost['price'] = ceil($total_area / $worker_kind_details['quantity']) * $waterproof_labor['univalence'];
         $labor_all_cost['worker_kind'] = $waterproof_labor['worker_kind'];
 
         //材料总费用
