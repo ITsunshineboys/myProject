@@ -10,76 +10,7 @@
   line-height: 60px;
 }
 
-<<<<<<< Updated upstream
-
-/* 分类菜单开始*/
-.classification_menu{
-  position: absolute;
-  right: 70px;
-}
-
-.classification_menu ul{
-  list-style: none;
-  border: 1px solid black;
-  padding: 0!important;
-  background-color: white;
-
-}
-.classification_menu ul li{
-  height: 20px;
-  position: relative;
-  width: 120px;
-  margin: 2px 0;
-}
-.classification_menu ul input{
-  width: 14px;
-  height: 14px;
-  position: absolute;
-  top:50%;
-  transform: translateY(-50%);
-  margin-right: 20px;
-  margin-left: 10px;
-}
-.classification_menu ul li span{
-  border: 0;
-  background-color: white;
-  margin: 0 0 0 30px ;
-  /*position: absolute;*/
-  /*height: auto;*/
-  /*margin: 0;*/
-  height: 14px;
-  line-height: 14px;
-  font-size: 14px!important;
-}
-/* 分类菜单结束*/
-/*公用CSS样式 开始*/
-#shop_num_null,#shop_num_null2{
-  border:1px solid red;
-  margin-bottom: 10px;
-  height: 32px;
-  line-height: 32px;
-  background-color: #FFF2F2;
-  color: #E82A2A;
-  width: 540px;
-}
-#show_img_size{
-  width: 30px;
-  height: 30px;
-}
-#shop_details_img,#link_details_img,#modal_edit_img,#modal_edit_img2{
-  max-width: 200px!important;
-  max-height: 150px!important;
-}
-.ng-hide:not(.ng-hide-animate){
-  display: inline-block!important;
-}
-.bottom_blue{
-  color:#3F94F6;
-  border-bottom: 1px solid #3F94F6;
-}
-=======
 /*公用CSS样式  开始*/
->>>>>>> Stashed changes
 .head_nav_font_weight{
   font-weight: bold;
 }
@@ -278,45 +209,6 @@ input[type="checkbox"]{
   border-radius: 3px;
   text-align: center;
 }
-<<<<<<< Updated upstream
-.modal_txt_one input[type="text"]{
-  width: 395px;
-  height: 32px;
-  background: #FFFFFF;
-  border: 1px solid #E6E9F0;
-  box-shadow: inset 0 2px 3px 0 #EEF1F8;
-  border-radius: 3px;
-}
-.modal_txt_two input[type="text"]{
-  width: 460px;
-}
-.modal_img_box{
-  overflow: hidden;
-}
-.modal_img_box i{
-  float: left;
-}
-.modal_img_box span{
-  float: left;
-}
-#modal_img,#modal_img2,#modal_link_img,#modal_link_img2,#modal_edit_link_img,#modal_edit_link_img2{
-  display: inline-block!important;
-  max-width: 240px!important;
-  max-height: 140px!important;
-  border: 1px solid #ccc;
-}
-.clear{
-  clear: both;
-}
-.modal_img_btn{
-  margin: 10px 0 0 70px;
-}
-.modal_img_btn span:nth-child(1){
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  text-align: center;
-}
-=======
  .modal_txt_one input[type="text"]{
    width: 395px;
    height: 32px;
@@ -325,7 +217,6 @@ input[type="checkbox"]{
    box-shadow: inset 0 2px 3px 0 #EEF1F8;
    border-radius: 3px;
  }
->>>>>>> Stashed changes
 
  .modal_txt_two input[type="text"],.modal_txt_one_del input[type="text"]{
    width: 460px;
@@ -372,7 +263,3 @@ input[type="checkbox"]{
   clear: both;
 }
 /*链接详情结束*/
-
-.border_red{
-  border:1px solid red!important;
-}

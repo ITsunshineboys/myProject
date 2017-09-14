@@ -7,8 +7,6 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
   "addseriesModule",
   "seriesdetailModule","addstyleModule","choose_styleModule","styledetailModule","idcard_right",
 
-   'index_module','intelligent_index','angularCSS','intelligent_directive',
-
   //  王杰 开始
   "index_module",
   "banner_recommend_module",
@@ -73,8 +71,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("brand_index",{   //商城管理——品牌管理
         url:"/brand_index",
-        templateUrl:"pages/mall_manage/brand_manage/brand_index/brand_index.html",
-        params:{down_flag:''}
+        templateUrl:"pages/mall_manage/brand_manage/brand_index/brand_index.html"
       })
       .state("edit_attribute",{   //商城管理——品牌管理
         url:"/edit_attribute",
@@ -212,13 +209,11 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("online_edit",{/*品牌管理-已上架编辑*/
         url:"/online_edit",
-        templateUrl:"pages/mall_manage/brand_manage/online_edit/online_edit.html",
-        params:{item:''}
+        templateUrl:"pages/mall_manage/brand_manage/online_edit/online_edit.html"
       })
       .state("offline_edit",{ /*品牌管理-已下架编辑*/
         url:"/offline_edit",
-        templateUrl:"pages/mall_manage/brand_manage/offline_edit/offline_edit.html",
-        params:{down_shelves_list:'',index:''}
+        templateUrl:"pages/mall_manage/brand_manage/offline_edit/offline_edit.html"
       })
       .state("add_brand",{ /*品牌管理-添加品牌*/
         url:"/add_brand",
@@ -226,8 +221,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("style_index",{ /*系列/风格/属性管理*/
         url:"/style_index",
-        templateUrl:"pages/mall_manage/style_manage/style_index/style_index.html",
-        params:{showstyle:''}
+        templateUrl:"pages/mall_manage/style_manage/style_index/style_index.html"
       })
       .state("choose_series",{ /*系列/风格/属性管理-选择拥有系列的分类*/
         url:"/choose_series",
@@ -239,17 +233,11 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("series_detail",{ /*系列/风格/属性管理-系列详情页*/
         url:"/series_detail",
-
-        templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html",
-        params:{item:'',ser_arr:'',index:''},
-
         templateUrl:"pages/mall_manage/style_manage/series_detail/series_detail.html"
-
       })
       .state("add_style",{ /*系列/风格/属性管理-风格-添加新风格*/
         url:"/add_style",
-        templateUrl:"pages/mall_manage/style_manage/add_style/add_style.html",
-        params:{style_arr:''}
+        templateUrl:"pages/mall_manage/style_manage/add_style/add_style.html"
       })
       .state("choose_style",{ /*系列/风格/属性管理-风格-选择拥有风格的分类*/
         url:"/choose_style",
@@ -257,79 +245,10 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
       .state("style_detail",{ /*系列/风格/属性管理-风格-风格详情*/
         url:"/style_detail",
-
-        templateUrl:"pages/mall_manage/style_manage/style_detail/style_detail.html",
-        params:{style_item:'',style_arr:'',index:''}
-      })
-  //========================张放====================================
-      .state('intelligent',{//智能报价头部
-          url:'/intelligent/',
-          templateUrl:'pages/intelligent/index.html',
-          css:'pages/intelligent/css/intelligent_header.css'
-      })
-      .state('intelligent.intelligent_index',{//智能报价首页
-          url:'index',
-          templateUrl:'pages/intelligent/intelligent_index.html',
-          css:'pages/intelligent/css/intelligent_index.css'
-      })
-      .state('intelligent.house_list',{//智能报价小区列表
-          url:'house_list',
-          templateUrl:'pages/intelligent/house_list.html',
-          css:'pages/intelligent/css/house_list.css'
-      })
-      .state('intelligent.add_house',{//智能报价添加/编辑小区
-          url:'add_house',
-          templateUrl:'pages/intelligent/add_house.html',
-          css:'pages/intelligent/css/add_house.css'
-      })
-      .state('intelligent.add_case',{//智能报价添加/编辑案例
-          url:'add_case',
-          templateUrl:'pages/intelligent/add_case.html',
-          css:'pages/intelligent/css/add_case.css'
-      })
-      .state('intelligent.edit_house',{//智能报价添加/编辑普通小区
-          url:'edit_house',
-          templateUrl:'pages/intelligent/edit_house.html',
-          css:'pages/intelligent/css/edit_house.css'
-      })
-      .state('intelligent.add_drawing',{//智能报价添加/编辑普通小区图纸
-          url:'add_drawing',
-          templateUrl:'pages/intelligent/add_drawing.html',
-          css:'pages/intelligent/css/add_drawing.css'
-      })
-      .state('intelligent.add_support_goods',{//智能报价案列/社区店配套商品管理
-          url:'add_support_goods',
-          templateUrl:'pages/intelligent/add_support_goods.html',
-          css:'pages/intelligent/css/add_support_goods.css'
-      })
-      .state('intelligent.worker_price_list',{//智能报价工人资费列表
-          url:'worker_price_list',
-          templateUrl:'pages/intelligent/worker_price_list.html',
-          css:'pages/intelligent/css/worker_price_list.css'
-      })
-      .state('intelligent.edit_worker',{//智能报价工人资费编辑
-          url:'edit_worker',
-          templateUrl:'pages/intelligent/edit_worker.html',
-          css:'pages/intelligent/css/edit_worker.css'
-      })
-      // .state('intelligent.add_worker',{
-      //     url:'add_worker',
-      //     templateUrl:'pages/intelligent/add_worker.html',
-      //     css:'pages/intelligent/css/add_worker.css'
-      // })
-      .state('intelligent.home_manage',{//智能报价首页管理
-          url:'home_manage',
-          templateUrl:'pages/intelligent/home_manage.html',
-          css:'pages/intelligent/css/home_manage.css'
-      })
-      .state('intelligent.add_manage',{//添加推荐
-          url:'add_manage',
-          templateUrl:'pages/intelligent/add_manage.html',
-          css:'pages/intelligent/css/add_manage.css'
-      })
-
-      })
-
+        templateUrl:"pages/mall_manage/style_manage/style_detail/style_detail.html"
+      });
+  //============================================================
+})
   .directive('wdatePicker',function(){
     return{
       restrict:"A",

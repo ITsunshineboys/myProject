@@ -4,7 +4,7 @@
     <div class="topnav">
         <span class="glyphicon glyphicon-certificate"></span>
         <h6>商城管理 ></h6>
-        <h6>分类管理</h6>
+        <h6>首页推荐</h6>
         <h6>> 分类详情 </h6>
     </div>
 
@@ -29,33 +29,13 @@
                 <option value="" selected="selected">基础材料</option>
                 <option value="">主材料</option>
             </select>
-<<<<<<< Updated upstream
-            <select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-model="changescope.secselect" ng-options="item.id as item.title for item in secondclass">
-                <!--<option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>-->
-=======
             <select name="suoshukuang" class="belong">
                 <option value="" selected="selected">墙面材料</option>
                 <option value="">板材类</option>
->>>>>>> Stashed changes
             </select>
         </div>
 
         <!--分类图片-->
-<<<<<<< Updated upstream
-            <div class="cla_pic">
-                <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span class="each_title">分类图片</span>
-                <div class="upload_pic">
-                    <img ng-src="{{iconpath}}" alt="" id="cla_pic_uploadpic">
-                    <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
-                    <div id="upload">
-                        <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
-                    </div>
-                    <div ng-show="picwarning" class="red_mark warning">
-                        <span class="glyphicon glyphicon-asterisk"></span>
-                        <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
-                    </div>
-=======
         <div class="cla_pic">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类图片</span>
@@ -70,7 +50,6 @@
                 <div class="reload_tishi">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
->>>>>>> Stashed changes
                 </div>
             </div>
         </div>
@@ -80,11 +59,7 @@
         <div class="cla_des">
             <span class="each_title" id="describclass">分类描述</span>
             <div id="edit_tool">
-<<<<<<< Updated upstream
-                <div class="ueditor" ng-model="onlinedes" config="config"></div>
-=======
                 <div class="ueditor" ng-model="content" id="editor"></div>
->>>>>>> Stashed changes
             </div>
         </div>
         <div class="divider"></div>
@@ -92,12 +67,12 @@
         <div class="info">
             <p>
                 <span>添加人员</span>
-                <span ng-bind="addperson"></span>
+                <span>森林木地板专营店</span>
             </p>
 
             <p>
                 <span>上架时间</span>
-                <span ng-bind="online_time"></span>
+                <span>2017-05-21 12:21</span>
             </p>
         </div>
 
@@ -144,13 +119,8 @@
                 </div>
 
                 <div class="btn_modal">
-<<<<<<< Updated upstream
-                    <button id="shuru_cancel" data-dismiss="modal" ng-click="cancelOffInEdit()">取消</button>
-                    <button id="shuru_sure" data-dismiss="modal" ng-click="sureoffline()">确认</button>
-=======
                     <button id="shuru_cancel">取消</button>
                     <button id="shuru_sure">确认</button>
->>>>>>> Stashed changes
                 </div>
             </div>
         </div>

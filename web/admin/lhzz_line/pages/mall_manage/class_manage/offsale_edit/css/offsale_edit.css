@@ -56,7 +56,7 @@
 .divider{
     height: 1px;
     width: 90%;
-    margin-top: 26px;
+    margin-top: 34px;
     margin-left:19px;
     background-color: #BFC0C2;
 }
@@ -80,25 +80,18 @@
 
 /*分类图片*/
 .cla_pic{
-    margin-top: 66px;
+    height: 220px;
+    margin-top: 40px;
 }
 
 .upload_pic{
-    display: inline-block;
-    vertical-align: top;
+    display: inline;
 }
 
-<<<<<<< Updated upstream
-.upload_pic img{
-    width: 120px;
-    height: 120px;
-=======
 #cla_pic_uploadpic{
     position: relative;
     top:40px;
->>>>>>> Stashed changes
 }
-
 
 .upload_tishi{
     font-size: 12px;
@@ -106,20 +99,18 @@
 
 .upload_pic h6{
     font-size: 12px;
-    color: #ABABAB;
-    margin-top: 10px;
+    width: 300px;
+    color: #BFC0C2;
+    position: relative;
+    top:46px;
+    left: 172px;
 }
 
-#upload {
-    width: 67px;
-    height: 24px;
-    font-size: 12px;
-    text-align: center;
-    line-height: 24px;
-    color: #666F80;
-    background-color: #FFFFFF;
-    border-radius: 3px;
-    margin-top: 4px;
+#upload{
+    width: 300px;
+    position: relative;
+    top: 43px;
+    left: 172px;
 }
 
 #upload_btn{
@@ -134,10 +125,15 @@
     background-color: white;
 }
 
-.warning{
+.reload_tishi{
+    width: 300px;
     font-size: 12px;
-    margin-top: 10px;
+    color: red;
+    position: relative;
+    top: 49px;
+    left: 172px;
 }
+
 /*分类描述*/
 .cla_des{
     margin-top: 32px;

@@ -21,9 +21,14 @@
                 <button class="xiajia_btn" data-toggle="modal" data-target="#piliangxiajia_modal" ng-click="piliangxiajia()">下架</button>
                 <span class="fenleichoose_span">分类选择</span>
                 <!--/*分类选择一级下拉框*/-->
-                <select name=""  class="fenleichoose" ng-model="firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+                <select name="" ng-init="firstselect='0'" class="fenleichoose" ng-model="firstselect"
+                        ng-change="subClass(firstselect)">
+                    <option ng-repeat="item in firstclass" value={{item.id}}>{{item.title}}</option>
+                </select>
                 <!--/*分类选择二级菜单*/-->
-                <select name="" class="cailiaochoose" ng-show="firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="secselect"></select>
+                <select name="" class="cailiaochoose" ng-show="firstselect=='0'?false:true" ng-init="secselect='0'" ng-model="secselect">
+                    <option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>
+                </select>
 
                 <button class="chaxun" ng-click="chaxun()">查询</button>
             </div>
@@ -57,11 +62,7 @@
                         <td>{{item.online_time}}</td>
                         <td>{{item.applicant}}</td>
                         <td class="yesGreen">{{item.status}}</td>
-<<<<<<< Updated upstream
-                        <td class="edit" ui-sref="onsale_edit({classtitle:item.title,classid:item.id,classlevel:item.level,classtitles:item.titles,classpath:item.path,iconpath:item.icon,addperson:item.applicant,online_time:item.online_time})" ng-click="onlineEdit(item.id,item.level)">编辑</td>
-=======
                         <td class="edit" ui-sref="onsale_edit({classtitle:item.title,classid:item.id,classlevel:item.level})" ng-click="onlineEdit(item.id,item.level)">编辑</td>
->>>>>>> Stashed changes
                         <td class="xiajia" data-toggle="modal" data-target="#xiajia_modal" ng-click="tobeoffline(item.id,item.level)">下架</td>
                     </tr>
                 </table>
@@ -87,10 +88,15 @@
                 <button class="chooseall_btn">全选</button>
                 <button class="xiajia_btn" data-toggle="modal" data-target="#piliangshangjia_modal" ng-click="piliangshangjia()">上架</button>
                 <span class="fenleichoose_span">分类选择</span>
-                <!--/*分类选择一级下拉框*/-->
-                <select name=""  class="fenleichoose" ng-model="firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+                <!--分类选择一级菜单-->
+                <select name="" ng-init="firstselect='0'" class="fenleichoose" ng-model="firstselect"
+                        ng-change="subClass(firstselect)">
+                    <option ng-repeat="item in firstclass" value={{item.id}}>{{item.title}}</option>
+                </select>
                 <!--/*分类选择二级菜单*/-->
-                <select name="" class="cailiaochoose" ng-show="firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="secselect"></select>
+                <select name="" class="cailiaochoose" ng-show="firstselect=='0'?false:true" ng-init="secselect='0'" ng-model="secselect">
+                    <option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>
+                </select>
                 <button class="chaxun" ng-click="offchaxun()">查询</button>
             </div>
 
@@ -123,13 +129,8 @@
                         <td>{{item.offline_time}}</td>
                         <td>{{item.applicant}}</td>
                         <td class="yesred">{{item.status}}</td>
-<<<<<<< Updated upstream
-                        <td id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal" ng-click="resetOffReason(item.id,item.offline_reason)">点击输入</td>
-                        <td class="edit" ui-sref="offsale_edit({classtitle:item.title,classid:item.id,classlevel:item.level,classtitles:item.titles,classpath:item.path,iconpath:item.icon,addperson:item.applicant,offline_time:item.offline_time})">编辑</td>
-=======
                         <td id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal">点击输入</td>
                         <td class="edit" ui-sref="offsale_edit({classtitle:item.title,classid:item.id,classlevel:item.level})">编辑</td>
->>>>>>> Stashed changes
                         <td class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="tobeonline(item.id,item.level)">上架</td>
                     </tr>
                 </table>
@@ -269,31 +270,5 @@
         </div>
     </div>
 
-<<<<<<< Updated upstream
-    <!--已下架 下架原因模态框-->
-    <div class="modal fade" id="shuru_modal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="shuru_content">
-                <div class="modal-header" id="shuru_header">
-                    <h4 class="modal-title" id="shurucaozuo">
-                        下架原因
-                    </h4>
-                </div>
-                <div class="modal-body" id="shuru_body">
-                    <h6 id="shuru_reason">下架原因（选填）</h6>
-                    <textarea name="" id="shuru_textarea" cols="50" rows="14"
-                              placeholder={{offline_reason==''?'请填写下架原因，如选择多个则为批量备注':''}} ng-model="xiajiareason"></textarea>
-                </div>
-
-                <div class="btn_modal">
-                    <button data-dismiss="modal" id="shuru_cancel" ng-click="cancelReset()">取消</button>
-                    <button data-dismiss="modal" id="shuru_sure" ng-click="surereset()">确认</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-=======
->>>>>>> Stashed changes
 
 </div>

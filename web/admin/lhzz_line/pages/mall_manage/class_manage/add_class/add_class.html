@@ -4,12 +4,10 @@
     <div class="topnav">
         <span class="glyphicon glyphicon-certificate"></span>
         <h6>商城管理 ></h6>
-        <h6>分类管理</h6>
+        <h6>首页推荐</h6>
         <h6>> 添加分类 </h6>
     </div>
 
-
-    <div class=class_detail>
     <!--分类详情-->
     <div class="cla_detail">
         <!--分类名称-->
@@ -34,20 +32,6 @@
             </select>
         </div>
 
-<<<<<<< Updated upstream
-    <div class="cla_pic">
-        <span class="glyphicon glyphicon-asterisk red_mark"></span>
-        <span class="each_title">分类图片</span>
-        <div class="upload_pic">
-            <img ng-src="{{iconpath}}" alt="" id="cla_pic_uploadpic">
-            <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
-            <div id="upload">
-                <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
-            </div>
-            <div class="red_mark warning" ng-show="picwarning">
-                <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span>{{picwarningtext}}</span>
-=======
         <!--分类图片-->
         <div class="cla_pic">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
@@ -63,7 +47,6 @@
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
                 </div>
->>>>>>> Stashed changes
             </div>
         </div>
         <div class="divider"></div>
@@ -71,47 +54,25 @@
         <!--分类描述-->
         <div class="cla_des">
             <span class="each_title">分类描述</span>
-<<<<<<< Updated upstream
-            <div id="edit_tool">
-                <div class="ueditor" ng-model="addclassdes" config="config"></div>
-            </div>
-=======
             <div id="edit_tool">此处应为富文本编辑器</div>
->>>>>>> Stashed changes
         </div>
         <div class="divider"></div>
 
+        <div class="info">
+            <p>
+                <span>添加人员</span>
+                <span>森林木地板专营店</span>
+            </p>
 
-        <div class="btn_sure">
-<<<<<<< Updated upstream
-            <!--#save_tishi-->
-            <button ng-click="sureaddclass()" data-toggle="modal" data-target={{savemodal}}>确认</button>
-            <button ui-sref="fenleiguanli">返回</button>
+            <p>
+                <span>上架时间</span>
+                <span>2017-05-21 12:21</span>
+            </p>
         </div>
 
-    </div>
-
-    <!--保存提示模态框-->
-    <div class="modal fade" id="save_tishi">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
-                </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">保存成功</h6>
-                </div>
-
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" ng-click="suresave()" data-dismiss="modal">确认</button>
-                </div>
-            </div>
-=======
+        <div class="btn_sure">
             <button>确认</button>
             <button>返回</button>
->>>>>>> Stashed changes
         </div>
     </div>
     </div>

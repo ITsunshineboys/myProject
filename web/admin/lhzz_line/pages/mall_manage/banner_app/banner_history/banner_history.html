@@ -30,49 +30,6 @@
     </div>
     <!--选择时间结束-->
 
-<<<<<<< Updated upstream
-        <!--Table内容  开始-->
-        <div class="tabTable">
-            <table>
-                <tr class="th">
-                    <td>类型</td>
-                    <td>商品编号</td>
-                    <td>标题</td>
-                    <td>来源商家</td>
-                    <td>上架浏览</td>
-                    <td>上架销量</td>
-                    <td>平台价格</td>
-                    <td>创建时间</td>
-                    <td>图片</td>
-                </tr>
-                <tr ng-repeat="item in recommendList">
-                    <td>{{item.from_type}}</td>
-                    <td>{{item.sku=='0'?'无':item.sku}}</td>
-                    <td>{{item.title}}</td>
-                    <td><a href="">{{item.supplier_name==''?'链接':item.supplier_name}}</a></td>
-                    <td>{{item.viewed_number}}</td>
-                    <td>{{item.sold_number}}</td>
-                    <td ng-if="item.sku!='0'">{{item.platform_price}}</td>
-                    <td ng-if="item.sku=='0'">—</td>
-                    <td>{{item.create_time}}</td>
-                    <td><img id="show_img_size" ng-src="http://test.cdlhzz.cn:888/{{item.image}}" alt=""></td>
-                </tr>
-            </table>
-        </div>
-        <!--Table内容  结束-->
-
-        <!--分页开始-->
-        <ul class="pages">
-            <li ng-click="Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-            <li class="pagenum" ng-repeat="page in banner_history_list" ng-click="choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-            <!--<li id="omit" ng-show="allpages>5">...</li>-->
-            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="Next()">下一页</li>
-            <li id="jumpto"><input type="text" ng-model="topage"></li>
-            <li ng-click="choosePage(topage)">跳转</li>
-        </ul>
-        <!--分页结束-->
-=======
     <!--Table内容-->
     <div class="tabTable">
         <table width="100%">
@@ -142,7 +99,6 @@
                 </td>
             </tr>
         </table>
->>>>>>> Stashed changes
     </div>
 </div>
 </div>
