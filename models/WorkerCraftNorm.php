@@ -43,4 +43,18 @@ class WorkerCraftNorm extends ActiveRecord
             ->where(['and',['labor_cost_id'=>$id],['worker_kind_details'=>$details]])
             ->one();
     }
+
+    /**
+     * Find everything by id all
+     * @param $id
+     * @return array|ActiveRecord[]
+     */
+    public static function findByLaborCostAll($id)
+    {
+        return self::find()
+            ->asArray()
+            ->select('quantity,worker_kind_details')
+            ->where(['labor_cost_id'=>$id])
+            ->all();
+    }
 }
