@@ -1329,7 +1329,7 @@ CREATE TABLE `worker_order_img` (
 
 CREATE TABLE `work_result_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_day_id` int(11) NOT NULL DEFAULT '0' COMMENT '工作日期id',
+  `order_day_result_id` int(11) NOT NULL DEFAULT '0' COMMENT '工作日期id',
   `result_img_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '工作成果图片名称',
   `result_img` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '工作单成果图片地址',
   PRIMARY KEY (`id`)
