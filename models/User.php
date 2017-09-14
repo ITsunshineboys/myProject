@@ -431,6 +431,14 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
 
+            if ($this->deadtime) {
+                $supplier = UserRole::roleUser($this, Yii::$app->params['supplierRoleId']);
+                if ($supplier) {
+                    $admin = UserRole::roleUser($operator, $operator->login_role_id);
+                    $supplier->offline($admin);
+                }
+            }
+
             $tran->commit();
             $code = 200;
             return $code;
