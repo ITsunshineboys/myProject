@@ -29,8 +29,52 @@ class OrderGoods extends ActiveRecord
         $data=self::find()
             ->where(['order_no'=>$order_no])
             ->andWhere(['sku'=>$sku])
-            ->asArray()
             ->one();
         return $data;
+    }
+
+    /**
+     * @param array $postData
+     * @param $user
+     * @return int
+     */
+    public static  function  UserConfirmReceipt($postData=[],$user)
+    {
+            if (!array_key_exists('order_no',$postData) || !array_key_exists('sku',$postData)){
+                $code=1000;
+                return $code;
+            }
+            $GoodsOrder=GoodsOrder::FindByOrderNo($postData['order_no']);
+            $OrderGoods=self::FindByOrderNoAndSku($postData['order_no'],$postData['sku']);
+            if (!$OrderGoods
+                || $user->id !=$GoodsOrder->user_id
+                || $OrderGoods->shipping_status!=1)
+            {
+                $code=1034;
+                return $code;
+            }
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $OrderGoods->shipping_status=2;
+                $OrderGoods->order_status=1;
+                $res=$OrderGoods->save();
+                if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+                $code=200;
+                $tran->commit();
+                return $code;
+            }catch (Exception $e)
+            {
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+
+
+
     }
 }

@@ -198,7 +198,6 @@ class GoodsOrder extends ActiveRecord
         {
             $data=self::find()
                 ->where(['order_no'=>$order_no])
-                ->asArray()
                 ->one();
             return $data;
         }
@@ -1100,9 +1099,15 @@ class GoodsOrder extends ActiveRecord
                     ->asArray()
                     ->one()['waybillnumber'];
                 $express=Express::findByWayBillNumber($waybillnumber);
-                $data[$k]['send_time']=$express->create_time;
-                $data[$k]['RemainingTime']=Express::findRemainingTime($express);
-                $data[$k]['complete_time']=$express->receive_time;
+                if (!$express){
+                    $data[$k]['send_time']=0;
+                    $data[$k]['RemainingTime']=0;
+                    $data[$k]['complete_time']=0;
+                }else{
+                    $data[$k]['send_time']=$express->create_time;
+                    $data[$k]['RemainingTime']=Express::findRemainingTime($express);
+                    $data[$k]['complete_time']=$express->receive_time;
+                }
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             $data[$k]['pay_term']=0;
