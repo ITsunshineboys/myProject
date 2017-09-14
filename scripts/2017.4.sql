@@ -157,21 +157,6 @@ CREATE TABLE `project` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `worker` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(11) unsigned not null default 0,
-  `nickname` varchar(25) not null DEFAULT '' COMMENT '工人姓名',
-  `project_manager_id` int(11) unsigned not null DEFAULT 0 COMMENT '项目经理“id”',
-  `work_type_id` int(11) unsigned not null DEFAULT 0 COMMENT '工种类型“id”',
-  `icon` varchar(255) not null DEFAULT '' COMMENT '头像地址',
-  `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
-  `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
-  `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
-  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
-  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 create table work_type (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL DEFAULT '',
