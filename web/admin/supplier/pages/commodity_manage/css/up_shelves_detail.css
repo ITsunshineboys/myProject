@@ -121,35 +121,69 @@ hr{
 .filter_pic{
   margin-top: 30px;
 }
-.filter_pic img{
-  margin-left: -25px;
-}
-
-.first_pic{
+.pic_right{
+  display: inline-block;
+  vertical-align: top;
   margin-left: 85px;
 }
 
-.filter_pic div{
+.pic_right img{
+  width: 120px;
+  height: 120px;
+}
+.img_list{
   display: inline-block;
-  border: 1px solid #666f80;
+  margin-right: 10px;
+  position: relative;
+}
+
+.def_gray{
+  font-size: 12px;
+  color: #ABABAB;
+  margin-top: 3px;
+}
+
+.upload_btn{
+  width: 67px;
+  height: 24px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 24px;
+  color: #666F80;
+  background-color: #FFFFFF;
+  border: 1px solid #666F80;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+
+
+.warning{
+  font-size: 12px;
+  margin-top: 6px;
+  color: #E51C23;
+}
+.filter_pic_red{
+  margin-left: -25px;
+}
+.logo{
   width: 138px;
   height: 138px;
+}
+.img_list{
+  display: inline-block;
   margin-right: 10px;
-  vertical-align:text-top;
+  position: relative;
 }
-
-
-.pic_rule{
-  display: inline-block;
-  color: #ABABAB;
-  margin-top: 5px;
-  margin-left: 135px;
-}
-.pic_warning{
-  display: inline-block;
+.img_times{
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  font-size: 30px;
   color: red;
-  margin-top: 5px;
-  margin-left: 135px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #ddd;
 }
 
 .buy_price{
@@ -221,27 +255,22 @@ hr{
 .template select{
   margin-left: 85px;
 }
-.template div{
+.template_div{
   margin-left: 145px;
   margin-top: 15px;
   color:#666F80;
   font-size: 14px;
 }
-.template div span:nth-child(2){
-  margin-left:45px;
-
+/*清楚number上下箭头*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance:textfield;
 }
-.template div span:nth-child(6){
-  margin-left: 45px;
+.margin_r{
+  margin-right: 50px;
 }
-.template div span:nth-child(11){
-  margin-left: 45px;
-}
-.template div span:nth-child(15){
-  margin-left: 45px;
-}
-.template div span:nth-child(17){
-  margin-left:105px;
+.template_span{
+  margin-right:10px;
 }
 .service{
   margin-bottom: 30px;
@@ -297,8 +326,31 @@ hr{
   background-color: white;
   border: 1px solid #5E6166;
   margin-left: 10px;
+  border-radius: 3px;
 }
 .btn_back button:nth-child(1){
   color:#487AF8;
-
+  border: 1px solid #487AF8;
+  background-color: #F2F4FF;
+}
+.border_red{
+  border: 1px solid red!important;
+  outline: 0;
+}
+.people_time{
+  margin: 30px 0 0 145px;
+}
+.people_time_right{
+  margin-right: 50px;
+}
+.pic_rule{
+  display: inline-block;
+  margin: 20px 0 0 145px;
+}
+.show_city{
+  height: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }

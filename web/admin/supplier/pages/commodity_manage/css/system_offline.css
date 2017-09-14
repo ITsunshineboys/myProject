@@ -76,10 +76,6 @@ section{
     margin-top: 20px
 }
 
-/*.attr_set ul{*/
-   /**/
-/*}*/
-
 .attr_set ul li{
     float: left;
     width: 60px;
@@ -97,27 +93,13 @@ section{
 .margin_left_280{
     margin-left: 280px;
 }
+.city_right{
+    margin-right: 45px;
+}
+.city_change{
+    margin-right: 10px;
+}
 
-.new_attr span:nth-child(2){
-    margin-left: 12px!important;
-}
-.new_attr input:nth-child(3){
-    width: 140px;
-    height: 31px;
-    border: 1px solid #ABABAB;
-    margin-left: 10px;
-}
-.new_attr input:nth-child(4){
-    margin-left: 35px;
-}
-.new_attr span:nth-child(5){
-    margin-left:40px!important;
-    color: #666F80!important;
-}
-.new_attr span:nth-child(6){
-    margin-left:50px!important;
-    color: #ABABAB;
-}
 hr{
     margin-left: 6px;
     width: 90%;
@@ -126,29 +108,38 @@ hr{
 .filter_pic{
     margin-top: 30px;
 }
-.filter_pic img{
-    margin-left: -25px;
-}
-
 .first_pic{
-    margin-left: 85px;
-}
-
-.filter_pic div{
     display: inline-block;
-    border: 1px solid #666f80;
-    width: 138px;
-    height: 138px;
-    margin-right: 10px;
+}
+.filter_pic_cover_img{
+    display: inline-block;
+    margin-left:101px;
+    width: 120px;
+    height: 120px;
     vertical-align:text-top;
 }
-
+.filter_pic_img{
+    display: inline-block;
+    margin: 0 10px 0 10px;
+    width: 120px;
+    height: 120px;
+    vertical-align:text-top;
+    /*float: left;*/
+}
+.filter_pic_img:first-child{
+    margin: 0 10px 0 115px;
+}
+/*.first_pic:after{*/
+    /*content: '';*/
+    /*display: table;*/
+    /*clear: both;*/
+/*}*/
 
 .pic_rule{
     display: inline-block;
     color: #ABABAB;
     margin-top: 5px;
-    margin-left: 135px;
+    margin-left: 145px;
 }
 .pic_warning{
     display: inline-block;
@@ -242,21 +233,9 @@ hr{
     color:#666F80;
     font-size: 14px;
 }
-.template div span:nth-child(2){
+.template_left{
     margin-left:45px;
 
-}
-.template div span:nth-child(6){
-    margin-left: 45px;
-}
-.template div span:nth-child(11){
-    margin-left: 45px;
-}
-.template div span:nth-child(15){
-    margin-left: 45px;
-}
-.template div span:nth-child(17){
-    margin-left:105px;
 }
 .service{
     margin-bottom: 30px;
@@ -266,8 +245,9 @@ hr{
     vertical-align:text-top;
 }
 .service ul {
-    margin-left:110px;
-    margin-top: -20px;
+    margin-left:125px;
+    /*float: left;*/
+    /*margin-top: -20px;*/
 }
 
 .service ul li{
@@ -286,7 +266,7 @@ hr{
 }
 
 .erweima img{
-    margin-left: 42px;
+    margin-left: 45px;
     width: 172px;
     vertical-align:text-top;
 }
@@ -301,11 +281,11 @@ hr{
 }
 
 
-.detail div{
+.detail textarea{
     width: 700px;
     height:380px ;
     border: 1px solid #666f80;
-    margin-left: 148px;
+    margin-left: 88px;
 }
 .btn_back{
     margin-top: 40px;
@@ -316,9 +296,6 @@ hr{
     height:34px;
     background-color: white;
     border: 1px solid #5E6166;
-    margin-left: 10px;
+    border-radius: 3px;
 }
-.btn_back button:nth-child(1){
-    color:#487AF8;
 
-}
