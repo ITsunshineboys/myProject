@@ -52,7 +52,7 @@ class WorkerItem extends \yii\db\ActiveRecord
 
 
     /**
-     * get craft by item_id
+     * 根据父级条目查询工艺列表
      * @param $item_id
      * @return array|null
      */

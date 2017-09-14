@@ -11,6 +11,14 @@ use yii\db\ActiveRecord;
 
 class EngineeringStandardCarpentryCoefficient extends ActiveRecord
 {
+    const FIELDS_ADMIN =[
+        'id',
+        'project',
+        'value',
+        'coefficient',
+        'series_or_style',
+    ];
+
     /**
      * @return string 返回该AR类关联的数据表名
      */

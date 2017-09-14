@@ -71,7 +71,7 @@ class LaborCost extends ActiveRecord
     {
         $labors = self::find()
             ->asArray()
-            ->where(['and',['city_code' => $arr['city']],['worker_kind_details'=>$craft],['rank'=>$rank]])
+            ->where(['and',['city_code' => $arr],['worker_kind'=>$craft],['rank'=>$rank]])
             ->one();
         return $labors;
     }

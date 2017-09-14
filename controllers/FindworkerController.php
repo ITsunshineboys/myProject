@@ -360,5 +360,10 @@ class FindworkerController extends Controller{
             ]
         ]);
     }
-
+    public function actionTest(){
+        $order_id=trim(\Yii::$app->request->get('order_id'));
+        $item_id=trim(\Yii::$app->request->get('item_id'));
+        $data=WorkerOrderItem::getorderitemview($order_id,$item_id);
+        var_dump($data);
+    }
 }

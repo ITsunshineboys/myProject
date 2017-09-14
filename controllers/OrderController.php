@@ -2333,4 +2333,34 @@ class OrderController extends Controller
         }
     }
 
+     /**
+     * 用户确认收货
+     * @return string
+     */
+    public  function  actionUserConfirmReceipt()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData=Yii::$app->request->post();
+        $code=OrderGoods::UserConfirmReceipt($postData,$user);
+        if ($code==200)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
 }

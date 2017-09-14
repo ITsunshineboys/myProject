@@ -198,10 +198,52 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 工程标准修改 木作修改
+     * @return string
+     */
     public function actionProjectNormWoodworkEdit()
     {
         $post = \Yii::$app->request->post();
+        foreach ($post['value'] as $one_post){
+            if (isset($one_post['id'])){
+                $value = EngineeringStandardCraft::findOne($one_post['id']);
+                $value->material = $one_post['value'];
+                $value->save();
+            } else {
+                $value = new EngineeringStandardCraft();
+                $value->district_code   = $post['district_code'];
+                $value->project         = $post['project'];
+                $value->project_details = $one_post['name'];
+                $value->material        = $one_post['value'];
+                $value->save();
+            }
+        }
 
+        foreach ($post['specification'] as $one_specification){
+            $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
+            $specification->value = $one_specification['value'];
+            $specification->save();
+        }
+
+        foreach ($post['coefficient'] as $one_coefficient){
+            if (isset($one_coefficient['id'])){
+                $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
+                $coefficient->value = $one_coefficient['value'];
+                $coefficient->save();
+            } else {
+                $coefficient = new EngineeringStandardCarpentryCoefficient();
+                $coefficient->project  = $one_coefficient['project'];
+                $coefficient->value  = $one_coefficient['value'];
+                $coefficient->coefficient  = $one_coefficient['coefficient'];
+                $coefficient->series_or_style  = $one_coefficient['series_or_style'];
+                $coefficient->save();
+            }
+        }
+        return Json::encode([
+           'code'=>200,
+            'msg'=>'OK'
+        ]);
     }
 
 
@@ -217,9 +259,29 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 系数管理 修改
+     * @return string
+     */
     public function actionCoefficientAdd()
     {
         $post = \Yii::$app->request->post();
+        foreach ($post as $one_post){
+            if (isset($one_post['id'])){
+                $coefficient = CoefficientManagement::findOne($one_post['id']);
+                $coefficient->coefficient = $post['coefficient'];
+                $coefficient->save();
+            } else {
+                $coefficient = new CoefficientManagement();
+                $coefficient->classify = $post['classify'];
+                $coefficient->coefficient = $post['coefficient'];
+                $coefficient->save();
+            }
+        }
+        return Json::encode([
+           'code'=>200,
+            'msg'=>'OK'
+        ]);
     }
 
     /**

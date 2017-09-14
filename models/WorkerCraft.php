@@ -43,4 +43,17 @@ class WorkerCraft extends \yii\db\ActiveRecord
             'craft' => '工艺',
         ];
     }
+    /**
+     * 获取工艺名称
+     * @param $id
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public static function getcraftitle($id){
+        return self::find()
+            ->asArray()
+            ->select('id,craft,item_id')
+            ->where(['id'=>$id])
+            ->one();
+
+    }
 }
