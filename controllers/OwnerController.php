@@ -1047,8 +1047,9 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         $handyman = '杂工';
         $labor = LaborCost::profession($post, '杂工');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 //        总天数
-        $total_day = BasisDecorationService::wallArea($post, $labor);
+        $total_day = BasisDecorationService::wallArea($post,$worker_kind_details);
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($handyman, $post['city']);
         if ($post['building_scrap'] == true) {
@@ -1057,7 +1058,7 @@ class OwnerController extends Controller
             $building_scrap = BasisDecorationService::nothingBuildingScrap($post, $craft);
         }
 //        总人工费
-        $labor_cost['price'] = $total_day['total_day'] * $labor[0]['univalence'] + $building_scrap['cost'];
+        $labor_cost['price'] = $total_day['total_day'] * $labor['univalence'] + $building_scrap['cost'];
         $labor_cost['worker_kind'] = $handyman;
         //材料费
         $material = ['水泥', '河沙', '空心砖'];
