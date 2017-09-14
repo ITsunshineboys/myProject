@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="pages/mall_manage/brand_manage/brand_check/css/brand_check.css"/>
+<div ng-controller="brand_check_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">商城管理 ></span>
+            <span class="shop_manage">商家管理 ></span>
+            <span class="shop_manage">商家详情 ></span>
+            <span class="manage_child">品牌授权详情</span>
+            <img src="pages/mall_manage/brand_manage/brand_check/images/user.png" alt=""/>
+        </div>
+    </header>
+    <section>
+        <!--品牌分类-->
+        <div class="shop_name">
+            <span>品牌分类</span>
+            <span>{{item.category_titles[0].root_category_title}}-{{item.category_titles[0].parent_category_title}}-{{item.category_titles[0].level3_category_titles}}</span>
+        </div>
+        <!--品牌名称-->
+        <div class="shop_name">
+            <span>品牌名称</span>
+            <span>{{item.name}}</span>
+        </div>
+        <!--授权期限-->
+        <div class="shop_name">
+            <span>授权期限</span>
+            <span>2017-10-05 至 2018-10-05</span>
+        </div>
+
+        <hr/>
+        <!--授权书上传-->
+        <div class="shop_img">
+            <span>授权书上传</span>
+            <img src="" alt=""/>
+        </div>
+        <!--逐级授权-->
+        <div class="shop_img_more">
+            <span>逐级授权</span>
+            <img src="" alt=""/>
+        </div>
+        <hr/>
+        <!--商家名称-->
+        <div class="shop_name">
+            <span>商家名称</span>
+            <span>{{item.supplier_name}}</span>
+        </div>
+        <!--账户申请-->
+        <div class="shop_name">
+            <span>申请账户</span>
+            <span>123456789</span>
+        </div>
+        <!--申请时间-->
+        <div class="shop_name">
+            <span>申请时间</span>
+            <span>{{item.review_time}}</span>
+        </div>
+        <hr/>
+        <!--审核状态-->
+        <div class="shop_select">
+            <span>审核状态</span>
+            <select ng-model="myng.check_select" ng-options="item.value as item.name for item in check_arr">
+            </select>
+        </div>
+        <!--审核备注-->
+        <div class="shop_input">
+            <span>审核备注</span>
+            <textarea ng-model="review_txt" placeholder="请填写不通过/通过原因"></textarea>
+        </div>
+        <!--按钮-->
+        <div class="btn_back">
+            <button class="btn_ok" data-toggle="modal" data-target="#review_modal">确认</button>
+            <button ui-sref="brand_index({check_flag:true})">返回</button>
+        </div>
+    </section>
+    <!--确认模态框-->
+    <div class="modal fade" id="review_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">审核备注</h4>
+                </div>
+                <div class="modal-body">
+                    <span>是否确认审核？</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="review_btn()">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

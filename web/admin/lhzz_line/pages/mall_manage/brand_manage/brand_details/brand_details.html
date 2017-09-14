@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="pages/mall_manage/brand_manage/brand_details/css/brand_details.css"/>
+<div ng-controller="brand_details_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage">商城管理 ></span>
+            <span class="shop_manage">商家管理 ></span>
+            <span class="shop_manage">商家详情 ></span>
+            <span class="manage_child">品牌授权详情</span>
+            <img src="pages/mall_manage/brand_manage/brand_details/images/user.png" alt=""/>
+        </div>
+    </header>
+    <section>
+        <!--所属分类-->
+        <div class="shop_name">
+            <span>所属分类</span>
+            <span>{{item.category_titles[0].root_category_title}}-{{item.category_titles[0].parent_category_title}}-{{item.category_titles[0].level3_category_titles}}</span>
+        </div>
+        <!--品牌-->
+        <div class="shop_num">
+            <span>品牌</span>
+            <span>{{item.name}}</span>
+        </div>
+        <!--授权期限-->
+        <div class="shop_name">
+            <span>授权期限</span>
+            <span>2017-10-05 至 2018-10-05</span>
+        </div>
+
+        <hr/>
+        <!--授权书上传-->
+        <div class="shop_img">
+            <span>授权书上传</span>
+            <img ng-src="http://test.cdlhzz.cn:888/{{item.certificate}}" alt=""/>
+        </div>
+        <!--逐级授权-->
+        <div class="shop_img_more">
+            <span>逐级授权</span>
+            <img ng-src="http://test.cdlhzz.cn:888/{{item.logo}}" alt=""/>
+        </div>
+        <hr/>
+        <!--申请人-->
+        <div class="shop_name">
+            <span>商家名称</span>
+            <span>{{item.supplier_name}}</span>
+        </div>
+        <!--账户申请-->
+        <div class="shop_name">
+            <span>申请账户</span>
+            <span>{{item.mobile}}</span>
+        </div>
+        <!--申请时间-->
+        <div class="shop_name">
+            <span>申请时间</span>
+            <span>{{item.create_time}}</span>
+        </div>
+        <hr/>
+        <!--审核状态-->
+        <div class="shop_name">
+            <span>审核状态</span>
+            <span class="green" ng-if="item.review_status=='审核通过'">{{item.review_status}}</span>
+            <span class="red" ng-if="item.review_status=='审核不通过'">{{item.review_status}}</span>
+        </div>
+        <!--审核备注-->
+        <div class="shop_name">
+            <span>审核备注</span>
+            <span>{{item.reason}}</span>
+        </div>
+        <!--按钮-->
+        <div class="btn_back">
+            <button ui-sref="brand_index({check_flag:true})">返回</button>
+        </div>
+    </section>
+</div>

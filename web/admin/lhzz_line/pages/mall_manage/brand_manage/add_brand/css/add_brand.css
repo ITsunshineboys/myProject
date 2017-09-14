@@ -55,10 +55,11 @@ ul{
     width: 245px;
     height: 31px;
     margin-left: 87px;
-    border: 1px solid #999!important;
+    border: 1px solid #999;
     border-radius: 3px;
     padding-left: 10px;
     line-height: 31px;
+    outline: 0;
 }
 
 .company_type p{
@@ -84,15 +85,12 @@ ul{
 .pic_right{
     display: inline-block;
     vertical-align: top;
+    margin-left: 50px;
 }
 
 .pic_right img{
     width: 120px;
     height: 120px;
-}
-
-.pic_right{
-    margin-left: 50px;
 }
 
 .pic_right p:nth-child(2){
@@ -116,7 +114,7 @@ ul{
 
 .warning{
     font-size: 12px;
-    margin-left: 16px;
+    margin-left: 50px;
     margin-top: 6px;
 }
 
@@ -137,50 +135,6 @@ ul{
     margin-bottom: 30px;
 }
 
-
-/*选择品牌所在分类*/
-.ulright{
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 36px;
-}
-
-.ulright ul{
-    display: inline-block;
-    width: 161px;
-    height: 444px;
-    padding-left: 10px;
-    border: 1px solid #ABABAB;
-    margin-right: 9px;
-    vertical-align: top;
-}
-
-.ulright ul li{
-    padding-top: 9px;
-    padding-bottom: 9px;
-    border-bottom: 1px solid #ABABAB;
-}
-
-.thirdul{
-    width: 180px!important;
-}
-
-.lastul li{
-    padding: 6px 7px 8px 7px;
-    text-align: start;
-    margin:  9px 9px 9px 0;
-    border: 1px solid #5677FC;
-    color: #5677FC;
-    position: relative;
-}
-
-.lastul img{
-    position: absolute;
-    width: 24px;
-    left: 104px;
-    top: 7px;
-
-}
 
 /*第三个分割线*/
 #thirdhr{
@@ -227,4 +181,52 @@ ul{
     background-color: #F2F4FF;
 }
 
+/*选择拥有系列的分类*/
+.ulright{
+    display: inline-block;
+    margin-top: 11px;
+}
 
+.ulright ul{
+    display: inline-block;
+    width: 161px;
+    height: 313px;
+    padding-left: 10px;
+    border: 1px solid #ABABAB;
+    margin-right: 9px;
+    vertical-align: top;
+    /*padding-bottom: 20px;*/
+    overflow: auto;
+}
+.active{
+    color: #487AF8;
+}
+.ulright ul li{
+    padding-top: 9px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #ABABAB;
+}
+
+.thirdul{
+    width: 180px!important;
+}
+
+.lastul li{
+    padding: 6px 7px 8px 7px;
+    text-align: start;
+    margin:  9px 9px 9px 0;
+    border: 1px solid #5677FC;
+    color: #5677FC;
+    position: relative;
+}
+
+.lastul img{
+    position: absolute;
+    width: 24px;
+    left: 92px;
+    top: 7px;
+
+}
+.border_red{
+    border:1px solid red!important;
+}

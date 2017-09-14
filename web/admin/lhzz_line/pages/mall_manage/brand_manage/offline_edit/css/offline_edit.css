@@ -54,11 +54,11 @@ ul{
     margin-left: 87px;
     width: 245px;
     height: 31px;
-    margin-left: 87px;
-    border: 1px solid #999!important;
+    border: 1px solid #999;
     border-radius: 3px;
     padding-left: 10px;
     line-height: 31px;
+    outline: 0;
 }
 
 .company_type p{
@@ -190,7 +190,8 @@ ul{
 
 
 /*下架原因*/
-.offline_reason textarea{
+.offline_reason_content{
+    display: inline-block;
     margin-left: 88px;
     vertical-align: top;
     width: 749px;
@@ -219,8 +220,7 @@ ul{
 
 /*按钮组*/
 .btn_sure{
-    margin-top: 62px;
-    margin-bottom: 308px;
+    margin: 30px 0;
 }
 
 .btn_sure button{
@@ -239,6 +239,13 @@ ul{
 #save{
     color: #487AF8;
     background-color: #F2F4FF;
+}
+/*选择拥有系列的分类*/
+.active{
+    color: #487AF8;
+}
+.border_red{
+    border:1px solid red!important;
 }
 
 
