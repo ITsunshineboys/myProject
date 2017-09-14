@@ -43,6 +43,7 @@ CREATE TABLE `user` (
   `birthday` int(8) unsigned not null DEFAULT 0,
   `district_code` int(6) unsigned not null default 0 comment '区域码',
   `district_name` varchar(50) NOT NULL DEFAULT '' comment '区域名',
+  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
   `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
   `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
   PRIMARY KEY (`id`)
@@ -71,6 +72,8 @@ CREATE TABLE `decoration_company` (
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   `pay_password` varchar(100) NOT NULL,
+  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
+  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -83,6 +86,8 @@ CREATE TABLE `designer` (
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
+  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
+  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -95,6 +100,8 @@ CREATE TABLE `project_manager` (
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
+  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
+  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -160,6 +167,8 @@ CREATE TABLE `worker` (
   `approve_reason` varchar(100) not null DEFAULT '' comment '同意原因',
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
+  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
+  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
