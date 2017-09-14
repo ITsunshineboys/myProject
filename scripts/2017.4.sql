@@ -44,7 +44,7 @@ CREATE TABLE `user` (
   `district_code` int(6) unsigned not null default 0 comment '区域码',
   `district_name` varchar(50) NOT NULL DEFAULT '' comment '区域名',
   `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
-  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
+  `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -73,7 +73,7 @@ CREATE TABLE `decoration_company` (
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   `pay_password` varchar(100) NOT NULL,
   `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
-  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
+  `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -87,7 +87,7 @@ CREATE TABLE `designer` (
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
   `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
-  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
+  `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -101,7 +101,7 @@ CREATE TABLE `project_manager` (
   `reject_reason` varchar(100) not null DEFAULT '' comment '拒绝原因',
   `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
   `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
-  `balance` bigint not null DEFAULT 0 comment '余额, unit: fen',
+  `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1258,6 +1258,7 @@ CREATE TABLE `worker` (
   `level` tinyint(1) NOT NULL DEFAULT '1' COMMENT '工人级别',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `signature` varchar(100) NOT NULL DEFAULT '' COMMENT '个性签名',
+  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
@@ -1494,3 +1495,13 @@ CREATE TABLE `coefficient_management` (
   `coefficient` float(10,2) DEFAULT NULL COMMENT '系数值',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user_freezelist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `freeze_money` bigint(20) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `freeze_reason` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
