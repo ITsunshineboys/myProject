@@ -365,8 +365,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return false;
         }
     }
-
-
     /**
      * 生成订单
      * @param $uid
