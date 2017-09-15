@@ -707,32 +707,76 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
     /**
-     * * 获取订单详情订单信息
      * @param $order_no
-     * @param $goods_id
-     * @return array
+     * @param $sku
+     * @return array|null
      */
-    public function Getorderinformation($order_no){
-        $array=self::getorderlist()->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.order_id,z.goods_price,a.order_refer,a.buyer_message')->where(['a.order_no'=>$order_no])->all();
+    public function Getorderinformation($order_no,$sku){
+        $select='a.pay_name,
+               z.order_status,
+               z.customer_service,
+               z.shipping_status,
+               a.pay_status,
+               a.create_time,
+               a.user_id,
+               a.address_id,
+               z.goods_name,
+               a.amount_order,
+               z.goods_number,
+               z.freight,
+               a.order_no,
+               a.create_time,
+               a.paytime,
+               a.user_id,
+               a.address_id,
+               a.return_insurance,
+               z.goods_id,
+               z.goods_attr_id,
+               z.sku,
+               a.address_id,
+               a.invoice_id,
+               supplier_price,
+               z.market_price,
+               b.waybillnumber,
+               b.waybillname,
+               z.shipping_type,
+               z.order_id,
+               z.goods_price,
+               a.order_refer,
+               a.buyer_message,
+               z.comment_id,
+               a.consignee,
+               a.district_code,
+               a.region,
+               a.consignee_mobile,
+               a.invoice_type,
+               a.invoice_header_type,
+               a.invoice_header,
+               a.invoicer_card,
+               a.invoice_content,
+               z.cover_image';
+        $array=self::getorderlist()
+            ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
+              ->select($select)
+            ->where(['a.order_no'=>$order_no,'z.sku'=>$sku])
+            ->all();
         $arr=self::getorderstatus($array);
+        if(!$arr){
+            return null;
+        }
         $output=array();
         $goods_num=0;
         foreach($arr as $k=>$v){
-            $arr[$k]['amount_order']= sprintf('%.2f', (float) $arr[$k]['amount_order']*0.01);
-            $arr[$k]['freight']= sprintf('%.2f', (float)$arr[$k]['freight']*0.01);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
-            $output['amount_order']=$arr[$k]['amount_order'];
-            $output['return_insurance']=$arr[$k]['return_insurance'];
-            $output['freight']=$arr[$k]['freight'];
+            $output['amount_order']=self::switchMoney(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+            $output['return_insurance']=self::switchMoney($arr[$k]['return_insurance']);
+            $output['freight']=self::switchMoney($arr[$k]['freight']*0.01);
             $output['address_id']=$arr[$k]['address_id'];
             $output['invoice_id']=$arr[$k]['invoice_id'];
-            $output['goods_price']=$arr[$k]['goods_price'];
-            $output['supplier_price']=$arr[$k]['supplier_price'];
-            $output['market_price']=$arr[$k]['market_price'];
+            $output['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+            $output['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+            $output['market_price']=self::switchMoney($arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
             $output['order_no']=$arr[$k]['order_no'];
+            $output['buyer_message']=$arr[$k]['buyer_message'];
             $output['create_time']=$arr[$k]['create_time'];
             $output['pay_name']=$arr[$k]['pay_name'];
             $output['paytime']=date('Y-m-d H:i:s',$arr[$k]['paytime']);
@@ -744,15 +788,42 @@ class GoodsOrder extends ActiveRecord
             $output['goods_name']=$arr[$k]['goods_name'];
             $output['waybillnumber']=$arr[$k]['waybillnumber'];
             $output['waybillname']=$arr[$k]['waybillname'];
+            if (!empty($output['waybillnumber']) && !empty($output['waybillnumber']))
+            {
+                $output['shipping_way']=$output['waybillname'].'('.$output['waybillnumber'].')';
+            }else{
+                $output['shipping_way']='';
+            }
             $output['shipping_type']=$arr[$k]['shipping_type'];
-            $user=(new Query())->from('user')->where(['id'=>$arr[$k]['user_id']])->one();
+            $output['consignee']=$arr[$k]['consignee'];
+            $output['consignee_mobile']=$arr[$k]['consignee_mobile'];
+            $output['district_code']=$arr[$k]['district_code'];
+            $output['region']=$arr[$k]['region'];
+            $output['invoice_type']=$arr[$k]['invoice_type'];
+            $output['invoice_header_type']=$arr[$k]['invoice_header_type'];
+            $output['invoice_header']=$arr[$k]['invoice_header'];
+            $output['invoicer_card']=$arr[$k]['invoicer_card'];
+            $output['invoice_content']=$arr[$k]['invoice_content'];
+            $output['cover_image']=$arr[$k]['cover_image'];
+            $user=User::find()
+                ->where(['id'=>$arr[$k]['user_id']])
+                ->asArray()
+                ->one();
             $output['username']=$user['nickname'];
 
             if (empty($output['username'])){
-                $output['username']=(new Query())->from('user_address')->where(['id'=>$arr[$k]['address_id']])->one()['consignee'];
+                $output['username']=(new Query())
+                    ->from('user_address')
+                    ->where(['id'=>$arr[$k]['address_id']])
+                    ->one()['consignee'];
                 $output['role']='平台';
             }else{
-                $output['role']=(new Query())->from('user_role as a')->select('b.name')->leftJoin('role as b','a.role_id=b.id')->where(['a.user_id'=>$arr[$k]['user_id']])->one()['role'];
+                $output['role']=(new Query())
+                    ->from(UserRole::tableName().' as a')
+                    ->select('b.name')
+                    ->leftJoin(Role::tableName().' as b','a.role_id=b.id')
+                    ->where(['a.user_id'=>$arr[$k]['user_id']])
+                    ->one()['name'];
                 if (!$output['role']){
                     $output['role']='平台';
                 }
@@ -764,7 +835,7 @@ class GoodsOrder extends ActiveRecord
             $time=time();
             $pay_term=(strtotime($output['create_time'])+1800);
             if (($pay_term-$time)<0){
-                $res=Yii::$app->db->createCommand()->update('order_goodslist', ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
+                $res=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
                 $output['pay_term']=0;
                 $output['status']='已取消';
             }else{

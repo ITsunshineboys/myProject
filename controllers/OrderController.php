@@ -1059,8 +1059,9 @@ class OrderController extends Controller
      */
     public function actionGetsupplierorderdetails(){
             $request=Yii::$app->request;
-            $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
-            if(!$order_no){
+            $order_no=trim($request->post('order_no',''));
+            $sku=trim($request->post('sku',''));
+            if(!$order_no || !$sku){
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -1068,7 +1069,7 @@ class OrderController extends Controller
                 ]);
             }
             //获取订单信息
-            $order_information=(new GoodsOrder())->Getorderinformation($order_no);
+            $order_information=(new GoodsOrder())->Getorderinformation($order_no,$sku);
             if (!$order_information) {
                 $code = 500;
                 return Json::encode([
@@ -1076,7 +1077,7 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-            //获取商品信息W
+            //获取商品信息
             $goods_name=$order_information['goods_name'];
             $goods_id=$order_information['goods_id'];
             $goods_attr_id=$order_information['goods_attr_id'];
@@ -1091,36 +1092,17 @@ class OrderController extends Controller
                 ]);
             }
             //获取收货详情
-            $address_id=$order_information['address_id'];
-            $invoice_id=$order_information['invoice_id'];
-            $address=Addressadd::find()->where(['id'=>$address_id])->asArray()->one();
-            if (!$address){
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => '收货地址不存在'
-                ]);
-            }
 
-            $model=new LogisticsDistrict();
-            $address['district']=$model->getdistrict($address['district']);
-            $invoice=Invoice::find()->where(['id'=>$invoice_id])->asArray()->one();
-            if (!$invoice){
-                $code = 500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => '发票信息为空'
-                ]);
-            }
-            $receive_details['consignee']=$address['consignee'];
-            $receive_details['mobile']=$address['mobile'];
-            $receive_details['district']=$address['district'];
-            $receive_details['region']=$address['region'];
-            $receive_details['invoice_header']=$invoice['invoice_header'];
-            $receive_details['invoice_header_type']=$invoice['invoice_header_type'];
-            $receive_details['invoice_content']=$invoice['invoice_content'];
-            $receive_details['invoicer_card'] = $invoice['invoicer_card'];
-            switch ($invoice['invoice_header_type']){
+            $receive_details['consignee']=$order_information['consignee'];
+            $receive_details['consignee_mobile']=$order_information['consignee_mobile'];
+            $receive_details['district']=LogisticsDistrict::getdistrict($order_information['district_code']);
+            $receive_details['region']=$order_information['region'];
+            $receive_details['invoice_header']=$order_information['invoice_header'];
+            $receive_details['invoice_header_type']=$order_information['invoice_header_type'];
+            $receive_details['invoice_content']=$order_information['invoice_content'];
+            $receive_details['invoicer_card'] = $order_information['invoicer_card'];
+            $receive_details['buyer_message'] = $order_information['buyer_message'];
+            switch ($order_information['invoice_header_type']){
                 case 1:
                     $receive_details['invoice_header_type']='个人';
                     break;
@@ -1143,7 +1125,7 @@ class OrderController extends Controller
               $goods_data['return_insurance']=$order_information['return_insurance'];
               $goods_data['supplier_price']=$order_information['supplier_price'];
               $goods_data['market_price']=$order_information['market_price'];
-              $goods_data['shipping_way']=$order_information['waybillname'].'('.$order_information['waybillnumber'].')';
+              $goods_data['shipping_way']=$order_information['shipping_way'];
               if ($order_information['shipping_type']==1){
                   $goods_data['shipping_way']='送货上门';
               }
