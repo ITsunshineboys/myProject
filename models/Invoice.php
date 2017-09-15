@@ -19,6 +19,16 @@ class Invoice extends ActiveRecord
     {
         return 'invoice';
     }
+
+    /**
+     * @param $invoice_id
+     * @return array|null|ActiveRecord
+     */
+    public static function  findById($invoice_id)
+    {
+        $data=self::find()->where(['id'=>$invoice_id])->one();
+        return $data;
+    }
     /**
      * @param   线下商城添加发票信息
      * @return array
@@ -35,7 +45,6 @@ class Invoice extends ActiveRecord
                 $invoice->invoice_header=$invoice_header;
                 $invoice->invoice_type=$invoice_type;
                 $invoice->invoice_content=$invoice_content;
-                $invoice->creat_time=$creat_time;
                 $invoice->invoicer_card=$invoicer_card;
                 $invoice->invoicetoken=$invoicetoken;
                 $res=$invoice->save();
@@ -53,7 +62,6 @@ class Invoice extends ActiveRecord
                 $model->invoice_header=$invoice_header;
                 $model->invoice_type=$invoice_type;
                 $model->invoice_content=$invoice_content;
-                $model->creat_time=$creat_time;
                 $model->invoicer_card=$invoicer_card;
                 $model->invoicetoken=$invoicetoken;
                 $res=$model->save();
@@ -72,6 +80,7 @@ class Invoice extends ActiveRecord
                 }
             }
     }
+
 
     /**
      * @param $invoice_type
@@ -102,7 +111,6 @@ class Invoice extends ActiveRecord
                     return $code;
                 }
             }
-            $time=date('Y-m-d H:i:s',time());
             $invoice_add=new self;
             $invoice_add->invoice_type=$invoice_type;
             $invoice_add->invoice_header_type=$invoice_header_type;
@@ -147,7 +155,7 @@ class Invoice extends ActiveRecord
      * @param $user
      * @return int
      */
-    public static  function  setDefaultInvoice($invoice_id,$user)
+    public static function  setDefaultInvoice($invoice_id,$user)
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
@@ -179,7 +187,6 @@ class Invoice extends ActiveRecord
             return $code;
         }
     }
-
 
     /**
      * @param $invoice_type
