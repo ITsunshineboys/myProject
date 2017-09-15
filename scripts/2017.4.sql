@@ -1527,4 +1527,24 @@ CREATE TABLE `worker_order_day_result` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- 9.15 start
 
+CREATE TABLE `worker_works` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `worker_id` int(11) NOT NULL DEFAULT '0' COMMENT '工人id',
+  `order_no` int(11) NOT NULL DEFAULT '0' COMMENT '工人订单号',
+  `title` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `desc` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '作品描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='工人作品表';
+
+
+
+CREATE TABLE `worker_works_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `works_id` int(11) NOT NULL DEFAULT 0 COMMENT '工人作品id',
+  `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '状态: 0:无效, 1:前, 2:中, 3:后',
+  `desc` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '描述',
+  `img_ids` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '图片,work_result_img的id,逗号分隔',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='工人作品详情';
