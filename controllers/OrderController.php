@@ -283,15 +283,15 @@ class OrderController extends Controller
             ]);
         }
     }
-    /**
+     /**
      * 无登录app-获取商品信息
      * @return string
      */
     public function actionGetgoodsdata(){
         $request = Yii::$app->request;
         if ($request->isPost) {
-            $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
-            $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
+            $goods_id=trim($request->post('goods_id'));
+            $goods_num=trim($request->post('goods_num'));
             if (!$goods_id || !$goods_num){
                 $code=1000;
                 return Json::encode([
@@ -312,8 +312,7 @@ class OrderController extends Controller
             $code=1050;
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
     }

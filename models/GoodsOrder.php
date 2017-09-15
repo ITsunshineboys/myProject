@@ -561,27 +561,38 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-     /**
-      * 获取商品信息-线下店商城
+    /**
      * @param $goods_id
      * @param $goods_num
-     * @param $goods_attr
      * @return array|bool
      */
     public static  function Getlinegoodsdata($goods_id, $goods_num){
-            $array  =(new Query())->from('goods AS a')->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.cover_image,b.icon,c.name,a.sku')->leftJoin(self::SUPPLIER.' AS b', 'b.id = a.supplier_id')->leftJoin('goods_brand AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])->one();
-                $logistics_template=(new Query())->from('logistics_template')->select('supplier_id,delivery_method,delivery_cost_default,delivery_number_default,delivery_cost_delta,delivery_number_delta,status')->where(['status'=>1,'id'=>$array['logistics_template_id']])->one();
+            $array  =(new Query())
+                ->from(Goods::tableName().' AS a')
+                ->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.market_price,a.cover_image,b.icon,c.name,a.sku')
+                ->leftJoin(self::SUPPLIER.' AS b', 'b.id = a.supplier_id')
+                ->leftJoin(GoodsBrand::tableName().' AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])
+                ->one();
+                $logistics_template=(new Query())
+                    ->from(LogisticsTemplate::tableName())
+                    ->select('supplier_id,delivery_method,delivery_cost_default,delivery_number_default,delivery_cost_delta,delivery_number_delta,status')
+                    ->where(['status'=>1,'id'=>$array['logistics_template_id']])
+                    ->one();
             if ($logistics_template['delivery_method']==1){
                 $array['freight']=0;
             }else{
-                $array['freight']=$logistics_template['delivery_cost_default']*0.01*$logistics_template['delivery_number_default']+$logistics_template['delivery_cost_delta']*0.01*$logistics_template['delivery_number_delta'];
+                if ($goods_num<=$logistics_template['delivery_number_default'])
+                {
+                    $array['freight']=$logistics_template['delivery_cost_default']*0.01;
+                }else{
+                    $array['freight']=$logistics_template['delivery_cost_default']*0.01+$logistics_template['delivery_cost_delta']*0.01*($goods_num-$logistics_template['delivery_number_default']);
+                }
             }
             $array['goods_num']=$goods_num;
-            $array['present_price']=$goods_num*0.01*$array['platform_price'];
-            $array['original_price']=$goods_num*0.01*$array['platform_price'];
-            unset($array['platform_price']);
-            unset($array['market_price']);
             $array['return_insurance']=0;
+            $array['platform_price']=self::switchMoney($array['platform_price']*0.01);
+            $array['market_price']=self::switchMoney($array['market_price']*0.01);
+            $array['freight']=self::switchMoney($array['freight']);
             return $array;
         }
     /**
