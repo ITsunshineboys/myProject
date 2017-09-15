@@ -376,12 +376,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return string
      */
     public static function dataeveryday($start_time,$end_time){
-
         $days = ($end_time-$start_time)/86400+1;
-        // 保存每天日期
         $date =[];
         for($i=0; $i<$days; $i++){
-            $date[] = date('Y-m-d', $start_time+(86400*$i));
+            $date[] = date('Ymd', $start_time+(86400*$i));
         }
         return implode(',',$date);
     }
