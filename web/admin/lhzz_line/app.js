@@ -133,10 +133,10 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       url:"/merchant_details",
       templateUrl:"pages/mall_manage/merchant_manage/merchant_comment/merchant_details.html"
     })
-    .state("comment",{
-    url:"/comment",
-    templateUrl:"pages/mall_manage/merchant_manage/merchant_comment/comment.html"
-  })
+  //   .state("comment",{
+  //   url:"/comment",
+  //   templateUrl:"pages/mall_manage/merchant_manage/merchant_comment/comment.html"
+  // })
 
     .state("check_right",{
     url:"/check_right",
