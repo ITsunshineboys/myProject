@@ -1885,7 +1885,7 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder[$k]['status']='未付款';
             $GoodsOrder[$k]['comment_grade']='';
             $GoodsOrder[$k]['handle']='';
-            $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->shop_name;
+            $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
@@ -1962,7 +1962,7 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
             $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
-            $arr[$k]['shop_name']=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one()->shop_name;
+            $arr[$k]['shop_name']=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one()->nickname;
             $arr_list=[];
             $arr_list['goods_name']=$arr[$k]['goods_name'];
             $arr_list['goods_price']=$arr[$k]['goods_price'];
