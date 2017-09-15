@@ -16,6 +16,15 @@ header{
 header img{
   margin-left:70%;
 }
+
+.goodattrs>div:not(:first-child){
+  margin-top: 15px;
+}
+
+.picarr img{
+  width: 120px;
+  height: 120px;
+}
 /*头部结束*/
 section{
   padding-left: 40px;
@@ -25,6 +34,7 @@ section{
 .margin_left{
   margin-left: 85px;
 }
+
 .margin_top{
   margin-top: 15px;
 }
@@ -33,8 +43,8 @@ section{
   vertical-align: top;
 }
 .img_size{
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 120px;
   background-color:#ccc;
 }
 .font_size{
@@ -81,4 +91,65 @@ hr{
   border: 1px solid #487AF8;
 }
 /*公共样式结束*/
+.coverimg{
+  position: relative;
+}
+
+#coverimg_span{
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50px;
+  height: 24px;
+  font-size: 12px;
+  background: #000000;
+  color: #fff;
+  text-align: center;
+  line-height: 24px;
+  z-index: 2;
+}
+
+.warning{
+  border: 1px solid red;
+}
+
+#save_body{
+  height: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.btn_modal_two{
+  overflow: hidden;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+
+#caozuo_sure,#caozuo_sure_end{
+  float: right;
+  width: 84px;
+  height: 36px;
+  padding-left: 5px;
+  line-height: 36px;
+  font-size: 12px;
+  color: #5e6166;
+  margin-top: 54px;
+  border: 1px solid #487AF8;
+  background-color: #F2F4FF;
+  border-radius: 3px;
+}
+
+input{
+  outline: none;
+}
+
+#save_body_end{
+  height: 100px;
+}
+
+#save_wenzi{
+  font-size: 16px;
+}
 

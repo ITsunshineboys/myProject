@@ -1,3 +1,7 @@
+input,button{
+    outline: none;
+}
+
 /*顶部导航*/
 .topnav {
     width: 100%;
@@ -81,7 +85,7 @@
     width: 245px;
     height: 31px;
     margin-left: 87px;
-    border: 1px solid #999!important;
+    border: 1px solid #999;
     border-radius: 3px;
     padding-left: 10px;
     line-height: 31px;
@@ -121,7 +125,7 @@ hr{
 /*上传营业执照*/
 .cla_pic{
     height: 220px;
-    margin-top: -20px;
+    margin-top: 8px;
 }
 
 .upload_pic{
@@ -148,7 +152,7 @@ hr{
     left: 148px;
 }
 
-#upload{
+.upload{
     width: 300px;
     position: relative;
     top: 43px;
@@ -183,11 +187,18 @@ hr{
  }
 
  /*法人身份证号*/
-#idnum{
+#idcard{
     margin-left: 59px;
 }
 
 #idfront{
+    position: relative;
+    top: 46px;
+    width: 120px;
+    left: 18px;
+}
+
+#idback{
     position: relative;
     top: 46px;
     width: 120px;
@@ -253,3 +264,19 @@ hr{
     float: right;
     margin-right: 40px;
 }
+
+.tored{
+    border: 1px solid red !important;
+}
+
+.picstyle{
+    height: 120px!important;
+}
+.warningred{
+    color: red;
+}
+
+.mar_left{
+    margin-left: 87px;
+}
+

@@ -41,7 +41,10 @@
 
 
 .panels{
-    margin-top: 100px;
+    width: 894px;
+    height: 250px;
+    /*margin-top: 100px;*/
+    margin: 100px auto 0;
 }
 
 .panels>div{
