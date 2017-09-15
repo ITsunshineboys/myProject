@@ -153,6 +153,7 @@ ul{
     border: 1px solid #ABABAB;
     margin-right: 9px;
     vertical-align: top;
+    overflow: auto;
 }
 
 .ulright ul li{
@@ -177,7 +178,7 @@ ul{
 .lastul img{
     position: absolute;
     width: 24px;
-    left: 104px;
+    right: 0;
     top: 7px;
 
 }
