@@ -110,19 +110,15 @@
             <!--属性管理按钮组-->
             <div class="attr_btns">
                 <span>分类选择</span>
-                <select name="">
-                    <option value="">全部</option>
-                </select>
+                <!--/*分类选择一级下拉框*/-->
+                <select name=""  ng-model="firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+                <!--/*分类选择二级菜单*/-->
+                <select name=""  ng-show="firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="secselect"></select>
 
-                <select name="" >
-                    <option value="">全部</option>
-                </select>
-
-                <button>查询</button>
+                <button ng-click="attrselect()">查询</button>
             </div>
 
             <!--属性管理表格-->
-            <!--风格管理Table内容-->
             <div class="series_mag_table">
                 <table>
                     <tr class="th">
@@ -136,18 +132,21 @@
                         <td>详情</td>
                     </tr>
 
-                    <tr>
-                        <td>水电材料</td>
-                        <td>PVC管</td>
-                        <td>2017-09-05 10:45</td>
-                        <td>运营01</td>
-                        <td>2</td>
-                        <td class="color_blue" ui-sref="edit_attribute">编辑</td>
+                    <tr ng-repeat="item in proptable">
+                        <td>{{item.parent_title}}</td>
+                        <td>{{item.title}}</td>
+                        <td>{{item.attr_op_time}}</td>
+                        <td>{{item.attr_op_username}}</td>
+                        <td>{{item.attr_number}}</td>
+                        <td class="color_blue" ui-sref="edit_attribute({titles:item.titles,propid:item.id,propattrs:item.attrs})">编辑</td>
                     </tr>
                 </table>
             </div>
 
         </div>
+
+
+
 
         <!--系列开启 模态框-->
         <div class="modal fade" id="open_modal" data-backdrop="static" data-keyboard="false">

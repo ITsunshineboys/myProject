@@ -242,4 +242,74 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
   };
 
 /*********************************风格结束*******************************/
+
+/*********************************属性开始*******************************/
+  /*分类选择下拉框*/
+  /*分类选择一级下拉框*/
+$scope.firstClass = (function () {
+  $http({
+    method: "get",
+    url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+  }).then(function (response) {
+    $scope.firstclass = response.data.data.categories;
+    $scope.firstselect = response.data.data.categories[0].id;
+  })
+})()
+
+  /*分类选择二级下拉框*/
+  $scope.subClass = function (obj) {
+    $http({
+      method: "get",
+      url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+      params: {pid: obj}
+    }).then(function (response) {
+      $scope.secondclass = response.data.data.categories;
+      $scope.secselect = response.data.data.categories[0].id;
+    })
+  }
+
+  /*属性管理table*/
+  $scope.allproperties = (function () {
+    $http({
+      method: "get",
+      url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+      // params:{"sort[]":"id:3"}
+    }).then(function (res) {
+      $scope.proptable = res.data.data.goods_attr_list_admin.details;
+    })
+  })()
+
+  /*属性分类选择*/
+  $scope.attrselect = function () {
+    /*只有一级下拉的全部*/
+    if(($scope.firstselect==0&&$scope.secselect==0)||($scope.firstselect==0&&$scope.secselect==undefined)){
+      $http({
+        method: "get",
+        url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+      }).then(function (res) {
+        $scope.proptable = res.data.data.goods_attr_list_admin.details;
+      })
+
+      /*二级下拉为全部*/
+    }else if($scope.firstselect!=0&&$scope.secselect==0){
+      $http({
+        method: "get",
+        url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+        params: {pid:$scope.firstselect},
+      }).then(function (res) {
+        $scope.proptable = res.data.data.goods_attr_list_admin.details;
+      })
+
+      /*两个都不为全部*/
+    }else if($scope.firstselect!=0&&$scope.secselect!=0){
+      $http({
+        method: "get",
+        url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+        params: {pid:$scope.secselect},
+      }).then(function (res) {
+        $scope.proptable =res.data.data.goods_attr_list_admin.details;
+      })
+    }
+  }
+/*********************************属性结束*******************************/
 });
