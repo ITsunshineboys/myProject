@@ -728,6 +728,9 @@ class OwnerController extends Controller
             }
         }
 
+        var_dump($series_and_style['putty']);
+        var_dump($putty_craft);
+        var_dump($putty_area);exit;
 //        腻子费用
         $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft, $putty_area);
 ////        底漆费用
