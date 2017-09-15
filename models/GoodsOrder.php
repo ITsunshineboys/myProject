@@ -1982,6 +1982,9 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['is_unusual']);
             unset($arr[$k]['comment_id']);
             unset($arr[$k]['return_insurance']);
+            unset($arr[$k]['send_time']);
+            unset($arr[$k]['complete_time']);
+            unset($arr[$k]['RemainingTime']);
             $arr[$k]['list']=[$arr_list];
         }
         return $arr;
