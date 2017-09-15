@@ -274,7 +274,7 @@ class SupplierCashController extends Controller
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
-        $status = trim(htmlspecialchars($request->post('status', 3)), '');
+        $status = trim(htmlspecialchars($request->post('status', self::CASH_STATUS_DONE)), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
 
         if (($time_type == 'custom' && (!$time_start || !$time_end))
@@ -328,7 +328,10 @@ class SupplierCashController extends Controller
             $reason = trim(htmlspecialchars($request->post('reason', '')), '');
             $real_money = (int)$request->post('real_money', '');
 
-            if (($status != 3 && $status != 4) || ($status == 3 && $real_money <= 0) || !$cash_id) {
+            if (($status != self::CASH_STATUS_DONE && $status != self::CASH_STATUS_FAIL)
+                || ($status == self::CASH_STATUS_DONE && $real_money <= 0)
+                || !$cash_id
+            ) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code]

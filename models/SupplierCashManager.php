@@ -188,7 +188,7 @@ class SupplierCashManager extends ActiveRecord
     {
         $data = (new Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['status' => 3, 'role_id' => self::ROLE_ID])
+            ->where(['status' => SupplierCashController::CASH_STATUS_DONE, 'role_id' => self::ROLE_ID])
             ->sum('cash_money');
 
         if ($data == null) {
@@ -205,7 +205,7 @@ class SupplierCashManager extends ActiveRecord
         $today = $this->getToday();
         $data = (new Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['status' => 3, 'role_id' => self::ROLE_ID])
+            ->where(['status' => SupplierCashController::CASH_STATUS_DONE, 'role_id' => self::ROLE_ID])
             ->andwhere('handle_time >= ' . $today[0])
             ->andWhere('handle_time <= ' . $today[1])
             ->sum('cash_money');
@@ -221,7 +221,12 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedCashesCountAll()
     {
-        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => [3, 4], 'role_id' => self::ROLE_ID])->count();
+        return (new Query())->from(self::SUP_CASHREGISTER)
+            ->where([
+                'status' => [SupplierCashController::CASH_STATUS_DONE, SupplierCashController::CASH_STATUS_FAIL],
+                'role_id' => self::ROLE_ID
+            ])
+            ->count();
     }
 
     /**
@@ -229,7 +234,11 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getNotPayedCashesCountAll()
     {
-        return (new Query())->from(self::SUP_CASHREGISTER)->where(['status' => [1, 2], 'role_id' => self::ROLE_ID])->count();
+        return (new Query())->from(self::SUP_CASHREGISTER)
+            ->where([
+                'status' => [SupplierCashController::CASH_STATUS_NOT_BEGIN, SupplierCashController::CASH_STATUS_ING], 'role_id' => self::ROLE_ID
+            ])
+            ->count();
     }
 
     /**
