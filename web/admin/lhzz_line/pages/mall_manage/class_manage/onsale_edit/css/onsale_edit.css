@@ -73,8 +73,7 @@
 .divider{
     height: 1px;
     width: 90%;
-    margin-top: 34px;
-    margin-left: 19px;
+    margin: 26px 0 19px 19px;
     background-color: #BFC0C2;
 }
 
@@ -97,18 +96,19 @@
 
 /*分类图片*/
 .cla_pic{
-    height: 220px;
-    margin-top: 40px;
+    margin-top: 66px;
 }
 
 .upload_pic{
-    display: inline;
+    display: inline-block;
+    vertical-align: top;
 }
 
-#cla_pic_uploadpic{
-    position: relative;
-    top: 40px;
+.upload_pic img{
+    width: 120px;
+    height: 120px;
 }
+
 
 .upload_tishi{
     font-size: 12px;
@@ -116,18 +116,20 @@
 
 .upload_pic h6{
     font-size: 12px;
-    width: 300px;
-    color: #BFC0C2;
-    position: relative;
-    top: 46px;
-    left: 172px;
+    color: #ABABAB;
+    margin-top: 10px;
 }
 
-#upload{
-    width: 300px;
-    position: relative;
-    top: 43px;
-    left: 172px;
+#upload {
+    width: 67px;
+    height: 24px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 24px;
+    color: #666F80;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    margin-top: 4px;
 }
 
 #upload_btn{
@@ -142,14 +144,19 @@
     background-color: white;
 }
 
-.reload_tishi{
-    width: 300px;
+.warning{
     font-size: 12px;
-    color: red;
-    position: relative;
-    top: 49px;
-    left: 172px;
+    margin-top: 10px;
 }
+
+/*.reload_tishi{*/
+    /*width: 300px;*/
+    /*font-size: 12px;*/
+    /*color: red;*/
+    /*position: relative;*/
+    /*top: 49px;*/
+    /*left: 172px;*/
+/*}*/
 
 /*分类描述*/
 .cla_des{
@@ -164,7 +171,6 @@
     display: inline-block;
     width: 623px;
     height: 337px;
-    /*background-color: #7A8599;*/
 }
 
 /*确认信息*/
@@ -297,6 +303,11 @@
 
 #describclass{
     position: relative!important;
-    top:-290px;
+    top:-362px;
     left: 0;
 }
+
+.ueditor{
+    width: 80%;
+}
+
