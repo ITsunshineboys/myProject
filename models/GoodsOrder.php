@@ -1917,7 +1917,7 @@ class GoodsOrder extends ActiveRecord
 
             return [
                 'total_page' =>$total_page,
-                'count'=>$count,
+                'count'=>count($data),
                 'details' => $data
             ];
         }else{
