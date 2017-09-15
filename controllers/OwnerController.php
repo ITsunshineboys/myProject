@@ -728,6 +728,8 @@ class OwnerController extends Controller
             }
         }
 
+        var_dump($series_and_style);
+        exit;
 //        腻子费用
         $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft, $putty_area);
 ////        底漆费用
@@ -1304,4 +1306,8 @@ class OwnerController extends Controller
         ]);
     }
 
+    public function actionPriceTotal()
+    {
+
+    }
 }

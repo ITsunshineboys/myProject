@@ -359,6 +359,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.page=1;
       //点击数字，跳转到多少页
       $scope.on_choosePage=function (page) {
+        $scope.selectAll=false;//取消全选
         if($scope.on_history_list.indexOf(parseInt(page))!=-1){
           $scope.page=page;
           $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
@@ -385,6 +386,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       }
       //上一页
       $scope.on_Previous=function () {
+        $scope.selectAll=false;//取消全选
         if($scope.page>1){                //当页数大于1时，执行
           $scope.page--;
           $scope.on_choosePage($scope.page);
@@ -392,6 +394,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       };
       //下一页
       $scope.on_Next=function () {
+        $scope.selectAll=false;//取消全选
         if($scope.page<$scope.on_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
           $scope.page++;
           $scope.on_choosePage($scope.page);
@@ -604,8 +607,13 @@ let commodity_manage = angular.module("commodity_manage",[])
     };
     /*--------已上架全选按钮----------*/
     $scope.selectAll=false;
+    $scope.up_list_arr_slice=[]
+    $scope.up_list_arr_slice=$scope.up_list_arr.slice(0,12);
     $scope.all= function (m) {
+      console.log($scope.up_list_arr);
+      console.log($scope.up_list_arr_slice);
       for(let[key,value] of $scope.up_list_arr.entries()){
+        console.log(value)
         m===true?(value.state=false,$scope.selectAll=false):(value.state=true,$scope.selectAll=true)
       }
     };
@@ -821,7 +829,48 @@ let commodity_manage = angular.module("commodity_manage",[])
         $scope.add_confirm_red=true;
       }
     };
-
+    //取消初始化
+      $scope.shop_add_close=function () {
+        $scope.item_check = [];
+        //获取一级
+        $http({
+          method: 'get',
+          url: 'http://test.cdlhzz.cn:888/mall/categories'
+        }).then(function successCallback(response) {
+          $scope.details = response.data.data.categories;
+          $scope.oneColor= $scope.details[0];
+          // console.log(response);
+          // console.log($scope.details)
+        });
+        //获取二级
+        $http({
+          method: 'get',
+          url: 'http://test.cdlhzz.cn:888/mall/categories?pid=1'
+        }).then(function successCallback(response) {
+          $scope.second = response.data.data.categories;
+          $scope.twoColor= $scope.second[0];
+          // console.log($scope.second)
+        });
+        //获取三级
+        $http({
+          method: 'get',
+          url: 'http://test.cdlhzz.cn:888/mall/categories?pid=2'
+        }).then(function successCallback(response) {
+          // console.log(response)
+          $scope.three = response.data.data.categories;
+          for(let [key,value] of $scope.three.entries()){
+            if($scope.item_check.length == 0){
+              value['complete'] = false
+            }else{
+              for(let [key1,value1] of $scope.item_check.entries()){
+                if(value.id == value1.id){
+                  value.complete = true
+                }
+              }
+            }
+          }
+        });
+      };
     /*--------------------已上架 结束-------------------------*/
 
     /*--------------------已下架 开始-------------------------*/

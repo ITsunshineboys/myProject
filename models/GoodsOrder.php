@@ -111,6 +111,7 @@ class GoodsOrder extends ActiveRecord
         'z.comment_id',
         'z.freight',
         'a.return_insurance',
+        'z.cover_image'
     ];
     const AFTER_SALE_SERVICES = [
         '提供发票',
@@ -1852,16 +1853,16 @@ class GoodsOrder extends ActiveRecord
         return $orderAmount;
     }
 
-  /**
+   /**
      * @param array $where
      * @param array $select
      * @param int $page
      * @param int $size
-     * @param $sort
+     * @param $type
      * @param $user
      * @return array
      */
-    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort,$user)
+    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user)
     {
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -1878,16 +1879,16 @@ class GoodsOrder extends ActiveRecord
             ->all();
         foreach ($GoodsOrder AS $k =>$v){
             $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
-
             $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
             $GoodsOrder[$k]['paytime']=date('Y-m-d h:i',$GoodsOrder[$k]['paytime']);
             $GoodsOrder[$k]['user_name']=$user->nickname;
             $GoodsOrder[$k]['status']='未付款';
             $GoodsOrder[$k]['comment_grade']='';
             $GoodsOrder[$k]['handle']='';
+            $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->shop_name;
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight')
+                ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
                 ->asArray()
                 ->all();
             foreach ($GoodsOrder[$k]['list'] as $key =>$val){
@@ -1903,6 +1904,7 @@ class GoodsOrder extends ActiveRecord
         }
         foreach ($arr as $key => $row)
         {
+            $arr[$key]['type']=$type;
             $create_time[$key]  = $arr[$key]['create_time'];
         }
         $arr=self::switchStatus($arr);
@@ -1915,7 +1917,7 @@ class GoodsOrder extends ActiveRecord
 
             return [
                 'total_page' =>$total_page,
-                'count'=>$count,
+                'count'=>count($data),
                 'details' => $data
             ];
         }else{
@@ -1926,6 +1928,7 @@ class GoodsOrder extends ActiveRecord
             ];
         }
     }
+
     /**
      * @param $arr
      * @return mixed
@@ -1959,6 +1962,7 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
             $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
+            $arr[$k]['shop_name']=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one()->shop_name;
             $arr_list=[];
             $arr_list['goods_name']=$arr[$k]['goods_name'];
             $arr_list['goods_price']=$arr[$k]['goods_price'];
@@ -1968,6 +1972,7 @@ class GoodsOrder extends ActiveRecord
             $arr_list['sku']=$arr[$k]['sku'];
             $arr_list['freight']=$arr[$k]['freight'];
             $arr_list['unusual']=$arr[$k]['unusual'];
+
             unset($arr[$k]['goods_name']);
             unset($arr[$k]['goods_price']);
             unset($arr[$k]['goods_number']);
@@ -1980,10 +1985,15 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['is_unusual']);
             unset($arr[$k]['comment_id']);
             unset($arr[$k]['return_insurance']);
+            unset($arr[$k]['send_time']);
+            unset($arr[$k]['complete_time']);
+            unset($arr[$k]['RemainingTime']);
+            unset($arr[$k]['supplier_id']);
             $arr[$k]['list']=[$arr_list];
         }
         return $arr;
     }
+
     /**
      * @param $data
      * @return string
