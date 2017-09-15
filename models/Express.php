@@ -67,8 +67,33 @@ class Express extends ActiveRecord
      * @return int
      */
     public static function Expressupdate($waybillnumber,$waybillname,$sku,$order_no){
-        $res=Yii::$app->db->createCommand()->update('express', ['waybillnumber' =>$waybillnumber,'waybillname'=>$waybillname], "sku=".$sku." and order_no=".$order_no)->execute();
-        return $res;
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $express=self::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
+            if (!$express)
+            {
+                $code=1000;
+                return $code;
+            }
+            $express->waybillnumber=$waybillnumber;
+            $express->waybillname=$waybillname;
+            $res=$express->save(false);
+            if (!$res)
+            {
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            $code=200;
+            $tran->commit();
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
     }
 
     /*

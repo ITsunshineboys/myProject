@@ -1077,6 +1077,7 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
+
             //获取商品信息
             $goods_name=$order_information['goods_name'];
             $goods_id=$order_information['goods_id'];
@@ -1091,6 +1092,7 @@ class OrderController extends Controller
                    'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
+            
             //获取收货详情
 
             $receive_details['consignee']=$order_information['consignee'];
@@ -1110,7 +1112,7 @@ class OrderController extends Controller
                     $receive_details['invoice_header_type']='公司';
                     break;
             }
-            $goods_data=array();
+              $goods_data=[];
               if ($order_information['goods_name']=='+'){
                   $goods_data['goods_name']='';
               }else{
@@ -1152,17 +1154,16 @@ class OrderController extends Controller
     }
 
     /**
-     * 去发货
+     * 去发货--商家后台
      * @return string
      */
     public function actionSupplierdelivery(){
         $request = Yii::$app->request;
-        $sku = trim(htmlspecialchars($request->post('sku', '')), '');
-        $order_no = trim(htmlspecialchars($request->post('order_no', '')), '');
-        $waybillname = trim(htmlspecialchars($request->post('waybillname', '')), '');
-        $waybillnumber = trim(htmlspecialchars($request->post('waybillnumber', '')), '');
-        $shipping_type = trim(htmlspecialchars($request->post('shipping_type', '')), '');
-
+        $sku = trim($request->post('sku', ''), '');
+        $order_no = trim($request->post('order_no', ''), '');
+        $waybillname = trim($request->post('waybillname', ''), '');
+        $waybillnumber = trim($request->post('waybillnumber', ''), '');
+        $shipping_type = trim($request->post('shipping_type', '0'), '');
         if ($shipping_type!=1){
             if (!$sku || !$waybillname || !$waybillnumber || !$order_no) {
                 $code = 1000;
@@ -1227,10 +1228,10 @@ class OrderController extends Controller
      */
     public function actionExpressupdate(){
         $request = Yii::$app->request;
-        $waybillname= trim(htmlspecialchars($request->post('waybillname', '')), '');
-        $waybillnumber= trim(htmlspecialchars($request->post('waybillnumber', '')), '');
-        $order_no= trim(htmlspecialchars($request->post('order_no', '')), '');
-        $sku=trim(htmlspecialchars($request->post('sku', '')), '');
+        $waybillname= trim($request->post('waybillname', ''));
+        $waybillnumber= trim($request->post('waybillnumber', ''));
+        $order_no= trim($request->post('order_no', ''));
+        $sku=trim($request->post('sku', ''));
         $data=Express::find()->select('waybillnumber,waybillname')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
         if (!$data || !$waybillnumber || !$waybillname){
             $code=1000;
@@ -1239,18 +1240,17 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $res=Express::Expressupdate($waybillnumber,$waybillname,$sku,$order_no);
-        if ($res){
+        $code=Express::Expressupdate($waybillnumber,$waybillname,$sku,$order_no);
+        if ($code==200){
             $code=200;
             return Json::encode([
                 'code' => $code,
                 'msg' => 'ok',
             ]);
         }else{
-            $code=500;
             return Json::encode([
                 'code' => $code,
-                'msg' => '修改失败，参数未做任何修改',
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
     }
