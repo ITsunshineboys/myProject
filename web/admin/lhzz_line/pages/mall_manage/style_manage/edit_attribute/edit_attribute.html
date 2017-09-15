@@ -12,12 +12,12 @@
     <section>
         <div class="top_title">
             <span style="margin-right: 80px">分类名称</span>
-            <span>基础材料—地点材料—pvc管</span>
+            <span ng-bind="titles"></span>
         </div>
         <hr>
         <div class="add_box">
-            <span class="add">下拉添加</span>
-            <span class="add">普通添加</span>
+            <span class="add" ng-click=selectAdd()>下拉添加</span>
+            <span class="add" ng-click="generalAdd()">普通添加</span>
         </div>
         <!--属性设置-->
         <div class="margin_top">
@@ -28,104 +28,32 @@
                     <td>属性内容</td>
                     <td>单位</td>
                 </tr>
-                <tr>
+
+                <!--属性添加-->
+                <tr ng-repeat="item in propattrs">
                     <td>&nbsp;</td>
                     <td class="padding_right">
                         <span >
                           <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
-                            <i class="glyphicon glyphicon-minus"></i>
+                           <i class="glyphicon glyphicon-minus" ng-click=deleteTr($index)></i>
                         </span>
-                        <input type="text" class="input_one" placeholder="请输入属性名称">
+                        <input type="text" class="input_one" ng-model="item.name" ng-blur=checkname(item.name,$index) ng-class={warningred:$index==temp&&iswarning==true}>
                     </td>
                     <td class="padding_right">
-                        <input  disabled="disabled" type="text" class="gay_input">
+                        <input type="text" class="normal_input" ng-model="item.value" disabled=disabled ng-show="item.addition_type==0">
+                        <input type="text" class="normal_input" ng-model="item.value" ng-show="item.addition_type==1" ng-class={warningred:$index==tempcontent&&iswarningcontent==true} ng-blur=checkContent(item.value,$index)>
                     </td>
                     <td class="padding_right">
-                        <select name="" class="select_css">
-                            <option value="">无</option>
-                            <option value="">L</option>
-                            <option value="">M²</option>
-                            <option value="">M</option>
-                            <option value="">kg</option>
-                        </select>
-                        <span class="attr_font">*属性名称限1～6个字</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td class="padding_right">
-                        <span >
-                          <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
-                           <i class="glyphicon glyphicon-minus"></i>
-                        </span>
-                        <input type="text" class="input_one" placeholder="请输入属性名称">
-                    </td>
-                    <td class="padding_right">
-                        <input  disabled="disabled" type="text" class="gay_input">
-                    </td>
-                    <td class="padding_right">
-                        <select name="" class="select_css">
-                            <option value="">无</option>
-                            <option value="">L</option>
-                            <option value="">M²</option>
-                            <option value="">M</option>
-                            <option value="">kg</option>
-                        </select>
-                        <span class="attr_font">*属性名称限1～6个字</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td class="padding_right">
-                        <span >
-                          <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
-                           <i class="glyphicon glyphicon-minus"></i>
-                        </span>
-                        <input type="text" class="input_one" placeholder="请输入属性名称">
-                    </td>
-                    <td class="padding_right">
-                        <input  disabled="disabled" type="text" class="gay_input">
-                    </td>
-                    <td class="padding_right">
-                        <select name="" class="select_css">
-                            <option value="">无</option>
-                            <option value="">L</option>
-                            <option value="">M²</option>
-                            <option value="">M</option>
-                            <option value="">kg</option>
-                        </select>
-                        <span class="attr_font">*属性名称限1～6个字</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td class="padding_right">
-                        <span >
-                          <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
-                           <i class="glyphicon glyphicon-minus"></i>
-                        </span>
-                        <input type="text" class="input_one" placeholder="请输入属性名称">
-                    </td>
-                    <td class="padding_right">
-                        <input  disabled="disabled" type="text" class="gay_input">
-                    </td>
-                    <td class="padding_right">
-                        <select name="" class="select_css">
-                            <option value="">无</option>
-                            <option value="">L</option>
-                            <option value="">M²</option>
-                            <option value="">M</option>
-                            <option value="">kg</option>
-                        </select>
-                        <span class="attr_font">*属性名称限1～6个字</span>
+                        <select name="" class="select_css" ng-options="op.unit for op in unitarrs" ng-model="item.cur_unit" ng-change=aiya(item.cur_unit.unit)></select>
+                        <span class="attr_font">*属性名称限1~6个字，属性内容以逗号隔开</span>
                     </td>
                 </tr>
             </table>
         </div>
         <!--保存 返回-->
         <div class="bottom">
-            <span class="bg_blue">保存</span>
-            <span>返回</span>
+            <span class="bg_blue" ng-click=saveProp()>保存</span>
+            <span ui-sref='style_index'>返回</span>
         </div>
     </section>
 </div>

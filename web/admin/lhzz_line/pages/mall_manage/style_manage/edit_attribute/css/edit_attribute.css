@@ -59,6 +59,12 @@ input{
   border:1px solid #E8E6E8;
   border-radius: 3px;
 }
+.normal_input{
+  width: 280px;
+  border:1px solid #E8E6E8;
+  border-radius: 3px;
+}
+
 .input_one{
   width: 140px;
   border-radius: 3px;
@@ -86,8 +92,13 @@ input{
   border-radius: 3px;
   text-align: center;
   line-height: 35px;
+  cursor: pointer;
 }
 .bg_blue{
   color: #487AF8;
   background-color: #F2F4FF;
+}
+
+.warningred{
+  border:1px solid red;
 }
