@@ -111,6 +111,7 @@ class GoodsOrder extends ActiveRecord
         'z.comment_id',
         'z.freight',
         'a.return_insurance',
+        'z.cover_image'
     ];
     const AFTER_SALE_SERVICES = [
         '提供发票',
@@ -1887,7 +1888,7 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder[$k]['handle']='';
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight')
+                ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
                 ->asArray()
                 ->all();
             foreach ($GoodsOrder[$k]['list'] as $key =>$val){
