@@ -1861,7 +1861,7 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return array
      */
-    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort,$user)
+    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user)
     {
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -1916,12 +1916,14 @@ class GoodsOrder extends ActiveRecord
             return [
                 'total_page' =>$total_page,
                 'count'=>$count,
+                'type'=>$type,
                 'details' => $data
             ];
         }else{
             return [
                 'total_page' =>0,
                 'count'=>0,
+                'type'=>$type,
                 'details' => []
             ];
         }
