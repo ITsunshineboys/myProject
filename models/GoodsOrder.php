@@ -234,6 +234,7 @@ class GoodsOrder extends ActiveRecord
             return false;
         }
     }
+    
     /**
      * 支付宝线下商城数据库操作
      * @param $arr
@@ -250,26 +251,44 @@ class GoodsOrder extends ActiveRecord
         $supplier_id=$arr[5];
         $freight=$arr[6];
         $return_insurance=$arr[7];
-        $goods=(new Query())->from('goods as a')->where(['a.id'=>$goods_id])->leftJoin('logistics_template as b','b.id=a.logistics_template_id')->one();
+        $buyer_message=$arr[8];
+        $goods=(new Query())
+            ->from(Goods::tableName().' as a')
+            ->where(['a.id'=>$goods_id])
+            ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
+            ->one();
         if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100){
             return false;
         }
-        $tran = Yii::$app->db->beginTransaction();
+        $address=Addressadd::findById($address_id);
+        $invoice=Invoice::findById($invoice_id);
+        if (! $address  || !$invoice){
+            return false;
+        }
         $time=time();
+        $tran = Yii::$app->db->beginTransaction();
         try{
             $goods_order=new self();
             $goods_order->order_no=$post['out_trade_no'];
             $goods_order->amount_order=$post['total_amount']*100;
             $goods_order->supplier_id=$supplier_id;
             $goods_order->invoice_id=$invoice_id;
-            $goods_order->address_id=$address_id;
             $goods_order->pay_status=1;
             $goods_order->create_time=strtotime($post['gmt_create']);
             $goods_order->paytime=strtotime($post['gmt_payment']);
             $goods_order->order_refer=1;
             $goods_order->return_insurance=$return_insurance*100;
             $goods_order->pay_name=$pay_name;
-            $goods_order->buyer_message=$post['body'];
+            $goods_order->buyer_message=$buyer_message;
+            $goods_order->consignee=$address->consignee;
+            $goods_order->district_code=$address->district;
+            $goods_order->region=$address->region;
+            $goods_order->consignee_mobile=$address->mobile;
+            $goods_order->invoice_type=$invoice->invoice_type;
+            $goods_order->invoice_header_type=$invoice->invoice_header_type;
+            $goods_order->invoicer_card=$invoice->invoicer_card;
+            $goods_order->invoice_header=$invoice->invoice_header;
+            $goods_order->invoice_content=$invoice->invoice_content;
             $res1=$goods_order->save();
             if (!$res1){
                 $tran->rollBack();
@@ -291,6 +310,7 @@ class GoodsOrder extends ActiveRecord
                 'customer_service'=>0,
                 'is_unusual'=>0,
                 'freight'=>$freight*100,
+                'cover_image'=>$goods['cover_image']
             ])->execute();
                 if (!$res2){
                     $tran->rollBack();
@@ -298,7 +318,9 @@ class GoodsOrder extends ActiveRecord
                 }
             $time=time();
             $month=date('Ym',$time);
-            $supplier=Supplier::find()->where(['id'=>$goods['supplier_id']])->one();
+            $supplier=Supplier::find()
+                ->where(['id'=>$goods['supplier_id']])
+                ->one();
             $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
             $supplier->sales_amount_month=$supplier->sales_amount_month+$goods['platform_price']*$goods_num;
             $supplier->month=$month;
@@ -313,10 +335,6 @@ class GoodsOrder extends ActiveRecord
             $tran->rollBack();
             return false;
         }
-
-
-
-
     }
 
      /**
