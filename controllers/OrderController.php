@@ -2362,7 +2362,7 @@ class OrderController extends Controller
 
 
     public function actionCheck(){
-         $data=Invoice::find()->asArray()->all();
+         $data=GoodsOrder::find()->asArray()->all();
         var_dump($data);
      }
 
