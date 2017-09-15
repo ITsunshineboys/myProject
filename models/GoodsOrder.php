@@ -1853,7 +1853,7 @@ class GoodsOrder extends ActiveRecord
         return $orderAmount;
     }
 
-  /**
+   /**
      * @param array $where
      * @param array $select
      * @param int $page
@@ -1879,13 +1879,13 @@ class GoodsOrder extends ActiveRecord
             ->all();
         foreach ($GoodsOrder AS $k =>$v){
             $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
-
             $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
             $GoodsOrder[$k]['paytime']=date('Y-m-d h:i',$GoodsOrder[$k]['paytime']);
             $GoodsOrder[$k]['user_name']=$user->nickname;
             $GoodsOrder[$k]['status']='未付款';
             $GoodsOrder[$k]['comment_grade']='';
             $GoodsOrder[$k]['handle']='';
+            $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->shop_name;
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
@@ -1962,6 +1962,7 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
             $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
+            $arr[$k]['shop_name']=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one()->shop_name;
             $arr_list=[];
             $arr_list['goods_name']=$arr[$k]['goods_name'];
             $arr_list['goods_price']=$arr[$k]['goods_price'];
@@ -1971,6 +1972,7 @@ class GoodsOrder extends ActiveRecord
             $arr_list['sku']=$arr[$k]['sku'];
             $arr_list['freight']=$arr[$k]['freight'];
             $arr_list['unusual']=$arr[$k]['unusual'];
+
             unset($arr[$k]['goods_name']);
             unset($arr[$k]['goods_price']);
             unset($arr[$k]['goods_number']);
@@ -1986,10 +1988,12 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['send_time']);
             unset($arr[$k]['complete_time']);
             unset($arr[$k]['RemainingTime']);
+            unset($arr[$k]['supplier_id']);
             $arr[$k]['list']=[$arr_list];
         }
         return $arr;
     }
+
     /**
      * @param $data
      * @return string
