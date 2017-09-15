@@ -2363,4 +2363,10 @@ class OrderController extends Controller
         }
     }
 
+
+    public function actionCheck(){
+         $data=Invoice::find()->asArray()->all();
+        var_dump($data);
+     }
+
 }
