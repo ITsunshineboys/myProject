@@ -44,13 +44,15 @@ ul{
     color: #E51C23;
     margin-left: -17px;
 }
-
+.color_skyblue{
+    color:#03A9F4!important;
+}
 .series_name input {
     margin-left: 87px;
     width: 245px;
     height: 31px;
     margin-left: 87px;
-    border: 1px solid #999!important;
+    border: 1px solid #999;
     border-radius: 3px;
     padding-left: 10px;
     line-height: 31px;
@@ -112,11 +114,20 @@ ul{
     text-align: center;
     line-height: 31px;
     color: #ABABAB;
-    border: 1px solid #666F80;
+    /*border: 1px solid #666F80;*/
     border-radius: 3px;
     position: relative;
 }
-
+.tags li input{
+    width: 88px;
+    height: 31px;
+    /*text-align: center;*/
+    padding-left: 6px;
+    line-height: 31px;
+    color: #ABABAB;
+    border: 1px solid #666F80;
+    border-radius: 3px;
+}
 .tags span{
     font-size: 13px;
     color: #ABABAB;
@@ -218,4 +229,12 @@ ul{
 #caozuo_sure{
     float: right;
     margin-right: 40px;
+}
+
+.add_vis{
+    visibility: hidden;
+}
+.border_red{
+    border: 1px solid red!important;
+    outline: 0;
 }

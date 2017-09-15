@@ -20,8 +20,7 @@ class Addressadd extends  ActiveRecord
     }
 
 
-  
-    /**
+ /**
      * 8.31
      * 无登录App-添加收货地址
      * @param $mobile
@@ -32,36 +31,67 @@ class Addressadd extends  ActiveRecord
      */
      public static function insertaddress($mobile,$consignee,$region,$districtcode){
          $addresstoken= md5($mobile.$consignee.date('Y-m-d H:i:s', time()));
-         $data=self::find()->where(['mobile'=>$mobile,'consignee'=>$consignee,'district'=>$districtcode])->asArray()->one();
+         $data=self::find()
+             ->where(['mobile'=>$mobile,'consignee'=>$consignee,'district'=>$districtcode])
+             ->asArray()
+             ->one();
          if ($data){
-             $res=Yii::$app->db->createCommand()->update(self::USER_ADDRESS,[
-                 'mobile'      => $mobile,
-                 'consignee'   => $consignee,
-                 'region'      => $region,
-                 'district'    => $districtcode,
-                 'addresstoken'=>$addresstoken
-             ],['id'=>$data['id']])->execute();
-             $session = Yii::$app->session;
-             $session['addresstoken']=$addresstoken;
-             if ($res){
-                 return true;
-             }
-         }else{
-             $res=Yii::$app->db->createCommand()->insert(self::USER_ADDRESS,[
-                 'mobile'      => $mobile,
-                 'consignee'   => $consignee,
-                 'region'      => $region,
-                 'district'    => $districtcode,
-                 'addresstoken'=>$addresstoken
-             ])->execute();
-             if ($res){
+
+             $tran = Yii::$app->db->beginTransaction();
+             try{
+                 $address=self::find()
+                     ->where(['id'=>$data['id']])->one();
+                 $address->mobile=$mobile;
+                 $address->consignee=$consignee;
+                 $address->region=$region;
+                 $address->district=$districtcode;
+                 $address->addresstoken=$addresstoken;
+                 $res=$address->save(false);
+                 if (!$res)
+                 {
+                     $code=500;
+                     $tran->rollBack();
+                     return $code;
+                 }
                  $session = Yii::$app->session;
                  $session['addresstoken']=$addresstoken;
-                 return true;
+                 $code=200;
+                 $tran->commit();
+                 return $code;
+             }catch(Exception $e)
+             {
+                 $code=500;
+                 $tran->rollBack();
+                 return $code;
              }
-
+         }else{
+             $tran = Yii::$app->db->beginTransaction();
+             try{
+                 $address=new self;
+                 $address->mobile=$mobile;
+                 $address->consignee=$consignee;
+                 $address->region=$region;
+                 $address->district=$districtcode;
+                 $address->addresstoken=$addresstoken;
+                 $res=$address->save(false);
+                 if (!$res)
+                 {
+                     $code=500;
+                     $tran->rollBack();
+                     return $code;
+                 }
+                 $session = Yii::$app->session;
+                 $session['addresstoken']=$addresstoken;
+                 $code=200;
+                 $tran->commit();
+                 return $code;
+             }catch(Exception $e)
+             {
+                 $code=500;
+                 $tran->rollBack();
+                 return $code;
+             }
          }
-
      }
      
     /**

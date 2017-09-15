@@ -11,45 +11,73 @@
     <!--选项卡-->
     <div class="tab">
         <ul>
-            <li ng-class="{'tab_blue':(on_flag==true)}"  ng-click="on_shelves()">已上架</li>
+            <li ng-class="{'tab_blue':(on_flag==true)}" ng-click="on_shelves()">已上架</li>
             <li ng-class="{'tab_blue':(down_flag==true)}" ng-click="down_shelves()">已下架</li>
             <li ng-class="{'tab_blue':(wait_flag==true)}" ng-click="wait_shelves()">等待上架</li>
             <li ng-class="{'tab_blue':(del_flag==true)}" ng-click="logistics()">已删除</li>
         </ul>
     </div>
 
-<!--------已上架开始------->
+    <!--------已上架开始------->
     <section ng-if="on_flag==true">
         <!--添加、全选、下架-->
-        <div class="operating" >
+        <div class="operating">
             <ul>
-                <li>全选</li>
-                <li data-toggle="modal" data-target="#down_shelves_modal">下架</li>
+                <li ng-click="allOffline(selectonlineAll)">全选</li>
+                <li data-toggle="modal" data-target="#alldown_shelves_reason_modal" ng-click="piliangxiajia()">下架</li>
             </ul>
             <!--Menu-->
             <span ng-click="on_menu(on_menu_flag)" class="menu glyphicon glyphicon-menu-hamburger"></span>
             <div class="search_box">
-                <input class="search_input" type="text" placeholder="  搜索商品编号或名称">
+                <input class="search_input" type="text" placeholder="  搜索商品编号或名称" ng-model="changed.online_search">
                 <span class="glyphicon glyphicon-search search"></span>
+                <button class="search_btn" ng-click="onlineSearch()">搜索</button>
             </div>
             <!--Menu 切换-->
             <div class="on_menu" ng-if="on_menu_flag">
                 <ul>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_1" ng-click="show_a(show_1)">商品编号</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_2" ng-click="show_b(show_2)">商品名称</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_3" ng-click="show_c(show_3)">供货价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_4" ng-click="show_d(show_4)">市场价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_5" ng-click="show_e(show_5)">平台价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="show_6" ng-click="show_f(show_6)">装饰公司采购价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="show_7" ng-click="show_g(show_7)">项目经理采购价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="show_8" ng-click="show_h(show_8)">设计师采购价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_9" ng-click="show_i(show_9)">库存</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_10" ng-click="show_j(show_10)">销量</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_11" ng-click="show_k(show_11)">状态</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_12" ng-click="show_l(show_12)">上架时间</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_13" ng-click="show_m(show_13)">图片</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_14" ng-click="show_n(show_14)">详情</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_15" ng-click="show_o(show_15)">操作</li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_1"
+                               ng-click="show_a(show_1)">商品编号
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_2"
+                               ng-click="show_b(show_2)">商品名称
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_3"
+                               ng-click="show_c(show_3)">供货价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_4"
+                               ng-click="show_d(show_4)">市场价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_5"
+                               ng-click="show_e(show_5)">平台价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="show_6" ng-click="show_f(show_6)">装饰公司采购价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="show_7" ng-click="show_g(show_7)">项目经理采购价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="show_8" ng-click="show_h(show_8)">设计师采购价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_9"
+                               ng-click="show_i(show_9)">库存
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_10"
+                               ng-click="show_j(show_10)">销量
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_11"
+                               ng-click="show_k(show_11)">状态
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_12"
+                               ng-click="show_l(show_12)">上架时间
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_13"
+                               ng-click="show_m(show_13)">图片
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_14"
+                               ng-click="show_n(show_14)">详情
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="show_15"
+                               ng-click="show_o(show_15)">操作
+                    </li>
                 </ul>
             </div>
         </div>
@@ -66,105 +94,199 @@
                 <td ng-if="show_7">项目经理采购价格</td>
                 <td ng-if="show_8">设计师采购价格</td>
                 <td ng-if="show_9">库存</td>
-                <td ng-if="show_10">销量</td>
+                <td ng-if="show_10">
+                    销量
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_up.png" alt="" class="sortpic" ng-show="onlinesold_ascorder" ng-click="onlineSoldDesorder()">
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_down.png" alt="" class="sortpic" ng-show="onlinesold_desorder" ng-click="onlineSoldAscorder()">
+                </td>
                 <td ng-if="show_11">状态</td>
-                <td ng-if="show_12">上架时间</td>
+                <td ng-if="show_12">
+                    上架时间
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_up.png" alt="" class="sortpic" ng-show="onlinetime_ascorder" ng-click="onlineTimeDesorder()">
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_down.png" alt="" class="sortpic" ng-show="onlinetime_desorder" ng-click="onlineTimeAscorder()">
+                </td>
                 <td ng-if="show_13">图片</td>
                 <td ng-if="show_14">详情</td>
                 <td ng-if="show_15">操作</td>
             </tr>
-            <tr class="table_content">
-                <td><input type="checkbox"></td>
-                <td ng-if="show_1">123456</td>
-                <td ng-if="show_2">升达木地板</td>
-                <td ng-if="show_3">¥45.00</td>
-                <td ng-if="show_4">¥80.00</td>
-                <td ng-if="show_5">¥80.00</td>
-                <td ng-if="show_6">装修公司采购价格</td>
-                <td ng-if="show_7">项目经理采购价格</td>
-                <td ng-if="show_8">设计师采购价格</td>
-                <td ng-if="show_9">5</td>
-                <td ng-if="show_10">250</td>
-                <td ng-if="show_11" class="green">上架</td>
-                <td ng-if="show_12">2017-08-07</td>
-                <td ng-if="show_13"><img id="img_size" src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="show_14" class="blue" ui-sref="commodity_detail_on">编辑</td>
-                <td ng-if="show_15" class="blue">下架</td>
-            </tr>
-            <tr class="table_content">
-                <td><input type="checkbox"></td>
-                <td ng-if="show_1">123456</td>
-                <td ng-if="show_2">升达木地板</td>
-                <td ng-if="show_3">¥45.00</td>
-                <td ng-if="show_4">¥80.00</td>
-                <td ng-if="show_5">¥80.00</td>
-                <td ng-if="show_6">装修公司采购价格</td>
-                <td ng-if="show_7">项目经理采购价格</td>
-                <td ng-if="show_8">设计师采购价格</td>
-                <td ng-if="show_9">5</td>
-                <td ng-if="show_10">250</td>
-                <td ng-if="show_11" class="green">上架</td>
-                <td ng-if="show_12">2017-08-07</td>
-                <td ng-if="show_13"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="show_14" class="blue" ui-sref="commodity_detail_on">编辑</td>
-                <td ng-if="show_15" class="blue">下架</td>
+            <tr class="table_content" ng-repeat="item in onlinegoods track by $index">
+                <td><input type="checkbox" ng-checked="selectonlineAll" ng-model="item.state"></td>
+                <td ng-if="show_1">{{item.sku}}</td>
+                <td ng-if="show_2">{{item.title}}</td>
+                <td ng-if="show_3">{{item.supplier_price | currency:"¥"}}</td>
+                <td ng-if="show_4">{{item.market_price | currency:"¥"}}</td>
+                <td ng-if="show_5">{{item.platform_price | currency:"¥"}}</td>
+                <td ng-if="show_6">{{item.purchase_price_decoration_company | currency:"¥"}}</td>
+                <td ng-if="show_7">{{item.purchase_price_manager | currency:"¥"}}</td>
+                <td ng-if="show_8"> {{item.purchase_price_designer | currency:"¥"}}</td>
+                <td ng-if="show_9">{{item.left_number}}</td>
+                <td ng-if="show_10">{{item.sold_number}}</td>
+                <td ng-if="show_11" class="green">{{item.status}}</td>
+                <td ng-if="show_12">{{item.online_time}}</td>
+                <td ng-if="show_13"><img class="goodpic" id="img_size"
+                                         src="http://test.cdlhzz.cn:888/{{item.cover_image}}"
+                                         alt=""></td>
+                <td ng-if="show_14" class="blue" ui-sref="commodity_detail_on({onlinegood:item})">编辑</td>
+                <td ng-if="show_15" class="blue" data-toggle="modal" data-target="#down_shelves_reason_modal"
+                    ng-click="singlegoodOffline(item.id)">下架
+                </td>
             </tr>
         </table>
-    </section>
-<!--------已上架结束------->
 
-    <!--下架模态框-->
-    <div class="modal fade" id="down_shelves_modal">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li><a href="#">首页</a></li>
+                <li>
+                    <a aria-label="Previous" ng-click="onPrevious()">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li ng-repeat="onpage in onpageList" ng-class="{active: onIsActivePage(onpage)}" >
+                    <a ng-click="onSelectPage(onpage)" >{{ onpage }}</a>
+                </li>
+                <li>
+                    <a aria-label="Next" ng-click="onNext()">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li><a href="#">末页</a></li>
+                <li>
+                    <div class="input-group page_input">
+                        <input type="number" class="form-control" placeholder="" ng-model="ontopage">
+                        <span class="input-group-btn">
+						  <button class="btn btn-default" type="button" ng-click="onToPage(ontopage)">跳转</button>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </section>
+
+    <!--下架原因模态框-->
+    <div class="modal fade" id="down_shelves_reason_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">提示</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">下架原因</h4>
                 </div>
                 <div class="modal-body">
-                    是否确认下架x个商品
+                    <span style="margin-right: 50px;vertical-align: top">下架原因（选填）</span>
+                    <textarea cols="30" rows="10" ng-model="offline_reason"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureGoodOffline()'>确认
+                    </button>
+                    <button type="button" class="btn btn-defalut" data-dismiss="modal" ng-click='cancelSingleOffline()'>取消</button>
                 </div>
             </div>
         </div>
     </div>
 
-<!-------已下架开始-------->
+    <!--已上架 批量下架 模态框-->
+    <div class="modal fade" id="alldown_shelves_reason_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="piliangxiajia_content">
+                <div class="modal-header" id="piliangxiajia_header">
+                    <h4 class="modal-title" id="piliangxiajiacaozuo">
+                        下架操作
+                    </h4>
+                </div>
+                <div class="modal-body" id="piliangxiajia_body" ng-show="xiajiaarr.length">
+                    <h6 id="piliangxiajia_fenlei">下架
+                        {{xiajiaarr.length}}个分类
+                    </h6>
+                    <h6 id="piliangxiajia_reason">下架原因（选填）</h6>
+                    <textarea name="" id="piliangxiajia_textarea" cols="43" rows="14"
+                              placeholder="请填写下架原因，如选择多个则为批量备注" ng-model="piliangofflinereason"></textarea>
+                </div>
+
+                <div class="modal-body" ng-show="!xiajiaarr.length">
+                    请选择商品下架
+                </div>
+                <div class="btn_modal" ng-show="xiajiaarr.length">
+                    <button id="piliang_cancel" data-dismiss="modal" ng-click="cancelplliangoffline()">取消</button>
+                    <button id="piliang_sure" data-dismiss="modal" ng-click="surepiliangoffline()">确认</button>
+                </div>
+
+                <div class="modal-footer" ng-show="!xiajiaarr.length">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <!--------已上架结束------->
+
+
+    <!-------已下架开始-------->
     <section ng-if="down_flag==true">
         <div class="operating">
             <ul>
-                <li>全选</li>
-                <li data-toggle="modal" data-target="#down_shelves_modal">上架</li>
+                <li ng-model="selectoffAll" ng-click="allOnline(selectoffAll)" class="btn_pointer">全选</li>
+                <li data-toggle="modal" data-target="#piliangonline_modal" ng-click="piliangshangjia()">上架</li>
             </ul>
             <!--Menu-->
             <span ng-click="down_menu(down_menu_flag)" class="menu glyphicon glyphicon-menu-hamburger"></span>
             <div class="search_box">
-                <input class="search_input" type="text" placeholder="  搜索商品编号或名称">
-                <span  class="glyphicon glyphicon-search search"></span>
+                <input class="search_input" type="text" placeholder="  搜索商品编号或名称" ng-model="changed.offline_search">
+                <span class="glyphicon glyphicon-search search"></span>
+                <button class="search_btn" ng-click="offlineSearch()">搜索</button>
             </div>
+
             <!--Menu 切换-->
             <div class="on_menu" ng-if="down_menu_flag">
                 <ul>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_1" ng-click="down_a(down_1)">商品编号</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_2" ng-click="down_b(down_2)">商品名称</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_3" ng-click="down_c(down_3)">供货价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_4" ng-click="down_d(down_4)">市场价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_5" ng-click="down_e(down_5)">平台价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="down_6" ng-click="down_f(down_6)">装饰公司采购价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="down_7" ng-click="down_g(down_7)">项目经理采购价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="down_8" ng-click="down_h(down_8)">设计师采购价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_9" ng-click="down_i(down_9)">库存</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_10" ng-click="down_j(down_10)">销量</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_11" ng-click="down_k(down_11)">状态</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_12" ng-click="down_l(down_12)">下架时间</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_13" ng-click="down_m(down_13)">操作人员</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_14" ng-click="down_n(down_14)">图片</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_15" ng-click="down_o(down_15)">下架原因</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_16" ng-click="down_p(down_16)">详情</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_17" ng-click="down_q(down_17)">操作</li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_1"
+                               ng-click="down_a(down_1)">商品编号
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_2"
+                               ng-click="down_b(down_2)">商品名称
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_3"
+                               ng-click="down_c(down_3)">供货价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_4"
+                               ng-click="down_d(down_4)">市场价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_5"
+                               ng-click="down_e(down_5)">平台价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="down_6" ng-click="down_f(down_6)">装饰公司采购价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="down_7" ng-click="down_g(down_7)">项目经理采购价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="down_8" ng-click="down_h(down_8)">设计师采购价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_9"
+                               ng-click="down_i(down_9)">库存
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_10"
+                               ng-click="down_j(down_10)">销量
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_11"
+                               ng-click="down_k(down_11)">状态
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_12"
+                               ng-click="down_l(down_12)">下架时间
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_13"
+                               ng-click="down_m(down_13)">操作人员
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_14"
+                               ng-click="down_n(down_14)">图片
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_15"
+                               ng-click="down_o(down_15)">下架原因
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_16"
+                               ng-click="down_p(down_16)">详情
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="down_17"
+                               ng-click="down_q(down_17)">操作
+                    </li>
                 </ul>
             </div>
         </div>
@@ -180,96 +302,93 @@
                 <td ng-if="down_7">项目经理采购价格</td>
                 <td ng-if="down_8">设计师采购价格</td>
                 <td ng-if="down_9">库存</td>
-                <td ng-if="down_10">销量</td>
+                <td ng-if="down_10">
+                    销量
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_up.png" alt="" class="sortpic" ng-show="offlinesold_ascorder" ng-click="offlineSoldDesorder()">
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_down.png" alt="" class="sortpic" ng-show="offlinesold_desorder" ng-click="offlineSoldAscorder()">
+                </td>
                 <td ng-if="down_11">状态</td>
-                <td ng-if="down_12">下架时间</td>
+                <td ng-if="down_12">
+                    下架时间
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_up.png" alt="" class="sortpic" ng-show="offlinetime_ascorder" ng-click="offlineTimeDesorder()">
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_down.png" alt="" class="sortpic" ng-show="offlinetime_desorder" ng-click="offlineTimeAscorder()">
+                </td>
                 <td ng-if="down_13">操作人员</td>
                 <td ng-if="down_14">图片</td>
                 <td ng-if="down_15">下架原因</td>
                 <td ng-if="down_16">详情</td>
                 <td ng-if="down_17">操作</td>
             </tr>
-            <tr class="table_content">
-                <td><input type="checkbox"></td>
-                <td ng-if="down_1">123456</td>
-                <td ng-if="down_2">升达木地板</td>
-                <td ng-if="down_3">¥45.00</td>
-                <td ng-if="down_4">¥80.00</td>
-                <td ng-if="down_5">¥80.00</td>
-                <td ng-if="down_6">装修公司采购价格</td>
-                <td ng-if="down_7">项目经理采购价格</td>
-                <td ng-if="down_8">设计师采购价格</td>
-                <td ng-if="down_9"><input type="text" value="51" class="stock"></td>
-                <td ng-if="down_10">销量</td>
-                <td ng-if="down_11"  class="red">已下架</td>
-                <td ng-if="down_12">2016-8-7</td>
-                <td ng-if="down_13">运营01</td>
-                <td ng-if="down_14"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="down_15" class="blue" data-toggle="modal" data-target="#down_shelves_reason_modal"><span class="wait_check">点击输入</span></td>
-                <td ng-if="down_16" class="blue" ui-sref="commodity_detail_down">编辑</td>
-                <td ng-if="down_17" class="blue">
-                    <span data-toggle="modal" data-target="#up_shelves_modal">上架</span>
+            <tr class="table_content" ng-repeat="item in offilinegoods track by $index">
+                <td><input type="checkbox" ng-checked="selectoffAll" ng-model="item.state"></td>
+                <td ng-if="down_1">{{item.sku}}</td>
+                <td ng-if="down_2">{{item.title}}</td>
+                <td ng-if="down_3">{{item.supplier_price | currency:"¥"}}</td>
+                <td ng-if="down_4">{{item.market_price | currency:"¥"}}</td>
+                <td ng-if="down_5">{{item.platform_price | currency:"¥"}}</td>
+                <td ng-if="down_6">{{item.purchase_price_decoration_company | currency:"¥"}}</td>
+                <td ng-if="down_7">{{item.purchase_price_manager | currency:"¥"}}</td>
+                <td ng-if="down_8">{{item.purchase_price_designer | currency:"¥"}}</td>
+                <td ng-if="down_9">{{item.left_number}}</td>
+                <td ng-if="down_10">{{item.sold_number}}</td>
+                <td ng-if="down_11" class="red">{{item.status}}</td>
+                <td ng-if="down_12">{{item.offline_time}}</td>
+                <td ng-if="down_13">{{item.operator}}</td>
+                <td ng-if="down_14"><img class="goodpic" src="http://test.cdlhzz.cn:888/{{item.cover_image}}" alt=""></td>
+                <td ng-if="down_15" class="blue" data-toggle="modal">
+                    <span ng-show="defaultreason_arr.indexOf(item.offline_reason)!=-1" class="wait_check">{{item.offline_reason}}</span>
+                    <span ng-show="defaultreason_arr.indexOf(item.offline_reason)==-1" class="wait_check reason_border" data-toggle="modal" data-target='#edit_offlinereason_modal' ng-click="editReason(item.id,item.offline_reason)">{{item.offline_reason}}</span>
                 </td>
-            </tr>
-            <tr class="table_content">
-                <td><input type="checkbox"></td>
-                <td ng-if="down_1">123456</td>
-                <td ng-if="down_2">升达木地板</td>
-                <td ng-if="down_3">¥45.00</td>
-                <td ng-if="down_4">¥80.00</td>
-                <td ng-if="down_5">¥80.00</td>
-                <td ng-if="down_6">装修公司采购价格</td>
-                <td ng-if="down_7">项目经理采购价格</td>
-                <td ng-if="down_8">设计师采购价格</td>
-                <td ng-if="down_9"><input type="text" value="51" class="stock"></td>
-                <td ng-if="down_10">销量</td>
-                <td ng-if="down_11"  class="red">已下架</td>
-                <td ng-if="down_12">2016-8-7</td>
-                <td ng-if="down_13">运营2</td>
-                <td ng-if="down_14"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="down_15">品牌下架</td>
-                <td ng-if="down_16" class="blue" ui-sref="commodity_detail_down">编辑</td>
+                <td ng-if="down_16" class="blue" ui-sref="commodity_detail_down({offlinegood:item})">编辑</td>
                 <td ng-if="down_17" class="blue">
-                    <span data-toggle="modal" data-target="#up_not_shelves_modal">上架</span>
+                    <span data-toggle="modal" data-target="#up_shelves_modal" ng-click="singlegoodOnline(item.id)">上架</span>
                 </td>
+                <!--ng-class={illegal:item.offline_reason=='资料违规'}-->
+                <!--data-target={{item.offline_reason=='资料违规'?'#down_shelves_reason_modal':''}}-->
             </tr>
         </table>
     </section>
-<!-------已下架结束-------->
 
-    <!--下架原因模态框-->
-    <div class="modal fade" id="down_shelves_reason_modal">
+    <!--审核备注模态框-->
+    <div class="modal fade" id="edit_offlinereason_modal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">下架原因</h4>
                 </div>
                 <div class="modal-body">
                     <span style="margin-right: 50px;vertical-align: top">下架原因（选填）</span>
-                    <textarea placeholder="资料违规，请重新修改" cols="30" rows="10"></textarea>
+                    <textarea cols="30" rows="10" ng-model="modal_offreason"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureResetReason()">确认</button>
                     <button type="button" class="btn btn-defalut" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
     </div>
+    <!-------已下架结束-------->
+
+
     <!--上架模态框-->
-    <div class="modal fade" id="up_shelves_modal">
+    <div class="modal fade" id="up_shelves_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    <span>是否确认上架x件商品</span>
+                    <span>是否确认上架1件商品</span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-default" ng-click="sureGoodOnline()">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelGoodOnline()">
+                        取消
+                    </button>
                 </div>
             </div>
         </div>
@@ -279,51 +398,111 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    <span>商品所在品牌已移除,请商家重新选择新品牌</span>
+                    <span>{{cantonline}}</span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureCantOnline()'>确认
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--批量上架模态框-->
+    <div class="modal fade" id="piliangonline_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body" ng-show="shangjiaarr.length">
+                    是否确认上架{{shangjiaarr.length}}个商品
+                </div>
+
+                <div class="modal-body" ng-show="!shangjiaarr.length">
+                    请选择商品上架
+                </div>
+
+                <div class="modal-footer" ng-show="shangjiaarr.length">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="surepiliangonline()">
+                        确认
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelplliangonline()">取消</button>
+                </div>
+                <div class="modal-footer" ng-show="!shangjiaarr.length">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
                 </div>
             </div>
         </div>
     </div>
 
 
-<!--------等待上架开始------->
+    <!--------等待上架开始------->
     <section ng-if="wait_flag==true">
         <div class="operating">
             <ul>
-                <li>全选</li>
-                <li data-toggle="modal" data-target="#down_shelves_modal">上架</li>
+                <li ng-model="selectwaitAll" ng-click="allwait(selectwaitAll)">全选</li>
+                <li data-toggle="modal" data-target="#allwaitonline_modal" ng-click="allwaitToOnline()">上架</li>
             </ul>
             <span ng-click="wait_menu(wait_menu_flag)" class="menu glyphicon glyphicon-menu-hamburger"></span>
             <div class="search_box">
-                <input class="search_input" type="text" placeholder="  搜索商品编号或名称">
+                <input class="search_input" type="text" placeholder="  搜索商品编号或名称" ng-model="changed.wait_search">
                 <span class="glyphicon glyphicon-search search"></span>
+                <button class="search_btn" ng-click="waitSearch()">搜索</button>
             </div>
             <!--Menu 切换-->
             <div class="on_menu" ng-if="wait_menu_flag">
                 <ul>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_1" ng-click="wait_a(wait_1)">商品编号</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_2" ng-click="wait_b(wait_2)">商品名称</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_3" ng-click="wait_c(wait_3)">供货价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_4" ng-click="wait_d(wait_4)">市场价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_5" ng-click="wait_e(wait_5)">平台价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="wait_6" ng-click="wait_f(wait_6)">装饰公司采购价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="wait_7" ng-click="wait_g(wait_7)">项目经理采购价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="wait_8" ng-click="wait_h(wait_8)">设计师采购价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_9" ng-click="wait_i(wait_9)">库存</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_10" ng-click="wait_j(wait_10)">销量</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_11" ng-click="wait_k(wait_11)">状态</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_12" ng-click="wait_l(wait_12)">发布时间</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_13" ng-click="wait_m(wait_13)">图片</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_14" ng-click="wait_n(wait_14)">审核备注</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_15" ng-click="wait_o(wait_15)">详情</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_16" ng-click="wait_p(wait_16)">操作</li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_1"
+                               ng-click="wait_a(wait_1)">商品编号
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_2"
+                               ng-click="wait_b(wait_2)">商品名称
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_3"
+                               ng-click="wait_c(wait_3)">供货价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_4"
+                               ng-click="wait_d(wait_4)">市场价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_5"
+                               ng-click="wait_e(wait_5)">平台价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="wait_6" ng-click="wait_f(wait_6)">装饰公司采购价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="wait_7" ng-click="wait_g(wait_7)">项目经理采购价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="wait_8" ng-click="wait_h(wait_8)">设计师采购价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_9"
+                               ng-click="wait_i(wait_9)">库存
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_10"
+                               ng-click="wait_j(wait_10)">销量
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_11"
+                               ng-click="wait_k(wait_11)">状态
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_12"
+                               ng-click="wait_l(wait_12)">发布时间
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_13"
+                               ng-click="wait_m(wait_13)">图片
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_14"
+                               ng-click="wait_n(wait_14)">审核备注
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_15"
+                               ng-click="wait_o(wait_15)">详情
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_16"
+                               ng-click="wait_p(wait_16)">操作
+                    </li>
                 </ul>
             </div>
         </div>
@@ -339,82 +518,191 @@
                 <td ng-if="wait_7">项目经理采购价格</td>
                 <td ng-if="wait_8">设计师采购价格</td>
                 <td ng-if="wait_9">库存</td>
-                <td ng-if="wait_10">销量</td>
+                <td ng-if="wait_10">
+                    销量
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_up.png" alt="" class="sortpic" ng-show="waitsold_ascorder" ng-click="waitSoldDesorder()">
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_down.png" alt="" class="sortpic" ng-show="waitsold_desorder" ng-click="waitSoldAscorder()">
+                </td>
                 <td ng-if="wait_11">状态</td>
-                <td ng-if="wait_12">发布时间</td>
+                <td ng-if="wait_12">
+                    发布时间
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_up.png" alt="" class="sortpic" ng-show="waittime_ascorder" ng-click="waitTimeDesorder()">
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_down.png" alt="" class="sortpic" ng-show="waittime_desorder" ng-click="waitTimeAscorder()">
+                </td>
                 <td ng-if="wait_13">图片</td>
                 <td ng-if="wait_14">审核备注</td>
                 <td ng-if="wait_15">详情</td>
                 <td ng-if="wait_16">操作</td>
             </tr>
-            <tr class="table_content">
-                <td><input type="checkbox"></td>
-                <td ng-if="wait_1">123456</td>
-                <td ng-if="wait_2">升达木地板</td>
-                <td ng-if="wait_3">¥45.00</td>
-                <td ng-if="wait_4">¥80.00</td>
-                <td ng-if="wait_5">¥80.00</td>
-                <td ng-if="wait_6">装修公司采购价格</td>
-                <td ng-if="wait_7">项目经理采购价格</td>
-                <td ng-if="wait_8">设计师采购价格</td>
-                <td ng-if="wait_9">5</td>
-                <td ng-if="wait_10">销量</td>
-                <td ng-if="wait_11" class="sky_blue">等待上架</td>
-                <td ng-if="wait_12">发布时间</td>
-                <td ng-if="wait_13"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="wait_14"  data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span class="wait_check">审核备注</span></td>
-                <td ng-if="wait_15" class="blue" ui-sref="commodity_detail_wait">编辑</td>
-                <td ng-if="wait_16" class="blue" data-toggle="modal" data-target="#up_shelves_modal">上架</td>
+            <tr class="table_content" ng-repeat="item in waitgoods track by $index">
+                <td><input type="checkbox" ng-checked="selectwaitAll" ng-model="item.state"></td>
+                <td ng-if="wait_1">{{item.sku}}</td>
+                <td ng-if="wait_2">{{item.title}}</td>
+                <td ng-if="wait_3">{{item.supplier_price | currency:"¥"}}</td>
+                <td ng-if="wait_4">{{item.market_price | currency:"¥"}}</td>
+                <td ng-if="wait_5">{{item.platform_price | currency:"¥"}}</td>
+                <td ng-if="wait_6">{{item.purchase_price_decoration_company | currency:"¥"}}</td>
+                <td ng-if="wait_7">{{item.purchase_price_manager | currency:"¥"}}</td>
+                <td ng-if="wait_8">{{item.purchase_price_designer | currency:"¥"}}</td>
+                <td ng-if="wait_9">{{item.left_number}}</td>
+                <td ng-if="wait_10">{{item.sold_number}}</td>
+                <td ng-if="wait_11" class="sky_blue">{{item.status}}</td>
+                <td ng-if="wait_12">{{item.publish_time}}</td>
+                <td ng-if="wait_13"><img class='goodpic' src="http://test.cdlhzz.cn:888/{{item.cover_image}}"
+                                         alt=""></td>
+                <td ng-if="wait_14" data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span
+                        class="check_border wait_check" ng-bind="item.reason||'点击输入'" ng-click="checkReason(item.id,item.reason)"></span></td>
+                <td ng-if="wait_15" class="blue" ui-sref="commodity_detail_wait({waitgood:item})">编辑</td>
+                <td ng-if="wait_16" class="blue" data-toggle="modal" data-target="#waitup_shelves_modal" ng-click="waitToOnline(item.id)">上架</td>
             </tr>
         </table>
     </section>
-<!-------等待上架结束-------->
+
+    <!--上架模态框-->
+    <div class="modal fade" id="waitup_shelves_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <span>是否确认上架1件商品</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="sureWaitToOnline()">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelGoodOnline()">
+                        取消
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--等待上架 上架被移除模态框-->
+    <div class="modal fade" id="waitup_not_shelves_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <span>{{waitcantonline}}</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureCantOnline()'>确认
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--批量上架模态框-->
+    <div class="modal fade" id="allwaitonline_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body" ng-show="waitarr.length">
+                    是否确认上架{{waitarr.length}}个商品
+                </div>
+
+                <div class="modal-body" ng-show="!waitarr.length">
+                    请选择商品上架
+                </div>
+
+                <div class="modal-footer" ng-show="waitarr.length">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="surewaitonline()">
+                        确认
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelWaitOnline()">取消</button>
+                </div>
+                <div class="modal-footer" ng-show="!waitarr.length">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-------等待上架结束-------->
 
     <!--审核备注模态框-->
     <div class="modal fade" id="wait_shelves_remarks_modal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">审核备注</h4>
                 </div>
                 <div class="modal-body">
                     <span style="margin-right: 50px;vertical-align: top">审核备注（选填）</span>
-                    <textarea placeholder="请填写等待上架原因，如选择多个则批量备注" cols="30" rows="10"></textarea>
+                    <textarea placeholder="请填写等待上架原因，如选择多个则批量备注" cols="30" rows="10" ng-model="lastreason"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
-                    <button type="button" class="btn btn-defalut" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureCheckReason()">确认</button>
+                    <button type="button" class="btn btn-defalut" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
     </div>
 
-<!-------删除模块开始-------->
+    <!-------删除模块开始-------->
     <section ng-if="del_flag==true">
-        <div class="operating" >
+        <div class="operating">
             <span ng-click="del_menu(del_menu_flag)" class="menu glyphicon glyphicon-menu-hamburger"></span>
             <div class="search_box">
-                <input class="search_input" type="text" placeholder="  搜索商品编号或名称">
+                <input class="search_input" type="text" placeholder="  搜索商品编号或名称" ng-model="changed.deleted_search">
                 <span class="glyphicon glyphicon-search search"></span>
+                <button class="search_btn" ng-click="deletedSearch()">搜索</button>
             </div>
             <!--Menu-->
             <div class="on_menu" ng-if="del_menu_flag">
                 <ul>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_1" ng-click="del_a(del_1)">商品编号</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_2" ng-click="del_b(del_2)">商品名称</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_3" ng-click="del_c(del_3)">供货价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_4" ng-click="del_d(del_4)">市场价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_5" ng-click="del_e(del_5)">平台价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="del_6" ng-click="del_f(del_6)">装饰公司采购价格</li>
-                    <li><input type="checkbox" class="right_input" ng-model="del_7" ng-click="del_g(del_7)">项目经理采购价格</li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_1"
+                               ng-click="del_a(del_1)">商品编号
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_2"
+                               ng-click="del_b(del_2)">商品名称
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_3"
+                               ng-click="del_c(del_3)">供货价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_4"
+                               ng-click="del_d(del_4)">市场价格
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_5"
+                               ng-click="del_e(del_5)">平台价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="del_6" ng-click="del_f(del_6)">装饰公司采购价格
+                    </li>
+                    <li><input type="checkbox" class="right_input" ng-model="del_7" ng-click="del_g(del_7)">项目经理采购价格
+                    </li>
                     <li><input type="checkbox" class="right_input" ng-model="del_8" ng-click="del_h(del_8)">设计师采购价格</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_9" ng-click="del_i(del_9)">库存</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_10" ng-click="del_j(del_10)">销量</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_11" ng-click="del_k(del_11)">状态</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_12" ng-click="del_l(del_12)">发布时间</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_13" ng-click="del_m(del_13)">图片</li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_14" ng-click="wait_n(del_14)">详情</li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_9"
+                               ng-click="del_i(del_9)">库存
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_10"
+                               ng-click="del_j(del_10)">销量
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_11"
+                               ng-click="del_k(del_11)">状态
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_12"
+                               ng-click="del_l(del_12)">发布时间
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_13"
+                               ng-click="del_m(del_13)">图片
+                    </li>
+                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="del_14"
+                               ng-click="wait_n(del_14)">详情
+                    </li>
                 </ul>
             </div>
         </div>
@@ -429,30 +717,39 @@
                 <td ng-if="del_7">项目经理采购价格</td>
                 <td ng-if="del_8">设计师采购价格</td>
                 <td ng-if="del_9">库存</td>
-                <td ng-if="del_10">销量</td>
+                <td ng-if="del_10">
+                    销量
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_up.png" alt="" class="sortpic" ng-show="deletedsold_ascorder" ng-click="deletedSoldDesorder()">
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_down.png" alt="" class="sortpic" ng-show="deletedsold_desorder" ng-click="deletedSoldAscorder()">
+                </td>
                 <td ng-if="del_11">状态</td>
-                <td ng-if="del_12">删除时间</td>
+                <td ng-if="del_12">
+                    删除时间
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_up.png" alt="" class="sortpic" ng-show="deletedtime_ascorder" ng-click="deletedTimeDesorder()">
+                    <img src="pages/mall_manage/merchant_manage/commodity_manage/images/arrow_down.png" alt="" class="sortpic" ng-show="deletedtime_desorder" ng-click="deletedTimeAscorder()">
+                </td>
                 <td ng-if="del_13">图片</td>
                 <td ng-if="del_14">详情</td>
             </tr>
-            <tr class="table_content">
-                <td ng-if="del_1">123456</td>
-                <td ng-if="del_2">升达木地板</td>
-                <td ng-if="del_3">¥45.00</td>
-                <td ng-if="del_4">¥80.00</td>
-                <td ng-if="del_5">¥80.00</td>
-                <td ng-if="del_6">装修公司采购价格</td>
-                <td ng-if="del_7">项目经理采购价格</td>
-                <td ng-if="del_8">设计师采购价格</td>
-                <td ng-if="del_9">库存</td>
-                <td ng-if="del_10">销量</td>
-                <td ng-if="del_11">已删除</td>
-                <td ng-if="del_12" class="sky_blue">删除时间</td>
-                <td ng-if="del_13"><img src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""></td>
-                <td ng-if="del_14" class="blue" ui-sref="commodity_detail_del">查看</td>
+            <tr class="table_content" ng-repeat="item in deletedgoods track by $index">
+                <td ng-if="del_1">{{item.sku}}</td>
+                <td ng-if="del_2">{{item.title}}</td>
+                <td ng-if="del_3">{{item.supplier_price | currency:"¥"}}</td>
+                <td ng-if="del_4">{{item.market_price | currency:"¥"}}</td>
+                <td ng-if="del_5">{{item.platform_price | currency:"¥"}}</td>
+                <td ng-if="del_6">{{item.purchase_price_decoration_company | currency:"¥"}}</td>
+                <td ng-if="del_7">{{item.purchase_price_manager | currency:"¥"}}</td>
+                <td ng-if="del_8">{{item.purchase_price_designer | currency:"¥"}}</td>
+                <td ng-if="del_9">{{item.left_number}}</td>
+                <td ng-if="del_10">{{item.sold_number}}</td>
+                <td ng-if="del_11">{{item.status}}</td>
+                <td ng-if="del_12" class="sky_blue">{{item.delete_time}}</td>
+                <td ng-if="del_13"><img class='goodpic' src="http://test.cdlhzz.cn:888/{{item.cover_image}}" alt="">
+                </td>
+                <td ng-if="del_14" class="blue" ui-sref="commodity_detail_del({deletegood:item})">查看</td>
             </tr>
         </table>
     </section>
-<!-------删除模块结束------->
+    <!-------删除模块结束------->
 
 </div>

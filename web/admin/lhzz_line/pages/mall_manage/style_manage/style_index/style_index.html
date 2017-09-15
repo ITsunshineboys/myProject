@@ -17,10 +17,11 @@
         </div>
 
         <!--系列管理-->
-        <div ng-show="showseries" class="series_mag">
+        <div ng-if="showseries==true" class="series_mag">
             <!--按钮组-->
             <div class="series_btn">
-                <button ui-sref="add_series">
+            <div class="series_btn">
+                <button ui-sref="add_series({list:series_arr})" ng-if="series_arr.length!=10">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span>添加</span>
                 </button>
@@ -33,30 +34,33 @@
                     <tr class="th">
                         <td width="224">系列名称</td>
                         <td width="270">创建时间
-                            <img src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
+                            <img ng-click="ser_time_sort(0)" ng-if="ser_time_sort_on_flag" src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
+                            <img ng-click="ser_time_sort(1)" ng-if="ser_time_sort_down_flag" src="pages/mall_manage/style_manage/style_index/images/arrow_down.png" alt="">
                         </td>
                         <td width="224">状态</td>
                         <td width="224">详情</td>
                         <td>操作</td>
                     </tr>
 
-                    <tr>
-                        <td>齐家</td>
-                        <td>2017-09-05 10:45</td>
-                        <td class="color_red">关闭</td>
-                        <td class="color_blue" ui-sref="series_detail">编辑</td>
-                        <td class="color_blue">开启</td>
-
+                    <tr ng-repeat="item in series_arr">
+                        <td>{{item.series}}</td>
+                        <td>{{item.creation_time}}</td>
+                        <td class="color_red" ng-if="item.status=='0'">关闭</td>
+                        <td class="color_skyblue" ng-if="item.status=='1'">启动中</td>
+                        <td class="color_blue" ui-sref="series_detail({item:item,ser_arr:series_arr,index:$index})">编辑</td>
+                        <td class="color_blue" ng-if="item.status=='0'" data-toggle="modal" data-target="#open_modal" ng-click="open_status(item)">开启</td>
+                        <td class="color_blue" ng-if="item.status=='1'" data-toggle="modal" data-target="#close_modal" ng-click="close_status(item)">关闭</td>
                     </tr>
                 </table>
             </div>
         </div>
+        </div>
 
         <!--风格管理-->
-        <div ng-show="showstyle" class="series_mag">
+        <div ng-if="showstyle==true" class="series_mag">
             <!--按钮组-->
             <div class="series_btn">
-                <button ui-sref="add_style">
+                <button ui-sref="add_style({style_arr:style_arr})">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span>添加</span>
                 </button>
@@ -69,26 +73,40 @@
                     <tr class="th">
                         <td width="224">风格名称</td>
                         <td width="270">创建时间
-                            <img src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
+                            <img ng-click="style_time_sort(0)" ng-if="style_time_sort_on_flag" src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
+                            <img ng-click="style_time_sort(1)" ng-if="style_time_sort_down_flag" src="pages/mall_manage/style_manage/style_index/images/arrow_down.png" alt="">
                         </td>
                         <td width="224">状态</td>
                         <td width="224">详情</td>
                         <td>操作</td>
                     </tr>
 
-                    <tr>
-                        <td>美式田园</td>
-                        <td>2017-09-05 10:45</td>
-                        <td class="color_red">关闭</td>
-                        <td class="color_blue" ui-sref="style_detail">编辑</td>
-                        <td class="color_blue">开启</td>
+                    <tr ng-repeat="style_item in style_arr">
+                        <td>{{style_item.style}}</td>
+                        <td>{{style_item.creation_time}}</td>
+                        <td class="color_red" ng-if="style_item.status=='0'">关闭</td>
+                        <td class="color_skyblue" ng-if="style_item.status=='1'">启用中</td>
+                        <td class="color_blue" ui-sref="style_detail({style_item:style_item})">编辑</td>
+                        <td class="color_blue" ng-if="style_item.status=='0'" ng-click="style_open(style_item)" data-toggle="modal" data-target="#style_open_modal">开启</td>
+                        <td class="color_blue" ng-if="style_item.status=='1'" ng-click="style_close(style_item)" data-toggle="modal" data-target="#style_close_modal">关闭</td>
                     </tr>
                 </table>
+                <!--分页开始-->
+                <ul class="pages">
+                    <li ng-click="style_Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
+                    <li class="pagenum" ng-repeat="page in style_history_list" ng-click="style_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
+                    <!--<li id="omit" ng-show="allpages>5">...</li>-->
+                    <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
+                    <li ng-click="style_Next()">下一页</li>
+                    <li class="jumpto"><input type="text" ng-model="topage"></li>
+                    <li ng-click="style_choosePage(topage)">跳转</li>
+                </ul>
+                <!--分页结束-->
             </div>
         </div>
 
         <!--属性管理-->
-        <div ng-show="showattr" class="series_mag">
+        <div ng-if="showattr==true" class="series_mag">
             <!--属性管理按钮组-->
             <div class="attr_btns">
                 <span>分类选择</span>
@@ -131,6 +149,80 @@
 
         </div>
 
+        <!--系列开启 模态框-->
+        <div class="modal fade" id="open_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>是否确认开启</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="open_btn_ok()">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--系列关闭模态框-->
+        <div class="modal fade" id="close_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>是否确认关闭</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="close_btn_ok()" >确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--风格开启 模态框-->
+        <div class="modal fade" id="style_open_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>是否确认开启</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="style_open_btn_ok()">确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--风格关闭模态框-->
+        <div class="modal fade" id="style_close_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>是否确认关闭</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="style_close_btn_ok()" >确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>

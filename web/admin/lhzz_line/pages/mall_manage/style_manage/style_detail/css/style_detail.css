@@ -50,7 +50,7 @@ ul{
     width: 245px;
     height: 31px;
     margin-left: 87px;
-    border: 1px solid #999!important;
+    border: 1px solid #999;
     border-radius: 3px;
     padding-left: 10px;
     line-height: 31px;
@@ -113,10 +113,20 @@ ul{
     height: 31px;
     text-align: center;
     line-height: 31px;
+    /*color: #ABABAB;*/
+    /*border: 1px solid #666F80;*/
+    border-radius: 3px;
+    position: relative;
+}
+.tags li input{
+    width: 88px;
+    height: 31px;
+    /*text-align: center;*/
+    padding-left: 6px;
+    line-height: 31px;
     color: #ABABAB;
     border: 1px solid #666F80;
     border-radius: 3px;
-    position: relative;
 }
 
 .tags span{
@@ -239,4 +249,37 @@ ul{
 #caozuo_sure{
     float: right;
     margin-right: 40px;
+}
+.color_skyblue{
+    color: #03A9F4!important;
+}
+.vis{
+    visibility: hidden;
+}
+.border_red{
+    border: 1px solid red!important;
+    outline: 0;
+}
+
+.img_list{
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+.logo{
+    width: 100px!important;
+    height: 100px!important;
+}
+.img_times{
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    font-size: 30px;
+    line-height: 30px;
+    color: red;
+    position: absolute;
+    bottom: 0;
+    background-color: #ddd;
 }

@@ -1,6 +1,6 @@
 var app = angular.module("app",["ui.router","shop_style","freight_template","template_details",
     "shopoffline_Module","systemoffline_Module","wait_online_Module"
-    ,"commodity_manage","up_shelves_detail_module",'index_module'])
+    ,"commodity_manage","up_shelves_detail_module",'index_module']);
 //路由拦截
    app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
         $urlRouterProvider.otherwise("/");
@@ -47,8 +47,13 @@ var app = angular.module("app",["ui.router","shop_style","freight_template","tem
             })
             .state("shop_style",{   //商品管理风格系类跳转
                 url:"/shop_style",
-                templateUrl:"pages/commodity_manage/shop_style.html"
-                //controller: "shop_style_ctrl"
+                templateUrl:"pages/commodity_manage/shop_style.html",
+                params:{
+                  category_id:'',
+                  first_category_title:'',
+                  second_category_title:'',
+                  third_category_title:''
+                }
             })
             .state("freight_template",{   //商品管理添加物流模板
                 url:"/freight_template",
@@ -63,7 +68,8 @@ var app = angular.module("app",["ui.router","shop_style","freight_template","tem
 
             .state("up_shelves_detail",{   //商品管理==>已上架商品详情
                 url:"/up_shelves_detail",
-                templateUrl:"pages/commodity_manage/up_shelves_detail.html"
+                templateUrl:"pages/commodity_manage/up_shelves_detail.html",
+                params:{item:'',flag:''}
             })
             .state("shop_offline",{/*已下架-商家下架*/
                 url:"/shop_offline",
@@ -71,13 +77,14 @@ var app = angular.module("app",["ui.router","shop_style","freight_template","tem
             })
             .state("system_offline",{   /*已下架-系统下架*/
                 url:"/system_offline",
-                templateUrl:"pages/commodity_manage/system_offline.html"
+                templateUrl:"pages/commodity_manage/system_offline.html",
+                params:{item:''}
             })
-            .state("wait_online",{   /*等待上架*/
-                url:"/wait_online",
-                templateUrl:"pages/commodity_manage/wait_online.html",
-                params:{item:'',flag:''}
-            })
+          .state("wait_online",{   /*等待上架*/
+            url:"/wait_online",
+            templateUrl:"pages/commodity_manage/wait_online.html",
+            params:{item:'',flag:''}
+          })
 
 
 

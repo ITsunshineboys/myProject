@@ -55,7 +55,7 @@ ul{
     width: 245px;
     height: 31px;
     margin-left: 87px;
-    border: 1px solid #999!important;
+    border: 1px solid #999;
     border-radius: 3px;
     padding-left: 10px;
     line-height: 31px;
@@ -87,8 +87,8 @@ ul{
 }
 
 .pic_right img{
-    width: 207px;
-    height: 299px;
+    width: 210px;
+    height: 300px;
 }
 
 .pic_right{
@@ -205,8 +205,7 @@ ul{
 
 /*按钮组*/
 .btn_sure{
-    margin-top: 37px;
-    margin-bottom: 308px;
+    margin: 30px 0;
 }
 
 .btn_sure button{
@@ -228,3 +227,14 @@ ul{
 }
 
 
+.ng-hide:not(.ng-hide-animate){
+    display: inline-block!important;
+}
+/*选择拥有系列的分类*/
+.active{
+    color: #487AF8;
+}
+.border_red{
+    border:1px solid red!important;
+    outline: 0;
+}

@@ -173,7 +173,7 @@ class OrderController extends Controller
         return Json::encode($data[0][$code]);
     }
 
-    /**
+/**
      * 无登录app-添加收货地址
      * @return string
      */
@@ -192,20 +192,17 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }else{
-                $res=Addressadd::insertaddress($mobile,$consignee,$region,$districtcode);
-                if ($res==true){
+                $code=Addressadd::insertaddress($mobile,$consignee,$region,$districtcode);
+                if ($code==200){
                     return Json::encode([
                         'code' => 200,
-                        'msg' => 'ok',
-                        'data' => '添加收货地址成功'
+                        'msg' => 'ok'
                     ]);
                 }else
                 {
-                    $code=1051;
                     return Json::encode([
                         'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                        'data' => '添加收货地址失败'
+                        'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
             }
@@ -2362,5 +2359,11 @@ class OrderController extends Controller
             ]);
         }
     }
+
+
+    public function actionCheck(){
+         $data=Invoice::find()->asArray()->all();
+        var_dump($data);
+     }
 
 }
