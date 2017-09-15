@@ -704,6 +704,7 @@ class OwnerController extends Controller
         $material = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
         $goods = Goods::priceDetail(3, $material);
         $goods_price = BasisDecorationService::priceConversion($goods);
+        var_dump($goods_price);exit;
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll('乳胶漆', $post['city']);
@@ -730,7 +731,8 @@ class OwnerController extends Controller
 
         var_dump($series_and_style['putty']);
         var_dump($putty_craft);
-        var_dump($putty_area);exit;
+        var_dump($putty_area);
+        exit;
 //        腻子费用
         $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft, $putty_area);
 ////        底漆费用
