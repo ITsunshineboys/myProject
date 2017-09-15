@@ -61,6 +61,7 @@ class GoodsOrder extends ActiveRecord
         self::SHIPPING_STATUS_SHIPPED=>self::SHIPPING_STATUS_DESC_SHIPPED,
         self::SHIPPING_STATUS_SHIPPEDCOMPLETE=>self::SHIPPING_STATUS_DESC_SHIPPEDCOMPLETE,
     ];
+    const PAGE_SIZE_DEFAULT = 12;
 
     const FIELDS_ORDERLIST_ADMIN = [
         'a.order_no',
@@ -234,7 +235,7 @@ class GoodsOrder extends ActiveRecord
             return false;
         }
     }
-    
+
     /**
      * 支付宝线下商城数据库操作
      * @param $arr
