@@ -177,7 +177,7 @@ ul{
 .lastul img{
     position: absolute;
     width: 24px;
-    left: 104px;
+    right: 0;
     top: 7px;
 
 }

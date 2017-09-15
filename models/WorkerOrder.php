@@ -30,6 +30,7 @@ use yii\db\Exception;
  * @property integer $worker_type_id
  * @property string $describe
  * @property string $demand
+ * @property string $days
  */
 class WorkerOrder extends \yii\db\ActiveRecord
 {
@@ -369,6 +370,22 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
     }
     /**
+     * 获取时间段精确到具体每一天
+     * @param $start_time
+     * @param $end_time
+     * @return string
+     */
+    public static function dataeveryday($start_time,$end_time){
+
+        $days = ($end_time-$start_time)/86400+1;
+        // 保存每天日期
+        $date =[];
+        for($i=0; $i<$days; $i++){
+            $date[] = date('Y-m-d', $start_time+(86400*$i));
+        }
+        return implode(',',$date);
+    }
+    /**
      * add guarantee info into worker_order_item
      * @param $id
      * @param $item_id
@@ -391,8 +408,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return false;
         }
     }
-
-
     /**
      * 生成订单
      * @param $uid
@@ -409,8 +424,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order->worker_type_id = $homeinfos['worker_type_id'];
         $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
         $worker_order->create_time = time();
-        $worker_order->start_time = $homeinfos['start_time'];
-        $worker_order->end_time = $homeinfos['end_time'];
+        $start_time=$worker_order->start_time = $homeinfos['start_time'];
+       $end_time= $worker_order->end_time = $homeinfos['end_time'];
         $worker_order->need_time = $homeinfos['need_time'];
         $worker_order->map_location=$ownerinfos['map_location'];
         $worker_order->address=$ownerinfos['address'];
@@ -418,6 +433,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order->con_tel=$ownerinfos['con_tel'];
         $worker_order->amount=$amount*100;
         $worker_order->front_money=$front_money*100;
+        $days=self::dataeveryday($start_time,$end_time);
+        $worker_order->days=$days;
         if(isset($describe)){
             $worker_order->describe=$describe;
         }

@@ -29,10 +29,13 @@
     color: gray;
 }
 
+.class_detail{
+    padding-left: 26px;
+}
+
 /*分类表单*/
 .cla_detail{
     padding-top: 56px;
-    padding-left: 26px;
     font-size: 14px;
 }
 
@@ -51,6 +54,11 @@
     border: 1px solid #BFC0C2;
     border-radius: 3px;
     padding-left: 5px;
+}
+
+.cla_name h6 {
+    color: red;
+    margin-left: 172px;
 }
 
 .divider{
@@ -80,18 +88,19 @@
 
 /*分类图片*/
 .cla_pic{
-    height: 220px;
-    margin-top: 40px;
+    margin-top: 66px;
 }
 
 .upload_pic{
-    display: inline;
+    display: inline-block;
+    vertical-align: top;
 }
 
-#cla_pic_uploadpic{
-    position: relative;
-    top:40px;
+.upload_pic img{
+    width: 120px;
+    height: 120px;
 }
+
 
 .upload_tishi{
     font-size: 12px;
@@ -99,18 +108,20 @@
 
 .upload_pic h6{
     font-size: 12px;
-    width: 300px;
-    color: #BFC0C2;
-    position: relative;
-    top:46px;
-    left: 172px;
+    color: #ABABAB;
+    margin-top: 10px;
 }
 
-#upload{
-    width: 300px;
-    position: relative;
-    top: 43px;
-    left: 172px;
+#upload {
+    width: 67px;
+    height: 24px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 24px;
+    color: #666F80;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    margin-top: 4px;
 }
 
 #upload_btn{
@@ -125,22 +136,21 @@
     background-color: white;
 }
 
-.reload_tishi{
-    width: 300px;
+.warning{
     font-size: 12px;
-    color: red;
-    position: relative;
-    top: 49px;
-    left: 172px;
+    margin-top: 10px;
 }
 
 /*分类描述*/
 .cla_des{
     margin-top: 32px;
+    padding-left: 26px;
 }
 
 .cla_des .each_title{
-    margin-left: 16px;
+    position: relative;
+    left: 0;
+    top: -363px;
 }
 
 #edit_tool{
@@ -180,7 +190,42 @@
     color: #5e6166;
     background-color: white;
     margin-right: 20px;
+}
 
+/*确认提示模态框*/
+#save_content{
+    width: 636px;
+    height: 256px;
+}
+
+#tishi{
+    padding-left: 13px;
+    padding-top: 6px;
+    font-weight: bold;
+}
+
+#tishi_wenzi{
+    font-size: 16px;
+    padding-left: 13px;
+}
+
+#caozuo_sure{
+    width: 84px;
+    height: 36px;
+    border: 1px solid #c2c2c2;
+    border-radius: 3px;
+    padding-left: 5px;
+    line-height: 36px;
+    font-size: 12px;
+    color: #5e6166;
+    background-color: white;
+    margin-left: 511px;
+    margin-top: 54px;
+}
+
+.cla_name h6{
+    color: red;
+    margin-left: 172px;
 }
 
 
