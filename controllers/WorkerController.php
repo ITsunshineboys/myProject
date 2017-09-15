@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\LaborCost;
+use app\models\User;
 use app\models\Worker;
 use app\models\WorkerCraft;
 use app\models\WorkerOrder;
@@ -95,7 +97,10 @@ class WorkerController extends Controller
         }
 
         $worker = Worker::find()->where(['uid' => $user])->one();
-        if ($worker == null) {
+
+        $laborcost=Worker::getLaborByWorkerId($worker->id);
+        $user_info=User::find()->where(['id'=>$user])->one();
+        if ($worker == null || $laborcost==null || $user_info==null) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -103,6 +108,9 @@ class WorkerController extends Controller
             ]);
         }
         $data = [];
+        $data['aite_cube_no']=$user_info->aite_cube_no;
+        $data['worker_no']=$user_info->aite_cube_no;
+        $data['rank']=$laborcost->rank;
         $data['icon'] = $worker->icon;
         $data['nickname'] = $worker->nickname;
         $data['signature'] = $worker->signature ? '已设置' : '未设置';

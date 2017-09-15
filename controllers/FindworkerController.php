@@ -360,10 +360,23 @@ class FindworkerController extends Controller{
             ]
         ]);
     }
-    public function actionTest(){
-        $order_id=trim(\Yii::$app->request->get('order_id'));
-        $item_id=trim(\Yii::$app->request->get('item_id'));
-        $data=WorkerOrderItem::getorderitemview($order_id,$item_id);
-        var_dump($data);
+    public function actionWorkerAccountinfo(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
     }
+
+
+//    public function actionTest(){
+//        $order_id=trim(\Yii::$app->request->get('order_id'));
+//        $item_id=trim(\Yii::$app->request->get('item_id'));
+//        $data=WorkerOrderItem::getorderitemview($order_id,$item_id);
+//        var_dump($data);
+//    }
 }
