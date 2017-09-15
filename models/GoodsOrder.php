@@ -130,6 +130,8 @@ class GoodsOrder extends ActiveRecord
     const ORDER_TYPE_DESC_CANCEL='已取消';
     const ORDER_TYPE_DESC_CUSTOMER_SERVICE='售后';
     const ORDER_TYPE_DESC_UNCOMMENT='待评论';
+    const ORDER_TYPE_DESC_APPLYREFUND='申请退款';
+    const ORDER_TYPE_APPLYREFUND='apply_refund';
     const ORDER_TYPE_ALL='all';
     const ORDER_TYPE_UNPAID='unpaid';
     const ORDER_TYPE_UNSHIPPED='unshipped';
@@ -2004,7 +2006,8 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
 
-   /**
+  
+    /**
      * @param $arr
      * @return mixed
      */
@@ -2019,9 +2022,15 @@ class GoodsOrder extends ActiveRecord
                     break;
                 case self::SHIPPING_STATUS_DESC_UNSHIPPED:
                     $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED;
+                    if ($arr[$k]['unusual']=='申请退款'){
+                        $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                    }
                     break;
                 case  self::ORDER_TYPE_DESC_UNRECEIVED:
                     $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED;
+                    if ($arr[$k]['unusual']=='申请退款'){
+                        $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                    }
                     break;
                 case  self::ORDER_TYPE_DESC_CANCEL:
                     $arr[$k]['status']=self::ORDER_TYPE_CANCEL;
