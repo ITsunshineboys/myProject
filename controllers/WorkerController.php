@@ -97,16 +97,30 @@ class WorkerController extends Controller
         }
 
         $worker = Worker::find()->where(['uid' => $user])->one();
-
-        $laborcost=Worker::getLaborByWorkerId($worker->id);
-        $user_info=User::find()->where(['id'=>$user])->one();
-        if ($worker == null || $laborcost==null || $user_info==null) {
+        if ($worker == null ) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $laborcost=Worker::getLaborByWorkerId($worker->id);
+        if ($laborcost == null ) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user_info=User::find()->where(['id'=>$user])->one();
+        if ($user_info == null ) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
         $data = [];
         $data['aite_cube_no']=$user_info->aite_cube_no;
         $data['worker_no']=$user_info->aite_cube_no;
