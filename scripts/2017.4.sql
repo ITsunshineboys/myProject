@@ -934,7 +934,7 @@ CREATE TABLE `invoice` (
   `default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 未默认  1：  默认',
   `uid` int(11) NOT NULL COMMENT '用户ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_address`;
 CREATE TABLE `user_address` (
