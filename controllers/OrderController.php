@@ -245,11 +245,10 @@ class OrderController extends Controller
      */
     public function actionOrderinvoicelineadd(){
         $request = \Yii::$app->request;
-        $invoice_type        = trim(htmlspecialchars($request->post('invoice_type')));
-
+        $invoice_type        = trim($request->post('invoice_type'));
         $invoice_header_type = 1;
-        $invoice_header      = trim(htmlspecialchars($request->post('invoice_header')));
-        $invoice_content     = trim(htmlspecialchars($request->post('invoice_content')));
+        $invoice_header      = trim($request->post('invoice_header'));
+        $invoice_content     = trim($request->post('invoice_content'));
         if (!$invoice_type||!$invoice_header||!$invoice_content )
         {
             $code=1000;
@@ -258,7 +257,7 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $invoicer_card =trim(htmlspecialchars($request->post('invoicer_card')));
+        $invoicer_card =trim($request->post('invoicer_card'));
         if ($invoicer_card){
             $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
             if ($isMatched==false){
@@ -275,18 +274,15 @@ class OrderController extends Controller
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
-                'data' => '添加发票成功'
             ]);
         }else{
             $code=$res['code'];
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
     }
-
     /**
      * 无登录app-获取商品信息
      * @return string

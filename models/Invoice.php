@@ -80,8 +80,6 @@ class Invoice extends ActiveRecord
                 }
             }
     }
-
-
     /**
      * @param $invoice_type
      * @param $invoice_header_type
