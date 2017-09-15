@@ -187,7 +187,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $workers = LaborCost::profession($post['city'], '水电工');
+        $workers = LaborCost::profession($post['city'],'水电工');
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],'弱电点位');
 
         //      点位 和 材料查询
@@ -417,7 +417,7 @@ class OwnerController extends Controller
             ]
         ]);
     }
-    
+
     /**
      * 防水
      * @return string
