@@ -51,7 +51,24 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_order_id', 'worker_item_id', 'worker_craft_id', 'area'], 'integer'],
+            [['worker_order_id', 'worker_item_id', 'worker_craft_id', 'area', 'status', 'electricity', 'count'], 'integer'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'worker_order_id' => '工单id',
+            'worker_item_id' => '工人条目id',
+            'worker_craft_id' => '工艺id',
+            'area' => '面积,单位: dm^2',
+            'status' => '0: 否，1：是',
+            'electricity' => '（水电：0:弱电,1:强电）',
+            'count' => '(水电：个数)',
         ];
     }
     /**

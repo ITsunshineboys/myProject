@@ -32,6 +32,7 @@ class WorkerType extends \yii\db\ActiveRecord
         return [
             [['pid'], 'integer'],
             [['worker_type'], 'string', 'max' => 20],
+            [['image'], 'string', 'max' => 255],
         ];
     }
 
@@ -44,6 +45,7 @@ class WorkerType extends \yii\db\ActiveRecord
             'id' => 'ID',
             'pid' => '所属上级工种id',
             'worker_type' => '工种名字',
+            'image' => '服务工种图片',
         ];
     }
 

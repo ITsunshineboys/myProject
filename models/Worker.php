@@ -4,23 +4,33 @@ namespace app\models;
 
 use Yii;
 
+
 /**
  * This is the model class for table "worker".
  *
  * @property integer $id
  * @property string $uid
  * @property string $project_manager_id
- * @property string $labor_cost_id
+ * @property string $province_code
+ * @property string $city_code
  * @property string $nickname
  * @property string $icon
  * @property string $follower_number
  * @property double $comprehensive_score
+ * @property integer $feedback
+ * @property string $order_total
+ * @property string $order_done
+ * @property integer $level
  * @property string $create_time
  * @property string $signature
  * @property string $balance
  * @property string $pay_password
  * @property string $address
  * @property integer $status
+ * @property string $worker_type_id
+ * @property string $skill_ids
+ * @property integer $work_year
+ * @property string $availableamount
  */
 class Worker extends \yii\db\ActiveRecord
 {
@@ -38,10 +48,12 @@ class Worker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'project_manager_id', 'labor_cost_id', 'follower_number', 'create_time', 'balance', 'status'], 'integer'],
+            [['uid', 'project_manager_id', 'follower_number', 'feedback', 'order_total', 'order_done', 'level', 'create_time', 'balance', 'status', 'worker_type_id', 'work_year', 'availableamount'], 'integer'],
             [['comprehensive_score'], 'number'],
+            [['availableamount'], 'required'],
+            [['province_code', 'city_code'], 'string', 'max' => 20],
             [['nickname'], 'string', 'max' => 25],
-            [['icon'], 'string', 'max' => 255],
+            [['icon', 'skill_ids'], 'string', 'max' => 255],
             [['signature', 'pay_password', 'address'], 'string', 'max' => 100],
         ];
     }
@@ -55,17 +67,26 @@ class Worker extends \yii\db\ActiveRecord
             'id' => 'ID',
             'uid' => 'Uid',
             'project_manager_id' => '项目经理id',
-            'labor_cost_id' => '工费地区id (包含工人类型和等级)',
+            'province_code' => '省份编码',
+            'city_code' => '市编码',
             'nickname' => '工人名字',
             'icon' => '头像',
             'follower_number' => '关注人数',
             'comprehensive_score' => '综合评分',
+            'feedback' => '好评率',
+            'order_total' => '总接单数',
+            'order_done' => '完成订单数',
+            'level' => '工人级别',
             'create_time' => '注册时间',
             'signature' => '个性签名',
             'balance' => '余额, unit: fen',
             'pay_password' => '支付密码',
             'address' => '详细地址',
             'status' => '接单状态: 1,接单 0,不接单',
+            'worker_type_id' => '工种id(只能选pid为0的)',
+            'skill_ids' => '特长的id',
+            'work_year' => '工龄：单位(年)',
+            'availableamount' => '可用余额',
         ];
     }
 
@@ -89,7 +110,7 @@ class Worker extends \yii\db\ActiveRecord
     {
         $worker = self::getWorkerByUid($uid);
         $worker->signature = $signature ? $signature : $worker->signature;
-        $worker->save();
+        $worker->save(false);
         return 200;
     }
 

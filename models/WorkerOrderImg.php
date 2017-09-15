@@ -30,7 +30,7 @@ class WorkerOrderImg extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_order_no'], 'integer'],
+            [['worker_order_no'], 'string', 'max' => 50],
             [['order_img'], 'string', 'max' => 255],
         ];
     }
@@ -42,7 +42,7 @@ class WorkerOrderImg extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'worker_order_id' => '工单号',
+            'worker_order_no' => '工人订单号',
             'order_img' => '工单图片地址',
         ];
     }

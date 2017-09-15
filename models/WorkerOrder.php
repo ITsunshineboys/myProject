@@ -37,20 +37,27 @@ class WorkerOrder extends \yii\db\ActiveRecord
     const STATUS_INSERT=1;
     const ORDER_OLD=1;
     const ORDER_NEW=0;
+
+    const WORKER_ORDER_CANCELED = 0;
+    const WORKER_ORDER_NOT_BEGIN = 1;
+    const WORKER_ORDER_PREPARE = 2;
+    const WORKER_ORDER_ING = 3;
+    const WORKER_ORDER_DONE = 4;
+
     const WORKER_ORDER_STATUS = [
-        0 => '完工',
-        1 => '未开始',
-        2 => '未开始',
-        3 => '施工中',
-        4 => '完工'
+        self::WORKER_ORDER_CANCELED => '完工',
+        self::WORKER_ORDER_NOT_BEGIN => '未开始',
+        self::WORKER_ORDER_PREPARE => '未开始',
+        self::WORKER_ORDER_ING => '施工中',
+        self::WORKER_ORDER_DONE => '完工'
     ];
 
     const USER_WORKER_ORDER_STATUS = [
-        0 => '已取消',
-        1 => '接单中',
-        2 => '已接单',
-        3 => '施工中',
-        4 => '已完工'
+        self::WORKER_ORDER_CANCELED => '已取消',
+        self::WORKER_ORDER_NOT_BEGIN => '接单中',
+        self::WORKER_ORDER_PREPARE => '已接单',
+        self::WORKER_ORDER_ING => '施工中',
+        self::WORKER_ORDER_DONE => '已完工'
     ];
 
     /**
@@ -68,14 +75,18 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
         return [
             [['uid', 'worker_id', 'create_time', 'modify_time', 'start_time', 'end_time', 'need_time', 'amount', 'front_money', 'status', 'worker_type_id', 'is_old'], 'integer'],
+            [['uid', 'worker_id', 'worker_type_id', 'create_time', 'modify_time', 'start_time', 'end_time', 'need_time', 'amount', 'front_money', 'status', 'is_old'], 'integer'],
             [['con_tel'], 'required'],
             [['order_no'], 'string', 'max' => 50],
             [['describe'], 'string', 'max' => 350],
             [['reason'], 'string', 'max' => 350],
             [['demand'], 'string', 'max' => 300],
+            [['days'], 'string', 'max' => 1000],
             [['map_location', 'address'], 'string', 'max' => 100],
             [['con_people'], 'string', 'max' => 25],
             [['con_tel'], 'string', 'max' => 11],
+            [['describe', 'reason'], 'string', 'max' => 350],
+            [['demand'], 'string', 'max' => 300],
         ];
     }
 
@@ -88,18 +99,25 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'id' => 'ID',
             'uid' => '用户id',
             'worker_id' => '工人id',
+            'worker_type_id' => '工人类型id',
             'order_no' => '工单号',
             'create_time' => '创建时间',
+            'modify_time' => '修改时间',
             'start_time' => '开始时间',
             'end_time' => '结束时间',
             'need_time' => '工期(天数)',
+            'days' => '工作的具体日期',
             'map_location' => '地图定位',
             'address' => '施工详细地址',
             'con_people' => '联系人',
             'con_tel' => '联系电话',
             'amount' => '订单总金额',
             'front_money' => '订金',
-            'status' => '0: 已取消(完成)，1：未开始(接单中)，2：施工中，3：已完工(完成)',
+            'status' => '0: 已取消(完成)，1：未开始(接单中)，2：未开始(已接单)，3：施工中，4：已完工(完成)',
+            'describe' => '订单描述',
+            'is_old' => '是否旧数据，0：不是，  1：是',
+            'demand' => '个性需求',
+            'reason' => '修改原因',
         ];
     }
 
@@ -119,8 +137,13 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->select(['create_time', 'amount', 'status'])
             ->where(['uid' => $uid, 'worker_id' => $worker_id]);
         if ($status != WorkerController::STATUS_ALL) {
-            if ($status == 0 || $status == 3) {
-                $status = [0, 3];
+            if ($status == self::WORKER_ORDER_CANCELED
+                || $status == self::WORKER_ORDER_DONE
+            ) {
+                $status = [
+                    self::WORKER_ORDER_CANCELED,
+                    self::WORKER_ORDER_DONE
+                ];
             }
             $query->andWhere(['status' => $status]);
         }
@@ -233,19 +256,38 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return 1000;
         }
         list($order, $worker_items) = $order_detail;
-        //TODO 查出工人的(成交数量，风格)待定， 调整历史单独分出来(对应订单) 好评率
+        //TODO  调整历史单独分出来(对应订单)  好评率
         $worker = [];
         //只要有工人id,便显示工人信息
         if ($order->worker_id) {
             $worker = Worker::find()
                 ->where(['id' => $order->worker_id])
-                ->select(['id', 'nickname', 'work_year', 'comprehensive_score', 'icon', 'province_code', 'city_code', 'level'])
+                ->asArray()
+                ->select(['id', 'nickname', 'work_year', 'comprehensive_score', 'icon', 'province_code', 'city_code', 'level', 'skill_ids', 'order_done'])
                 ->one();
         }
 
         $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
         $order_no = self::getOrderNoById($order_id);
         $order_img = WorkerOrderImg::find()->where(['worker_order_no' => $order_no])->all();
+
+        $skill_ids = $worker['skill_ids'];
+
+        $skills = [];
+
+        if ($skill_ids) {
+            $skill_ids = explode(',', $skill_ids);
+            $skill_all = WorkerSkill::find()
+                ->where(['id' => $skill_ids])->all();
+
+            foreach ($skill_all as $skill) {
+                $skills[] = $skill['skill'];
+            }
+        }
+
+        unset($worker['skill_ids']);
+
+        $worker['skills'] = $skills;
 
         return [
             'order' => $order,
@@ -270,8 +312,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if (!$insert && $changedAttributes['status'] == 4) {
-            //TODO 工人成交数量加1    工人好评率修改
+        //每完成一个订单
+        if (!$insert && $changedAttributes['status'] == self::WORKER_ORDER_DONE) {
+            //TODO 工人完成订单数加1
         }
         parent::afterSave($insert, $changedAttributes); // TODO: Change the autogenerated stub
     }
