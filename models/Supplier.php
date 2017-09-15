@@ -475,7 +475,7 @@ class Supplier extends ActiveRecord
     public static function getsupplierdata($supplier_id, $uid)
     {
         $query = new Query();
-        $select = 'sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
+        $select = 's.id,sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money';
         $array = $query->from('supplier as s')
             ->select($select)
             ->leftJoin('user_cashregister as sc', 'sc.uid=s.id')

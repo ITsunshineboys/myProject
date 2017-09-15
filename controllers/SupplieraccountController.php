@@ -247,10 +247,17 @@ class SupplieraccountController extends  Controller{
                 $freeze_money=  $model->freeze_money=trim($request->post('freeze_money',''),'');
                 $model->freeze_reason=trim($request->post('freeze_reason',''),'');
                 $model->create_time=time();
-                $code=1000;
+                    if(!$freeze_money){
+                        $code=1000;
+                        return json_encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code],
+
+                        ]);
+                    }
                     if($freezed_money<$freeze_money){
                        $transaction->rollBack();
-                        $code=500;
+                        $code=1051;
                        return json_encode([
                            'code' => $code,
                            'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -274,19 +281,7 @@ class SupplieraccountController extends  Controller{
                        'msg'=>'ok',
 
                    ]);
-
-
             }else{
-                if(!$supplier_id){
-                    $transaction->rollBack();
-                    $code=500;
-                    return json_encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code],
-
-                    ]);
-                }
-
                 if($supplier){
                     return json_encode([
                         'code' => 200,
@@ -294,7 +289,6 @@ class SupplieraccountController extends  Controller{
                         'data'=>$freezed_money
 
                     ]);
-
                 }
             }
         }catch (Exception $e){
