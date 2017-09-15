@@ -1857,7 +1857,7 @@ class GoodsOrder extends ActiveRecord
      * @param array $select
      * @param int $page
      * @param int $size
-     * @param $sort
+     * @param $type
      * @param $user
      * @return array
      */
@@ -1903,6 +1903,7 @@ class GoodsOrder extends ActiveRecord
         }
         foreach ($arr as $key => $row)
         {
+            $arr[$key]['type']=$type;
             $create_time[$key]  = $arr[$key]['create_time'];
         }
         $arr=self::switchStatus($arr);
@@ -1916,18 +1917,17 @@ class GoodsOrder extends ActiveRecord
             return [
                 'total_page' =>$total_page,
                 'count'=>$count,
-                'type'=>$type,
                 'details' => $data
             ];
         }else{
             return [
                 'total_page' =>0,
                 'count'=>0,
-                'type'=>$type,
                 'details' => []
             ];
         }
     }
+
     /**
      * @param $arr
      * @return mixed
