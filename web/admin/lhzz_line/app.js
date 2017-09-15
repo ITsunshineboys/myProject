@@ -6,6 +6,7 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
   "onlineeditModule","offlineeditModule","addbrandModule","styleindexModule","chooseseriesModule",
   "addseriesModule",
   "seriesdetailModule","addstyleModule","choose_styleModule","styledetailModule",
+  "storedetailModule",
 
   //  王杰 开始
   "index_module",
