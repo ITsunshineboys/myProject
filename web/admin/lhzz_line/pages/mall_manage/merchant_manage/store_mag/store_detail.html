@@ -1,0 +1,208 @@
+<link rel="stylesheet" href="pages/mall_manage/merchant_manage/store_mag/css/store_detail.css"/>
+<div ng-controller="storedetail_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage" ui-sref='merchant_index'>商城管理 ></span>
+            <span class="shop_manage" ui-sref='store_mag'>商家管理 ></span>
+            <span class="manage_child">商家详情</span>
+            <img src="pages/mall_manage/merchant_manage/merchant_comment/images/user.png" alt=""/>
+        </div>
+    </header>
+    <section>  <!--图文详情和参数-->
+        <div class="pic_comment">
+            <div>
+                <ul class="nav nav-tabs list_tab" ng-init="vm.activeTab=1">
+                    <li ng-class="{active:vm.activeTab == 1}">
+                        <a href="javascript:;" ng-click="vm.activeTab = 1" >基本信息</a>
+                        <span ng-class="{line_com:vm.activeTab==1}" ></span>
+                    </li>
+                    <li ng-class="{active: vm.activeTab == 2}">
+                        <a href="javascript:;" ng-click="vm.activeTab = 2">店铺咨质</a>
+                        <span ng-class="{line_com:vm.activeTab==2}" ></span>
+                    </li>
+                    <li ng-class="{active: vm.activeTab == 3}">
+                        <a href="javascript:;" ng-click="vm.activeTab = 3">品牌授权</a>
+                        <span ng-class="{line_com:vm.activeTab==3}" ></span>
+                    </li>
+                </ul>
+                <div class="tab-content tab-bordered">
+                    <!--基本信息-->
+                    <div class="tab-panel" ng-show="vm.activeTab == 1">
+                        <div class="shop_name">
+                            <span>店铺名称</span>
+                            <span ng-bind="shop_name"></span>
+                        </div>
+
+                        <!--店铺号-->
+                        <div class="shop_num">
+                            <span>店铺号</span>
+                            <span ng-bind="shop_no"></span>
+                        </div>
+
+                        <!--开店时间-->
+                        <div class="shop_name">
+                            <span>开店时间</span>
+                            <span ng-bind="create_time"></span>
+                        </div>
+
+                        <!--登录账号-->
+                        <div class="shop_name">
+                            <span>登录账号</span>
+                            <span ng-bind="mobile"></span>
+                        </div>
+                        <!--店铺状态-->
+                        <div class="shop_name">
+                            <span>店铺状态</span>
+                            <span ng-bind="status"></span>
+                        </div>
+
+                        <!--店铺logO-->
+                        <div class="shop_logo">
+                            <span>店铺logo</span>
+                            <img src="http://test.cdlhzz.cn:888/{{icon}}" alt="店铺logo"/>
+                        </div>
+                        <hr/>
+
+                        <!--店铺评分-->
+                        <div class="shop_store">
+                            <span>店铺评分</span>
+                            <ul>
+                                <li><span>综合评分</span><span ng-bind="comprehensive_score"></span></li>
+                                <li><span>店家服务</span><span ng-bind="store_service_score"></span></li>
+                                <li><span>物流速度</span><span ng-bind="logistics_speed_score"></span></li>
+                                <li><span>配送员服务</span><span ng-bind="delivery_service_score"></span></li>
+                            </ul>
+                        </div>
+
+                        <!--关注粉丝-->
+                        <div class="shop_name">
+                            <span>关注粉丝</span>
+                            <span ng-bind="follower_number"></span>
+                        </div>
+                        <!--按钮-->
+                        <div class="btn_back">
+                            <button ui-sref="store_mag">返回</button>
+                        </div>
+
+                    </div>
+                    <!--店铺资质-->
+                    <div class="tab-panel" ng-show="vm.activeTab == 2">
+                        <div class="shop_name">
+                            <span>单位类型</span>
+                            <span ng-bind="type_org"></span>
+                        </div>
+                        <!--店铺号-->
+                        <div class="shop_num">
+                            <span>商家分类</span>
+                            <span ng-bind="category_name" id='storeclass'></span>
+                        </div>
+
+                        <!--店铺类型-->
+                        <div class="shop_name">
+                            <span>店铺类型</span>
+                            <span ng-bind="type_shop"></span>
+                        </div>
+                        <!--资质日期-->
+                        <div class="shop_name">
+                            <span>资质日期</span>
+                            <span>{{create_time}}至{{onemoreyear}}</span>
+                        </div>
+                        <!--保证金-->
+                        <div class="shop_money">
+                            <span>质保金</span>
+                            <span ng-bind="quality_guarantee_deposit"></span>
+                            <span>已免除</span>
+                        </div>
+                        <hr/>
+                        <!--公司名称-->
+                        <div class="shop_name">
+                            <span>公司名称</span>
+                            <span ng-bind="name"></span>
+                        </div>
+                        <!--社会信用代码-->
+                        <div class="shop_credit">
+                            <span>社会信用代码</span>
+                            <span ng-bind="licence"></span>
+                        </div>
+                        <!--营业执照-->
+                        <div class="shop_license">
+                            <span>营业执照</span>
+                            <img src="http://test.cdlhzz.cn:888/{{licence_image}}" alt="营业执照"/>
+                        </div>
+                        <hr/>
+                        <!--法人名称-->
+                        <div class="shop_name">
+                            <span>法人名称</span>
+                            <span ng-bind="legal_person"></span>
+                        </div>
+                        <!--法人身份证号-->
+                        <div class="shop_card">
+                            <span>法人身份证号</span>
+                            <span ng-bind="identity_card_no"></span>
+                        </div>
+                        <!--法人身份证正面-->
+                        <div class="shop_face">
+                            <span>法人身份证正面</span>
+                            <img src="http://test.cdlhzz.cn:888/{{identity_card_front_image}}" alt=""/>
+                        </div>
+                        <!--法人身份证反面-->
+                        <div class="shop_face">
+                            <span>法人身份证反面</span>
+                            <img src="http://test.cdlhzz.cn:888/{{identity_card_back_image}}" alt=""/>
+                        </div>
+                        <!--按钮-->
+                        <div class="btn_back">
+                            <button ui-sref="store_mag">返回</button>
+                        </div>
+                    </div>
+                    <!--品牌授权-->
+                    <div class="tab-panel" ng-show="vm.activeTab == 3">
+                        <div class="table_div">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <th>品牌详情</th>
+                                    <th>申请日期</th>
+                                    <th>授权日期</th>
+                                    <th>状态</th>
+                                    <th>审核备注</th>
+                                    <th>详情</th>
+                                </tr>
+                                <tr>
+                                    <td>升达木地板专卖店</td>
+                                    <td>2017-09-10 10:35</td>
+                                    <td>2017-09-10 至 2018-09-10</td>
+                                    <td>通过</td>
+                                    <td>无</td>
+                                    <td><a href="">查看</a></td>
+                                </tr>
+                                <tr>
+                                    <td>升达木地板专卖店</td>
+                                    <td>2017-09-10 10:35</td>
+                                    <td>2017-09-10 至 2018-09-10</td>
+                                    <td>通过</td>
+                                    <td data-toggle="modal" data-target=".bs-example-modal-md">营业执照</td>
+                                    <td><a ui-sref="merchant_details">查看</a></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--模态框-->
+        <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content modal_size">
+                    <h4>审核备注</h4>
+                    <hr/>
+                    <span>说明</span>
+                    <span>营业执照不清晰，请重新上传</span>
+                    <br/>
+                    <button class="modal_size_btn" data-dismiss="modal">确认</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
