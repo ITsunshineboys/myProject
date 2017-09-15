@@ -1,6 +1,6 @@
 var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router",
   "clamagModule","onsaleeditModule",
-  "offsaleeditModule","addclassModule","comment",'brand_details_module',
+  "offsaleeditModule","addclassModule",'brand_details_module',
   'brand_check','check_right','account_comment','change_num',
   'bind_record','operation_record',"mallmagModule","storemagModule","addstoreModule",
   "onlineeditModule","offlineeditModule","addbrandModule","styleindexModule","chooseseriesModule",
