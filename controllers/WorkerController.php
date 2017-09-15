@@ -313,7 +313,7 @@ class WorkerController extends Controller
             }
             $request = \Yii::$app->request;
 
-            //TODO 传值的格式暂定 $post[order_id, items, new_amount, reason, work_days]
+            //TODO 传值的格式暂定 $post[order_id, items, new_amount, reason, days]
             //TODO 其中 items[   [id, craft_id, area], [id, area] ...]   work_days[day1, day2, day3, day...]
 
             $order_id = (int)$request->post('order_id', 0);
@@ -321,6 +321,7 @@ class WorkerController extends Controller
             $new_amount = trim($request->post('new_amount', 0));
             $reason = trim($request->post('reason', ''));
             $need_time = trim($request->post('need_time', ''));
+            $days = trim($request->post('days', ''));
 
             if (!$order_id) {
                 $code = 1000;
@@ -365,6 +366,8 @@ class WorkerController extends Controller
             if ($need_time && $need_time != $order_old['need_time']) {
                 $data['need_time'] = $need_time;
             }
+
+            $days && $data['days'] = $days;
 
             $data['is_old'] = 0;
             $data['modify_time'] = time();
