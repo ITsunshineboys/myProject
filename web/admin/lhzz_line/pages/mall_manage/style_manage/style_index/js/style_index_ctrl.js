@@ -37,19 +37,19 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
 
 
     /*选项卡切换方法*/
-    function changeToseries () {
+    $scope.changeToseries = function() {
         $scope.showseries = true;
         $scope.showstyle = false;
         $scope.showattr = false;
     };
 
-    function changeTostyle () {
+    $scope.changeTostyle = function () {
         $scope.showseries = false;
         $scope.showstyle = true;
         $scope.showattr = false;
     };
 
-   function changeToattr () {
+    $scope.changeToattr = function () {
         $scope.showseries = false;
         $scope.showstyle = false;
         $scope.showattr = true;
