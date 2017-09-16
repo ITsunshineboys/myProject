@@ -3646,7 +3646,7 @@ class MallController extends Controller
         $code = 1000;
 
         $user = Yii::$app->user->identity;
-        if (!$user) {echo 'aaa';
+        if (!$user) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -3656,7 +3656,7 @@ class MallController extends Controller
         $sort = Yii::$app->request->get('sort', []);
         $model = new Goods;
         $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
-        if ($orderBy === false) {echo 'bbb';
+        if ($orderBy === false) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -3664,7 +3664,7 @@ class MallController extends Controller
         }
 
         $status = (int)Yii::$app->request->get('status', Goods::STATUS_ONLINE);
-        if (!in_array($status, array_keys(Goods::$statuses))) {echo 'ccc';
+        if (!in_array($status, array_keys(Goods::$statuses))) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -3690,7 +3690,7 @@ class MallController extends Controller
             $where .= " and supplier_id = {$supplier->id}";
         } else {
             $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
-            if (!$supplierId) {echo 'ddd';
+            if (!$supplierId) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
