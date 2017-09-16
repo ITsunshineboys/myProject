@@ -1940,7 +1940,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-    /**
+     /**
      * @param $arr
      * @return mixed
      */
@@ -1982,6 +1982,7 @@ class GoodsOrder extends ActiveRecord
             $arr_list['supplier_price']=$arr[$k]['supplier_price'];
             $arr_list['sku']=$arr[$k]['sku'];
             $arr_list['freight']=$arr[$k]['freight'];
+            $arr_list['cover_image']=$arr[$k]['cover_image'];
             $arr_list['unusual']=$arr[$k]['unusual'];
 
             unset($arr[$k]['goods_name']);
@@ -1991,6 +1992,7 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['supplier_price']);
             unset($arr[$k]['sku']);
             unset($arr[$k]['freight']);
+            unset($arr[$k]['cover_image']);
             unset($arr[$k]['order_id']);
             unset($arr[$k]['is_unusual']);
             unset($arr[$k]['comment_id']);
