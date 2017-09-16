@@ -1916,6 +1916,10 @@ class GoodsOrder extends ActiveRecord
                 }
                 unset($GoodsOrder[$k]['pay_status']);
                 unset($GoodsOrder[$k]['supplier_id']);
+                if (empty($GoodsOrder[$k]['list']))
+                {
+                    unset($GoodsOrder[$k]);
+                }
             // foreach ($GoodsOrder[$k]['list'] as &$list)
             // {
             //     $GoodsOrder[$k]['del']=0;
