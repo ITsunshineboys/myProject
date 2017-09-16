@@ -1597,6 +1597,10 @@ class OrderController extends Controller
         $page=$request->get('page','1');
         $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
         $role=$request->get('role','user');
+        if (!array_key_exists($type,GoodsOrder::ORDER_TYPE_LIST))
+        {
+            $type='all';
+        }
         switch ($role){
             case 'user':
                 if ($type==GoodsOrder::ORDER_TYPE_ALL){
@@ -1633,7 +1637,6 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
-
 
     /**
      * app端  商家获取订单列表
