@@ -20,6 +20,18 @@ class OrderRefund extends ActiveRecord
         return 'order_refund';
     }
 
+  /**
+     * @param $order_no
+     * @param $sku
+     * @return array|ActiveRecord[]
+     */
+    public static  function  findByOrderNoAndSku($order_no,$sku)
+    {
+        $data=self::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->all();
+        return $data?$data:[];
+    }
 
     public  static  function  SetRefundparameter($order_refund)
     {

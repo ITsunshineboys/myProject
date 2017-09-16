@@ -2337,10 +2337,124 @@ class OrderController extends Controller
         }
     }
 
+    /**异常状态 -后台
+     * @return string
+     */
+    public  function  actionFindUnusualList()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+        if (!$order_no || !$sku)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $unusualList=OrderRefund::findByOrderNoAndSku($order_no,$sku);
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        if (!$GoodsOrder || !$unusualList)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        switch ($GoodsOrder->order_refer)
+        {
+            case 1:
+                $refund_type='线下已退款';
+                break;
+            case 2:
+                $refund_type='已退至顾客钱包';
+                break;
+        }
+        foreach ($unusualList as & $list)
+        {
 
-    public function actionCheck(){
-         $data=GoodsOrder::find()->asArray()->all();
-        var_dump($data);
-     }
+            $list=$list->toArray();
+            if($list['create_time'])
+            {
+                $list['create_time']=date('Y-m-d H:i',$list['create_time']);
+            }
+            if ($list['refund_time'])
+            {
+                $list['refund_time']=date('Y-m-d H:i',$list['refund_time']);
+            }
+            if ($list['handle_time'])
+            {
+                $list['handle_time']=date('Y-m-d H:i',$list['handle_time']);
+            }
+            if ($list['handle']==0)
+            {
+                $arr[]=[
+                    'type'=>'取消原因',
+                    'value'=>$list['apply_reason'],
+                    'content'=>'',
+                    'time'=>$list['create_time']
+                ];
+            }else{
+                $arr[]=[
+                    'type'=>'取消原因',
+                    'value'=>$list['apply_reason'],
+                    'content'=>'',
+                    'time'=>$list['create_time']
+                ];
+                switch ($list['handle'])
+                {
+                    case 1:
+                        $type='同意';
+                        $reason='';
+                        $complete_time=$list['refund_time'];
+                        $result='成功';
+                        break;
+                    case 2:
+                        $type='驳回';
+                        $reason=$list['handle_reason'];
+                        $complete_time=$list['handle_time'];
+                        $result='失败';
+                        break;
+                }
+                $arr[]=[
+                    'type'=>'商家反馈',
+                    'value'=>$type,
+                    'content'=>$reason,
+                    'time'=>$list['handle_time']
+                ];
+                $arr[]=[
+                    'type'=>'退款结果',
+                    'value'=>$result,
+                    'content'=>'',
+                    'time'=>$complete_time
+                ];
+                if ($list['handle']==1){
+                    $arr[]=[
+                        'type'=>'退款去向',
+                        'value'=>$refund_type,
+                        'content'=>'',
+                        'time'=>$complete_time
+                    ];
+                }
+            }
+            $data[]=$arr;
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
+    }
 
 }
