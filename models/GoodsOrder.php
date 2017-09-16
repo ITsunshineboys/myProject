@@ -88,6 +88,7 @@ class GoodsOrder extends ActiveRecord
         'a.return_insurance',
     ];
     const FIELDS_USERORDER_ADMIN = [
+        'a.supplier_id',
         'a.order_no',
         'z.customer_service',
         'a.pay_status',
