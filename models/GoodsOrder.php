@@ -1876,7 +1876,7 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return array
      */
-    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user)
+    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -1932,6 +1932,7 @@ class GoodsOrder extends ActiveRecord
         foreach ($arr as $key => $row)
         {
             $arr[$key]['type']=$type;
+            $arr[$key]['role']=$role;
             $create_time[$key]  = $arr[$key]['create_time'];
         }
         $arr=self::switchStatus($arr);

@@ -1626,7 +1626,7 @@ class OrderController extends Controller
                 break;
         }
         $sort=' a.create_time  desc';
-        $paginationData = GoodsOrder::paginationByUserorderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user);
+        $paginationData = GoodsOrder::paginationByUserorderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
         $code=200;
         return Json::encode([
             'code'=>$code,
