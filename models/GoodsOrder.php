@@ -1886,25 +1886,28 @@ class GoodsOrder extends ActiveRecord
             ->all();
         $arr=self::getorderstatus($OrderList);
         $arr=self::findOrderData($arr);
-        $GoodsOrder=self::find()
-            ->select('order_no,create_time,user_id,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
-            ->where(['pay_status'=>0,'user_id'=>$user->id])
-            ->asArray()
-            ->all();
-        foreach ($GoodsOrder AS $k =>$v){
-            $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
-            $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
-            $GoodsOrder[$k]['paytime']=date('Y-m-d h:i',$GoodsOrder[$k]['paytime']);
-            $GoodsOrder[$k]['user_name']=$user->nickname;
-            $GoodsOrder[$k]['status']='未付款';
-            $GoodsOrder[$k]['comment_grade']='';
-            $GoodsOrder[$k]['handle']='';
-            $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
-            $GoodsOrder[$k]['list']=OrderGoods::find()
-                ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status')
+        if ($type=='all' || $type=='unpaid')
+        {
+            $GoodsOrder=self::find()
+                ->select('order_no,create_time,user_id,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
+                ->where(['pay_status'=>0,'user_id'=>$user->id])
                 ->asArray()
                 ->all();
+            foreach ($GoodsOrder AS $k =>$v){
+                $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
+                $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
+                $GoodsOrder[$k]['paytime']=date('Y-m-d h:i',$GoodsOrder[$k]['paytime']);
+                $GoodsOrder[$k]['user_name']=$user->nickname;
+                $GoodsOrder[$k]['status']='未付款';
+                $GoodsOrder[$k]['comment_grade']='';
+                $GoodsOrder[$k]['handle']='';
+                $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
+                $GoodsOrder[$k]['list']=OrderGoods::find()
+                    ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
+                    ->andWhere(['order_status' =>0])
+                    ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status')
+                    ->asArray()
+                    ->all();
                 $addunpaid=1;
                 foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                     $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
@@ -1921,7 +1924,10 @@ class GoodsOrder extends ActiveRecord
                 if ($addunpaid==1)
                 {
                     $arr[]=$GoodsOrder[$k];
+                }else{
+                    unset($GoodsOrder[$k]);
                 }
+            }
         }
         foreach ($arr as $key => $row)
         {
@@ -1947,7 +1953,6 @@ class GoodsOrder extends ActiveRecord
             ];
         }
     }
-
      /**
      * @param $arr
      * @return mixed
