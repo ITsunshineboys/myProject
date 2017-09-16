@@ -1902,11 +1902,10 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->andWhere('order_status !=2')
+                ->andWhere('order_status ==0')
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
                 ->asArray()
                 ->all();
-            if ($GoodsOrder[$k]['list']){
                 foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                     $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
                     $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
@@ -1917,9 +1916,6 @@ class GoodsOrder extends ActiveRecord
                 unset($GoodsOrder[$k]['pay_status']);
                 unset($GoodsOrder[$k]['supplier_id']);
                 $arr[]=$GoodsOrder[$k];
-            }else{
-                unset($GoodsOrder[$k]);
-            }
         }
         foreach ($arr as $key => $row)
         {
