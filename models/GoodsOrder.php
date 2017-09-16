@@ -1110,7 +1110,7 @@ class GoodsOrder extends ActiveRecord
 
     }
 
-      /**
+    /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
@@ -1131,7 +1131,7 @@ class GoodsOrder extends ActiveRecord
                         ->one()['username'];
                     break;
             }
-            if ($data[$k]['pay_status']==0){
+            if ($data[$k]['pay_status']==0 && $data[$k]['order_status']!=2){
                 $data[$k]['status']='未付款';
             }else{
                 switch ($data[$k]['order_status']){
@@ -1203,6 +1203,7 @@ class GoodsOrder extends ActiveRecord
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
                     ->asArray()
                     ->one()['waybillnumber'];
+
                 $express=Express::findByWayBillNumber($waybillnumber);
                 if (!$express){
                     $data[$k]['send_time']=0;
@@ -1795,8 +1796,10 @@ class GoodsOrder extends ActiveRecord
             case self::ORDER_TYPE_CUSTOMER_SERVICE:
                 $where='z.order_status=1 and z.customer_service!=0';
                 break;
+            case self::ORDER_TYPE_UNCOMMENT:
+                $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=1   and  z.comment_id=0';
+                break;
         }
-
         return $where;
     }
 
