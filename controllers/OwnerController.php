@@ -33,6 +33,20 @@ use Yii;
 class OwnerController extends Controller
 {
     /**
+     * work
+     */
+    const WORK_CATEGORY = [
+        'plumber'           => '水电工',
+        'waterproof_worker' => '防水工',
+        'woodworker'        => '木工',
+        'painters'          => '油漆工',
+        'mason'             => '泥瓦工',
+        'backman'           => '杂工',
+    ];
+    const POINTS_CATECORY = [
+
+    ];
+    /**
      * Actions accessed by logged-in users
      */
     const ACCESS_LOGGED_IN_USER = [
@@ -187,7 +201,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $workers = LaborCost::profession($post['city'],'水电工');
+        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],'弱电点位');
 
         //      点位 和 材料查询
@@ -269,7 +283,7 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->post();
-        $workers = LaborCost::profession($post, '水电工');
+        $workers = LaborCost::profession($post, self::WORK_CATEGORY['plumber']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],'强电点位');
         $points = Points::strongPointsAll();
         $points_total = PointsTotal::findByAll($points);
@@ -342,7 +356,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $waterway_labor = LaborCost::profession($post, '水电工');
+        $waterway_labor = LaborCost::profession($post, self::WORK_CATEGORY['plumber']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],'水路点位');
 
         //点位 和材料 查询
@@ -426,7 +440,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $waterproof_labor = LaborCost::profession($post, '防水工');
+        $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],'做工面积');
         //防水所需材料
 
@@ -514,7 +528,7 @@ class OwnerController extends Controller
     public function actionCarpentry()
     {
         $post = \Yii::$app->request->post();
-        $labor_cost = LaborCost::profession($post, '木工');
+        $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker']);
         $price = $labor_cost['univalence'];
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
         foreach ($worker_kind_details as $one_labor) {
@@ -632,7 +646,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //工人一天单价
-        $labor_costs = LaborCost::profession($post,'油漆工');
+        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
 
         foreach ($worker_kind_details as $labor_cost) {
@@ -831,7 +845,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //工人一天单价
-        $labor_costs = LaborCost::profession($post,'泥瓦工');
+        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason']);
         $labor_day_cost = $labor_costs['univalence'];
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
         foreach ($worker_kind_details as $labor_cost) {
@@ -1046,7 +1060,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         $handyman = '杂工';
-        $labor = LaborCost::profession($post, '杂工');
+        $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 //        总天数
         $total_day = BasisDecorationService::wallArea($post,$worker_kind_details);
@@ -1164,15 +1178,15 @@ class OwnerController extends Controller
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
         $goods = Goods::assortList($material_name,510100);
-        $goods_price = BasisDecorationService::priceConversion($goods);
+        $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea('卧室', '卧室面积');
-        $material[] = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
-        $material[] = BasisDecorationService::capacity($goods_price, $post);
-        $material[] = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
-        $material[] = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
-        $material[] = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
-        $material[] = BasisDecorationService::mild($goods_price,$post);
-        $material[] = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
+        $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
+        $material[]   = BasisDecorationService::capacity($goods_price, $post);
+        $material[]   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
+        $material[]   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
+        $material[]   = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        $material[]   = BasisDecorationService::mild($goods_price,$post);
+        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory('楼梯');
             $stairs_price = BasisDecorationService::priceConversion($stairs);
