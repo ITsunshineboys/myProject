@@ -2337,7 +2337,7 @@ class OrderController extends Controller
         }
     }
 
-    /**异常状态 -后台
+    /**异常状态
      * @return string
      */
     public  function  actionFindUnusualList()
@@ -2409,7 +2409,8 @@ class OrderController extends Controller
                     'type'=>'取消原因',
                     'value'=>$list['apply_reason'],
                     'content'=>'',
-                    'time'=>$list['create_time']
+                    'time'=>$list['create_time'],
+                    'stage'=>$list['order_type']
                 ];
                 switch ($list['handle'])
                 {
@@ -2430,20 +2431,23 @@ class OrderController extends Controller
                     'type'=>'商家反馈',
                     'value'=>$type,
                     'content'=>$reason,
-                    'time'=>$list['handle_time']
+                    'time'=>$list['handle_time'],
+                    'stage'=>$list['order_type']
                 ];
                 $arr[]=[
                     'type'=>'退款结果',
                     'value'=>$result,
                     'content'=>'',
-                    'time'=>$complete_time
+                    'time'=>$complete_time,
+                    'stage'=>$list['order_type']
                 ];
                 if ($list['handle']==1){
                     $arr[]=[
                         'type'=>'退款去向',
                         'value'=>$refund_type,
                         'content'=>'',
-                        'time'=>$complete_time
+                        'time'=>$complete_time,
+                        'stage'=>$list['order_type']
                     ];
                 }
             }
@@ -2456,5 +2460,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
 
 }
