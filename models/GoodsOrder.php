@@ -1865,7 +1865,7 @@ class GoodsOrder extends ActiveRecord
         return $orderAmount;
     }
 
-   /**
+    /**
      * @param array $where
      * @param array $select
      * @param int $page
@@ -1922,11 +1922,9 @@ class GoodsOrder extends ActiveRecord
         $arr=self::switchStatus($arr);
         if ($arr){
             array_multisort($create_time, SORT_DESC, $arr);
-
             $count=count($arr);
             $total_page=ceil($count/$size);
             $data=array_slice($arr, ($page-1)*$size,$size);
-
             return [
                 'total_page' =>$total_page,
                 'count'=>count($data),
@@ -1992,7 +1990,6 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['supplier_price']);
             unset($arr[$k]['sku']);
             unset($arr[$k]['freight']);
-            unset($arr[$k]['unusual']);
             unset($arr[$k]['order_id']);
             unset($arr[$k]['is_unusual']);
             unset($arr[$k]['comment_id']);
@@ -2032,7 +2029,7 @@ class GoodsOrder extends ActiveRecord
                     break;
                 case self::SHIPPING_STATUS_DESC_UNSHIPPED:
                     $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED;
-                    if ($arr[$k]['unusual']=='申请退款'){
+                    if ( $arr[$k]['unusual']=='申请退款'){
                         $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
                     }
                     break;
@@ -2058,6 +2055,7 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['status']=self::ORDER_TYPE_UNCOMMENT;
                     break;
             }
+            unset($arr[$k]['unusual']);
         }
         return $arr;
     }
