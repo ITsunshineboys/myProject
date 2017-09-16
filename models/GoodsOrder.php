@@ -1926,6 +1926,7 @@ class GoodsOrder extends ActiveRecord
             if ($GoodsOrder[$k]['del']==1){
                 unset($GoodsOrder[$k]);
             }else{
+                unset($GoodsOrder[$k]['del']);
                 $arr[]=$GoodsOrder[$k];
             }
         }
