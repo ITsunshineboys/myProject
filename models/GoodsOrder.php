@@ -1902,7 +1902,7 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->andWhere('order_status ==0')
+                ->andWhere('order_status =0')
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
                 ->asArray()
                 ->all();
