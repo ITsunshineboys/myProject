@@ -983,7 +983,7 @@ class OrderController extends Controller
      * supplier order list
      * @return string
      */
-    public  function actionFindSuppierOrderList(){
+    public  function actionFindSupplierOrderList(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
