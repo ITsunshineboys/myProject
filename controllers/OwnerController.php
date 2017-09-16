@@ -727,15 +727,15 @@ class OwnerController extends Controller
                     break;
             }
         }
-        
+
 //        腻子费用
-        $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft, $putty_area);
-////        底漆费用
-        $primer_cost = BasisDecorationService::paintedCost($series_and_style['primer'], $primer_craft, $primer_area);
+        $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft,$putty_area);
+//        底漆费用
+        $primer_cost = BasisDecorationService::paintedCost($series_and_style['primer'], $primer_craft,$primer_area);
 //        乳胶漆面漆费用
-        $finishing_coat_cost = BasisDecorationService::paintedCost($series_and_style['finishing_coat'], $finishing_coat_craft, $finishing_coat_area);
+        $finishing_coat_cost = BasisDecorationService::paintedCost($series_and_style['finishing_coat'],$finishing_coat_craft,$finishing_coat_area);
 //        阴角线费用
-        $concave_line_cost = BasisDecorationService::paintedCost($series_and_style['concave_line'], $concave_line_craft, $concave_line_length);
+        $concave_line_cost = BasisDecorationService::paintedCost($series_and_style['concave_line'],$concave_line_craft,$concave_line_length);
 
 //        石膏粉费用   石膏粉费用：个数×商品价格
 //        个数：（【3元】×乳胶漆面漆面积÷商品价格）
@@ -759,17 +759,17 @@ class OwnerController extends Controller
                     break;
                 case $one_goods_price['title'] == '乳胶漆面漆':
                     $one_goods_price['quantity'] = $finishing_coat_cost['quantity'];
-                    $one_goods_price['cost'] = $finishing_coat_cost['cost'];
+                    $one_goods_price['cost']     = $finishing_coat_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == '阴角线':
                     $one_goods_price['quantity'] = $concave_line_cost['quantity'];
-                    $one_goods_price['cost'] = $concave_line_cost['cost'];
+                    $one_goods_price['cost']     = $concave_line_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == '石膏粉':
                     $one_goods_price['quantity'] = $gypsum_powder_cost['quantity'];
-                    $one_goods_price['cost'] = $gypsum_powder_cost['cost'];
+                    $one_goods_price['cost']     = $gypsum_powder_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
             }
@@ -783,7 +783,7 @@ class OwnerController extends Controller
         $coating_labor_price['worker_kind'] = $labor_costs['worker_kind'];
 
         //添加材料费用
-        $add_price_area = DecorationAdd::AllArea('油漆', $post['area'], $post['city']);
+        $add_price_area = DecorationAdd::AllArea('油漆',$post['area'],$post['city']);
         $add_price = [];
         foreach ($add_price_area as $add_area) {
             $sku_area = Goods::skuAll($add_area['sku']);
@@ -794,7 +794,7 @@ class OwnerController extends Controller
             }
         }
 
-        $add_price_series = DecorationAdd::AllSeries('油漆', $post['series'], $post['city']);
+        $add_price_series = DecorationAdd::AllSeries('油漆',$post['series'],$post['city']);
         foreach ($add_price_series as $add_series) {
             $sku_area = Goods::skuAll($add_series['sku']);
             if ($sku_area !== null) {
@@ -803,7 +803,7 @@ class OwnerController extends Controller
                 $add_price [] = 0;
             }
         }
-        $add_price_style = DecorationAdd::AllStyle('油漆', $post['style'], $post['city']);
+        $add_price_style = DecorationAdd::AllStyle('油漆',$post['style'],$post['city']);
         foreach ($add_price_style as $add_style) {
             $sku_area = Goods::skuAll($add_style['sku']);
             if ($sku_area !== null) {

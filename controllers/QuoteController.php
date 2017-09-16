@@ -246,7 +246,6 @@ class QuoteController extends Controller
         ]);
     }
 
-
     /**
      * 系数管理 列表
      * @return string
