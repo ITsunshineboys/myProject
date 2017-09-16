@@ -33,7 +33,7 @@ use Yii;
 class OwnerController extends Controller
 {
     /**
-     * work
+     * work category details
      */
     const WORK_CATEGORY = [
         'plumber'           => '水电工',
@@ -43,8 +43,15 @@ class OwnerController extends Controller
         'mason'             => '泥瓦工',
         'backman'           => '杂工',
     ];
-    const POINTS_CATECORY = [
 
+    /**
+     * points category details
+     */
+    const POINTS_CATEGORY = [
+        'weak_current'  =>'弱电点位',
+        'strong_current'=>'强电点位',
+        'waterway'      =>'水路点位',
+        'work_area'     =>'做工面积',
     ];
     /**
      * Actions accessed by logged-in users
@@ -202,7 +209,7 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         //人工价格
         $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],'弱电点位');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
 
         //      点位 和 材料查询
         $points = Points::weakPoints();
@@ -284,7 +291,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         $workers = LaborCost::profession($post, self::WORK_CATEGORY['plumber']);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],'强电点位');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current']);
         $points = Points::strongPointsAll();
         $points_total = PointsTotal::findByAll($points);
         $points_details = BasisDecorationService::strongCurrentPoints($points_total, $post);
@@ -357,7 +364,7 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         //人工价格
         $waterway_labor = LaborCost::profession($post, self::WORK_CATEGORY['plumber']);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],'水路点位');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
 
         //点位 和材料 查询
         $points = Points::waterwayPoints();
@@ -441,7 +448,7 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         //人工价格
         $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker']);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],'做工面积');
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area']);
         //防水所需材料
 
         //查询弱电所需要材料
