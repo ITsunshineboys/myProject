@@ -311,5 +311,36 @@ $scope.firstClass = (function () {
       })
     }
   }
+
+  /*操作时间降序*/
+    $scope.handleDesorder = () => {
+        $scope.handledesorder = true;
+        $scope.handleascorder = false;
+        sortTime(3);
+    }
+
+
+  /*操作时间升序*/
+    $scope.handleAsorder = () => {
+        $scope.handledesorder = false;
+        $scope.handleascorder = true;
+        sortTime(4);
+    }
+
+  /*排序公共方法*/
+    function sortTime(sortmethod) {
+        $scope.firstselect == 0 && !$scope.secselect ? $scope.pid = $scope.firstselect : false; //第一个下拉框为全部
+        $scope.firstselect != 0 && !$scope.secselect ? $scope.pid = $scope.firstselect : false; //二级下拉为全部
+        $scope.firstselect != 0 && $scope.secselect ? $scope.pid = $scope.secselect : false; //两个都不为全部
+        sortparam = 'attr_op_time:' + sortmethod;
+        $http({
+            method: "get",
+            params: {"sort[]": sortparam, pid: $scope.pid || 0},
+            url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+        }).then(function (res) {
+            $scope.proptable = res.data.data.goods_attr_list_admin.details;
+            // $scope.selPage = 1;
+        })
+    }
 /*********************************属性结束*******************************/
 });
