@@ -7,6 +7,8 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
             return $.param(data)
         }
     };
+
+    let sortparam;
     //系列——展示数据数组
     $scope.series_arr = [];  //系列所有数据列表
     $scope.style_arr = [];  //风格所有数据列表
@@ -14,33 +16,34 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     /*属性管理*/
     $scope.handledesorder = true; //排序初始值
     $scope.handleascorder = false; //排序初始值
-    let sortparam;
+
+
 
     (function () {
         if ($stateParams.showstyle) {
-            $scope.changeTostyle();
+            changeTostyle();
         } else if ($stateParams.showattr) {
-            $scope.changeToattr();
+            changeToattr();
         } else {
-            $scope.changeToseries
+            changeToseries()
         }
     })()
 
 
     /*选项卡切换方法*/
-    $scope.changeToseries = function () {
+    function changeToseries () {
         $scope.showseries = true;
         $scope.showstyle = false;
         $scope.showattr = false;
     };
 
-    $scope.changeTostyle = function () {
+    function changeTostyle () {
         $scope.showseries = false;
         $scope.showstyle = true;
         $scope.showattr = false;
     };
 
-    $scope.changeToattr = function () {
+   function changeToattr () {
         $scope.showseries = false;
         $scope.showstyle = false;
         $scope.showattr = true;
