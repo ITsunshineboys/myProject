@@ -1905,14 +1905,14 @@ class GoodsOrder extends ActiveRecord
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status')
                 ->asArray()
                 ->all();
-            $addunpaid=1;
+                $addunpaid=1;
                 foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                     $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
                     $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
                     $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                     $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                     $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
-                    if (['list'][$key]['order_status'] !=0){
+                    if ($GoodsOrder[$k]['list'][$key]['order_status'] !=0){
                         $addunpaid=2;
                     }
                 }
