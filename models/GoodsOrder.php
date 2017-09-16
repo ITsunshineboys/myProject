@@ -1877,7 +1877,7 @@ class GoodsOrder extends ActiveRecord
      * @param $type
      * @param $user
      * @return array
-     */
+     */ 
     public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user)
     {
         $OrderList = (new Query())
