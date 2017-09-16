@@ -1109,7 +1109,6 @@ class GoodsOrder extends ActiveRecord
         return $res;
 
     }
-
     /**
      * 获取后台订单状态
      * @param $data
@@ -1903,10 +1902,11 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->andWhere('order_status =0')
+                ->andWhere('order_status !=2')
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
                 ->asArray()
                 ->all();
+            if ($GoodsOrder[$k]['list']){
                 foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                     $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
                     $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
@@ -1916,23 +1916,10 @@ class GoodsOrder extends ActiveRecord
                 }
                 unset($GoodsOrder[$k]['pay_status']);
                 unset($GoodsOrder[$k]['supplier_id']);
-                if (empty($GoodsOrder[$k]['list']))
-                {
-                    unset($GoodsOrder[$k]);
-                }
-            // foreach ($GoodsOrder[$k]['list'] as &$list)
-            // {
-            //     $GoodsOrder[$k]['del']=0;
-            //     if ($list['order_status']!=0){
-            //         $GoodsOrder[$k]['del']=1;
-            //     }
-            // }
-            // if ($GoodsOrder[$k]['del']==1){
-            //     unset($GoodsOrder[$k]);
-            // }else{
-            //     unset($GoodsOrder[$k]['del']);
-            //     $arr[]=$GoodsOrder[$k];
-            // }
+                $arr[]=$GoodsOrder[$k];
+            }else{
+                unset($GoodsOrder[$k]);
+            }
         }
         foreach ($arr as $key => $row)
         {
