@@ -1513,7 +1513,7 @@ class GoodsOrder extends ActiveRecord
         return (int)$query->one()[$retKeyName];
     }
 
-     /**user apply refund
+    /**user apply refund
      * @param $order_no
      * @param $sku
      * @param $apply_reason
@@ -1539,24 +1539,35 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $trans = \Yii::$app->db->beginTransaction();
         try {
+
+            $order=OrderGoods::find()
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
+                ->one();
+            switch ($order->shipping_status)
+            {
+                case 0:
+                    $shipping_status='unshipped';
+                    break;
+                case 1:
+                    $shipping_status='unreceived';
+                    break;
+            }
+            $order->is_unusual=self::UNUSUAL_STATUS_REFUND;
+            $res2=$order->save(false);
+            if (!$res2){
+                $code=500;
+                $trans->rollBack();
+                return $code;
+            }
             $order_refund=new OrderRefund();
             $order_refund->order_no=$order_no;
             $order_refund->sku=$sku;
             $order_refund->apply_reason=$apply_reason;
             $order_refund->create_time=$time;
-            $res=$order_refund->save();
+            $order_refund->order_type=$shipping_status;
+            $res=$order_refund->save(false);
             if (!$res){
-                $code=500;
-                $trans->rollBack();
-                return $code;
-            }
-            $order=OrderGoods::find()
-                ->where(['order_no'=>$order_no])
-                ->andWhere(['sku'=>$sku])
-                ->one();
-            $order->is_unusual=self::UNUSUAL_STATUS_REFUND;
-            $res2=$order->save();
-            if (!$res2){
                 $code=500;
                 $trans->rollBack();
                 return $code;
@@ -1570,7 +1581,6 @@ class GoodsOrder extends ActiveRecord
             return $code;
         }
     }
-
 
     /**
      * set transaction no
@@ -1726,7 +1736,7 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return int
      */
-    private static  function CheckJurisdiction($order_no,$sku,$user)
+    public static  function CheckJurisdiction($order_no,$sku,$user)
     {
         $order=GoodsOrder::find()
             ->select('user_id')
@@ -1739,7 +1749,7 @@ class GoodsOrder extends ActiveRecord
             ->one();
         if ($order_goodslist['order_status']!=0)
         {
-            $code=403;
+            $code=1034;
             return $code;
         }
         if (!$order || !$order_goodslist)
@@ -1751,7 +1761,7 @@ class GoodsOrder extends ActiveRecord
             $code= 200;
         }
         else{
-            $code=403;
+            $code=1034;
         }
         return $code;
     }

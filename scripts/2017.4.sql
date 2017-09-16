@@ -1215,6 +1215,7 @@ CREATE TABLE `order_refund` (
   `create_time` int(11) NOT NULL,
   `handle_time` int(11) NOT NULL,
   `refund_time` int(11) NOT NULL,
+  `order_type` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- 8.25 end
