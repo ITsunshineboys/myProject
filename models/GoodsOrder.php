@@ -1868,7 +1868,6 @@ class GoodsOrder extends ActiveRecord
         }
         return $orderAmount;
     }
-
     /**
      * @param array $where
      * @param array $select
@@ -1877,7 +1876,7 @@ class GoodsOrder extends ActiveRecord
      * @param $type
      * @param $user
      * @return array
-     */ 
+     */
     public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user)
     {
         $OrderList = (new Query())
@@ -1908,7 +1907,6 @@ class GoodsOrder extends ActiveRecord
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
                 ->asArray()
                 ->all();
-            if ($GoodsOrder[$k]['list']){
                 foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                     $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
                     $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
@@ -1918,9 +1916,17 @@ class GoodsOrder extends ActiveRecord
                 }
                 unset($GoodsOrder[$k]['pay_status']);
                 unset($GoodsOrder[$k]['supplier_id']);
-                $arr[]=$GoodsOrder[$k];
-            }else{
+            foreach ($GoodsOrder[$k]['list'] as &$list)
+            {
+                $GoodsOrder[$k]['del']=0;
+                if ($list['order_status']!=0){
+                    $GoodsOrder[$k]['del']=1;
+                }
+            }
+            if ($GoodsOrder[$k]['del']==1){
                 unset($GoodsOrder[$k]);
+            }else{
+                $arr[]=$GoodsOrder[$k];
             }
         }
         foreach ($arr as $key => $row)
