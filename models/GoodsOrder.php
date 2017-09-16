@@ -1888,9 +1888,17 @@ class GoodsOrder extends ActiveRecord
         $arr=self::findOrderData($arr);
         if ($type=='all' || $type=='unpaid')
         {
+            switch ($role){
+                case 'supplier':
+                    $where='pay_status=0 and supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
+                    break;
+                case 'user':
+                    $where='pay_status=0 and user_id='.$user->id;
+                    break;
+            }
             $GoodsOrder=self::find()
                 ->select('order_no,create_time,user_id,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
-                ->where(['pay_status'=>0,'user_id'=>$user->id])
+                ->where($where)
                 ->asArray()
                 ->all();
             foreach ($GoodsOrder AS $k =>$v){
@@ -1954,6 +1962,7 @@ class GoodsOrder extends ActiveRecord
             ];
         }
     }
+
      /**
      * @param $arr
      * @return mixed
