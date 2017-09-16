@@ -16,13 +16,16 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     $scope.handleascorder = false; //排序初始值
     let sortparam;
 
-    if ($stateParams.showstyle) {
-        $scope.changeTostyle();
-    } else if ($stateParams.showattr) {
-        $scope.changeToattr();
-    } else {
-        $scope.changeToseries
-    }
+    (function () {
+        if ($stateParams.showstyle) {
+            $scope.changeTostyle();
+        } else if ($stateParams.showattr) {
+            $scope.changeToattr();
+        } else {
+            $scope.changeToseries
+        }
+    })()
+
 
     /*选项卡切换方法*/
     $scope.changeToseries = function () {
