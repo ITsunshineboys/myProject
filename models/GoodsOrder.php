@@ -1902,20 +1902,26 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->andWhere('order_status =0')
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
                 ->asArray()
                 ->all();
+            $addunpaid=1;
                 foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                     $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
                     $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
                     $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                     $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                     $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
+                    if (['list'][$key]['order_status'] !=0){
+                        $addunpaid=2;
+                    }
                 }
                 unset($GoodsOrder[$k]['pay_status']);
                 unset($GoodsOrder[$k]['supplier_id']);
-                $arr[]=$GoodsOrder[$k];
+                if ($addunpaid==1)
+                {
+                    $arr[]=$GoodsOrder[$k];
+                }
         }
         foreach ($arr as $key => $row)
         {
