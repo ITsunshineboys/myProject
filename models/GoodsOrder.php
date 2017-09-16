@@ -1131,7 +1131,7 @@ class GoodsOrder extends ActiveRecord
                         ->one()['username'];
                     break;
             }
-            if ($data[$k]['pay_status']==0 && $data[$k]['order_status']!=2){
+            if ($data[$k]['pay_status']==0 && $data[$k]['order_status']==0){
                 $data[$k]['status']='未付款';
             }else{
                 switch ($data[$k]['order_status']){
@@ -1904,7 +1904,7 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
             $GoodsOrder[$k]['list']=OrderGoods::find()
                 ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                ->andWhere('order_status !=2')
+                ->andWhere('order_status =0')
                 ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image')
                 ->asArray()
                 ->all();
