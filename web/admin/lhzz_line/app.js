@@ -236,7 +236,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       .state("style_index",{ /*系列/风格/属性管理*/
         url:"/style_index",
         templateUrl:"pages/mall_manage/style_manage/style_index/style_index.html",
-        params:{showstyle:''}
+        params:{showstyle:null,showattr:null}
       })
       .state("choose_series",{ /*系列/风格/属性管理-选择拥有系列的分类*/
         url:"/choose_series",
