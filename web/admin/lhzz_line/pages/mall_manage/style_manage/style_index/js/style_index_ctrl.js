@@ -19,13 +19,19 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
 
 
 
-    (function () {
+    $scope.changeTabbar = (function () {
         if ($stateParams.showstyle) {
-            changeTostyle();
+            $scope.showseries = false;
+            $scope.showstyle = true;
+            $scope.showattr = false;
         } else if ($stateParams.showattr) {
-            changeToattr();
+            $scope.showseries = false;
+            $scope.showstyle = false;
+            $scope.showattr = true;
         } else {
-            changeToseries()
+            $scope.showseries = true;
+            $scope.showstyle = false;
+            $scope.showattr = false;
         }
     })()
 
