@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use app\services\StringService;
 use Yii;
 use yii\db\Query;
@@ -89,12 +90,8 @@ class EffectEarnst extends \yii\db\ActiveRecord
             $effect['earnest']=sprintf('%.2f',(float)$effect['earnest']*0.01);
         }
 
-        return [
-            'total' => (int)self::find()->where($where)->asArray()->count(),
-            'page'=>$page,
-            'size'=>$size,
-            'details' => $effectList
-        ];
+        $total = (int)self::find()->where($where)->asArray()->count();
+        return ModelService::pageDeal($effectList, $total, $page, $size);
     }
 
     public static function getToday()

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\controllers\FindworkerController;
 use Yii;
 use yii\db\Query;
 

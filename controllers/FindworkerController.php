@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Request;
+use app\models\User;
 
 
 class FindworkerController extends Controller{
@@ -79,7 +80,10 @@ class FindworkerController extends Controller{
             $parent=[];
             for ($i=0;$i<count($data);$i++){
 
-                  $parent[]=[$parents[$i]['worker_type']=>$data[$i]];
+                  $parent[]=[
+                      $parents[$i]['worker_type']=>$data[$i],
+                      'image'=>$parents[$i]['image']
+                  ];
 
 
             }
@@ -279,6 +283,23 @@ class FindworkerController extends Controller{
         }
         return  ceil($sum / 12 + 1);
     }
+
+    public function actionWorkerIndex(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $worker_info=User::find()->where(['id'=>$user_id])->one();
+        $worker['worker']['aite_cube_no']=$worker_info->aite_cube_no;
+        $worker['worker']['worker_no']=$worker_info->aite_cube_no;
+        $worker['worker']['balance']=$worker_info->balance;
+
+
+    }
     /**
      *抢单信息
      * @return string
@@ -360,23 +381,5 @@ class FindworkerController extends Controller{
             ]
         ]);
     }
-    public function actionWorkerAccountinfo(){
-        $user_id = \Yii::$app->user->identity;
-        $code=1052;
-        if(!$user_id){
-            return Json::encode([
-                'code' => $code,
-                'msg' =>\ Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
 
-    }
-
-
-//    public function actionTest(){
-//        $order_id=trim(\Yii::$app->request->get('order_id'));
-//        $item_id=trim(\Yii::$app->request->get('item_id'));
-//        $data=WorkerOrderItem::getorderitemview($order_id,$item_id);
-//        var_dump($data);
-//    }
 }
