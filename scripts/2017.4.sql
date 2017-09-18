@@ -179,7 +179,7 @@ CREATE TABLE `goods` (
   `area_id` int(11) NOT NULL,
   `series_id` int(11) unsigned not null default 0,
   `style_id` int(11) unsigned not null default 0,
-  `sku` bigint unsigned not null default 0,
+  `sku` bigint unsigned not null default 0 COMMENT '商品编号',
   `title` varchar(100) not null DEFAULT '',
   `subtitle` varchar(100) not null DEFAULT '',
   `cover_image` varchar(255) not null DEFAULT '' comment '封面图',
