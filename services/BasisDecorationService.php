@@ -14,6 +14,7 @@ class BasisDecorationService
     const WALL_SPACE = 4;
     const BRICK_UNITS = 1000;
     const GOODS_PRICE_UNITS = 100;
+
     /**
      * goods name
      */
@@ -62,6 +63,10 @@ class BasisDecorationService
         'squatting_pan'=>'蹲便器',
         'elbow'=>'弯头',
     ];
+
+    /**
+     * house message
+     */
     const HOUSE_MESSAGE = [
         'kitchen_area'=>'厨房面积',
         'toilet_area' =>'卫生间面积',
@@ -80,6 +85,10 @@ class BasisDecorationService
         'hall' =>'客厅',
 
     ];
+
+    /**
+     * units
+     */
     const UNITS =[
         'length' =>'长度',
         'breadth' =>'宽度',
@@ -88,6 +97,10 @@ class BasisDecorationService
         'wide' =>'宽',
         'high' =>'高',
     ];
+
+    /**
+     * backman details
+     */
     const BACKMAN_DETAILS =[
         'dismantle_12_area'=>'拆除12墙面积',
         'dismantle_24_area'=>'拆除24墙面积',
@@ -106,6 +119,7 @@ class BasisDecorationService
         '24_river_sand_dosage'=>'24墙河沙用量',
         'repair_river_sand_dosage'=>'补烂河沙用量',
     ];
+
     /**
      * 人工费
      * @param string $points
