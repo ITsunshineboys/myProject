@@ -418,18 +418,16 @@ class EffectController extends Controller
         $size = (int)Yii::$app->request->get('size', EffectEarnst::PAGE_SIZE_DEFAULT);
         $paginationData = EffectEarnst::pagination($where, EffectEarnst::FIELDS_ADMIN, $page, $size);
         $earnest=new EffectEarnst();
-        $data=[];
-        $data['all_apply']=$earnest::getallapply();
-            $data['today_apply']=$earnest::gettodayapply();
-            $data['today_earnest']=$earnest::gettodayearnest();
-            $data['all_earnest']=$earnest::getallearnest();
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' =>
-                 [
-                     $data, $paginationData,
-                 ]
+                   ['all_apply'=>$earnest::getallapply(),
+                    'today_apply'=>$earnest::gettodayapply(),
+                    'today_earnest'=>$earnest::gettodayearnest(),
+                    'all_earnest'=>$earnest::getallearnest(),
+                     $paginationData,
+                     ]
 
 
         ]);
