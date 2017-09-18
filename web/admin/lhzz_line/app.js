@@ -201,7 +201,6 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
         templateUrl:"pages/mall_manage/merchant_manage/merchant_index/merchant_index.html"
       })
       .state("store_mag",{   //商城管理-商家管理
-
         url:"/store_mag",
         templateUrl:"pages/mall_manage/merchant_manage/store_mag/store_mag.html"
       })
