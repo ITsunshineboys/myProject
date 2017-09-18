@@ -90,6 +90,7 @@ class Effect extends ActiveRecord
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.id'=>$effect_id])->one();
         if($array){
+            $array['create_time']=date('Y-m-d',$array['create_time']);
             $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
             $array['address']=$array['city'].$array['district'].$array['street'];
             if($array['stairway']){
