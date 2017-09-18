@@ -12,8 +12,8 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
     }
   };
   let sortparam;
-	//系列——展示数据数组
-	$scope.series_arr=[];  //系列所有数据列表
+  //系列——展示数据数组
+  $scope.series_arr=[];  //系列所有数据列表
   $scope.style_arr=[];  //风格所有数据列表
 
   /*属性管理*/
@@ -45,25 +45,25 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
     $scope.showattr = false;
   }
 
-	/*选项卡切换方法*/
-	$scope.changeToseries = function () {
-		$scope.showseries = true;
-		$scope.showstyle = false;
-		$scope.showattr = false;
-	};
+  /*选项卡切换方法*/
+  $scope.changeToseries = function () {
+    $scope.showseries = true;
+    $scope.showstyle = false;
+    $scope.showattr = false;
+  };
 
-	$scope.changeTostyle = function () {
-		$scope.showseries = false;
-		$scope.showstyle = true;
-		$scope.showattr = false;
-	};
+  $scope.changeTostyle = function () {
+    $scope.showseries = false;
+    $scope.showstyle = true;
+    $scope.showattr = false;
+  };
 
-	$scope.changeToattr = function () {
-		$scope.showseries = false;
-		$scope.showstyle = false;
-		$scope.showattr = true;
-	};
-	/************************系列开始*******************************/
+  $scope.changeToattr = function () {
+    $scope.showseries = false;
+    $scope.showstyle = false;
+    $scope.showattr = true;
+  };
+  /************************系列开始*******************************/
 
 //	系列——展示数据
   $http.get('http://test.cdlhzz.cn:888/mall/series-list').then(function (res) {
@@ -75,10 +75,10 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
   });
   //开启操作
   $scope.open_status=function (item) {
-		$scope.open_item=item;
+    $scope.open_item=item;
   };
-	//开启确认按钮
-	$scope.open_btn_ok=function () {
+  //开启确认按钮
+  $scope.open_btn_ok=function () {
     let url='http://test.cdlhzz.cn:888/mall/series-status';
     $http.post(url,{
       id:+$scope.open_item.id,
@@ -99,7 +99,7 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
     $scope.close_item=item;
   };
   //关闭确认按钮
-	$scope.close_btn_ok=function () {
+  $scope.close_btn_ok=function () {
     let url='http://test.cdlhzz.cn:888/mall/series-status';
     $http.post(url,{
       id:+$scope.close_item.id,
@@ -114,7 +114,7 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
       console.log(err);
     })
   };
-	//系类时间排序
+  //系类时间排序
   $scope.ser_time_sort_on_flag=true;
   $scope.ser_time_sort_down_flag=false;
   $scope.ser_time_sort=function (num) {
@@ -158,13 +158,14 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
       console.log(err);
     });
   };
-	/******************************系列结束******************************/
+  /******************************系列结束******************************/
 
-/*********************************风格开始*******************************/
+  /*********************************风格开始*******************************/
 
 //列表数据展示
   $http.get('http://test.cdlhzz.cn:888/mall/style-list',{params:{page:$scope.page}}).then(function (res) {
     console.log("风格列表返回");
+    console.log($scope.page);
     console.log(res);
     $scope.style_arr=res.data.data.series_list.details;
     //分页
@@ -259,7 +260,7 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
     })
   };
 
-/*********************************风格结束*******************************/
+  /*********************************风格结束*******************************/
 
   /*********************************属性开始*******************************/
   /*分类选择下拉框*/
