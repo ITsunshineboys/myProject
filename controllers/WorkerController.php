@@ -36,7 +36,6 @@ class WorkerController extends Controller
                 'only' => ['logout', 'about'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'about'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -97,23 +96,23 @@ class WorkerController extends Controller
         }
 
         $worker = Worker::find()->where(['uid' => $user])->one();
-        if ($worker == null ) {
+        if ($worker == null) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $laborcost=Worker::getLaborByWorkerId($worker->id);
-        if ($laborcost == null ) {
+        $laborcost = Worker::getLaborByWorkerId($worker->id);
+        if ($laborcost == null) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $user_info=User::find()->where(['id'=>$user])->one();
-        if ($user_info == null ) {
+        $user_info = User::find()->where(['id' => $user])->one();
+        if ($user_info == null) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -122,9 +121,9 @@ class WorkerController extends Controller
         }
 
         $data = [];
-        $data['aite_cube_no']=$user_info->aite_cube_no;
-        $data['worker_no']=$user_info->aite_cube_no;
-        $data['rank']=$laborcost->rank;
+        $data['aite_cube_no'] = $user_info->aite_cube_no;
+        $data['worker_no'] = $user_info->aite_cube_no;
+        $data['rank'] = $laborcost->rank;
         $data['icon'] = $worker->icon;
         $data['nickname'] = $worker->nickname;
         $data['signature'] = $worker->signature ? '已设置' : '未设置';
@@ -282,6 +281,85 @@ class WorkerController extends Controller
             'data' => $data
         ]);
     }
+
+    /**
+     * 得到订单图片分页
+     *
+     * @return int|string
+     */
+    public function actionGetOrderImg()
+    {
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+
+        $order_no = (int)$request->get('order_no', 0);
+
+        $page_size = (int)$request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
+
+        $page = (int)$request->get('page', 1);
+
+        $data = WorkerOrder::getOrderImg($order_no, $page_size, $page);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
+
+
+//    /**
+//     * 得到订单的具体施工日期
+//     *
+//     * @return array|int|string
+//     */
+//    public function actionGetOrderDays()
+//    {
+//        $user = self::userIdentity();
+//        if (!is_int($user)) {
+//            return $user;
+//        }
+//
+//        $request = \Yii::$app->request;
+//
+//        $order_id = (int)$request->get('order_id', 0);
+//
+//        if (!$order_id) {
+//            $code = 1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//
+//        $order_days = WorkerOrder::find()
+//            ->where(['id' => $order_id, 'uid' => $user])
+//            ->select('days')
+//            ->one();
+//
+//        if (!$order_days) {
+//            $code = 1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        } elseif ($order_days->days) {
+//            $order_days = explode(',', $order_days->days);
+//        } else {
+//            $order_days = [];
+//        }
+//
+//
+//        return Json::encode([
+//            'code' => 200,
+//            'msg' => 'ok',
+//            'data' => $order_days
+//        ]);
+//    }
 
     /**
      * 订单条目详情
@@ -501,6 +579,103 @@ class WorkerController extends Controller
         return Json::encode([
             'code' => $code,
             'msg' => \Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+
+    public function actionGetOrderHistory()
+    {
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+
+        $order_no = (int)$request->get('order_no', 0);
+
+        $code = 1000;
+
+        if (!$order_no) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+    }
+
+    /**
+     * 取消订单
+     *
+     * @return string
+     */
+    public function actionCancelOrder()
+    {
+        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_CANCELED);
+    }
+
+    /**
+     * 同意开工
+     *
+     * @return string
+     */
+    public function actionBeginOrder()
+    {
+        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_ING);
+    }
+
+
+    /**
+     * 改变订单状态
+     *
+     * @param $status
+     * @return int|string
+     */
+    public function changeOrderStatus($status)
+    {
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+
+        $order_no = (int)$request->get('order_no', 0);
+
+        $code = 1000;
+
+        if (!$order_no
+            || !array_key_exists($status, WorkerOrder::USER_WORKER_ORDER_STATUS)
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $order = WorkerOrder::find()->where(['order_no' => $order_no, 'uid' => $user])->exists();
+
+        if (!$order) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        //todo  取消订单  开工订单  写到模型一个方法
+
+        $order = WorkerOrder::updateAll(['status' => $status], ['order_no' => $order_no]);
+
+        if (!$order) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok'
         ]);
     }
 }

@@ -34,10 +34,10 @@ use yii\db\Exception;
  */
 class WorkerOrder extends \yii\db\ActiveRecord
 {
-    const TIMESTYPE='~';
-    const STATUS_INSERT=1;
-    const ORDER_OLD=1;
-    const ORDER_NEW=0;
+    const TIMESTYPE = '~';
+    const STATUS_INSERT = 1;
+    const ORDER_OLD = 1;
+    const ORDER_NEW = 0;
 
     const WORKER_ORDER_CANCELED = 0;
     const WORKER_ORDER_NOT_BEGIN = 1;
@@ -60,6 +60,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
         self::WORKER_ORDER_ING => '施工中',
         self::WORKER_ORDER_DONE => '已完工'
     ];
+
+
+    const IMG_PAGE_SIZE_DEFAULT = 3;
 
     /**
      * @inheritdoc
@@ -207,6 +210,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         return [$order, $worker_items];
     }
+
     /**
      * 用户工程订单列表
      * @param $uid
@@ -257,6 +261,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return 1000;
         }
         list($order, $worker_items) = $order_detail;
+
         //TODO  调整历史单独分出来(对应订单)  好评率
         $worker = [];
         //只要有工人id,便显示工人信息
@@ -264,13 +269,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $worker = Worker::find()
                 ->where(['id' => $order->worker_id])
                 ->asArray()
-                ->select(['id', 'nickname', 'work_year', 'comprehensive_score', 'icon', 'province_code', 'city_code', 'level', 'skill_ids', 'order_done'])
                 ->one();
         }
 
         $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
         $order_no = self::getOrderNoById($order_id);
-        $order_img = WorkerOrderImg::find()->where(['worker_order_no' => $order_no])->all();
+        $order_img = self::getOrderImg($order_no);
 
         $skill_ids = $worker['skill_ids'];
 
@@ -290,6 +294,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         $worker['skills'] = $skills;
 
+        $worker['mobile'] = User::find()
+            ->select('mobile')
+            ->where(['id' => $worker['uid']])
+            ->one()['mobile'];
+
         return [
             'order' => $order,
             'worker_items' => $worker_items,
@@ -298,14 +307,36 @@ class WorkerOrder extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getOrderImg($order_no, $page_size = self::IMG_PAGE_SIZE_DEFAULT, $page = 1)
+    {
+        $query = WorkerOrderImg::find()
+            ->where(['worker_order_no' => $order_no]);
+
+        $count = $query->count();
+
+        $pagination = new Pagination([
+            'totalCount' => $count,
+            'pageSize' => $page_size,
+            'pageSizeParam' => false
+        ]);
+
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->asArray()
+            ->all();
+
+        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
+        return $data;
+    }
+
     /**
      * @param bool $insert
      * @return bool
      */
     public function beforeSave($insert)
     {
-        if($insert){
-            $this->status=self::STATUS_INSERT;
+        if ($insert) {
+            $this->status = self::STATUS_INSERT;
         }
         return parent::beforeSave($insert);
     }
@@ -338,7 +369,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 if ($worker_order_item->worker_craft_id) {
                     $craft_id = (int)$worker_order_item->worker_craft_id;
                     $worker_item['craft'] = WorkerCraft::find()
-                        ->where(['id'=> $craft_id])
+                        ->where(['id' => $craft_id])
                         ->select('craft')
                         ->one()['craft'];
                 } elseif ($worker_order_item->area) {
@@ -348,41 +379,45 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
         return $worker_items;
     }
+
     /**
      * save images
      * @param array $images
      * @param $order_id
      * @return bool
      */
-    public static function saveorderimgs(array $images,$order_no){
-        $worker_order_img=new WorkerOrderImg();
-        foreach($images as $attributes)
-        {
+    public static function saveorderimgs(array $images, $order_no)
+    {
+        $worker_order_img = new WorkerOrderImg();
+        foreach ($images as $attributes) {
             $_model = clone $worker_order_img;
-            $_model->order_img=$attributes;
-            $_model->worker_order_no=$order_no;
-           $res= $_model->save();
+            $_model->order_img = $attributes;
+            $_model->worker_order_no = $order_no;
+            $res = $_model->save();
         }
-        if(!$res){
+        if (!$res) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+
     /**
      * 获取时间段精确到具体每一天
      * @param $start_time
      * @param $end_time
      * @return string
      */
-    public static function dataeveryday($start_time,$end_time){
-        $days = ($end_time-$start_time)/86400+1;
-        $date =[];
-        for($i=0; $i<$days; $i++){
-            $date[] = date('Ymd', $start_time+(86400*$i));
+    public static function dataeveryday($start_time, $end_time)
+    {
+        $days = ($end_time - $start_time) / 86400 + 1;
+        $date = [];
+        for ($i = 0; $i < $days; $i++) {
+            $date[] = date('Ymd', $start_time + (86400 * $i));
         }
-        return implode(',',$date);
+        return implode(',', $date);
     }
+
     /**
      * add guarantee info into worker_order_item
      * @param $id
@@ -390,22 +425,24 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $guarantee
      * @return bool
      */
-    public static function inserstatus($id,$item_id,$status){
+    public static function inserstatus($id, $item_id, $status)
+    {
         $connection = \Yii::$app->db;
-        $res= $connection->createCommand()
+        $res = $connection->createCommand()
             ->insert('worker_order_item',
                 [
-                    'worker_order_id'=>$id,
-                    'worker_item_id'=>$item_id,
-                    'status'=>$status
+                    'worker_order_id' => $id,
+                    'worker_item_id' => $item_id,
+                    'status' => $status
                 ])
             ->execute();
-        if($res){
+        if ($res) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
+
     /**
      * 生成订单
      * @param $uid
@@ -416,50 +453,51 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return int
      */
 
-    public static function addorderinfo($uid, $homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe){
+    public static function addorderinfo($uid, $homeinfos, $ownerinfos, $front_money, $amount, $demand, $describe)
+    {
         $worker_order = new self();
-        $worker_order->uid =$uid;
+        $worker_order->uid = $uid;
         $worker_order->worker_type_id = $homeinfos['worker_type_id'];
         $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
         $worker_order->create_time = time();
-        $start_time=$worker_order->start_time = $homeinfos['start_time'];
-       $end_time= $worker_order->end_time = $homeinfos['end_time'];
+        $start_time = $worker_order->start_time = $homeinfos['start_time'];
+        $end_time = $worker_order->end_time = $homeinfos['end_time'];
         $worker_order->need_time = $homeinfos['need_time'];
-        $worker_order->map_location=$ownerinfos['map_location'];
-        $worker_order->address=$ownerinfos['address'];
-        $worker_order->con_people=$ownerinfos['con_people'];
-        $worker_order->con_tel=$ownerinfos['con_tel'];
-        $worker_order->amount=$amount*100;
-        $worker_order->front_money=$front_money*100;
-        $days=self::dataeveryday($start_time,$end_time);
-        $worker_order->days=$days;
-        if(isset($describe)){
-            $worker_order->describe=$describe;
+        $worker_order->map_location = $ownerinfos['map_location'];
+        $worker_order->address = $ownerinfos['address'];
+        $worker_order->con_people = $ownerinfos['con_people'];
+        $worker_order->con_tel = $ownerinfos['con_tel'];
+        $worker_order->amount = $amount * 100;
+        $worker_order->front_money = $front_money * 100;
+        $days = self::dataeveryday($start_time, $end_time);
+        $worker_order->days = $days;
+        if (isset($describe)) {
+            $worker_order->describe = $describe;
         }
-        if(isset($demand)){
-            $worker_order->demand=$demand;
+        if (isset($demand)) {
+            $worker_order->demand = $demand;
         }
         $transaction = Yii::$app->db->beginTransaction();
-        try{
-            if(!$worker_order->save(false)){
+        try {
+            if (!$worker_order->save(false)) {
                 $transaction->rollBack();
                 $code = 500;
                 return $code;
             }
-            $worker_order_img=new WorkerOrderImg();
-            $order_no= $worker_order_img->worker_order_no=$worker_order->order_no;
-            $rest=self::saveorderimgs($homeinfos['images'],$order_no);
-            if($rest==false){
+            $worker_order_img = new WorkerOrderImg();
+            $order_no = $worker_order_img->worker_order_no = $worker_order->order_no;
+            $rest = self::saveorderimgs($homeinfos['images'], $order_no);
+            if ($rest == false) {
                 $transaction->rollBack();
                 $code = 500;
                 return $code;
             }
-            $data=[];
-            $worker_order_item=new WorkerOrderItem();
-            $id=$worker_order_item->worker_order_id=$worker_order->id;
-            $keys=array_keys($homeinfos);
-            foreach ($keys as $k=>&$key){
-                if(preg_match('/(item)/',$key,$m) ) {
+            $data = [];
+            $worker_order_item = new WorkerOrderItem();
+            $id = $worker_order_item->worker_order_id = $worker_order->id;
+            $keys = array_keys($homeinfos);
+            foreach ($keys as $k => &$key) {
+                if (preg_match('/(item)/', $key, $m)) {
                     $data[$k] = $homeinfos[$key];
                     foreach ($data as &$dat) {
                         $dat['id'] = $id;
@@ -467,15 +505,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 }
             }
 
-            $infos=self::saveorderitems($data,$id);
-            if ($infos==false) {
+            $infos = self::saveorderitems($data, $id);
+            if ($infos == false) {
                 $transaction->rollBack();
                 $code = 500;
                 return $code;
             }
             $transaction->commit();
             return 200;
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $transaction->rollBack();
             return 1000;
         }
@@ -488,47 +526,48 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return bool
      */
-    public static function saveorderitems($items,$order_id){
+    public static function saveorderitems($items, $order_id)
+    {
 
-        $worker_order_item=new WorkerOrderItem();
-        foreach($items as $attributes)
-        {
+        $worker_order_item = new WorkerOrderItem();
+        foreach ($items as $attributes) {
 
             $_model = clone $worker_order_item;
-            $_model->worker_order_id=$order_id;
-            foreach (array_keys($attributes) as &$k){
-                if(preg_match('/(item)/',$k,$m)){
-                    $_model->worker_item_id=$attributes[$k];
+            $_model->worker_order_id = $order_id;
+            foreach (array_keys($attributes) as &$k) {
+                if (preg_match('/(item)/', $k, $m)) {
+                    $_model->worker_item_id = $attributes[$k];
                 }
-                if(preg_match('/(craft)/',$k,$m)){
-                   $_model->worker_craft_id=$attributes[$k];
+                if (preg_match('/(craft)/', $k, $m)) {
+                    $_model->worker_craft_id = $attributes[$k];
                 }
-                if(preg_match('/(area)/',$k,$m)){
-                    $_model->area=$attributes[$k];
+                if (preg_match('/(area)/', $k, $m)) {
+                    $_model->area = $attributes[$k];
                 }
-                if(preg_match('/(status)/',$k)){
-                    $_model->status=$attributes[$k];
+                if (preg_match('/(status)/', $k)) {
+                    $_model->status = $attributes[$k];
                 }
-                if(preg_match('/(length)/',$k)){
-                    $_model->length=$attributes[$k];
+                if (preg_match('/(length)/', $k)) {
+                    $_model->length = $attributes[$k];
                 }
-                if(preg_match('/(count)/',$k)){
-                    $_model->count=$attributes[$k];
+                if (preg_match('/(count)/', $k)) {
+                    $_model->count = $attributes[$k];
                 }
-                if(preg_match('/(electricity)/',$k)){
-                    $_model->electricity=$attributes[$k];
+                if (preg_match('/(electricity)/', $k)) {
+                    $_model->electricity = $attributes[$k];
                 }
             }
-           $res= $_model->save();
+            $res = $_model->save();
         }
-        if(!$res){
+        if (!$res) {
             return false;
-        }else{
+        } else {
             return true;
         }
 
 
     }
+
     /**
      * 刷新订单随机
      * @return array|null|\yii\db\ActiveRecord
@@ -537,46 +576,48 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
         $data = self::find()
             ->asArray()
-            ->where(['is_old' =>self::ORDER_NEW])
-            ->andWhere(['status'=>self::STATUS_INSERT])
+            ->where(['is_old' => self::ORDER_NEW])
+            ->andWhere(['status' => self::STATUS_INSERT])
             ->all();
-        foreach ($data as $key=>&$v){
+        foreach ($data as $key => &$v) {
 
-            $ids[]=$v['id'];
+            $ids[] = $v['id'];
         }
-        $rand_keys=array_rand($ids,1);
-        $id=$ids[$rand_keys];
-        $info=self::find()
+        $rand_keys = array_rand($ids, 1);
+        $id = $ids[$rand_keys];
+        $info = self::find()
             ->asArray()
-            ->where(['is_old'=>self::ORDER_NEW])
-            ->andWhere(['id'=>$id])
+            ->where(['is_old' => self::ORDER_NEW])
+            ->andWhere(['id' => $id])
             ->one();
-        if(empty($info)){
+        if (empty($info)) {
             return null;
-       }else{
-           return $info;
-       }
+        } else {
+            return $info;
+        }
     }
+
     /**
      * 时间格式
      * @param $order_id
      * @return null|string
      */
-    public static function timedata($order_id){
-        $time=[];
-        $order_info=self::find()
+    public static function timedata($order_id)
+    {
+        $time = [];
+        $order_info = self::find()
             ->select('start_time,end_time,need_time')
-            ->where(['id'=>$order_id])
+            ->where(['id' => $order_id])
             ->asArray()
             ->one();
-        if(!$order_info){
+        if (!$order_info) {
             return null;
         }
-        $start_time=date('m.j',$order_info['start_time']);
-        $end_time=date('m.j',$order_info['end_time']);
-        $time['need_time']=$order_info['need_time'];
-        $time['time_length']=$start_time.self::TIMESTYPE.$end_time;
-       return $time;
+        $start_time = date('m.j', $order_info['start_time']);
+        $end_time = date('m.j', $order_info['end_time']);
+        $time['need_time'] = $order_info['need_time'];
+        $time['time_length'] = $start_time . self::TIMESTYPE . $end_time;
+        return $time;
     }
 
     /**
@@ -589,5 +630,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return $order->order_no;
         }
         return null;
+    }
+
+    public function changeOrderStatus($order_no)
+    {
+        $order = self::updateAll(['status' => 0], ['order_no' => $order_no]);
     }
 }
