@@ -423,7 +423,9 @@ class WorkerController extends Controller
             $need_time = trim($request->post('need_time', ''));
             $days = trim($request->post('days', ''));
 
-            if (!$order_id) {
+            if (!$order_id
+                ||($days && $need_time != count(explode(',', $days)))
+            ) {
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
@@ -467,7 +469,7 @@ class WorkerController extends Controller
                 $data['need_time'] = $need_time;
             }
 
-            $days && $data['days'] = $days;
+            $data['days'] = $days;
 
             $data['is_old'] = 0;
             $data['modify_time'] = time();
@@ -592,6 +594,8 @@ class WorkerController extends Controller
         $request = \Yii::$app->request;
 
         $order_no = (int)$request->get('order_no', 0);
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
 
         $code = 1000;
 
@@ -602,6 +606,13 @@ class WorkerController extends Controller
             ]);
         }
 
+        $order = WorkerOrder::getOrderHistory($user, $order_no, $page, $page_size);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $order
+        ]);
     }
 
     /**
@@ -624,6 +635,16 @@ class WorkerController extends Controller
         return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_ING);
     }
 
+
+    /**
+     * 确定验收
+     *
+     * @return string
+     */
+    public function actionFinishOrder()
+    {
+        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_DONE);
+    }
 
     /**
      * 改变订单状态
@@ -653,7 +674,9 @@ class WorkerController extends Controller
             ]);
         }
 
-        $order = WorkerOrder::find()->where(['order_no' => $order_no, 'uid' => $user])->exists();
+        $order = WorkerOrder::find()
+            ->where(['order_no' => $order_no, 'uid' => $user, 'is_old' => WorkerOrder::IS_NEW])
+            ->one();
 
         if (!$order) {
             return Json::encode([
@@ -662,15 +685,30 @@ class WorkerController extends Controller
             ]);
         }
 
-        //todo  取消订单  开工订单  写到模型一个方法
+        $worker_id = $order->worker_id;
 
-        $order = WorkerOrder::updateAll(['status' => $status], ['order_no' => $order_no]);
+        $trans = \Yii::$app->db->beginTransaction();
 
-        if (!$order) {
+        try {
+            WorkerOrder::updateAll(['status' => $status], ['order_no' => $order_no]);
+            $trans->commit();
+        } catch (Exception $e) {
+
+            $trans->rollBack();
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+
+        if ($status = WorkerOrder::WORKER_ORDER_DONE) {
+            $works = WorkerOrder::newWorkerWorks($worker_id, $order_no);
+            if ($works != 200) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
 
         return Json::encode([
