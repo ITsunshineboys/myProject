@@ -8,6 +8,11 @@ style_detail.controller("style_detail",function ($scope,$http,$state,$stateParam
       return $.param(data)
     }
   };
+  $scope.change_txts=function () {
+    if($scope.style_txt==undefined){
+      $scope.style_txt='';
+    }
+  };
   //风格列表所有数据
   $scope.style_arr=[];
   $http.get('http://test.cdlhzz.cn:888/mall/style-list',{

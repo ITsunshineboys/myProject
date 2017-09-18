@@ -8,6 +8,14 @@ add_style.controller("add_style",function ($scope,$http,$state,$stateParams,Uplo
       return $.param(data)
     }
   };
+  $scope.style_intro='';
+  $scope.change_txts=function () {
+    if($scope.style_intro==undefined){
+      $scope.style_intro='';
+    }
+  };
+
+
   //风格列表所有数据
   $scope.style_arr=[];
   $http.get('http://test.cdlhzz.cn:888/mall/style-list',{

@@ -69,11 +69,12 @@
             </div>
         </div>
 
-        <!--系列介绍-->
+        <!--风格介绍-->
         <div class="series_intro">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>系列介绍</span>
-            <textarea name="style_txt" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_txt"></textarea>
+            <span>风格介绍</span>
+            <textarea name="style_txt" maxlength="70" ng-change="change_txts()" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_txt"></textarea>
+            <span class="word_num">{{style_txt.length}}/70</span>
         </div>
 
         <!--按钮-->

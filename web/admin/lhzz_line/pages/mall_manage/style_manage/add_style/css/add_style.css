@@ -158,6 +158,7 @@ p{
 
 /*系列介绍*/
 .series_intro{
+    position: relative;
     margin-top: 48px;
 }
 
@@ -167,6 +168,11 @@ p{
     vertical-align: top;
     margin-left: 87px;
     border-radius: 3px;
+}
+.word_num{
+    position: absolute;
+    bottom:0;
+    margin-left: -50px;
 }
 
 
