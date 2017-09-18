@@ -70,6 +70,8 @@ class BasisDecorationService
     const HOUSE_MESSAGE = [
         'kitchen_area'=>'厨房面积',
         'toilet_area' =>'卫生间面积',
+        'bedroom_area' =>'卧室面积',
+        'hall_area' =>'客厅面积',
         'kitchen_waterproof' =>'厨房防水',
         'toilet_waterproof' =>'卫生间防水',
         'modelling_length' =>'造型长度石膏板',
