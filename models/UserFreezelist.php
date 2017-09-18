@@ -68,4 +68,18 @@ class UserFreezelist extends \yii\db\ActiveRecord
 
     }
 
+        /**
+     * @param $uid
+     * @param $role_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static  function  findByUidAndRoleId($uid,$role_id)
+    {
+        $list=self::find()
+            ->where(['uid'=>$uid])
+            ->andWhere(['role_id'=>$role_id])
+            ->all();
+        return $list?$list:[];
+    }
+
 }
