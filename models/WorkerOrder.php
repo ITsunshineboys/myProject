@@ -64,6 +64,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
     const IMG_PAGE_SIZE_DEFAULT = 3;
 
+    const IS_OLD = 1;
+    const IS_NEW = 0;
+
     /**
      * @inheritdoc
      */
@@ -181,11 +184,28 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     private static function getOrderDetail($order_id)
     {
-        $order = self::find()->where(['id' => $order_id])->one();
-        if ($order == null) {
-            return 1000;
+        if (is_array($order_id)) {
+            $return = [];
+            $orders = self::find()->where(['id' => $order_id])->all();
+            if ($orders) {
+                return 1000;
+            }
+            foreach ($orders as $order) {
+                $return[] = self::dealOrder($order);
+            }
+        } else {
+            $order = self::find()->where(['id' => $order_id])->one();
+            if (!$order) {
+                return 1000;
+            }
+            $return = self::dealOrder($order);
         }
 
+        return $return;
+    }
+
+    private static function dealOrder($order)
+    {
         $worker_type_id = $order->worker_type_id;
 
         $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
@@ -632,8 +652,59 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return null;
     }
 
-    public function changeOrderStatus($order_no)
+    public static function getOrderHistory($uid, $order_no, $page = 1, $page_size = self::IMG_PAGE_SIZE_DEFAULT)
     {
-        $order = self::updateAll(['status' => 0], ['order_no' => $order_no]);
+        $query = WorkerOrder::find()
+            ->where(['uid' => $uid, 'order_no' => $order_no, 'is_old' => self::IS_OLD]);
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        foreach ($arr as &$v) {
+            $v = self::dealOrder($v);
+        }
+
+        return ModelService::pageDeal($arr, $count, $page, $page_size);
+    }
+
+    public static function newWorkerWorks($worker_id, $order_no, $title = '', $desc = '')
+    {
+        $worker_works = WorkerWorks::find()->where(['worker_id' => $worker_id, 'order_no' => $order_no])->exists();
+        if ($worker_works) {
+            return 1000;
+        }
+
+        if (!isset($title) || trim($title) == '') {
+
+            $worker_order = self::find()->where(['order_no' => $order_no, 'is_old' => self::IS_NEW])->one();
+
+            if ($worker_order == null) {
+                return 1000;
+            }
+
+            $worker_type_id = $worker_order->worker_type_id;
+
+            $title = WorkerType::find()
+                ->where(['id' => $worker_type_id])
+                ->one();
+            if ($title == null) {
+                return 1000;
+            }
+            $title = $title->worker_type;
+        }
+
+        $worker_works = new WorkerWorks();
+        $worker_works->setAttributes([
+            'worker_id' => $worker_id,
+            'order_no' => $order_no,
+            'title' => $title,
+            'desc' => $desc
+        ]);
+        if (!$worker_works->save(false)) {
+            return 1000;
+        }
+        return 200;
     }
 }
