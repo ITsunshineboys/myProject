@@ -1055,7 +1055,7 @@ let commodity_manage = angular.module("commodity_manage",[])
               console.log(err);
           })
       };
-    
+
       $scope.myng=$scope;
       $scope.down_list_arr=[];
       $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
