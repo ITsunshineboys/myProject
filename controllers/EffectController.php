@@ -354,35 +354,6 @@ class EffectController extends Controller
 
     }
     /**
-     * 后台样板间获取申请总金额
-     * @return string
-     *
-     */
-
-    public function actionApplyEarnestNum(){
-
-        $user = \Yii::$app->user->identity;
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $earnest=new EffectEarnst();
-        $data=[];
-        $data['all_apply']=$earnest::getallapply();
-
-        $data['today_apply']=$earnest::gettodayapply();
-        $data['today_earnest']=$earnest::gettodayearnest();
-        $data['all_earnest']=$earnest::getallearnest();
-        return json_encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>$data
-        ]);
-    }
-    /**
      * 后台样板间列表搜索
      * @return string
      *
@@ -446,13 +417,20 @@ class EffectController extends Controller
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', EffectEarnst::PAGE_SIZE_DEFAULT);
         $paginationData = EffectEarnst::pagination($where, EffectEarnst::FIELDS_ADMIN, $page, $size);
-
+        $earnest=new EffectEarnst();
+        $data=[];
+        $data['all_apply']=$earnest::getallapply();
+            $data['today_apply']=$earnest::gettodayapply();
+            $data['today_earnest']=$earnest::gettodayearnest();
+            $data['all_earnest']=$earnest::getallearnest();
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' =>
+                 [
+                     $data, $paginationData,
+                 ]
 
-                $paginationData
 
         ]);
     }
