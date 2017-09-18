@@ -121,6 +121,7 @@ class Supplier extends ActiveRecord
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
     const PAGE_SIZE_DEFAULT = 10;
     const FIELDS_ADMIN = [
+        'id',
         'shop_no',
         'status',
         'shop_name',
