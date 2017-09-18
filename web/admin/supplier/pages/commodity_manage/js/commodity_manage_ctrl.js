@@ -1062,7 +1062,7 @@ let commodity_manage = angular.module("commodity_manage",[])
           }
       };
       $scope.myng=$scope;
-      $scope.down_list_arr=[];
+      $scope.down_wait_list_arr=[];
       $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
               params:{
                   status:1
@@ -1138,7 +1138,7 @@ let commodity_manage = angular.module("commodity_manage",[])
               }
           }).then(function (res) {
               console.log(res);
-              $scope.down_list_arr=res.data.data.goods_list_admin.details;
+              $scope.down_wait_list_arr=res.data.data.goods_list_admin.details;
               /*--------------------分页------------------------*/
               $scope.down_history_list=[];
               $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
@@ -1258,7 +1258,7 @@ let commodity_manage = angular.module("commodity_manage",[])
               }
           }).then(function (res) {
               console.log(res);
-              $scope.down_list_arr=res.data.data.goods_list_admin.details;
+              $scope.down_wait_list_arr=res.data.data.goods_list_admin.details;
               /*--------------------分页------------------------*/
               $scope.on_history_list=[];
               $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
@@ -1273,7 +1273,7 @@ let commodity_manage = angular.module("commodity_manage",[])
           })
       };
 
-      /*--------------------已下架 结束-------------------------*/
+      /*--------------------等待下架 结束-------------------------*/
 
 
 
