@@ -20,7 +20,7 @@ use yii\db\Query;
  */
 class EffectEarnst extends \yii\db\ActiveRecord
 {
-    const INSET_EARNST = 89;
+    const INSET_EARNST = 8900;
     const PAGE_SIZE_DEFAULT = 10;
     const FIELDS_EXTRA = [];
     const FIELDS_ADMIN = [
