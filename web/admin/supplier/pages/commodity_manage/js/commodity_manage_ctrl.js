@@ -1055,12 +1055,7 @@ let commodity_manage = angular.module("commodity_manage",[])
               console.log(err);
           })
       };
-      const config = {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          transformRequest: function (data) {
-              return $.param(data)
-          }
-      };
+      
       $scope.myng=$scope;
       $scope.down_wait_list_arr=[];
       $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
