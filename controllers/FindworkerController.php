@@ -283,7 +283,10 @@ class FindworkerController extends Controller{
         }
         return  ceil($sum / 12 + 1);
     }
-
+    /**
+     * 工人个人中心
+     * @return string
+     */
     public function actionWorkerIndex(){
         $user_id = \Yii::$app->user->identity->getId();
         $code=1052;
@@ -294,9 +297,30 @@ class FindworkerController extends Controller{
             ]);
         }
         $worker_info=User::find()->where(['id'=>$user_id])->one();
-        $worker['worker']['aite_cube_no']=$worker_info->aite_cube_no;
-        $worker['worker']['worker_no']=$worker_info->aite_cube_no;
-        $worker['worker']['balance']=$worker_info->balance;
+        $worker['aite_cube_no']=$worker_info->aite_cube_no;
+        $worker['name']=Worker::getWorkerByUid($user_id)->nickname;
+        $worker['uid']=Worker::getWorkerByUid($user_id)->id;
+        $worker['worker_no']=$worker_info->aite_cube_no;
+        $worker['balance']=sprintf('%.2f',(float)$worker_info->balance*0.01);
+        $order=Worker::getordertypebystatus($user_id);
+        if(is_int($order)){
+            $code=$order;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>[
+               'worker_infos'=> $worker,
+                'worker_orders'=>$order
+            ]
+        ]);
+
+    }
+    public function actionOwenInfos(){
 
 
     }
@@ -353,11 +377,7 @@ class FindworkerController extends Controller{
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $worker_id=Worker::find()
-            ->select('id')
-            ->where(['uid'=>$user_id])
-            ->asArray()
-            ->one();
+        $worker_id=Worker::getWorkerByUid($user_id)->id;
         $orderdata=WorkerOrder::find()
             ->where(['id'=>$order_id])
             ->andWhere(['status'=>self::STATUS_SINGLE])

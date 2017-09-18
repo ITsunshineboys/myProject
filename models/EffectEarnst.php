@@ -24,6 +24,7 @@ class EffectEarnst extends \yii\db\ActiveRecord
     const PAGE_SIZE_DEFAULT = 10;
     const FIELDS_EXTRA = [];
     const FIELDS_ADMIN = [
+        'id',
         'create_time',
         'name',
         'phone',

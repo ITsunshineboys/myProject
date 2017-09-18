@@ -34,6 +34,7 @@ use Yii;
  */
 class Worker extends \yii\db\ActiveRecord
 {
+    const ORDER_BEGIN=3;
     /**
      * @inheritdoc
      */
@@ -124,5 +125,37 @@ class Worker extends \yii\db\ActiveRecord
         $worker = self::find()->where(['id' => $worker_id])->one();
         $labor_cost_id = (int)$worker->labor_cost_id;
         return LaborCost::find()->where(['id' => $labor_cost_id])->one();
+    }
+    /**
+     * @param $user_id
+     * @return array|int
+     */
+    public static function getordertypebystatus($user_id){
+        $data=[];
+        $worker_id=Worker::getWorkerByUid($user_id)->id;
+
+        if(!$worker_id){
+            $code=1000;
+            return $code;
+        }
+        $count_worker_order=WorkerOrder::find()
+            ->select('order_no')
+            ->where(['uid'=>$user_id])
+            ->andWhere(['worker_id'=>$worker_id])
+            ->asArray()
+            ->distinct()
+            ->count();
+        $count_worker_place=WorkerOrder::find()
+            ->select('order_no')
+            ->where(['uid'=>$user_id])
+            ->andWhere(['worker_id'=>$worker_id])
+            ->andWhere(['status'=>self::ORDER_BEGIN])
+            ->asArray()
+            ->distinct()
+            ->count();
+
+        $data['worker_count_order']=$count_worker_order;
+        $data['worker_order_place']=$count_worker_place;
+        return $data;
     }
 }
