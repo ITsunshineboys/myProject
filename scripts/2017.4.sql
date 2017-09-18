@@ -1450,6 +1450,7 @@ CREATE TABLE `user_accessdetail` (
   `create_time` int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
   `transaction_no` varchar(50) NOT NULL DEFAULT '' COMMENT '交易单号',
+  `sku` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
