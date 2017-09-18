@@ -1,4 +1,8 @@
 /*��������ʼ*/
+html,body{
+    height: 100%;
+    width: 100%;
+}
 .nav_box{
     width: 200px;
     height:100% !important;
@@ -76,6 +80,5 @@
 /*�Ҳ�·���л���С*/
 #content{
     margin-left: 200px!important;
-    /*width: 85%;*/
-    height: 636px;
+    height: 100%;
 }
