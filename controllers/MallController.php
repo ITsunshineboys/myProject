@@ -4160,7 +4160,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-index-admin' => Supplier::statData($supplier->id)
+                'supplier_index_admin' => Supplier::statData($supplier->id)
             ],
         ]);
     }
