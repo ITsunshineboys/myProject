@@ -85,7 +85,7 @@ class EffectController extends Controller
             $window=$effect->window=self::WINDOW;
             $site_particulars= $effect->site_particulars = trim($request->post('site_particulars', ''), '');
             $effect->city = mb_substr($site_particulars,0,2,'utf8');
-             $effect->district = mb_substr($site_particulars,3,2,'utf8');
+             $effect->district = mb_substr($site_particulars,2,3,'utf8');
             $effect->street = mb_substr($site_particulars,6,null,'utf8');
             $particulars= $effect->particulars = trim($request->post('particulars', ''), '');
             preg_match('/\d+/',$particulars,$area);

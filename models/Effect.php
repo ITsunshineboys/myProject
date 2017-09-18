@@ -57,7 +57,7 @@ class Effect extends ActiveRecord
     public function rules()
     {
         return [
-            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','effect_images','images_name','type'], 'required'],
+            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','effect_images','images_name','type','site_particulars'], 'required'],
             [['province', 'city','district','toponymy','street','particulars'],'string'],
             [['bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high'],'number']
         ];
