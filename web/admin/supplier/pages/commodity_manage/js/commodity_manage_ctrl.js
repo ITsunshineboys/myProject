@@ -1041,7 +1041,293 @@ let commodity_manage = angular.module("commodity_manage",[])
 
 
     /*--------------------已下架 结束-------------------------*/
+      /*等待上架表格Menu切换 结束*/
+      //等待上架
+      /*--------------------等待上架 开始-------------------------*/
+      //实时监听库存并修改
+      $scope.change_left_number=function (id,left_num) {
+          $http.post('http://test.cdlhzz.cn:888/mall/goods-inventory-reset',{
+              id:+id,
+              left_number:+left_num
+          },config).then(function (res) {
+              console.log(res);
+          },function (err) {
+              console.log(err);
+          })
+      };
 
+      $scope.myng=$scope;
+      $scope.down_list_arr=[];
+      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
+              params:{
+                  status:1
+              }
+          }
+      ).then(function (res) {
+          console.log('等待上架');
+          console.log(res);
+          $scope.down_list_arr=res.data.data.goods_list_admin.details;
+          /*--------------------分页------------------------*/
+          $scope.down_history_list=[];
+          $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+          let all_num=$scope.down_history_all_page;//循环总页数
+          for(let i=0;i<all_num;i++){
+              $scope.down_history_list.push(i+1)
+          }
+          $scope.page=1;
+          //点击数字，跳转到多少页
+          $scope.down_choosePage=function (page) {
+              if($scope.down_history_list.indexOf(parseInt(page))!=-1){
+                  $scope.page=page;
+                  $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
+                      params:{
+                          status:1,
+                          page:$scope.page,
+                          'sort[]':$scope.sort_status
+                      }
+                  }).then(function (res) {
+                      //console.log(res);
+                      $scope.down_list_arr=res.data.data.goods_list_admin.details;
+                  },function (err) {
+                      console.log(err);
+                  });
+              }
+          };
+          //显示当前是第几页的样式
+          $scope.isActivePage=function (page) {
+              return $scope.page==page;
+          };
+          //进入页面，默认设置为第一页
+          if($scope.page===undefined){
+              $scope.page=1;
+          }
+          //上一页
+          $scope.down_Previous=function () {
+              if($scope.page>1){                //当页数大于1时，执行
+                  $scope.page--;
+                  $scope.down_choosePage($scope.page);
+              }
+          };
+          //下一页
+          $scope.down_Next=function () {
+              if($scope.page<$scope.down_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
+                  $scope.page++;
+                  $scope.down_choosePage($scope.page);
+              }
+          }
+      },function (err) {
+          console.log(err)
+      });
+      //查看获取审核备注
+      $scope.getRest = function (item) {
+          $scope.reset = item
+      }
+
+      /*----------------搜索---------------*/
+      $scope.off_search_btn=function () {
+          console.log($scope.off_search_content)
+          $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
+              params:{
+                  status:1,
+                  keyword:$scope.off_search_content
+              }
+          }).then(function (res) {
+              console.log(res);
+              $scope.down_list_arr=res.data.data.goods_list_admin.details;
+              /*--------------------分页------------------------*/
+              $scope.down_history_list=[];
+              $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+              let all_num=$scope.down_history_all_page;//循环总页数
+              for(let i=0;i<all_num;i++){
+                  $scope.down_history_list.push(i+1)
+              }
+              $scope.page=1;
+          },function (err) {
+              console.log(err);
+          })
+      };
+      //监听搜索框的值为空时，返回最初的值
+      $scope.$watch("off_search_content",function (newVal,oldVal) {
+          if(newVal == ""){
+              $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
+                      params:{
+                          status:1
+                      }
+                  }
+              ).then(function (res) {
+                  console.log('等待上架');
+                  console.log(res);
+                  $scope.down_list_arr=res.data.data.goods_list_admin.details;
+                  /*--------------------分页------------------------*/
+                  $scope.down_history_list=[];
+                  $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+                  let all_num=$scope.down_history_all_page;//循环总页数
+                  for(let i=0;i<all_num;i++){
+                      $scope.down_history_list.push(i+1)
+                  }
+                  $scope.page=1;
+                  //点击数字，跳转到多少页
+                  $scope.down_choosePage=function (page) {
+                      if($scope.down_history_list.indexOf(parseInt(page))!=-1){
+                          $scope.page=page;
+                          $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
+                              params:{
+                                  status:1,
+                                  page:$scope.page,
+                                  'sort[]':$scope.sort_status
+                              }
+                          }).then(function (res) {
+                              //console.log(res);
+                              $scope.down_list_arr=res.data.data.goods_list_admin.details;
+                          },function (err) {
+                              console.log(err);
+                          });
+                      }
+                  };
+                  //显示当前是第几页的样式
+                  $scope.isActivePage=function (page) {
+                      return $scope.page==page;
+                  };
+                  //进入页面，默认设置为第一页
+                  if($scope.page===undefined){
+                      $scope.page=1;
+                  }
+                  //上一页
+                  $scope.down_Previous=function () {
+                      if($scope.page>1){                //当页数大于1时，执行
+                          $scope.page--;
+                          $scope.down_choosePage($scope.page);
+                      }
+                  };
+                  //下一页
+                  $scope.down_Next=function () {
+                      if($scope.page<$scope.down_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
+                          $scope.page++;
+                          $scope.down_choosePage($scope.page);
+                      }
+                  }
+              })
+          }
+      });
+      /*=======降序=====*/
+      $scope.on_time_sort=function () {
+          $scope.sort_status='publish_time:3';
+          $scope.on_time_flag=false;
+          $scope.down_time_flag=true;
+
+          $scope.page=1;
+          $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
+              params:{
+                  status:1,
+                  page:$scope.page,
+                  'sort[]':$scope.sort_status
+              }
+          }).then(function (res) {
+              console.log(res);
+              $scope.down_list_arr=res.data.data.goods_list_admin.details;
+              /*--------------------分页------------------------*/
+              $scope.on_history_list=[];
+              $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+              let all_num=$scope.on_history_all_page;//循环总页数
+              for(let i=0;i<all_num;i++){
+                  $scope.on_history_list.push(i+1)
+              }
+              $scope.page=1;
+          },function (err) {
+              console.log(err)
+          })
+      };
+      /*============升序==================*/
+      $scope.on_time_flag=true;
+      $scope.down_time_flag=false;
+      $scope.down_time_sort=function (status) {
+          $scope.sort_status='publish_time:4';
+          $scope.on_time_flag=true;
+          $scope.down_time_flag=false;
+          $scope.page=1;
+          $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
+              params:{
+                  status:1,
+                  page:$scope.page,
+                  'sort[]':$scope.sort_status
+              }
+          }).then(function (res) {
+              console.log(res);
+              $scope.down_list_arr=res.data.data.goods_list_admin.details;
+              /*--------------------分页------------------------*/
+              $scope.on_history_list=[];
+              $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+              let all_num=$scope.on_history_all_page;//循环总页数
+              for(let i=0;i<all_num;i++){
+                  $scope.on_history_list.push(i+1)
+              }
+
+              $scope.page=1;
+          },function (err) {
+              console.log(err)
+          })
+      };
+
+      /*--------------------等待下架 结束-------------------------*/
+
+
+
+      //物流模板开始
+      $http({
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          //transformRequest: function (data) {
+          //  return $.param(data)
+          //},
+          method: 'POST',
+          url: 'http://test.cdlhzz.cn:888/mall/logistics-templates-supplier'
+      }).then(function successCallback(response) {
+          console.log(response);
+          $scope.contentMore = response.data.data.logistics_templates_supplier;
+          console.log($scope.contentMore);
+
+      });
+
+      //删除获取ID
+      $scope.getId = function (item) {
+          console.log(item);
+          $scope.id = item;
+          //删除物流模板
+          $scope.deleteTemplate = function () {
+              console.log($scope.id);
+              $http({
+                  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                  transformRequest: function (data) {
+                      return $.param(data)
+                  },
+                  method: 'POST',
+                  url: 'http://test.cdlhzz.cn:888/mall/logistics-template-status-toggle',
+                  data:{
+                      id:+$scope.id
+                  }
+              }).then(function successCallback(response) {
+                  $http({
+                      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                      //transformRequest: function (data) {
+                      //  return $.param(data)
+                      //},
+                      method: 'POST',
+                      url: 'http://test.cdlhzz.cn:888/mall/logistics-templates-supplier'
+                  }).then(function successCallback(response) {
+                      $scope.contentMore = response.data.data.logistics_templates_supplier;
+                      console.log($scope.contentMore);
+                  });
+                  console.log(response);
+              });
+          }
+      };
+
+      //查看物流模板详情
+      $scope.getDetails = function (item) {
+          $scope.id = item.id;
+          $scope.name = item.name;
+          console.log($scope.id);
+          $state.go('template_details',{'id':$scope.id,'name':$scope.name})
+      }
   })
   .directive('stringToNumber2', function() {
     return {
