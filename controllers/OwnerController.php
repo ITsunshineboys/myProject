@@ -53,6 +53,10 @@ class OwnerController extends Controller
         'waterway'      =>'水路点位',
         'work_area'     =>'做工面积',
     ];
+
+    const PROJECT_DETAILS = [
+        'weak_current'=>'弱电',
+    ];
     /**
      * Actions accessed by logged-in users
      */
@@ -230,7 +234,7 @@ class OwnerController extends Controller
         $weak_current = BasisDecorationService::judge($judge, $post);
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll('弱电', $post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'], $post['city']);
 
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points,$workers,$worker_kind_details);
@@ -241,7 +245,7 @@ class OwnerController extends Controller
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
 
         //添加材料
-        $add_price_area = DecorationAdd::AllArea('弱电', $post['area'], $post['city']);
+        $add_price_area = DecorationAdd::AllArea(self::PROJECT_DETAILS['weak_current'], $post['area'], $post['city']);
         $add_price = [];
         foreach ($add_price_area as $add_area) {
             $sku_area = Goods::skuAll($add_area['sku']);
@@ -252,7 +256,7 @@ class OwnerController extends Controller
             }
         }
 
-        $add_price_series = DecorationAdd::AllSeries('弱电', $post['series'], $post['city']);
+        $add_price_series = DecorationAdd::AllSeries(self::PROJECT_DETAILS['weak_current'], $post['series'], $post['city']);
         foreach ($add_price_series as $add_series) {
             $sku_area = Goods::skuAll($add_series['sku']);
             if ($sku_area !== null) {
@@ -262,7 +266,7 @@ class OwnerController extends Controller
             }
         }
 
-        $add_price_style = DecorationAdd::AllStyle('弱电', $post['style'], $post['city']);
+        $add_price_style = DecorationAdd::AllStyle(self::PROJECT_DETAILS['weak_current'], $post['style'], $post['city']);
         foreach ($add_price_style as $add_style) {
             $sku_area = Goods::skuAll($add_style['sku']);
             if ($sku_area !== null) {
