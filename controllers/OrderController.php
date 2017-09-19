@@ -2497,10 +2497,10 @@ class OrderController extends Controller
      */
     public  function  actionFindTest()
     {
-        $data=Express::find()->asArray()->all();
+        $data=Yii::$app->db->createCommand('alter table express add `receive_time1` int(11) NOT NULL')
+            ->execute();
         var_dump($data);
 
     }
-
 
 }
