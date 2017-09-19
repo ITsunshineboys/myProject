@@ -1884,7 +1884,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $orderAmount;
     }
-    /**
+ /**分页数据
      * @param array $where
      * @param array $select
      * @param int $page
@@ -1941,17 +1941,13 @@ class GoodsOrder extends ActiveRecord
                     $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                     $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
                     if ($GoodsOrder[$k]['list'][$key]['order_status'] !=0){
-                        $addunpaid=2;
+                        unset($GoodsOrder[$k]);
                     }
                 }
                 unset($GoodsOrder[$k]['pay_status']);
                 unset($GoodsOrder[$k]['supplier_id']);
-                if ($addunpaid==1)
-                {
                     $arr[]=$GoodsOrder[$k];
-                }else{
-                    unset($GoodsOrder[$k]);
-                }
+
             }
         }
         foreach ($arr as $key => $row)
