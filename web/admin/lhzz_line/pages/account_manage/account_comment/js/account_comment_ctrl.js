@@ -1,5 +1,5 @@
 /**
- * Created by Administrator on 2017/8/10 0010.
+ * Created by xl on 2017/8/10 0010.
  */
 var account_comment= angular.module("account_comment",[])
     .controller("account_comment_ctrl",function ($scope,$http,$state,$stateParams) {
@@ -59,10 +59,9 @@ var account_comment= angular.module("account_comment",[])
                     'legal_person':$scope.legal_person,'identity_no':$scope.identity_no
                     ,'identity_card_front_imagen':$scope.identity_card_front_image,'identity_card_back_image':
                     $scope.identity_card_back_image,'review_time':$scope.review_time,
-                     'status_remark':$scope.status_remark,'status_operator':$scope.status_operator
+                    'status_remark':$scope.status_remark,'status_operator':$scope.status_operator
                     ,'a':$scope.a})
             }
-
         };
         $scope.back_page = function () {
             $state.go("account_index")
