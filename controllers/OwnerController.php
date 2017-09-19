@@ -54,10 +54,10 @@ class OwnerController extends Controller
      * points category details
      */
     const POINTS_CATEGORY = [
-        'weak_current'  =>'弱电点位',
-        'strong_current'=>'强电点位',
-        'waterway'      =>'水路点位',
-        'work_area'     =>'做工面积',
+        'weak_current'  => '弱电点位',
+        'strong_current'=> '强电点位',
+        'waterway'      => '水路点位',
+        'work_area'     => '做工面积',
 
     ];
 
@@ -65,39 +65,39 @@ class OwnerController extends Controller
      * 工种
      */
     const PROJECT_DETAILS = [
-        'weak_current'      =>'弱电',
-        'strong_current'    =>'强电',
-        'waterway'          =>'水路',
-        'waterproof'        =>'防水',
-        'carpentry'         =>'木作',
-        'emulsion_varnish'  =>'乳胶漆',
-        'oil_paint'         =>'油漆',
-        'tiler'             =>'泥工',
+        'weak_current'      => '弱电',
+        'strong_current'    => '强电',
+        'waterway'          => '水路',
+        'waterproof'        => '防水',
+        'carpentry'         => '木作',
+        'emulsion_varnish'  => '乳胶漆',
+        'oil_paint'         => '油漆',
+        'tiler'             => '泥工',
     ];
 
     /**
      * 其它信息
      */
     const WORKMANSHIP = [
-        'flat_area'       =>'平顶面积',
-        'modelling_length'=>'造型长度',
-        'emulsion_varnish_primer_area'=>'乳胶漆底漆面积',
-        'emulsion_varnish_cover_area'=>'乳胶漆面漆面积',
-        'concave_line_length'=>'阴角线长度',
-        'putty_area'=>'腻子面积',
-        'protective_layer_length'     =>'保护层长度',
-        'geostrophy_area'     =>'贴地砖面积',
-        'wall_brick_area'     =>'贴墙砖面积',
+        'flat_area'                     => '平顶面积',
+        'modelling_length'              => '造型长度',
+        'emulsion_varnish_primer_area'  => '乳胶漆底漆面积',
+        'emulsion_varnish_cover_area'   => '乳胶漆面漆面积',
+        'concave_line_length'           => '阴角线长度',
+        'putty_area'                    => '腻子面积',
+        'protective_layer_length'       => '保护层长度',
+        'geostrophy_area'               => '贴地砖面积',
+        'wall_brick_area'               => '贴墙砖面积',
     ];
 
     /**
      * room  detail
      */
     const ROOM_DETAIL = [
-        'kitchen'=>'厨房',
-        'toilet'=>'卫生间',
-        'hall'=>'客厅',
-        'bedroom'=>'卧室',
+        'kitchen' => '厨房',
+        'toilet'  => '卫生间',
+        'hall'    => '客厅',
+        'bedroom' => '卧室',
     ];
 
     /**
