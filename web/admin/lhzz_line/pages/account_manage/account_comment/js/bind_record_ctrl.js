@@ -67,6 +67,7 @@ var bind_record= angular.module("bind_record",[])
         }).then(function successCallback(response) {
             $scope.past_record = response.data.data.reset_mobile_logs.details;
             console.log(response);
+
             /*-----------------------------分页-----------------------*/
             $scope.history_list_colse=[];
             $scope.history_all_page=Math.ceil(response.data.data.reset_mobile_logs.total/12);//获取总页数
@@ -85,7 +86,6 @@ var bind_record= angular.module("bind_record",[])
                 $http.get('http://test.cdlhzz.cn:888/mall/reset-mobile-logs',{
                     params:{
                         'page':$scope.page
-
                     }
                 }).then(function (response) {
                     // console.log(response);
