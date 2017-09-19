@@ -257,7 +257,7 @@ class SupplieraccountController extends  Controller{
                     }
                     if($freezed_money<$freeze_money){
                        $transaction->rollBack();
-                        $code=1051;
+                        $code=1033;
                        return json_encode([
                            'code' => $code,
                            'msg' => \Yii::$app->params['errorCodes'][$code],

@@ -1905,7 +1905,7 @@ class GoodsOrder extends ActiveRecord
         $arr=self::findOrderData($arr);
         if ($type=='all' || $type=='unpaid')
         {
- switch ($role){
+            switch ($role){
                 case 'supplier':
                     $where='pay_status=0  and supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
                     break;
@@ -2010,7 +2010,9 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
             $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
+            $arr[$k]['freight']=self::switchMoney($arr[$k]['freight']*0.01);
             $arr[$k]['shop_name']=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one()->nickname;
+
             $arr_list=[];
             $arr_list['goods_name']=$arr[$k]['goods_name'];
             $arr_list['goods_price']=$arr[$k]['goods_price'];
