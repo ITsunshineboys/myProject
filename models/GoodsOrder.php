@@ -2213,4 +2213,45 @@ class GoodsOrder extends ActiveRecord
        }
        return $output;
    }
+
+
+   
+    /**set order_no
+     * @return string
+     */
+    public static function SetOrderNo(){
+        do {
+            $code=date('md',time()).'1'.rand(10000,99999);
+        } while ( $code==GoodsOrder::find()->select('order_no')->where(['order_no'=>$code])->asArray()->one()['order_no']);
+        return $code;
+    }
+
+
+    /**
+     * set  transaction no
+     * @param $supplier_id
+     * @return string
+     */
+    public  static  function  SetTransactionNo($supplier_id)
+    {
+        $supplier=Supplier::find()
+            ->where(['id'=>$supplier_id])
+            ->one();
+        $rand=rand(10000,99999);
+        $time=time();
+        $month=date('m',$time);
+        $day=date('d',$time);
+        do {
+            $transaction_no=$month.$day.$supplier->shop_no.$rand;
+        } while ( $transaction_no==UserCashregister::find()
+            ->select('transaction_no')
+            ->where(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one()['transaction_no'] || $transaction_no==UserAccessdetail::find() ->select('transaction_no')
+            ->where(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one()['transaction_no']
+        );
+        return $transaction_no;
+    }
 }
