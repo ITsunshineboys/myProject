@@ -6,6 +6,7 @@ use Yii;
 use yii\db\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Query;
+use app\services\ModelService;
 
 class OrderAfterSale extends ActiveRecord
 {

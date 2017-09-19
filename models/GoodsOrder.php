@@ -1587,25 +1587,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-    /**
-     * set transaction no
-     * @return string
-     */
-    public static  function SetTransaction_no($supplier){
-        $time=time();
-        $month=date('m',$time);
-        $day=date('d',$time);
-        $rand=rand(10000,99999);
-        do {
-            $transaction_no=$month.$day.$supplier->shop_no.$rand;
-        } while ( $transaction_no==SupplierCashregister::find()
-            ->select('transaction_no')
-            ->where(['transaction_no'=>$transaction_no])
-            ->asArray()
-            ->one()['transaction_no']);
 
-        return $transaction_no;
-    }
     /**
      * @param $order_no
      * @param $sku
