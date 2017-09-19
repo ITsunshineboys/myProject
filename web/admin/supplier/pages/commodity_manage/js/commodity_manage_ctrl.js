@@ -967,7 +967,7 @@ let commodity_manage = angular.module("commodity_manage",[])
     };
 
     /*----------------搜索---------------*/
-    $scope.off_search_btn=function () {
+    $scope.all_search_btn=function () {
       $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
         params:{
           status:0,
