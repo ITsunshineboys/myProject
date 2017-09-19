@@ -2492,6 +2492,13 @@ class OrderController extends Controller
 
     }
 
+    public  function  actionFindTest()
+    {
+        $data=Yii::$app->db->createCommand('alter table user_accessdetail add `sku` bigint(20) NOT NULL')
+            ->execute();
+        var_dump($data);
+    }
+
 
 
 }
