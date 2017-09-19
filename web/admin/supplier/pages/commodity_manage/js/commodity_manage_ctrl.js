@@ -40,6 +40,13 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.wait_flag=true;
       $scope.logistics_flag=false;
     }
+    // 物流模板
+    if($stateParams.logistics_flag==true){
+      $scope.on_flag=false;
+      $scope.down_flag=false;
+      $scope.wait_flag=false;
+      $scope.logistics_flag=true;
+    }
 
     //已上架
     $scope.on_shelves=function () {

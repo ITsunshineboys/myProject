@@ -27,7 +27,7 @@ var app = angular.module("app",["ui.router","shop_style","freight_template","tem
             .state("commodity_manage",{   //商品管理
                 url:"/commodity_manage",
                 templateUrl:"pages/commodity_manage/commodity_manage.html",
-                params:{id:'id',name:'name',on_flag:'',down_flag:'',wait_flag:''}
+                params:{id:'id',name:'name',on_flag:'',down_flag:'',wait_flag:'',logistics_flag:''}
             })
             .state("order_manage",{   //订单管理
                 url:"/order_manage",

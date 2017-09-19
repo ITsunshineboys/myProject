@@ -167,6 +167,6 @@ var shop_style= angular.module("template_details",[])
            };
         //返回上一页
            $scope.getBack = function () {
-                $state.go('commodity_manage')
+                $state.go('commodity_manage',{logistics_flag:true})
            }
     });
