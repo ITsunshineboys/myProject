@@ -22,6 +22,7 @@ use app\models\Style;
 use app\models\WorkerCraftNorm;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
+use app\models\WorksWorkerData;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
@@ -104,10 +105,10 @@ class OwnerController extends Controller
      * room area
      */
     const ROOM_AREA = [
-        'kitchen_area'=>'厨房面积',
-        'toilet_area'=>'卫生间面积',
-        'hall_area'=>'客厅面积',
-        'bedroom_area'=>'卧室面积',
+        'kitchen_area' => '厨房面积',
+        'toilet_area'  => '卫生间面积',
+        'hall_area'    => '客厅面积',
+        'bedroom_area' => '卧室面积',
     ];
 
     /**
@@ -287,7 +288,7 @@ class OwnerController extends Controller
         $weak_current = BasisDecorationService::judge($judge, $post);
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'], $post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'],$post['city']);
 
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points,$workers,$worker_kind_details);
@@ -1364,15 +1365,18 @@ class OwnerController extends Controller
      * @return string
      */
     public function actionCaseList(){
-        $code     = trim(Yii::$app->request->get('code',''));
-        $street   = trim(Yii::$app->request->get('street',''));
-        $toponymy = trim(Yii::$app->request->get('toponymy',''));
+        $code     = trim(Yii::$app->request->post('code',''));
+        $street   = trim(Yii::$app->request->post('street',''));
+        $toponymy = trim(Yii::$app->request->post('toponymy',''));
         $effect['case_effect'] = Effect::findByCode($code,$street,$toponymy);
-        $effect['case_picture'] = EffectPicture::findById( $effect['case_effect']['id']);
-        $effect['case_works_backman_data'] = WorksBackmanData::findById($effect['case_effect']['id']);
-        $effect['case_works_data'] = WorksData::findById($effect['case_effect']['id']);
-        $effect['case_works_worker_data'] = WorksBackmanData::findById($effect['case_effect']['id']);
-
+        foreach ($effect['case_effect'] as $one_effect){
+            if ($one_effect['type'] == 1){
+                $effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
+                $effect['case_works_backman_data'] = WorksWorkerData::findById($one_effect['id']);
+                $effect['case_works_data'] = WorksData::findById($one_effect['id']);
+                $effect['case_works_worker_data'] = WorksBackmanData::findById($one_effect['id']);
+            }
+        }
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',

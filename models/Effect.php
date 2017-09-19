@@ -217,7 +217,7 @@ class Effect extends ActiveRecord
             'house_image'   => $house_image,
             'type'          => $type,
             'stair_id'      => $stair_id,
-            'sort_id'      => $sort_id,
+            'sort_id'       => $sort_id,
         ])->execute();
 
         return $res;
@@ -279,8 +279,9 @@ class Effect extends ActiveRecord
     {
         return self::find()
             ->asArray()
-            ->where(['and',['district_code'=>$district_code],['street'=>$street],['toponymy'=>$toponymy],['type'=>self::TYPE_STATUS_YES]])
-            ->one();
+            ->where(['and',['district_code'=>$district_code],['street'=>$street],['toponymy'=>$toponymy]])
+            ->orderBy(['sort_id'=>SORT_ASC])
+            ->all();
     }
 
     /**
