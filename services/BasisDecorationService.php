@@ -62,6 +62,11 @@ class BasisDecorationService
         'closestool'=>'马桶',
         'squatting_pan'=>'蹲便器',
         'elbow'=>'弯头',
+        'tiling'=>'贴砖',
+        'wall_brick'=>'墙砖',
+        'floor_tile'=>'地砖',
+        'air_brick'=>'空心砖',
+        'stairs'=>'楼梯',
     ];
 
     /**
