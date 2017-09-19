@@ -8,6 +8,7 @@ use app\models\Series;
 use app\models\Style;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
+use function PHPSTORM_META\elementType;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -68,11 +69,7 @@ class EffectController extends Controller
         ];
     }
 
-    public function actionEffectInfo(){
-        $data=Effect::find()->asArray()->all();
-      return json_encode($data);
 
-    }
     public function actionSrachToponymy(){
         $keyword=trim(Yii::$app->request->get('keyword'));
         $data=Effect::find()
@@ -324,47 +321,59 @@ class EffectController extends Controller
         $code = 1000;
         $request = new Request();
 
-            $effect_id = trim($request->get('id', ''), '');
-                if(!$effect_id){
-                    return json_encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code],
 
-                    ]);
-                }
         if($request->isPost){
-            $remark=EffectEarnst::findOne(['id'=>$effect_id]);
-
-          $res=$remark->remark= trim($request->post('remark',''),'');
-            if(!$remark->save()){
-                $code=500;
+            $effect_id = trim($request->post('id', ''), '');
+            if(!$effect_id){
                 return json_encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
+
                 ]);
             }
-            return json_encode([
-                'code' => 200,
-                'msg' => 'ok',
-                'data' => $res
-                ]);
-        }
-            $model = new Effect();
-            $data = $model->geteffectdata($effect_id);
-            if (!$effect_id) {
+            $remark=EffectEarnst::findOne(['id'=>$effect_id]);
+            if(!$remark){
                 return json_encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
 
                 ]);
-            }else{
-                return json_encode([
+            }
+            $res=$remark->remark= trim($request->post('remark',''),'');
+                if($res){
+                    if(!$remark->save()){
+                        $code=500;
+                        return json_encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code],
+                        ]);
+                }
+                    return json_encode([
                     'code' => 200,
                     'msg' => 'ok',
-                    'data' => $data
-
                 ]);
-            }
+
+            }else{
+                    $model = new Effect();
+                    $data = $model->geteffectdata($effect_id);
+                    if (!$effect_id) {
+                        return json_encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code],
+
+                        ]);
+                    }else{
+                        return json_encode([
+                            'code' => 200,
+                            'msg' => 'ok',
+                            'data' => $data
+
+                        ]);
+                    }
+                }
+
+        }
+
 
 
     }
