@@ -146,7 +146,7 @@ class WithdrawalsController extends Controller
             ]);
         }
         $role_id=trim(Yii::$app->request->get('role_id',7));
-        $$UserBankInfo=UserBankInfo::findByUidAndRole_id($user->id,$role_id);
+        $UserBankInfo=UserBankInfo::findByUidAndRole_id($user->id,$role_id);
         if ($UserBankInfo)
         {
             $data=$UserBankInfo->toArray();
