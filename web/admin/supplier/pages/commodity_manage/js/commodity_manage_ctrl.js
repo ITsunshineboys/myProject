@@ -1162,7 +1162,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       })
     };
     //监听搜索框的值为空时，返回最初的值
-    $scope.$watch("all_search_content",function (newVal,oldVal) {
+    $scope.$watch("wait_search_content",function (newVal,oldVal) {
       if(newVal == ""){
         $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
             params:{
@@ -1173,6 +1173,7 @@ let commodity_manage = angular.module("commodity_manage",[])
           console.log('等待上架');
           console.log(res);
           $scope.wait_list_arr=res.data.data.goods_list_admin.details;
+          
           /*--------------------分页------------------------*/
           $scope.wait_history_list=[];
           $scope.wait_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
