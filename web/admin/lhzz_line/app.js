@@ -148,6 +148,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
     url:"/check_right",
     templateUrl:"pages/mall_manage/merchant_manage/merchant_comment/check-right.html"
   })
+
     .state("account_comment",{
     url:"/account_comment",
     templateUrl:"pages/account_manage/account_comment/account_comment.html",
@@ -161,6 +162,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
             a:''
     }
   })
+
     .state("change_num",{  //更换手机号码
       url:"/change_num",
       templateUrl:"pages/account_manage/account_comment/change_num.html",
