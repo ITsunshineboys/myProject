@@ -444,7 +444,7 @@
                 <td ng-if="wait_11">{{item.status}}</td>
                 <td ng-if="wait_12" class="sky_blue">{{item.publish_time}}</td>
                 <td ng-if="wait_13"><img class="img_cover_size" ng-src="http://test.cdlhzz.cn:888/{{item.cover_image}}"  alt=""></td>
-                <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)" data-target="#wait_shelves_remarks_modal">{{item.reason}}</td>
+                <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)" data-target="{{reason_model}}">{{item.reason}}</td>
                 <td ng-if="wait_15" class="blue" ui-sref="wait_online({item:item,flag:1})">详情</td>
             </tr>
         </table>

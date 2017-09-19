@@ -1135,8 +1135,11 @@ let commodity_manage = angular.module("commodity_manage",[])
     });
     //查看获取审核备注
     $scope.getRest = function (item) {
-      $scope.reset = item
-    }
+      if(item !== ''){
+          $scope.reset = item
+        $scope.reason_model = '#wait_shelves_remarks_modal'
+      }
+    };
 
     /*----------------搜索---------------*/
     $scope.wait_search_btn=function () {
