@@ -32,6 +32,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.wait_flag=false;
       $scope.logistics_flag=false;
     }
+
     //等待上架
     if($stateParams.wait_flag==true){
       $scope.on_flag=false;
