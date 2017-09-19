@@ -53,12 +53,41 @@ class OrderGoods extends ActiveRecord
                 $code=1034;
                 return $code;
             }
+            $supplier=Supplier::find()->where(['id'=>$GoodsOrder->supplier_id])->one();
+            $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
             $tran = Yii::$app->db->beginTransaction();
             try{
                 $OrderGoods->shipping_status=2;
                 $OrderGoods->order_status=1;
-                $res=$OrderGoods->save();
+                $res=$OrderGoods->save(false);
                 if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+                $supplier_accessdetail=new UserAccessdetail();
+                $supplier_accessdetail->uid=$supplier->uid;
+                $supplier_accessdetail->role_id=6;
+                $supplier_accessdetail->access_type=6;
+                $supplier_accessdetail->access_money=($OrderGoods->freight+$OrderGoods->supplier_price*$OrderGoods->goods_number);
+                $supplier_accessdetail->order_no=$postData['order_no'];
+                $supplier_accessdetail->sku=$postData['sku'];
+                $supplier_accessdetail->create_time=time();
+                $supplier_accessdetail->transaction_no=$transaction_no;
+                $res2=$supplier_accessdetail->save(false);
+
+
+                if (!$res2)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+                $supplier->availableamount+=($OrderGoods->freight+$OrderGoods->supplier_price*$OrderGoods->goods_number);
+                $supplier->balance+=$OrderGoods->freight+$OrderGoods->supplier_price*$OrderGoods->goods_number;
+                $res3=$supplier->save(false);
+                if (!$res3)
                 {
                     $tran->rollBack();
                     $code=500;
@@ -73,8 +102,10 @@ class OrderGoods extends ActiveRecord
                 $code=500;
                 return $code;
             }
-
-
-
     }
+
+
+
+
+    
 }
