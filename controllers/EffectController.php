@@ -69,19 +69,6 @@ class EffectController extends Controller
         ];
     }
 
-
-    public function actionSrachToponymy(){
-        $keyword=trim(Yii::$app->request->get('keyword'));
-        $data=Effect::find()
-            ->select('toponymy')
-            ->asArray()
-            ->distinct()
-            ->where( "toponymy like '{$keyword}%'")
-            ->andWhere(['type'=>1])
-            ->all();
-        var_dump($data);
-
-    }
     /**
      * 前台样板间申请
      * @return string
