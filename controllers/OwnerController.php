@@ -282,7 +282,7 @@ class OwnerController extends Controller
 
         //查询弱电所需要材料
         $material = ['网线', '线管', '底盒'];
-        $goods = Goods::priceDetail(3, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
         $judge = BasisDecorationService::priceConversion($goods);
         $weak_current = BasisDecorationService::judge($judge, $post);
 
@@ -355,7 +355,7 @@ class OwnerController extends Controller
 
         //查询弱电所需要材料
         $material = ['电线', '线管', '底盒'];
-        $goods = Goods::priceDetail(3, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
         $judge = BasisDecorationService::priceConversion($goods);
         $strong_current = BasisDecorationService::judge($judge, $post);
 
@@ -440,7 +440,7 @@ class OwnerController extends Controller
 
         //查询弱电所需要材料
         $material = ['PPR水管', 'PVC管'];
-        $goods = Goods::priceDetail(3, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE,$material);
         $judge = BasisDecorationService::priceConversion($goods);
         $waterway_current = BasisDecorationService::judge($judge, $post);
 
@@ -510,7 +510,7 @@ class OwnerController extends Controller
 
         //查询弱电所需要材料
         $material = ['防水涂料'];
-        $goods = Goods::priceDetail(3, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
 
@@ -620,7 +620,7 @@ class OwnerController extends Controller
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
         //材料
         $material = ['石膏板', '龙骨', '丝杆'];
-        $goods = Goods::priceDetail(3, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
         $judge = BasisDecorationService::priceConversion($goods);
         $goods_price = BasisDecorationService::judge($judge, $post);
         //当地工艺
@@ -779,7 +779,7 @@ class OwnerController extends Controller
         $putty_day = $putty_area / $putty;
 
         $material = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
-        $goods = Goods::priceDetail(3, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
         $goods_price = BasisDecorationService::priceConversion($goods);
 
         //当地工艺
@@ -1229,7 +1229,7 @@ class OwnerController extends Controller
         foreach ($assort_material as $assort){
             if ($assort['status'] != MaterialPropertyClassify::DEFAULT_STATUS){
                 $have_assort[] = $assort;
-            }else{
+            } else {
                 $without_assort[] = $assort;
             }
         }
