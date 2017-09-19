@@ -1690,11 +1690,11 @@ class OrderController extends Controller
         ]);
     }
 
-     /**
+    /**
+     * 余额支付
      * @return string
      */
     public  function  actionBalancePay(){
-
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -1711,11 +1711,11 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if (Yii::$app->getSecurity()->validatePassword($postData,$user->pay_password)==false){
+        if (Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false){
             $code=1055;
             return Json::encode([
                 'code'=>$code,
-                'msg'=>'ok'
+                'msg'=>Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $code=GoodsOrder::orderBalanceSub($postData,$user);

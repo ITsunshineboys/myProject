@@ -1822,6 +1822,23 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder=self::find()
                 ->where(['order_no'=>$orders[$k]['order_no']])
                 ->one();
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$orders[$k]['order_no']])
+                ->asArray()
+                ->all();
+            foreach ($OrderGoods as &$Goods)
+            {
+                if ($Goods['order_status']!=0)
+                {
+                    $code=1000;
+                    return $code;
+                }
+            }
+            if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+            {
+                $code=1000;
+                return $code;
+            }
             $tran = Yii::$app->db->beginTransaction();
             try{
                 $order_money=$GoodsOrder->amount_order;
