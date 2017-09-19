@@ -434,7 +434,4 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 			$state.go('commodity_manage',{wait_flag:true})
 		},300)
 	}
-
-
-
 })
