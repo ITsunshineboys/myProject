@@ -2492,15 +2492,6 @@ class OrderController extends Controller
 
     }
 
-     /**
-     * @return string
-     */
-    public  function  actionFindTest()
-    {
-        $data=Yii::$app->db->createCommand('alter table express add `receive_time` int(11) NOT NULL')
-            ->execute();
-        var_dump($data);
 
-    }
 
 }
