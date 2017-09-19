@@ -1884,7 +1884,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $orderAmount;
     }
- /**分页数据
+   /**分页数据
      * @param array $where
      * @param array $select
      * @param int $page
@@ -1918,6 +1918,7 @@ class GoodsOrder extends ActiveRecord
                 ->where($where)
                 ->asArray()
                 ->all();
+            var_dump($GoodsOrder);exit;
             foreach ($GoodsOrder AS $k =>$v){
                 $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
                 $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
@@ -1941,13 +1942,17 @@ class GoodsOrder extends ActiveRecord
                     $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                     $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
                     if ($GoodsOrder[$k]['list'][$key]['order_status'] !=0){
-                        unset($GoodsOrder[$k]);
+                        $addunpaid=2;
                     }
                 }
                 unset($GoodsOrder[$k]['pay_status']);
                 unset($GoodsOrder[$k]['supplier_id']);
+                if ($addunpaid==1)
+                {
                     $arr[]=$GoodsOrder[$k];
-
+                }else{
+                    unset($GoodsOrder[$k]);
+                }
             }
         }
         foreach ($arr as $key => $row)
@@ -1975,7 +1980,6 @@ class GoodsOrder extends ActiveRecord
             ];
         }
     }
-
      /**
      * @param $arr
      * @return mixed
