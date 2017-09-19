@@ -1907,10 +1907,10 @@ class GoodsOrder extends ActiveRecord
         {
             switch ($role){
                 case 'supplier':
-                    $where='pay_status=0 and supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
+                    $where='a.pay_status=0  and a.supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
                     break;
                 case 'user':
-                    $where='pay_status=0 and user_id='.$user->id;
+                    $where='a.pay_status=0  and a.user_id='.$user->id;
                     break;
             }
             $GoodsOrder=self::find()
@@ -1918,7 +1918,6 @@ class GoodsOrder extends ActiveRecord
                 ->where($where)
                 ->asArray()
                 ->all();
-            var_dump($GoodsOrder);exit;
             foreach ($GoodsOrder AS $k =>$v){
                 $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
                 $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
@@ -1934,25 +1933,23 @@ class GoodsOrder extends ActiveRecord
                     ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status')
                     ->asArray()
                     ->all();
-                $addunpaid=1;
-                foreach ($GoodsOrder[$k]['list'] as $key =>$val){
-                    $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
-                    $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
-                    $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
-                    $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
-                    $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
-                    if ($GoodsOrder[$k]['list'][$key]['order_status'] !=0){
-                        $addunpaid=2;
-                    }
-                }
-                unset($GoodsOrder[$k]['pay_status']);
-                unset($GoodsOrder[$k]['supplier_id']);
-                if ($addunpaid==1)
+                if($GoodsOrder[$k]['list']==[])
                 {
-                    $arr[]=$GoodsOrder[$k];
-                }else{
                     unset($GoodsOrder[$k]);
+                }else{
+                    foreach ($GoodsOrder[$k]['list'] as $key =>$val){
+                        $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
+
+                    }
+                    unset($GoodsOrder[$k]['pay_status']);
+                    unset($GoodsOrder[$k]['supplier_id']);
+                        $arr[]=$GoodsOrder[$k];
                 }
+
             }
         }
         foreach ($arr as $key => $row)
