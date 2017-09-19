@@ -1905,12 +1905,12 @@ class GoodsOrder extends ActiveRecord
         $arr=self::findOrderData($arr);
         if ($type=='all' || $type=='unpaid')
         {
-            switch ($role){
+ switch ($role){
                 case 'supplier':
-                    $where='a.pay_status=0  and a.supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
+                    $where='pay_status=0  and supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
                     break;
                 case 'user':
-                    $where='a.pay_status=0  and a.user_id='.$user->id;
+                    $where='pay_status=0  and user_id='.$user->id;
                     break;
             }
             $GoodsOrder=self::find()
