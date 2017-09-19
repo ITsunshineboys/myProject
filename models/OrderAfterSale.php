@@ -496,7 +496,7 @@ class OrderAfterSale extends ActiveRecord
                 if (!$res2){
                     $tran->rollBack();
                 }
-                $transaction_no=ModelService::SetTransactionNo($supplier->id);
+                $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
                 $supplier_accessdetail=new UserAccessdetail();
                 $supplier_accessdetail->uid=$user->id;
                 $supplier_accessdetail->role_id=6;
@@ -672,7 +672,7 @@ class OrderAfterSale extends ActiveRecord
                 if (!$res2){
                     $tran->rollBack();
                 }
-                $transaction_no=ModelService::SetTransactionNo($supplier->id);
+                $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
                 $supplier_accessdetail=new UserAccessdetail();
                 $supplier_accessdetail->uid=$user->id;
                 $supplier_accessdetail->role_id=6;

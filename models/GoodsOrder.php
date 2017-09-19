@@ -1251,7 +1251,7 @@ class GoodsOrder extends ActiveRecord
             ->where(['id'=>$supplier_id])
             ->one();
         $time=time();
-        $transaction_no= ModelService::SetTransactionNo($supplier->id);
+        $transaction_no= self::SetTransactionNo($supplier->id);
         try {
             $res1=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
             if (!$res1)
@@ -1662,7 +1662,7 @@ class GoodsOrder extends ActiveRecord
     public static function AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
     {
         $time=time();
-        $transaction_no=ModelService::SetTransactionNo($supplier->id);;
+        $transaction_no=self::SetTransactionNo($supplier->id);;
         $tran = Yii::$app->db->beginTransaction();
         try{
             $order_goodslist=OrderGoods::find()
@@ -2215,7 +2215,7 @@ class GoodsOrder extends ActiveRecord
    }
 
 
-   
+
     /**set order_no
      * @return string
      */
