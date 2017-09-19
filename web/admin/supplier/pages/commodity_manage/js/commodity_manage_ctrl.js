@@ -1162,7 +1162,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       })
     };
     //监听搜索框的值为空时，返回最初的值
-    $scope.$watch("off_search_content",function (newVal,oldVal) {
+    $scope.$watch("all_search_content",function (newVal,oldVal) {
       if(newVal == ""){
         $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
             params:{
