@@ -3011,6 +3011,12 @@ class MallController extends Controller
 
         $names = Yii::$app->request->post('names', []);
         $values = Yii::$app->request->post('values', []);
+        if (!StringService::checkArrayIdentity($names, GoodsAttr::findNecessaryAttrs($goods->category_id))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         if (!StringService::checkEmptyElement($names)) {
             $attrCnt = count($names);
@@ -3127,6 +3133,13 @@ class MallController extends Controller
         $names = Yii::$app->request->post('names', []);
         $values = Yii::$app->request->post('values', []);
         if (GoodsAttr::changedAttr($id, $names, $values)) {
+            if (!StringService::checkArrayIdentity($names, GoodsAttr::findNecessaryAttrs($goods->category_id))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             GoodsAttr::deleteAll([
                 'goods_id' => $id
             ]);
