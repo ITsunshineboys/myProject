@@ -67,6 +67,12 @@ class EffectController extends Controller
             ],
         ];
     }
+
+    public function actionEffectInfo(){
+        $data=Effect::find()->asArray()->all();
+      return json_encode($data);
+
+    }
     /**
      * 前台样板间申请
      * @return string
@@ -315,7 +321,7 @@ class EffectController extends Controller
                     ]);
                 }
         if($request->isPost){
-            $remark=EffectEarnst::findOne(['effect_id'=>$effect_id]);
+            $remark=EffectEarnst::findOne(['id'=>$effect_id]);
 
           $res=$remark->remark= trim($request->post('remark',''),'');
             if(!$remark->save()){
@@ -330,9 +336,6 @@ class EffectController extends Controller
                 'msg' => 'ok',
                 'data' => $res
                 ]);
-
-
-
         }
             $model = new Effect();
             $data = $model->geteffectdata($effect_id);
