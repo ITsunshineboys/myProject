@@ -1380,8 +1380,4 @@ class OwnerController extends Controller
         ]);
     }
 
-    public function actionPriceTotal()
-    {
-
-    }
 }
