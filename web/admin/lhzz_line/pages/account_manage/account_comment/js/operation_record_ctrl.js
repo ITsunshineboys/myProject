@@ -62,7 +62,10 @@ var operation_record= angular.module("operation_record",[])
         };
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/reset-user-status-logs?user_id'+$scope.id
+            url: 'http://test.cdlhzz.cn:888/mall/reset-user-status-logs',
+            params: {
+                user_id:+$scope.id
+            }
         }).then(function successCallback(response) {
             $scope.past_record = response.data.data.reset_user_status_logs.details;
 
