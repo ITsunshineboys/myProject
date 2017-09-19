@@ -425,7 +425,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 	};
 	/*------------返回按钮----------------*/
 	$scope.back_wait=function () {
-		$state.go('commodity_manage',{on_flag:true})
+		$state.go('commodity_manage',{wait_flag:true})
 	};
 	/*-----------------------保存成功跳转--------------------------------*/
 	$scope.change_go=function () {
