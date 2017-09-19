@@ -2462,4 +2462,35 @@ class OrderController extends Controller
     }
 
 
+    /**
+     * @return string
+     */
+    public  function  actionAddBalance()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $money=trim($request->post('money',''));
+        $user=User::find()->where(['id'=>$user->id])->one();
+        $user->balance+=$money*100;
+        $user->availableamount+=$money*100;
+        $res=$user->save(false);
+        if ($res)
+        {
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok',
+            ]);
+        }
+
+    }
+
+
 }
