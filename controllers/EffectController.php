@@ -73,6 +73,18 @@ class EffectController extends Controller
       return json_encode($data);
 
     }
+    public function actionSrachToponymy(){
+        $keyword=trim(Yii::$app->request->get('keyword'));
+        $data=Effect::find()
+            ->select('toponymy')
+            ->asArray()
+            ->distinct()
+            ->where( "toponymy like '{$keyword}%'")
+            ->andWhere(['type'=>1])
+            ->all();
+        var_dump($data);
+
+    }
     /**
      * 前台样板间申请
      * @return string
@@ -455,37 +467,31 @@ class EffectController extends Controller
         }
         $code=1000;
         $request=new Request();
-        $effect_id=trim($request->get('id',''),'');
-
-        if(!$effect_id){
-            return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $model=EffectEarnst::findone(['id'=>$effect_id]);
-        if(!$model){
-            return json_encode([
-                'code' => 200,
-                'msg' => 'ok',
-                'data'=>null
-            ]);
-        }
         if($request->isPost){
+            $effect_id=trim($request->post('id',''),'');
+            if(!$effect_id){
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            $model=EffectEarnst::findone(['id'=>$effect_id]);
+            if(!$model){
+                return json_encode([
+                    'code' => 200,
+                    'msg' => 'ok',
+                    'data'=>null
+                ]);
+            }
             $model->remark=trim($request->post('remark',''),'');
             $model->save();
             return json_encode([
                 'code' => 200,
                 'msg' => 'ok',
             ]);
-        }else{
-            return json_encode([
-                'code' => $code,
-                'msg' => 'ok',
-                'data'=>$model->remark
-            ]);
         }
+
+
     }
 
 
