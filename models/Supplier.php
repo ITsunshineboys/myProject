@@ -480,7 +480,7 @@ class Supplier extends ActiveRecord
         $array = $query->from('supplier as s')
             ->select($select)
             ->leftJoin('user_cashregister as sc', 'sc.uid=s.id')
-            ->leftJoin('user_bankinfo as sb', 'sb.u_id=s.uid')
+            ->leftJoin('user_bankinfo as sb', 'sb.uid=s.uid')
             ->leftJoin('user_freezelist as sf', 'sf.uid=s.id')
             ->where(['s.id' => $supplier_id])
             ->one();
