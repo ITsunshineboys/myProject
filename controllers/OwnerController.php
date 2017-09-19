@@ -32,6 +32,12 @@ use Yii;
 
 class OwnerController extends Controller
 {
+
+    const WALL_HIGH = 2.8;
+    const WALL = 4;
+    const WALL_SPACE = 3;
+    const DIGITAL = 2;
+    const DEFAULT_CITY_CODE = 510100;
     /**
      * work category details
      */
@@ -52,6 +58,7 @@ class OwnerController extends Controller
         'strong_current'=>'强电点位',
         'waterway'      =>'水路点位',
         'work_area'     =>'做工面积',
+
     ];
 
     const PROJECT_DETAILS = [
@@ -61,16 +68,36 @@ class OwnerController extends Controller
         'waterproof'        =>'防水',
         'carpentry'         =>'木作',
         'emulsion_varnish'  =>'乳胶漆',
+        'oil_paint'         =>'油漆',
+        'tiler'             =>'泥工',
     ];
 
     const WORKMANSHIP = [
-      'flat_area'       =>'平顶面积',
-      'modelling_length'=>'造型长度',
-      'emulsion_varnish_primer_area'=>'乳胶漆底漆面积',
-      'emulsion_varnish_cover_area'=>'乳胶漆面漆面积',
-      'concave_line_length'=>'阴角线长度',
-      'putty_area'=>'腻子面积',
+        'flat_area'       =>'平顶面积',
+        'modelling_length'=>'造型长度',
+        'emulsion_varnish_primer_area'=>'乳胶漆底漆面积',
+        'emulsion_varnish_cover_area'=>'乳胶漆面漆面积',
+        'concave_line_length'=>'阴角线长度',
+        'putty_area'=>'腻子面积',
+        'protective_layer_length'     =>'保护层长度',
+        'geostrophy_area'     =>'贴地砖面积',
+        'wall_brick_area'     =>'贴墙砖面积',
     ];
+
+    const ROOM_DETAIL = [
+        'kitchen'=>'厨房',
+        'toilet'=>'卫生间',
+        'hall'=>'客厅',
+        'bedroom'=>'卧室',
+    ];
+
+    const ROOM_AREA = [
+        'kitchen_area'=>'厨房面积',
+        'toilet_area'=>'卫生间面积',
+        'hall_area'=>'客厅面积',
+        'bedroom_area'=>'卧室面积',
+    ];
+
     /**
      * Actions accessed by logged-in users
      */
@@ -690,8 +717,7 @@ class OwnerController extends Controller
                     break;
             }
         }
-        $project = '油漆';
-        $areas = EngineeringUniversalCriterion::findByAll($project);
+        $areas = EngineeringUniversalCriterion::findByAll(self::PROJECT_DETAILS['oil_paint']);
         $area['masterBedroom_area'] = 0;
         $area['sittingRoom_diningRoom_area'] = 0;
         foreach ($areas as $one) {
@@ -707,34 +733,34 @@ class OwnerController extends Controller
             }
         }
         //卧室底漆面积
-        $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'], 2.8, 4);
+        $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'],self::WALL_HIGH,self::WALL);
 
         //客餐厅底漆面积
-        $drawing_room_primer_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], 2.8, 3);
+        $drawing_room_primer_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
         $primer_area = $bedroom_primer_area + $drawing_room_primer_area;
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
         $primer_day = $primer_area / $primer;
 
         //乳胶漆面漆面积
-        $finishing_coat_area = $primer_area * 2;
+        $finishing_coat_area = $primer_area * self::DIGITAL;
 //        乳胶漆面漆天数：乳胶漆面漆面积÷【每天做乳胶漆面漆面积】
         $finishing_coat_day = $finishing_coat_area / $finishing_coat;
 
 //        卧室周长
-        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($area['masterBedroom_area'], $post['area'], $post['bedroom'], 4);
+        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($area['masterBedroom_area'], $post['area'], $post['bedroom'], self::WALL);
 //        客厅周长
-        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], 3);
+        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], self::WALL_SPACE);
 //        阴角线长度
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
         $concave_line_day = $concave_line_length / $concave_line;
 
 //        腻子卧室墙面积
-        $putty_bedroom_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'], 2.8, 4);
+        $putty_bedroom_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'], self::WALL_HIGH, self::WALL);
 
 //        腻子客餐厅面积
-        $putty_drawing_room_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], 2.8, 3);
+        $putty_drawing_room_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 //        腻子面积 卧室腻子面积+客厅腻子面积
         $putty_area = $putty_bedroom_area + $putty_drawing_room_area;
 //        腻子天数 腻子面积÷【每天做腻子面积】
@@ -749,19 +775,19 @@ class OwnerController extends Controller
         $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price, $crafts, $post);
         foreach ($crafts as $craft) {
             switch ($craft) {
-                case $craft['project_details'] == '腻子':
+                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['putty']:
                     $putty_craft = $craft;
                     break;
-                case $craft['project_details'] == '乳胶漆底漆':
+                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_primer']:
                     $primer_craft = $craft;
                     break;
-                case $craft['project_details'] == '乳胶漆面漆':
+                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_surface']:
                     $finishing_coat_craft = $craft;
                     break;
-                case $craft['project_details'] == '阴角线':
+                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['concave_line']:
                     $concave_line_craft = $craft;
                     break;
-                case $craft['project_details'] == '石膏粉':
+                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['land_plaster']:
                     $gypsum_powder_craft = $craft;
                     break;
             }
@@ -786,27 +812,27 @@ class OwnerController extends Controller
         $material_total = [];
         foreach ($series_and_style as $one_goods_price) {
             switch ($one_goods_price) {
-                case $one_goods_price['title'] == '腻子':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['putty']:
                     $one_goods_price['quantity'] = $putty_cost['quantity'];
                     $one_goods_price['cost'] = $putty_cost['cost'];
                     $material_total['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == '乳胶漆底漆':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_primer']:
                     $one_goods_price['quantity'] = $primer_cost['quantity'];
                     $one_goods_price['cost'] = $primer_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == '乳胶漆面漆':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_surface']:
                     $one_goods_price['quantity'] = $finishing_coat_cost['quantity'];
                     $one_goods_price['cost']     = $finishing_coat_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == '阴角线':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['concave_line']:
                     $one_goods_price['quantity'] = $concave_line_cost['quantity'];
                     $one_goods_price['cost']     = $concave_line_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == '石膏粉':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['land_plaster']:
                     $one_goods_price['quantity'] = $gypsum_powder_cost['quantity'];
                     $one_goods_price['cost']     = $gypsum_powder_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
@@ -822,7 +848,7 @@ class OwnerController extends Controller
         $coating_labor_price['worker_kind'] = $labor_costs['worker_kind'];
 
         //添加材料费用
-        $add_price_area = DecorationAdd::AllArea('油漆',$post['area'],$post['city']);
+        $add_price_area = DecorationAdd::AllArea(self::PROJECT_DETAILS['oil_paint'],$post['area'],$post['city']);
         $add_price = [];
         foreach ($add_price_area as $add_area) {
             $sku_area = Goods::skuAll($add_area['sku']);
@@ -833,7 +859,7 @@ class OwnerController extends Controller
             }
         }
 
-        $add_price_series = DecorationAdd::AllSeries('油漆',$post['series'],$post['city']);
+        $add_price_series = DecorationAdd::AllSeries(self::PROJECT_DETAILS['oil_paint'],$post['series'],$post['city']);
         foreach ($add_price_series as $add_series) {
             $sku_area = Goods::skuAll($add_series['sku']);
             if ($sku_area !== null) {
@@ -842,7 +868,7 @@ class OwnerController extends Controller
                 $add_price [] = 0;
             }
         }
-        $add_price_style = DecorationAdd::AllStyle('油漆',$post['style'],$post['city']);
+        $add_price_style = DecorationAdd::AllStyle(self::PROJECT_DETAILS['oil_paint'],$post['style'],$post['city']);
         foreach ($add_price_style as $add_style) {
             $sku_area = Goods::skuAll($add_style['sku']);
             if ($sku_area !== null) {
@@ -875,43 +901,43 @@ class OwnerController extends Controller
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
         foreach ($worker_kind_details as $labor_cost) {
             switch ($labor_cost) {
-                case $labor_cost['worker_kind_details'] == '保护层长度':
+                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['protective_layer_length']:
                     $covering_layer_day_area = $labor_cost['quantity'];
                     break;
-                case $labor_cost['worker_kind_details'] == '贴地砖面积':
+                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['geostrophy_area']:
                     $geostrophy_day_area = $labor_cost['quantity'];
                     break;
-                case $labor_cost['worker_kind_details'] == '贴墙砖面积':
+                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['wall_brick_area']:
                     $wall_tile_day_area = $labor_cost['quantity'];
                     break;
             }
         }
         //泥作面积
         //厨房面积
-        $kitchen_particulars = EngineeringUniversalCriterion::mudMakeArea('厨房', '厨房面积');
+        $kitchen_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['kitchen'],self::ROOM_AREA['kitchen_area']);
         $kitchen_area = $post['area'] * $kitchen_particulars['project_value'];
         //卫生间面积
-        $toilet_particulars = EngineeringUniversalCriterion::mudMakeArea('卫生间', '卫生间面积');
+        $toilet_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['toilet'],self::ROOM_AREA['toilet_area']);
         $toilet_area = $post['area'] * $toilet_particulars['project_value'];
         //客餐厅面积
-        $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea('客厅', '客厅面积');
+        $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['hall'],self::ROOM_AREA['hall_area']);
         $drawing_room_area = $post['area'] * $drawing_room_particulars['project_value'];
 
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll('泥工', $post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['tiler'], $post['city']);
         foreach ($craft as $local_craft) {
             switch ($local_craft) {
-                case $local_craft['project_details'] == '贴砖':
+                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['tiling']:
                     $wall_height = $local_craft['material'];
                     break;
-                case $local_craft['project_details'] == '水泥':
+                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['cement']:
                     $cement_craft = $local_craft['material'];
                     break;
-                case $local_craft['project_details'] == '自流平':
+                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['self_leveling']:
                     $self_leveling_craft = $local_craft['material'];
                     break;
-                case $local_craft['project_details'] == '河沙':
+                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['river_sand']:
                     $river_sand_craft = $local_craft['material'];
                     break;
             }
@@ -939,34 +965,34 @@ class OwnerController extends Controller
         $total_day = ceil($tiling_day + $covering_layer_day);
         //总的人工费
         $total_labor_cost['price'] = $total_day * $labor_day_cost;
-        $total_labor_cost['worker_kind'] = '泥工';
+        $total_labor_cost['worker_kind'] = self::PROJECT_DETAILS['tiler'];
 
         //材料费
         $material = ['水泥', '自流平', '河沙'];
-        $goods = Goods::priceDetail(3, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
 
-        $wall_brick = Goods::seriesAndStyle(3, '墙砖', $post);
+        $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['wall_brick'], $post);
         $wall_brick_price = BasisDecorationService::priceConversion($wall_brick);
         $wall_brick_max = BasisDecorationService::profitMargin($wall_brick_price);
         $wall_brick_area = BasisDecorationService::wallBrickAttr($wall_brick_max['id']);
 
-        $floor_tile = Goods::seriesAndStyle(3, '地砖', $post);
+        $floor_tile = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['floor_tile'], $post);
         $floor_tile_price = BasisDecorationService::priceConversion($floor_tile);
         $floor_tile_attr = BasisDecorationService::floorTile($floor_tile_price);
 
 //        水泥费用
         $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods_price, $cement_craft, $goods_attr, '水泥');
+        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods_price, $cement_craft, $goods_attr,BasisDecorationService::GOODS_NAME['cement']);
 
 //        自流平费用
         $self_leveling_area = $drawing_room_area;
-        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods_price, $self_leveling_craft, $goods_attr, '自流平');
+        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods_price, $self_leveling_craft, $goods_attr,BasisDecorationService::GOODS_NAME['self_leveling']);
 
         //        河沙费用
         $river_sand_cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods_price, $river_sand_craft, $goods_attr, '河沙');
+        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods_price, $river_sand_craft, $goods_attr,BasisDecorationService::GOODS_NAME['river_sand']);
 
 //        墙砖费用 墙砖费用：个数×抓取的商品价格 个数：（墙砖面积÷抓取墙砖面积）
         $wall_brick_cost['quantity'] = ceil($wall_area / $wall_brick_area);
@@ -989,22 +1015,22 @@ class OwnerController extends Controller
 
         foreach ($goods_price as $one_goods_price) {
             switch ($one_goods_price) {
-                case $one_goods_price['title'] == '河沙':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
                     $one_goods_price['quantity'] = $river_sand_cost['quantity'];
                     $one_goods_price['cost'] = $river_sand_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == '水泥':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $one_goods_price['quantity'] = $cement_cost['quantity'];
                     $one_goods_price['cost'] = $cement_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == '自流平':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['self_leveling']:
                     $one_goods_price['quantity'] = $self_leveling_cost['quantity'];
                     $one_goods_price['cost'] = $self_leveling_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == '墙砖':
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['wall_brick']:
                     $one_goods_price['quantity'] = $wall_brick_cost['quantity'];
                     $one_goods_price['cost'] = $wall_brick_cost['cost'];
                     $material_total ['material'][] = $one_goods_price;
@@ -1084,7 +1110,6 @@ class OwnerController extends Controller
     public function actionHandyman()
     {
         $post = \Yii::$app->request->post();
-        $handyman = '杂工';
         $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 //        总天数
@@ -1101,12 +1126,12 @@ class OwnerController extends Controller
         $labor_cost['worker_kind'] = $handyman;
         //材料费
         $material = ['水泥', '河沙', '空心砖'];
-        $goods = Goods::priceDetail(3, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = [];
         foreach ($goods_price as $max) {
             switch ($max) {
-                case $max['title'] == '水泥':
+                case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                     //水泥费用
@@ -1115,7 +1140,7 @@ class OwnerController extends Controller
                     $goods_max['cost'] = $cement_cost['cost'];
                     $material ['material'][] = $goods_max;
                     break;
-                case $max['title'] == '空心砖':
+                case $max['title'] == BasisDecorationService::GOODS_NAME['air_brick']:
                     $goods_max = BasisDecorationService::profitMargin($max);
                     //空心砖费用
                     $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
@@ -1124,7 +1149,7 @@ class OwnerController extends Controller
                     $goods_max['cost'] = $brick_cost['cost'];
                     $material['material'] [] = $goods_max;
                     break;
-                case $max['title'] == '河沙':
+                case $max['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                     //河沙费用
@@ -1140,7 +1165,7 @@ class OwnerController extends Controller
         $material['total_cost'] = $total_material_cost;
 
         //添加材料费用
-        $add_price_area = DecorationAdd::AllArea('杂工', $post['area'], $post['city']);
+        $add_price_area = DecorationAdd::AllArea(self::WORK_CATEGORY['backman'], $post['area'], $post['city']);
         $add_price = [];
         foreach ($add_price_area as $add_area) {
             $sku_area = Goods::skuAll($add_area['sku']);
@@ -1151,7 +1176,7 @@ class OwnerController extends Controller
             }
         }
 
-        $add_price_series = DecorationAdd::AllSeries('杂工', $post['series'], $post['city']);
+        $add_price_series = DecorationAdd::AllSeries(self::WORK_CATEGORY['backman'], $post['series'], $post['city']);
         foreach ($add_price_series as $add_series) {
             $sku_area = Goods::skuAll($add_series['sku']);
             if ($sku_area !== null) {
@@ -1160,7 +1185,7 @@ class OwnerController extends Controller
                 $add_price [] = 0;
             }
         }
-        $add_price_style = DecorationAdd::AllStyle('杂工', $post['style'], $post['city']);
+        $add_price_style = DecorationAdd::AllStyle(self::WORK_CATEGORY['backman'], $post['style'], $post['city']);
         foreach ($add_price_style as $add_style) {
             $sku_area = Goods::skuAll($add_style['sku']);
             if ($sku_area !== null) {
@@ -1202,9 +1227,9 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['material'];
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
-        $goods = Goods::assortList($material_name,510100);
+        $goods = Goods::assortList($material_name,self::DEFAULT_CITY_CODE);
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        $bedroom_area = EngineeringUniversalCriterion::mudMakeArea('卧室', '卧室面积');
+        $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
         $material[]   = BasisDecorationService::capacity($goods_price, $post);
         $material[]   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
@@ -1213,11 +1238,11 @@ class OwnerController extends Controller
         $material[]   = BasisDecorationService::mild($goods_price,$post);
         $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
         if ($post['stairway_id'] == 1) {
-            $stairs = Goods::findByCategory('楼梯');
+            $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             foreach ($stairs_price as $one_stairs_price) {
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
-                    $one_stairs_price['quantity'] = $material_one['楼梯']['quantity'];
+                    $one_stairs_price['quantity'] = $material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
                     $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                     $condition_stairs [] = $one_stairs_price;
                 }
@@ -1232,7 +1257,7 @@ class OwnerController extends Controller
             $without_assort_name[] = $one_without_assort['material'];
             $without_assort_one[$one_without_assort['material']] = $one_without_assort;
         }
-        $without_assort_goods = Goods::assortList($without_assort_name,510100);
+        $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
