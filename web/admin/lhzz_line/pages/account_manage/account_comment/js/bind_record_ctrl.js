@@ -19,8 +19,8 @@ var bind_record= angular.module("bind_record",[])
         $scope.status_remark = $stateParams.status_remark;
         $scope.status_operator = $stateParams.status_operator;
         $scope.a = $stateParams.a;
+        console.log($scope.a);
         console.log($scope.id);
-        //console.log($scope.status_remark);
         //console.log($scope.status_operator);
 
         $scope.flag = true;
@@ -70,7 +70,6 @@ var bind_record= angular.module("bind_record",[])
         }).then(function successCallback(response) {
             $scope.past_record = response.data.data.reset_mobile_logs.details;
             console.log(response);
-
             /*-----------------------------分页-----------------------*/
             $scope.history_list_colse=[];
             $scope.history_all_page=Math.ceil(response.data.data.reset_mobile_logs.total/12);//获取总页数
@@ -89,6 +88,7 @@ var bind_record= angular.module("bind_record",[])
                 $http.get('http://test.cdlhzz.cn:888/mall/reset-mobile-logs',{
                     params:{
                         'page':$scope.page
+
                     }
                 }).then(function (response) {
                     // console.log(response);
@@ -108,7 +108,7 @@ var bind_record= angular.module("bind_record",[])
             }
             //上一页
             $scope.Previous=function () {
-                if($scope.page>1){                //当页数大于1时，执行
+                if($scope.page>1){   //当页数大于1时，执行
                     $scope.page--;
                     $scope.choosePageColse($scope.page);
                 }
@@ -132,8 +132,4 @@ var bind_record= angular.module("bind_record",[])
                 'status_remark':$scope.status_remark,'status_operator':$scope.status_operator,'a':$scope.a
             })
         };
-
-
-
-
     });
