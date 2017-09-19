@@ -141,12 +141,14 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            $transaction_no=GoodsOrder::SetTransaction_no($supplier);
-            $supplier_accessdetail=new SupplierAccessdetail();
+            $transaction_no=ModelService::SetTransactionNo($supplier->id);
+            $supplier_accessdetail=new UserAccessdetail();
+            $supplier_accessdetail->uid=$user->id;
+            $supplier_accessdetail->role_id=6;
             $supplier_accessdetail->access_type=4;
             $supplier_accessdetail->access_money=$reduce_money;
-            $supplier_accessdetail->order_no=$OrderGoods->order_no;
-            $supplier_accessdetail->supplier_id=$supplier->id;
+            $supplier_accessdetail->order_no=$order_no;
+            $supplier_accessdetail->sku=$sku;
             $supplier_accessdetail->create_time=time();
             $supplier_accessdetail->transaction_no=$transaction_no;
             $res5=$supplier_accessdetail->save(false);

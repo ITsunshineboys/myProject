@@ -1664,7 +1664,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-    /**
+   /**
      * @param $order_no
      * @param $sku
      * @param $handle
@@ -1676,7 +1676,7 @@ class GoodsOrder extends ActiveRecord
     public static function AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
     {
         $time=time();
-        $transaction_no=self::SetTransaction_no($supplier);
+        $transaction_no=ModelService::SetTransactionNo($supplier->id);;
         $tran = Yii::$app->db->beginTransaction();
         try{
             $order_goodslist=OrderGoods::find()
@@ -1697,11 +1697,13 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            $supplier_accessdetail=new SupplierAccessdetail();
+            $supplier_accessdetail=new UserAccessdetail();
+            $supplier_accessdetail->uid=$user->id;
+            $supplier_accessdetail->role_id=6;
             $supplier_accessdetail->access_type=4;
             $supplier_accessdetail->access_money=$order_goodslist->freight+$order_goodslist->supplier_price*$order_goodslist->goods_number;
             $supplier_accessdetail->order_no=$order_no;
-            $supplier_accessdetail->supplier_id=$supplier->id;
+            $supplier_accessdetail->sku=$sku;
             $supplier_accessdetail->create_time=$time;
             $supplier_accessdetail->transaction_no=$transaction_no;
             $res3=$supplier_accessdetail->save(false);

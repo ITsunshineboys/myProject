@@ -456,6 +456,7 @@ class OrderAfterSale extends ActiveRecord
         }
         $data[]=[
             'stage'=>'商家已派出工作人员',
+            'content'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_send_time),
         ];
         if (!$OrderAfterSale->supplier_confirm){
@@ -481,7 +482,7 @@ class OrderAfterSale extends ActiveRecord
                     ->where(['id'=>$GoodsOrder->user_id])
                     ->one();
                 $user->balance=($user->balance+$OrderGoods->goods_price*$OrderGoods->goods_number);
-                $res=$user->save();
+                $res=$user->save(false);
                 if (!$res){
                     $tran->rollBack();
                 }
@@ -494,12 +495,14 @@ class OrderAfterSale extends ActiveRecord
                 if (!$res2){
                     $tran->rollBack();
                 }
-                $transaction_no=GoodsOrder::SetTransaction_no($supplier);
-                $supplier_accessdetail=new SupplierAccessdetail();
+                $transaction_no=ModelService::SetTransactionNo($supplier->id);
+                $supplier_accessdetail=new UserAccessdetail();
+                $supplier_accessdetail->uid=$user->id;
+                $supplier_accessdetail->role_id=6;
                 $supplier_accessdetail->access_type=4;
                 $supplier_accessdetail->access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
                 $supplier_accessdetail->order_no=$OrderGoods->order_no;
-                $supplier_accessdetail->supplier_id=$supplier->id;
+                $supplier_accessdetail->sku=$OrderGoods->sku;
                 $supplier_accessdetail->create_time=time();
                 $supplier_accessdetail->transaction_no=$transaction_no;
                 $res3=$supplier_accessdetail->save(false);
@@ -668,12 +671,14 @@ class OrderAfterSale extends ActiveRecord
                 if (!$res2){
                     $tran->rollBack();
                 }
-                $transaction_no=GoodsOrder::SetTransaction_no($supplier);
-                $supplier_accessdetail=new SupplierAccessdetail();
+                $transaction_no=ModelService::SetTransactionNo($supplier->id);
+                $supplier_accessdetail=new UserAccessdetail();
+                $supplier_accessdetail->uid=$user->id;
+                $supplier_accessdetail->role_id=6;
                 $supplier_accessdetail->access_type=4;
                 $supplier_accessdetail->access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
                 $supplier_accessdetail->order_no=$OrderGoods->order_no;
-                $supplier_accessdetail->supplier_id=$supplier->id;
+                $supplier_accessdetail->sku=$OrderGoods->sku;
                 $supplier_accessdetail->create_time=time();
                 $supplier_accessdetail->transaction_no=$transaction_no;
                 $res3=$supplier_accessdetail->save(false);
