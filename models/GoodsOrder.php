@@ -1809,7 +1809,7 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function  orderBalanceSub($postData,$user){
         $orders=$postData['orders'];
-        if ($postData['total_amount']<= $user->availableamount){
+        if ($postData['total_amount']> $user->availableamount){
             $code=1033;
             return $code;
         }
