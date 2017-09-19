@@ -967,7 +967,7 @@ let commodity_manage = angular.module("commodity_manage",[])
     };
 
     /*----------------搜索---------------*/
-    $scope.all_search_btn=function () {
+    $scope.off_search_btn=function () {
       $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
         params:{
           status:0,
@@ -1019,17 +1019,6 @@ let commodity_manage = angular.module("commodity_manage",[])
       },config).then(function (res) {
         console.log('删除');
         console.log(res);
-        $scope.down_list_arr=res.data.data.goods_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.down_history_list=[];
-        $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.down_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.down_history_list.push(i+1)
-        }
-        $scope.page=1;
-      },function (err) {
-        console.log(err);
       },function (err) {
         console.log(err)
       })
@@ -1039,6 +1028,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.down_reason=reason;
     };
     /*--------------------已下架 结束-------------------------*/
+
 
     /*--------------------等待上架 开始-------------------------*/
     //实时监听库存并修改
@@ -1052,6 +1042,7 @@ let commodity_manage = angular.module("commodity_manage",[])
         console.log(err);
       })
     };
+    $scope.myng=$scope;
     $scope.wait_list_arr=[];
     $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
         params:{
@@ -1119,12 +1110,12 @@ let commodity_manage = angular.module("commodity_manage",[])
     }
 
     /*----------------搜索---------------*/
-    $scope.off_search_btn=function () {
-      console.log($scope.off_search_content)
+    $scope.wait_search_btn=function () {
+      console.log($scope.wait_search_content)
       $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
         params:{
           status:1,
-          keyword:$scope.off_search_content
+          keyword:$scope.wait_search_content
         }
       }).then(function (res) {
         console.log(res);
@@ -1324,7 +1315,6 @@ let commodity_manage = angular.module("commodity_manage",[])
       $state.go('template_details',{'id':$scope.id,'name':$scope.name})
     }
   })
-
   .directive('stringToNumber2', function() {
     return {
       require: 'ngModel',
