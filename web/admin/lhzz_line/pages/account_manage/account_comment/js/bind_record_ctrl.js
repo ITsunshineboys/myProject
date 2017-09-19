@@ -19,7 +19,7 @@ var bind_record= angular.module("bind_record",[])
         $scope.status_remark = $stateParams.status_remark;
         $scope.status_operator = $stateParams.status_operator;
         $scope.a = $stateParams.a;
-        //console.log($scope.a);
+        console.log($scope.id);
         //console.log($scope.status_remark);
         //console.log($scope.status_operator);
 
@@ -63,7 +63,7 @@ var bind_record= angular.module("bind_record",[])
         //过往绑定记录
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/reset-mobile-logs'
+            url: 'http://test.cdlhzz.cn:888/mall/reset-mobile-logs?user_id'+$scope.id
         }).then(function successCallback(response) {
             $scope.past_record = response.data.data.reset_mobile_logs.details;
             console.log(response);
