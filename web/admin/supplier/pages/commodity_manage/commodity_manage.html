@@ -422,14 +422,15 @@
                 <td ng-if="wait_11">状态</td>
                 <td ng-if="wait_12">
                     <span>发布时间</span>
-                    <img ng-click="on_time_sort()" ng-if="on_time_flag" class="arrow_img_size" src="pages/commodity_manage/image/up.png" alt="">
-                    <img ng-click="down_time_sort()" ng-if="down_time_flag" class="arrow_img_size" src="pages/commodity_manage/image/down.png" alt="">
+                    <img ng-click="wait_time_sort()" ng-if="on_time_flag" class="arrow_img_size" src="pages/commodity_manage/image/up.png" alt="">
+                    <img ng-click="wait_time_sort()" ng-if="down_time_flag" class="arrow_img_size" src="pages/commodity_manage/image/down.png" alt="">
                 </td>
                 <td ng-if="wait_13">图片</td>
                 <td ng-if="wait_14">审核备注</td>
                 <td ng-if="wait_15">详情</td>
             </tr>
-            <tr class="table_content" ng-repeat="item in down_list_arr" >
+
+            <tr class="table_content" ng-repeat="item in wait_list_arr" >
                 <td ng-if="wait_1">{{item.sku}}</td>
                 <td ng-if="wait_2">{{item.title}}</td>
                 <td ng-if="wait_3">¥{{item.supplier_price}}</td>
@@ -438,7 +439,7 @@
                 <td ng-if="wait_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="wait_7">¥{{item.purchase_price_manager}}</td>
                 <td ng-if="wait_8">¥{{item.purchase_price_designer}}</td>
-                <td ng-if="wait_9"><input type="number"  class="stock" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number" string-to-number2></td>
+                <td ng-if="wait_9"><input type="number"  class="stock" ng-change="change_right_number(item.id,item.left_number)" ng-model="item.left_number" string-to-number2></td>
                 <td ng-if="wait_10">{{item.sold_number}}</td>
                 <td ng-if="wait_11">{{item.status}}</td>
                 <td ng-if="wait_12" class="sky_blue">{{item.publish_time}}</td>
@@ -449,13 +450,11 @@
         </table>
         <!--分页开始-->
         <ul class="pages">
-            <li ng-click="down_Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-            <li class="pagenum" ng-repeat="page in down_history_list" ng-click="down_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-            <!--<li id="omit" ng-show="allpages>5">...</li>-->
-            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="down_Next()">下一页</li>
+            <li ng-click="wait_Previous()">上一页</li>
+            <li class="pagenum" ng-repeat="page in wait_history_list" ng-click="wait_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
+            <li ng-click="wait_Next()">下一页</li>
             <li class="jumpto"><input type="text" class="size_input" ng-model="down_topage"></li>
-            <li ng-click="down_choosePage(down_topage)">跳转</li>
+            <li ng-click="wait_choosePage(down_topage)">跳转</li>
         </ul>
         <!--分页结束-->
     </section>

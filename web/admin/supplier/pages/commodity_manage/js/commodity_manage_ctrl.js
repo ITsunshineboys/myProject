@@ -1032,7 +1032,7 @@ let commodity_manage = angular.module("commodity_manage",[])
 
     /*--------------------等待上架 开始-------------------------*/
     //实时监听库存并修改
-    $scope.change_left_number=function (id,left_num) {
+    $scope.change_right_number=function (id,left_num) {
       $http.post('http://test.cdlhzz.cn:888/mall/goods-inventory-reset',{
         id:+id,
         left_number:+left_num
@@ -1042,9 +1042,8 @@ let commodity_manage = angular.module("commodity_manage",[])
         console.log(err);
       })
     };
-
     $scope.myng=$scope;
-    $scope.down_list_arr=[];
+    $scope.wait_list_arr=[];
     $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
         params:{
           status:1
@@ -1053,18 +1052,18 @@ let commodity_manage = angular.module("commodity_manage",[])
     ).then(function (res) {
       console.log('等待上架');
       console.log(res);
-      $scope.down_list_arr=res.data.data.goods_list_admin.details;
+      $scope.wait_list_arr=res.data.data.goods_list_admin.details;
       /*--------------------分页------------------------*/
-      $scope.down_history_list=[];
-      $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-      let all_num=$scope.down_history_all_page;//循环总页数
+      $scope.wait_history_list=[];
+      $scope.wait_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+      let all_num=$scope.wait_history_all_page;//循环总页数
       for(let i=0;i<all_num;i++){
-        $scope.down_history_list.push(i+1)
+        $scope.wait_history_list.push(i+1)
       }
       $scope.page=1;
       //点击数字，跳转到多少页
-      $scope.down_choosePage=function (page) {
-        if($scope.down_history_list.indexOf(parseInt(page))!=-1){
+      $scope.wait_choosePage=function (page) {
+        if($scope.wait_history_list.indexOf(parseInt(page))!=-1){
           $scope.page=page;
           $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
             params:{
@@ -1074,7 +1073,7 @@ let commodity_manage = angular.module("commodity_manage",[])
             }
           }).then(function (res) {
             //console.log(res);
-            $scope.down_list_arr=res.data.data.goods_list_admin.details;
+            $scope.wait_list_arr=res.data.data.goods_list_admin.details;
           },function (err) {
             console.log(err);
           });
@@ -1089,15 +1088,15 @@ let commodity_manage = angular.module("commodity_manage",[])
         $scope.page=1;
       }
       //上一页
-      $scope.down_Previous=function () {
+      $scope.wait_Previous=function () {
         if($scope.page>1){                //当页数大于1时，执行
           $scope.page--;
           $scope.down_choosePage($scope.page);
         }
       };
       //下一页
-      $scope.down_Next=function () {
-        if($scope.page<$scope.down_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
+      $scope.wait_Next=function () {
+        if($scope.page<$scope.wait_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
           $scope.page++;
           $scope.down_choosePage($scope.page);
         }
@@ -1120,13 +1119,13 @@ let commodity_manage = angular.module("commodity_manage",[])
         }
       }).then(function (res) {
         console.log(res);
-        $scope.down_list_arr=res.data.data.goods_list_admin.details;
+        $scope.wait_list_arr=res.data.data.goods_list_admin.details;
         /*--------------------分页------------------------*/
-        $scope.down_history_list=[];
-        $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.down_history_all_page;//循环总页数
+        $scope.wait_history_list=[];
+        $scope.wait_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+        let all_num=$scope.wait_history_all_page;//循环总页数
         for(let i=0;i<all_num;i++){
-          $scope.down_history_list.push(i+1)
+          $scope.wait_history_list.push(i+1)
         }
         $scope.page=1;
       },function (err) {
@@ -1144,18 +1143,18 @@ let commodity_manage = angular.module("commodity_manage",[])
         ).then(function (res) {
           console.log('等待上架');
           console.log(res);
-          $scope.down_list_arr=res.data.data.goods_list_admin.details;
+          $scope.wait_list_arr=res.data.data.goods_list_admin.details;
           /*--------------------分页------------------------*/
-          $scope.down_history_list=[];
-          $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-          let all_num=$scope.down_history_all_page;//循环总页数
+          $scope.wait_history_list=[];
+          $scope.wait_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+          let all_num=$scope.wait_history_all_page;//循环总页数
           for(let i=0;i<all_num;i++){
-            $scope.down_history_list.push(i+1)
+            $scope.wait_history_list.push(i+1)
           }
           $scope.page=1;
           //点击数字，跳转到多少页
           $scope.down_choosePage=function (page) {
-            if($scope.down_history_list.indexOf(parseInt(page))!=-1){
+            if($scope.wait_history_list.indexOf(parseInt(page))!=-1){
               $scope.page=page;
               $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
                 params:{
@@ -1165,7 +1164,7 @@ let commodity_manage = angular.module("commodity_manage",[])
                 }
               }).then(function (res) {
                 //console.log(res);
-                $scope.down_list_arr=res.data.data.goods_list_admin.details;
+                $scope.wait_list_arr=res.data.data.goods_list_admin.details;
               },function (err) {
                 console.log(err);
               });
@@ -1180,15 +1179,15 @@ let commodity_manage = angular.module("commodity_manage",[])
             $scope.page=1;
           }
           //上一页
-          $scope.down_Previous=function () {
+          $scope.wait_Previous=function () {
             if($scope.page>1){                //当页数大于1时，执行
               $scope.page--;
               $scope.down_choosePage($scope.page);
             }
           };
           //下一页
-          $scope.down_Next=function () {
-            if($scope.page<$scope.down_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
+          $scope.wait_Next=function () {
+            if($scope.page<$scope.wait_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
               $scope.page++;
               $scope.down_choosePage($scope.page);
             }
@@ -1196,12 +1195,12 @@ let commodity_manage = angular.module("commodity_manage",[])
         })
       }
     });
+
     /*=======降序=====*/
-    $scope.on_time_sort=function () {
+    $scope.wait_time_sort=function () {
       $scope.sort_status='publish_time:3';
       $scope.on_time_flag=false;
       $scope.down_time_flag=true;
-
       $scope.page=1;
       $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
         params:{
@@ -1211,13 +1210,13 @@ let commodity_manage = angular.module("commodity_manage",[])
         }
       }).then(function (res) {
         console.log(res);
-        $scope.down_list_arr=res.data.data.goods_list_admin.details;
+        $scope.wait_list_arr=res.data.data.goods_list_admin.details;
         /*--------------------分页------------------------*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+        $scope.wait_history_list=[];
+        $scope.wait_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
         let all_num=$scope.on_history_all_page;//循环总页数
         for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
+          $scope.wait_history_list.push(i+1)
         }
         $scope.page=1;
       },function (err) {
@@ -1227,7 +1226,7 @@ let commodity_manage = angular.module("commodity_manage",[])
     /*============升序==================*/
     $scope.on_time_flag=true;
     $scope.down_time_flag=false;
-    $scope.down_time_sort=function (status) {
+    $scope.wait_time_sort=function (status) {
       $scope.sort_status='publish_time:4';
       $scope.on_time_flag=true;
       $scope.down_time_flag=false;
@@ -1240,13 +1239,13 @@ let commodity_manage = angular.module("commodity_manage",[])
         }
       }).then(function (res) {
         console.log(res);
-        $scope.down_list_arr=res.data.data.goods_list_admin.details;
+        $scope.wait_list_arr=res.data.data.goods_list_admin.details;
         /*--------------------分页------------------------*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
+        $scope.wait_history_list=[];
+        $scope.wait_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+        let all_num=$scope.wait_history_all_page;//循环总页数
         for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
+          $scope.wait_history_list.push(i+1)
         }
 
         $scope.page=1;
