@@ -4999,13 +4999,14 @@ class MallController extends Controller
      */
     public function actionResetUserStatusLogs()
     {
+        $userId = (int)Yii::$app->request->get('user_id', 0);
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $sort = Yii::$app->request->get('sort', []);
         $model = new UserStatus;
         $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
 
-        if ($orderBy === false) {
+        if (!$userId || $orderBy === false) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -5017,7 +5018,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'reset_user_status_logs' => UserStatus::pagination([], UserStatus::FIELDS_STATUS_LOGS, $page, $size, $orderBy)
+                'reset_user_status_logs' => UserStatus::pagination(['uid' => $userId], UserStatus::FIELDS_STATUS_LOGS, $page, $size, $orderBy)
             ],
         ]);
     }
