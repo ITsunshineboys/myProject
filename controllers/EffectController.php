@@ -83,7 +83,7 @@ class EffectController extends Controller
             $effect = new Effect();
             $high=$effect->high=self::HIGH;
             $window=$effect->window=self::WINDOW;
-            $site_particulars= $effect->site_particulars = trim($request->post('site_particulars', ''), '');
+            $site_particulars=trim($request->post('site_particulars', ''), '');
             $effect->city = mb_substr($site_particulars,0,2,'utf8');
              $effect->district = mb_substr($site_particulars,2,3,'utf8');
             $effect->street = mb_substr($site_particulars,6,null,'utf8');
