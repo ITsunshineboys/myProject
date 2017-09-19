@@ -701,7 +701,8 @@ class WorkerController extends Controller
             ]);
         }
 
-        if ($status = WorkerOrder::WORKER_ORDER_DONE) {
+
+        if ($status == WorkerOrder::WORKER_ORDER_DONE) {
             $works = WorkerOrder::newWorkerWorks($worker_id, $order_no);
             if ($works != 200) {
                 return Json::encode([

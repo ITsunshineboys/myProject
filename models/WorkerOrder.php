@@ -64,8 +64,14 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
     const IMG_PAGE_SIZE_DEFAULT = 3;
 
+    const IMG_COUNT_DEFAULT = 9;
+
     const IS_OLD = 1;
     const IS_NEW = 0;
+
+    const WORKER_WORKS_BEFORE = 1;
+    const WORKER_WORKS_ING = 2;
+    const WORKER_WORKS_AFTER = 3;
 
     /**
      * @inheritdoc
@@ -669,6 +675,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return ModelService::pageDeal($arr, $count, $page, $page_size);
     }
 
+    /**
+     * 新工人作品
+     *
+     * @param $worker_id
+     * @param $order_no
+     * @param string $title
+     * @param string $desc
+     * @return int
+     */
     public static function newWorkerWorks($worker_id, $order_no, $title = '', $desc = '')
     {
         $worker_works = WorkerWorks::find()->where(['worker_id' => $worker_id, 'order_no' => $order_no])->exists();
@@ -689,10 +704,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $title = WorkerType::find()
                 ->where(['id' => $worker_type_id])
                 ->one();
-            if ($title == null) {
-                return 1000;
-            }
-            $title = $title->worker_type;
+            $title && $title = $title->worker_type;
         }
 
         $worker_works = new WorkerWorks();
@@ -702,9 +714,193 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'title' => $title,
             'desc' => $desc
         ]);
+
+        $trans = Yii::$app->db->beginTransaction();
         if (!$worker_works->save(false)) {
+            $trans->rollBack();
             return 1000;
         }
+        $trans->commit();
         return 200;
     }
+
+
+    /**
+     * 新的工人作品详情
+     *
+     * @param $works_id
+     * @return int
+     */
+    public static function newWorkerWorksDetail($works_id)
+    {
+        $works = WorkerWorks::find()->where(['id' => $works_id])->exists();
+
+        if (!$works) {
+            return 1000;
+        }
+
+        $detail = WorkerWorksDetail::find()->where(['works_id' => $works_id])->exists();
+
+        if (!$detail) {
+
+        }
+
+        $details = [];
+
+        $detail = new WorkerWorksDetail();
+
+        $details[0]['works_id'] = $works_id;
+        $details[0]['status'] = self::WORKER_WORKS_BEFORE;
+        $details[0]['img_ids'] = self::getWorksImg($works_id, self::WORKER_WORKS_BEFORE);
+
+        $details[1]['works_id'] = $works_id;
+        $details[1]['status'] = self::WORKER_WORKS_ING;
+        $details[1]['img_ids'] = self::getWorksImg($works_id, self::WORKER_WORKS_ING);
+
+        $details[2]['works_id'] = $works_id;
+        $details[2]['status'] = self::WORKER_WORKS_AFTER;
+        $details[2]['img_ids'] = self::getWorksImg($works_id, self::WORKER_WORKS_AFTER);
+
+
+        $detail->setAttributes($details, false);
+
+        $trans = Yii::$app->db->beginTransaction();
+
+        if (!$detail->save(false)) {
+            $trans->rollBack();
+            return 1000;
+        }
+
+        $trans->commit();
+        return 200;
+    }
+
+
+    /**
+     * 自动生成工人的作品图片
+     *
+     * @param $works_id
+     * @param $status
+     * @return string
+     */
+    public static function getWorksImg($works_id, $status)
+    {
+
+        $works = WorkerWorks::find()->where(['id' => $works_id])->one();
+
+        if (!$works) {
+            return '';
+        }
+
+        $img = [];
+
+        $order_no = $works->order_no;
+        switch ($status) {
+            case self::WORKER_WORKS_BEFORE:
+                //先找用户下订单的图片
+                $order_img = WorkerOrderImg::find()
+                    ->where(['worker_order_no' => $order_no])
+                    ->limit(self::IMG_COUNT_DEFAULT)
+                    ->all();
+                if ($order_img) {
+                    foreach ($order_img as $value) {
+                        $img[] = '0' . $value->id;
+                    }
+                } else {
+                    $worker_order_day = WorkerOrderDayResult::find()
+                        ->where(['order_no' => $order_no])
+                        ->limit(1)
+                        ->orderBy(['id' => SORT_ASC])
+                        ->one();
+                    if (!$worker_order_day) {
+                        return '';
+                    }
+
+                    $order_day_result_id = $worker_order_day->id;
+
+                    $result_img = WorkResultImg::find()
+                        ->where(['order_day_result_id' => $order_day_result_id])
+                        ->limit(self::IMG_COUNT_DEFAULT)
+                        ->orderBy(['id' => SORT_ASC])
+                        ->all();
+
+                    if (!$result_img) {
+                        return '';
+                    }
+                    foreach ($result_img as $value) {
+                        $img[] = $value->id;
+                    }
+                }
+                break;
+            case self::WORKER_WORKS_ING:
+                //装修的天数/2取整   这天的图片前3张
+
+                $query = WorkerOrderDayResult::find()
+                    ->where(['order_no' => $order_no]);
+                $count = $query->count();
+
+                $day = ceil($count/2) - 1;
+
+                $worker_order_day = $query
+                    ->offset($day)
+                    ->limit(1)
+                    ->orderBy(['id' => SORT_ASC])
+                    ->one();
+
+                if (!$worker_order_day) {
+                    return '';
+                }
+
+                $order_day_result_id = $worker_order_day->id;
+
+                $result_img = WorkResultImg::find()
+                    ->where(['order_day_result_id' => $order_day_result_id])
+                    ->limit(self::IMG_COUNT_DEFAULT)
+                    ->orderBy(['id' => SORT_ASC])
+                    ->all();
+                if (!$result_img) {
+                    return '';
+                }
+                foreach ($result_img as $value) {
+                    $img[] = $value->id;
+                }
+                break;
+            case self::WORKER_WORKS_AFTER:
+                $worker_order_day = WorkerOrderDayResult::find()
+                    ->where(['order_no' => $order_no])
+                    ->limit(1)
+                    ->orderBy(['id' => SORT_DESC])
+                    ->one();
+                if (!$worker_order_day) {
+                    return '';
+                }
+
+                $order_day_result_id = $worker_order_day->id;
+
+                $result_img = WorkResultImg::find()
+                    ->where(['order_day_result_id' => $order_day_result_id])
+                    ->limit(self::IMG_COUNT_DEFAULT)
+                    ->orderBy(['id' => SORT_ASC])
+                    ->all();
+
+                if (!$result_img) {
+                    return '';
+                }
+                foreach ($result_img as $value) {
+                    $img[] = $value->id;
+                }
+                break;
+            default:
+                return '';
+        }
+
+        if ($img == []) {
+            $img = '';
+        } else {
+            $img = implode(',', $img);
+        }
+        
+        return $img;
+    }
+
 }
