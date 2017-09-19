@@ -1238,36 +1238,40 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    /**
+   /**
      * @param $order_no
      * @param $sku
      * @param $supplier_id
      * @param $money
      * @return bool
      */
-    private static  function  changeOrderStatus($order_no,$sku,$supplier_id,$money){
+    public static  function  changeOrderStatus($order_no,$sku,$supplier_id,$money){
         $trans = \Yii::$app->db->beginTransaction();
-        $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
-        $rand=rand(10000,99999);
+        $supplier=Supplier::find()
+            ->where(['id'=>$supplier_id])
+            ->one();
         $time=time();
-        $month=date('m',$time);
-        $day=date('d',$time);
-        do {
-            $transaction_no=$month.$day.$supplier->shop_no.$rand;
-        } while ( $transaction_no==SupplierCashregister::find()->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no']);
+        $transaction_no= ModelService::SetTransactionNo($supplier->id);
         try {
-            \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
+            $res1=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
+            if (!$res1)
+            {
+                $trans->rollBack();
+                return false;
+            }
             $supplier->balance=$supplier->balance+$money;
             $supplier->availableamount=$supplier->availableamount+$money;
-            $ress=Yii::$app->db->createCommand()->insert('supplier_accessdetail',[
+            $res2=Yii::$app->db->createCommand()->insert(UserAccessdetail::tableName(),[
                 'access_type'    => 1,
                 'access_money' =>$money,
                 'create_time'      =>$time,
                 'order_no'  =>$order_no,
+                'sku'  =>$sku,
                 'transaction_no'=>$transaction_no,
-                'supplier_id'=>$supplier_id
+                'uid'=>$supplier->uid,
+                'role_id'=>6,
             ])->execute();
-            if (!$ress){
+            if (!$res2){
                 $trans->rollBack();
                 return false;
             }
