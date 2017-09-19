@@ -1091,14 +1091,14 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.wait_Previous=function () {
         if($scope.page>1){                //当页数大于1时，执行
           $scope.page--;
-          $scope.down_choosePage($scope.page);
+          $scope.wait_choosePage($scope.page);
         }
       };
       //下一页
       $scope.wait_Next=function () {
         if($scope.page<$scope.wait_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
           $scope.page++;
-          $scope.down_choosePage($scope.page);
+          $scope.wait_choosePage($scope.page);
         }
       }
     },function (err) {
@@ -1153,7 +1153,7 @@ let commodity_manage = angular.module("commodity_manage",[])
           }
           $scope.page=1;
           //点击数字，跳转到多少页
-          $scope.down_choosePage=function (page) {
+          $scope.wait_choosePage=function (page) {
             if($scope.wait_history_list.indexOf(parseInt(page))!=-1){
               $scope.page=page;
               $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
@@ -1182,14 +1182,14 @@ let commodity_manage = angular.module("commodity_manage",[])
           $scope.wait_Previous=function () {
             if($scope.page>1){                //当页数大于1时，执行
               $scope.page--;
-              $scope.down_choosePage($scope.page);
+              $scope.wait_choosePage($scope.page);
             }
           };
           //下一页
           $scope.wait_Next=function () {
             if($scope.page<$scope.wait_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
               $scope.page++;
-              $scope.down_choosePage($scope.page);
+              $scope.wait_choosePage($scope.page);
             }
           }
         })
@@ -1214,7 +1214,7 @@ let commodity_manage = angular.module("commodity_manage",[])
         /*--------------------分页------------------------*/
         $scope.wait_history_list=[];
         $scope.wait_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
+        let all_num=$scope.wait_history_all_page;//循环总页数
         for(let i=0;i<all_num;i++){
           $scope.wait_history_list.push(i+1)
         }

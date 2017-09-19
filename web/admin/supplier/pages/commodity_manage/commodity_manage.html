@@ -453,8 +453,8 @@
             <li ng-click="wait_Previous()">上一页</li>
             <li class="pagenum" ng-repeat="page in wait_history_list" ng-click="wait_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
             <li ng-click="wait_Next()">下一页</li>
-            <li class="jumpto"><input type="text" class="size_input" ng-model="down_topage"></li>
-            <li ng-click="wait_choosePage(down_topage)">跳转</li>
+            <li class="jumpto"><input type="text" class="size_input" ng-model="wait_topage"></li>
+            <li ng-click="wait_choosePage(wait_topage)">跳转</li>down_topage
         </ul>
         <!--分页结束-->
     </section>
