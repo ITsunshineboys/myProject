@@ -100,7 +100,7 @@ class UserCashregister extends \yii\db\ActiveRecord
     {
 
         $query = new Query();
-        $select = 'sc.cash_money,sc.apply_time,sc.real_money,sc.status,sc.supplier_reason,sc.transaction_no,sc.handle_time,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch';
+        $select = 'sc.id,sc.cash_money,sc.apply_time,sc.real_money,sc.status,sc.supplier_reason,sc.transaction_no,sc.handle_time,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch';
         $array = $query->from('user_cashregister as sc')
             ->select($select)
             ->leftJoin('supplier as s', 'sc.uid=s.uid')
