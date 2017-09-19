@@ -624,6 +624,12 @@ let commodity_manage = angular.module("commodity_manage",[])
         }
       }).then(function (res) {
         $scope.up_list_arr=res.data.data.goods_list_admin.details;
+        $scope.on_history_list=[];
+        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+        let all_num=$scope.on_history_all_page;//循环总页数
+        for(let i=0;i<all_num;i++){
+          $scope.on_history_list.push(i+1)
+        }
       },function (err) {
         console.log(err)
       });
@@ -661,6 +667,12 @@ let commodity_manage = angular.module("commodity_manage",[])
         }
       }).then(function (res) {
         $scope.up_list_arr=res.data.data.goods_list_admin.details;
+        $scope.on_history_list=[];
+        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
+        let all_num=$scope.on_history_all_page;//循环总页数
+        for(let i=0;i<all_num;i++){
+          $scope.on_history_list.push(i+1)
+        }
       },function (err) {
         console.log(err)
       });
@@ -869,8 +881,7 @@ let commodity_manage = angular.module("commodity_manage",[])
         status:0,
         'sort[]':"offline_time:3"
       }
-    }
-    ).then(function (res) {
+    }).then(function (res) {
       console.log('已下架');
       console.log(res);
       $scope.down_list_arr=res.data.data.goods_list_admin.details;
@@ -971,7 +982,8 @@ let commodity_manage = angular.module("commodity_manage",[])
       $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
         params:{
           status:0,
-          keyword:$scope.off_search_content
+          keyword:$scope.off_search_content,
+          'sort[]':$scope.sort_status
         }
       }).then(function (res) {
         console.log(res);
@@ -1019,6 +1031,24 @@ let commodity_manage = angular.module("commodity_manage",[])
       },config).then(function (res) {
         console.log('删除');
         console.log(res);
+        $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
+          params:{
+            status:0,
+            'sort[]':$scope.sort_status
+          }
+        }).then(function (res) {
+          console.log(res);
+          $scope.down_list_arr = res.data.data.goods_list_admin.details;
+          /*--------------------分页------------------------*/
+          $scope.down_history_list = [];
+          $scope.down_history_all_page = Math.ceil(res.data.data.goods_list_admin.total / 12);//获取总页数
+          let all_num = $scope.down_history_all_page;//循环总页数
+          for (let i = 0; i < all_num; i++) {
+            $scope.down_history_list.push(i + 1)
+          }
+        });
+      },function (err) {
+        console.log(err);
       },function (err) {
         console.log(err)
       })
@@ -1028,7 +1058,6 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.down_reason=reason;
     };
     /*--------------------已下架 结束-------------------------*/
-
 
     /*--------------------等待上架 开始-------------------------*/
     //实时监听库存并修改
@@ -1256,8 +1285,6 @@ let commodity_manage = angular.module("commodity_manage",[])
 
     /*--------------------等待下架 结束-------------------------*/
 
-
-
     //物流模板开始
     $http({
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -1315,6 +1342,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       $state.go('template_details',{'id':$scope.id,'name':$scope.name})
     }
   })
+
   .directive('stringToNumber2', function() {
     return {
       require: 'ngModel',
