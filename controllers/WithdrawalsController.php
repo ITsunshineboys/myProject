@@ -486,7 +486,7 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $transaction_no=ModelService::SetTransactionNo($supplier->id);
+        $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
