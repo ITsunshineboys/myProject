@@ -61,6 +61,9 @@ class OwnerController extends Controller
 
     ];
 
+    /**
+     * 工种
+     */
     const PROJECT_DETAILS = [
         'weak_current'      =>'弱电',
         'strong_current'    =>'强电',
@@ -72,6 +75,9 @@ class OwnerController extends Controller
         'tiler'             =>'泥工',
     ];
 
+    /**
+     * 其它信息
+     */
     const WORKMANSHIP = [
         'flat_area'       =>'平顶面积',
         'modelling_length'=>'造型长度',
@@ -84,6 +90,9 @@ class OwnerController extends Controller
         'wall_brick_area'     =>'贴墙砖面积',
     ];
 
+    /**
+     * room  detail
+     */
     const ROOM_DETAIL = [
         'kitchen'=>'厨房',
         'toilet'=>'卫生间',
@@ -91,6 +100,9 @@ class OwnerController extends Controller
         'bedroom'=>'卧室',
     ];
 
+    /**
+     * room area
+     */
     const ROOM_AREA = [
         'kitchen_area'=>'厨房面积',
         'toilet_area'=>'卫生间面积',
