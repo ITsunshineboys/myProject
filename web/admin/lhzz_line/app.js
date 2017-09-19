@@ -22,17 +22,23 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
   "brand_index_module",
   "edit_attribute_module",
   "account_index_module",
-  "add_user_module"
+  "add_user_module",
+  //第三次需求开始
+  "login_module"
+  //第三次需求结束
   //王杰 结束
 ]);
 /*路由拦截*/
 app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
   $httpProvider.defaults.withCredentials = true;
-  $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise("/login");
   $stateProvider
 
     //  ==============王杰  开始====================
-
+    .state("login",{   //登录
+      url:"/login",
+      templateUrl:"pages/login/login.html"
+    })
     .state("banner_recommend",{   //APP推荐-banner
     url:"/banner_recommend",
     templateUrl:"pages/mall_manage/banner_app/banner_recommend/banner_recommend.html"
