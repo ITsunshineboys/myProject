@@ -387,7 +387,7 @@ class DistributionController extends Controller
         ]);
     }
 
- public  function  actionGetdistributionlist()
+   public  function  actionGetdistributionlist()
     {
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -402,7 +402,7 @@ class DistributionController extends Controller
         $size=trim($request->get('size',Distribution::PAGE_SIZE_DEFAULT));
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
-        $where='';
+        $where='applydis_time !=0';
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -422,15 +422,12 @@ class DistributionController extends Controller
         }
         if ($startTime) {
             $startTime = (int)strtotime($startTime);
-            $startTime && $where .= "  applydis_time >= {$startTime}";
-            if ($endTime) {
-                $endTime = (int)strtotime($endTime);
-                $endTime && $where .= " and  applydis_time <= {$endTime}";
-            }
+            $startTime && $where .= "  and applydis_time >= {$startTime}";
+
         }
         if ($endTime) {
             $endTime = (int)strtotime($endTime);
-            $endTime && $where .= "   applydis_time <= {$endTime}";
+            $endTime && $where .= " and  applydis_time <= {$endTime}";
         }
         $sort_time=trim($request->get('sort_time','2'));
         switch ($sort_time)
@@ -500,7 +497,6 @@ class DistributionController extends Controller
             'data' => $data
         ]);
     }
-
 
     /**
      * 分销详情页
