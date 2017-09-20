@@ -1570,8 +1570,6 @@ CREATE TABLE `point_category` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='点位表';
 
-
-
 CREATE TABLE `project_view` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `project` varchar(100) NOT NULL DEFAULT '' COMMENT '项目名称',
