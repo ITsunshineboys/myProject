@@ -20,6 +20,7 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
   /*属性管理*/
   $scope.handledesorder = true; //排序初始值
   $scope.handleascorder = false; //排序初始值
+    
   $scope.changeTabbar = (function () {
     if ($stateParams.showstyle) {
       $scope.showseries = false;
