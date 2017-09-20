@@ -299,7 +299,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
             $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
                 params: {pid: +newVal},
             }).then(function (res) {
-                console.log(123123)
+                console.log('属性管理分类选择第一个下拉框')
                 console.log(res);
                 $scope.proptable = res.data.data.goods_attr_list_admin.details;
             }, function (err) {
