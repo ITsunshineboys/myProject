@@ -7,6 +7,7 @@ use app\models\Worker;
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
+use app\models\WorkerSkill;
 use app\models\WorkerType;
 use app\models\WorkerTypeItem;
 use app\services\ExceptionHandleService;
@@ -399,8 +400,84 @@ class FindworkerController extends Controller{
      * 实名认证
      */
     public function  actionCertification(){
-        $code=1000;
 
+
+    }
+    /**
+     * 获取所有特长与工人自己的特长
+     * @return string
+     */
+    public function actionSkillsList(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $skills['worker_skill']=WorkerSkill::getWorkerSkillname($user_id);
+
+        $skills['other_skill']=WorkerSkill::getOtherSkillname($user_id);
+
+       return Json::encode([
+           'code'=>200,
+            'msg'=>'ok',
+           'data'=>$skills
+       ]);
+    }
+    /**
+     * 工人设置特长
+     * @return string
+     */
+    public function actionSetSkills(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $skill_id=trim(\Yii::$app->request->get('skill_id',''),'');
+        if(!$skill_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=WorkerSkill::getSetSkillids($user_id,$skill_id);
+
+        return Json::encode([
+            'code' => $code,
+            'msg' =>$code==200?'ok':\ Yii::$app->params['errorCodes'][$code]
+        ]);
+
+
+    }
+    /**
+     * 删除工人特长
+     * @return string
+     */
+    public function actionDelWorkerSkill(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $skill_id=trim(\Yii::$app->request->get('skill_id',''),'');
+        if(!$skill_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=WorkerSkill::DelWorkerSkill($user_id,$skill_id);
     }
     /**
      *抢单信息
