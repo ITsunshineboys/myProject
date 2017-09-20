@@ -2101,8 +2101,7 @@ class GoodsOrder extends ActiveRecord
         return $arr;
     }
 
-
-     /**获取订单详情信息1
+    /**获取订单详情信息1
      * @param $postData
      * @param $user
      * @return array|mixed|null
@@ -2111,9 +2110,52 @@ class GoodsOrder extends ActiveRecord
    {
        $array=self::getorderlist()
            ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
-           ->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.order_id,z.goods_price,a.order_refer,a.buyer_message,z.comment_id,a.consignee,a.district_code,a.region,a.consignee_mobile,a.invoice_type,a.invoice_header_type,a.invoice_header,a.invoicer_card,a.invoice_content,z.cover_image');
+           ->select('
+           a.pay_name,
+           z.order_status,
+           z.customer_service,
+           z.shipping_status,
+           a.pay_status,
+           a.create_time,
+           a.user_id,
+           a.address_id,
+           z.goods_name,
+           a.amount_order,
+           z.goods_number,
+           z.freight,
+           a.order_no,
+           a.create_time,
+           a.paytime,
+           a.user_id,
+           a.address_id,
+           a.return_insurance,
+           z.goods_id,
+           z.goods_attr_id,
+           z.sku,
+           a.address_id,
+           a.invoice_id,
+           supplier_price,
+           z.market_price,
+           b.waybillnumber,
+           b.waybillname,
+           z.shipping_type,
+           z.order_id,
+           z.goods_price,
+           a.order_refer,
+           a.buyer_message,
+           z.comment_id,
+           a.consignee,
+           a.district_code,
+           a.region,
+           a.consignee_mobile,
+           a.invoice_type,
+           a.invoice_header_type,
+           a.invoice_header,
+           a.invoicer_card,
+           a.invoice_content,
+           z.cover_image,
+           z.is_unusual');
        if(array_key_exists('sku', $postData)){
-
            $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id,'z.sku'=>$postData['sku']])
                ->all();
        }else{
