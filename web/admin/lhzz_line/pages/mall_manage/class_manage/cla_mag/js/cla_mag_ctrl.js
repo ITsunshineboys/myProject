@@ -301,7 +301,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $sta
 
 
     /*===========================已上架 下架操作==========================*/
-    /*=已上架列表 单个下架*/
+    /*已上架列表 单个下架*/
 
     /*已上架单个分类下架种类统计*/
     $scope.tobeoffline = function (id, level) {
