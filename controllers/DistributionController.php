@@ -423,10 +423,14 @@ class DistributionController extends Controller
         if ($startTime) {
             $startTime = (int)strtotime($startTime);
             $startTime && $where .= "  create_time >= {$startTime}";
+            if ($endTime) {
+                $endTime = (int)strtotime($endTime);
+                $endTime && $where .= " and  create_time <= {$endTime}";
+            }
         }
         if ($endTime) {
             $endTime = (int)strtotime($endTime);
-            $endTime && $where .= "  create_time <= {$endTime}";
+            $endTime && $where .= "   create_time <= {$endTime}";
         }
         $sort_time=trim($request->get('sort_time','2'));
         switch ($sort_time)
@@ -443,9 +447,10 @@ class DistributionController extends Controller
         }
         $count=Distribution::find()->count();
         $data=Distribution::pagination($where,[],$page,$size,$sort);
-
-        foreach ($data['list'] as &$list)
+        if ($data['list'])
         {
+            foreach ($data['list'] as &$list)
+            {
                 $total_amount=0;
                 $user=User::find()
                     ->where(['mobile'=>$list['mobile']])
@@ -482,7 +487,9 @@ class DistributionController extends Controller
                 unset($list['parent_id']);
                 unset($list['id']);
                 unset($list['create_time']);
+            }
         }
+
         $time=strtotime(date('Y-m-d',time()));
         $nowday_user=Distribution::find()->asArray()->where('create_time>'.$time)->count();
         $data['total_add']=$count;
