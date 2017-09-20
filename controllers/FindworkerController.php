@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 
+use app\models\District;
 use app\models\Worker;
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
@@ -75,7 +76,7 @@ class FindworkerController extends Controller{
      */
     public function actionServiceList()
     {
-        $parents = WorkerType::find()->where(['pid'=>self::PARENT])->asArray()->all();
+        $parents = WorkerType::parent();
         $data=WorkerType::getworkertype($parents);
             $parent=[];
             for ($i=0;$i<count($data);$i++){
@@ -320,8 +321,85 @@ class FindworkerController extends Controller{
         ]);
 
     }
+    /**
+     * 个人资料-工人
+     * @return string
+     */
     public function actionOwenInfos(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
 
+        $data=Worker::find()
+            ->select('icon,nickname,province_code,city_code')
+            ->where(['uid'=>$user_id])
+            ->asArray()
+            ->one();
+
+        $data['province_code'] && $data['city_code']?$data['origin']='已设置':$data['origin']='未设置';
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+
+    }
+    /**
+     * 设置籍贯
+     * @return string
+     */
+    public function actionSetOrigin(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $worker=Worker::find()->where(['uid'=>$user_id])->one();
+        $province_code=$worker->province_code=(int)trim(\Yii::$app->request->post('province_code',''),'');
+        $city_code=$worker->city_code=(int)trim(\Yii::$app->request->post('city_code',''),'');
+        $district_code=$worker->district_code=(int)trim(\Yii::$app->request->post('district_code',''),'');
+        if(!$province_code || !$city_code || !$district_code){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if(!$worker->save(false)){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok'
+        ]);
+    }
+    /**
+     * 获取工种
+     * @return string
+     */
+    public function actionWorkerParentype(){
+        return Json::encode([
+           'code'=>200,
+           'msg'=>'ok',
+            'data'=>WorkerType::parent()
+        ]);
+    }
+    /**
+     * 实名认证
+     */
+    public function  actionCertification(){
+        $code=1000;
 
     }
     /**

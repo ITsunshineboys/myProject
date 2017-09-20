@@ -70,78 +70,30 @@ class EffectController extends Controller
     }
 
     /**
-     * 前台样板间申请
+     * 前台新样板间申请
      * @return string
      *
      */
     public function actionAddEffect()
     {
-        $code = 1000;
         $request = \Yii::$app->request;
-        if ($request->isPost) {
-            $effect_picture=new EffectPicture();
-           $series_id= $effect_picture->series_id = trim($request->post('series_id', ''), '');
-           $style_id= $effect_picture->style_id = trim($request->post('style_id', ''), '');
-            $effect = new Effect();
-            $high=$effect->high=self::HIGH;
-            $window=$effect->window=self::WINDOW;
-            $site_particulars=trim($request->post('site_particulars', ''), '');
-            $effect->city = mb_substr($site_particulars,0,2,'utf8');
-             $effect->district = mb_substr($site_particulars,2,3,'utf8');
-            $effect->street = mb_substr($site_particulars,6,null,'utf8');
-            $particulars= $effect->particulars = trim($request->post('particulars', ''), '');
-            preg_match('/\d+/',$particulars,$area);
-            $area=$effect->area=$area[0];
-            $toponymy= $effect->toponymy = trim($request->post('toponymy', ''), '');
-           $stairway= $effect->stairway = trim($request->post('stairway', ''), '');
-            if (!$series_id || !$style_id ||!$area ||!$high || !$window  ||!$toponymy||  !$particulars || !$site_particulars) {
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-            if($stairway==1){
-
-                 $stair_id=trim($request->post('stair_id',''),'');
-
-                $effect->stair_id=$stair_id;
-
-            }
-            $transaction=Yii::$app->db->beginTransaction();
-            $effect->type=self::TYPE_EFFECT;
-            if(!$effect->save(false)){
-                $transaction->rollBack();
-                $code=500;
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-            $effect_picture->effect_id=$effect->id;
-            if(!$effect_picture->save(false)){
-                $transaction->rollBack();
-                $code=500;
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-                return json_encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-                    'data'=>[
-                        'id'=>$effect->id
-                    ]
-                ]);
-
-        } else {
-            $code=500;
+        $post=$request->post();
+        $data=Effect::addneweffect($post);
+        if(is_numeric($data)){
+            $code=$data;
             return json_encode([
                 'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
+                'msg' =>\Yii::$app->params['errorCodes'][$code],
 
             ]);
         }
+        return json_encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data'=>$data
+
+        ]);
+
     }
     /**
      * 获取户型列表
@@ -157,50 +109,7 @@ class EffectController extends Controller
         ]);
 
     }
-    /**
-     * 获取风格
-     * @return string
-     */
-    public function actionGetstyle(){
 
-        return json_encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>Style::findByStyle()
-        ]);
-    }
-    /**
-     * 获取系列
-     * @return string
-     *
-     */
-    public function actionGetseries(){
-
-        return json_encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>Series::findBySeries()
-        ]);
-    }
-    /**
-     * 获取楼梯材质
-     * @return array
-     *
-     */
-    public function actionGetstair(){
-
-        $stairway=(int)trim(Yii::$app->request->get('stairway',''),'');
-        if($stairway==1){
-
-            $data=(new Query())->from('stairs_details')->select('*')->all();
-            return json_encode([
-                'code'=>200,
-                'msg'=>'ok',
-                'data'=>$data
-            ]);
-        }
-
-    }
     /**
      * 支付定金/获取用户信息
      * @return array
@@ -220,7 +129,7 @@ class EffectController extends Controller
             if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
                 return json_encode([
                     'code' => $code,
-                    'msg' => '电话号码不正确!'
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
 
                 ]);
             }

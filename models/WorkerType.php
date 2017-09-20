@@ -55,6 +55,7 @@ class WorkerType extends \yii\db\ActiveRecord
      *@return string
      */
     public static function getworkertype($parents){
+
          foreach ($parents as $k=>$chlid){
             $data[$k]=self::find()->select('worker_type')->where(['pid'=>$chlid['id']])->asArray()->all();
 
@@ -84,5 +85,9 @@ class WorkerType extends \yii\db\ActiveRecord
             ->where(['id'=>$worker_type_id])
             ->andWhere(['pid'=>self::PARENT])
             ->one()['worker_type'];
+    }
+
+    public static function parent(){
+       return self::find()->where(['pid'=>self::PARENT])->asArray()->all();
     }
 }

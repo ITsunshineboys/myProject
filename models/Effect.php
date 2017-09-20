@@ -76,6 +76,73 @@ class Effect extends ActiveRecord
         return $detail;
     }
     /**
+     * 生成新的样板间
+     * @param $post
+     * @return int
+     */
+    public static function addneweffect($post){
+        $effects=self::find()
+            ->select('sort_id')
+            ->asArray()
+            ->where(['toponymy'=>$post['toponymy']])
+            ->all();
+        if($effects){
+            $sort_id=max($effects)['sort_id']+1;
+        }else{
+            $sort_id=0;
+        }
+
+        $province=District::findByCode($post['province_code'])->name;
+        $city=District::findByCode($post['city_code'])->name;
+        $district=District::findByCode($post['district_code'])->name;
+
+        if($post['stair_id']==1){
+            $post['stairway']=StairsDetails::find()->where(['id'=>$post['stairway']])->one()->id;
+        }else{
+            $post['stairway']=0;
+        }
+        $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
+            'bedroom'       => $post['bedroom'],
+            'sittingRoom_diningRoom' => $post['sittingRoom_diningRoom'],
+            'toilet'        => $post['toilet'],
+            'kitchen'       => $post['kitchen'],
+            'window'        => $post['window'],
+            'area'          => $post['area'],
+            'high'          => $post['high'],
+            'province'      => $province,
+            'province_code' => $post['province_code'],
+            'city'          => $city,
+            'city_code'     => $post['city_code'],
+            'district'      => $district,
+            'district_code' => $post['district_code'],
+            'toponymy'      => $post['toponymy'],
+            'street'        => $post['street'],
+            'particulars'   => $post['particulars'],
+            'stairway'      => $post['stairway'],
+            'add_time'      => time(),
+            'house_image'   => $post['house_image'],
+            'type'          => self::TYPE_STATUS_NO,
+            'stair_id'      => $post['stair_id'],
+            'sort_id'      => $sort_id,
+        ])->execute();
+
+         $id=\Yii::$app->db->lastInsertID;
+         $effect_picture=new EffectPicture();
+         $effect_picture->effect_id=$id;
+         $effect_picture->style_id=$post['style_id'];
+         $effect_picture->series_id=$post['series_id'];
+         $data['id']=$id;
+         if(!$effect_picture->save(false)){
+             $code=500;
+             return $code;
+         }
+        if(!$res){
+          $code=500;
+          return $code;
+         }
+        return $data;
+    }
+    /**
      * get effect view info
      * @param int $effect_id
      * @return array
@@ -217,7 +284,7 @@ class Effect extends ActiveRecord
             'house_image'   => $house_image,
             'type'          => $type,
             'stair_id'      => $stair_id,
-            'sort_id'       => $sort_id,
+            'sort_id'      => $sort_id,
         ])->execute();
 
         return $res;

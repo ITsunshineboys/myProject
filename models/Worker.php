@@ -13,6 +13,7 @@ use Yii;
  * @property string $project_manager_id
  * @property string $province_code
  * @property string $city_code
+ * @property string $district_code
  * @property string $nickname
  * @property string $icon
  * @property string $follower_number
