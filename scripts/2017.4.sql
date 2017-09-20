@@ -1572,7 +1572,7 @@ CREATE TABLE `point_category` (
 
 
 
-CREATE TABLE `projerc_view` (
+CREATE TABLE `project_view` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `project` varchar(100) NOT NULL DEFAULT '' COMMENT '项目名称',
   `parent_project` varchar(100) NOT NULL COMMENT '父级项目名称',
