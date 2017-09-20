@@ -708,7 +708,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   };
   change_m=false;
   $scope.change_menu=function (m) {
-    m===true?$scope.change_m=true: $scope.change_m=false;
+    m===true?$scope.change_m=false: $scope.change_m=true;
   };
 
   //初始化值---添加
