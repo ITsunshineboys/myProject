@@ -1552,3 +1552,32 @@ CREATE TABLE `worker_works_detail` (
   `img_ids` varchar(255) NOT NULL DEFAULT '' COMMENT '图片id逗号分隔，有前导0的为worker_order_img，没有为worker_result_img',
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='工人作品详情';
+-- 9.15 end
+
+-- 9.20 start
+CREATE TABLE `apartment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `apartment` varchar(100) NOT NULL DEFAULT '' COMMENT '户型',
+  `status` tinyint(1) NOT NULL COMMENT '状态 0:可用 1:不可用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='户型表';
+
+CREATE TABLE `point_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '名称',
+  `parent_id` int(11) NOT NULL COMMENT '父级id',
+  `count` int(11) NOT NULL DEFAULT '0' COMMENT '个数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='点位表';
+
+
+
+CREATE TABLE `projerc_view` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `project` varchar(100) NOT NULL DEFAULT '' COMMENT '项目名称',
+  `parent_project` varchar(100) NOT NULL COMMENT '父级项目名称',
+  `apartment_id` int(11) NOT NULL DEFAULT '0' COMMENT '户型id',
+  `project_vule` int(11) NOT NULL COMMENT '项目值',
+  `unit` varchar(20) NOT NULL COMMENT '单位',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='项目详细表';
