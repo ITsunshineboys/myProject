@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\BrainpowerInitalSupervise;
 use app\models\CarpentryAdd;
+use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
 use app\models\Effect;
 use app\models\EffectPicture;
@@ -1378,7 +1379,7 @@ class OwnerController extends Controller
             }
         }
         // 系数查找
-
+        $management = CoefficientManagement::findByAll();
         //var_dump($effect['case_works_data']);exit;
         $sku = [];
         foreach ($effect['case_works_data'] as $one_goods){
@@ -1387,18 +1388,14 @@ class OwnerController extends Controller
         $select = "id,sku,platform_price,purchase_price_decoration_company";
         $goods = Goods::findBySkuAll($sku,$select);
         foreach ($effect['case_works_data'] as &$case_works_datum){
-            foreach ($goods as $one_goods){
+            foreach ($goods as $one_goods) {
                 if ($one_goods['sku'] == $case_works_datum['goods_code']) {
-                    $case_works_datum['goods_cost'] = $case_works_datum['goods_quantity'] * $one_goods['platform_price'];
-                    $case_works_datum['coefficient_cost'] = $case_works_datum['goods_quantity'] * $one_goods['platform_price'];
-                    var_dump($one_goods);
-                    var_dump($case_works_datum);
-                    exit;
+                    $cost = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
+                    $case_works_datum['goods_cost'] = $case_works_datum['goods_quantity'] * $cost;
                 }
             }
         }
-        var_dump($sku);
-        var_dump($goods);
+        var_dump($effect['case_works_data']);
         exit;
         return Json::encode([
             'code' =>200,
