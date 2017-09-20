@@ -453,7 +453,7 @@ CREATE TABLE `goods_order` (
   `consignee` varchar(45) NOT NULL COMMENT '收货人姓名',
   `district_code` varchar(10) NOT NULL COMMENT '收货人地区编号',
   `region` varchar(90) NOT NULL COMMENT '收货人详细地址',
-  `consignee_mobile` varchar(30) NOT NULL COMMENT '收货人手机号',
+  `consignee_mobile` bigint(20) NOT NULL COMMENT '收货人手机号',
   `invoice_type` tinyint(1) NOT NULL COMMENT '1:普通发票  2： 电子发票',
   `invoice_header_type` tinyint(1) NOT NULL COMMENT '1:个人发票  2.公司发票',
   `invoice_header` varchar(50) NOT NULL COMMENT '发票抬头',
