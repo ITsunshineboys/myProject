@@ -1132,7 +1132,7 @@ class MallController extends Controller
 
         $category->title = trim(Yii::$app->request->post('title', ''));
         $category->icon = trim(Yii::$app->request->post('icon', ''));
-        null === Yii::$app->request->post('offline_reason') && $category->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
+        null !== Yii::$app->request->post('offline_reason') && $category->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
         $pid = (int)Yii::$app->request->post('pid', '');
         $category->setLevelPath($pid);
         $category->pid = $pid;
