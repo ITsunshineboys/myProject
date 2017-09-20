@@ -198,11 +198,11 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 			}else{
 				pid = 0;
 			}
-			$scope.sureoffline()
+
 			let url = "http://test.cdlhzz.cn:888/mall/category-edit";
-			let data =  {id:$scope.onsaleclassid,title:$scope.class_name,pid:pid,icon:$scope.classicon||$stateParams.iconpath,description:$scope.offlinedes};
+			let data =  {id:+$scope.onsaleclassid,title:$scope.class_name,pid:+pid,icon:$scope.classicon||$stateParams.iconpath,description:$scope.offlinedes,offline_reason:$scope.offlinereason};
 			$http.post(url,data,config).then(function (res) {
-				// console.log(res)
+				console.log(res)
 			})
 			$scope.savemodal = '#save_tishi'
 			$scope.savesuccess = true;
@@ -212,19 +212,8 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 	//*保存模态框确认*/
         $scope.suresave = function () {
 		setTimeout(function () {
-			$state.go("fenleiguanli",{showoffsale});
+			$state.go("fenleiguanli",{showoffsale:true});
 		},200)
 	}
-
-	/*下架原因的处理*/
-	$scope.sureoffline = function () {
-		let url = "http://test.cdlhzz.cn:888/mall/category-status-toggle";
-		let data =  {id:$scope.onsaleclassid,offline_reason:$scope.offlinereason};
-		$http.post(url,data,config).then(function (res) {
-			$scope.offlinereason = '';
-		})
-	}
-
-
 })
 
