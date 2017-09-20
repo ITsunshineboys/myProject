@@ -267,6 +267,7 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
   /*分类选择下拉框*/
   /*分类选择一级下拉框*/
     $scope.firstClass = (function () {
+        console.log(123123)
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
