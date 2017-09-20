@@ -1132,7 +1132,7 @@ class MallController extends Controller
 
         $category->title = trim(Yii::$app->request->post('title', ''));
         $category->icon = trim(Yii::$app->request->post('icon', ''));
-        $category->description = trim(Yii::$app->request->post('description', ''));
+        null === Yii::$app->request->post('offline_reason') && $category->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
         $pid = (int)Yii::$app->request->post('pid', '');
         $category->setLevelPath($pid);
         $category->pid = $pid;
@@ -4247,12 +4247,12 @@ class MallController extends Controller
 
     public function actionSeriesTimeSort()
     {
-        $sort = trim(Yii::$app->request->get('sort',''));
-        $pages = trim(Yii::$app->request->get('page','1'));
-        $size = trim(Yii::$app->request->get('size','12'));
-        $series = Series::findByTimeSort($sort,$pages,$size);
+        $sort = trim(Yii::$app->request->get('sort', ''));
+        $pages = trim(Yii::$app->request->get('page', '1'));
+        $size = trim(Yii::$app->request->get('size', '12'));
+        $series = Series::findByTimeSort($sort, $pages, $size);
         return Json::encode([
-            'list'=> $series
+            'list' => $series
         ]);
     }
 
@@ -4365,12 +4365,12 @@ class MallController extends Controller
 
     public function actionStyleTimeSort()
     {
-        $sort = trim(Yii::$app->request->get('sort',''));
-        $pages = trim(Yii::$app->request->get('page','1'));
-        $size = trim(Yii::$app->request->get('size','12'));
-        $style = Style::findByTimeSort($sort,$pages,$size);
+        $sort = trim(Yii::$app->request->get('sort', ''));
+        $pages = trim(Yii::$app->request->get('page', '1'));
+        $size = trim(Yii::$app->request->get('size', '12'));
+        $style = Style::findByTimeSort($sort, $pages, $size);
         return Json::encode([
-            'list'=> $style
+            'list' => $style
         ]);
     }
 
