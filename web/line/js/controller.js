@@ -62,7 +62,7 @@ angular.module("all_controller", [])
             method: 'get',
             url: 'http://test.cdlhzz.cn:888/mall/categories-level3?pid=' + $stateParams.pid
         }).then(function successCallback(response) {
-            let arr= {}
+            let arr= {};
             for(let [key,value] of response.data.categories_level3.entries()){
                 if(!(value.path.split(',')[1] in arr)){
                     arr[value.path.split(',')[1]] = [value]
@@ -157,32 +157,100 @@ angular.module("all_controller", [])
         $scope.brands = '';
         $scope.series = '';
         $scope.styles = '';
-        $scope.orderType = 'sold_number';
-        $scope.order = '-';
+        $scope.flag = true;
+        $scope.strat = false;
         console.log($stateParams.id);
         $http({
             method:"get",
-            url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id
+            url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+            params:{
+                "sort[]":"sold_number:4"
+            }
         }).then(function successCallback (response) {
             $scope.detailsList = response.data.data.category_goods;
             console.log(response)
         });
         $scope.curGoPrev = function () {
-            $state.go("minute_class",{'pid':$scope.pid,'id':$scope.id})
+            $state.go("minute_class",{'pid':$scope.pid,'id':$scope.id,'commentThree':$scope.commentThree})
         };
         //筛选  排序
-        $scope.changeOrder = function (type) {
-            $scope.orderType = type
-            if(arguments.length == 2){
-                $scope.order = '-'
-            }else{
-                if($scope.order == '-'){
-                    $scope.order = ''
-                }else{
-                    $scope.order = '-'
+        //价格排序
+        $scope.changePic = function () {
+            $scope.strat = true;
+            $scope.flag = false;
+            $http({
+                method: 'get',
+                url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+                params:{
+                    "sort[]":"platform_price:3"
                 }
-            }
+
+            }).then(function successCallback(response) {
+                console.log(response)
+                $scope.detailsList = response.data.data.category_goods;
+            });
         };
+        $scope.changePicse = function () {
+            $scope.flag = true;
+            $scope.strat = false;
+            $http({
+                method: 'get',
+                url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+                params:{
+                    "sort[]":"platform_price:4"
+                }
+
+            }).then(function successCallback(response) {
+                console.log(response);
+                $scope.detailsList = response.data.data.category_goods;
+            });
+        };
+
+        //好评率排序
+        $scope.changeRingt = function () {
+            $scope.strat = true;
+            $scope.flag = false;
+            $http({
+                method: 'get',
+                url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+                params:{
+                    "sort[]":"favourable_comment_rate:3"
+                }
+
+            }).then(function successCallback(response) {
+                console.log(response)
+                $scope.detailsList = response.data.data.category_goods;
+            });
+        };
+        $scope.changeRightDown = function () {
+            $scope.flag = true;
+            $scope.strat = false;
+            $http({
+                method: 'get',
+                url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+                params:{
+                    "sort[]":"favourable_comment_rate:4"
+                }
+
+            }).then(function successCallback(response) {
+                console.log(response);
+                $scope.detailsList = response.data.data.category_goods;
+            });
+        };
+        //$scope.changeOrder = function (type) {
+        //    $scope.flag = false;
+        //    $scope.strat = true;
+        //    $scope.orderType = type
+        //    if(arguments.length == 2){
+        //        $scope.order = '-'
+        //    }else{
+        //        if($scope.order == '-'){
+        //            $scope.order = ''
+        //        }else{
+        //            $scope.order = '-'
+        //        }
+        //    }
+        //};
 
         //风格  系类 接数据调用
         $http({
@@ -193,7 +261,7 @@ angular.module("all_controller", [])
             $scope.series = response.data.data.category_brands_styles_series.series;
             $scope.styles = response.data.data.category_brands_styles_series.styles;
             console.log(response);
-            console.log($scope.brands)
+            console.log($scope.styles)
         });
         //具体几级某个商品跳转到产品详情列表
     })
