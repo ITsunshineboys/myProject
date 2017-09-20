@@ -292,13 +292,14 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     })()
 
     /*属性分类选择*/
-    $scope.$watch('firstselect', function (newVal, oldVal) {
+    $scope.$watch('firstselect', function (newVal,oldVal) {
         $scope.handledesorder = true;
         $scope.handleascorder = false;
         if (!$scope.secselect) {
             $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
                 params: {pid: +newVal},
             }).then(function (res) {
+                console.log(123123)
                 console.log(res);
                 $scope.proptable = res.data.data.goods_attr_list_admin.details;
             }, function (err) {
@@ -310,7 +311,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         ;
     })
 
-    $scope.$watch('secselect', function (newVal, oldVal) {
+    $scope.$watch('secselect', function (newVal,oldVal) {
         $scope.handledesorder = true;
         $scope.handleascorder = false;
         if (newVal != 0) {
