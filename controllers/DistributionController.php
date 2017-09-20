@@ -558,7 +558,7 @@ class DistributionController extends Controller
 
     public  function  actionTestData()
     {
-        $data=Distribution::find()->all();
+        $data=Distribution::find()->asArray()->all();
         var_dump($data);exit;
     }
 
