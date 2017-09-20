@@ -307,6 +307,7 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
             $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin',{
                 params: {pid:+newVal},
             }).then(function (res) {
+                console.log(res);
                 $scope.proptable = res.data.data.goods_attr_list_admin.details;
             },function (err) {
                 console.log(err);
