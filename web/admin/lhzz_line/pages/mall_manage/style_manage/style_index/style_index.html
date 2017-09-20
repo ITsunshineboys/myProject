@@ -114,8 +114,6 @@
                 <select name=""  ng-model="firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
                 <!--/*分类选择二级菜单*/-->
                 <select name=""  ng-show="firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="secselect"></select>
-
-                <button ng-click="attrselect()">查询</button>
             </div>
 
             <!--属性管理表格-->
