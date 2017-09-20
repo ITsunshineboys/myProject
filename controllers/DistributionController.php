@@ -646,6 +646,128 @@ class DistributionController extends Controller
         ]);
     }
 
+        /**
+     * @return string
+     */
+    public function  actionCorrelateOrder()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $mobile= trim($request->get('mobile'));
+        if (!$mobile)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $Distribution=Distribution::find()
+            ->where(['mobile'=>$mobile])
+            ->one();
+        if (!$Distribution)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        //子集订单
+        $subsets=Distribution::find()
+            ->where(['parent_id'=>$Distribution->id])
+            ->asArray()
+            ->all();
+        $total_amount=0;
+        $list=[];
+        foreach ($subsets as &$subset)
+        {
+            $user=User::find()
+                ->where(['mobile'=>$subset['mobile']])
+                ->one();
+            if ($user)
+            {
+                $UserOrders=GoodsOrder::find()
+                    ->select('order_no,amount_order,paytime,remarks')
+                    ->where(['user_id'=>$user->id,'order_refer'=>2])
+                    ->asArray()
+                    ->all();
+
+                foreach ($UserOrders as &$UserOrder)
+                {
+                    $list[]=[
+                        'mobile'=>$user->mobile,
+                        'order_no'=>$UserOrder['order_no'],
+                        'amount_order'=>GoodsOrder::switchMoney($UserOrder['amount_order']*0.01),
+                        'create_time'=>date('Y-m-d H:i',$UserOrder['paytime']),
+                        'remarks'=>$UserOrder['remarks']
+                    ];
+                    $total_amount+=$UserOrder['amount_order']*0.01;
+                }
+            }
+            $consigneeOrders=GoodsOrder::find()
+                ->select('order_no,amount_order,paytime,remarks')
+                ->where(['consignee_mobile'=>$subset['mobile'],'order_refer'=>1])
+                ->asArray()
+                ->all();
+            foreach ($consigneeOrders as &$consigneeOrder)
+            {
+                $list[]=[
+                    'mobile'=>$user->mobile,
+                    'order_no'=>$consigneeOrder['order_no'],
+                    'amount_order'=>GoodsOrder::switchMoney($consigneeOrder['amount_order']*0.01),
+                    'create_time'=>date('Y-m-d H:i',$consigneeOrder['paytime']),
+                    'remarks'=>$consigneeOrder['remarks']
+                ];
+                $total_amount+=$consigneeOrder['amount_order']*0.01;
+            }
+
+        }
+
+        $page=trim($request->get('page'));
+        $size=trim($request->get('size', Distribution::PAGE_SIZE_DEFAULT));
+        $total_amount=GoodsOrder::switchMoney($total_amount);
+        $total_orders=count($list);
+
+        if ($list!=[]){
+            array_multisort($create_time, SORT_DESC, $list);
+            $count=count($list);
+            $total_page=ceil($count/$size);
+            $data=array_slice($list, ($page-1)*$size,$size);
+
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'ok',
+                'data' =>[
+                    'total_page' =>$total_page,
+                    'count'=>count($data),
+                    'total_amount'=>$total_amount,
+                    'total_orders'=>$total_orders,
+                    'details' => $data
+                ]
+            ]);
+        }else{
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'ok',
+                'data' =>[
+                    'total_page' =>0,
+                    'count'=>0,
+                    'total_amount'=>0,
+                    'total_orders'=>0,
+                    'details' => []
+                ]
+            ]);
+        }
+    }
+
     public  function  actionTestData()
     {
         $data=Distribution::find()->asArray()->all();
