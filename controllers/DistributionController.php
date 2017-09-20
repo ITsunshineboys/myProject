@@ -402,7 +402,7 @@ class DistributionController extends Controller
         $size=trim($request->get('size',Distribution::PAGE_SIZE_DEFAULT));
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
-        $where='applydis_time !=0';
+        $where='';
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -422,12 +422,16 @@ class DistributionController extends Controller
         }
         if ($startTime) {
             $startTime = (int)strtotime($startTime);
-            $startTime && $where .= "  and create_time >= {$startTime}";
+            $startTime && $where .= "  create_time >= {$startTime}";
+            if ($endTime) {
+                $endTime = (int)strtotime($endTime);
+                $endTime && $where .= " and  create_time <= {$endTime}";
+            }
 
         }
         if ($endTime) {
             $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and  create_time <= {$endTime}";
+            $endTime && $where .= "  create_time <= {$endTime}";
         }
         $sort_time=trim($request->get('sort_time','2'));
         switch ($sort_time)
