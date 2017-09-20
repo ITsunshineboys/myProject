@@ -556,4 +556,10 @@ class DistributionController extends Controller
         ]);
     }
 
+    public  function  actionTestData()
+    {
+        $data=Distribution::find()->all();
+        var_dump($data);exit;
+    }
+
 }
