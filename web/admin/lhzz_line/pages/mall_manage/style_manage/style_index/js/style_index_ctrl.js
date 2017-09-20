@@ -36,16 +36,6 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
     }
   })()
 
-  if($stateParams.showstyle){
-    $scope.showseries = false;
-    $scope.showstyle = true;
-    $scope.showattr = false;
-  }else{
-    $scope.showseries = true;
-    $scope.showstyle = false;
-    $scope.showattr = false;
-  }
-
   /*选项卡切换方法*/
   $scope.changeToseries = function () {
     $scope.showseries = true;
