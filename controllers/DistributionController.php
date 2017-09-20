@@ -387,7 +387,7 @@ class DistributionController extends Controller
         ]);
     }
 
-    public  function  Getdistributionlist()
+    public  function  actionGetdistributionlist()
     {
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -533,10 +533,5 @@ class DistributionController extends Controller
             'data' =>$subset
         ]);
     }
-
-
-
-
-
 
 }
