@@ -387,7 +387,7 @@ class DistributionController extends Controller
         ]);
     }
 
-    public  function  actionGetdistributionlist()
+ public  function  actionGetdistributionlist()
     {
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -422,24 +422,24 @@ class DistributionController extends Controller
         }
         if ($startTime) {
             $startTime = (int)strtotime($startTime);
-            $startTime && $where .= "  create_time >= {$startTime}";
+            $startTime && $where .= "  applydis_time >= {$startTime}";
             if ($endTime) {
                 $endTime = (int)strtotime($endTime);
-                $endTime && $where .= " and  create_time <= {$endTime}";
+                $endTime && $where .= " and  applydis_time <= {$endTime}";
             }
         }
         if ($endTime) {
             $endTime = (int)strtotime($endTime);
-            $endTime && $where .= "   create_time <= {$endTime}";
+            $endTime && $where .= "   applydis_time <= {$endTime}";
         }
         $sort_time=trim($request->get('sort_time','2'));
         switch ($sort_time)
         {
             case 1:
-                $sort='create_time asc';
+                $sort='applydis_time asc';
                 break;
             case 2:
-                $sort='create_time desc';
+                $sort='applydis_time desc';
                 break;
         }
         if($keyword){
@@ -491,7 +491,7 @@ class DistributionController extends Controller
         }
 
         $time=strtotime(date('Y-m-d',time()));
-        $nowday_user=Distribution::find()->asArray()->where('create_time>'.$time)->count();
+        $nowday_user=Distribution::find()->asArray()->where('applydis_time>'.$time)->count();
         $data['total_add']=$count;
         $data['nowday_add']=$nowday_user;
         return Json::encode([
