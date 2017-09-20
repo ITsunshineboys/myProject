@@ -278,7 +278,7 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
 
   /*分类选择二级下拉框*/
     $scope.subClass = function (obj) {
-        console.log(obj)
+        console.log( obj)
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
