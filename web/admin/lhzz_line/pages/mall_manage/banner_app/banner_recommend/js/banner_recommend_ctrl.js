@@ -406,7 +406,6 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
       console.log(err);
     });
   };
-
   //编辑确认按钮
   $scope.recommend_shop_edit=function (valid) {
     if(valid){

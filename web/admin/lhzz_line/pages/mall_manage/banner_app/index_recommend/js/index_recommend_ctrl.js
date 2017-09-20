@@ -487,9 +487,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
       $scope.edit_variable_modal="";
       $scope.img_flag='请上传图片'
     }
-
   };
-
 /**
  *--------------------------
  * 商家详情
