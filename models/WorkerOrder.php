@@ -682,7 +682,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_no
      * @param string $title
      * @param string $desc
-     * @return int
+     * @return int|array
      */
     public static function newWorkerWorks($worker_id, $order_no, $title = '', $desc = '')
     {
@@ -721,7 +721,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return 1000;
         }
         $trans->commit();
-        return 200;
+        return [200, $worker_works->id];
     }
 
 
@@ -741,8 +741,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         $detail = WorkerWorksDetail::find()->where(['works_id' => $works_id])->exists();
 
-        if (!$detail) {
-
+        if ($detail) {
+            return 1000;
         }
 
         $details = [];
@@ -762,16 +762,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $details[2]['img_ids'] = self::getWorksImg($works_id, self::WORKER_WORKS_AFTER);
 
 
-        $detail->setAttributes($details, false);
-
-        $trans = Yii::$app->db->beginTransaction();
-
-        if (!$detail->save(false)) {
-            $trans->rollBack();
-            return 1000;
+        foreach ($details as $d) {
+            $_detail = clone $detail;
+            $_detail->setAttributes($d, false);
+            $trans = Yii::$app->db->beginTransaction();
+            if (!$_detail->save(false)) {
+                $trans->rollBack();
+                return 1000;
+            }
+            $trans->commit();
         }
 
-        $trans->commit();
         return 200;
     }
 
@@ -899,7 +900,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         } else {
             $img = implode(',', $img);
         }
-        
+
         return $img;
     }
 
