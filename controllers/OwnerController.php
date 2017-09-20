@@ -1373,10 +1373,17 @@ class OwnerController extends Controller
             if ($one_effect['type'] == 1){
                 $effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
                 $effect['case_works_backman_data'] = WorksWorkerData::findById($one_effect['id']);
-                $effect['case_works_data'] = WorksData::findById($one_effect['id']);
                 $effect['case_works_worker_data'] = WorksBackmanData::findById($one_effect['id']);
+                $effect['case_works_data'] = WorksData::findById($one_effect['id']);
             }
         }
+
+        $sku = [];
+        foreach ($effect['case_works_data'] as $one_goods){
+            $sku [] = $one_goods['goods_code'];
+        }
+        $goods = Goods::findBySkuAll($sku);
+        var_dump($sku);exit;
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',

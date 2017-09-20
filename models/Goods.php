@@ -416,6 +416,25 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * Get recommend by sku all
+     *
+     * @param int $sku sku
+     * @param array $select recommend fields default all fields
+     * @return array|bool|ActiveRecord[]
+     */
+    public static function findBySkuAll($sku,$select = [])
+    {
+        if (!$sku) {
+            return false;
+        }
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['in','sku',$sku])
+            ->all();
+    }
+
+    /**
      * @param string $level
      * @param string $title
      * @param int $city
