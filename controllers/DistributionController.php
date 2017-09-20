@@ -514,31 +514,60 @@ class DistributionController extends Controller
      */
     public function actionGetdistributiondetail(){
         $request = Yii::$app->request;
-        $mobile= trim(htmlspecialchars($request->post('mobile', 'all')), '');
-        $data=Distribution::find()->where(['mobile'=>$mobile])->one();
+        $mobile= trim(htmlspecialchars($request->get('mobile', '')), '');
+        if (!$mobile)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=Distribution::find()
+            ->where(['mobile'=>$mobile])
+            ->asArray()
+            ->one();
+        if (!$data)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $profit=$data['profit']==0?100.00:GoodsOrder::switchMoney($data['profit']*0.01);
         $subset=Distribution::find()->select('mobile,applydis_time')->where(['parent_id'=>$data['id']])->limit(10)->asArray()->all();
         foreach ($subset as $k =>$v){
             $subset[$k]['add_time']=date('Y-m-d',$subset[$k]['applydis_time']);
             unset($subset[$k]['applydis_time']);
         }
-        $fatherset=Distribution::find()->where(['id'=>$data['parent_id']])->one();
-        $data=[
-            'myself'=>[
-                'mobile'=>$data['mobile'],
-                'add_time'=>date('Y-m-d',$data['create_time']),
-            ],
-            'fatherset'=>[
-                'mobile'=>$fatherset['mobile'],
-                'add_time'=>date('Y-m-d',$fatherset['applydis_time'])
-             ],
-            'subset'=>$subset
-        ];
+            $fatherset=Distribution::find()->select('mobile,applydis_time')->where(['id'=>$data['parent_id']])->asArray()->one();
+
+            if ($fatherset['applydis_time']!=0)
+            {
+                $fatherset['add_time']=date('Y-m-d',$fatherset['applydis_time']);
+                unset($fatherset['applydis_time']);
+            }
+            if (!$fatherset)
+            {
+                $fatherset=[];
+            }
+            $list=[
+                'myself'=>[
+                    'mobile'=>$data['mobile'],
+                    'add_time'=>date('Y-m-d',$data['applydis_time']),
+                ],
+                'fatherset'=>$fatherset,
+                'subset'=>$subset,
+                'profit'=>$profit
+         ];
          return Json::encode([
             'code' => 200,
             'msg' =>'ok',
-            'data' =>$data
+            'data' =>$list
         ]);
     }
+
 
     /**
      *  分销详情页-查看全部
