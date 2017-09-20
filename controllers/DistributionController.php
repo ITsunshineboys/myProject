@@ -422,21 +422,21 @@ class DistributionController extends Controller
         }
         if ($startTime) {
             $startTime = (int)strtotime($startTime);
-            $startTime && $where .= "  and applydis_time >= {$startTime}";
+            $startTime && $where .= "  and create_time >= {$startTime}";
 
         }
         if ($endTime) {
             $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and  applydis_time <= {$endTime}";
+            $endTime && $where .= " and  create_time <= {$endTime}";
         }
         $sort_time=trim($request->get('sort_time','2'));
         switch ($sort_time)
         {
             case 1:
-                $sort='applydis_time asc';
+                $sort='create_time asc';
                 break;
             case 2:
-                $sort='applydis_time desc';
+                $sort='create_time desc';
                 break;
         }
         if($keyword){
@@ -483,12 +483,13 @@ class DistributionController extends Controller
                 unset($list['profit']);
                 unset($list['parent_id']);
                 unset($list['id']);
+                $list['applydis_time']=$list['create_time'];
                 unset($list['create_time']);
             }
         }
 
         $time=strtotime(date('Y-m-d',time()));
-        $nowday_user=Distribution::find()->asArray()->where('applydis_time>'.$time)->count();
+        $nowday_user=Distribution::find()->asArray()->where('create_time>'.$time)->count();
         $data['total_add']=$count;
         $data['nowday_add']=$nowday_user;
         return Json::encode([
