@@ -768,10 +768,65 @@ class DistributionController extends Controller
         }
     }
 
-    public  function  actionTestData()
+     /**
+     * 添加备注
+     * @return string
+     */
+    public  function  actionAddRemarks()
     {
-        $data=Distribution::find()->asArray()->all();
-        var_dump($data);exit;
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $mobile= trim($request->post('mobile'));
+        $remarks= trim($request->post('remarks'));
+        if (!$mobile || !$remarks)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $Distribution=Distribution::find()->where(['mobile'=>$mobile])->one();
+        if (!$Distribution)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $Distribution->remarks=$remarks;
+            $res=$Distribution->save(false);
+            if (!$res)
+            {
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>'ok'
+            ]);
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
     }
 
 }
