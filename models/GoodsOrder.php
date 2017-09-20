@@ -2149,6 +2149,7 @@ class GoodsOrder extends ActiveRecord
                    $arr[$k]['shipping_type']='送货上门';
                    break;
            }
+           $arr=self::switchStatus_desc($arr);
            $output[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
            $output[$k]['freight']=sprintf('%.2f', (float)$arr[$k]['freight']);
            $output[$k]['goods_price']=$arr[$k]['goods_price'];
@@ -2175,7 +2176,8 @@ class GoodsOrder extends ActiveRecord
                $output[$k]['automatic_receive_time']=date('Y-m-d H:i',$arr[$k]['RemainingTime']);
            }
            $output[$k]['pay_term']=$arr[$k]['pay_term'];
-           $output[$k]['status']=$arr[$k]['status'];
+           $output[$k]['status_code']=$arr[$k]['status_code'];
+           $output[$k]['status_desc']=$arr[$k]['status_desc'];
            $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
            $output[$k]['order_no']=$arr[$k]['order_no'];
            $output[$k]['goods_id']=$arr[$k]['goods_id'];
@@ -2266,4 +2268,60 @@ class GoodsOrder extends ActiveRecord
         );
         return $transaction_no;
     }
+
+      public  static  function  switchStatus_desc($arr)
+   {
+       foreach ($arr as $k =>$v)
+       {
+           switch ($arr[$k]['status'])
+           {
+               case self::PAY_STATUS_DESC_UNPAID:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_UNPAID;
+                   $arr[$k]['status_desc']=self::PAY_STATUS_DESC_UNPAID;
+                   break;
+               case self::SHIPPING_STATUS_DESC_UNSHIPPED:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED;
+                   $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
+                   if ( $arr[$k]['is_unusual']==1){
+                       $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_申请退款';
+                   }
+                   break;
+               case  self::ORDER_TYPE_DESC_UNRECEIVED:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED;
+                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED;
+                       if ($arr[$k]['is_unusual']==1){
+                           $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                           $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
+                   }
+                   break;
+               case  self::ORDER_TYPE_DESC_CANCEL:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
+                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
+                   break;
+               case  '售后中':
+                   $arr[$k]['status_code']='after_saled';
+                   $arr[$k]['status_desc']='售后中';
+                   break;
+               case  '售后结束':
+                   $arr[$k]['status_code']='after_sale_completed';
+                   $arr[$k]['status_desc']='售后结束';
+                   break;
+               case self::ORDER_TYPE_DESC_COMPLETED:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
+                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
+                   break;
+               case self::ORDER_TYPE_DESC_UNCOMMENT:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
+                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                   break;
+           }
+           unset($arr[$k]['unusual']);
+       }
+       return $arr;
+   }
+
+
+
+
 }
