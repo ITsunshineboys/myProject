@@ -70,6 +70,7 @@ class Supplier extends ActiveRecord
         'quality_guarantee_deposit',
         'licence',
         'licence_image',
+        'support_offline_shop',
     ];
     const FIELDS_VIEW_ADMIN_EXTRA = [
         'mobile',
@@ -762,6 +763,10 @@ class Supplier extends ActiveRecord
             if ($ym != $data['month']) {
                 $data['sales_volumn_month'] = 0;
             }
+        }
+
+        if (isset($data['support_offline_shop'])) {
+            $data['support_offline_shop'] = Yii::$app->params['desc']['support'][$data['support_offline_shop']];
         }
     }
 
