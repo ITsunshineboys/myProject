@@ -86,8 +86,8 @@
                         </div>
 
                     </div>
-                    <!--店铺资质-->
-                    <div class="tab-panel" ng-show="vm.activeTab == 2">
+                    <!---------------------店铺资质-------------------->
+                    <div class="tab-panel store_level" ng-show="vm.activeTab == 2">
                         <div class="shop_name">
                             <span>单位类型</span>
                             <span ng-bind="type_org"></span>
@@ -114,6 +114,13 @@
                             <span ng-bind="quality_guarantee_deposit"></span>
                             <span>已免除</span>
                         </div>
+
+                        <!--是否支持线下体验店-->
+                        <div class="offline_store">
+                            <span>是否支持线下体验店</span>
+                            <span ng-bind="support_offline_shop"></span>
+                        </div>
+
                         <hr/>
                         <!--公司名称-->
                         <div class="shop_name">

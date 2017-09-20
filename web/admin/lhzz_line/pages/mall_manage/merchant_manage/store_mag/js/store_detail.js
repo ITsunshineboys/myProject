@@ -8,6 +8,7 @@ var comment= angular.module("storedetailModule",[])
         let year;
         let timearr;
         const storeid = $stateParams.store.id;
+        console.log($stateParams.store);
         $scope.category_name = $stateParams.store.category_name;
         $scope.type_shop = $stateParams.store.type_shop;
         $scope.shop_name = $stateParams.store.shop_name;
@@ -45,6 +46,7 @@ var comment= angular.module("storedetailModule",[])
                 $scope.identity_card_back_image = result.identity_card_back_image;
                 $scope.type_org = result.type_org;//单位类型
                 $scope.mobile = result.mobile;//登录账号
+                $scope.support_offline_shop = result.support_offline_shop;
             })
         }
 
