@@ -4,7 +4,7 @@ angular.module("directives", [])
             restrict: "EA",
             link: function (scope, element, attrs) {
                 var mySwiper = new Swiper('.swiper-container', {
-                    direction: 'horizontal',
+                    direction:'horizontal',
                     loop: true,
                     autoplay: 1000,
 

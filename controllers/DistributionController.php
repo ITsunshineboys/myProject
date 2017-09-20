@@ -97,7 +97,7 @@ class DistributionController extends Controller
         ];
     }
 
-    /**
+     /**
      * 输入手机号获取验证码
      * 登录状态判断并保存手机号
      * @return string
@@ -158,7 +158,7 @@ class DistributionController extends Controller
         );
     }
 
-    /**
+   /**
      * 登录
      * @return string
      */
@@ -256,7 +256,6 @@ class DistributionController extends Controller
 
         }
         $mobile=$data[0];
-
         $create_time=$data[1];
         $Distribution=Distribution::find()
             ->where(['mobile'=>$mobile,'create_time'=>$create_time])
@@ -278,7 +277,7 @@ class DistributionController extends Controller
     }
 
 
-    /**
+   /**
      * 分销绑定手机号
      * @return string
      */
@@ -443,8 +442,15 @@ class DistributionController extends Controller
                 $sort='create_time desc';
                 break;
         }
-        if($keyword){
-            $where .=" and mobile like '%{$keyword}%'";
+        if ($where!='')
+        {
+            if($keyword){
+                $where .=" and mobile like '%{$keyword}%'";
+            }
+        }else{
+            if($keyword){
+                $where .="mobile like '%{$keyword}%'";
+            }
         }
         $count=Distribution::find()->count();
         $data=Distribution::pagination($where,[],$page,$size,$sort);
@@ -548,6 +554,12 @@ class DistributionController extends Controller
             'msg' =>'ok',
             'data' =>$subset
         ]);
+    }
+
+    public  function  actionTestData()
+    {
+        $data=Distribution::find()->asArray()->all();
+        var_dump($data);exit;
     }
 
 }

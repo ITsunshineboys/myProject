@@ -8,6 +8,7 @@ use app\models\Worker;
 use app\models\WorkerCraft;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
+use app\models\WorkerWorks;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use yii\db\Exception;
@@ -424,7 +425,7 @@ class WorkerController extends Controller
             $days = trim($request->post('days', ''));
 
             if (!$order_id
-                ||($days && $need_time != count(explode(',', $days)))
+                || ($days && $need_time != count(explode(',', $days)))
             ) {
                 $code = 1000;
                 return Json::encode([
@@ -704,12 +705,24 @@ class WorkerController extends Controller
 
         if ($status == WorkerOrder::WORKER_ORDER_DONE) {
             $works = WorkerOrder::newWorkerWorks($worker_id, $order_no);
-            if ($works != 200) {
+            if (!is_array($works)) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+
+            $works_id = $works[1];
+
+            $works_detail = WorkerOrder::newWorkerWorksDetail($works_id);
+
+            if ($works_detail != 200) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
         }
 
         return Json::encode([

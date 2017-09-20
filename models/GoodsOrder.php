@@ -1774,6 +1774,9 @@ class GoodsOrder extends ActiveRecord
             case self::ORDER_TYPE_UNRECEIVED:
                 $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=1';
                 break;
+            case 'shipped':
+                $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=1';
+                break;
             case self::ORDER_TYPE_COMPLETED:
                 $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=1  and z.customer_service=0';
                 break;
@@ -1946,7 +1949,7 @@ class GoodsOrder extends ActiveRecord
             $arr[$key]['role']=$role;
             $create_time[$key]  = $arr[$key]['create_time'];
         }
-        $arr=self::switchStatus($arr);
+        $arr=self::switchStatus($arr,$role);
         if ($arr){
             array_multisort($create_time, SORT_DESC, $arr);
             $count=count($arr);
@@ -2043,12 +2046,11 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
 
-  
     /**
      * @param $arr
      * @return mixed
      */
-    public static  function switchStatus($arr)
+    public static  function switchStatus($arr,$role)
     {
         foreach ($arr as $k =>$v)
         {
@@ -2064,11 +2066,20 @@ class GoodsOrder extends ActiveRecord
                     }
                     break;
                 case  self::ORDER_TYPE_DESC_UNRECEIVED:
-                    $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED;
-                    if ($arr[$k]['unusual']=='申请退款'){
-                        $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                    }
-                    break;
+                    if ($role=='supplier')
+                    {
+                        $arr[$k]['status']='shipped';
+                        if ($arr[$k]['unusual']=='申请退款'){
+                            $arr[$k]['status']='shipped'.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        }
+                    }else{
+                        $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED;
+                        if ($arr[$k]['unusual']=='申请退款'){
+                            $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        }
+
+                     }
+                break;
                 case  self::ORDER_TYPE_DESC_CANCEL:
                     $arr[$k]['status']=self::ORDER_TYPE_CANCEL;
                     break;
@@ -2089,6 +2100,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $arr;
     }
+
 
      /**获取订单详情信息1
      * @param $postData
