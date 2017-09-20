@@ -3178,7 +3178,8 @@ angular.module("all_controller", [])
     })
 
 
-    .controller('nodata_ctrl', function ($scope, $http, $state, $timeout) {
+    .controller('nodata_ctrl', function ($scope, $http, $state, $timeout,$stateParams) {
+        console.log($stateParams)
         $scope.ctrlScope = $scope
         //post请求配置
         let config = {
@@ -3204,6 +3205,9 @@ angular.module("all_controller", [])
         $scope.all_workers_cost = 0//工人总费用
         $scope.show_material = false//是否成功生成材料
         $scope.cur_header = '智能报价'
+        $scope.cur_second_level = ''//二级名称保存
+        $scope.cur_three_level = ''//三级名称保存
+        $scope.cur_content = 'modal'//控制编辑状态无法点击弹出模态框
         $scope.is_city = true//是否显示城市定位
         $scope.is_edit = false//是否显示编辑按钮
         $scope.tab_title = 0//商品详情页tab切换
@@ -3211,9 +3215,11 @@ angular.module("all_controller", [])
         $scope.cur_title = ''//商品更换或者添加
         $scope.replaced_goods = []//被替换的商品
         $scope.goods_replaced = []//替换的商品
+        $scope.all_delete_goods = []//其他材料删除的材料
+        $scope.all_add_goods = []//其他材料添加的材料
         $scope.cur_project = 0//0为基础装修 1为主要材料 2是其他材料 3三级分类页
         $scope.cur_operate = '编辑'//其他材料编辑两种状态 编辑/完成
-        $scope.all_delete_goods = []//其他材料删除的材料
+        $scope.is_delete_btn = false //切换编辑状态
         //请求后台数据
         $http.get('/owner/series-and-style').then(function (response) {
             console.log(response)
@@ -3303,16 +3309,37 @@ angular.module("all_controller", [])
             console.log(error)
         })
         //跳转案例页
-        $scope.go_case = function (item) {
-            $http.get('case-list', {
+        if(Object.keys($stateParams).length!=0){
+            $http.get('/owner/case-list', {
                 params: {
-                    code: item.district_code,
-                    street: item.street,
-                    toponymy: item.toponymy
+                    code: $stateParams.item.district_code,
+                    street: $stateParams.item.street,
+                    toponymy: $stateParams.item.toponymy
                 }
             }).then(function (response) {
                 console.log(response)
+                $scope.toponymy = response.data.data.case_effect.toponymy
+                $scope.message = response.data.data.case_effect.city+response.data.data.case_effect.district+response.data.data.case_effect.street
+                $scope.highCrtl = response.data.data.case_effect.high
+                $scope.window = response.data.data.case_effect.window
+                $scope.choose_stairs = response.data.data.case_effect.stairway
+                $scope.nowStairs = response.data.data.case_effect.stair_id
+                for(let [key,value] of $scope.series.entries()){
+                    if(value.id == response.data.data.case_picture.series_id){
+                        $scope.cur_series = value
+                    }
+                }
+                for(let [key,value] of $scope.style.entries()){
+                    if(value.id == response.data.data.case_picture.style_id){
+                        $scope.cur_style = value
+                    }
+                }
             }, function (error) {
+                console.log(error)
+            })
+            $http.get('/effect/getparticulars').then(function(response){
+                console.log(response)
+            },function(error){
                 console.log(error)
             })
         }
@@ -3322,9 +3349,9 @@ angular.module("all_controller", [])
         $scope.$watch('toponymy', function (newVal, oldVal) {
             $scope.show_material = false
         })
-        $scope.$watch('message', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
+        // $scope.$watch('message', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
         $scope.$watch('area', function (newVal, oldVal) {
             $scope.show_material = false
         })
@@ -3363,29 +3390,61 @@ angular.module("all_controller", [])
                 let minIndex = cur_height[0] > cur_height[1] ? 1 : 0
                 $(this).css({
                     'top': min,
-                    'left': minIndex * ($(window).width() * 0.471)
+                    'left': minIndex * ($(window).width() * 0.471),
                 })
                 cur_height[minIndex] += $(this).outerHeight() + 5
                 $('.basis_decoration').outerHeight(parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[0] : cur_height[1])
             })
         })
+        //跳转内页
+        $scope.go_inner = function (item) {
+            if (item.title == '辅材') {
+                $state.go('nodata.basics_decoration')
+                $scope.cur_header = '基础装修'
+                $scope.cur_project = 0
+                $scope.is_city = false
+                $scope.is_edit = false
+            } else if (item.title == '主要材料') {
+                $state.go('nodata.main_material')
+                $scope.replaced_goods = []//被替换的商品
+                $scope.goods_replaced = []//替换的商品
+                $scope.cur_header = '主材料'
+                $scope.cur_project = 1
+                $scope.is_city = false
+                $scope.is_edit = false
+            } else {
+                $state.go('nodata.other_material')
+                $scope.cur_header = item.title
+                $scope.replaced_goods = []//被替换的商品
+                $scope.goods_replaced = []//替换的商品
+                $scope.all_delete_goods = []//其他材料删除的材料
+                $scope.all_add_goods = []
+                $scope.cur_project = 2
+                $scope.is_city = false
+                $scope.is_edit = true
+            }
+            $scope.have_header = true
+            $scope.cur_item = item
+            $scope.cur_all_goods = angular.copy($scope.all_goods)
+        }
         //模态框详情
-        $scope.get_details = function (item, three_level_name, three_level_id) {
+        $scope.get_basic_details = function (item, three_level_name, three_level_id) {
             $scope.cur_goods_detail = item
+            $scope.cur_second_level = $scope.cur_header
             $scope.cur_three_level = three_level_name
             $scope.cur_three_id = three_level_id
         }
         //查看详情
         $scope.go_details = function (item) {
+            console.log(item)
             if ($scope.cur_status == 0) {
                 $scope.check_goods = $scope.cur_goods_detail
-                $scope.cur_project = 0
             } else if ($scope.cur_status == 1) {
                 $scope.check_goods = item
-                $scope.cur_project = 1
             } else {
-
+                $scope.check_goods = item
             }
+            console.log($scope.check_goods)
             $http.get('/mall/goods-view', {
                 params: {
                     id: +$scope.check_goods.id
@@ -3394,7 +3453,10 @@ angular.module("all_controller", [])
                 console.log(response)
                 if ($scope.cur_status == 1) {
                     $scope.cur_title = '更换'
-                    $scope.check_goods['shop_name'] = response.data.data.goods_view.supplier.shop_name
+                    // $scope.check_goods['shop_name'] = response.data.data.goods_view.supplier.shop_name
+                    $scope.check_goods['name'] = response.data.data.goods_view.brand_name
+                }else if($scope.cur_status == 2){
+                    $scope.cur_title = '添加'
                     $scope.check_goods['name'] = response.data.data.goods_view.brand_name
                 }
                 $scope.sale_services = response.data.data.goods_view.after_sale_services
@@ -3432,7 +3494,7 @@ angular.module("all_controller", [])
         //更换商品
         $scope.replace_material = function () {
             $scope.cur_status = 1
-            $scope.cur_project = 1
+            // $scope.cur_project = 1
             $scope.cur_replace_material = []//所有可以替换的商品
             $http.get('/mall/category-goods', {
                 params: {
@@ -3442,7 +3504,6 @@ angular.module("all_controller", [])
                 }
             }).then(function (response) {
                 console.log(response)
-                $scope.cur_replace_material = []
                 for (let [key, value] of response.data.data.category_goods.entries()) {
                     $scope.cur_replace_material.push({
                         id: value.id,
@@ -3475,93 +3536,173 @@ angular.module("all_controller", [])
                 console.log(error)
             })
         }
-        //较正式更换商品
+        //较正式更换或者添加商品
         $scope.first_replace = function () {
+            console.log($scope.check_goods)
+            console.log($scope.cur_project)
             $scope.have_header = true
+            $scope.cur_header = $scope.cur_second_level
             $scope.is_city = false
-            $scope.is_edit = false
-            $scope.cur_goods_detail['three_level'] = $scope.cur_three_id
-            $scope.check_goods['three_level'] = $scope.cur_three_id
-            $scope.replaced_goods.push($scope.cur_goods_detail)
-            $scope.goods_replaced.push($scope.check_goods)
-            for (let [key, value] of $scope.all_goods.entries()) {
-                for (let [key1, value1] of value.second_level.entries()) {
-                    for (let [key2, value2] of value1.three_level.entries()) {
-                        for (let [key3, value3] of value2.goods_detail.entries()) {
-                            if (value2.id === $scope.cur_three_id && value3.id === $scope.cur_goods_detail.id) {
-                                value2.goods_detail.splice(key3, 1)
-                                value1.cost += $scope.check_goods.cost - $scope.cur_goods_detail.cost
-                                value.cost += $scope.check_goods.cost - $scope.cur_goods_detail.cost
-                                value2.goods_detail.push({
-                                    id: $scope.check_goods.id,
-                                    image: $scope.check_goods.cover_image,
-                                    cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
-                                    name: $scope.check_goods.name,
-                                    platform_price: $scope.check_goods.platform_price,
-                                    profit_rate: $scope.check_goods.profit_rate,
-                                    purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
-                                    quantity: $scope.check_goods.quantity,
-                                    series_id: $scope.check_goods.series_id,
-                                    style_id: $scope.check_goods.style_id,
-                                    subtitle: $scope.check_goods.subtitle,
-                                    supplier_price: $scope.check_goods.supplier_price,
-                                    shop_name: $scope.check_goods.shop_name
-                                })
+            // $scope.cur_goods_detail['three_level'] = $scope.cur_three_id
+            // $scope.check_goods['three_level'] = $scope.cur_three_id
+            if($scope.cur_status == 1) {//更换
+                $scope.check_goods.cost = $scope.check_goods.platform_price*$scope.check_goods.quantity
+                $scope.replaced_goods.push($scope.cur_goods_detail)
+                $scope.goods_replaced.push($scope.check_goods)
+                for (let [key, value] of $scope.all_goods.entries()) {
+                    for (let [key1, value1] of value.second_level.entries()) {
+                        for (let [key2, value2] of value1.three_level.entries()) {
+                            for (let [key3, value3] of value2.goods_detail.entries()) {
+                                if (value2.id === $scope.cur_three_id && value3.id === $scope.cur_goods_detail.id) {
+                                    value2.goods_detail.splice(key3, 1)
+                                    value1.cost += $scope.check_goods.cost - $scope.cur_goods_detail.cost
+                                    value.cost += $scope.check_goods.cost - $scope.cur_goods_detail.cost
+                                    value2.goods_detail.push({
+                                        id: $scope.check_goods.id,
+                                        image: $scope.check_goods.cover_image,
+                                        cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
+                                        name: $scope.check_goods.name,
+                                        platform_price: $scope.check_goods.platform_price,
+                                        profit_rate: $scope.check_goods.profit_rate,
+                                        purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
+                                        quantity: $scope.check_goods.quantity,
+                                        series_id: $scope.check_goods.series_id,
+                                        style_id: $scope.check_goods.style_id,
+                                        subtitle: $scope.check_goods.subtitle,
+                                        supplier_price: $scope.check_goods.supplier_price,
+                                        shop_name: $scope.check_goods.shop_name
+                                    })
+                                }
+                            }
+                        }
+                    }
+                }
+            }else if($scope.cur_status == 2){
+                console.log($scope.check_goods)
+                $scope.all_add_goods.push($scope.check_goods)
+                for(let [key,value] of $scope.all_goods.entries()){
+                    if(value.id == $scope.cur_item.id){
+                        value.cost += $scope.check_goods.platform_price * $scope.check_goods.quantity
+                        let second_item = value.second_level.findIndex(function (item) {
+                            return item.id == $scope.check_goods.path.split(',')[1]
+                        })
+                        if(second_item == -1){
+                            value.second_level.push({
+                                id:$scope.check_goods.path.split(',')[1],
+                                three_level:[{
+                                    id:$scope.cur_three_id,
+                                    title:$scope.cur_three_level,
+                                    goods_detail:[{
+                                        id: $scope.check_goods.id,
+                                        image: $scope.check_goods.cover_image,
+                                        cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
+                                        name: $scope.check_goods.name,
+                                        platform_price: $scope.check_goods.platform_price,
+                                        profit_rate: $scope.check_goods.profit_rate,
+                                        purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
+                                        quantity: $scope.check_goods.quantity,
+                                        series_id: $scope.check_goods.series_id,
+                                        style_id: $scope.check_goods.style_id,
+                                        subtitle: $scope.check_goods.subtitle,
+                                        supplier_price: $scope.check_goods.supplier_price,
+                                        shop_name: $scope.check_goods.shop_name
+                                    }]
+                                }]
+                            })
+                        }else{
+                            for(let [key1,value1] of value.second_level.entries()){
+                                if(value1.id == $scope.check_goods.path.split(',')[1]){
+                                    let three_item = value1.three_level.findIndex(function (item) {
+                                        return item.id == $scope.cur_three_id
+                                    })
+                                    if(three_item == -1){
+                                        value1.three_level.push({
+                                            id:$scope.cur_three_id,
+                                            title:$scope.cur_three_level,
+                                            goods_detail:[{
+                                                id: $scope.check_goods.id,
+                                                image: $scope.check_goods.cover_image,
+                                                cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
+                                                name: $scope.check_goods.name,
+                                                platform_price: $scope.check_goods.platform_price,
+                                                profit_rate: $scope.check_goods.profit_rate,
+                                                purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
+                                                quantity: $scope.check_goods.quantity,
+                                                series_id: $scope.check_goods.series_id,
+                                                style_id: $scope.check_goods.style_id,
+                                                subtitle: $scope.check_goods.subtitle,
+                                                supplier_price: $scope.check_goods.supplier_price,
+                                                shop_name: $scope.check_goods.shop_name
+                                            }]
+                                        })
+                                    }else{
+                                        for(let [key2,value2] of value1.three_level.entries()){
+                                            if(value2.id == $scope.cur_three_id){
+                                                let goods_item = value2.goods_detail.findIndex(function (item) {
+                                                    return item.id == $scope.check_goods.id
+                                                })
+                                                if(goods_item == -1){
+                                                    value2.goods_detail.push({
+                                                        id: $scope.check_goods.id,
+                                                        image: $scope.check_goods.cover_image,
+                                                        cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
+                                                        name: $scope.check_goods.name,
+                                                        platform_price: $scope.check_goods.platform_price,
+                                                        profit_rate: $scope.check_goods.profit_rate,
+                                                        purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
+                                                        quantity: $scope.check_goods.quantity,
+                                                        series_id: $scope.check_goods.series_id,
+                                                        style_id: $scope.check_goods.style_id,
+                                                        subtitle: $scope.check_goods.subtitle,
+                                                        supplier_price: $scope.check_goods.supplier_price,
+                                                        shop_name: $scope.check_goods.shop_name
+                                                    })
+                                                }else{
+                                                    value2.goods_detail[goods_item].cost += $scope.check_goods.platform_price * $scope.check_goods.quantity
+                                                    value2.goods_detail[goods_item].quantity += $scope.check_goods.quantity
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-            $state.go('nodata.main_material')
+            if($scope.cur_project == 1){
+                $scope.is_edit = false
+                $state.go('nodata.main_material')
+            }else if ($scope.cur_project == 2){
+                $scope.is_edit = true
+                $scope.is_delete_btn = false
+                $state.go('nodata.other_material')
+            }
         }
         //直接返回
         $scope.returnIntelligent = function () {
-            for (let [key, value] of $scope.all_goods.entries()) {
-                for (let [key1, value1] of value.second_level.entries()) {
-                    for (let [key2, value2] of value1.three_level.entries()) {
-                        for (let [key3, value3] of value2.goods_detail.entries()) {
-                            for (let [key4, value4] of $scope.replaced_goods.entries()) {
-                                if (value4.three_level == value2.id) {
-                                    if (value2.goods_detail.find(function (item) {
-                                            return item.id == value4.id
-                                        }) == undefined) {
-                                        delete value4.three_level
-                                        value2.goods_detail.push(value4)
-                                        value1.cost += value4.cost
-                                        value.cost += value4.cost
-                                    }
-                                }
-                            }
-                            for (let [key4, value4] of $scope.goods_replaced.entries()) {
-                                let cur_index = value2.goods_detail.findIndex(function (item) {
-                                    return item.id == value4.id
-                                })
-                                if (value4.three_level == value2.id) {
-                                    if (cur_index != -1) {
-                                        value2.goods_detail.splice(cur_index, 1)
-                                        value1.cost -= value4.cost
-                                        value.cost -= value4.cost
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+           $scope.all_goods = $scope.cur_all_goods
             $state.go('nodata.house_list')
         }
-        //保存返回
+        // 保存返回
         $scope.save = function () {
-            $state.go('nodata.house_list')
+            console.log($scope.all_goods)
+                $scope.have_header = true
+                $scope.is_city = true
+                $scope.is_edit = false
+                $scope.cur_header = '智能报价'
+                $state.go('nodata.house_list')
         }
         //切换编辑/完成
         $scope.switch_delete = function () {
             if ($scope.cur_operate == '编辑') {
                 $scope.cur_operate = '完成'
                 $scope.is_delete_btn = true
+                $scope.cur_content = ''
             } else {
                 $scope.cur_operate = '编辑'
                 $scope.is_delete_btn = false
+                $scope.cur_content = 'modal'
             }
         }
         // 删除项
@@ -3576,6 +3717,7 @@ angular.module("all_controller", [])
                         console.log(cur_index)
                         if (cur_id == value2.id) {
                             if (cur_index != -1) {
+                                value.cost -= item.cost
                                 $scope.all_delete_goods.push(item)
                                 value2.goods_detail.splice(cur_index, 1)
                             }
@@ -3587,6 +3729,8 @@ angular.module("all_controller", [])
         //添加一系列操作
         //添加按钮跳转选择三级页面
         $scope.go_three_item = function(){
+            $scope.cur_status = 2
+            $scope.cur_second_level = $scope.cur_header
             $http.get('/mall/categories-level3',{
                 params:{
                     pid:$scope.cur_item.id
@@ -3603,6 +3747,8 @@ angular.module("all_controller", [])
             })
         }
         $scope.go_cur_goods = function (item) {
+            $scope.cur_three_level = item.title
+            $scope.cur_three_id = item.id
             $http.get('/mall/category-goods', {
                 params: {
                     category_id: item.id,
@@ -3631,6 +3777,7 @@ angular.module("all_controller", [])
                         profit_rate: value.profit_rate,
                         purchase_price_decoration_company: value.purchase_price_decoration_company,
                         quantity: 1,
+                        path:item.path,
                         // series_id: $scope.cur_goods_detail.series_id,
                         // style_id: $scope.cur_goods_detail.style_id,
                         subtitle: value.subtitle,
@@ -3644,7 +3791,7 @@ angular.module("all_controller", [])
                     $scope.have_header = true
                     $scope.is_city = false
                     $scope.is_edit = false
-                    $scope.cur_header = $scope.cur_three_level
+                    $scope.cur_header = $scope.cur_three_level || item.title
                     $state.go('nodata.all_goods')
                 }, 300)
             }, function (error) {
@@ -4512,27 +4659,6 @@ angular.module("all_controller", [])
             $scope.cur_toponymy = $scope.toponymy
             console.log($scope.toponymy)
         }
-        //跳转内页
-        $scope.go_inner = function (item) {
-            if (item.title == '辅材') {
-                $state.go('nodata.basics_decoration')
-                $scope.cur_header = '基础装修'
-                $scope.is_city = false
-                $scope.is_edit = false
-            } else if (item.title == '主要材料') {
-                $state.go('nodata.main_material')
-                $scope.cur_header = '主材料'
-                $scope.is_city = false
-                $scope.is_edit = false
-            } else {
-                $state.go('nodata.other_material')
-                $scope.cur_header = item.title
-                $scope.is_city = false
-                $scope.is_edit = true
-            }
-            $scope.have_header = true
-            $scope.cur_item = item
-        }
 
         /*小区搜索*/
         //修改搜索小区字段实时请求小区数据
@@ -4751,4 +4877,6 @@ angular.module("all_controller", [])
                 })
             }
         }
+    /*样板间相关*/
+
     })

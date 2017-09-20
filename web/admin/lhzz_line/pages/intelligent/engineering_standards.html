@@ -1,1 +1,13 @@
-<!--div.engineering_standards-->
+<div class="engineering_standards">
+    <button><i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>通用添加</button>
+    <table class="table">
+        <tr>
+            <th>名称</th>
+            <th>操作</th>
+        </tr>
+        <tr ng-repeat="item in all_project">
+            <td>{{item.project}}工艺</td>
+            <td style="color: #5677FC;" ng-click="get_process(item)">编辑</td>
+        </tr>
+    </table>
+</div>

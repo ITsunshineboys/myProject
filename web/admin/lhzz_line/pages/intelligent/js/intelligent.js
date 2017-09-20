@@ -1,4 +1,4 @@
-angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
+angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap','ngDraggable'])
     .controller('intelligent_ctrl', function ($scope, $state, $stateParams, $uibModal, $http, $timeout, Upload, $location, $anchorScroll, $window) {
         //公共配置以及一些变量初始化
         //post请求配置
@@ -15,6 +15,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         // $scope.pic_error = ''
         $scope.cur_num = 0
         $scope.cur_page = 1
+        $scope.is_add_manage = 1//是否跳转添加推荐页面 1是 0不是
         $scope.address = ''//小区详细地址
         $scope.house_name = ''//小区名称
         $scope.all_num = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]//中文排序
@@ -1084,6 +1085,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 $state.go('intelligent.home_manage')
             }else if($scope.second_title == '资费/做工标准'){
                 $state.go('intelligent.worker_price_list')
+            }else if($scope.second_title = '工程标准'){
+                $state.go('intelligent.engineering_standards')
             }
         }
         //跳转三级页面
@@ -1980,6 +1983,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         // }
         //计算各种工种资费
         $scope.edit_worker = function (item) {
+            console.log($scope.cur_worker_list)
             $scope.submitted = false
             $scope.cur_worker = item
             $scope.second_title = '资费/做工标准'
@@ -2071,6 +2075,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 }
             }).then(function (response) {
                 console.log(response)
+                $scope.all_manage = response.data.list
             }, function (error) {
                 console.log(error)
             })
@@ -2086,6 +2091,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             $scope.second_title = '首页管理'
             $scope.three_title = '添加推荐'
             $scope.four_title = ''
+            $scope.is_add_manage = 1
             $http.get('/quote/homepage-district', {
                 params: {
                     province: $scope.cur_province.id,
@@ -2122,6 +2128,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                             console.log(response)
                             $scope.all_case = response.data.list
                             $scope.cur_case = $scope.all_case[0]
+                            $state.go('intelligent.add_manage')
                         }, function (error) {
                             console.log(error)
                         })
@@ -2134,7 +2141,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
             }, function (error) {
                 console.log(error)
             })
-            $state.go('intelligent.add_manage')
         }
         //当修改区县
         $scope.change_county = function (item) {
@@ -2219,10 +2225,85 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
                 console.log(error)
             })
         }
-        //保存添加推荐
+        //保存添加/编辑推荐
         $scope.save_manage = function(valid){
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.cur_title = '保存成功'
+                $scope.common_house = function () {
+                    $uibModalInstance.close()
+                    $state.go('intelligent.home_manage')
+                }
+            }
+            all_modal.$inject = ['$scope', '$uibModalInstance']
             if(valid&&$scope.cur_image!=''){
-
+                if(!!$scope.is_add_manage){
+                    $http.post('/quote/homepage-add',{
+                        province: $scope.cur_province.id,
+                        city: $scope.cur_city.id,
+                        district: $scope.cur_house_city.district_code,
+                        toponymy: $scope.cur_toponymy_house.toponymy,
+                        street: $scope.cur_street.street,
+                        image:$scope.cur_image,
+                        house_type_name:$scope.cur_case.particulars,
+                        recommend_name:$scope.recommend_name
+                    },config).then(function (response) {
+                        console.log(response)
+                        $scope.second_title = '资费/做工标准'
+                        $scope.three_title = ''
+                        $scope.four_title = ''
+                        $uibModal.open({
+                            templateUrl: 'pages/intelligent/cur_model.html',
+                            controller: all_modal
+                        })
+                        $http.get('/quote/homepage-list', {
+                            params: {
+                                province: $scope.cur_province.id,
+                                city: $scope.cur_city.id
+                            }
+                        }).then(function (response) {
+                            console.log(response)
+                            $scope.all_manage = response.data.list
+                        }, function (error) {
+                            console.log(error)
+                        })
+                    },function (error) {
+                        console.log(error)
+                    })
+                }else{
+                    $http.post('/quote/homepage-edit',{
+                        id:$scope.cur_manage_id,
+                        province: $scope.cur_province.id,
+                        city: $scope.cur_city.id,
+                        district: $scope.cur_house_city.district_code,
+                        toponymy: $scope.cur_toponymy_house.toponymy,
+                        street: $scope.cur_street.street,
+                        image:$scope.cur_image,
+                        house_type_name:$scope.cur_case.particulars,
+                        recommend_name:$scope.recommend_name
+                    },config).then(function (response) {
+                        console.log(response)
+                        $scope.second_title = '资费/做工标准'
+                        $scope.three_title = ''
+                        $scope.four_title = ''
+                        $uibModal.open({
+                            templateUrl: 'pages/intelligent/cur_model.html',
+                            controller: all_modal
+                        })
+                        $http.get('/quote/homepage-list', {
+                            params: {
+                                province: $scope.cur_province.id,
+                                city: $scope.cur_city.id
+                            }
+                        }).then(function (response) {
+                            console.log(response)
+                            $scope.all_manage = response.data.list
+                        }, function (error) {
+                            console.log(error)
+                        })
+                    },function (error) {
+                        console.log(error)
+                    })
+                }
             }else{
                 $scope.submitted = true
             }
@@ -2233,5 +2314,454 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap'])
         //返回首页管理页
         $scope.returnHomeManage = function () {
             $state.go('intelligent.home_manage')
+        }
+        //修改状态
+        $scope.change_status = function(item){
+            $http.get('/quote/homepage-status',{
+                params:{
+                    id:item.id,
+                    status:+!+item.status
+                }
+            }).then(function (response) {
+                console.log(response)
+                $http.get('/quote/homepage-list', {
+                    params: {
+                        province: $scope.cur_province.id,
+                        city: $scope.cur_city.id
+                    }
+                }).then(function (response) {
+                    console.log(response)
+                    $scope.all_manage = response.data.list
+                }, function (error) {
+                    console.log(error)
+                })
+            },function (error) {
+                console.log(error)
+            })
+        }
+        //编辑推荐
+        $scope.go_edit_manage = function(item){
+            $scope.recommend_name = item.recommend_name
+            $scope.cur_image = item.image
+            $scope.cur_manage_id = item.id
+            $scope.is_add_manage = 0
+            $scope.second_title = '首页管理'
+            $scope.three_title = '编辑推荐'
+            $scope.four_title = ''
+            $http.get('/quote/homepage-district', {
+                params: {
+                    province: $scope.cur_province.id,
+                    city: $scope.cur_city.id
+                }
+            }).then(function (response) {
+                console.log(response)
+                $scope.all_house_city = response.data.list
+                for(let [key,value] of $scope.all_house_city.entries()){
+                    if(value.district_code == item.district_code){
+                        $scope.cur_house_city = value
+                    }
+                }
+                $http.post('/quote/homepage-toponymy', {
+                    province: $scope.cur_province.id,
+                    city: $scope.cur_city.id,
+                    district: $scope.cur_house_city.district_code
+                }, config).then(function (response) {
+                    console.log(response)
+                    $scope.all_toponymy = response.data.list
+                    for(let [key,value] of $scope.all_toponymy.entries()){
+                        if(value.toponymy == item.toponymy){
+                            $scope.cur_toponymy_house = value
+                        }
+                    }
+                    $http.post('/quote/homepage-street', {
+                        province: $scope.cur_province.id,
+                        city: $scope.cur_city.id,
+                        district: $scope.cur_house_city.district_code,
+                        toponymy: $scope.cur_toponymy_house.toponymy
+                    }, config).then(function (response) {
+                        console.log(response)
+                        $scope.all_street = response.data.list
+                        for(let [key,value] of $scope.all_street.entries()){
+                            if(value.street == item.street){
+                                $scope.cur_street = value
+                            }
+                        }
+                        $http.post('/quote/homepage-case', {
+                            province: $scope.cur_province.id,
+                            city: $scope.cur_city.id,
+                            district: $scope.cur_house_city.district_code,
+                            toponymy: $scope.cur_toponymy_house.toponymy,
+                            street: $scope.cur_street.street
+                        }, config).then(function (response) {
+                            console.log(response)
+                            $scope.all_case = response.data.list
+                            for(let [key,value] of $scope.all_case.entries()){
+                                if(value.particulars == item.house_type_name){
+                                    $scope.cur_case = value
+                                }
+                            }
+                            $state.go('intelligent.add_manage')
+                        }, function (error) {
+                            console.log(error)
+                        })
+                    }, function (error) {
+                        console.log(error)
+                    })
+                }, function (error) {
+                    console.log(error)
+                })
+            }, function (error) {
+                console.log(error)
+            })
+        }
+        //拖拽排序
+        $scope.dropComplete = function(index,obj){
+            let idx = $scope.all_manage.indexOf(obj)
+            $scope.all_manage[idx] = $scope.all_manage[index]
+            $scope.all_manage[index] = obj
+        }
+        // 排序保存
+        $scope.cur_sort = function () {
+            let arr = []
+            for(let [key,value] of $scope.all_manage.entries()){
+                arr.push({id:value.id,sort:key+1})
+            }
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.cur_title = '保存成功'
+                $scope.common_house = function () {
+                    $uibModalInstance.close()
+                }
+            }
+            all_modal.$inject = ['$scope', '$uibModalInstance']
+            $http.post('/quote/homepage-sort',{
+                sort:arr
+            },config).then(function(response){
+                console.log(response)
+                $uibModal.open({
+                    templateUrl: 'pages/intelligent/cur_model.html',
+                    controller: all_modal
+                })
+            },function (error) {
+                console.log(error)
+            })
+        }
+        //删除推荐
+        $scope.delete_manage = function (item) {
+            console.log(+item.status == 0)
+            if(+item.status == 0){
+                $http.post('/quote/homepage-delete',{
+                    id:item.id
+                },config).then(function (response) {
+                    console.log(response)
+                    $http.get('/quote/homepage-list', {
+                        params: {
+                            province: $scope.cur_province.id,
+                            city: $scope.cur_city.id
+                        }
+                    }).then(function (response) {
+                        console.log(response)
+                        $scope.all_manage = response.data.list
+                    }, function (error) {
+                        console.log(error)
+                    })
+                },function (error) {
+                    console.log(error)
+                })
+            }
+        }
+
+        /*工程标准*/
+    //    工程标准主页
+        $scope.go_engineering = function () {
+            $http.get('/quote/project-norm-list').then(function (response) {
+                console.log(response)
+                $scope.all_project = response.data.list
+                $scope.second_title = '工程标准'
+                $scope.three_title = ''
+                $scope.four_title = ''
+                $state.go('intelligent.engineering_standards')
+            },function (error) {
+                console.log(error)
+            })
+        }
+        //工程标准编辑
+        $scope.get_process = function (item) {
+            console.log(item)
+            $scope.process_list = []
+            $scope.second_title = '工程标准'
+            $scope.three_title = item.project+'工艺'
+            $scope.four_title = ''
+            $http.get('/quote/project-norm-edit-list',{
+                params:{
+                    city:$scope.cur_city.id,
+                    project:item.project
+                }
+            }).then(function(response){
+                console.log(response)
+                 let arr = response.data.list
+                //简单0处理
+                for (let [key, value] of arr.entries()) {
+                    if (value.material == 0) {
+                        value.material = ''
+                    }
+                    value['flag'] = false
+                    value['name'] = 'name' + value.id
+                }
+                //不同板块处理
+                if(item.project == '强电'||item.project == '弱电'||item.project=='水路'){
+                    for (let [key, value] of arr.entries()) {
+                        value.cur_unit = 'm/点位'
+                    }
+                    $scope.process_list.push(arr)
+                }else if(item.project == '防水'){
+                    for (let [key, value] of arr.entries()) {
+                        value.cur_unit = 'kg/m2'
+                    }
+                    $scope.process_list.push(arr)
+                }else if(item.project == '乳胶漆'){
+                    for (let [key, value] of arr.entries()) {
+                        if(value.project_details.indexOf('腻子')!=-1){
+                            value.cur_unit = 'kg/m2'
+                        }else if(value.project_details.indexOf('底漆')!=-1 || value.project_details.indexOf('面漆')!=-1){
+                            value.cur_unit = 'L/m2'
+                        }else if(value.project_details.indexOf('阴角线')!=-1){
+                            value.cur_unit = 'm/m'
+                        }else if(value.project_details.indexOf('石膏粉')!=-1){
+                            value.cur_unit = 'm/m'
+                        }
+                    }
+                    $scope.process_list.push(arr)
+                }else if(item.project == '泥工'){
+                    for (let [key, value] of arr.entries()) {
+                        value.cur_unit = 'kg/m2'
+                    }
+                    $scope.process_list.push(arr)
+                }else if(item.project == '杂工'){
+                    let arr1=[],arr2=[],arr3=[]
+                    for (let [key, value] of arr.entries()) {
+                        if(value.project_details.indexOf('水泥')!=-1){
+                           if(value.project_details.indexOf('补烂')!=-1){
+                                value.cur_unit = 'kg/m'
+                                arr1.push(value)
+                            }else{
+                                value.cur_unit = 'kg/m2'
+                                arr1.push(value)
+                            }
+                        }else if(value.project_details.indexOf('河沙')!=-1){
+                            if(value.project_details.indexOf('补烂')!=-1){
+                                value.cur_unit = 'kg/m'
+                                arr2.push(value)
+                            }else{
+                                value.cur_unit = 'kg/m2'
+                                arr2.push(value)
+                            }
+                        }else{
+                            if(value.project_details.indexOf('清运')!=-1){
+                                value.cur_unit = '元'
+                                arr3.push(value)
+                            }else if(value.project_details.indexOf('面积')!=-1){
+                                value.cur_unit = 'm2/车'
+                                arr3.push(value)
+                            }else if(value.project_details.indexOf('费用')!=-1){
+                                value.cur_unit = '元/车'
+                                arr3.push(value)
+                            }
+                        }
+                    }
+                    $scope.process_list = [arr1,arr2,arr3]
+                }else if(item.project == '木作'){
+                    let arr4=[],arr5=[],arr6=[]
+                    $http.get('/quote/project-norm-woodwork-list').then(function(response){
+                        console.log(response)
+                        console.log(2.5==2.50)
+                        $scope.cur_norm = response.data.specification.find_specification
+                        $scope.all_norm = response.data.specification.specification
+                        let arr1 = angular.copy(response.data.series),
+                            arr2 = angular.copy(response.data.series),
+                            arr3 = angular.copy(response.data.series),
+                            arr7 = angular.copy(response.data.style),
+                            arr8 = angular.copy(response.data.style),
+                            arr9 = angular.copy(response.data.style)
+                        //系列
+                        for(let [key,value] of response.data.coefficient.entries()){
+                            for(let [key1,value1] of arr1.entries()){
+                                value1['name'] = 'series01' + value1.id
+                                if(value.project == value1.series){
+                                    if(+value.series_or_style == 0&&+value.coefficient==1){
+                                        value1['series_or_style'] = 0
+                                        value1['cur_id'] = value.id
+                                        value1['coefficient'] = 1
+                                        value1['value'] = value.value
+                                    }
+                                }else{
+                                    if(value1.value == undefined){
+                                        value1['series_or_style'] = 0
+                                        value1['coefficient'] = 1
+                                        value1['value'] = ''
+                                    }
+                                }
+                            }
+                            for(let [key1,value1] of arr2.entries()){
+                                value1['name'] = 'series02' + value1.id
+                                if(value.project == value1.series){
+                                    if(+value.series_or_style == 0&&+value.coefficient==2){
+                                        value1['series_or_style'] = 0
+                                        value1['cur_id'] = value.id
+                                        value1['coefficient'] = 2
+                                        value1['value'] = value.value
+                                    }
+                                }else{
+                                    if(value1.value == undefined){
+                                        value1['series_or_style'] = 0
+                                        value1['coefficient'] = 2
+                                        value1['value'] = ''
+                                    }
+                                }
+                            }
+                            for(let [key1,value1] of arr3.entries()){
+                                value1['name'] = 'series03' + value1.id
+                                if(value.project == value1.series){
+                                    if(+value.series_or_style == 0&&+value.coefficient==3){
+                                        value1['series_or_style'] = 0
+                                        value1['cur_id'] = value.id
+                                        value1['coefficient'] = 3
+                                        value1['value'] = value.value
+                                    }
+                                }else{
+                                    if(value1.value == undefined){
+                                        value1['series_or_style'] = 0
+                                        value1['coefficient'] = 3
+                                        value1['value'] = ''
+                                    }
+                                }
+                            }
+                        }
+                        //风格
+                        for(let [key,value] of response.data.coefficient.entries()){
+                            for(let [key1,value1] of arr7.entries()){
+                                value1['name'] = 'style11' + value1.id
+                                if(value.project == value1.style){
+                                    if(+value.series_or_style == 1&&+value.coefficient==1){
+                                        value1['series_or_style'] = 1
+                                        value1['cur_id'] = value.id
+                                        value1['coefficient'] = 1
+                                        value1['value'] = value.value
+                                    }
+                                }else{
+                                    if(value1.value == undefined){
+                                        value1['series_or_style'] = 1
+                                        value1['coefficient'] = 1
+                                        value1['value'] = ''
+                                    }
+                                }
+                            }
+                            for(let [key1,value1] of arr8.entries()){
+                                value1['name'] = 'style12' + value1.id
+                                if(value.project == value1.style){
+                                    if(+value.series_or_style == 1&&+value.coefficient==2){
+                                        value1['series_or_style'] = 1
+                                        value1['cur_id'] = value.id
+                                        value1['coefficient'] = 2
+                                        value1['value'] = value.value
+                                    }
+                                }else{
+                                    if(value1.value == undefined){
+                                        value1['series_or_style'] = 1
+                                        value1['coefficient'] = 2
+                                        value1['value'] = ''
+                                    }
+                                }
+                            }
+                        }
+                        $scope.all_series = [arr1,arr2,arr3]
+                        $scope.all_style = [arr7,arr8]
+                        console.log($scope.all_series)
+                        for(let [key,value] of $scope.all_norm.entries()){
+                            for(let [key1,value1] of $scope.cur_norm.entries()){
+                                if(value.title == value1.title){
+                                    value1['options'] = value.value
+                                }
+                            }
+                        }
+                        for(let [key,value] of $scope.cur_norm.entries()){
+                            value.value = parseFloat(value.value)+''
+                            value.cur_unit = 'm'
+                            if(value.title == '石膏板'){
+                                arr4.push(value)
+                            }else if(value.title == '龙骨'){
+                                arr5.push(value)
+                            }else if(value.title == '丝杆'){
+                                arr6.push(value)
+                            }
+                        }
+                        for(let [key,value] of arr.entries()){
+                            if(value.project_details.indexOf('长度')!=-1){
+                                value.cur_unit = 'm'
+                            }else if(value.project_details.indexOf('面积')!=-1){
+                                value.cur_unit = 'm2'
+                            }else{
+                                value.cur_unit = '张'
+                            }
+                            if(value.project_details.indexOf('石膏板')!=-1){
+                                arr4.push(value)
+                            }else if(value.project_details.indexOf('龙骨')!=-1){
+                                arr5.push(value)
+                            }else if(value.project_details.indexOf('丝杆')!=-1){
+                                arr6.push(value)
+                            }
+                        }
+                        $scope.process_list = [arr4,arr5,arr6]
+                        console.log($scope.process_list)
+                        console.log(arr)
+                    },function(error){
+                        console.log(error)
+                    })
+                }
+                $state.go('intelligent.engineering_process')
+            },function (error) {
+                console.log(error)
+            })
+        }
+        //工程标准保存
+        $scope.get_engineering_process = function (valid) {
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.cur_title = '保存成功'
+                $scope.common_house = function () {
+                    $uibModalInstance.close()
+                    $state.go('intelligent.engineering_standards')
+                }
+            }
+            all_modal.$inject = ['$scope', '$uibModalInstance']
+            let arr = []
+            for(let [key,value] of $scope.process_list.entries()){
+                for(let [key1,value1] of value.entries()){
+                    arr.push({id:value1.id,material:value1.material})
+                }
+            }
+            if(valid){
+                $http.post('/quote/project-norm-edit',{
+                    material:arr
+                },config).then(function (response) {
+                    console.log(response)
+                    $scope.second_title = '工程标准'
+                    $scope.three_title = ''
+                    $scope.four_title = ''
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
+                },function (error) {
+                    console.log(error)
+                })
+            }else{
+                $scope.submitted = true
+            }
+        }
+        //工程标准返回
+        $scope.return_engineering = function () {
+            $scope.second_title = '工程标准'
+            $scope.three_title = ''
+            $scope.four_title = ''
+            $state.go('intelligent.engineering_standards')
         }
     })

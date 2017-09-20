@@ -203,6 +203,7 @@
                 <h1>适合人群</h1>
                 <p ng-cloak>{{cur_series.intro}}</p>
             </div>
+        </div>
             <div class="background_w">
                 <div class="choose_style">
                     <div class="shu_house_3"></div>
@@ -212,30 +213,6 @@
                             <button type="button" ng-cloak ng-class="{'btn_checked':(item.id==cur_style.id)}"
                                     ng-click="toggleStyle(item)">{{item.style}}
                             </button>
-                        </li>
-                    </ul>
-
-                </div>
-
-                <!--轮播图-->
-                <div class="carousel">
-                    <div class="swiper-container">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide" style="height: 16rem;width: 100%;overflow: hidden"
-                                 ng-repeat="item in cur_style.images.split(',')">
-                                <img style="width: 100%;height: 100%;" ng-src="http://test.cdlhzz.cn:888/{{item}}"
-                                     alt="">
-                            </div>
-                        </div>
-                        <!-- 如果需要分页器 -->
-                        <div class="swiper-pagination"></div>
-                    </div>
-                </div>
-                <!--风格便签-->
-                <div class="note">
-                    <ul>
-                        <li ng-repeat="item in cur_style.theme.split(',')">
-                            <button ng-cloak>{{item}}</button>
                         </li>
                     </ul>
                 </div>

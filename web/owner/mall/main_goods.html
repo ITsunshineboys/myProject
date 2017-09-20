@@ -6,7 +6,7 @@
             <span class="second_title">{{item.title}}</span>
             <div ng-repeat="item1 in item.three_level">
                 <ul>
-                    <li data-toggle="modal" data-target="#myModal" ng-click="get_details(item2,item1.title,item1.id)"
+                    <li data-toggle="modal" data-target="#myModal" ng-click="get_basic_details(item2,item1.title,item1.id)"
                         ng-repeat="item2 in item1.goods_detail" class="main_details">
                         <span class="wall_span">{{item1.title}}&times;{{item2.quantity}}</span><br/>
                         <span class="wall_brand">{{item2.name}}</span>

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.css">
     <link rel="stylesheet" href="lib/css/index.css">
     <link rel="stylesheet" href="lib/data_js/need/laydate.css">
+    <link rel="stylesheet" href="lib/css/font-awesome.min.css">
 </head>
 <body ng-cloak>
 <!--左侧导航栏开始-->
@@ -33,7 +34,7 @@
     </dl>
 
     <dl>
-        <dt><i class="glyphicon glyphicon-home"></i> 智能报价</dt>
+        <dt  ui-sref="intelligent.intelligent_index"><i class="glyphicon glyphicon-home"></i> 智能报价</dt>
     </dl>
 
     <dl>
@@ -45,6 +46,12 @@
     <dl>
         <dt ui-sref="account_index"><i class="glyphicon glyphicon-home"></i> 账户管理</dt>
     </dl>
+    <dl>
+        <dt ui-sref="distribution.index"><i class="glyphicon glyphicon-home"></i>分销</dt>
+    </dl>
+    <dl>
+        <dt ui-sref="apply_case.index"><i class="glyphicon glyphicon-home"></i> 申请样板间</dt>
+    </dl>
 </div>
 <!--左侧导航栏结束-->
 
@@ -55,6 +62,8 @@
 <script src="lib/js/jquery-3.1.1.js"></script>
 <script src="lib/js/angular.js"></script>
 <script src="lib/js/angular-ui-router.js"></script>
+<script src="lib/js/ui-bootstrap-tpls-2.5.0.min.js"></script>
+<script src="lib/js/angular-css.js"></script>
 <script src="lib/js/controller.js"></script>
 <script src="lib/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
 <script src="lib/js/index.js"></script>
@@ -115,6 +124,12 @@
 <script src="pages/mall_manage/style_manage/add_style/js/add_style_ctrl.js"></script><!--添加新风格-->
 <script src="pages/mall_manage/style_manage/choose_style/js/choose_style_ctrl.js"></script><!--选择风格-->
 <script src="pages/mall_manage/style_manage/style_detail/js/style_detail_ctrl.js"></script><!--风格详情-->
+
+<!--===================================================================-->
+<script src="pages/intelligent/js/directive.js"></script>
+<script src="pages/intelligent/js/intelligent.js"></script>
+<script src="pages/distribution/js/distribution.js"></script>
+<script src="pages/apply_case/js/apply_case.js"></script>
 
 <script src="app.js"></script>
 </body>

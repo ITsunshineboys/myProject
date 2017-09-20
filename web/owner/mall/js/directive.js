@@ -24,14 +24,14 @@ angular.module("directives", [])
     .directive('water',function ($timeout) {
         return {
             restrict: "EA",
-            scope:false,
+            // scope:false,
             link:function (scope,element,attrs) {
                 console.log(element)
                 console.log(element.find('div'))
-                if(scope.$last == true){
+                if(scope.$last === true){
                     $timeout(function () {
                         scope.$emit('ngRepeatFinished')
-                    })
+                    },300)
                 }
                 //     let all_children = element.find('div')
                 // console.log(all_children)

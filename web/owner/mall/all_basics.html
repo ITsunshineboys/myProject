@@ -7,7 +7,7 @@
         <h1>{{item.title}}</h1>
         <ul class="wall_ul">
             <div ng-repeat="item1 in item.three_level">
-                <li data-toggle="modal" data-target="#myModal" ng-repeat="item2 in item1.goods_detail" ng-click="get_details(item2,item1.title)">
+                <li data-toggle="modal" data-target="#myModal" ng-repeat="item2 in item1.goods_detail" ng-click="get_basic_details(item2,item1.title)">
                     <span class="wall_span">{{item1.title}}x{{item2.quantity}}</span><br/>
                     <span class="wall_brand">{{item2.name}}</span>
                     <span class="wall_money">{{item2.cost | currency:"￥"}} <img

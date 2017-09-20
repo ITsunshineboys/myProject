@@ -2,24 +2,29 @@
     <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{cur_province.name}}-{{cur_city.name}}</h6>
     <div class="form-group">
         <button ng-click="add_manage()"><i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>添加</button>
-        <select ng-model="cur_county" ng-options="item.name for item in county"></select>
+        <button ng-click="cur_sort()">保存</button>
     </div>
     <table class="table">
         <tr>
-            <th>推荐名称</th>
-            <th>创建日期</th>
-            <th>小区名称</th>
-            <th>所在区域</th>
-            <th>状态</th>
-            <th>操作</th>
+            <th class="text-left">推荐名称</th>
+            <th class="text-left">创建日期</th>
+            <th class="text-left">小区名称</th>
+            <th class="text-left">所在区域</th>
+            <th class="text-left">状态</th>
+            <th class="text-left">操作</th>
         </tr>
-        <!--<tr ng-repeat="">-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-            <!--<td></td>-->
-        <!--</tr>-->
+        <tr ng-repeat="item in all_manage" ng-drop="true" ng-drag="true" ng-drop-success="dropComplete(
+        $index,$data,$event)" ng-drag-data="item">
+            <td class="text-left">{{item.recommend_name}}</td>
+            <td class="text-left">{{item.add_time}}</td>
+            <td class="text-left">{{item.toponymy}}</td>
+            <td class="text-left">{{item.district}}</td>
+            <td ng-class="{'cur_status':!+item.status}" class="text-left">{{!+item.status?'关闭':'开启'}}</td>
+            <td class="text-left" style="color: #5677FC;">
+                <span ng-click="go_edit_manage(item)">编辑</span>
+                <span style="margin-right: 10px;margin-left: 10px;" ng-click="delete_manage(item)">删除</span>
+                <span style="cursor: pointer" ng-click="change_status(item)">{{!+item.status?'开启':'关闭'}}</span>
+            </td>
+        </tr>
     </table>
 </div>

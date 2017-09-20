@@ -64,3 +64,6 @@ header button{
 .home_manage table td{
     color: #666F80;
 }
+.home_manage .cur_status{
+    color: #FF5722;
+}

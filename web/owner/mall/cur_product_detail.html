@@ -31,7 +31,7 @@
         <div class="shop_header">
             <div class="shop_header_child">
                 <img style="width: 3rem;height: 3rem;padding-left: 0;" ng-src="http://test.cdlhzz.cn:888/{{supplier.icon}}" alt=""/>
-                <span>{{check_goods.shop_name}}</span>
+                <span>{{supplier.shop_name}}</span>
             </div>
             <div class="shop_number">
                 <ul>
@@ -180,7 +180,7 @@
         </div>
     </div>
     <div class="foot_tab" ng-if="!!cur_status">
-        <button class="add" data-toggle="modal" data-target="#myModal">更换</button>
+        <button class="add" data-toggle="modal" data-target="#myModal">{{cur_title}}</button>
     </div>
     <div style="height: 4rem;" ng-if="!!cur_status"></div>
 </div>

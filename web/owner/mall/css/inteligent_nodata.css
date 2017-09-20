@@ -871,9 +871,11 @@ button[disabled]{
     /*margin-top: 1rem;*/
     position: relative;
 }
-.basis_decoration > div{
+.grid{
     position: absolute;
     width:47%;
+    top: 0;
+    left:0;
 }
 .basis_decoration ul{
     padding:0;

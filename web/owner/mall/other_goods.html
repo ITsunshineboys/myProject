@@ -6,13 +6,13 @@
                 <div class="wall_margin">
                     <li ng-repeat="item in cur_item.second_level">
                         <div ng-repeat="item1 in item.three_level">
-                            <div ng-repeat="item2 in item1.goods_detail" ng-click="get_details(item2,item1.title,item1.id)">
+                            <div ng-repeat="item2 in item1.goods_detail" data-toggle="{{cur_content}}" data-target="#myModal" ng-click="get_basic_details(item2,item1.title,item1.id)">
                                 <div style="overflow: hidden;border-bottom:1px solid #E9EDEE;padding: 10px;position: relative;" ng-class="{'cur_animate':is_delete_btn}">
                                     <div class="wall_span_brand">
-                                        <span class="wall_span" data-toggle="modal" data-target="#myModal">{{item1.title}}x{{item2.quantity}}</span><br>
-                                        <span class="wall_brand" data-toggle="modal" data-target="#myModal">{{item2.name}}</span>
+                                        <span class="wall_span">{{item1.title}}x{{item2.quantity}}</span><br>
+                                        <span class="wall_brand">{{item2.name}}</span>
                                     </div>
-                                    <span class="wall_money" data-toggle="modal" data-target="#myModal">{{item2.cost | currency:'￥'}} &nbsp;&nbsp;<i><img
+                                    <span class="wall_money" >{{item2.cost | currency:'￥'}}<i><img
                                             src="images/left_more.png" alt=""></i></span>
                                     <button class="del" ng-click="delete_item(item2,item1.id)" ng-if="is_delete_btn">删除</button>
                                 </div>
@@ -35,30 +35,30 @@
         <div class="preservation">
             <span>合计：</span>
             <span class="money_col">{{cur_item.cost | currency:'￥'}}</span>
-            <button ng-if="!is_delete_btn" ng-click="change_material()">保存</button>
+            <button ng-if="!is_delete_btn" ng-click="save()">保存</button>
         </div>
 
         <!--模态框  ===== 更换材料 -->
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
-                <div class="modal-content">
+                <div class="modal-content" id="whit" >
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <div class="comment_img">
-                        <img src="images/all.png" alt=""/>
+                        <img ng-src="http://test.cdlhzz.cn:888/{{cur_goods_detail.image}}" alt=""/>
                     </div>
                     <div class="comment">
                         <p class="good_title">
-                            <span class="comment_span">{{modalData.name}}</span>
-                            <span class="comment_se">{{modalData.cost | currency:'￥'}}</span>
+                            <span class="comment_span">{{cur_goods_detail.name}}</span>
+                            <span class="comment_se">{{cur_goods_detail.cost | currency:'￥'}}</span>
                         </p>
-                        <p class="comment_square">产品类别：{{modalData.title}} 数量:{{modalData.show_quantity}}</p>
+                        <p class="comment_square">产品类别：{{cur_three_level}}</p>
 
 
-                        <p class="comment_p">商品特色</p>
-                        <p class="text_p ">{{modalData.subtitle}}</p>
+                        <p class="comment_p">{{cur_goods_detail.shop_name}}</p>
                     </div>
-                    <button type="button" class="btn replace btn-primary"  data-dismiss="modal" ng-click="replace_material(modalData)">更换</button>
+                    <button type="button" class="go_detail" ng-click="go_details()">查看详情</button>
+                    <button type="button" class="go_replace" ng-click="replace_material()">更换</button>
                 </div>
             </div>
         </div>

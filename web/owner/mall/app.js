@@ -53,6 +53,12 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate",'a
                 templateUrl:'second_level.html',
                 css:'css/movefurniture.css'
             })
+            .state('nodata.quotation',{
+                url:'/quotation',
+                templateUrl:'quotation_house.html',
+                css:'css/intelligent_quotation.css',
+                params:{item:''}
+            })
             // .state("have_data",{   //有资料
             //     url:"/have_data",
             //     views:{
