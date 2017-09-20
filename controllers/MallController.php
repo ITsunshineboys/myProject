@@ -4471,6 +4471,7 @@ class MallController extends Controller
     {
         $recommend = new GoodsRecommendSupplier;
         $recommend->attributes = Yii::$app->request->post();
+        $recommend->status = GoodsRecommend::STATUS_ONLINE;
         if (isset($recommend->district_code)) {
             unset($recommend->district_code);
         }
