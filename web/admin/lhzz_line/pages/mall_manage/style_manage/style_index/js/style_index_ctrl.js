@@ -11,6 +11,7 @@ style_index.controller("style_index",function ($scope,$http,$stateParams) {
       return $.param(data)
     }
   };
+
   let sortparam;
   //系列——展示数据数组
   $scope.series_arr=[];  //系列所有数据列表
