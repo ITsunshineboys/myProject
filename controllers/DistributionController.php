@@ -443,8 +443,15 @@ class DistributionController extends Controller
                 $sort='create_time desc';
                 break;
         }
-        if($keyword){
-            $where .=" and mobile like '%{$keyword}%'";
+        if ($where!='')
+        {
+            if($keyword){
+                $where .=" and mobile like '%{$keyword}%'";
+            }
+        }else{
+            if($keyword){
+                $where .="mobile like '%{$keyword}%'";
+            }
         }
         $count=Distribution::find()->count();
         $data=Distribution::pagination($where,[],$page,$size,$sort);
