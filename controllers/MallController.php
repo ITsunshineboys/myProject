@@ -1132,7 +1132,7 @@ class MallController extends Controller
 
         $category->title = trim(Yii::$app->request->post('title', ''));
         $category->icon = trim(Yii::$app->request->post('icon', ''));
-        $category->description = trim(Yii::$app->request->post('description', ''));
+        null !== Yii::$app->request->post('offline_reason') && $category->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
         $pid = (int)Yii::$app->request->post('pid', '');
         $category->setLevelPath($pid);
         $category->pid = $pid;
@@ -3011,6 +3011,12 @@ class MallController extends Controller
 
         $names = Yii::$app->request->post('names', []);
         $values = Yii::$app->request->post('values', []);
+        if (!StringService::checkArrayIdentity($names, GoodsAttr::findNecessaryAttrs($goods->category_id))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         if (!StringService::checkEmptyElement($names)) {
             $attrCnt = count($names);
@@ -3127,6 +3133,13 @@ class MallController extends Controller
         $names = Yii::$app->request->post('names', []);
         $values = Yii::$app->request->post('values', []);
         if (GoodsAttr::changedAttr($id, $names, $values)) {
+            if (!StringService::checkArrayIdentity($names, GoodsAttr::findNecessaryAttrs($goods->category_id))) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             GoodsAttr::deleteAll([
                 'goods_id' => $id
             ]);
@@ -4160,7 +4173,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-index-admin' => Supplier::statData($supplier->id)
+                'supplier_index_admin' => Supplier::statData($supplier->id)
             ],
         ]);
     }
@@ -4234,12 +4247,12 @@ class MallController extends Controller
 
     public function actionSeriesTimeSort()
     {
-        $sort = trim(Yii::$app->request->get('sort',''));
-        $pages = trim(Yii::$app->request->get('page','1'));
-        $size = trim(Yii::$app->request->get('size','12'));
-        $series = Series::findByTimeSort($sort,$pages,$size);
+        $sort = trim(Yii::$app->request->get('sort', ''));
+        $pages = trim(Yii::$app->request->get('page', '1'));
+        $size = trim(Yii::$app->request->get('size', '12'));
+        $series = Series::findByTimeSort($sort, $pages, $size);
         return Json::encode([
-            'list'=> $series
+            'list' => $series
         ]);
     }
 
@@ -4352,12 +4365,12 @@ class MallController extends Controller
 
     public function actionStyleTimeSort()
     {
-        $sort = trim(Yii::$app->request->get('sort',''));
-        $pages = trim(Yii::$app->request->get('page','1'));
-        $size = trim(Yii::$app->request->get('size','12'));
-        $style = Style::findByTimeSort($sort,$pages,$size);
+        $sort = trim(Yii::$app->request->get('sort', ''));
+        $pages = trim(Yii::$app->request->get('page', '1'));
+        $size = trim(Yii::$app->request->get('size', '12'));
+        $style = Style::findByTimeSort($sort, $pages, $size);
         return Json::encode([
-            'list'=> $style
+            'list' => $style
         ]);
     }
 
@@ -4458,6 +4471,7 @@ class MallController extends Controller
     {
         $recommend = new GoodsRecommendSupplier;
         $recommend->attributes = Yii::$app->request->post();
+        $recommend->status = GoodsRecommend::STATUS_ONLINE;
         if (isset($recommend->district_code)) {
             unset($recommend->district_code);
         }
@@ -4821,13 +4835,14 @@ class MallController extends Controller
      */
     public function actionResetMobileLogs()
     {
+        $userId = (int)Yii::$app->request->get('user_id', 0);
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $sort = Yii::$app->request->get('sort', []);
         $model = new UserMobile;
         $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
 
-        if ($orderBy === false) {
+        if (!$userId || $orderBy === false) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -4839,7 +4854,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'reset_mobile_logs' => UserMobile::pagination([], UserMobile::FIELDS_BINDING_LOGS, $page, $size, $orderBy)
+                'reset_mobile_logs' => UserMobile::pagination(['uid' => $userId], UserMobile::FIELDS_BINDING_LOGS, $page, $size, $orderBy)
             ],
         ]);
     }
@@ -4985,13 +5000,14 @@ class MallController extends Controller
      */
     public function actionResetUserStatusLogs()
     {
+        $userId = (int)Yii::$app->request->get('user_id', 0);
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $sort = Yii::$app->request->get('sort', []);
         $model = new UserStatus;
         $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
 
-        if ($orderBy === false) {
+        if (!$userId || $orderBy === false) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -5003,7 +5019,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'reset_user_status_logs' => UserStatus::pagination([], UserStatus::FIELDS_STATUS_LOGS, $page, $size, $orderBy)
+                'reset_user_status_logs' => UserStatus::pagination(['uid' => $userId], UserStatus::FIELDS_STATUS_LOGS, $page, $size, $orderBy)
             ],
         ]);
     }

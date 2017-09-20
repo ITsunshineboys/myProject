@@ -29,7 +29,7 @@ var operation_record= angular.module("operation_record",[])
         //console.log($scope.status_remark);
         $scope.flag = true;
         $scope.strat = false;
-        //½µĞò
+        //é™åº
         $scope.changePic = function () {
             $scope.flag = false;
             $scope.strat = true;
@@ -44,7 +44,7 @@ var operation_record= angular.module("operation_record",[])
                 $scope.past_record = response.data.data.reset_user_status_logs.details;
                 console.log(response);
             })
-            //ÉıĞò
+            //å‡åº
             $scope.changePicse = function () {
                 $scope.strat = false;
                 $scope.flag = true;
@@ -62,20 +62,23 @@ var operation_record= angular.module("operation_record",[])
         };
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/reset-user-status-logs'
+            url: 'http://test.cdlhzz.cn:888/mall/reset-user-status-logs',
+            params: {
+                user_id:+$scope.id
+            }
         }).then(function successCallback(response) {
             $scope.past_record = response.data.data.reset_user_status_logs.details;
 
-            /*-----------------------------·ÖÒ³-----------------------*/
+            /*-----------------------------åˆ†é¡µ-----------------------*/
             $scope.history_list_colse = [];
-            $scope.history_all_page = Math.ceil(response.data.data.reset_user_status_logs.total / 12);//»ñÈ¡×ÜÒ³Êı
+            $scope.history_all_page = Math.ceil(response.data.data.reset_user_status_logs.total / 12);//è·å–æ€»é¡µæ•°
             console.log($scope.history_all_page);
-            let all_num = $scope.history_all_page;//Ñ­»·×ÜÒ³Êı
+            let all_num = $scope.history_all_page;//å¾ªç¯æ€»é¡µæ•°
             for (let i = 0; i < all_num; i++) {
                 $scope.history_list_colse.push(i + 1);
                 console.log($scope.history_list_colse)
             }
-            //µã»÷Êı×Ö£¬Ìø×ªµ½¶àÉÙÒ³
+            //ç‚¹å‡»æ•°å­—ï¼Œè·³è½¬åˆ°å¤šå°‘é¡µ
             $scope.choosePageColse = function (page) {
                 $scope.page = page;
                 console.log($scope.page);
@@ -91,30 +94,30 @@ var operation_record= angular.module("operation_record",[])
                     console.log(err);
                 });
             };
-            //ÏÔÊ¾µ±Ç°ÊÇµÚ¼¸Ò³µÄÑùÊ½
+            //æ˜¾ç¤ºå½“å‰æ˜¯ç¬¬å‡ é¡µçš„æ ·å¼
             $scope.isActivePage = function (page) {
                 return $scope.page == page;
             };
-            //½øÈëÒ³Ãæ£¬Ä¬ÈÏÉèÖÃÎªµÚÒ»Ò³
+            //è¿›å…¥é¡µé¢ï¼Œé»˜è®¤è®¾ç½®ä¸ºç¬¬ä¸€é¡µ
             if ($scope.page === undefined) {
                 $scope.page = 1;
             }
-            //ÉÏÒ»Ò³
+            //ä¸Šä¸€é¡µ
             $scope.Previous = function () {
-                if ($scope.page > 1) {                //µ±Ò³Êı´óÓÚ1Ê±£¬Ö´ĞĞ
+                if ($scope.page > 1) {                //å½“é¡µæ•°å¤§äº1æ—¶ï¼Œæ‰§è¡Œ
                     $scope.page--;
                     $scope.choosePageColse($scope.page);
                 }
             };
-            //ÏÂÒ»Ò³
+            //ä¸‹ä¸€é¡µ
             $scope.Next = function () {
-                if ($scope.page < $scope.history_all_page) { //ÅĞ¶ÏÊÇ·ñÎª×îºóÒ»Ò³£¬Èç¹û²»ÊÇ£¬Ò³Êı+1,
+                if ($scope.page < $scope.history_all_page) { //åˆ¤æ–­æ˜¯å¦ä¸ºæœ€åä¸€é¡µï¼Œå¦‚æœä¸æ˜¯ï¼Œé¡µæ•°+1,
                     $scope.page++;
                     $scope.choosePageColse($scope.page);
                 }
             }
         });
-        //µã»÷·µ»Ø±£´æ×´Ì¬
+        //ç‚¹å‡»è¿”å›ä¿å­˜çŠ¶æ€
         $scope.getBack = function () {
             $state.go("account_comment", {
                 'id': $scope.id,

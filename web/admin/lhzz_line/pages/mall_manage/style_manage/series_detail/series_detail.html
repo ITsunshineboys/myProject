@@ -59,7 +59,8 @@
         <div class="series_intro">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>系列介绍</span>
-            <textarea name="ser_intro" required ng-class="{'border_red':(form.ser_intro.$invalid &&submitted)||(form.ser_intro.$error.required && area_blur)}" ng-blur="area_blur=!!form.ser_intro.$error" placeholder="请输入添加风格的介绍内容" ng-model="ser_intro"></textarea>
+            <textarea name="ser_intro" ng-change="change_txts()" maxlength="70" required ng-class="{'border_red':(form.ser_intro.$invalid &&submitted)||(form.ser_intro.$error.required && area_blur)}" ng-blur="area_blur=!!form.ser_intro.$error" placeholder="请输入添加风格的介绍内容" ng-model="ser_intro"></textarea>
+            <span class="word_num">{{ser_intro.length}}/70</span>
         </div>
 
         <!--按钮-->

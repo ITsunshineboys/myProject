@@ -26,6 +26,7 @@ class UserCashregister extends \yii\db\ActiveRecord
     const PAGE_SIZE_DEFAULT=10;
     const FIELDS_EXTRA=[];
     const FIELDS_ADMIN = [
+        'id',
         'apply_time',
         'cash_money',
         'real_money',
@@ -99,11 +100,11 @@ class UserCashregister extends \yii\db\ActiveRecord
     {
 
         $query = new Query();
-        $select = 'sc.cash_money,sc.apply_time,sc.real_money,sc.status,sc.supplier_reason,sc.transaction_no,sc.handle_time,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch';
+        $select = 'sc.id,sc.cash_money,sc.apply_time,sc.real_money,sc.status,sc.supplier_reason,sc.transaction_no,sc.handle_time,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch';
         $array = $query->from('user_cashregister as sc')
             ->select($select)
             ->leftJoin('supplier as s', 'sc.uid=s.uid')
-            ->leftJoin('user_bankinfo as sb', 's.uid=sb.u_id')
+            ->leftJoin('user_bankinfo as sb', 's.uid=sb.uid')
             ->where(['sc.id' => $cash_id])
             ->one();
         if ($array) {

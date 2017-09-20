@@ -1,11 +1,17 @@
 let style_detail = angular.module("styledetailModule",[]);
 style_detail.controller("style_detail",function ($scope,$http,$state,$stateParams,Upload) {
 	$scope.myng=$scope;
+	$scope.page=$stateParams.page;//默认页数
   //POST请求的响应头
   let config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     transformRequest: function (data) {
       return $.param(data)
+    }
+  };
+  $scope.change_txts=function () {
+    if($scope.style_txt==undefined){
+      $scope.style_txt='';
     }
   };
   //风格列表所有数据
@@ -132,7 +138,7 @@ style_detail.controller("style_detail",function ($scope,$http,$state,$stateParam
         console.log(err);
       });
     setTimeout(function () {
-      $state.go("style_index",{showstyle:true});
+      $state.go("style_index",{showstyle:true,page:$scope.page});
     },300);
   }
 });

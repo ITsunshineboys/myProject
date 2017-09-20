@@ -121,6 +121,7 @@ class Supplier extends ActiveRecord
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
     const PAGE_SIZE_DEFAULT = 10;
     const FIELDS_ADMIN = [
+        'id',
         'shop_no',
         'status',
         'shop_name',
@@ -479,7 +480,7 @@ class Supplier extends ActiveRecord
         $array = $query->from('supplier as s')
             ->select($select)
             ->leftJoin('user_cashregister as sc', 'sc.uid=s.id')
-            ->leftJoin('user_bankinfo as sb', 'sb.u_id=s.uid')
+            ->leftJoin('user_bankinfo as sb', 'sb.uid=s.uid')
             ->leftJoin('user_freezelist as sf', 'sf.uid=s.id')
             ->where(['s.id' => $supplier_id])
             ->one();

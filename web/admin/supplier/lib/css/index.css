@@ -1,4 +1,8 @@
-/*µ¼º½À¸¿ªÊ¼*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼*/
+html,body{
+    height: 100%;
+    width: 100%;
+}
 .nav_box{
     width: 200px;
     height:100% !important;
@@ -32,7 +36,7 @@
     cursor:pointer;
     background-color: #F5F7FA;;
 }
-/*Ò»¼¶µ¼º½À¸µÄhoverºÍµ±Ç°Ò³ÃæµÄÑùÊ½*/
+/*Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hoverï¿½Íµï¿½Ç°Ò³ï¿½ï¿½ï¿½ï¿½ï¿½Ê½*/
 .nav_box .on{
     color: #5677FC;
     background-color: #E6E9F0;
@@ -71,11 +75,10 @@
     position:absolute;
     left:15px;top:15px;
 }
-/*µ¼º½À¸ÑùÊ½½áÊø*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½*/
 
-/*ÓÒ²àÂ·ÓÉÇÐ»»´óÐ¡*/
+/*ï¿½Ò²ï¿½Â·ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½Ð¡*/
 #content{
     margin-left: 200px!important;
-    width: 85%;
-    height: 636px;
+    height: 100%;
 }

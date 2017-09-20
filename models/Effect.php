@@ -57,7 +57,7 @@ class Effect extends ActiveRecord
     public function rules()
     {
         return [
-            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','effect_images','images_name','type'], 'required'],
+            [['series_id', 'style_id','bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high','province','province_code','city','city_code','district','district_code', 'toponymy','street','particulars','stairway','house_image','effect_images','images_name','type','site_particulars'], 'required'],
             [['province', 'city','district','toponymy','street','particulars'],'string'],
             [['bedroom','sittingRoom_diningRoom','toilet','kitchen','window','area','high'],'number']
         ];
@@ -76,20 +76,90 @@ class Effect extends ActiveRecord
         return $detail;
     }
     /**
+     * 生成新的样板间
+     * @param $post
+     * @return int
+     */
+    public static function addneweffect($post){
+        $effects=self::find()
+            ->select('sort_id')
+            ->asArray()
+            ->where(['toponymy'=>$post['toponymy']])
+            ->all();
+        if($effects){
+            $sort_id=max($effects)['sort_id']+1;
+        }else{
+            $sort_id=0;
+        }
+
+        $province=District::findByCode($post['province_code'])->name;
+        $city=District::findByCode($post['city_code'])->name;
+        $district=District::findByCode($post['district_code'])->name;
+
+        if($post['stair_id']==1){
+            $post['stairway']=StairsDetails::find()->where(['id'=>$post['stairway']])->one()->id;
+        }else{
+            $post['stairway']=0;
+        }
+        $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
+            'bedroom'       => $post['bedroom'],
+            'sittingRoom_diningRoom' => $post['sittingRoom_diningRoom'],
+            'toilet'        => $post['toilet'],
+            'kitchen'       => $post['kitchen'],
+            'window'        => $post['window'],
+            'area'          => $post['area'],
+            'high'          => $post['high'],
+            'province'      => $province,
+            'province_code' => $post['province_code'],
+            'city'          => $city,
+            'city_code'     => $post['city_code'],
+            'district'      => $district,
+            'district_code' => $post['district_code'],
+            'toponymy'      => $post['toponymy'],
+            'street'        => $post['street'],
+            'particulars'   => $post['particulars'],
+            'stairway'      => $post['stairway'],
+            'add_time'      => time(),
+            'house_image'   => $post['house_image'],
+            'type'          => self::TYPE_STATUS_NO,
+            'stair_id'      => $post['stair_id'],
+            'sort_id'      => $sort_id,
+        ])->execute();
+
+         $id=\Yii::$app->db->lastInsertID;
+         $effect_picture=new EffectPicture();
+         $effect_picture->effect_id=$id;
+         $effect_picture->style_id=$post['style_id'];
+         $effect_picture->series_id=$post['series_id'];
+         $data['id']=$id;
+         if(!$effect_picture->save(false)){
+             $code=500;
+             return $code;
+         }
+        if(!$res){
+          $code=500;
+          return $code;
+         }
+        return $data;
+    }
+    /**
      * get effect view info
      * @param int $effect_id
      * @return array
      */
     public function geteffectdata($effect_id){
         $query=new Query();
-        $array= $query->from('effect As e')->select('e.toponymy,e.province,e.city,e.particulars,e.high,e.window,e.stairway,t.style,s.series')->leftJoin('effect_picture as ep','e.id=ep.effect_id')->leftJoin('series As s','s.id = ep.series_id')->leftJoin('style As t','t.id = ep.style_id')->where(['e.id'=>$effect_id])->one();
-        $array1=(new Query())->from('effect_earnst')->select('phone,name,create_time,earnest,remark')->where(['effect_id'=>$effect_id])->one();
+        $array= $query->from('effect_earnst As ea')
+            ->select('e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
+            ->leftJoin('effect as e','ea.effect_id=e.id')
+            ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
+            ->leftJoin('series As s','s.id = ep.series_id')
+            ->leftJoin('style As t','t.id = ep.style_id')
+            ->where(['ea.id'=>$effect_id])->one();
         if($array){
-            $array['phone']=$array1['phone'];
-            $array['create_time']=$array1['create_time'];
-            $array['earnest']=sprintf('%.2f',(float)$array1['earnest']*0.01);
-            $array['name']=$array1['name'];
-            $array['remark']=$array1['remark'];
+            $array['create_time']=date('Y-m-d',$array['create_time']);
+            $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
+            $array['address']=$array['city'].$array['district'].$array['street'];
             if($array['stairway']){
                 $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
                 $array['stairway']=$stairway_cl['attribute'];
@@ -276,8 +346,9 @@ class Effect extends ActiveRecord
     {
         return self::find()
             ->asArray()
-            ->where(['and',['district_code'=>$district_code],['street'=>$street],['toponymy'=>$toponymy],['type'=>self::TYPE_STATUS_YES]])
-            ->one();
+            ->where(['and',['district_code'=>$district_code],['street'=>$street],['toponymy'=>$toponymy]])
+            ->orderBy(['sort_id'=>SORT_ASC])
+            ->all();
     }
 
     /**

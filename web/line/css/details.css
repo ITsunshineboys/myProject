@@ -137,7 +137,6 @@ section{
 
 .down_arrow{
     margin-left: 18rem;
-    /*margin-top: -2rem*/
     position: absolute;
 
 }
@@ -196,7 +195,7 @@ section{
     margin-left: -5rem;
 }
 .reset_btn{
-    width: 13.7rem;
+    width: 13.2rem;
     font-size: 1.2rem;
     height: 4rem;
     color: #4A4A4A;
@@ -207,29 +206,48 @@ section{
 }
 .modal-footer {
     padding: 0;
-    text-align: center;
     border-top: 1px solid #e5e5e5;
 }
-.modal_body_height{
-    height: 30rem;
-    /*margin-left: -2rem;*/
+.model_content{
+    width: 32rem!important;
+    height: 58rem!important;
+    margin-top: -28px;
+    margin-left: -2.2rem;
+
 }
-.myModal_brand {
-    width: 30rem;
-    background-color: white;
+.modal-body{
+    position: relative;
+}
+.brand_content{
+    margin-left: -3rem;
+    font-size: 1.4rem;
+}
+.footer_size{
+    margin-left: -100px!important;
+    width: 31.6rem;
     position: absolute;
-    top: -1rem;
-    /*border: 1px solid red;*/
-    /*margin-left: -2rem;*/
+    top: 49.1rem;
+    left: -.1rem;
 }
-.ui-content{
-    width: 30rem;
+.footer_size button{
+    width: 13.7rem;
+    height: 4rem;
+    font-size: 1.2rem
 }
-.list_li li{
-    width: 21rem;
+.btn_brand{
+    margin-left: -20px;
+    background-color: white;
+    color: #6C6C6C;
+    border: 1px solid #999;
 }
-.ui-filterable{
-    width:21rem;
+.btn_brandRight{
+    margin-left: -20px;
+    background-color: #53A8F4;
+    color: white;
+}
+.modal-footer {
+    padding: 15px;
+    border-top: none;
 }
 .back_btn{
     width: 10rem;

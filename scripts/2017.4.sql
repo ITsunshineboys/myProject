@@ -179,7 +179,7 @@ CREATE TABLE `goods` (
   `area_id` int(11) NOT NULL,
   `series_id` int(11) unsigned not null default 0,
   `style_id` int(11) unsigned not null default 0,
-  `sku` bigint unsigned not null default 0,
+  `sku` bigint unsigned not null default 0 COMMENT '商品编号',
   `title` varchar(100) not null DEFAULT '',
   `subtitle` varchar(100) not null DEFAULT '',
   `cover_image` varchar(255) not null DEFAULT '' comment '封面图',
@@ -453,7 +453,7 @@ CREATE TABLE `goods_order` (
   `consignee` varchar(45) NOT NULL COMMENT '收货人姓名',
   `district_code` varchar(10) NOT NULL COMMENT '收货人地区编号',
   `region` varchar(90) NOT NULL COMMENT '收货人详细地址',
-  `consignee_mobile` int(11) NOT NULL COMMENT '收货人手机号',
+  `consignee_mobile` bigint(20) NOT NULL COMMENT '收货人手机号',
   `invoice_type` tinyint(1) NOT NULL COMMENT '1:普通发票  2： 电子发票',
   `invoice_header_type` tinyint(1) NOT NULL COMMENT '1:个人发票  2.公司发票',
   `invoice_header` varchar(50) NOT NULL COMMENT '发票抬头',
@@ -1080,6 +1080,7 @@ CREATE TABLE `distribution` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) NOT NULL COMMENT '绑定手机号父id',
   `mobile` bigint(20) NOT NULL COMMENT '手机号',
+  `profit` bigint(20) NOT NULL COMMENT '收益',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
   `applydis_time` int(11) DEFAULT NULL COMMENT '绑定父id时间',
   PRIMARY KEY (`id`)
@@ -1246,8 +1247,9 @@ CREATE TABLE `worker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned NOT NULL DEFAULT '0',
   `project_manager_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '项目经理id',
-  `province_code` varchar(20) DEFAULT NULL COMMENT '省份编码',
-  `city_code` varchar(20) DEFAULT NULL COMMENT '市编码',
+  `province_code` int(20) DEFAULT NULL COMMENT '省份编码',
+  `city_code` int(20) DEFAULT NULL COMMENT '市编码',
+  `district_code` int(20) DEFAULT NULL COMMENT '区编码',
   `labor_cost_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工费地区id (包含工人类型和等级)',
   `worker_type_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工种id(只能选pid为0的)',
   `nickname` varchar(25) NOT NULL DEFAULT '' COMMENT '工人名字',
@@ -1450,6 +1452,7 @@ CREATE TABLE `user_accessdetail` (
   `create_time` int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
   `transaction_no` varchar(50) NOT NULL DEFAULT '' COMMENT '交易单号',
+  `sku` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1546,6 +1549,33 @@ CREATE TABLE `worker_works_detail` (
   `works_id` int(11) NOT NULL DEFAULT 0 COMMENT '工人作品id',
   `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '状态: 0:无效, 1:前, 2:中, 3:后',
   `desc` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '描述',
-  `img_ids` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '图片,work_result_img的id,逗号分隔',
+  `img_ids` varchar(255) NOT NULL DEFAULT '' COMMENT '图片id逗号分隔，有前导0的为worker_order_img，没有为worker_result_img',
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='工人作品详情';
+-- 9.15 end
+
+-- 9.20 start
+CREATE TABLE `apartment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `apartment` varchar(100) NOT NULL DEFAULT '' COMMENT '户型',
+  `status` tinyint(1) NOT NULL COMMENT '状态 0:可用 1:不可用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='户型表';
+
+CREATE TABLE `point_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '名称',
+  `parent_id` int(11) NOT NULL COMMENT '父级id',
+  `count` int(11) NOT NULL DEFAULT '0' COMMENT '个数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='点位表';
+
+CREATE TABLE `project_view` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `project` varchar(100) NOT NULL DEFAULT '' COMMENT '项目名称',
+  `parent_project` varchar(100) NOT NULL COMMENT '父级项目名称',
+  `apartment_id` int(11) NOT NULL DEFAULT '0' COMMENT '户型id',
+  `project_vule` int(11) NOT NULL COMMENT '项目值',
+  `unit` varchar(20) NOT NULL COMMENT '单位',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='项目详细表';

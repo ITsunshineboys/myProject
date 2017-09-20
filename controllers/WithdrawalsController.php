@@ -146,8 +146,14 @@ class WithdrawalsController extends Controller
             ]);
         }
         $role_id=trim(Yii::$app->request->get('role_id',7));
-        $data=UserBankInfo::findByUidAndRole_id($user->id,$role_id)->toArray();
-        $data['create_time']=date('Y-m-d H:i',$data['create_time']);
+        $UserBankInfo=UserBankInfo::findByUidAndRole_id($user->id,$role_id);
+        if ($UserBankInfo)
+        {
+            $data=$UserBankInfo->toArray();
+            $data['create_time']=date('Y-m-d H:i',$data['create_time']);
+        }else{
+            $data=[];
+        }
         $code=200;
         return Json::encode([
             'code' => $code,
@@ -480,7 +486,7 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $transaction_no=ModelService::SetTransactionNo($supplier->id);
+        $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{

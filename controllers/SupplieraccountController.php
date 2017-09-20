@@ -257,7 +257,7 @@ class SupplieraccountController extends  Controller{
                     }
                     if($freezed_money<$freeze_money){
                        $transaction->rollBack();
-                        $code=1051;
+                        $code=1033;
                        return json_encode([
                            'code' => $code,
                            'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -492,7 +492,6 @@ class SupplieraccountController extends  Controller{
             $startTime = explode(' ', $startTime)[0];
             $endTime = explode(' ', $endTime)[0];
         }
-        //
         if ($startTime) {
             $startTime = strtotime($startTime);
             $startTime && $where .= " and apply_time >= {$startTime}";
@@ -501,9 +500,7 @@ class SupplieraccountController extends  Controller{
             $endTime = strtotime($endTime);
             $endTime && $where .= " and apply_time <= {$endTime}";
         }
-
         $page = (int)Yii::$app->request->get('page', 1);
-
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
         $paginationData = UserCashregister::pagination($where, UserCashregister::FIELDS_ADMIN, $page, $size);
         return json_encode([

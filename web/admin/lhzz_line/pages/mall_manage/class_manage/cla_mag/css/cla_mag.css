@@ -260,8 +260,18 @@ input[type="checkbox"]{
 }
 
 #dianji_shuru{
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    margin-top: 5px;
+    line-height: 30px;
     border: 1px solid #BFC0C2;
     cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 0px !important;
+    text-align: center;
 }
 
 #xiajiacaozuo,#piliangxiajiacaozuo{

@@ -1,12 +1,21 @@
 var app = angular.module("app",["ui.router","shop_style","freight_template","template_details",
     "shopoffline_Module","systemoffline_Module","wait_online_Module"
-    ,"commodity_manage","up_shelves_detail_module",'index_module']);
+    ,"commodity_manage","up_shelves_detail_module","index_module",
+  /*三阶段王杰---开始*/
+  "supplier_index","login"
+  /*三阶段王杰---结束*/
+
+]);
 //路由拦截
    app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise("/login");
         $httpProvider.defaults.withCredentials = true;
         $stateProvider
 
+          .state("login",{   //登录
+            url:"/login",
+            templateUrl:"pages/login/login.html"
+          })
             .state("supplier_index",{   //首页
                 url:"/supplier_index",
                 templateUrl:"pages/supplier_index/supplier_index.html"
@@ -18,15 +27,15 @@ var app = angular.module("app",["ui.router","shop_style","freight_template","tem
             .state("commodity_manage",{   //商品管理
                 url:"/commodity_manage",
                 templateUrl:"pages/commodity_manage/commodity_manage.html",
-                params:{id:'id',name:'name',on_flag:'',down_flag:''}
+                params:{id:'id',name:'name',on_flag:'',down_flag:'',wait_flag:'',logistics_flag:''}
             })
             .state("order_manage",{   //订单管理
                 url:"/order_manage",
                 templateUrl:"pages/order_manage/order_manage.html"
             })
-            .state("store_data",{   //店铺数据
-                url:"/store_data",
-                templateUrl:"pages/store_data/store_data.html"
+            .state("shop_data",{   //店铺数据
+                url:"/shop_data",
+                templateUrl:"pages/shop_data/shop_data.html"
             })
 
             .state("shop_decoration",{   //店铺装修
@@ -85,7 +94,4 @@ var app = angular.module("app",["ui.router","shop_style","freight_template","tem
             templateUrl:"pages/commodity_manage/wait_online.html",
             params:{item:'',flag:''}
           })
-
-
-
     });

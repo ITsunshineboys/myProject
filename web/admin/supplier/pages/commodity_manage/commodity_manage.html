@@ -381,9 +381,9 @@
     <section ng-if="wait_flag==true">
         <div class="operating">
             <span ng-click="wait_menu (wait_menu_flag)" class="menu glyphicon glyphicon-menu-hamburger"></span>
-            <span class="search_txt" ng-click="off_search_btn()">搜索</span>
+            <span class="search_txt" ng-click="wait_search_btn()">搜索</span>
             <div class="search_box">
-                <input class="search_input" ng-model="myng.off_search_content" type="text" placeholder="搜索商品编号或名称">
+                <input class="search_input" ng-model="myng.wait_search_content" type="text" placeholder="搜索商品编号或名称">
                 <span  class="glyphicon glyphicon-search search"></span>
             </div>
             <!--Menu 切换-->
@@ -422,14 +422,15 @@
                 <td ng-if="wait_11">状态</td>
                 <td ng-if="wait_12">
                     <span>发布时间</span>
-                    <img ng-click="on_time_sort()" ng-if="on_time_flag" class="arrow_img_size" src="pages/commodity_manage/image/up.png" alt="">
-                    <img ng-click="down_time_sort()" ng-if="down_time_flag" class="arrow_img_size" src="pages/commodity_manage/image/down.png" alt="">
+                    <img ng-click="wait_time_sort()" ng-if="on_time_flag" class="arrow_img_size" src="pages/commodity_manage/image/up.png" alt="">
+                    <img ng-click="wait_time_sort()" ng-if="down_time_flag" class="arrow_img_size" src="pages/commodity_manage/image/down.png" alt="">
                 </td>
                 <td ng-if="wait_13">图片</td>
                 <td ng-if="wait_14">审核备注</td>
                 <td ng-if="wait_15">详情</td>
             </tr>
-            <tr class="table_content" ng-repeat="item in down_list_arr" >
+
+            <tr class="table_content" ng-repeat="item in wait_list_arr" >
                 <td ng-if="wait_1">{{item.sku}}</td>
                 <td ng-if="wait_2">{{item.title}}</td>
                 <td ng-if="wait_3">¥{{item.supplier_price}}</td>
@@ -438,24 +439,22 @@
                 <td ng-if="wait_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="wait_7">¥{{item.purchase_price_manager}}</td>
                 <td ng-if="wait_8">¥{{item.purchase_price_designer}}</td>
-                <td ng-if="wait_9"><input type="number"  class="stock" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number" string-to-number2></td>
+                <td ng-if="wait_9"><input type="number"  class="stock" ng-change="change_right_number(item.id,item.left_number)" ng-model="item.left_number" string-to-number2></td>
                 <td ng-if="wait_10">{{item.sold_number}}</td>
                 <td ng-if="wait_11">{{item.status}}</td>
                 <td ng-if="wait_12" class="sky_blue">{{item.publish_time}}</td>
                 <td ng-if="wait_13"><img class="img_cover_size" ng-src="http://test.cdlhzz.cn:888/{{item.cover_image}}"  alt=""></td>
-                <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)" data-target="#wait_shelves_remarks_modal">{{item.reason}}</td>
+                <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)" data-target="{{reason_model}}">{{item.reason}}</td>
                 <td ng-if="wait_15" class="blue" ui-sref="wait_online({item:item,flag:1})">详情</td>
             </tr>
         </table>
         <!--分页开始-->
         <ul class="pages">
-            <li ng-click="down_Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-            <li class="pagenum" ng-repeat="page in down_history_list" ng-click="down_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-            <!--<li id="omit" ng-show="allpages>5">...</li>-->
-            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="down_Next()">下一页</li>
-            <li class="jumpto"><input type="text" class="size_input" ng-model="down_topage"></li>
-            <li ng-click="down_choosePage(down_topage)">跳转</li>
+            <li ng-click="wait_Previous()">上一页</li>
+            <li class="pagenum" ng-repeat="page in wait_history_list" ng-click="wait_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
+            <li ng-click="wait_Next()">下一页</li>
+            <li class="jumpto"><input type="text" class="size_input" ng-model="wait_topage"></li>
+            <li ng-click="wait_choosePage(wait_topage)">跳转</li>
         </ul>
         <!--分页结束-->
     </section>

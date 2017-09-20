@@ -297,6 +297,77 @@ class GoodsAttr extends ActiveRecord
         return $code;
     }
 
+    public static function findByGoodsId($id)
+    {
+        if ($id) {
+            $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
+            $standard = self::find()
+                ->asArray()
+                ->select($select)
+                ->where(['in', 'goods_id', $id])
+                ->all();
+        } else {
+            $standard = null;
+        }
+        return $standard;
+    }
+
+    /**
+     * find goods_id
+     * @param $goods_id
+     * @return array
+     */
+    public static function findByGoodsIdUnit($goods_id)
+    {
+        if (is_array($goods_id)) {
+            $str_id = implode(',', $goods_id);
+        } else {
+            $str_id = $goods_id;
+        }
+
+        $db = Yii::$app->db;
+        $sql = "SELECT goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value FROM goods_attr LEFT JOIN goods ON goods_attr.goods_id = goods. id LEFT JOIN goods_category ON goods.category_id = goods_category.id WHERE goods_id IN (" . $str_id . ")";
+        $standard = $db->createCommand($sql)->queryAll();
+        return $standard;
+    }
+
+    /**
+     * @param $goods
+     * @return array|ActiveRecord[]
+     */
+    public static function goodsIdUnit($goods)
+    {
+        $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
+        $standard = self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['goods_id' => $goods['id']])
+            ->all();
+        return $standard;
+    }
+
+    public static function goodsByIds($ids)
+    {
+        $select = 'id,name,value,goods_id';
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['goods_id' => $ids])
+            ->all();
+    }
+
+    /**
+     * Find necessary goods attributes
+     *
+     * @param int $categoryId category id
+     * @return array
+     */
+    public static function findNecessaryAttrs($categoryId)
+    {
+        $names = self::find()->select(['name'])->where(['goods_id' => 0, 'category_id' => $categoryId])->asArray()->all();
+        return StringService::valuesByKey($names, 'name');
+    }
+
     /**
      * Validates category_id
      *
@@ -326,66 +397,5 @@ class GoodsAttr extends ActiveRecord
             ['unit', 'in', 'range' => array_keys(self::UNITS)],
             ['addition_type', 'in', 'range' => array_keys(self::ADDITION_TYPES)]
         ];
-    }
-
-    public static function findByGoodsId($id)
-    {
-        if ($id)
-        {
-            $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
-            $standard = self::find()
-                        ->asArray()
-                        ->select($select)
-                        ->where(['in','goods_id',$id])
-                        ->all();
-        }else
-        {
-            $standard = null;
-        }
-       return $standard;
-    }
-
-    /**
-     * find goods_id
-     * @param $goods_id
-     * @return array
-     */
-    public static function findByGoodsIdUnit($goods_id)
-    {
-        if (is_array($goods_id)) {
-            $str_id = implode(',',$goods_id);
-        } else {
-            $str_id = $goods_id;
-        }
-
-        $db = Yii::$app->db;
-        $sql = "SELECT goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value FROM goods_attr LEFT JOIN goods ON goods_attr.goods_id = goods. id LEFT JOIN goods_category ON goods.category_id = goods_category.id WHERE goods_id IN (".$str_id.")";
-        $standard = $db->createCommand($sql)->queryAll();
-        return $standard;
-    }
-
-    /**
-     * @param $goods
-     * @return array|ActiveRecord[]
-     */
-    public static function goodsIdUnit($goods)
-    {
-        $select = "goods_attr.goods_id,goods_attr.name,goods_attr.value";
-        $standard = self::find()
-            ->asArray()
-            ->select($select)
-            ->where(['goods_id'=>$goods['id']])
-            ->all();
-        return $standard;
-    }
-
-    public static function goodsByIds($ids)
-    {
-        $select = 'id,name,value,goods_id';
-        return self::find()
-            ->asArray()
-            ->select($select)
-            ->where(['goods_id'=>$ids])
-            ->all();
     }
 }

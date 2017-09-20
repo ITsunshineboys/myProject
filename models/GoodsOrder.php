@@ -1238,36 +1238,40 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    /**
+   /**
      * @param $order_no
      * @param $sku
      * @param $supplier_id
      * @param $money
      * @return bool
      */
-    private static  function  changeOrderStatus($order_no,$sku,$supplier_id,$money){
+    public static  function  changeOrderStatus($order_no,$sku,$supplier_id,$money){
         $trans = \Yii::$app->db->beginTransaction();
-        $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
-        $rand=rand(10000,99999);
+        $supplier=Supplier::find()
+            ->where(['id'=>$supplier_id])
+            ->one();
         $time=time();
-        $month=date('m',$time);
-        $day=date('d',$time);
-        do {
-            $transaction_no=$month.$day.$supplier->shop_no.$rand;
-        } while ( $transaction_no==SupplierCashregister::find()->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no']);
+        $transaction_no= self::SetTransactionNo($supplier->id);
         try {
-            \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
+            $res1=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
+            if (!$res1)
+            {
+                $trans->rollBack();
+                return false;
+            }
             $supplier->balance=$supplier->balance+$money;
             $supplier->availableamount=$supplier->availableamount+$money;
-            $ress=Yii::$app->db->createCommand()->insert('supplier_accessdetail',[
+            $res2=Yii::$app->db->createCommand()->insert(UserAccessdetail::tableName(),[
                 'access_type'    => 1,
                 'access_money' =>$money,
                 'create_time'      =>$time,
                 'order_no'  =>$order_no,
+                'sku'  =>$sku,
                 'transaction_no'=>$transaction_no,
-                'supplier_id'=>$supplier_id
+                'uid'=>$supplier->uid,
+                'role_id'=>6,
             ])->execute();
-            if (!$ress){
+            if (!$res2){
                 $trans->rollBack();
                 return false;
             }
@@ -1583,25 +1587,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-    /**
-     * set transaction no
-     * @return string
-     */
-    public static  function SetTransaction_no($supplier){
-        $time=time();
-        $month=date('m',$time);
-        $day=date('d',$time);
-        $rand=rand(10000,99999);
-        do {
-            $transaction_no=$month.$day.$supplier->shop_no.$rand;
-        } while ( $transaction_no==SupplierCashregister::find()
-            ->select('transaction_no')
-            ->where(['transaction_no'=>$transaction_no])
-            ->asArray()
-            ->one()['transaction_no']);
 
-        return $transaction_no;
-    }
     /**
      * @param $order_no
      * @param $sku
@@ -1664,7 +1650,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-    /**
+   /**
      * @param $order_no
      * @param $sku
      * @param $handle
@@ -1676,7 +1662,7 @@ class GoodsOrder extends ActiveRecord
     public static function AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
     {
         $time=time();
-        $transaction_no=self::SetTransaction_no($supplier);
+        $transaction_no=self::SetTransactionNo($supplier->id);;
         $tran = Yii::$app->db->beginTransaction();
         try{
             $order_goodslist=OrderGoods::find()
@@ -1697,11 +1683,13 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            $supplier_accessdetail=new SupplierAccessdetail();
+            $supplier_accessdetail=new UserAccessdetail();
+            $supplier_accessdetail->uid=$user->id;
+            $supplier_accessdetail->role_id=6;
             $supplier_accessdetail->access_type=4;
             $supplier_accessdetail->access_money=$order_goodslist->freight+$order_goodslist->supplier_price*$order_goodslist->goods_number;
             $supplier_accessdetail->order_no=$order_no;
-            $supplier_accessdetail->supplier_id=$supplier->id;
+            $supplier_accessdetail->sku=$sku;
             $supplier_accessdetail->create_time=$time;
             $supplier_accessdetail->transaction_no=$transaction_no;
             $res3=$supplier_accessdetail->save(false);
@@ -1786,6 +1774,9 @@ class GoodsOrder extends ActiveRecord
             case self::ORDER_TYPE_UNRECEIVED:
                 $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=1';
                 break;
+            case 'shipped':
+                $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=1';
+                break;
             case self::ORDER_TYPE_COMPLETED:
                 $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=1  and z.customer_service=0';
                 break;
@@ -1809,7 +1800,7 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function  orderBalanceSub($postData,$user){
         $orders=$postData['orders'];
-        if ($postData['total_amount']<= $user->availableamount){
+        if ($postData['total_amount']> $user->availableamount){
             $code=1033;
             return $code;
         }
@@ -1822,6 +1813,23 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder=self::find()
                 ->where(['order_no'=>$orders[$k]['order_no']])
                 ->one();
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$orders[$k]['order_no']])
+                ->asArray()
+                ->all();
+            foreach ($OrderGoods as &$Goods)
+            {
+                if ($Goods['order_status']!=0)
+                {
+                    $code=1000;
+                    return $code;
+                }
+            }
+            if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+            {
+                $code=1000;
+                return $code;
+            }
             $tran = Yii::$app->db->beginTransaction();
             try{
                 $order_money=$GoodsOrder->amount_order;
@@ -1867,7 +1875,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $orderAmount;
     }
-    /**
+   /**分页数据
      * @param array $where
      * @param array $select
      * @param int $page
@@ -1890,10 +1898,10 @@ class GoodsOrder extends ActiveRecord
         {
             switch ($role){
                 case 'supplier':
-                    $where='pay_status=0 and supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
+                    $where='pay_status=0  and supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
                     break;
                 case 'user':
-                    $where='pay_status=0 and user_id='.$user->id;
+                    $where='pay_status=0  and user_id='.$user->id;
                     break;
             }
             $GoodsOrder=self::find()
@@ -1916,25 +1924,23 @@ class GoodsOrder extends ActiveRecord
                     ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status')
                     ->asArray()
                     ->all();
-                $addunpaid=1;
-                foreach ($GoodsOrder[$k]['list'] as $key =>$val){
-                    $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
-                    $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
-                    $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
-                    $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
-                    $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
-                    if ($GoodsOrder[$k]['list'][$key]['order_status'] !=0){
-                        $addunpaid=2;
-                    }
-                }
-                unset($GoodsOrder[$k]['pay_status']);
-                unset($GoodsOrder[$k]['supplier_id']);
-                if ($addunpaid==1)
+                if($GoodsOrder[$k]['list']==[])
                 {
-                    $arr[]=$GoodsOrder[$k];
-                }else{
                     unset($GoodsOrder[$k]);
+                }else{
+                    foreach ($GoodsOrder[$k]['list'] as $key =>$val){
+                        $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
+
+                    }
+                    unset($GoodsOrder[$k]['pay_status']);
+                    unset($GoodsOrder[$k]['supplier_id']);
+                        $arr[]=$GoodsOrder[$k];
                 }
+
             }
         }
         foreach ($arr as $key => $row)
@@ -1943,7 +1949,7 @@ class GoodsOrder extends ActiveRecord
             $arr[$key]['role']=$role;
             $create_time[$key]  = $arr[$key]['create_time'];
         }
-        $arr=self::switchStatus($arr);
+        $arr=self::switchStatus($arr,$role);
         if ($arr){
             array_multisort($create_time, SORT_DESC, $arr);
             $count=count($arr);
@@ -1962,7 +1968,6 @@ class GoodsOrder extends ActiveRecord
             ];
         }
     }
-
      /**
      * @param $arr
      * @return mixed
@@ -1996,7 +2001,9 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
             $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
+            $arr[$k]['freight']=self::switchMoney($arr[$k]['freight']*0.01);
             $arr[$k]['shop_name']=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one()->nickname;
+
             $arr_list=[];
             $arr_list['goods_name']=$arr[$k]['goods_name'];
             $arr_list['goods_price']=$arr[$k]['goods_price'];
@@ -2039,12 +2046,11 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
 
-  
     /**
      * @param $arr
      * @return mixed
      */
-    public static  function switchStatus($arr)
+    public static  function switchStatus($arr,$role)
     {
         foreach ($arr as $k =>$v)
         {
@@ -2060,11 +2066,20 @@ class GoodsOrder extends ActiveRecord
                     }
                     break;
                 case  self::ORDER_TYPE_DESC_UNRECEIVED:
-                    $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED;
-                    if ($arr[$k]['unusual']=='申请退款'){
-                        $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                    }
-                    break;
+                    if ($role=='supplier')
+                    {
+                        $arr[$k]['status']='shipped';
+                        if ($arr[$k]['unusual']=='申请退款'){
+                            $arr[$k]['status']='shipped'.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        }
+                    }else{
+                        $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED;
+                        if ($arr[$k]['unusual']=='申请退款'){
+                            $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        }
+
+                     }
+                break;
                 case  self::ORDER_TYPE_DESC_CANCEL:
                     $arr[$k]['status']=self::ORDER_TYPE_CANCEL;
                     break;
@@ -2086,7 +2101,7 @@ class GoodsOrder extends ActiveRecord
         return $arr;
     }
 
-     /**获取订单详情信息1
+    /**获取订单详情信息1
      * @param $postData
      * @param $user
      * @return array|mixed|null
@@ -2095,9 +2110,52 @@ class GoodsOrder extends ActiveRecord
    {
        $array=self::getorderlist()
            ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
-           ->select('a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.order_id,z.goods_price,a.order_refer,a.buyer_message,z.comment_id,a.consignee,a.district_code,a.region,a.consignee_mobile,a.invoice_type,a.invoice_header_type,a.invoice_header,a.invoicer_card,a.invoice_content,z.cover_image');
+           ->select('
+           a.pay_name,
+           z.order_status,
+           z.customer_service,
+           z.shipping_status,
+           a.pay_status,
+           a.create_time,
+           a.user_id,
+           a.address_id,
+           z.goods_name,
+           a.amount_order,
+           z.goods_number,
+           z.freight,
+           a.order_no,
+           a.create_time,
+           a.paytime,
+           a.user_id,
+           a.address_id,
+           a.return_insurance,
+           z.goods_id,
+           z.goods_attr_id,
+           z.sku,
+           a.address_id,
+           a.invoice_id,
+           supplier_price,
+           z.market_price,
+           b.waybillnumber,
+           b.waybillname,
+           z.shipping_type,
+           z.order_id,
+           z.goods_price,
+           a.order_refer,
+           a.buyer_message,
+           z.comment_id,
+           a.consignee,
+           a.district_code,
+           a.region,
+           a.consignee_mobile,
+           a.invoice_type,
+           a.invoice_header_type,
+           a.invoice_header,
+           a.invoicer_card,
+           a.invoice_content,
+           z.cover_image,
+           z.is_unusual');
        if(array_key_exists('sku', $postData)){
-
            $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id,'z.sku'=>$postData['sku']])
                ->all();
        }else{
@@ -2133,6 +2191,7 @@ class GoodsOrder extends ActiveRecord
                    $arr[$k]['shipping_type']='送货上门';
                    break;
            }
+           $arr=self::switchStatus_desc($arr);
            $output[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
            $output[$k]['freight']=sprintf('%.2f', (float)$arr[$k]['freight']);
            $output[$k]['goods_price']=$arr[$k]['goods_price'];
@@ -2159,7 +2218,8 @@ class GoodsOrder extends ActiveRecord
                $output[$k]['automatic_receive_time']=date('Y-m-d H:i',$arr[$k]['RemainingTime']);
            }
            $output[$k]['pay_term']=$arr[$k]['pay_term'];
-           $output[$k]['status']=$arr[$k]['status'];
+           $output[$k]['status_code']=$arr[$k]['status_code'];
+           $output[$k]['status_desc']=$arr[$k]['status_desc'];
            $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
            $output[$k]['order_no']=$arr[$k]['order_no'];
            $output[$k]['goods_id']=$arr[$k]['goods_id'];
@@ -2209,4 +2269,101 @@ class GoodsOrder extends ActiveRecord
        }
        return $output;
    }
+
+
+
+    /**set order_no
+     * @return string
+     */
+    public static function SetOrderNo(){
+        do {
+            $code=date('md',time()).'1'.rand(10000,99999);
+        } while ( $code==GoodsOrder::find()->select('order_no')->where(['order_no'=>$code])->asArray()->one()['order_no']);
+        return $code;
+    }
+
+
+    /**
+     * set  transaction no
+     * @param $supplier_id
+     * @return string
+     */
+    public  static  function  SetTransactionNo($supplier_id)
+    {
+        $supplier=Supplier::find()
+            ->where(['id'=>$supplier_id])
+            ->one();
+        $rand=rand(10000,99999);
+        $time=time();
+        $month=date('m',$time);
+        $day=date('d',$time);
+        do {
+            $transaction_no=$month.$day.$supplier->shop_no.$rand;
+        } while ( $transaction_no==UserCashregister::find()
+            ->select('transaction_no')
+            ->where(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one()['transaction_no'] || $transaction_no==UserAccessdetail::find() ->select('transaction_no')
+            ->where(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one()['transaction_no']
+        );
+        return $transaction_no;
+    }
+
+      public  static  function  switchStatus_desc($arr)
+   {
+       foreach ($arr as $k =>$v)
+       {
+           switch ($arr[$k]['status'])
+           {
+               case self::PAY_STATUS_DESC_UNPAID:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_UNPAID;
+                   $arr[$k]['status_desc']=self::PAY_STATUS_DESC_UNPAID;
+                   break;
+               case self::SHIPPING_STATUS_DESC_UNSHIPPED:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED;
+                   $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
+                   if ( $arr[$k]['is_unusual']==1){
+                       $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_申请退款';
+                   }
+                   break;
+               case  self::ORDER_TYPE_DESC_UNRECEIVED:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED;
+                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED;
+                       if ($arr[$k]['is_unusual']==1){
+                           $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                           $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
+                   }
+                   break;
+               case  self::ORDER_TYPE_DESC_CANCEL:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
+                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
+                   break;
+               case  '售后中':
+                   $arr[$k]['status_code']='after_saled';
+                   $arr[$k]['status_desc']='售后中';
+                   break;
+               case  '售后结束':
+                   $arr[$k]['status_code']='after_sale_completed';
+                   $arr[$k]['status_desc']='售后结束';
+                   break;
+               case self::ORDER_TYPE_DESC_COMPLETED:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
+                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
+                   break;
+               case self::ORDER_TYPE_DESC_UNCOMMENT:
+                   $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
+                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                   break;
+           }
+           unset($arr[$k]['unusual']);
+       }
+       return $arr;
+   }
+
+
+
+
 }

@@ -15,6 +15,11 @@ series_detail.controller("series_detail",function ($scope,$http,$state,$statePar
   $scope.sec_time=$scope.items.creation_time;//时间
   $scope.ser_intro=$scope.items.intro; //介绍
 
+  $scope.change_txts=function () {
+    if($scope.ser_intro==undefined){
+      $scope.ser_intro='';
+    }
+  };
     /*---------------判断等级 开始---------------*/
   //初始化等级列表
   $scope.list_ser=[

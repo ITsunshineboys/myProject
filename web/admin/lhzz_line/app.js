@@ -24,17 +24,23 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
   "brand_index_module",
   "edit_attribute_module",
   "account_index_module",
-  "add_user_module"
+  "add_user_module",
+  //第三次需求开始
+  "login_module"
+  //第三次需求结束
   //王杰 结束
 ]);
 /*路由拦截*/
 app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
   $httpProvider.defaults.withCredentials = true;
-  $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise("/login");
   $stateProvider
 
     //  ==============王杰  开始====================
-
+    .state("login",{   //登录
+      url:"/login",
+      templateUrl:"pages/login/login.html"
+    })
     .state("banner_recommend",{   //APP推荐-banner
     url:"/banner_recommend",
     templateUrl:"pages/mall_manage/banner_app/banner_recommend/banner_recommend.html"
@@ -144,10 +150,21 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
     url:"/check_right",
     templateUrl:"pages/mall_manage/merchant_manage/merchant_comment/check-right.html"
   })
+
     .state("account_comment",{
     url:"/account_comment",
-    templateUrl:"pages/account_manage/account_comment/account_comment.html"
+    templateUrl:"pages/account_manage/account_comment/account_comment.html",
+    params:{icon:'icon',nickname:'nickname'
+            ,old_nickna:'old_nickname',district_name:'district_name',birthday:'birthday',
+            signature:'signature',mobile:'mobile',aite_cube_no:'aite_cube_no',
+            create_time:'create_time',names:'names',review_status_desc:'review_status_desc',
+            status:'status',id:'id',legal_person:'legal_person',identity_no:'identity_no'
+            ,identity_card_front_imagen:'identity_card_front_image',identity_card_back_image:
+                'identity_card_back_image',review_time:'review_time',status_remark:'status_remark',status_operator:'status_operator',
+            a:''
+    }
   })
+
     .state("change_num",{  //更换手机号码
       url:"/change_num",
       templateUrl:"pages/account_manage/account_comment/change_num.html",
@@ -238,7 +255,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       .state("style_index",{ /*系列/风格/属性管理*/
         url:"/style_index",
         templateUrl:"pages/mall_manage/style_manage/style_index/style_index.html",
-        params:{showstyle:null,showattr:null}
+        params:{showstyle:'',page:'',showattr:null}
       })
       .state("choose_series",{ /*系列/风格/属性管理-选择拥有系列的分类*/
         url:"/choose_series",
@@ -266,7 +283,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       .state("style_detail",{ /*系列/风格/属性管理-风格-风格详情*/
         url:"/style_detail",
         templateUrl:"pages/mall_manage/style_manage/style_detail/style_detail.html",
-        params:{style_item:''}
+        params:{style_item:'',page:''}
       })
       //========================张放====================================
       //智能报价

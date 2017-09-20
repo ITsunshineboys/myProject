@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use app\services\ModelService;
 /**
  * This is the model class for table "user_accessdetail".
  *

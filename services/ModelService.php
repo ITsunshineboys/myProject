@@ -351,4 +351,5 @@ class ModelService
         list ($sql, $params) = $db->getQueryBuilder()->build($query);
         return $db->createCommand($sql, $params)->getRawSql();
     }
+
 }

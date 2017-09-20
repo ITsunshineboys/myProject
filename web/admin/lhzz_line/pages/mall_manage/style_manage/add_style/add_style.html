@@ -14,11 +14,11 @@
         <div class="series_name">
             <span class="glyphicon glyphicon-asterisk red_mark" ></span>
             <span>风格名称</span>
-            <input name="style_name" required ng-class="{'border_red':(form.style_name.$invalid &&submitted)||(form.style_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.style_name.$error" maxlength=10 type="text" placeholder="请输入系列名称" ng-model="style_name" >
+            <input name="style_name" required ng-class="{'border_red':(form.style_name.$invalid &&submitted)||(form.style_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.style_name.$error" maxlength=10 type="text" placeholder="请输入风格名称" ng-model="style_name" >
             <span id="limitword">*限1~10个字符</span>
             <p class="red_mark" ng-show="name_flag">
                 <span class="glyphicon glyphicon-asterisk"></span>
-                该系列名称已存在，请重新填写
+                该风格名称已存在，请重新填写
             </p>
         </div>
 
@@ -58,7 +58,8 @@
         <div class="series_intro">
             <span class="glyphicon glyphicon-asterisk red_mark" ></span>
             <span>风格介绍</span>
-            <textarea name="style_txt" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_intro"></textarea>
+            <textarea name="style_txt" maxlength="70" ng-change="change_txts()" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_intro"></textarea>
+            <span class="word_num">{{style_intro.length}}/70</span>
         </div>
 
         <!--按钮-->

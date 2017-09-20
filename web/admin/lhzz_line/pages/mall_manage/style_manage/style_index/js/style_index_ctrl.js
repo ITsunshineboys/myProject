@@ -1,5 +1,9 @@
 let style_index = angular.module("styleindexModule", []);
 style_index.controller("style_index", function ($scope, $http, $stateParams) {
+    $scope.page = $stateParams.page;
+    if ($scope.page == '') {
+        $scope.page = 1;
+    }
     //POST请求的响应头
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -17,8 +21,6 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     $scope.handledesorder = true; //排序初始值
     $scope.handleascorder = false; //排序初始值
 
-
-
     $scope.changeTabbar = (function () {
         if ($stateParams.showstyle) {
             $scope.showseries = false;
@@ -35,9 +37,8 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         }
     })()
 
-
     /*选项卡切换方法*/
-    $scope.changeToseries = function() {
+    $scope.changeToseries = function () {
         $scope.showseries = true;
         $scope.showstyle = false;
         $scope.showattr = false;
@@ -154,8 +155,9 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     /*********************************风格开始*******************************/
 
 //列表数据展示
-    $http.get('http://test.cdlhzz.cn:888/mall/style-list').then(function (res) {
+    $http.get('http://test.cdlhzz.cn:888/mall/style-list', {params: {page: $scope.page}}).then(function (res) {
         console.log("风格列表返回");
+        console.log($scope.page);
         console.log(res);
         $scope.style_arr = res.data.data.series_list.details;
         //分页
@@ -267,6 +269,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
 
     /*分类选择二级下拉框*/
     $scope.subClass = function (obj) {
+        console.log(obj)
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
@@ -282,44 +285,55 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
-            // params:{"sort[]":"id:3"}
+            params: {"sort[]": "attr_op_time:3"}
         }).then(function (res) {
             $scope.proptable = res.data.data.goods_attr_list_admin.details;
         })
     })()
 
     /*属性分类选择*/
-    $scope.attrselect = function () {
-        /*只有一级下拉的全部*/
-        if (($scope.firstselect == 0 && $scope.secselect == 0) || ($scope.firstselect == 0 && $scope.secselect == undefined)) {
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+    $scope.$watch('firstselect', function (newVal,oldVal) {
+        $scope.handledesorder = true;
+        $scope.handleascorder = false;
+        if (!$scope.secselect) {
+            $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+                params: {pid: +newVal},
             }).then(function (res) {
+                console.log('属性管理分类选择第一个下拉框')
+                console.log(res);
                 $scope.proptable = res.data.data.goods_attr_list_admin.details;
+            }, function (err) {
+                console.log(err);
             })
+        } else {
+            return;
+        }
+        ;
+    })
 
-            /*二级下拉为全部*/
-        } else if ($scope.firstselect != 0 && $scope.secselect == 0) {
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
-                params: {pid: $scope.firstselect},
+    $scope.$watch('secselect', function (newVal,oldVal) {
+        $scope.handledesorder = true;
+        $scope.handleascorder = false;
+        if (newVal != 0) {
+            $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+                params: {pid: +newVal},
             }).then(function (res) {
+                console.log(res);
                 $scope.proptable = res.data.data.goods_attr_list_admin.details;
+            }, function (err) {
+                console.log(err);
             })
-
-            /*两个都不为全部*/
-        } else if ($scope.firstselect != 0 && $scope.secselect != 0) {
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
-                params: {pid: $scope.secselect},
+        } else {
+            $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+                params: {pid: +$scope.firstselect},
             }).then(function (res) {
                 $scope.proptable = res.data.data.goods_attr_list_admin.details;
+            }, function (err) {
+                console.log(err);
             })
         }
-    }
+    });
+
 
     /*操作时间降序*/
     $scope.handleDesorder = () => {

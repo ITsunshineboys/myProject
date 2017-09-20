@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 
+use app\models\District;
 use app\models\Worker;
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
@@ -75,7 +76,7 @@ class FindworkerController extends Controller{
      */
     public function actionServiceList()
     {
-        $parents = WorkerType::find()->where(['pid'=>self::PARENT])->asArray()->all();
+        $parents = WorkerType::parent();
         $data=WorkerType::getworkertype($parents);
             $parent=[];
             for ($i=0;$i<count($data);$i++){
@@ -283,7 +284,10 @@ class FindworkerController extends Controller{
         }
         return  ceil($sum / 12 + 1);
     }
-
+    /**
+     * 工人个人中心
+     * @return string
+     */
     public function actionWorkerIndex(){
         $user_id = \Yii::$app->user->identity->getId();
         $code=1052;
@@ -294,10 +298,108 @@ class FindworkerController extends Controller{
             ]);
         }
         $worker_info=User::find()->where(['id'=>$user_id])->one();
-        $worker['worker']['aite_cube_no']=$worker_info->aite_cube_no;
-        $worker['worker']['worker_no']=$worker_info->aite_cube_no;
-        $worker['worker']['balance']=$worker_info->balance;
+        $worker['aite_cube_no']=$worker_info->aite_cube_no;
+        $worker['name']=Worker::getWorkerByUid($user_id)->nickname;
+        $worker['uid']=Worker::getWorkerByUid($user_id)->id;
+        $worker['worker_no']=$worker_info->aite_cube_no;
+        $worker['balance']=sprintf('%.2f',(float)$worker_info->balance*0.01);
+        $order=Worker::getordertypebystatus($user_id);
+        if(is_int($order)){
+            $code=$order;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>[
+               'worker_infos'=> $worker,
+                'worker_orders'=>$order
+            ]
+        ]);
 
+    }
+    /**
+     * 个人资料-工人
+     * @return string
+     */
+    public function actionOwenInfos(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $data=Worker::find()
+            ->select('icon,nickname,province_code,city_code')
+            ->where(['uid'=>$user_id])
+            ->asArray()
+            ->one();
+
+        $data['province_code'] && $data['city_code']?$data['origin']='已设置':$data['origin']='未设置';
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+
+    }
+    /**
+     * 设置籍贯
+     * @return string
+     */
+    public function actionSetOrigin(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $worker=Worker::find()->where(['uid'=>$user_id])->one();
+        $province_code=$worker->province_code=(int)trim(\Yii::$app->request->post('province_code',''),'');
+        $city_code=$worker->city_code=(int)trim(\Yii::$app->request->post('city_code',''),'');
+        $district_code=$worker->district_code=(int)trim(\Yii::$app->request->post('district_code',''),'');
+        if(!$province_code || !$city_code || !$district_code){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if(!$worker->save(false)){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok'
+        ]);
+    }
+    /**
+     * 获取工种
+     * @return string
+     */
+    public function actionWorkerParentype(){
+        return Json::encode([
+           'code'=>200,
+           'msg'=>'ok',
+            'data'=>WorkerType::parent()
+        ]);
+    }
+    /**
+     * 实名认证
+     */
+    public function  actionCertification(){
+        $code=1000;
 
     }
     /**
@@ -353,11 +455,7 @@ class FindworkerController extends Controller{
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $worker_id=Worker::find()
-            ->select('id')
-            ->where(['uid'=>$user_id])
-            ->asArray()
-            ->one();
+        $worker_id=Worker::getWorkerByUid($user_id)->id;
         $orderdata=WorkerOrder::find()
             ->where(['id'=>$order_id])
             ->andWhere(['status'=>self::STATUS_SINGLE])

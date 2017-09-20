@@ -9,13 +9,25 @@ use yii\db\ActiveRecord;
 use yii\db\Query;
 use app\services\StringService;
 use yii\data\Pagination;
-
+use app\services\ModelService;
 const  GOODS_ORDER = 'goods_order';
 const  DISTRIBUTTION = 'distribution';
 const  USER='user';
+
 class Distribution extends ActiveRecord
 {
 
+
+    const PAGE_SIZE_DEFAULT=10;
+    const FIELDS_EXTRA=[];
+    const FIELDS_ADMIN = [
+        'id',
+        'parent_id',
+        'mobile',
+        'profit',
+        'create_time',
+        'applydis_time',
+    ];
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -24,16 +36,74 @@ class Distribution extends ActiveRecord
         return 'distribution';
     }
 
-    public static  function Distributionusercenter($mobile){
-        $data=self::find()->where(['mobile'=>$mobile])->asArray()->one();
-        $parent=self::find()->select('mobile,applydis_time')->where(['id'=>$data['parent_id']])->asArray()->one();
-        $son=self::find()->select('mobile,applydis_time')->where(['parent_id'=>$data['id']])->asArray()->all();
-        $res=[
+    /**
+     * @param $mobile
+     * @return array|null|ActiveRecord
+     */
+    public  static  function  findByMobile($mobile)
+    {
+            $data=self::find()
+                ->where(['mobile'=>$mobile])
+                ->one();
+            return $data?$data:[];
+    }
+
+    /**线下店个人中心
+     * @param $mobile
+     * @return array
+     */
+    public static  function DistributionUserCenter($mobile){
+        $data=self::find()
+            ->where(['mobile'=>$mobile])
+            ->one();
+        $parent=self::find()
+            ->where(['id'=>$data['parent_id']])
+            ->one();
+        $son=self::find()
+            ->select('mobile,applydis_time')
+            ->where(['parent_id'=>$data['id']])
+            ->asArray()
+            ->all();
+        $son_count=count($son);
+        $goodsOrder_line_count=0;
+        $goodsOrder_line_money=0;
+        $goodsOrder_online_count=0;
+        $goodsOrder_online_money=0;
+        foreach ($son as &$list)
+        {
+            $list['time']=date('y-m-d H:i',$list['applydis_time']);
+            $goodsOrder_line=GoodsOrder::Find()->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1]);
+            $goodsOrder_line_data=$goodsOrder_line->asArray()->all();
+            foreach ($goodsOrder_line_data as &$goodsOrder_line_data_list)
+            {
+                $goodsOrder_line_money+=$goodsOrder_line_data_list['amount_order']*0.01;
+            }
+            $goodsOrder_line_count+=$goodsOrder_line->count();
+            $user=User::find()->where(['mobile'=>$data->mobile])->one();
+            if ($user)
+            {
+                $goodsOrder_online=GoodsOrder::Find()->where(['user_id'=>$user->id,'order_refer'=>2]);
+                $goodsOrder_online_data=$goodsOrder_online->asArray()->all();
+                foreach ($goodsOrder_online_data as &$goodsOrder_online_data_list)
+                {
+                    $goodsOrder_online_money+=$goodsOrder_online_data_list['amount_order']*0.01;
+                }
+                $goodsOrder_online_count+=$goodsOrder_online->count();
+            }
+
+            unset($list['applydis_time']);
+        }
+        $goodsOrder_count=$goodsOrder_online_count+$goodsOrder_line_count;
+        $goodsOrder_money=GoodsOrder::switchMoney($goodsOrder_online_money+$goodsOrder_line_money);
+        return [
+            'binding_count'=>$son_count,
+            'order_count'=>$goodsOrder_count,
+            'order_money'=>$goodsOrder_money,
+            'MyProfit'=>GoodsOrder::switchMoney($data['profit']*0.01),
             'mobile' => $mobile,
-            'parent' => $parent,
+            'parent' => ['mobile'=>$parent->mobile,'time'=>date('y-m-d H:i',$data->applydis_time)],
             'son'=>$son
         ];
-        return $res;
     }
 
     /**
@@ -154,5 +224,36 @@ class Distribution extends ActiveRecord
             );
         }
         return $sd;
+    }
+
+
+    /**
+     * @param array $where
+     * @param array $select
+     * @param int $page
+     * @param int $size
+     * @param string $orderBy
+     * @return array
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    {
+        $select = array_diff($select, self::FIELDS_EXTRA);
+
+        $offset = ($page - 1) * $size;
+        $DisList = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        foreach ($DisList as &$list) {
+            $list['create_time']=date('Y-m-d H:i',$list['create_time']);
+            $list['applydis_time']=date('Y-m-d H:i',$list['applydis_time']);
+        }
+        $total=(int)self::find()->where($where)->asArray()->count();
+        return ModelService::pageDeal($DisList, $total, $page, $size);
+
     }
 }

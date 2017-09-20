@@ -9,6 +9,12 @@ add_series.controller("add_series",function ($scope,$http,$stateParams,$state) {
       return $.param(data)
     }
   };
+  $scope.ser_intro='';
+  $scope.change_txts=function () {
+    if($scope.ser_intro==undefined){
+      $scope.ser_intro='';
+    }
+  };
   $scope.list=$stateParams.list;//获取系列数据列表
   //所处等级
   $scope.list_ser=[    //初始化等级列表

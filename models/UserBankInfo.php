@@ -19,7 +19,19 @@ class UserBankInfo extends \yii\db\ActiveRecord
     {
         return 'user_bankinfo';
     }
-
+    /**
+     * @param $user_id
+     * @param $role_id
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public  static  function  findByUidAndRole_id($user_id,$role_id)
+    {
+        $data=self::find()
+            ->where(['uid'=>$user_id])
+            ->andWhere(['role_id'=>$role_id])
+            ->one();
+        return $data?$data:[];
+    }
 
 
     /**添加、修改银行卡操作

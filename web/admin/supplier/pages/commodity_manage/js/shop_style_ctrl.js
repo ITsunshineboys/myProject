@@ -1,6 +1,7 @@
 let shop_style_let= angular.module("shop_style",['ngFileUpload']);
 shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
       /*POST请求头*/
+      $scope.myng=$scope;
       const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -9,12 +10,11 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       };
       $scope.logistics=[];//物流模块列表
       $scope.goods_all_attrs=[];//所有属性数据
-      $scope.myng=$scope;
-       $scope.category_id=$stateParams.category_id;//三级分类的id
-       $scope.first_category_title=$stateParams.first_category_title;//一级分类名称
-       $scope.second_category_title=$stateParams.second_category_title;//二级分类名称
-       $scope.third_category_title=$stateParams.third_category_title;//三级分类名称
-
+      $scope.shop_logistics=[];//物流模板默认第一项
+      $scope.category_id=$stateParams.category_id;//三级分类的id
+      $scope.first_category_title=$stateParams.first_category_title;//一级分类名称
+      $scope.second_category_title=$stateParams.second_category_title;//二级分类名称
+      $scope.third_category_title=$stateParams.third_category_title;//三级分类名称
 
       /*-----------------品牌、系列、风格 获取-----------------*/
       $scope.brands_arr=[];
