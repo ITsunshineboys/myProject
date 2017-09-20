@@ -9,6 +9,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
     }
   };
   $scope.shop_rep=[];
+  let recommend_admin_index=null;
   //选择城市开始
   //初始化省市区县;
   $http.get('districts2.json').then(function (response) {
@@ -455,14 +456,14 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
         let shop_url='http://test.cdlhzz.cn:888/mall/recommend-edit';
         $http.post(shop_url,{
           id:$scope.edit_item.id,
-          url:$scope.edit_item.url,
+          url:$scope.link_edit_url,
           title:$scope.link_edit_title,
           image:$scope.upload_link_img_src,
           from_type:"2",
           status:$scope.shop_edit_check,
           type:2,
           description:$scope.link_edit_subtitle,
-          platform_price:$scope.edit_item.show_price
+          platform_price:$scope.link_edit_price
         },config).then(function (res) {
           console.log("编辑返回");
           console.log(res);

@@ -287,6 +287,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
             'type':0
           }
         }).then(function (res) {
+          console.log(res);
           $scope.shop_rep = res.data.data.recommend_admin_index.details;
         },function (err) {
           console.log(err);
@@ -409,9 +410,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
   //编辑确认按钮
   $scope.recommend_shop_edit=function (valid) {
     if(valid){
-      console.log(123)
       $scope.variable_modal="modal";
-      console.log($scope.variable_modal)
       if($scope.edit_item.from_type=='商家'){
         if($scope.upload_img_src==''){
           $scope.upload_img_src=$scope.recommend_shop_edit_img;
@@ -436,6 +435,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
               'type':0
             }
           }).then(function (res) {
+            console.log(res);
             $scope.shop_rep = res.data.data.recommend_admin_index.details;
           },function (err) {
             console.log(err);
@@ -451,7 +451,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
         let shop_url='http://test.cdlhzz.cn:888/mall/recommend-edit';
         $http.post(shop_url,{
           id:+$scope.edit_item.id,
-          url:$scope.edit_item.url,
+          url:$scope.link_edit_url,
           title:$scope.link_edit_title,
           image:$scope.upload_link_img_src,
           from_type:"2",
