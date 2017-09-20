@@ -446,34 +446,42 @@ class DistributionController extends Controller
 
         foreach ($data['list'] as &$list)
         {
-            $user=User::find()->select('mobile,id')->where(['mobile'=>$list['mobile']])->asArray()->one();
-            if ($user){
-                $list['order_num']=GoodsOrder::find()->where(['user_id'=>$user['id']])->count();
-            }else{
-                $address=Addressadd::find()->select('mobile,id')->where(['mobile'=>$list['mobile']])->asArray()->one();
-                if (!$address){
-                    $list['order_num']=0;
-                }
-                $list['order_num']=GoodsOrder::find()->where(['address_id'=>$address['id']])->count();
-            }
-            //关联账号所产生的订单
-            $dis=Distribution::find()->select('id,mobile')->where(['parent_id'=>$list['id']])->asArray()->all();
-            $list['order_subsetnum']=0;
-            foreach ($dis as $key =>$val){
-                $user_subset[$key]=User::find()->select('mobile,id')->where(['mobile'=>$dis[$key]['mobile']])->asArray()->one();
-                if ($user_subset[$key]){
-                    $dis[$key]['order_num']=GoodsOrder::find()->where(['user_id'=>$user_subset[$key]['id']])->count();
-                }else{
-                    $address_subset[$key]=Addressadd::find()->select('mobile,id')->where(['mobile'=>$dis[$key]['mobile']])->asArray()->one();
-                    if (!$address_subset[$key]){
-                        $dis[$key]['order_num']=0;
+                $total_amount=0;
+                $user=User::find()
+                    ->where(['mobile'=>$list['mobile']])
+                    ->one();
+                $order_subsetnum=0;
+                if ($user)
+                {
+                    $UserOrders=GoodsOrder::find()
+                        ->select('order_no,amount_order,paytime,remarks')
+                        ->where(['user_id'=>$user->id,'order_refer'=>2])
+                        ->asArray()
+                        ->all();
+                    $order_subsetnum+=count($UserOrders);
+
+                    foreach ($UserOrders as &$UserOrder)
+                    {
+                        $total_amount+=$UserOrder['amount_order']*0.01;
                     }
-                    $dis[$key]['order_num']=GoodsOrder::find()->where(['address_id'=>$address_subset[$key]['id']])->count();
                 }
-                $list['order_subsetnum']+=$dis[$key]['order_num'];
-            }
-            $list['order_num']=$list['order_subsetnum']+$list['order_num'];
-            $list['create_time']=date('Y-m-d H:i',(int)$list['create_time']);
+                $consigneeOrders=GoodsOrder::find()
+                    ->select('order_no,amount_order,paytime,remarks')
+                    ->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1])
+                    ->asArray()
+                    ->all();
+                $order_subsetnum+=count($consigneeOrders);
+                foreach ($consigneeOrders as &$consigneeOrder)
+                {
+
+                    $total_amount+=$consigneeOrder['amount_order']*0.01;
+                }
+                $list['subset_amount']=GoodsOrder::switchMoney($total_amount);
+                $list['order_subsetnum']=$order_subsetnum;
+                unset($list['profit']);
+                unset($list['parent_id']);
+                unset($list['id']);
+                unset($list['create_time']);
         }
         $time=strtotime(date('Y-m-d',time()));
         $nowday_user=Distribution::find()->asArray()->where('create_time>'.$time)->count();
