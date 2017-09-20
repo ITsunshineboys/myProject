@@ -509,7 +509,7 @@ class DistributionController extends Controller
         ]);
     }
 
-    /**
+ /**
      * 分销详情页
      */
     public function actionGetdistributiondetail(){
@@ -568,6 +568,67 @@ class DistributionController extends Controller
         ]);
     }
 
+
+    /**添加收益
+     * @return string
+     */
+    public  function  actionAddProfit()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $mobile= trim($request->post('mobile'));
+        $profit= trim($request->post('profit'));
+        if (!$mobile || !$profit)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $Distribution=Distribution::find()->where(['mobile'=>$mobile])->one();
+        if (!$Distribution)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+
+            $Distribution->profit=$profit*100;
+            $res=$Distribution->save(false);
+            if (!$res)
+            {
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>'ok'
+            ]);
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
 
     /**
      *  分销详情页-查看全部
