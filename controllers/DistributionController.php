@@ -510,7 +510,7 @@ class DistributionController extends Controller
      */
     public function actionGetdistributiondetail(){
         $request = Yii::$app->request;
-        $mobile= trim(htmlspecialchars($request->get('mobile', '')), '');
+        $mobile= trim(htmlspecialchars($request->post('mobile', '')), '');
         if (!$mobile)
         {
             $code=1000;
