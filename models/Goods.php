@@ -30,6 +30,7 @@ class Goods extends ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_REVIEW = 'review';
     const PROFIT_RATE_PRECISION = 100000;
+    const DEFAULT_CITY = 510100;
     const PROFIT_RATE_ATTRS = [
         'supplier_price',
         'platform_price',
@@ -440,7 +441,7 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level, $title, $city = 510100)
+    public static function priceDetail($level, $title, $city = self::DEFAULT_CITY)
     {
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $all = self::find()
@@ -456,7 +457,7 @@ class Goods extends ActiveRecord
         return $all;
     }
 
-    public static function newMaterialAdd($level, $title, $city = 510100)
+    public static function newMaterialAdd($level, $title, $city = self::DEFAULT_CITY)
     {
         if (empty($level) && empty($title)) {
             echo '请正确输入值';
@@ -489,7 +490,7 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return array
      */
-    public static function findQueryAll($all, $city = 510100)
+    public static function findQueryAll($all, $city = self::DEFAULT_CITY)
     {
         $goods_id = [];
         foreach ($all as $single) {
@@ -502,7 +503,7 @@ class Goods extends ActiveRecord
         return $all_goods;
     }
 
-    public static function categoryById($all, $city = 510100)
+    public static function categoryById($all, $city = self::DEFAULT_CITY)
     {
         $material = [];
         foreach ($all as $one) {
