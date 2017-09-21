@@ -111,9 +111,13 @@ class Worker extends \yii\db\ActiveRecord
     public static function setSignature($uid, $signature)
     {
         $worker = self::getWorkerByUid($uid);
-        $worker->signature = $signature ? $signature : $worker->signature;
-        $worker->save(false);
-        return 200;
+
+        if ($signature) {
+            $worker->signature = $signature;
+            $worker->save(false);
+        }
+
+        return true;
     }
 
     public static function getWorkerByUid($uid)

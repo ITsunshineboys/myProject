@@ -9,6 +9,7 @@ use app\models\WorkerCraft;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\models\WorkerWorks;
+use app\models\WorkerWorksReview;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use yii\db\Exception;
@@ -20,6 +21,7 @@ use yii\web\Controller;
 class WorkerController extends Controller
 {
     const STATUS_ALL = 5;
+    const STAR_DEFAULT = 15;
 
     /**
      * @inheritdoc
@@ -168,10 +170,10 @@ class WorkerController extends Controller
 
         $signature = trim(\Yii::$app->request->get('signature', ''), '');
 
-        $code = Worker::setSignature($user, $signature);
+        Worker::setSignature($user, $signature);
 
         return Json::encode([
-            'code' => $code,
+            'code' => 200,
             'msg' => 'ok',
         ]);
     }
@@ -729,5 +731,103 @@ class WorkerController extends Controller
             'code' => 200,
             'msg' => 'ok'
         ]);
+    }
+
+    /**
+     * new 工人作品评论
+     *
+     * @return string
+     */
+    public function actionAddWorksReview()
+    {
+        $request = \Yii::$app->request;
+        if ($request->isPost) {
+            $code = 1000;
+
+            //maybe uid and role_id get by login?
+            $uid = (int)$request->post('uid', 0);
+            $role_id = (int)$request->post('role_id', 0);
+            $works_id = (int)$request->post('works_id', 0);
+            $star = (int)$request->post('star', self::STAR_DEFAULT);
+            $review = trim($request->post('review', ''));
+
+            $user = User::find()->where(['id' => $uid])->exists();
+            $works = WorkerWorks::find()->where(['id' => $works_id])->exists();
+
+            if (!$user
+                || $role_id > 7
+                || !$role_id
+                || !$works
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            $works_review = new WorkerWorksReview();
+
+            $works_review->uid = $uid;
+            $works_review->role_id = $role_id;
+            $works_review->works_id = $works_id;
+            $works_review->star = $star;
+            $works_review->review = $review;
+            if ($works_review->save(false)) {
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'ok'
+                ]);
+            }
+
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $code = 1050;
+        return Json::encode([
+            'code' => $code,
+            'msg' => \Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
+
+    //todo 如果订单有review 则用户订单详情返回一个review_id
+
+    /**
+     * view works_review by review_id
+     *
+     */
+    public function actionGetWorksReview()
+    {
+
+    }
+
+    /**
+     * view works_reviews by works_id
+     *
+     */
+    public function actionGetWorksReviewsByWorksId()
+    {
+        //todo 需要建一个订单评论回复表 or 加pid?
+        //todo 需要查出每条的回复
+    }
+
+    /**
+     * view works by worker_id
+     *
+     */
+    public function actionGetWorksByWorkerId()
+    {
+
+    }
+
+    /**
+     * view works_detail by works_id
+     *
+     */
+    public function actionGetWorksDetail()
+    {
+
     }
 }
