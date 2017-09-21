@@ -66,6 +66,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "order_commodity",
                 params:{}
             })
+
     }])
 
     .run(["$rootScope","$state",function ($rootScope,$state) {
