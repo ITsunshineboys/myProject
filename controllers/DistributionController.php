@@ -862,8 +862,10 @@ class DistributionController extends Controller
     public  function actionTestData()
     {
 
-        $data=Yii::$app->db->createCommand('show create table distribution')
-            ->execute();
+ 
+          $data = Yii::$app->db->createCommand('show create table distribution')
+            ->queryOne();
+        ;
         var_dump($data);
 
 
