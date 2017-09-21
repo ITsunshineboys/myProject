@@ -478,6 +478,10 @@ class FindworkerController extends Controller{
             ]);
         }
         $code=WorkerSkill::DelWorkerSkill($user_id,$skill_id);
+        return Json::encode([
+            'code' => $code,
+            'msg' =>$code==200?'ok':\ Yii::$app->params['errorCodes'][$code]
+        ]);
     }
     /**
      *抢单信息

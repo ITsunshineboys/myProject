@@ -70,6 +70,12 @@ class WorkerSkill extends \yii\db\ActiveRecord
         }
         return $skill_name;
     }
+    /**
+     * 设置特长
+     * @param $uid
+     * @param $skill_id
+     * @return int
+     */
     public static function getSetSkillids($uid,$skill_id){
         $worker=Worker::find()->where(['uid'=>$uid])->one();
         if(!$worker){
@@ -95,13 +101,19 @@ class WorkerSkill extends \yii\db\ActiveRecord
     public static function DelWorkerSkill($uid,$skill_id){
         $worker=Worker::find()->where(['uid'=>$uid])->one();
         $data=explode(',',$worker->skill_ids);
-        foreach ($data as $v){
-            if($skill_id==$v){
-
-                $a=str_replace($v,'',$worker->skill_ids);
-                var_dump($a);
+        foreach ($data as $k=>$vule){
+            if($vule==$skill_id){
+                unset($data[$k]);
+               $a=implode(',',$data);
+              $worker->skill_ids=$a;
+              if(!$worker->save(false)){
+                  $code=500;
+                  return $code;
+              }
+              return 200;
             }
         }
+
     }
     /**
      * 获取工人特长名称
