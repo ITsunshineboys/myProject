@@ -42,6 +42,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
     const WORKER_ORDER_CANCELED = 0;
     const WORKER_ORDER_NOT_BEGIN = 1;
     const WORKER_ORDER_PREPARE = 2;
+    const WORKER_ORDER_PREPARE = 2;
     const WORKER_ORDER_ING = 3;
     const WORKER_ORDER_DONE = 4;
 
