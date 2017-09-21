@@ -47,7 +47,6 @@ class Distribution extends ActiveRecord
                 ->one();
             return $data?$data:[];
     }
-
     /**线下店个人中心
      * @param $mobile
      * @return array
@@ -69,43 +68,55 @@ class Distribution extends ActiveRecord
         $goodsOrder_line_money=0;
         $goodsOrder_online_count=0;
         $goodsOrder_online_money=0;
-        foreach ($son as &$list)
+        $goodsOrder_count=0;
+        $goodsOrder_money=0.00;
+        if ($son)
         {
-            $list['time']=date('y-m-d H:i',$list['applydis_time']);
-            $goodsOrder_line=GoodsOrder::Find()->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1]);
-            $goodsOrder_line_data=$goodsOrder_line->asArray()->all();
-            foreach ($goodsOrder_line_data as &$goodsOrder_line_data_list)
+            foreach ($son as &$list)
             {
-                $goodsOrder_line_money+=$goodsOrder_line_data_list['amount_order']*0.01;
-            }
-            $goodsOrder_line_count+=$goodsOrder_line->count();
-            $user=User::find()->where(['mobile'=>$data->mobile])->one();
-            if ($user)
-            {
-                $goodsOrder_online=GoodsOrder::Find()->where(['user_id'=>$user->id,'order_refer'=>2]);
-                $goodsOrder_online_data=$goodsOrder_online->asArray()->all();
-                foreach ($goodsOrder_online_data as &$goodsOrder_online_data_list)
+                $list['time']=date('y-m-d H:i',$list['applydis_time']);
+                $goodsOrder_line=GoodsOrder::Find()->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1]);
+                $goodsOrder_line_data=$goodsOrder_line->asArray()->all();
+                foreach ($goodsOrder_line_data as &$goodsOrder_line_data_list)
                 {
-                    $goodsOrder_online_money+=$goodsOrder_online_data_list['amount_order']*0.01;
+                    $goodsOrder_line_money+=$goodsOrder_line_data_list['amount_order']*0.01;
                 }
-                $goodsOrder_online_count+=$goodsOrder_online->count();
+                $goodsOrder_line_count+=$goodsOrder_line->count();
+                $user=User::find()->where(['mobile'=>$data->mobile])->one();
+                if ($user)
+                {
+                    $goodsOrder_online=GoodsOrder::Find()->where(['user_id'=>$user->id,'order_refer'=>2]);
+                    $goodsOrder_online_data=$goodsOrder_online->asArray()->all();
+                    foreach ($goodsOrder_online_data as &$goodsOrder_online_data_list)
+                    {
+                        $goodsOrder_online_money+=$goodsOrder_online_data_list['amount_order']*0.01;
+                    }
+                    $goodsOrder_online_count+=$goodsOrder_online->count();
+                }
+
+                unset($list['applydis_time']);
             }
 
-            unset($list['applydis_time']);
+            $goodsOrder_count=$goodsOrder_online_count+$goodsOrder_line_count;
+            $goodsOrder_money=GoodsOrder::switchMoney($goodsOrder_online_money+$goodsOrder_line_money);
         }
-        $goodsOrder_count=$goodsOrder_online_count+$goodsOrder_line_count;
-        $goodsOrder_money=GoodsOrder::switchMoney($goodsOrder_online_money+$goodsOrder_line_money);
+
+        if ($parent)
+        {
+            $parents=['mobile'=>$parent->mobile,'time'=>date('y-m-d H:i',$data->applydis_time)];
+        }else{
+            $parents=[];
+        }
         return [
             'binding_count'=>$son_count,
             'order_count'=>$goodsOrder_count,
             'order_money'=>$goodsOrder_money,
             'MyProfit'=>GoodsOrder::switchMoney($data['profit']*0.01),
             'mobile' => $mobile,
-            'parent' => ['mobile'=>$parent->mobile,'time'=>date('y-m-d H:i',$data->applydis_time)],
+            'parent' => $parents,
             'son'=>$son
         ];
     }
-
     /**
      *
      * @param $page

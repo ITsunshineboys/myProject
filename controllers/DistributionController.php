@@ -829,4 +829,25 @@ class DistributionController extends Controller
         }
     }
 
+        /**
+     * @return string
+     */
+    public  function  actionAddTest()
+    {
+//        $request = Yii::$app->request;
+//        $mobile= trim($request->post('mobile'));
+//        if (!$mobile){
+//            $code=1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+        $data=Distribution::find()->asArray()->all();
+        var_dump($data);
+
+
+    }
+
+
 }
