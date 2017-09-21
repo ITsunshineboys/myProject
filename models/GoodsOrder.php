@@ -2174,13 +2174,20 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return mixed
      */
-   public static  function GetOrderDetailsData($arr=[],$user)
+  public static  function GetOrderDetailsData($arr=[],$user)
    {
-       foreach ( $arr as $k =>$v){
-           $output[$k]['amount_order']=self::switchMoney(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
-           $arr[$k]['freight']= self::switchMoney($arr[$k]['freight']*0.01);
-           $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
-           $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
+       $list=[];
+       $arr=self::switchStatus_desc($arr);
+       $supplier_price=0;
+       $market_price=0;
+       $amount_order=0;
+       $goods_num=0;
+       $freight=0;
+       foreach ($arr as $k =>$v){
+           $amount_order+=($arr[$k]['goods_price']*$arr[$k]['goods_number'])*0.01;
+           $supplier_price+=$arr[$k]['supplier_price']*0.01;
+           $market_price+=$arr[$k]['market_price']*0.01;
+           $freight+=$arr[$k]['freight']*0.01;
            $arr[$k]['return_insurance']=self::switchMoney($arr[$k]['return_insurance']*0.01);
            $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
            switch ($arr[$k]['shipping_type']){
@@ -2191,56 +2198,61 @@ class GoodsOrder extends ActiveRecord
                    $arr[$k]['shipping_type']='送货上门';
                    break;
            }
-           $arr=self::switchStatus_desc($arr);
-           $output[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
-           $output[$k]['freight']=sprintf('%.2f', (float)$arr[$k]['freight']);
-           $output[$k]['goods_price']=$arr[$k]['goods_price'];
-           $output[$k]['supplier_price']=$arr[$k]['supplier_price'];
-           $output[$k]['market_price']=$arr[$k]['market_price'];
-           $output[$k]['order_no']=$arr[$k]['order_no'];
-           $output[$k]['buyer_message']=$arr[$k]['buyer_message'];
-           $output[$k]['create_time']=$arr[$k]['create_time'];
-           $output[$k]['pay_name']=$arr[$k]['pay_name'];
-           $output[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
-            if ($arr[$k]['send_time']==0){
-               $output[$k]['send_time']=$arr[$k]['send_time'];
+           $list[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
+           $list[$k]['goods_price']=$arr[$k]['goods_price'];
+           if ($arr[$k]['send_time']==0){
+               $list[$k]['send_time']=$arr[$k]['send_time'];
            }else{
-               $output[$k]['send_time']=date('Y-m-d H:i',$arr[$k]['send_time']);
+               $list[$k]['send_time']=date('Y-m-d H:i',$arr[$k]['send_time']);
            }
            if ($arr[$k]['complete_time']==0){
-               $output[$k]['complete_time']=$arr[$k]['complete_time'];
+               $list[$k]['complete_time']=$arr[$k]['complete_time'];
            }else{
-               $output[$k]['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
+               $list[$k]['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
            }
            if ($arr[$k]['RemainingTime']<=0){
-               $output[$k]['automatic_receive_time']=0;
+               $list[$k]['automatic_receive_time']=0;
            }else{
-               $output[$k]['automatic_receive_time']=date('Y-m-d H:i',$arr[$k]['RemainingTime']);
+               $list[$k]['automatic_receive_time']=date('Y-m-d H:i',$arr[$k]['RemainingTime']);
            }
-           $output[$k]['pay_term']=$arr[$k]['pay_term'];
-           $output[$k]['status_code']=$arr[$k]['status_code'];
-           $output[$k]['status_desc']=$arr[$k]['status_desc'];
-           $output[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
-           $output[$k]['order_no']=$arr[$k]['order_no'];
-           $output[$k]['goods_id']=$arr[$k]['goods_id'];
-           $output[$k]['sku']=$arr[$k]['sku'];
-           $output[$k]['goods_name']=$arr[$k]['goods_name'];
-           $output[$k]['waybillnumber']=$arr[$k]['waybillnumber'];
-           $output[$k]['waybillname']=$arr[$k]['waybillname'];
-           $output[$k]['shipping_type']=$arr[$k]['shipping_type'];
-           $output[$k]['username']=$user->nickname;
-           $output[$k]['comment_grade']=$arr[$k]['comment_grade'];
-           $output[$k]['consignee']=$arr[$k]['consignee'];
-           $output[$k]['district_code']=$arr[$k]['district_code'];
-           $output[$k]['region']=$arr[$k]['region'];
-           $output[$k]['invoice_information']=$arr[$k]['invoice_content'].'-'.$arr[$k]['invoice_header'];
-           $output[$k]['invoicer_card']=$arr[$k]['invoicer_card'];
-           $output[$k]['consignee_mobile']=$arr[$k]['consignee_mobile'];
-           $output[$k]['cover_image']=$arr[$k]['cover_image'];
-           $output[$k]['goods_number']=$arr[$k]['goods_number'];
-           $output[$k]['invoice_header_type']=$arr[$k]['invoice_header_type'];
-           $output[$k]=self::SetUnpaidContinuedTime($output[$k],$arr[$k]);
+           $list[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
+           $list[$k]['goods_id']=$arr[$k]['goods_id'];
+           $list[$k]['sku']=$arr[$k]['sku'];
+           $list[$k]['goods_name']=$arr[$k]['goods_name'];
+           $list[$k]['waybillnumber']=$arr[$k]['waybillnumber'];
+           $list[$k]['waybillname']=$arr[$k]['waybillname'];
+           $list[$k]['shipping_type']=$arr[$k]['shipping_type'];
+           $list[$k]['username']=$user->nickname;
+           if (empty($list[$k]['username'])) {
+               $list['username'] = $list['consignee'];
+           }
+           $list[$k]['comment_grade']=$arr[$k]['comment_grade'];
+
+           $list[$k]['cover_image']=$arr[$k]['cover_image'];
+           $list[$k]['goods_number']=$arr[$k]['goods_number'];
        }
+       $output['order_no']=$arr[0]['order_no'];
+
+       $output['buyer_message']=$arr[0]['buyer_message'];
+       $output['pay_name']=$arr[0]['pay_name'];
+       $output['paytime']=date('Y-m-d H:i',$arr[0]['paytime']);
+       $output['pay_term']=$arr[0]['pay_term'];
+       $output['freight']=GoodsOrder::switchMoney($freight);
+       $output['original_price']=GoodsOrder::switchMoney($market_price*$arr[0]['goods_number']);
+       $output['discount_price']=GoodsOrder::switchMoney($amount_order);
+       $output['amount_order']=GoodsOrder::switchMoney($freight+$amount_order);
+       $output['consignee']=$arr[0]['consignee'];
+       if (array_key_exists($arr[0]['district_code'],Yii::$app->params['districts'][0]))
+       {
+           $output['district']=LogisticsDistrict::getdistrict($arr[0]['district_code']).$arr[0]['region'];
+       }else{
+           $output['district']='';
+       }
+       $output['invoice_information']=$arr[0]['invoice_content'].'-'.$arr[0]['invoice_header'];
+       $output['invoicer_card']=$arr[0]['invoicer_card'];
+       $output['consignee_mobile']=$arr[0]['consignee_mobile'];
+       $output['invoice_header_type']=$arr[0]['invoice_header_type'];
+       $output['list']=$list;
        return $output;
    }
      /**
