@@ -271,7 +271,7 @@ class DistributionController extends Controller
     }
 
 
-   /**
+     /**
      * 分销绑定手机号
      * @return string
      */
@@ -321,7 +321,7 @@ class DistributionController extends Controller
         }
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $Distribution->parent_id=$user->id;
+            $Distribution->parent_id=(int)$user->id;
             $res=$Distribution->save(false);
             if (!$res)
             {
@@ -332,6 +332,7 @@ class DistributionController extends Controller
                 ]);
             }
             $code=200;
+            $tran->commit();
             return Json::encode([
                 'code' => $code,
                 'msg' =>'ok'
@@ -345,6 +346,7 @@ class DistributionController extends Controller
             ]);
         }
     }
+
 
     /**
      * 大后台获取分销列表订单
