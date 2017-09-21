@@ -2232,7 +2232,8 @@ class GoodsOrder extends ActiveRecord
            $list[$k]['goods_number']=$arr[$k]['goods_number'];
        }
        $output['order_no']=$arr[0]['order_no'];
-
+       $output['status_code']=$arr[0]['status_code'];
+       $output['status_desc']=$arr[0]['status_desc'];
        $output['buyer_message']=$arr[0]['buyer_message'];
        $output['pay_name']=$arr[0]['pay_name'];
        $output['paytime']=date('Y-m-d H:i',$arr[0]['paytime']);
