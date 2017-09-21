@@ -14,6 +14,7 @@ use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
 use app\models\LaborCost;
+use app\models\LogisticsTemplate;
 use app\models\MaterialPropertyClassify;
 use app\models\Points;
 use app\models\PointsTotal;
@@ -1386,7 +1387,7 @@ class OwnerController extends Controller
         foreach ($effect['case_works_data'] as $one_goods){
             $sku [] = $one_goods['goods_code'];
         }
-        $select = "id,sku,platform_price,purchase_price_decoration_company";
+        $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id";
         $goods = Goods::findBySkuAll($sku,$select);
         foreach ($effect['case_works_data'] as &$case_works_datum){
             foreach ($goods as $one_goods) {
@@ -1400,6 +1401,13 @@ class OwnerController extends Controller
                 }
             }
         }
+
+        //快递费
+        foreach ($goods as $goods_id) {
+            $ids[] = $goods_id['logistics_template_id'];
+        }
+        $logistics_template = LogisticsTemplate::findByGoodsSku($ids);
+        var_dump($logistics_template);exit;
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',

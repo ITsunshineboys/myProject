@@ -198,4 +198,13 @@ class LogisticsTemplate extends ActiveRecord
         isset($this->delivery_cost_default) && $this->delivery_cost_default /= 100;
         isset($this->delivery_cost_delta) && $this->delivery_cost_delta /= 100;
     }
+
+    public static function findByGoodsSku($ids,$select = [])
+    {
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['in','id',$ids])
+            ->all();
+    }
 }
