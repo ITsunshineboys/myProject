@@ -2236,7 +2236,7 @@ class GoodsOrder extends ActiveRecord
        $output['status_desc']=$arr[0]['status_desc'];
        $output['buyer_message']=$arr[0]['buyer_message'];
        $output['pay_name']=$arr[0]['pay_name'];
-       $output['create_time']=date('Y-m-d H:i',$arr[0]['create_time']);
+       $output['create_time']=$arr[0]['create_time'];
        $output['paytime']=date('Y-m-d H:i',$arr[0]['paytime']);
        $output['pay_term']=$arr[0]['pay_term'];
        $output['freight']=GoodsOrder::switchMoney($freight);
