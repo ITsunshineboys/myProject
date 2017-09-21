@@ -158,12 +158,12 @@ class DistributionController extends Controller
         );
     }
 
-   /**
+    /**
      * 登录
      * @return string
      */
     public function actionDistributionLogin(){
-        $session = Yii::$app->session;
+        $session = \Yii::$app->session;
         $mobile=$session['distribution_mobile'];
         if (!$mobile)
         {
@@ -195,15 +195,12 @@ class DistributionController extends Controller
         $user=Distribution::findByMobile($mobile);
         if (!$user)
         {
-            $tran = Yii::$app->db->beginTransaction();
-            try{
                 $Distribution=new Distribution();
                 $Distribution->mobile=$mobile;
                 $Distribution->create_time=$time;
                 $res=$Distribution->save(false);
                 if (!$res)
                 {
-                    $tran->rollBack();
                     $code=500;
                     return Json::encode([
                         'code' => $code,
@@ -213,29 +210,25 @@ class DistributionController extends Controller
                 $session['distribution_token']=urlencode($mobile.'&'.$time);
                 if (!$session['distribution_token'])
                 {
-                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
                 }
                 $code=200;
                 return Json::encode([
                     'code' => $code,
                     'msg' =>'ok'
                 ]);
-            }catch (Exception $e){
-                $tran->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
+            }else{
+                    $session['distribution_token']=urlencode($user->mobile.'&'.$user->create_time);
+                    $code=200;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' =>'ok'
+                    ]);
             }
-        }else{
-                $session['distribution_token']=urlencode($user->mobile.'&'.$user->create_time);
-                $code=200;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' =>'ok'
-                ]);
-        }
     }
 
 
