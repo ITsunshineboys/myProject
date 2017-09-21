@@ -1383,8 +1383,6 @@ class OwnerController extends Controller
         }
         // 系数查找
         $management = CoefficientManagement::findByAll();
-        //var_dump($effect['case_works_data']);exit;
-        $sku = [];
         foreach ($effect['case_works_data'] as $one_goods){
             $sku [] = $one_goods['goods_code'];
         }
@@ -1392,14 +1390,16 @@ class OwnerController extends Controller
         $goods = Goods::findBySkuAll($sku,$select);
         foreach ($effect['case_works_data'] as &$case_works_datum){
             foreach ($goods as $one_goods) {
-                if ($one_goods['sku'] == $case_works_datum['goods_code']) {
-                    $cost = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
-                    $case_works_datum['goods_cost'] = $case_works_datum['goods_quantity'] * $cost;
+                foreach ($management as $one_value){
+                    if ($one_goods['sku'] == $case_works_datum['goods_code']) {
+                        $cost = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
+                        if ($case_works_datum['goods_first'] == $one_value['classify']){
+                            $case_works_datum['goods_cost'] = round($case_works_datum['goods_quantity'] * $cost * $one_value['coefficient'],2);
+                        }
+                    }
                 }
             }
         }
-        var_dump($effect['case_works_data']);
-        exit;
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',
