@@ -1600,11 +1600,11 @@ class OrderController extends Controller
 
         switch ($role){
             case 'user':
-                if ($type==GoodsOrder::ORDER_TYPE_ALL){
-                    $where ="a.user_id={$user->id}";
+               if ($type==GoodsOrder::ORDER_TYPE_ALL){
+                    $where ="a.user_id={$user->id} and role_id={$user->login_role_id}";
                 }else{
                     $where=GoodsOrder::GetTypeWhere($type);
-                    $where .=" and a.user_id={$user->id}  and order_refer = 2";
+                    $where .=" and a.user_id={$user->id}  and role_id={$user->login_role_id}  and order_refer = 2";
                 }
                 break;
             case 'supplier':
