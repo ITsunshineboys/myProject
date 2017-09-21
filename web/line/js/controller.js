@@ -301,7 +301,7 @@ angular.module("all_controller", [])
             console.log(response);
         });
         // 跳转到订单页面
-        $scope.order_commodity =function () {
+        $scope.getOrderCommodity =function () {
             console.log(222222);
             setTimeout(function () {
                 $state.go('order_commodity')
@@ -343,7 +343,6 @@ angular.module("all_controller", [])
         }
 
     })
-
      //确认订单
     .controller('order_commodity',function ($scope,$http,$state,$stateParams) {
 

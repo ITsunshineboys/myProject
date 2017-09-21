@@ -1,0 +1,83 @@
+<link rel="stylesheet" href="css/order.css"/>
+
+<div ng-controller="order_commodity" ng-cloak>
+ <header>
+     <div>
+         <img src="images/mall_nav_return.png" alt="">
+         <span>确认订单</span>
+     </div>
+ </header>
+ <section>
+     <div class="address_map">
+         <img src="images/mall_location_blue.png" alt="">
+         <span class="delivery_address">填写收货地址</span>
+         <img src="images/left_com.png" alt="">
+     </div>
+     <!--商品详情展示-->
+     <div class="bag_div"></div>
+     <div class="address_shop">
+         <div class="inoc_title">
+             <img src="images/appliances.png" alt="">
+             <span>深大木地板</span>
+         </div>
+         <div class="address_commodity">
+             <img src="images/bed.png" alt="">
+             <div class="left_commodity">
+                 <p>我去IQ那敏谈谈李</p>
+                 <p>去留肝胆两昆仑</p>
+                 <span>￥500.00</span>
+                 <span>X100</span>
+             </div>
+         </div>
+     </div>
+     <!--发票 付款 留言-->
+     <div class="bag_div"></div>
+     <div class="more_details">
+         <ul>
+             <li class="show_in">
+                 <span>发票信息</span>
+                 <span>明细-艾特魔  &nbsp; 〉</span>
+                 <!--<img src="images/left_com.png" alt="">-->
+             </li>
+             <li>
+                 <span>付款方式</span>
+                 <span>在线支付</span>
+             </li>
+             <li>
+                 <span>买家留言</span>
+                 <input type="text" placeholder="选填：对本次交易的说明">
+             </li>
+         </ul>
+     </div>
+     <!--商品价格 优惠价格 运费-->
+     <div class="bag_div"></div>
+     <div class="commodity_pic">
+         <ul>
+             <li>
+                 <span>商品价格</span>
+                 <span class="commodity_pic_num">￥4800.00</span>
+             </li>
+             <li>
+                 <span>优惠价格</span>
+                 <span class="commodity_pic_r">￥800.00</span>
+             </li>
+             <li>
+                 <span>+运费</span>
+                 <span>￥80.00</span>
+             </li>
+         </ul>
+     </div>
+     <!--需要付款-->
+     <div class="need_required">
+         <span>需付款：</span>
+         <span>￥1360.00</span>
+     </div>
+     <div class="bag_div"></div>
+     <!--去支付-->
+     <div class="go_play">
+         <span>合计：</span>
+         <span>￥1360.00</span>
+         <button>去支付</button>
+     </div>
+ </section>
+</div>
