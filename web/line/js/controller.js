@@ -301,14 +301,12 @@ angular.module("all_controller", [])
             console.log(response);
         });
         // 跳转到订单页面
-        $scope.getOrder =function () {
+        $scope.order_commodity =function () {
             console.log(222222);
             setTimeout(function () {
                 $state.go('order_commodity')
             },300)
-
         }
-
     })
      //店铺首页和全部商品
     .controller("shop_front_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
