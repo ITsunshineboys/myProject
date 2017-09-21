@@ -148,7 +148,6 @@ angular.module("all_controller", [])
             $state.go("details",{'pid':$scope.pid,'id':item.id})
         }
     })
-
     //某个商品的详细列表
     .controller("details_ctrl", function ($scope,$http ,$state,$stateParams) {
         console.log($stateParams);
@@ -303,7 +302,11 @@ angular.module("all_controller", [])
         });
         // 跳转到订单页面
         $scope.getOrder =function () {
-            $state.go('order')
+            console.log(222222);
+            setTimeout(function () {
+                $state.go('order_commodity')
+            },300)
+
         }
 
     })
@@ -344,7 +347,7 @@ angular.module("all_controller", [])
     })
 
      //确认订单
-    .controller('order_ctrl',function ($scope,$http,$state,$stateParams) {
+    .controller('order_commodity',function ($scope,$http,$state,$stateParams) {
 
     })
    //=================分割 飞机线========================

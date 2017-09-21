@@ -58,15 +58,14 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "shop_front_ctrl",
                 params:{'pid':'',"id":""}
             })
-            .state("order", {   //订单确认
-                url: "/order",
+            .state("order_commodity", {    //订单确认
+                url: "/order_commodity",
                 views: {
-                    "": {templateUrl: "order.html"}
+                    "": {templateUrl: "order_commodity.html"}
                 },
-                controller: "order_ctrl",
+                controller: "order_commodity",
                 params:{}
             })
-
 
     }])
 
@@ -77,4 +76,4 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 $state.go(fromState.name,obj)
             }
         })
-    }])
+    }]);
