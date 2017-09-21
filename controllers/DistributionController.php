@@ -6,6 +6,7 @@ use app\models\Addressadd;
 use app\models\Distribution;
 use app\models\GoodsOrder;
 use app\models\LoginForm;
+use app\models\Supplier;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
