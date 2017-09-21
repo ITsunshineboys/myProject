@@ -40,6 +40,7 @@ class OwnerController extends Controller
     const WALL = 4;
     const WALL_SPACE = 3;
     const DIGITAL = 2;
+    const PRICE_UNITS = 100;
     const DEFAULT_CITY_CODE = 510100;
 
     const WEAK_MATERIAL   = ['网线', '线管', '底盒'];
@@ -1407,7 +1408,23 @@ class OwnerController extends Controller
             $ids[] = $goods_id['logistics_template_id'];
         }
         $logistics_template = LogisticsTemplate::findByGoodsSku($ids);
-        var_dump($logistics_template);exit;
+        //物流信息
+        foreach ($goods as &$logistics){
+            foreach ($logistics_template as $one_logistics){
+                if ($logistics['logistics_template_id']  == $one_logistics['id']){
+                    if ($one_logistics['delivery_method'] != 1 ){
+                        $logistics_message = $one_logistics['delivery_cost_default'] / self::PRICE_UNITS;
+                    } else {
+                        $logistics_message = 0;
+                    }
+
+                }
+            }
+        }
+        var_dump($logistics_message);
+        var_dump($goods);
+        var_dump($logistics_template);
+        exit;
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',

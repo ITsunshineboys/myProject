@@ -204,7 +204,7 @@ class LogisticsTemplate extends ActiveRecord
         return self::find()
             ->asArray()
             ->select($select)
-            ->where(['in','id',$ids])
+            ->where(['and',['in','id',$ids],['status'=>self::STATUS_ONLINE]])
             ->all();
     }
 }
