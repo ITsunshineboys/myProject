@@ -364,15 +364,19 @@ class FindworkerController extends Controller{
             ]);
         }
         $worker=Worker::find()->where(['uid'=>$user_id])->one();
-        $province_code=$worker->province_code=(int)trim(\Yii::$app->request->post('province_code',''),'');
-        $city_code=$worker->city_code=(int)trim(\Yii::$app->request->post('city_code',''),'');
-        $district_code=$worker->district_code=(int)trim(\Yii::$app->request->post('district_code',''),'');
+        $province_code=(int)trim(\Yii::$app->request->post('province_code',''),'');
+        $city_code=(int)trim(\Yii::$app->request->post('city_code',''),'');
+        $district_code=(int)trim(\Yii::$app->request->post('district_code',''),'');
         if(!$province_code || !$city_code || !$district_code){
             return Json::encode([
                 'code' => $code,
                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $province=District::findByCode($province_code)->name;
+        $city=District::findByCode($city_code)->name;
+        $district=District::findByCode($district_code)->name;
+        $worker->native_place=$province.$city.$district;
         if(!$worker->save(false)){
             $code=500;
             return Json::encode([
@@ -400,6 +404,20 @@ class FindworkerController extends Controller{
      * 实名认证
      */
     public function  actionCertification(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $post=\Yii::$app->request->post();
+        $code=Worker::Certification($post,$user_id);
+        return Json::encode([
+            'code' => $code,
+            'msg' =>$code==200?'ok':\ Yii::$app->params['errorCodes'][$code]
+        ]);
 
 
     }

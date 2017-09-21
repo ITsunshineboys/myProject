@@ -554,7 +554,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return 200;
         } catch (Exception $e) {
             $transaction->rollBack();
-            return 1000;
+            return 500;
         }
 
     }
@@ -652,8 +652,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
         if (!$order_info) {
             return null;
         }
-        $start_time = date('m.j', $order_info['start_time']);
-        $end_time = date('m.j', $order_info['end_time']);
+        $start_time = date('n.j', $order_info['start_time']);
+        $end_time = date('n.j', $order_info['end_time']);
         $time['need_time'] = $order_info['need_time'];
         $time['time_length'] = $start_time . self::TIMESTYPE . $end_time;
         return $time;

@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use Yii;
+use yii\db\ActiveRecord;
+use yii\db\Exception;
 
 
 /**
@@ -35,6 +38,7 @@ use Yii;
  */
 class Worker extends \yii\db\ActiveRecord
 {
+    const WorkerRoleId=2;
     const ORDER_BEGIN=3;
     /**
      * @inheritdoc
@@ -162,5 +166,60 @@ class Worker extends \yii\db\ActiveRecord
         $data['worker_count_order']=$count_worker_order;
         $data['worker_order_place']=$count_worker_place;
         return $data;
+    }
+
+    public static function Certification(array $post,$uid,ActiveRecord $operator = null){
+        $worker=Worker::find()->where(['uid'=>$uid])->one();
+        $worker->worker_type_id=$post['worker_type_id'];
+        $worker->province_code=$post['province_code'];
+        $worker->city_code=$post['city_code'];
+        $worker->uid=$uid;
+        $worker->work_year=$post['work_year'];
+        $worker->nickname=$post['nickname'];
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            if(!$worker->save(false)){
+                $transaction->rollBack();
+                $code = 500;
+                return $code;
+            }
+            if($post['identity_no'] && !StringService::checkIdentityCardNo($post['identity_no'])){
+                $transaction->rollBack();
+                $code = 1000;
+                return $code;
+            }
+            $user=User::find()->where(['id'=>$uid])->one();
+
+            $user->identity_no=$post['identity_no'];
+            $user->identity_card_front_image=$post['identity_card_front_image'];
+            $user->identity_card_back_image=$post['identity_card_back_image'];
+            if(!$user->save(false)){
+                $transaction->rollBack();
+                $code = 500;
+                return $code;
+            }
+            UserRole::deleteAll(['user_id' => $uid, 'role_id' => self::WorkerRoleId]);
+            $userRole = new UserRole;
+            $userRole->user_id = $user->id;
+            $userRole->role_id = self::WorkerRoleId;
+            $userRole->review_apply_time = time();
+            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
+
+            if(!$userRole->save(false)){
+                $transaction->rollBack();
+                $code = 500;
+                return $code;
+            }
+            $transaction->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $transaction->rollBack();
+            $code = 500;
+            return $code;
+        }
+
+
+
     }
 }
