@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="css/product_details.css"/>
 <div ng-controller="product_details_ctrl" class="main_body">
     <a class="header" ng-click="goPrev({stair:stair,index:index,level:level,stair_copy:stair_copy
-                ,worker_category:worker_category,level:level,
+                ,worker_category:worker_category,
                 handyman_price:handyman_price,area:area,series_index:series_index,style_index:style_index,
                 labor_price:labor_price,house_bedroom:house_bedroom,house_hall:house_hall,
                 house_kitchen:house_kitchen,house_toilet:house_toilet,highCrtl:highCrtl,
@@ -11,8 +11,17 @@
             <img src="images/mall_nav_return.png" alt="">
     </a>
     <div class="main">
-        <div class="details_banner">
-            <img src="images/banner1.png" alt=""/>
+         <div class="carousel" swiper>
+             <img src="images/banner1.png" id="size_img"  alt="">
+             <!--<div class="swiper-container">-->
+                  <!--<div class="swiper-wrapper">-->
+                      <!--<div class="swiper-slide" ng-repeat="n in swiper_img" id="size_img">-->
+                          <!--<img src="http://test.cdlhzz.cn:888/{{n.image}}" alt="" />-->
+                      <!--</div>-->
+                  <!--</div>-->
+                    <!--&lt;!&ndash; 如果需要分页器 &ndash;&gt;-->
+                    <!--<div class="swiper-pagination "></div>-->
+             <!--</div>-->
         </div>
         <div class="intro_box">
             <div class="product_name">
@@ -31,7 +40,7 @@
         <!--服务项-->
         <div class="service_item" data-toggle="modal" data-target="#myModal_sec">
             <ul>
-                <li><img src="images/right.png" alt=""/> &nbsp;<span>上门维修</span></li>
+                <li><img src="images/right.png" alt=""/> &nbsp<span>上门维修</span></li>
                 <li><img src="images/right.png" alt=""/> &nbsp;<span>上门换货</span></li>
                 <li><img src="images/right.png" alt=""/> &nbsp;<span>上门退货</span></li>
                 <li>
@@ -135,7 +144,7 @@
                 </div>
                 <div class="modal-footer_div">
                     <!--<button type="button" class=" resct_btn_one join_cart " data-dismiss="modal" data-toggle="modal" data-target="#myModalP">加入购物车</button>-->
-                    <button type="button" class="resct_btn_two" data-dismiss="modal">立即购买</button>
+                    <button type="button" class="resct_btn_two" ng-click="getOrder()" data-dismiss="modal">立即购买</button>
                     <!--<button type="button" class=" resct_btn_two" data-dismiss="modal" ng-if="prev_index == 1 || prev_index == 2" ng-click="replace_goods()">更换</button>-->
                 </div>
             </div>

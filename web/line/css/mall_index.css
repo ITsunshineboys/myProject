@@ -1,5 +1,5 @@
 
-/*¿ªÊ¼*/
+/*ï¿½ï¿½Ê¼*/
 .search_box{
     width: auto;
     height: 4rem;
@@ -45,7 +45,7 @@
     top:1.25rem;
     right:1.2rem;
 }
-/*»ÃµÆÆ¬¿ªÊ¼*/
+/*ï¿½Ãµï¿½Æ¬ï¿½ï¿½Ê¼*/
 /*.swiper-container {*/
     /*margin:0 auto;*/
     /*position:relative;*/
@@ -147,10 +147,10 @@ Pagination Styles
     border-radius: 0.35rem;
     background: #53A7F3;
 }
-/*»ÃµÆÆ¬½áÊø*/
+/*ï¿½Ãµï¿½Æ¬ï¿½ï¿½ï¿½ï¿½*/
 
 
-/*ÍÆ¼ö¿ªÊ¼*/
+/*ï¿½Æ¼ï¿½ï¿½ï¿½Ê¼*/
 .banner_recommend{
     margin-bottom: 1rem;
     margin-left: .5rem;
@@ -199,7 +199,7 @@ Pagination Styles
     display: block;
     color:#9094A1;
 }
-/*ÍÆ¼ö¿ªÊ¼*/
+/*ï¿½Æ¼ï¿½ï¿½ï¿½Ê¼*/
 .recommend_box{
     width: auto;
     height: auto;
@@ -324,4 +324,3 @@ Pagination Styles
     color:#F56A22
 }
 
-/*Î²²¿*/

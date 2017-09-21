@@ -39,7 +39,8 @@
                                 <div class="swiper-container">
                                     <div class="swiper-wrapper">
                                         <div class="swiper-slide" >
-                                            <img src="images/banner1.png" alt="" class="size_img"/>
+                                            <!--<img src="images/banner1.png" alt="" class="size_img"/>-->
+                                            <img src="images/chart.jpg" alt="" class="size_img"/>
                                         </div>
                                     </div>
                                     <!-- 如果需要分页器 -->
@@ -105,8 +106,72 @@
     </div>
     <div style="width: 32rem;height: 1rem;background-color: #F6F6F6"></div>
     <!--店铺介绍-->
-    <div class="shop_profile">
+    <div class="shop_profile" data-toggle="modal" data-target="#shop_introduction">
         <span>店铺简介</span>
+    </div>
+
+
+    <!-- Modal  店铺简介 -->
+    <div class="modal fade" id="shop_introduction" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" id="shop_profile">
+            <div class="modal-content" id="shop_body">
+                <div class="modal-header" id="shop_header">
+                    <img src="images/mall_nav_return.png" data-dismiss="modal"  class="shop_back_return" alt=""/>
+                    <span class="modal-title" id="shop_title">店铺简介</span>
+                    <img src="images/mall_home.png" data-dismiss="modal" ng-click="getHome()" class="shop_back_home" alt=""/>
+                </div>
+                <div class="modal-body">
+                    <!--头部-->
+                    <div class="header_shop">
+                        <img src="images/bed.png" alt=""/>
+                        <span>深大地板直营店</span>
+                        <div>
+                            <p class="num">12k</p>
+                            <p class="fan_count">粉丝数</p>
+                        </div>
+                    </div>
+                    <div class="bag_div"></div>
+                    <!--展示一-->
+                    <div class="comment_show">
+                        <ul >
+                            <li >
+                                <span>店铺号</span>
+                                <span>22335</span>
+                            </li>
+                            <li>
+                                <span>开店时间</span>
+                                <span>2017-10-10</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--展示二-->
+                    <div class="bag_div"></div>
+                    <div class="comment_show">
+                        <ul>
+                            <li>
+                                <span>店铺号</span>
+                                <span>22335</span>
+                            </li>
+                            <li>
+                                <span>开店时间</span>
+                                <span>2017-10-10</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--展示三-->
+                    <div class="bag_div"></div>
+                    <div class="comment_show">
+                        <ul>
+                            <li>
+                                <span>资质</span>
+                                <span class="num_left">质保金</span>
+                                <span class="color_span">55555</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 </div>

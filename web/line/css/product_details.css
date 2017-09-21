@@ -11,13 +11,13 @@
     width: auto;
     height: auto;
 }
-.main .details_banner{
+.main {
     width:100%;
     height: 31rem;
     position:relative;
     background-color: #31b0d5;
 }
-.main .details_banner img{
+#size_img{
     width:100%;
     height: 31rem;
 

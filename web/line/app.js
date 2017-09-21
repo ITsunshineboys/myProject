@@ -55,8 +55,16 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 views: {
                     "": {templateUrl: "shop_front.html"}
                 },
-                controller: "shop_front_ctrl)",
+                controller: "shop_front_ctrl",
                 params:{'pid':'',"id":""}
+            })
+            .state("order", {   //订单确认
+                url: "/order",
+                views: {
+                    "": {templateUrl: "order.html"}
+                },
+                controller: "order_ctrl",
+                params:{}
             })
 
 
@@ -64,7 +72,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
 
     .run(["$rootScope","$state",function ($rootScope,$state) {
         $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
-            document.body.scrollTop = document.documentElement.scrollTop = 0
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
             $rootScope.goPrev = function (obj) {
                 $state.go(fromState.name,obj)
             }

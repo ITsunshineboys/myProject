@@ -57,7 +57,14 @@ section{
     margin-left: 2.6rem;
     color: #B8B6B6;
     display: inline-block;
-
+}
+.up_down{
+    width: 1rem;
+    height: 1.5rem;
+}
+.filter_nor{
+    width: 1.4rem;
+    height: 1.7rem;
 }
 .sort{
     color:#A9A9A9 ;
@@ -71,8 +78,6 @@ section{
 }
 .flex_div{
     position: relative;
-
-    /*top:1rem;*/
 }
 .item_commodity{
     position: relative;
@@ -151,7 +156,7 @@ section{
     margin-left: 1rem;
 }
 .well ul li{
-    width: 6rem;
+    width: 5.5rem;
     height: 2.4rem;
     border: 1px solid #999;
     color: #959292;
@@ -159,12 +164,10 @@ section{
     display: inline-block;
     text-align: center;
     line-height: 2.4rem;
-    font-size: 1rem;
-    margin-left: .2rem;
+    font-size: 1.1rem;
+    margin-left: .5rem;
     margin-bottom: .7rem;
     margin-top: .7rem;
-
-
 }
 .price_range{
     margin: 1.2rem 0;
@@ -252,4 +255,28 @@ section{
 .back_btn{
     width: 10rem;
     margin-left: -4.2rem;
+}
+/*第三个页面*/
+.brands_more{
+
+}
+.brands_more ul{
+
+}
+.brands_more ul li {
+    list-style: none;
+    width: 5.5rem;
+    height: 2.4rem;
+    border: 1px solid #999;
+    color: #959292;
+    border-radius:0.5rem;
+    display: inline-block;
+    text-align: center;
+    line-height: 2.4rem;
+    font-size: 1.1rem;
+    margin-left: .5rem;
+    margin-bottom: .7rem;
+    margin-top: .7rem;
+
+
 }

@@ -10,21 +10,19 @@
         <!--<img src="searchimages/message_icon.png" class="massage" alt=""/>-->
     </div>
     <!--banner图开始-->
-    <div class="device">
-            <div swiper>
-                <div class="carousel">
-                    <div class="swiper-container">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide" ng-repeat="n in swiper_img">
-                                <img src="http://test.cdlhzz.cn:888/{{n.image}}" alt="" class="size_img"/>
-                            </div>
-                        </div>
-                        <!-- 如果需要分页器 -->
-                        <div class="swiper-pagination size_div"></div>
-                    </div>
-                </div>
+    <div class="carousel" swiper>
+        <div class="swiper-container" swiper>
+            <div class="swiper-wrapper">
+                 <div class="swiper-slide" ng-repeat="n in swiper_img">
+                      <img src="http://test.cdlhzz.cn:888/{{n.image}}" alt="" class="size_img"/>
+                 </div>
             </div>
+              <!-- 如果需要分页器 -->
+            <div class="swiper-pagination "></div>
+        </div>
     </div>
+
+
     <!--banner图结束-->
     <!--分类开始-->
     <div class="classify-box">
@@ -60,15 +58,7 @@
         </div>
     </div>
 
-    <!--<footer>-->
-        <!--<div class="footer_home">-->
-           <!--<ul>-->
-               <!--<li>-->
 
-               <!--</li>-->
-           <!--</ul>-->
-        <!--</div>-->
-    <!--</footer>-->
 </div>
 
 </div>
