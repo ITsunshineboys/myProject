@@ -836,10 +836,12 @@ class DistributionController extends Controller
 //                'msg' => Yii::$app->params['errorCodes'][$code]
 //            ]);
 //        }
-        $data=Distribution::find()->asArray()->all();
+//        $data=Distribution::find()->asArray()->all();
+//        var_dump($data);
+
+                $data=Yii::$app->db->createCommand('alter table distribution engine=InnoDB')
+            ->execute();
         var_dump($data);
-
-
     }
 
 
