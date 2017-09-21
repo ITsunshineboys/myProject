@@ -1249,7 +1249,7 @@ CREATE TABLE `worker` (
   `project_manager_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '项目经理id',
   `province_code` int(20) DEFAULT NULL COMMENT '省份编码',
   `city_code` int(20) DEFAULT NULL COMMENT '市编码',
-  `native _place` varchar(100) NOT NULL  DEFAULT '' COMMENT '籍贯',
+  `native_place` varchar(100) NOT NULL  DEFAULT '' COMMENT '籍贯',
   `labor_cost_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工费地区id (包含工人类型和等级)',
   `worker_type_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工种id(只能选pid为0的)',
   `nickname` varchar(25) NOT NULL DEFAULT '' COMMENT '工人名字',
