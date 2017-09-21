@@ -323,6 +323,33 @@ class FindworkerController extends Controller{
 
     }
     /**
+     * 工人账户管理
+     * @return string
+     */
+    public function actionWorkerAccount(){
+        $user_id = \Yii::$app->user->identity->getId();
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=Worker::getWorkerAccount($user_id);
+        if(!$data){
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'ok',
+                'data'=>null
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data'=>$data
+        ]);
+    }
+    /**
      * 个人资料-工人
      * @return string
      */

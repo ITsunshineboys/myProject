@@ -6,6 +6,7 @@ use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
+use yii\db\Query;
 
 
 /**
@@ -38,8 +39,20 @@ use yii\db\Exception;
  */
 class Worker extends \yii\db\ActiveRecord
 {
+    const DAI_STATUS=1;
     const WorkerRoleId=2;
     const ORDER_BEGIN=3;
+    const STATUS_OFFLINE = 0;
+    const STATUS_DESC_NO_REVIE='未认证';
+    const STATUS_DESC_WAIT_REVIEW = '等待审核';
+    const STATUS_DESC_ONLINE_APP = '已认证';
+    const STATUS_DESC_NOT_APPROVED = '审核未通过';
+    const STATUSES=[
+        self::STATUS_OFFLINE=>self::STATUS_DESC_NO_REVIE,
+        self::DAI_STATUS=>self::STATUS_DESC_WAIT_REVIEW,
+        self::WorkerRoleId=>self::STATUS_DESC_ONLINE_APP,
+        self::ORDER_BEGIN=>self::STATUS_DESC_NOT_APPROVED
+    ];
     /**
      * @inheritdoc
      */
@@ -136,6 +149,7 @@ class Worker extends \yii\db\ActiveRecord
         return LaborCost::find()->where(['id' => $labor_cost_id])->one();
     }
     /**
+     * 获取工程订单 智管工地 数量
      * @param $user_id
      * @return array|int
      */
@@ -167,7 +181,34 @@ class Worker extends \yii\db\ActiveRecord
         $data['worker_order_place']=$count_worker_place;
         return $data;
     }
-
+    /**
+     * 工人账户详情
+     * @param $uid
+     * @return array|bool|null
+     */
+    public static function getWorkerAccount($uid){
+        $query=new Query();
+        $array=$query
+            ->from('worker as w')
+            ->select('w.examine_status,w.icon,w.nickname,lc.rank,u.aite_cube_no')
+            ->leftJoin('user as u','w.uid=u.id')
+            ->leftJoin('labor_cost as lc','w.labor_cost_id=lc.id')
+            ->where(['w.uid'=>$uid])
+            ->one();
+            $array['examine_status']=self::STATUSES[$array['examine_status']];
+            $array['worker_no']=$array['aite_cube_no'];
+        if(!$array){
+            return null;
+        }
+        return $array;
+    }
+    /**
+     * 工人实名认证
+     * @param array $post
+     * @param $uid
+     * @param ActiveRecord|null $operator
+     * @return int
+     */
     public static function Certification(array $post,$uid,ActiveRecord $operator = null){
         $worker=Worker::find()->where(['uid'=>$uid])->one();
         $worker->worker_type_id=$post['worker_type_id'];
@@ -176,6 +217,7 @@ class Worker extends \yii\db\ActiveRecord
         $worker->uid=$uid;
         $worker->work_year=$post['work_year'];
         $worker->nickname=$post['nickname'];
+        $worker->examine_status=self::DAI_STATUS;
         $transaction = Yii::$app->db->beginTransaction();
         try{
             if(!$worker->save(false)){
