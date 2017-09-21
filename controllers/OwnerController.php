@@ -40,6 +40,15 @@ class OwnerController extends Controller
     const WALL_SPACE = 3;
     const DIGITAL = 2;
     const DEFAULT_CITY_CODE = 510100;
+
+    const WEAK_MATERIAL   = ['网线', '线管', '底盒'];
+    const STRING_MATERIAL = ['电线', '线管', '底盒'];
+    const WATERWAY_MATERIAL = ['PPR水管', 'PVC管'];
+    const WATERPROOF_MATERIAL = ['防水涂料'];
+    const CARPENTRY_MATERIAL = ['石膏板', '龙骨', '丝杆'];
+    const LATEX_MATERIAL = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
+    const TILER_MATERIAL = ['水泥', '自流平', '河沙'];
+    const BACKMAN_MATERIAL = ['水泥', '河沙', '空心砖'];
     /**
      * work category details
      */
@@ -283,8 +292,7 @@ class OwnerController extends Controller
         $weak_points = $sitting_room + $secondary_bedroom;
 
         //查询弱电所需要材料
-        $material = ['网线', '线管', '底盒'];
-        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL);
         $judge = BasisDecorationService::priceConversion($goods);
         $weak_current = BasisDecorationService::judge($judge, $post);
 
@@ -356,8 +364,7 @@ class OwnerController extends Controller
         $points_details = BasisDecorationService::strongCurrentPoints($points_total, $post);
 
         //查询弱电所需要材料
-        $material = ['电线', '线管', '底盒'];
-        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::STRING_MATERIAL);
         $judge = BasisDecorationService::priceConversion($goods);
         $strong_current = BasisDecorationService::judge($judge, $post);
 
@@ -441,8 +448,7 @@ class OwnerController extends Controller
         $waterway_points = $kitchen + $toilet + $other;
 
         //查询弱电所需要材料
-        $material = ['PPR水管', 'PVC管'];
-        $goods = Goods::priceDetail(self::WALL_SPACE,$material);
+        $goods = Goods::priceDetail(self::WALL_SPACE,self::WATERWAY_MATERIAL);
         $judge = BasisDecorationService::priceConversion($goods);
         $waterway_current = BasisDecorationService::judge($judge, $post);
 
@@ -511,8 +517,7 @@ class OwnerController extends Controller
         //防水所需材料
 
         //查询弱电所需要材料
-        $material = ['防水涂料'];
-        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::WATERPROOF_MATERIAL);
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
 
@@ -620,9 +625,9 @@ class OwnerController extends Controller
         //人工费
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $price);
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
+
         //材料
-        $material = ['石膏板', '龙骨', '丝杆'];
-        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL);
         $judge = BasisDecorationService::priceConversion($goods);
         $goods_price = BasisDecorationService::judge($judge, $post);
         //当地工艺
@@ -780,8 +785,7 @@ class OwnerController extends Controller
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
-        $material = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
-        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL);
         $goods_price = BasisDecorationService::priceConversion($goods);
 
         //当地工艺
@@ -982,8 +986,7 @@ class OwnerController extends Controller
         $total_labor_cost['worker_kind'] = self::PROJECT_DETAILS['tiler'];
 
         //材料费
-        $material = ['水泥', '自流平', '河沙'];
-        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
 
@@ -1138,9 +1141,9 @@ class OwnerController extends Controller
 //        总人工费
         $labor_cost['price'] = $total_day['total_day'] * $labor['univalence'] + $building_scrap['cost'];
         $labor_cost['worker_kind'] = $handyman;
+
         //材料费
-        $material = ['水泥', '河沙', '空心砖'];
-        $goods = Goods::priceDetail(self::WALL_SPACE, $material);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = [];
         foreach ($goods_price as $max) {
