@@ -4708,7 +4708,8 @@ class MallController extends Controller
             $where,
             GoodsRecommendSupplier::$adminFields,
             1,
-            GoodsRecommendSupplier::PAGE_SIZE_DEFAULT_ADMIN_INDEX);
+            GoodsRecommendSupplier::PAGE_SIZE_DEFAULT_ADMIN_INDEX,
+            ['sorting_number' => SORT_ASC]);
         return Json::encode($ret);
     }
 
