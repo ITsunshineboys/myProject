@@ -566,14 +566,14 @@ class GoodsRecommendSupplier extends ActiveRecord
      */
     public function validateDescription($attribute)
     {
-        if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
-            return true;
-        }
-
-        if (empty($this->$attribute)) {
-            $this->addError($attribute);
-            return false;
-        }
+//        if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
+//            return true;
+//        }
+//
+//        if (empty($this->$attribute)) {
+//            $this->addError($attribute);
+//            return false;
+//        }
 
         return true;
     }
@@ -586,17 +586,17 @@ class GoodsRecommendSupplier extends ActiveRecord
      */
     public function validatePlatformPrice($attribute)
     {
-        if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
-            if (isset($this->$attribute)) {
-                unset($this->$attribute);
-            }
-            return true;
-        }
-
-        if (empty($this->$attribute)) {
-            $this->addError($attribute);
-            return false;
-        }
+//        if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
+//            if (isset($this->$attribute)) {
+//                unset($this->$attribute);
+//            }
+//            return true;
+//        }
+//
+//        if (empty($this->$attribute)) {
+//            $this->addError($attribute);
+//            return false;
+//        }
 
         return true;
     }
