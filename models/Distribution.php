@@ -103,7 +103,7 @@ class Distribution extends ActiveRecord
 
         if ($parent)
         {
-            $parents=['mobile'=>$parent->mobile,'time'=>date('y-m-d H:i',$data->applydis_time)];
+            $parents=['mobile'=>$parent->mobile,'time'=>date('Y-m-d H:i',$data->applydis_time)];
         }else{
             $parents=[];
         }

@@ -600,7 +600,6 @@ class DistributionController extends Controller
         }
         $tran = Yii::$app->db->beginTransaction();
         try{
-
             $Distribution->profit=$profit*100;
             $res=$Distribution->save(false);
             if (!$res)
@@ -612,6 +611,7 @@ class DistributionController extends Controller
                 ]);
             }
             $code=200;
+            $tran->commit();
             return Json::encode([
                 'code' => $code,
                 'msg' =>'ok'
@@ -764,8 +764,8 @@ class DistributionController extends Controller
         }
     }
 
-     /**
-     * 添加备注
+    /**
+     * 添加/修改备注
      * @return string
      */
     public  function  actionAddRemarks()
@@ -811,6 +811,7 @@ class DistributionController extends Controller
                 ]);
             }
             $code=200;
+            $tran->commit();
             return Json::encode([
                 'code' => $code,
                 'msg' =>'ok'
