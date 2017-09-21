@@ -42,14 +42,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
     const WORKER_ORDER_CANCELED = 0;
     const WORKER_ORDER_NOT_BEGIN = 1;
     const WORKER_ORDER_PREPARE = 2;
-    const WORKER_ORDER_PREPARE = 2;
-    const WORKER_ORDER_ING = 3;
-    const WORKER_ORDER_DONE = 4;
+    const WORKER_ORDER_READY = 3;
+    const WORKER_ORDER_ING = 4;
+    const WORKER_ORDER_DONE = 5;
 
     const WORKER_ORDER_STATUS = [
         self::WORKER_ORDER_CANCELED => '完工',
         self::WORKER_ORDER_NOT_BEGIN => '未开始',
         self::WORKER_ORDER_PREPARE => '未开始',
+        self::WORKER_ORDER_READY => '未开始',
         self::WORKER_ORDER_ING => '施工中',
         self::WORKER_ORDER_DONE => '完工'
     ];
@@ -58,6 +59,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         self::WORKER_ORDER_CANCELED => '已取消',
         self::WORKER_ORDER_NOT_BEGIN => '接单中',
         self::WORKER_ORDER_PREPARE => '已接单',
+        self::WORKER_ORDER_READY => '申请开工',
         self::WORKER_ORDER_ING => '施工中',
         self::WORKER_ORDER_DONE => '已完工'
     ];
@@ -127,7 +129,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'con_tel' => '联系电话',
             'amount' => '订单总金额',
             'front_money' => '订金',
-            'status' => '0: 已取消(完成)，1：未开始(接单中)，2：未开始(已接单)，3：施工中，4：已完工(完成)',
+            'status' => '0: 已取消(完成)，1：未开始(接单中)，2：未开始(已接单)，3: 未开始(申请开工)，4：施工中，5：已完工(完成)',
             'describe' => '订单描述',
             'is_old' => '是否旧数据，0：不是，  1：是',
             'demand' => '个性需求',
@@ -299,10 +301,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->one();
         }
 
-        $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
+
+
         $order_no = self::getOrderNoById($order_id);
+
+        $works_id = 0;
+        if ($order->status == self::WORKER_ORDER_DONE) {
+            //得到worker_works_id
+            $works_id = self::getWorksIdByOrderNo($order_no);
+        }
+
         $order_img = self::getOrderImg($order_no);
 
+        $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
         $skill_ids = $worker['skill_ids'];
 
         $skills = [];
@@ -330,7 +341,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'order' => $order,
             'worker_items' => $worker_items,
             'order_img' => $order_img,
-            'worker' => $worker
+            'worker' => $worker,
+            'works_id' => $works_id
         ];
     }
 
@@ -671,6 +683,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         foreach ($arr as &$v) {
             $v = self::dealOrder($v);
+            $v->status = self::USER_WORKER_ORDER_STATUS[$v->status];
         }
 
         return ModelService::pageDeal($arr, $count, $page, $page_size);
@@ -798,6 +811,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         $order_no = $works->order_no;
         switch ($status) {
+
             case self::WORKER_WORKS_BEFORE:
                 //先找用户下订单的图片
                 $order_img = WorkerOrderImg::find()
@@ -834,9 +848,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     }
                 }
                 break;
+
             case self::WORKER_WORKS_ING:
                 //装修的天数/2取整   这天的图片前3张
-
                 $query = WorkerOrderDayResult::find()
                     ->where(['order_no' => $order_no]);
                 $count = $query->count();
@@ -867,6 +881,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     $img[] = $value->id;
                 }
                 break;
+
             case self::WORKER_WORKS_AFTER:
                 $worker_order_day = WorkerOrderDayResult::find()
                     ->where(['order_no' => $order_no])
@@ -892,6 +907,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     $img[] = $value->id;
                 }
                 break;
+
             default:
                 return '';
         }
@@ -905,4 +921,14 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $img;
     }
 
+
+    public static function getWorksIdByOrderNo($order_no)
+    {
+        $id = 0;
+        $works = WorkerWorks::find()->where(['order_no' => $order_no])->one();
+        if ($works) {
+            $id = $works->id;
+        }
+        return $id;
+    }
 }

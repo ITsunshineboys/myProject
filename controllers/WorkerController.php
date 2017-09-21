@@ -20,7 +20,7 @@ use yii\web\Controller;
 
 class WorkerController extends Controller
 {
-    const STATUS_ALL = 5;
+    const STATUS_ALL = 6;
     const STAR_DEFAULT = 15;
 
     /**
@@ -587,6 +587,11 @@ class WorkerController extends Controller
         ]);
     }
 
+    /**
+     * 得到 订单历史记录
+     *
+     * @return int|string
+     */
     public function actionGetOrderHistory()
     {
         $user = self::userIdentity();
@@ -626,6 +631,26 @@ class WorkerController extends Controller
     public function actionCancelOrder()
     {
         return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_CANCELED);
+    }
+
+    /**
+     * 工人接单改变状态
+     *
+     * @return string
+     */
+    public function actionAcceptOrder()
+    {
+        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_PREPARE);
+    }
+
+    /**
+     * 工人申请开工
+     *
+     * @return string
+     */
+    public function actionReadyOrder()
+    {
+        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_READY);
     }
 
     /**
@@ -692,11 +717,33 @@ class WorkerController extends Controller
 
         $trans = \Yii::$app->db->beginTransaction();
 
-        try {
-            WorkerOrder::updateAll(['status' => $status], ['order_no' => $order_no]);
-            $trans->commit();
-        } catch (Exception $e) {
+        if (WorkerOrder::updateAll(['status' => $status], ['order_no' => $order_no])) {
 
+            if ($status == WorkerOrder::WORKER_ORDER_DONE) {
+
+                $works = WorkerOrder::newWorkerWorks($worker_id, $order_no);
+
+                if (!is_array($works)) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+
+                $works_id = $works[1];
+
+                $works_detail = WorkerOrder::newWorkerWorksDetail($works_id);
+
+                if ($works_detail != 200) {
+                    $trans->rollBack();
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+
+        } else {
             $trans->rollBack();
             return Json::encode([
                 'code' => $code,
@@ -704,28 +751,7 @@ class WorkerController extends Controller
             ]);
         }
 
-
-        if ($status == WorkerOrder::WORKER_ORDER_DONE) {
-            $works = WorkerOrder::newWorkerWorks($worker_id, $order_no);
-            if (!is_array($works)) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-            $works_id = $works[1];
-
-            $works_detail = WorkerOrder::newWorkerWorksDetail($works_id);
-
-            if ($works_detail != 200) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-        }
+        $trans->commit();
 
         return Json::encode([
             'code' => 200,
@@ -791,8 +817,6 @@ class WorkerController extends Controller
             'msg' => \Yii::$app->params['errorCodes'][$code]
         ]);
     }
-
-    //todo 如果订单有review 则用户订单详情返回一个review_id
 
     /**
      * view works_review by review_id
