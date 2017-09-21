@@ -822,26 +822,32 @@ class DistributionController extends Controller
         }
     }
 
-        /**
+    /**
      * @return string
      */
     public  function  actionAddTest()
     {
-//        $request = Yii::$app->request;
-//        $mobile= trim($request->post('mobile'));
-//        if (!$mobile){
-//            $code=1000;
+        $request = Yii::$app->request;
+        $mobile= trim($request->get('mobile'));
+        $user=User::find()->asArray()->all();
+        $supplier=Supplier::find()->asArray()->all();
+//        $user=User::find()->where(['mobile'=>$mobile])->one();
+//        $supplier=Supplier::find()->where(['id'=>1])->one();
+//        $supplier->uid=$user->id;
+//        $res=$supplier->save(false);
+//        if (!$res)
+//        {
+//            $code=500;
 //            return Json::encode([
 //                'code' => $code,
 //                'msg' => Yii::$app->params['errorCodes'][$code]
 //            ]);
 //        }
-//        $data=Distribution::find()->asArray()->all();
-//        var_dump($data);
+        return Json::encode([
+            'user'=>$user,
+            'supplier'=>$supplier
+        ]);
 
-                $data=Yii::$app->db->createCommand('alter table distribution engine=InnoDB')
-            ->execute();
-        var_dump($data);
     }
 
 
