@@ -28,10 +28,9 @@ class SupplierCashController extends Controller
         'cash-deal'
     ];
 
-    const CASH_STATUS_NOT_BEGIN = 1;
-    const CASH_STATUS_ING = 2;
-    const CASH_STATUS_DONE= 3;
-    const CASH_STATUS_FAIL = 4;
+    const CASH_STATUS_ING = 1;
+    const CASH_STATUS_DONE= 2;
+    const CASH_STATUS_FAIL = 3;
 
     const ACCESS_TYPE_RECHARGE = 1;
     const ACCESS_TYPE_CHARGE = 2;
@@ -41,7 +40,6 @@ class SupplierCashController extends Controller
     const ACCESS_TYPE_PAYMENT = 6;
 
     const USER_CASH_STATUSES = [
-        self::CASH_STATUS_NOT_BEGIN => '未提现',
         self::CASH_STATUS_ING => '提现中',
         self::CASH_STATUS_DONE => '已提现',
         self::CASH_STATUS_FAIL => '提现失败'
@@ -127,11 +125,11 @@ class SupplierCashController extends Controller
         $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
-        $status = trim(htmlspecialchars($request->post('status', '')), '');
+        $status = (int)$request->post('status', '');
 
         if (($time_type == 'custom' && (!$time_start || !$time_end))
             || !array_key_exists($time_type, \Yii::$app->params['timeTypes'])
-            || !array_key_exists($status, self::USER_CASH_STATUSES)
+            || ($status && !array_key_exists($status, self::USER_CASH_STATUSES))
         ) {
             $code = 1000;
             return Json::encode([
