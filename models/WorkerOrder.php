@@ -775,18 +775,18 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $details[2]['status'] = self::WORKER_WORKS_AFTER;
         $details[2]['img_ids'] = self::getWorksImg($works_id, self::WORKER_WORKS_AFTER);
 
+        $trans = Yii::$app->db->beginTransaction();
 
         foreach ($details as $d) {
             $_detail = clone $detail;
             $_detail->setAttributes($d, false);
-            $trans = Yii::$app->db->beginTransaction();
             if (!$_detail->save(false)) {
                 $trans->rollBack();
                 return 1000;
             }
-            $trans->commit();
         }
 
+        $trans->commit();
         return 200;
     }
 
