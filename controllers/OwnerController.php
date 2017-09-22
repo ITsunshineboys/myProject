@@ -27,6 +27,7 @@ use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
+use app\services\LogisticsService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -1396,17 +1397,25 @@ class OwnerController extends Controller
                     if ($one_goods['sku'] == $case_works_datum['goods_code']) {
                         $cost = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
                         if ($case_works_datum['goods_first'] == $one_value['classify']){
-                            $case_works_datum['goods_cost'] = round($case_works_datum['goods_quantity'] * $cost * $one_value['coefficient'],2);
+                            $case_works_datum['goods_coefficient_price'] = round($case_works_datum['goods_quantity'] * $cost * $one_value['coefficient'],2);
+                            $case_works_datum['goods_id'] = $one_goods['id'];
+                            $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
+                            $case_works_datum['goods_original_cost'] = $cost * $case_works_datum['goods_quantity'];
                         }
                     }
                 }
             }
         }
-        foreach ($goods as $logistics_id) {
-            $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($logistics_id['logistics_template_id'],[]);
-        }
 
-        var_dump($logistics);exit;
+        //物流信息
+        foreach ($effect['case_works_data'] as $logistics_id) {
+            $ids = $logistics_id['logistics_template_id'];
+        }
+        $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+//        var_dump($effect['case_works_data']);
+//        var_dump($logistics);
+        $new = new LogisticsService($logistics,$effect['case_works_data']);
+        var_dump($new);exit;
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',
