@@ -12,6 +12,7 @@ use app\models\WorkerWorks;
 use app\models\WorkerWorksReview;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
+use app\services\StringService;
 use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -819,7 +820,7 @@ class WorkerController extends Controller
     }
 
     /**
-     * view works_review by review_id
+     * todo view works_review by review_id
      *
      */
     public function actionGetWorksReview()
@@ -828,7 +829,7 @@ class WorkerController extends Controller
     }
 
     /**
-     * view works_reviews by works_id
+     * todo view works_reviews by works_id
      *
      */
     public function actionGetWorksReviewsByWorksId()
@@ -838,20 +839,71 @@ class WorkerController extends Controller
     }
 
     /**
-     * view works by worker_id
+     * todo view works by worker_id
      *
      */
     public function actionGetWorksByWorkerId()
     {
+        $request = \Yii::$app->request;
 
+        $worker_id = (int)$request->get('worker_id', 0);
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
+
+        $data = WorkerOrder::getWorksByWorkerIdAll($worker_id, $page, $page_size);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
     }
 
     /**
-     * view works_detail by works_id
+     * todo view works_detail by works_id
      *
      */
     public function actionGetWorksDetail()
     {
 
+    }
+
+    /**
+     * 工人排班日历
+     *
+     * @return string
+     */
+    public function actionGetWorkDaysByTime()
+    {
+        //默认当前月，接收年月
+        StringService::startEndDate('month', true);
+        //根据年月查出当前月的接单
+
+        $request = \Yii::$app->request;
+
+        $time = trim($request->get('month', ''));
+        $worker_id = (int)$request->get('worker_id', 0);
+
+        $start_time = $end_time = 0;
+
+        if (!$time) {
+            $time_type = 'month';
+        } else {
+            $time_type = 'custom';
+            $yearMonth = $time;
+            list($year, $month) = explode('-', $yearMonth);
+            $start_time = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, 1, $year));
+            $end_time = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, date('t'), $year));
+        }
+
+        $time_area = ModelService::timeDeal($time_type, $start_time, $end_time);
+
+        $data = WorkerOrder::getWorkDaysByTimeArea($worker_id, $time_area);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
     }
 }
