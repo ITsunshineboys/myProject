@@ -25,7 +25,7 @@ use yii\web\ViewAction;
 class SupplieraccountController extends  Controller{
 
 
-    const STATUS_CG=3;
+    const STATUS_CG=2;
     const ACCESS_LOGGED_IN_USER = [
         'logout',
         'roles',
@@ -215,7 +215,7 @@ class SupplieraccountController extends  Controller{
 
 
     /**
-     * 商家账户冻结金额
+     * 商家账户可冻结金额
      * @return bool
      */
         public function actionFreezeMoney(){
@@ -238,69 +238,74 @@ class SupplieraccountController extends  Controller{
             }
             $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
             $freezed_money=sprintf('%.2f',(float)$supplier->availableamount*0.01);
-            $transaction=Yii::$app->db->beginTransaction();
-            try{
-            if($request->isPost){
-                $model=new UserFreezelist();
-                $model->uid=$user->getId();
-                $model->role_id=Supplier::ROLE_SUPPLIER;
-                $freeze_money=  $model->freeze_money=trim($request->post('freeze_money',''),'');
-                $model->freeze_reason=trim($request->post('freeze_reason',''),'');
-                $model->create_time=time();
-                    if(!$freeze_money){
-                        $code=1000;
-                        return json_encode([
-                            'code' => $code,
-                            'msg' => \Yii::$app->params['errorCodes'][$code],
-
-                        ]);
-                    }
-                    if($freezed_money<$freeze_money){
-                       $transaction->rollBack();
-                        $code=1033;
-                       return json_encode([
-                           'code' => $code,
-                           'msg' => \Yii::$app->params['errorCodes'][$code],
-
-                       ]);
-                   }
-                   $supplier->availableamount-=$freeze_money*100;
-                   $model->freeze_money=$freeze_money*100;
-                   if(!$model->save() || !$supplier->update(false)){
-                       $transaction->rollBack();
-                       $code=500;
-                       return json_encode([
-                           'code'=>$code,
-                           'msg' => \Yii::$app->params['errorCodes'][$code],
-                       ]);
-
-                   }
-                $transaction->commit();
-                   return json_encode([
-                       'code'=>200,
-                       'msg'=>'ok',
-
-                   ]);
-            }else{
-                if($supplier){
-                    return json_encode([
-                        'code' => 200,
-                        'msg' => 'ok',
-                        'data'=>$freezed_money
-
-                    ]);
-                }
-            }
-        }catch (Exception $e){
-            $transaction->rollBack();
-            $code=500;
+            if($supplier){
                 return json_encode([
-                    'code'=>$code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
+                    'code' => 200,
+                    'msg' => 'ok',
+                    'data'=>[
+                        'freeze_money'=>$freezed_money,
+                        'id'=>$supplier->id
+                    ]
+                ]);
+            }
+    }
+    /**
+     * 冻结金额
+     * @return string
+     */
+    public function actionApplyFreeze(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-    }
+        $request=new Request();
+        $supplier=Supplier::find()->where(['id'=>$user->getId()])->one();
 
+            $transaction=Yii::$app->db->beginTransaction();
+        try {
+            $model = new UserFreezelist();
+            $model->uid = $user->getId();
+            $model->role_id = Supplier::ROLE_SUPPLIER;
+            $freeze_money = $model->freeze_money = trim($request->post('freeze_money', ''), '');
+            $model->freeze_reason = trim($request->post('freeze_reason', ''), '');
+            $model->create_time = time();
+            if (!$freeze_money) {
+                $code = 1000;
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+
+                ]);
+            }
+            $supplier->availableamount-=$freeze_money*100;
+            $model->freeze_money=$freeze_money*100;
+            if(!$model->save(false) || !$supplier->update(false)){
+                $transaction->rollBack();
+                $code=500;
+                return json_encode([
+                    'code'=>$code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+
+            }
+            $transaction->commit();
+            return json_encode([
+                'code'=>200,
+                'msg'=>'ok',
+            ]);
+         }catch (Exception $e){
+            $transaction->rollBack();
+            $code=500;
+            return json_encode([
+                'code'=>$code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+         }
+    }
     /**
      * 商家账户冻结列表
      * @return array
