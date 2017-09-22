@@ -122,8 +122,8 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $page = (int)$request->get('page', 1);
-        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+        $page = (int)$request->post('page', 1);
+        $page_size = (int)$request->post('page_size', ModelService::PAGE_SIZE_DEFAULT);
         $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -230,8 +230,8 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $page = (int)$request->get('page', 1);
-        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+        $page = (int)$request->post('page', 1);
+        $page_size = (int)$request->post('page_size', ModelService::PAGE_SIZE_DEFAULT);
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
@@ -269,8 +269,8 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $page = (int)$request->get('page', 1);
-        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+        $page = (int)$request->post('page', 1);
+        $page_size = (int)$request->post('page_size', ModelService::PAGE_SIZE_DEFAULT);
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');

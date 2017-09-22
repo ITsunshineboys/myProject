@@ -844,7 +844,7 @@ class WorkerController extends Controller
     }
 
     /**
-     * todo view works by worker_id
+     * view works by worker_id
      *
      */
     public function actionGetWorksByWorkerId()
