@@ -302,8 +302,8 @@ class SupplierCashManager extends ActiveRecord
         $query = (new Query())
             ->from(self::SUP_CASHREGISTER . ' as g')
             ->where(['g.role_id' => self::ROLE_ID])
-            ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
-            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 'g.supplier_id', 'g.status', 'g.real_money']);
+            ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.id')
+            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 'g.uid', 'g.status', 'g.real_money']);
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
@@ -313,7 +313,7 @@ class SupplierCashManager extends ActiveRecord
             $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
         }
         if (isset($search) && trim($search) == $search) {
-            $query->andFilterWhere(['like', 'g.supplier_id', $search])
+            $query->andFilterWhere(['like', 'g.uid', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);
         }
 
@@ -354,11 +354,11 @@ class SupplierCashManager extends ActiveRecord
         $supplier_cash = (new Query())
             ->from(self::SUP_CASHREGISTER)
             ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID])
-            ->select(['cash_money', 'supplier_id', 'status', 'transaction_no'])
+            ->select(['cash_money', 'uid', 'status', 'transaction_no'])
             ->one();
 
         $cash_money = $supplier_cash['cash_money'];
-        $supplier_id = (int)$supplier_cash['supplier_id'];
+        $supplier_id = (int)$supplier_cash['uid'];
         $old_status = (int)$supplier_cash['status'];
         $transaction_no = $supplier_cash['transaction_no'];
 
