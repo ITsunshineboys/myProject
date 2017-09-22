@@ -1388,7 +1388,7 @@ class OwnerController extends Controller
         foreach ($effect['case_works_data'] as $one_goods){
             $sku [] = $one_goods['goods_code'];
         }
-        $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id";
+        $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id,sku";
         $goods = Goods::findBySkuAll($sku,$select);
         foreach ($effect['case_works_data'] as &$case_works_datum){
             foreach ($goods as $one_goods) {
@@ -1402,29 +1402,7 @@ class OwnerController extends Controller
                 }
             }
         }
-
-        //快递费
-        foreach ($goods as $goods_id) {
-            $ids[] = $goods_id['logistics_template_id'];
-        }
-        $logistics_template = LogisticsTemplate::findByGoodsSku($ids);
-        //物流信息
-        foreach ($goods as &$logistics){
-            foreach ($logistics_template as $one_logistics){
-                if ($logistics['logistics_template_id']  == $one_logistics['id']){
-                    if ($one_logistics['delivery_method'] != 1 ){
-                        $logistics_message = $one_logistics['delivery_cost_default'] / self::PRICE_UNITS;
-                    } else {
-                        $logistics_message = 0;
-                    }
-
-                }
-            }
-        }
-        var_dump($logistics_message);
-        var_dump($goods);
-        var_dump($logistics_template);
-        exit;
+        $log = LogisticsTemplate::findByGoodsSku();
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',
