@@ -81,16 +81,12 @@ class FindworkerController extends Controller{
         $data=WorkerType::getworkertype($parents);
             $parent=[];
             for ($i=0;$i<count($data);$i++){
-
-                  $parent[]=[
+                $parent[]=[
+                      'image'=>$parents[$i]['image'],
+                      'id'=>$parents[$i]['id'],
                       $parents[$i]['worker_type']=>$data[$i],
-                      'image'=>$parents[$i]['image']
                   ];
-
-
             }
-
-
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',

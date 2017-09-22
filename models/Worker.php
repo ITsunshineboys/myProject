@@ -39,6 +39,7 @@ use yii\db\Query;
  */
 class Worker extends \yii\db\ActiveRecord
 {
+    const SK_ING=4;
     const DAI_STATUS=1;
     const WorkerRoleId=2;
     const ORDER_BEGIN=3;
@@ -172,7 +173,7 @@ class Worker extends \yii\db\ActiveRecord
             ->select('order_no')
             ->where(['uid'=>$user_id])
             ->andWhere(['worker_id'=>$worker_id])
-            ->andWhere(['status'=>self::ORDER_BEGIN])
+            ->andWhere(['status'=>self::SK_ING])
             ->asArray()
             ->distinct()
             ->count();
