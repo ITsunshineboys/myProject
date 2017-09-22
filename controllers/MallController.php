@@ -4149,7 +4149,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'shop-data' => [
+                'shop_data' => [
                     'total_sold_number' => GoodsStat::totalSoldNumber($where),
                     'total_amount_sold' => GoodsStat::totalAmountSold($where),
                     'total_ip_number' => GoodsStat::totalIpNumber($where),
