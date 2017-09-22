@@ -1402,7 +1402,11 @@ class OwnerController extends Controller
                 }
             }
         }
-        $log = LogisticsTemplate::findByGoodsSku();
+        foreach ($goods as $logistics_id) {
+            $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($logistics_id['logistics_template_id'],[]);
+        }
+
+        var_dump($logistics);exit;
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',

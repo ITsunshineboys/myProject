@@ -199,7 +199,7 @@ class LogisticsTemplate extends ActiveRecord
         isset($this->delivery_cost_delta) && $this->delivery_cost_delta /= 100;
     }
 
-    public static function findByGoodsLogisticsTemplateIds($ids,$select = [])
+    public static function GoodsLogisticsTemplateIds($ids,$select = [])
     {
         return self::find()
             ->asArray()
