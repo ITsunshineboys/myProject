@@ -524,6 +524,29 @@ class FindworkerController extends Controller{
             'msg' =>$code==200?'ok':\ Yii::$app->params['errorCodes'][$code]
         ]);
     }
+
+    public function actionWorkerView(){
+        $code=1000;
+        $worker_id=(int)trim(\Yii::$app->request->get('worker_id'));
+        if(!$worker_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+
+        $data=Worker::workerinfos($worker_id);
+        if($data){
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'ok',
+                'data'=>[
+                    'worker_view'=>$data
+                ]
+            ]);
+        }
+    }
     /**
      *抢单信息
      * @return string

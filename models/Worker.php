@@ -263,8 +263,37 @@ class Worker extends \yii\db\ActiveRecord
             $code = 500;
             return $code;
         }
-
-
+    }
+    /**
+     * 工人详情
+     * @param $worker_id
+     * @return array|bool|null
+     */
+    public static function workerinfos($worker_id){
+        $query=new Query();
+        $array=$query->from('worker ')
+            ->select('uid,worker_type_id,nickname,province_code,city_code,work_year,feedback,signature,skill_ids,order_done,labor_cost_id,')
+            ->where(['id'=>$worker_id])
+            ->one();
+        if($array){
+            $array['province']=District::findByCode($array['province_code'])->name;
+            $array['city']=District::findByCode($array['city_code'])->name;
+            $worker_type=WorkerType::getparenttype($array['worker_type_id']);
+            $rank=LaborCost::find()->where(['id'=>$array['labor_cost_id']])->one()->rank;
+            $array['worker_type_rank']=$rank.$worker_type;
+            unset($array['worker_type_id']);
+            unset($array['skill_ids']);
+            unset($array['province_code']);
+            unset($array['city_code']);
+            unset($array['labor_cost_id']);
+            $skills=WorkerSkill::getWorkerSkillname($array['uid']);
+            foreach ($skills as &$vule){
+                $array['skills']=$vule;
+            }
+           return $array;
+        }else{
+            return null;
+        }
 
     }
 }
