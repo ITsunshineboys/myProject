@@ -983,6 +983,13 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $data;
     }
 
+    /**
+     * 得到工人某个月的排班
+     *
+     * @param $worker_id
+     * @param $time_area
+     * @return array
+     */
     public static function getWorkDaysByTimeArea($worker_id, $time_area)
     {
         list($start_time, $end_time) = $time_area;
@@ -1007,4 +1014,31 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         return array_unique($days_arr);
     }
+
+//    /**
+//     * 得到工人的全部排班日期
+//     *
+//     * @param $worker_id
+//     * @return array
+//     */
+//    public static function getWorkDaysAll($worker_id)
+//    {
+//        $all_days = WorkerOrder::find()
+//            ->where([
+//                'worker_id' => $worker_id,
+//                'is_old' => self::IS_NEW,
+//                'status' => [2, 3, 4]
+//            ])
+//            ->select('days')
+//            ->all();
+//
+//        $days_arr = [];
+//        foreach ($all_days as $days) {
+//            if ($days) {
+//                $days_arr = array_merge($days_arr, explode(',', $days->days));
+//            }
+//        }
+//
+//        return array_unique($days_arr);
+//    }
 }

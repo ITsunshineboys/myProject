@@ -473,7 +473,12 @@ class WorkerController extends Controller
                 $data['need_time'] = $need_time;
             }
 
-            $data['days'] = $days;
+            if ($days) {
+                $data['days'] = $days;
+                $days_arr = explode(',', $days);
+                $data['start_time'] = strtotime($days_arr[0]);
+                $data['end_time'] = strtotime($days_arr[count($days_arr)-1]);
+            }
 
             $data['is_old'] = 0;
             $data['modify_time'] = time();
