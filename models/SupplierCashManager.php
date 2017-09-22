@@ -61,6 +61,7 @@ class SupplierCashManager extends ActiveRecord
                 $v['lost_money'] = sprintf('%.2f', 0);
                 $v['real_money'] = sprintf('%.2f', 0);
             }
+            $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
         }
 
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
@@ -114,6 +115,8 @@ class SupplierCashManager extends ActiveRecord
             $arr['lost_money'] = sprintf('%.2f', 0);
             $arr['real_money'] = sprintf('%.2f', 0);
         }
+        $arr['status'] = SupplierCashController::USER_CASH_STATUSES[$arr['status']];
+
         return $arr;
     }
 
@@ -236,7 +239,7 @@ class SupplierCashManager extends ActiveRecord
     {
         return (new Query())->from(self::SUP_CASHREGISTER)
             ->where([
-                'status' => [SupplierCashController::CASH_STATUS_NOT_BEGIN, SupplierCashController::CASH_STATUS_ING], 'role_id' => self::ROLE_ID
+                'status' => SupplierCashController::CASH_STATUS_ING, 'role_id' => self::ROLE_ID
             ])
             ->count();
     }
@@ -330,6 +333,8 @@ class SupplierCashManager extends ActiveRecord
                 $v['lost_money'] = sprintf('%.2f', 0);
                 $v['real_money'] = sprintf('%.2f', 0);
             }
+
+            $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
         }
 
         return ModelService::pageDeal($arr, $count, $page, $page_size);
