@@ -192,7 +192,7 @@ class FindworkerController extends Controller{
             ]);
         }
     /**
-     * Generate Order
+     * 生成订单
      * @return string
      */
      public function actionGenerateOrder(){
