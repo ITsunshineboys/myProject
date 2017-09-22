@@ -235,6 +235,50 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         return $data;
     }
     /**
+     * 防水工 添加
+     * @param array $array
+     */
+    public static function addwaterproofdata(array $array){
+        $data=[];
+        $data['worker_type_id']=$array['worker_type_id'];
+        if(isset($array['demand'])){
+            $data['demand']=$array['demand'];
+        }
+        if(isset($array['remark'])){
+            $data['remark']=$array['remark'];
+        }
+        $data['images']=$array['images'];
+        if(!isset($array['start_time'])){
+            $code = 1000;
+            return $code;
+        }
+        $data['start_time']=strtotime($array['start_time']);
+        $data['end_time']=strtotime($array['end_time']);
+        if(isset($array['indoor_id'])){
+            if (!isset($array['indoor_craft_id']) || !isset($array['indoor_area'])) {
+                $code = 1000;
+                return $code;
+            }else {
+                $data['indoor_item']['slotting_item_id'] = $array['indoor_id'];
+                $data['indoor_item']['indoor_craft_id'] = $array['indoor_craft_id'];
+                $data['indoor_item']['indoor_area'] = $array['indoor_area'];
+
+            }
+        }
+        if(isset($array['outdoor_id'])){
+            if (!isset($array['outdoor_craft_id']) || !isset($array['outdoor_area'])) {
+                $code = 1000;
+                return $code;
+            }else {
+                $data['outdoor_item']['outdoor_item_id'] = $array['outdoor_id'];
+                $data['outdoor_item']['outdoor_craft_id'] = $array['outdoor_craft_id'];
+                $data['outdoor_item']['outdoor_area'] = $array['outdoor_area'];
+
+            }
+        }
+        return $data;
+    }
+        /**
      * 业主联系信息
      * @param array $ownerinfos
      * @return int
@@ -258,6 +302,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
 
         return $ownerinfos;
     }
+
     /**
      *
      * @param $id
@@ -280,7 +325,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
                 $homeinfos=WorkerOrderItem::addcarpentrydata($post['homeinfos']);
                 break;
             case '防水工';
-                $homeinfos=WorkerOrderItem::addcarpentrydata($post['homeinfos']);
+                $homeinfos=WorkerOrderItem::addwaterproofdata($post['homeinfos']);
                 break;
             case '油漆工';
                 $homeinfos=WorkerOrderItem::addcarpentrydata($post['homeinfos']);
