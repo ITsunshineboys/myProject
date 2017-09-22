@@ -542,10 +542,9 @@ class DistributionController extends Controller
         }
         $profit=$data['profit']==0?100.00:GoodsOrder::switchMoney($data['profit']*0.01);
         $subset=Distribution::find()->select('mobile,applydis_time')->where(['parent_id'=>$data['id']])->limit(10)->asArray()->all();
-        foreach ($subset as $k =>$v){
-            $subset[$k]['add_time']=date('Y-m-d',$subset[$k]['applydis_time']);
-            unset($subset[$k]['applydis_time']);
-        }
+            foreach ($subset as $k =>$v){
+                $subset[$k]['applydis_time']=date('Y-m-d',$subset[$k]['applydis_time']);
+            }
             $fatherset=Distribution::find()->select('mobile,applydis_time')->where(['id'=>$data['parent_id']])->asArray()->one();
 
             if ($fatherset['applydis_time']!=0)
