@@ -651,7 +651,8 @@ class DistributionController extends Controller
         ]);
     }
 
-        /**
+   /**
+     * 获取关联订单
      * @return string
      */
     public function  actionCorrelateOrder()
@@ -735,13 +736,16 @@ class DistributionController extends Controller
             }
 
         }
-
-        $page=trim($request->get('page'));
+        $page=trim($request->get('page',1));
         $size=trim($request->get('size', Distribution::PAGE_SIZE_DEFAULT));
         $total_amount=GoodsOrder::switchMoney($total_amount);
         $total_orders=count($list);
 
         if ($list!=[]){
+            foreach ($list as $key => $row)
+            {
+                $create_time[$key]  = $list[$key]['create_time'];
+            }
             array_multisort($create_time, SORT_DESC, $list);
             $count=count($list);
             $total_page=ceil($count/$size);
