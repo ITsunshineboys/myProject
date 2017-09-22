@@ -381,8 +381,10 @@ class DistributionController extends Controller
             'data' =>$list
         ]);
     }
-
-   public  function  actionGetdistributionlist()
+    /**
+     * @return string
+     */
+    public  function  actionGetdistributionlist()
     {
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -455,34 +457,41 @@ class DistributionController extends Controller
             foreach ($data['list'] as &$list)
             {
                 $total_amount=0;
-                $user=User::find()
-                    ->where(['mobile'=>$list['mobile']])
-                    ->one();
                 $order_subsetnum=0;
-                if ($user)
-                {
-                    $UserOrders=GoodsOrder::find()
-                        ->select('order_no,amount_order,paytime,remarks')
-                        ->where(['user_id'=>$user->id,'order_refer'=>2])
-                        ->asArray()
-                        ->all();
-                    $order_subsetnum+=count($UserOrders);
-
-                    foreach ($UserOrders as &$UserOrder)
-                    {
-                        $total_amount+=$UserOrder['amount_order']*0.01;
-                    }
-                }
-                $consigneeOrders=GoodsOrder::find()
-                    ->select('order_no,amount_order,paytime,remarks')
-                    ->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1])
+                $son_disList=Distribution::find()
+                    ->where(['parent_id'=>$list['id']])
                     ->asArray()
                     ->all();
-                $order_subsetnum+=count($consigneeOrders);
-                foreach ($consigneeOrders as &$consigneeOrder)
+                foreach ($son_disList as &$Son_list)
                 {
+                    $user=User::find()
+                        ->where(['mobile'=>$Son_list['mobile']])
+                        ->one();
+                    if ($user)
+                    {
+                        $UserOrders=GoodsOrder::find()
+                            ->select('order_no,amount_order,paytime,remarks')
+                            ->where(['user_id'=>$user->id,'order_refer'=>2])
+                            ->asArray()
+                            ->all();
+                        $order_subsetnum+=count($UserOrders);
 
-                    $total_amount+=$consigneeOrder['amount_order']*0.01;
+                        foreach ($UserOrders as &$UserOrder)
+                        {
+                            $total_amount+=$UserOrder['amount_order']*0.01;
+                        }
+                    }
+                    $consigneeOrders=GoodsOrder::find()
+                        ->select('order_no,amount_order,paytime,remarks')
+                        ->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1])
+                        ->asArray()
+                        ->all();
+
+                    $order_subsetnum+=count($consigneeOrders);
+                    foreach ($consigneeOrders as &$consigneeOrder)
+                    {
+                        $total_amount+=$consigneeOrder['amount_order']*0.01;
+                    }
                 }
                 $list['subset_amount']=GoodsOrder::switchMoney($total_amount);
                 $list['order_subsetnum']=$order_subsetnum;
@@ -493,7 +502,6 @@ class DistributionController extends Controller
                 unset($list['create_time']);
             }
         }
-
         $time=strtotime(date('Y-m-d',time()));
         $nowday_user=Distribution::find()->asArray()->where('create_time>'.$time)->count();
         $data['total_add']=$count;
@@ -504,6 +512,7 @@ class DistributionController extends Controller
             'data' => $data
         ]);
     }
+
 
  /**
      * 分销详情页
