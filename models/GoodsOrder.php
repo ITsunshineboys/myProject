@@ -1875,7 +1875,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $orderAmount;
     }
-   /**分页数据
+     /**分页数据
      * @param array $where
      * @param array $select
      * @param int $page
@@ -1911,8 +1911,8 @@ class GoodsOrder extends ActiveRecord
                 ->all();
             foreach ($GoodsOrder AS $k =>$v){
                 $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
-                $GoodsOrder[$k]['create_time']=date('Y-m-d h:i',$GoodsOrder[$k]['create_time']);
-                $GoodsOrder[$k]['paytime']=date('Y-m-d h:i',$GoodsOrder[$k]['paytime']);
+                $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
+                $GoodsOrder[$k]['paytime']=date('Y-m-d H:i',$GoodsOrder[$k]['paytime']);
                 $GoodsOrder[$k]['user_name']=$user->nickname;
                 $GoodsOrder[$k]['status']='未付款';
                 $GoodsOrder[$k]['comment_grade']='';
@@ -1927,18 +1927,18 @@ class GoodsOrder extends ActiveRecord
                 if($GoodsOrder[$k]['list']==[])
                 {
                     unset($GoodsOrder[$k]);
-                }else{
+                }else
+                {
                     foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                         $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
                         $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
-
                     }
                     unset($GoodsOrder[$k]['pay_status']);
                     unset($GoodsOrder[$k]['supplier_id']);
-                        $arr[]=$GoodsOrder[$k];
+                    $arr[]=$GoodsOrder[$k];
                 }
 
             }
@@ -1947,11 +1947,13 @@ class GoodsOrder extends ActiveRecord
         {
             $arr[$key]['type']=$type;
             $arr[$key]['role']=$role;
-          if ($user->login_role_id==0)
+            if ($user->login_role_id==0)
             {
                 $user->login_role_id=7;
+                $arr[$key]['availableamount']=self::switchMoney($user->availableamount*0.01);
+            }else{
+                $arr[$key]['availableamount']=self::switchMoney(Role::CheckUserRole($user->login_role_id)->where(['uid'=>$user->id])->one()->availableamount*0.01);
             }
-            $arr[$key]['availableamount']=self::switchMoney(Role::CheckUserRole($user->login_role_id)->one()->availableamount*0.01);
             $create_time[$key]  = $arr[$key]['create_time'];
         }
         $arr=self::switchStatus($arr,$role);
