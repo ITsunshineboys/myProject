@@ -277,7 +277,7 @@ class SupplierCashController extends Controller
 
         if (($time_type == 'custom' && (!$time_start || !$time_end))
             || !array_key_exists($time_type, \Yii::$app->params['timeTypes'])
-            || !array_key_exists($status, self::USER_CASH_STATUSES)
+            || ($status && !array_key_exists($status, self::USER_CASH_STATUSES))
         ) {
             $code = 1000;
             return Json::encode([
