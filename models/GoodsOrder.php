@@ -1952,12 +1952,13 @@ class GoodsOrder extends ActiveRecord
                 $user->login_role_id=7;
                 $arr[$key]['availableamount']=self::switchMoney($user->availableamount*0.01);
             }else{
-                if ($user->login_role_id==7)
+                 if ($user->login_role_id==7)
                 {
                     $user->login_role_id=7;
                     $arr[$key]['availableamount']=self::switchMoney($user->availableamount*0.01);
+                }else{
+                    $arr[$key]['availableamount']=self::switchMoney(Role::CheckUserRole($user->login_role_id)->where(['uid'=>$user->id])->one()->availableamount*0.01);
                 }
-                $arr[$key]['availableamount']=self::switchMoney(Role::CheckUserRole($user->login_role_id)->where(['uid'=>$user->id])->one()->availableamount*0.01);
             }
             $create_time[$key]  = $arr[$key]['create_time'];
         }
