@@ -24,7 +24,8 @@ use yii\web\ViewAction;
 
 class SupplieraccountController extends  Controller{
 
-
+    const STATUS_JD=0;
+    const STATUS_WJD=1;
     const STATUS_CG=2;
     const ACCESS_LOGGED_IN_USER = [
         'logout',
@@ -321,7 +322,7 @@ class SupplieraccountController extends  Controller{
         }
                 $code = 1000;
                 $timeType = trim(Yii::$app->request->get('time_type', ''));
-                $where=" role_id=".Supplier::ROLE_SUPPLIER;
+                $where=" role_id=".Supplier::ROLE_SUPPLIER and "status=".self::STATUS_JD;
                 if ($timeType == 'custom') {
                     $startTime = trim(Yii::$app->request->get('start_time', ''));
                     $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -425,7 +426,8 @@ class SupplieraccountController extends  Controller{
         try{
             if($supplier){
                 $supplier->availableamount+=$freeze->freeze_money;
-                if(!$supplier->update(false)){
+                $freeze->status=self::STATUS_WJD;
+                if(!$supplier->update(false) || !$freeze->save(false)){
                     $transaction->rollBack();
                     $code=500;
                     return json_encode([

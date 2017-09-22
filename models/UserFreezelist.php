@@ -21,6 +21,8 @@ class UserFreezelist extends \yii\db\ActiveRecord
     const FIELDS_EXTRA=[];
     const FIELDS_ADMIN = [
         'id',
+        'uid',
+        'role_id',
         'create_time',
         'freeze_money',
         'freeze_reason'

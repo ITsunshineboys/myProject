@@ -1502,6 +1502,7 @@ CREATE TABLE `user_freezelist` (
   `freeze_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '冻结余额',
   `create_time` int(11) NOT NULL,
   `freeze_reason` varchar(255) NOT NULL COMMENT '冻结原因',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未解冻 1:已解冻',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
