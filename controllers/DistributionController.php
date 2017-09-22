@@ -792,9 +792,9 @@ class DistributionController extends Controller
             ]);
         }
         $request = Yii::$app->request;
-        $mobile= trim($request->post('mobile'));
+        $order_no= trim($request->post('order_no'));
         $remarks= trim($request->post('remarks'));
-        if (!$mobile || !$remarks)
+        if (!$order_no || !$remarks)
         {
             $code=1000;
             return Json::encode([
@@ -802,8 +802,8 @@ class DistributionController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $Distribution=Distribution::find()->where(['mobile'=>$mobile])->one();
-        if (!$Distribution)
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        if (!$GoodsOrder)
         {
             $code=1000;
             return Json::encode([
@@ -813,8 +813,8 @@ class DistributionController extends Controller
         }
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $Distribution->remarks=$remarks;
-            $res=$Distribution->save(false);
+            $GoodsOrder->remarks=$remarks;
+            $res=$GoodsOrder->save(false);
             if (!$res)
             {
                 $code=500;
