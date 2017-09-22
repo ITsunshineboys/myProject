@@ -1835,9 +1835,25 @@ class GoodsOrder extends ActiveRecord
                 $order_money=$GoodsOrder->amount_order;
                 $GoodsOrder->pay_status=1;
                 $res=$GoodsOrder->save();
-                $user=User::find()
-                    ->where(['id'=>$user->id])
-                    ->one();
+                if ($user->last_role_id_app==0)
+                {
+                    $user->last_role_id_app=7;
+                    $user=User::find()
+                        ->where(['id'=>$user->id])
+                        ->one();
+                }else{
+                    if ($user->last_role_id_app==7)
+                    {
+                        $user->last_role_id_app=7;
+                        $user=User::find()
+                            ->where(['id'=>$user->id])
+                            ->one();
+                    }else{
+                       $user=Role::CheckUserRole($user->last_role_id_app)
+                           ->where(['uid'=>$user->id])
+                           ->one();
+                    }
+                }
                 $user->balance=($user->balance-$order_money);
                 $user->availableamount=($user->availableamount-$order_money);
                 $res2=$user->save(false);
@@ -1856,6 +1872,7 @@ class GoodsOrder extends ActiveRecord
         $code=200;
         return $code;
     }
+
 
     /**
      * @param $orders
