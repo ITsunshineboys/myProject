@@ -1947,7 +1947,7 @@ class GoodsOrder extends ActiveRecord
         {
             $arr[$key]['type']=$type;
             $arr[$key]['role']=$role;
-            $arr[$key]['availableamount']=self::switchMoney($user->availableamount*0.01);
+            $arr[$key]['availableamount']=self::switchMoney(Role::CheckUserRole($user->login_role_id)->select('availableamount')->one()->availableamount*0.01);
             $create_time[$key]  = $arr[$key]['create_time'];
         }
         $arr=self::switchStatus($arr,$role);
