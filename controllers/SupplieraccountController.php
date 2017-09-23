@@ -87,7 +87,7 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $pid=(int)trim(\Yii::$app->request->get('pid',0),'');
+        $pid=(int)trim(\Yii::$app->request->get('pid',''),'');
         $cate_title=(new Query())->from('goods_category')->select('title,pid,id')->where(['pid'=>$pid])->all();
         if($cate_title){
             return json_encode([
@@ -105,7 +105,14 @@ class SupplieraccountController extends  Controller{
 
 
     }
+    public function actionParentCate(){
+        return json_encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' =>GoodsCategory::find()->select('pid,id,title')->asArray()->where(['pid'=>0])->all()
+        ]);
 
+    }
     /**
      * 商家账户列表
      * @return string
