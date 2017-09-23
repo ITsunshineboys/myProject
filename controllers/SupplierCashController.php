@@ -146,8 +146,8 @@ class SupplierCashController extends Controller
             ->select('id')->where(['uid' => $user])->one();
 
 
-        var_dump($user);
-        var_dump($supplier['id']);
+//        var_dump($user);
+//        var_dump($supplier['id']);
 
         $data = SupplierCashManager::getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
 
@@ -186,7 +186,8 @@ class SupplierCashController extends Controller
             $supplier['id'] = 0;
         }
 
-        var_dump($supplier['id']);
+//        var_dump($supplier['id']);
+        //1 , 81
         $data = SupplierCashManager::GetCash($cash_id, $supplier['id']);
 
         return Json::encode([
