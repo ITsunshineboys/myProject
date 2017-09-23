@@ -122,7 +122,7 @@ class SupplieraccountController extends  Controller{
         $code=1000;
         $vaue_all=Yii::$app->params['value_all'];
         $type_shop=(int)(\Yii::$app->request->get('type_shop',$vaue_all));
-        $status=(int)(\Yii::$app->request->get('status',$vaue_all));
+        $status=(int)(\Yii::$app->request->get('status',Supplier::STATUSES_ONLINE_OFFLINE));
         $keyword=trim(\Yii::$app->request->get('keyword',''),'');
         $category_id=(int)trim(\Yii::$app->request->get('category_id',''),'');
         if (!Supplier::checkShopType($type_shop) || !Supplier::checkStatus($status)) {
@@ -131,8 +131,8 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $where = '1';
 
+        $where='1';
         if(!$keyword) {
             if ($type_shop != $vaue_all){
                 $where.= " and type_shop = {$type_shop}";
@@ -164,7 +164,8 @@ class SupplieraccountController extends  Controller{
             }
 
         }else{
-            $where=" shop_no like '%{$keyword}%' or shop_name like '%{$keyword}%'";
+            $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
+            $where=" shop_no like '%{$keyword}%' or shop_name like '%{$keyword}%' and status in ({$keys})";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
