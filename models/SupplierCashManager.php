@@ -97,7 +97,7 @@ class SupplierCashManager extends ActiveRecord
         $supplier_id = $arr['supplier_id'];
         $bankcard = self::GetBankcard($supplier_id);
         $supplier = self::GetSupplier($supplier_id);
-        if (!$bankcard) {
+        if (!$bankcard || !$supplier) {
             return null;
         }
 

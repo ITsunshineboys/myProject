@@ -380,26 +380,10 @@ class SupplierCashController extends Controller
     }
 
 
-//    public function actionDooo()
-//    {
-//        $cash = new UserCashregister();
-//
-//        $cash->setAttributes([
-//            'uid' => 1,
-//            'role_id' => 6,
-//            'cash_money' => 1000000,
-//            'real_money' => 0,
-//            'apply_time' => time(),
-//            'handle_time' => time(),
-//            'status' => 3,
-//            'supplier_reason' => '123',
-//            'transaction_no' => '1156415646999'
-//        ], false);
-//
-//        $cash->save(false);
-//
-//        return 1;
-//    }
+    public function actionDooo()
+    {
+        Supplier::updateAll(['uid' => 79], ['id' => 113]);
+    }
 
 
     public function actionGCash()
