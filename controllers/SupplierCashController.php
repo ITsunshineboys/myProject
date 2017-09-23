@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\models\Supplier;
 use app\models\SupplierCashManager;
+use app\models\User;
 use app\models\UserCashregister;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -400,6 +401,6 @@ class SupplierCashController extends Controller
 
     public function actionGetSupplier()
     {
-        var_dump(UserCashregister::find()->asArray()->all());
+        var_dump(User::find()->asArray()->all());
     }
 }
