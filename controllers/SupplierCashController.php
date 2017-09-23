@@ -130,8 +130,7 @@ class SupplierCashController extends Controller
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $status = (int)$request->post('status', '');
 
-        if (($time_type == 'custom' && (!$time_start || !$time_end))
-            || !array_key_exists($time_type, \Yii::$app->params['timeTypes'])
+        if (!array_key_exists($time_type, \Yii::$app->params['timeTypes'])
             || ($status && !array_key_exists($status, self::USER_CASH_STATUSES))
         ) {
             $code = 1000;
@@ -387,37 +386,15 @@ class SupplierCashController extends Controller
     }
 
 
-    public function actionDooo()
-    {
-//        Supplier::updateAll(['uid' => 7]);
-//        Supplier::updateAll(['uid' => 1], ['id' => 81]);
-
-//        UserBankInfo::updateAll(['uid' => 81]);
-//        $bank = new UserBankInfo();
-//
-//        $bank->setAttributes([
-//            'uid' => 81,
-//            'role_id' => 6,
-//            'bankname' => '中国银行',
-//            'bankcard' => 5184326955655548494646,
-//            'username' => '领航智造',
-//            'position' => '四川成都',
-//            'bankbranch' => '青羊宫支行',
-//            'create_time' => time()-1000
-//        ], false);
-//
-//        $bank->save(false);
-//        UserCashregister::updateAll(['uid' => 81]);
-        UserBankInfo::updateAll(['uid' => 1], ['id' => 1]);
-    }
+//    public function actionDooo()
+//    {
+//        UserBankInfo::updateAll(['uid' => 1], ['id' => 1]);
+//    }
 
 
     public function actionGCash()
     {
         var_dump(UserCashregister::find()->asArray()->all());
-//        UserCashregister::updateAll(['real_money' => 900, 'status' => 2], ['<', 'id', 5]);
-//        UserCashregister::updateAll(['real_money' => 0, 'status' => 1], ['between', 'id', 5, 10]);
-//        UserCashregister::updateAll(['real_money' => 0, 'status' => 3], ['>', 'id', 10]);
     }
 
 

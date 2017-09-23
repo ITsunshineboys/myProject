@@ -34,9 +34,12 @@ class SupplierCashManager extends ActiveRecord
             ->from(self::SUP_CASHREGISTER)
             ->where(['uid' => $supplier_id, 'role_id' => self::ROLE_ID]);
 
-        list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
+        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
+        if ($time_area) {
+            list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
+            if ($time_start && $time_end && $time_end > $time_start) {
+                $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
+            }
         }
         if ($status) {
             $query->andWhere(['status' => $status]);

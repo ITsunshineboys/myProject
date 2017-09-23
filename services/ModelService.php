@@ -218,11 +218,14 @@ class ModelService
      * @param $time_type
      * @param $time_start
      * @param $time_end
-     * @return array
+     * @return array | int
      */
     public static function timeDeal($time_type, $time_start, $time_end)
     {
-        if ($time_type == 'custom' && $time_start && $time_end) {
+        if ($time_type == 'custom') {
+            if (!$time_start || !$time_end) {
+                return 0;
+            }
             $time_start = strtotime($time_start);
             $time_end = strtotime($time_end);
         } else {
