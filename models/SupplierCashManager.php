@@ -332,7 +332,7 @@ class SupplierCashManager extends ActiveRecord
         } elseif ($time_end) {
             $query->andWhere(['<=', 'g.apply_time', $time_end]);
         }
-        
+
         if (isset($search) && trim($search) == $search) {
             $query->andFilterWhere(['like', 'g.uid', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);

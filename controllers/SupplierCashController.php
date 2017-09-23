@@ -144,10 +144,6 @@ class SupplierCashController extends Controller
         $supplier = Supplier::find()
             ->select('id')->where(['uid' => $user])->one();
 
-
-//        var_dump($user);
-//        var_dump($supplier['id']);
-
         $data = SupplierCashManager::getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
 
         return Json::encode([
@@ -180,13 +176,11 @@ class SupplierCashController extends Controller
         }
 
         $supplier = Supplier::find()->select('id')->where(['uid' => $user])->one();
-//        var_dump($supplier);
+
         if ($admin) {
             $supplier['id'] = 0;
         }
 
-//        var_dump($supplier['id']);
-        //1 , 81
         $data = SupplierCashManager::GetCash($cash_id, $supplier['id']);
 
         return Json::encode([
@@ -383,33 +377,5 @@ class SupplierCashController extends Controller
             ]);
         }
         return $user->getId();
-    }
-
-
-//    public function actionDooo()
-//    {
-//        UserBankInfo::updateAll(['uid' => 1], ['id' => 1]);
-//    }
-
-
-    public function actionGCash()
-    {
-        var_dump(UserCashregister::find()->asArray()->all());
-    }
-
-
-    public function actionGSupplier()
-    {
-        var_dump(Supplier::find()->asArray()->all());
-    }
-
-    public function actionGBank()
-    {
-        var_dump(UserBankInfo::find()->asArray()->all());
-    }
-
-    public function actionGUser()
-    {
-        var_dump(User::find()->asArray()->all());
     }
 }
