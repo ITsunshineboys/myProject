@@ -404,7 +404,9 @@ class SupplierCashController extends Controller
     public function actionGetSupplier()
     {
 //        var_dump(UserCashregister::find()->asArray()->all());
-        UserCashregister::updateAll(['real_money' => 0, 'status' => 2], ['<', 'id', 4]);
+        UserCashregister::updateAll(['real_money' => 900, 'status' => 2], ['<', 'id', 5]);
+        UserCashregister::updateAll(['real_money' => 0, 'status' => 1], ['between', 'id', 5, 10]);
+        UserCashregister::updateAll(['real_money' => 0, 'status' => 3], ['>', 'id', 10]);
     }
 
 }
