@@ -550,6 +550,12 @@ class FindworkerController extends Controller{
                     'owener_resview'=>$restview
                 ]
             ]);
+        }else{
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'ok',
+                'data'=>null
+            ]);
         }
     }
     /**

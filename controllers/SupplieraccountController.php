@@ -262,7 +262,7 @@ class SupplieraccountController extends  Controller{
             ]);
         }
         $request=new Request();
-        $supplier=Supplier::find()->where(['id'=>$user->getId()])->one();
+        $supplier_id=trim(Yii::$app->request->post('supplier_id'));
 
             $transaction=Yii::$app->db->beginTransaction();
         try {
@@ -280,6 +280,7 @@ class SupplieraccountController extends  Controller{
 
                 ]);
             }
+            $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
             $supplier->availableamount-=$freeze_money*100;
             $model->freeze_money=$freeze_money*100;
             if(!$model->save(false) || !$supplier->update(false)){
@@ -569,21 +570,4 @@ class SupplieraccountController extends  Controller{
         ]);
     }
 
-    public function actionDooo()
-    {
-        $supplier = Supplier::find()->where(['id' => 2])->one();
-
-        $supplier->balance = 10000000;
-        $supplier->availableamount = 10000000;
-        $supplier->district_code = 510000;
-        $supplier->district_name = '四川省';
-        $supplier->address = '成都市青羊区人民公园';
-
-        $supplier->update(false);
-    }
-    public function actionTest(){
-        $supplier=Supplier::find()->asArray()->all();
-       $data=UserBankInfo::find()->all();
-       var_dump($supplier);
-    }
 }

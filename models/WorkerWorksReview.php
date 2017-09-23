@@ -18,6 +18,7 @@ use yii\db\Query;
  */
 class WorkerWorksReview extends \yii\db\ActiveRecord
 {
+    const SIZE=2;
     /**
      * @inheritdoc
      */
@@ -65,16 +66,24 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
             ->leftJoin('role as r','r.id=wwr.role_id')
             ->leftJoin('worker_works as ww','ww.id=wwr.works_id')
             ->where(['ww.worker_id'=>$worker_id])
-            ->orderBy('id Desc')
-            ->one();
-        $query['resview_count']=count(self::find()->where(['works_id'=>$query['works_id']])->all());
-        $query['create_time']=date('Y-m-d',$query['create_time']);
+            ->orderBy('create_time Desc')
+            ->limit(self::SIZE)
+            ->all();
+        $data=[];
         if($query){
-            unset($query['id']);
-            unset($query['works_id']);
-            unset($query['uid']);
-            unset($query['role_id']);
-            return $query;
+            foreach ($query as $k=>&$value){
+                $resview_count=count(self::find()->where(['works_id'=>$value['works_id']])->all());
+                $value['create_time']=date('Y-m-d',$value['create_time']);
+
+                unset($value['id']);
+                unset($value['works_id']);
+                unset($value['uid']);
+                unset($value['role_id']);
+                $data['resview_count']=$resview_count;
+                $data[]=$value;
+
+            }
+            return $data;
         }else{
             return null;
         }
