@@ -26,7 +26,7 @@ class Supplier extends ActiveRecord
     const STATUS_APPROVED = 4;
     const STATUS_DESC_ONLINE_APP = '审核通过';
     const STATUS_DESC_ONLINE_ADMIN = '正常营业';
-    const STATUS_DESC_OFFLINE = '已关闭';
+    const STATUS_DESC_OFFLINE = '已闭店';
     const STATUS_DESC_WAIT_REVIEW = '等待审核';
     const STATUS_DESC_NOT_APPROVED = '审核未通过';
     const SCENARIO_ADD = 'add';
@@ -457,7 +457,7 @@ class Supplier extends ActiveRecord
             }
 
             if (isset($supplier['status'])) {
-                $supplier['status'] = self::STATUSES[$supplier['status']];
+                $supplier['status'] = self::STATUSES_ONLINE_OFFLINE[$supplier['status']];
             }
 
             if (isset($supplier['category_id'])) {
