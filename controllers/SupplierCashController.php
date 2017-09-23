@@ -32,7 +32,7 @@ class SupplierCashController extends Controller
     ];
 
     const CASH_STATUS_ING = 1;
-    const CASH_STATUS_DONE= 2;
+    const CASH_STATUS_DONE = 2;
     const CASH_STATUS_FAIL = 3;
 
     const ACCESS_TYPE_RECHARGE = 1;
@@ -379,22 +379,4 @@ class SupplierCashController extends Controller
         return $user->getId();
     }
 
-
-    public function actionDooo()
-    {
-        $supplier = Supplier::find()->where(['id' => 81])->one();
-
-        $supplier->balance = 10000000;
-        $supplier->availableamount = 10000000;
-        $supplier->district_code = 510000;
-        $supplier->district_name = '四川省';
-        $supplier->address = '成都市青羊区人民公园';
-
-        $supplier->update(false);
-    }
-
-    public function actionGCash()
-    {
-        var_dump(UserCashregister::find()->asArray()->all());
-    }
 }
