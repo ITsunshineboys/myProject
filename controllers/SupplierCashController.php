@@ -144,9 +144,6 @@ class SupplierCashController extends Controller
         $supplier = Supplier::find()
             ->select('id')->where(['uid' => $user])->one();
 
-        var_dump($user);
-        var_dump($supplier['id']);
-
         $data = SupplierCashManager::getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
 
         return Json::encode([
@@ -394,5 +391,10 @@ class SupplierCashController extends Controller
         $supplier->address = '成都市青羊区人民公园';
 
         $supplier->update(false);
+    }
+
+    public function actionGCash()
+    {
+        var_dump(UserCashregister::find()->asArray()->all());
     }
 }
