@@ -164,8 +164,8 @@ class SupplieraccountController extends  Controller{
             }
 
         }else{
-
-            $where=" shop_no like '%{$keyword}' or shop_name like '%{$keyword}%'";
+            $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
+            $where=" shop_no like '%{$keyword}' or shop_name like '%{$keyword}%' and  status in ({$keys})";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
