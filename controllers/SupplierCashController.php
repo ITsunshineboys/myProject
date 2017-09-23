@@ -182,6 +182,8 @@ class SupplierCashController extends Controller
         if ($admin) {
             $supplier['id'] = 0;
         }
+
+        var_dump($supplier['id']);
         $data = SupplierCashManager::GetCash($cash_id, $supplier['id']);
 
         return Json::encode([
