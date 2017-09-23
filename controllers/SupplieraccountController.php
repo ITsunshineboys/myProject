@@ -106,26 +106,6 @@ class SupplieraccountController extends  Controller{
 
     }
     /**
-     *父级分类
-     * @return string
-     */
-    public function actionParentCate(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return json_encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        return json_encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' =>GoodsCategory::find()->select('pid,id,title')->asArray()->where(['pid'=>self::STATUS_OFFLINE])->all()
-        ]);
-
-    }
-    /**
      * 商家账户列表
      * @return string
      */
@@ -183,7 +163,7 @@ class SupplieraccountController extends  Controller{
             }
 
         }else{
-            $where=" shop_no like '%{$keyword}' or shop_name like '%{$keyword}'";
+            $where=" shop_no like '%{$keyword}%' or shop_name like '%{$keyword}%'";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
