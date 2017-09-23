@@ -425,4 +425,8 @@ class SupplierCashController extends Controller
         var_dump(UserBankInfo::find()->asArray()->all());
     }
 
+    public function actionGUser()
+    {
+        var_dump(User::find()->asArray()->all());
+    }
 }
