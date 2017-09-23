@@ -122,7 +122,7 @@ class SupplieraccountController extends  Controller{
         $code=1000;
         $vaue_all=Yii::$app->params['value_all'];
         $type_shop=(int)(\Yii::$app->request->get('type_shop',$vaue_all));
-        $status=(int)(\Yii::$app->request->get('status',$vaue_all));
+        $status=(int)(\Yii::$app->request->get('status',array_keys(Supplier::STATUSES_ONLINE_OFFLINE)));
         $keyword=trim(\Yii::$app->request->get('keyword',''),'');
         $category_id=(int)trim(\Yii::$app->request->get('category_id',''),'');
         if (!Supplier::checkShopType($type_shop) || !Supplier::checkStatus($status)) {
