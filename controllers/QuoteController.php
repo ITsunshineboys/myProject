@@ -7,6 +7,7 @@
  */
 namespace app\controllers;
 
+use app\models\ApartmentArea;
 use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
 use app\models\CoefficientManagement;
@@ -1159,5 +1160,37 @@ class QuoteController extends Controller
             'msg'=>'OK'
         ]);
 
+    }
+
+    /**
+     * apartment area list
+     * @return string
+     */
+    public function actionApartmentAreaList()
+    {
+        $code = 200;
+        $select = "id,min_area,max_area";
+        return Json::encode([
+            'code'=> $code,
+            'msg'=>'ok',
+            'list'=>ApartmentArea::findByAll($select),
+        ]);
+    }
+
+    public function actionApartmentArea()
+    {
+//        $post = \Yii::$app->request->post();
+        $post = [
+            ['id'=>1, 'min_area'=>10, 'max_area'=>20,],
+            ['min_area'=>10, 'max_area'=>20,],
+            ['id'=>1, 'min_area'=>10, 'max_area'=>20,],
+        ];
+        foreach ($post as $one_post){
+            if (isset($one_post['id'])){
+                $apartment_area = ApartmentArea::findOne(['id'=>$one_post['id']]);
+            } else {
+
+            }
+        }
     }
 }
