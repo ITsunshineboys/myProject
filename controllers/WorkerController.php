@@ -422,10 +422,10 @@ class WorkerController extends Controller
 
             $order_id = (int)$request->post('order_id', 0);
             $items = $request->post('items', '');
-            $new_amount = trim($request->post('new_amount', 0));
+            $new_amount = (int)$request->post('new_amount', 0);
             $reason = trim($request->post('reason', ''));
-            $need_time = trim($request->post('need_time', ''));
-            $days = trim($request->post('days', ''));
+            $need_time = (int)$request->post('need_time', '');
+            $days = (int)$request->post('days', '');
 
             if (!$order_id
                 || ($days && $need_time != count(explode(',', $days)))
@@ -437,9 +437,12 @@ class WorkerController extends Controller
                 ]);
             }
 
-            $order_old = WorkerOrder::find()
-                ->where(['id' => $order_id])
+            $query = WorkerOrder::find()
+                ->where(['id' => $order_id]);
+
+            $order_old = $query
                 ->asArray()
+                ->orderBy(['id' => SORT_DESC])
                 ->one();
 
             if ($order_old == null) {
@@ -448,6 +451,12 @@ class WorkerController extends Controller
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
+            }
+
+            if ($query->count() == 1) {
+                $order_new = new WorkerOrder();
+            } else {
+                $order_new = $order_old;
             }
 
 
@@ -482,8 +491,6 @@ class WorkerController extends Controller
 
             $data['is_old'] = 0;
             $data['modify_time'] = time();
-
-            $order_new = new WorkerOrder();
 
             $trans = \Yii::$app->db->beginTransaction();
             try {
@@ -911,4 +918,6 @@ class WorkerController extends Controller
             'data' => $data
         ]);
     }
+
+    //todo  历史记录只查第一条数据  用户输入的数据  IS_OLD 只有一条   IS_NEW 也只有一条  订单详情页
 }

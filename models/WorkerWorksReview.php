@@ -12,6 +12,7 @@ use Yii;
  * @property integer $star
  * @property integer $uid
  * @property integer $role_id
+ * @property integer $create_time
  * @property string $review
  */
 class WorkerWorksReview extends \yii\db\ActiveRecord
@@ -30,7 +31,7 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['works_id', 'star', 'uid', 'role_id'], 'integer'],
+            [['works_id', 'star', 'uid', 'role_id', 'create_time'], 'integer'],
             [['review'], 'string', 'max' => 350],
         ];
     }
@@ -48,5 +49,11 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
             'role_id' => '用户角色id',
             'review' => '评论内容',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        $insert && $this->create_time = time();
+        return parent::beforeSave($insert);
     }
 }
