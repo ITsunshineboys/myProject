@@ -395,7 +395,7 @@ class SupplierCashController extends Controller
             'apply_time' => time()-100000,
             'handle_time' => time(),
             'status' => $status,
-            'supplier_reason' => '',
+            'supplier_reason' => '123',
             'transaction_no' => $no
         ], false);
 
