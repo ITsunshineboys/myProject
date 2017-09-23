@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\models\Supplier;
 use app\models\SupplierCashManager;
+use app\models\UserCashregister;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use yii\filters\AccessControl;
@@ -374,4 +375,30 @@ class SupplierCashController extends Controller
         return $user->getId();
     }
 
+
+    public function actionDo()
+    {
+        $cash = new UserCashregister();
+
+        $request = \Yii::$app->request;
+
+        $c = $request->get('c');
+        $real = $request->get('real', 0);
+        $status = $request->get('status', 1);
+        $no = $request->get('no');
+
+        $cash->setAttributes([
+            'uid' => 1,
+            'role_id' => 6,
+            'cash_money' => $c,
+            'real_money' => $real,
+            'apply_time' => time()-100000,
+            'handle_time' => time(),
+            'status' => $status,
+            'supplier_reason' => '',
+            'transaction_no' => $no
+        ], false);
+
+        $cash->save(false);
+    }
 }
