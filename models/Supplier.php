@@ -436,11 +436,13 @@ class Supplier extends ActiveRecord
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
         $select = array_diff($select, self::FIELDS_EXTRA);
-
+        $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
+        $andwhere="  status in ({$keys})";
         $offset = ($page - 1) * $size;
         $supplierList = self::find()
             ->select($select)
             ->where($where)
+            ->andWhere($andwhere)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
@@ -457,7 +459,7 @@ class Supplier extends ActiveRecord
             }
 
             if (isset($supplier['status'])) {
-                $supplier['status'] = self::STATUSES[$supplier['status']];
+                $supplier['status'] = self::STATUSES_ONLINE_OFFLINE[$supplier['status']];
             }
 
             if (isset($supplier['category_id'])) {
