@@ -222,9 +222,9 @@ class ModelService
      */
     public static function timeDeal($time_type, $time_start = 0, $time_end = 0)
     {
-        if ($time_type == 'custom' && $time_start && $time_end) {
-            $time_start = strtotime($time_start);
-            $time_end = strtotime($time_end);
+        if ($time_type == 'custom') {
+            $time_start && $time_start = strtotime($time_start);
+            $time_end && $time_end = strtotime($time_end);
         } else {
             $time_area = StringService::startEndDate($time_type, 1);
             $time_start = $time_area[0];

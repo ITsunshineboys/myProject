@@ -271,6 +271,10 @@ class SupplierCashManager extends ActiveRecord
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['between', 'g.paytime', $time_start, $time_end]);
+        } elseif ($time_start) {
+            $query->andWhere(['>=', 'g.paytime', $time_start]);
+        } elseif ($time_end) {
+            $query->andWhere(['<=', 'g.paytime', $time_end]);
         }
 
         if ($search) {
@@ -323,7 +327,12 @@ class SupplierCashManager extends ActiveRecord
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
+        } elseif ($time_start) {
+            $query->andWhere(['>=', 'g.apply_time', $time_start]);
+        } elseif ($time_end) {
+            $query->andWhere(['<=', 'g.apply_time', $time_end]);
         }
+        
         if (isset($search) && trim($search) == $search) {
             $query->andFilterWhere(['like', 'g.uid', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);
