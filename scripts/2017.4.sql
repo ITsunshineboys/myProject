@@ -1522,6 +1522,7 @@ CREATE TABLE `worker_works_review` (
   `uid` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
   `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '用户角色id',
   `review` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '评论内容',
+  `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '评论时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '工人作品评论表';
 
