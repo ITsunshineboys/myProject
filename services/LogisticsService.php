@@ -4,7 +4,7 @@ namespace app\services;
 class LogisticsService
 {
     /**
-     * 单位
+     * units
      */
     const PRICE_UNITS = 100;
 
