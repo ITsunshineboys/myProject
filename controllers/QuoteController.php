@@ -990,10 +990,10 @@ class QuoteController extends Controller
      */
     public function actionHomepageToponymy()
     {
-        $request = \Yii::$app->request;
-        $province = trim($request->post('province',''));
-        $city = trim($request->post('city',''));
-        $district = trim($request->post('district',''));
+        $request    = \Yii::$app->request;
+        $province   = trim($request->post('province',''));
+        $city       = trim($request->post('city',''));
+        $district   = trim($request->post('district',''));
         $code = 200;
         return Json::encode([
             'code' => $code,
@@ -1008,11 +1008,11 @@ class QuoteController extends Controller
      */
     public function actionHomepageStreet()
     {
-        $request = \Yii::$app->request;
-        $province = trim($request->post('province',''));
-        $city = trim($request->post('city',''));
-        $district = trim($request->post('district',''));
-        $toponymy = trim($request->post('toponymy',''));
+        $request    = \Yii::$app->request;
+        $province   = trim($request->post('province',''));
+        $city       = trim($request->post('city',''));
+        $district   = trim($request->post('district',''));
+        $toponymy   = trim($request->post('toponymy',''));
         $code = 200;
         return Json::encode([
             'code' => $code,
@@ -1211,5 +1211,28 @@ class QuoteController extends Controller
            'code' => 200,
             'msg' => 'ok',
         ]);
+    }
+
+    /**
+     * Decoration list
+     * @return string
+     */
+    public function actionDecorationList()
+    {
+        $page = (int)\Yii::$app->request->get('page', 1);
+        $size = (int)\Yii::$app->request->get('size', DecorationAdd::PAGE_SIZE_DEFAULT);
+        $where  = [];
+        $select = [];
+        $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'list'  => $decoration_add,
+        ]);
+    }
+
+    public function actionDecorationAdd()
+    {
+        
     }
 }

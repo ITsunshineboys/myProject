@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
 class DecorationAdd extends ActiveRecord
 {
 
+    const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_ADMIN =
         [
             'id',
@@ -105,5 +106,31 @@ class DecorationAdd extends ActiveRecord
             }
         }
         return $add_price;
+    }
+
+    public static function pagination($where,$select,$page = 1, $size = self::PAGE_SIZE_DEFAULT)
+    {
+        $offset = ($page - 1) * $size;
+        $List = self::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy(['add_time' => SORT_ASC])
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+
+        foreach ($List as &$effect) {
+            if(isset($effect['add_time'])){
+                $effect['add_time']=date('Y-m-d H:i', $effect['add_time']);
+            }
+        }
+
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'page'=>$page,
+            'size'=>$size,
+            'details' => $List
+        ];
     }
 }

@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
 class ApartmentArea extends ActiveRecord
 {
 
+    const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_NAME = [
         'province_code',
         'city_code',
