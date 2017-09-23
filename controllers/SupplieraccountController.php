@@ -7,6 +7,7 @@ use app\models\Supplier;
 use app\models\SupplierCashregister;
 use app\models\SupplierFreezelist;
 use app\models\User;
+use app\models\UserBankInfo;
 use app\models\UserCashregister;
 use app\models\UserFreezelist;
 use app\services\ExceptionHandleService;
@@ -554,5 +555,8 @@ class SupplieraccountController extends  Controller{
         ]);
     }
 
-
+    public function actionTest(){
+       $data=UserBankInfo::find()->all();
+       var_dump($data);
+    }
 }
