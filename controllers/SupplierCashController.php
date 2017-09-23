@@ -44,7 +44,7 @@ class SupplierCashController extends Controller
     const USER_CASH_STATUSES = [
         self::CASH_STATUS_ING => '提现中',
         self::CASH_STATUS_DONE => '已提现',
-        self::CASH_STATUS_FAIL => '提现失败'
+        self::CASH_STATUS_FAIL => '驳回'
     ];
 
     const USER_ACCESS_TYPE = [
@@ -379,34 +379,34 @@ class SupplierCashController extends Controller
     }
 
 
-    public function actionDooo()
-    {
-        $cash = new UserCashregister();
+//    public function actionDooo()
+//    {
+//        $cash = new UserCashregister();
+//
+//        $cash->setAttributes([
+//            'uid' => 1,
+//            'role_id' => 6,
+//            'cash_money' => 1000000,
+//            'real_money' => 0,
+//            'apply_time' => time(),
+//            'handle_time' => time(),
+//            'status' => 3,
+//            'supplier_reason' => '123',
+//            'transaction_no' => '1156415646999'
+//        ], false);
+//
+//        $cash->save(false);
+//
+//        return 1;
+//    }
 
-        $cash->setAttributes([
-            'uid' => 1,
-            'role_id' => 6,
-            'cash_money' => 1000000,
-            'real_money' => 0,
-            'apply_time' => time(),
-            'handle_time' => time(),
-            'status' => 3,
-            'supplier_reason' => '123',
-            'transaction_no' => '1156415646999'
-        ], false);
 
-        $cash->save(false);
-
-        return 1;
-    }
-
-
-    public function actionGetSupplier()
-    {
-//        var_dump(UserCashregister::find()->asArray()->all());
-        UserCashregister::updateAll(['real_money' => 900, 'status' => 2], ['<', 'id', 5]);
-        UserCashregister::updateAll(['real_money' => 0, 'status' => 1], ['between', 'id', 5, 10]);
-        UserCashregister::updateAll(['real_money' => 0, 'status' => 3], ['>', 'id', 10]);
-    }
+//    public function actionGetSupplier()
+//    {
+////        var_dump(UserCashregister::find()->asArray()->all());
+//        UserCashregister::updateAll(['real_money' => 900, 'status' => 2], ['<', 'id', 5]);
+//        UserCashregister::updateAll(['real_money' => 0, 'status' => 1], ['between', 'id', 5, 10]);
+//        UserCashregister::updateAll(['real_money' => 0, 'status' => 3], ['>', 'id', 10]);
+//    }
 
 }
