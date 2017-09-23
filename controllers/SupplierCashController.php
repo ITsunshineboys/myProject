@@ -382,8 +382,24 @@ class SupplierCashController extends Controller
 
     public function actionDooo()
     {
-        Supplier::updateAll(['uid' => 79]);
-        UserBankInfo::updateAll(['uid' => 79]);
+        Supplier::updateAll(['uid' => 7]);
+        Supplier::updateAll(['uid' => 79], ['id' => 81]);
+
+//        UserBankInfo::updateAll(['uid' => 81]);
+        $bank = new UserBankInfo();
+
+        $bank->setAttributes([
+            'uid' => 81,
+            'role_id' => 6,
+            'bankname' => '中国银行',
+            'bankcard' => 5184326955655548494646,
+            'username' => '领航智造',
+            'position' => '四川成都',
+            'bankbranch' => '青羊宫支行',
+            'create_time' => time()-1000
+        ], false);
+
+        $bank->save(false);
     }
 
 
