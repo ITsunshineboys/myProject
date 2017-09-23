@@ -556,7 +556,8 @@ class SupplieraccountController extends  Controller{
     }
 
     public function actionTest(){
+        $supplier=Supplier::find()->asArray()->all();
        $data=UserBankInfo::find()->all();
-       var_dump($data);
+       var_dump($supplier);
     }
 }
