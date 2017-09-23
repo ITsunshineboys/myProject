@@ -429,7 +429,7 @@ class Supplier extends ActiveRecord
     }
 
     /**
-     * 已提现列表查询分页
+     * 账户列表查询分页
      * @return array
      * */
 
@@ -457,7 +457,7 @@ class Supplier extends ActiveRecord
             }
 
             if (isset($supplier['status'])) {
-                $supplier['status'] = self::STATUSES_ONLINE_OFFLINE[$supplier['status']];
+                $supplier['status'] = self::STATUSES[$supplier['status']];
             }
 
             if (isset($supplier['category_id'])) {
