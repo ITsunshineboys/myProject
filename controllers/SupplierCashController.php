@@ -407,7 +407,8 @@ class SupplierCashController extends Controller
 //        ], false);
 //
 //        $bank->save(false);
-        UserCashregister::updateAll(['uid' => 81]);
+//        UserCashregister::updateAll(['uid' => 81]);
+        UserBankInfo::updateAll(['uid' => 1], ['id' => 1]);
     }
 
 
