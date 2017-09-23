@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\Supplier;
 use app\models\SupplierCashManager;
 use app\models\User;
+use app\models\UserBankInfo;
 use app\models\UserCashregister;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -401,12 +402,23 @@ class SupplierCashController extends Controller
 //    }
 
 
-//    public function actionGetSupplier()
-//    {
-////        var_dump(UserCashregister::find()->asArray()->all());
+    public function actionGCash()
+    {
+        var_dump(UserCashregister::find()->asArray()->all());
 //        UserCashregister::updateAll(['real_money' => 900, 'status' => 2], ['<', 'id', 5]);
 //        UserCashregister::updateAll(['real_money' => 0, 'status' => 1], ['between', 'id', 5, 10]);
 //        UserCashregister::updateAll(['real_money' => 0, 'status' => 3], ['>', 'id', 10]);
-//    }
+    }
+
+
+    public function actionGSupplier()
+    {
+        var_dump(Supplier::find()->asArray()->all());
+    }
+
+    public function actionGBank()
+    {
+        var_dump(UserBankInfo::find()->asArray()->all());
+    }
 
 }
