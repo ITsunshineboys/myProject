@@ -1381,17 +1381,17 @@ class OwnerController extends Controller
                 $effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
                 $effect['case_works_backman_data'] = WorksWorkerData::findById($one_effect['id']);
                 $effect['case_works_worker_data'] = WorksBackmanData::findById($one_effect['id']);
-                $effect['case_works_data'] = WorksData::findById($one_effect['id']);
+                $goods_effect = WorksData::findById($one_effect['id']);
             }
         }
         // 系数查找
         $management = CoefficientManagement::findByAll();
-        foreach ($effect['case_works_data'] as $one_goods){
+        foreach ($goods_effect as $one_goods){
             $sku [] = $one_goods['goods_code'];
         }
         $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id,sku";
         $goods = Goods::findBySkuAll($sku,$select);
-        foreach ($effect['case_works_data'] as &$case_works_datum){
+        foreach ($goods_effect as &$case_works_datum){
             foreach ($goods as $one_goods) {
                 foreach ($management as $one_value){
                     if ($one_goods['sku'] == $case_works_datum['goods_code']) {
@@ -1408,14 +1408,12 @@ class OwnerController extends Controller
         }
 
         //物流信息
-        foreach ($effect['case_works_data'] as $logistics_id) {
+        foreach ($goods_effect as $logistics_id) {
             $ids = $logistics_id['logistics_template_id'];
         }
         $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
-//        var_dump($effect['case_works_data']);
-//        var_dump($logistics);
-        $new = new LogisticsService($logistics,$effect['case_works_data']);
-        var_dump($new);exit;
+        $new =  new LogisticsService($logistics,$goods_effect);
+        $effect['goods'] = $new->minQuantity();
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',

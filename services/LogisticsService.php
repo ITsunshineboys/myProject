@@ -3,8 +3,19 @@ namespace app\services;
 
 class LogisticsService
 {
+    /**
+     * 单位
+     */
     const PRICE_UNITS = 100;
+
+    /**
+     * @var array : goods array
+     */
     private $_goods;
+
+    /**
+     * @var array : logistics array
+     */
     private $_logistics;
 
     /**
@@ -19,29 +30,28 @@ class LogisticsService
         }
         $this->_goods     = $goods;
         $this->_logistics = $logistics;
-        return $this->quantity();
     }
 
-    public function quantity()
+
+    public function minQuantity()
     {
-        foreach ($this->_goods as $one_goods){
-            foreach ($this->_logistics as $one_logistics){
-                if ($one_goods['goods_quantity'] < $one_logistics['delivery_number_default']){
-                    $min_freight = $this->minQuantity($one_goods,$one_logistics);
-                } elseif($one_goods['goods_quantity'] > $one_logistics['delivery_number_default']) {
-                    $max_freight = $this->maxQuantity($one_goods,$one_logistics);
+        if (array_key_exists(1,$this->_logistics)){
+            foreach ($this->_goods as &$one_goods){
+                foreach ($this->_logistics as $one_logistics){
+                    if ($one_goods['goods_quantity'] < $one_logistics['delivery_number_default']){
+                        $one_goods['freight'] = $one_logistics['delivery_cost_default'] / self::PRICE_UNITS;
+                    }
+                }
+            }
+        } else {
+            foreach ($this->_goods as &$one_goods){
+                if ($one_goods['goods_quantity'] < $this->_logistics['0']['delivery_number_default']){
+                    $one_goods['freight'] = $this->_logistics['0']['delivery_cost_default'] / self::PRICE_UNITS;
                 }
             }
         }
 
-        return $min_freight;
-    }
-
-    public function minQuantity($one_goods,$one_logistics)
-    {
-        $goods = $one_goods;
-        $goods['freight'] = $one_logistics['delivery_cost_default'] / self::PRICE_UNITS;
-        return $goods;
+        return $this->_goods;
     }
 
     /**
@@ -68,4 +78,22 @@ class LogisticsService
     （假设有商品a，b，c）
     则平均分配运费
      */
+
+    public function a()
+    {
+        $a  = [
+            ['1'=>1],
+            ['1'=>1],
+        ];
+        $b = [
+          ['2'=>2],
+        ];
+
+        foreach ($a as &$aa){
+            foreach ($b as $bb){
+                $aa['c'] = $bb;
+            }
+        }
+        var_dump($a);
+    }
 }
