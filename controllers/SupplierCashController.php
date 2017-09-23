@@ -178,7 +178,7 @@ class SupplierCashController extends Controller
         }
 
         $supplier = Supplier::find()->select('id')->where(['uid' => $user])->one();
-        var_dump($supplier);
+//        var_dump($supplier);
         if ($admin) {
             $supplier['id'] = 0;
         }
