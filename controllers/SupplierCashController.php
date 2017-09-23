@@ -403,7 +403,8 @@ class SupplierCashController extends Controller
 
     public function actionGetSupplier()
     {
-        var_dump(UserCashregister::find()->asArray()->all());
+//        var_dump(UserCashregister::find()->asArray()->all());
+        UserCashregister::updateAll(['real_money' => 0, 'status' => 2], ['<', 'id', 4]);
     }
 
 }
