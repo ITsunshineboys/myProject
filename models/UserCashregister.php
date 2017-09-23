@@ -86,7 +86,7 @@ class UserCashregister extends \yii\db\ActiveRecord
             $freeze['cost_money']=sprintf('%.2f', $freeze['cash_money']-$freeze['real_money']*0.01
             );
         }
-        $total=(int)self::find()->where($where)->asArray()->count();
+        $total=count($freezeList);
         return ModelService::pageDeal($freezeList, $total, $page, $size);
 
 

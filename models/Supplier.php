@@ -435,6 +435,7 @@ class Supplier extends ActiveRecord
 
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
+
         $select = array_diff($select, self::FIELDS_EXTRA);
         $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
         $andwhere="  status in ({$keys})";
@@ -448,7 +449,6 @@ class Supplier extends ActiveRecord
             ->limit($size)
             ->asArray()
             ->all();
-        var_dump($supplierList);exit;
         foreach ($supplierList as &$supplier) {
 
             if (isset($supplier['create_time'])) {

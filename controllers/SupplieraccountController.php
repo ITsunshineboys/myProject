@@ -111,7 +111,7 @@ class SupplieraccountController extends  Controller{
      * @return string
      */
     public function actionAccountList(){
-        $user = Yii::$app->user->identity->getId();
+        $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
             return json_encode([
@@ -132,7 +132,7 @@ class SupplieraccountController extends  Controller{
             ]);
         }
 
-        $where=" uid =$user";
+        $where='1';
         if(!$keyword) {
             if ($type_shop != $vaue_all){
                 $where.= " and type_shop = {$type_shop}";
@@ -162,9 +162,7 @@ class SupplieraccountController extends  Controller{
             }
 
         }else{
-            $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
-            $where=" shop_no like '%{$keyword}%' or shop_name like '%{$keyword}%'and  status in ({$keys}) ";
-
+            $where=" shop_no like '%{$keyword}%' or shop_name like '%{$keyword}%'";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
@@ -571,6 +569,18 @@ class SupplieraccountController extends  Controller{
         ]);
     }
 
+    public function actionDooo()
+    {
+        $supplier = Supplier::find()->where(['id' => 2])->one();
+
+        $supplier->balance = 10000000;
+        $supplier->availableamount = 10000000;
+        $supplier->district_code = 510000;
+        $supplier->district_name = '四川省';
+        $supplier->address = '成都市青羊区人民公园';
+
+        $supplier->update(false);
+    }
     public function actionTest(){
         $supplier=Supplier::find()->asArray()->all();
        $data=UserBankInfo::find()->all();
