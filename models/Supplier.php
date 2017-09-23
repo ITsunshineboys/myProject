@@ -449,6 +449,7 @@ class Supplier extends ActiveRecord
             ->limit($size)
             ->asArray()
             ->all();
+
         foreach ($supplierList as &$supplier) {
 
             if (isset($supplier['create_time'])) {
@@ -472,7 +473,7 @@ class Supplier extends ActiveRecord
                 $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
             }
         }
-        $total = count($supplierList);
+        $total = self::find()->where($where)->andWhere($andwhere)->count();
         return ModelService::pageDeal($supplierList, $total, $page, $size);
     }
 

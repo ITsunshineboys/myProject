@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "worker_works_review".
@@ -48,5 +49,27 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
             'role_id' => '用户角色id',
             'review' => '评论内容',
         ];
+    }
+
+    public static function getOwenerPLone($worker_id){
+        $query=(new Query())->from('worker_works_review as wwr')
+            ->select('wwr.*,u.nickname,u.icon,r.name,')
+            ->leftJoin('user as u','wwr.uid=u.id')
+            ->leftJoin('role as r','r.id=wwr.role_id')
+            ->leftJoin('worker_works as ww','ww.id=wwr.works_id')
+            ->where(['ww.worker_id'=>$worker_id])
+            ->orderBy('id Desc')
+            ->one();
+        $query['resview_count']=count(self::find()->where(['works_id'=>$query['works_id']])->all());
+        $query['create_time']=date('Y-m-d',$query['create_time']);
+        if($query){
+            unset($query['id']);
+            unset($query['works_id']);
+            unset($query['uid']);
+            unset($query['role_id']);
+            return $query;
+        }else{
+            return null;
+        }
     }
 }

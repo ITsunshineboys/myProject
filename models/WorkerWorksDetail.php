@@ -48,4 +48,5 @@ class WorkerWorksDetail extends \yii\db\ActiveRecord
             'img_ids' => '图片,work_result_img的id,逗号分隔',
         ];
     }
+
 }

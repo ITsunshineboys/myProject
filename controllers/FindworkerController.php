@@ -10,6 +10,7 @@ use app\models\WorkerOrderItem;
 use app\models\WorkerSkill;
 use app\models\WorkerType;
 use app\models\WorkerTypeItem;
+use app\models\WorkerWorksReview;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
 use yii\filters\AccessControl;
@@ -524,7 +525,10 @@ class FindworkerController extends Controller{
             'msg' =>$code==200?'ok':\ Yii::$app->params['errorCodes'][$code]
         ]);
     }
-
+    /**
+     * 工人详情
+     * @return string
+     */
     public function actionWorkerView(){
         $code=1000;
         $worker_id=(int)trim(\Yii::$app->request->get('worker_id'));
@@ -535,14 +539,15 @@ class FindworkerController extends Controller{
             ]);
         }
 
-
+        $restview=WorkerWorksReview::getOwenerPLone($worker_id);
         $data=Worker::workerinfos($worker_id);
-        if($data){
+        if($data && $restview){
             return Json::encode([
                 'code' => 200,
                 'msg' =>'ok',
                 'data'=>[
-                    'worker_view'=>$data
+                    'worker_view'=>$data,
+                    'owener_resview'=>$restview
                 ]
             ]);
         }
