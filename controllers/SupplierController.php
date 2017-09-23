@@ -358,15 +358,13 @@ class SupplierController extends Controller
      */
     public function actionShopTypes()
     {
-        $i = 0;
         $shopTypes = [];
-        array_map(function ($type) use (&$i, &$shopTypes) {
+        foreach (Supplier::TYPE_SHOP_APP as $id => $type) {
             $shopTypes[] = [
-                'id' => $i,
+                'id' => $id,
                 'type' => $type,
             ];
-            $i++;
-        }, Supplier::TYPE_SHOP);
+        }
 
         return Json::encode(
             [
