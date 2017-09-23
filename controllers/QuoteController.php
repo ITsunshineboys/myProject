@@ -1177,20 +1177,39 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * apartment area add and edit
+     * @return string
+     */
     public function actionApartmentArea()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            ['id'=>1, 'min_area'=>10, 'max_area'=>20,],
-            ['min_area'=>10, 'max_area'=>20,],
-            ['id'=>1, 'min_area'=>10, 'max_area'=>20,],
-        ];
-        foreach ($post as $one_post){
+        $post = \Yii::$app->request->post();
+//        $post = [
+//            'province' => 510000,
+//            'city' => 510100,
+//            'list'=>[
+//            ['id'=>1, 'min_area'=>20, 'max_area'=>20,],
+//            ['min_area'=>1, 'max_area'=>2,],]
+//        ];
+        foreach ($post['list'] as $one_post){
             if (isset($one_post['id'])){
                 $apartment_area = ApartmentArea::findOne(['id'=>$one_post['id']]);
-            } else {
-
+                $apartment_area->min_area = $one_post['min_area'];
+                $apartment_area->max_area = $one_post['max_area'];
+                $apartment_area->save();
+            }
+            else {
+                $apartment = new ApartmentArea();
+                $apartment->province_code  = $post['province'];
+                $apartment->city_code      = $post['city'];
+                $apartment->min_area       = $one_post['min_area'];
+                $apartment->max_area       = $one_post['max_area'];
+                $apartment->save();
             }
         }
+        return Json::encode([
+           'code' => 200,
+            'msg' => 'ok',
+        ]);
     }
 }

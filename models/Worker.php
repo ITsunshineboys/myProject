@@ -287,8 +287,8 @@ class Worker extends \yii\db\ActiveRecord
             unset($array['city_code']);
             unset($array['labor_cost_id']);
             $skills=WorkerSkill::getWorkerSkillname($array['uid']);
-            foreach ($skills as &$vule){
-                $array['skills']=$vule;
+            foreach ($skills as $k=>&$vule){
+                $array['skills'][$k]=$vule;
             }
            return $array;
         }else{
