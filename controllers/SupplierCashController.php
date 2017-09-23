@@ -376,31 +376,24 @@ class SupplierCashController extends Controller
     }
 
 
-//    public function actionDo()
-//    {
-//        $cash = new UserCashregister();
-//
-//        $request = \Yii::$app->request;
-//
-//        $c = $request->get('c');
-//        $real = $request->get('real', 0);
-//        $status = $request->get('status', 1);
-//        $no = (string)$request->get('no');
-//
-//        $cash->setAttributes([
-//            'uid' => 1,
-//            'role_id' => 6,
-//            'cash_money' => $c,
-//            'real_money' => $real,
-//            'apply_time' => time(),
-//            'handle_time' => time(),
-//            'status' => $status,
-//            'supplier_reason' => '123',
-//            'transaction_no' => $no
-//        ], false);
-//
-//        $cash->save(false);
-//
-//        return 1;
-//    }
+    public function actionDooo()
+    {
+        $cash = new UserCashregister();
+
+        $cash->setAttributes([
+            'uid' => 1,
+            'role_id' => 6,
+            'cash_money' => 1000000,
+            'real_money' => 900000,
+            'apply_time' => time(),
+            'handle_time' => time(),
+            'status' => 2,
+            'supplier_reason' => '123',
+            'transaction_no' => '1156415646545'
+        ], false);
+
+        $cash->save(false);
+
+        return 1;
+    }
 }
