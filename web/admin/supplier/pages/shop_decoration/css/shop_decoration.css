@@ -1,0 +1,138 @@
+section{
+  padding-left: 40px;
+  width: 95%;
+}
+/*公共样式开始*/
+.red{
+  color: red;
+  margin-right: 3px;
+}
+.img_size{
+  width: 30px;
+  height: 30px;
+}
+.checkbox_index{
+  position: relative;
+  z-index: 9999;
+}
+.detail_img_size{
+  display: inline-block!important;
+  max-width: 240px!important;
+  max-height: 140px!important;
+}
+.dropdown-menu > li:hover{
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+.dropdown-menu > li {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+}
+
+/*公共样式结束*/
+
+.myTab{
+  border-bottom: 1px solid #E6E9F0;
+  overflow: hidden;
+  margin: 40px 0;
+}
+.myTab span{
+  display: inline-block;
+  width: 60px;
+  font-family: Helvetica-Bold;
+  font-size: 14px;
+  color: #666F80;
+  text-align: center;
+  float: left;
+  list-style: none;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.bottom_border{
+  border-bottom: 1px solid #5677FC;
+  color: #5677FC!important;
+}
+
+/*添加模态框*/
+
+#my_modal_add{
+  height: 650px;
+}
+#shop_num_null,#shop_num_null2,#shop_num_null3,#shop_num_null4{
+  border:1px solid red;
+  margin-bottom: 10px;
+  height: 32px;
+  line-height: 32px;
+  background-color: #FFF2F2;
+  color: #E82A2A;
+  width: 540px;
+}
+.modal_txt_one{
+  margin-top: 10px;
+}
+.modal_txt_one span{
+  display: inline-block;
+  width: 64px;
+  height: 32px;
+  line-height: 32px;
+}
+.modal_txt_one span:nth-child(4){
+  background: #FFFFFF;
+  border: 1px solid #BFC0C2;
+  border-radius: 3px;
+  text-align: center;
+}
+.modal_txt_one input[type="text"]{
+  width: 395px;
+  height: 32px;
+  background: #FFFFFF;
+  border: 1px solid #E6E9F0;
+  box-shadow: inset 0 2px 3px 0 #EEF1F8;
+  border-radius: 3px;
+}
+.modal_txt_two input[type="text"]{
+  width: 460px;
+}
+
+.modal_img_box img{
+  vertical-align: top;
+}
+.modal_img_box span{
+  line-height: 0!important;
+}
+#modal_img,#modal_img2,#edit_modal_img1,#edit_modal_img2,#modal_link_img,#modal_link_img2,#modal_edit_link_img,#modal_edit_link_img2{
+  display: inline-block!important;
+  max-width: 240px!important;
+  max-height: 140px!important;
+  border: 1px solid #ccc;
+}
+.clear{
+  clear: both;
+}
+.still{
+  background-color: #F0F0F0!important;
+}
+.modal_img_btn{
+  margin: 10px 0 0 78px;
+}
+.modal_img_btn span:nth-child(1){
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  text-align: center;
+  line-height: 32px!important;
+}
+/*模态框居中*/
+.modelCenter{
+  width: 650px;
+  height: 650px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%)
+}

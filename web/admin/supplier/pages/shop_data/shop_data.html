@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="pages/shop_data/css/shop_data.css">
+<div ng-controller="shop_data_ctrl">
+    <!--头部开始-->
+    <div class="header clearfix">
+        <i class="glyphicon glyphicon-shopping-cart"></i>
+        <a class="crumbs" style="font-weight: bold">店铺数据</a>
+        <img class="pull-right" src="lib/images/user.png" alt="">
+        <!--<a class="pull-right">退出</a>-->
+    </div>
+    <!--头部结束-->
+    <section>
+        <ul class="nav_ul">
+            <li>销量：{{total_sold_number}}</li>
+            <li>销售额：{{total_amount_sold}}</li>
+            <li>游客数：{{total_ip_number}}</li>
+            <li>访问量：{{total_viewed_number}}</li>
+        </ul>
+        <div>
+            <select  name="province" ng-model="selectValue" class="time_select" ng-options="item.value as item.name for item in time">
+            </select>
+            <input ng-if="selectValue=='custom'" id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
+            <input ng-if="selectValue=='custom'" id="stop_time"   ng-model="myng.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+        </div>
+        <!-- 表格 -->
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th>时间</th>
+                <th>销量</th>
+                <th>销量额</th>
+                <th>游客数</th>
+                <th>访问量</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in data_list">
+                <td>{{item.create_date}}</td>
+                <td>{{item.sold_number}}</td>
+                <td>{{item.amount_sold}}</td>
+                <td>{{item.ip_number}}</td>
+                <td>{{item.viewed_number}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
