@@ -37,11 +37,14 @@ html,body{
     background-color: #F5F7FA;;
 }
 /*һ����������hover�͵�ǰҳ�����ʽ*/
-.nav_box .on{
-    color: #5677FC;
-    background-color: #E6E9F0;
+
+.dl_active{
+    background-color: #E6E9F0!important;
 }
-.nav_box dt>a:hover,.nav_box .on>a{
+.a_active{
+    color: #5677FC!important;
+}
+.nav_box dt>a:hover{
     color: #5677FC;
 }
 .nav_box dd{
@@ -64,9 +67,9 @@ html,body{
     font-size: 16px;
     line-height:20px;
 }
-.nav_box dd .dd_on {
-    color: #5677FC;
-}
+/*.nav_box dd .dd_on {*/
+    /*color: #5677FC;*/
+/*}*/
 .nav_box dd:hover a{
     color: #5677FC;
     /*transition: all .3s linear;*/

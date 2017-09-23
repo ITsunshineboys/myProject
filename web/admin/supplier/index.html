@@ -5,6 +5,7 @@
     <title>商家后台</title>
     <link rel="stylesheet" href="lib/css/index.css"/>
     <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="lib/css/common.css">
 </head>
 <body >
 <!--导航栏开始-->
@@ -12,73 +13,73 @@
     <div class="logo">
         <img src="lib/images/logo.png" alt=""/>
     </div>
-    <dl >
-        <dt >
-            <a href="">
+    <dl ng-click="dl_click(1)" ui-sref="supplier_index">
+        <dt ng-class="{dl_active:show_class==1}">
+            <a ng-class="{a_active:show_class==1}">
                 <i class="glyphicon glyphicon-home"></i>
                 首页
             </a>
         </dt>
     </dl>
-    <dl >
-        <dt >
-            <a href="">
+    <dl ng-click="dl_click(2)">
+        <dt ng-class="{dl_active:show_class==2}">
+            <a ng-class="{a_active:show_class==2}">
                 <i class="glyphicon glyphicon-home"></i>
                 店铺管理
             </a>
         </dt>
     </dl>
-    <dl >
-        <dt >
-            <a ui-sref="commodity_manage">
+    <dl ng-click="dl_click(3)" ui-sref="commodity_manage">
+        <dt ng-class="{dl_active:show_class==3}">
+            <a ng-class="{a_active:show_class==3}">
                 <i class="glyphicon glyphicon-home"></i>
                 商品管理
             </a>
         </dt>
     </dl>
-    <dl >
-        <dt >
-            <a href="">
+    <dl ng-click="dl_click(4)">
+        <dt ng-class="{dl_active:show_class==4}">
+            <a ng-class="{a_active:show_class==4}">
                 <i class="glyphicon glyphicon-home"></i>
                 订单管理
             </a>
         </dt>
     </dl>
-    <dl >
-        <dt >
-            <a href="">
+    <dl ng-click="dl_click(5)" ui-sref="shop_data">
+        <dt ng-class="{dl_active:show_class==5}">
+            <a ng-class="{a_active:show_class==5}">
                 <i class="glyphicon glyphicon-home"></i>
                 店铺数据
             </a>
         </dt>
     </dl>
-    <dl >
-        <dt >
-            <a href="">
+    <dl ng-click="dl_click(6)" ui-sref="shop_decoration">
+        <dt ng-class="{dl_active:show_class==6}">
+            <a ng-class="{a_active:show_class==6}">
                 <i class="glyphicon glyphicon-home"></i>
                 店铺装修
             </a>
         </dt>
     </dl>
-    <dl class="dl_on">
-        <dt class="on">
-            <a href="">
+    <dl ng-click="dl_click(7)">
+        <dt ng-class="{dl_active:show_class==7}">
+            <a ng-class="{a_active:show_class==7}">
                 <i class="glyphicon glyphicon-home"></i>
                 品牌管理
             </a>
         </dt>
     </dl>
-    <dl >
-        <dt >
-            <a href="index.html"  >
+    <dl ng-click="dl_click(8)">
+        <dt ng-class="{dl_active:show_class==8}">
+            <a ng-class="{a_active:show_class==8}">
                 <i class="glyphicon glyphicon-home"></i>
                 分类管理
             </a>
         </dt>
     </dl>
-    <dl >
-        <dt >
-            <a href="">
+    <dl ng-click="dl_click(9)" ui-sref="supplier_wallet">
+        <dt ng-class="{dl_active:show_class==9}">
+            <a ng-class="{a_active:show_class==9}">
                 <i class="glyphicon glyphicon-home"></i>
                 钱包
             </a>
@@ -103,12 +104,20 @@
 <script src="pages/commodity_manage/js/commodity_manage_ctrl.js"></script>
 <script src="pages/commodity_manage/js/up_shelves_detail_ctrl.js"></script>
 <!--三阶段王杰----- 开始-->
+<script src="lib/data_js/laydate.js"></script>
+<script src="lib/js/directive.js"></script>
 <script src="pages/supplier_index/js/supplier_index.js"></script>
 <script src="pages/login/js/login.js"></script>
+<script src="pages/shop_decoration/js/shop_decoratiion.js"></script>
+<script src="pages/supplier_wallet/js/supplier_wallet.js"></script>
+<script src="pages/shop_data/js/shop_data.js"></script>
+<script src="pages/supplier_wallet/js/wallet_detail.js"></script>
+<script src="pages/supplier_wallet/js/income_pay.js"></script>
 <!--三阶段王杰----- 结束-->
 <script src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="lib/js/ng-file-upload.js"></script>
 <script src="lib/js/ng-file-upload-shim.js"></script>
+<script src="lib/js/ngDraggable.js"></script>
 <script src="lib/js/index.js"></script>
 <script src="app.js"></script>
 </body>
