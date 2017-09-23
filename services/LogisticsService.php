@@ -62,11 +62,6 @@ class LogisticsService
      *   若有多个商品：（假设商品有a.b.c）
      *   运费a=默认运费 b=0,  c=0
      */
-    public function maxQuantity($one_goods,$one_logistics)
-    {
-        $goods = $one_goods;
-       return $goods;
-    }
     /**
     B：
     当商品件数大于默认件数
@@ -78,22 +73,4 @@ class LogisticsService
     （假设有商品a，b，c）
     则平均分配运费
      */
-
-    public function a()
-    {
-        $a  = [
-            ['1'=>1],
-            ['1'=>1],
-        ];
-        $b = [
-          ['2'=>2],
-        ];
-
-        foreach ($a as &$aa){
-            foreach ($b as $bb){
-                $aa['c'] = $bb;
-            }
-        }
-        var_dump($a);
-    }
 }
