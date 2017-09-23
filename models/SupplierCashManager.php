@@ -94,7 +94,7 @@ class SupplierCashManager extends ActiveRecord
             $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
         }
 
-        $supplier_id = $arr['supplier_id'];
+        $supplier_id = $arr['uid'];
         $bankcard = self::GetBankcard($supplier_id);
         $supplier = self::GetSupplier($supplier_id);
         if (!$bankcard || !$supplier) {
