@@ -61,7 +61,7 @@ class UserCashregister extends \yii\db\ActiveRecord
      * 已提现列表查询分页
      * @return array
      * */
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    public static function pagination($uid,$where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
         $select = array_diff($select, self::FIELDS_EXTRA);
 
@@ -69,12 +69,12 @@ class UserCashregister extends \yii\db\ActiveRecord
         $freezeList = self::find()
             ->select($select)
             ->where($where)
+            ->andWhere(['uid'=>$uid])
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
             ->asArray()
             ->all();
-
         foreach ($freezeList as &$freeze) {
 
             if (isset($freeze['apply_time'])) {

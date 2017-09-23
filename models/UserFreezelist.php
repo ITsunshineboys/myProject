@@ -48,7 +48,7 @@ class UserFreezelist extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    public static function pagination($uid,$where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
         $select = array_diff($select, self::FIELDS_EXTRA);
 
@@ -56,6 +56,7 @@ class UserFreezelist extends \yii\db\ActiveRecord
         $freezeList = self::find()
             ->select($select)
             ->where($where)
+            ->andWhere(['uid'=>$uid])
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
@@ -66,7 +67,7 @@ class UserFreezelist extends \yii\db\ActiveRecord
             $freeze['create_time']=date('Y-m-d H:i',$freeze['create_time']);
             $freeze['freeze_money']=sprintf('%.2f',(float)$freeze['freeze_money']*0.01);
         }
-        $total=(int)self::find()->where($where)->asArray()->count();
+        $total=count($freezeList);
         return ModelService::pageDeal($freezeList, $total, $page, $size);
 
     }

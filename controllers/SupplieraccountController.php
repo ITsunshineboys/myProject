@@ -111,7 +111,7 @@ class SupplieraccountController extends  Controller{
      * @return string
      */
     public function actionAccountList(){
-        $user = Yii::$app->user->identity;
+        $user = Yii::$app->user->identity->getId();
         if (!$user){
             $code=1052;
             return json_encode([
@@ -122,7 +122,7 @@ class SupplieraccountController extends  Controller{
         $code=1000;
         $vaue_all=Yii::$app->params['value_all'];
         $type_shop=(int)(\Yii::$app->request->get('type_shop',$vaue_all));
-        $status=(int)(\Yii::$app->request->get('status',array_keys(Supplier::STATUSES_ONLINE_OFFLINE)));
+        $status=(int)(\Yii::$app->request->get('status',$vaue_all));
         $keyword=trim(\Yii::$app->request->get('keyword',''),'');
         $category_id=(int)trim(\Yii::$app->request->get('category_id',''),'');
         if (!Supplier::checkShopType($type_shop) || !Supplier::checkStatus($status)) {
@@ -132,7 +132,7 @@ class SupplieraccountController extends  Controller{
             ]);
         }
 
-        $where="1";
+        $where=" uid =$user";
         if(!$keyword) {
             if ($type_shop != $vaue_all){
                 $where.= " and type_shop = {$type_shop}";
@@ -321,6 +321,13 @@ class SupplieraccountController extends  Controller{
             ]);
         }
                 $code = 1000;
+                $supplier_id=trim(Yii::$app->request->get('supplier_id'));
+                if(!$supplier_id){
+                    return json_encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
                 $timeType = trim(Yii::$app->request->get('time_type', ''));
                 $where=" role_id=".Supplier::ROLE_SUPPLIER and "status=".self::STATUS_JD;
                 if ($timeType == 'custom') {
@@ -351,7 +358,9 @@ class SupplieraccountController extends  Controller{
                 $page = (int)Yii::$app->request->get('page', 1);
 
                 $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
-            $paginationData = UserFreezelist::pagination($where, UserFreezelist::FIELDS_ADMIN, $page, $size);
+                $uid=Supplier::find()->where(['id'=>$supplier_id])->one()->uid;
+
+            $paginationData = UserFreezelist::pagination($uid,$where, UserFreezelist::FIELDS_ADMIN, $page, $size);
                 return json_encode([
                     'code'=>200,
                     'msg'=>'ok',
@@ -477,9 +486,15 @@ class SupplieraccountController extends  Controller{
             ]);
         }
         $code = 1000;
-
+        $supplier_id=trim(Yii::$app->request->get('supplier_id'));
+        if(!$supplier_id){
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where=" status=".self::STATUS_CG;
+        $where=" status=".self::STATUS_CG and "role_id=".Supplier::ROLE_SUPPLIER ;
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -509,7 +524,8 @@ class SupplieraccountController extends  Controller{
         }
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
-        $paginationData = UserCashregister::pagination($where, UserCashregister::FIELDS_ADMIN, $page, $size);
+        $uid=Supplier::find()->where(['id'=>$supplier_id])->one()->uid;
+        $paginationData = UserCashregister::pagination($uid,$where, UserCashregister::FIELDS_ADMIN, $page, $size);
         return json_encode([
             'code'=>200,
             'msg'=>'ok',
