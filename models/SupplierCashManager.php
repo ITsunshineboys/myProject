@@ -34,13 +34,15 @@ class SupplierCashManager extends ActiveRecord
             ->from(self::SUP_CASHREGISTER)
             ->where(['uid' => $supplier_id, 'role_id' => self::ROLE_ID]);
 
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        if ($time_area) {
-            list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
-            if ($time_start && $time_end && $time_end > $time_start) {
-                $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
-            }
+        list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
+        if ($time_start && $time_end && $time_end > $time_start) {
+            $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
+        } elseif ($time_start) {
+            $query->andWhere(['>=', 'apply_time', $time_start]);
+        } elseif ($time_end) {
+            $query->andWhere(['<=', 'apply_time', $time_end]);
         }
+
         if ($status) {
             $query->andWhere(['status' => $status]);
         }
@@ -257,14 +259,14 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
- public static function getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search)
+    public static function getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search)
     {
         $query = (new Query())
             ->from(self::GOODS_ORDER . ' g')
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
-            ->leftJoin(OrderGoods::tableName().' o','o.order_no=g.order_no')
+            ->leftJoin(OrderGoods::tableName() . ' o', 'o.order_no=g.order_no')
             ->where(['g.pay_status' => 1])
-            ->andWhere(['o.order_status'=>2]);
+            ->andWhere(['o.order_status' => 2]);
 
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
@@ -285,7 +287,7 @@ class SupplierCashManager extends ActiveRecord
             ->all();
         foreach ($arr as &$v) {
             $v['paytime'] = date('Y-m-d H:i', $v['paytime']);
-            $v['amount_order'] = sprintf('%.2f', (float)($v['goods_price']*$v['goods_number']+$v['freight']) / 100);
+            $v['amount_order'] = sprintf('%.2f', (float)($v['goods_price'] * $v['goods_number'] + $v['freight']) / 100);
             $v['status'] = '已完成';
             unset($v['freight']);
             unset($v['goods_number']);
