@@ -144,7 +144,6 @@ class SupplierCashController extends Controller
         $supplier = Supplier::find()
             ->select('id')->where(['uid' => $user])->one();
 
-        var_dump($supplier['id']);exit();
 
         $data = SupplierCashManager::getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
 
@@ -404,8 +403,7 @@ class SupplierCashController extends Controller
 
     public function actionGetSupplier()
     {
-//        var_dump(Supplier::find()->asArray()->all());
-        UserCashregister::updateAll(['uid' => 79]);
+        var_dump(UserCashregister::find()->asArray()->all());
     }
-    
+
 }
