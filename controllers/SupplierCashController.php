@@ -387,9 +387,9 @@ class SupplierCashController extends Controller
             'real_money' => 0,
             'apply_time' => time(),
             'handle_time' => time(),
-            'status' => 1,
+            'status' => 3,
             'supplier_reason' => '123',
-            'transaction_no' => '1156415646558'
+            'transaction_no' => '1156415646999'
         ], false);
 
         $cash->save(false);
