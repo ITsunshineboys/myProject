@@ -404,6 +404,6 @@ class SupplierCashController extends Controller
 
     public function actionGetSupplier()
     {
-        var_dump(User::find()->asArray()->all());
+        var_dump(Supplier::find()->asArray()->all());
     }
 }
