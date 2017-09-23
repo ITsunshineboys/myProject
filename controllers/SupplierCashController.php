@@ -384,7 +384,7 @@ class SupplierCashController extends Controller
     public function actionDooo()
     {
         Supplier::updateAll(['uid' => 7]);
-        Supplier::updateAll(['uid' => 79], ['id' => 81]);
+        Supplier::updateAll(['uid' => 1], ['id' => 81]);
 
 //        UserBankInfo::updateAll(['uid' => 81]);
         $bank = new UserBankInfo();
