@@ -105,11 +105,23 @@ class SupplieraccountController extends  Controller{
 
 
     }
+    /**
+     *父级分类
+     * @return string
+     */
     public function actionParentCate(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         return json_encode([
             'code' => 200,
             'msg' => 'OK',
-            'data' =>GoodsCategory::find()->select('pid,id,title')->asArray()->where(['pid'=>0])->all()
+            'data' =>GoodsCategory::find()->select('pid,id,title')->asArray()->where(['pid'=>self::STATUS_OFFLINE])->all()
         ]);
 
     }
