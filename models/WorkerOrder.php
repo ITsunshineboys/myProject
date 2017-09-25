@@ -1006,6 +1006,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->select('days')
             ->all();
 
+        if (!$all_days) {
+            return [];
+        }
         //查出来的days里面筛选出符合返回的day
         $days_arr = [];
         foreach ($all_days as $days) {

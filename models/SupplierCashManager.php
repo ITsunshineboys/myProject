@@ -318,7 +318,7 @@ class SupplierCashManager extends ActiveRecord
             ->from(self::SUP_CASHREGISTER . ' as g')
             ->where(['g.role_id' => self::ROLE_ID])
             ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.id')
-            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 'g.uid', 'g.status', 'g.real_money']);
+            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money']);
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
