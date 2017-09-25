@@ -12,6 +12,7 @@ use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
 use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
+use app\models\DecorationMessage;
 use app\models\DecorationParticulars;
 use app\models\District;
 use app\models\Effect;
@@ -19,7 +20,6 @@ use app\models\EffectPicture;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCarpentryCraft;
 use app\models\EngineeringStandardCraft;
-use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
@@ -31,6 +31,7 @@ use app\models\WorkerCraftNorm;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
+use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -39,6 +40,7 @@ use yii\web\Controller;
 
 class QuoteController extends Controller
 {
+    const CATEGORY_LEVEL = 3;
     /**
      * @inheritdoc
      */
@@ -1231,8 +1233,72 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * decoration ass classify
+     * @return string
+     */
+    public function actionDecorationAddClassify()
+    {
+        $one_goods = trim(\Yii::$app->request->post('classify',''));
+        $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
+        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$one_goods,$select);
+        foreach ($goods as &$one_goods){
+            $one_goods['supplier_price'] = $one_goods['supplier_price'] / 100;
+            $one_goods['platform_price'] = $one_goods['platform_price'] / 100;
+            $one_goods['market_price'] = $one_goods['market_price'] / 100;
+        }
+        $goods_attr = GoodsAttr::frontDetailsByGoodsId($goods['0']['id']);
+        return Json::encode([
+            'goods'=> $goods['0'],
+            'goods_attr'=> $goods_attr,
+        ]);
+    }
+
+    /**
+     * apartment area list
+     * @return string
+     */
+    public function actionHouseTypeList()
+    {
+        $select = 'min_area,max_area';
+        return Json::encode([
+           'list'=> ApartmentArea::findByAll($select),
+        ]);
+    }
+
     public function actionDecorationAdd()
     {
-        
+        $post = \Yii::$app->request->post();
+        $decoration_add = new DecorationAdd();
+        $decoration_add->province_code = $post['province'];
+        $decoration_add->city_code     = $post['city'];
+        $decoration_add->matendls_name = $post['name'];
+        $decoration_add->correlation_message = $post['message'];
+        $decoration_add->sku           = $post['code'];
+        $decoration_add->add_time      = time();
+
+        if (!$decoration_add->validate()){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$decoration_add->save()){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $id = $decoration_add->attributes['id'];
+        $decoration_message = new DecorationMessage();
+        foreach ($post['add'] as $one_post){
+            if (isset($one_post['min_area'])){
+
+            }
+        }
+
     }
 }

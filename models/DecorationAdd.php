@@ -16,22 +16,28 @@ class DecorationAdd extends ActiveRecord
     const FIELDS_ADMIN =
         [
             'id',
-            'project',
-            'min_area',
-            'max_area',
-            'material',
-            'quantity',
+            'province_code',
+            'city_code',
+            'matendls_name',
+            'correlation_message',
             'sku',
-            'series_id',
-            'style_id',
-            'district_code'
+            'add_time',
         ];
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
     public static function tableName()
     {
         return 'decoration_add';
+    }
+
+    public function rules()
+    {
+        return [
+            [['matendls_name','correlation_message'],'string','max' => 100],
+            [['province_code','city_code','sku'],'number'],
+        ];
     }
 
     /**

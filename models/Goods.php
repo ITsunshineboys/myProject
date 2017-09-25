@@ -441,9 +441,8 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level, $title, $city = self::DEFAULT_CITY)
+    public static function priceDetail($level, $title,$select = [], $city = self::DEFAULT_CITY)
     {
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $all = self::find()
             ->select($select)
             ->asArray()
