@@ -453,16 +453,17 @@ class WorkerController extends Controller
                 ]);
             }
 
-            if ($query->count() == 1) {
-                $order_new = new WorkerOrder();
-            } else {
-                $order_new = $order_old;
-            }
-
-
             //得到之前的数据
             $data = $order_old;
-            unset($data['id']);
+            //分两种情况，
+            //a. 没有修改过  新建一条数据         //b. 修改过的  修改第二条
+            if ($query->count() == 1) {
+                $order_new = new WorkerOrder();
+                unset($data['id']);
+            } else {
+                $order_new = WorkerOrder::find()->where(['id' => $order_id])->orderBy(['id' => SORT_DESC])->one();
+            }
+
 
             //alter amount data
             if ($new_amount) {
@@ -581,9 +582,13 @@ class WorkerController extends Controller
 
             $worker_order_item = new WorkerOrderItem();
             foreach ($new_item_finals as $new_item_final) {
+                $trans = \Yii::$app->db->beginTransaction();
                 $new_worker_order_item = clone $worker_order_item;
                 $new_worker_order_item->setAttributes($new_item_final, false);
-                $new_worker_order_item->save(false);
+                if (!$new_worker_order_item->save(false)) {
+                    $trans->rollBack();
+                }
+                $trans->commit();
             }
 
             $code = 200;
@@ -615,19 +620,17 @@ class WorkerController extends Controller
         $request = \Yii::$app->request;
 
         $order_no = (int)$request->get('order_no', 0);
-        $page = (int)$request->get('page', 1);
-        $page_size = (int)$request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
 
         $code = 1000;
 
-        if (!$order_no) {
+        $order = WorkerOrder::getOrderHistory($user, $order_no);
+
+        if (!$order_no || !$order) {
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
-        $order = WorkerOrder::getOrderHistory($user, $order_no, $page, $page_size);
 
         return Json::encode([
             'code' => 200,
@@ -885,10 +888,8 @@ class WorkerController extends Controller
      *
      * @return string
      */
-    public function actionGetWorkDaysByTime()
+    public function actionGetWorkDaysByMonth()
     {
-        //默认当前月，接收年月
-        StringService::startEndDate('month', true);
         //根据年月查出当前月的接单
 
         $request = \Yii::$app->request;

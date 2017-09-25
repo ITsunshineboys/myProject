@@ -671,22 +671,20 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return null;
     }
 
-    public static function getOrderHistory($uid, $order_no, $page = 1, $page_size = self::IMG_PAGE_SIZE_DEFAULT)
+    public static function getOrderHistory($uid, $order_no)
     {
-        $query = WorkerOrder::find()
-            ->where(['uid' => $uid, 'order_no' => $order_no, 'is_old' => self::IS_OLD]);
-        $count = $query->count();
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
-        $arr = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
+        $data = WorkerOrder::find()
+            ->where(['uid' => $uid, 'order_no' => $order_no, 'is_old' => self::IS_OLD])
+            ->asArray()
+            ->orderBy(['id' => SORT_DESC])
+            ->one();
 
-        foreach ($arr as &$v) {
-            $v = self::dealOrder($v);
-            $v->status = self::USER_WORKER_ORDER_STATUS[$v->status];
+        if ($data) {
+            $data['status'] = self::USER_WORKER_ORDER_STATUS[$data['status']];
+            return $data;
         }
 
-        return ModelService::pageDeal($arr, $count, $page, $page_size);
+        return false;
     }
 
     /**
@@ -994,25 +992,39 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
         list($start_time, $end_time) = $time_area;
 
+        //!备注： eg: 8月的排班   开始时间 <= 8月31  结束时间 >= 8月1
+
+        //得到工人在此区间内的天数
         $all_days = WorkerOrder::find()
             ->where([
                 'worker_id' => $worker_id,
                 'is_old' => self::IS_NEW,
                 'status' => [2, 3, 4]
             ])
-            ->andWhere(['>', 'start_time', $start_time])
-            ->andWhere(['<', 'end_time', $end_time])
+            ->andWhere(['<=', 'start_time', $end_time])
+            ->andWhere(['>=', 'end_time', $start_time])
             ->select('days')
             ->all();
 
+        //查出来的days里面筛选出符合返回的day
         $days_arr = [];
         foreach ($all_days as $days) {
             if ($days) {
-                $days_arr = array_merge($days_arr, explode(',', $days->days));
+                $days_arr_tmp = explode(',', $days->days);
+                foreach ($days_arr_tmp as $day_tmp) {
+                    if (strtotime($day_tmp) >= $start_time
+                        && strtotime($day_tmp) <= $end_time
+                    ) {
+                        $days_arr[] = $day_tmp;
+                    }
+                }
             }
         }
 
-        return array_unique($days_arr);
+        $return = array_unique($days_arr);
+        sort($return, SORT_NUMERIC);
+
+        return $return;
     }
 
 //    /**
