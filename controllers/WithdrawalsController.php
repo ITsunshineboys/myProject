@@ -491,6 +491,9 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $userBankInfo=UserBankInfo::find()
+            ->where(['uid'=>$user->id,'role_id'=>6])
+            ->one();
         $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
@@ -502,6 +505,7 @@ class WithdrawalsController extends Controller
             $UserCashRegister->apply_time=$time;
             $UserCashRegister->status=1;
             $UserCashRegister->transaction_no=$transaction_no;
+            $UserCashRegister->bank_log_id=$userBankInfo->log_id;
             $res1=$UserCashRegister->save(false);
             if (!$res1)
             {
