@@ -1118,14 +1118,10 @@ CREATE TABLE `user_bankinfo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户id',
   `role_id` int(50) NOT NULL COMMENT '角色id',
-	`bankname` varchar(50) NOT NULL COMMENT '开户银行',
-  `bankcard` int(50) NOT NULL COMMENT '银行卡号',
-  `username` varchar(50) NOT NULL COMMENT '开户名',
-  `position` varchar(150) NOT NULL COMMENT '开户行所在地',
-  `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
-  `create_time` int(11) NOT NULL COMMENT '开户时间',
+  `log_id` int(11) NOT NULL COMMENT '银行卡记录id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡信息';
+
 
 -- 8.13 end
 
@@ -1460,8 +1456,9 @@ CREATE TABLE `user_accessdetail` (
 
 CREATE TABLE `user_cashregister` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
-  `role_id` int(50) NOT NULL DEFAULT 0 COMMENT '角色id',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `role_id` int(50) NOT NULL DEFAULT '0' COMMENT '角色id',
+  `bank_log_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户银行卡操作记录id',
   `cash_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '申请提现金额',
   `real_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '实际到账金额',
   `apply_time` int(11) NOT NULL COMMENT '申请提现时间',
@@ -1582,3 +1579,17 @@ CREATE TABLE `project_view` (
   `unit` varchar(20) NOT NULL COMMENT '单位',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='项目详细表';
+
+-- 9.25 start
+
+CREATE TABLE `bankinfo_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bankname` varchar(50) NOT NULL COMMENT '开户银行',
+  `bankcard` int(50) NOT NULL COMMENT '银行卡号',
+  `username` varchar(50) NOT NULL COMMENT '开户名',
+  `position` varchar(150) NOT NULL COMMENT '开户行所在地',
+  `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
+  `create_time` int(11) NOT NULL COMMENT '开户时间',
+  `modify_time` int(11) NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡记录';
