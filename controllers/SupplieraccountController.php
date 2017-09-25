@@ -566,17 +566,12 @@ class SupplieraccountController extends  Controller{
 
         ]);
     }
-    public function actionF(){
-
-        $data=UserFreezelist::deleteAll();
-        var_dump($data);
-    }
 
     public function actionTest(){
 
         $supplier=Supplier::find()->where(['id'=>2])->one();
 
-       $supplier->availableamount=100000;
+       $supplier->availableamount=10000000;
        $res=$supplier->save(false);
        var_dump($res);
     }
