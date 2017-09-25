@@ -1587,8 +1587,7 @@ CREATE TABLE `bankinfo_log` (
   `username` varchar(50) NOT NULL COMMENT '开户名',
   `position` varchar(150) NOT NULL COMMENT '开户行所在地',
   `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
-  `create_time` int(11) NOT NULL COMMENT '开户时间',
-  `modify_time` int(11) NOT NULL COMMENT '修改时间',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡记录';
 
