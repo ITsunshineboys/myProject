@@ -123,7 +123,8 @@ class UserCashregister extends \yii\db\ActiveRecord
         $array = $query->from('user_cashregister as sc')
             ->select($select)
             ->leftJoin('supplier as s', 'sc.uid=s.uid')
-            ->leftJoin('user_bankinfo as sb', 's.uid=sb.uid')
+            ->leftJoin('user_bankinfo as ub', 's.uid=ub.uid')
+            ->leftJoin('bankinfo_log as sb','sb.id=ub.log_id')
             ->where(['sc.id' => $cash_id])
             ->one();
         if ($array) {
