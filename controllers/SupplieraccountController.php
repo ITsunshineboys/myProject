@@ -572,7 +572,7 @@ class SupplieraccountController extends  Controller{
     }
 
     public function actionTest(){
-//        var_dump(Supplier::find()->asArray()->all());exit;
+        var_dump(Supplier::find()->asArray()->all());exit;
         $supplier=Supplier::find()->where(['id'=>2])->one();
 
        $supplier->availableamount=100000;
