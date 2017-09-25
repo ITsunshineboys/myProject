@@ -567,7 +567,7 @@ class SupplieraccountController extends  Controller{
         ]);
     }
     public function actionTest(){
-        $data=UserFreezelist::find()->all();
+        $data=UserFreezelist::deleteAll();
         var_dump($data);
     }
 }
