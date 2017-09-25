@@ -486,7 +486,7 @@ class Supplier extends ActiveRecord
     public static function getsupplierdata($supplier_id, $uid)
     {
         $query = new Query();
-        $select = 's.id,sc.cash_money,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money,s.availableamount';
+        $select = 's.id,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money,s.availableamount';
         $array = $query->from('supplier as s')
             ->select($select)
             ->leftJoin('user_cashregister as sc', 'sc.uid=s.id')
@@ -499,10 +499,9 @@ class Supplier extends ActiveRecord
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
         if ($array) {
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
-            $array['cash_money'] = sprintf('%.2f', (float)$array['cash_money'] * 0.01);
             $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
             $array['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
-            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['availableamount']);
+            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['availableamount']*0.01);
             unset($array['availableamount']);
             return $array;
 

@@ -1186,13 +1186,6 @@ class QuoteController extends Controller
     public function actionApartmentArea()
     {
         $post = \Yii::$app->request->post();
-//        $post = [
-//            'province' => 510000,
-//            'city' => 510100,
-//            'list'=>[
-//            ['id'=>1, 'min_area'=>20, 'max_area'=>20,],
-//            ['min_area'=>1, 'max_area'=>2,],]
-//        ];
         foreach ($post['list'] as $one_post){
             if (isset($one_post['id'])){
                 $apartment_area = ApartmentArea::findOne(['id'=>$one_post['id']]);
@@ -1266,13 +1259,19 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * decoration add
+     * @return string
+     */
     public function actionDecorationAdd()
     {
         $post = \Yii::$app->request->post();
         $decoration_add = new DecorationAdd();
         $decoration_add->province_code = $post['province'];
         $decoration_add->city_code     = $post['city'];
-        $decoration_add->matendls_name = $post['name'];
+        $decoration_add->one_materials = $post['one_name'];
+        $decoration_add->two_materials = $post['two_name'];
+        $decoration_add->three_materials = $post['three_name'];
         $decoration_add->correlation_message = $post['message'];
         $decoration_add->sku           = $post['code'];
         $decoration_add->add_time      = time();
@@ -1296,9 +1295,120 @@ class QuoteController extends Controller
         $decoration_message = new DecorationMessage();
         foreach ($post['add'] as $one_post){
             if (isset($one_post['min_area'])){
+                $decoration_message->decoration_add_id = $id;
+                $decoration_message->min_area = $one_post['min_area'];
+                $decoration_message->max_area = $one_post['min_area'];
+                $decoration_message->quantity = $one_post['quantity'];
+                if (!$decoration_message->validate()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
 
+                if (!$decoration_message->save()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }elseif (isset($one_post['style_id'])) {
+                $decoration_message->decoration_add_id = $id;
+                $decoration_message->quantity = $one_post['quantity'];
+                $decoration_message->style_id = $one_post['style'];
+                if (!$decoration_message->validate()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!$decoration_message->save()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }elseif (isset($one_post['series_id'])){
+                $decoration_message->decoration_add_id = $id;
+                $decoration_message->quantity = $one_post['quantity'];
+                $decoration_message->series_id = $one_post['series'];
+                if (!$decoration_message->validate()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!$decoration_message->save()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
             }
         }
 
+        return Json::encode([
+           'code' => 200,
+            'msg' => 'ok',
+        ]);
+    }
+
+    /**
+     * decoration edit
+     * @return string
+     */
+    public function actionDecorationEdit()
+    {
+        $post = \Yii::$app->request->post();
+        $decoration_add = DecorationAdd::findOne($post['id']);
+        $decoration_add->correlation_message = $post['message'];
+        $decoration_add->sku           = $post['code'];
+        if (!$decoration_add->validate()){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$decoration_add->save()){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        foreach ($post['add'] as $one_post){
+            $decoration_message =DecorationMessage::findOne($one_post['id']);
+            $decoration_message->quantity  = $one_post['quantity'];
+            if (!$decoration_message->validate()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'=>\Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            if (!$decoration_message->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'=>\Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+        ]);
     }
 }

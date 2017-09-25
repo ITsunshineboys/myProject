@@ -18,7 +18,9 @@ class DecorationAdd extends ActiveRecord
             'id',
             'province_code',
             'city_code',
-            'matendls_name',
+            'one_materials',
+            'two_materials',
+            'three_materials',
             'correlation_message',
             'sku',
             'add_time',
@@ -35,7 +37,7 @@ class DecorationAdd extends ActiveRecord
     public function rules()
     {
         return [
-            [['matendls_name','correlation_message'],'string','max' => 100],
+            [['one_materials','two_materials','three_materials','correlation_message'],'string','max' => 100],
             [['province_code','city_code','sku'],'number'],
         ];
     }
