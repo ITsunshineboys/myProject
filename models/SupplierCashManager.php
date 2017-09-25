@@ -99,8 +99,7 @@ class SupplierCashManager extends ActiveRecord
             $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
         }
 
-        $supplier_id = $arr['uid'];
-        $bankcard = self::GetBankcard($supplier_id);
+        $bankcard = self::GetBankcard($arr['bank_log_id']);
         $supplier = self::GetSupplier($supplier_id);
         if (!$bankcard || !$supplier) {
             return null;
@@ -127,19 +126,19 @@ class SupplierCashManager extends ActiveRecord
 
     /**
      * 查询银行卡信息
-     * @param $supplier_id
-     * @return array
+     * @param $bank_log_id
+     * @return ActiveRecord
      */
-    public static function GetBankcard($supplier_id)
+    public static function GetBankcard($bank_log_id)
     {
-        $uid = (int)self::GetSupplier($supplier_id)['uid'];
-        return (new Query())->from(self::USER_BANKINFO)->where(['uid' => $uid])->one();
+        return BankinfoLog::find()->where(['id' => $bank_log_id])->one();
     }
 
     public static function GetSupplier($supplier_id)
     {
         return (new Query())->from(self::SUPPLIER)->where(['id' => $supplier_id])->one();
     }
+
 
     /**
      * @return array
