@@ -225,6 +225,14 @@ class ModelService
         if ($time_type == 'custom') {
             $time_start && $time_start = strtotime($time_start);
             $time_end && $time_end = strtotime($time_end);
+
+            if (($time_start && $time_end)
+                && $time_start == $time_end
+            ) {
+                $time_area = StringService::startEndDate($time_type, 1);
+                $time_start = $time_area[0];
+                $time_end = $time_area[1];
+            }
         } else {
             $time_area = StringService::startEndDate($time_type, 1);
             $time_start = $time_area[0];
