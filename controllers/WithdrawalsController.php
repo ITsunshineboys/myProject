@@ -9,6 +9,7 @@ use app\models\User;
 use app\models\UserAccessdetail;
 use app\models\UserCashregister;
 use app\models\UserBankInfo;
+use app\models\BankinfoLog;
 use app\models\UserFreezelist;
 use app\services\ModelService;
 use app\services\SmValidationService;
