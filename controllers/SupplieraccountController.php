@@ -273,6 +273,7 @@ class SupplieraccountController extends  Controller{
             $model->freeze_reason = trim($request->post('freeze_reason', ''), '');
             $model->create_time = time();
             if (!$freeze_money) {
+                $transaction->rollBack();
                 $code = 1000;
                 return json_encode([
                     'code' => $code,
@@ -333,7 +334,7 @@ class SupplieraccountController extends  Controller{
                     $startTime = trim(Yii::$app->request->get('start_time', ''));
                     $endTime = trim(Yii::$app->request->get('end_time', ''));
                     if (($startTime && !StringService::checkDate($startTime))
-                        || ($endTime && !StringService::checkDate($endTime))
+                        || ($endTime && !StringService::checkDate($endTime) || $startTime>$endTime)
                     ) {
                         return json_encode([
                             'code' => $code,
@@ -344,6 +345,7 @@ class SupplieraccountController extends  Controller{
                     list($startTime, $endTime) = StringService::startEndDate($timeType);
                     $startTime = explode(' ', $startTime)[0];
                     $endTime = explode(' ', $endTime)[0];
+
                 }
                 if ($startTime) {
                     $startTime = strtotime($startTime);
@@ -355,11 +357,9 @@ class SupplieraccountController extends  Controller{
                 }
 
                 $page = (int)Yii::$app->request->get('page', 1);
-
                 $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
                 $uid=Supplier::find()->where(['id'=>$supplier_id])->one()->uid;
-
-            $paginationData = UserFreezelist::pagination($uid,$where, UserFreezelist::FIELDS_ADMIN, $page, $size);
+                $paginationData = UserFreezelist::pagination($uid,$where, UserFreezelist::FIELDS_ADMIN, $page, $size);
                 return json_encode([
                     'code'=>200,
                     'msg'=>'ok',
@@ -497,11 +497,8 @@ class SupplieraccountController extends  Controller{
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
-
-
-
             if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
+                || ($endTime && !StringService::checkDate($endTime) || $startTime>$endTime)
             ) {
                 return json_encode([
                     'code' => $code,

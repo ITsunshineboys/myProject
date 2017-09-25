@@ -259,7 +259,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
                 $code = 1000;
                 return $code;
             }else {
-                $data['indoor_item']['slotting_item_id'] = $array['indoor_id'];
+                $data['indoor_item']['indoor_item_id'] = $array['indoor_id'];
                 $data['indoor_item']['indoor_craft_id'] = $array['indoor_craft_id'];
                 $data['indoor_item']['indoor_area'] = $array['indoor_area'];
 
@@ -276,6 +276,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
 
             }
         }
+
         return $data;
     }
         /**

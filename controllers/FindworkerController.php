@@ -73,7 +73,7 @@ class FindworkerController extends Controller{
         ];
     }
     /**
-     *get Services type list
+     *工种服务类型
      *@return string
      */
     public function actionServiceList()
@@ -99,7 +99,7 @@ class FindworkerController extends Controller{
 
     /**
      *
-     *get home info by worker type
+     *根据工种类型获取具体条目
      *@return string
      */
 
@@ -151,7 +151,7 @@ class FindworkerController extends Controller{
     }
     /**
      *
-     * get craft price by craft_id
+     * 获取某项工艺的价格
      * @return string
      */
     public function actionGetCraftprice(){
@@ -172,7 +172,7 @@ class FindworkerController extends Controller{
     }
 
     /**
-     *get chlid item by parent item_id
+     *根据条目id 获取子条目
      *@return string
      */
     public function actionGetChliditem(){
@@ -192,6 +192,20 @@ class FindworkerController extends Controller{
                 'data' => $data
             ]);
         }
+//        public function actionOrderList(){
+//            $user_id = \Yii::$app->user->identity;
+//            $code=1052;
+//            if(!$user_id){
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' =>\ Yii::$app->params['errorCodes'][$code]
+//                ]);
+//            }
+//            $post=\Yii::$app->request->post();
+//            $infos=WorkerOrder::orderhomeinfos($post);
+//            $data=\Yii::$app->cache->set('homeinfos',$post);
+//
+//        }
     /**
      * 生成订单
      * @return string

@@ -22,7 +22,7 @@ use yii\db\Query;
  */
 class UserCashregister extends \yii\db\ActiveRecord
 {
-
+    const SUPPLIER=6;
     const PAGE_SIZE_DEFAULT=10;
     const FIELDS_EXTRA=[];
     const FIELDS_ADMIN = [
@@ -81,10 +81,9 @@ class UserCashregister extends \yii\db\ActiveRecord
                 $freeze['apply_time']=date('Y-m-d H:i',$freeze['apply_time']);
 
             }
-            $freeze['real_money']=sprintf('%.2f',$freeze['real_money']*0.01);
-            $freeze['cash_money']=sprintf('%.2f',$freeze['cash_money']*0.01);
-            $freeze['cost_money']=sprintf('%.2f', $freeze['cash_money']-$freeze['real_money']*0.01
-            );
+            $freeze['real_money']=sprintf('%.2f',(float)$freeze['real_money']*0.01);
+            $freeze['cash_money']=sprintf('%.2f',(float)$freeze['cash_money']*0.01);
+            $freeze['cost_money']=sprintf('%.2f',$freeze['cash_money']-$freeze['real_money']);
         }
         $total=self::find()->where($where)->andWhere($andwhere)->count();
         return ModelService::pageDeal($freezeList, $total, $page, $size);
@@ -110,14 +109,11 @@ class UserCashregister extends \yii\db\ActiveRecord
         if ($array) {
             $array['apply_time'] = date('Y-m-d H:i', $array['apply_time']);
             $array['handle_time'] = date('Y-m-d H:i', $array['handle_time']);
-            $array['cost_money'] = sprintf('%.2f', (float)($array['cash_money'] - $array['real_money']) * 0.01);
             $array['cash_money'] = sprintf('%.2f', (float)($array['cash_money']) * 0.01);
             $array['real_money'] = sprintf('%.2f', (float)($array['real_money']) * 0.01);
+            $array['cost_money'] = sprintf('%.2f', (float)$array['cash_money'] - $array['real_money']);
             $array['status'] = self::STATUS_CSED;
-
             return $array;
-
-
         }
         return null;
     }
