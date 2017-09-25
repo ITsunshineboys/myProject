@@ -566,7 +566,7 @@ class SupplieraccountController extends  Controller{
 
         ]);
     }
-    public function actiionTest(){
+    public function actionTest(){
         $data=UserFreezelist::find()->all();
         var_dump($data);
     }
