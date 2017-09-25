@@ -1383,39 +1383,50 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
 
-        $GoodsOrder=GoodsOrder::find()
-            ->select('pay_status')
-            ->where(['order_no'=>$order_no])
-            ->one();
         if ($GoodsOrder->pay_status==0)
         {
-            $trans = \Yii::$app->db->beginTransaction();
-            try {
-                $OrderGoods=OrderGoods::find()
-                    ->where(['order_no'=>$order_no,'sku'=>$sku])
-                    ->one();
-                $OrderGoods->order_status=2;
-                $res=$OrderGoods->save();
-                if (!$res){
-                    $code=500;
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$order_no])
+                ->asArray()
+                ->all();
+            foreach ($OrderGoods as &$goods)
+            {
+                if ($goods->order_status ==2)
+                {
+                    $code=403;
                     return Json::encode([
                         'code' => $code,
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                $trans->commit();
+
+                    $trans = \Yii::$app->db->beginTransaction();
+                    try {
+                        $goods->order_status=2;
+                        $res=$goods->save(false);
+                        if (!$res){
+                            $code=500;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg' => \Yii::$app->params['errorCodes'][$code]
+                            ]);
+                        }
+                        $trans->commit();
+                    } catch (Exception $e) {
+                        $trans->rollBack();
+                        $code=500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+
                 $code=200;
                 return Json::encode([
                     'code' => $code,
                     'msg' => 'ok'
-                ]);
-            } catch (Exception $e) {
-                $trans->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
                 ]);
             }
         }
