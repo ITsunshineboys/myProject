@@ -263,11 +263,11 @@ class SupplieraccountController extends  Controller{
         }
         $request=new Request();
         $supplier_id=trim(Yii::$app->request->post('supplier_id'));
-
+        $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
             $transaction=Yii::$app->db->beginTransaction();
         try {
             $model = new UserFreezelist();
-            $model->uid = $user->getId();
+            $model->uid = $supplier->uid;
             $model->role_id = Supplier::ROLE_SUPPLIER;
             $freeze_money = $model->freeze_money = trim($request->post('freeze_money', ''), '');
             $model->freeze_reason = trim($request->post('freeze_reason', ''), '');
@@ -567,12 +567,13 @@ class SupplieraccountController extends  Controller{
         ]);
     }
     public function actionF(){
-        $data=UserFreezelist::find()->asArray()->all();
+
+        $data=UserFreezelist::deleteAll();
         var_dump($data);
     }
 
     public function actionTest(){
-        var_dump(Supplier::find()->asArray()->all());exit;
+
         $supplier=Supplier::find()->where(['id'=>2])->one();
 
        $supplier->availableamount=100000;
