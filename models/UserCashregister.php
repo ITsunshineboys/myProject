@@ -50,10 +50,30 @@ class UserCashregister extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'role_id', 'cash_money', 'real_money', 'apply_time', 'handle_time', 'status'], 'integer'],
+            [['uid', 'role_id', 'bank_log_id', 'cash_money', 'real_money', 'apply_time', 'handle_time', 'status'], 'integer'],
             [['apply_time', 'supplier_reason', 'transaction_no'], 'required'],
             [['supplier_reason'], 'string', 'max' => 150],
             [['transaction_no'], 'string', 'max' => 50],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'uid' => '用户id',
+            'role_id' => '角色id',
+            'bank_log_id' => '用户银行卡操作记录id',
+            'cash_money' => '申请提现金额',
+            'real_money' => '实际到账金额',
+            'apply_time' => '申请提现时间',
+            'handle_time' => '处理提现时间',
+            'status' => '提现状态  1:提现中 2:已提现 3:提现失败',
+            'supplier_reason' => '提现操作原因',
+            'transaction_no' => '交易单号',
         ];
     }
 
