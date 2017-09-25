@@ -32,8 +32,8 @@ class BankinfoLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['bankname', 'bankcard', 'username', 'position', 'bankbranch', 'create_time', 'modify_time'], 'required'],
-            [['bankcard', 'create_time', 'modify_time'], 'integer'],
+            [['bankname', 'bankcard', 'username', 'position', 'bankbranch', 'create_time'], 'required'],
+            [['bankcard', 'create_time'], 'integer'],
             [['bankname', 'username'], 'string', 'max' => 50],
             [['position', 'bankbranch'], 'string', 'max' => 150],
         ];
@@ -51,8 +51,7 @@ class BankinfoLog extends \yii\db\ActiveRecord
             'username' => '开户名',
             'position' => '开户行所在地',
             'bankbranch' => '开户行支行名',
-            'create_time' => '开户时间',
-            'modify_time' => '修改时间',
+            'create_time' => '创建时间',
         ];
     }
 }

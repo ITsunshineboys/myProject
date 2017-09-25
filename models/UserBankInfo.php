@@ -44,23 +44,33 @@ class UserBankInfo extends \yii\db\ActiveRecord
      * @param $user
      * @return int
      */
-    public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
+   public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
     {
             $bankInfo=self::find()
                 ->where(['uid'=>$user->id,'role_id'=>$role_id])
                 ->one();
+            $time=time();
             if ($bankInfo)
             {
                 $trans = \Yii::$app->db->beginTransaction();
                 try {
-                    $bankInfo->bankname=$bankname;
-                    $bankInfo->bankcard=$bankcard;
-                    $bankInfo->username=$username;
-                    $bankInfo->position=$position;
-                    $bankInfo->bankbranch=$bankbranch;
+                    $log=new BankinfoLog();
+                    $log->bankname=$bankname;
+                    $log->bankcard=$bankcard;
+                    $log->username=$username;
+                    $log->position=$position;
+                    $log->bankbranch=$bankbranch;
+                    $log->create_time=$time;
+                    $res2=$log->save(false);
+                    if (!$res2)
+                    {
+                        $code=500;
+                        return $code;
+                    }
+                    $bankInfo->log_id=$log->id;
                     $bankInfo->uid=$user->id;
                     $bankInfo->role_id=$role_id;
-                    $res1=$bankInfo->save();
+                    $res1=$bankInfo->save(false);
                     if (!$res1){
                         $code=500;
                         return $code;
@@ -76,12 +86,21 @@ class UserBankInfo extends \yii\db\ActiveRecord
             }else{
                 $trans = \Yii::$app->db->beginTransaction();
                 try {
+                    $log=new BankinfoLog();
+                    $log->bankname=$bankname;
+                    $log->bankcard=$bankcard;
+                    $log->username=$username;
+                    $log->position=$position;
+                    $log->bankbranch=$bankbranch;
+                    $log->create_time=$time;
+                    $res2=$log->save(false);
+                    if (!$res2)
+                    {
+                        $code=500;
+                        return $code;
+                    }
                     $bankInfo=new self;
-                    $bankInfo->bankname=$bankname;
-                    $bankInfo->bankcard=$bankcard;
-                    $bankInfo->username=$username;
-                    $bankInfo->position=$position;
-                    $bankInfo->bankbranch=$bankbranch;
+                    $bankInfo->log_id=$log->id;
                     $bankInfo->uid=$user->id;
                     $bankInfo->role_id=$role_id;
                     $res1=$bankInfo->save(false);
