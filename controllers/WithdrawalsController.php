@@ -132,7 +132,7 @@ class WithdrawalsController extends Controller
         }
     }
 
-    /**
+     /**
      * 查询银行卡信息
      * @return string
      */
@@ -146,7 +146,12 @@ class WithdrawalsController extends Controller
             ]);
         }
         $role_id=trim(Yii::$app->request->get('role_id',7));
-        $UserBankInfo=UserBankInfo::findByUidAndRole_id($user->id,$role_id);
+//        $UserBankInfo=UserBankInfo::findByUidAndRole_id($user->id,$role_id);
+        $UserBankInfo=(new Query())
+            ->from(UserBankInfo::tableName().' as u')
+            ->leftJoin(BankinfoLog::tableName().' as b','u.log_id=b.id')
+            ->where(['u.uid'=>$user->id,'u.role_id'=>$role_id])
+            ->one();
         if ($UserBankInfo)
         {
             $data=$UserBankInfo->toArray();
