@@ -838,17 +838,15 @@ CREATE TABLE `cleaning` (
 
 -- 6.26 start --
 CREATE TABLE `decoration_add` (
-  `id` int(11) NOT NULL,
-  `series_id` int(11) DEFAULT '0' COMMENT '系列',
-  `style_id` int(11) DEFAULT '0' COMMENT '风格',
-  `project` varchar(50) DEFAULT NULL COMMENT '项目名称',
-  `min_area` int(10) DEFAULT '0' COMMENT '最小面积',
-  `max_area` int(10) DEFAULT '0' COMMENT '最大面积',
-  `material` varchar(20) DEFAULT NULL COMMENT '材料',
-  `quantity` int(20) DEFAULT '0' COMMENT '数量',
-  `sku` int(10) DEFAULT NULL COMMENT '商品编码',
-  `supplier_price` bigint(20) DEFAULT NULL COMMENT '平台价格',
-  `district_code` int(10) DEFAULT NULL COMMENT '城市编码',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `province_code` int(10) DEFAULT NULL,
+  `city_code` int(10) DEFAULT NULL,
+  `one_materials` varchar(11) DEFAULT '0' COMMENT '一级材料',
+  `two_materials` varchar(10) DEFAULT NULL,
+  `three_materials` varchar(10) DEFAULT NULL,
+  `correlation_message` varchar(11) DEFAULT '0' COMMENT '相关信息',
+  `sku` int(10) DEFAULT NULL COMMENT '项目名称',
+  `add_time` int(10) DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1593,3 +1591,23 @@ CREATE TABLE `bankinfo_log` (
   `modify_time` int(11) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡记录';
+
+CREATE TABLE `decoration_message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `decoration_add_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL COMMENT '数量',
+  `style_id` int(11) DEFAULT NULL,
+  `series_id` int(11) DEFAULT NULL,
+  `min_area` int(11) DEFAULT NULL,
+  `max_area` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `apartment_area` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `province_code` int(11) DEFAULT NULL,
+  `city_code` int(11) DEFAULT NULL,
+  `min_area` int(11) DEFAULT NULL,
+  `max_area` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
