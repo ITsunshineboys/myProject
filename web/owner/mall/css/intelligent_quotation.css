@@ -11,11 +11,11 @@ input[type="radio"]+span {
     border: 1px solid #B8B6B6;
     background-color: white;
 }
-.structure input[type="radio"] ~ img{
-    position: absolute;
-    top:.4rem;
-    left:-.1rem;
-}
+/*.structure input[type="radio"] ~ img{*/
+    /*position: absolute;*/
+    /*top:.4rem;*/
+    /*left:-.1rem;*/
+/*}*/
 /*input[type="radio"]:checked+span {*/
     /*border: 1px solid #C2C2C2;*/
     /*background-color: #53A8F4;*/
@@ -94,7 +94,7 @@ header div span {
 }
 
 .pic_span {
-    margin-left: 12.8rem;
+    margin-left: 11.2rem;
     font-size: 1.5rem;
 }
 .pos_span{

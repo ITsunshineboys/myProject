@@ -2,12 +2,12 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate",'a
     .config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/")
         $stateProvider
-            .state("home", {
-                url: "/",
-                templateUrl: "intelligent.html",
-                controller:'nodata_ctrl',
-                css:['css/intelligent_index.css','zui-1.7.0-dist/dist/css/zui.min.css']
-            })
+            // .state("home", {
+            //     url: "/",
+            //     templateUrl: "intelligent.html",
+            //     controller:'nodata_ctrl',
+            //     css:['css/intelligent_index.css','zui-1.7.0-dist/dist/css/zui.min.css']
+            // })
             .state('nodata',{
                 url:'/nodata',
                 templateUrl:'nodata.html',
@@ -59,96 +59,100 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate",'a
                 css:'css/intelligent_quotation.css',
                 params:{item:''}
             })
-            // .state("have_data",{   //有资料
-            //     url:"/have_data",
-            //     views:{
-            //         "":{templateUrl:"Intelligent_quotation.html"}
-            //     },
-            //     controller:"intelligent_quotation_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
-            // .state("all_comment",{  //评论页
-            //     url:"/all_comment",
-            //     views:{
-            //         "":{templateUrl:"all_comment.html"}
-            //     },
-            //     controller:"all_comment_ctrl",
-            //     params:{"id":""}
-            // })
-            //
-            // .state("main_material",{  //主材料页
-            //     url:"/main_material",
-            //     views:{
-            //         "":{templateUrl:"main_material.html"}
-            //     },
-            //     controller:"main_material_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
-            // .state("other_materials",{  //其他材料页
-            //     url:"/other_materials",
-            //     views:{
-            //         "":{templateUrl:"other_materials.html"}
-            //     },
-            //     controller:"other_materials_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
-            //
-            // .state("fixed_home",{  //固定家居
-            //     url:"/fixed_home",
-            //     views:{
-            //         "":{templateUrl:"fixed_home.html"}
-            //     },
-            //     controller:"fixed_home_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
-            // .state("house_hold",{  //固定家居
-            //     url:"/house_hold",
-            //     views:{
-            //         "":{templateUrl:"house_hold.html"}
-            //     },
-            //     controller:"house_hold_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
-            // .state("soft_house",{  //软装家居
-            //     url:"/soft_house",
-            //     views:{
-            //         "":{templateUrl:"soft_house.html"}
-            //     },
-            //     controller:"soft_house_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
-            // .state("life_house",{  //生活家居
-            //     url:"/life_house",
-            //     views:{
-            //         "":{templateUrl:"life_house.html"}
-            //     },
-            //     controller:"soft_house_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
-            // .state("add_main",{  //生活家居
-            //     url:"/add_main",
-            //     views:{
-            //         "":{templateUrl:"add_main.html"}
-            //     },
-            //     controller:"add_main_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
-            // .state("have_search",{  //生活家居
-            //     url:"/have_search",
-            //     views:{
-            //         "":{templateUrl:"have_search.html"}
-            //     },
-            //     controller:"have_search_ctrl",
-            //     params:{'name':'','address':"",'pic_one':"",'pic_two':""}
-            // })
-            // .state("basics_decoration",{  //辅材页
-            //     url:"/basics_decoration",
-            //     views:{
-            //         "":{templateUrl:"basics_decoration.html"}
-            //     },
-            //     controller:"basics_decoration_ctrl",
-            //     params:{name:'',address:'','pic_one':"",'pic_two':""}
-            // })
+            .state('index',{
+                url:'/',
+                templateUrl:'intelligent_index.html'
+            })
+            .state("have_data",{   //有资料
+                url:"/have_data",
+                views:{
+                    "":{templateUrl:"Intelligent_quotation.html"}
+                },
+                controller:"intelligent_quotation_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("all_comment",{  //评论页
+                url:"/all_comment",
+                views:{
+                    "":{templateUrl:"all_comment.html"}
+                },
+                controller:"all_comment_ctrl",
+                params:{"id":""}
+            })
+
+            .state("main_material",{  //主材料页
+                url:"/main_material",
+                views:{
+                    "":{templateUrl:"main_material.html"}
+                },
+                controller:"main_material_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("other_materials",{  //其他材料页
+                url:"/other_materials",
+                views:{
+                    "":{templateUrl:"other_materials.html"}
+                },
+                controller:"other_materials_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+
+            .state("fixed_home",{  //固定家居
+                url:"/fixed_home",
+                views:{
+                    "":{templateUrl:"fixed_home.html"}
+                },
+                controller:"fixed_home_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("house_hold",{  //固定家居
+                url:"/house_hold",
+                views:{
+                    "":{templateUrl:"house_hold.html"}
+                },
+                controller:"house_hold_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("soft_house",{  //软装家居
+                url:"/soft_house",
+                views:{
+                    "":{templateUrl:"soft_house.html"}
+                },
+                controller:"soft_house_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("life_house",{  //生活家居
+                url:"/life_house",
+                views:{
+                    "":{templateUrl:"life_house.html"}
+                },
+                controller:"soft_house_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("add_main",{  //生活家居
+                url:"/add_main",
+                views:{
+                    "":{templateUrl:"add_main.html"}
+                },
+                controller:"add_main_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
+            .state("have_search",{  //生活家居
+                url:"/have_search",
+                views:{
+                    "":{templateUrl:"have_search.html"}
+                },
+                controller:"have_search_ctrl",
+                params:{'name':'','address':"",'pic_one':"",'pic_two':""}
+            })
+            .state("basics_decoration",{  //辅材页
+                url:"/basics_decoration",
+                views:{
+                    "":{templateUrl:"basics_decoration.html"}
+                },
+                controller:"basics_decoration_ctrl",
+                params:{name:'',address:'','pic_one':"",'pic_two':""}
+            })
             // .state("nodata", {
             //     url: "/nodata",
             //     views: {
