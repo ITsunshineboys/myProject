@@ -24,6 +24,7 @@ use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
 use app\models\LaborCost;
+use app\models\Points;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
@@ -1409,6 +1410,73 @@ class QuoteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
+        ]);
+    }
+
+    /**
+     * commonality  list
+     * @return string
+     */
+    public function actionCommonalityList()
+    {
+        $select = 'id,title';
+        $where  = 'level = 1';
+        return Json::encode([
+           'list'=> Points::findByPid($select,$where),
+        ]);
+    }
+
+    /**
+     * commonality  one title list
+     * @return string
+     */
+    public function actionCommonalityTitle()
+    {
+        $id = trim(\Yii::$app->request->post('id',''));
+        $select = 'id,title';
+        $where  = 'pid='.$id;
+        $title['one_title'] = Points::findByPid($select,$where);
+        foreach ($title['one_title'] as $one_title){
+            $ids [] = $one_title['id'];
+        }
+        $string_ids = implode(',',$ids);
+        $two_select = 'id,title,count';
+        $two_where  = 'pid in ('.$string_ids.')';
+        $title['two_title'] = Points::findByPid($two_select,$two_where);
+
+        return Json::encode([
+           'list'=> $title,
+        ]);
+    }
+
+    /**
+     * commonality one title add
+     * @return string
+     */
+    public function actionCommonalityTitleAdd()
+    {
+        $points = new Points();
+        $points->pid   = trim(\Yii::$app->request->post('id',''));
+        $points->title = trim(\Yii::$app->request->post('title',''));
+        $points->level = 2;
+        if (!$points->validate()){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$points->save()){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        return Json::encode([
+           'code'=>200,
+            'msg'=> 'ok',
         ]);
     }
 }
