@@ -847,4 +847,93 @@ class WithdrawalsController extends Controller
         ]);
     }
 
+
+        /**
+     *
+     * @return string
+     */
+    public  function  actionCheckCashMoney()
+    {
+        $user=Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        if (!$supplier)
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $cash_moeny=trim($request->post('cash_money'));
+        if (!$cash_moeny || !is_numeric($cash_moeny))
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if ($supplier->availableamount-$cash_moeny<0 )
+        {
+            $code=1033;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok'
+        ]);
+    }
+
+        public  function  actionCheckSupplierPayPwd()
+    {
+        $user=Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        $pay_pwd=trim($request->post('pay_pwd'));
+        if (!$pay_pwd)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        if (Yii::$app->getSecurity()->validatePassword($pay_pwd,$supplier->pay_password)==false){
+            $code=1055;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok'
+        ]);
+    }
+
+
 }
