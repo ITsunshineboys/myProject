@@ -860,7 +860,8 @@ class MallController extends Controller
                     'subtitle' => $goods->subtitle,
                     'platform_price' => $goods->platform_price,
 //                    'url' => Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true),
-                    'url' => Goods::GOODS_DETAIL_URL_PREFIX . $goods->id,
+//                    'url' => Goods::GOODS_DETAIL_URL_PREFIX . $goods->id,
+                    'goods_id' => $goods->id,
                 ],
             ];
         }
