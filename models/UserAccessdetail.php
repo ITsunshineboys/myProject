@@ -19,6 +19,7 @@ use app\services\ModelService;
 class UserAccessdetail extends \yii\db\ActiveRecord
 {
 
+
     const PAGE_SIZE_DEFAULT=12;
     const FIELDS_EXTRA=[];
     const FIELDS_ADMIN = [
@@ -138,5 +139,126 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 break;
         }
         return $type;
+    }
+
+       /**
+     * 充值类收支明细
+     * @param array $accessDetail
+     * @return array
+     */
+    public  static  function  findRechargeDetail($accessDetail=[])
+    {
+        $data[]=[
+            'name'=>'充值金额',
+            'value'=>$accessDetail['access_money']
+        ];
+        $data[]=[
+            'name'=>'充值类型',
+            'value'=>'微信支付'
+        ];
+        $data[]=[
+            'name'=>'充值时间',
+            'value'=>date('Y-m-d H:i',$accessDetail['create_time'])
+        ];
+        $data[]=[
+            'name'=>'交易单号',
+            'value'=>$accessDetail['transaction_no']
+        ];
+        return $data;
+    }
+
+    /**
+     * @param array $accessDetail
+     * @return int
+     */
+    public static  function findAccessDetail($accessDetail=[],$type)
+    {
+        $GoodsOrder=GoodsOrder::findByOrderNo($accessDetail['order_no'])->toArray();
+        $OrderGoods=OrderGoods::find()
+            ->where(['order_no'=>$accessDetail['order_no']])
+            ->andWhere(['sku'=>$accessDetail['sku']])
+            ->asArray()
+            ->one();
+
+            if (!$GoodsOrder || !$OrderGoods)
+            {
+                $code=1000;
+                return $code;
+            }
+
+            $data[]=[
+                'name'=>'商品名称',
+                'value'=>$OrderGoods['goods_name']
+            ];
+            switch ($type){
+                case 'Debit':
+                    $data[]=[
+                        'name'=>'扣款金额',
+                        'value'=>GoodsOrder::switchMoney($accessDetail['access_money']*0.01)
+                    ];
+                    break;
+                case 'Goods':
+                    $data[]=[
+                        'name'=>'货款金额',
+                        'value'=>GoodsOrder::switchMoney($accessDetail['access_money']*0.01)
+                    ];
+                    break;
+            }
+
+            $data[]=[
+                'name'=>'商品编号',
+                'value'=>$OrderGoods['sku']
+            ];
+            $data[]=[
+                'name'=>'订单号',
+                'value'=>$GoodsOrder['order_no']
+            ];
+            $data[]=[
+                'name'=>'交易单号',
+                'value'=>$accessDetail['transaction_no']
+            ];
+            $data[]=[
+                'name'=>'下单时间',
+                'value'=>date('Y-m-d H:i',$GoodsOrder['create_time'])
+            ];
+            $data[]=[
+                'name'=>'付款方式',
+                'value'=>$GoodsOrder['pay_name']
+            ];
+            $data[]=[
+                'name'=>'付款时间',
+                'value'=>date('Y-m-d H:i',$GoodsOrder['paytime'])
+            ];
+            $data[]=[
+                'name'=>'扣款时间',
+                'value'=>date('Y-m-d H:i',$accessDetail['create_time'])
+            ];
+            switch ($OrderGoods['shipping_type'])
+            {
+                case 0:
+                    $express=Express::find()
+                        ->where(['order_no'=>$accessDetail['order_no']])
+                        ->andWhere(['sku'=>$accessDetail['sku']])
+                        ->one();
+                    if ($express)
+                    {
+                        $shippingType=$express->waybillname.'('.$express->waybillnumber.')';
+                    }else{
+                        $shippingType='';
+                    }
+                    break;
+                case 1:
+                    $shippingType='送货上门';
+                    break;
+            }
+            $data[]=[
+                'name'=>'配送方式',
+                'value'=>$shippingType
+            ];
+            $data[]=[
+                'name'=>'收货地址',
+                'value'=>LogisticsDistrict::getdistrict($GoodsOrder['district_code']).$GoodsOrder['region']
+            ];
+            return $data;
     }
 }

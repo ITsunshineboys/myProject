@@ -696,4 +696,79 @@ class WithdrawalsController extends Controller
         ]);
     }
 
+
+    /**
+     * @return string
+     */
+    public function  actionSupplierAccessDetail()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        if (!$supplier)
+        {
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $transaction_no=trim($request->post('transaction_no',''));
+        if (!$transaction_no)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $accessDetail=UserAccessdetail::find()
+            ->where(['uid'=>$user->id])
+            ->andWhere(['role_id'=>6])
+            ->andWhere(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one();
+            if (!$accessDetail){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            switch ($accessDetail['access_type'])
+            {
+                case 1:
+                    $data=UserAccessdetail::findRechargeDetail($accessDetail);
+                    break;
+                case 2:
+                    $type='Debit';
+                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
+                    break;
+                case 6:
+                    $type='Goods';
+                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type);;
+                    break;
+            }
+            if (is_numeric($data))
+            {
+                $code=$data;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            return Json::encode([
+                'code'=>200,
+                'msg' =>'ok',
+                'data' => $data
+            ]);
+    }
+
 }
