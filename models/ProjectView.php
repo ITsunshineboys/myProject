@@ -2,24 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: Administrator
- * Date: 2017/9/13 0013
- * Time: 下午 15:19
+ * Date: 2017/9/26 0026
+ * Time: 下午 16:41
  */
 namespace app\models;
 
 use yii\db\ActiveRecord;
 
-class CoefficientManagement extends ActiveRecord
+class ProjectView extends ActiveRecord
 {
     /**
      * @return string 返回该AR类关联的数据表名
      */
     public static function tableName()
     {
-        return 'coefficient_management';
+        return 'project_view';
     }
 
-    public static function findByAll($select = [],$where = [])
+    public static function findByAll($select = [] , $where = [])
     {
         return self::find()
             ->asArray()

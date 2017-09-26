@@ -25,6 +25,8 @@ use app\models\GoodsAttr;
 use app\models\GoodsCategory;
 use app\models\LaborCost;
 use app\models\Points;
+use app\models\ProjectView;
+use app\models\ProjercView;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
@@ -34,6 +36,7 @@ use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
+use phpDocumentor\Reflection\Project;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -1422,7 +1425,7 @@ class QuoteController extends Controller
         $select = 'id,title';
         $where  = 'level = 1';
         return Json::encode([
-           'list'=> Points::findByPid($select,$where),
+           'post'=> Points::findByPid($select,$where),
         ]);
     }
 
@@ -1526,8 +1529,45 @@ class QuoteController extends Controller
         ]);
     }
 
-    public function actionCommonalityAreaProportion()
+    /**
+     * commonality area proportion list
+     * @return string
+     */
+    public function actionCommonalityAreaProportionList()
     {
-        
+        $id = trim(\Yii::$app->request->post('id',''));
+        $select = 'id,project,project_value';
+        $where = 'points_id='.$id;
+        $a = ProjectView::findByAll($select,$where);
+        var_dump($a);exit;
+    }
+
+    public function actionCommonalityAreaProportionEdit()
+    {
+        $ids = \Yii::$app->request->post();
+        foreach ($ids as $id){
+            $coefficient = CoefficientManagement::findOne(['id'=>$id['id']]);
+            $coefficient->coefficient = $id['coefficient'];
+
+            if (!$coefficient->validate()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$coefficient->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+        return Json::encode([
+           'code' => 200,
+           'msg'  => 'OK',
+        ]);
     }
 }
