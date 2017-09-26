@@ -615,7 +615,7 @@ class WithdrawalsController extends Controller
     }
 
 
-    /**商家获取收支明细列表
+   /**商家获取收支明细列表
      * @return string
      */
     public function  actionFindSupplierAccessDetailList()
@@ -642,7 +642,13 @@ class WithdrawalsController extends Controller
         $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
-        $where="role_id=6 and uid={$user->id}";
+        $type=trim($request->get('type',''));
+        if (array_key_exists($type,UserCashregister::ACCESS_TYPE_LIST))
+        {
+            $where="access_type={$type} and role_id=6 and uid={$user->id}";
+        }else{
+            $where="role_id=6 and uid={$user->id}";
+        }
         if($keyword){
             $where .=" and order_no like '%{$keyword}%' or transaction_no like '%{$keyword}%'";
         }
@@ -688,6 +694,5 @@ class WithdrawalsController extends Controller
             'data' => $data
         ]);
     }
-
 
 }

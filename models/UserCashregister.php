@@ -35,6 +35,21 @@ class UserCashregister extends \yii\db\ActiveRecord
 
 
     ];
+    const  RECHARGE=1;
+    const  DEBIT=2;
+    const  CASH=3;
+    const  CASH_IN=4;
+    const  REJECT=5;
+    const  GOODSPAYMENT=6;
+    const ACCESS_TYPE_LIST=
+        [
+            self::RECHARGE,
+            self::DEBIT,
+            self::CASH,
+            self::CASH_IN,
+            self::REJECT,
+            self::GOODSPAYMENT,
+        ];
     const STATUS_CSED='已提现';
     /**
      * @inheritdoc
