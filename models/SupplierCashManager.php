@@ -67,9 +67,13 @@ class SupplierCashManager extends ActiveRecord
                 $v['real_money'] = sprintf('%.2f', 0);
             }
             $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
+            unset($v['uid'], $v['role_id']);
         }
 
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
+
+        $data['supplier_id'] = $supplier_id;
+
         return $data;
     }
 

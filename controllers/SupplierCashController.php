@@ -146,10 +146,11 @@ class SupplierCashController extends Controller
 
         $data = SupplierCashManager::getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
 
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
