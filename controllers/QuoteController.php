@@ -1450,7 +1450,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * commonality one title add
+     * commonality white fuel edit and add
      * @return string
      */
     public function actionCommonalityTitleAdd()
@@ -1524,5 +1524,10 @@ class QuoteController extends Controller
            'code' => 200,
             'msg' => 'ok',
         ]);
+    }
+
+    public function actionCommonalityAreaProportion()
+    {
+        
     }
 }
