@@ -329,7 +329,8 @@ class SupplieraccountController extends  Controller{
         }
                 $code = 1000;
                 $supplier_id=trim(Yii::$app->request->get('supplier_id'));
-                if(!$supplier_id){
+                 $uid=Supplier::find()->asArray()->where(['id'=>$supplier_id])->one()['uid'];
+                if(!$supplier_id || !$uid){
                     return json_encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code]
@@ -365,7 +366,7 @@ class SupplieraccountController extends  Controller{
 
                 $page = (int)Yii::$app->request->get('page', 1);
                 $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
-                $uid=Supplier::find()->where(['id'=>$supplier_id])->one()->uid;
+
                 $paginationData = UserFreezelist::pagination($uid,$where, UserFreezelist::FIELDS_ADMIN, $page, $size);
                 return json_encode([
                     'code'=>200,
@@ -493,7 +494,8 @@ class SupplieraccountController extends  Controller{
         }
         $code = 1000;
         $supplier_id=trim(Yii::$app->request->get('supplier_id'));
-        if(!$supplier_id){
+        $uid=Supplier::find()->asArray()->where(['id'=>$supplier_id])->one()['uid'];
+        if(!$supplier_id || !$uid){
             return json_encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -527,7 +529,7 @@ class SupplieraccountController extends  Controller{
         }
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
-        $uid=Supplier::find()->where(['id'=>$supplier_id])->one()->uid;
+
         $paginationData = UserCashregister::pagination($uid,$where, UserCashregister::FIELDS_ADMIN, $page, $size);
         return json_encode([
             'code'=>200,
