@@ -4063,21 +4063,26 @@ class MallController extends Controller
     {
         $code = 1000;
 
-        $id = (int)Yii::$app->request->get('id', 0);
-        if ($id <= 0) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        $user = Yii::$app->user->identity;
+        if ($user->login_role_id != Yii::$app->params['supplierRoleId']) {
+            $id = (int)Yii::$app->request->get('id', 0);
+            if ($id <= 0) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
 
-        $supplier = Supplier::findOne($id);
+            $supplier = Supplier::findOne($id);
 
-        if (!$supplier) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            if (!$supplier) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        } else {
+            $supplier = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
         }
 
         return Json::encode([
