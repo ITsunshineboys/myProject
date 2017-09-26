@@ -241,8 +241,8 @@ class SupplierCashController extends Controller
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
 
-        if (($time_type == 'custom' && (!$time_start || !$time_end))
-            || !array_key_exists($time_type, \Yii::$app->params['timeTypes'])
+        if (!array_key_exists($time_type, \Yii::$app->params['timeTypes'])
+            || ($time_type == 'custom' && $time_start > $time_end)
         ) {
             $code = 1000;
             return Json::encode([
@@ -281,9 +281,9 @@ class SupplierCashController extends Controller
         $status = trim(htmlspecialchars($request->post('status', self::CASH_STATUS_DONE)), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
 
-        if (($time_type == 'custom' && (!$time_start || !$time_end))
-            || !array_key_exists($time_type, \Yii::$app->params['timeTypes'])
+        if (!array_key_exists($time_type, \Yii::$app->params['timeTypes'])
             || ($status && !array_key_exists($status, self::USER_CASH_STATUSES))
+            || ($time_type == 'custom' && $time_start > $time_end)
         ) {
             $code = 1000;
             return Json::encode([
