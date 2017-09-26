@@ -495,7 +495,8 @@ class WithdrawalsController extends Controller
         $userBankInfo=UserBankInfo::find()
             ->where(['uid'=>$user->id,'role_id'=>6])
             ->one();
-        $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
+        $role_number=$supplier->shop_no;
+        $transaction_no=GoodsOrder::SetTransactionNo($role_number);
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{

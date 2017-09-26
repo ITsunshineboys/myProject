@@ -1251,7 +1251,8 @@ class GoodsOrder extends ActiveRecord
             ->where(['id'=>$supplier_id])
             ->one();
         $time=time();
-        $transaction_no= self::SetTransactionNo($supplier->id);
+        $role_number=$supplier->shop_no;
+        $transaction_no= self::SetTransactionNo($role_number);
         try {
             $res1=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
             if (!$res1)
@@ -1662,7 +1663,8 @@ class GoodsOrder extends ActiveRecord
     public static function AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
     {
         $time=time();
-        $transaction_no=self::SetTransactionNo($supplier->id);;
+        $role_number=$supplier->shop_no;
+        $transaction_no=GoodsOrder::SetTransactionNo($role_number);
         $tran = Yii::$app->db->beginTransaction();
         try{
             $order_goodslist=OrderGoods::find()
@@ -2332,29 +2334,18 @@ class GoodsOrder extends ActiveRecord
      * @param $supplier_id
      * @return string
      */
-    public  static  function  SetTransactionNo($supplier_id)
+    public  static  function  SetTransactionNo($role_number)
     {
-        $supplier=Supplier::find()
-            ->where(['id'=>$supplier_id])
-            ->one();
         $rand=rand(10000,99999);
         $time=time();
         $month=date('m',$time);
         $day=date('d',$time);
-        do {
-            $transaction_no=$month.$day.$supplier->shop_no.$rand;
-        } while ( $transaction_no==UserCashregister::find()
-            ->select('transaction_no')
-            ->where(['transaction_no'=>$transaction_no])
-            ->asArray()
-            ->one()['transaction_no'] || $transaction_no==UserAccessdetail::find() ->select('transaction_no')
-            ->where(['transaction_no'=>$transaction_no])
-            ->asArray()
-            ->one()['transaction_no']
-        );
+        do{
+            $transaction_no=$month.$day.$role_number.$rand;
+        }while ( $transaction_no==UserCashregister::find()->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no'] || $transaction_no==UserAccessdetail::find() ->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no']);
         return $transaction_no;
     }
-
+    
       public  static  function  switchStatus_desc($arr)
    {
        foreach ($arr as $k =>$v)

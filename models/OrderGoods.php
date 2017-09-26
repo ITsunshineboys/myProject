@@ -54,7 +54,8 @@ class OrderGoods extends ActiveRecord
                 return $code;
             }
             $supplier=Supplier::find()->where(['id'=>$GoodsOrder->supplier_id])->one();
-            $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
+            $role_number=$supplier->shop_no;
+            $transaction_no=GoodsOrder::SetTransactionNo($role_number);
             $tran = Yii::$app->db->beginTransaction();
             try{
                 $OrderGoods->shipping_status=2;
