@@ -821,7 +821,7 @@ class MallController extends Controller
         }
 
         $where = 'delete_time = 0 and type = ' . $type . ' and district_code = ' . $districtCode;
-
+echo $where;
         $ret['data']['recommend_admin_index']['details'] = GoodsRecommend::pagination($where, GoodsRecommend::$adminFields, 1, GoodsRecommend::PAGE_SIZE_DEFAULT_ADMIN_INDEX, ['sorting_number' => SORT_ASC]);
         return Json::encode($ret);
     }
