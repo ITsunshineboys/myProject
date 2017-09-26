@@ -19,6 +19,14 @@ class Points extends ActiveRecord
         return 'points';
     }
 
+    public function rules()
+    {
+        return [
+            [['title'],'string'],
+            [['pid','level'],'number']
+        ];
+    }
+
     public static function findByPid($select =[],$where = [])
     {
         return self::find()

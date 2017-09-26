@@ -1440,7 +1440,7 @@ class QuoteController extends Controller
             $ids [] = $one_title['id'];
         }
         $string_ids = implode(',',$ids);
-        $two_select = 'id,title,count';
+        $two_select = 'id,title,count,pid';
         $two_where  = 'pid in ('.$string_ids.')';
         $title['two_title'] = Points::findByPid($two_select,$two_where);
 
@@ -1455,26 +1455,71 @@ class QuoteController extends Controller
      */
     public function actionCommonalityTitleAdd()
     {
+        $post = \Yii::$app->request->post();
         $points = new Points();
-        $points->pid   = trim(\Yii::$app->request->post('id',''));
-        $points->title = trim(\Yii::$app->request->post('title',''));
-        $points->level = 2;
-        if (!$points->validate()){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        foreach ($post  as $value){
+            if (isset($value['one_title'])){
+                $points->pid   = $value['pid'];
+                $points->title = $value['title'];
+                $points->level = 2;
+                if (!$points->validate()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
 
-        if (!$points->save()){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+                if (!$points->save()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }
+            if (isset($value['two_title'])){
+                if (isset($value['two_title']['id'])){
+                    $one = Points::findOne($value['two_title']['id']);
+                    $one->count = $value['count'];
+                    if (!$one->validate()){
+                        $code = 1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => \Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
 
+                    if (!$one->save()){
+                        $code = 1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => \Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
+                } else {
+                    $points->pid   = $value['pid'];
+                    $points->title = $value['title'];
+                    $points->count = $value['count'];
+                    $points->level = 3;
+                    if (!$points->validate()){
+                        $code = 1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => \Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
+
+                    if (!$points->save()){
+                        $code = 1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => \Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
+                }
+            }
+        }
         return Json::encode([
            'code' => 200,
             'msg' => 'ok',
