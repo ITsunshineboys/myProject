@@ -137,8 +137,7 @@ class SupplierCashController extends Controller
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
 
@@ -171,8 +170,7 @@ class SupplierCashController extends Controller
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
 
@@ -247,8 +245,7 @@ class SupplierCashController extends Controller
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
 
@@ -288,8 +285,7 @@ class SupplierCashController extends Controller
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
 
