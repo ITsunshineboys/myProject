@@ -1474,6 +1474,7 @@ class QuoteController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         return Json::encode([
            'code'=>200,
             'msg'=> 'ok',
