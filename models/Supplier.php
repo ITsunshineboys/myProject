@@ -489,14 +489,15 @@ class Supplier extends ActiveRecord
         $select = 's.id,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money,s.availableamount';
         $array = $query->from('supplier as s')
             ->select($select)
-            ->leftJoin('user_cashregister as sc', 'sc.uid=s.id')
+            ->leftJoin('user_cashregister as sc', 'sc.uid=s.uid')
             ->leftJoin('user_bankinfo as ub', 'ub.uid=s.uid')
             ->leftJoin('bankinfo_log as sb','sb.id=ub.log_id')
-            ->leftJoin('user_freezelist as sf', 'sf.uid=s.id')
+            ->leftJoin('user_freezelist as sf', 'sf.uid=s.uid')
+            ->andWhere(['ub.role'=>self::ROLE_SUPPLIER])
             ->where(['s.id' => $supplier_id])
             ->one();
 
-        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id'=>self::ROLE_SUPPLIER])->sum('freeze_money');
+        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id'=>self::ROLE_SUPPLIER])->andWhere(['status'=>self::STATUS_OFFLINE])->sum('freeze_money');
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
         if ($array) {
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);

@@ -203,8 +203,8 @@ class SupplieraccountController extends  Controller{
                 ]);
             }
 
-            $model=new Supplier();
-            $data= $model::getsupplierdata($supplier_id,$user->getId());
+            $model=Supplier::find()->where(['id'=>$supplier_id])->one();
+            $data= Supplier::getsupplierdata($supplier_id,$model->uid);
             return json_encode([
                 'code' => 200,
                 'msg' => 'ok',
