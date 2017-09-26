@@ -574,8 +574,7 @@ class SupplieraccountController extends  Controller{
     public function actionTest(){
 
         $supplier=new UserBankInfo();
-
-       $supplier->uid=1;
+        $supplier->uid=7;
        $supplier->role_id=6;
        $supplier->log_id=1;
        $res=$supplier->save(false);
