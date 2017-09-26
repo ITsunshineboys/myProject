@@ -793,7 +793,7 @@ class WithdrawalsController extends Controller
             ]);
         }
         $supplier=Supplier::find()->asArray()->where(['uid'=>$user->id])->one();
-        if ($supplier)
+        if (!$supplier)
         {
             $tran=Yii::$app->db->beginTransaction();
             try{
