@@ -772,52 +772,78 @@ class WithdrawalsController extends Controller
     }
 
 
-       public  function  actionAddSupplier()
+     public  function  actionAddSupplier()
     {
-//        $mobile=Yii::$app->request->post('mobile','');
-//        if (!$mobile)
-//        {
-//            $code=1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//        $user=User::find()->where(['mobile'=>$mobile])->one();
-//        if (!$user)
-//        {
-//            $code=1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-        $supplier=Supplier::find()->asArray()->all();
-        var_dump($supplier);exit;
-//        if (!$supplier)
-//        {
-//            $tran=Yii::$app->db->transaction;
-//            try{
-//
-//
-//                  $addSupplier=new Supplier();
-//                  $addSupplier->uid=$user->id;
-//                  $addSupplier->nickname='王杰';
-//                  $addSupplier->shop_name='王杰';
-//                  $addSupplier->name='王杰';
-//                  $addSupplier->licence=1234567890111111;
-//                  $addSupplier->licence_image=''
-//            }catch (Exception $e)
-//            {
-//                $code=500;
-//                $tran->rollBack();
-//                return Json::encode([
-//                    'code' => $code,
-//                    'msg' => Yii::$app->params['errorCodes'][$code]
-//                ]);
-//            }
-//
-//        }
+        $mobile=Yii::$app->request->post('mobile','');
+        if (!$mobile)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user=User::find()->where(['mobile'=>$mobile])->one();
+        if (!$user)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier=Supplier::find()->asArray()->where(['uid'=>$user->id])->one();
+        if ($supplier)
+        {
+            $tran=Yii::$app->db->beginTransaction();
+            try{
+                $sss=Supplier::find()->where(['id'=>12])->one();
+                $sss->uid=$user->id;
+                if (!$sss->save(false))
+                {
+                    $code=500;
+                    $tran->rollBack();
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $userRole=new UserRole();
+                $userRole->user_id=$user->id;
+                $userRole->role_id=6;
+                $userRole->review_apply_time=time();
+                $userRole->review_status=2;
+                $userRole->reviewer_uid=7;
+                if (!$userRole->save(false))
+                {
+                    $code=500;
+                    $tran->rollBack();
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $code=200;
+                $tran->commit();
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => 'ok'
+                ]);
+            }catch (Exception $e)
+            {
+                $tran->rollBack();
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok'
+        ]);
     }
 
 }
