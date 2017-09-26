@@ -1463,7 +1463,7 @@ class QuoteController extends Controller
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg'=>\Yii::$app->params['errorCodes'][$code],
+                'msg'  => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
@@ -1471,13 +1471,13 @@ class QuoteController extends Controller
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg'=>\Yii::$app->params['errorCodes'][$code],
+                'msg'  => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
         return Json::encode([
-           'code'=>200,
-            'msg'=> 'ok',
+           'code' => 200,
+            'msg' => 'ok',
         ]);
     }
 }
