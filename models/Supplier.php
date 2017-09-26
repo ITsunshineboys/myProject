@@ -77,6 +77,8 @@ class Supplier extends ActiveRecord
         'licence',
         'licence_image',
         'support_offline_shop',
+        'category_id',
+        'type_shop',
     ];
     const FIELDS_VIEW_ADMIN_EXTRA = [
         'mobile',
