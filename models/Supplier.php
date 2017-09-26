@@ -498,7 +498,7 @@ class Supplier extends ActiveRecord
             ->one();
 
         $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id'=>self::ROLE_SUPPLIER])->andWhere(['status'=>self::STATUS_OFFLINE])->sum('freeze_money');
-        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
+        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['role_id'=>self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
         if ($array) {
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
             $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
