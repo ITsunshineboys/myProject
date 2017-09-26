@@ -11,6 +11,7 @@ use app\models\UserCashregister;
 use app\models\UserBankInfo;
 use app\models\BankinfoLog;
 use app\models\UserFreezelist;
+use app\models\UserRole;
 use app\services\ModelService;
 use app\services\SmValidationService;
 use app\services\ExceptionHandleService;
