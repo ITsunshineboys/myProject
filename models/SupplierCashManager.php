@@ -385,7 +385,8 @@ class SupplierCashManager extends ActiveRecord
         //初始状态不能为已经处理过的
         if (!$cash_money || !$supplier_id || !$old_status
             || $old_status == SupplierCashController::CASH_STATUS_DONE
-            || $old_status == SupplierCashController::CASH_STATUS_FAIL) {
+            || $old_status == SupplierCashController::CASH_STATUS_FAIL
+        ) {
             return null;
         }
         //提现失败
