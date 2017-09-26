@@ -25,6 +25,18 @@ class UploadForm extends Model
     public $file;
 
     /**
+     * Get relative image path
+     *
+     * @param string $imageUrl image url
+     * @return string
+     */
+    public static function getUploadImageRelativePath($imageUrl)
+    {
+        list($_, $path) = explode(UploadForm::DIR_PUBLIC, $imageUrl, 2);
+        return UploadForm::DIR_PUBLIC . $path;
+    }
+
+    /**
      * @return array the validation rules.
      */
     public function rules()

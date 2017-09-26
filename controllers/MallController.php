@@ -18,6 +18,7 @@ use app\models\LogisticsDistrict;
 use app\models\GoodsAttr;
 use app\models\GoodsImage;
 use app\models\GoodsComment;
+use app\models\UploadForm;
 use app\models\User;
 use app\models\BrandApplication;
 use app\models\GoodsStat;
@@ -4025,7 +4026,7 @@ class MallController extends Controller
             ]);
         }
 
-        $supplier->icon = $icon;
+        $supplier->icon = UploadForm::getUploadImageRelativePath($icon);
         if (!$supplier->isAttributeChanged('icon')) {
             return Json::encode([
                 'code' => 200,
