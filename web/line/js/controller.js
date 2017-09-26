@@ -25,12 +25,14 @@ angular.module("all_controller", [])
             method: 'get',
             url: "http://test.cdlhzz.cn:888/mall/recommend-second"
         }).then(function successCallback (response) {
-            $scope.commodity=response.data.data.recommend_second;
+            $scope.commodity = response.data.data.recommend_second;
+            $scope.mall_id   = response.data.data.recommend_second.url;
             console.log( $scope.commodity);
-        }, function errorCallback(response) {
-
+            console.log( $scope.mall_id);
+            console.log( response);
         });
     })
+
     //分类详情控制器
     .controller("minute_class_ctrl", function ($scope,$http ,$state,$stateParams) {
         $scope.pid = $stateParams.pid;
@@ -109,11 +111,12 @@ angular.module("all_controller", [])
             //})
         }
     })
+
     //商品搜索
     .controller("commodity_search_ctrl", function ($scope,$http ,$state,$stateParams) {
         $scope.data = '';
         //$scope.title =  $stateParams.title;
-        $scope.pid = $stateParams.pid
+        $scope.pid = $stateParams.pid;
         //判断
         $scope.getSearch = function () {
             let arr=[];
@@ -148,6 +151,7 @@ angular.module("all_controller", [])
             $state.go("details",{'pid':$scope.pid,'id':item.id})
         }
     })
+
     //某个商品的详细列表
     .controller("details_ctrl", function ($scope,$http ,$state,$stateParams) {
         console.log($stateParams);
@@ -280,6 +284,7 @@ angular.module("all_controller", [])
 
         //具体几级某个商品跳转到产品详情列表
     })
+
     //某个 商品详细信息展示
     .controller("product_details_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
        let vm = $scope.vm = {};
@@ -295,19 +300,20 @@ angular.module("all_controller", [])
             method:'get',
             url:"http://test.cdlhzz.cn:888/mall/goods-view",
             params:{
-                id:$scope.id
+                id:4
             }
         }).then( function successsCallback (response) {
             console.log(response);
         });
         // 跳转到订单页面
-        $scope.getOrderCommodity =function () {
+        $scope.getOrder =function () {
             console.log(222222);
             setTimeout(function () {
                 $state.go('order_commodity')
             },300)
         }
     })
+
      //店铺首页和全部商品
     .controller("shop_front_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         let vm = $scope.vm = {};
@@ -343,11 +349,28 @@ angular.module("all_controller", [])
         }
 
     })
+
      //确认订单
-    .controller('order_commodity',function ($scope,$http,$state,$stateParams) {
+    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams) {
 
     })
-   //=================分割 飞机线========================
+
+     //发票信息
+    .controller('invoice_ctrl',function($scope,$http,$state,$stateParams){
+
+    })
+
+    // 支付成功
+    .controller('pay_success_ctrl',function($scope,$http,$state,$stateParams){
+
+    })
+
+    //断网提示
+    .controller('cut_net_ctrl',function($scope,$http,$state,$stateParams){
+
+    })
+
+    //=================分割 飞机线========================
     .directive("swiper", function () {
         return {
             restrict: "EA",
@@ -356,6 +379,7 @@ angular.module("all_controller", [])
                     direction:'horizontal',
                     loop: true,
                     autoplay: 1000,
+
                     // 分页器
                     pagination : '.swiper-pagination',
                     paginationClickable :true,

@@ -310,12 +310,22 @@ Pagination Styles
     line-height: 1.4rem;
     margin-top: 0.3rem;
     color: #6C6C6C;
+    width:14rem;
+    display:block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 .recommend2_box ul>li a .describe2{
     font-size: 1.2rem;
     line-height: 1.2rem;
     margin-top: 0.3rem;
+    width:14rem;
     color:#B8B6B6;
+    display:block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 .recommend2_box ul>li a .price2{
     font-size: 1.4rem;

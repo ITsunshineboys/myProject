@@ -1,0 +1,158 @@
+header{
+    height: 4rem;
+    line-height: 4rem;
+}
+header div img{
+    margin-left: 1.4rem;
+}
+header div span{
+    margin-left: 11rem;
+    font-size: 1.5rem;
+    color: #4A4A4A;
+    vertical-align: middle;
+}
+.bag_div{
+    background-color: #F6F6F6;
+    width: 32rem;
+    height: 1rem;
+}
+.invoice_style{
+    height: 8.5rem;
+    padding-top: 1rem;
+}
+.invoice_style span{
+    font-size: 1.5rem;
+    color: #4A4A4A;
+    margin-left: .7rem;
+    vertical-align: top;
+    margin-top: 2rem;
+}
+.invoice_style button{
+    background: #53A8F4;
+    border: 1px solid #53A8F4;
+    border-radius: .5rem;
+    width: 7.4rem;
+    height: 2.3rem;
+    font-size: 1.2rem;
+    color: white;
+    margin-left: 1.4rem;
+    outline: none;
+}
+.shu{
+    height: 1.5rem;
+    width: .3rem;
+    background-color:#53A8F4;
+    display: inline-block;
+    margin-left: 1.4rem;
+    margin-top: .3rem;
+}
+.invoice_body{
+    padding-top: 1rem;
+    padding-bottom: 1.2rem;
+}
+.invoice_rise{
+    font-size: 1.5rem;
+    color: #4A4A4A;
+    margin-left: .7rem;
+    vertical-align: top;
+    margin-top: 2rem;
+}
+.invoice_radio label{
+    font-size: 1.4rem;
+    color: rgba(85, 85, 85, 0.84);
+    margin-left: 1.4rem;
+    margin-top: 1rem;
+}
+.invoice_radio label input{
+    width: 1.3rem;
+    height: 1.3rem;
+}
+.invoice_input{
+    margin-top: 1rem;
+}
+.invoice_input label{
+    margin-left: 1.4rem;
+}
+.invoice_input input{
+    width:29rem;
+    height:3.2rem;
+    border: 1px solid #E5E5E5;
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+    font-size:1.3rem;
+    margin-left: 1.4rem;
+    padding-left: 1rem;
+}
+.invoice_input span{
+    font-size: 1.1rem;
+    margin-left: 1.4rem;
+    color: #B8B6B6;
+}
+.invoice_detailed{
+    margin-top: 1rem;
+}
+.invoice_detailed label{
+    margin-left: 1.4rem;
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    color: rgba(85, 85, 85, 0.84);
+}
+.invoice_detailed span{
+    color: #4A4A4A;
+    margin-left: .7rem;
+    vertical-align: top;
+    margin-top: 2rem;
+    font-size: 1.5rem;
+}
+.invoice_detailed label input{
+    width:1.3rem;
+    height:1.3rem;
+}
+.invoice_btn{
+    margin-top: 2rem;
+}
+.invoice_btn button{
+    width: 29rem;
+    height: 4rem;
+    line-height: 4rem;
+    background: #53A8F4;
+    border: 1px solid #53A8F4;
+    font-size:1.4rem;
+    outline: none;
+    color: white;
+    opacity: .6;
+    margin-left: 1.4rem;
+    border-radius: .6rem;
+}
+/*弹出 判断框*/
+#sm_model{
+    width: 21rem;
+}
+#num_modal{
+    height: 12rem;
+    margin-top: 16rem;
+    line-height: 6rem;
+    text-align: center;
+    border-radius: .6rem;
+}
+#num_modal p{
+    font-size: 1.4rem;
+    color: #4A4A4A;
+}
+#num_modal button{
+    color: #53A8F4;
+    background-color: white;
+    width: 20.5rem;
+    height: 2.8rem;
+    line-height: 2.8rem;
+    border: 0;
+    font-size: 1.4rem;
+    outline: none;
+    padding: 0;
+}
+.xian{
+    background-color:#E9EDEE;
+    width: 21rem;
+    height: .2rem;
+    margin-top: 1.2rem;
+}

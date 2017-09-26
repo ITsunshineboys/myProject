@@ -183,3 +183,108 @@ header div img{
     position: absolute;
     right: 0;
 }
+#address_body{
+    width: 32rem!important;
+    height: 58rem!important;
+    margin-top: -.3rem;
+}
+#two_address{
+    width: 32rem!important;
+    height: 58rem!important;
+}
+#address_header{
+    height:4rem;
+    line-height: 3rem;
+    vertical-align: middle;
+}
+#address_header img{
+    margin-left: 1.4rem;
+}
+#address_header span{
+    vertical-align: middle;
+    margin-left: 10rem;
+    font-size: 1.5rem;
+    color: #4A4A4A;
+}
+.input-group{
+    width: 32rem;
+    height: 4rem;
+    line-height: 4rem;
+    border-bottom: 1px solid #E9EDEE;
+    position: relative;
+}
+.input-group span{
+    font-size:1.4rem;
+    color: #4A4A4A;
+    margin-left: 1.4rem;
+}
+.shu{
+    height: 1.8rem;
+    width: .2rem;
+    background-color: #E9EDEE;
+    display: inline-block;
+    position: absolute;
+    left: 9rem;
+    top:1.2rem;
+}
+.input-group input{
+    width: 20rem;
+    height: 4rem;
+    font-size: 1.4rem;
+    border: 0;
+    padding-left: 1rem;
+    position: absolute;
+    left: 10rem;
+}
+.address_more{
+    position: absolute;
+    right: 2rem;
+    color: #4A4A4A;
+}
+.btn_hold{
+    margin-top: 2rem;
+}
+.btn_hold button{
+    width: 29rem;
+    height: 4rem;
+    line-height: 4rem;
+    color: white;
+    background-color: #53A8F4;
+    border-radius: .6rem;
+    margin-left: 1rem;
+    font-size: 1.5rem;
+    outline: none;
+    opacity: .6;
+}
+/*弹出 判断框*/
+#sm_model{
+    width: 21rem;
+}
+#num_modal{
+    height: 12rem;
+    margin-top: 16rem;
+    line-height: 6rem;
+    text-align: center;
+    border-radius: .6rem;
+}
+#num_modal p{
+    font-size: 1.4rem;
+    color: #4A4A4A;
+}
+#num_modal button{
+    color: #53A8F4;
+    background-color: white;
+    width: 20.5rem;
+    height: 2.8rem;
+    line-height: 2.8rem;
+    border: 0;
+    font-size: 1.4rem;
+    outline: none;
+    padding: 0;
+}
+.xian{
+    background-color:#E9EDEE;
+    width: 21rem;
+    height: .2rem;
+    margin-top: 1.2rem;
+}

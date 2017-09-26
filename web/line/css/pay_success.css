@@ -1,0 +1,24 @@
+.success_pay{
+    text-align: center;
+}
+#success_img{
+    margin-top: 11rem;
+}
+.success_pay p:nth-child(2){
+    text-align: center;
+    font-size: 1.5rem;
+    color: #4A4A4A;
+    margin-top: 1rem;
+}
+.success_pay p:nth-child(3){
+    text-align: center;
+    font-size: 1.4rem;
+    color: #4A4A4A;
+    margin-top: 4rem;
+}
+.success_pay p:nth-child(4){
+    text-align: center;
+    font-size: 1.2rem;
+    color: #B8B6B6;
+    margin-top: .8rem;
+}

@@ -1,0 +1,64 @@
+<link rel="stylesheet" href="css/invoice.css"/>
+<div ng-controller="invoice_ctrl">
+   <header>
+       <div>
+           <img src="images/mall_nav_return.png" alt="">
+           <span>发票信息</span>
+       </div>
+   </header>
+    <section>
+        <div class="bag_div"></div>
+        <div class="invoice_style">
+            <div class="shu"></div>
+            <span>发票类型</span> <br><br><br>
+            <button>普通发票</button>
+        </div>
+        <!--主体内容-->
+        <div class="bag_div"></div>
+        <div class="invoice_body">
+            <div class="shu"></div>
+            <span class="invoice_rise">发票抬头</span>
+            <div class="invoice_radio">
+                <label>
+                    <input type="radio" name="invoice_radio"  checked>
+                     个人
+                </label>
+                <label>
+                     <input type="radio" name="invoice_radio">
+                      单位
+                </label>
+            </div>
+            <!--s输入框-->
+            <div class="invoice_input">
+                <input type="text" placeholder="请输入抬头名称">
+                <input type="text" placeholder="请输入纳税人识别号"> <br>
+                <span>纳税人识别号为18位数字和英文字母组成，请仔细填写</span>
+            </div>
+        </div>
+        <div class="bag_div"></div>
+        <!--m明细-->
+        <div class="invoice_detailed">
+            <div class="shu"></div>
+            <span>发票内容</span> <br>
+            <label>
+                <input type="radio" name="invoice_detailed"  checked>
+                明细
+            </label>
+        </div>
+        <!--按钮-->
+        <div class="invoice_btn" data-toggle="modal" data-target=".bs-example-modal-sm">
+            <button>确认</button>
+        </div>
+
+        <!--模态框  纳税人识别号错误-->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" id="sm_model" role="document">
+                <div class="modal-content" id="num_modal">
+                    <p>纳税人识别号输入不正确</p>
+                    <div class="xian"></div>
+                    <button class="btn_num" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

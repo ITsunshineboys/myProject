@@ -66,6 +66,30 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "order_commodity",
                 params:{}
             })
+            .state("invoice", {    //发票信息
+                url: "/invoice",
+                views: {
+                    "": {templateUrl: "invoice.html"}
+                },
+                controller: "invoice_ctrl",
+                params:{}
+            })
+            .state("pay_success", {    //支付成功
+                url: "/pay_success",
+                views: {
+                    "": {templateUrl: "pay_success.html"}
+                },
+                controller: "pay_success_ctrl",
+                params:{}
+            })
+            .state("cut_net", {    //断网提示
+                url: "/cut_net",
+                views: {
+                    "": {templateUrl: "cut_net.html"}
+                },
+                controller: "cut_net_ctrl",
+                params:{}
+            })
 
     }])
 

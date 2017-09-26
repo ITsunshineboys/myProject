@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="css/order.css"/>
 
-<div ng-controller="order_commodity" ng-cloak>
+<div ng-controller="order_commodity_ctrl" ng-cloak>
  <header>
      <div>
          <img src="images/mall_nav_return.png" alt="">
@@ -8,7 +8,7 @@
      </div>
  </header>
  <section>
-     <div class="address_map">
+     <div class="address_map" data-toggle="modal" data-target="#delivery_address" >
          <img src="images/mall_location_blue.png" alt="">
          <span class="delivery_address">填写收货地址</span>
          <img src="images/left_com.png" alt="">
@@ -34,7 +34,7 @@
      <div class="bag_div"></div>
      <div class="more_details">
          <ul>
-             <li class="show_in">
+             <li class="show_in" ui-sref="invoice">
                  <span>发票信息</span>
                  <span>明细-艾特魔  &nbsp; 〉</span>
                  <!--<img src="images/left_com.png" alt="">-->
@@ -78,6 +78,56 @@
          <span>合计：</span>
          <span>￥1360.00</span>
          <button>去支付</button>
+     </div>
+
+
+     <!--编辑收货地址-->
+     <div class="modal fade" id="delivery_address" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+         <div class="modal-dialog" role="document" id="address_body">
+             <div class="modal-content" id="two_address">
+                 <div class="modal-header" id="address_header">
+                     <img src="images/mall_nav_return.png" alt="" data-dismiss="modal">
+                     <span class="modal-title" >编辑收货地址</span>
+                 </div>
+                 <div class="bag_div"></div>
+                 <div class="modal-body"  >
+                     <!--表格填写-->
+                     <div class="input-group">
+                         <span>收货人</span>
+                         <div class="shu"></div>
+                         <input type="text" placeholder="请输入姓名">
+                     </div>
+                     <div class="input-group" data-toggle="modal" data-target=".bs-example-modal-sm">
+                         <span>联系电话</span>
+                         <div class="shu"></div>
+                         <input type="text" placeholder="请输入联系电话">
+                     </div>
+                     <div class="input-group">
+                         <span>所在区域</span>
+                         <span class="address_more">四川省-成都市-金牛区 〉</span>
+                     </div>
+                     <div class="input-group">
+                         <span>详细地址</span>
+                         <div class="shu"></div>
+                         <input type="text"  cols="10" rows="2" placeholder="请输入详细地址">
+                     </div>
+                     <!--按钮-->
+                     <div class="btn_hold">
+                         <button>保存</button>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <!--手机号码判断错误模态框-->
+     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+         <div class="modal-dialog modal-sm" id="sm_model" role="document">
+             <div class="modal-content" id="num_modal">
+                 <p>手机号输入不正确</p>
+                 <div class="xian"></div>
+                 <button class="btn_num" data-dismiss="modal">确认</button>
+             </div>
+         </div>
      </div>
  </section>
 </div>

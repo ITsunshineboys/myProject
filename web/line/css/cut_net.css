@@ -1,0 +1,26 @@
+.cut_net{
+    text-align: center;
+}
+.cut_net img{
+    margin-top: 11rem;
+    width: 15rem;
+    height: 6rem;
+    margin-left: 4rem;
+}
+.cut_net p{
+    color: #6C6C6C;
+    font-size: 1.4rem;
+    margin-top:2rem;
+}
+.cut_net button{
+    width: 15rem;
+    height: 4rem;
+    line-height: 4rem;
+    font-size: 1.3rem;
+    border-radius: 4rem;
+    color: #53A8F4;
+    border: 1px solid #53A8F4;
+    margin-top: 4rem;
+    background-color: white;
+    outline: none;
+}
