@@ -264,6 +264,13 @@ class SupplieraccountController extends  Controller{
         $request=new Request();
         $supplier_id=trim(Yii::$app->request->post('supplier_id'));
         $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
+        if(!$supplier_id || !$supplier){
+            $code=1000;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
             $transaction=Yii::$app->db->beginTransaction();
         try {
             $model = new UserFreezelist();
