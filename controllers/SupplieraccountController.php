@@ -195,15 +195,14 @@ class SupplieraccountController extends  Controller{
                 $code=1000;
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
-            if(!$supplier_id){
+            $model=Supplier::find()->where(['id'=>$supplier_id])->one();
+            if(!$supplier_id || !$model){
                 return json_encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
 
                 ]);
             }
-
-            $model=Supplier::find()->where(['id'=>$supplier_id])->one();
             $data= Supplier::getsupplierdata($supplier_id,$model->uid);
             return json_encode([
                 'code' => 200,
