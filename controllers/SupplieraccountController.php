@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 
+use app\models\BankinfoLog;
 use app\models\GoodsCategory;
 use app\models\Supplier;
 use app\models\SupplierCashregister;
@@ -566,13 +567,26 @@ class SupplieraccountController extends  Controller{
 
         ]);
     }
-
+    public function actionView(){
+        var_dump(UserBankInfo::find()->asArray()->all());
+        var_dump(BankinfoLog::find()->asArray()->all());
+    }
     public function actionTest(){
 
-        $supplier=Supplier::find()->where(['id'=>2])->one();
+        $supplier=new UserBankInfo();
 
-       $supplier->availableamount=10000000;
+       $supplier->uid=1;
+       $supplier->role_id=6;
+       $supplier->log_id=1;
        $res=$supplier->save(false);
-       var_dump($res);
+       $a= new BankinfoLog();
+       $a->bankname='工商银行';
+       $a->bankcard='61515454545454545451';
+       $a->bankbranch='成都工商银行';
+       $a->username='张大三';
+       $a->position='四川成都';
+       $a->create_time='15058454454';
+       $b=$a->save();
+       var_dump($res,$b);
     }
 }
