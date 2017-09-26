@@ -168,7 +168,7 @@ class WithdrawalsController extends Controller
         ]);
     }
 
-    /**
+   /**
      * 获取余额
      * @return string
     */
@@ -181,7 +181,8 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $role_id=trim(Yii::$app->request->get('role_id',7));
+//        $role_id=trim(Yii::$app->request->get('role_id',7));
+        $role_id=$user->last_role_id_app;
         $data=UserBankInfo::findCapitalDetail($role_id,$user);
         $code=200;
         return Json::encode([
@@ -190,7 +191,6 @@ class WithdrawalsController extends Controller
             'data'=>$data
         ]);
     }
-
     /**
      * 判断是否设置过交易密码
      * @return string
