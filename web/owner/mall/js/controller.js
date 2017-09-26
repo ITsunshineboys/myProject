@@ -1,52 +1,52 @@
 angular.module("all_controller", [])
-// .controller("cell_search_ctrl", function ($scope, $http) {//小区搜索控制器
-//     $scope.data = ''
-//     // $scope.search_data = ''
-//     let arr = []
-//     let url = "http://test.cdlhzz.cn:888/owner/search"
-//
-//     let config = {
-//         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-//         transformRequest: function (data) {
-//             return $.param(data)
-//         }
-//     }
-//     $scope.getData = function () {
-//         $scope.search_data = ''
-//         let data = {
-//             str: $scope.data
-//         }
-//         console.log(data)
-//         let arr = [], arr1 = []
-//         if (data.str) {
-//             $http.post(url, data, config).then(function (response) {
-//                 console.log(response)
-//                 for (let [key, value] of response.data.data.effect.entries()) {
-//                     if (arr.length == 0) {
-//                         arr.push({toponymy: value.toponymy, id: value.id, site_particulars: value.site_particulars})
-//                     } else {
-//                         for (let [key1, value1] of arr.entries()) {
-//                             if (value.toponymy !== value1.toponymy && key1 === arr.length - 1) {
-//                                 arr.push({
-//                                     toponymy: value.toponymy,
-//                                     id: value.id,
-//                                     site_particulars: value.site_particulars
-//                                 })
-//                             }
-//                         }
-//                     }
-//                 }
-//                 console.log(arr)
-//                 $scope.search_data = arr
-//             }, function (response) {
-//
-//             })
-//         } else {
-//             $scope.search_data = ''
-//         }
-//
-//     }
-// })
+.controller("cell_search_ctrl", function ($scope, $http) {//小区搜索控制器
+    $scope.data = ''
+    // $scope.search_data = ''
+    let arr = []
+    let url = "http://test.cdlhzz.cn:888/owner/search"
+
+    let config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformRequest: function (data) {
+            return $.param(data)
+        }
+    }
+    $scope.getData = function () {
+        $scope.search_data = ''
+        let data = {
+            str: $scope.data
+        }
+        console.log(data)
+        let arr = [], arr1 = []
+        if (data.str) {
+            $http.post(url, data, config).then(function (response) {
+                console.log(response)
+                for (let [key, value] of response.data.data.effect.entries()) {
+                    if (arr.length == 0) {
+                        arr.push({toponymy: value.toponymy, id: value.id, site_particulars: value.site_particulars})
+                    } else {
+                        for (let [key1, value1] of arr.entries()) {
+                            if (value.toponymy !== value1.toponymy && key1 === arr.length - 1) {
+                                arr.push({
+                                    toponymy: value.toponymy,
+                                    id: value.id,
+                                    site_particulars: value.site_particulars
+                                })
+                            }
+                        }
+                    }
+                }
+                console.log(arr)
+                $scope.search_data = arr
+            }, function (response) {
+
+            })
+        } else {
+            $scope.search_data = ''
+        }
+
+    }
+})
     .controller("intelligent_index_ctrl", function ($scope, $http) {//主页控制器
         /* $scope.get_quotation = function () {
          $http({
