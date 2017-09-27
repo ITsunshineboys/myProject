@@ -80,23 +80,23 @@ class LaborCost extends ActiveRecord
      * labor const list
      * @return array|ActiveRecord[]
      */
-    public static function LaborCostList()
+    public static function LaborCostList($select = [] , $group = [])
     {
         return  self::find()
             ->distinct()
-            ->select('worker_kind')
-            ->groupBy('worker_kind')
+            ->select($select)
+            ->groupBy($group)
             ->asArray()
             ->all();
 
     }
 
 
-    public static function workerKind($province,$city,$worker_kind)
+    public static function workerKind($select = [],$province,$city,$worker_kind)
     {
         return self::find()
             ->asArray()
-            ->select('id,province,city,univalence,worker_kind')
+            ->select($select)
             ->where(['and',['province_code'=>$province],['city_code'=>$city],['worker_kind'=>$worker_kind]])
             ->one();
     }

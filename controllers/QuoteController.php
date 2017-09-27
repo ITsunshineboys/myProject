@@ -96,8 +96,10 @@ class QuoteController extends Controller
      */
     public function actionLaborCostList()
     {
+        $select = 'worker_kind';
+        $group  = 'worker_kind';
         return Json::encode([
-            'list' => LaborCost::LaborCostList(),
+            'list' => LaborCost::LaborCostList($select,$group),
         ]);
     }
 
@@ -111,7 +113,8 @@ class QuoteController extends Controller
         $province = trim($request->get('province',''));
         $city = trim($request->get('city',''));
         $worker_kind = trim($request->get('worker_kind',''));
-        $labor_cost = LaborCost::workerKind($province,$city,$worker_kind);
+        $select = 'id,province,city,univalence,worker_kind';
+        $labor_cost = LaborCost::workerKind($select,$province,$city,$worker_kind);
         $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
         return Json::encode([
             'labor_cost'=> $labor_cost,
@@ -269,7 +272,14 @@ class QuoteController extends Controller
      */
     public function actionCoefficientAdd()
     {
-        $post = \Yii::$app->request->post();
+//        $post = \Yii::$app->request->post();
+        $post = [
+          'value'=>[
+              ['classify'=>'zuihao', 'coefficient'=>123,],
+              ['classify'=>'zuihasdo', 'coefficient'=>321,],
+              ['classify'=>'aaaa', 'coefficient'=>456,],
+          ]
+        ];
         CoefficientManagement::deleteAll();
         $coefficient = new CoefficientManagement();
         foreach ($post['value'] as $value){
