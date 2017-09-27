@@ -442,7 +442,7 @@ class WithdrawalsController extends Controller
         }else{
             $money=sprintf('%.2f', (float)$m->availableamount*0.01);
         }
-        if ($m->availableamoun<0){
+        if ($m->availableamount<0){
             $money=0.00;
         }
         $code=200;
