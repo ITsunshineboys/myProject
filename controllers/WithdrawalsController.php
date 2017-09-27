@@ -106,7 +106,7 @@ class WithdrawalsController extends Controller
         }
         $request=Yii::$app->request;
         $bankname=trim($request->post('bankname',''));
-        $bankcard=trim($request->post('bankcard',''));
+        $bankcard=(int)trim($request->post('bankcard'));
         $username=trim($request->post('username',''));
         $position=trim($request->post('position',''));
         $bankbranch=trim($request->post('bankbranch',''));

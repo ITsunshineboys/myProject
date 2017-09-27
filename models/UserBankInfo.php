@@ -56,7 +56,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                 try {
                     $log=new BankinfoLog();
                     $log->bankname=$bankname;
-                    $log->bankcard=$bankcard;
+                    $log->bankcard=(int)$bankcard;
                     $log->username=$username;
                     $log->position=$position;
                     $log->bankbranch=$bankbranch;
