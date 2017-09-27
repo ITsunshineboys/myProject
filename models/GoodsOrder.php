@@ -1885,7 +1885,7 @@ class GoodsOrder extends ActiveRecord
         $orderAmount=0;
         foreach ($orders as $k =>$v){
             $GoodsOrder=GoodsOrder::find()
-                ->where(['order_no'=>$orders[$k]['order_no']])
+                ->where(['order_no'=>$orders[$k]])
                 ->asArray()
                 ->all();
             foreach ($GoodsOrder as $key =>$val){
