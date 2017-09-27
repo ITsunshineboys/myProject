@@ -1787,7 +1787,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $postData=yii::$app->request->post();
+        $postData=yii::$app->request->get();
         $uploadsData=FileService::uploadMore();
           if ($uploadsData !=1000){
             if (is_numeric($uploadsData)){
