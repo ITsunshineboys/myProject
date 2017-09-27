@@ -90,19 +90,3 @@ ng-cloak{
   width: 85%;
   height: 636px;
 }
-/*公共输入框样式*/
-input,select,button,textarea{
-  outline:none;
-}
-input[disabled]{
-  background: none!important;
-}
-textarea{
-  resize: none;
-}
-.error{
-  border-color: red!important;
-}
-li{
-  list-style: none!important;
-}
