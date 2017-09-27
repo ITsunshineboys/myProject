@@ -2514,7 +2514,7 @@ class OrderController extends Controller
     {
         $mobile=Yii::$app->request->post('mobile','');
         $role_id=Yii::$app->request->post('role_id','');
-        if (!$mobile || $role_id)
+        if (!$mobile || !$role_id)
         {
             $code=1000;
             return Json::encode([
