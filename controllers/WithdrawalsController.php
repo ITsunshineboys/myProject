@@ -156,7 +156,7 @@ class WithdrawalsController extends Controller
             ->one();
         if ($UserBankInfo)
         {
-            $data=$UserBankInfo->toArray();
+            $data=$UserBankInfo;
             $data['create_time']=date('Y-m-d H:i',$data['create_time']);
         }else{
             $data=[];
