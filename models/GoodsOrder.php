@@ -1800,9 +1800,9 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return int
      */
-    public  static  function  orderBalanceSub($postData,$user){
+  public  static  function  orderBalanceSub($postData,$user){
         $orders=$postData['list'];
-        if ($postData['total_amount']>= $user->availableamount){
+        if ($postData['total_amount']> $user->availableamount){
             $code=1033;
             return $code;
         }
@@ -1885,7 +1885,7 @@ class GoodsOrder extends ActiveRecord
         $orderAmount=0;
         foreach ($orders as $k =>$v){
             $GoodsOrder=GoodsOrder::find()
-                ->where(['order_no'=>$orders[$k]['order_no']])
+                ->where(['order_no'=>$orders[$k]])
                 ->asArray()
                 ->all();
             foreach ($GoodsOrder as $key =>$val){

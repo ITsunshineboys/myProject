@@ -183,6 +183,7 @@ class GoodsRecommend extends ActiveRecord
         return self::find()
             ->select($select)
             ->where([
+                'delete_time' => 0,
                 'type' => self::RECOMMEND_GOODS_TYPE_SECOND,
                 'status' => self::STATUS_ONLINE,
                 'district_code' => $districtCode])
@@ -224,6 +225,7 @@ class GoodsRecommend extends ActiveRecord
         return self::find()
             ->select($select)
             ->where([
+                'delete_time' => 0,
                 'type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL,
                 'status' => self::STATUS_ONLINE,
                 'district_code' => $districtCode])

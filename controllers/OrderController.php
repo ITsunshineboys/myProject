@@ -4,13 +4,15 @@ namespace app\controllers;
 use app\models\Addressadd;
 use app\models\CommentImage;
 use app\models\CommentReply;
-use app\models\OrderAfterSale;
-use app\models\GoodsComment;
-use app\models\Wxpay;
 use app\models\EffectEarnst;
+use app\models\GoodsComment;
+use app\models\OrderAfterSale;
+use app\models\OrderGoods;
+use app\models\OrderRefund;
+use app\models\UserRole;
+use app\models\Wxpay;
 use app\models\User;
 use app\models\Alipay;
-use app\models\OrderGoods;
 use app\models\GoodsOrder;
 use app\models\Invoice;
 use app\models\Express;
@@ -22,6 +24,7 @@ use app\services\StringService;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
 use yii\db\Query;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -1787,7 +1790,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $postData=yii::$app->request->post();
+        $postData=yii::$app->request->get();
         $uploadsData=FileService::uploadMore();
           if ($uploadsData !=1000){
             if (is_numeric($uploadsData)){
@@ -2503,6 +2506,58 @@ class OrderController extends Controller
 
     }
 
+   /**
+     * 测试专用
+     * @return string
+     */
+    public  function  actionAddTestRole()
+    {
+        $mobile=Yii::$app->request->post('mobile','');
+        if (!$mobile)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user=User::find()->where(['mobile'=>$mobile])->one();
+        if (!$user)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $time=time();
+        $userRole=UserRole::find()->where(['user_id'=>$user->id,'role_id'=>7])->one();
+        if (!$userRole)
+        {
+            $role=new UserRole();
+            $role->role_id=7;
+            $role->user_id=$user->id;
+            $role->review_status=2;
+            $role->reviewer_uid=7;
+            $role->review_apply_time=$time;
+            $role->review_time=$time;
+            $res1=$role->save(false);
+            if (!$res1)
+            {
+                $code=1051;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' =>'ok'
+        ]);
+    }
+
 
      /**
      * @return string
@@ -2549,6 +2604,49 @@ class OrderController extends Controller
                 'msg' => 'ok',
             ]);
         }
+    }
+
+
+        /**
+     * 去付款支付宝app支付
+     * @return string
+     */
+    public  function actionAppOrderAliPay()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        if (!array_key_exists('list',$postData)
+         || !array_key_exists('total_amount',$postData))
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $orders=$postData['list'];
+        $orderAmount=GoodsOrder::CalculationCost($orders);
+        if ($postData['total_amount']*100  != $orderAmount){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        };
+        $data=Alipay::OrderAppPay($orderAmount,$orders);
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
     }
 
 

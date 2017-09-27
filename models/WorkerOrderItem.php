@@ -303,7 +303,18 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
 
         return $ownerinfos;
     }
-
+//    /**
+//     * 订单具体项目
+//     * @param $order_id
+//     */
+//    public static function OrderItem($order_id){
+//        $data=self::find()
+//            ->asArray()
+//            ->select('worker_item_id')
+//            ->where(['worker_order_id'=>$order_id])
+//            ->all();
+//        var_dump($data);exit;
+//    }
     /**
      *
      * @param $id

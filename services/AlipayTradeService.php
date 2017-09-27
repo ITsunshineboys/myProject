@@ -16,6 +16,7 @@ use vendor\alipay\alipaydatadataservicebilldownloadurlqueryRequest;
 use vendor\alipay\AlipayTradeCloseRequest;
 use vendor\alipay\AlipayTradeRefundRequest;
 use vendor\alipay\AlipayTradeQueryRequest;
+use vendor\alipay\AlipayTradeAppPayRequest;
 require_once dirname ( __FILE__ ).DIRECTORY_SEPARATOR.'./../vendor/alipay/AopSdk.php';
 require dirname ( __FILE__ ).DIRECTORY_SEPARATOR.'./../vendor/alipay/config.php';
 
@@ -68,6 +69,34 @@ class AlipayTradeService {
     }
     function AlipayWapPayService($alipay_config) {
         $this->__construct($alipay_config);
+    }
+
+        /**
+     * alipay.trade.wap.pay
+     * @param $builder 业务参数，使用buildmodel中的对象生成。
+     * @param $return_url 同步跳转地址，公网可访问
+     * @param $notify_url 异步通知地址，公网可以访问
+     * @return $response 支付宝返回的信息
+     */
+    function appPay($builder,$return_url,$notify_url) {
+
+        $aop=new AopClient();
+        $aop->gatewayUrl = $this->gateway_url;
+        $aop->appId = $this->appid;
+        $aop->rsaPrivateKey =  $this->private_key;
+        $aop->format = "json";
+        $aop->charset = "UTF-8";
+        $aop->signType = "RSA2";
+        $aop->alipayrsaPublicKey = $this->alipay_public_key;
+        $biz_content=$builder->getBizContent();
+        $request = new AlipayTradeAppPayRequest();
+//SDK已经封装掉了公共参数，这里只需要传入业务参数
+        $bizcontent =$biz_content;
+        $request->setNotifyUrl($notify_url);
+        $request->setBizContent($bizcontent);
+        //这里和普通的接口调用不同，使用的是sdkExecute
+        $response = $aop->sdkExecute($request);
+        return $response;
     }
 
     /**

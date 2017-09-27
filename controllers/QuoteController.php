@@ -7,6 +7,7 @@
  */
 namespace app\controllers;
 
+use app\models\Apartment;
 use app\models\ApartmentArea;
 use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
@@ -26,7 +27,6 @@ use app\models\GoodsCategory;
 use app\models\LaborCost;
 use app\models\Points;
 use app\models\ProjectView;
-use app\models\ProjercView;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
@@ -34,9 +34,7 @@ use app\models\WorkerCraftNorm;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
-use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
-use phpDocumentor\Reflection\Project;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -272,20 +270,29 @@ class QuoteController extends Controller
     public function actionCoefficientAdd()
     {
         $post = \Yii::$app->request->post();
-        foreach ($post as $one_post){
-            if (isset($one_post['id'])){
-                $coefficient = CoefficientManagement::findOne($one_post['id']);
-                $coefficient->coefficient = $post['coefficient'];
-                $coefficient->save();
-            } else {
-                $coefficient = new CoefficientManagement();
-                $coefficient->classify = $post['classify'];
-                $coefficient->coefficient = $post['coefficient'];
-                $coefficient->save();
+        CoefficientManagement::deleteAll();
+        $coefficient = new CoefficientManagement();
+        foreach ($post['value'] as $value){
+            $coefficient->classify = $value['classify'];
+            $coefficient->coefficient = $value['coefficient'];
+            if (!$coefficient->validate()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if (!$coefficient->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => \Yii::$app->params['errorCodes'][$code],
+                ]);
             }
         }
         return Json::encode([
-           'code'=>200,
+            'code'=>200,
             'msg'=>'OK'
         ]);
     }
@@ -1538,17 +1545,24 @@ class QuoteController extends Controller
         $id = trim(\Yii::$app->request->post('id',''));
         $select = 'id,project,project_value';
         $where = 'points_id='.$id;
-        $a = ProjectView::findByAll($select,$where);
-        var_dump($a);exit;
+        $area_select = 'id,min_area,max_area,project_name,project_value';
+        return Json::encode([
+            'list' => ProjectView::findByAll($select,$where),
+            'area' => Apartment::findByAll($area_select,$where),
+        ]);
+
     }
 
+    /**
+     * commonality area proportion edit
+     * @return string
+     */
     public function actionCommonalityAreaProportionEdit()
     {
-        $ids = \Yii::$app->request->post();
-        foreach ($ids as $id){
-            $coefficient = CoefficientManagement::findOne(['id'=>$id['id']]);
-            $coefficient->coefficient = $id['coefficient'];
-
+        $post = \Yii::$app->request->post();
+        foreach ($post['value'] as $value){
+            $coefficient = ProjectView::findOne(['id'=>$value['id']]);
+            $coefficient->coefficient = $value['coefficient'];
             if (!$coefficient->validate()){
                 $code = 1000;
                 return Json::encode([
@@ -1556,13 +1570,54 @@ class QuoteController extends Controller
                     'msg'  => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-
             if (!$coefficient->save()){
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
                     'msg'  => \Yii::$app->params['errorCodes'][$code],
                 ]);
+            }
+        }
+
+        $add_apartment = new Apartment();
+        foreach ($post['area'] as $area_value){
+            if (isset($area_value['id'])){
+                $apartment = Apartment::findOne(['id'=>$area_value['id']]);
+                $apartment->project_value = $area_value['value'];
+                if (!$apartment->validate()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if (!$apartment->save()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            } else {
+                $add_apartment->min_area = $area_value['min_area'];
+                $add_apartment->max_area = $area_value['max_area'];
+                $add_apartment->project_name = $area_value['name'];
+                $add_apartment->project_value = $area_value['value'];
+                $add_apartment->points_id = $area_value['points_id'];
+                if (!$add_apartment->validate()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if (!$add_apartment->save()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
             }
         }
         return Json::encode([
