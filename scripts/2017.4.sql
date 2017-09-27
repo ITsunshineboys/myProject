@@ -919,7 +919,7 @@ CREATE TABLE `supplier_bankinformation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) NOT NULL COMMENT '商家id',
   `bankname` varchar(50) NOT NULL COMMENT '开户银行',
-  `bankcard` int(50) NOT NULL COMMENT '银行卡号',
+  `bankcard` bigint(30) NOT NULL COMMENT '银行卡号',
   `username` varchar(50) NOT NULL COMMENT '开户名',
   `position` varchar(150) NOT NULL COMMENT '开户行所在地',
   `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
