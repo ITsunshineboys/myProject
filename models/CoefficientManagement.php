@@ -19,6 +19,14 @@ class CoefficientManagement extends ActiveRecord
         return 'coefficient_management';
     }
 
+    public function rules()
+    {
+        return [
+            [['classify'],'string'],
+            [['coefficient'],'number']
+        ];
+    }
+
     public static function findByAll($select = [],$where = [])
     {
         return self::find()
