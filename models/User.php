@@ -765,7 +765,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $psw
      * @return int
      */
-    private static function CheckPaypwdFormat($psw)
+    public static function CheckPaypwdFormat($psw)
     {
         $res = preg_match('/\b\d{6}\b/', $psw, $matches);
         return $res;
