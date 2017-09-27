@@ -576,8 +576,7 @@ class SupplieraccountController extends  Controller{
         ]);
     }
     public function actionView(){
-        var_dump(UserBankInfo::find()->asArray()->all());
-        var_dump(BankinfoLog::find()->asArray()->all());
+        var_dump(Supplier::find()->asArray()->select('pay_password')->where(['id'=>81])->one());
     }
     public function actionTest(){
 
