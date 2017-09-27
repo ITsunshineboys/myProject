@@ -1030,30 +1030,37 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $return;
     }
 
-//    /**
-//     * 得到工人的全部排班日期
-//     *
-//     * @param $worker_id
-//     * @return array
-//     */
-//    public static function getWorkDaysAll($worker_id)
-//    {
-//        $all_days = WorkerOrder::find()
-//            ->where([
-//                'worker_id' => $worker_id,
-//                'is_old' => self::IS_NEW,
-//                'status' => [2, 3, 4]
-//            ])
-//            ->select('days')
-//            ->all();
-//
-//        $days_arr = [];
-//        foreach ($all_days as $days) {
-//            if ($days) {
-//                $days_arr = array_merge($days_arr, explode(',', $days->days));
-//            }
-//        }
-//
-//        return array_unique($days_arr);
-//    }
+    /**
+     * 得到工人的全部排班日期
+     *
+     * @param $worker_id
+     * @return array
+     */
+    public static function getWorkDaysAll($worker_id)
+    {
+        $all_days = WorkerOrder::find()
+            ->where([
+                'worker_id' => $worker_id,
+                'is_old' => self::IS_NEW,
+                'status' => [2, 3, 4]
+            ])
+            ->select('days')
+            ->all();
+
+        if (!$all_days) {
+            return [];
+        }
+
+        $days_arr = [];
+        foreach ($all_days as $days) {
+            if ($days) {
+                $days_arr = array_merge($days_arr, explode(',', $days->days));
+            }
+        }
+
+        $return = array_unique($days_arr);
+        sort($return, SORT_NUMERIC);
+
+        return $return;
+    }
 }
