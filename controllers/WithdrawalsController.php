@@ -505,6 +505,14 @@ class WithdrawalsController extends Controller
         $userBankInfo=UserBankInfo::find()
             ->where(['uid'=>$user->id,'role_id'=>6])
             ->one();
+        if (!$userBankInfo)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '你尚未绑定银行卡'
+            ]);
+        }
         $role_number=$supplier->shop_no;
         $transaction_no=GoodsOrder::SetTransactionNo($role_number);
         $time=time();
@@ -553,7 +561,6 @@ class WithdrawalsController extends Controller
             ]);
         }
     }
-
 
     /**
      * 商家获取已冻结资金列表
