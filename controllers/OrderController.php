@@ -2530,7 +2530,7 @@ class OrderController extends Controller
         }
         $request=Yii::$app->request;
         $money=trim($request->post('money',''));
-        if ($money)
+        if (!$money)
         {
             $code=1000;
             return Json::encode([
