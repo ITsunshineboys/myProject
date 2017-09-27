@@ -121,7 +121,7 @@ class GoodsComment extends ActiveRecord
         return $stat;
     }
 
-     /**
+    /**
      * @param $postData
      * @param $user
      * @return int
@@ -165,7 +165,6 @@ class GoodsComment extends ActiveRecord
         }
 
     }
-
 
     /**
      * @param $postData
