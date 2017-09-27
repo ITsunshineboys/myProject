@@ -2503,6 +2503,58 @@ class OrderController extends Controller
 
     }
 
+   /**
+     * 测试专用
+     * @return string
+     */
+    public  function  actionAddTestRole()
+    {
+        $mobile=Yii::$app->request->post('mobile','');
+        if (!$mobile)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user=User::find()->where(['mobile'=>$mobile])->one();
+        if (!$user)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $time=time();
+        $userRole=UserRole::find()->where(['user_id'=>$user->id,'role_id'=>7])->one();
+        if (!$userRole)
+        {
+            $role=new UserRole();
+            $role->role_id=7;
+            $role->user_id=$user->id;
+            $role->review_status=2;
+            $role->reviewer_uid=7;
+            $role->review_apply_time=$time;
+            $role->review_time=$time;
+            $res1=$role->save(false);
+            if (!$res1)
+            {
+                $code=1051;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' =>'ok'
+        ]);
+    }
+
 
      /**
      * @return string
