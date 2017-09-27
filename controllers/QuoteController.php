@@ -1563,7 +1563,6 @@ class QuoteController extends Controller
         foreach ($post['value'] as $value){
             $coefficient = ProjectView::findOne(['id'=>$value['id']]);
             $coefficient->coefficient = $value['coefficient'];
-
             if (!$coefficient->validate()){
                 $code = 1000;
                 return Json::encode([
@@ -1571,13 +1570,54 @@ class QuoteController extends Controller
                     'msg'  => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-
             if (!$coefficient->save()){
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
                     'msg'  => \Yii::$app->params['errorCodes'][$code],
                 ]);
+            }
+        }
+
+        $add_apartment = new Apartment();
+        foreach ($post['area'] as $area_value){
+            if (isset($area_value['id'])){
+                $apartment = Apartment::findOne(['id'=>$area_value['id']]);
+                $apartment->project_value = $area_value['value'];
+                if (!$apartment->validate()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if (!$apartment->save()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            } else {
+                $add_apartment->min_area = $area_value['min_area'];
+                $add_apartment->max_area = $area_value['max_area'];
+                $add_apartment->project_name = $area_value['name'];
+                $add_apartment->project_value = $area_value['value'];
+                $add_apartment->points_id = $area_value['points_id'];
+                if (!$add_apartment->validate()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if (!$add_apartment->save()){
+                    $code = 1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
             }
         }
         return Json::encode([

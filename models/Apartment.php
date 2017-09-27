@@ -20,6 +20,14 @@ class Apartment extends ActiveRecord
         return 'apartment';
     }
 
+    public function rules()
+    {
+        return [
+            [['min_area','max_area','project_points'],'integer'],
+            [['project_name'],'string']
+        ];
+    }
+
     public static function findByAll($select =[] ,$where = [])
     {
         return self::find()
