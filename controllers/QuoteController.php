@@ -7,6 +7,7 @@
  */
 namespace app\controllers;
 
+use app\models\Apartment;
 use app\models\ApartmentArea;
 use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
@@ -26,7 +27,6 @@ use app\models\GoodsCategory;
 use app\models\LaborCost;
 use app\models\Points;
 use app\models\ProjectView;
-use app\models\ProjercView;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
@@ -34,9 +34,7 @@ use app\models\WorkerCraftNorm;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
-use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
-use phpDocumentor\Reflection\Project;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -1538,16 +1536,24 @@ class QuoteController extends Controller
         $id = trim(\Yii::$app->request->post('id',''));
         $select = 'id,project,project_value';
         $where = 'points_id='.$id;
-        $a = ProjectView::findByAll($select,$where);
-        var_dump($a);exit;
+        $area_select = 'id,min_area,max_area,project_name,project_value';
+        return Json::encode([
+            'list' => ProjectView::findByAll($select,$where),
+            'area' => Apartment::findByAll($area_select,$where),
+        ]);
+
     }
 
+    /**
+     * commonality area proportion edit
+     * @return string
+     */
     public function actionCommonalityAreaProportionEdit()
     {
-        $ids = \Yii::$app->request->post();
-        foreach ($ids as $id){
-            $coefficient = CoefficientManagement::findOne(['id'=>$id['id']]);
-            $coefficient->coefficient = $id['coefficient'];
+        $post = \Yii::$app->request->post();
+        foreach ($post['value'] as $value){
+            $coefficient = ProjectView::findOne(['id'=>$value['id']]);
+            $coefficient->coefficient = $value['coefficient'];
 
             if (!$coefficient->validate()){
                 $code = 1000;
