@@ -2504,5 +2504,53 @@ class OrderController extends Controller
     }
 
 
+     /**
+     * @return string
+     */
+    public  function  actionAddSupplierBalance()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier=Supplier::find()
+            ->where(['uid'=>$user->id])
+            ->one();
+        if (!$supplier)
+        {
+            $code=1034;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $money=trim($request->post('money',''));
+        if (!$money)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier->balance+=$money*100;
+        $supplier->availableamount+=$money*100;
+        $res=$supplier->save(false);
+        if ($res)
+        {
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok',
+            ]);
+        }
+    }
+
+
 
 }

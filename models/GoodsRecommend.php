@@ -63,7 +63,7 @@ class GoodsRecommend extends ActiveRecord
     /**
      * @var array app fields
      */
-    private static $appFields = ['id', 'title', 'image', 'description', 'platform_price', 'url'];
+    private static $appFields = ['id', 'title', 'image', 'description', 'platform_price', 'url', 'from_type'];
 
     /**
      * @var array cache keys
@@ -183,6 +183,7 @@ class GoodsRecommend extends ActiveRecord
         return self::find()
             ->select($select)
             ->where([
+                'delete_time' => 0,
                 'type' => self::RECOMMEND_GOODS_TYPE_SECOND,
                 'status' => self::STATUS_ONLINE,
                 'district_code' => $districtCode])
@@ -224,6 +225,7 @@ class GoodsRecommend extends ActiveRecord
         return self::find()
             ->select($select)
             ->where([
+                'delete_time' => 0,
                 'type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL,
                 'status' => self::STATUS_ONLINE,
                 'district_code' => $districtCode])

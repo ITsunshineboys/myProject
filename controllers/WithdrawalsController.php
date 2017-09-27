@@ -414,7 +414,7 @@ class WithdrawalsController extends Controller
      * 获取可用余额-商家后台
      * @return string
      */
-    public function actionFindSupplierBalance(){
+     public function actionFindSupplierBalance(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -423,7 +423,10 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $m = Supplier::find()->select('availableamount')->where(['uid' => $user->id])->one()->availableamount;
+        $m = Supplier::find()
+            ->select('availableamount')
+            ->where(['uid' => $user->id])
+            ->one();
         if (!$m)
         {
             $code=1034;
@@ -432,8 +435,14 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $money=sprintf('%.2f', (float)$m*0.01);
-        if ($m<0){
+
+        if (!$m->availableamount)
+        {
+            $money=0.00;
+        }else{
+            $money=sprintf('%.2f', (float)$m->availableamount*0.01);
+        }
+        if ($m->availableamount<0){
             $money=0.00;
         }
         $code=200;
@@ -496,6 +505,14 @@ class WithdrawalsController extends Controller
         $userBankInfo=UserBankInfo::find()
             ->where(['uid'=>$user->id,'role_id'=>6])
             ->one();
+        if (!$userBankInfo)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '你尚未绑定银行卡'
+            ]);
+        }
         $role_number=$supplier->shop_no;
         $transaction_no=GoodsOrder::SetTransactionNo($role_number);
         $time=time();
@@ -544,7 +561,6 @@ class WithdrawalsController extends Controller
             ]);
         }
     }
-
 
     /**
      * 商家获取已冻结资金列表
