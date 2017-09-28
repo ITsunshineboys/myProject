@@ -1234,7 +1234,7 @@ class QuoteController extends Controller
         $one_goods = trim(\Yii::$app->request->post('classify',''));
         $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$one_goods,$select);
-        if (!isset($goods)){
+        if (!isset($goods['0'])){
             $code = 1000;
             return Json::encode([
                 'code' => $code,
