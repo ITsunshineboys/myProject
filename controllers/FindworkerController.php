@@ -245,7 +245,14 @@ class FindworkerController extends Controller{
      */
     public function actionAddHomeimages()
     {
-
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $files=FileService::uploadMore();
             if (is_numeric($files)){
                 $code=$files;
@@ -432,6 +439,14 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionWorkerParentype(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         return Json::encode([
            'code'=>200,
            'msg'=>'ok',

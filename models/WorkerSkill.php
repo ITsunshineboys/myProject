@@ -50,15 +50,19 @@ class WorkerSkill extends \yii\db\ActiveRecord
 
     }
     /**
-     * 工人自己特长
+     * 工人自己特长ids
      * @param $uid
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function getWorkerSkillids($uid){
-        return Worker::find()->where(['uid'=>$uid])->asArray()->select('skill_ids')->all();
+        $data=Worker::find()->where(['uid'=>$uid])->asArray()->select('skill_ids')->all();
+        if(!$data){
+            return null;
+        }
+        return $data;
     }
     /**
-     * 除了工人特长其他的特长
+     * 除了工人特长其他的特长的名称
      * @param $uid
      * @return array|\yii\db\ActiveRecord[]
      */
@@ -67,6 +71,9 @@ class WorkerSkill extends \yii\db\ActiveRecord
         foreach ($skill_ids as $skill_id){
             $skill_name=self::find()->where( "id not in ({$skill_id['skill_ids']})")->asArray()->all();
 
+        }
+        if(!$skill_name){
+            return null;
         }
         return $skill_name;
     }
@@ -126,6 +133,9 @@ class WorkerSkill extends \yii\db\ActiveRecord
         foreach ($skill_ids as $skill_id){
             $skill_name=self::find()->where( "id in ({$skill_id['skill_ids']})")->asArray()->all();
 
+        }
+        if(!$skill_name){
+            return null;
         }
         return $skill_name;
     }
