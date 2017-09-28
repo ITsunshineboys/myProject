@@ -729,7 +729,7 @@ class OrderController extends Controller
         ]);
     }
     /**
-     * find order list
+     * find order list by admin user
      * @return string
      */
     public function actionFindOrderList(){
@@ -754,8 +754,8 @@ class OrderController extends Controller
         $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
-        $type=trim($request->post('type','all'));
-        $where=GoodsOrder::GetTypeWhere($type);
+        $type=trim($request->get('type','all'));
+            $where=GoodsOrder::GetTypeWhere($type);
             if($keyword){
                 $where .=" z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
             }
@@ -785,8 +785,8 @@ class OrderController extends Controller
             $endTime = (int)strtotime($endTime);
             $endTime && $where .= " and create_time <= {$endTime}";
         }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
+        $sort_money=trim($request->get('sort_money',''));
+        $sort_time=trim($request->get('sort_time',''));
         $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
         $code=200;
@@ -1008,7 +1008,7 @@ class OrderController extends Controller
         $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
-        $type=trim($request->post('type','all'));
+        $type=trim($request->get('type','all'));
         if ($type=='all'){
             $where ="a.supplier_id={$supplier->id}";
         }else{
