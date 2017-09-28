@@ -558,8 +558,6 @@ class FindworkerController extends Controller{
      */
     public function actionWorkerView(){
         $code=1000;
-        var_dump(User::find()->asArray()->all());
-       var_dump(UserBankInfo::find()->asArray()->all());exit;
         $worker_id=(int)trim(\Yii::$app->request->get('worker_id'));
         if(!$worker_id){
             return Json::encode([
@@ -571,13 +569,14 @@ class FindworkerController extends Controller{
         $restview=WorkerWorksReview::getOwenerPLone($worker_id);
         $worker_view=Worker::workerinfos($worker_id);
         $worker_works=WorkerWorks::getLatelyWorks($worker_id);
-        if($worker_view && $restview){
+        if($worker_view ){
             return Json::encode([
                 'code' => 200,
                 'msg' =>'ok',
                 'data'=>[
                     'worker_view'=>$worker_view,
-                    'owener_resview'=>$restview
+                    'owener_resview'=>$restview,
+                    'worker_works'=>$worker_works
                 ]
             ]);
         }else{
