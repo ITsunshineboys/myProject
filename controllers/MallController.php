@@ -3012,7 +3012,7 @@ class MallController extends Controller
 
         $names = Yii::$app->request->post('names', []);
         $values = Yii::$app->request->post('values', []);
-        if (!StringService::checkArrayIdentity($names, GoodsAttr::findNecessaryAttrs($goods->category_id))) {
+        if (array_diff(GoodsAttr::findNecessaryAttrs($goods->category_id), $names)) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -3134,7 +3134,7 @@ class MallController extends Controller
         $names = Yii::$app->request->post('names', []);
         $values = Yii::$app->request->post('values', []);
         if (GoodsAttr::changedAttr($id, $names, $values)) {
-            if (!StringService::checkArrayIdentity($names, GoodsAttr::findNecessaryAttrs($goods->category_id))) {
+            if (array_diff(GoodsAttr::findNecessaryAttrs($goods->category_id), $names)) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
