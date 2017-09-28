@@ -156,7 +156,8 @@ class FindworkerController extends Controller{
      */
     public function actionGetCraftprice(){
         $code=1000;
-        $craft_id=trim(\Yii::$app->request->get('craft_id',''),'');
+
+        $craft_id=(int)trim(\Yii::$app->request->get('craft_id',''),'');
         if (!$craft_id) {
             return Json::encode([
                 'code' => $code,
@@ -301,7 +302,7 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionWorkerIndex(){
-        $user_id = \Yii::$app->user->identity->getId();
+        $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
             return Json::encode([
@@ -309,13 +310,13 @@ class FindworkerController extends Controller{
                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $worker_info=User::find()->where(['id'=>$user_id])->one();
+        $worker_info=User::find()->where(['id'=>$user_id->getId()])->one();
         $worker['aite_cube_no']=$worker_info->aite_cube_no;
-        $worker['name']=Worker::getWorkerByUid($user_id)->nickname;
-        $worker['uid']=Worker::getWorkerByUid($user_id)->id;
+        $worker['name']=Worker::getWorkerByUid($user_id->getId())->nickname;
+        $worker['uid']=Worker::getWorkerByUid($user_id->getId())->id;
         $worker['worker_no']=$worker_info->aite_cube_no;
         $worker['balance']=sprintf('%.2f',(float)$worker_info->balance*0.01);
-        $order=Worker::getordertypebystatus($user_id);
+        $order=Worker::getordertypebystatus($user_id->getId());
         if(is_int($order)){
             $code=$order;
             return Json::encode([
@@ -338,7 +339,7 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionWorkerAccount(){
-        $user_id = \Yii::$app->user->identity->getId();
+        $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
             return Json::encode([
@@ -346,7 +347,7 @@ class FindworkerController extends Controller{
                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=Worker::getWorkerAccount($user_id);
+        $data=Worker::getWorkerAccount($user_id->getId());
         if(!$data){
             return Json::encode([
                 'code' => 200,
@@ -365,7 +366,7 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionOwenInfos(){
-        $user_id = \Yii::$app->user->identity->getId();
+        $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
             return Json::encode([
@@ -376,16 +377,25 @@ class FindworkerController extends Controller{
 
         $data=Worker::find()
             ->select('icon,nickname,province_code,city_code')
-            ->where(['uid'=>$user_id])
+            ->where(['uid'=>$user_id->getId()])
             ->asArray()
             ->one();
+        if($data){
+            $data['province_code'] && $data['city_code']?$data['origin']='已设置':$data['origin']='未设置';
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }else{
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>null
+            ]);
+        }
 
-        $data['province_code'] && $data['city_code']?$data['origin']='已设置':$data['origin']='未设置';
-        return Json::encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>$data
-        ]);
+
 
     }
     /**
@@ -393,7 +403,7 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionSetOrigin(){
-        $user_id = \Yii::$app->user->identity->getId();
+        $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
             return Json::encode([
@@ -401,7 +411,7 @@ class FindworkerController extends Controller{
                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $worker=Worker::find()->where(['uid'=>$user_id])->one();
+        $worker=Worker::find()->where(['uid'=>$user_id->getId()])->one();
         $province_code=(int)trim(\Yii::$app->request->post('province_code',''),'');
         $city_code=(int)trim(\Yii::$app->request->post('city_code',''),'');
         $district_code=(int)trim(\Yii::$app->request->post('district_code',''),'');
@@ -442,7 +452,7 @@ class FindworkerController extends Controller{
      * 实名认证
      */
     public function  actionCertification(){
-        $user_id = \Yii::$app->user->identity->getId();
+        $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
             return Json::encode([
@@ -451,7 +461,7 @@ class FindworkerController extends Controller{
             ]);
         }
         $post=\Yii::$app->request->post();
-        $code=Worker::Certification($post,$user_id);
+        $code=Worker::Certification($post,$user_id->getId());
         return Json::encode([
             'code' => $code,
             'msg' =>$code==200?'ok':\ Yii::$app->params['errorCodes'][$code]
@@ -464,7 +474,7 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionSkillsList(){
-        $user_id = \Yii::$app->user->identity->getId();
+        $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
             return Json::encode([
@@ -472,9 +482,9 @@ class FindworkerController extends Controller{
                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $skills['worker_skill']=WorkerSkill::getWorkerSkillname($user_id);
+        $skills['worker_skill']=WorkerSkill::getWorkerSkillname($user_id->getId());
 
-        $skills['other_skill']=WorkerSkill::getOtherSkillname($user_id);
+        $skills['other_skill']=WorkerSkill::getOtherSkillname($user_id->getId());
 
        return Json::encode([
            'code'=>200,
@@ -487,7 +497,7 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionSetSkills(){
-        $user_id = \Yii::$app->user->identity->getId();
+        $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
             return Json::encode([
@@ -503,7 +513,7 @@ class FindworkerController extends Controller{
                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=WorkerSkill::getSetSkillids($user_id,$skill_id);
+        $code=WorkerSkill::getSetSkillids($user_id->getId(),$skill_id);
 
         return Json::encode([
             'code' => $code,
@@ -517,7 +527,7 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionDelWorkerSkill(){
-        $user_id = \Yii::$app->user->identity->getId();
+        $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
             return Json::encode([
@@ -533,7 +543,7 @@ class FindworkerController extends Controller{
                 'msg' =>\ Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=WorkerSkill::DelWorkerSkill($user_id,$skill_id);
+        $code=WorkerSkill::DelWorkerSkill($user_id->getId(),$skill_id);
         return Json::encode([
             'code' => $code,
             'msg' =>$code==200?'ok':\ Yii::$app->params['errorCodes'][$code]
