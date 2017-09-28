@@ -279,7 +279,6 @@ class QuoteController extends Controller
             $rows [] = $value;
         }
         (new CoefficientManagement())->findByInsert($rows);
-
         return Json::encode([
             'code'=>200,
             'msg'=>'OK'
