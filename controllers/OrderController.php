@@ -1060,7 +1060,7 @@ class OrderController extends Controller
      * 商家后台获取订单详情
      * @return string
      */
-    public function actionGetsupplierorderdetails(){
+   public function actionGetsupplierorderdetails(){
             $request=Yii::$app->request;
             $order_no=trim($request->post('order_no',''));
             $sku=trim($request->post('sku',''));
@@ -1112,7 +1112,7 @@ class OrderController extends Controller
                     $receive_details['invoice_header_type']='公司';
                     break;
             }
-                 $goods_data=[];
+            $goods_data=array();
               if ($order_information['goods_name']=='+'){
                   $goods_data['goods_name']='';
               }else{
@@ -1122,6 +1122,27 @@ class OrderController extends Controller
               $goods_data['order_no']=$order_information['order_no'];
               $goods_data['username']=$order_information['username'];
               $goods_data['amount_order']=$order_information['amount_order'];
+                switch ($order_information['role_id'])
+                {
+                    case 7:
+                        $goods_data['role']='平台价';
+                        break;
+                    case 6:
+                        $goods_data['role']='供应商价格';
+                        break;
+                    case 5:
+                        $goods_data['role']='装修公司价';
+                        break;
+                    case 4:
+                        $goods_data['role']='项目经理价';
+                        break;
+                    case 3:
+                        $goods_data['role']='设计师价';
+                        break;
+                    case 2:
+                        $goods_data['role']='工人价';
+                        break;
+                }
               $goods_data['goods_price']=$order_information['goods_price'];
               $goods_data['freight']=$order_information['freight'];
               $goods_data['return_insurance']=$order_information['return_insurance'];
