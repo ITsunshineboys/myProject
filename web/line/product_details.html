@@ -1,33 +1,26 @@
 <link rel="stylesheet" href="css/product_details.css"/>
 <div ng-controller="product_details_ctrl" class="main_body">
-    <a class="header" ng-click="goPrev({stair:stair,index:index,level:level,stair_copy:stair_copy
-                ,worker_category:worker_category,
-                handyman_price:handyman_price,area:area,series_index:series_index,style_index:style_index,
-                labor_price:labor_price,house_bedroom:house_bedroom,house_hall:house_hall,
-                house_kitchen:house_kitchen,house_toilet:house_toilet,highCrtl:highCrtl,
-                window:window,choose_stairs:choose_stairs,second_material:second_material,
-                three_material:three_material,three_material_details:three_material_details,excluded_item:excluded_item,
-                prev_index:prev_index,pid:pid,cur_stair :cur_stair})">
+    <a class="header" ng-click="goPrev({})">
             <img src="images/mall_nav_return.png" alt="">
     </a>
-    <div class="main">
-         <div class="carousel" swiper>
-             <img src="images/banner1.png" id="size_img"  alt="">
-             <!--<div class="swiper-container">-->
-                  <!--<div class="swiper-wrapper">-->
-                      <!--<div class="swiper-slide" ng-repeat="n in swiper_img" id="size_img">-->
-                          <!--<img src="http://test.cdlhzz.cn:888/{{n.image}}" alt="" />-->
-                      <!--</div>-->
-                  <!--</div>-->
-                    <!--&lt;!&ndash; 如果需要分页器 &ndash;&gt;-->
-                    <!--<div class="swiper-pagination "></div>-->
-             <!--</div>-->
-        </div>
+    <div class="main" >
+         <!--<div class="carousel" swiper>-->
+             <!--<img src="http://test.cdlhzz.cn:888/{{cover_image}}" id="size_img"  alt="">-->
+             <div class="swiper-container" swiper>
+                  <div class="swiper-wrapper" swiper>
+                      <div class="swiper-slide" ng-repeat="n in images" id="size_img">
+                          <img src="http://test.cdlhzz.cn:888/{{n}}" alt="" />
+                      </div>
+                  </div>
+                    <!-- 如果需要分页器 -->
+                    <div class="swiper-pagination"></div>
+             </div>
+        <!--</div>-->
         <div class="intro_box">
             <div class="product_name">
-                {{title}}
+                {{detailsTitle}}
             </div>
-            <div class="introduce">{{description}}</div>
+            <div class="introduce">{{detailsSubtitle}}</div>
             <p class="cost">￥{{platform_price}}</p>
         </div>
         <!--下拉选择数量-->
@@ -39,11 +32,11 @@
         </div>
         <!--服务项-->
         <div class="service_item" data-toggle="modal" data-target="#myModal_sec">
-            <ul>
-                <li><img src="images/right.png" alt=""/> &nbsp<span>上门维修</span></li>
-                <li><img src="images/right.png" alt=""/> &nbsp;<span>上门换货</span></li>
-                <li><img src="images/right.png" alt=""/> &nbsp;<span>上门退货</span></li>
-                <li>
+            <ul >
+                <li ng-repeat="n in after_sale_services.slice(0,3)"><img src="images/right.png" alt=""/> &nbsp<span class="more_span">{{n}}</span></li>
+                <!--<li ng-show = changeGoods ><img src="images/right.png" alt=""/> &nbsp;<span>上门换货</span></li>-->
+                <!--<li ng-show = returnGoods ><img src="images/right.png" alt=""/> &nbsp;<span>上门退货</span></li>-->
+                <li id="moreLeft">
                     &nbsp;
                     <img src="images/left_com.png"  class="img_size" alt=""/>
                 </li>
@@ -51,16 +44,16 @@
         </div>
 
         <!--商铺头部-->
-        <div class="shop_header">
-            <div class="shop_header_child">
-                <img src="images/bed.png" alt=""/>
-                <span>合金压缩旗舰店</span>
+        <div class="shop_header" >
+            <div class="shop_header_child" >
+                <img src="http://test.cdlhzz.cn:888/{{icon}}" alt=""/>
+                <span>{{shop_name}}</span>
             </div>
             <div class="shop_number">
                 <ul>
                     <li>
-                        <span class="num_shop">66</span> <br/>
-                        <span class="number">商品数</span>
+                        <span class="num_shop">{{goods_number}}</span> <br/>
+                        <span class="number">商品数量</span>
                         <div class="line"></div>
                     </li>
                     <!--<li>-->
@@ -69,7 +62,7 @@
                         <!--<div class="line"></div>-->
                     <!--</li>-->
                     <li>
-                        <span class="num_shop">6.6</span> <br/>
+                        <span class="num_shop">{{comprehensive_score}}</span> <br/>
                         <span class="number">综合详情</span>
                         <div class="line" style="visibility: hidden"></div>
                     </li>
@@ -95,17 +88,16 @@
                 </ul>
                 <div class="tab-content tab-bordered">
                     <div class="tab-panel" ng-show="vm.activeTab == 1">
-                        <img src="images/banner1.png" alt="" class="comment_img"/>
+                        <span class="description_span">{{description}}</span>
                     </div>
                     <div class="tab-panel" ng-show="vm.activeTab == 2">
                         <div class="shop_two">
-                            <ul>
-                                <li><span>产品参数</span><span class="comment_num">25446556</span></li>
-                                <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                                <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                                <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                                <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                                <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
+                            <ul  >
+                                <li><span>产品编码</span><span class="comment_num">{{sku}}</span></li>
+                                <li><span>产品品牌</span><span class="comment_num">{{brand_name}}</span></li>
+                                <li ng-show = style_parameter><span>产品系列</span><span class="comment_num">{{series_name}}</span></li>
+                                <li ng-show = series_parameter><span>产品风格</span><span class="comment_num">{{style_name}}</span></li>
+                                <li ng-repeat="n in attrs"><span>{{n.name}}</span><span class="comment_num">{{n.value}}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -124,21 +116,21 @@
                 <div class="modal-body">
 
                     <div class="add_cart">
-                        <img src="images/bed.png" alt=""/>
+                        <img src="http://test.cdlhzz.cn:888/{{cover_image}}" alt=""/>
                     </div>
                     <div class="pic_add">
-                        <span class="pic_span">￥1230.00</span>
-                        <span class="pic_span_two">库存1200件</span>
+                        <span class="pic_span">￥{{platform_price}}</span>
+                        <span class="pic_span_two">库存{{left_number}}件</span>
                     </div>
 
 
                     <div class="sl">
                         <span>购买数量</span>
                         <div class="input_div">
-                            <img src="images/mall_subtract_reduce.png" class="reduce" alt=""/>
-                            <span class="pic_more">12</span>
+                            <img ng-click="reduceNumber()" src="images/mall_subtract_reduce.png" class="reduce" alt=""/>
+                            <span class="pic_more">{{shopNum}}</span>
                             <img src="images/mall_add_subtract.png" alt=""/>
-                            <img src="images/mall_add_box.png" class="add" alt=""/>
+                            <img ng-click="addNumber()" src="images/mall_add_box.png" class="add" alt=""/>
                         </div>
                     </div>
                 </div>
@@ -153,7 +145,7 @@
     <!--售后服务条款模态框-->
     <!-- Modal -->
     <div class="modal fade" id="myModal_sec" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog" role="document" id="invoice_model">
             <div class="modal-content">
                 <div class=" t-header">
                     <h1 class="modal-title" id="myModalLabel">售后</h1>
@@ -161,30 +153,25 @@
                 <div class="modal-body-comment">
                     <div class="service_comment">
                         <ul>
-                            <li>
+                            <li ng-show = on_site>
                                 <img src="images/right.png" alt=""/>
                                 <span>上门维修</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
                             </li>
-                            <li>
+                            <li ng-show = changeGoods>
                                 <img src="images/right.png" alt=""/>
                                 <span>上门换货</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
                             </li>
-                            <li>
+                            <li ng-show = returnGoods >
                                 <img src="images/right.png" alt=""/>
                                 <span>上门退货</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
                             </li>
-                            <li>
+                            <li ng-show = changeMore>
                                 <img src="images/right.png" alt=""/>
                                 <span>换货</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
                             </li>
-                            <li>
+                            <li ng-show="returnMore">
                                 <img src="images/right.png" alt=""/>
                                 <span>退货</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
                             </li>
                         </ul>
                     </div>
@@ -192,16 +179,14 @@
                         <h1>保障</h1>
                     </div>
                     <div class="service_comment">
-                        <ul>
-                            <li>
+                        <ul class="comment_ul_invoice">
+                            <li ng-show="getInvoice">
                                 <img src="images/right.png" alt=""/>
                                 <span>提供发票</span>
-                                <p>在购买后，会提供相应的发票</p>
                             </li>
-                            <li>
+                            <li ng-show="doorPay">
                                 <img src="images/right.png" alt=""/>
                                 <span>上门安装</span>
-                                <p>在购买商品后，商家会上门安装</p>
                             </li>
                         </ul>
                     </div>

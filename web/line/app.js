@@ -48,7 +48,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     "": {templateUrl: "product_details.html"}
                 },
                 controller: "product_details_ctrl",
-                params:{'pid':'',"id":"",platform_price:"",title:"title",description:"description"}
+                params:{'pid':'',"id":"", 'mall_id':""}
             })
             .state("shop_front", {   //店铺首页和全部商品
                 url: "/shop_front",

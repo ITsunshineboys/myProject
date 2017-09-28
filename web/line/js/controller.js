@@ -21,16 +21,43 @@ angular.module("all_controller", [])
         }, function errorCallback (response) {
 
         });
+        // 点击轮播图跳转
+        $scope.getDetails = function (item) {
+            console.log(item);
+            if(item.from_type == 1){
+                $state.go('product_details',{'id':$state.mall_id})
+            }else{
+                alert(121);
+                $state.go(item.url)
+            }
+        };
+
         $http({   //推荐分类商品列表
             method: 'get',
             url: "http://test.cdlhzz.cn:888/mall/recommend-second"
         }).then(function successCallback (response) {
+            console.log(response);
             $scope.commodity = response.data.data.recommend_second;
-            $scope.mall_id   = response.data.data.recommend_second.url;
+           for(let [key,value] of  $scope.commodity.entries()) {
+                // console.log(value.url)
+            }
             console.log( $scope.commodity);
-            console.log( $scope.mall_id);
-            console.log( response);
+            // console.log( $scope.mall_id);
+
         });
+        // 点击推荐跳转商品详情
+        $scope.getProduct = function (m) {
+            console.log(m);
+            if(m.from_type == 1){ //商铺类型
+                console.log(11);
+                $scope.mall_id = m.url.split('=')[1];
+                $state.go('product_details',{'mall_id':$scope.mall_id});
+                console.log($scope.mall_id);
+            }else {              //链接类型
+                console.log(222);
+                $state.go('m.url')
+            }
+        }
     })
 
     //分类详情控制器
@@ -292,22 +319,103 @@ angular.module("all_controller", [])
         $scope.title=$stateParams.title;
         $scope.description=$stateParams.description;
         $scope.platform_price=$stateParams.platform_price;
-        console.log($stateParams.id);
-        console.log($stateParams.title);
-        console.log($stateParams.description);
-        console.log($stateParams.platform_price);
+        $scope.mall_id = $stateParams.mall_id;
+        console.log($scope.mall_id);
         $http({
             method:'get',
             url:"http://test.cdlhzz.cn:888/mall/goods-view",
             params:{
-                id:4
+                id:+$scope.mall_id
             }
-        }).then( function successsCallback (response) {
+        }).then( function successCallback (response) {
             console.log(response);
+            $scope.datailsShop = response.data.data.goods_view;
+            $scope.detailsTitle = response.data.data.goods_view.title;
+            $scope.detailsSubtitle = response.data.data.goods_view.subtitle;
+            $scope.platform_price = response.data.data.goods_view.platform_price;
+            $scope.after_sale_services = response.data.data.goods_view.after_sale_services;//服务类型
+            $scope.supplier = response.data.data.goods_view.supplier;
+            $scope.cover_image = response.data.data.goods_view.cover_image;
+            $scope.shop_name = response.data.data.goods_view.supplier.shop_name;//店铺名称
+            $scope.icon = response.data.data.goods_view.supplier.icon; //店铺图标
+            $scope.comprehensive_score = response.data.data.goods_view.supplier.comprehensive_score; //综合评分
+            $scope.goods_number = response.data.data.goods_view.supplier.goods_number; //商品数量
+            $scope.brand_name = response.data.data.goods_view.brand_name; //产品参数-品牌
+            $scope.left_number = response.data.data.goods_view.left_number; //产品库存
+            $scope.sku = response.data.data.goods_view.sku; //产品参数-编码
+            $scope.series_name = response.data.data.goods_view.series_name; //产品参数-系列
+            $scope.style_name = response.data.data.goods_view.series_name; //产品参数-风格
+            $scope.attrs = response.data.data.goods_view.attrs; //产品参数-属性
+            $scope.description = response.data.data.goods_view.description; //产品参数-属性
+            $scope.images = response.data.data.goods_view.images; //产品参数-属性
+
+            $scope.style_parameter = false;
+            $scope.series_parameter = false;
+            // 判断是否存在系列
+            if($scope.series_name == '' ){
+                $scope.style_parameter = false;
+            }else {
+                $scope.style_parameter = true;
+            }
+            // 判断是否存在风格
+            if($scope.series_parameter == ''){
+                $scope.series_parameter = false;
+            }else {
+                $scope.series_parameter = true;
+            }
+            // 判断服务存在类型
+            $scope.on_site     = false;
+            $scope.changeGoods = false;
+            $scope.returnGoods = false;
+            $scope.changeMore  = false;
+            $scope.returnMore  = false;
+            $scope.getInvoice  = false;
+            $scope.doorPay     = false;
+            for( let [key,vaule] of $scope.after_sale_services.entries()){
+               if(vaule == "上门维修"){
+                   $scope.on_site     = true;
+               }
+               else if(vaule == "上门换货"){
+                   $scope.changeGoods = true;
+               }
+               else if(vaule == "上门退货"){
+                   $scope.returnGoods = true;
+               }
+               else if(vaule == "换货"){
+                   $scope.changeMore  = true;
+               }
+               else if(vaule == "退货"){
+                   $scope.returnMore  = true;
+               }
+               else if(vaule == "提供发票"){
+                   $scope.getInvoice  = true;
+               }
+               else if(vaule == "上门安装"){
+                   $scope.doorPay     = true
+               }
+                console.log(vaule);
+            }
+
         });
+        // 购买数量=======点击加减
+        $scope.shopNum = 1;
+        $scope.addNumber = function () { //点击==>加
+            if($scope.shopNum <= $scope.left_number){
+                $scope.shopNum++
+            }else {
+                $scope.shopNum = $scope.left_number;
+            }
+        };
+        $scope.reduceNumber =function () { //点击==>减
+            if($scope.shopNum > 0){
+                $scope.shopNum--
+            }else {
+                $scope.shopNum = 0;
+            }
+        };
+
         // 跳转到订单页面
         $scope.getOrder =function () {
-            console.log(222222);
             setTimeout(function () {
                 $state.go('order_commodity')
             },300)
