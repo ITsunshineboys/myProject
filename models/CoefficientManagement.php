@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
 
 class CoefficientManagement extends ActiveRecord
 {
+    const TABLE_NAME = 'coefficient_management';
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -34,5 +35,13 @@ class CoefficientManagement extends ActiveRecord
             ->select($select)
             ->where($where)
             ->all();
+    }
+
+    public static function findByInsert($rows)
+    {
+        $row = \Yii::$app->db->createCommand();
+        return $row
+            ->batchInsert(self::TABLE_NAME,['classify','coefficient'],$rows)
+            ->execute();
     }
 }

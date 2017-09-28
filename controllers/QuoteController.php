@@ -272,35 +272,14 @@ class QuoteController extends Controller
      */
     public function actionCoefficientAdd()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-          'value'=>[
-              ['classify'=>'zuihao', 'coefficient'=>123,],
-              ['classify'=>'zuihasdo', 'coefficient'=>321,],
-              ['classify'=>'aaaa', 'coefficient'=>456,],
-          ]
-        ];
+        $post = \Yii::$app->request->post();
         CoefficientManagement::deleteAll();
-        $coefficient = new CoefficientManagement();
+        $rows = [];
         foreach ($post['value'] as $value){
-            $coefficient->classify = $value['classify'];
-            $coefficient->coefficient = $value['coefficient'];
-            if (!$coefficient->validate()){
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-
-            if (!$coefficient->save()){
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+            $rows [] = $value;
         }
+        (new CoefficientManagement())->findByInsert($rows);
+
         return Json::encode([
             'code'=>200,
             'msg'=>'OK'
