@@ -1317,9 +1317,9 @@ class QuoteController extends Controller
             $one_post ['id'] = $id;
             if (isset($one_post['min_area'])) {
                 $add_decoration [] = $one_post;
-            }elseif (isset($one_post['style_id'])) {
+            }elseif (isset($one_post['style'])) {
                 $style[] = $one_post;
-            }elseif (isset($one_post['series_id'])) {
+            }elseif (isset($one_post['series'])) {
                 $series[] = $one_post;
             }
         }
