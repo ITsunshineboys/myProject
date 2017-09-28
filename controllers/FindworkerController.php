@@ -558,7 +558,7 @@ class FindworkerController extends Controller{
      */
     public function actionWorkerView(){
         $code=1000;
-        var_dump(BankinfoLog::find()->asArray()->all());
+        var_dump(User::find()->asArray()->all());
        var_dump(UserBankInfo::find()->asArray()->all());exit;
         $worker_id=(int)trim(\Yii::$app->request->get('worker_id'));
         if(!$worker_id){
