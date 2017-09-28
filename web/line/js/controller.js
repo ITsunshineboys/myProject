@@ -1,5 +1,5 @@
 angular.module("all_controller", [])
-    //首页控制器
+//首页控制器
     .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         $http({   //轮播接口调用
             method: 'get',
@@ -38,7 +38,7 @@ angular.module("all_controller", [])
         }).then(function successCallback (response) {
             console.log(response);
             $scope.commodity = response.data.data.recommend_second;
-           for(let [key,value] of  $scope.commodity.entries()) {
+            for(let [key,value] of  $scope.commodity.entries()) {
                 // console.log(value.url)
             }
             console.log( $scope.commodity);
@@ -314,7 +314,7 @@ angular.module("all_controller", [])
 
     //某个 商品详细信息展示
     .controller("product_details_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
-       let vm = $scope.vm = {};
+        let vm = $scope.vm = {};
         $scope.id=$stateParams.id;
         $scope.title=$stateParams.title;
         $scope.description=$stateParams.description;
@@ -372,27 +372,27 @@ angular.module("all_controller", [])
             $scope.getInvoice  = false;
             $scope.doorPay     = false;
             for( let [key,vaule] of $scope.after_sale_services.entries()){
-               if(vaule == "上门维修"){
-                   $scope.on_site     = true;
-               }
-               else if(vaule == "上门换货"){
-                   $scope.changeGoods = true;
-               }
-               else if(vaule == "上门退货"){
-                   $scope.returnGoods = true;
-               }
-               else if(vaule == "换货"){
-                   $scope.changeMore  = true;
-               }
-               else if(vaule == "退货"){
-                   $scope.returnMore  = true;
-               }
-               else if(vaule == "提供发票"){
-                   $scope.getInvoice  = true;
-               }
-               else if(vaule == "上门安装"){
-                   $scope.doorPay     = true
-               }
+                if(vaule == "上门维修"){
+                    $scope.on_site     = true;
+                }
+                else if(vaule == "上门换货"){
+                    $scope.changeGoods = true;
+                }
+                else if(vaule == "上门退货"){
+                    $scope.returnGoods = true;
+                }
+                else if(vaule == "换货"){
+                    $scope.changeMore  = true;
+                }
+                else if(vaule == "退货"){
+                    $scope.returnMore  = true;
+                }
+                else if(vaule == "提供发票"){
+                    $scope.getInvoice  = true;
+                }
+                else if(vaule == "上门安装"){
+                    $scope.doorPay     = true
+                }
                 console.log(vaule);
             }
 
@@ -413,6 +413,13 @@ angular.module("all_controller", [])
                 $scope.shopNum = 0;
             }
         };
+        // 监听购买数量输入是否大于库存
+        $scope.getQuantity = function () {
+            if($scope.shopNum > $scope.left_number){
+                $scope.shopNum =  $scope.left_number
+            }
+        };
+
 
         // 跳转到订单页面
         $scope.getOrder =function () {
@@ -422,10 +429,10 @@ angular.module("all_controller", [])
         }
     })
 
-     //店铺首页和全部商品
+    //店铺首页和全部商品
     .controller("shop_front_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         let vm = $scope.vm = {};
-       //获取商品列表
+        //获取商品列表
         console.log($stateParams);
         $scope.id=$stateParams.id;
         $scope.pid=$stateParams.pid;
@@ -458,12 +465,12 @@ angular.module("all_controller", [])
 
     })
 
-     //确认订单
+    //确认订单
     .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams) {
 
     })
 
-     //发票信息
+    //发票信息
     .controller('invoice_ctrl',function($scope,$http,$state,$stateParams){
 
     })
