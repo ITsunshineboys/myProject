@@ -590,7 +590,7 @@ class WithdrawalsController extends Controller
         $page=trim($request->get('page',1));
         $size=trim($request->get('size',UserFreezelist::PAGE_SIZE_DEFAULT));
         $timeType = trim($request->get('time_type', ''));
-        $where="role_id=6 and uid={$user->id}  and status=0";
+        $where="role_id=6   and status=0";
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -627,7 +627,7 @@ class WithdrawalsController extends Controller
                 $sort='create_time desc';
                 break;
         }
-        $data=UserFreezelist::pagination($where,[],$page,$size,$sort);
+        $data=UserFreezelist::pagination($user->id,$where,[],$page,$size,$sort);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
