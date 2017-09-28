@@ -379,12 +379,13 @@ class FindworkerController extends Controller{
         }
 
         $data=Worker::find()
-            ->select('icon,nickname,province_code,city_code')
+            ->select('icon,nickname,native_place')
             ->where(['uid'=>$user_id->getId()])
             ->asArray()
             ->one();
         if($data){
-            $data['province_code'] && $data['city_code']?$data['origin']='已设置':$data['origin']='未设置';
+            $data['native_place']?$data['origin']='已设置':$data['origin']='未设置';
+            unset($data['native_place']);
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
