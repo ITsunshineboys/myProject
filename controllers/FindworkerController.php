@@ -2,7 +2,9 @@
 namespace app\controllers;
 
 
+use app\models\BankinfoLog;
 use app\models\District;
+use app\models\UserBankInfo;
 use app\models\Worker;
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
@@ -10,6 +12,7 @@ use app\models\WorkerOrderItem;
 use app\models\WorkerSkill;
 use app\models\WorkerType;
 use app\models\WorkerTypeItem;
+use app\models\WorkerWorks;
 use app\models\WorkerWorksReview;
 use app\services\ExceptionHandleService;
 use app\services\FileService;
@@ -555,6 +558,7 @@ class FindworkerController extends Controller{
      */
     public function actionWorkerView(){
         $code=1000;
+        var_dump(BankinfoLog::find()->asArray()->all());exit;
         $worker_id=(int)trim(\Yii::$app->request->get('worker_id'));
         if(!$worker_id){
             return Json::encode([
@@ -564,13 +568,14 @@ class FindworkerController extends Controller{
         }
 
         $restview=WorkerWorksReview::getOwenerPLone($worker_id);
-        $data=Worker::workerinfos($worker_id);
-        if($data && $restview){
+        $worker_view=Worker::workerinfos($worker_id);
+        $worker_works=WorkerWorks::getLatelyWorks($worker_id);
+        if($worker_view && $restview){
             return Json::encode([
                 'code' => 200,
                 'msg' =>'ok',
                 'data'=>[
-                    'worker_view'=>$data,
+                    'worker_view'=>$worker_view,
                     'owener_resview'=>$restview
                 ]
             ]);
