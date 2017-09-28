@@ -1481,26 +1481,17 @@ class QuoteController extends Controller
             if (isset($area_value['id'])){
                 Apartment::findByUpdate($area_value['value'],$area_value['id']);
             } else {
+                $add[] = $area_value;
                 $add_apartment->min_area = $area_value['min_area'];
                 $add_apartment->max_area = $area_value['max_area'];
                 $add_apartment->project_name = $area_value['name'];
                 $add_apartment->project_value = $area_value['value'];
                 $add_apartment->points_id = $area_value['points_id'];
-                if (!$add_apartment->validate()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => \Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-                if (!$add_apartment->save()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => \Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
             }
+        }
+        if (isset($add)){
+            $columns = ['min_area','max_area','project_name','project_value','points_id'];
+            Apartment::findByInsert($add,$columns);
         }
         return Json::encode([
            'code' => 200,

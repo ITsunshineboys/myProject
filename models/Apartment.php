@@ -38,6 +38,14 @@ class Apartment extends ActiveRecord
             ->all();
     }
 
+    public static function findByInsert($rows,$columns)
+    {
+        return \Yii::$app->db
+            ->createCommand()
+            ->batchInsert(self::TABLE_NAME,$rows,$columns)
+            ->execute();
+    }
+
     public static function findByUpdate($rows,$id)
     {
         $row = \Yii::$app->db->createCommand();
