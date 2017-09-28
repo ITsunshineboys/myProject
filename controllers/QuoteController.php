@@ -1234,6 +1234,13 @@ class QuoteController extends Controller
         $one_goods = trim(\Yii::$app->request->post('classify',''));
         $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$one_goods,$select);
+        if (!isset($goods)){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($goods as &$one_goods){
             $one_goods['supplier_price'] = $one_goods['supplier_price'] / 100;
             $one_goods['platform_price'] = $one_goods['platform_price'] / 100;
@@ -1457,67 +1464,27 @@ class QuoteController extends Controller
         $points = new Points();
         foreach ($post  as $value){
             if (isset($value['one_title'])){
-                $points->pid   = $value['pid'];
-                $points->title = $value['title'];
-                $points->level = 2;
-                if (!$points->validate()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => \Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-
-                if (!$points->save()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => \Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
+                $one_title[] = $value;
             }
             if (isset($value['two_title'])){
                 if (isset($value['two_title']['id'])){
+                    $two_title_id [] = $value;
                     $one = Points::findOne($value['two_title']['id']);
                     $one->count = $value['count'];
-                    if (!$one->validate()){
-                        $code = 1000;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg'  => \Yii::$app->params['errorCodes'][$code],
-                        ]);
-                    }
-
-                    if (!$one->save()){
-                        $code = 1000;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg'  => \Yii::$app->params['errorCodes'][$code],
-                        ]);
-                    }
+                    $one->save();
                 } else {
-                    $points->pid   = $value['pid'];
-                    $points->title = $value['title'];
-                    $points->count = $value['count'];
-                    $points->level = 3;
-                    if (!$points->validate()){
-                        $code = 1000;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg'  => \Yii::$app->params['errorCodes'][$code],
-                        ]);
-                    }
-
-                    if (!$points->save()){
-                        $code = 1000;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg'  => \Yii::$app->params['errorCodes'][$code],
-                        ]);
-                    }
+                    $two_title[] = $value;
                 }
             }
         }
+        if (isset($one_title)){
+            $columns = "'pid','title',level";
+            $points->findByInsert($one_title,$columns);
+        } elseif (isset($two_title)){
+            $columns = "'pid','title','count','level'";
+            $points->findByInsert($two_title,$columns);
+        }
+
         return Json::encode([
            'code' => 200,
             'msg' => 'ok',
