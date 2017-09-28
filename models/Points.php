@@ -44,4 +44,11 @@ class Points extends ActiveRecord
         return $row->batchInsert(self::TABLE_NAME,$columns,$rows)->execute();
     }
 
+    public static function findByUpdate($rows,$id)
+    {
+        $row = \Yii::$app->db->createCommand();
+        return $row->update(self::TABLE_NAME,[
+            'count'=>$rows
+            ],'id',$id)->execute();
+    }
 }

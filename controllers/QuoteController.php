@@ -35,6 +35,8 @@ use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\ExceptionHandleService;
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -1266,6 +1268,18 @@ class QuoteController extends Controller
     }
 
     /**
+     * decoration message style series and house type list
+     * @return string
+     */
+    public function actionDecorationMessageList()
+    {
+        $id = trim(\Yii::$app->request->post('id',''));
+        return Json::encode([
+           'list'=>DecorationMessage::findAll(['decoration_add_id'=>$id]),
+        ]);
+    }
+
+    /**
      * decoration add
      * @return string
      */
@@ -1414,9 +1428,7 @@ class QuoteController extends Controller
             if (isset($value['two_title'])){
                 if (isset($value['two_title']['id'])){
                     $two_title_id [] = $value;
-                    $one = Points::findOne($value['two_title']['id']);
-                    $one->count = $value['count'];
-                    $one->save();
+                    $one = Points::findByUpdate($value['count'],$value['id']);
                 } else {
                     $two_title[] = $value;
                 }
@@ -1461,43 +1473,13 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         foreach ($post['value'] as $value){
-            $coefficient = ProjectView::findOne(['id'=>$value['id']]);
-            $coefficient->coefficient = $value['coefficient'];
-            if (!$coefficient->validate()){
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-            if (!$coefficient->save()){
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+            ProjectView::findByUpdate($value['coefficient'],$value['id']);
         }
 
         $add_apartment = new Apartment();
         foreach ($post['area'] as $area_value){
             if (isset($area_value['id'])){
-                $apartment = Apartment::findOne(['id'=>$area_value['id']]);
-                $apartment->project_value = $area_value['value'];
-                if (!$apartment->validate()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => \Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-                if (!$apartment->save()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => \Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
+                Apartment::findByUpdate($area_value['value'],$area_value['id']);
             } else {
                 $add_apartment->min_area = $area_value['min_area'];
                 $add_apartment->max_area = $area_value['max_area'];

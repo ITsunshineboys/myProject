@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
 
 class ProjectView extends ActiveRecord
 {
+    const TABLE_NAME = 'project_view';
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -26,5 +27,13 @@ class ProjectView extends ActiveRecord
             ->select($select)
             ->where($where)
             ->all();
+    }
+
+    public static function findByUpdate($rows,$id)
+    {
+        $row = \Yii::$app->db->createCommand();
+        return $row->update(self::TABLE_NAME,[
+                'coefficient'=>$rows
+            ],'id',$id)->execute();
     }
 }

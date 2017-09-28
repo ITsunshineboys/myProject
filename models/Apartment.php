@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
 
 class Apartment extends ActiveRecord
 {
+    const TABLE_NAME = 'apartment';
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -35,5 +36,13 @@ class Apartment extends ActiveRecord
             ->select($select)
             ->where($where)
             ->all();
+    }
+
+    public static function findByUpdate($rows,$id)
+    {
+        $row = \Yii::$app->db->createCommand();
+        return $row->update(self::TABLE_NAME,[
+            'project_value'=>$rows
+        ],'id',$id)->execute();
     }
 }
