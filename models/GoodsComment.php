@@ -121,7 +121,7 @@ class GoodsComment extends ActiveRecord
         return $stat;
     }
 
-     /**
+   /**
      * @param $postData
      * @param $user
      * @return int
@@ -129,6 +129,17 @@ class GoodsComment extends ActiveRecord
     public  static  function  addComment($postData,$user,$uploadsData)
     {
         if(!array_key_exists('store_service_score', $postData)|| !array_key_exists('shipping_score', $postData)|| !array_key_exists('score', $postData)|| !array_key_exists('logistics_speed_score', $postData) || !array_key_exists('sku',$postData) || !array_key_exists('order_no',$postData) || ! array_key_exists('content',$postData) || !array_key_exists('anonymous',$postData))
+        {
+            $code=1000;
+            return $code;
+        }
+        $goodsOrder=GoodsOrder::find()
+            ->where(['order_no'=>$postData['order_no']])
+            ->one();
+        $orderGoods=OrderGoods::find()
+            ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
+            ->one();
+        if (!$orderGoods || !$goodsOrder)
         {
             $code=1000;
             return $code;
@@ -141,16 +152,15 @@ class GoodsComment extends ActiveRecord
             ->where(['sku'=>$postData['sku']])
             ->one();
         $list=self::GetAverageScore($postData,$goods->supplier_id);
-
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
             $res1=self::AddCommentData($postData,$user,$goods,$time,$uploadsData);
-            if ($res1!=200){
+            if (is_numeric($res1)){
                 $tran->rollBack();
                 return $res1;
             }
-            $commendSupplierDatabase=self::commendSupplierDatabase($postData,$goods,$time,$list);
+            $commendSupplierDatabase=self::commendSupplierDatabase($orderGoods,$res1,$postData,$goods,$time,$list);
             if ($commendSupplierDatabase!=200){
                 $tran->rollBack();
                 return $commendSupplierDatabase;
@@ -167,27 +177,20 @@ class GoodsComment extends ActiveRecord
     }
 
     /**
+     * @param $orderGoods
+     * @param $comment
      * @param $postData
-     * @param $user
      * @param $goods
      * @param $time
      * @param $list
      * @return int
      */
-    public static  function commendSupplierDatabase($postData,$goods,$time,$list)
+    public static  function commendSupplierDatabase($orderGoods,$comment,$postData,$goods,$time,$list)
     {
-        $GetComment=self::find()
-            ->select('id')
-            ->where(['create_time'=>$time])
-            ->asArray()
-            ->one();
         $tran = Yii::$app->db->beginTransaction();
         try {
-            $orderGoods=OrderGoods::find()
-                ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
-                ->one();
-            $orderGoods->comment_id=$GetComment['id'];
-            $res1=$orderGoods->save();
+            $orderGoods->comment_id=$comment->id;
+            $res1=$orderGoods->save(false);
             if (!$res1){
                 $code=500;
                 $tran->rollBack();
@@ -213,6 +216,7 @@ class GoodsComment extends ActiveRecord
             return $code;
         }
     }
+
 
 
      /**
@@ -288,7 +292,7 @@ class GoodsComment extends ActiveRecord
     }
 
 
-    /**
+   /**
      * @param $postData
      * @param $supplier_id
      * @return array
@@ -310,30 +314,36 @@ class GoodsComment extends ActiveRecord
 
         }
         $count=count($order);
-        $score_list=[];
-        $score_list['shipping_score']=0;
-        $score_list['store_service_score']=0;
-        $score_list['logistics_speed_score']=0;
-        $score_list['score']=0;
-        $score_list['good_score']=0;
-        foreach ($order as $k =>$v){
-            $score_list['shipping_score']+=$order[$k]['shipping_score'];
-            $score_list['store_service_score']+=$order[$k]['store_service_score'];
-            $score_list['logistics_speed_score']+=$order[$k]['logistics_speed_score'];
-            $score_list['score']+=$order[$k]['score'];
-            if ($order[$k]['score']>=8){
-                $score_list['good_score']= $score_list['good_score']+1;
+        if ($count !=0)
+        {
+            $score_list=[];
+            $score_list['shipping_score']=0;
+            $score_list['store_service_score']=0;
+            $score_list['logistics_speed_score']=0;
+            $score_list['score']=0;
+            $score_list['good_score']=0;
+            foreach ($order as $k =>$v){
+                $score_list['shipping_score']+=$order[$k]['shipping_score'];
+                $score_list['store_service_score']+=$order[$k]['store_service_score'];
+                $score_list['logistics_speed_score']+=$order[$k]['logistics_speed_score'];
+                $score_list['score']+=$order[$k]['score'];
+                if ($order[$k]['score']>=8){
+                    $score_list['good_score']= $score_list['good_score']+1;
+                }
             }
+            $data['well_probability']=round($score_list['good_score']/$count,2)*100;
+            $data['shipping_score']=round(($score_list['shipping_score']+$postData['shipping_score'])/$count+1,1);
+            $data['store_service_score']=round(($score_list['store_service_score']+$postData['store_service_score'])/$count+1,1);
+            $data['logistics_speed_score']=round(($score_list['logistics_speed_score']+$postData['logistics_speed_score'])/$count+1,1);
+            $data['score']=round(($score_list['score']+$postData['score'])/$count+1,1);
+            $data['count']=$count;
+        }else{
+            $data['logistics_speed_score']=0;
+            $data['score']=0;
         }
-        $data['well_probability']=round($score_list['good_score']/$count,2)*100;
-        $data['shipping_score']=round(($score_list['shipping_score']+$postData['shipping_score'])/$count+1,1);
-        $data['store_service_score']=round(($score_list['store_service_score']+$postData['store_service_score'])/$count+1,1);
-        $data['logistics_speed_score']=round(($score_list['logistics_speed_score']+$postData['logistics_speed_score'])/$count+1,1);
-        $data['score']=round(($score_list['score']+$postData['score'])/$count+1,1);
-        $data['count']=$count;
+
       return $data;
     }
-
 
     /**
      * @param $comment_id
