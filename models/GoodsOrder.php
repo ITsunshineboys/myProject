@@ -41,28 +41,40 @@ class GoodsOrder extends ActiveRecord
     const ORDER_STATUS_DESC_UNCOMPLETE='未完成';
     const ORDER_STATUS_DESC_CANCEL='已取消';
     const UNUSUAL_STATUS_REFUND=1;
-    const UNUSUAL_STATUS_DESC_REFUND='申请退款';
     const REFUND_HANDLE_STATUS_AGREE=1;
     const REFUND_HANDLE_STATUS_DISAGREE=2;
     const REFUND_HANDLE_STATUS_DESC_AGREE='同意';
     const REFUND_HANDLE_STATUS_DESC_DISAGREE='驳回';
-    const PAY_STATUSES = [
-        self::PAY_STATUS_UNPAID => self::PAY_STATUS_DESC_UNPAID,
-        self::PAY_STATUS_PAID => self::PAY_STATUS_DESC_PAID,
-        self::PAY_STATUS_REFUNDED => self::PAY_STATUS_DESC_REFUNDED,
-    ];
-    const ORDER_STATUS=[
-        self::ORDER_STATUS_UNCOMPLETE=>self::ORDER_STATUS_DESC_UNCOMPLETE,
-        self::ORDER_STATUS_COMPLETE=>self::ORDER_TYPE_DESC_COMPLETED,
-        self::ORDER_STATUS_CANCEL=>self::ORDER_STATUS_DESC_CANCEL,
-    ];
-    const SHIPPED_STATUS=[
-        self::SHIPPING_STATUS_UNSHIPPED=>self::SHIPPING_STATUS_DESC_UNSHIPPED,
-        self::SHIPPING_STATUS_SHIPPED=>self::SHIPPING_STATUS_DESC_SHIPPED,
-        self::SHIPPING_STATUS_SHIPPEDCOMPLETE=>self::SHIPPING_STATUS_DESC_SHIPPEDCOMPLETE,
-    ];
     const PAGE_SIZE_DEFAULT = 12;
-
+    const ORDER_TYPE_DESC_ALL='全部';
+    const ORDER_TYPE_DESC_UNPAID='待付款';
+    const ORDER_TYPE_DESC_UNSHIPPED='待发货';
+    const ORDER_TYPE_DESC_UNRECEIVED='待收货';
+    const ORDER_TYPE_DESC_COMPLETED='已完成';
+    const ORDER_TYPE_DESC_CANCEL='已取消';
+    const ORDER_TYPE_DESC_CUSTOMER_SERVICE='售后';
+    const ORDER_TYPE_DESC_UNCOMMENT='待评论';
+    const ORDER_TYPE_DESC_APPLYREFUND='申请退款';
+    const ORDER_TYPE_APPLYREFUND='apply_refund';
+    const ORDER_TYPE_ALL='all';
+    const ORDER_TYPE_UNPAID='unpaid';
+    const ORDER_TYPE_UNSHIPPED='unshipped';
+    const ORDER_TYPE_SHIPPED='shipped';
+    const ORDER_TYPE_UNRECEIVED='unreceived';
+    const ORDER_TYPE_COMPLETED='completed';
+    const ORDER_TYPE_CANCEL='cancel';
+    const ORDER_TYPE_CUSTOMER_SERVICE='customer_service';
+    const ORDER_TYPE_UNCOMMENT='uncomment';
+    const ORDER_TYPE_LIST=[
+        self::ORDER_TYPE_DESC_ALL=>self::ORDER_TYPE_ALL,
+        self::ORDER_TYPE_DESC_UNPAID=>self::ORDER_TYPE_UNPAID,
+        self::ORDER_TYPE_DESC_UNSHIPPED=>self::ORDER_TYPE_UNSHIPPED,
+        self::ORDER_TYPE_DESC_UNRECEIVED=>self::ORDER_TYPE_UNRECEIVED,
+        self::ORDER_TYPE_DESC_COMPLETED=>self::ORDER_TYPE_COMPLETED,
+        self::ORDER_TYPE_DESC_CANCEL=>self::ORDER_TYPE_CANCEL,
+        self::ORDER_TYPE_DESC_CUSTOMER_SERVICE=>self::ORDER_TYPE_CUSTOMER_SERVICE,
+        self::ORDER_TYPE_DESC_UNCOMMENT=>self::ORDER_TYPE_UNCOMMENT
+    ];
     const FIELDS_ORDERLIST_ADMIN = [
         'a.order_no',
         'a.id',
@@ -123,34 +135,7 @@ class GoodsOrder extends ActiveRecord
         '退货',
         '换货',
     ];
-    const ORDER_TYPE_DESC_ALL='全部';
-    const ORDER_TYPE_DESC_UNPAID='待付款';
-    const ORDER_TYPE_DESC_UNSHIPPED='待发货';
-    const ORDER_TYPE_DESC_UNRECEIVED='待收货';
-    const ORDER_TYPE_DESC_COMPLETED='已完成';
-    const ORDER_TYPE_DESC_CANCEL='已取消';
-    const ORDER_TYPE_DESC_CUSTOMER_SERVICE='售后';
-    const ORDER_TYPE_DESC_UNCOMMENT='待评论';
-    const ORDER_TYPE_DESC_APPLYREFUND='申请退款';
-    const ORDER_TYPE_APPLYREFUND='apply_refund';
-    const ORDER_TYPE_ALL='all';
-    const ORDER_TYPE_UNPAID='unpaid';
-    const ORDER_TYPE_UNSHIPPED='unshipped';
-    const ORDER_TYPE_UNRECEIVED='unreceived';
-    const ORDER_TYPE_COMPLETED='completed';
-    const ORDER_TYPE_CANCEL='cancel';
-    const ORDER_TYPE_CUSTOMER_SERVICE='customer_service';
-    const ORDER_TYPE_UNCOMMENT='uncomment';
-    const ORDER_TYPE_LIST=[
-        self::ORDER_TYPE_DESC_ALL=>self::ORDER_TYPE_ALL,
-        self::ORDER_TYPE_DESC_UNPAID=>self::ORDER_TYPE_UNPAID,
-        self::ORDER_TYPE_DESC_UNSHIPPED=>self::ORDER_TYPE_UNSHIPPED,
-        self::ORDER_TYPE_DESC_UNRECEIVED=>self::ORDER_TYPE_UNRECEIVED,
-        self::ORDER_TYPE_DESC_COMPLETED=>self::ORDER_TYPE_COMPLETED,
-        self::ORDER_TYPE_DESC_CANCEL=>self::ORDER_TYPE_CANCEL,
-        self::ORDER_TYPE_DESC_CUSTOMER_SERVICE=>self::ORDER_TYPE_CUSTOMER_SERVICE,
-        self::ORDER_TYPE_DESC_UNCOMMENT=>self::ORDER_TYPE_UNCOMMENT
-    ];
+
 
 
     /**
@@ -2352,7 +2337,7 @@ class GoodsOrder extends ActiveRecord
         return $transaction_no;
     }
     
-      public  static  function  switchStatus_desc($arr)
+    public  static  function  switchStatus_desc($arr,$user)
    {
        foreach ($arr as $k =>$v)
        {
@@ -2367,7 +2352,7 @@ class GoodsOrder extends ActiveRecord
                    $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
                    if ( $arr[$k]['is_unusual']==1){
                        $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_申请退款';
+                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
                    }
                    break;
                case  self::ORDER_TYPE_DESC_UNRECEIVED:
@@ -2376,6 +2361,15 @@ class GoodsOrder extends ActiveRecord
                        if ($arr[$k]['is_unusual']==1){
                            $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
                            $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
+                   }
+                   if ($user->last_role_id_app==6)
+                   {
+                       $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED;
+                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED;
+                       if ($arr[$k]['is_unusual']==1){
+                           $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                           $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
+                       }
                    }
                    break;
                case  self::ORDER_TYPE_DESC_CANCEL:
