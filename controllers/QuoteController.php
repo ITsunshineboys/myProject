@@ -1324,21 +1324,23 @@ class QuoteController extends Controller
             }
         }
         if (isset($add_decoration)){
+            $add = sort($add_decoration);
+            var_dump($add);exit;
             $columns = ['min_area','max_area','quantity','decoration_add_id'];
-            $decoration_message->findByInsert($add_decoration,$columns);
+            $decoration_message->findByInsert($add,$columns);
         }
-        if (isset($style)){
-            $columns = ['quantity','style_id','decoration_add_id'];
-            $decoration_message->findByInsert($style,$columns);
-        }
-        if (isset($series)){
-            $columns = ['quantity','series_id','decoration_add_id'];
-            $decoration_message->findByInsert($series,$columns);
-        }
-        return Json::encode([
-           'code' => 200,
-            'msg' => 'ok',
-        ]);
+//        if (isset($style)){
+//            $columns = ['quantity','style_id','decoration_add_id'];
+//            $decoration_message->findByInsert($style,$columns);
+//        }
+//        if (isset($series)){
+//            $columns = ['quantity','series_id','decoration_add_id'];
+//            $decoration_message->findByInsert($series,$columns);
+//        }
+//        return Json::encode([
+//           'code' => 200,
+//            'msg' => 'ok',
+//        ]);
     }
 
     /**
@@ -1476,17 +1478,11 @@ class QuoteController extends Controller
             ProjectView::findByUpdate($value['coefficient'],$value['id']);
         }
 
-        $add_apartment = new Apartment();
         foreach ($post['area'] as $area_value){
             if (isset($area_value['id'])){
                 Apartment::findByUpdate($area_value['value'],$area_value['id']);
             } else {
                 $add[] = $area_value;
-                $add_apartment->min_area = $area_value['min_area'];
-                $add_apartment->max_area = $area_value['max_area'];
-                $add_apartment->project_name = $area_value['name'];
-                $add_apartment->project_value = $area_value['value'];
-                $add_apartment->points_id = $area_value['points_id'];
             }
         }
         if (isset($add)){
