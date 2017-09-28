@@ -774,6 +774,7 @@ class GoodsOrder extends ActiveRecord
             $output['return_insurance']=self::switchMoney($arr[$k]['return_insurance']);
             $output['freight']=self::switchMoney($arr[$k]['freight']*0.01);
             $output['address_id']=$arr[$k]['address_id'];
+            $output['role_id']=$arr[$k]['role_id'];
             $output['invoice_id']=$arr[$k]['invoice_id'];
             $output['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
             $output['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
