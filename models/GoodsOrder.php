@@ -98,6 +98,9 @@ class GoodsOrder extends ActiveRecord
         'a.order_refer',
         'z.freight',
         'a.return_insurance',
+        'a.consignee',
+        'a.consignee_mobile',
+        'a.order_refer'
     ];
     const FIELDS_USERORDER_ADMIN = [
         'a.supplier_id',
@@ -365,6 +368,16 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+            switch ($arr[$k]['order_refer'])
+            {
+                case 1:
+                    $arr[$k]['mobile']=$arr[$k]['consignee_mobile'];
+                    break;
+                case 2:
+                    $arr[$k]['mobile']=User::find()->select('mobile')->where(['id'=>$arr[$k]['user_id']])->one()->mobile;
+                    break;
+            }
+            unset($arr[$k]['consignee_mobile']);
         }
         $count=(new Query())
             ->from(self::tableName().' AS a')
