@@ -1323,24 +1323,17 @@ class QuoteController extends Controller
                 $series[] = $one_post;
             }
         }
-        var_dump($add_decoration);
-        var_dump($style);
-        var_dump($series);
-        exit;
         if (isset($add_decoration)){
-            $add = sort($add_decoration);
-            $columns = ['decoration_add_id','quantity','max_area','min_area'];
-            $decoration_message->findByInsert($add,$columns);
+            $columns = ['min_area','max_area','quantity','decoration_add_id'];
+            $decoration_message->findByInsert($add_decoration,$columns);
         }
         if (isset($style)){
-            $add = sort($style);
-            $columns = ['decoration_add_id','quantity','style_id'];
-            $decoration_message->findByInsert($add,$columns);
+            $columns = ['quantity','style_id','decoration_add_id'];
+            $decoration_message->findByInsert($style,$columns);
         }
         if (isset($series)){
-            $add = sort($series);
-            $columns = ['decoration_add_id','quantity','series_id'];
-            $decoration_message->findByInsert($add,$columns);
+            $columns = ['quantity','series_id','decoration_add_id'];
+            $decoration_message->findByInsert($series,$columns);
         }
         return Json::encode([
            'code' => 200,
