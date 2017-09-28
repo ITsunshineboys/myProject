@@ -68,6 +68,9 @@ class WorkerSkill extends \yii\db\ActiveRecord
      */
     public static function getOtherSkillname($uid){
         $skill_ids=self::getWorkerSkillids($uid);
+        if(!$skill_ids){
+            return null;
+        }
         foreach ($skill_ids as $skill_id){
             $skill_name=self::find()->where( "id not in ({$skill_id['skill_ids']})")->asArray()->all();
 
@@ -129,10 +132,11 @@ class WorkerSkill extends \yii\db\ActiveRecord
      */
     public static function getWorkerSkillname($uid){
         $skill_ids=self::getWorkerSkillids($uid);
-
+        if(!$skill_ids){
+            return null;
+        }
         foreach ($skill_ids as $skill_id){
             $skill_name=self::find()->where( "id in ({$skill_id['skill_ids']})")->asArray()->all();
-
         }
         if(!$skill_name){
             return null;

@@ -379,7 +379,7 @@ class WorkerController extends Controller
         $request = \Yii::$app->request;
 
         $order_id = (int)$request->get('order_id', 0);
-        $item_id = (int)$request->get('item_id', 0);
+        $item_id = (int)$request->get('item_id',0);
 
         if (!$item_id || !$order_id) {
             $code = 1000;

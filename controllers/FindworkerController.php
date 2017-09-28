@@ -559,6 +559,14 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionWorkerView(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=1000;
         $worker_id=(int)trim(\Yii::$app->request->get('worker_id'));
         if(!$worker_id){
@@ -594,8 +602,19 @@ class FindworkerController extends Controller{
      * @return string
      */
     public function actionLaborGrabsheet(){
-
-        $order_info=WorkerOrder::getorderinfo();
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $worker_type_id=Worker::find()
+            ->select('worker_type_id')
+            ->where(['uid'=>$user_id->getId()])
+            ->one();
+        $order_info=WorkerOrder::getorderinfo($worker_type_id);
         if($order_info==null){
             return Json::encode([
                 'code'=>200,
@@ -603,8 +622,8 @@ class FindworkerController extends Controller{
                 'data'=>null
             ]);
         }
-        $woker_type=WorkerType::gettype($order_info['worker_type_id']);
-        $servicstyle=WorkerItem::getparent($order_info['worker_type_id']);
+        $woker_type=WorkerType::gettype($worker_type_id);
+        $servicstyle=WorkerItem::getparent($worker_type_id);
         $time=WorkerOrder::timedata($order_info['id']);
 
        return Json::encode([

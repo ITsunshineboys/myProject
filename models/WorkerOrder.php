@@ -611,13 +611,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * 刷新订单随机
      * @return array|null|\yii\db\ActiveRecord
      */
-    public static function getorderinfo()
+    public static function getorderinfo($worker_type_id)
     {
         $data = self::find()
             ->asArray()
             ->where(['is_old' => self::ORDER_NEW])
             ->andWhere(['status' => self::STATUS_INSERT])
+            ->andWhere(['worker_type_id'=>$worker_type_id])
             ->all();
+        if(!$data){
+            return null;
+        }
         foreach ($data as $key => &$v) {
 
             $ids[] = $v['id'];
