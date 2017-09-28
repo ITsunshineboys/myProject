@@ -1777,13 +1777,13 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
+   /**
      * user add comment
      * @return string
      */
     public function actionCommentSub(){
         $user = Yii::$app->user->identity;
-        if (!$user->checklogin()){
+        if (!$user){
             $code=1052;
             return Json::encode([
                 'code' => $code,
@@ -1792,7 +1792,7 @@ class OrderController extends Controller
         }
         $postData=yii::$app->request->get();
         $uploadsData=FileService::uploadMore();
-          if ($uploadsData !=1000){
+        if ($uploadsData !=1000){
             if (is_numeric($uploadsData)){
                 $code=$uploadsData;
                 return Json::encode([

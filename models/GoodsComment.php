@@ -121,7 +121,7 @@ class GoodsComment extends ActiveRecord
         return $stat;
     }
 
-    /**
+     /**
      * @param $postData
      * @param $user
      * @return int
@@ -288,7 +288,7 @@ class GoodsComment extends ActiveRecord
     }
 
 
-     /**
+    /**
      * @param $postData
      * @param $supplier_id
      * @return array
@@ -333,6 +333,7 @@ class GoodsComment extends ActiveRecord
         $data['count']=$count;
       return $data;
     }
+
 
     /**
      * @param $comment_id
