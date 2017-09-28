@@ -1323,6 +1323,10 @@ class QuoteController extends Controller
                 $series[] = $one_post;
             }
         }
+        var_dump($add_decoration);
+        var_dump($style);
+        var_dump($series);
+        exit;
         if (isset($add_decoration)){
             $add = sort($add_decoration);
             $columns = ['decoration_add_id','quantity','max_area','min_area'];
