@@ -7,8 +7,10 @@
  */
 
 namespace app\models;
-
+use yii;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
+use yii\db\Query;
 
 class GoodsComment extends ActiveRecord
 {
