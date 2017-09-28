@@ -93,7 +93,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         $price=(new Query())->from('craft_cost')
             ->select('price')
             ->where(['worker_craft_id'=>$craft_id])
-            ->one()['price'];
+            ->one();
         if($price){
             return $price;
         }
@@ -376,7 +376,7 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
                 ->where(['id'=>$carft_info['item_id']])
                 ->one();
             $data['craft']=$carft_info['craft'].self::UNITS[$unit['unit']];
-            $data['price']=self::craftprice($carft_info['id']).self::UNITXG.self::UNITS[3];
+            $data['price']=self::craftprice($carft_info['id'])['price'].self::UNITXG.self::UNITS[3];
         }
         if($items['area']){
             $data['area']=$items['area'].self::UNITS['3'];

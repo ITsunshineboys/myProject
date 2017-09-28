@@ -196,20 +196,6 @@ class FindworkerController extends Controller{
                 'data' => $data
             ]);
         }
-//        public function actionOrderList(){
-//            $user_id = \Yii::$app->user->identity;
-//            $code=1052;
-//            if(!$user_id){
-//                return Json::encode([
-//                    'code' => $code,
-//                    'msg' =>\ Yii::$app->params['errorCodes'][$code]
-//                ]);
-//            }
-//            $post=\Yii::$app->request->post();
-//            $infos=WorkerOrder::orderhomeinfos($post);
-//            $data=\Yii::$app->cache->set('homeinfos',$post);
-//
-//        }
     /**
      * 生成订单
      * @return string
