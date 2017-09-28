@@ -575,7 +575,9 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        $supplier=Supplier::find()
+            ->where(['uid'=>$user->id])
+            ->one();
         if (!$supplier)
         {
             $code=1010;
@@ -594,7 +596,8 @@ class WithdrawalsController extends Controller
             $endTime = trim(Yii::$app->request->get('end_time', ''));
             if (($startTime && !StringService::checkDate($startTime))
                 || ($endTime && !StringService::checkDate($endTime))
-            ) {
+            )
+            {
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -631,6 +634,7 @@ class WithdrawalsController extends Controller
             'data' => $data
         ]);
     }
+
 
 
    /**商家获取收支明细列表
