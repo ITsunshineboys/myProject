@@ -1794,7 +1794,6 @@ class GoodsOrder extends ActiveRecord
         }
         return $where;
     }
-
     /**
      * 余额支付
      * @param $postData
@@ -1802,13 +1801,13 @@ class GoodsOrder extends ActiveRecord
      * @return int
      */
     public  static  function  orderBalanceSub($postData,$user){
-        if(!is_array($postData['list']))
+
+        $orders=urldecode($postData['list']);
+        if(!is_array($orders))
         {
             $code=1000;
             return $code;
         }
-        $orders=$postData['list'];
-
         if ($postData['total_amount']> $user->availableamount){
             $code=1033;
             return $code;
