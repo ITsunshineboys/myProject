@@ -1801,8 +1801,7 @@ class GoodsOrder extends ActiveRecord
      * @return int
      */
     public  static  function  orderBalanceSub($postData,$user){
-
-        $orders=urldecode($postData['list']);
+        $orders=explode(',',$postData['list']);
         if(!is_array($orders))
         {
             $code=1000;
