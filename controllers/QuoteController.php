@@ -1341,6 +1341,18 @@ class QuoteController extends Controller
         ]);
     }
 
+    public function actionDecorationDel()
+    {
+        $id = trim(\Yii::$app->request->post('id',''));
+        DecorationAdd::deleteAll(['id'=>$id]);
+        DecorationMessage::deleteAll(['decoration_add_id'=>$id]);
+        return Json::encode([
+           'code' => 200,
+            'msg' => 'OK'
+        ]);
+    }
+
+
     /**
      * decoration edit
      * @return string
