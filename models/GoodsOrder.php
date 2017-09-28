@@ -1795,18 +1795,20 @@ class GoodsOrder extends ActiveRecord
         return $where;
     }
 
-    /**余额支付
+    /**
+     * 余额支付
      * @param $postData
      * @param $user
      * @return int
      */
-  public  static  function  orderBalanceSub($postData,$user){
+    public  static  function  orderBalanceSub($postData,$user){
         if(!is_array($postData['list']))
         {
             $code=1000;
             return $code;
         }
         $orders=$postData['list'];
+
         if ($postData['total_amount']> $user->availableamount){
             $code=1033;
             return $code;
@@ -1879,6 +1881,7 @@ class GoodsOrder extends ActiveRecord
         $code=200;
         return $code;
     }
+
 
 
     /**
@@ -2009,7 +2012,7 @@ class GoodsOrder extends ActiveRecord
      * @param $arr
      * @return mixed
      */
-    public static function  findOrderData($arr)
+   public static function  findOrderData($arr)
     {
         foreach ($arr as $k=>$v){
             if ($arr[$k]['status']=='未付款'){
@@ -2040,7 +2043,6 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
             $arr[$k]['freight']=self::switchMoney($arr[$k]['freight']*0.01);
             $arr[$k]['shop_name']=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one()->nickname;
-
             $arr_list=[];
             $arr_list['goods_name']=$arr[$k]['goods_name'];
             $arr_list['goods_price']=$arr[$k]['goods_price'];
@@ -2072,6 +2074,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $arr;
     }
+
 
     /**
      * @param $data
@@ -2114,7 +2117,6 @@ class GoodsOrder extends ActiveRecord
                         if ($arr[$k]['unusual']=='申请退款'){
                             $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
                         }
-
                      }
                 break;
                 case  self::ORDER_TYPE_DESC_CANCEL:
@@ -2137,6 +2139,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $arr;
     }
+
 
     /**获取订单详情信息1
      * @param $postData

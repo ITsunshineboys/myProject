@@ -1611,14 +1611,13 @@ class OrderController extends Controller
         $page=$request->get('page','1');
         $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
         $role=$request->get('role','user');
-
         switch ($role){
             case 'user':
-               if ($type==GoodsOrder::ORDER_TYPE_ALL){
-                    $where ="a.user_id={$user->id} and role_id={$user->login_role_id}";
+                if ($type==GoodsOrder::ORDER_TYPE_ALL){
+                    $where ="a.user_id={$user->id} and role_id={$user->last_role_id_app}";
                 }else{
                     $where=GoodsOrder::GetTypeWhere($type);
-                    $where .=" and a.user_id={$user->id}  and role_id={$user->login_role_id}  and order_refer = 2";
+                    $where .=" and a.user_id={$user->id}  and role_id={$user->last_role_id_app}  and order_refer = 2";
                 }
                 break;
             case 'supplier':
@@ -1648,6 +1647,7 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
+
 
     /**
      * app端  商家获取订单列表
@@ -1704,7 +1704,7 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
+   /**
      * 余额支付
      * @return string
      */
