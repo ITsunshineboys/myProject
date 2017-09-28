@@ -1329,10 +1329,12 @@ class QuoteController extends Controller
             $columns = ['min_area','max_area','quantity','decoration_add_id'];
             $decoration_message->findByInsert($add,$columns);
         }
-//        if (isset($style)){
-//            $columns = ['quantity','style_id','decoration_add_id'];
-//            $decoration_message->findByInsert($style,$columns);
-//        }
+        if (isset($style)){
+            $add = sort($style);
+            var_dump($add);exit;
+            $columns = ['quantity','style_id','decoration_add_id'];
+            $decoration_message->findByInsert($add,$columns);
+        }
 //        if (isset($series)){
 //            $columns = ['quantity','series_id','decoration_add_id'];
 //            $decoration_message->findByInsert($series,$columns);
