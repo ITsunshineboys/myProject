@@ -575,24 +575,5 @@ class SupplieraccountController extends  Controller{
 
         ]);
     }
-    public function actionView(){
-        var_dump(Supplier::find()->asArray()->select('pay_password')->where(['id'=>81])->one());
-    }
-    public function actionTest(){
 
-        $supplier=new UserBankInfo();
-        $supplier->uid=7;
-       $supplier->role_id=6;
-       $supplier->log_id=1;
-       $res=$supplier->save(false);
-       $a= new BankinfoLog();
-       $a->bankname='工商银行';
-       $a->bankcard='61515454545454545451';
-       $a->bankbranch='成都工商银行';
-       $a->username='张大三';
-       $a->position='四川成都';
-       $a->create_time='15058454454';
-       $b=$a->save();
-       var_dump($res,$b);
-    }
 }
