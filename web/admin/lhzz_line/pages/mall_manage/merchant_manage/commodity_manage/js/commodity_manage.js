@@ -19,7 +19,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
     $scope.offline_reason = ''
     $scope.defaultreason_arr = ["分类系列或风格移除","商家下架","品牌下架","分类下架","闭店下架"];
     /*已上架列表单个下架原因*/
-    // console.log($stateParams.storeid)  /*目前商家ID默认传79 后期替换为该值*/
+    // console.log($stateParams.storeid)  /*目前商家ID默认传+$stateParams.storeid 后期替换为该值*/
 
 
 
@@ -444,7 +444,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params: {status: 2, supplier_id: 79,"sort[]": "online_time:3"}
+            params: {status: 2, supplier_id: +$stateParams.storeid,"sort[]": "online_time:3"}
         }).then(function (res) {
             $scope.onlinegoods = res.data.data.goods_list_admin.details;
             $scope.onpages = Math.ceil(res.data.data.goods_list_admin.total / 12); //分页数
@@ -465,7 +465,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         } else {
             $http({
                 method: "get",
-                params: {status: 2, supplier_id: 79, page: page},
+                params: {status: 2, supplier_id: +$stateParams.storeid, page: page},
                 url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
             }).then(function (response) {
                 $scope.onselPage = page;
@@ -562,7 +562,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params: {status: 2, supplier_id: 79, keyword: $scope.online_search}
+            params: {status: 2, supplier_id: +$stateParams.storeid, keyword: $scope.online_search}
         }).then(function (res) {
             $scope.onlinegoods = res.data.data.goods_list_admin.details;
         })
@@ -577,7 +577,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.onlinesold_desorder = false;
         $http({
             method: "get",
-            params: {status: 2, supplier_id: 79, "sort[]": "sold_number:4"},
+            params: {status: 2, supplier_id: +$stateParams.storeid, "sort[]": "sold_number:4"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.onlinegoods = response.data.data.goods_list_admin.details;
@@ -593,7 +593,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.onlinesold_desorder = true;
         $http({
             method: "get",
-            params: {status: 2, supplier_id: 79, "sort[]": "sold_number:3"},
+            params: {status: 2, supplier_id: +$stateParams.storeid, "sort[]": "sold_number:3"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.onlinegoods = response.data.data.goods_list_admin.details;
@@ -610,7 +610,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.onlinetime_desorder = false;
         $http({
             method: "get",
-            params: {status: 2, supplier_id: 79, "sort[]": "online_time:4"},
+            params: {status: 2, supplier_id: +$stateParams.storeid, "sort[]": "online_time:4"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.onlinegoods = response.data.data.goods_list_admin.details;
@@ -627,7 +627,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.onlinetime_desorder = true;
         $http({
             method: "get",
-            params: {status: 2, supplier_id: 79},
+            params: {status: 2, supplier_id: +$stateParams.storeid},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.onlinegoods = response.data.data.goods_list_admin.details;
@@ -647,7 +647,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
        $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params: {status: 0, supplier_id: 79, "sort[]": "offline_time:3",size:999}
+            params: {status: 0, supplier_id: +$stateParams.storeid, "sort[]": "offline_time:3",size:999}
         }).then((res) => {
             $scope.offilinegoods = res.data.data.goods_list_admin.details;
         })
@@ -748,7 +748,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params: {status: 0, supplier_id: 79, keyword: $scope.offline_search}
+            params: {status: 0, supplier_id: +$stateParams.storeid, keyword: $scope.offline_search}
         }).then(function (res) {
             $scope.offilinegoods = res.data.data.goods_list_admin.details;
         })
@@ -763,7 +763,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.offlinesold_desorder = true;
         $http({
             method: "get",
-            params: {status: 0, supplier_id: 79, "sort[]": "sold_number:3"},
+            params: {status: 0, supplier_id: +$stateParams.storeid, "sort[]": "sold_number:3"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.offilinegoods = response.data.data.goods_list_admin.details;
@@ -779,7 +779,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.offlinesold_desorder = false;
         $http({
             method: "get",
-            params: {status: 0, supplier_id: 79, "sort[]": "sold_number:4"},
+            params: {status: 0, supplier_id: +$stateParams.storeid, "sort[]": "sold_number:4"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             console.log(response)
@@ -797,7 +797,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.offlinetime_desorder = true;
         $http({
             method: "get",
-            params: {status: 0, supplier_id: 79, "sort[]": "offline_time:3"},
+            params: {status: 0, supplier_id: +$stateParams.storeid, "sort[]": "offline_time:3"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.offilinegoods = response.data.data.goods_list_admin.details;
@@ -813,7 +813,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.offlinetime_desorder = false;
         $http({
             method: "get",
-            params: {status: 0, supplier_id: 79, "sort[]": "offline_time:4"},
+            params: {status: 0, supplier_id: +$stateParams.storeid, "sort[]": "offline_time:4"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.offilinegoods = response.data.data.goods_list_admin.details;
@@ -854,7 +854,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params: {status: 1, supplier_id: 79,create_time:4}
+            params: {status: 1, supplier_id: +$stateParams.storeid,create_time:4}
         }).then(function (res) {
             $scope.waitgoods = res.data.data.goods_list_admin.details;
 
@@ -894,7 +894,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method:"get",
             url:"http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params:{status: 1, supplier_id: 79, "sort[]": "sold_number:3"}
+            params:{status: 1, supplier_id: +$stateParams.storeid, "sort[]": "sold_number:3"}
         }).then(function (res) {
             $scope.waitgoods = res.data.data.goods_list_admin.details;
         })
@@ -910,7 +910,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method:"get",
             url:"http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params:{status: 1, supplier_id: 79, "sort[]": "sold_number:4"}
+            params:{status: 1, supplier_id: +$stateParams.storeid, "sort[]": "sold_number:4"}
         }).then(function (res) {
             $scope.waitgoods = res.data.data.goods_list_admin.details;
         })
@@ -929,7 +929,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method:"get",
             url:"http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params:{status: 1, supplier_id: 79, "sort[]": "publish_time:3"}
+            params:{status: 1, supplier_id: +$stateParams.storeid, "sort[]": "publish_time:3"}
         }).then(function (res) {
             $scope.waitgoods = res.data.data.goods_list_admin.details;
         })
@@ -945,7 +945,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method:"get",
             url:"http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params:{status: 1, supplier_id: 79, "sort[]": "publish_time:4"}
+            params:{status: 1, supplier_id: +$stateParams.storeid, "sort[]": "publish_time:4"}
         }).then(function (res) {
             $scope.waitgoods = res.data.data.goods_list_admin.details;
         })
@@ -962,7 +962,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params: {status: 1, supplier_id: 79, keyword: $scope.wait_search}
+            params: {status: 1, supplier_id: +$stateParams.storeid, keyword: $scope.wait_search}
         }).then(function (res) {
             $scope.waitgoods = res.data.data.goods_list_admin.details;
         })
@@ -1043,7 +1043,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params: {status: 3, supplier_id: 79,"sort[]": "delete_time:3"}
+            params: {status: 3, supplier_id: +$stateParams.storeid,"sort[]": "delete_time:3"}
         }).then(function (res) {
             $scope.deletedgoods = res.data.data.goods_list_admin.details;
         })
@@ -1054,7 +1054,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
-            params: {status: 3, supplier_id: 79, keyword: $scope.deleted_search}
+            params: {status: 3, supplier_id: +$stateParams.storeid, keyword: $scope.deleted_search}
         }).then(function (res) {
             $scope.deletedgoods = res.data.data.goods_list_admin.details;
         })
@@ -1066,7 +1066,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.deletedsold_desorder = true;
         $http({
             method: "get",
-            params: {status: 3, supplier_id: 79, "sort[]": "sold_number:3"},
+            params: {status: 3, supplier_id: +$stateParams.storeid, "sort[]": "sold_number:3"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.deletedgoods = response.data.data.goods_list_admin.details;
@@ -1079,7 +1079,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.deletedsold_desorder = false;
         $http({
             method: "get",
-            params: {status: 3, supplier_id: 79, "sort[]": "sold_number:4"},
+            params: {status: 3, supplier_id: +$stateParams.storeid, "sort[]": "sold_number:4"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.deletedgoods = response.data.data.goods_list_admin.details;
@@ -1094,7 +1094,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.deletedtime_desorder = true;
         $http({
             method: "get",
-            params: {status: 3, supplier_id: 79, "sort[]": "delete_time:3"},
+            params: {status: 3, supplier_id: +$stateParams.storeid, "sort[]": "delete_time:3"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.deletedgoods = response.data.data.goods_list_admin.details;
@@ -1107,7 +1107,7 @@ commodity_manage.controller("commodity_manage_ctrl", function ($scope, $http, $s
         $scope.deletedtime_desorder = false;
         $http({
             method: "get",
-            params: {status: 3, supplier_id: 79, "sort[]": "delete_time:4"},
+            params: {status: 3, supplier_id: +$stateParams.storeid, "sort[]": "delete_time:4"},
             url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
         }).then(function (response) {
             $scope.deletedgoods = response.data.data.goods_list_admin.details;
