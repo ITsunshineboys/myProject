@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
 
 class DecorationMessage extends ActiveRecord
 {
+    const TABLE_NAME = 'decoration_message';
     const FIELDS_ADMIN = [
             'decoration_add_id',
             'quantity',
@@ -25,5 +26,19 @@ class DecorationMessage extends ActiveRecord
     public static function tableName()
     {
         return 'decoration_message';
+    }
+
+    public static function findByInsert($rows,$columns)
+    {
+        $row = \Yii::$app->db->createCommand();
+        return $row->batchInsert(self::TABLE_NAME,$columns,$rows)->execute();
+    }
+
+    public static function findByUpdate($row,$id)
+    {
+        $row = \Yii::$app->db->createCommand();
+        return $row->update(self::TABLE_NAME,[
+            'quantity'=>$row
+        ],'id',$id)->execute();
     }
 }

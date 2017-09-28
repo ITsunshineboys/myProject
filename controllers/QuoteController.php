@@ -1299,68 +1299,28 @@ class QuoteController extends Controller
         }
         $id = $decoration_add->attributes['id'];
         $decoration_message = new DecorationMessage();
-        foreach ($post['add'] as $one_post){
-            if (isset($one_post['min_area'])){
-                $decoration_message->decoration_add_id = $id;
-                $decoration_message->min_area = $one_post['min_area'];
-                $decoration_message->max_area = $one_post['min_area'];
-                $decoration_message->quantity = $one_post['quantity'];
-                if (!$decoration_message->validate()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'=>\Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-
-                if (!$decoration_message->save()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'=>\Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
+        foreach ($post['add'] as $k => &$one_post){
+            $one_post ['id'] = $id;
+            if (isset($one_post['min_area'])) {
+                $add_decoration [] = $one_post;
             }elseif (isset($one_post['style_id'])) {
-                $decoration_message->decoration_add_id = $id;
-                $decoration_message->quantity = $one_post['quantity'];
-                $decoration_message->style_id = $one_post['style'];
-                if (!$decoration_message->validate()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'=>\Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-
-                if (!$decoration_message->save()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'=>\Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-            }elseif (isset($one_post['series_id'])){
-                $decoration_message->decoration_add_id = $id;
-                $decoration_message->quantity = $one_post['quantity'];
-                $decoration_message->series_id = $one_post['series'];
-                if (!$decoration_message->validate()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'=>\Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-
-                if (!$decoration_message->save()){
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'=>\Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
+                $style[] = $one_post;
+            }elseif (isset($one_post['series_id'])) {
+                $series[] = $one_post;
             }
         }
-
+        if (isset($add_decoration)){
+            $columns = ['min_area','max_area','quantity','decoration_add_id'];
+            $decoration_message->findByInsert($add_decoration,$columns);
+        }
+        if (isset($style)){
+            $columns = ['quantity','style_id','decoration_add_id'];
+            $decoration_message->findByInsert($style,$columns);
+        }
+        if (isset($series)){
+            $columns = ['quantity','series_id','decoration_add_id'];
+            $decoration_message->findByInsert($series,$columns);
+        }
         return Json::encode([
            'code' => 200,
             'msg' => 'ok',
@@ -1394,22 +1354,7 @@ class QuoteController extends Controller
         }
 
         foreach ($post['add'] as $one_post){
-            $decoration_message =DecorationMessage::findOne($one_post['id']);
-            $decoration_message->quantity  = $one_post['quantity'];
-            if (!$decoration_message->validate()){
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'=>\Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-            if (!$decoration_message->save()){
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'=>\Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+            DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
         }
 
         return Json::encode([
@@ -1478,10 +1423,10 @@ class QuoteController extends Controller
             }
         }
         if (isset($one_title)){
-            $columns = "'pid','title',level";
+            $columns = ['pid','title','level'];
             $points->findByInsert($one_title,$columns);
         } elseif (isset($two_title)){
-            $columns = "'pid','title','count','level'";
+            $columns = ['pid','title','count','level'];
             $points->findByInsert($two_title,$columns);
         }
 
