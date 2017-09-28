@@ -1080,7 +1080,6 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-
             //获取商品信息
             $goods_name=$order_information['goods_name'];
             $goods_id=$order_information['goods_id'];
@@ -1095,9 +1094,7 @@ class OrderController extends Controller
                    'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-            
             //获取收货详情
-
             $receive_details['consignee']=$order_information['consignee'];
             $receive_details['consignee_mobile']=$order_information['consignee_mobile'];
             $receive_details['district']=LogisticsDistrict::getdistrict($order_information['district_code']);
@@ -1115,7 +1112,7 @@ class OrderController extends Controller
                     $receive_details['invoice_header_type']='公司';
                     break;
             }
-              $goods_data=[];
+                 $goods_data=[];
               if ($order_information['goods_name']=='+'){
                   $goods_data['goods_name']='';
               }else{
