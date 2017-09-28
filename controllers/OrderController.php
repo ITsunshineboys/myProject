@@ -675,7 +675,7 @@ class OrderController extends Controller
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $where='';
         if($keyword){
-            $where .=" z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
+            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
         }
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -757,7 +757,7 @@ class OrderController extends Controller
         $type=trim($request->get('type','all'));
             $where=GoodsOrder::GetTypeWhere($type);
             if($keyword){
-                $where .=" z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
             }
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -1815,7 +1815,7 @@ class OrderController extends Controller
     }
 
 
-    /**
+   /**
      * get order comment
      * @return int|string
      */
@@ -1833,16 +1833,27 @@ class OrderController extends Controller
             $code=1000;
             return $code;
         }
-        $order=OrderGoods::find()->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])->one();
+        $order=OrderGoods::find()
+            ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
+            ->one();
         if (!$order){
             $code=1000;
             return $code;
         }
-        $comment=GoodsComment::find()->where(['id'=>$order['comment_id']])->asArray()->one();
-        $comment['image']=CommentImage::find()
-            ->select('image')
-            ->where(['comment_id'=>$order['comment_id']])
-            ->all();
+        $comment=GoodsComment::find()
+            ->where(['id'=>$order['comment_id']])
+            ->asArray()
+            ->one();
+        foreach ($comment as &$list)
+        {
+                $list['create_time']=date('Y-m-d H:i',$list['create_time']);
+        }
+        if ($comment){
+            $comment['image']=CommentImage::find()
+                ->select('image')
+                ->where(['comment_id'=>$order['comment_id']])
+                ->all();
+        }
         $code=200;
         return Json::encode([
             'code'=>$code,

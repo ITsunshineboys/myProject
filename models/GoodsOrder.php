@@ -100,7 +100,8 @@ class GoodsOrder extends ActiveRecord
         'a.return_insurance',
         'a.consignee',
         'a.consignee_mobile',
-        'a.order_refer'
+        'a.order_refer',
+        'a.role_id'
     ];
     const FIELDS_USERORDER_ADMIN = [
         'a.supplier_id',
@@ -375,6 +376,27 @@ class GoodsOrder extends ActiveRecord
                     break;
                 case 2:
                     $arr[$k]['mobile']=User::find()->select('mobile')->where(['id'=>$arr[$k]['user_id']])->one()->mobile;
+                    break;
+            }
+            switch ($arr[$k]['role_id'])
+            {
+                case 7:
+                    $arr[$k]['role_id']='平台价';
+                    break;
+                case 6:
+                    $arr[$k]['role_id']='供应商价格';
+                    break;
+                case 5:
+                    $arr[$k]['role_id']='装修公司价';
+                    break;
+                case 4:
+                    $arr[$k]['role_id']='项目经理价';
+                    break;
+                case 3:
+                    $arr[$k]['role_id']='设计师价';
+                    break;
+                case 2:
+                    $arr[$k]['role_id']='工人价';
                     break;
             }
             unset($arr[$k]['consignee_mobile']);
