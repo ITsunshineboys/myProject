@@ -1120,7 +1120,7 @@ class GoodsOrder extends ActiveRecord
      * @param $data
      * @return mixed
      */
-    public static function  getorderstatus($data)
+   public static function  getorderstatus($data)
     {
         foreach ($data as $k =>$v){
             $data[$k]['create_time']=date('Y-m-d H:i',$data[$k]['create_time']);
@@ -1175,11 +1175,10 @@ class GoodsOrder extends ActiveRecord
             $data[$k]['complete_time']=0;
             $data[$k]['RemainingTime']=0;
             if ($data[$k]['status']=='待收货'){
-                   $waybillnumber=Express::find()
+                $waybillnumber=Express::find()
                        ->select('waybillnumber')
                        ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
-                       ->asArray()
-                       ->one()['waybillnumber'];
+                       ->one()->waybillnumber;
                     if ($waybillnumber)
                     {
                         $express=Express::findByWayBillNumber($waybillnumber);
@@ -1208,7 +1207,6 @@ class GoodsOrder extends ActiveRecord
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
                     ->asArray()
                     ->one()['waybillnumber'];
-
                 $express=Express::findByWayBillNumber($waybillnumber);
                 if (!$express){
                     $data[$k]['send_time']=0;
