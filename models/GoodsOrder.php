@@ -708,12 +708,12 @@ class GoodsOrder extends ActiveRecord
         $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
         return $data;
     }
-    /**
+     /**
      * @param $order_no
      * @param $sku
      * @return array|null
      */
-    public function Getorderinformation($order_no,$sku){
+    public static function Getorderinformation($order_no,$sku){
         $select='a.pay_name,
                z.order_status,
                z.customer_service,
@@ -760,7 +760,7 @@ class GoodsOrder extends ActiveRecord
                a.role_id';
         $array=self::getorderlist()
             ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
-              ->select($select)
+            ->select($select)
             ->where(['a.order_no'=>$order_no,'z.sku'=>$sku])
             ->all();
         $arr=self::getorderstatus($array);
@@ -774,8 +774,9 @@ class GoodsOrder extends ActiveRecord
             $output['return_insurance']=self::switchMoney($arr[$k]['return_insurance']);
             $output['freight']=self::switchMoney($arr[$k]['freight']*0.01);
             $output['address_id']=$arr[$k]['address_id'];
-            $output['role_id']=$arr[$k]['role_id'];
             $output['invoice_id']=$arr[$k]['invoice_id'];
+            $output['role_id']=$arr[$k]['role_id'];
+            $output['goods_number']=$arr[$k]['goods_number'];
             $output['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
             $output['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
             $output['market_price']=self::switchMoney($arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
@@ -792,6 +793,7 @@ class GoodsOrder extends ActiveRecord
             $output['goods_name']=$arr[$k]['goods_name'];
             $output['waybillnumber']=$arr[$k]['waybillnumber'];
             $output['waybillname']=$arr[$k]['waybillname'];
+
             if (!empty($output['waybillnumber']) && !empty($output['waybillnumber']))
             {
                 $output['shipping_way']=$output['waybillname'].'('.$output['waybillnumber'].')';
@@ -837,7 +839,7 @@ class GoodsOrder extends ActiveRecord
         $output['goods_num']=$goods_num;
         if ($output['status']=='未付款'){
             $time=time();
-            $pay_term=(strtotime($output['create_time'])+1800);
+            $pay_term=(strtotime($output['create_time'])+24*60*60);
             if (($pay_term-$time)<0){
                 $res=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
                 $output['pay_term']=0;
@@ -941,17 +943,21 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array
      */
-    public function Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
+    public  static function Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
             $goods=array();
             $goods['goods_name']=$goods_name;
             $goods['goods_id']=$goods_id;
             $attr_id=explode(',',$goods_attr_id);
             $goods['attr']=array();
             foreach($attr_id AS $key =>$val){
-                $goods['attr'][$key]=(new Query())->select('name,value')->from('goods_attr')->where(['id'=>$attr_id[$key]])->one();
+                $goods['attr'][$key]=GoodsAttr::find()
+                    ->select('name,value')
+                    ->where(['id'=>$attr_id[$key]])
+                    ->asArray()
+                    ->one();
 
             }
-        return $goods;
+            return $goods;
     }
 
   /**

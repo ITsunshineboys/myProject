@@ -1056,11 +1056,11 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
+     /**
      * 商家后台获取订单详情
      * @return string
      */
-   public function actionGetsupplierorderdetails(){
+    public function actionGetsupplierorderdetails(){
             $request=Yii::$app->request;
             $order_no=trim($request->post('order_no',''));
             $sku=trim($request->post('sku',''));
@@ -1072,7 +1072,7 @@ class OrderController extends Controller
                 ]);
             }
             //获取订单信息
-            $order_information=(new GoodsOrder())->Getorderinformation($order_no,$sku);
+            $order_information=GoodsOrder::Getorderinformation($order_no,$sku);
             if (!$order_information) {
                 $code = 500;
                 return Json::encode([
@@ -1086,7 +1086,7 @@ class OrderController extends Controller
             $goods_attr_id=$order_information['goods_attr_id'];
             $order_no=$order_information['order_no'];
             $sku=explode('+',$order_information['sku']);
-            $ordergoodsinformation=(new GoodsOrder())->Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
+            $ordergoodsinformation=GoodsOrder::Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
             if (!$ordergoodsinformation){
                 $code = 500;
                return Json::encode([
@@ -1144,6 +1144,7 @@ class OrderController extends Controller
                         break;
                 }
               $goods_data['goods_price']=$order_information['goods_price'];
+              $goods_data['goods_number']=$order_information['goods_number'];
               $goods_data['freight']=$order_information['freight'];
               $goods_data['return_insurance']=$order_information['return_insurance'];
               $goods_data['supplier_price']=$order_information['supplier_price'];
@@ -1152,6 +1153,7 @@ class OrderController extends Controller
               if ($order_information['shipping_type']==1){
                   $goods_data['shipping_way']='送货上门';
               }
+              $goods_data['pay_name']=$order_information['pay_name'];
               if ($order_information['status']=='未付款'){
                   $goods_data['pay_term']=$order_information['pay_term'];
               }else{
@@ -1166,13 +1168,14 @@ class OrderController extends Controller
                     'goods_value'=>$ordergoodsinformation,
                     'receive_details'=>$receive_details
                 );
-                $code = 200;
-                return Json::encode([
+              $code = 200;
+              return Json::encode([
                     'code' => $code,
                     'msg' => 'ok',
                     'data' =>$data
-                ]);
+              ]);
     }
+
 
     /**
      * 去发货--商家后台
