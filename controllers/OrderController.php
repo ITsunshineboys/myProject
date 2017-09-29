@@ -728,11 +728,11 @@ class OrderController extends Controller
             'data'=>$order_type_list
         ]);
     }
-    /**
-     * [actionFindOrderList description]
-     * @return [type] [description]
+   /**
+     * find order list by admin user
+     * @return string
      */
-   public function actionFindOrderList(){
+    public function actionFindOrderList(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -777,7 +777,6 @@ class OrderController extends Controller
                 $startTime = explode(' ', $startTime)[0];
                 $endTime = explode(' ', $endTime)[0];
             }
-
         if($type=='all')
         {
             if($supplier_id)
@@ -792,7 +791,6 @@ class OrderController extends Controller
                 }
                 $where .=" a.supplier_id={$supplier_id}";
             }
-
         }else{
             if($supplier_id)
             {
@@ -807,23 +805,19 @@ class OrderController extends Controller
                 $where .=" and a.supplier_id={$supplier_id}";
             }
         }
-        if ($type=='all')
+        if ($type=='all' && !$supplier_id)
         {
-            if (!$supplier_id)
-            {
                 if($keyword){
                     $where .="  z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
                 }
-            }
         }else{
             if($keyword){
                 $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
             }
         }
-            if ($type=='all')
+            if ($type=='all' && !$supplier_id || !$keyword)
             {
-                if (!$supplier_id)
-                {
+
                     if ($startTime) {
                         $startTime = (int)strtotime($startTime);
                         $startTime && $where .= "a.create_time >= {$startTime}";
@@ -832,7 +826,7 @@ class OrderController extends Controller
                         $endTime = (int)strtotime($endTime);
                         $endTime && $where .= " and a.create_time <= {$endTime}";
                     }
-                }
+
             }else
                 {
                 if ($startTime) {
@@ -857,6 +851,7 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
+
 
     /**
      *大后台之查看订单详情
