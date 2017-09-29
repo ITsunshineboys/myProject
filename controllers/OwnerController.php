@@ -210,7 +210,6 @@ class OwnerController extends Controller
             $list_effect = Effect::find()->where(['id' => $post['id']])->one();
             $list_effect_picture = EffectPicture::find()->where(['id' => $list_effect['id']])->all();
             $effect = Effect::districtSearch($list_effect['toponymy']);
-            $id = [];
             foreach ($effect as $one_effect) {
                 $id [] = $one_effect['id'];
             }
@@ -222,7 +221,6 @@ class OwnerController extends Controller
                 $list_effect = null;
                 $list_effect_picture = null;
                 $effect = Effect::districtSearch($post['str']);
-                $id = [];
                 foreach ($effect as $one_effect) {
                     $id = $one_effect['id'];
                 }
@@ -282,7 +280,8 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         //人工价格
         $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
+        $select = 'quantity,worker_kind_details';
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current'],$select);
 
         //      点位 和 材料查询
         $points = Points::weakPoints();

@@ -22,7 +22,7 @@ class LaborCost extends ActiveRecord
         'worker_kind_details'
     ];
     const LABOR_COST ='labor_cost';
-
+    const LABOR_LEVEL = '白银';
     const WORKER_KIND_DETAILS = [
             'weak'=> '弱电',
             'strong' => '强电',
@@ -51,7 +51,7 @@ class LaborCost extends ActiveRecord
      * @param string $rank
      * @return array|ActiveRecord[]
      */
-    public static function univalence($arr,$jobs,$rank = '白银')
+    public static function univalence($arr,$jobs,$rank = self::LABOR_LEVEL)
     {
         $labors = self::find()
             ->asArray()
@@ -67,7 +67,7 @@ class LaborCost extends ActiveRecord
      * @param string $rank
      * @return array|null|ActiveRecord
      */
-    public static function profession($arr,$craft,$rank = '白银')
+    public static function profession($arr,$craft,$rank = self::LABOR_LEVEL)
     {
         $labors = self::find()
             ->asArray()

@@ -35,11 +35,11 @@ class WorkerCraftNorm extends ActiveRecord
      * @param $details
      * @return array|null|ActiveRecord
      */
-    public static function findByLaborCostId($id,$details)
+    public static function findByLaborCostId($id,$details,$select =[])
     {
         return self::find()
             ->asArray()
-            ->select('quantity,worker_kind_details')
+            ->select($select)
             ->where(['and',['labor_cost_id'=>$id],['worker_kind_details'=>$details]])
             ->one();
     }
