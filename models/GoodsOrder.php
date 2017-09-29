@@ -1426,11 +1426,6 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-   /**
-     * @param $sort_money
-     * @param $sort_time
-     * @return string
-     */
     public static  function sort_lhzz_order($sort_money,$sort_time){
         if ($sort_time==1 && $sort_money==1){
             $sort='a.create_time asc,a.amount_order asc';
