@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use Yii;
+use yii\data\Pagination;
 use yii\db\Query;
 
 /**
@@ -64,11 +66,89 @@ class WorkerWorks extends \yii\db\ActiveRecord
             ->andWhere(['is_old'=>1])
             ->orderBy('wo.end_time Desc')
             ->one();
+        if(!$query){
+            return null;
+        }
         $query['start_time']=date('Y-m-d',$query['start_time']);
         $query['end_time']=date('Y-m-d',$query['end_time']);
-       if(!$query){
+
+       return $query;
+    }
+    /**
+     * 获取装修前图片
+     * @param $worker_order_no
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function beforedecorationimgs($worker_order_no){
+        $data=WorkerOrderImg::find()
+            ->select('order_img')
+            ->where(['worker_order_no'=>$worker_order_no])
+            ->asArray()
+            ->all();
+        return $data;
+    }
+    /**
+     * 获取装修中图片
+     * @param $works_id
+     * @return array|string
+     */
+    public static function Indecorationimgs($works_id){
+        $works_detail = WorkerWorksDetail::find()
+            ->where(['works_id' => $works_id])
+            ->one();
+
+        if ($works_detail) {
+            $img_ids = $works_detail->img_ids;
+
+            if ($img_ids) {
+                $ids = explode(',', $img_ids);
+               foreach ($ids as $id){
+                   $data[]= WorkResultImg::find()->select('result_img')->asArray()->where(['id'=>$id])->one();
+               }
+            }
+        } else {
+            $data = '';
+        }
+        return $data;
+    }
+    /**
+     * 作品详情
+     * @param $works_id
+     *@return null
+     */
+    public static function GetWorksDetail($works_id){
+
+       $array=self::find()
+           ->asArray()
+           ->where(['id'=>$works_id])
+           ->one();
+       if(!$array){
            return null;
        }
-       return $query;
+        $time=WorkerOrder::find()
+            ->asArray()
+            ->select('start_time,end_time')
+            ->where(['order_no'=>$array['order_no']])
+            ->one();
+        $time['start_time']=date('Y-m-d',$time['start_time']);
+        $time['end_time']=date('Y-m-d',$time['end_time']);
+
+        $data['works']=array_merge($time,$array);
+        //装修前---下单用户上传的
+        $before_decoration_imgs=self::beforedecorationimgs($array['order_no']);
+        //装修中---工人上传的 截取中间日期
+        //todo 装修中图片 需要好好理下;
+        $In_decoration_imgs=self::Indecorationimgs($works_id);
+        if($before_decoration_imgs){
+            $data['In_decoration_imgs']=$In_decoration_imgs;
+            $data['before_decoration_imgs']=$before_decoration_imgs;
+
+        }else{
+            $data['In_decoration_imgs']='';
+            $data['before_decoration_imgs']='';
+
+        }
+
+        return $data;
     }
 }

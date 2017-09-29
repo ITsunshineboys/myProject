@@ -880,6 +880,22 @@ class WorkerController extends Controller
      */
     public function actionGetWorksDetail()
     {
+        $code=1000;
+        $works_id=trim(\Yii::$app->request->get('works_id'));
+        if(!$works_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $page = (int)\Yii::$app->request->get('page', 1);
+        $page_size = (int)\Yii::$app->request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
+            $data=WorkerWorks::GetWorksDetail($works_id,$page,$page_size);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
 
     }
 

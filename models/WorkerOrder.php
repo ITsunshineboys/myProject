@@ -982,7 +982,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $worker_order = WorkerOrder::find()
                 ->where(['order_no' => $v['order_no'], 'is_old' => self::IS_NEW])
                 ->one();
-
+            if(!$worker_order){
+                return null;
+            }
             $v['start_time'] = date('Y-n-j', $worker_order->start_time);
             $v['end_time'] = date('Y-n-j', $worker_order->end_time);
         }
