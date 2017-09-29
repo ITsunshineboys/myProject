@@ -869,7 +869,7 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
 
-    /**
+   /**
      * 去发货
      * @param $sku
      * @param $order_no
@@ -884,9 +884,15 @@ class GoodsOrder extends ActiveRecord
             $trans = \Yii::$app->db->beginTransaction();
             $e=1;
             try {
-                \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
-
-                $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
+                $res1=\Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
+                if(!$res1)
+                {
+                    $trans->rollBack();
+                }
+                $express=Express::find()
+                    ->select('waybillnumber')
+                    ->where(['sku'=>$sku,'order_no'=>$order_no])
+                    ->one();
                 if ($express){
                     \Yii::$app->db->createCommand()->update(self::EXPRESS, [
                         'waybillname'      =>'送货上门',
@@ -908,16 +914,19 @@ class GoodsOrder extends ActiveRecord
             $trans = \Yii::$app->db->beginTransaction();
             $e=1;
             try {
-                $express=Express::find()->select('waybillnumber')->where(['sku'=>$sku,'order_no'=>$order_no])->one();
-                \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
+                $express=Express::find()
+                    ->select('waybillnumber')
+                    ->where(['sku'=>$sku,'order_no'=>$order_no])
+                    ->one();
+                \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>0,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
                 if ($express){
-                    \Yii::$app->db->createCommand()->update(EXPRESS, [
+                    \Yii::$app->db->createCommand()->update(self::EXPRESS, [
 
                         'waybillname'      =>$waybillname,
                         'waybillnumber'  =>$waybillnumber,
                         'create_time'=>$create_time],'sku='.$sku.' and order_no='.$order_no)->execute();
                 }else{
-                    \Yii::$app->db->createCommand()->insert('express',[
+                    \Yii::$app->db->createCommand()->insert(self::EXPRESS,[
                         'sku'    => $sku,
                         'order_no' =>$order_no,
                         'waybillname'      =>$waybillname,
@@ -932,7 +941,6 @@ class GoodsOrder extends ActiveRecord
             return $e;
         }
     }
-
 
     /**
      * 获取商品信息
@@ -1115,12 +1123,12 @@ class GoodsOrder extends ActiveRecord
         return $res;
 
     }
-    /**
+   /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
      */
-   public static function  getorderstatus($data)
+    public static function  getorderstatus($data)
     {
         foreach ($data as $k =>$v){
             $data[$k]['create_time']=date('Y-m-d H:i',$data[$k]['create_time']);
@@ -1215,6 +1223,7 @@ class GoodsOrder extends ActiveRecord
                 }else{
                     $data[$k]['send_time']=$express->create_time;
                     $data[$k]['RemainingTime']=Express::findRemainingTime($express);
+                    echo $data[$k]['RemainingTime'];exit;
                     $data[$k]['complete_time']=$express->receive_time;
                 }
             };
