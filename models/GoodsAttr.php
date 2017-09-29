@@ -324,7 +324,6 @@ class GoodsAttr extends ActiveRecord
         } else {
             $str_id = $goods_id;
         }
-
         $db = Yii::$app->db;
         $sql = "SELECT goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value FROM goods_attr LEFT JOIN goods ON goods_attr.goods_id = goods. id LEFT JOIN goods_category ON goods.category_id = goods_category.id WHERE goods_id IN (" . $str_id . ")";
         $standard = $db->createCommand($sql)->queryAll();

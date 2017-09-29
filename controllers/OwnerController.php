@@ -279,21 +279,15 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
+        $_select = 'id,univalence,worker_kind';
+        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber'],$_select);
         $select = 'quantity,worker_kind_details';
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current'],$select);
 
         //      点位 和 材料查询
-        $points = Points::weakPoints();
-        $weak_current_all = [];
-        foreach ($points as $v => $k) {
-            if ($k['weak_current_points'] !== 0) {
-                $weak_current_all[$k['place']] = $k['weak_current_points'];
-            }
-        }
-        $sitting_room = $weak_current_all['客餐厅'] * $post['hall'];
-        $secondary_bedroom = $weak_current_all['卧室'] * $post['bedroom'];
-        $weak_points = $sitting_room + $secondary_bedroom;
+        $points_select = 'count';
+        $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
+        $points = Points::findByOne($points_select,$points_where);
 
         //查询弱电所需要材料
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL);
@@ -301,15 +295,17 @@ class OwnerController extends Controller
         $weak_current = BasisDecorationService::judge($judge, $post);
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'],$post['city']);
+        $craft_select = 'id,material,project_details';
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'],$post['city'],$craft_select);
 
         //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_points,$workers,$worker_kind_details);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers,$worker_kind_details);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
-        $material_price = BasisDecorationService::quantity($weak_points, $weak_current, $craft);
+        $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
+        var_dump($material);exit;
 
         //添加材料
         $add_price_area = DecorationAdd::AllArea(self::PROJECT_DETAILS['weak_current'], $post['area'], $post['city']);

@@ -32,10 +32,11 @@ class EngineeringStandardCraft  extends ActiveRecord
      * @param int $district
      * @return array|bool|ActiveRecord[]
      */
-    public static function findByAll($project='',$district =510100)
+    public static function findByAll($project='',$district =510100,$select=[])
     {
         return self::find()
             ->asArray()
+            ->select($select)
             ->where(['and', ['district_code' => $district], ['project' => $project]])
             ->all();
     }

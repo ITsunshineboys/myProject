@@ -38,6 +38,15 @@ class Points extends ActiveRecord
             ->all();
     }
 
+    public static function findByOne($select =[],$where = [])
+    {
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where($where)
+            ->one();
+    }
+
     public static function findByInsert($rows,$columns = [])
     {
         $row = \Yii::$app->db->createCommand();

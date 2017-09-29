@@ -67,10 +67,11 @@ class LaborCost extends ActiveRecord
      * @param string $rank
      * @return array|null|ActiveRecord
      */
-    public static function profession($arr,$craft,$rank = self::LABOR_LEVEL)
+    public static function profession($arr,$craft,$select = [],$rank = self::LABOR_LEVEL)
     {
         $labors = self::find()
             ->asArray()
+            ->select($select)
             ->where(['and',['city_code' => $arr],['worker_kind'=>$craft],['rank'=>$rank]])
             ->one();
         return $labors;
