@@ -186,8 +186,10 @@ class OwnerController extends Controller
     public function actionSeriesAndStyle()
     {
         $show['stairs_details'] = StairsDetails::findByAll();
-        $show['series'] = Series::findByAll();
-        $show['style'] = Style::findByAll();
+        $select = 'id,series,intro,theme';
+        $_select ='id,style,intro,theme,images';
+        $show['series'] = Series::findByAll($select);
+        $show['style'] = Style::findByAll($_select);
         return Json::encode([
             'code' => 200,
             'msg' => '成功',

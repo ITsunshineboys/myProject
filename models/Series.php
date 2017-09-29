@@ -36,11 +36,11 @@ class Series extends ActiveRecord
         return 'series';
     }
 
-    public static function findByAll()
+    public static function findByAll($select = [])
     {
         $series = self::find()
             ->asArray()
-            ->select("id,series,intro,theme")
+            ->select($select)
             ->where(['status'=>self::STATUS_ONLINE])
             ->orderBy(['id'=>SORT_ASC])
             ->all();
