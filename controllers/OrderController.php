@@ -728,7 +728,7 @@ class OrderController extends Controller
             'data'=>$order_type_list
         ]);
     }
-     /**
+   /**
      * find order list by admin user
      * @return string
      */
@@ -792,9 +792,7 @@ class OrderController extends Controller
                 }
                 $where .=" a.supplier_id={$supplier_id}";
             }
-            if($keyword){
-                $where .=" z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
-            }
+
         }else{
             if($supplier_id)
             {
@@ -808,19 +806,40 @@ class OrderController extends Controller
                 }
                 $where .=" and a.supplier_id={$supplier_id}";
             }
+        }
+        if ($type=='all')
+        {
+            if($keyword){
+                $where .=" z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+            }
+        }else{
             if($keyword){
                 $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
             }
         }
+            if ($type=='all')
+            {
+                    if ($startTime) {
+                        $startTime = (int)strtotime($startTime);
+                        $startTime && $where .= "create_time >= {$startTime}";
+                    }
+                    if ($endTime) {
+                        $endTime = (int)strtotime($endTime);
+                        $endTime && $where .= " create_time <= {$endTime}";
+                    }
+            }else
+                {
+                if ($startTime) {
+                    $startTime = (int)strtotime($startTime);
+                    $startTime && $where .= " and   create_time >= {$startTime}";
+                }
+                if ($endTime) {
+                    $endTime = (int)strtotime($endTime);
+                    $endTime && $where .= " and create_time <= {$endTime}";
+                }
+           }
 
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and   create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
+
         $sort_money=trim($request->get('sort_money',''));
         $sort_time=trim($request->get('sort_time',''));
         $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
@@ -832,7 +851,6 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
-
     /**
      *大后台之查看订单详情
      */
