@@ -1370,12 +1370,25 @@ class OrderController extends Controller
             ]);
         }
         $shipping_type=GoodsOrder::findshipping_type($order_no,$sku);
+        $express=Express::find()
+            ->select('waybillnumber,waybillname,create_time')
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->asArray()
+            ->one();
+        if (!$express)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         switch ($shipping_type){
             case 0:
-                $data=Express::Findexresslist($order_no,$sku);
-                if (is_numeric($data))
+                $list=Express::Findexresslist($order_no,$sku);
+                if (is_numeric($list))
                 {
-                    $code=$data;
+                    $code=$list;
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1383,13 +1396,18 @@ class OrderController extends Controller
                 }
                 break;
             case 1:
-                $data=Express::Findexpresslist_sendtohome($order_no,$sku);
+                $list=Express::Findexpresslist_sendtohome($order_no,$sku);
                 break;
         }
         return Json::encode([
             'code' => 200,
             'msg' =>'ok',
-            'data' =>  $data,
+            'data' => [
+                'list'=>$list,
+                'shipping_type'=>$shipping_type,
+                'waybillname'=>$express->waybillname,
+                'waybillnumber'=>$express->waybillnumber
+            ],
         ]);
     }
 
