@@ -728,11 +728,11 @@ class OrderController extends Controller
             'data'=>$order_type_list
         ]);
     }
-   /**
-     * find order list by admin user
-     * @return string
+    /**
+     * [actionFindOrderList description]
+     * @return [type] [description]
      */
-    public function actionFindOrderList(){
+   public function actionFindOrderList(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -809,16 +809,21 @@ class OrderController extends Controller
         }
         if ($type=='all')
         {
-            if($keyword){
-                $where .=" z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+            if (!$supplier_id)
+            {
+                if($keyword){
+                    $where .="  z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+                }
             }
         }else{
             if($keyword){
                 $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
             }
         }
-           if ($type=='all')
+            if ($type=='all')
             {
+                if (!$supplier_id)
+                {
                     if ($startTime) {
                         $startTime = (int)strtotime($startTime);
                         $startTime && $where .= "a.create_time >= {$startTime}";
@@ -827,6 +832,7 @@ class OrderController extends Controller
                         $endTime = (int)strtotime($endTime);
                         $endTime && $where .= " and a.create_time <= {$endTime}";
                     }
+                }
             }else
                 {
                 if ($startTime) {
@@ -851,6 +857,7 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
+
     /**
      *大后台之查看订单详情
      */
