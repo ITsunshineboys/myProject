@@ -728,7 +728,7 @@ class OrderController extends Controller
             'data'=>$order_type_list
         ]);
     }
-    /**
+     /**
      * find order list by admin user
      * @return string
      */
@@ -757,21 +757,9 @@ class OrderController extends Controller
         $type=trim($request->get('type','all'));
         $supplier_id=trim($request->get('supplier_id'));
         $where=GoodsOrder::GetTypeWhere($type);
-            if($supplier_id)
-            {
-                if(!is_numeric($supplier_id))
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $where .=" and a.supplier_id={$supplier_id}";
-            }
-            if($keyword){
-                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
-            }
+
+
+
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));
                 $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -790,9 +778,44 @@ class OrderController extends Controller
                 $endTime = explode(' ', $endTime)[0];
             }
 
+        if($type=='all')
+        {
+            if($supplier_id)
+            {
+                if(!is_numeric($supplier_id))
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $where .=" a.supplier_id={$supplier_id}";
+            }
+            if($keyword){
+                $where .=" z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+            }
+        }else{
+            if($supplier_id)
+            {
+                if(!is_numeric($supplier_id))
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $where .=" and a.supplier_id={$supplier_id}";
+            }
+            if($keyword){
+                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+            }
+        }
+
         if ($startTime) {
             $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
+            $startTime && $where .= " and   create_time >= {$startTime}";
         }
         if ($endTime) {
             $endTime = (int)strtotime($endTime);
