@@ -1223,7 +1223,6 @@ class GoodsOrder extends ActiveRecord
                 }else{
                     $data[$k]['send_time']=$express->create_time;
                     $data[$k]['RemainingTime']=Express::findRemainingTime($express);
-                    echo $data[$k]['RemainingTime'];exit;
                     $data[$k]['complete_time']=$express->receive_time;
                 }
             };
