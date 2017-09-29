@@ -817,25 +817,25 @@ class OrderController extends Controller
                 $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
             }
         }
-            if ($type=='all')
+           if ($type=='all')
             {
                     if ($startTime) {
                         $startTime = (int)strtotime($startTime);
-                        $startTime && $where .= "create_time >= {$startTime}";
+                        $startTime && $where .= "a.create_time >= {$startTime}";
                     }
                     if ($endTime) {
                         $endTime = (int)strtotime($endTime);
-                        $endTime && $where .= " and create_time <= {$endTime}";
+                        $endTime && $where .= " and a.create_time <= {$endTime}";
                     }
             }else
                 {
                 if ($startTime) {
                     $startTime = (int)strtotime($startTime);
-                    $startTime && $where .= " and   create_time >= {$startTime}";
+                    $startTime && $where .= " and   a.create_time >= {$startTime}";
                 }
                 if ($endTime) {
                     $endTime = (int)strtotime($endTime);
-                    $endTime && $where .= " and create_time <= {$endTime}";
+                    $endTime && $where .= " and a.create_time <= {$endTime}";
                 }
            }
 
