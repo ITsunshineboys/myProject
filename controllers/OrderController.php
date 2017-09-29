@@ -1910,23 +1910,36 @@ class OrderController extends Controller
         $postData=yii::$app->request->post();
         if (!array_key_exists('order_no',$postData) || ! array_key_exists('sku',$postData)){
             $code=1000;
-            return $code;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
         $order=OrderGoods::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
             ->one();
         if (!$order){
             $code=1000;
-            return $code;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
         $comment=GoodsComment::find()
             ->where(['id'=>$order['comment_id']])
             ->asArray()
             ->one();
-        foreach ($comment as &$list)
+        if(!$comment)
         {
-                $list['create_time']=date('Y-m-d H:i',$list['create_time']);
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
+
+        $comment['create_time']=date('Y-m-d H:i',0);
+
         if ($comment){
             $comment['image']=CommentImage::find()
                 ->select('image')
@@ -1940,6 +1953,7 @@ class OrderController extends Controller
             'data'=>$comment
         ]);
     }
+
 
     /**
      * @return string
