@@ -75,7 +75,7 @@ class GoodsOrder extends ActiveRecord
         self::ORDER_TYPE_DESC_CUSTOMER_SERVICE=>self::ORDER_TYPE_CUSTOMER_SERVICE,
         self::ORDER_TYPE_DESC_UNCOMMENT=>self::ORDER_TYPE_UNCOMMENT
     ];
-    const FIELDS_ORDERLIST_ADMIN = [
+   const FIELDS_ORDERLIST_ADMIN = [
         'a.order_no',
         'a.id',
         'z.customer_service',
@@ -101,6 +101,8 @@ class GoodsOrder extends ActiveRecord
         'a.consignee',
         'a.consignee_mobile',
         'a.order_refer',
+        'a.role_id',
+        'z.shipping_type'
     ];
     const FIELDS_USERORDER_ADMIN = [
         'a.supplier_id',
