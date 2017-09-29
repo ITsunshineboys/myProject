@@ -825,7 +825,7 @@ class OrderController extends Controller
                     }
                     if ($endTime) {
                         $endTime = (int)strtotime($endTime);
-                        $endTime && $where .= " create_time <= {$endTime}";
+                        $endTime && $where .= " and create_time <= {$endTime}";
                     }
             }else
                 {
