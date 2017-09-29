@@ -854,6 +854,7 @@ class OrderController extends Controller
         $sort_money=trim($request->get('sort_money','2'));
         $sort_time=trim($request->get('sort_time','2'));
         $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
+        echo $sort;exit;
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
         $code=200;
         return Json::encode([
