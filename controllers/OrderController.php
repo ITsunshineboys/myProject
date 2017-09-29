@@ -755,7 +755,20 @@ class OrderController extends Controller
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
         $type=trim($request->get('type','all'));
-            $where=GoodsOrder::GetTypeWhere($type);
+        $supplier_id=trim($request->get('supplier_id'));
+        $where=GoodsOrder::GetTypeWhere($type);
+            if($supplier_id)
+            {
+                if(!is_numeric($supplier_id))
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $where .=" and a.supplier_id={$supplier_id}";
+            }
             if($keyword){
                 $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
             }
