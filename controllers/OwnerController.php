@@ -306,6 +306,7 @@ class OwnerController extends Controller
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
+        var_dump($material);exit;
 
         //添加材料
         $add_price_area = DecorationAdd::AllArea(self::PROJECT_DETAILS['weak_current'], $post['area'], $post['city']);
