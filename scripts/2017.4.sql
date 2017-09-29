@@ -1442,7 +1442,7 @@ CREATE TABLE `worker_order_day_result` (
 CREATE TABLE `worker_works` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `worker_id` int(11) NOT NULL DEFAULT '0' COMMENT '工人id',
-  `order_no` int(11) NOT NULL DEFAULT '0' COMMENT '工人订单号',
+  `order_no` VARCHAR(50) NOT NULL DEFAULT '0' COMMENT '工人订单号',
   `title` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '标题',
   `desc` VARCHAR(350) NOT NULL DEFAULT '' COMMENT '作品描述',
   PRIMARY KEY (`id`)

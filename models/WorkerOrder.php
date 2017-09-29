@@ -963,12 +963,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $works_detail = WorkerWorksDetail::find()
                 ->where(['id' => $v['id'], 'status' => self::WORKER_WORKS_AFTER])
                 ->one();
+
             if ($works_detail) {
                 $img_ids = $works_detail->img_ids;
                 if ($img_ids) {
                     $ids = explode(',', $img_ids);
                     $id = array_rand($ids, 1);
-                    $v['img'] = WorkResultImg::find()->where(['id' => $id])->one()->result_img;
+                    if($id!=0){
+                        $v['img'] = WorkResultImg::find()->where(['id' => $id])->one()->result_img;
+                    }
+
+
                 }
             } else {
                 $v['img'] = '';
@@ -977,6 +982,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $worker_order = WorkerOrder::find()
                 ->where(['order_no' => $v['order_no'], 'is_old' => self::IS_NEW])
                 ->one();
+
             $v['start_time'] = date('Y-n-j', $worker_order->start_time);
             $v['end_time'] = date('Y-n-j', $worker_order->end_time);
         }
