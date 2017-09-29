@@ -444,8 +444,8 @@ class Goods extends ActiveRecord
     public static function priceDetail($level, $title,$select = [], $city = self::DEFAULT_CITY)
     {
         $all = self::find()
-            ->select($select)
             ->asArray()
+            ->select($select)
             ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
             ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')

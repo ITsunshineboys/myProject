@@ -290,7 +290,8 @@ class OwnerController extends Controller
         $points = Points::findByOne($points_select,$points_where);
 
         //查询弱电所需要材料
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL);
+        $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name';
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL,$goods_select);
         $judge = BasisDecorationService::priceConversion($goods);
         $weak_current = BasisDecorationService::judge($judge, $post);
 
@@ -305,7 +306,6 @@ class OwnerController extends Controller
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
-        var_dump($material);exit;
 
         //添加材料
         $add_price_area = DecorationAdd::AllArea(self::PROJECT_DETAILS['weak_current'], $post['area'], $post['city']);
