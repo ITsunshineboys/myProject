@@ -244,14 +244,29 @@ class SupplierController extends Controller
      */
     public function actionRecommendSecond()
     {
+        $code = 1000;
+
+        $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
+        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
+        if (!$supplierId) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', GoodsRecommendSupplier::PAGE_SIZE_DEFAULT);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+        $where = [
+            'supplier_id' => $supplierId,
+            'district_code' => $districtCode,
+        ];
 
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'recommend_second' => GoodsRecommendSupplier::second(null, $page, $size),
+                'recommend_second' => GoodsRecommendSupplier::pagination($where, GoodsRecommendSupplier::$appFields, $page, $size, ['sorting_number' => SORT_ASC]),
             ],
         ]);
     }

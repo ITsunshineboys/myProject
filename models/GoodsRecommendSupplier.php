@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
@@ -63,7 +64,7 @@ class GoodsRecommendSupplier extends ActiveRecord
     /**
      * @var array app fields
      */
-    private static $appFields = ['id', 'title', 'image', 'description', 'platform_price', 'url'];
+    public static $appFields = ['id', 'title', 'image', 'description', 'platform_price', 'url'];
 
     /**
      * @var array cache keys
@@ -248,7 +249,7 @@ class GoodsRecommendSupplier extends ActiveRecord
      * @param  array $orderBy order by fields default sold_number desc
      * @return array
      */
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
+    public static function pagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
     {
         if (in_array('from_type', $select)) {
             $select[] = 'supplier_name';
@@ -283,12 +284,12 @@ class GoodsRecommendSupplier extends ActiveRecord
             || in_array('status', $select)
             || in_array('platform_price', $select)
             || in_array('sku', $select)
-            || $hasViewedNumber
-            || $hasSoldNumber
+            || isset($hasViewedNumber)
+            || isset($hasSoldNumber)
         ) {
             foreach ($recommendList as &$recommend) {
-                $hasViewedNumber && $recommend['viewed_number'] = self::viewedNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
-                $hasSoldNumber && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
+                isset($hasViewedNumber) && $recommend['viewed_number'] = self::viewedNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
+                isset($hasSoldNumber) && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
 
                 if (isset($recommend['create_time'])) {
                     if (!empty($recommend['create_time'])) {
