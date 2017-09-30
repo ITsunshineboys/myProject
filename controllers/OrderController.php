@@ -2819,6 +2819,13 @@ class OrderController extends Controller
             ]);
 
         }
+
+        $all=(new Query())
+            ->from(GoodsOrder::tableName().' as g')
+            ->select('g.id')
+            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+            ->where(" g.supplier_id={$supplier_id} ")
+            ->count();
 //        $role_id=$user->last_role_id_app;
         //Get 待付款订单  and g.role_id={$role_id}
         $unpaid=(new Query())
@@ -2856,6 +2863,7 @@ class OrderController extends Controller
             'code' => $code,
             'msg' =>'ok',
             'data'=>[
+                'all'=>$all,
                 'unpaid'=>$unpaid,
                 'unshipped'=>$unshipped,
                 'unreceiveed'=>$unreceiveed,
