@@ -5,7 +5,7 @@
 
 var offsale_edit = angular.module("offsaleeditModule",['ngFileUpload']);
 offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http,Upload) {
-	let pattern = /^[\u4e00-\u9fa5]{1,10}$/;
+	let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
 	const picprefix = "http://test.cdlhzz.cn:888/";
 	$scope.showtishi = false;
 	$scope.idarr = [];

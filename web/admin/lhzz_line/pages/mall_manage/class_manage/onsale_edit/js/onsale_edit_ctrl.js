@@ -12,7 +12,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 		}
 	};
 	let pid;
-	let pattern = /^[\u4e00-\u9fa5]{0,10}$/;
+	let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;
 	$scope.changescope = $scope;
 	$scope.showtishi = false;
 	$scope.idarr = [];
@@ -94,7 +94,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 
 	/*分类名称是否存在的判断*/
 	$scope.addClassName = function () {
-		if (!pattern.test($scope.class_name)||$scope.class_name=='') {
+		if ((!pattern.test($scope.class_name))||$scope.class_name=='') {
 			$scope.tishi = "您的输入不满足条件,请重新输入"
 			$scope.showtishi = true;
 		} else {
