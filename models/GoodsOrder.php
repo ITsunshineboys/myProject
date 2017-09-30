@@ -403,13 +403,11 @@ class GoodsOrder extends ActiveRecord
             $create_time[$k]  = $arr[$k]['create_time'];
         }
         if ($arr){
-            if($sort_money==2 && $sort_time==1)
+           if ($sort_time==1  && $sort_money==1)
             {
-                array_multisort($create_time, SORT_ASC, $arr);
-            }
-            if($sort_money==1 && $sort_time==2)
-            {
-                array_multisort($amount_order, SORT_ASC, $arr);
+                $sort='a.amount_order asc';
+            }else{
+                $sort='a.amount_order desc';
             }
             $count=count($arr);
             $total_page=ceil($count/$size);
