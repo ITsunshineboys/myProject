@@ -56,33 +56,19 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $sta
         }
     })()
 
-
-    /*选项卡切换方法*/
-    $scope.changeToonsale = function () {
-        $scope.showonsale = true;
-        $scope.showoffsale = false;
-        $scope.firstselect = 0;
-        onlineRefresh()
-    }
-
-    $scope.changeTooffsale = function () {
-        $scope.showonsale = false;
-        $scope.showoffsale = true;
-        $scope.firstselect = 0;
-        offlineRefresh();
-    }
+    firstClass();
 
 
     /*分类选择一级下拉框*/
-    $scope.firstClass = (function () {
+    function firstClass() {
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
-        }).then(function (response) {
+        }).then((response) => {
             $scope.firstclass = response.data.data.categories;
             $scope.firstselect = response.data.data.categories[0].id;
         })
-    })()
+    }
 
     /*分类选择二级下拉框*/
     $scope.subClass = function (obj) {
@@ -94,6 +80,24 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $sta
             $scope.secondclass = response.data.data.categories;
             $scope.secselect = response.data.data.categories[0].id;
         })
+    }
+
+    /*选项卡切换方法*/
+    $scope.changeToonsale = function () {
+        $scope.showonsale = true;
+        $scope.showoffsale = false;
+        $scope.firstselect = 0;
+        onlineRefresh();
+        firstClass();
+
+    }
+
+    $scope.changeTooffsale = function () {
+        $scope.showonsale = false;
+        $scope.showoffsale = true;
+        $scope.firstselect = 0;
+        offlineRefresh();
+        firstClass();
     }
 
 
@@ -196,7 +200,11 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $sta
         $scope.offdesorder = true;
         $http({
             method: "get",
-            params: $scope.offtemp==0?{status: 0, "sort[]": "id:4"}:{status: 0, "sort[]": "id:4",pid:$scope.offtemp},
+            params: $scope.offtemp == 0 ? {status: 0, "sort[]": "id:4"} : {
+                status: 0,
+                "sort[]": "id:4",
+                pid: $scope.offtemp
+            },
             url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
         }).then(function (response) {
             $scope.alloffsalepro = response.data.data.category_list_admin.details;
@@ -210,7 +218,11 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $sta
         $scope.offdesorder = false;
         $http({
             method: "get",
-            params: $scope.offtemp==0?{status: 0, "sort[]": "id:3"}:{status: 0, "sort[]": "id:3",pid:$scope.offtemp},
+            params: $scope.offtemp == 0 ? {status: 0, "sort[]": "id:3"} : {
+                status: 0,
+                "sort[]": "id:3",
+                pid: $scope.offtemp
+            },
             url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
         }).then(function (response) {
             $scope.alloffsalepro = response.data.data.category_list_admin.details;
@@ -520,7 +532,11 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $sta
             $http({
                 method: "get",
                 url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-                params: $scope.offtemp == 0 ? {status: 0, page: $scope.seloffPage} : {status: 0, pid: $scope.offtemp, page: $scope.seloffPage},
+                params: $scope.offtemp == 0 ? {status: 0, page: $scope.seloffPage} : {
+                    status: 0,
+                    pid: $scope.offtemp,
+                    page: $scope.seloffPage
+                },
             }).then(function (res) {
                 $scope.alloffsalepro = res.data.data.category_list_admin.details;
                 $scope.isOffActivePage($scope.seloffPage);
