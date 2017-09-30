@@ -2024,7 +2024,6 @@ class GoodsOrder extends ActiveRecord
                         $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
-                        $GoodsOrder[$k]['list'][$key]['shipping_type']=$GoodsOrder[$k]['shipping_type'];
                     }
                     unset($GoodsOrder[$k]['pay_status']);
                     unset($GoodsOrder[$k]['supplier_id']);
