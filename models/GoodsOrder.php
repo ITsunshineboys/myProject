@@ -1426,23 +1426,29 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
+    /**
+     * @param $sort_money
+     * @param $sort_time
+     * @return string
+     */
     public static  function sort_lhzz_order($sort_money,$sort_time){
         if ($sort_time==1 && $sort_money==1){
-            $sort='a.create_time asc,a.amount_order asc';
+            $sort='a.create_time asc,z.goods_price asc';
         }else if ($sort_time==1 && $sort_money==2){
-            $sort='a.create_time asc,a.amount_order desc';
+            $sort='a.create_time asc,z.goods_price desc';
         }
         else if ($sort_time==2 && $sort_money==1){
-            $sort='a.create_time desc,a.amount_order asc';
+            $sort='a.create_time desc,z.goods_price asc';
         }
         else if ($sort_time==2 && $sort_money==2){
-            $sort='a.create_time desc,a.amount_order desc';
+            $sort='a.create_time desc,z.goods_price desc';
         }else
         {
-            $sort='a.create_time desc,a.amount_order desc';
+            $sort='a.create_time desc,z.goods_price desc';
         }
         return $sort;
     }
+
 
     private static function gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
         $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
