@@ -92,25 +92,35 @@ class WorkerWorks extends \yii\db\ActiveRecord
      * @param $works_id
      * @return array|string
      */
-    public static function Indecorationimgs($works_id){
-        $works_detail = WorkerWorksDetail::find()
-            ->where(['works_id' => $works_id])
-            ->one();
+        public static function Indecorationimgs($works_id){
+//            $works=self::find()->where(['id'=>$works_id])->one();
+//            $order_time=WorkerOrder::find()
+//                ->select('start_time,end_time')
+//                ->where(['order_no'=>$works->order_no])
+//                ->one();
+            $works_detail = WorkerWorksDetail::find()
+                ->where(['works_id' => $works_id])
+                ->one();
 
-        if ($works_detail) {
-            $img_ids = $works_detail->img_ids;
+            if ($works_detail) {
+                $img_ids = $works_detail->img_ids;
 
-            if ($img_ids) {
-                $ids = explode(',', $img_ids);
-               foreach ($ids as $id){
-                   $data[]= WorkResultImg::find()->select('result_img')->asArray()->where(['id'=>$id])->one();
-               }
+                if ($img_ids) {
+                    $ids = explode(',', $img_ids);
+                   foreach ($ids as $id){
+                       $data[]= WorkResultImg::find()
+                           ->select('result_img')
+                           ->leftJoin('')
+                           ->asArray()
+                           ->where(['id'=>$id])
+                           ->one();
+                   }
+                }
+            } else {
+                $data = '';
             }
-        } else {
-            $data = '';
+            return $data;
         }
-        return $data;
-    }
     /**
      * 作品详情
      * @param $works_id
@@ -139,6 +149,8 @@ class WorkerWorks extends \yii\db\ActiveRecord
         //装修中---工人上传的 截取中间日期
         //todo 装修中图片 需要好好理下;
         $In_decoration_imgs=self::Indecorationimgs($works_id);
+        //装修后--
+//        $after_decoration_imgs=self::afterdecorationimgs();
         if($before_decoration_imgs){
             $data['In_decoration_imgs']=$In_decoration_imgs;
             $data['before_decoration_imgs']=$before_decoration_imgs;
