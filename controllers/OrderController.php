@@ -2809,8 +2809,8 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id=Yii::$app->request->post('supplier_id','');
-        if ($supplier_id)
+        $supplier_id=Yii::$app->request->get('supplier_id');
+        if (!$supplier_id)
         {
             $code=1000;
             return Json::encode([
