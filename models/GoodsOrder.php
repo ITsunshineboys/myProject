@@ -2477,63 +2477,6 @@ class GoodsOrder extends ActiveRecord
    }
 
 
-    public  function  actionGetOrderNum()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-//        $role_id=$user->last_role_id_app;
-        //Get 待付款订单  and g.role_id={$role_id}
-        $unpaid=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=0 and o.order_status=0 ")
-            ->count();
-        $unshipped=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=0 and shipping_sattus=0 ")
-            ->count();
-        $unreceiveed=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=0 and shipping_sattus=1 ")
-            ->count();
-        $completed=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=1 and shipping_sattus=2 ")
-            ->count();
-        $canceled=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("o.order_status=2")
-            ->count();
-        $code=200;
-        return Json::encode([
-            'code' => $code,
-            'msg' =>'ok',
-            'data'=>[
-                'unpaid'=>$unpaid,
-                'unshipped'=>$unshipped,
-                'unreceiveed'=>$unreceiveed,
-                'completed'=>$completed,
-                'cancele'=>$canceled
-
-            ]
-        ]);
-    }
-
 
 
 
