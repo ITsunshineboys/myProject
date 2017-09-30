@@ -348,7 +348,6 @@ class GoodsOrder extends ActiveRecord
             ->from(self::tableName().' AS a')
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
             ->select($select)
-            ->orderBy('a.amount_order desc')
             ->where($where)
             ->all();
              echo count($OrderList);exit;
