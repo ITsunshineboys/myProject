@@ -349,6 +349,7 @@ class GoodsOrder extends ActiveRecord
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
             ->select($select)
             ->where($where)
+            ->orderBy('a.create_time desc')
             ->all();
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
@@ -418,13 +419,12 @@ class GoodsOrder extends ActiveRecord
             {
                 array_multisort($create_time, SORT_DESC, $arr);
             }
-            echo count($arr);exit;
             $count=count($arr);
             $total_page=ceil($count/$size);
             $data=array_slice($arr, ($page-1)*$size,$size);
             return [
                 'total_page' =>$total_page,
-                'count'=>count($data),
+                'count'=>$count,
                 'details' => $data
             ];
         }else{
