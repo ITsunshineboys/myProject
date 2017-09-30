@@ -129,7 +129,7 @@ class GoodsOrder extends ActiveRecord
         'z.comment_id',
         'z.freight',
         'a.return_insurance',
-        'z.cover_image'
+        'z.cover_image',
         'z.shipping_type'
     ];
     const AFTER_SALE_SERVICES = [
