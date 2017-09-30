@@ -376,8 +376,9 @@ class QuoteController extends Controller
     public function actionSeriesAndStyle()
     {
         $stairs_details = StairsDetails::findByAll();
-        $series = Series::findBySeries();
-        $style = Style::findByStyle();
+        $series         = Series::findBySeries();
+        $style          = Style::findByStyle();
+
         return Json::encode([
             'series' => $series,
             'style' => $style,
