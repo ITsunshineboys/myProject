@@ -861,13 +861,7 @@ class OrderController extends Controller
         {
             $sort_money=2;
         }
-        if ($sort_time==1  && $sort_money==1)
-        {
-            $sort='a.create_time asc  ,a.amount_order asc';
-        }else{
-            $sort='a.create_time desc ,a.amount_order desc';
-        }
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort,$sort_time,$sort_money);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money);
         $code=200;
         return Json::encode([
              'code'=>$code,

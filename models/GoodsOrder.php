@@ -341,7 +341,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sort
      * @return array
      */
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT,$sort, $sort_time,$sort_money)
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
     {
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
@@ -349,7 +349,6 @@ class GoodsOrder extends ActiveRecord
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
             ->select($select)
             ->where($where)
-            ->orderBy($sort)
             ->all();
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
@@ -403,11 +402,18 @@ class GoodsOrder extends ActiveRecord
             $create_time[$k]  = $arr[$k]['create_time'];
         }
         if ($arr){
-           if ($sort_time==1  && $sort_money==1)
+            if($sort_money==2 && $sort_time==1)
             {
-                $sort='a.amount_order asc';
+                array_multisort($create_time, SORT_ASC, $arr);
             }else{
-                $sort='a.amount_order desc';
+                array_multisort($amount_order, SORT_DESC, $arr);
+            }
+            if($sort_money==1 && $sort_time==2)
+            {
+                array_multisort($amount_order, SORT_ASC, $arr);
+            }
+            else{
+                array_multisort($amount_order, SORT_DESC, $arr);
             }
             $count=count($arr);
             $total_page=ceil($count/$size);
