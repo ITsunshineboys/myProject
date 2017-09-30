@@ -2703,6 +2703,15 @@ class OrderController extends Controller
     }
 
 
+    public function  actionFindExpress()
+    {
+        $data=Express::find()->all();
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data'=>$data
+        ]);
+    }
      /**
      * @return string
      */
