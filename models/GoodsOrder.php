@@ -351,7 +351,7 @@ class GoodsOrder extends ActiveRecord
             ->orderBy('a.amount_order desc')
             ->where($where)
             ->all();
-             echo count($arr);exit;
+             echo count($OrderList);exit;
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
