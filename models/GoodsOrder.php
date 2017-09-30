@@ -1433,18 +1433,18 @@ class GoodsOrder extends ActiveRecord
      */
    public static  function sort_lhzz_order($sort_money,$sort_time){
         if ($sort_time==1 && $sort_money==1){
-            $sort='a.create_time asc,a.amount_order asc';
+            $sort='a.create_time asc,z.goods_price asc';
         }else if ($sort_time==1 && $sort_money==2){
             $sort='a.create_time asc';
         }
         else if ($sort_time==2 && $sort_money==1){
-            $sort='a.amount_order asc';
+            $sort='z.goods_price asc';
         }
         else if ($sort_time==2 && $sort_money==2){
-            $sort='a.create_time desc,a.amount_order desc';
+            $sort='a.create_time desc,z.goods_price desc';
         }else
         {
-            $sort='a.create_time desc,a.amount_order desc';
+            $sort='a.create_time desc,z.goods_price desc';
         }
         return $sort;
     }
