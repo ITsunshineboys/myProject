@@ -351,6 +351,7 @@ class GoodsOrder extends ActiveRecord
             ->orderBy('a.amount_order desc')
             ->where($where)
             ->all();
+             echo count($arr);exit;
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
@@ -402,6 +403,7 @@ class GoodsOrder extends ActiveRecord
             $amount_order[$k]  = $arr[$k]['amount_order'];
             $create_time[$k]  = $arr[$k]['create_time'];
         }
+
         if ($arr){
             if ($sort_money==1 && $sort_time=='')
             {
