@@ -1499,7 +1499,6 @@ class OrderController extends Controller
         {
             $OrderGoods=OrderGoods::find()
                 ->where(['order_no'=>$order_no])
-                ->asArray()
                 ->all();
             foreach ($OrderGoods as &$goods)
             {
