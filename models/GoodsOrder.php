@@ -130,6 +130,7 @@ class GoodsOrder extends ActiveRecord
         'z.freight',
         'a.return_insurance',
         'z.cover_image'
+        'z.shipping_type'
     ];
     const AFTER_SALE_SERVICES = [
         '提供发票',
@@ -1972,7 +1973,7 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return array
      */
-    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
+     public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -2009,7 +2010,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['list']=OrderGoods::find()
                     ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                     ->andWhere(['order_status' =>0])
-                    ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status')
+                    ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status,shipping_type')
                     ->asArray()
                     ->all();
                 if($GoodsOrder[$k]['list']==[])
@@ -2023,6 +2024,7 @@ class GoodsOrder extends ActiveRecord
                         $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
+                        $GoodsOrder[$k]['list'][$key]['shipping_type']=$GoodsOrder[$k]['shipping_type'];
                     }
                     unset($GoodsOrder[$k]['pay_status']);
                     unset($GoodsOrder[$k]['supplier_id']);
@@ -2058,7 +2060,7 @@ class GoodsOrder extends ActiveRecord
             $data=array_slice($arr, ($page-1)*$size,$size);
             return [
                 'total_page' =>$total_page,
-                'count'=>count($data),
+                'count'=>$count,
                 'details' => $data
             ];
         }else{
@@ -2114,6 +2116,7 @@ class GoodsOrder extends ActiveRecord
             $arr_list['freight']=$arr[$k]['freight'];
             $arr_list['cover_image']=$arr[$k]['cover_image'];
             $arr_list['unusual']=$arr[$k]['unusual'];
+            $arr_list['shipping_type']=$arr[$k]['shipping_type'];
 
             unset($arr[$k]['goods_name']);
             unset($arr[$k]['goods_price']);
