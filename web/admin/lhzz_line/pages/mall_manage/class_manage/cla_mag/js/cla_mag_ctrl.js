@@ -76,7 +76,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $sta
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
             params: {pid: obj}
-        }).then(function (response) {
+        }).then((response) => {
             $scope.secondclass = response.data.data.categories;
             $scope.secselect = response.data.data.categories[0].id;
         })
