@@ -852,9 +852,8 @@ class OrderController extends Controller
 
 
         $sort_money=trim($request->get('sort_money',2));
-
         $sort_time=trim($request->get('sort_time',2));
-        if ($sort_money=='' )
+        if ($sort_money=='')
         {
             $sort_money=2;
         }
@@ -862,8 +861,13 @@ class OrderController extends Controller
         {
             $sort_money=2;
         }
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        if ($sort_time==1  && $sort_money==1)
+        {
+            $sort='a.create_time asc  ,a.amount_order asc';
+        }else{
+            $sort='a.create_time desc ,a.amount_order desc';
+        }
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort,$sort_time,$sort_money);
         $code=200;
         return Json::encode([
              'code'=>$code,

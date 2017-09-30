@@ -341,7 +341,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sort
      * @return array
      */
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort)
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT,$sort, $sort_time,$sort_money)
     {
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
@@ -350,8 +350,6 @@ class GoodsOrder extends ActiveRecord
             ->select($select)
             ->where($where)
             ->orderBy($sort)
-            ->offset($offset)
-            ->limit($size)
             ->all();
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
@@ -379,19 +377,56 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['mobile']=User::find()->select('mobile')->where(['id'=>$arr[$k]['user_id']])->one()->mobile;
                     break;
             }
+            switch ($arr[$k]['role_id'])
+            {
+                case 7:
+                    $arr[$k]['role_id']='平台价';
+                    break;
+                case 6:
+                    $arr[$k]['role_id']='供应商价格';
+                    break;
+                case 5:
+                    $arr[$k]['role_id']='装修公司价';
+                    break;
+                case 4:
+                    $arr[$k]['role_id']='项目经理价';
+                    break;
+                case 3:
+                    $arr[$k]['role_id']='设计师价';
+                    break;
+                case 2:
+                    $arr[$k]['role_id']='工人价';
+                    break;
+            }
             unset($arr[$k]['consignee_mobile']);
+            $amount_order[$k]  = $arr[$k]['amount_order'];
+            $create_time[$k]  = $arr[$k]['create_time'];
         }
-        $count=(new Query())
-            ->from(self::tableName().' AS a')
-            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
-            ->select($select)
-            ->where($where)
-            ->count();
-        return [
-            'total_page' =>ceil($count/$size),
-            'count'=>$count,
-            'details' => $arr
-        ];
+        if ($arr){
+            if($sort_money==2 && $sort_time==1)
+            {
+                array_multisort($create_time, SORT_ASC, $arr);
+            }
+            if($sort_money==1 && $sort_time==2)
+            {
+                array_multisort($amount_order, SORT_ASC, $arr);
+            }
+            $count=count($arr);
+            $total_page=ceil($count/$size);
+            $data=array_slice($arr, ($page-1)*$size,$size);
+            return [
+                'total_page' =>$total_page,
+                'count'=>count($data),
+                'details' => $data
+            ];
+        }else{
+            return [
+                'total_page' =>0,
+                'count'=>0,
+                'details' => []
+            ];
+        }
+
     }
 
      /**
