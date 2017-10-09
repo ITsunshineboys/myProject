@@ -26,7 +26,7 @@ class GoodsOrder extends ActiveRecord
     const PAY_STATUS_UNPAID = 0;
     const PAY_STATUS_PAID = 1;
     const PAY_STATUS_REFUNDED = 2;
-    const PAY_STATUS_DESC_UNPAID = '未付款';
+    const PAY_STATUS_DESC_UNPAID = '待付款';
     const PAY_STATUS_DESC_PAID = '已付款';
     const PAY_STATUS_DESC_REFUNDED = '已退款';
     const SHIPPING_STATUS_UNSHIPPED=0;
@@ -885,7 +885,7 @@ class GoodsOrder extends ActiveRecord
             $goods_num+=$arr[$k]['goods_number'];
         }
         $output['goods_num']=$goods_num;
-        if ($output['status']=='未付款'){
+        if ($output['status']=='待付款'){
             $time=time();
             $pay_term=(strtotime($output['create_time'])+24*60*60);
             if (($pay_term-$time)<0){
@@ -1193,7 +1193,7 @@ class GoodsOrder extends ActiveRecord
                     break;
             }
             if ($data[$k]['pay_status']==0 && $data[$k]['order_status']==0){
-                $data[$k]['status']='未付款';
+                $data[$k]['status']='待付款';
             }else{
                 switch ($data[$k]['order_status']){
                     case 0:
@@ -1276,7 +1276,7 @@ class GoodsOrder extends ActiveRecord
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             $data[$k]['pay_term']=0;
-            if ($data[$k]['status']=='未付款'){
+            if ($data[$k]['status']=='待付款'){
                 $time=time();
                 $pay_term=(strtotime($data[$k]['create_time'])+24*60*60);
                 if (($pay_term-$time)<=0){
@@ -2005,7 +2005,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
                 $GoodsOrder[$k]['paytime']=date('Y-m-d H:i',$GoodsOrder[$k]['paytime']);
                 $GoodsOrder[$k]['user_name']=$user->nickname;
-                $GoodsOrder[$k]['status']='未付款';
+                $GoodsOrder[$k]['status']='待付款';
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
                 $GoodsOrder[$k]['shop_name']=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one()->nickname;
@@ -2079,7 +2079,7 @@ class GoodsOrder extends ActiveRecord
    public static function  findOrderData($arr)
     {
         foreach ($arr as $k=>$v){
-            if ($arr[$k]['status']=='未付款'){
+            if ($arr[$k]['status']=='待付款'){
                 unset($arr[$k]);
             }
         }

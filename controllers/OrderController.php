@@ -957,7 +957,7 @@ class OrderController extends Controller
         if ($order_information['shipping_type']==1){
             $goods_data['shipping_way']='送货上门';
         }
-        if ($order_information['status']=='未付款'){
+        if ($order_information['status']=='待付款'){
             $goods_data['pay_term']=$order_information['pay_term'];
         }else{
             $goods_data['pay_term']=0;
@@ -1279,7 +1279,7 @@ class OrderController extends Controller
                   $goods_data['shipping_way']='送货上门';
               }
               $goods_data['pay_name']=$order_information['pay_name'];
-              if ($order_information['status']=='未付款'){
+              if ($order_information['status']=='待付款'){
                   $goods_data['pay_term']=$order_information['pay_term'];
               }else{
                   $goods_data['pay_term']=0;
