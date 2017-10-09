@@ -2058,7 +2058,7 @@ class GoodsOrder extends ActiveRecord
                     $arr[$key]['availableamount']=self::switchMoney(Role::CheckUserRole($user->last_role_id_app)->where(['uid'=>$user->id])->one()->availableamount*0.01);
                 }
             }
-            $goods=Goods::find()->where(['sku'=>$arr[$key]['sku']])->one();
+           $goods=Goods::find()->where(['sku'=>$arr[$key]['list'][0]['sku']])->one();
             if($goods->after_sale_services==0)
             {
                 $arr[$key]['is_support_after_sale']=0;
