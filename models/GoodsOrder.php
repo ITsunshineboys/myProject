@@ -1238,9 +1238,10 @@ class GoodsOrder extends ActiveRecord
             $data[$k]['RemainingTime']=0;
             if ($data[$k]['status']=='待收货'){
                 $waybillnumber=Express::find()
-                       ->select('waybillnumber')
-                       ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
-                       ->one()->waybillnumber;
+                    ->select('waybillnumber')
+                    ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                    ->asArray()
+                    ->one()['waybillnumber'];
                     if ($waybillnumber)
                     {
                         $express=Express::findByWayBillNumber($waybillnumber);

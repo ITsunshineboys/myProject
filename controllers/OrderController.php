@@ -2540,7 +2540,8 @@ class OrderController extends Controller
         }
     }
 
-    /**异常状态
+   /**
+     * 获取异常状态
      * @return string
      */
     public  function  actionFindUnusualList()
@@ -2605,7 +2606,8 @@ class OrderController extends Controller
                     'type'=>'取消原因',
                     'value'=>$list['apply_reason'],
                     'content'=>'',
-                    'time'=>$list['create_time']
+                    'time'=>$list['create_time'],
+                    'stage'=>$list['order_type']
                 ];
             }else{
                 $arr[]=[
@@ -2654,7 +2656,8 @@ class OrderController extends Controller
                     ];
                 }
             }
-            $data[]=$arr;
+            $data['order_type']=$list['order_type'];
+            $data['list'][]=$arr;
         }
         $code=200;
         return Json::encode([
@@ -2868,11 +2871,7 @@ class OrderController extends Controller
         $supplier_id=Yii::$app->request->get('supplier_id');
         if (!$supplier_id)
         {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+          $supplier_id=Supplier::find()->where(['uid'=>$user->id])->one()->id;
 
         }
 
@@ -2924,8 +2923,7 @@ class OrderController extends Controller
                 'unshipped'=>$unshipped,
                 'unreceiveed'=>$unreceiveed,
                 'completed'=>$completed,
-                'cancele'=>$canceled
-
+                'canceled'=>$canceled
             ]
         ]);
     }
