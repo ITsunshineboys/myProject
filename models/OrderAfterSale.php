@@ -80,17 +80,17 @@ class OrderAfterSale extends ActiveRecord
             ->select('after_sale_services')
             ->where(['sku'=>$postData['sku']])
             ->one();
-        if ($goods){
-            $array=explode(',',$goods->after_sale_services);
-            $arr=[];
-            foreach ($array as $k =>$v){
-                $arr[]=self::GOODS_AFTER_SALE_SERVICES[$array[$k]];
-            }
-            if (!in_array(self::AFTER_SALE_SERVICES[$postData['type']],$arr)){
-                $code=1035;
-                return $code;
-            }
-        }
+        // if ($goods){
+        //     $array=explode(',',$goods->after_sale_services);
+        //     $arr=[];
+        //     foreach ($array as $k =>$v){
+        //         $arr[]=self::GOODS_AFTER_SALE_SERVICES[$array[$k]];
+        //     }
+        //     if (!in_array(self::AFTER_SALE_SERVICES[$postData['type']],$arr)){
+        //         $code=1035;
+        //         return $code;
+        //     }
+        // }
         $CheckIsAfter=self::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
             ->one();
