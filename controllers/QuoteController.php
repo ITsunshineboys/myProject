@@ -1358,6 +1358,29 @@ class QuoteController extends Controller
     }
 
     /**
+     * decoration edit list
+     */
+    public function actionDecorationEditList()
+    {
+        $id = trim(\Yii::$app->request->post('id',''));
+        $sku = DecorationAdd::findOne($id);
+        $select ='id,category_id,title,sku,supplier_price,platform_price,market_price,left_number';
+        $goods = Goods::findBySku($sku,$select);
+        $goods['supplier_price'] = $goods['supplier_price'] / 100;
+        $goods['platform_price'] = $goods['platform_price'] / 100;
+        $goods['market_price'] = $goods['market_price'] / 100;
+        $goods_attr = GoodsAttr::frontDetailsByGoodsId($goods['id']);
+        $goods_category_select = 'id,title,path,parent_title';
+        $goods_category = GoodsCategory::findById($goods['id'],$goods_category_select);
+
+        return Json::encode([
+           'goods_category'=>$goods_category,
+           'goods'=>$goods,
+           'goods_attr'=>$goods_attr,
+        ]);
+    }
+
+    /**
      * decoration edit
      * @return string
      */

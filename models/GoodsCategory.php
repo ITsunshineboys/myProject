@@ -1067,4 +1067,13 @@ class GoodsCategory extends ActiveRecord
             ->where(['and',['level'=>1]])
             ->all();
     }
+
+    public static function findById($id,$select = [])
+    {
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['id'=>$id])
+            ->one();
+    }
 }
