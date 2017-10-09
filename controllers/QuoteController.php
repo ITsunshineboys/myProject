@@ -918,7 +918,7 @@ class QuoteController extends Controller
             foreach ($find as $find_one) {
                 $id [] = $find_one['category_id'];
             }
-            (new AssortGoods())->deleteAll(['category_id'=>$id]);
+            (new AssortGoods())->deleteAll(['and',['category_id'=>$id],['state'=> 0]]);
         }
 
         $assort = (new AssortGoods())->add($array);

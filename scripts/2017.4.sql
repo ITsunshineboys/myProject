@@ -970,6 +970,8 @@ CREATE TABLE `assort_goods` (
   `category_id` int(10) DEFAULT NULL COMMENT '分类id',
   `pid` int(10) DEFAULT NULL COMMENT '分类的父类id',
   `path` varchar(20) DEFAULT NULL COMMENT '关系',
+  `state` tinyint(4) DEFAULT NULL COMMENT '0-案例商品管理，1-商品管理',
+  `quantity` int(11) DEFAULT NULL COMMENT '数量',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- 8.5 end
