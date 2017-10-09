@@ -1049,7 +1049,7 @@ class OrderController extends Controller
         }
     }
 
-    /**
+   /**
      * supplier order list
      * @return string
      */
@@ -1062,11 +1062,11 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier = Supplier::find()->where(['uid' => $user->id])->one();
-        if(!$supplier){
+        $supplier=Supplier::find()->where(['uid' => $user->id])->one()['id'];
+        if (!$supplier){
             $code=1010;
             return Json::encode([
-                'code'=>$code,
+                'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
@@ -1076,15 +1076,8 @@ class OrderController extends Controller
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
         $type=trim($request->get('type','all'));
-        if ($type=='all'){
-            $where ="a.supplier_id={$supplier->id}";
-        }else{
-            $where=GoodsOrder::GetTypeWhere($type);
-            $where .=" and a.supplier_id={$supplier->id}";
-        }
-        if($keyword){
-            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
-        }
+        $supplier_id=trim($request->get('supplier_id'));
+        $where=GoodsOrder::GetTypeWhere($type);
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -1102,19 +1095,83 @@ class OrderController extends Controller
             $startTime = explode(' ', $startTime)[0];
             $endTime = explode(' ', $endTime)[0];
         }
+        if($type=='all')
+        {
+            if($supplier_id)
+            {
+                if(!is_numeric($supplier_id))
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $where .=" a.supplier_id={$supplier_id}";
+            }
+        }else{
+            if($supplier_id)
+            {
+                if(!is_numeric($supplier_id))
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $where .=" and a.supplier_id={$supplier_id}";
+            }
+        }
+        if ($type=='all' && !$supplier_id)
+        {
+            if($keyword){
+                $where .="  z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+            }
+        }else{
+            if($keyword){
+                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+            }
+        }
+        if ($type=='all' && !$supplier_id )
+        {
+            if ($keyword)
+            {
+                if ($startTime) {
+                    $startTime = (int)strtotime($startTime);
+                    $startTime && $where .= " and   a.create_time >= {$startTime}";
+                }
+                if ($endTime) {
+                    $endTime = (int)strtotime($endTime);
+                    $endTime && $where .= " and a.create_time <= {$endTime}";
+                }
+            }else{
+                if ($startTime) {
+                    $startTime = (int)strtotime($startTime);
+                    $startTime && $where .= "a.create_time >= {$startTime}";
+                }
+                if ($endTime) {
+                    $endTime = (int)strtotime($endTime);
+                    $endTime && $where .= " and a.create_time <= {$endTime}";
+                }
+            }
+        }
+        else
+        {
+            if ($startTime) {
+                $startTime = (int)strtotime($startTime);
+                $startTime && $where .= " and   a.create_time >= {$startTime}";
+            }
+            if ($endTime) {
+                $endTime = (int)strtotime($endTime);
+                $endTime && $where .= " and a.create_time <= {$endTime}";
+            }
+        }
+        $where.=" and a.supplier_id={$suplier->id}";
+        $sort_money=trim($request->get('sort_money'));
+        $sort_time=trim($request->get('sort_time'));
 
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money);
         $code=200;
         return Json::encode([
             'code'=>$code,
@@ -1122,6 +1179,7 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
+
 
      /**
      * 商家后台获取订单详情
