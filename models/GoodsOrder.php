@@ -32,7 +32,7 @@ class GoodsOrder extends ActiveRecord
     const SHIPPING_STATUS_UNSHIPPED=0;
     const SHIPPING_STATUS_SHIPPED=1;
     const SHIPPING_STATUS_SHIPPEDCOMPLETE=2;
-    const SHIPPING_STATUS_DESC_UNSHIPPED='未发货';
+    const SHIPPING_STATUS_DESC_UNSHIPPED='待发货';
     const SHIPPING_STATUS_DESC_SHIPPED='已发货';
     const SHIPPING_STATUS_DESC_SHIPPEDCOMPLETE='已收货';
     const ORDER_STATUS_UNCOMPLETE=0;
@@ -362,7 +362,7 @@ class GoodsOrder extends ActiveRecord
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
             }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+            if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
                 $arr[$k]['handle']='平台介入';
             }
             $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
@@ -467,7 +467,7 @@ class GoodsOrder extends ActiveRecord
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
             }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+            if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
                 $arr[$k]['handle']='平台介入';
             }
             if ($arr[$k]['status']=='已完成'){
@@ -1199,7 +1199,7 @@ class GoodsOrder extends ActiveRecord
                     case 0:
                                 switch ($data[$k]['shipping_status']){
                                     case 0:
-                                        $data[$k]['status']='未发货';
+                                        $data[$k]['status']='待发货';
                                         break;
                                     case 1:
                                         $data[$k]['status']='待收货';
@@ -1438,7 +1438,7 @@ class GoodsOrder extends ActiveRecord
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
             $arr[$k]['unusual']=self::unusual($arr[$k]['is_unusual']);
-            if($arr[$k]['status']=='未发货'){
+            if($arr[$k]['status']=='待发货'){
                 $arr[$k]['handle']='去发货';
             }
             if ($arr[$k]['status']=='售后中'){
@@ -1518,7 +1518,7 @@ class GoodsOrder extends ActiveRecord
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
             }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+            if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
                 $arr[$k]['handle']='平台介入';
             }
             $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
@@ -2093,7 +2093,7 @@ class GoodsOrder extends ActiveRecord
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
             }
-            if($arr[$k]['status']=='未发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+            if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
                 $arr[$k]['handle']='平台介入';
             }
             if ($arr[$k]['status']=='已完成'){
