@@ -100,6 +100,7 @@ class Supplier extends ActiveRecord
     ];
     const FIELDS_VIEW_MALL_MODEL = [
         'icon',
+        'shop_no',
         'shop_name',
         'follower_number',
         'comprehensive_score',
