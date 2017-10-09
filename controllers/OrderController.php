@@ -2540,7 +2540,7 @@ class OrderController extends Controller
         }
     }
 
-   /**
+    /**
      * 获取异常状态
      * @return string
      */
@@ -2584,51 +2584,51 @@ class OrderController extends Controller
                 $refund_type='已退至顾客钱包';
                 break;
         }
-        foreach ($unusualList as & $list)
+        foreach ($unusualList as $k =>$v)
         {
 
-            $list=$list->toArray();
-            if($list['create_time'])
+            $unusualList[$k]=$unusualList[$k]->toArray();
+            if($unusualList[$k]['create_time'])
             {
-                $list['create_time']=date('Y-m-d H:i',$list['create_time']);
+                $unusualList[$k]['create_time']=date('Y-m-d H:i',$unusualList[$k]['create_time']);
             }
-            if ($list['refund_time'])
+            if ($unusualList[$k]['refund_time'])
             {
-                $list['refund_time']=date('Y-m-d H:i',$list['refund_time']);
+                $unusualList[$k]['refund_time']=date('Y-m-d H:i',$unusualList[$k]['refund_time']);
             }
-            if ($list['handle_time'])
+            if ($unusualList[$k]['handle_time'])
             {
-                $list['handle_time']=date('Y-m-d H:i',$list['handle_time']);
+                $unusualList[$k]['handle_time']=date('Y-m-d H:i',$unusualList[$k]['handle_time']);
             }
-            if ($list['handle']==0)
+            if ($unusualList[$k]['handle']==0)
             {
                 $arr[]=[
                     'type'=>'取消原因',
-                    'value'=>$list['apply_reason'],
+                    'value'=>$unusualList[$k]['apply_reason'],
                     'content'=>'',
-                    'time'=>$list['create_time'],
-                    'stage'=>$list['order_type']
+                    'time'=>$unusualList[$k]['create_time'],
+                    'stage'=>$unusualList[$k]['order_type']
                 ];
             }else{
                 $arr[]=[
                     'type'=>'取消原因',
-                    'value'=>$list['apply_reason'],
+                    'value'=>$unusualList[$k]['apply_reason'],
                     'content'=>'',
-                    'time'=>$list['create_time'],
-                    'stage'=>$list['order_type']
+                    'time'=>$unusualList[$k]['create_time'],
+                    'stage'=>$unusualList[$k]['order_type']
                 ];
-                switch ($list['handle'])
+                switch ($unusualList[$k]['handle'])
                 {
                     case 1:
                         $type='同意';
                         $reason='';
-                        $complete_time=$list['refund_time'];
+                        $complete_time=$unusualList[$k]['refund_time'];
                         $result='成功';
                         break;
                     case 2:
                         $type='驳回';
-                        $reason=$list['handle_reason'];
-                        $complete_time=$list['handle_time'];
+                        $reason=$unusualList[$k]['handle_reason'];
+                        $complete_time=$unusualList[$k]['handle_time'];
                         $result='失败';
                         break;
                 }
@@ -2636,28 +2636,28 @@ class OrderController extends Controller
                     'type'=>'商家反馈',
                     'value'=>$type,
                     'content'=>$reason,
-                    'time'=>$list['handle_time'],
-                    'stage'=>$list['order_type']
+                    'time'=>$unusualList[$k]['handle_time'],
+                    'stage'=>$unusualList[$k]['order_type']
                 ];
                 $arr[]=[
                     'type'=>'退款结果',
                     'value'=>$result,
                     'content'=>'',
                     'time'=>$complete_time,
-                    'stage'=>$list['order_type']
+                    'stage'=>$unusualList[$k]['order_type']
                 ];
-                if ($list['handle']==1){
+                if ($unusualList[$k]['handle']==1){
                     $arr[]=[
                         'type'=>'退款去向',
                         'value'=>$refund_type,
                         'content'=>'',
                         'time'=>$complete_time,
-                        'stage'=>$list['order_type']
+                        'stage'=>$unusualList[$k]['order_type']
                     ];
                 }
             }
-            $data['order_type']=$list['order_type'];
-            $data['list'][]=$arr;
+            $data[$k]['order_type']=$unusualList[$k]['order_type'];
+            $data[$k]['list']=$arr;
         }
         $code=200;
         return Json::encode([
@@ -2666,6 +2666,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
 
 
     /**
