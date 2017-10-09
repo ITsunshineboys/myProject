@@ -1199,7 +1199,7 @@ class OrderController extends Controller
             //获取订单信息
             $order_information=GoodsOrder::Getorderinformation($order_no,$sku);
             if (!$order_information) {
-                $code = 500;
+                $code = 1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
