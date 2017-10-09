@@ -1310,7 +1310,7 @@ class OrderController extends Controller
     public function actionSupplierdelivery(){
         $request = Yii::$app->request;
         $sku = trim($request->post('sku', ''), '');
-        $order_no = trim($request->post('order_no', ''), '');
+        $order_no = (string)trim($request->post('order_no', ''), '');
         $waybillnumber = trim($request->post('waybillnumber', ''), '');
         $shipping_type = trim($request->post('shipping_type', '0'), '');
         if ($shipping_type!=1){
