@@ -94,10 +94,19 @@ class WorkerWorks extends \yii\db\ActiveRecord
      */
     public static function Indecorationimgs($works_id){
 //            $works=self::find()->where(['id'=>$works_id])->one();
-//            $order_time=WorkerOrder::find()
-//                ->select('start_time,end_time')
-//                ->where(['order_no'=>$works->order_no])
-//                ->one();
+//        $order_time=WorkerOrder::find()
+//            ->select('start_time,end_time')
+//            ->where(['order_no'=>$works->order_no])
+//            ->asArray()
+//            ->one();
+//        $days = ($order_time['end_time'] - $order_time['start_time']) / 86400 + 1;
+//        $date = [];
+//        for ($i = 0; $i < $days; $i++) {
+//            $date[] = date('Ymd', $order_time['start_time'] + (86400 * $i));
+//        }
+
+//        $leng=count($date)/2;
+//        $InImages=array_slice($date,$leng,1);
         $works_detail = WorkerWorksDetail::find()
             ->where(['works_id' => $works_id])
             ->one();
@@ -136,8 +145,9 @@ class WorkerWorks extends \yii\db\ActiveRecord
         }
         $time=WorkerOrder::find()
             ->asArray()
-            ->select('start_time,end_time')
-            ->where(['order_no'=>$array['order_no']])
+            ->select('worker_order.start_time,worker_order.end_time,worker_type.worker_type')
+            ->leftJoin('worker_type','worker_order.worker_type_id=worker_type.id')
+            ->where(['worker_order.order_no'=>$array['order_no']])
             ->one();
         $time['start_time']=date('Y-m-d',$time['start_time']);
         $time['end_time']=date('Y-m-d',$time['end_time']);
@@ -148,7 +158,7 @@ class WorkerWorks extends \yii\db\ActiveRecord
         //装修中---工人上传的 截取中间日期
         //todo 装修中图片 需要好好理下;
         $In_decoration_imgs=self::Indecorationimgs($works_id);
-        //装修后--
+        //装修后--工人上传的 截取最后一次上传的日期
 //        $after_decoration_imgs=self::afterdecorationimgs();
         if($before_decoration_imgs){
             $data['In_decoration_imgs']=$In_decoration_imgs;
