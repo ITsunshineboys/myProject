@@ -1364,18 +1364,19 @@ class QuoteController extends Controller
     {
         $id = trim(\Yii::$app->request->post('id',''));
         $sku = DecorationAdd::findOne($id);
+        $message_select = 'quantity,style_id,series_id,min_area,max_area';
+        $where = 'decoration_add_id='.$sku['id'];
+        $decoration_message = DecorationMessage::findById($message_select,$where);
         $select ='id,category_id,title,sku,supplier_price,platform_price,market_price,left_number';
         $goods = Goods::findBySku($sku,$select);
         $goods['supplier_price'] = $goods['supplier_price'] / 100;
         $goods['platform_price'] = $goods['platform_price'] / 100;
         $goods['market_price'] = $goods['market_price'] / 100;
         $goods_attr = GoodsAttr::frontDetailsByGoodsId($goods['id']);
-        $goods_category_select = 'id,title,path,parent_title';
-        $goods_category = GoodsCategory::findById($goods['category_id'],$goods_category_select);
 
         return Json::encode([
            'decoration_add'=>$sku,
-           'goods_category'=>$goods_category,
+           'decoration_message'=>$decoration_message,
            'goods'=>$goods,
            'goods_attr'=>$goods_attr,
         ]);
@@ -1531,5 +1532,10 @@ class QuoteController extends Controller
            'code' => 200,
            'msg'  => 'OK',
         ]);
+    }
+
+    public function actionGoodsManagement()
+    {
+
     }
 }

@@ -28,6 +28,15 @@ class DecorationMessage extends ActiveRecord
         return 'decoration_message';
     }
 
+    public static function findById($select = [] , $where = [])
+    {
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where($where)
+            ->all();
+    }
+
     public static function findByInsert($rows,$columns)
     {
         $row = \Yii::$app->db->createCommand();
@@ -36,8 +45,8 @@ class DecorationMessage extends ActiveRecord
 
     public static function findByUpdate($row,$id)
     {
-        $row = \Yii::$app->db->createCommand();
-        return $row->update(self::TABLE_NAME,[
+        $rows = \Yii::$app->db->createCommand();
+        return $rows->update(self::TABLE_NAME,[
             'quantity'=>$row
         ],'id',$id)->execute();
     }
