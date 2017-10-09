@@ -1371,7 +1371,7 @@ class QuoteController extends Controller
         $goods['market_price'] = $goods['market_price'] / 100;
         $goods_attr = GoodsAttr::frontDetailsByGoodsId($goods['id']);
         $goods_category_select = 'id,title,path,parent_title';
-        $goods_category = GoodsCategory::findById($goods['id'],$goods_category_select);
+        $goods_category = GoodsCategory::findById($goods['category_id'],$goods_category_select);
 
         return Json::encode([
            'goods_category'=>$goods_category,
