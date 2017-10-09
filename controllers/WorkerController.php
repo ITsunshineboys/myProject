@@ -863,9 +863,9 @@ class WorkerController extends Controller
 
         $worker_id = (int)$request->get('worker_id', 0);
         $page = (int)$request->get('page', 1);
-        $page_size = (int)$request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
+        $size = (int)$request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
 
-        $data = WorkerOrder::getWorksByWorkerIdAll($worker_id, $page, $page_size);
+        $data = WorkerOrder::getWorksByWorkerIdAll($worker_id, $page, $size);
 
         return Json::encode([
             'code' => 200,
@@ -888,9 +888,7 @@ class WorkerController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $page = (int)\Yii::$app->request->get('page', 1);
-        $page_size = (int)\Yii::$app->request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
-            $data=WorkerWorks::GetWorksDetail($works_id,$page,$page_size);
+            $data=WorkerWorks::GetWorksDetail($works_id);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',

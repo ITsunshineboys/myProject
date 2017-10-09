@@ -72,7 +72,7 @@ class WorkerWorks extends \yii\db\ActiveRecord
         $query['start_time']=date('Y-m-d',$query['start_time']);
         $query['end_time']=date('Y-m-d',$query['end_time']);
 
-       return $query;
+        return $query;
     }
     /**
      * 获取装修前图片
@@ -92,35 +92,34 @@ class WorkerWorks extends \yii\db\ActiveRecord
      * @param $works_id
      * @return array|string
      */
-        public static function Indecorationimgs($works_id){
+    public static function Indecorationimgs($works_id){
 //            $works=self::find()->where(['id'=>$works_id])->one();
 //            $order_time=WorkerOrder::find()
 //                ->select('start_time,end_time')
 //                ->where(['order_no'=>$works->order_no])
 //                ->one();
-            $works_detail = WorkerWorksDetail::find()
-                ->where(['works_id' => $works_id])
-                ->one();
+        $works_detail = WorkerWorksDetail::find()
+            ->where(['works_id' => $works_id])
+            ->one();
 
-            if ($works_detail) {
-                $img_ids = $works_detail->img_ids;
+        if ($works_detail) {
+            $img_ids = $works_detail->img_ids;
 
-                if ($img_ids) {
-                    $ids = explode(',', $img_ids);
-                   foreach ($ids as $id){
-                       $data[]= WorkResultImg::find()
-                           ->select('result_img')
-                           ->leftJoin('')
-                           ->asArray()
-                           ->where(['id'=>$id])
-                           ->one();
-                   }
+            if ($img_ids) {
+                $ids = explode(',', $img_ids);
+                foreach ($ids as $id){
+                    $data[]= WorkResultImg::find()
+                        ->select('result_img')
+                        ->asArray()
+                        ->where(['id'=>$id])
+                        ->one();
                 }
-            } else {
-                $data = '';
             }
-            return $data;
+        } else {
+            $data = '';
         }
+        return $data;
+    }
     /**
      * 作品详情
      * @param $works_id
@@ -128,13 +127,13 @@ class WorkerWorks extends \yii\db\ActiveRecord
      */
     public static function GetWorksDetail($works_id){
 
-       $array=self::find()
-           ->asArray()
-           ->where(['id'=>$works_id])
-           ->one();
-       if(!$array){
-           return null;
-       }
+        $array=self::find()
+            ->asArray()
+            ->where(['id'=>$works_id])
+            ->one();
+        if(!$array){
+            return null;
+        }
         $time=WorkerOrder::find()
             ->asArray()
             ->select('start_time,end_time')
