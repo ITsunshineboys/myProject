@@ -2,11 +2,13 @@
 
 namespace app\models;
 
+use function GuzzleHttp\Psr7\str;
 use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 use yii\helpers\Json;
+use yii\db\Exception;
 class Express extends ActiveRecord
 {
 
@@ -19,8 +21,7 @@ class Express extends ActiveRecord
         return 'express';
     }
 
-    
- /**
+    /**
      * @param $num
      * @return array|null|ActiveRecord
      */
@@ -31,7 +32,6 @@ class Express extends ActiveRecord
             ->one();
         return $data;
     }
-
     /**
      * 添加快递单号
      * @param $sku
@@ -144,21 +144,25 @@ class Express extends ActiveRecord
         $keywords = $this->expressname($order);
         if (!$keywords) {
             return false;
-        } else {
+        }else {
             $result = $this->getcontent("http://www.kuaidi100.com/query?type=".$keywords."&postid=".$order);
             $data   = json_decode($result, true);
             return $data;
         }
     }
 
-   /**
+    /**
      * @param $order_no
      * @param $sku
      * @return int
      */
     public static  function Findexresslist($order_no,$sku)
     {
-        $waybill=Express::find()->select('waybillnumber,waybillname,create_time')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+        $waybill=Express::find()
+            ->select('waybillnumber,waybillname,create_time')
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->asArray()
+            ->one();
         if (!$waybill){
             $code = 1000;
             return $code;
@@ -187,8 +191,15 @@ class Express extends ActiveRecord
      * @return array
      */
     public static  function Findexpresslist_sendtohome($order_no,$sku){
-        $order=(new Query())->from(ORDER_GOODSLIST)->select('order_status,shipping_status')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
-        $express=Express::find()->select('create_time,receive_time')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+        $order=(new Query())->from(ORDER_GOODSLIST)
+            ->select('order_status,shipping_status')
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
+        $express=Express::find()
+            ->select('create_time,receive_time')
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->asArray()
+            ->one();
         switch ($order['shipping_status']){
             case 1:
                 $arr[] =[
@@ -212,7 +223,6 @@ class Express extends ActiveRecord
         return $arr;
 
     }
-
 
     /**
      * 获取物流信息
@@ -276,7 +286,7 @@ class Express extends ActiveRecord
         return $response;
     }
 
-    
+
         /**获取收获剩余时间
          * @param $express
          * @return int
@@ -284,7 +294,56 @@ class Express extends ActiveRecord
       public  static  function  findRemainingTime($express)
       {
           $time=time();
+
           $RemainingTime=$express->create_time+15*24*60*60-$time;
           return $RemainingTime;
+      }
+
+
+        /**
+         * 通过快递公司编码获取公司名称
+         * @return array
+         */
+      public  static function  findExpressByCode()
+      {
+          return [
+              'youzhengguonei'=>'邮政包裹/平邮',
+              'youzhengguoji' =>'国际包裹',
+              'ems'=>'EMS',
+              'emsguoji'=>'EMS-国际件',
+              'emsinten'=>'EMS-国际件-英文结果',
+              'CN'=>'万国邮联',
+              'bjemstckj'=>'北京EMS',
+              'shunfeng'=>'顺丰',
+              'shentong'=>'申通',
+              'yuantong'=>'圆通',
+              'zhongtong'=>'中通',
+              'huitongkuaidi'=>'汇通',
+              'baishiwuliu'=>'百世汇通',
+              'yunda'=>'韵达',
+              'zhaijisong'=>'宅急送',
+              'tiantian'=>'天天',
+              'debangwuliu'=>'德邦',
+              'guotongkuaidi'=>'国通',
+              'zengyisudi'=>'增益',
+              'suer'=>'速尔',
+              'ztky'=>'中铁物流',
+              'zhongtiewuliu'=>'中铁快运',
+              'ganzhongnengda'=>'能达',
+              'youshuwuliu'=>'优速',
+              'quanfengkuaidi'=>'全峰',
+              'jd'=>'京东',
+          ];
+      }
+
+    /**
+     * 获取快递公司名称
+     * @param $waybillnumber
+     * @return mixed
+     */
+      public  function  GetExpressName($waybillnumber)
+      {
+          $name   = json_decode($this->getcontent("http://www.kuaidi100.com/autonumber/auto?num=".$waybillnumber), true)[0]['comCode'];
+          return self::findExpressByCode()[$name];
       }
 }

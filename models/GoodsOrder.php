@@ -926,7 +926,7 @@ class GoodsOrder extends ActiveRecord
      * @param $shipping_type
      * @return bool
      */
-    public static function Supplierdelivery($sku,$order_no,$waybillname,$waybillnumber,$shipping_type){
+   public static function Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type){
         $create_time=time();
         if($shipping_type==1){
             $trans = \Yii::$app->db->beginTransaction();
@@ -960,6 +960,11 @@ class GoodsOrder extends ActiveRecord
             return $e;
         }else{
             $trans = \Yii::$app->db->beginTransaction();
+            $waybillname=(new Express())->GetExpressName($waybillnumber);
+            if (!$waybillname)
+            {
+                $waybillname='未知快递公司';
+            }
             $e=1;
             try {
                 $express=Express::find()
@@ -968,6 +973,7 @@ class GoodsOrder extends ActiveRecord
                     ->one();
                 \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>0,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
                 if ($express){
+
                     \Yii::$app->db->createCommand()->update(self::EXPRESS, [
 
                         'waybillname'      =>$waybillname,
