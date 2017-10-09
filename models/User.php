@@ -672,12 +672,11 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
         $key = trim(htmlspecialchars($postData['key']), '');
-         if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true){
-            $code=self::setPaypassword_first($postData,$user);
+        if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD . $user->id . date('Y-m-d', time()), $key) == true) {
+            $code = self::setPaypassword_first($postData, $user);
         }
-        if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true)
-        {
-            $code=self::setPaypassword_secend($postData,$user);
+        if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD . $user->id . date('Y-m-d', time()), $key) == true) {
+            $code = self::setPaypassword_secend($postData, $user);
         }
         return $code;
     }
@@ -741,21 +740,21 @@ class User extends ActiveRecord implements IdentityInterface
             $cache->set(self::CACHE_PREFIX_SET_PAYPASSWORD . $user->id, $cacheData, 24 * 60 * 60);
         }
         $tran = Yii::$app->db->beginTransaction();
-        try{
+        try {
             $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd_secend);
-            $userRole->pay_password=$psw;
-            $res=$userRole->save(false);
-            if (!$res){
-                $code=500;
+            $userRole->pay_password = $psw;
+            $res = $userRole->save(false);
+            if (!$res) {
+                $code = 500;
                 $tran->rollBack();
                 return $code;
             }
             $tran->commit();
-            $code=200;
+            $code = 200;
             return $code;
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $tran->rollBack();
-            $code=500;
+            $code = 500;
             return $code;
         }
     }
@@ -823,8 +822,8 @@ class User extends ActiveRecord implements IdentityInterface
         $data['mobile'] = $users['mobile'];
         $data['type'] = 'resetPayPassword';
         try {
-             new SmValidationService($data);
-         } catch (\InvalidArgumentException $e) {
+            new SmValidationService($data);
+        } catch (\InvalidArgumentException $e) {
             $code = 1000;
             return $code;
         } catch (ServerErrorHttpException $e) {
@@ -836,8 +835,8 @@ class User extends ActiveRecord implements IdentityInterface
                 return $code;
             }
         }
-         $code=200;
-         return $code;
+        $code = 200;
+        return $code;
     }
 
     /**
@@ -969,6 +968,39 @@ class User extends ActiveRecord implements IdentityInterface
         $check = self::find()->select('mobile')->asArray()->where(['mobile' => $mobile])->andWhere("id!={$user->id}")->one();
         if ($check) {
             $code = 1019;
+            return $code;
+        }
+        $code = 200;
+        return $code;
+    }
+
+    /**
+     * Check if identity card no unique
+     *
+     * @param string $identityNo identity card no
+     * @return bool
+     */
+    public static function checkIdentityNoUnique($identityNo)
+    {
+        return !self::find()->where(['identity_no' => $identityNo])->exists();
+    }
+
+    /**
+     * @param $user
+     * @param $postData
+     * @return int
+     */
+    public static function CheckOrderJurisdiction($user, $postData)
+    {
+        if (!array_key_exists('order_no', $postData)) {
+            $code = 1000;
+            return $code;
+        }
+        $GoodsOrder = GoodsOrder::find()
+            ->where(['order_no' => $postData['order_no']])
+            ->one();
+        if ($user->id != $GoodsOrder->user_id) {
+            $code = 1034;
             return $code;
         }
         $code = 200;
@@ -1748,27 +1780,5 @@ class User extends ActiveRecord implements IdentityInterface
 
         $this->last_role_id_app = $roleId;
         return $this->save() ? 200 : 500;
-    }
-
-    /**
-     * @param $user
-     * @param $postData
-     * @return int
-     */
-    public static function CheckOrderJurisdiction($user,$postData)
-    {
-        if(!array_key_exists('order_no', $postData)){
-            $code=1000;
-            return $code;
-        }
-        $GoodsOrder=GoodsOrder::find()
-            ->where(['order_no'=>$postData['order_no']])
-            ->one();
-        if ($user->id != $GoodsOrder->user_id){
-            $code=1034;
-            return $code;
-        }
-        $code=200;
-        return $code;
     }
 }

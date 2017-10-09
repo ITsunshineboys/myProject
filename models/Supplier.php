@@ -295,6 +295,13 @@ class Supplier extends ActiveRecord
                     return $code;
                 }
 
+                if (!User::checkIdentityNoUnique($user->identity_no)) {
+                    $transaction->rollBack();
+
+                    $code = 1038;
+                    return $code;
+                }
+
                 if (!$user->save()) {
                     $transaction->rollBack();
 
