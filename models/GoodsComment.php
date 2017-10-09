@@ -146,33 +146,71 @@ class GoodsComment extends ActiveRecord
             $code=1000;
             return $code;
         }
-        $code=self::checkIsSetComment($postData,$user);
+        $code=self::checkIsSetComment($orderGoods,$user);
         if ($code !=200){
             return $code;
         }
         $goods=Goods::find()
             ->where(['sku'=>$postData['sku']])
             ->one();
+
         $list=self::GetAverageScore($postData,$goods->supplier_id);
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $res1=self::AddCommentData($postData,$user,$goods,$time,$uploadsData);
-            if (is_numeric($res1)){
+            $comment=new GoodsComment();
+            $comment->goods_id=$goods->id;
+            $comment->uid=$user->id;
+            $comment->role_id=$user->last_role_id_app;
+            $comment->create_time=$time;
+            $comment->content=$postData['content'];
+            $comment->is_anonymous=$postData['anonymous'];
+            $comment->name =$user->nickname;
+            $comment->store_service_score=$postData['store_service_score'];
+            $comment->logistics_speed_score=$postData['logistics_speed_score'];
+            $comment->shipping_score=$postData['shipping_score'];
+            $comment->score=$postData['score'];
+            $res=$comment->save(false);
+            if (!$res){
+                $code=500;
                 $tran->rollBack();
-                return $res1;
+                return $code;
             }
-            $commendSupplierDatabase=self::commendSupplierDatabase($orderGoods,$res1,$postData,$goods,$time,$list);
-            if ($commendSupplierDatabase!=200){
+            if (is_array($uploadsData)){
+                foreach ($uploadsData as &$uploads){
+                    $comment_image=new CommentImage();
+                    $comment_image->comment_id=$comment->id;
+                    $comment_image->image=$uploads;
+                    if (!$comment_image->save()){
+                        $code=500;
+                        return $code;
+                    };
+                }
+            }
+            $orderGoods->comment_id=$comment->id;
+            $res1=$orderGoods->save(false);
+            if (!$res1){
+                $code=500;
                 $tran->rollBack();
-                return $commendSupplierDatabase;
+                return $code;
+            }
+            $supplier=Supplier::find()
+                ->where(['id'=>$goods->supplier_id])
+                ->one();
+            $supplier->comprehensive_score=$list['score'];
+            $supplier->logistics_speed_score=$list['logistics_speed_score'];
+            $res2=$supplier->save(false);
+            if (!$res2){
+                $code=500;
+                $tran->rollBack();
+                return $code;
             }
             $tran->commit();
             $code=200;
             return $code;
         }catch (Exception $e) {
             $code=500;
-        $tran->rollBack();
+            $tran->rollBack();
             return $code;
         }
 
