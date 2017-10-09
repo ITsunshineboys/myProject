@@ -159,7 +159,7 @@ class SupplierController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'supplier-view' => $supplier->view(),
+                'supplier_view' => $supplier->view(),
             ],
         ]);
     }
