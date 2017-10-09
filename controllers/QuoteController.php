@@ -1374,6 +1374,7 @@ class QuoteController extends Controller
         $goods_category = GoodsCategory::findById($goods['category_id'],$goods_category_select);
 
         return Json::encode([
+           'decoration_add'=>$sku,
            'goods_category'=>$goods_category,
            'goods'=>$goods,
            'goods_attr'=>$goods_attr,
