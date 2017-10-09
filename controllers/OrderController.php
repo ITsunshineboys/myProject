@@ -1213,8 +1213,8 @@ class OrderController extends Controller
             $sku=explode('+',$order_information['sku']);
             $ordergoodsinformation=GoodsOrder::Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
             if (!$ordergoodsinformation){
-                $code = 500;
-               return Json::encode([
+                $code = 1000;
+                return Json::encode([
                    'code' => $code,
                    'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
@@ -1291,7 +1291,8 @@ class OrderController extends Controller
                 $data=array(
                     'goods_data'=>$goods_data,
                     'goods_value'=>$ordergoodsinformation,
-                    'receive_details'=>$receive_details
+                    'receive_details'=>$receive_details,
+                    'is_unusual'=>$order_information['is_unusual']
                 );
               $code = 200;
               return Json::encode([
@@ -1300,7 +1301,6 @@ class OrderController extends Controller
                     'data' =>$data
               ]);
     }
-
 
 
     /**

@@ -803,7 +803,8 @@ class GoodsOrder extends ActiveRecord
                a.invoicer_card,
                a.invoice_content,
                z.cover_image,
-               a.role_id';
+               a.role_id,
+               z.is_unusual';
         $array=self::getorderlist()
             ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
             ->select($select)
@@ -857,6 +858,7 @@ class GoodsOrder extends ActiveRecord
             $output['invoicer_card']=$arr[$k]['invoicer_card'];
             $output['invoice_content']=$arr[$k]['invoice_content'];
             $output['cover_image']=$arr[$k]['cover_image'];
+            $output['is_unusual']=$arr[$k]['is_unusual'];
             $user=User::find()
                 ->where(['id'=>$arr[$k]['user_id']])
                 ->asArray()
