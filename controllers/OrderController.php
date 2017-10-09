@@ -1311,11 +1311,10 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $sku = trim($request->post('sku', ''), '');
         $order_no = trim($request->post('order_no', ''), '');
-        $waybillname = trim($request->post('waybillname', ''), '');
         $waybillnumber = trim($request->post('waybillnumber', ''), '');
         $shipping_type = trim($request->post('shipping_type', '0'), '');
         if ($shipping_type!=1){
-            if (!$sku || !$waybillname || !$waybillnumber || !$order_no) {
+            if (!$sku  || !$waybillnumber || !$order_no) {
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
@@ -1323,7 +1322,7 @@ class OrderController extends Controller
                 ]);
             }
         }
-        $res=GoodsOrder::Supplierdelivery($sku,$order_no,$waybillname,$waybillnumber,$shipping_type);
+        $res=GoodsOrder::Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type);
         if ($res==true){
             return Json::encode([
                 'code' => 200,
