@@ -1692,8 +1692,9 @@ class OrderController extends Controller
         // $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
         $order=GoodsOrder::find()->where(['order_no'=>$order_no])
             ->asArray()->one();
+             var_dump($order['supplier_id']);exit;
         $supplier=Supplier::find()->where(['id'=>$order['supplier_id']])->one();
-        var_dump($supplier);exit;
+
         $u=User::find()->where(['id'=>$supplier->uid])->asArray()->one();
         var_dump($u);exit;
         $order=GoodsOrder::find()->select('id')->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])->one();
