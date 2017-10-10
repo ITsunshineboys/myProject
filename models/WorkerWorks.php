@@ -85,6 +85,9 @@ class WorkerWorks extends \yii\db\ActiveRecord
             ->where(['worker_order_no'=>$worker_order_no])
             ->asArray()
             ->all();
+        if(!$data){
+
+        }
         return $data;
     }
     /**
@@ -93,20 +96,6 @@ class WorkerWorks extends \yii\db\ActiveRecord
      * @return array|string
      */
     public static function Indecorationimgs($works_id){
-//            $works=self::find()->where(['id'=>$works_id])->one();
-//        $order_time=WorkerOrder::find()
-//            ->select('start_time,end_time')
-//            ->where(['order_no'=>$works->order_no])
-//            ->asArray()
-//            ->one();
-//        $days = ($order_time['end_time'] - $order_time['start_time']) / 86400 + 1;
-//        $date = [];
-//        for ($i = 0; $i < $days; $i++) {
-//            $date[] = date('Ymd', $order_time['start_time'] + (86400 * $i));
-//        }
-
-//        $leng=count($date)/2;
-//        $InImages=array_slice($date,$leng,1);
         $works_detail = WorkerWorksDetail::find()
             ->where(['works_id' => $works_id])
             ->one();
@@ -115,18 +104,75 @@ class WorkerWorks extends \yii\db\ActiveRecord
             $img_ids = $works_detail->img_ids;
 
             if ($img_ids) {
+                $time=WorkResult::find()->asArray()->orderBy('create_time Desc')->where(['works_id'=>$works_id])->all();
+                if(!$time){
+                    return null;
+                }
                 $ids = explode(',', $img_ids);
                 foreach ($ids as $id){
-                    $data[]= WorkResultImg::find()
-                        ->select('result_img')
+                    $a[]= WorkResultImg::find()
+                        ->select('result_img,work_result_id')
                         ->asArray()
                         ->where(['id'=>$id])
                         ->one();
                 }
+                foreach ($a as $d){
+
+                    if($d['work_result_id']!=$time[0]['id']){
+                       $data[]=$d;
+                    }else{
+                        $data='';
+                    }
+                }
             }
+
         } else {
             $data = '';
         }
+
+        return $data;
+    }
+    /**
+     * 装修最后一天上传的图片
+     * @param $works_id
+     * @return array|string
+     */
+    public static function afterdecorationimgs($works_id){
+        $works_detail = WorkerWorksDetail::find()
+            ->where(['works_id' => $works_id])
+            ->one();
+
+        if ($works_detail) {
+            $img_ids = $works_detail->img_ids;
+
+            if ($img_ids) {
+                $time=WorkResult::find()->asArray()->orderBy('create_time Desc')->where(['works_id'=>$works_id])->all();
+                if(!$time){
+                    return null;
+                }
+                $ids = explode(',', $img_ids);
+                foreach ($ids as $id){
+                    $a[]= WorkResultImg::find()
+                        ->select('result_img,work_result_id')
+                        ->asArray()
+                        ->where(['id'=>$id])
+                        ->one();
+                }
+                foreach ($a as $d){
+
+                    if($d['work_result_id']==$time[0]['id']){
+                        $data[]=$d;
+                    }else{
+                        $data='';
+                    }
+                }
+
+            }
+
+        } else {
+            $data = '';
+        }
+
         return $data;
     }
     /**
@@ -159,16 +205,32 @@ class WorkerWorks extends \yii\db\ActiveRecord
         //todo 装修中图片 需要好好理下;
         $In_decoration_imgs=self::Indecorationimgs($works_id);
         //装修后--工人上传的 截取最后一次上传的日期
-//        $after_decoration_imgs=self::afterdecorationimgs();
-        if($before_decoration_imgs){
-            $data['In_decoration_imgs']=$In_decoration_imgs;
+        $after_decoration_imgs=self::afterdecorationimgs($works_id);
+        if($before_decoration_imgs || $In_decoration_imgs || $after_decoration_imgs){
+            $data['in_decoration_imgs']=$In_decoration_imgs;
             $data['before_decoration_imgs']=$before_decoration_imgs;
+            $data['after_decorationimgs']=$after_decoration_imgs;
 
         }else{
             $data['In_decoration_imgs']='';
             $data['before_decoration_imgs']='';
+            $data['after_decoration_imgs']='';
 
         }
+        $works_views=WorkerWorksReview::find()
+            ->asArray()
+            ->where(['works_id'=>$works_id])
+            ->limit(3)
+            ->all();
+        foreach ($works_views as &$works_view){
+                $works_view['create_time']=date('Y-m-d',$works_view['create_time']);
+                $works_view['role']=Role::find()->asArray()->select('name')->where(['id'=>$works_view['role_id']])->one()['name'];
+                $works_view['name']=User::find()->asArray()->select('nickname')->where(['id'=>$works_view['uid']])->one()['nickname'];
+                unset($works_view['role_id']);
+                unset($works_view['uid']);
+        }
+
+        $data['views']=$works_views;
 
         return $data;
     }

@@ -814,6 +814,7 @@ class WorkerController extends Controller
             $works_review->works_id = $works_id;
             $works_review->star = $star;
             $works_review->review = $review;
+            $works_review->pid=0;
             if ($works_review->save(false)) {
                 return Json::encode([
                     'code' => 200,
@@ -849,13 +850,14 @@ class WorkerController extends Controller
      */
     public function actionGetWorksReviewsByWorksId()
     {
+
         //todo 需要建一个订单评论回复表 or 加pid?
         //todo 需要查出每条的回复
     }
 
     /**
-     * view works by worker_id
-     *
+     * 查询所以工人作品+分页
+     * @return string
      */
     public function actionGetWorksByWorkerId()
     {
@@ -875,8 +877,8 @@ class WorkerController extends Controller
     }
 
     /**
-     * todo view works_detail by works_id
-     *
+     * 工人某作品详情
+     * @return string
      */
     public function actionGetWorksDetail()
     {
