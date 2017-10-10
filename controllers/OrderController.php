@@ -1460,9 +1460,14 @@ class OrderController extends Controller
         }
         if ($shipping_type==1)
         {
-            $waybillname='商家';
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+            $supplier=Supplier::find()
+                ->select('nickname')
+                ->where(['id'=>$GoodsOrder->supplier_id])
+                ->one();
+            $waybillname=$supplier->nickname;
         }else{
-            $waybillname= $express->waybillname;
+            $waybillname= $express['waybillname'];
         }
         return Json::encode([
             'code' => 200,
@@ -2770,6 +2775,50 @@ class OrderController extends Controller
             'data' => $data
         ]);
     }
+
+      /**
+         * @return string
+         */
+        public function  actionUpdateTestGoods()
+        {
+            $sku=Yii::$app->request->post('sku','');
+            if (!$sku)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $after_sale_services='0,1,2,3,4,5,6';
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $Goods=Goods::findBySku($sku);
+                $Goods->after_sale_services=$after_sale_services;
+                $res=$Goods->save(false);
+                if (!$res)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $tran->commit();
+                return Json::encode([
+                    'code' =>  200,
+                    'msg'  => 'ok'
+                ]);
+            }catch (Exception $e){
+                $tran->rollBack();
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+        }
      /**
      * @return string
      */
