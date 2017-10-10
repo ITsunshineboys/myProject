@@ -63,7 +63,8 @@ class WorkerWorks extends \yii\db\ActiveRecord
         $query=(new Query())
             ->from('worker_works as ww')
             ->select('ww.*,wrj.result_img,wo.start_time,wo.end_time')
-            ->leftJoin('work_result_img as wrj','ww.id=wrj.work_result_id')
+            ->leftJoin('work_result as wr','wr.works_id=ww.id')
+            ->leftJoin('work_result_img as wrj','wr.id=wrj.work_result_id')
             ->leftJoin('worker_order as wo','ww.worker_id=wo.worker_id')
             ->where(['ww.id'=>$worker_id])
             ->andWhere(['is_old'=>1])
@@ -72,8 +73,8 @@ class WorkerWorks extends \yii\db\ActiveRecord
         if(!$query){
             return null;
         }
-        $query['start_time']=date('Y-m-d',$query['start_time']);
-        $query['end_time']=date('Y-m-d',$query['end_time']);
+        $query['start_time']=date('Y-n-j',$query['start_time']);
+        $query['end_time']=date('Y-n-j',$query['end_time']);
 
         return $query;
     }
@@ -227,16 +228,20 @@ class WorkerWorks extends \yii\db\ActiveRecord
             ->where(['pid'=>self::STUAT_LIN])
             ->limit(self::DEAUFT_T)
             ->all();
+        if(!$works_views){
+            return null;
+        }
         foreach ($works_views as &$works_view){
-                $works_view['create_time']=date('Y-m-d',$works_view['create_time']);
+                $works_view['create_time']=date('Y-n-d',$works_view['create_time']);
                 $works_view['role']=Role::find()->asArray()->select('name')->where(['id'=>$works_view['role_id']])->one()['name'];
                 $works_view['name']=User::find()->asArray()->select('nickname')->where(['id'=>$works_view['uid']])->one()['nickname'];
+                $works_view['icon']=User::find()->asArray()->select('icon')->where(['id'=>$works_view['uid']])->one()['icon'];
                 $works_view['worker_reply']=WorkerWorksReview::find()->asArray()->select('review')->where(['pid'=>$works_view['id']])->one()['review'];
                 unset($works_view['role_id']);
                 unset($works_view['uid']);
         }
 
-        $data['views']=$works_views;
+        $data['comment']=$works_views;
 
         return $data;
     }

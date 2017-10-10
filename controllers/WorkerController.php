@@ -18,6 +18,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use yii\web\Request;
 
 class WorkerController extends Controller
 {
@@ -836,12 +837,29 @@ class WorkerController extends Controller
     }
 
     /**
-     * todo view works_review by review_id
+     * 获取工人所有作品评论+分页
      *
      */
-    public function actionGetWorksReview()
+    public function actionGetAllWorksReview()
     {
+        $code=1000;
+        $request=new Request();
+        $worker_id=(int)trim($request->get('worker_id'));
+        if(!$worker_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $page = (int)$request->get('page', 1);
+        $size = (int)$request->get('size', WorkerWorksReview::VIEW_SIZE);
+        $data=WorkerWorksReview::getworkerallviews($worker_id,$page,$size);
 
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
     }
 
     /**
@@ -862,10 +880,16 @@ class WorkerController extends Controller
     public function actionGetWorksByWorkerId()
     {
         $request = \Yii::$app->request;
-
+        $code=1000;
         $worker_id = (int)$request->get('worker_id', 0);
+        if(!$worker_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $page = (int)$request->get('page', 1);
-        $size = (int)$request->get('page_size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
+        $size = (int)$request->get('size', WorkerOrder::IMG_PAGE_SIZE_DEFAULT);
 
         $data = WorkerOrder::getWorksByWorkerIdAll($worker_id, $page, $size);
 
