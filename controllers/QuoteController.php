@@ -1484,7 +1484,7 @@ class QuoteController extends Controller
             if (isset($value['two_title'])){
                 if (isset($value['two_title']['id'])){
                     $two_title_id [] = $value;
-                    $one = Points::findByUpdate($value['count'],$value['id']);
+                    Points::findByUpdate($value['count'],$value['id']);
                 } else {
                     $two_title[] = $value;
                 }
@@ -1508,7 +1508,7 @@ class QuoteController extends Controller
      * commonality area proportion list
      * @return string
      */
-    public function actionCommonalityAreaProportionList()
+    public function actionCommonalityElseList()
     {
         $id = trim(\Yii::$app->request->post('id',''));
         $select = 'id,project,project_value';
@@ -1525,7 +1525,7 @@ class QuoteController extends Controller
      * commonality area proportion edit
      * @return string
      */
-    public function actionCommonalityAreaProportionEdit()
+    public function actionCommonalityElseEdit()
     {
         $post = \Yii::$app->request->post();
         foreach ($post['value'] as $value){
