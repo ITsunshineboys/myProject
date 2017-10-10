@@ -995,7 +995,7 @@ class OrderController extends Controller
         $order_no   =trim($request->post('order_no',''));
         $sku        =trim($request->post('sku',''));
         $handle_type=trim($request->post('handle_type',''));
-        $reason     =trim($request->post('handle_type',''));
+        $reason     =trim($request->post('reason',''));
         if (!$order_no || !$handle_type || !$reason || !$sku){
             $code=1000;
             return Json::encode([
