@@ -1270,6 +1270,14 @@ class OrderController extends Controller
                 ]);
             }
         }
+        $name=(new  Express())->GetExpressName($waybillnumber);
+        if(!$name)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $res=GoodsOrder::Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type);
         if ($res==true){
             return Json::encode([
