@@ -896,6 +896,9 @@ class MallController extends Controller
             $recommend->supplier_id = $supplier->id;
             $recommend->supplier_name = $supplier->nickname;
             $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
+            $recommend->platform_price = $goods->platform_price;
+            $recommend->description = $goods->subtitle;
+            $recommend->title = $goods->title;
         }
 
         if (!$recommend->save()) {
