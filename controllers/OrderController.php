@@ -1273,6 +1273,7 @@ class OrderController extends Controller
         $name=(new  Express())->GetExpressName($waybillnumber);
         if(!$name)
         {
+            $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
