@@ -2038,6 +2038,15 @@ class OrderController extends Controller
             ]);
         }
 
+         if (6 <$comment['score'] && $comment['score']<= 10 )
+        {
+            $comment['score']='好评';
+        }else if (2< $comment['score'] && $comment['score']<= 6 )
+        {
+            $comment['score']='中评';
+        }else{
+            $comment['score']='差评';
+        }
         $comment['create_time']=date('Y-m-d H:i',0);
 
          if ($comment){
