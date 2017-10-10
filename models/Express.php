@@ -336,14 +336,18 @@ class Express extends ActiveRecord
           ];
       }
 
-    /**
+ /**
      * 获取快递公司名称
      * @param $waybillnumber
      * @return mixed
      */
       public  function  GetExpressName($waybillnumber)
       {
-          $name   = json_decode($this->getcontent("http://www.kuaidi100.com/autonumber/auto?num=".$waybillnumber), true)[0]['comCode'];
-          return self::findExpressByCode()[$name];
+          $name   = json_decode($this->getcontent("http://www.kuaidi100.com/autonumber/auto?num=".$waybillnumber), true);
+          if (!$name)
+          {
+              return null;
+          }
+          return self::findExpressByCode()[$name[0]['comCode']];
       }
 }
