@@ -1413,10 +1413,18 @@ class QuoteController extends Controller
             if (isset($one_post['id'])) {
                 DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
             } else {
-                $columns = ['series_id','quantity','decoration_add_id'];
-                DecorationMessage::findByInsert($one_post,$columns);
-            }
+                if (isset($one_post['series'])){
+                    $columns = ['series_id','quantity','decoration_add_id'];
+                    DecorationMessage::findByInsert($one_post,$columns);
+                } elseif (isset($one_post['style'])){
+                    $columns = ['style_id','quantity','decoration_add_id'];
+                    DecorationMessage::findByInsert($one_post,$columns);
+                } elseif (isset($one_post['min_area'])){
+                    $columns = ['min_area','max_area','quantity','decoration_add_id'];
+                    DecorationMessage::findByInsert($one_post,$columns);
+                }
 
+            }
         }
 
         return Json::encode([

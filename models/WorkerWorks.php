@@ -18,6 +18,9 @@ use yii\db\Query;
  */
 class WorkerWorks extends \yii\db\ActiveRecord
 {
+
+    const DEAUFT_T=3;
+    const STUAT_LIN=0;
     /**
      * @inheritdoc
      */
@@ -220,12 +223,15 @@ class WorkerWorks extends \yii\db\ActiveRecord
         $works_views=WorkerWorksReview::find()
             ->asArray()
             ->where(['works_id'=>$works_id])
-            ->limit(3)
+            ->orderBy('create_time Desc')
+            ->where(['pid'=>self::STUAT_LIN])
+            ->limit(self::DEAUFT_T)
             ->all();
         foreach ($works_views as &$works_view){
                 $works_view['create_time']=date('Y-m-d',$works_view['create_time']);
                 $works_view['role']=Role::find()->asArray()->select('name')->where(['id'=>$works_view['role_id']])->one()['name'];
                 $works_view['name']=User::find()->asArray()->select('nickname')->where(['id'=>$works_view['uid']])->one()['nickname'];
+                $works_view['worker_reply']=WorkerWorksReview::find()->asArray()->select('review')->where(['pid'=>$works_view['id']])->one()['review'];
                 unset($works_view['role_id']);
                 unset($works_view['uid']);
         }
