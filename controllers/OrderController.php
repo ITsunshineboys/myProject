@@ -1676,11 +1676,11 @@ class OrderController extends Controller
             ]);
         }
         $request=yii::$app->request;
-        $order_no=(string)$request->post('order_no','');
-        $sku=$request->post('sku','');
+        $order_no=$request->post('order_no');
+        $sku=$request->post('sku');
         $handle_reason=$request->post('handle_reason
 ','');
-        $handle=$request->post('handle','');
+        $handle=$request->post('handle');
         if (!$order_no  || ! $sku || !$handle)
         {
             $code=1000;
@@ -1719,6 +1719,10 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        if (!$handle_reason)
+        {
+            $handle_reason='';
         }
         $code=GoodsOrder::RefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
         if ($code ==200){
