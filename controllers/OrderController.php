@@ -2979,8 +2979,10 @@ class OrderController extends Controller
                 }else{
                     $value=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$arr[$k]];
                     $name=array_search($value,OrderAfterSale::AFTER_SALE_SERVICES);
-                    $data[$k]['value']=$value;
-                    $data[$k]['name']=$name;
+                    $data[]=[
+                        'name'=>$name,
+                        'value'=>$value
+                    ];
                 }
             }
             $code=200;
