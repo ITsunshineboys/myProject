@@ -1423,7 +1423,6 @@ class QuoteController extends Controller
                     $columns = ['min_area','max_area','quantity','decoration_add_id'];
                     DecorationMessage::findByInsert($one_post,$columns);
                 }
-
             }
         }
 
