@@ -47,7 +47,7 @@ class DecorationMessage extends ActiveRecord
     {
         $rows = \Yii::$app->db->createCommand();
         return $rows->update(self::TABLE_NAME,[
-            'quantity'=>$row
-        ],'id',$id)->execute();
+            'quantity' => $row,
+        ],['id'=>$id])->execute();
     }
 }
