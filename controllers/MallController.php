@@ -4708,7 +4708,8 @@ class MallController extends Controller
             ],
         ];
 
-        $where = 'delete_time = 0 and type = ' . $type;
+        $supplier = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->params['supplierRoleId']);
+        $where = 'delete_time = 0 and type = ' . $type . ' and supplier_id = ' . $supplier->id;
 
         $ret['data']['recommend_admin_index_supplier']['details'] = GoodsRecommendSupplier::pagination(
             $where,
