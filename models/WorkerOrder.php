@@ -960,20 +960,23 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         //开始时间和结束时间,图片选择完工的图片随机
         foreach ($arr as &$v) {
+
             $works_detail = WorkerWorksDetail::find()
                 ->where(['id' => $v['id'], 'status' => self::WORKER_WORKS_AFTER])
                 ->one();
-
             if ($works_detail) {
+
                 $img_ids = $works_detail->img_ids;
+
                 if ($img_ids) {
                     $ids = explode(',', $img_ids);
-                    $id = array_rand($ids, 1);
+                    $id = array_rand($ids);
                     if($id!=0){
-                        $v['img'] = WorkResultImg::find()->where(['id' => $id])->one()->result_img;
+                        $v['img'] = WorkResultImg::find()
+                            ->where(['id' => $id])
+                            ->one()
+                            ->result_img;
                     }
-
-
                 }
             } else {
                 $v['img'] = '';
