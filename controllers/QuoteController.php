@@ -1365,7 +1365,7 @@ class QuoteController extends Controller
     {
         $id = trim(\Yii::$app->request->post('id',''));
         $sku = DecorationAdd::findOne($id);
-        $message_select = 'quantity,style_id,series_id,min_area,max_area';
+        $message_select = 'id,quantity,style_id,series_id,min_area,max_area';
         $where = 'decoration_add_id='.$sku['id'];
         $decoration_message = DecorationMessage::findById($message_select,$where);
         $select ='id,category_id,title,sku,supplier_price,platform_price,market_price,left_number';
