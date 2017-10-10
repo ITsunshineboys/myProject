@@ -1049,7 +1049,7 @@ class OrderController extends Controller
         }
     }
 
-   /**
+  /**
      * supplier order list
      * @return string
      */
@@ -1095,48 +1095,18 @@ class OrderController extends Controller
             $startTime = explode(' ', $startTime)[0];
             $endTime = explode(' ', $endTime)[0];
         }
-        if($type=='all')
-        {
-            if($supplier_id)
-            {
-                if(!is_numeric($supplier_id))
+                if ($type=='all')
                 {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $where .=" a.supplier_id={$supplier_id}";
-            }
-        }else{
-            if($supplier_id)
-            {
-                if(!is_numeric($supplier_id))
+                    $where .=" supplier_id={$supplier_id}";
+                }else
                 {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                    $where .=" and supplier_id={$supplier_id}";
                 }
-                $where .=" and a.supplier_id={$supplier_id}";
-            }
-        }
-        if ($type=='all' && !$supplier_id)
-        {
-            if($keyword){
-                $where .="  z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
-            }
-        }else{
-            if($keyword){
-                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
-            }
-        }
-        if ($type=='all' && !$supplier_id )
-        {
-            if ($keyword)
-            {
+
+                if($keyword){
+                    $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+                }
+
                 if ($startTime) {
                     $startTime = (int)strtotime($startTime);
                     $startTime && $where .= " and   a.create_time >= {$startTime}";
@@ -1145,28 +1115,6 @@ class OrderController extends Controller
                     $endTime = (int)strtotime($endTime);
                     $endTime && $where .= " and a.create_time <= {$endTime}";
                 }
-            }else{
-                if ($startTime) {
-                    $startTime = (int)strtotime($startTime);
-                    $startTime && $where .= "a.create_time >= {$startTime}";
-                }
-                if ($endTime) {
-                    $endTime = (int)strtotime($endTime);
-                    $endTime && $where .= " and a.create_time <= {$endTime}";
-                }
-            }
-        }
-        else
-        {
-            if ($startTime) {
-                $startTime = (int)strtotime($startTime);
-                $startTime && $where .= " and   a.create_time >= {$startTime}";
-            }
-            if ($endTime) {
-                $endTime = (int)strtotime($endTime);
-                $endTime && $where .= " and a.create_time <= {$endTime}";
-            }
-        }
         $where.=" and a.supplier_id={$supplier->id}";
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
@@ -1179,7 +1127,6 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
-
 
      /**
      * 商家后台获取订单详情
