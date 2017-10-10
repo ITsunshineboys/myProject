@@ -1167,7 +1167,7 @@ class OrderController extends Controller
                 $endTime && $where .= " and a.create_time <= {$endTime}";
             }
         }
-        $where.=" and a.supplier_id={$suplier->id}";
+        $where.=" and a.supplier_id={$supplier->id}";
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
 
