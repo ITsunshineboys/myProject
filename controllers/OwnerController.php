@@ -309,37 +309,6 @@ class OwnerController extends Controller
         var_dump($material);exit;
 
         //添加材料
-        $add_price_area = DecorationAdd::AllArea(self::PROJECT_DETAILS['weak_current'], $post['area'], $post['city']);
-        $add_price = [];
-        foreach ($add_price_area as $add_area) {
-            $sku_area = Goods::skuAll($add_area['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_area['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
-        $add_price_series = DecorationAdd::AllSeries(self::PROJECT_DETAILS['weak_current'], $post['series'], $post['city']);
-        foreach ($add_price_series as $add_series) {
-            $sku_area = Goods::skuAll($add_series['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_series['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
-        $add_price_style = DecorationAdd::AllStyle(self::PROJECT_DETAILS['weak_current'], $post['style'], $post['city']);
-        foreach ($add_price_style as $add_style) {
-            $sku_area = Goods::skuAll($add_style['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_style['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
