@@ -2029,12 +2029,13 @@ class OrderController extends Controller
             ->where(['id'=>$order['comment_id']])
             ->asArray()
             ->one();
-        if(!$comment)
+         if(!$comment)
         {
-            $code=1000;
+            $code=200;
             return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'code'=>$code,
+                'msg'=>'ok',
+                'data'=>[]
             ]);
         }
 
