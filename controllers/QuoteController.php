@@ -1458,11 +1458,12 @@ class QuoteController extends Controller
         foreach ($title['one_title'] as $one_title){
             $ids [] = $one_title['id'];
         }
-        $string_ids = implode(',',$ids);
-        $two_select = 'id,title,count,pid';
-        $two_where  = 'pid in ('.$string_ids.')';
-        $title['two_title'] = Points::findByPid($two_select,$two_where);
-
+        if (isset($ids)){
+            $string_ids = implode(',',$ids);
+            $two_select = 'id,title,count,pid';
+            $two_where  = 'pid in ('.$string_ids.')';
+            $title['two_title'] = Points::findByPid($two_select,$two_where);
+        }
         return Json::encode([
            'list'=> $title,
         ]);
@@ -1561,6 +1562,10 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * goods management add
+     * @return string
+     */
     public function actionGoodsManagementAdd()
     {
         $post = \Yii::$app->request->post();
