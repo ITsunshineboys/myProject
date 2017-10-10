@@ -7,8 +7,9 @@
  */
 
 namespace app\models;
-
+use think\Exception;
 use yii\db\ActiveRecord;
+use Yii;
 
 class OrderGoods extends ActiveRecord
 {
