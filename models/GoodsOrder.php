@@ -2070,10 +2070,10 @@ class GoodsOrder extends ActiveRecord
             }else{
                 $arr[$key]['is_support_after_sale']=1;
             }
-            if ($arr[$key]['status']!='completed' && $arr[$key]['status']!='uncomment')
-            {
-                $arr[$key]['is_support_after_sale']=0;
-            }
+            // if ($arr[$key]['status']!='completed' && $arr[$key]['status']!='uncomment')
+            // {
+            //     $arr[$key]['is_support_after_sale']=0;
+            // }
             $create_time[$key]  = $arr[$key]['create_time'];
         }
         $arr=self::switchStatus($arr,$role);
