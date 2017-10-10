@@ -1062,7 +1062,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier=Supplier::find()->where(['uid' => $user->id])->one()['id'];
+        $supplier=Supplier::find()->where(['uid' => $user->id])->one();
         if (!$supplier){
             $code=1010;
             return Json::encode([
