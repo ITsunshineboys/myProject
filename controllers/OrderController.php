@@ -1663,8 +1663,7 @@ class OrderController extends Controller
         ]);
     }
 
-     /**
-     用户退款操作
+   /**退款处理
      * @return string
      */
     public function  actionRefundHandle(){
@@ -1677,12 +1676,11 @@ class OrderController extends Controller
             ]);
         }
         $request=yii::$app->request;
-        $order_no=$request->post('order_no','');
+        $order_no=(string)$request->post('order_no','');
         $sku=$request->post('sku','');
-        $handle_reason=$request->post('$handle_reason
+        $handle_reason=$request->post('handle_reason
 ','');
         $handle=$request->post('handle','');
-
         if (!$order_no  || ! $sku || !$handle)
         {
             $code=1000;
@@ -1693,8 +1691,15 @@ class OrderController extends Controller
         }
         $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
         $order=GoodsOrder::find()->select('id')->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])->one();
-        if (!$supplier || !$order){
-            $code=403;
+        if (!$supplier ){
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if(!$order){
+            $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
@@ -1728,6 +1733,7 @@ class OrderController extends Controller
             ]);
         }
     }
+
     
      /**获取退款详情
      * @return string

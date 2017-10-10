@@ -1667,7 +1667,7 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    /**
+   /**
      * @param $order_no
      * @param $sku
      * @param $handle
@@ -1688,6 +1688,8 @@ class GoodsOrder extends ActiveRecord
     }
 
     /**
+     *
+     * ordfer_refund 表字段status不启用
      * @param $order_no
      * @param $sku
      * @param $handle
@@ -1729,7 +1731,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-   /**
+    /**
      * @param $order_no
      * @param $sku
      * @param $handle
@@ -1799,8 +1801,7 @@ class GoodsOrder extends ActiveRecord
             return $code;
         }
     }
-
-    /** check user Jurisdiction
+     /** check user Jurisdiction
      * @param $order_no
      * @param $user
      * @return int
