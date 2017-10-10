@@ -1738,49 +1738,7 @@ class OrderController extends Controller
         }
     }
 
-public function  actionFindSupplier()
-    {
-        $mobile=18782056433;
-        $user=User::find()->where(['id'=>7])->one();
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-            $user->mobile=18208142446;
-            $res=$user->save(false);
-            if (!$res)
-            {
-                $tran->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $u=User::find()->where(['mobile'=>18208142446])->one();
-            $u->mobile=$mobile;
-            $res1=$u->save(false);
-            if (!$res1)
-            {
-                $tran->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $tran->commit();
-            return Json::encode([
-                'code' =>  200,
-                'msg'  => 'ok'
-            ]);
-        }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-    }
+
     
      /**获取退款详情
      * @return string
