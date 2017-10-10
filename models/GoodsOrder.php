@@ -1718,12 +1718,15 @@ class GoodsOrder extends ActiveRecord
             $order_refund->handle=$handle;
             $order_refund->handle_reason=$handle_reason;
             $order_refund->handle_time=$time;
-            $res2=$order_refund->save();
+            $res2=$order_refund->save(false);
             if(!$res2){
                 $code=500;
                 $tran->rollBack();
                 return $code;
             }
+            $tran->commit();
+            $code=200;
+            return $code;
         }catch (Exception $e){
             $tran->rollBack();
             $code=500;
