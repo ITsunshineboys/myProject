@@ -1275,6 +1275,7 @@ class OrderController extends Controller
               $goods_data['supplier_price']=$order_information['supplier_price'];
               $goods_data['market_price']=$order_information['market_price'];
               $goods_data['shipping_way']=$order_information['shipping_way'];
+              $goods_data['shipping_type']=$order_information['shipping_type'];
               if ($order_information['shipping_type']==1){
                   $goods_data['shipping_way']='送货上门';
               }
