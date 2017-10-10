@@ -1706,7 +1706,7 @@ class GoodsOrder extends ActiveRecord
         try{
 
             $order_goodslist=OrderGoods::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
-            $order_goodslist->isunusual=0;
+            $order_goodslist->is_unusual=0;
             $res1=$order_goodslist->save(false);
             if (!$res1){
                 $code=500;
