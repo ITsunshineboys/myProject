@@ -1863,7 +1863,7 @@ class GoodsOrder extends ActiveRecord
                 $where='a.pay_status=1 and z.order_status=0 and z.shipping_status=1';
                 break;
             case self::ORDER_TYPE_COMPLETED:
-                $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=1  and z.customer_service=0';
+                $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=2  and z.customer_service=0';
                 break;
             case  self::ORDER_TYPE_CANCEL:
                 $where='z.order_status=2';
