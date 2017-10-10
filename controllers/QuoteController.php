@@ -1389,30 +1389,25 @@ class QuoteController extends Controller
      */
     public function actionDecorationEdit()
     {
-//        $post = \Yii::$app->request->post();
-        $post = [
-            'add'=>[
-              ['id'=>1,'quantity'=>20]
-            ],
-        ];
-//        $decoration_add = DecorationAdd::findOne($post['id']);
-//        $decoration_add->correlation_message = $post['message'];
-//        $decoration_add->sku           = $post['code'];
-//        if (!$decoration_add->validate()){
-//            $code = 1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg'=>\Yii::$app->params['errorCodes'][$code],
-//            ]);
-//        }
-//
-//        if (!$decoration_add->save()){
-//            $code = 1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg'=>\Yii::$app->params['errorCodes'][$code],
-//            ]);
-//        }
+        $post = \Yii::$app->request->post();
+        $decoration_add = DecorationAdd::findOne($post['id']);
+        $decoration_add->correlation_message = $post['message'];
+        $decoration_add->sku           = $post['code'];
+        if (!$decoration_add->validate()){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$decoration_add->save()){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         foreach ($post['add'] as $one_post){
             if (isset($one_post['id'])) {
