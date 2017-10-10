@@ -1693,6 +1693,7 @@ class OrderController extends Controller
         $order=GoodsOrder::find()->where(['order_no'=>$order_no])
             ->asArray()->one();
         $supplier=Supplier::find()->where(['id'=>$order['supplier_id']])->one();
+        var_dump($supplier);exit;
         $u=User::find()->where(['id'=>$supplier->uid])->asArray()->one();
         var_dump($u);exit;
         $order=GoodsOrder::find()->select('id')->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])->one();
