@@ -1410,7 +1410,13 @@ class QuoteController extends Controller
         }
 
         foreach ($post['add'] as $one_post){
-            DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
+            if (isset($one_post['id'])) {
+                DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
+            } else {
+                $columns = ['series_id','quantity','decoration_add_id'];
+                DecorationMessage::findByInsert($one_post,$columns);
+            }
+
         }
 
         return Json::encode([
