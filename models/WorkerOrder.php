@@ -983,8 +983,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
 
             $worker_order = WorkerOrder::find()
-                ->where(['order_no' => $v['order_no'], 'is_old' => self::IS_NEW])
+                ->where(['order_no' => $v['order_no'], 'is_old' => self::IS_OLD])
                 ->one();
+
             if(!$worker_order){
                 return null;
             }

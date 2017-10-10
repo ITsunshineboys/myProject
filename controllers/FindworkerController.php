@@ -640,50 +640,50 @@ class FindworkerController extends Controller{
 
        ]);
     }
-    /**
-     * 工人抢单
-     * @return string
-     */
-    public function actionGrabsingle(){
-        $user_id = \Yii::$app->user->identity;
-        $code=1052;
-        if(!$user_id){
-            return Json::encode([
-                'code' => $code,
-                'msg' =>\ Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $code=1000;
-        $order_id=trim(\Yii::$app->request->get('order_id',''),'');
-        if(!$order_id){
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $worker_id=Worker::getWorkerByUid($user_id)->id;
-        $orderdata=WorkerOrder::find()
-            ->where(['id'=>$order_id])
-            ->andWhere(['status'=>self::STATUS_SINGLE])
-            ->one();
-        $orderdata->is_old=self::STATUS_SINGLE;
-        $orderdata->worker_id=$worker_id['id'];
-        if(!$orderdata->save(false)){
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>[
-                'tel'=>$orderdata->con_tel,
-                'name'=>$orderdata->con_people
-            ]
-        ]);
-    }
+//    /**
+//     * 工人抢单
+//     * @return string
+//     */
+//    public function actionGrabsingle(){
+//        $user_id = \Yii::$app->user->identity;
+//        $code=1052;
+//        if(!$user_id){
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $code=1000;
+//        $order_id=trim(\Yii::$app->request->get('order_id',''),'');
+//        if(!$order_id){
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $worker_id=Worker::getWorkerByUid($user_id)->id;
+//        $orderdata=WorkerOrder::find()
+//            ->where(['id'=>$order_id])
+//            ->andWhere(['status'=>self::STATUS_SINGLE])
+//            ->one();
+//        $orderdata->is_old=self::STATUS_SINGLE;
+//        $orderdata->worker_id=$worker_id['id'];
+//        if(!$orderdata->save(false)){
+//            $code=500;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//
+//        return Json::encode([
+//            'code' => 200,
+//            'msg' => 'ok',
+//            'data'=>[
+//                'tel'=>$orderdata->con_tel,
+//                'name'=>$orderdata->con_people
+//            ]
+//        ]);
+//    }
 
 }

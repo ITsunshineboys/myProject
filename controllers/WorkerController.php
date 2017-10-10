@@ -863,18 +863,7 @@ class WorkerController extends Controller
     }
 
     /**
-     * todo view works_reviews by works_id
-     *
-     */
-    public function actionGetWorksReviewsByWorksId()
-    {
-
-        //todo 需要建一个订单评论回复表 or 加pid?
-        //todo 需要查出每条的回复
-    }
-
-    /**
-     * 查询所以工人作品+分页
+     * 查询所有工人作品+分页
      * @return string
      */
     public function actionGetWorksByWorkerId()

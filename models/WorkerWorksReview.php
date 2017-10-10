@@ -76,22 +76,20 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
             ->where(['ww.worker_id'=>$worker_id])
             ->andWhere(['wwr.pid'=>0])
             ->orderBy('create_time Desc')
-            ->limit(self::SIZE)
             ->all();
+        $resview_count=count($query);
         $data=[];
+        $data['resview_count']=$resview_count;
         if($query){
+            $query=array_slice($query,1,2);//取最近评论2条数据
             foreach ($query as $k=>&$value){
-                $resview_count=count(self::find()->where(['works_id'=>$value['works_id']])->andWhere(['pid'=>0])->all());
                 $value['create_time']=date('Y-n-j',$value['create_time']);
                 $value['worker_reply']=self::find()->asArray()->select('review')->where(['works_id'=>$value['works_id']])->andWhere(['pid'=>$value['id']])->one()['review'];
-
                 unset($value['id']);
                 unset($value['works_id']);
                 unset($value['uid']);
                 unset($value['role_id']);
-                $data['resview_count']=$resview_count;
                 $data[]=$value;
-
             }
             return $data;
         }else{
@@ -121,7 +119,6 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
             foreach ($arr as &$value){
                 $value['role']=Role::find()->asArray()->where(['id'=>$value['role_id']])->one()['name'];
                 $value['icon']=User::find()->asArray()->where(['id'=>$value['uid']])->one()['icon'];
-
                 $value['nickname']=User::find()->asArray()->where(['id'=>$value['uid']])->one()['nickname'];
                 $value['worker_reply']=WorkerWorksReview::find()->asArray()->where(['pid'=>$value['id']])->one()['review'];
                 unset($value['uid']);
