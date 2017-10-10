@@ -196,16 +196,17 @@ class GoodsRecommendSupplier extends ActiveRecord
     /**
      * Get carousel
      *
+     * @param int $supplierId supplier id
      * @param int $districtCode district code default null
      * @return array
      */
-    public static function carousel($districtCode = null)
+    public static function carousel($supplierId, $districtCode = null)
     {
-        $key = self::CACHE_KEY_CAROUSEL;
+        $key = self::CACHE_KEY_CAROUSEL . $supplierId;
         $cache = Yii::$app->cache;
         $recommendGoods = $cache->get($key);
         if (!$recommendGoods) {
-            $recommendGoods = self::_carousel($districtCode, self::$appFields);
+            $recommendGoods = self::_carousel($supplierId, $districtCode, self::$appFields);
             if ($recommendGoods) {
                 $cache->set($key, $recommendGoods);
             }
@@ -218,16 +219,18 @@ class GoodsRecommendSupplier extends ActiveRecord
      * Get carousel
      *
      * @access private
+     * @param int $supplierId supplier id
      * @param int $districtCode district code default null
      * @param array $select select fields default all fields
      * @param array $orderBy order by fields default id desc
      * @return array
      */
-    private static function _carousel($districtCode = null, $select = [], $orderBy = ['id' => SORT_DESC])
+    private static function _carousel($supplierId, $districtCode = null, $select = [], $orderBy = ['id' => SORT_DESC])
     {
         $where = [
             'type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL,
             'status' => self::STATUS_ONLINE,
+            'supplier_id' => $supplierId,
         ];
         $districtCode && $where['district_code'] = $districtCode;
 
@@ -649,9 +652,9 @@ class GoodsRecommendSupplier extends ActiveRecord
 
         $cache = Yii::$app->cache;
         if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
-            $cache->delete(self::CACHE_KEY_CAROUSEL);
+            $cache->delete(self::CACHE_KEY_CAROUSEL . $this->supplier_id);
         } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
-            $cache->delete(self::CACHE_KEY_SECOND);
+            $cache->delete(self::CACHE_KEY_SECOND . $this->supplier_id);
         }
     }
 

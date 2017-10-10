@@ -297,7 +297,7 @@ class SupplierController extends Controller
         }
 
         $data = ModelService::selectModelFields($supplier, Supplier::FIELDS_SHOP_INDEX_MODEL);
-        $data['carousel'] = GoodsRecommendSupplier::carousel();
+        $data['carousel'] = GoodsRecommendSupplier::carousel($supplierId);
 
         return Json::encode([
             'code' => 200,
