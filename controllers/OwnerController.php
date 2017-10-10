@@ -124,6 +124,16 @@ class OwnerController extends Controller
         'bedroom_area' => '卧室面积',
     ];
 
+    const MATERIALS_CLASSIFY = [
+        'auxiliary_material' => '辅材',
+        'principal_material' => '主要材料',
+        'immobilization' => '固定家具',
+        'move' => '移动家具',
+        'home_appliances' => '家电配套',
+        'mild' => '软装配套',
+        'capacity' => '智能配套',
+        'live' => '生活配套',
+    ];
     /**
      * Actions accessed by logged-in users
      */
@@ -292,9 +302,11 @@ class OwnerController extends Controller
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name';
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL,$goods_select);
-        var_dump($goods);exit;
         $judge = BasisDecorationService::priceConversion($goods);
         $weak_current = BasisDecorationService::judge($judge, $post);
+
+        // 系数管理
+        $classify = CoefficientManagement::findByAll();
 
         //当地工艺
         $craft_select = 'id,material,project_details';
@@ -307,16 +319,20 @@ class OwnerController extends Controller
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
-        var_dump($material);exit;
 
         //添加材料
+        $decoration_add_select = 'id,one_materials,sku';
+        $decoration_add_where = ['and',['city_code'=>$post['city']],['one_materials'=>self::MATERIALS_CLASSIFY['auxiliary_material']]];
+        $decoration_add = DecorationAdd::findByAll($decoration_add_select,$decoration_add_where);
+        var_dump($decoration_add);exit;
+
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
                 'weak_current_labor_price' => $labor_all_cost,
                 'weak_current_material' => $material,
-                'weak_current_add_price' => $add_price,
+//                'weak_current_add_price' => $add_price,
             ]
         ]);
     }

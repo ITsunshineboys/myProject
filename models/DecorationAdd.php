@@ -93,6 +93,16 @@ class DecorationAdd extends ActiveRecord
             ->all();
     }
 
+    public static function findByAll($select = [] , $where = [])
+    {
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where($where)
+            ->all();
+    }
+
+
     /**
      * carpentry find all
      * @param $str
