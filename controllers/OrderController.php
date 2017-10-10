@@ -1236,6 +1236,8 @@ class OrderController extends Controller
               if ($order_information['paytime']!=0){
                   $goods_data['paytime']=$order_information['paytime'];
               }
+                  $data=OrderPlatForm::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+              var_dump($data);exit;
               if (!OrderPlatForm::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one())
               {
                   $is_platform=1;
