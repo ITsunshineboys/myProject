@@ -2045,6 +2045,10 @@ class OrderController extends Controller
                 ->select('image')
                 ->where(['comment_id'=>$order['comment_id']])
                 ->all();
+            $comment['reply']=CommentReply::find()
+                ->select('content')
+                ->where(['comment_id'=>$order['comment_id']])
+                ->one()->content;
         }
         $code=200;
         return Json::encode([
