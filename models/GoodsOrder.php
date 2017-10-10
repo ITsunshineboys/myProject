@@ -1687,7 +1687,8 @@ class GoodsOrder extends ActiveRecord
            }
     }
 
-    /**
+
+   /**
      *
      * ordfer_refund 表字段status不启用
      * @param $order_no
@@ -1704,9 +1705,9 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         try{
 
-            $order_goodslist=OrderGoods::find()->where(['order_no','sku'=>$sku])->one();
+            $order_goodslist=OrderGoods::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
             $order_goodslist->isunusual=0;
-            $res1=$order_goodslist->save();
+            $res1=$order_goodslist->save(false);
             if (!$res1){
                 $code=500;
                 $tran->rollBack();
