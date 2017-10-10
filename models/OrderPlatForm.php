@@ -127,7 +127,7 @@ class OrderPlatForm extends ActiveRecord
                 return $code;
             }
             $GoodsOrder=GoodsOrder::find()
-                ->select(['id'])
+                ->select(['supplier_id'])
                 ->where(['order_no'=>$order_no])
                 ->one();
             $supplier=Supplier::find()
