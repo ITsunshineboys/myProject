@@ -247,7 +247,7 @@ class SupplierController extends Controller
         $code = 1000;
 
         $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
-        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
+//        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
         if (!$supplierId) {
             return Json::encode([
                 'code' => $code,
@@ -259,7 +259,7 @@ class SupplierController extends Controller
         $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $where = [
             'supplier_id' => $supplierId,
-            'district_code' => $districtCode,
+//            'district_code' => $districtCode,
         ];
 
         return Json::encode([
