@@ -2150,7 +2150,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $postData = Yii::$app->request->post();
+        $postData = Yii::$app->request->get();
         $uploadsData=FileService::uploadMore();
         if ($uploadsData !=1000){
             if (is_numeric($uploadsData)){
@@ -2575,7 +2575,7 @@ class OrderController extends Controller
     }
 
     /**
-     * 获取异常状态
+     *商家后台获取异常状态
      * @return string
      */
     public  function  actionFindUnusualList()
@@ -2693,6 +2693,216 @@ class OrderController extends Controller
             $data[$k]['order_type']=$unusualList[$k]['order_type'];
             $data[$k]['list']=$arr;
         }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
+    }
+    /**
+     * 大后台获取异常信息
+     * @return string
+     */
+    public  function actionFindUnusualListLhzz()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+
+        if (!$order_no || !$sku)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        if (!$GoodsOrder)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        switch ($GoodsOrder->order_refer)
+        {
+            case 1:
+                $refund_type='线下已退款';
+                break;
+            case 2:
+                $refund_type='已退至顾客钱包';
+                break;
+        }
+
+
+        $unshipped=OrderRefund::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
+            ->asArray()
+            ->one();
+        if ($unshipped)
+        {
+            if($unshipped['create_time'])
+            {
+                $unshipped['create_time']=date('Y-m-d H:i',$unshipped['create_time']);
+            }
+            if ($unshipped['refund_time'])
+            {
+                $unshipped['refund_time']=date('Y-m-d H:i',$unshipped['refund_time']);
+            }
+            if ($unshipped['handle_time'])
+            {
+                $unshipped['handle_time']=date('Y-m-d H:i',$unshipped['handle_time']);
+            }
+            if ($unshipped['handle']==0)
+            {
+                $arr1[]=[
+                    'type'=>'取消原因',
+                    'value'=>$unshipped['apply_reason'],
+                    'content'=>'',
+                    'time'=>$unshipped['create_time'],
+                    'stage'=>$unshipped['order_type']
+                ];
+            }else {
+                $arr1[] = [
+                    'type' => '取消原因',
+                    'value' => $unshipped['apply_reason'],
+                    'content' => '',
+                    'time' => $unshipped['create_time'],
+                    'stage' => $unshipped['order_type']
+                ];
+                switch ($unshipped['handle']) {
+                    case 1:
+                        $type = '同意';
+                        $reason = '';
+                        $complete_time = $unshipped['refund_time'];
+                        $result = '成功';
+                        break;
+                    case 2:
+                        $type = '驳回';
+                        $reason = $unshipped['handle_reason'];
+                        $complete_time = $unshipped['handle_time'];
+                        $result = '失败';
+                        break;
+                }
+                $arr1[] = [
+                    'type' => '商家反馈',
+                    'value' => $type,
+                    'content' => $reason,
+                    'time' => $unshipped['handle_time'],
+                    'stage' => $unshipped['order_type']
+                ];
+                $arr1[] = [
+                    'type' => '退款结果',
+                    'value' => $result,
+                    'content' => '',
+                    'time' => $complete_time,
+                    'stage' => $unshipped['order_type']
+                ];
+                if ($unshipped['handle'] == 1) {
+                    $arr1[] = [
+                        'type' => '退款去向',
+                        'value' => $refund_type,
+                        'content' => '',
+                        'time' => $complete_time,
+                        'stage' => $unshipped['order_type']
+                    ];
+                }
+            }
+            $data[]=$arr1;
+        }else{
+            $data[]=[];
+        }
+
+        $unreceived=OrderRefund::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
+            ->asArray()
+            ->one();
+        if ($unreceived)
+        {
+            if($unreceived['create_time'])
+            {
+                $unreceived['create_time']=date('Y-m-d H:i',$unreceived['create_time']);
+            }
+            if ($unreceived['refund_time'])
+            {
+                $unreceived['refund_time']=date('Y-m-d H:i',$unreceived['refund_time']);
+            }
+            if ($unreceived['handle_time'])
+            {
+                $unreceived['handle_time']=date('Y-m-d H:i',$unreceived['handle_time']);
+            }
+            if ($unreceived['handle']==0)
+            {
+                $arr2[]=[
+                    'type'=>'取消原因',
+                    'value'=>$unreceived['apply_reason'],
+                    'content'=>'',
+                    'time'=>$unreceived['create_time'],
+                    'stage'=>$unreceived['order_type']
+                ];
+            }else {
+                $arr2[] = [
+                    'type' => '取消原因',
+                    'value' => $unreceived['apply_reason'],
+                    'content' => '',
+                    'time' => $unreceived['create_time'],
+                    'stage' => $unreceived['order_type']
+                ];
+                switch ($unreceived['handle']) {
+                    case 1:
+                        $type = '同意';
+                        $reason = '';
+                        $complete_time = $unreceived['refund_time'];
+                        $result = '成功';
+                        break;
+                    case 2:
+                        $type = '驳回';
+                        $reason = $unreceived['handle_reason'];
+                        $complete_time = $unreceived['handle_time'];
+                        $result = '失败';
+                        break;
+                }
+                $arr2[] = [
+                    'type' => '商家反馈',
+                    'value' => $type,
+                    'content' => $reason,
+                    'time' => $unreceived['handle_time'],
+                    'stage' => $unreceived['order_type']
+                ];
+                $arr2[] = [
+                    'type' => '退款结果',
+                    'value' => $result,
+                    'content' => '',
+                    'time' => $complete_time,
+                    'stage' => $unreceived['order_type']
+                ];
+                if ($unreceived['handle'] == 1) {
+                    $arr2[] = [
+                        'type' => '退款去向',
+                        'value' => $refund_type,
+                        'content' => '',
+                        'time' => $complete_time,
+                        'stage' => $unreceived['order_type']
+                    ];
+                }
+            }
+            $data[]=$arr2;
+        }else{
+            $data[]=[];
+        }
+
         $code=200;
         return Json::encode([
             'code' => $code,
