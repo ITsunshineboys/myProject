@@ -1546,7 +1546,6 @@ class QuoteController extends Controller
         return Json::encode([
            'list'=> AssortGoods::findByAll($select,$where),
         ]);
-
     }
 
     public function actionGoodsManagementAdd()
