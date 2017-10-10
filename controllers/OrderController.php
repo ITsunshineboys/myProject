@@ -1667,7 +1667,7 @@ class OrderController extends Controller
      用户退款操作
      * @return string
      */
-    public function  actionRefundhandle(){
+    public function  actionRefundHandle(){
         $user = \Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
