@@ -1236,20 +1236,19 @@ class OrderController extends Controller
               if ($order_information['paytime']!=0){
                   $goods_data['paytime']=$order_information['paytime'];
               }
-                  $data=OrderPlatForm::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
-              // if (!OrderPlatForm::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one())
-              // {
-              //     $is_platform=1;
-              // }else{
-              //     $is_platform=2;
-              // }
+              if (!OrderPlatForm::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one())
+              {
+                  $is_platform=1;
+              }else{
+                  $is_platform=2;
+              }
               $goods_data['create_time']=$order_information['create_time'];
               $data=array(
                     'goods_data'=>$goods_data,
                     'goods_value'=>$ordergoodsinformation,
                     'receive_details'=>$receive_details,
                     'is_unusual'=>$order_information['is_unusual'],
-                    // 'is_platform'=>$is_platform
+                    'is_platform'=>$is_platform
                 );
               $code = 200;
               return Json::encode([
