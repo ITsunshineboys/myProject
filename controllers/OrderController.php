@@ -1456,13 +1456,19 @@ class OrderController extends Controller
                 $list=Express::Findexpresslist_sendtohome($order_no,$sku);
                 break;
         }
+        if ($shipping_type==1)
+        {
+            $waybillname='商家';
+        }else{
+            $waybillname= $express->waybillname;
+        }
         return Json::encode([
             'code' => 200,
             'msg' =>'ok',
             'data' => [
                 'list'=>$list,
                 'shipping_type'=>$shipping_type,
-                'waybillname'=>$express->waybillname,
+                'waybillname'=>$waybillname,
                 'waybillnumber'=>$express->waybillnumber
             ],
         ]);
@@ -2929,6 +2935,69 @@ class OrderController extends Controller
         ]);
     }
 
+
+   /**
+     * 用户申请售后详情
+     * @return string
+     */
+    public function actionApplyAfterDetails()
+    {
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $request=Yii::$app->request;
+            $code=1000;
+            $order_no=$request->post('order_no','');
+            $sku=$request->post('sku','');
+            if (!$order_no || !$sku)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+            $Goods=Goods::findBySku($sku,'after_sale_services');
+            if (!$OrderGoods || !$Goods)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $arr=explode(',',$Goods->after_sale_services);
+            foreach ($arr as $k =>$v)
+            {
+                if ($arr[$k]==0)
+                {
+                    unset($arr[$k]);
+                }else{
+                    $value=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$arr[$k]];
+                    $name=array_search($value,OrderAfterSale::AFTER_SALE_SERVICES);
+                    $data[$k]['value']=$value;
+                    $data[$k]['name']=$name;
+                }
+            }
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>'ok',
+                'data'=>[
+                    'goods'=>[
+                        'goods_name'=>$OrderGoods->goods_name,
+                        'goods_number'=>$OrderGoods->goods_number,
+                        'cover_image'=>$OrderGoods->cover_image,
+                        'goods_price'=>$OrderGoods->goods_price
+                    ],
+                    'after_sale'=>$data
+                ]
+            ]);
+        }
 
 
 }
