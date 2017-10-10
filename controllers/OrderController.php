@@ -2040,15 +2040,23 @@ class OrderController extends Controller
 
         $comment['create_time']=date('Y-m-d H:i',0);
 
-        if ($comment){
+         if ($comment){
             $comment['image']=CommentImage::find()
                 ->select('image')
                 ->where(['comment_id'=>$order['comment_id']])
                 ->all();
-            $comment['reply']=CommentReply::find()
+            $reply=CommentReply::find()
                 ->select('content')
                 ->where(['comment_id'=>$order['comment_id']])
-                ->one()->content;
+                ->asArray()
+                ->one();
+            if ($reply)
+            {
+                $comment['reply']=$reply['content'];
+            }else{
+                $comment['reply']='';
+            }
+
         }
         $code=200;
         return Json::encode([
