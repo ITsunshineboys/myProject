@@ -110,7 +110,7 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            if ($OrderGoods->shiping_status==0){
+            if ($OrderGoods->shipping_status==0){
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number+$OrderGoods->freight;
                 $reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number+$OrderGoods->freight;
             }else{
