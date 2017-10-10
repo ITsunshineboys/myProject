@@ -227,6 +227,21 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * Get readable after sale services
+     *
+     * @return array
+     */
+    public static function afterSaleServicesReadableCls($afterSaleServices)
+    {
+        $readableServices = [];
+        $services = explode(',', $afterSaleServices);
+        foreach ($services as $service) {
+            $readableServices[] = self::AFTER_SALE_SERVICES[$service];
+        }
+        return $readableServices;
+    }
+
+    /**
      * Get goods list by brand id
      *
      * @param  int $brandId brand id
@@ -423,7 +438,7 @@ class Goods extends ActiveRecord
      * @param array $select recommend fields default all fields
      * @return array|bool|ActiveRecord[]
      */
-    public static function findBySkuAll($sku,$select = [])
+    public static function findBySkuAll($sku, $select = [])
     {
         if (!$sku) {
             return false;
@@ -431,7 +446,7 @@ class Goods extends ActiveRecord
         return self::find()
             ->asArray()
             ->select($select)
-            ->where(['in','sku',$sku])
+            ->where(['in', 'sku', $sku])
             ->all();
     }
 
@@ -441,7 +456,7 @@ class Goods extends ActiveRecord
      * @param int $city
      * @return mixed
      */
-    public static function priceDetail($level, $title,$select = [], $city = self::DEFAULT_CITY)
+    public static function priceDetail($level, $title, $select = [], $city = self::DEFAULT_CITY)
     {
         $all = self::find()
             ->asArray()
@@ -450,7 +465,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->leftJoin('supplier','goods.supplier_id = supplier.id')
+            ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
             ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title], ['goods.status' => self::STATUS_ONLINE]])
             ->all();
         return $all;
@@ -516,7 +531,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-            ->leftJoin('supplier','goods.supplier_id = supplier.id')
+            ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
             ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $material]])
             ->all();
         return $all_goods;
@@ -920,7 +935,7 @@ class Goods extends ActiveRecord
                 ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
                 ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
                 ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-                ->leftJoin('supplier','goods.supplier_id = supplier.id')
+                ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
                 ->where(['and', ['gc.title' => $title], ['gc.level' => $level], ['goods.series_id' => $post['series']], ['goods.style_id' => $post['style']]])
                 ->all();
             return $goods;
@@ -940,6 +955,18 @@ class Goods extends ActiveRecord
             ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all], ['goods.status' => self::STATUS_ONLINE]])
             ->all();
         return $all_goods;
+    }
+
+    /**
+     * Check if of supplier's goods by supplier id and sku
+     *
+     * @param int $supplierId supplier id
+     * @param int $sku goods sku
+     * @return bool
+     */
+    public static function checkSupplierGoodsBySupplierIdAndSku($supplierId, $sku)
+    {
+        return self::find()->where(['sku' => $sku, 'supplier_id' => $supplierId])->exists();
     }
 
     /**
@@ -1256,21 +1283,6 @@ class Goods extends ActiveRecord
     {
         $readableServices = [];
         $services = explode(',', $this->after_sale_services);
-        foreach ($services as $service) {
-            $readableServices[] = self::AFTER_SALE_SERVICES[$service];
-        }
-        return $readableServices;
-    }
-
-    /**
-     * Get readable after sale services
-     *
-     * @return array
-     */
-    public static function afterSaleServicesReadableCls($afterSaleServices)
-    {
-        $readableServices = [];
-        $services = explode(',', $afterSaleServices);
         foreach ($services as $service) {
             $readableServices[] = self::AFTER_SALE_SERVICES[$service];
         }
