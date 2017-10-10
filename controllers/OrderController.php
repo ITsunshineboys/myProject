@@ -1249,7 +1249,7 @@ class OrderController extends Controller
                     'goods_value'=>$ordergoodsinformation,
                     'receive_details'=>$receive_details,
                     'is_unusual'=>$order_information['is_unusual'],
-                    'is_platform'=>$is_platform
+                    // 'is_platform'=>$is_platform
                 );
               $code = 200;
               return Json::encode([
