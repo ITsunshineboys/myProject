@@ -878,6 +878,7 @@ class QuoteController extends Controller
     {
         $goods_list = AssortGoods::find()
             ->select(['title','category_id as id','pid','path'])
+            ->where(['state'=>0])
             ->asArray()
             ->all();
         $goods_classify = GoodsCategory::find()
@@ -1329,11 +1330,11 @@ class QuoteController extends Controller
             $decoration_message->findByInsert($add_decoration,$columns);
         }
         if (isset($style)){
-            $columns = ['quantity','style_id','decoration_add_id'];
+            $columns = ['style_id','quantity','decoration_add_id'];
             $decoration_message->findByInsert($style,$columns);
         }
         if (isset($series)){
-            $columns = ['quantity','series_id','decoration_add_id'];
+            $columns = ['series_id','quantity','decoration_add_id'];
             $decoration_message->findByInsert($series,$columns);
         }
         return Json::encode([
@@ -1534,8 +1535,30 @@ class QuoteController extends Controller
         ]);
     }
 
-    public function actionGoodsManagement()
+    /**
+     * Goods management list
+     * @return string
+     */
+    public function actionGoodsManagementList()
     {
+        $select = 'title,pid,path,category_id';
+        $where = 'state = 1';
+        return Json::encode([
+           'list'=> AssortGoods::findByAll($select,$where),
+        ]);
 
+    }
+
+    public function actionGoodsManagementAdd()
+    {
+        $post = \Yii::$app->request->post();
+        (new AssortGoods())->deleteAll(['state'=>1]);
+        foreach($post as $management) {
+            AssortGoods::findByInsert($management);
+        }
+        return Json::encode([
+           'code'=>200,
+           'msg'=>'ok',
+        ]);
     }
 }
