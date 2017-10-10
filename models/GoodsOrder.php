@@ -2064,8 +2064,9 @@ class GoodsOrder extends ActiveRecord
                 }
             }
            $goods=Goods::find()->where(['sku'=>$arr[$key]['list'][0]['sku']])->one();
-           if($goods->after_sale_services==0 )
+            if($goods->after_sale_services=='0' )
             {
+
                 $arr[$key]['is_support_after_sale']=0;
             }else{
                 $arr[$key]['is_support_after_sale']=1;
