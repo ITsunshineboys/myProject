@@ -1076,7 +1076,6 @@ class OrderController extends Controller
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
         $type=trim($request->get('type','all'));
-        $supplier_id=trim($request->get('supplier_id'));
         $where=GoodsOrder::GetTypeWhere($type);
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -1097,10 +1096,10 @@ class OrderController extends Controller
         }
                 if ($type=='all')
                 {
-                    $where .=" supplier_id={$supplier_id}";
+                    $where .=" supplier_id={$supplier->id}";
                 }else
                 {
-                    $where .=" and supplier_id={$supplier_id}";
+                    $where .=" and supplier_id={$supplier->id}";
                 }
 
                 if($keyword){
