@@ -52,7 +52,7 @@ class CommentReply extends ActiveRecord
                return $code;
            }
            $OrderGoods=OrderGoods::find()
-               ->where(['order_no'=>$postData['ordeR_no'],'sku'=>$postData['sku']])
+               ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
                ->one();
            if ($OrderGoods->comment_id==0){
                $code=1000;
