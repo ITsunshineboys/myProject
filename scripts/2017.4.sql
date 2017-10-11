@@ -1520,3 +1520,24 @@ CREATE TABLE `apartment_area` (
   `max_area` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `deleted_goods_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL DEFAULT '0',
+  `role_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(25) NOT NULL DEFAULT '',
+  `icon` varchar(255) NOT NULL DEFAULT '' COMMENT '头像地址',
+  `content` varchar(255) NOT NULL DEFAULT '',
+  `score` float NOT NULL DEFAULT '0',
+  `create_time` int(11) NOT NULL DEFAULT '0',
+  `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `store_service_score` float NOT NULL DEFAULT '0',
+  `shipping_score` float NOT NULL DEFAULT '0',
+  `logistics_speed_score` float NOT NULL DEFAULT '0',
+  `is_anonymous` tinyint(1) NOT NULL COMMENT '1:匿名  2： 实名',
+  `handle_uid` int(11) NOT NULL,
+  `order_no` bigint(30) NOT NULL,
+  `sku` bigint(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;

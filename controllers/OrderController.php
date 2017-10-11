@@ -3258,5 +3258,100 @@ class OrderController extends Controller
             ]);
         }
 
+           /**
+     * 删除评论操作
+     * @return string
+     */
+    public  function  actionSupplierDeleteComment()
+        {
+            $order_no=Yii::$app->request->post('order_no','');
+            $sku=Yii::$app->request->post('sku','');
+            $code=1000;
+            if (!$sku ||! $order_no)
+            {
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+            if (!$OrderGoods)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            if (!$OrderGoods->comment_id)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $comment=GoodsComment::find()->where(['id'=>$OrderGoods->comment_id])->one();
+            if (!$comment)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $delete=new DeletedGoodsComment();
+                $delete->uid=$comment->uid;
+                $delete->role_id=$comment->uid;
+                $delete->name=$comment->uid;
+                $delete->icon=$comment->uid;
+                $delete->content=$comment->uid;
+                $delete->score=$comment->uid;
+                $delete->goods_id=$comment->uid;
+                $delete->store_service_score=$comment->uid;
+                $delete->shipping_score=$comment->uid;
+                $delete->logistics_speed_score=$comment->uid;
+                $delete->is_anonymous=$comment->uid;
+                $res1=$delete->save(false);
+                if (!$res1)
+                {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $res2=$comment->delete();
+                if (!$res2)
+                {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $OrderGoods->comment_id=0;
+                $res3=$OrderGoods->save(false);
+                if (!$res3)
+                {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $tran->commit();
+                return Json::encode([
+                    'code' =>  200,
+                    'msg'  => 'ok'
+                ]);
+            }catch (Exception $e){
+                $tran->rollBack();
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+
+
 
 }
