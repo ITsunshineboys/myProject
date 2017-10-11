@@ -1540,4 +1540,4 @@ CREATE TABLE `deleted_goods_comment` (
   `order_no` bigint(30) NOT NULL,
   `sku` bigint(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
