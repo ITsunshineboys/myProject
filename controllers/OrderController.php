@@ -2077,7 +2077,7 @@ class OrderController extends Controller
     public function  actionCommentReply()
     {
         $user = Yii::$app->user->identity;
-        if (!$user->checklogin()){
+        if (!$user){
             $code=1052;
             return Json::encode([
                 'code' => $code,
