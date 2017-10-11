@@ -1244,14 +1244,12 @@ class GoodsOrder extends ActiveRecord
             $data[$k]['complete_time']=0;
             $data[$k]['RemainingTime']=0;
             if ($data[$k]['status']=='待收货'){
-                $waybillnumber=Express::find()
-                    ->select('waybillnumber')
-                    ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
-                    ->asArray()
-                    ->one()['waybillnumber'];
-                    if ($waybillnumber)
+
+                    $express=Express::find()
+                        ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                        ->one();
+                    if ($express)
                     {
-                        $express=Express::findByWayBillNumber($waybillnumber);
                         $data[$k]['send_time']=$express->create_time;
                         $data[$k]['RemainingTime']=Express::findRemainingTime($express);
                         if ($data[$k]['RemainingTime']<=0){
@@ -1269,15 +1267,14 @@ class GoodsOrder extends ActiveRecord
                             }
                         }
                     }
+
                };
             if ($data[$k]['status']=='已完成')
             {
-                $waybillnumber=Express::find()
-                    ->select('waybillnumber')
+                $express=Express::find()
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
                     ->asArray()
-                    ->one()['waybillnumber'];
-                $express=Express::findByWayBillNumber($waybillnumber);
+                    ->one();
                 if (!$express){
                     $data[$k]['send_time']=0;
                     $data[$k]['RemainingTime']=0;
@@ -1310,7 +1307,6 @@ class GoodsOrder extends ActiveRecord
         }
         return $data;
     }
-
 
    /**
      * @param $order_no
