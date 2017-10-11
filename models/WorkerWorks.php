@@ -74,22 +74,51 @@ class WorkerWorks extends \yii\db\ActiveRecord
             return null;
         }
         $query['start_time']=date('Y-n-j',$query['start_time']);
-        $query['end_time']=date('Y-n-j',$query['end_time']);
+        $query['end_time']=date('Y-n-',$query['end_time']);
 
         return $query;
     }
+
     /**
      * 获取装修前图片
      * @param $worker_order_no
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function beforedecorationimgs($worker_order_no){
+    public static function beforedecorationimgs($works_id,$worker_order_no){
         $data=WorkerOrderImg::find()
             ->select('order_img')
             ->where(['worker_order_no'=>$worker_order_no])
             ->asArray()
             ->all();
+
         if(!$data){
+            $works_detail =WorkerWorksDetail::worksdetailbyworksId($works_id);
+            if ($works_detail) {
+                $img_ids = $works_detail->img_ids;
+
+                if ($img_ids) {
+                    $time=WorkResult::find()->asArray()->orderBy('create_time Asc')->where(['works_id'=>$works_id])->all();
+                    if(!$time){
+                        return null;
+                    }
+                    $ids = explode(',', $img_ids);
+                    foreach ($ids as $id){
+                        $a[]= WorkResultImg::find()
+                            ->select('result_img,work_result_id')
+                            ->asArray()
+                            ->where(['id'=>$id])
+                            ->one();
+                    }
+                    foreach ($a as $d){
+                        if($d['work_result_id']==$time[0]['id']){
+                            $data[]=$d;
+                        }
+                    }
+                }
+
+            } else {
+                $data = '';
+            }
 
         }
         return $data;
@@ -100,10 +129,7 @@ class WorkerWorks extends \yii\db\ActiveRecord
      * @return array|string
      */
     public static function Indecorationimgs($works_id){
-        $works_detail = WorkerWorksDetail::find()
-            ->where(['works_id' => $works_id])
-            ->one();
-
+        $works_detail =WorkerWorksDetail::worksdetailbyworksId($works_id);
         if ($works_detail) {
             $img_ids = $works_detail->img_ids;
 
@@ -121,11 +147,8 @@ class WorkerWorks extends \yii\db\ActiveRecord
                         ->one();
                 }
                 foreach ($a as $d){
-
-                    if($d['work_result_id']!=$time[0]['id']){
-                       $data[]=$d;
-                    }else{
-                        $data='';
+                    if($d['work_result_id']!=$time[0]['id'] && $d['work_result_id']!= end($time)['id']){
+                        $data[]=$d;
                     }
                 }
             }
@@ -142,10 +165,7 @@ class WorkerWorks extends \yii\db\ActiveRecord
      * @return array|string
      */
     public static function afterdecorationimgs($works_id){
-        $works_detail = WorkerWorksDetail::find()
-            ->where(['works_id' => $works_id])
-            ->one();
-
+        $works_detail =WorkerWorksDetail::worksdetailbyworksId($works_id);
         if ($works_detail) {
             $img_ids = $works_detail->img_ids;
 
@@ -166,8 +186,6 @@ class WorkerWorks extends \yii\db\ActiveRecord
 
                     if($d['work_result_id']==$time[0]['id']){
                         $data[]=$d;
-                    }else{
-                        $data='';
                     }
                 }
 
@@ -204,20 +222,20 @@ class WorkerWorks extends \yii\db\ActiveRecord
 
         $data['works']=array_merge($time,$array);
         //装修前---下单用户上传的
-        $before_decoration_imgs=self::beforedecorationimgs($array['order_no']);
+        $before_decoration_imgs=self::beforedecorationimgs($works_id,$array['order_no']);
         //装修中---工人上传的 截取中间日期
         //todo 装修中图片 需要好好理下;
         $In_decoration_imgs=self::Indecorationimgs($works_id);
         //装修后--工人上传的 截取最后一次上传的日期
         $after_decoration_imgs=self::afterdecorationimgs($works_id);
         if($before_decoration_imgs || $In_decoration_imgs || $after_decoration_imgs){
-            $data['in_decoration_imgs']=$In_decoration_imgs;
             $data['before_decoration_imgs']=$before_decoration_imgs;
+            $data['in_decoration_imgs']=$In_decoration_imgs;
             $data['after_decorationimgs']=$after_decoration_imgs;
 
         }else{
-            $data['In_decoration_imgs']='';
             $data['before_decoration_imgs']='';
+            $data['In_decoration_imgs']='';
             $data['after_decoration_imgs']='';
 
         }

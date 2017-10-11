@@ -579,7 +579,7 @@ class FindworkerController extends Controller{
         $restview=WorkerWorksReview::getOwenerPLone($worker_id);
         $worker_view=Worker::workerinfos($worker_id);
         $worker_works=WorkerWorks::getLatelyWorks($worker_id);
-        if($worker_view ){
+
             return Json::encode([
                 'code' => 200,
                 'msg' =>'ok',
@@ -589,13 +589,7 @@ class FindworkerController extends Controller{
                     'worker_works'=>$worker_works
                 ]
             ]);
-        }else{
-            return Json::encode([
-                'code' => 200,
-                'msg' =>'ok',
-                'data'=>null
-            ]);
-        }
+
     }
     /**
      *抢单信息

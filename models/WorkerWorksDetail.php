@@ -48,5 +48,9 @@ class WorkerWorksDetail extends \yii\db\ActiveRecord
             'img_ids' => '图片,work_result_img的id,逗号分隔',
         ];
     }
-
+    public static function worksdetailbyworksId($works_id){
+       return self::find()
+            ->where(['works_id' => $works_id])
+            ->one();
+    }
 }
