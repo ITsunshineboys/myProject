@@ -75,7 +75,7 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
             ->leftJoin('role as r','r.id=wwr.role_id')
             ->leftJoin('worker_works as ww','ww.id=wwr.works_id')
             ->where(['ww.worker_id'=>$worker_id])
-            ->andWhere(['wwr.pid'=>0])
+            ->andWhere(['wwr.pid'=>WorkerWorks::STUAT_LIN])
             ->orderBy('create_time Desc')
             ->all();
         $resview_count=count($query);
@@ -130,7 +130,14 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
 
 
     }
-
+    /**
+     * 工人回复评论添加
+     * @param $uid
+     * @param $view_id
+     * @param $review
+     * @param $works_id
+     * @return int
+     */
     public static function WorkerRelpy($uid,$view_id,$review,$works_id){
         $role_id=User::find()
             ->select('last_role_id_app')
