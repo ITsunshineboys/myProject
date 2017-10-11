@@ -94,19 +94,26 @@ class OrderPlatForm extends ActiveRecord
             $OrderPlatForm->refund_result=2;
             $OrderPlatForm->refund_type=1;
             $OrderPlatForm->refund_time=$time;
-            $res=$OrderPlatForm->save();
+            $OrderPlatForm->order_no=$order_no;
+            $OrderPlatForm->sku=$sku;
+            $res=$OrderPlatForm->save(false);
             if (!$res){
                 $code=500;
                 $tran->rollBack();
                 return $code;
             }
-            $OrderGoods=OrderGoods::find()
-            ->where(['order_no'=>$order_no,'sku'=>$sku])
-            ->one();
+            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+            if (!$OrderGoods)
+            {
+                $code=1000;
+                $tran->rollBack();
+                return $code;
+            }
             $OrderGoods->order_status=2;
-            $res2=$OrderGoods->save();
+            $res2=$OrderGoods->save(false);
             if (!$res2){
                 $code=500;
+
                 $tran->rollBack();
                 return $code;
             }
@@ -122,9 +129,11 @@ class OrderPlatForm extends ActiveRecord
             $user->balance=$user->balance+$refund_money;
             $res3=$user->save(false);
             if (!$res3){
+
                 $code=500;
                 $tran->rollBack();
                 return $code;
+
             }
             $GoodsOrder=GoodsOrder::find()
                 ->select(['supplier_id'])
@@ -136,7 +145,7 @@ class OrderPlatForm extends ActiveRecord
 
             $supplier->balance=$supplier->balance-$reduce_money;
             $supplier->availableamount=$supplier->availableamount-$reduce_money;
-            $res4=$supplier->save();
+            $res4=$supplier->save(false);
             if (!$res4){
                 $code=500;
                 $tran->rollBack();
@@ -167,7 +176,6 @@ class OrderPlatForm extends ActiveRecord
             return $code;
         }
     }
-
     /**
      * @param $order_no
      * @param $handle_type
