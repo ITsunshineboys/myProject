@@ -1599,6 +1599,7 @@ class GoodsOrder extends ActiveRecord
         return (int)$query->one()[$retKeyName];
     }
 
+ 
     /**user apply refund
      * @param $order_no
      * @param $sku
@@ -1618,14 +1619,10 @@ class GoodsOrder extends ActiveRecord
             ->andWhere(['sku'=>$sku])
             ->andWhere('handle = 0')
             ->one();
-        if ($refunds){
-            $code=1031;
-            return $code;
-        }
+
         $time=time();
         $trans = \Yii::$app->db->beginTransaction();
         try {
-
             $order=OrderGoods::find()
                 ->where(['order_no'=>$order_no])
                 ->andWhere(['sku'=>$sku])
@@ -1646,21 +1643,28 @@ class GoodsOrder extends ActiveRecord
                 $trans->rollBack();
                 return $code;
             }
-            $order_refund=new OrderRefund();
-            $order_refund->order_no=$order_no;
-            $order_refund->sku=$sku;
-            $order_refund->apply_reason=$apply_reason;
-            $order_refund->create_time=$time;
-            $order_refund->order_type=$shipping_status;
-            $res=$order_refund->save(false);
-            if (!$res){
-                $code=500;
-                $trans->rollBack();
+            if ($refunds){
+                $code=1031;
+                $trans->commit();
+                return $code;
+            }else{
+                $order_refund=new OrderRefund();
+                $order_refund->order_no=$order_no;
+                $order_refund->sku=$sku;
+                $order_refund->apply_reason=$apply_reason;
+                $order_refund->create_time=$time;
+                $order_refund->order_type=$shipping_status;
+                $res=$order_refund->save(false);
+                if (!$res){
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+                $trans->commit();
+                $code=200;
                 return $code;
             }
-            $trans->commit();
-            $code=200;
-            return $code;
+
         } catch (Exception $e) {
             $trans->rollBack();
             $code=500;
