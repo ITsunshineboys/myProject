@@ -2573,8 +2573,8 @@ class OrderController extends Controller
         }
     }
 
-    /**
-     *商家后台获取异常状态
+   /**
+     * 商家获取异常状态
      * @return string
      */
     public  function  actionFindUnusualList()
@@ -2590,6 +2590,7 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
+
         if (!$order_no || !$sku)
         {
             $code=1000;
@@ -2617,9 +2618,9 @@ class OrderController extends Controller
                 $refund_type='已退至顾客钱包';
                 break;
         }
+
         foreach ($unusualList as $k =>$v)
         {
-
             $unusualList[$k]=$unusualList[$k]->toArray();
             if($unusualList[$k]['create_time'])
             {
@@ -2654,21 +2655,21 @@ class OrderController extends Controller
                 {
                     case 1:
                         $type='同意';
-                        $reason='';
-                        $complete_time=$unusualList[$k]['refund_time'];
+                        $data_code[$k]['reason']='';
+                        $data_code[$k]['complete_time']=$unusualList[$k]['refund_time'];
                         $result='成功';
                         break;
                     case 2:
                         $type='驳回';
-                        $reason=$unusualList[$k]['handle_reason'];
-                        $complete_time=$unusualList[$k]['handle_time'];
+                        $data_code[$k]['reason']=$unusualList[$k]['handle_reason'];
+                        $data_code[$k]['complete_time']=$unusualList[$k]['handle_time'];
                         $result='失败';
                         break;
                 }
                 $arr[]=[
                     'type'=>'商家反馈',
                     'value'=>$type,
-                    'content'=>$reason,
+                    'content'=>$data_code[$k]['reason'],
                     'time'=>$unusualList[$k]['handle_time'],
                     'stage'=>$unusualList[$k]['order_type']
                 ];
@@ -2676,7 +2677,7 @@ class OrderController extends Controller
                     'type'=>'退款结果',
                     'value'=>$result,
                     'content'=>'',
-                    'time'=>$complete_time,
+                    'time'=>$data_code[$k]['complete_time'],
                     'stage'=>$unusualList[$k]['order_type']
                 ];
                 if ($unusualList[$k]['handle']==1){
@@ -2684,7 +2685,7 @@ class OrderController extends Controller
                         'type'=>'退款去向',
                         'value'=>$refund_type,
                         'content'=>'',
-                        'time'=>$complete_time,
+                        'time'=>$data_code[$k]['complete_time'],
                         'stage'=>$unusualList[$k]['order_type']
                     ];
                 }
@@ -2699,6 +2700,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 大后台获取异常信息
      * @return string
