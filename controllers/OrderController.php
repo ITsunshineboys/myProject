@@ -3487,12 +3487,13 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+            echo 1;
             $OrderGoods=OrderGoods::find()
                 ->select('goods_name,sku')
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->asArray()
                 ->one();
-
+            echo 2;
             if (!$OrderGoods)
             {
                 $code=1000;
