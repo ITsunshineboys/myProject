@@ -778,7 +778,7 @@ class WorkerController extends Controller
     }
 
     /**
-     * new 工人作品评论
+     * 工人作品评论
      *
      * @return string
      */
