@@ -2456,6 +2456,7 @@ class GoodsOrder extends ActiveRecord
     
     public  static  function  switchStatus_desc($arr,$user)
    {
+    echo 1;exit;
        foreach ($arr as $k =>$v)
        {
            switch ($arr[$k]['status'])
@@ -2512,7 +2513,6 @@ class GoodsOrder extends ActiveRecord
            }
            unset($arr[$k]['unusual']);
        }
-       var_dump($arr);exit;
        return $arr;
    }
 
