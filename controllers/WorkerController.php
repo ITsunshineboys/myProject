@@ -941,6 +941,12 @@ class WorkerController extends Controller
         ]);
 
     }
+    /**
+     * 编辑工人作品详情
+     */
+    public function actionEditWorksView(){
+
+    }
 
     /**
      * 工人排班日历

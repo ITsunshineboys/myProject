@@ -38,7 +38,7 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
     {
         return [
             [['works_id', 'star', 'uid', 'role_id', 'create_time'], 'integer'],
-            [['review'], 'string', 'max' => 350],
+            [['review'], 'string', 'max' => 70],
         ];
     }
 
