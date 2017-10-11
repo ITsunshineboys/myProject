@@ -2317,7 +2317,7 @@ class GoodsOrder extends ActiveRecord
   public static  function GetOrderDetailsData($arr=[],$user)
    {
        $list=[];
-       $arr=self::switchStatus_desc($arr);
+       $arr=self::SwitchStatus_desc($arr);
        $supplier_price=0;
        $market_price=0;
        $amount_order=0;
@@ -2458,7 +2458,7 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return mixed
      */
-    public  static  function  switchStatus_desc($arr,$user)
+   public  static  function   SwitchStatus_desc($arr,$user)
        {
            foreach ($arr as $k =>$v)
            {
