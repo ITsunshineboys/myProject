@@ -1279,23 +1279,21 @@ class OrderController extends Controller
         $order_no = (string)trim($request->post('order_no', ''), '');
         $waybillnumber = trim($request->post('waybillnumber', ''), '');
         $shipping_type = trim($request->post('shipping_type', '0'), '');
-        if ($shipping_type!=1){
-            if (!$sku  || !$waybillnumber || !$order_no) {
-                $code = 1000;
+         if ($shipping_type!=1){
+            if (!$sku|| !$waybillnumber || !$order_no) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-        }
-        $name=(new  Express())->GetExpressName($waybillnumber);
-        if(!$name)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            $name=(new  Express())->GetExpressName($waybillnumber);
+            if(!$name)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
         $res=GoodsOrder::Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type);
         if ($res==true){
