@@ -1540,5 +1540,6 @@ CREATE TABLE `deleted_goods_comment` (
   `order_no` bigint(30) NOT NULL,
   `sku` bigint(30) NOT NULL,
   `comment_time` int(11) NOT NULL COMMENT '用户评论时间',
+  `comment_id` int(11) NOT NULL COMMENT '评论ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
