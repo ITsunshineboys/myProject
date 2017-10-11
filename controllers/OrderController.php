@@ -1129,7 +1129,7 @@ class OrderController extends Controller
         ]);
     }
 
-     /**
+    /**
      * 商家后台获取订单详情
      * @return string
      */
@@ -1193,9 +1193,10 @@ class OrderController extends Controller
               }
               $goods_data['status']=$order_information['status'];
               $goods_data['order_no']=$order_information['order_no'];
+              $goods_data['sku']=$order_information['sku'];
               $goods_data['username']=$order_information['username'];
               $goods_data['amount_order']=$order_information['amount_order'];
-                 switch ($order_information['role_id'])
+                switch ($order_information['role_id'])
                 {
                     case 7:
                         $goods_data['role']='平台采购价';
@@ -1222,8 +1223,8 @@ class OrderController extends Controller
               $goods_data['return_insurance']=$order_information['return_insurance'];
               $goods_data['supplier_price']=$order_information['supplier_price'];
               $goods_data['market_price']=$order_information['market_price'];
-              $goods_data['shipping_way']=$order_information['shipping_way'];
               $goods_data['shipping_type']=$order_information['shipping_type'];
+              $goods_data['shipping_way']=$order_information['shipping_way'];
               $goods_data['complete_time']=$order_information['complete_time'];
               if ($order_information['shipping_type']==1){
                   $goods_data['shipping_way']='送货上门';
@@ -1243,13 +1244,20 @@ class OrderController extends Controller
               }else{
                   $is_platform=2;
               }
+              if (!OrderRefund::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one())
+              {
+                    $is_refund=1;
+              }else{
+                    $is_refund=2;
+              }
               $goods_data['create_time']=$order_information['create_time'];
-              $data=array(
+                $data=array(
                     'goods_data'=>$goods_data,
                     'goods_value'=>$ordergoodsinformation,
                     'receive_details'=>$receive_details,
                     'is_unusual'=>$order_information['is_unusual'],
-                    'is_platform'=>$is_platform
+                    'is_platform'=>$is_platform,
+                    'is_refund'=>$is_refund
                 );
               $code = 200;
               return Json::encode([
