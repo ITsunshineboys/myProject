@@ -7,6 +7,7 @@ use app\models\CommentImage;
 use app\models\CommentReply;
 use app\models\EffectEarnst;
 use app\models\GoodsComment;
+use app\models\DeletedGoodsComment;
 use app\models\OrderAfterSale;
 use app\models\OrderGoods;
 use app\models\OrderRefund;
@@ -3256,9 +3257,7 @@ class OrderController extends Controller
                     'after_sale'=>$data
                 ]
             ]);
-        }
-
-           /**
+        }   /**
      * 删除评论操作
      * @return string
      */
@@ -3273,6 +3272,23 @@ class OrderController extends Controller
                 return Json::encode([
                     'code' => $code,
                     'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $lhzz=Lhzz::find()->where(['uid'=>$user->id])->one();
+            if (!$lhzz)
+            {
+                $code=403;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
             $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
@@ -3312,6 +3328,11 @@ class OrderController extends Controller
                 $delete->shipping_score=$comment->uid;
                 $delete->logistics_speed_score=$comment->uid;
                 $delete->is_anonymous=$comment->uid;
+                $delete->create_time=time();
+                $delete->comment_time=$comment->create_time;
+                $delete->handle_uid=$user->id;
+                $delete->order_no=$OrderGoods->order_no;
+                $delete->sku=$OrderGoods->sku;
                 $res1=$delete->save(false);
                 if (!$res1)
                 {
@@ -3350,6 +3371,72 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+        }
+
+            /**
+     * @return string
+     */
+        public  function  actionDeleteCommentList()
+        {
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $request = Yii::$app->request;
+            $page=trim($request->get('page',1));
+            $size=trim($request->get('size',DeletedGoodsComment::PAGE_SIZE_DEFAULT));
+            $supplier_id=trim($request->get('supplier_id', ''));
+            if (!$supplier_id)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $keyword = trim($request->get('keyword', ''));
+            $timeType = trim($request->get('time_type', ''));
+            $where="g.supplier_id={$supplier_id}";
+            if ($keyword)
+            {
+                $where .=" and d.order_no like '%{$keyword}%' or  o.goods_name like '%{$keyword}%'";
+            }
+            if ($timeType == 'custom') {
+                $startTime = trim(Yii::$app->request->get('start_time', ''));
+                $endTime = trim(Yii::$app->request->get('end_time', ''));
+                if (($startTime && !StringService::checkDate($startTime))
+                    || ($endTime && !StringService::checkDate($endTime))
+                ) {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }else{
+                list($startTime, $endTime) = StringService::startEndDate($timeType);
+                $startTime = explode(' ', $startTime)[0];
+                $endTime = explode(' ', $endTime)[0];
+            }
+            if ($startTime) {
+                $startTime = (int)strtotime($startTime);
+                $startTime && $where .= " and  d.create_time >= {$startTime}";
+            }
+            if ($endTime) {
+                $endTime = (int)strtotime($endTime);
+                $endTime && $where .= "and  d.create_time <= {$endTime}";
+            }
+            $paginationData = DeletedGoodsComment::pagination($where, DeletedGoodsComment::FIELDS_COMMENT_ADMIN, $page, $size);
+            $code=200;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok',
+                'data'=>$paginationData
+            ]);
         }
 
 
