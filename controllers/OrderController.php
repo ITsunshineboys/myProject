@@ -3477,8 +3477,8 @@ class OrderController extends Controller
                 ]);
             }
             $request = Yii::$app->request;
-            $order_no=$request->post('order_no');
-            $sku=$request->post('sku');
+            $order_no=$request->post('order_no','');
+            $sku=$request->post('sku','');
             if (!$order_no || !$sku)
             {
                 $code=1000;
@@ -3487,13 +3487,13 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            echo 1;
-            $OrderGoods=OrderGoods::find()
-                ->select('goods_name,sku')
-                ->where(['order_no'=>$order_no,'sku'=>$sku])
-                ->asArray()
-                ->one();
-            echo 2;
+            // $OrderGoods=OrderGoods::find()
+            //     ->select('goods_name,sku')
+            //     ->where(['order_no'=>$order_no,'sku'=>$sku])
+            //     ->asArray()
+            //     ->one(); 
+                $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku); 
+                var_dump($OrderGoods);exit;          
             if (!$OrderGoods)
             {
                 $code=1000;
