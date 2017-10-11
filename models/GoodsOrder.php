@@ -2317,7 +2317,6 @@ class GoodsOrder extends ActiveRecord
   public static  function GetOrderDetailsData($arr=[],$user)
    {
        $list=[];
-       var_dump($arr);exit;
        $arr=self::switchStatus_desc($arr);
        $supplier_price=0;
        $market_price=0;
@@ -2513,8 +2512,10 @@ class GoodsOrder extends ActiveRecord
            }
            unset($arr[$k]['unusual']);
        }
+       var_dump($arr);exit;
        return $arr;
    }
+
 
 
 
