@@ -14,6 +14,7 @@ use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
 use yii\db\Exception;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -24,7 +25,7 @@ class WorkerController extends Controller
 {
     const STATUS_ALL = 6;
     const STAR_DEFAULT = 15;
-
+    const VIEWS_PARENT=0;
     /**
      * @inheritdoc
      */
@@ -783,20 +784,21 @@ class WorkerController extends Controller
      */
     public function actionAddWorksReview()
     {
+        $uid = self::userIdentity();
+
+        if (!is_int($uid)) {
+            return $uid;
+        }
         $request = \Yii::$app->request;
         if ($request->isPost) {
             $code = 1000;
-
-            //maybe uid and role_id get by login?
-            $uid = (int)$request->post('uid', 0);
-            $role_id = (int)$request->post('role_id', 0);
             $works_id = (int)$request->post('works_id', 0);
             $star = (int)$request->post('star', self::STAR_DEFAULT);
             $review = trim($request->post('review', ''));
 
             $user = User::find()->where(['id' => $uid])->exists();
             $works = WorkerWorks::find()->where(['id' => $works_id])->exists();
-
+            $role_id = User::find()->select('last_role_id_app')->where(['id'=>$uid])->one()->last_role_id_app;
             if (!$user
                 || $role_id > 7
                 || !$role_id
@@ -815,7 +817,7 @@ class WorkerController extends Controller
             $works_review->works_id = $works_id;
             $works_review->star = $star;
             $works_review->review = $review;
-            $works_review->pid=0;
+            $works_review->pid=self::VIEWS_PARENT;
             if ($works_review->save(false)) {
                 return Json::encode([
                     'code' => 200,
@@ -834,6 +836,34 @@ class WorkerController extends Controller
             'code' => $code,
             'msg' => \Yii::$app->params['errorCodes'][$code]
         ]);
+    }
+    /**
+     * 工人回复评论
+     * @return int|string
+     */
+    public function actionWorkerReply(){
+        $uid = self::userIdentity();
+
+        if (!is_int($uid)) {
+            return $uid;
+        }
+        $code=1000;
+        $request=new Request();
+        $view_id=(int)($request->post('view_id'));
+        $works_id=(int)($request->post('works_id'));
+        $review=trim($request->post('review',''));
+        if(!$view_id || !$review ||!$works_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=WorkerWorksReview::WorkerRelpy($uid,$view_id,$review,$works_id);
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
+
     }
 
     /**

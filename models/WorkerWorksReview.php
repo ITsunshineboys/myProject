@@ -12,6 +12,7 @@ use yii\db\Query;
  *
  * @property integer $id
  * @property integer $works_id
+ * @property integer $pid
  * @property integer $star
  * @property integer $uid
  * @property integer $role_id
@@ -81,12 +82,10 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
         $data=[];
         $data['resview_count']=$resview_count;
         if($query){
-            $query=array_slice($query,1,2);//取最近评论2条数据
+            $query=array_slice($query,0,2);//取最近评论2条数据
             foreach ($query as $k=>&$value){
                 $value['create_time']=date('Y-n-j',$value['create_time']);
                 $value['worker_reply']=self::find()->asArray()->select('review')->where(['works_id'=>$value['works_id']])->andWhere(['pid'=>$value['id']])->one()['review'];
-                unset($value['id']);
-                unset($value['works_id']);
                 unset($value['uid']);
                 unset($value['role_id']);
                 $data[]=$value;
@@ -129,6 +128,34 @@ class WorkerWorksReview extends \yii\db\ActiveRecord
         }
       return  $data = ModelService::pageDeal($arr, $count, $page, $size);
 
+
+    }
+
+    public static function WorkerRelpy($uid,$view_id,$review,$works_id){
+        $role_id=User::find()
+            ->select('last_role_id_app')
+            ->where(['id'=>$uid])
+            ->one()
+            ->last_role_id_app;
+        if(!$role_id){
+            $code=1000;
+            return $code;
+        }
+        $worker_review=new WorkerWorksReview();
+        $worker_review->role_id=$role_id;
+        $worker_review->uid=$uid;
+        $worker_review->works_id=$works_id;
+        $worker_review->pid=$view_id;
+        $worker_review->review=$review;
+        if(!$worker_review->validate()){
+            $code=1000;
+            return $code;
+        }
+        if(!$worker_review->save()){
+            $code=500;
+            return $code;
+        }
+        return 200;
 
     }
 }
