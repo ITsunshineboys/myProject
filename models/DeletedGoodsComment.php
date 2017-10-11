@@ -33,7 +33,7 @@ class DeletedGoodsComment extends ActiveRecord
     }
 
 
-    /**
+   /**
      * @param $where
      * @param $select
      * @param $page
@@ -54,6 +54,35 @@ class DeletedGoodsComment extends ActiveRecord
             ->orderBy('d.create_time desc')
             ->limit($size)
             ->all();
-        return $commentList;
+        foreach ($commentList as &$list)
+        {
+            $list['create_time']=date('Y-m-d H:i',$list['create_time']);
+        }
+        if ($commentList)
+        {
+
+            $count=(new Query())
+                ->from(self::tableName().' as d')
+                ->leftJoin(OrderGoods::tableName().' as o','d.order_no=o.order_no and d.sku=o.sku')
+                ->leftJoin(GoodsOrder::tableName().' as g','g.order_no=d.order_no')
+                ->leftJoin(User::tableName(). ' as u','u.id=d.handle_uid')
+                ->select($select)
+                ->where($where)
+                ->count();
+            $total_page=ceil($count/$size);
+               return [
+                   'total_page' =>$total_page,
+                   'count'=>$count,
+                   'details' =>$commentList
+               ];
+        }else{
+               return [
+                   'total_page' =>0,
+                   'count'=>0,
+                   'details' => []
+               ];
+        }
+
+
     }
 }
