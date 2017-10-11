@@ -508,6 +508,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order->con_tel = $ownerinfos['con_tel'];
         $worker_order->amount = $amount * 100;
         $worker_order->front_money = $front_money * 100;
+        $worker_order->status=self::WORKER_ORDER_NOT_BEGIN;
         $days = self::dataeveryday($start_time, $end_time);
         $worker_order->days = $days;
         if (isset($describe)) {
