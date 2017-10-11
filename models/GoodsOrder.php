@@ -2349,7 +2349,7 @@ class GoodsOrder extends ActiveRecord
            if ($arr[$k]['RemainingTime']<=0){
                $list[$k]['automatic_receive_time']=0;
            }else{
-               $list[$k]['automatic_receive_time']=date('Y-m-d H:i',$arr[$k]['RemainingTime']);
+               $list[$k]['automatic_receive_time']=$arr[$k]['RemainingTime'];
            }
            $list[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
            $list[$k]['goods_id']=$arr[$k]['goods_id'];
