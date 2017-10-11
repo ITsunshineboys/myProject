@@ -1651,7 +1651,7 @@ class OrderController extends Controller
         $sku=$request->post('sku');
         $handle_reason=$request->post('handle_reason
 ','');
-        $handle=$request->post('handle');
+        $handle=$request->post('handle','');
         if (!$order_no  || ! $sku || !$handle)
         {
             $code=1000;
@@ -1659,6 +1659,18 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
+
+        }
+        if ($handle==2)
+        {
+            if (!$handle_reason)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
         $order=GoodsOrder::find()->select('id')->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])->one();
