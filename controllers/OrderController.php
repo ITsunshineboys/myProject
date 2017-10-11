@@ -3450,7 +3450,7 @@ class OrderController extends Controller
             ]);
         }
 
-                /**
+        /**
          * 删除评论详情
          * @return string
          */
@@ -3467,7 +3467,7 @@ class OrderController extends Controller
             $request = Yii::$app->request;
             $order_no=$request->post('order_no');
             $sku=$request->post('sku');
-            if (!$order_no || $sku)
+            if (!$order_no || !$sku)
             {
                 $code=1000;
                 return Json::encode([
@@ -3480,6 +3480,7 @@ class OrderController extends Controller
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->asArray()
                 ->one();
+
             if (!$OrderGoods)
             {
                 $code=1000;
@@ -3514,7 +3515,7 @@ class OrderController extends Controller
             }
             $comment['create_time']=date('Y-m-d H:i',0);
 
-            if ($comment){
+
                 $comment['image']=CommentImage::find()
                     ->select('image')
                     ->where(['comment_id'=>$comment['comment_id']])
@@ -3531,7 +3532,13 @@ class OrderController extends Controller
                     $comment['reply']='';
                 }
 
-            }
+            $code=200;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok',
+                'data'=>$comment
+            ]);
+
         }
 
 
