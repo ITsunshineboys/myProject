@@ -2422,7 +2422,8 @@ class OrderController extends Controller
             ]);
         }
     }
-     /**
+    /**
+     * 添加测试数据
      * @return string
      */
     public function actionAddTestOrderData(){
@@ -2443,6 +2444,7 @@ class OrderController extends Controller
                 'msg'  =>'商品不存在'
             ]);
         }
+        $LogisticsTemplate=LogisticsTemplate::findOne($goods->logistics_template_id);
         $freight=1000;
         $address=Addressadd::find()
             ->where(['id'=>$address_id])
@@ -2469,6 +2471,7 @@ class OrderController extends Controller
             $GoodsOrder->pay_status=0;
             $GoodsOrder->create_time=$time;
             $GoodsOrder->paytime=$time;
+            $GoodsOrder->pay_name='支付宝支付';
             $GoodsOrder->order_refer=2;
             $GoodsOrder->return_insurance=0;
             $GoodsOrder->role_id=7;
@@ -2484,7 +2487,7 @@ class OrderController extends Controller
             $GoodsOrder->invoicer_card=$invoice->invoicer_card;
             $GoodsOrder->invoice_header=$invoice->invoice_header;
             $GoodsOrder->invoice_content=$invoice->invoice_content;
-            $res1=$GoodsOrder->save();
+            $res1=$GoodsOrder->save(false);
             $OrderGoods=new  OrderGoods();
             $OrderGoods->order_no=$order_no;
             $OrderGoods->goods_id=$goods->id;
@@ -2496,14 +2499,14 @@ class OrderController extends Controller
             $OrderGoods->sku=$goods->sku;
             $OrderGoods->market_price=$goods->market_price;
             $OrderGoods->supplier_price=$goods->supplier_price;
-            $OrderGoods->shipping_type=0;
+            $OrderGoods->shipping_type=$LogisticsTemplate->delivery_method;
             $OrderGoods->order_status=0;
             $OrderGoods->shipping_status=0;
             $OrderGoods->customer_service=0;
             $OrderGoods->is_unusual=0;
             $OrderGoods->freight=$freight;
             $OrderGoods->cover_image=$goods->cover_image;
-            $res2= $OrderGoods->save();
+            $res2= $OrderGoods->save(false);
             if (!$res1  || !$res2)
             {
                 $tran->rollBack();
@@ -2527,6 +2530,7 @@ class OrderController extends Controller
             ]);
         }
     }
+
 
      /**
      * 用户确认收货
