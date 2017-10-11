@@ -1537,8 +1537,8 @@ CREATE TABLE `deleted_goods_comment` (
   `logistics_speed_score` float NOT NULL DEFAULT '0',
   `is_anonymous` tinyint(1) NOT NULL COMMENT '1:匿名  2： 实名',
   `handle_uid` int(11) NOT NULL,
-  `order_no` bigint(30) NOT NULL,
-  `sku` bigint(30) NOT NULL,
+  `order_no` varchar(50) NOT NULL,
+  `sku` varchar(30) NOT NULL,
   `comment_time` int(11) NOT NULL COMMENT '用户评论时间',
   `comment_id` int(11) NOT NULL COMMENT '评论ID',
   PRIMARY KEY (`id`)
