@@ -224,7 +224,6 @@ class WorkerWorks extends \yii\db\ActiveRecord
         //装修前---下单用户上传的
         $before_decoration_imgs=self::beforedecorationimgs($works_id,$array['order_no']);
         //装修中---工人上传的 截取中间日期
-        //todo 装修中图片 需要好好理下;
         $In_decoration_imgs=self::Indecorationimgs($works_id);
         //装修后--工人上传的 截取最后一次上传的日期
         $after_decoration_imgs=self::afterdecorationimgs($works_id);

@@ -48,6 +48,11 @@ class WorkerWorksDetail extends \yii\db\ActiveRecord
             'img_ids' => '图片,work_result_img的id,逗号分隔',
         ];
     }
+    /**
+     * works view by works Id
+     * @param $works_id
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public static function worksdetailbyworksId($works_id){
        return self::find()
             ->where(['works_id' => $works_id])
