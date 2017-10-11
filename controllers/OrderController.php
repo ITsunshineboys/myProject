@@ -3450,6 +3450,90 @@ class OrderController extends Controller
             ]);
         }
 
+                /**
+         * 删除评论详情
+         * @return string
+         */
+        public function  actionDeleteCommentDetails()
+        {
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $request = Yii::$app->request;
+            $order_no=$request->post('order_no');
+            $sku=$request->post('sku');
+            if (!$order_no || $sku)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $OrderGoods=OrderGoods::find()
+                ->select('goods_name,sku')
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->asArray()
+                ->one();
+            if (!$OrderGoods)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            $comment=DeletedGoodsComment::find()
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
+                ->asArray()
+                ->one();
+            if(!$comment)
+            {
+                $code=200;
+                return Json::encode([
+                    'code'=>$code,
+                    'msg'=>'ok',
+                    'data'=>[]
+                ]);
+            }
+            if (6 <$comment['score'] && $comment['score']<= 10 )
+            {
+                $comment['score']='好评';
+            }else if (2< $comment['score'] && $comment['score']<= 6 )
+            {
+                $comment['score']='中评';
+            }else{
+                $comment['score']='差评';
+            }
+            $comment['create_time']=date('Y-m-d H:i',0);
+
+            if ($comment){
+                $comment['image']=CommentImage::find()
+                    ->select('image')
+                    ->where(['comment_id'=>$comment['comment_id']])
+                    ->all();
+                $reply=CommentReply::find()
+                    ->select('content')
+                    ->where(['comment_id'=>$comment['comment_id']])
+                    ->asArray()
+                    ->one();
+                if ($reply)
+                {
+                    $comment['reply']=$reply['content'];
+                }else{
+                    $comment['reply']='';
+                }
+
+            }
+        }
+
 
 
 }
