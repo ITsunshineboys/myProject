@@ -16,7 +16,7 @@ use yii\db\Query;
 
 class Supplier extends ActiveRecord
 {
-    const ROLE_SUPPLIER=6;
+    const ROLE_SUPPLIER = 6;
     const FIELDS_EXTRA = [];
     const STATUS_CASHED = 3;
     const STATUS_OFFLINE = 0;
@@ -244,14 +244,14 @@ class Supplier extends ActiveRecord
                 return $code;
             }
 
-            $supplier->shop_no = Yii::$app->params['supplierRoleId']
-                . (Yii::$app->params['offsetGeneral'] + $supplier->id);
-            if (!$supplier->save()) {
-                $transaction->rollBack();
-
-                $code = 500;
-                return $code;
-            }
+//            $supplier->shop_no = Yii::$app->params['supplierRoleId']
+//                . (Yii::$app->params['offsetGeneral'] + $supplier->id);
+//            if (!$supplier->save()) {
+//                $transaction->rollBack();
+//
+//                $code = 500;
+//                return $code;
+//            }
 
             UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['supplierRoleId']]);
             $userRole = new UserRole;
@@ -335,7 +335,6 @@ class Supplier extends ActiveRecord
         return (int)self::find()->count();
     }
 
-
     /**
      * Check shop type
      *
@@ -359,7 +358,6 @@ class Supplier extends ActiveRecord
         return in_array($status,
             array_merge(array_keys(self::STATUSES_ONLINE_OFFLINE), [Yii::$app->params['value_all']]));
     }
-
 
     /**
      * Format data
@@ -448,8 +446,8 @@ class Supplier extends ActiveRecord
     {
 
         $select = array_diff($select, self::FIELDS_EXTRA);
-        $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
-        $andwhere="  status in ({$keys})";
+        $keys = implode(',', array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
+        $andwhere = "  status in ({$keys})";
         $offset = ($page - 1) * $size;
         $supplierList = self::find()
             ->select($select)
@@ -502,19 +500,19 @@ class Supplier extends ActiveRecord
             ->select($select)
             ->leftJoin('user_cashregister as sc', 'sc.uid=s.uid')
             ->leftJoin('user_bankinfo as ub', 'ub.uid=s.uid')
-            ->leftJoin('bankinfo_log as sb','sb.id=ub.log_id')
+            ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
             ->leftJoin('user_freezelist as sf', 'sf.uid=s.uid')
-            ->andWhere(['ub.role'=>self::ROLE_SUPPLIER])
+            ->andWhere(['ub.role' => self::ROLE_SUPPLIER])
             ->where(['s.id' => $supplier_id])
             ->one();
 
-        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id'=>self::ROLE_SUPPLIER])->andWhere(['status'=>self::STATUS_OFFLINE])->sum('freeze_money');
-        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['role_id'=>self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
+        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_OFFLINE])->sum('freeze_money');
+        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
         if ($array) {
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
             $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
             $array['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
-            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['availableamount']*0.01);
+            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['availableamount'] * 0.01);
             unset($array['availableamount']);
             return $array;
 
@@ -590,13 +588,6 @@ class Supplier extends ActiveRecord
         ];
     }
 
-    /* Get extra fields
-     *
-     * @param int $id supplier id
-     * @param array $extraFields extra fields
-     * @return array
-     */
-
     /** check  supplier handle  order  Jurisdiction
      * 商家处理订单权限
      * @param $user
@@ -621,6 +612,26 @@ class Supplier extends ActiveRecord
         }
         $code = 200;
         return $code;
+    }
+
+    /* Get extra fields
+     *
+     * @param int $id supplier id
+     * @param array $extraFields extra fields
+     * @return array
+     */
+
+    /**
+     * Set shop no
+     *
+     * @return $this
+     */
+    public function setShopNo()
+    {
+        $this->shop_no = Yii::$app->params['supplierRoleId']
+            . (Yii::$app->params['offsetGeneral'] + $this->id);
+        $this->save();
+        return $this;
     }
 
     /**
