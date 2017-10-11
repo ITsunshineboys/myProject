@@ -2453,68 +2453,71 @@ class GoodsOrder extends ActiveRecord
         }while ( $transaction_no==UserCashregister::find()->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no'] || $transaction_no==UserAccessdetail::find() ->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no']);
         return $transaction_no;
     }
-    
+     /**
+     * @param $arr
+     * @param $user
+     * @return mixed
+     */
     public  static  function  switchStatus_desc($arr,$user)
-   {
-    echo 1;exit;
-       foreach ($arr as $k =>$v)
        {
-           switch ($arr[$k]['status'])
+           foreach ($arr as $k =>$v)
            {
-               case self::PAY_STATUS_DESC_UNPAID:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_UNPAID;
-                   $arr[$k]['status_desc']=self::PAY_STATUS_DESC_UNPAID;
-                   break;
-               case self::SHIPPING_STATUS_DESC_UNSHIPPED:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED;
-                   $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
-                   if ( $arr[$k]['is_unusual']==1){
-                       $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
-                   }
-                   break;
-               case  self::ORDER_TYPE_DESC_UNRECEIVED:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED;
-                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED;
-                       if ($arr[$k]['is_unusual']==1){
-                           $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                           $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
-                   }
-                   if ($user->last_role_id_app==6)
-                   {
-                       $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED;
-                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED;
-                       if ($arr[$k]['is_unusual']==1){
-                           $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                           $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
+               switch ($arr[$k]['status'])
+               {
+                   case self::PAY_STATUS_DESC_UNPAID:
+                       $arr[$k]['status_code']=self::ORDER_TYPE_UNPAID;
+                       $arr[$k]['status_desc']=self::PAY_STATUS_DESC_UNPAID;
+                       break;
+                   case self::SHIPPING_STATUS_DESC_UNSHIPPED:
+                       $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED;
+                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
+                       if ( $arr[$k]['is_unusual']==1){
+                           $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                           $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
                        }
-                   }
-                   break;
-               case  self::ORDER_TYPE_DESC_CANCEL:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
-                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
-                   break;
-               case  '售后中':
-                   $arr[$k]['status_code']='after_saled';
-                   $arr[$k]['status_desc']='售后中';
-                   break;
-               case  '售后结束':
-                   $arr[$k]['status_code']='after_sale_completed';
-                   $arr[$k]['status_desc']='售后结束';
-                   break;
-               case self::ORDER_TYPE_DESC_COMPLETED:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
-                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
-                   break;
-               case self::ORDER_TYPE_DESC_UNCOMMENT:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
-                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
-                   break;
+                       break;
+                   case  self::ORDER_TYPE_DESC_UNRECEIVED:
+                       $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED;
+                       $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED;
+                           if ($arr[$k]['is_unusual']==1){
+                               $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                               $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
+                       }
+                       if ($user->last_role_id_app==6)
+                       {
+                           $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED;
+                           $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED;
+                           if ($arr[$k]['is_unusual']==1){
+                               $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                               $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
+                           }
+                       }
+                       break;
+                   case  self::ORDER_TYPE_DESC_CANCEL:
+                       $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
+                       $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
+                       break;
+                   case  '售后中':
+                       $arr[$k]['status_code']='after_saled';
+                       $arr[$k]['status_desc']='售后中';
+                       break;
+                   case  '售后结束':
+                       $arr[$k]['status_code']='after_sale_completed';
+                       $arr[$k]['status_desc']='售后结束';
+                       break;
+                   case self::ORDER_TYPE_DESC_COMPLETED:
+                       $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
+                       $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
+                       break;
+                   case self::ORDER_TYPE_DESC_UNCOMMENT:
+                       $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
+                       $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                       break;
+               }
+               unset($arr[$k]['unusual']);
            }
-           unset($arr[$k]['unusual']);
+           return $arr;
        }
-       return $arr;
-   }
 
 
 
