@@ -3492,6 +3492,7 @@ class OrderController extends Controller
             //     ->where(['order_no'=>$order_no,'sku'=>$sku])
             //     ->asArray()
             //     ->one(); 
+            echo $order_no;echo $sku;exit;
                 $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku); 
                 var_dump($OrderGoods);exit;          
             if (!$OrderGoods)
