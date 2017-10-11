@@ -8,6 +8,7 @@ use app\models\CommentReply;
 use app\models\EffectEarnst;
 use app\models\GoodsComment;
 use app\models\DeletedGoodsComment;
+use app\models\LogisticsTemplate;
 use app\models\OrderAfterSale;
 use app\models\OrderGoods;
 use app\models\OrderRefund; 
