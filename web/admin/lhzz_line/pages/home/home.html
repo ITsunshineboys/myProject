@@ -1,0 +1,42 @@
+<div ng-controller="home">
+    <!--头部导航开始-->
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span>首页</span>
+            <img src="pages/home/images/user.png" alt=""/>
+        </div>
+    </header>
+    <!--头部导航结束-->
+    <section>
+        <h5><i class="glyphicon glyphicon-user"></i> 用户数据</h5>
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th>用户数</th>
+                <th>业主</th>
+                <th>设计师</th>
+                <th>商家</th>
+                <th>项目经理</th>
+                <th>工人</th>
+                <th>装修公司</th>
+                <th>已实名认证</th>
+                <th>未实名认证</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td ng-bind="data.total_number_user"></td>
+                <td ng-bind="data.total_number_owner"></td>
+                <td ng-bind="data.total_number_designer"></td>
+                <td ng-bind="data.total_number_supplier"></td>
+                <td ng-bind="data.total_number_manager"></td>
+                <td ng-bind="data.total_number_worker"></td>
+                <td ng-bind="data.total_number_decoration_company"></td>
+                <td ng-bind="data.total_number_authorized_user"></td>
+                <td ng-bind="data.total_number_unauthorized_user"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
