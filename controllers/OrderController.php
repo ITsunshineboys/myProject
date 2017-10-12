@@ -1454,7 +1454,8 @@ class OrderController extends Controller
                 'list'=>$list,
                 'shipping_type'=>$shipping_type,
                 'waybillname'=>$waybillname,
-                'waybillnumber'=>$express['waybillnumber']
+                'waybillnumber'=>$express['waybillnumber'],
+                'order_no'=>$order_no
             ],
         ]);
     }
