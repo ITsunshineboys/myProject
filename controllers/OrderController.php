@@ -3569,7 +3569,7 @@ class OrderController extends Controller
 
         }
 
-       /**
+        /**
          * @return string
          */
         public  function  actionGoodsView()
@@ -3677,6 +3677,7 @@ class OrderController extends Controller
                     'series'=>$series,
                     'style'=>$style,
                     'goods_attr'=>$attr,
+                    'cover_image'=>$Goods->cover_image,
                     'goods_image'=>$goods_image,
                     'market_price'=>GoodsOrder::switchMoney($market_price*0.01),
                     'supplier_price'=>GoodsOrder::switchMoney($supplier_price*0.01),
