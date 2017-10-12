@@ -2597,7 +2597,7 @@ class OrderController extends Controller
         }
     }
 
-   /**
+    /**
      * 商家获取异常状态
      * @return string
      */
@@ -2678,28 +2678,28 @@ class OrderController extends Controller
                 switch ($unusualList[$k]['handle'])
                 {
                     case 1:
-                        $type='同意';
+                        $data_code[$k]['type']='同意';
                         $data_code[$k]['reason']='';
                         $data_code[$k]['complete_time']=$unusualList[$k]['refund_time'];
-                        $result='成功';
+                        $data_code[$k]['result']='成功';
                         break;
                     case 2:
-                        $type='驳回';
+                        $data_code[$k]['type']='同意';
                         $data_code[$k]['reason']=$unusualList[$k]['handle_reason'];
                         $data_code[$k]['complete_time']=$unusualList[$k]['handle_time'];
-                        $result='失败';
+                        $data_code[$k]['result']='失败';
                         break;
                 }
                 $arr[]=[
                     'type'=>'商家反馈',
-                    'value'=>$type,
+                    'value'=>$data_code[$k]['type'],
                     'content'=>$data_code[$k]['reason'],
                     'time'=>$unusualList[$k]['handle_time'],
                     'stage'=>$unusualList[$k]['order_type']
                 ];
                 $arr[]=[
                     'type'=>'退款结果',
-                    'value'=>$result,
+                    'value'=>$data_code[$k]['result'],
                     'content'=>'',
                     'time'=>$data_code[$k]['complete_time'],
                     'stage'=>$unusualList[$k]['order_type']
