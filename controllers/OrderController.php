@@ -2730,7 +2730,6 @@ class OrderController extends Controller
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
             ->asArray()
             ->one();
-                var_dump($unreceived);exit;
         if ($unreceived)
         {
             if($unreceived['create_time'])

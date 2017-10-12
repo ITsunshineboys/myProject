@@ -1743,7 +1743,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-    /**
+   /**
      * @param $order_no
      * @param $sku
      * @param $handle
@@ -1793,12 +1793,12 @@ class GoodsOrder extends ActiveRecord
                 return $code;
             }
             $order_refund=OrderRefund::find()
-                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
                 ->one();
-            $order_refund->handle=$handle;
-            $order_refund->handle_reason=$handle_reason;
+            $order_refund->handle=1;
+            $order_refund->handle_reason='';
             $order_refund->handle_time=$time;
-            $res4=$order_refund->save();
+            $res4=$order_refund->save(false);
             if (!$res4){
                 $code=500;
                 $tran->rollBack();
@@ -1813,6 +1813,7 @@ class GoodsOrder extends ActiveRecord
             return $code;
         }
     }
+
      /** check user Jurisdiction
      * @param $order_no
      * @param $user
