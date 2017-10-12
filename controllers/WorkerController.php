@@ -984,4 +984,43 @@ class WorkerController extends Controller
             'data' => $data
         ]);
     }
+
+    /**
+     * 工人抢单
+     * @return int|string
+     */
+    public function actionGrabsingle(){
+        $uid = self::userIdentity();
+        if (!is_int($uid)) {
+            return $uid;
+        }
+        $code=1000;
+        $order_id=(int)(\Yii::$app->request->get('order_id'));
+        if(!$order_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $worker_id=Worker::getWorkerByUid($uid)->id;
+        $worker_order=WorkerOrder::find()
+            ->where(['id'=>$order_id])
+            ->one();
+
+       $worker_order->worker_id=$worker_id;
+       $worker_order->is_old=WorkerOrder::IS_OLD;
+
+       if(!$worker_order->update(false)){
+           $code=500;
+           return Json::encode([
+               'code' => $code,
+               'msg' => \Yii::$app->params['errorCodes'][$code]
+           ]);
+       }
+       return Json::encode([
+           'code'=>200,
+           'msg'=>'ok'
+       ]);
+
+    }
 }
