@@ -3669,7 +3669,7 @@ class OrderController extends Controller
             }
             $qrcode='uploads/image.png';
             return Json::encode([
-                'code'=>$code,
+                'code'=>200,
                 'msg'=>'ok',
                 'data'=>[
                     'category'=>$category,
