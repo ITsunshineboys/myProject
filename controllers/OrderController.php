@@ -305,8 +305,6 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-             $Goods=Goods::findOne($goods_id);
-            var_dump($Goods);exit;
             $data=GoodsOrder::getlinegoodsdata($goods_id,$goods_num);
            if (is_numeric($data))
            {

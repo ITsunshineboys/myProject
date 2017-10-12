@@ -617,12 +617,11 @@ class GoodsOrder extends ActiveRecord
     public static  function Getlinegoodsdata($goods_id,$goods_num){
             $array  =(new Query())
                 ->from(Goods::tableName().' AS a')
-                // ->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.market_price,a.cover_image,b.icon,c.name,a.sku')
-                // ->leftJoin(Supplier::tableName().' AS b', 'b.id = a.supplier_id')
-                // ->leftJoin(GoodsBrand::tableName().' AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])
+                ->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.market_price,a.cover_image,b.icon,c.name,a.sku')
+                ->leftJoin(Supplier::tableName().' AS b', 'b.id = a.supplier_id')
+                ->leftJoin(GoodsBrand::tableName().' AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])
                 ->where(['a.id'=>$goods_id])
                 ->one();
-                var_dump($array);exit;
                 if(!$array)
                 {
                     $code=1000;
