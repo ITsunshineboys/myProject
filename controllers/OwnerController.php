@@ -320,19 +320,12 @@ class OwnerController extends Controller
         $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
 
-        //添加材料
-        $decoration_add_select = 'id,one_materials,sku';
-        $decoration_add_where = ['and',['city_code'=>$post['city']],['one_materials'=>self::MATERIALS_CLASSIFY['auxiliary_material']]];
-        $decoration_add = DecorationAdd::findByAll($decoration_add_select,$decoration_add_where);
-        var_dump($decoration_add);exit;
-
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
                 'weak_current_labor_price' => $labor_all_cost,
                 'weak_current_material' => $material,
-//                'weak_current_add_price' => $add_price,
             ]
         ]);
     }

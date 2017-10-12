@@ -588,6 +588,7 @@ CREATE TABLE `points` (
   `pid` int(10) DEFAULT '0' COMMENT '弱电点位',
   `count` int(11) DEFAULT NULL,
   `level` tinyint(1) DEFAULT NULL COMMENT '等级',
+  `differentiate` tinyint(1) DEFAULT '0' COMMENT '0-固定，1-新添加',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
