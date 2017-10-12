@@ -1,0 +1,58 @@
+<!--头部导航开始-->
+<header>
+    <div>
+        <i class="glyphicon glyphicon-home"></i>
+        <span>商城管理</span> >
+        <a ui-sref="store_mag">商家管理</a> >
+        <a ui-sref="order.all({id: shopID})">订单管理</a> >
+        <span>删除评论</span>
+        <img src="pages/home/images/user.png"/>
+    </div>
+</header>
+<!--头部导航结束-->
+<section>
+    <div class="search form-inline clearfix">
+        <select class="form-control" ng-model="params.time_type">
+            <option value="all">全部时间</option>
+            <option value="today">今天</option>
+            <option value="week">本周</option>
+            <option value="month">本月</option>
+            <option value="year">本年</option>
+            <option value="custom">自定义</option>
+        </select>
+        <input id="startTime" ng-if="params.time_type == 'custom'" ng-model="params.start_time"
+               max-date="{{params.end_time}}" class="form-control" type="text" placeholder="开始时间" ngc-lay-date>
+        <input id="endTime" ng-if="params.time_type == 'custom'" ng-model="params.end_time" min-date="{{params.start_time}}"
+               class="form-control" type="text" placeholder="结束时间" ngc-lay-date>
+        <div class="form-group pull-right">
+            <div class="input-group">
+                <input class="form-control" type="text" ng-model="params.keyword" placeholder="搜索订单号、商品名称或手机号">
+                <span class="glyphicon glyphicon-search"></span>
+            </div>
+            <button class="btn btn-default" ng-click="search()">查询</button>
+        </div>
+    </div>
+    <div class="content">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th>订单号</th>
+                <th>商品名称</th>
+                <th>删除时间</th>
+                <th>操作角色</th>
+                <th>详情</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="obj in list">
+                <td>{{obj.order_no}}</td>
+                <td>{{obj.goods_name}}</td>
+                <td>{{obj.create_time}}</td>
+                <td>{{obj.nickname}}</td>
+                <td><a ui-sref="comm_details({orderNo:obj.order_no,sku: obj.sku})">查看</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <tm-pagination conf="pageConfig"></tm-pagination>
+    </div>
+</section>

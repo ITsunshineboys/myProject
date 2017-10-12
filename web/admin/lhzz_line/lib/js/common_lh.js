@@ -341,33 +341,36 @@ app.service('_ajax', function ($http, $state) {
     });
 
 /**
- * 提示模态框
+ * 确认模态框
  * @param info  提示信息
  * @param fun   确认后的执行函数
  * @private
  */
 function _confirm(info, fun) {
-    let node = `<div id="confirm" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">提示</h4>
-            </div>
-            <div class="modal-body">
-                <p>${info}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button id="confirmEnter" type="button" class="btn btn-primary">确认</button>
+    let node = `
+    <div id="confirm" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>${info}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button id="confirmEnter" type="button" class="btn btn-primary">确认</button>
+                </div>
             </div>
         </div>
-    </div>
-</div>`;
+    </div>`;
     $('body').append(node);
     let $confirm = $('#confirm');
     $confirm.one('show.bs.modal', function () {
         $('#confirmEnter').one('click', function () {
-            fun();
+            if (typeof fun === 'function') {
+                fun();
+            }
             $confirm.modal('hide');
         });
     });
@@ -375,4 +378,42 @@ function _confirm(info, fun) {
         $confirm.remove()
     });
     $confirm.modal('show');
+}
+
+/**
+ * 警告模态框
+ * @param title 警告标题
+ * @param info  警告信息
+ * @param fun   执行函数
+ * @private
+ */
+function _alert(title, info, fun) {
+    let node = `
+    <div id="alert" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">${title}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>${info}</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="alertEnter" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    $('body').append(node);
+    let _alert = $('#alert');
+    _alert.one('hide.bs.modal', function () {
+        if (typeof fun === 'function') {
+            fun();
+        }
+    });
+    _alert.one('hidden.bs.modal', function () {
+        _alert.remove()
+    });
+    _alert.modal('show');
 }

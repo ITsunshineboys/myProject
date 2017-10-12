@@ -1,0 +1,151 @@
+/*顶部导航*/
+header {
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #E6E9F0;
+    position: relative;
+}
+
+header img {
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+
+/*顶部导航结束*/
+
+section {
+    padding-left: 40px;
+}
+
+h3 {
+    color: #666f80;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.total-money {
+    color: #ff9800 !important;
+}
+
+.order-details .title,
+.goods-details .title,
+.receive-detail .title,
+.exce-record .title {
+    margin-top: 50px;
+}
+
+.order-details .row,
+.goods-details .row,
+.receive-detail .row,
+.exce-record .row:first-child {
+    margin-top: 20px;
+}
+
+/* 订单信息 */
+.order-details .table {
+    margin-top: -8px;
+    margin-bottom: 0;
+}
+
+.order-details .table th {
+    font-weight: normal;
+    border-top: none;
+}
+
+.order-details .table td {
+    border-top-width: 2px;
+    border-bottom: none;
+}
+
+/* 商品信息 */
+.goods-details a.btn {
+    margin-top: -5px;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.goods-attr .row:first-child {
+    margin-top: 0;
+}
+
+.operation {
+    margin-top: 20px;
+}
+
+.operation .btn {
+    margin-right: 10px;
+}
+
+/* 异常信息 */
+.exce-record + .exce-record {
+    margin-top: 80px;
+}
+
+.exce-record .title h3 {
+    display: inline-block;
+}
+
+.exce-record .title i {
+    margin-left: 30px;
+    color: #5677fc;
+}
+
+.exce-record .title h3,
+.exce-record .title i {
+    vertical-align: middle;
+}
+
+.exce-record .list {
+    border-left: 1px solid #bbb;
+}
+
+.exce-record .stage::before {
+    content: ' ';
+    position: absolute;
+    top: 4px;
+    left: -6px;
+    width: 11px;
+    height: 11px;
+    background-color: #ffffff;
+    border: 1px solid #bbbbbb;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.exce-record .exce-info {
+    color: #979899;
+}
+
+.img-list img {
+    width: 138px;
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+.score {
+    color: #979899;
+}
+
+/* 评论图片放大 */
+.modal-img {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.modal-img button {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    z-index: 10;
+}
+
+/* 顾客评论回复 */
+.reviews-name::after {
+    content: '：';
+}

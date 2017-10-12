@@ -1,0 +1,85 @@
+<!--头部导航开始-->
+<header>
+    <div>
+        <i class="glyphicon glyphicon-home"></i>
+        <span>商城管理</span> >
+        <a href="javascript: void(0);" ui-sref="store_mag">商家管理</a> >
+        <a ui-sref="order.all({id: shopID})">订单管理</a> >
+        <a href="javascript:history.go(-1);">删除评论</a> >
+        <span>删除评论详情</span>
+        <img src="pages/home/images/user.png"/>
+    </div>
+</header>
+<!--头部导航结束-->
+<section>
+    <div class="goods-details">
+        <div class="row title">
+            <div class="col-xs-2">
+                <h3>商品详情</h3>
+            </div>
+            <div class="col-xs-10">
+                <a ui-sref="goods_details({orderNo: params.order_no, sku: params.sku})" class="btn btn-info btn-lg">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                    <span>查看商品</span>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">商品名称</div>
+            <div class="col-xs-10">{{data.goods_name}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">商品编号</div>
+            <div class="col-xs-10">{{data.sku}}</div>
+        </div>
+    </div>
+    <hr/>
+    <div class="receive-detail">
+        <div class="row title">
+            <div class="col-xs-12">
+                <h3>评论回复</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">顾客评论</div>
+            <div class="col-xs-10">
+                <p>
+                    <span class="reviews-name">{{data.name}}</span>
+                    <span>{{data.content}}</span>
+                </p>
+                <p class="img-list">
+                    <img class="pointer" ng-repeat="obj in data.image" ng-src="{{obj.image}}" ng-click="showImage(obj.image)">
+                </p>
+                <div class="row">
+                    <div class="col-xs-2">商品评分</div>
+                    <div class="col-xs-10">{{data.score}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 score">店家服务</div>
+                    <div class="col-xs-10">
+                        <star max="5" readonly="true" rating-value="data.store_service_score/2"></star>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 score">物流速度</div>
+                    <div class="col-xs-10">
+                        <star max="5" readonly="true" rating-value="data.logistics_speed_score/2"></star>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 score">配送人员服务</div>
+                    <div class="col-xs-10">
+                        <star max="5" readonly="true" rating-value="data.shipping_score/2"></star>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">店家回复</div>
+            <div class="col-xs-10">{{data.reply}}</div>
+        </div>
+    </div>
+    <div class="operation">
+        <a class="btn btn-default" href="javascript: history.go(-1);">返回</a>
+    </div>
+</section>
