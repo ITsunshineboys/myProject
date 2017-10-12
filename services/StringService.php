@@ -404,16 +404,28 @@ class StringService
     /**get  client ip
      * @return array|false|string
      */
-    public  static  function  getClientIP()
+    public static function getClientIP()
     {
         global $ip;
         if (getenv("HTTP_CLIENT_IP"))
             $ip = getenv("HTTP_CLIENT_IP");
-        else if(getenv("HTTP_X_FORWARDED_FOR"))
+        else if (getenv("HTTP_X_FORWARDED_FOR"))
             $ip = getenv("HTTP_X_FORWARDED_FOR");
-        else if(getenv("REMOTE_ADDR"))
+        else if (getenv("REMOTE_ADDR"))
             $ip = getenv("REMOTE_ADDR");
         else $ip = "Unknow";
         return $ip;
+    }
+
+    /**
+     * Format price
+     *
+     * @param int|float $price price
+     * @param int $decimalDigits decimal digits default 2
+     * @return string
+     */
+    public static function formatPrice($price, $decimalDigits = 2)
+    {
+        return sprintf('%.' . $decimalDigits . 'f', $price);
     }
 }
