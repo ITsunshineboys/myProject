@@ -3633,7 +3633,12 @@ class OrderController extends Controller
             $purchase_price_decoration_company=$Goods->purchase_price_decoration_company;
             $purchase_price_manager=$Goods->purchase_price_manager;
             $purchase_price_designer=$Goods->purchase_price_designer;
-            $logisticsTemplate=LogisticsTemplate::findOne($Goods->logistics_template_id);
+            $logisticsTemplate=LogisticsTemplate::find()
+                ->where(['id'=>$Goods->logistics_template_id])
+                ->asArray()
+                ->one();
+            $logisticsTemplate['delivery_number_default']=GoodsOrder::switchMoney($logisticsTemplate['delivery_number_default']*0.01);
+            $logisticsTemplate['delivery_cost_delta']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_delta']*0.01);
             $logisticsDistrict=LogisticsDistrict::find()->select('district_name')->where(['template_id'=>$logisticsTemplate->id])->asArray()->all();
             $after_sale=explode(',',$Goods->after_sale_services);
             foreach ($after_sale as &$afterSale)
