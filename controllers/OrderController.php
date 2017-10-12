@@ -3310,14 +3310,13 @@ class OrderController extends Controller
      * 删除评论操作
      * @return string
      */
-    public  function  actionSupplierDeleteComment()
+   public  function  actionSupplierDeleteComment()
         {
             $order_no=Yii::$app->request->post('order_no','');
             $sku=Yii::$app->request->post('sku','');
             $code=1000;
             if (!$sku ||! $order_no)
             {
-
                 return Json::encode([
                     'code' => $code,
                     'msg'  => Yii::$app->params['errorCodes'][$code]
@@ -3367,21 +3366,22 @@ class OrderController extends Controller
             try{
                 $delete=new DeletedGoodsComment();
                 $delete->uid=$comment->uid;
-                $delete->role_id=$comment->uid;
-                $delete->name=$comment->uid;
-                $delete->icon=$comment->uid;
-                $delete->content=$comment->uid;
-                $delete->score=$comment->uid;
-                $delete->goods_id=$comment->uid;
-                $delete->store_service_score=$comment->uid;
-                $delete->shipping_score=$comment->uid;
-                $delete->logistics_speed_score=$comment->uid;
-                $delete->is_anonymous=$comment->uid;
+                $delete->role_id=$comment->role_id;
+                $delete->name=$comment->name;
+                $delete->icon=$comment->icon;
+                $delete->content=$comment->content;
+                $delete->score=$comment->score;
+                $delete->goods_id=$comment->goods_id;
+                $delete->store_service_score=$comment->store_service_score;
+                $delete->shipping_score=$comment->shipping_score;
+                $delete->logistics_speed_score=$comment->logistics_speed_score;
+                $delete->is_anonymous=$comment->is_anonymous;
                 $delete->create_time=time();
                 $delete->comment_time=$comment->create_time;
                 $delete->handle_uid=$user->id;
                 $delete->order_no=$OrderGoods->order_no;
                 $delete->sku=$OrderGoods->sku;
+                $delete->comment_id=$comment->id;
                 $res1=$delete->save(false);
                 if (!$res1)
                 {
@@ -3421,6 +3421,8 @@ class OrderController extends Controller
                 ]);
             }
         }
+
+
 
             /**
          * @return string
