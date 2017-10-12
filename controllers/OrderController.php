@@ -3711,34 +3711,6 @@ class OrderController extends Controller
             ]);
         }
 
-                public  function  actionReplyData()
-        {
-            $tran = Yii::$app->db->beginTransaction();
-            try{
-                $OrderAfterSale=OrderAfterSale::find()->where(['type'=>0])->all();
-                foreach ($OrderAfterSale as &$list)
-                {
-                    $list->type=4;
-                    if (!$list->save(false))
-                    {
-                        $tran->rollBack();
-                    }
-                }
-                $tran->commit();
-                return Json::encode([
-                    'code' =>  200,
-                    'msg'  => 'ok'
-                ]);
-            }catch (Exception $e){
-                $tran->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-        }
 
 
 
