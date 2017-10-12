@@ -482,8 +482,8 @@ class OwnerController extends Controller
     public function actionCarpentry()
     {
         $post = \Yii::$app->request->post();
-        $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker']);
-        $price = $labor_cost['univalence'];
+        $_select = 'id,univalence,worker_kind';
+        $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker'],$_select);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
         foreach ($worker_kind_details as $one_labor) {
             switch ($one_labor) {
@@ -506,19 +506,20 @@ class OwnerController extends Controller
         $flat_day = BasisDecorationService::flatDay($carpentry_add, $flat, $series_all, $style_all, $post['series']);
 
         //人工费
-        $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $price);
+        $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
 
         //材料
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL);
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL,$select);
         $judge = BasisDecorationService::priceConversion($goods);
         $goods_price = BasisDecorationService::judge($judge, $post);
+
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['carpentry'], $post['city']);
 
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
-
         //龙骨费用
         $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //丝杆费用
@@ -551,37 +552,6 @@ class OwnerController extends Controller
         }
         $material_total['total_cost'][] = $material_cost;
 
-//      添加费用
-        $add_price_area = DecorationAdd::AllArea(self::PROJECT_DETAILS['carpentry'], $post['area'], $post['city']);
-        $add_price = [];
-        foreach ($add_price_area as $add_area) {
-            $sku_area = Goods::skuAll($add_area['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_area['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
-        $add_price_series = DecorationAdd::AllSeries(self::PROJECT_DETAILS['carpentry'], $post['series'], $post['city']);
-        foreach ($add_price_series as $add_series) {
-            $sku_area = Goods::skuAll($add_series['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_series['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-        $add_price_style = DecorationAdd::AllStyle(self::PROJECT_DETAILS['carpentry'], $post['style'], $post['city']);
-        foreach ($add_price_style as $add_style) {
-            $sku_area = Goods::skuAll($add_style['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_style['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
@@ -600,9 +570,9 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //工人一天单价
-        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters']);
+        $_select = 'id,univalence,worker_kind';
+        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters'],$_select);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
-
         foreach ($worker_kind_details as $labor_cost) {
             switch ($labor_cost) {
                 case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_area']:
@@ -748,44 +718,12 @@ class OwnerController extends Controller
         $coating_labor_price['price'] = $total_day * $labor_costs['univalence'];
         $coating_labor_price['worker_kind'] = $labor_costs['worker_kind'];
 
-        //添加材料费用
-        $add_price_area = DecorationAdd::AllArea(self::PROJECT_DETAILS['oil_paint'],$post['area'],$post['city']);
-        $add_price = [];
-        foreach ($add_price_area as $add_area) {
-            $sku_area = Goods::skuAll($add_area['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_area['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
-        $add_price_series = DecorationAdd::AllSeries(self::PROJECT_DETAILS['oil_paint'],$post['series'],$post['city']);
-        foreach ($add_price_series as $add_series) {
-            $sku_area = Goods::skuAll($add_series['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_series['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-        $add_price_style = DecorationAdd::AllStyle(self::PROJECT_DETAILS['oil_paint'],$post['style'],$post['city']);
-        foreach ($add_price_style as $add_style) {
-            $sku_area = Goods::skuAll($add_style['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_style['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
                 'coating_labor_price' => $coating_labor_price,
                 'coating_material' => $material_total,
-                'add_price' => $add_price,
             ]
         ]);
     }
