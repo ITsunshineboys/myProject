@@ -63,10 +63,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         self::WORKER_ORDER_ING => '施工中',
         self::WORKER_ORDER_DONE => '已完工'
     ];
-
-
     const IMG_PAGE_SIZE_DEFAULT = 3;
-
     const IMG_COUNT_DEFAULT = 9;
 
     const IS_OLD = 1;
@@ -203,7 +200,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $return[] = self::dealOrder($order);
             }
         } else {
-            $order = self::find()->where(['id' => $order_id])->one();
+            $order = self::find()
+                ->select('id,uid,worker_type_id,worker_id,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address')
+                ->where(['id' => $order_id])
+                ->one();
             if (!$order) {
                 return 1000;
             }
@@ -227,7 +227,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->asArray()->one();
             $worker_items[] = $worker_item;
         }
-
+        $order->worker_type_id=WorkerType::getparenttype($order->worker_type_id);
         $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
         $order->modify_time && $order->modify_time = date('Y-m-d H:i', $order->modify_time);
         $order->start_time && $order->start_time = date('Y-m-d H:i', $order->start_time);
@@ -296,9 +296,18 @@ class WorkerOrder extends \yii\db\ActiveRecord
         //只要有工人id,便显示工人信息
         if ($order->worker_id) {
             $worker = Worker::find()
+                ->select('id,uid,nickname,icon,order_done,labor_cost_id,worker_type_id,skill_ids')
                 ->where(['id' => $order->worker_id])
                 ->asArray()
                 ->one();
+            $worker['worker_type_id']=WorkerType::getparenttype($worker['worker_type_id']);
+            $rank=LaborCost::find()
+                ->asArray()
+                ->where(['id'=>$worker['labor_cost_id']])
+                ->select('rank')
+                ->one();
+            $worker=array_merge($worker,$rank);
+
         }
 
 

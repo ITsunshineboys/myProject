@@ -26,6 +26,7 @@ class WorkerController extends Controller
     const STATUS_ALL = 6;
     const STAR_DEFAULT = 15;
     const VIEWS_PARENT=0;
+    const STATUS_JDED=2;
     /**
      * @inheritdoc
      */
@@ -217,7 +218,7 @@ class WorkerController extends Controller
     }
 
     /**
-     * 工程订单列表
+     * 工程订单列表-业主
      * @return int|string
      */
     public function actionUserWorkerOrderList()
@@ -1009,6 +1010,7 @@ class WorkerController extends Controller
 
        $worker_order->worker_id=$worker_id;
        $worker_order->is_old=WorkerOrder::IS_OLD;
+       $worker_order->status=self::STATUS_JDED;
 
        if(!$worker_order->update(false)){
            $code=500;
@@ -1019,8 +1021,14 @@ class WorkerController extends Controller
        }
        return Json::encode([
            'code'=>200,
-           'msg'=>'ok'
+           'msg'=>'ok',
+           'data'=>[
+               'order_id'=>$order_id
+           ]
        ]);
+
+    }
+    public function actionGrabDetails(){
 
     }
 }
