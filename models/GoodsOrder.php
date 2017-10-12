@@ -1008,7 +1008,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-    /**
+   /**
      * 获取商品信息
      * @param $goods_name
      * @param $goods_id
@@ -1025,11 +1025,10 @@ class GoodsOrder extends ActiveRecord
             $goods['attr']=array();
             foreach($attr_id AS $key =>$val){
                 $goods['attr'][$key]=GoodsAttr::find()
-                    ->select('name,value')
-                    ->where(['id'=>$attr_id[$key]])
+                    ->select('name,value,unit')
+                    ->where(['goods_id'=>$goods['goods_id']])
                     ->asArray()
-                    ->one();
-
+                    ->all();
             }
             return $goods;
     }
