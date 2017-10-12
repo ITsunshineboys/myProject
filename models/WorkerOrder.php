@@ -318,7 +318,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $data;
     }
     /**
-     * get User worker_order detail
+     * 获取用户工程订单详情
      * @param $order_id
      * @return array|int
      */
@@ -333,12 +333,31 @@ class WorkerOrder extends \yii\db\ActiveRecord
         //TODO  调整历史单独分出来(对应订单)  好评率
         $worker = [];
         //只要有工人id,便显示工人信息
+
         if ($order->worker_id) {
             $worker = Worker::find()
                 ->select('id,uid,nickname,icon,order_done,labor_cost_id,worker_type_id,skill_ids')
                 ->where(['id' => $order->worker_id])
                 ->asArray()
                 ->one();
+            //工人特长
+            $skill_ids = $worker['skill_ids'];
+            $skills = [];
+            if ($skill_ids) {
+                $skill_ids = explode(',', $skill_ids);
+                $skill_all = WorkerSkill::find()
+                    ->where(['id' => $skill_ids])->all();
+
+                foreach ($skill_all as $skill) {
+                    $skills[] = $skill['skill'];
+                }
+            }
+            unset($worker['skill_ids']);
+            $worker['skills'] = $skills;
+            $worker['mobile'] = User::find()
+                ->select('mobile')
+                ->where(['id' => $worker['uid']])
+                ->one()['mobile'];
             $worker['worker_type_id']=WorkerType::getparenttype($worker['worker_type_id']);
             $rank=LaborCost::find()
                 ->asArray()
@@ -348,41 +367,14 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $worker=array_merge($worker,$rank);
 
         }
-
-
         $order_no = self::getOrderNoById($order_id);
-
         $works_id = 0;
         if ($order->status == self::WORKER_ORDER_DONE) {
             //得到worker_works_id
             $works_id = self::getWorksIdByOrderNo($order_no);
         }
-
         $order_img = self::getOrderImg($order_no);
-
         $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
-        $skill_ids = $worker['skill_ids'];
-
-        $skills = [];
-
-        if ($skill_ids) {
-            $skill_ids = explode(',', $skill_ids);
-            $skill_all = WorkerSkill::find()
-                ->where(['id' => $skill_ids])->all();
-
-            foreach ($skill_all as $skill) {
-                $skills[] = $skill['skill'];
-            }
-        }
-
-        unset($worker['skill_ids']);
-
-        $worker['skills'] = $skills;
-
-        $worker['mobile'] = User::find()
-            ->select('mobile')
-            ->where(['id' => $worker['uid']])
-            ->one()['mobile'];
 
         return [
             'order' => $order,

@@ -299,7 +299,7 @@ class WorkerController extends Controller
             return $user;
         }
         $request = \Yii::$app->request;
-        //工程订单-业主 status=(0,1,4,5)
+        //工程订单-工人 status=(0,1,4,5)
         $status = (int)$request->get('status', self::STATUS_ALL);
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
@@ -321,6 +321,41 @@ class WorkerController extends Controller
             'data' => $data
         ]);
 }
+    /**
+     * 工程订单详情-工人
+     * @return int|string
+     */
+    public function actionWorkerWorkerOrderDetail(){
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+
+        $order_id = (int)$request->get('order_id', 0);
+        if (!$order_id) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $data = WorkerOrder::getWorkerWorkerOrderDetail($order_id);
+        if (is_int($data)) {
+            return Json::encode([
+                'code' => $data,
+                'msg' => \Yii::$app->params['errorCodes'][$data]
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
 
     /**
      * 得到订单图片分页
