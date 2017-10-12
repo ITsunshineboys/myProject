@@ -1366,17 +1366,21 @@ class OrderController extends Controller
      */
     public function actionExpressupdate(){
         $request = Yii::$app->request;
-        $waybillname= trim($request->post('waybillname', ''));
         $waybillnumber= trim($request->post('waybillnumber', ''));
         $order_no= trim($request->post('order_no', ''));
         $sku=trim($request->post('sku', ''));
         $data=Express::find()->select('waybillnumber,waybillname')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
-        if (!$data || !$waybillnumber || !$waybillname){
+        if (!$data || !$waybillnumber){
             $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
+        }
+        $waybillname=(new Express())->GetExpressName($waybillnumber);
+        if (!$waybillname)
+        {
+            $waybillname='未知';
         }
         $code=Express::Expressupdate($waybillnumber,$waybillname,$sku,$order_no);
         if ($code==200){
