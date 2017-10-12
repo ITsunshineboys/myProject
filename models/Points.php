@@ -47,10 +47,16 @@ class Points extends ActiveRecord
             ->one();
     }
 
-    public static function findByInsert($rows,$columns = [])
+    public static function findByInsert($rows)
     {
         $row = \Yii::$app->db->createCommand();
-        return $row->batchInsert(self::TABLE_NAME,$columns,$rows)->execute();
+        return $row->insert(self::TABLE_NAME,[
+            'count' => $rows['count'],
+            'title' => $rows['title'],
+            'pid'   => $rows['id'],
+            'level' => 3,
+            'differentiate' => 1,
+        ])->execute();
     }
 
     public static function findByUpdate($rows,$id)

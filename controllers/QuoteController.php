@@ -1513,6 +1513,26 @@ class QuoteController extends Controller
         }
     }
 
+    public function actionCommonalityTitleTwoAdd()
+    {
+        $post = \Yii::$app->request->post();
+        $points = new Points();
+        foreach ($post as $value){
+            if (isset($value['title'])) {
+                $points->findByInsert($value);
+            }
+            if (isset($value['edit_id'])){
+                $points->findByUpdate($value['count'],$value['id']);
+            }
+        }
+        if ($post['del_id']) {
+            $points->deleteAll(['and',['id'=>$points['del_id']],['differentiate'=>1]]);
+        }
+        return Json::encode([
+           'code' => 200,
+           'msg' => 'OK',
+        ]);
+    }
 
     /**
      * commonality area proportion list
