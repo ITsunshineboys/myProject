@@ -1,0 +1,189 @@
+<!--头部导航开始-->
+<header>
+    <div>
+        <i class="glyphicon glyphicon-home"></i>
+        <span>商城管理</span> >
+        <a ui-sref="store_mag">商家管理</a> >
+        <a ui-sref="order.all({id: shopID})">订单管理</a> >
+        <span>商品详情</span>
+        <img src="pages/home/images/user.png"/>
+    </div>
+</header>
+<!--头部导航结束-->
+<section>
+    <div class="row">
+        <div class="col-xs-2">商品分类</div>
+        <div class="col-xs-10">{{data.category}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">商品名称</div>
+        <div class="col-xs-10">{{data.goods_name}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">商品特色</div>
+        <div class="col-xs-10">{{data.subtitle}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">品牌</div>
+        <div class="col-xs-10">{{data.brand}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">系列</div>
+        <div class="col-xs-10">{{data.series}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">风格</div>
+        <div class="col-xs-10">{{data.style}}</div>
+    </div>
+    <div class="row prop">
+        <div class="col-xs-2">属性设置</div>
+        <div class="col-xs-5">
+            <table class="table table-responsive">
+                <tr>
+                    <td>属性名称</td>
+                    <td>属性内容</td>
+                    <td>单位</td>
+                </tr>
+                <tr ng-repeat="obj in data.goods_attr">
+                    <td>{{obj.name}}</td>
+                    <td>{{obj.value}}</td>
+                    <td>{{obj.unit}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">图片</div>
+        <div class="col-xs-10 img-list">
+            <div class="cover-map">
+                <span>封面图</span>
+                <img ng-src="{{data.cover_image}}">
+            </div>
+            <img ng-repeat="obj in data.goods_image" ng-src="{{obj.image}}">
+        </div>
+    </div>
+    <div class="row table-style">
+        <div class="col-xs-2">价格/库存</div>
+        <div class="col-xs-4">
+            <table class="table">
+                <tr>
+                    <th>供货价格</th>
+                    <th>平台价格</th>
+                    <th>市场价格</th>
+                    <th>库存</th>
+                </tr>
+                <tr>
+                    <td>{{data.supplier_price}}</td>
+                    <td>{{data.platform_price}}</td>
+                    <td>{{data.market_price}}</td>
+                    <td>{{data.left_number}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row table-style">
+        <div class="col-xs-2">采购价</div>
+        <div class="col-xs-5">
+            <table class="table">
+                <tr>
+                    <th>装修公司采购价</th>
+                    <th>项目经理采购价</th>
+                    <th>设计师采购价</th>
+                </tr>
+                <tr>
+                    <td>{{data.purchase_price_decoration_company}}</td>
+                    <td>{{data.purchase_price_manager}}</td>
+                    <td>{{data.purchase_price_designer}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">商品物流</div>
+        <div class="col-xs-10">
+            <div class="row">
+                <div class="col-xs-12">{{data.logisticsTemplate.name}}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2">快递方式</div>
+                <div class="col-xs-10" ng-if="data.logisticsTemplate.delivery_method == 0">快递物流</div>
+                <div class="col-xs-10" ng-if="data.logisticsTemplate.delivery_method == 1">运货上门</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2">城市选择</div>
+                <div class="col-xs-10 city">
+                    <!--<span ng-repeat="obj in data.logisticsDistrict | limitTo: 3">{{obj.district_name}}</span>-->
+                    <span ng-repeat="obj in data.logisticsDistrict | limitTo: 3">{{obj.district_name}}</span>
+                    <!--<span ng-if="data.logisticsDistrict.length > 3">...</span>-->
+                    <span ng-if="data.logisticsDistrict.length > 3">...</span>
+                    <!--<a ng-if="data.logisticsDistrict.length > 3" href="javascript: void (0);">查看</a>-->
+                    <a style="color:#5677FC" ng-if="data.logisticsDistrict.length > 3" href="javascript: void (0);" ng-click="showCity()">查看</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2">是否包邮</div>
+                <div class="col-xs-10" ng-if="data.logisticsTemplate.delivery_cost_default == 0">包邮</div>
+                <div class="col-xs-10" ng-if="data.logisticsTemplate.delivery_cost_default != 0">不包邮</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2">收费金额</div>
+                <div class="col-xs-10">
+                    <p ng-if="data.logisticsTemplate.delivery_cost_default != 0">
+                        默认{{data.logisticsTemplate.delivery_number_default}}件商品：
+                        ¥{{data.logisticsTemplate.delivery_cost_default || '0.00'}}
+                    </p>
+                    <p ng-if="data.logisticsTemplate.delivery_cost_default != 0">
+                        每增加{{data.logisticsTemplate.delivery_number_delta}}件商品，运费增加：
+                        ¥{{data.logisticsTemplate.delivery_cost_delta || '0.00'}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">售后</div>
+        <div class="col-xs-10">
+            <p ng-repeat="obj in data.after">{{obj}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">保障</div>
+        <div class="col-xs-10">
+            <p ng-repeat="obj in data.guarantee">{{obj}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">线下商城二维码</div>
+        <div class="col-xs-10">
+            <img ng-src="{{data.qrcode}}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">详情描述</div>
+        <div class="col-xs-10 description">{{data.description}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-2">
+            <a class="btn btn-default" href="javascript: history.back();">返回</a>
+        </div>
+    </div>
+</section>
+
+<div id="cityModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">城市选择</h4>
+            </div>
+            <div class="modal-body">
+                <p class="city">
+                    <span ng-repeat="obj in data.logisticsDistrict">{{obj.district_name}}</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

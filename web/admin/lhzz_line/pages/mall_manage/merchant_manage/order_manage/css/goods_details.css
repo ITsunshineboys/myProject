@@ -1,0 +1,98 @@
+/*顶部导航*/
+header {
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #E6E9F0;
+    position: relative;
+}
+
+header img {
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+
+/*顶部导航结束*/
+
+section {
+    padding-left: 40px;
+}
+
+section > .row {
+    margin-top: 20px;
+}
+
+section > .row .row + .row {
+    margin-top: 15px;
+}
+
+.prop .table {
+    margin-top: -7px;
+}
+
+.prop .table td {
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
+}
+
+.img-list img {
+    margin-right: 10px;
+    width: 138px;
+    max-width: 100%;
+}
+
+.table-style .table {
+    margin-top: -7px;
+}
+
+.table-style .table th {
+    font-weight: normal;
+    border-top: none;
+}
+
+.table-style .table td {
+    border-top-width: 2px;
+    border-bottom: none;
+}
+
+/* 城市选择 */
+.city span + span::before {
+    content: '、'
+}
+
+div.city span:nth-child(4)::before {
+    content: ''
+}
+
+.city a {
+    margin-left: 20px;
+}
+
+.description {
+    word-break: break-all;
+}
+
+/* 封面图 */
+.cover-map {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.cover-map img {
+    margin-right: 0;
+}
+
+.cover-map > span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    padding: 1px 3px;
+    color: #fff;
+    white-space: nowrap;
+    background-color: rgba(0, 0, 0, .3);
+}

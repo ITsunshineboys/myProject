@@ -1,0 +1,334 @@
+<!--头部导航开始-->
+<header>
+    <div>
+        <i class="glyphicon glyphicon-home"></i>
+        <span>商城管理</span> >
+        <a href="javascript: void(0);" ui-sref="store_mag">商家管理</a> >
+        <a href="javascript:history.go(-1);">订单管理</a> >
+        <span>订单详情</span>
+        <img src="pages/home/images/user.png"/>
+    </div>
+</header>
+<!--头部导航结束-->
+<section>
+    <div class="order-details">
+        <div class="row title">
+            <div class="col-xs-12">
+                <h3>订单详情</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">订单号</div>
+            <div class="col-xs-10">{{orderDetails.order_no}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">订单状态</div>
+            <div class="col-xs-10">{{orderDetails.status}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">用户</div>
+            <div class="col-xs-10">{{orderDetails.username}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">订单金额</div>
+            <div class="col-xs-4">
+                <table class="table table-responsive">
+                    <tr>
+                        <th>总金额</th>
+                        <th>{{orderDetails.role}}</th>
+                        <th>运费</th>
+                    </tr>
+                    <tr>
+                        <td class="total-money">¥{{orderDetails.amount_order}}</td>
+                        <td>¥{{orderDetails.goods_price}}</td>
+                        <td>¥{{orderDetails.freight}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">供货价</div>
+            <div class="col-xs-10">¥{{orderDetails.supplier_price}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">市场价</div>
+            <div class="col-xs-10">¥{{orderDetails.market_price}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">商品个数</div>
+            <div class="col-xs-10">{{orderDetails.goods_number}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">付款方式</div>
+            <div class="col-xs-10">{{orderDetails.pay_name}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">下单时间</div>
+            <div class="col-xs-10">{{orderDetails.create_time}}</div>
+        </div>
+        <div class="row" ng-if="orderType != '待付款'">
+            <div class="col-xs-2">付款时间</div>
+            <div class="col-xs-10">{{orderDetails.paytime}}</div>
+        </div>
+        <div class="row" ng-if="orderType == '已完成'">
+            <div class="col-xs-2">完成时间</div>
+            <div class="col-xs-10">{{orderDetails.complete_time}}</div>
+        </div>
+        <div class="row" ng-if="orderType == '待付款'">
+            <div class="col-xs-2">剩余付款时间</div>
+            <div class="col-xs-10">{{payTerm}}</div>
+        </div>
+        <div class="row" ng-if="orderType != '待付款' && orderType != '待发货'">
+            <div class="col-xs-2">配送方式</div>
+            <div class="col-xs-10"><a ui-sref="express({orderNo: params.order_no,sku: params.sku})">{{orderDetails.shipping_way}}</a></div>
+        </div>
+    </div>
+    <hr>
+    <div class="goods-details">
+        <div class="row title">
+            <div class="col-xs-2">
+                <h3>商品详情</h3>
+            </div>
+            <div class="col-xs-10">
+                <a ui-sref="goods_details({orderNo: params.order_no,sku: params.sku})" class="btn btn-info btn-lg">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                    <span>查看商品</span>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">商品名称</div>
+            <div class="col-xs-10">{{goodsDetails.goods_name}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">商品编号</div>
+            <div class="col-xs-10">{{goodsDetails.goods_id}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">商品属性</div>
+            <div class="col-xs-10">
+                <div class="goods-attr">
+                    <div class="row" ng-repeat="obj in goodsDetails.attr">
+                        <div class="col-xs-2">{{obj.name}}</div>
+                        <div class="col-xs-10">{{obj.value}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="receive-detail">
+        <div class="row title">
+            <div class="col-xs-12">
+                <h3>收货详情</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">收货人</div>
+            <div class="col-xs-10">{{receiveDetails.consignee}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">收货地址</div>
+            <div class="col-xs-10">{{receiveDetails.district}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">电话</div>
+            <div class="col-xs-10">{{receiveDetails.consignee_mobile}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">留言</div>
+            <div class="col-xs-10">{{receiveDetails.buyer_message}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">发票类型</div>
+            <div class="col-xs-10">{{receiveDetails.invoice_header_type}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">抬头</div>
+            <div class="col-xs-10">{{receiveDetails.invoice_header}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">纳税人识别码</div>
+            <div class="col-xs-10">{{receiveDetails.invoicer_card}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">发票内容</div>
+            <div class="col-xs-10">{{receiveDetails.invoice_content}}</div>
+        </div>
+    </div>
+    <hr/>
+    <div class="exce-record" ng-if="isException && orderType != '待收货' && receiving.length != 0">
+        <div class="row title">
+            <div class="col-xs-12">
+                <h3>异常记录-待发货</h3>
+                <i class="glyphicon pointer" ng-class="{'glyphicon-chevron-up': isShowreceiving, 'glyphicon-chevron-down': !isShowreceiving}"
+                   ng-click="isShowreceiving = !isShowreceiving"></i>
+            </div>
+        </div>
+        <div ng-if="isShowreceiving">
+            <div class="row list" ng-repeat="obj in receiving">
+                <div class="col-xs-2 stage">{{obj.type}}</div>
+                <div class="col-xs-4">
+                    <p>
+                        <span>{{obj.value}}</span>
+                        <span class="pull-right">{{obj.time}}</span>
+                    </p>
+                    <p class="exce-info">{{obj.content}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="exce-record" ng-if="isException && orderType != '待发货' && delivery.length != 0">
+        <div class="row title">
+            <div class="col-xs-12">
+                <h3>异常记录-待收货</h3>
+                <i class="glyphicon pointer" ng-class="{'glyphicon-chevron-up': isShowDelivery, 'glyphicon-chevron-down': !isShowDelivery}"
+                   ng-click="isShowDelivery = !isShowDelivery"></i>
+            </div>
+        </div>
+        <div ng-if="isShowDelivery">
+            <div class="row list" ng-repeat="obj in delivery">
+                <div class="col-xs-2 stage">{{obj.type}}</div>
+                <div class="col-xs-4">
+                    <p>
+                        <span>{{obj.value}}</span>
+                        <span class="pull-right">{{obj.time}}</span>
+                    </p>
+                    <p class="exce-info">{{obj.content}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr ng-if="isException"/>
+    <div class="exce-record" ng-if="isPlatform">
+        <div class="row title">
+            <div class="col-xs-12">
+                <h3 ng-if="platformInfo.handle == 1 || platformInfo.handle == 2">平台介入-关闭订单</h3>
+                <h3 ng-if="platformInfo.handle == 3">平台介入-退货</h3>
+                <h3 ng-if="platformInfo.handle == 4">平台介入-换货</h3>
+                <h3 ng-if="platformInfo.handle == 5">平台介入-上门维修</h3>
+                <h3 ng-if="platformInfo.handle == 6">平台介入-上门退货</h3>
+                <h3 ng-if="platformInfo.handle == 7">平台介入-上门换货</h3>
+                <i class="glyphicon pointer" ng-class="{'glyphicon-chevron-up': isShowPlatform, 'glyphicon-chevron-down': !isShowPlatform}"
+                   ng-click="isShowPlatform = !isShowPlatform"></i>
+            </div>
+        </div>
+        <div ng-if="isShowPlatform">
+            <div class="row list">
+                <div class="col-xs-2 stage">操作类型</div>
+                <div class="col-xs-4">
+                    <p>
+                        <span ng-if="platformInfo.handle == 1">关闭订单退款</span>
+                        <span ng-if="platformInfo.handle == 2">关闭订单线下退款</span>
+                        <span ng-if="platformInfo.handle == 3">退货</span>
+                        <span ng-if="platformInfo.handle == 4">换货</span>
+                        <span ng-if="platformInfo.handle == 5">上门维修</span>
+                        <span ng-if="platformInfo.handle == 6">上门退货</span>
+                        <span ng-if="platformInfo.handle == 7">上门换货</span>
+                        <span class="pull-right">{{platformInfo.handle_time}}</span>
+                    </p>
+                    <p class="exce-info">{{platformInfo.reasons}}</p>
+                </div>
+            </div>
+            <div class="row list">
+                <div class="col-xs-2 stage">退款结果</div>
+                <div class="col-xs-4">
+                    <p>
+                        <span>{{platformInfo.refund_result}}</span>
+                        <span class="pull-right">{{platformInfo.refund_time}}</span>
+                    </p>
+                    <p class="exce-info">{{platformInfo.refund_type}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr ng-if="isPlatform" />
+    <div class="receive-detail" ng-if="orderType == '已完成' && comments.length != 0">
+        <div class="row title">
+            <div class="col-xs-12">
+                <h3>评论回复</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">顾客评论</div>
+            <div class="col-xs-10">
+                <p>
+                    <span class="reviews-name" ng-if="comments.name != ''">{{comments.name}}</span>
+                    <span>{{comments.content}}</span>
+                </p>
+                <p class="img-list">
+                    <img class="pointer" ng-repeat="obj in comments.image" ng-src="{{obj.image}}" ng-click="showImage(obj.image)">
+                </p>
+                <div class="row">
+                    <div class="col-xs-2">商品评分</div>
+                    <div class="col-xs-10">{{comments.score}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 score">店家服务</div>
+                    <div class="col-xs-10">
+                        <star max="5" readonly="true" rating-value="comments.store_service_score/2"></star>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 score">物流速度</div>
+                    <div class="col-xs-10">
+                        <star max="5" readonly="true" rating-value="comments.logistics_speed_score/2"></star>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 score">配送人员服务</div>
+                    <div class="col-xs-10">
+                        <star max="5" readonly="true" rating-value="comments.shipping_score/2"></star>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">店家回复</div>
+            <div class="col-xs-10">{{comments.reply}} <a href="javascript:void (0);" ng-click="delComments()" ng-if="comments.length != 0">删除</a></div>
+        </div>
+    </div>
+    <hr ng-if="orderType == '已完成' && comments.length != 0"/>
+    <div class="receive-detail" ng-if="platformInter == 1">
+        <div class="row title">
+            <div class="col-xs-12">
+                <h3>平台介入</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">操作类型</div>
+            <div class="col-xs-3">
+                <select class="form-control" ng-model="interOper.handle_type">
+                    <option value="1">关闭订单，退款</option>
+                    <option value="2">关闭订单，线下退款</option>
+                    <!--<option value="3">退货</option>
+                    <option value="4">换货</option>
+                    <option value="5">上门维修</option>
+                    <option value="6">上门退货</option>
+                    <option value="7">上门换货</option>-->
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">说明</div>
+            <div class="col-xs-8">
+                <textarea class="form-control" rows="5" placeholder="请输入操作理由" ng-model="interOper.reason"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="operation">
+        <button class="btn btn-primary" ng-if="platformInter == 1" ng-click="confirmAction()">确认</button>
+        <a class="btn btn-default" href="javascript: history.go(-1);">返回</a>
+    </div>
+</section>
+<!-- 图片浏览模态框 -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-img" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <img ng-src="{{showImg}}">
+            </div>
+        </div>
+    </div>
+</div>

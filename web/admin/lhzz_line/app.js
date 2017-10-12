@@ -472,7 +472,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
           controller: 'comments_details'
       })
       .state('goods_details', { // 商品详情
-          url: '/order/goods/details',
+          url: '/order/goods/details?orderNo&sku',
           templateUrl: 'pages/mall_manage/merchant_manage/order_manage/goods_details/goods_details.html',
           css: 'pages/mall_manage/merchant_manage/order_manage/css/goods_details.css',
           controller: 'order_goods'
