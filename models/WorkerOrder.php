@@ -209,7 +209,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
             $return = self::dealOrder($order);
         }
-
         return $return;
     }
 
