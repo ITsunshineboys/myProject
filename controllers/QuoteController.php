@@ -1513,6 +1513,10 @@ class QuoteController extends Controller
         }
     }
 
+    /**
+     * commonality two title add
+     * @return string
+     */
     public function actionCommonalityTitleTwoAdd()
     {
         $post = \Yii::$app->request->post();
