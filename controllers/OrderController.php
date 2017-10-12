@@ -3705,6 +3705,7 @@ class OrderController extends Controller
                 'data'=>[
                     'category'=>$category,
                     'goods_name'=>$OrderGoods->goods_name,
+                     'subtitle'=>$Goods->subtitle,
                     'brand'=>$brand->name,
                     'series'=>$series,
                     'style'=>$style,
