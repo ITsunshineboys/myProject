@@ -2645,6 +2645,7 @@ class OrderController extends Controller
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
             ->asArray()
             ->one();
+            var_dump($unshipped);exit;
         if ($unshipped)
         {
             if($unshipped['create_time'])
