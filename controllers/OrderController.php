@@ -302,18 +302,24 @@ class OrderController extends Controller
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
             $data=GoodsOrder::getlinegoodsdata($goods_id,$goods_num);
-            if ($data){
-                return Json::encode([
-                    'code' => 200,
-                    'msg'  => 'ok',
-                    'data' => $data
-                ]);
-            }
+           if (is_numeric($data))
+           {
+               $code=$data;
+               return Json::encode([
+                   'code' => $code,
+                   'msg'  => Yii::$app->params['errorCodes'][$code]
+               ]);
+           }else{
+               return Json::encode([
+                   'code' => 200,
+                   'msg'  =>'ok',
+                   'data'=>$data
+               ]);
+           }
         }else{
             $code=1050;
             return Json::encode([
@@ -322,6 +328,7 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
      * 无登录app-获取发票信息
      * @return string
