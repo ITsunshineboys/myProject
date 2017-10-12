@@ -398,6 +398,86 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
           templateUrl:'pages/distribution/associate_list.html',
           css:'pages/distribution/css/associate_list.css'
       })
+      /*=============== 廖欢 start ===============*/
+      .state('home', {  // 首页
+          url: '/home',
+          templateUrl: 'pages/home/home.html',
+          css: 'pages/home/css/home.css'
+      })
+      .state('order', { // 订单管理
+          abstract:true,
+          url: '/order?id',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'order'
+      })
+      .state('order.all', { // 全部订单
+          url: '/all',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order_all.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'order_all'
+      })
+      .state('order.unpaid', {  // 待付款订单
+          url: '/unpaid',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order_unpaid.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'order_unpaid'
+      })
+      .state('order.unshipped', {   // 待发货订单
+          url: '/unshipped',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order_unshipped.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'order_unshipped'
+      })
+      .state('order.unreceived', {  // 待收货订单
+          url: '/unreceived',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order_unreceived.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'order_unreceived'
+      })
+      .state('order.completed', {   // 已完成订单
+          url: '/completed',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order_completed.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'order_completed'
+      })
+      .state('order.cancel', {  // 已取消订单
+          url: '/cancel',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order_cancel.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'order_cancel'
+      })
+      .state('comments_del', {  // 删除评论列表
+          url: '/order/comments?id',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/comments_del/comments_del.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'comments'
+      })
+      .state('order_details', { // 订单详情
+          url: '/order/details?orderNo&sku&status&type',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order_details.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
+          controller: 'order_details'
+      })
+      .state('express', {   // 物流详情
+          url: '/order/express?orderNo&sku',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/express/order_express.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
+          controller: 'express'
+      })
+      .state('comm_details', {  // 删除评论详情
+          url: '/order/comments/details?orderNo&sku',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/comments_del/del_details.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
+          controller: 'comments_details'
+      })
+      .state('goods_details', { // 商品详情
+          url: '/order/goods/details',
+          templateUrl: 'pages/mall_manage/merchant_manage/order_manage/goods_details/goods_details.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/goods_details.css',
+          controller: 'order_goods'
+      })
+    /*=============== 廖欢 end ===============*/
 })
   .directive('wdatePicker',function(){
     return{

@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>大后台</title>
     <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="lib/css/common.css">
     <link rel="stylesheet" href="lib/css/index.css">
     <link rel="stylesheet" href="lib/data_js/need/laydate.css">
     <link rel="stylesheet" href="lib/css/font-awesome.min.css">
@@ -18,7 +19,7 @@
         <img src="lib/images/logo.png" alt=""/>
     </div>
     <dl >
-        <dt ><i class="glyphicon glyphicon-home"></i> 首页</dt>
+        <dt ui-sref="home"><i class="glyphicon glyphicon-home"></i> 首页</dt>
     </dl>
     <dl>
         <dt ><i class="glyphicon glyphicon-home"></i> 商城管理</dt>
@@ -135,5 +136,19 @@
 <script src="pages/apply_case/js/apply_case.js"></script>
 
 <script src="app.js"></script>
+<!-- lh -->
+<script src="lib/js/common_lh.js"></script>     <!-- 公用 -->
+<script src="pages/home/js/home.js"></script>   <!-- 首页 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/order/js/order.js"></script>                    <!-- 订单 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/order/js/order_all.js"></script>                <!-- 全部 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/order/js/order_unpaid.js"></script>             <!-- 待付款 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/order/js/order_unshipped.js"></script>          <!-- 待发货 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/order/js/order_unreceived.js"></script>         <!-- 待收货 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/order/js/order_completed.js"></script>          <!-- 已完成 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/order/js/order_cancel.js"></script>             <!-- 已取消 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/comments_del/js/comments_del.js"></script>      <!-- 删除评论 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/order/js/order_details.js"></script>            <!-- 订单详情 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/express/js/order_express.js"></script>          <!-- 物流详情 -->
+<script src="pages/mall_manage/merchant_manage/order_manage/goods_details/js/goods_details.js"></script>    <!-- 订单商品详情 -->
 </body>
 </html>
