@@ -3639,7 +3639,7 @@ class OrderController extends Controller
                 ->one();
             $logisticsTemplate['delivery_number_default']=GoodsOrder::switchMoney($logisticsTemplate['delivery_number_default']*0.01);
             $logisticsTemplate['delivery_cost_delta']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_delta']*0.01);
-            $logisticsDistrict=LogisticsDistrict::find()->select('district_name')->where(['template_id'=>$logisticsTemplate->id])->asArray()->all();
+            $logisticsDistrict=LogisticsDistrict::find()->select('district_name')->where(['template_id'=>$logisticsTemplate['id'])->asArray()->all();
             $after_sale=explode(',',$Goods->after_sale_services);
             foreach ($after_sale as &$afterSale)
             {
