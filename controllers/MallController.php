@@ -4556,8 +4556,16 @@ class MallController extends Controller
         $recommend->attributes = $postData;
 
         if (!empty($postData['sku'])) {
+            $supplier = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->params['supplierRoleId']);
+            if (!Goods::checkSupplierGoodsBySupplierIdAndSku($supplier->id, $recommend->sku)) {
+                $code = 1039;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
             $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
-            $supplier = Supplier::findOne($goods->supplier_id);
             $recommend->supplier_id = $supplier->id;
             $recommend->supplier_name = $supplier->nickname;
             $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
