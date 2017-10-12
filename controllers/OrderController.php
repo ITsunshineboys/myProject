@@ -2623,9 +2623,8 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $unusualList=OrderRefund::findByOrderNoAndSku($order_no,$sku);
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-        if (!$GoodsOrder || !$unusualList)
+        if (!$GoodsOrder )
         {
             $code=1000;
             return Json::encode([
@@ -2642,80 +2641,166 @@ class OrderController extends Controller
                 $refund_type='已退至顾客钱包';
                 break;
         }
-
-        foreach ($unusualList as $k =>$v)
+        $unshipped=OrderRefund::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
+            ->asArray()
+            ->one();
+        if ($unshipped)
         {
-            $unusualList[$k]=$unusualList[$k]->toArray();
-            if($unusualList[$k]['create_time'])
+            if($unshipped['create_time'])
             {
-                $unusualList[$k]['create_time']=date('Y-m-d H:i',$unusualList[$k]['create_time']);
+                $unshipped['create_time']=date('Y-m-d H:i',$unshipped['create_time']);
             }
-            if ($unusualList[$k]['refund_time'])
+            if ($unshipped['refund_time'])
             {
-                $unusualList[$k]['refund_time']=date('Y-m-d H:i',$unusualList[$k]['refund_time']);
+                $unshipped['refund_time']=date('Y-m-d H:i',$unshipped['refund_time']);
             }
-            if ($unusualList[$k]['handle_time'])
+            if ($unshipped['handle_time'])
             {
-                $unusualList[$k]['handle_time']=date('Y-m-d H:i',$unusualList[$k]['handle_time']);
+                $unshipped['handle_time']=date('Y-m-d H:i',$unshipped['handle_time']);
             }
-            if ($unusualList[$k]['handle']==0)
+            if ($unshipped['handle']==0)
             {
-                $arr[]=[
+                $arr1[]=[
                     'type'=>'取消原因',
-                    'value'=>$unusualList[$k]['apply_reason'],
+                    'value'=>$unshipped['apply_reason'],
                     'content'=>'',
-                    'time'=>$unusualList[$k]['create_time'],
-                    'stage'=>$unusualList[$k]['order_type']
+                    'time'=>$unshipped['create_time'],
+                    'stage'=>$unshipped['order_type']
                 ];
-            }else{
-                $arr[]=[
-                    'type'=>'取消原因',
-                    'value'=>$unusualList[$k]['apply_reason'],
-                    'content'=>'',
-                    'time'=>$unusualList[$k]['create_time'],
-                    'stage'=>$unusualList[$k]['order_type']
+            }else {
+                $arr1[] = [
+                    'type' => '取消原因',
+                    'value' => $unshipped['apply_reason'],
+                    'content' => '',
+                    'time' => $unshipped['create_time'],
+                    'stage' => $unshipped['order_type']
                 ];
-                switch ($unusualList[$k]['handle'])
-                {
+                switch ($unshipped['handle']) {
                     case 1:
-                        $data_code[$k]['type']='同意';
-                        $data_code[$k]['reason']='';
-                        $data_code[$k]['complete_time']=$unusualList[$k]['refund_time'];
-                        $data_code[$k]['result']='成功';
+                        $type = '同意';
+                        $reason = '';
+                        $complete_time = $unshipped['refund_time'];
+                        $result = '成功';
                         break;
                     case 2:
-                        $data_code[$k]['type']='同意';
-                        $data_code[$k]['reason']=$unusualList[$k]['handle_reason'];
-                        $data_code[$k]['complete_time']=$unusualList[$k]['handle_time'];
-                        $data_code[$k]['result']='失败';
+                        $type = '驳回';
+                        $reason = $unshipped['handle_reason'];
+                        $complete_time = $unshipped['handle_time'];
+                        $result = '失败';
                         break;
                 }
-                $arr[]=[
-                    'type'=>'商家反馈',
-                    'value'=>$data_code[$k]['type'],
-                    'content'=>$data_code[$k]['reason'],
-                    'time'=>$unusualList[$k]['handle_time'],
-                    'stage'=>$unusualList[$k]['order_type']
+                $arr1[] = [
+                    'type' => '商家反馈',
+                    'value' => $type,
+                    'content' => $reason,
+                    'time' => $unshipped['handle_time'],
+                    'stage' => $unshipped['order_type']
                 ];
-                $arr[]=[
-                    'type'=>'退款结果',
-                    'value'=>$data_code[$k]['result'],
-                    'content'=>'',
-                    'time'=>$data_code[$k]['complete_time'],
-                    'stage'=>$unusualList[$k]['order_type']
+                $arr1[] = [
+                    'type' => '退款结果',
+                    'value' => $result,
+                    'content' => '',
+                    'time' => $complete_time,
+                    'stage' => $unshipped['order_type']
                 ];
-                if ($unusualList[$k]['handle']==1){
-                    $arr[]=[
-                        'type'=>'退款去向',
-                        'value'=>$refund_type,
-                        'content'=>'',
-                        'time'=>$data_code[$k]['complete_time'],
-                        'stage'=>$unusualList[$k]['order_type']
+                if ($unshipped['handle'] == 1) {
+                    $arr1[] = [
+                        'type' => '退款去向',
+                        'value' => $refund_type,
+                        'content' => '',
+                        'time' => $complete_time,
+                        'stage' => $unshipped['order_type']
                     ];
                 }
             }
-            $data[$k]['order_type']=$unusualList[$k]['order_type'];
-            $data[$k]['list']=$arr;
+            $data[]=[
+                'order_type'=>'unshipped',
+                'list'=>$arr1
+            ];
+        }else{
+            $data[]=[];
+        }
+
+        $unreceived=OrderRefund::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
+            ->asArray()
+            ->one();
+        if ($unreceived)
+        {
+            if($unreceived['create_time'])
+            {
+                $unreceived['create_time']=date('Y-m-d H:i',$unreceived['create_time']);
+            }
+            if ($unreceived['refund_time'])
+            {
+                $unreceived['refund_time']=date('Y-m-d H:i',$unreceived['refund_time']);
+            }
+            if ($unreceived['handle_time'])
+            {
+                $unreceived['handle_time']=date('Y-m-d H:i',$unreceived['handle_time']);
+            }
+            if ($unreceived['handle']==0)
+            {
+                $arr2[]=[
+                    'type'=>'取消原因',
+                    'value'=>$unreceived['apply_reason'],
+                    'content'=>'',
+                    'time'=>$unreceived['create_time'],
+                    'stage'=>$unreceived['order_type']
+                ];
+            }else {
+                $arr2[] = [
+                    'type' => '取消原因',
+                    'value' => $unreceived['apply_reason'],
+                    'content' => '',
+                    'time' => $unreceived['create_time'],
+                    'stage' => $unreceived['order_type']
+                ];
+                switch ($unreceived['handle']) {
+                    case 1:
+                        $type = '同意';
+                        $reason = '';
+                        $complete_time = $unreceived['refund_time'];
+                        $result = '成功';
+                        break;
+                    case 2:
+                        $type = '驳回';
+                        $reason = $unreceived['handle_reason'];
+                        $complete_time = $unreceived['handle_time'];
+                        $result = '失败';
+                        break;
+                }
+                $arr2[] = [
+                    'type' => '商家反馈',
+                    'value' => $type,
+                    'content' => $reason,
+                    'time' => $unreceived['handle_time'],
+                    'stage' => $unreceived['order_type']
+                ];
+                $arr2[] = [
+                    'type' => '退款结果',
+                    'value' => $result,
+                    'content' => '',
+                    'time' => $complete_time,
+                    'stage' => $unreceived['order_type']
+                ];
+                if ($unreceived['handle'] == 1) {
+                    $arr2[] = [
+                        'type' => '退款去向',
+                        'value' => $refund_type,
+                        'content' => '',
+                        'time' => $complete_time,
+                        'stage' => $unreceived['order_type']
+                    ];
+                }
+            }
+            $data[]=[
+                'order_type'=>'unreceived',
+                'list'=>$arr2
+            ];
+        }else{
+            $data[]=[];
         }
         $code=200;
         return Json::encode([
@@ -2724,6 +2809,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
 
     /**
      * 大后台获取异常信息
