@@ -20,7 +20,7 @@ class Addressadd extends  ActiveRecord
     }
 
 
- /**
+   /**
      * 8.31
      * 无登录App-添加收货地址
      * @param $mobile
@@ -36,7 +36,6 @@ class Addressadd extends  ActiveRecord
              ->asArray()
              ->one();
          if ($data){
-
              $tran = Yii::$app->db->beginTransaction();
              try{
                  $address=self::find()
@@ -53,16 +52,14 @@ class Addressadd extends  ActiveRecord
                      $tran->rollBack();
                      return $code;
                  }
-                 $session = Yii::$app->session;
-                 $session['addresstoken']=$addresstoken;
-                 $code=200;
+                 $id=$address->id;
                  $tran->commit();
-                 return $code;
+                 return $id;
              }catch(Exception $e)
              {
                  $code=500;
                  $tran->rollBack();
-                 return $code;
+                 return null;
              }
          }else{
              $tran = Yii::$app->db->beginTransaction();
@@ -78,33 +75,29 @@ class Addressadd extends  ActiveRecord
                  {
                      $code=500;
                      $tran->rollBack();
-                     return $code;
+                     return null;
                  }
-                 $session = Yii::$app->session;
-                 $session['addresstoken']=$addresstoken;
-                 $code=200;
+                 $id=$address->id;
                  $tran->commit();
-                 return $code;
+                 return $id;
              }catch(Exception $e)
              {
                  $code=500;
                  $tran->rollBack();
-                 return $code;
+                 return null;
              }
          }
      }
-     
     /**
      * 无登录app-获取收货地址
      * @param $addresstoken
      * @return array|null
      */
-    public static function getaddress($addresstoken){
-        $array  = self::find()->select('id,mobile,consignee,region,district')->where(['addresstoken' => $addresstoken])->limit(1)->asArray()->all();
+    public static function getaddress($addressid){
+        $array  = self::find()->select('id,mobile,consignee,region,district')->where(['id' => $addressid])->limit(1)->asArray()->all();
         if ($array){
             foreach ($array as $k=>$v){
-                $model=new LogisticsDistrict();
-                $array[$k]['district']=$model->getdistrict($array[$k]['district']);
+                $array[$k]['district']=LogisticsDistrict::getdistrict($array[$k]['district']);
             }
             return $array;
         }else
@@ -112,7 +105,6 @@ class Addressadd extends  ActiveRecord
             return null;
         }
     }
-
 
       /**
      * @param $district_code
