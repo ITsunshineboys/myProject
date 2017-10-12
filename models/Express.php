@@ -185,13 +185,13 @@ class Express extends ActiveRecord
         return $data['data'];
     }
 
-    /**
+   /**
      * @param $order_no
      * @param $sku
      * @return array
      */
     public static  function Findexpresslist_sendtohome($order_no,$sku){
-        $order=(new Query())->from(ORDER_GOODSLIST)
+        $order=(new Query())->from(OrderGoods::tableName())
             ->select('order_status,shipping_status')
             ->where(['order_no'=>$order_no,'sku'=>$sku])
             ->one();
