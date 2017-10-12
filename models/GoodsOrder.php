@@ -622,6 +622,7 @@ class GoodsOrder extends ActiveRecord
                 // ->leftJoin(GoodsBrand::tableName().' AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])
                 ->where(['a.id'=>$goods_id])
                 ->one();
+                var_dump($array);exit;
                 if(!$array)
                 {
                     $code=1000;
