@@ -3569,7 +3569,7 @@ class OrderController extends Controller
 
         }
 
-               /**
+       /**
          * @return string
          */
         public  function  actionGoodsView()
@@ -3634,7 +3634,7 @@ class OrderController extends Controller
             $purchase_price_manager=$Goods->purchase_price_manager;
             $purchase_price_designer=$Goods->purchase_price_designer;
             $logisticsTemplate=LogisticsTemplate::findOne($Goods->logistics_template_id);
-            $logisticsDistrict=LogisticsDistrict::find()->where(['template_id'=>$logisticsTemplate->id])->asArray()->all();
+            $logisticsDistrict=LogisticsDistrict::find()->select('district_name')->where(['template_id'=>$logisticsTemplate->id])->asArray()->all();
             $after_sale=explode(',',$Goods->after_sale_services);
             foreach ($after_sale as &$afterSale)
             {
@@ -3678,13 +3678,13 @@ class OrderController extends Controller
                     'style'=>$style,
                     'goods_attr'=>$attr,
                     'goods_image'=>$goods_image,
-                    'market_price'=>$market_price,
-                    'supplier_price'=>$supplier_price,
-                    'platform_price'=>$platform_price,
+                    'market_price'=>GoodsOrder::switchMoney($market_price*0.01),
+                    'supplier_price'=>GoodsOrder::switchMoney($supplier_price*0.01),
+                    'platform_price'=>GoodsOrder::switchMoney($platform_price*0.01),
                     'left_number'=>$left_number,
-                    'purchase_price_decoration_company'=>$purchase_price_decoration_company,
-                    'purchase_price_manager'=>$purchase_price_manager,
-                    'purchase_price_designer'=>$purchase_price_designer,
+                    'purchase_price_decoration_company'=>GoodsOrder::switchMoney($purchase_price_decoration_company*0.01),
+                    'purchase_price_manager'=>GoodsOrder::switchMoney($purchase_price_manager*0.01),
+                    'purchase_price_designer'=>GoodsOrder::switchMoney($purchase_price_designer*0.01),
                     'logisticsTemplate'=>$logisticsTemplate,
                     'logisticsDistrict'=>$logisticsDistrict,
                     'guarantee'=>$guarantee,
