@@ -1273,7 +1273,6 @@ class GoodsOrder extends ActiveRecord
             {
                 $express=Express::find()
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
-                    ->asArray()
                     ->one();
                 if (!$express){
                     $data[$k]['send_time']=0;
