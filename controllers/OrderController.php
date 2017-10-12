@@ -2253,7 +2253,7 @@ class OrderController extends Controller
             ]);
         }
 
-        
+
         if (!array_key_exists($OrderAfterSale->type,OrderAfterSale::AFTER_SALE_SERVICES))
         {
             $code=500;
@@ -3709,6 +3709,35 @@ class OrderController extends Controller
                     'description'=>$Goods->description
                 ]
             ]);
+        }
+
+                public  function  actionReplyData()
+        {
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $OrderAfterSale=OrderAfterSale::find()->where(['type'=>0])->all();
+                foreach ($OrderAfterSale as &$list)
+                {
+                    $list->type=4;
+                    if (!$list->save(false))
+                    {
+                        $tran->rollBack();
+                    }
+                }
+                $tran->commit();
+                return Json::encode([
+                    'code' =>  200,
+                    'msg'  => 'ok'
+                ]);
+            }catch (Exception $e){
+                $tran->rollBack();
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
         }
 
 
