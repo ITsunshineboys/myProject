@@ -229,6 +229,7 @@ class WorkerController extends Controller
         }
 
         $request = \Yii::$app->request;
+        //工程订单-业主 status=(1,2,3,4,5)
         $status = (int)$request->get('status', self::STATUS_ALL);
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
@@ -253,7 +254,7 @@ class WorkerController extends Controller
     }
 
     /**
-     * 工程订单详情
+     * 工程订单详情-业主
      * @return string
      */
     public function actionUserWorkerOrderDetail()
@@ -288,6 +289,38 @@ class WorkerController extends Controller
             'data' => $data
         ]);
     }
+    /**
+     * 工程订单列表-工人
+     * @return int|string
+     */
+    public function actionWorkerWorkerOrderList(){
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+        $request = \Yii::$app->request;
+        //工程订单-业主 status=(0,1,4,5)
+        $status = (int)$request->get('status', self::STATUS_ALL);
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+        if ($status
+            && $status != self::STATUS_ALL
+            && !array_key_exists($status, WorkerOrder::USER_WORKER_ORDER_STATUS)
+        ) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $data = WorkerOrder::getWorkerWorkerOrderList($user, $status, $page, $page_size);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+}
 
     /**
      * 得到订单图片分页

@@ -63,6 +63,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         self::WORKER_ORDER_ING => '施工中',
         self::WORKER_ORDER_DONE => '已完工'
     ];
+
     const IMG_PAGE_SIZE_DEFAULT = 3;
     const IMG_COUNT_DEFAULT = 9;
 
@@ -235,12 +236,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
 //        $order->cancel_time && $order->cancel_time = date('Y-m-d H:i', $order->cancel_time);
         $order->amount && $order->amount = sprintf('%.2f', (float)$order->amount / 100);
         $order->front_money && $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
-
         return [$order, $worker_items];
     }
 
     /**
-     * 用户工程订单列表
+     * 用户-工程订单列表
      * @param $uid
      * @param $status
      * @param $page
@@ -250,8 +250,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function getUserWorkerOrderList($uid, $status, $page, $page_size)
     {
         $query = self::find()
-            ->select(['create_time', 'amount', 'status', 'worker_id'])
-            ->where(['uid' => $uid]);
+        ->select(['id','create_time', 'amount', 'status', 'worker_id'])
+        ->where(['uid' => $uid]);
         if ($status != WorkerController::STATUS_ALL) {
             $query->andWhere(['status' => $status]);
         }
@@ -276,7 +276,47 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;
     }
+    /**
+     * 工人-工程订单列表
+     * @param $uid
+     * @param $status
+     * @param $page
+     * @param $page_size
+     * @return array
+     */
+    public static function  getWorkerWorkerOrderList($uid, $status, $page, $page_size){
+        $worker_id=Worker::find()->select('id')
+            ->where(['uid'=>$uid])
+            ->one()
+            ->id;
 
+        $query = self::find()
+            ->select(['id','create_time', 'amount', 'status', 'worker_id'])
+            ->Where(['worker_id'=>$worker_id]);
+        if ($status != WorkerController::STATUS_ALL) {
+            $query->andWhere(['status' => $status]);
+        }
+
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->asArray()
+            ->all();
+
+        foreach ($arr as &$v) {
+            $worker = Worker::find()->where(['id' => $v['worker_id']])->one();
+            $worker && $worker_type_id = $worker->worker_type_id;
+            $worker_type_id && $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one();
+            $worker_type && $v['worker_type'] = $worker_type->worker_type;
+            $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
+            $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
+            $v['status'] = self::USER_WORKER_ORDER_STATUS[$v['status']];
+        }
+
+        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
+        return $data;
+    }
     /**
      * get User worker_order detail
      * @param $order_id
