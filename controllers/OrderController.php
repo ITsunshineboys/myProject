@@ -3690,6 +3690,7 @@ class OrderController extends Controller
                 'msg'=>'ok',
                 'data'=>[
                     'category'=>$category,
+                    'goods_name'=>$OrderGoods->goods_name,
                     'brand'=>$brand->name,
                     'series'=>$series,
                     'style'=>$style,
