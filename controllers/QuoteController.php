@@ -1452,7 +1452,7 @@ class QuoteController extends Controller
     public function actionCommonalityTitle()
     {
         $id = trim(\Yii::$app->request->post('id',''));
-        $select = 'id,title';
+        $select = 'id,title,differentiate';
         $where  = 'pid='.$id;
         $title['one_title'] = Points::findByPid($select,$where);
         foreach ($title['one_title'] as $one_title){
@@ -1477,32 +1477,42 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         $points = new Points();
-        foreach ($post  as $value){
-            if (isset($value['one_title'])){
-                $one_title[] = $value;
+        if (isset($post['one_title']['title'])){
+            $points->title = $post['one_title']['title'];
+            $points->pid = $post['one_title']['id'];
+            $points->level = 2;
+            $points->differentiate = 1;
+            if (!$points->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            } else {
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'ok',
+                ]);
             }
-            if (isset($value['two_title'])){
-                if (isset($value['two_title']['id'])){
-                    $two_title_id [] = $value;
-                    Points::findByUpdate($value['count'],$value['id']);
-                } else {
-                    $two_title[] = $value;
-                }
-            }
-        }
-        if (isset($one_title)){
-            $columns = ['pid','title','level'];
-            $points->findByInsert($one_title,$columns);
-        } elseif (isset($two_title)){
-            $columns = ['pid','title','count','level'];
-            $points->findByInsert($two_title,$columns);
-        }
 
-        return Json::encode([
-           'code' => 200,
-            'msg' => 'ok',
-        ]);
+        }
+        if (isset($post['del_id'])) {
+            $points_delete = $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
+            $points->deleteAll(['and',['differentiate'=>1],['pid'=>$post['del_id']]]);
+            if ($points_delete == 0){
+                return Json::encode([
+                    'code'=> 1055,
+                    'msg' => '删除失败,请确认'
+                ]);
+            } else {
+                return Json::encode([
+                    'code'=> 200,
+                    'msg' => 'ok',
+                ]);
+            }
+        }
     }
+
 
     /**
      * commonality area proportion list
