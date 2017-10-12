@@ -3563,6 +3563,132 @@ class OrderController extends Controller
 
         }
 
+               /**
+         * @return string
+         */
+        public  function  actionGoodsView()
+        {
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $order_no=Yii::$app->request->post('order_no','');
+            $sku=Yii::$app->request->post('sku','');
+            $code=1000;
+            if (!$sku ||! $order_no)
+            {
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+            if (!$OrderGoods)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $Goods=Goods::findBySku($OrderGoods->sku);
+            if (!$Goods)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $three_category=GoodsCategory::find()->select('path,title,parent_title')->where(['id'=>$Goods->category_id])->one();
+            $category_arr=explode(',',$three_category->path);
+            $first_category=GoodsCategory::find()->select('path,title,parent_title')->where(['id'=>$category_arr[0]])->one();
+            $category=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
+            $brand=GoodsBrand::findOne($Goods->brand_id);
+            $series=Series::findByAll($Goods->series_id)->series;
+            $style=Style::findOne($Goods->style_id)->style;
+            $attr=GoodsAttr::find()
+                ->select('name,value,unit')
+                ->where(['goods_id'=>$Goods->id])
+                ->asArray()
+                ->all();
+            $goods_image=GoodsImage::find()
+                ->select('image')
+                ->where(['goods_id'=>$Goods->id])
+                ->asArray()
+                ->all();
+            $market_price=$OrderGoods->market_price;
+            $supplier_price=$OrderGoods->supplier_price;
+            $platform_price=$Goods->platform_price;
+            $left_number=$Goods->left_number;
+            $purchase_price_decoration_company=$Goods->purchase_price_decoration_company;
+            $purchase_price_manager=$Goods->purchase_price_manager;
+            $purchase_price_designer=$Goods->purchase_price_designer;
+            $logisticsTemplate=LogisticsTemplate::findOne($Goods->logistics_template_id);
+            $logisticsDistrict=LogisticsDistrict::find()->where(['template_id'=>$logisticsTemplate->id])->asArray()->all();
+            $after_sale=explode(',',$Goods->after_sale_services);
+            foreach ($after_sale as &$afterSale)
+            {
+                if ($afterSale==0)
+                {
+                    $guarantee[]='提供发票';
+                }
+                if ($afterSale==1)
+                {
+                    $guarantee[]='上门安装';
+                }
+                if ($afterSale==2)
+                {
+                    $after[]='上门维修';
+                }
+                if ($afterSale==3)
+                {
+                    $after[]='上门退货';
+                }
+                if ($afterSale==4)
+                {
+                    $after[]='上门换货';
+                }
+                if ($afterSale==5)
+                {
+                    $after[]='退货';
+                }
+                if ($afterSale==6)
+                {
+                    $after[]='换货';
+                }
+            }
+            $qrcode='uploads/image.png';
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok',
+                'data'=>[
+                    'category'=>$category,
+                    'brand'=>$brand->name,
+                    'series'=>$series,
+                    'style'=>$style,
+                    'goods_attr'=>$attr,
+                    'goods_image'=>$goods_image,
+                    'market_price'=>$market_price,
+                    'supplier_price'=>$supplier_price,
+                    'platform_price'=>$platform_price,
+                    'left_number'=>$left_number,
+                    'purchase_price_decoration_company'=>$purchase_price_decoration_company,
+                    'purchase_price_manager'=>$purchase_price_manager,
+                    'purchase_price_designer'=>$purchase_price_designer,
+                    'logisticsTemplate'=>$logisticsTemplate,
+                    'logisticsDistrict'=>$logisticsDistrict,
+                    'guarantee'=>$guarantee,
+                    'after'=>$after,
+                    'qrcode'=>$qrcode,
+                    'description'=>$Goods->description
+                ]
+            ]);
+        }
+
 
 
 }
