@@ -2252,6 +2252,16 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
+        
+        if (!array_key_exists($OrderAfterSale->type,OrderAfterSale::AFTER_SALE_SERVICES))
+        {
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         switch ($OrderAfterSale->supplier_handle){
             case 0:
                 $data=OrderAfterSale::findUnhandleAfterSale($OrderAfterSale);
