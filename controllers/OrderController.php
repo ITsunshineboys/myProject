@@ -3613,7 +3613,7 @@ class OrderController extends Controller
             $first_category=GoodsCategory::find()->select('path,title,parent_title')->where(['id'=>$category_arr[0]])->one();
             $category=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
             $brand=GoodsBrand::findOne($Goods->brand_id);
-            $series=Series::findByAll($Goods->series_id)->series;
+            $series=Series::find()->select('series')->where(['id'=>$Goods->series_id])->one()->series;
             $style=Style::findOne($Goods->style_id)->style;
             $attr=GoodsAttr::find()
                 ->select('name,value,unit')
