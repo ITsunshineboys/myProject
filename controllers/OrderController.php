@@ -3559,7 +3559,7 @@ class OrderController extends Controller
                 }else{
                     $comment['reply']='';
                 }
-     $comment['goods_name']=$OrderGoods->goods_name;
+            $comment['goods_name']=$OrderGoods->goods_name;
             $code=200;
             return Json::encode([
                 'code'=>$code,
