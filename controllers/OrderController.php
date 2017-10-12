@@ -10,6 +10,8 @@ use app\models\GoodsComment;
 use app\models\GoodsAttr;
 use app\models\GoodsBrand;
 use app\models\GoodsCategory;
+use app\models\Series;
+use app\models\Style;
 use app\models\DeletedGoodsComment;
 use app\models\LogisticsTemplate;
 use app\models\OrderAfterSale;
