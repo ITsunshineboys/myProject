@@ -3270,10 +3270,10 @@ class OrderController extends Controller
             $arr=explode(',',$Goods->after_sale_services);
             foreach ($arr as $k =>$v)
             {
-                if ($arr[$k]==0)
+              if ($arr[$k]==0 ||$arr[$k]==1 )
                 {
                     unset($arr[$k]);
-                }else{
+                } else{
                     $value=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$arr[$k]];
                     $name=array_search($value,OrderAfterSale::AFTER_SALE_SERVICES);
                     $data[]=[
