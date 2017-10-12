@@ -1198,10 +1198,8 @@ class QuoteController extends Controller
             }
             else {
                 $apartment = new ApartmentArea();
-                $apartment->province_code  = $post['province'];
-                $apartment->city_code      = $post['city'];
-                $apartment->min_area       = $one_post['min_area'];
-                $apartment->max_area       = $one_post['max_area'];
+                $apartment->min_area  = $one_post['min_area'];
+                $apartment->max_area  = $one_post['max_area'];
                 $apartment->save();
             }
         }
