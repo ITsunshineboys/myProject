@@ -1436,13 +1436,13 @@ class QuoteController extends Controller
      */
     public function actionCommonalityList()
     {
-        $select = 'id,title,count';
+        $select = 'id,title';
         $where  = 'level = 1';
         return Json::encode([
            'post'=> Points::findByPid($select,$where),
         ]);
     }
-    
+
     /**
      * commonality  one title list
      * @return string
@@ -1450,6 +1450,7 @@ class QuoteController extends Controller
     public function actionCommonalityTitle()
     {
         $id = trim(\Yii::$app->request->post('id',''));
+        $count = Points::findOne(['id'=>$id]);
         $select = 'id,title,differentiate';
         $where  = 'pid='.$id;
         $title['one_title'] = Points::findByPid($select,$where);
@@ -1458,12 +1459,13 @@ class QuoteController extends Controller
         }
         if (isset($ids)){
             $string_ids = implode(',',$ids);
-            $two_select = 'id,title,count,pid';
+            $two_select = 'id,title,count,pid,differentiate';
             $two_where  = 'pid in ('.$string_ids.')';
             $title['two_title'] = Points::findByPid($two_select,$two_where);
         }
         return Json::encode([
-           'list'=> $title,
+            'list' => $title,
+            'count' => $count
         ]);
     }
 
