@@ -355,4 +355,14 @@ class Express extends ActiveRecord
          }
          return $data[$name[0]['comCode']];
       }
+
+          public  function  actionDelData()
+    {
+        $data=UserAccessdetail::find()->all();
+        foreach ($data as &$list)
+        {
+            $res=$list->delete();
+        }
+        var_dump($res);
+    }
 }

@@ -955,6 +955,15 @@ class WithdrawalsController extends Controller
             'msg' => 'ok'
         ]);
     }
+    public  function  actionDelData()
+    {
+        $data=UserAccessdetail::find()->all();
+        foreach ($data as &$list)
+        {
+            $res=$list->delete();
+        }
+        var_dump($res);
+    }
 
 
 }
