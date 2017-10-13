@@ -92,7 +92,7 @@ class SupplierCashManager extends ActiveRecord
         if ($supplier_id) {
             $query->andWhere(['uid' => $supplier_id]);
         }
-        $arr = $query->one();
+        $arr = $query->one();var_dump($arr);die;
         if (!$arr) {
             return null;
         }
