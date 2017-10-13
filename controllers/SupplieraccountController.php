@@ -438,7 +438,7 @@ class SupplieraccountController extends  Controller{
                 ]);
             }
             $freeze=UserFreezelist::findOne($freeze_id);
-            $supplier=Supplier::findOne($freeze->uid);
+            $supplier=Supplier::find()->where(['uid'=>$freeze->uid])->one();
             var_dump($freeze,$supplier);die;
         $transaction = Yii::$app->db->beginTransaction();
         try{
