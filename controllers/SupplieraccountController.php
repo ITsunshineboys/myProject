@@ -264,6 +264,7 @@ class SupplieraccountController extends  Controller{
         $request=new Request();
         $supplier_id=trim(Yii::$app->request->post('supplier_id'));
         $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
+
         if(!$supplier_id || !$supplier){
             $code=1000;
             return json_encode([
@@ -417,7 +418,7 @@ class SupplieraccountController extends  Controller{
      */
 
     public function actionAccountThaw(){
-
+        var_dump(Supplier::find()->where(['uid'=>1])->asArray()->all());
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
