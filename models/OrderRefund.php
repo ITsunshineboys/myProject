@@ -202,8 +202,17 @@ class OrderRefund extends ActiveRecord
                     ];
                 }
             }
-            $data[$k]['order_type']=$unusualList[$k]['order_type'];
-            $data[$k]['list']=$arr;
+            switch ($unusualList[$k]['order_type'])
+            {
+                case 'unshipped':
+                    $data[$k]['order_type']='待发货';
+                    break;
+                case 'unreceived':
+                    $data[$k]['order_type']='待收货';
+                    break;
+            }
+//            $data[$k]['order_type']=$unusualList[$k]['order_type'];
+            $data[$k]['list']=$arr;;
         }
 
         $OrderPlatform=OrderPlatForm::find()

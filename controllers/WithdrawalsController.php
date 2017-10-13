@@ -763,7 +763,6 @@ class WithdrawalsController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-             var_dump($accessDetail['access_type']);exit;
             switch ($accessDetail['access_type'])
             {
                 case 1:
@@ -955,15 +954,7 @@ class WithdrawalsController extends Controller
             'msg' => 'ok'
         ]);
     }
-    public  function  actionDelData()
-    {
-        $data=UserAccessdetail::find()->all();
-        foreach ($data as &$list)
-        {
-            $res=$list->delete();
-        }
-        var_dump($res);
-    }
+
 
 
 }
