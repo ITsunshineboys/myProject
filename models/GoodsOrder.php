@@ -1339,7 +1339,7 @@ class GoodsOrder extends ActiveRecord
             $supplier->balance=$supplier->balance+$money;
             $supplier->availableamount=$supplier->availableamount+$money;
             $res2=Yii::$app->db->createCommand()->insert(UserAccessdetail::tableName(),[
-                'access_type'    => 1,
+                'access_type'    => 6,
                 'access_money' =>$money,
                 'create_time'      =>$time,
                 'order_no'  =>$order_no,
@@ -1780,7 +1780,7 @@ class GoodsOrder extends ActiveRecord
             $supplier_accessdetail=new UserAccessdetail();
             $supplier_accessdetail->uid=$user->id;
             $supplier_accessdetail->role_id=6;
-            $supplier_accessdetail->access_type=4;
+            $supplier_accessdetail->access_type=2;
             $supplier_accessdetail->access_money=$order_goodslist->freight+$order_goodslist->supplier_price*$order_goodslist->goods_number;
             $supplier_accessdetail->order_no=$order_no;
             $supplier_accessdetail->sku=$sku;
