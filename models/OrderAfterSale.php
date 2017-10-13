@@ -2,11 +2,11 @@
 
 namespace app\models;
 use app\admin\controller\Users;
+use app\services\ModelService;
 use Yii;
 use yii\db\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Query;
-use app\services\ModelService;
 
 class OrderAfterSale extends ActiveRecord
 {
@@ -85,17 +85,17 @@ class OrderAfterSale extends ActiveRecord
             ->select('after_sale_services')
             ->where(['sku'=>$postData['sku']])
             ->one();
-        // if ($goods){
-        //     $array=explode(',',$goods->after_sale_services);
-        //     $arr=[];
-        //     foreach ($array as $k =>$v){
-        //         $arr[]=self::GOODS_AFTER_SALE_SERVICES[$array[$k]];
-        //     }
-        //     if (!in_array(self::AFTER_SALE_SERVICES[$postData['type']],$arr)){
-        //         $code=1035;
-        //         return $code;
-        //     }
-        // }
+//        if ($goods){
+//            $array=explode(',',$goods->after_sale_services);
+//            $arr=[];
+//            foreach ($array as $k =>$v){
+//                $arr[]=self::GOODS_AFTER_SALE_SERVICES[$array[$k]];
+//            }
+//            if (!in_array(self::AFTER_SALE_SERVICES[$postData['type']],$arr)){
+//                $code=1035;
+//                return $code;
+//            }
+//        }
         $CheckIsAfter=self::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
             ->one();
@@ -321,9 +321,13 @@ class OrderAfterSale extends ActiveRecord
     public  static  function  findUnHandleAfterSale($OrderAfterSale)
     {
         $data[]=[
-            'stage'=>'发起售后',
-            'type'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
+            'type'=>'发起售后',
+            'value'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->create_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
         return $data;
     }
@@ -333,18 +337,25 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public static  function  findHandleAfterSaleDisagree($OrderAfterSale)
+    public static  function  findHandleAfterSaleDisagree($OrderAfterSale,$role)
     {
         $data[]=[
-            'stage'=>'发起售后',
-            'type'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
+            'type'=>'发起售后',
+            'value'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->create_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
         $data[]=[
-            'stage'=>'商家反馈',
-            'type'=>self::AFTER_SALE_HANDLE[$OrderAfterSale->supplier_handle],
-            'reason'=>$OrderAfterSale->supplier_handle_reason,
+            'type'=>'商家反馈',
+            'value'=>self::AFTER_SALE_HANDLE[$OrderAfterSale->supplier_handle],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_handle_time),
+            'phone'=>'',
+            'content'=>$OrderAfterSale->supplier_handle_reason,
+            'number'=>'',
+            'code'=>''
         ];
         $tran = Yii::$app->db->beginTransaction();
         try{
@@ -352,7 +363,7 @@ class OrderAfterSale extends ActiveRecord
                 ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
                 ->one();
             $OrderGoods->customer_service=2;
-            $res=$OrderGoods->save();
+            $res=$OrderGoods->save(false);
             if (!$res){
                 $tran->rollBack();
             }
@@ -363,12 +374,18 @@ class OrderAfterSale extends ActiveRecord
             return $code;
         }
         $data[]=[
-            'stage'=>'售后完成',
-            'type'=>'ok',
+            'type'=>'售后完成',
+            'value'=>'',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_handle_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
-        $PlatForm=OrderPlatForm::find()->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
-        ->one();
+
+        $PlatForm=OrderPlatForm::find()
+            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+            ->one();
         if (!$PlatForm){
             return $data;
         }
@@ -378,7 +395,7 @@ class OrderAfterSale extends ActiveRecord
                 ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
                 ->one();
             $OrderGoods->customer_service=1;
-            $res=$OrderGoods->save();
+            $res=$OrderGoods->save(false);
             if (!$res){
                 $tran->rollBack();
             }
@@ -392,19 +409,19 @@ class OrderAfterSale extends ActiveRecord
         switch ($PlatForm->handle)
         {
             case 3:
-                $res=self::ReturnGoodsHandleDetail($res,$OrderAfterSale);
+                $res=self::ReturnGoodsHandleDetail($res,$OrderAfterSale,$role);
                 break;
             case 4:
-                $res=self::ExangeGoodsHandleDetail($res,$OrderAfterSale);
+                $res=self::ExangeGoodsHandleDetail($res,$OrderAfterSale,$role);
                 break;
             case 5:
-                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale);
+                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role);
                 break;
             case 6:
                 $res=self::ToDoorReturnGoodsHandleDetail($res,$OrderAfterSale);
                 break;
             case 7:
-                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale);
+                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role);
                 break;
         }
         return ['data'=>$data,'platform'=>$res];
@@ -414,34 +431,41 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array
      */
-    public  static  function  findHandleAfterSaleAgree($OrderAfterSale)
+    public  static  function  findHandleAfterSaleAgree($OrderAfterSale,$role)
     {
         $data[]=[
-            'stage'=>'发起售后',
-            'type'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
+            'type'=>'发起售后',
+            'value'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->create_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
         $data[]=[
-            'stage'=>'商家反馈',
-            'type'=>self::AFTER_SALE_HANDLE[$OrderAfterSale->supplier_handle],
-            'content'=>$OrderAfterSale->supplier_handle_reason,
+            'type'=>'商家反馈',
+            'value'=>self::AFTER_SALE_HANDLE[$OrderAfterSale->supplier_handle],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_handle_time),
+            'phone'=>'',
+            'content'=>$OrderAfterSale->supplier_handle_reason,
+            'number'=>'',
+            'code'=>''
         ];
         switch ($OrderAfterSale->type){
             case 1:
-                $data=self::ReturnGoodsHandleDetail($data,$OrderAfterSale);
+                $data=self::ReturnGoodsHandleDetail($data,$OrderAfterSale,$role);
                 break;
             case 2:
-                $data=self::ExangeGoodsHandleDetail($data,$OrderAfterSale);
+                $data=self::ExangeGoodsHandleDetail($data,$OrderAfterSale,$role);
                 break;
             case 3:
-                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale);
+                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role);
                 break;
             case 4:
-                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale);
+                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role);
                 break;
             case 5:
-                $data=self::ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale);
+                $data=self::ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role);
                 break;
         }
       return $data;
@@ -452,28 +476,84 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public static  function  ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale)
+    public static  function  ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role)
     {
         if (!$OrderAfterSale->supplier_send_man){
-            $data[]=[
-                'stage'=>'等待商家处理',
-            ];
+
+
+            switch ($role)
+            {
+                case 'user':
+                    $data[]=[
+                        'type'=>'等待商家处理',
+                        'value'=>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>''
+                    ];
+                    break;
+                case 'supplier':
+                    $data[]=[
+                        'type'=>'等待商家处理',
+                        'value'=>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>'supplier_unsend'
+                    ];
+                    break;
+            }
             return $data;
         }
         $data[]=[
-            'stage'=>'商家已派出工作人员',
-            'content'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
+            'type'=>'商家已派出工作人员',
+            'value'=>'',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_send_time),
+            'phone'=>'',
+            'content'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
+            'number'=>'',
+            'code'=>'supplier_unsend'
         ];
         if (!$OrderAfterSale->supplier_confirm){
-            $data[]=[
-                'stage'=>'商家待确认',
-            ];
+            switch ($role)
+            {
+                case 'user':
+                    $data[]=[
+                        'type'=>'商家待确认',
+                        'value'=>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>''
+                    ];
+                    break;
+                case 'supplier':
+                    $data[]=[
+                        'type'=>'商家待确认',
+                        'value'=>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>'supplier_unconfirm'
+                    ];
+                    break;
+            }
+
             return $data;
         }
         $data[]=[
-            'stage'=>'商家已确认',
+            'type'=>'商家已确认',
+            'value'=>'',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_confirm_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
         $OrderGoods=OrderGoods::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
@@ -529,15 +609,22 @@ class OrderAfterSale extends ActiveRecord
             }
         }
         $data[]=[
-            'stage'=>'退款结果',
-            'type' =>'成功',
+            'type'=>'退款结果',
+            'value'=>'成功',
+            'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_confirm_time),
+            'phone'=>'',
             'content'=>'已退至顾客钱包',
-            'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_confirm_time),
+            'number'=>'',
+            'code'=>''
         ];
-
         $data[]=[
-            'stage'=>'售后完成',
+            'type'=>'售后完成',
+            'value'=>'',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_confirm_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
         return $data;
     }
@@ -547,36 +634,75 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public static function RepairGoodsHandleDetail($data,$OrderAfterSale)
+    public static function RepairGoodsHandleDetail($data,$OrderAfterSale,$role)
     {
-
         if (!$OrderAfterSale->supplier_send_man){
             $data[]=[
-                'stage'=>'等待商家处理'
+                'type'=>'等待商家处理',
+                'value' =>'',
+                'time'=>'',
+                'phone'=>'',
+                'content'=>'',
+                'number'=>'',
+                'code'=>''
             ];
             return $data;
         }
         $data[]=[
-            'stage'=>'商家已派出工作人员',
+            'type'=>'商家已派出工作人员',
+            'value' =>'',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_send_time),
+            'phone'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
+
         if (!$OrderAfterSale->buyer_confirm!=1){
-            $data[]=[
-                'stage'=>'顾客待确认'
-            ];
+            switch ($role)
+            {
+                case 'user':
+                    $data[]=[
+                        'type'=>'顾客待确认',
+                        'value' =>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>'user_unconfirm'
+                    ];
+                    break;
+                case 'supplier':
+                    $data[]=[
+                        'type'=>'顾客待确认',
+                        'value' =>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'0',
+                        'number'=>'',
+                        'code'=>''
+                    ];
+                    break;
+            }
             return $data;
         }
         $data[]=[
-            'stage'=>'顾客已确认',
+            'type'=>'顾客已确认',
+            'value' =>'',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->buyer_confirm_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
+
         $OrderGoods=OrderGoods::find()->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])->one();
         if ($OrderGoods->customer_service!=2){
             $tran = Yii::$app->db->beginTransaction();
             try{
 
                 $OrderGoods->customer_service=2;
-                $res=$OrderGoods->save();
+                $res=$OrderGoods->save(false);
                 if (!$res){
                     $tran->rollBack();
                 }
@@ -588,8 +714,13 @@ class OrderAfterSale extends ActiveRecord
             }
         }
         $data[]=[
-            'stage'=>'售后完成',
+            'type'=>'售后完成',
+            'value' =>'',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->buyer_confirm_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
         return $data;
     }
@@ -598,59 +729,110 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public  static  function  ReturnGoodsHandleDetail($data,$OrderAfterSale)
+    public  static  function  ReturnGoodsHandleDetail($data,$OrderAfterSale,$role)
     {
 
         if (!$OrderAfterSale->buyer_express_id){
-            $data[]=[
-                'stage'=>'顾客待发货'
-            ];
+            switch ($role)
+            {
+                case 'user':
+                    $data[]=[
+                        'type'=>'顾客待发货',
+                        'value' =>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>'user_unshipped'
+                    ];
+                    break;
+                case 'supplier':
+                    $data[]=[
+                        'type'=>'顾客待发货',
+                        'value' =>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>''
+                    ];
+                    break;
+            }
             return $data;
         }
         $buyer_express=Express::find()
             ->where(['id'=>$OrderAfterSale->buyer_express_id])
             ->one();
         $data[]=[
-            'stage'=>'顾客已发货',
-            'type' =>$buyer_express->waybillname,
-            'content'=>$buyer_express->waybillnumber,
+            'type'=>'顾客已发货',
+            'value' =>'快递',
             'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+            'phone'=>'',
+            'content'=>$buyer_express->waybillname,
+            'number'=>$buyer_express->waybillnumber,
+            'code'=>'shipped'
         ];
         $time=15*24*60*60+$buyer_express->create_time-time();
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-            if ($time<0){
-                $OrderAfterSale->supplier_express_confirm=1;
-                $res1=$OrderAfterSale->save();
-                $buyer_express->receive_time=time();
-                $res2=$buyer_express->save();
-                if (!$res1 || !$res2){
-                    $code=500;
-                    return $code;
-                }
+        if ($time<0){
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                    $OrderAfterSale->supplier_express_confirm=1;
+                    $res1=$OrderAfterSale->save(false);
+                    $buyer_express->receive_time=time();
+                    $res2=$buyer_express->save(false);
+                    if (!$res1 || !$res2){
+                        $code=500;
+                        return $code;
+                    }
+                $tran->commit();
+            }catch (Exception $e){
+                $tran->rollBack();
+                $code=500;
+                return $code;
             }
-            $tran->commit();
-        }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
-            return $code;
         }
         if (!$OrderAfterSale->supplier_express_confirm){
             $day=floor($time/(24*60*60));
             $hour=floor(($time-$day*(24*60*60))/(60*60));
             $min=floor(($time-$day*(24*60*60)-$hour*3600)/60);
             $s=$time-$day*(24*60*60)-$hour*3600-$min*60;
-            $data[]=[
-                'stage'=>'商家待确认收货',
-                'type' =>'剩余确认时间',
-                'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
-                'time'=>date('Y-m-d H:i',$buyer_express->create_time),
-            ];
+
+            switch ($role)
+            {
+                case 'user':
+                    $data[]=[
+                        'type'=>'商家确认收货',
+                        'value' =>'剩余确认时间',
+                        'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+                        'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
+                        'phone'=>'',
+                        'number'=>'',
+                        'code'=>'countdown'
+                    ];
+                    break;
+                case 'supplier':
+                    $data[]=[
+                        'type'=>'商家确认收货',
+                        'value' =>'剩余确认时间',
+                        'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+                        'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
+                        'phone'=>'',
+                        'number'=>'',
+                        'code'=>'supplier_unconfirm'
+                    ];
+                    break;
+            }
             return $data;
         }
         $data[]=[
-            'stage'=>'商家已收货',
+            'type'=>'商家已收货',
+            'value' =>'',
             'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
+            'content'=>'',
+            'phone'=>'',
+            'number'=>'',
+            'code'=>''
+
         ];
         $OrderGoods=OrderGoods::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
@@ -665,7 +847,7 @@ class OrderAfterSale extends ActiveRecord
                     ->where(['id'=>$GoodsOrder->user_id])
                     ->one();
                 $user->balance=($user->balance+$OrderGoods->goods_price*$OrderGoods->goods_number);
-                $res=$user->save();
+                $res=$user->save(false);
                 if (!$res){
                     $tran->rollBack();
                 }
@@ -694,7 +876,7 @@ class OrderAfterSale extends ActiveRecord
                     $tran->rollBack();
                 }
                 $OrderGoods->customer_service=2;
-                $res4=$OrderGoods->save();
+                $res4=$OrderGoods->save(false);
                 if (!$res4){
                     $tran->rollBack();
                 }
@@ -706,15 +888,22 @@ class OrderAfterSale extends ActiveRecord
             }
         }
         $data[]=[
-            'stage'=>'退款结果',
-            'type' =>'成功',
+            'type'=>'退款结果',
+            'value' =>'成功',
+            'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
+            'phone'=>'',
             'content'=>'已退至顾客钱包',
-            'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
+            'number'=>'',
+            'code'=>''
         ];
-
         $data[]=[
-            'stage'=>'售后完成',
+            'type'=>'售后完成',
+            'value' =>'',
             'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
+            'phone'=>'',
+            'content'=>'已退至顾客钱包',
+            'number'=>'',
+            'code'=>''
         ];
         return $data;
     }
@@ -723,31 +912,56 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public static  function  ExangeGoodsHandleDetail($data,$OrderAfterSale)
+    public static  function  ExangeGoodsHandleDetail($data,$OrderAfterSale,$role)
     {
         if (!$OrderAfterSale->buyer_express_id){
-            $data[]=[
-                'stage'=>'顾客待发货'
-            ];
+            switch ($role)
+            {
+                case 'user':
+                    $data[]=[
+                        'type'=>'顾客待发货',
+                        'value' =>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>'user_unshipped'
+                    ];
+                    break;
+                case 'supplier':
+                    $data[]=[
+                        'type'=>'顾客待发货',
+                        'value' =>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>''
+                    ];
+                    break;
+            }
             return $data;
         }
         $buyer_express=Express::find()
             ->where(['id'=>$OrderAfterSale->buyer_express_id])
             ->one();
         $data[]=[
-            'stage'=>'顾客已发货',
-            'type' =>$buyer_express->waybillname,
-            'content'=>$buyer_express->waybillnumber,
+            'type'=>'顾客已发货',
+            'value'=>'快递',
             'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+            'phone'=>'',
+            'content' =>$buyer_express->waybillname,
+            'number'=>$buyer_express->waybillnumber,
+            'code'=>'shipped'
         ];
             $time=15*24*60*60+$buyer_express->create_time-time();
             $tran = Yii::$app->db->beginTransaction();
             try{
                 if ($time<0){
                     $OrderAfterSale->supplier_express_confirm=1;
-                    $res1=$OrderAfterSale->save();
+                    $res1=$OrderAfterSale->save(false);
                     $buyer_express->receive_time=time();
-                    $res2=$buyer_express->save();
+                    $res2=$buyer_express->save(false);
                     if (!$res1 || !$res2){
                         $code=500;
                         return $code;
@@ -765,36 +979,90 @@ class OrderAfterSale extends ActiveRecord
                 $hour=floor(($time-$day*(24*60*60))/(60*60));
                 $min=floor(($time-$day*(24*60*60)-$hour*3600)/60);
                 $s=$time-$day*(24*60*60)-$hour*3600-$min*60;
-                $data[]=[
-                    'stage'=>'商家待确认收货',
-                    'type' =>'剩余确认时间',
-                    'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
-                    'time'=>date('Y-m-d H:i',$buyer_express->create_time),
-                ];
+                switch ($role)
+                {
+                    case 'user':
+                        $data[]=[
+                            'type'=>'商家待确认收货',
+                            'value' =>'剩余确认时间',
+                            'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+                            'phone'=>'',
+                            'content'=>$time,
+                            'number'=>'',
+                            'code'=>'countdown'
+                        ];
+                        break;
+                    case 'supplier':
+                        $data[]=[
+                            'type'=>'商家待确认收货',
+                            'value' =>'剩余确认时间',
+                            'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+                            'phone'=>'',
+                            'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
+                            'number'=>'',
+                            'code'=>'supplier_unconfirm'
+                        ];
+                        break;
+                }
+
                 return $data;
             }
-        $data[]=[
-            'stage'=>'商家已收货',
-            'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
-        ];
-        if(!$OrderAfterSale->supplier_express_id){
-            return $data;
-        }
+            $data[]=[
+                'type'=>'商家已收货',
+                'value' =>'',
+                'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
+                'phone'=>'',
+                'content'=>'',
+                'number'=>'',
+                'code'=>''
+            ];
+            if(!$OrderAfterSale->supplier_express_id){
+                switch ($role)
+                {
+                    case 'user':
+                        $data[]=[
+                            'type'=>'商家待发货',
+                            'value' =>'',
+                            'time'=>'',
+                            'phone'=>'',
+                            'content'=>'',
+                            'number'=>'',
+                            'code'=>''
+                        ];
+                        break;
+                    case 'supplier':
+                        $data[]=[
+                            'type'=>'商家待发货',
+                            'value' =>'',
+                            'time'=>'',
+                            'phone'=>'',
+                            'content'=>'',
+                            'number'=>'',
+                            'code'=>'supplier_unshipped'
+                        ];
+                        break;
+                }
+                return $data;
+            }
         $supplier_express=Express::find()
             ->where(['id'=>$OrderAfterSale->supplier_express_id])
             ->one();
         $data[]=[
-            'stage'=>'商家已发货',
-            'type' =>$supplier_express->waybillname,
-            'content'=>$supplier_express->waybillnumber,
-            'time'=>date('Y-m-d H:i',$supplier_express->create_time)
+            'type'=>'商家已发货',
+            'value' =>'快递',
+            'time'=>date('Y-m-d H:i',$supplier_express->create_time),
+            'phone'=>'',
+            'content'=>$supplier_express->waybillname,
+            'number'=>$supplier_express->waybillnumber,
+            'code'=>''
         ];
+
         $time=15*24*60*60+$supplier_express->create_time-time();
             $tran = Yii::$app->db->beginTransaction();
             try{
                 if ($time<0){
                     $OrderAfterSale->buyer_express_confirm=1;
-                    $res1=$OrderAfterSale->save();
+                    $res1=$OrderAfterSale->save(false);
                     $supplier_express->receive_time=time();
                     $res2=$supplier_express->save();
                     if (!$res1 || !$res2){
@@ -811,22 +1079,41 @@ class OrderAfterSale extends ActiveRecord
             }
 
             if (!$OrderAfterSale->buyer_express_confirm){
-
-                $day=floor($time/(24*60*60));
-                $hour=($time-$day*(24*60*60))/(60*60);
-                $min=($time-$day*(24*60*60)-$hour*3600)/60;
-                $s=$time-$day*(24*60*60)-$hour*3600-$min*60;
-                $data[]=[
-                    'stage'=>'顾客待确认收货',
-                    'type' =>'剩余确认时间',
-                    'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
-                    'time'=>date('Y-m-d H:i',$supplier_express->create_time),
-                ];
+                switch ($role)
+                {
+                    case 'user':
+                        $data[]=[
+                            'type'=>'顾客待确认收货',
+                            'value' =>'剩余确认时间',
+                            'time'=>date('Y-m-d H:i',$supplier_express->create_time),
+                            'phone'=>'',
+                            'content'=>$time,
+                            'number'=>'',
+                            'code'=>'user_unconfirm'
+                        ];
+                        break;
+                    case 'supplier':
+                        $data[]=[
+                            'type'=>'顾客待确认收货',
+                            'value' =>'剩余确认时间',
+                            'time'=>date('Y-m-d H:i',$supplier_express->create_time),
+                            'phone'=>'',
+                            'content'=>$time,
+                            'number'=>'',
+                            'code'=>'countdown'
+                        ];
+                        break;
+                }
                 return $data;
             }
         $data[]=[
-            'stage'=>'顾客已收货',
+            'type'=>'顾客已收货',
+            'value' =>'',
             'time'=>date('Y-m-d H:i',$supplier_express->receive_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
         $OrderGoods=OrderGoods::find()->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])->one();
         if ($OrderGoods->customer_service!=2){
@@ -834,7 +1121,7 @@ class OrderAfterSale extends ActiveRecord
             try{
 
                 $OrderGoods->customer_service=2;
-                $res=$OrderGoods->save();
+                $res=$OrderGoods->save(false);
                 if (!$res){
                     $tran->rollBack();
                 }
@@ -846,8 +1133,13 @@ class OrderAfterSale extends ActiveRecord
             }
         }
         $data[]=[
-            'stage'=>'售后完成',
+            'type'=>'售后完成',
+            'value' =>'',
             'time'=>date('Y-m-d H:i',$supplier_express->receive_time),
+            'phone'=>'',
+            'content'=>'',
+            'number'=>'',
+            'code'=>''
         ];
         return $data;
     }
@@ -857,14 +1149,15 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return int
      */
-    public  static  function  SupplierSendMan($OrderAfterSale)
+    public  static  function  SupplierSendMan($OrderAfterSale,$worker_mobile,$worker_name)
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
-
             $OrderAfterSale->supplier_send_man=1;
+            $OrderAfterSale->worker_name=$worker_name;
+            $OrderAfterSale->worker_mobile=$worker_mobile;
             $OrderAfterSale->supplier_send_time=time();
-            $res=$OrderAfterSale->save();
+            $res=$OrderAfterSale->save(false);
             if (!$res){
                 $tran->rollBack();
             }
@@ -911,10 +1204,11 @@ class OrderAfterSale extends ActiveRecord
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
-
             $OrderAfterSale->buyer_confirm=1;
+            $OrderAfterSale->worker_name='';
+            $OrderAfterSale->worker_mobile='';
             $OrderAfterSale->buyer_confirm_time=time();
-            $res=$OrderAfterSale->save();
+            $res=$OrderAfterSale->save(false);
             if (!$res){
                 $tran->rollBack();
             }

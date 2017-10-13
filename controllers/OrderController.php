@@ -2240,7 +2240,7 @@ class OrderController extends Controller
         }
     }
 
-    /**
+    /**售后详情
      * @return array|string
      */
     public  function   actionUserAfterSaleDetail(){
@@ -2255,12 +2255,17 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
+        $role=trim($request->post('role','user'));
         if(!$order_no || !$sku){
             $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        if (!$role)
+        {
+            $role='user';
         }
         $OrderAfterSale=OrderAfterSale::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku])
@@ -2272,8 +2277,6 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
-
         if (!array_key_exists($OrderAfterSale->type,OrderAfterSale::AFTER_SALE_SERVICES))
         {
             $code=500;
@@ -2287,10 +2290,10 @@ class OrderController extends Controller
                 $data=OrderAfterSale::findUnhandleAfterSale($OrderAfterSale);
                 break;
             case 1:
-                $data=OrderAfterSale::findHandleAfterSaleAgree($OrderAfterSale);
+                $data=OrderAfterSale::findHandleAfterSaleAgree($OrderAfterSale,$role);
                 break;
             case 2:
-                $data=OrderAfterSale::findHandleAfterSaleDisagree($OrderAfterSale);
+                $data=OrderAfterSale::findHandleAfterSaleDisagree($OrderAfterSale,$role);
                 break;
         }
         if (is_numeric($data)){
@@ -2307,6 +2310,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
 
     /**售后详情 -- 商家派出人员
      * 上门服务
