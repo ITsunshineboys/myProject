@@ -763,6 +763,7 @@ class WithdrawalsController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+             var_dump($accessDetail['access_type']);exit;
             switch ($accessDetail['access_type'])
             {
                 case 1:
