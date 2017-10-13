@@ -18,6 +18,7 @@ use app\models\LogisticsTemplate;
 use app\models\MaterialPropertyClassify;
 use app\models\Points;
 use app\models\PointsTotal;
+use app\models\ProjectView;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
@@ -134,6 +135,8 @@ class OwnerController extends Controller
         'capacity' => '智能配套',
         'live' => '生活配套',
     ];
+
+    const AREA_PROPORTION = '面积比例';
     /**
      * Actions accessed by logged-in users
      */
@@ -591,22 +594,25 @@ class OwnerController extends Controller
         }
 
         // 面积比例
-
-        $areas = EngineeringUniversalCriterion::findByAll(self::PROJECT_DETAILS['oil_paint']);
-        $area['masterBedroom_area'] = 0;
-        $area['sittingRoom_diningRoom_area'] = 0;
-        foreach ($areas as $one) {
-            switch ($one) {
-                case $one['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['bedroom_area']:
-                    $area['masterBedroom_area'] = $one['project_value'];
-                    $tall = $one['storey'];
-                    break;
-                case $one['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['hall_area']:
-                    $area['sittingRoom_diningRoom_area'] = $one['project_value'];
-                    $tall = $one['storey'];
-                    break;
+        $points_where = ['title'=>self::AREA_PROPORTION];
+        $points = Points::findByOne([],$points_where);
+        $proportion_where = ['points_id'=>$points['id']];
+        $proportion = ProjectView::findByAll([],$proportion_where);
+        foreach ($proportion as $one_proportion){
+            if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
+                $kitchen_area = $one_proportion;
+            }
+            if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
+                $kitchen_area = $one_proportion;
+            }
+            if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
+                $kitchen_area = $one_proportion;
+            }
+            if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
+                $kitchen_area = $one_proportion;
             }
         }
+        var_dump($kitchen_area);exit;
         //卧室底漆面积
         $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'],self::WALL_HIGH,self::WALL);
 
