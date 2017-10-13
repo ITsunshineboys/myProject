@@ -353,6 +353,7 @@ class Express extends ActiveRecord
          {
              return null;
          }
+         var_dump($data);exit;
          return $data[$name[0]['comCode']];
       }
 }
