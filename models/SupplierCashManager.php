@@ -92,7 +92,7 @@ class SupplierCashManager extends ActiveRecord
         if ($supplier_id) {
             $query->andWhere(['uid' => $supplier_id]);
         }
-        $arr = $query->one();var_dump($arr);die;
+        $arr = $query->one();
         if (!$arr) {
             return null;
         }
@@ -105,6 +105,7 @@ class SupplierCashManager extends ActiveRecord
 
         $bankcard = self::GetBankcard($arr['bank_log_id']);
         $supplier = self::GetSupplier($supplier_id);
+        var_dump($supplier,$bankcard);die;
         if (!$bankcard || !$supplier) {
             return null;
         }
