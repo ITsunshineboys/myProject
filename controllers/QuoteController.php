@@ -1477,7 +1477,6 @@ class QuoteController extends Controller
     public function actionCommonalityTitleAdd()
     {
         $post = \Yii::$app->request->post();
-        var_dump($post);exit;
         $points = new Points();
         if (isset($post['one_title']['title'])){
             $points->title = $post['one_title']['title'];
