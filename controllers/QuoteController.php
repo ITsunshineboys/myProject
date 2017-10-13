@@ -1436,16 +1436,13 @@ class QuoteController extends Controller
      */
     public function actionCommonalityList()
     {
-        $select = 'id,title';
+        $select = 'id,title,count';
         $where  = 'level = 1';
         return Json::encode([
            'post'=> Points::findByPid($select,$where),
         ]);
     }
-
-    public function actionList(){
-        return Points::find()->asArray()->select([])->where([])->all();
-    }
+    
     /**
      * commonality  one title list
      * @return string

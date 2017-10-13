@@ -589,7 +589,9 @@ class OwnerController extends Controller
                     break;
             }
         }
-        //
+
+        // 面积比例
+
         $areas = EngineeringUniversalCriterion::findByAll(self::PROJECT_DETAILS['oil_paint']);
         $area['masterBedroom_area'] = 0;
         $area['sittingRoom_diningRoom_area'] = 0;
