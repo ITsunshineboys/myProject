@@ -349,11 +349,10 @@ class Express extends ActiveRecord
               return null;
           }
          $data= self::findExpressByCode();
-         if (!$data)
+         if (!array_key_exists($name[0]['comCode'],$data))
          {
              return null;
          }
-         var_dump($data);exit;
          return $data[$name[0]['comCode']];
       }
 }
