@@ -1406,8 +1406,7 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => 'ok',
                 'data'=>[
-                    'waybillname'=>$waybillname,
-                    'waybillnumber'=>$waybillnumber
+                    'shipping_way'=>$waybillname.'('.$waybillnumber.')'
                 ]
             ]);
         }else{
