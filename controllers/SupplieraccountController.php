@@ -417,7 +417,7 @@ class SupplieraccountController extends  Controller{
      */
 
     public function actionAccountThaw(){
-        var_dump(UserFreezelist::find()->asArray()->all());die;
+
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -438,14 +438,14 @@ class SupplieraccountController extends  Controller{
             }
             $freeze=UserFreezelist::findOne($freeze_id);
             $supplier=Supplier::findOne($freeze->uid);
-
+            var_dump($supplier);die;
         $transaction = Yii::$app->db->beginTransaction();
         try{
             if($supplier){
                 $supplier->availableamount+=$freeze->freeze_money;
 
                 $freeze->status=self::STATUS_WJD;
-                if(!$supplier->update(false) || !$freeze->save(false)){
+                if(!$supplier->update(false) || !$freeze->update(false)){
                     $transaction->rollBack();
                     $code=500;
                     return json_encode([
