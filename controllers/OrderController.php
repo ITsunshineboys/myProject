@@ -1397,7 +1397,7 @@ class OrderController extends Controller
         $waybillname=(new Express())->GetExpressName($waybillnumber);
         if (!$waybillname)
         {
-            $waybillname='未知';
+            $waybillname='未知快递';
         }
         $code=Express::Expressupdate($waybillnumber,$waybillname,$sku,$order_no);
         if ($code==200){
@@ -1405,6 +1405,10 @@ class OrderController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => 'ok',
+                'data'=>[
+                    'waybillname'=>$waybillname,
+                    'waybillnumber'=>$waybillnumber
+                ]
             ]);
         }else{
             return Json::encode([
@@ -1412,13 +1416,6 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-    }
-    public function actionTesteffecf(){
-        $data=(new Query())->from('effect_earnst')->all();
-        return Json::encode([
-            'code' => 200,
-            'data' =>  $data,
-        ]);
     }
 
     /**
