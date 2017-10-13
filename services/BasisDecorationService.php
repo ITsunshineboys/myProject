@@ -1316,7 +1316,7 @@ class BasisDecorationService
      * @param $post
      * @return mixed
      */
-    public static function coatingSeriesAndStyle($goods_price,$crafts,$post)
+    public static function coatingSeriesAndStyle($goods_price,$post)
     {
         foreach ($goods_price as $goods) {
             switch ($goods) {

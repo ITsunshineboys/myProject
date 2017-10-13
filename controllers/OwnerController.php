@@ -121,7 +121,7 @@ class OwnerController extends Controller
     const ROOM_AREA = [
         'kitchen_area' => '厨房面积',
         'toilet_area'  => '卫生间面积',
-        'hall_area'    => '客厅面积',
+        'hall_area'    => '客餐厅及过道面积',
         'bedroom_area' => '卧室面积',
     ];
 
@@ -602,22 +602,22 @@ class OwnerController extends Controller
             if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
                 $kitchen_area = $one_proportion;
             }
-            if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
-                $kitchen_area = $one_proportion;
+            if ($one_proportion['project'] == self::ROOM_AREA['toilet_area']){
+                $toilet_area = $one_proportion;
             }
-            if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
-                $kitchen_area = $one_proportion;
+            if ($one_proportion['project'] == self::ROOM_AREA['hall_area']){
+                $hall_area = $one_proportion;
             }
-            if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
-                $kitchen_area = $one_proportion;
+            if ($one_proportion['project'] == self::ROOM_AREA['bedroom_area']){
+                $bedroom_area = $one_proportion;
             }
         }
-        var_dump($kitchen_area);exit;
         //卧室底漆面积
-        $bedroom_primer_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'],self::WALL_HIGH,self::WALL);
+        $bedroom_primer_area = BasisDecorationService::paintedArea($kitchen_area['project_value'], $post['area'], $post['bedroom'],self::WALL_HIGH,self::WALL);
 
         //客餐厅底漆面积
-        $drawing_room_primer_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
+        $drawing_room_primer_area = BasisDecorationService::paintedArea($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
+
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
         $primer_area = $bedroom_primer_area + $drawing_room_primer_area;
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
@@ -629,30 +629,31 @@ class OwnerController extends Controller
         $finishing_coat_day = $finishing_coat_area / $finishing_coat;
 
 //        卧室周长
-        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($area['masterBedroom_area'], $post['area'], $post['bedroom'], self::WALL);
+        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($bedroom_area['project_value'], $post['area'], $post['bedroom'], self::WALL);
 //        客厅周长
-        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], self::WALL_SPACE);
+        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_SPACE);
 //        阴角线长度
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
         $concave_line_day = $concave_line_length / $concave_line;
 
 //        腻子卧室墙面积
-        $putty_bedroom_area = BasisDecorationService::paintedArea($area['masterBedroom_area'], $post['area'], $post['bedroom'], self::WALL_HIGH, self::WALL);
+        $putty_bedroom_area = BasisDecorationService::paintedArea($bedroom_area['project_value'], $post['area'], $post['bedroom'], self::WALL_HIGH, self::WALL);
 
 //        腻子客餐厅面积
-        $putty_drawing_room_area = BasisDecorationService::paintedArea($area['sittingRoom_diningRoom_area'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
+        $putty_drawing_room_area = BasisDecorationService::paintedArea($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 //        腻子面积 卧室腻子面积+客厅腻子面积
         $putty_area = $putty_bedroom_area + $putty_drawing_room_area;
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL);
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL,$select);
         $goods_price = BasisDecorationService::priceConversion($goods);
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['emulsion_varnish'], $post['city']);
-        $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price, $crafts, $post);
+        $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price, $post);
         foreach ($crafts as $craft) {
             switch ($craft) {
                 case $craft['project_details'] == BasisDecorationService::GOODS_NAME['putty']:
@@ -744,8 +745,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //工人一天单价
-        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason']);
-        $labor_day_cost = $labor_costs['univalence'];
+        $_select = 'id,univalence,worker_kind';
+        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason'],$_select);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
         foreach ($worker_kind_details as $labor_cost) {
             switch ($labor_cost) {
@@ -812,11 +813,12 @@ class OwnerController extends Controller
 //        总天数：保护层天数+贴砖天数
         $total_day = ceil($tiling_day + $covering_layer_day);
         //总的人工费
-        $total_labor_cost['price'] = $total_day * $labor_day_cost;
+        $total_labor_cost['price'] = $total_day * $labor_costs['univalence'];
         $total_labor_cost['worker_kind'] = self::PROJECT_DETAILS['tiler'];
 
         //材料费
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL);
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL,$select);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
 
@@ -909,44 +911,12 @@ class OwnerController extends Controller
         }
         $material_total['total_cost'] = $material_cost_total;
 
-        //添加材料费用
-        $add_price_area = DecorationAdd::AllArea('泥作', $post['area'], $post['city']);
-        $add_price = [];
-        foreach ($add_price_area as $add_area) {
-            $sku_area = Goods::skuAll($add_area['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_area['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
-        $add_price_series = DecorationAdd::AllSeries('泥作', $post['series'], $post['city']);
-        foreach ($add_price_series as $add_series) {
-            $sku_area = Goods::skuAll($add_series['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_series['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-        $add_price_style = DecorationAdd::AllStyle('泥作', $post['style'], $post['city']);
-        foreach ($add_price_style as $add_style) {
-            $sku_area = Goods::skuAll($add_style['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_style['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
                 'mud_make_labor_price' => $total_labor_cost,
                 'mud_make_material' => $material_total,
-                'add_price' => $add_price,
             ]
         ]);
     }
@@ -957,12 +927,13 @@ class OwnerController extends Controller
     public function actionHandyman()
     {
         $post = \Yii::$app->request->post();
-        $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman']);
+        $_select = 'id,univalence,worker_kind';
+        $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman'],$_select);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 //        总天数
         $total_day = BasisDecorationService::wallArea($post,$worker_kind_details);
 //        清运建渣费用
-        $craft = EngineeringStandardCraft::findByAll($handyman, $post['city']);
+        $craft = EngineeringStandardCraft::findByAll($labor['worker_kind'], $post['city']);
         if ($post['building_scrap'] == true) {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
         } else {
@@ -970,7 +941,7 @@ class OwnerController extends Controller
         }
 //        总人工费
         $labor_cost['price'] = $total_day['total_day'] * $labor['univalence'] + $building_scrap['cost'];
-        $labor_cost['worker_kind'] = $handyman;
+        $labor_cost['worker_kind'] = $labor['worker_kind'];
 
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL);
@@ -1011,46 +982,22 @@ class OwnerController extends Controller
         $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand['cost'];
         $material['total_cost'] = $total_material_cost;
 
-        //添加材料费用
-        $add_price_area = DecorationAdd::AllArea(self::WORK_CATEGORY['backman'], $post['area'], $post['city']);
-        $add_price = [];
-        foreach ($add_price_area as $add_area) {
-            $sku_area = Goods::skuAll($add_area['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_area['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
-        $add_price_series = DecorationAdd::AllSeries(self::WORK_CATEGORY['backman'], $post['series'], $post['city']);
-        foreach ($add_price_series as $add_series) {
-            $sku_area = Goods::skuAll($add_series['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_series['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-        $add_price_style = DecorationAdd::AllStyle(self::WORK_CATEGORY['backman'], $post['style'], $post['city']);
-        foreach ($add_price_style as $add_style) {
-            $sku_area = Goods::skuAll($add_style['sku']);
-            if ($sku_area !== null) {
-                $add_price [] = $add_style['quantity'] * $sku_area['platform_price'];
-            } else {
-                $add_price [] = 0;
-            }
-        }
-
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
                 'labor_cost' => $labor_cost,
                 'total_material' => $material,
-                'add_price' => $add_price,
             ]
         ]);
+    }
+
+    /**
+     * 添加材料查询
+     */
+    public function actionAddMaterials()
+    {
+
     }
 
     /**
@@ -1115,15 +1062,6 @@ class OwnerController extends Controller
                 'goods' => $material,
             ]
         ]);
-    }
-
-    /**
-     * noopsyche quote total
-     */
-    public function actionNoopsycheTotal()
-    {
-        $post = Yii::$app->request->post();
-
     }
 
     /**
