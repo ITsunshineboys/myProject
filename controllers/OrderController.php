@@ -3774,6 +3774,8 @@ class OrderController extends Controller
             $logisticsTemplate['delivery_cost_delta']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_delta']*0.01);
             $logisticsDistrict=LogisticsDistrict::find()->select('district_name')->where(['template_id'=>$Goods->logistics_template_id])->asArray()->all();
             $after_sale=explode(',',$Goods->after_sale_services);
+            $guarantee=[];
+            $after=[];
             foreach ($after_sale as &$afterSale)
             {
                 if ($afterSale==0)
