@@ -353,7 +353,7 @@ class OrderController extends Controller
 
         $request = \Yii::$app->request;
         $invoice_id= trim($request->get('invoice_id'));
-        if ($invoice_id)
+        if (!$invoice_id)
         {
             $code=1000;
             return Json::encode([
@@ -843,12 +843,12 @@ class OrderController extends Controller
         }
         if ($type=='all' && !$supplier_id)
         {
-                if($keyword){
-                    $where .="  z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+           if($keyword){
+                    $where .="  z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'  or   a.consignee_mobile like '%{$keyword}%'  or   u.mobile like '%{$keyword}%'";
                 }
-        }else{
+            }else{
             if($keyword){
-                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'  or   a.consignee_mobile like '%{$keyword}%'  or   u.mobile like '%{$keyword}%'";
             }
         }
             if ($type=='all' && !$supplier_id )

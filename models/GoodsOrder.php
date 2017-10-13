@@ -348,6 +348,7 @@ class GoodsOrder extends ActiveRecord
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
+            ->leftJoin(User::tableName(). ' AS u','u.id=a.user_id')
             ->select($select)
             ->where($where)
             ->orderBy('a.create_time desc')
