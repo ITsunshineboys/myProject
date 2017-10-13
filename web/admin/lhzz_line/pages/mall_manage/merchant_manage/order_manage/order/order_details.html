@@ -203,12 +203,7 @@
     <div class="exce-record" ng-if="isPlatform">
         <div class="row title">
             <div class="col-xs-12">
-                <h3 ng-if="platformInfo.handle == 1 || platformInfo.handle == 2">平台介入-关闭订单</h3>
-                <h3 ng-if="platformInfo.handle == 3">平台介入-退货</h3>
-                <h3 ng-if="platformInfo.handle == 4">平台介入-换货</h3>
-                <h3 ng-if="platformInfo.handle == 5">平台介入-上门维修</h3>
-                <h3 ng-if="platformInfo.handle == 6">平台介入-上门退货</h3>
-                <h3 ng-if="platformInfo.handle == 7">平台介入-上门换货</h3>
+                <h3>平台介入</h3>
                 <i class="glyphicon pointer" ng-class="{'glyphicon-chevron-up': isShowPlatform, 'glyphicon-chevron-down': !isShowPlatform}"
                    ng-click="isShowPlatform = !isShowPlatform"></i>
             </div>

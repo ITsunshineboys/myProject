@@ -477,6 +477,24 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
           css: 'pages/mall_manage/merchant_manage/order_manage/css/goods_details.css',
           controller: 'order_goods'
       })
+      .state('search', {    // 搜索页面
+          url: '/merchant_index/search',
+          templateUrl: 'pages/mall_manage/merchant_manage/search_page/search_page.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'searchCtrl'
+      })
+      .state('mall_data', { // 商城数据
+          url: '/mall_data',
+          templateUrl: 'pages/mall_manage/data_page/data_page.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'mallDataCtrl'
+      })
+      .state('store_data', {    // 店铺数据
+          url: '/store_mag/store_data?id',
+          templateUrl: 'pages/mall_manage/data_page/data_page.html',
+          css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+          controller: 'storeDataCtrl'
+      })
     /*=============== 廖欢 end ===============*/
 })
   .directive('wdatePicker',function(){

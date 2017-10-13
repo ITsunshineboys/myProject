@@ -1,0 +1,57 @@
+<!--头部导航开始-->
+<header>
+    <div>
+        <i class="glyphicon glyphicon-home"></i>
+        <a ui-sref="merchant_index">商城管理</a> >
+        <a  ng-if="!isMallData" ui-sref="store_mag">商家管理</a>
+        <span ng-if="!isMallData"> > </span>
+        <span ng-if="isMallData">商城数据</span>
+        <span ng-if="!isMallData" >店铺数据</span>
+        <img src="pages/home/images/user.png"/>
+    </div>
+</header>
+<!--头部导航结束-->
+<section>
+    <p class="sales-data">
+        <span>销量：{{data.total_sold_number}}</span>
+        <span>销售额：{{data.total_amount_sold}}</span>
+        <span>游客数：{{data.total_ip_number}}</span>
+        <span>访问量：{{data.total_viewed_number}}</span>
+    </p>
+    <div class="search form-inline clearfix">
+        <select class="form-control" ng-model="params.time_type">
+            <option value="all">全部时间</option>
+            <option value="week">本周</option>
+            <option value="month">本月</option>
+            <option value="year">本年</option>
+            <option value="custom">自定义</option>
+        </select>
+        <input id="startTime" ng-if="params.time_type == 'custom'" ng-model="params.start_time"
+               max-date="{{params.end_time}}" class="form-control" type="text" placeholder="开始时间" ngc-lay-date>
+        <input id="endTime" ng-if="params.time_type == 'custom'" ng-model="params.end_time" min-date="{{params.start_time}}"
+               max-date="" class="form-control" type="text" placeholder="结束时间" ngc-lay-date>
+    </div>
+    <div class="content">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th>销量</th>
+                <th>销售额</th>
+                <th>游客数</th>
+                <th>访问量</th>
+                <th>时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="obj in data.details">
+                <td>{{obj.sold_number}}</td>
+                <td>{{obj.amount_sold}}</td>
+                <td>{{obj.ip_number}}</td>
+                <td>{{obj.viewed_number}}</td>
+                <td>{{obj.create_date}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <tm-pagination conf="pageConfig"></tm-pagination>
+    </div>
+</section>

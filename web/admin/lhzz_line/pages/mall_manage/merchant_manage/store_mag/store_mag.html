@@ -78,7 +78,7 @@
                         <td>
                             <span class="color_blue" ui-sref="commodity_manage({storeid:item.id})">商品管理</span>
                             <a class="color_blue" ui-sref="order.all({id: item.id})">订单管理</a>
-                            <span class="color_blue">数据</span>
+                            <a class="color_blue" ui-sref="store_data({id: item.id})">数据</a>
                         </td>
                         <td class="color_blue clickstyle">
                             <span data-toggle="modal" data-target="#bidian_tishi"  ng-click=changeStatus(item.id,item.status) ng-bind="item.status=='正常营业'?'闭店':'开店'"></span>

@@ -12,6 +12,7 @@ header img {
     right: 20px;
     top: 8px;
 }
+
 /*顶部导航结束*/
 
 section {
@@ -56,6 +57,7 @@ section {
 .search {
     margin-top: 20px;
 }
+
 .search .input-group {
     width: 240px;
 }
@@ -131,4 +133,15 @@ section {
 
 .table .sort .active {
     color: #5677fc;
+}
+
+/* 销量数据 */
+.sales-data {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.sales-data span {
+    margin-right: 15px;
+    font-weight: bold;
 }
