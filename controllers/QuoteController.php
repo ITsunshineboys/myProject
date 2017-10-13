@@ -1526,7 +1526,7 @@ class QuoteController extends Controller
                 $points->findByInsert($value);
             }
             if (isset($value['edit_id'])){
-                $points->findByUpdate($value['count'],$value['id']);
+                $points->findByUpdate($value['count'],$value['edit_id']);
             }
         }
         if (isset($post['del_id'])) {
