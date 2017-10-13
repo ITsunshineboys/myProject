@@ -64,6 +64,6 @@ class Points extends ActiveRecord
         $row = \Yii::$app->db->createCommand();
         return $row->update(self::TABLE_NAME,[
             'count'=>$rows
-            ],'id',$id)->execute();
+            ],['id' => $id])->execute();
     }
 }
