@@ -573,22 +573,23 @@ class OwnerController extends Controller
         $_select = 'id,univalence,worker_kind';
         $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters'],$_select);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
-        foreach ($worker_kind_details as $labor_cost) {
-            switch ($labor_cost) {
-                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_area']:
-                    $primer = $labor_cost['quantity'];
+        foreach ($worker_kind_details as $_labor_cost) {
+            switch ($_labor_cost) {
+                case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_primer_area']:
+                    $primer = $_labor_cost['quantity'];
                     break;
-                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_cover_area']:
-                    $finishing_coat = $labor_cost['quantity'];
+                case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_cover_area']:
+                    $finishing_coat = $_labor_cost['quantity'];
                     break;
-                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['concave_line_length']:
-                    $concave_line = $labor_cost['quantity'];
+                case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['concave_line_length']:
+                    $concave_line = $_labor_cost['quantity'];
                     break;
-                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['putty_area']:
-                    $putty = $labor_cost['quantity'];
+                case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['putty_area']:
+                    $putty = $_labor_cost['quantity'];
                     break;
             }
         }
+        //
         $areas = EngineeringUniversalCriterion::findByAll(self::PROJECT_DETAILS['oil_paint']);
         $area['masterBedroom_area'] = 0;
         $area['sittingRoom_diningRoom_area'] = 0;
