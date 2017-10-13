@@ -158,8 +158,18 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     self::WORKER_ORDER_CANCELED,
                     self::WORKER_ORDER_DONE
                 ];
+                $query->andWhere(['status' => $status]);
             }
-            $query->andWhere(['status' => $status]);
+            if($status == self::WORKER_WORKS_AFTER){
+                $status=[
+                    self::WORKER_ORDER_PREPARE,
+                    self::WORKER_WORKS_AFTER,
+                ];
+                $worker_status=implode(',',array_values($status));
+                $query->andWhere("status in ($worker_status)");
+            }else{
+                $query->andWhere(['status' => $status]);
+            }
         }
 
         $count = $query->count();
@@ -182,10 +192,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
         return $data;
     }
+    /**
+     * 智管工地列表-用户
+     * @param $uid
+     * @param $status
+     * @param $page
+     * @param $page_size
+     * @return array
+     */
     public static function getUserOrderList($uid,$status,$page,$page_size){
         $query = self::find()
             ->select(['id','worker_id','create_time', 'amount', 'status','worker_type_id'])
-            ->where(['uid' => $uid]);
+            ->where(['uid' => $uid])
+            ->andWhere('worker_id!=0');
         if ($status != WorkerController::STATUS_ALL) {
             if ($status == self::WORKER_ORDER_CANCELED
                 || $status == self::WORKER_ORDER_DONE
@@ -194,8 +213,20 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     self::WORKER_ORDER_CANCELED,
                     self::WORKER_ORDER_DONE
                 ];
+                $query->andWhere(['status' => $status]);
             }
-            $query->andWhere(['status' => $status]);
+            if($status == self::WORKER_WORKS_AFTER){
+                $status=[
+                    self::WORKER_ORDER_PREPARE,
+                    self::WORKER_WORKS_AFTER,
+                ];
+                $worker_status=implode(',',array_values($status));
+                $query->andWhere("status in ($worker_status)");
+            }else{
+                $query->andWhere(['status' => $status]);
+            }
+
+
         }
 
         $count = $query->count();
@@ -205,16 +236,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
-
 //        $worker_type_id = Worker::find()->where(['id' => $worker_id])->one()->worker_type_id;
 //        $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one()->worker_type;
 
         foreach ($arr as &$v) {
-            $v['worker_type'] = WorkerType::find()->where(['id' => $v['worker_type_id']])->one()->worker_type;
-            $v['create_time'] = date('Y-m-d ', $v['create_time']);
-            $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
-            $v['status'] = self::WORKER_ORDER_STATUS[$v['status']];
-            unset($v['worker_type_id']);
+
+
+                $v['worker_type'] = WorkerType::find()->where(['id' => $v['worker_type_id']])->one()->worker_type;
+                $v['create_time'] = date('Y-m-d ', $v['create_time']);
+                $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
+                $v['status'] = self::WORKER_ORDER_STATUS[$v['status']];
+                unset($v['worker_type_id']);
+
+
         }
 
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);

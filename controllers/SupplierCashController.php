@@ -174,14 +174,13 @@ class SupplierCashController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $supplier_id=Supplier::find()->where(['uid'=>$user])->one()->id;
 
-        $supplier = Supplier::find()->select('id')->where(['uid' => $user])->one();
-
-        if ($admin) {
-            $supplier['id'] = 0;
+        if($admin){
+            $supplier_id=UserCashregister::find()->where(['id'=>$cash_id])->one()->uid;
         }
 
-        $data = SupplierCashManager::GetCash($cash_id, $supplier['id']);
+        $data = SupplierCashManager::GetCash($cash_id,$supplier_id);
 
         return Json::encode([
             'code' => 200,
