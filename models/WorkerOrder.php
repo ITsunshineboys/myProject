@@ -136,19 +136,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
     }
 
     /**
-     * 工人智管工地列表
+     * 工人智管工地列表-工人
      * @param $uid
      * @param $status
      * @param $page
      * @param $page_size
      * @return array
      */
-    public static function getWorkerOrderList($uid, $status, $page, $page_size)
+    public static function getWorkerOrderList($uid, $status, $page,$page_size)
     {
         $worker = Worker::getWorkerByUid($uid);
         $worker_id = $worker->id;
         $query = self::find()
-            ->select(['create_time', 'amount', 'status'])
+            ->select(['id','worker_id','create_time', 'amount', 'status'])
             ->where(['uid' => $uid, 'worker_id' => $worker_id]);
         if ($status != WorkerController::STATUS_ALL) {
             if ($status == self::WORKER_ORDER_CANCELED
@@ -174,9 +174,47 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         foreach ($arr as &$v) {
             $v['worker_type'] = $worker_type;
-            $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
+            $v['create_time'] = date('Y-m-d ', $v['create_time']);
             $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
             $v['status'] = self::WORKER_ORDER_STATUS[$v['status']];
+        }
+
+        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
+        return $data;
+    }
+    public static function getUserOrderList($uid,$status,$page,$page_size){
+        $query = self::find()
+            ->select(['id','worker_id','create_time', 'amount', 'status','worker_type_id'])
+            ->where(['uid' => $uid]);
+        if ($status != WorkerController::STATUS_ALL) {
+            if ($status == self::WORKER_ORDER_CANCELED
+                || $status == self::WORKER_ORDER_DONE
+            ) {
+                $status = [
+                    self::WORKER_ORDER_CANCELED,
+                    self::WORKER_ORDER_DONE
+                ];
+            }
+            $query->andWhere(['status' => $status]);
+        }
+
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->asArray()
+            ->all();
+
+
+//        $worker_type_id = Worker::find()->where(['id' => $worker_id])->one()->worker_type_id;
+//        $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one()->worker_type;
+
+        foreach ($arr as &$v) {
+            $v['worker_type'] = WorkerType::find()->where(['id' => $v['worker_type_id']])->one()->worker_type;
+            $v['create_time'] = date('Y-m-d ', $v['create_time']);
+            $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
+            $v['status'] = self::WORKER_ORDER_STATUS[$v['status']];
+            unset($v['worker_type_id']);
         }
 
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
@@ -202,7 +240,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
         } else {
             $order = self::find()
-                ->select('id,uid,worker_type_id,worker_id,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address')
+                ->select('id,uid,worker_type_id,worker_id,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location')
                 ->where(['id' => $order_id])
                 ->one();
             if (!$order) {
@@ -341,19 +379,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->asArray()
                 ->one();
             //工人特长
-            $skill_ids = $worker['skill_ids'];
-            $skills = [];
-            if ($skill_ids) {
-                $skill_ids = explode(',', $skill_ids);
-                $skill_all = WorkerSkill::find()
-                    ->where(['id' => $skill_ids])->all();
-
-                foreach ($skill_all as $skill) {
-                    $skills[] = $skill['skill'];
-                }
-            }
-            unset($worker['skill_ids']);
-            $worker['skills'] = $skills;
+//            $skill_ids = $worker['skill_ids'];
+//            $skills = [];
+//            if ($skill_ids) {
+//                $skill_ids = explode(',', $skill_ids);
+//                $skill_all = WorkerSkill::find()
+//                    ->where(['id' => $skill_ids])->all();
+//
+//                foreach ($skill_all as $skill) {
+//                    $skills[] = $skill['skill'];
+//                }
+//            }
+//            unset($worker['skill_ids']);
+//            $worker['skills'] = $skills;
             $worker['mobile'] = User::find()
                 ->select('mobile')
                 ->where(['id' => $worker['uid']])
@@ -383,6 +421,28 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'worker' => $worker,
             'works_id' => $works_id
         ];
+    }
+    /**
+     * 工程订单详情-工人
+     * @param $order_id
+     * @return array|int
+     */
+    public static function getWorkerWorkerOrderDetail($order_id){
+        $order_detail = self::getOrderDetail($order_id);
+        if (is_int($order_detail)) {
+            return 1000;
+        }
+        list($order, $worker_items) = $order_detail;
+        $order_no = self::getOrderNoById($order_id);
+        $order_img = self::getOrderImg($order_no);
+        $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
+
+        return [
+            'order' => $order,
+            'worker_items' => $worker_items,
+            'order_img' => $order_img,
+        ];
+
     }
 
     public static function getOrderImg($order_no, $page_size = self::IMG_PAGE_SIZE_DEFAULT, $page = 1)
