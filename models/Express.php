@@ -336,7 +336,7 @@ class Express extends ActiveRecord
           ];
       }
 
- /**
+    /**
      * 获取快递公司名称
      * @param $waybillnumber
      * @return mixed
@@ -348,6 +348,11 @@ class Express extends ActiveRecord
           {
               return null;
           }
-          return self::findExpressByCode()[$name[0]['comCode']];
+         $data= self::findExpressByCode();
+         if (!$data)
+         {
+             return null;
+         }
+         return $data[$name[0]['comCode']];
       }
 }
