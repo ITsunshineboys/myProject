@@ -38,23 +38,28 @@ class Invoice extends ActiveRecord
             $array=array();
             $creat_time=date('Y-m-d H:i:s',time());
             $invoicetoken=md5($invoice_type.$invoice_header.$creat_time);
-            $data=self::find()->where(['invoice_type'=>$invoice_type,'invoice_header_type'=>$invoice_header_type,'invoice_header'=>$invoice_header,'invoice_content'=>$invoice_content,'invoicer_card'=>$invoicer_card])->asArray()->one();
+            $data=self::find()
+                ->where(['invoice_type'=>$invoice_type,
+                    'invoice_header_type'=>$invoice_header_type,
+                    'invoice_header'=>$invoice_header,
+                    'invoice_content'=>$invoice_content,
+                    'invoicer_card'=>$invoicer_card])
+                ->asArray()
+                ->one();
             if ($data){
                 $invoice=self::find()->where(['id'=>$data['id']])->one();
                 $invoice->invoice_header_type=$invoice_header_type;
                 $invoice->invoice_header=$invoice_header;
                 $invoice->invoice_type=$invoice_type;
                 $invoice->invoice_content=$invoice_content;
+                $invoice->creat_time=$creat_time;
                 $invoice->invoicer_card=$invoicer_card;
                 $invoice->invoicetoken=$invoicetoken;
-                $res=$invoice->save();
+                $res=$invoice->save(false);
                 if ($res==true){
-                    $session = Yii::$app->session;
-                    $session['invoicetoken']=$invoicetoken;
-                    $code =200;
-                    $array['code']=$code;
-                    $array['data']=$res;
-                    return $array;
+                    return $invoice->id;
+                }else{
+                    return null;
                 }
             }else{
                 $model=new self();
@@ -64,22 +69,15 @@ class Invoice extends ActiveRecord
                 $model->invoice_content=$invoice_content;
                 $model->invoicer_card=$invoicer_card;
                 $model->invoicetoken=$invoicetoken;
-                $res=$model->save();
+                $res=$model->save(false);
                 if ($res==true){
-                    $session = Yii::$app->session;
-                    $session['invoicetoken']=$invoicetoken;
-                    $code =200;
-                    $array['code']=$code;
-                    $array['data']=$res;
-                    return $array;
+                    return $model->id;
                 }else{
-                    $code=1050;
-                    $array['code']=$code;
-                    $array['data']=null;
-                    return $array;
+                    return null;
                 }
             }
     }
+
     /**
      * @param $invoice_type
      * @param $invoice_header_type
@@ -134,12 +132,13 @@ class Invoice extends ActiveRecord
         }
     }
 
-    /**
+   /**
      * 获取线下店商城-发票信息
-     *
      */
-    public function  getlineinvoice($invoicetoken){
-        $array  = self::find()->select('invoice_content,invoice_header')->where(['invoicetoken' => $invoicetoken])->one();
+    public function  getlineinvoice($invoice_id){
+        $array  = self::find()
+            ->select('invoice_content,invoice_header')->where(['id' => $invoice_id])
+            ->one();
         if ($array){
             return $array;
         }else

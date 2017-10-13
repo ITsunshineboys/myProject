@@ -254,7 +254,7 @@ class OrderController extends Controller
             ]);
         }
     }
-    /**
+   /**
      * 无登录app-添加发票信息
      * @return string
      */
@@ -285,19 +285,25 @@ class OrderController extends Controller
             }
         }
         $res=Invoice::addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
-        if ($res['code']==200){
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'ok',
-            ]);
-        }else{
-            $code=$res['code'];
+        if ($res)
+        {
+            $code=200;
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
+                'msg'  =>'ok',
+                'dara' =>[
+                    'invoice_id'=>$res
+                ]
+            ]);
+        }else{
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
             ]);
         }
     }
+
      /**
      * 无登录app-获取商品信息
      * @return string
@@ -344,10 +350,20 @@ class OrderController extends Controller
      */
     public function  actionGetinvoicelinedata()
     {
-        $session = Yii::$app->session;
-        $invoicetoken=$session['invoicetoken'];
+
+        $request = \Yii::$app->request;
+        $invoice_id= trim($request->get('invoice_id'));
+        if ($invoice_id)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
         $model = new Invoice();
-        $data=$model->getlineinvoice($invoicetoken);
+        $data=$model->getlineinvoice($invoice_id);
         if ($data){
             return Json::encode([
                 'code' => 200,
@@ -363,6 +379,7 @@ class OrderController extends Controller
             ]);
         }
     }
+
 
     /**
      * 判断是否是微信登录
