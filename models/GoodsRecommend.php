@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use app\services\ModelService;
 use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
@@ -615,7 +616,7 @@ class GoodsRecommend extends ActiveRecord
             return false;
         }
 
-        $goods = Goods::find()->where([$attribute => $this->$attribute])->one();
+        $goods = Goods::find()->where([$attribute => $this->$attribute, 'status' => Goods::STATUS_ONLINE])->one();
         if (!$goods) {
             $this->addError($attribute);
             return false;

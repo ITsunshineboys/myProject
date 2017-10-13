@@ -625,7 +625,7 @@ class GoodsRecommendSupplier extends ActiveRecord
             return false;
         }
 
-        $goods = Goods::find()->where([$attribute => $this->$attribute])->one();
+        $goods = Goods::find()->where([$attribute => $this->$attribute, 'status' => Goods::STATUS_ONLINE])->one();
         if (!$goods) {
             $this->addError($attribute);
             return false;
