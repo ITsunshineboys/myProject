@@ -83,19 +83,19 @@ class SupplierCashManager extends ActiveRecord
      * @param $cash_id
      * @return array|bool
      */
-    public static function GetCash($cash_id, $supplier_id = 0)
+    public static function GetCash($cash_id)
     {
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
             ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID]);
 
-        if ($supplier_id) {
-            $query->andWhere(['uid' => $supplier_id]);
-        }
+
         $arr = $query->one();
         if (!$arr) {
             return null;
         }
+        $supplier_id=Supplier::find()->where(['uid'=>$arr['uid']])->one()->id;
+
         if ($arr['apply_time']) {
             $arr['apply_time'] = date('Y-m-d H:i', $arr['apply_time']);
         }
@@ -105,7 +105,6 @@ class SupplierCashManager extends ActiveRecord
 
         $bankcard = self::GetBankcard($arr['bank_log_id']);
         $supplier = self::GetSupplier($supplier_id);
-        var_dump($supplier,$bankcard);die;
         if (!$bankcard || !$supplier) {
             return null;
         }
