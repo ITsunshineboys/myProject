@@ -437,8 +437,8 @@ class SupplieraccountController extends  Controller{
                     'msg'=>Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $freeze=UserFreezelist::find()->asArray()->where(['id'=>$freeze_id])->one();
-            $supplier=Supplier::find()->where(['uid'=>$freeze['uid']])->one();
+            $freeze=UserFreezelist::find()->where(['id'=>$freeze_id])->one();
+            $supplier=Supplier::find()->where(['uid'=>$freeze->uid])->one();
             $transaction = Yii::$app->db->beginTransaction();
         try{
             if($supplier){
