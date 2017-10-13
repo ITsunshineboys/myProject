@@ -119,7 +119,7 @@ class OrderAfterSale extends ActiveRecord
                 return $code;
             }
             $OrderGoods->customer_service=1;
-            $res2=$OrderGoods->save();
+            $res2=$OrderGoods->save(false);
             if (!$res2)
             {
                 $tran->rollBack();
@@ -297,7 +297,7 @@ class OrderAfterSale extends ActiveRecord
         try{
             $after_sale->supplier_handle=1;
             $after_sale->supplier_handle_time=time();
-            $res=$after_sale->save();
+            $res=$after_sale->save(false);
             if (!$res){
                 $tran->rollBack();
                 $code=500;
@@ -329,7 +329,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return $data;
+        return ['data'=>$data,'platform'=>[]];
     }
 
 
@@ -418,7 +418,7 @@ class OrderAfterSale extends ActiveRecord
                 $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role);
                 break;
             case 6:
-                $res=self::ToDoorReturnGoodsHandleDetail($res,$OrderAfterSale);
+                $res=self::ToDoorReturnGoodsHandleDetail($res,$OrderAfterSale,$role);
                 break;
             case 7:
                 $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role);
@@ -468,7 +468,7 @@ class OrderAfterSale extends ActiveRecord
                 $data=self::ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role);
                 break;
         }
-      return $data;
+        return ['data'=>$data,'platform'=>[]];
     }
 
     /**
@@ -506,7 +506,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return $data;
+            return ['data'=>$data,'platform'=>[]];
         }
         $data[]=[
             'type'=>'商家已派出工作人员',
@@ -544,7 +544,7 @@ class OrderAfterSale extends ActiveRecord
                     break;
             }
 
-            return $data;
+            return ['data'=>$data,'platform'=>[]];
         }
         $data[]=[
             'type'=>'商家已确认',
@@ -626,7 +626,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return $data;
+        return ['data'=>$data,'platform'=>[]];
     }
 
     /**
@@ -646,7 +646,7 @@ class OrderAfterSale extends ActiveRecord
                 'number'=>'',
                 'code'=>''
             ];
-            return $data;
+            return ['data'=>$data,'platform'=>[]];
         }
         $data[]=[
             'type'=>'商家已派出工作人员',
@@ -684,7 +684,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return $data;
+            return ['data'=>$data,'platform'=>[]];
         }
         $data[]=[
             'type'=>'顾客已确认',
@@ -722,7 +722,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return $data;
+        return ['data'=>$data,'platform'=>[]];
     }
     /**
      * @param $data
@@ -758,7 +758,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return $data;
+            return ['data'=>$data,'platform'=>[]];
         }
         $buyer_express=Express::find()
             ->where(['id'=>$OrderAfterSale->buyer_express_id])
@@ -822,7 +822,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return $data;
+            return ['data'=>$data,'platform'=>[]];
         }
         $data[]=[
             'type'=>'商家已收货',
@@ -905,7 +905,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return $data;
+        return ['data'=>$data,'platform'=>[]];
     }
     /**
      * @param $data
@@ -940,7 +940,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return $data;
+            return ['data'=>$data,'platform'=>[]];
         }
         $buyer_express=Express::find()
             ->where(['id'=>$OrderAfterSale->buyer_express_id])
@@ -1005,7 +1005,7 @@ class OrderAfterSale extends ActiveRecord
                         break;
                 }
 
-                return $data;
+            return ['data'=>$data,'platform'=>[]];
             }
             $data[]=[
                 'type'=>'商家已收货',
@@ -1042,7 +1042,7 @@ class OrderAfterSale extends ActiveRecord
                         ];
                         break;
                 }
-                return $data;
+                return ['data'=>$data,'platform'=>[]];
             }
         $supplier_express=Express::find()
             ->where(['id'=>$OrderAfterSale->supplier_express_id])
@@ -1104,7 +1104,7 @@ class OrderAfterSale extends ActiveRecord
                         ];
                         break;
                 }
-                return $data;
+                return ['data'=>$data,'platform'=>[]];
             }
         $data[]=[
             'type'=>'顾客已收货',
@@ -1141,7 +1141,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return $data;
+        return ['data'=>$data,'platform'=>[]];
     }
 
     /**
