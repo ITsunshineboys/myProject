@@ -420,15 +420,16 @@ class Goods extends ActiveRecord
      *
      * @param int $sku sku
      * @param array $select recommend fields default all fields
+     * @param int $status goods status default online
      * @return mixed array|bool
      */
-    public static function findBySku($sku, $select = [])
+    public static function findBySku($sku, $select = [], $status = self::STATUS_ONLINE)
     {
         if (!$sku) {
             return false;
         }
 
-        return self::find()->select($select)->where(['sku' => $sku])->one();
+        return self::find()->select($select)->where(['sku' => $sku, 'status' => $status])->one();
     }
 
     /**
