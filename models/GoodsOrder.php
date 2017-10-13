@@ -2565,6 +2565,11 @@ class GoodsOrder extends ActiveRecord
                case self::ORDER_TYPE_DESC_COMPLETED:
                    $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
+                   if (!$arr[$k]['comment_id'])
+                   {
+                       $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
+                       $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                   }
                    break;
                case self::ORDER_TYPE_DESC_UNCOMMENT:
                    $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
