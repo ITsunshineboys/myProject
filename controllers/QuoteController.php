@@ -1444,7 +1444,7 @@ class QuoteController extends Controller
     }
 
     public function actionList(){
-        return Points::find()->asArray()->all();
+        return Points::find()->asArray()->select([])->where([])->all();
     }
     /**
      * commonality  one title list
