@@ -157,7 +157,7 @@ class SupplierCashController extends Controller
      * 获取商家提现详情
      * @return mixed
      */
-    public function actionGetCash($admin = 0)
+    public function actionGetCash()
     {
         $user = self::userIdentity();
         if (!is_int($user)) {
@@ -165,23 +165,23 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $cash_id = (int)$request->get('cash_id', '');
-        if (!$cash_id) {
+        $transaction_no = (int)$request->get('transaction_no', '');
+        if (!$transaction_no) {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id=Supplier::find()->where(['uid'=>$user])->one()->id;
-
-
-        if($admin){
-            $supplier_id=UserCashregister::find()->where(['id'=>$cash_id])->one()->uid;
-
+        $supplier_id=Supplier::find()->asArray()->where(['uid'=>$user])->one()['id'];
+        if(!$supplier_id){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
-
-        $data = SupplierCashManager::GetCash($cash_id,$supplier_id);
+        $data = SupplierCashManager::GetCash($transaction_no,$supplier_id);
 
         return Json::encode([
             'code' => 200,
@@ -304,7 +304,39 @@ class SupplierCashController extends Controller
      */
     public function actionCashActionDetail()
     {
-        return $this->actionGetCash(1);
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+        $transaction_no = (int)$request->get('transaction_no', '');
+        if (!$transaction_no) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier_uid=UserCashregister::find()
+            ->asArray()
+            ->where(['transaction_no'=>$transaction_no])
+            ->one()['uid'];
+            $supplier_id=Supplier::find()->where(['uid'=>$supplier_uid])->asArray()->one()['id'];
+        if(!$supplier_id){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data = SupplierCashManager::GetCash($transaction_no,$supplier_id);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
     }
 
 

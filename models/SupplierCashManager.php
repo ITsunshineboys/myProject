@@ -88,12 +88,12 @@ class SupplierCashManager extends ActiveRecord
      * @param $cash_id
      * @return array|bool
      */
-    public static function GetCash($cash_id,$supplier_id)
+    public static function GetCash($transaction_no,$supplier_id)
     {
 
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID]);
+            ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID]);
 
 
         $arr = $query->one();
