@@ -1451,7 +1451,7 @@ class QuoteController extends Controller
     {
         $id = trim(\Yii::$app->request->post('id',''));
         $count = Points::findOne(['id'=>$id]);
-        $select = 'id,title,differentiate';
+        $select = 'id,title,differentiate,count';
         $where  = 'pid='.$id;
         $title['one_title'] = Points::findByPid($select,$where);
         foreach ($title['one_title'] as $one_title){
