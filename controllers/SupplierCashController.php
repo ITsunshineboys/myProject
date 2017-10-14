@@ -181,6 +181,7 @@ class SupplierCashController extends Controller
 
         if($admin){
             $supplier_id=UserCashregister::find()->where(['id'=>$cash_id])->one()->uid;
+
         }
 
         $data = SupplierCashManager::GetCash($cash_id,$supplier_id);
