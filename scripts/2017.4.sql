@@ -1301,6 +1301,8 @@ CREATE TABLE `order_after_sale` (
   `buyer_express_confirm` tinyint(1) NOT NULL COMMENT '0:未确认  1:已确认',
   `supplier_express_confirm` tinyint(1) NOT NULL COMMENT '0 :未确认  1：已确认',
   `supplier_express_id` int(11) NOT NULL,
+  `worker_name` varchar(30) NOT NULL,
+  `worker_mobile` varchar(20) NOT NULL,
   `supplier_send_man` tinyint(1) NOT NULL COMMENT '0:派人  1：已派出人员',
   `supplier_send_time` int(11) NOT NULL COMMENT '商家派出工作人员时间',
   `buyer_confirm` tinyint(1) NOT NULL COMMENT '0 :未确认  1：已确认',
