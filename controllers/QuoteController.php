@@ -1526,15 +1526,14 @@ class QuoteController extends Controller
                 $points->findByInsert($value);
             }
             if (isset($value['edit_id'])){
-                $points->findByUpdate($value['count'],$value['edit_id']);
+                $points->findByUpdate($value['count'],$value['edit_id'],$value['title']);
             }
-
         }
         if (isset($post['del_id'])) {
-            $a = $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
+            $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
         }
         if (isset($post['count'])) {
-            $points->findByUpdate($post['count']['count'],$post['count']['id']);
+            $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['title']);
         }
         return Json::encode([
            'code' => 200,

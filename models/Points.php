@@ -59,10 +59,11 @@ class Points extends ActiveRecord
         ])->execute();
     }
 
-    public static function findByUpdate($rows,$id)
+    public static function findByUpdate($rows,$id,$title)
     {
         $row = \Yii::$app->db->createCommand();
         return $row->update(self::TABLE_NAME,[
+            'title'=>$title,
             'count'=>$rows
             ],['id' => $id])->execute();
     }
