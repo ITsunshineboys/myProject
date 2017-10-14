@@ -1547,11 +1547,26 @@ class QuoteController extends Controller
             }
         }
         if (isset($post['del_id'])) {
-            $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
+            $del_points = $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
+            if (!$del_points){
+                $code = 1000;
+                return Json::encode([
+                   'code' => $code,
+                   'msg' => '删除'.\Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
         if (isset($post['count'])) {
-           $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['count']['title']);
+           $count_points = $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['count']['title']);
+            if (!$count_points){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => '总数'.\Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
+
         return Json::encode([
            'code' => 200,
            'msg' => 'OK',
