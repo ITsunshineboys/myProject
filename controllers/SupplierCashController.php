@@ -327,10 +327,7 @@ class SupplierCashController extends Controller
             $status = (int)$request->post('status', '');
             $reason = trim(htmlspecialchars($request->post('reason', '')), '');
             $real_money = (int)$request->post('real_money', '');
-
-            if (($status != self::CASH_STATUS_DONE && $status != self::CASH_STATUS_FAIL)
-                || ($status == self::CASH_STATUS_DONE && $real_money <= 0)
-                || !$cash_id
+            if (($status == self::CASH_STATUS_DONE && $real_money <= 0)  || !$cash_id
             ) {
                 return Json::encode([
                     'code' => $code,
@@ -345,12 +342,14 @@ class SupplierCashController extends Controller
                     'msg' => 'ok',
                     'data' => $data
                 ]);
+            }else{
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+
             }
 
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
 
         }
 

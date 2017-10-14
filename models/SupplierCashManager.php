@@ -375,6 +375,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function doCashDeal($cash_id, $status, $reason, $real_money)
     {
+
         $supplier_cash = (new Query())
             ->from(self::SUP_CASHREGISTER)
             ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID])
