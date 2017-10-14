@@ -453,7 +453,7 @@ class WithdrawalsController extends Controller
         ]);
     }
 
-    /**
+   /**
      * 商家提现申请
      * @return string
      */
@@ -546,6 +546,21 @@ class WithdrawalsController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+            $UserAccessdetail=new UserAccessdetail();
+            $UserAccessdetail->access_type=4;
+            $UserAccessdetail->uid=$user->id;
+            $UserAccessdetail->role_id=6;
+            $UserAccessdetail->access_money=$money*100;
+            $UserAccessdetail->create_time=$time;
+            $UserAccessdetail->transaction_no=GoodsOrder::SetTransactionNo($supplier->shop_no);
+            if ($UserAccessdetail->save(false))
+            {
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $code=200;
             $tran->commit();
             return Json::encode([
@@ -561,6 +576,7 @@ class WithdrawalsController extends Controller
             ]);
         }
     }
+
 
     /**
      * 商家获取已冻结资金列表
