@@ -278,7 +278,7 @@ class SupplierCashController extends Controller
         $time_type = trim(htmlspecialchars($request->post('time_type', 'today')), '');
         $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
-        $status = trim(htmlspecialchars($request->post('status', self::CASH_STATUS_DONE)), '');
+        $status = trim(htmlspecialchars($request->post('status', self::CASH_STATUS_ING)), '');
         $search = trim(htmlspecialchars($request->post('search', '')), '');
 
         if (!array_key_exists($time_type, \Yii::$app->params['timeTypes'])

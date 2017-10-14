@@ -316,24 +316,24 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
     {
-        $query = (new Query())
+            $query = (new Query())
             ->from(self::SUP_CASHREGISTER . ' as g')
             ->where(['g.role_id' => self::ROLE_ID])
             ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.id')
             ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money']);
+
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
 
-        list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
+            list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
             $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
         } elseif ($time_start) {
             $query->andWhere(['>=', 'g.apply_time', $time_start]);
         } elseif ($time_end) {
             $query->andWhere(['<=', 'g.apply_time', $time_end]);
         }
-
         if (isset($search) && trim($search) == $search) {
             $query->andFilterWhere(['like', 'g.uid', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);
@@ -341,10 +341,10 @@ class SupplierCashManager extends ActiveRecord
 
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-
         foreach ($arr as &$v) {
             $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
             $v['cash_money'] = sprintf('%.2f', (float)$v['cash_money'] / 100);
