@@ -104,6 +104,7 @@ class SupplierCashManager extends ActiveRecord
         }
         $bankcard = self::GetBankcard($arr['bank_log_id']);
         $supplier = self::GetSupplier($supplier_id);
+        var_dump($bankcard,$supplier);die;
         if (!$bankcard || !$supplier) {
             return null;
         }
@@ -122,8 +123,8 @@ class SupplierCashManager extends ActiveRecord
             $arr['lost_money'] = sprintf('%.2f', 0);
             $arr['real_money'] = sprintf('%.2f', 0);
         }
+
         $arr['status'] = SupplierCashController::USER_CASH_STATUSES[$arr['status']];
-        var_dump($arr);die;
         return $arr;
     }
 
