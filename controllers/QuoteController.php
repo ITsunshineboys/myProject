@@ -1477,7 +1477,7 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         $points = new Points();
-        if (isset($post['one_title']['title'])){
+        if (isset($post['one_title']['id'])){
             $points->title = $post['one_title']['title'];
             $points->pid = $post['one_title']['id'];
             $points->level = 2;
@@ -1495,6 +1495,23 @@ class QuoteController extends Controller
                 ]);
             }
 
+        }
+
+        if (isset($post['one_title']['edit_id'])){
+            $edit_points = $points->findOne(['id'=>$post['one_title']['edit_id']]);
+            $edit_points->title = $post['one_title']['title'];
+            if (!$edit_points->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            } else {
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'ok',
+                ]);
+            }
         }
         if (isset($post['del_id'])) {
             $points_delete = $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
