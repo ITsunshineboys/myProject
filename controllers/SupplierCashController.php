@@ -143,10 +143,7 @@ class SupplierCashController extends Controller
             ]);
         }
 
-        $supplier = Supplier::find()
-            ->select('id')->where(['uid' => $user])->one();
-
-        $data = SupplierCashManager::getCashList($supplier['id'], $page, $page_size, $time_type, $time_start, $time_end, $status);
+        $data = SupplierCashManager::getCashList($user, $page, $page_size, $time_type, $time_start, $time_end, $status);
 
 
         return Json::encode([

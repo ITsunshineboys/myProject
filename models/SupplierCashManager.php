@@ -29,13 +29,12 @@ class SupplierCashManager extends ActiveRecord
      * @param $status int 状态
      * @return array
      */
-    public static function getCashList($supplier_id, $page, $page_size, $time_type, $time_start, $time_end, $status)
+    public static function getCashList($user, $page, $page_size, $time_type, $time_start, $time_end, $status)
     {
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
             ->orderBy('apply_time Desc')
-            ->where(['uid' => $supplier_id, 'role_id' => self::ROLE_ID]);
-        var_dump($query->all());exit;
+            ->where(['uid' => $user, 'role_id' => self::ROLE_ID]);
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
