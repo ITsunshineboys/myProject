@@ -33,7 +33,7 @@ class ProjectView extends ActiveRecord
     {
         $row = \Yii::$app->db->createCommand();
         return $row->update(self::TABLE_NAME,[
-                'coefficient'=>$rows
-            ],'id',$id)->execute();
+                'project_value'=>$rows
+            ],['id'=>$id])->execute();
     }
 }

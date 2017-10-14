@@ -1579,6 +1579,7 @@ class QuoteController extends Controller
         return Json::encode([
             'list' => ProjectView::findByAll($select,$where),
             'area' => Apartment::findByAll($area_select,$where),
+            'apartment_area' => ApartmentArea::findCondition([],$where),
         ]);
 
     }
@@ -1590,21 +1591,68 @@ class QuoteController extends Controller
     public function actionCommonalityElseEdit()
     {
         $post = \Yii::$app->request->post();
-        foreach ($post['value'] as $value){
-            ProjectView::findByUpdate($value['coefficient'],$value['id']);
-        }
-
-        foreach ($post['area'] as $area_value){
-            if (isset($area_value['id'])){
-                Apartment::findByUpdate($area_value['value'],$area_value['id']);
-            } else {
-                $add[] = $area_value;
+        /*
+         * 户型面积
+         */
+        if (isset($post['apartment_area'])) {
+            foreach ($post as $apartment_area){
+                if (isset($apartment_area['add'])){
+                    foreach ($apartment_area['add'] as $add){
+                        $add_apartment_area = ApartmentArea::findInset($add);
+                    }
+                } else {
+                    $add_apartment_area = false;
+                }
+                if (isset($apartment_area['edit'])){
+                    foreach ($apartment_area['edit'] as $edit){
+                        $edit_apartment_area = ApartmentArea::findUpdate($edit);
+                    }
+                } else {
+                    $edit_apartment_area = false;
+                }
+                if (isset($apartment_area['del'])){
+                    foreach ($apartment_area['del'] as $del){
+                        $del_apartment_area = ApartmentArea::deleteAll(['id'=>$del]);
+                        var_dump($del_apartment_area);exit;
+                    }
+                } else {
+                    $edit_apartment_area = false;
+                }
+            }
+            if (!$add_apartment_area || !$edit_apartment_area || !$del_apartment_area){
+                $code = 1000;
+                return Json::encode([
+                    'code'=>$code,
+                    'msg'=>\Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+            ]);
+        } elseif (isset($post['else'])) {
+            /*
+             * 其它修改
+             */
+            if (isset($post['else']['value'])){
+                foreach ($post['else']['value'] as $value){
+                    $a = ProjectView::findByUpdate($value['coefficient'],$value['edit_id']);
+                }
+            }
+            var_dump($a);exit;
+            foreach ($post['else']['area'] as $area_value){
+                if (isset($area_value['id'])){
+                    Apartment::findByUpdate($area_value['value'],$area_value['id']);
+                } else {
+                    $add[] = $area_value;
+                }
+            }
+            if (isset($add)){
+                $columns = ['min_area','max_area','project_name','project_value','points_id'];
+                Apartment::findByInsert($add,$columns);
             }
         }
-        if (isset($add)){
-            $columns = ['min_area','max_area','project_name','project_value','points_id'];
-            Apartment::findByInsert($add,$columns);
-        }
+
         return Json::encode([
            'code' => 200,
            'msg'  => 'OK',

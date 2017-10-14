@@ -36,4 +36,36 @@ class ApartmentArea extends ActiveRecord
             ->select($select)
             ->all();
     }
+
+    public static function findCondition($select=[],$where = [])
+    {
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where($where)
+            ->all();
+    }
+
+    public static function findInset($rows)
+    {
+        return \Yii::$app->db
+            ->createCommand()
+            ->insert(self::tableName(),[
+                'points_id'=>$rows['add_id'],
+                'min_area'=>$rows['min_area'],
+                'max_area'=>$rows['max_area'],
+            ])
+            ->execute();
+    }
+
+    public static function findUpdate($rows)
+    {
+        return \Yii::$app->db
+            ->createCommand()
+            ->update(self::tableName(),[
+                'min_area'=>$rows['min_area'],
+                'max_area'=>$rows['max_area'],
+            ],['id'=>$rows['edit_id']])
+            ->execute();
+    }
 }
