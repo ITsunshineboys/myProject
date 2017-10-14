@@ -1529,7 +1529,7 @@ class QuoteController extends Controller
                 $points->findByUpdate($value['count'],$value['edit_id']);
             }
             if (isset($post['del_id'])) {
-                $points->deleteAll(['and',['id'=>$points['del_id']['del_id']],['differentiate'=>1]]);
+                $points->deleteAll(['and',['id'=>$points['del_id']],['differentiate'=>1]]);
             }
         }
 
