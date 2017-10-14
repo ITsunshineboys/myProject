@@ -668,7 +668,7 @@ class OrderAfterSale extends ActiveRecord
 
             return $data;
         }
-        var_dump($data);exit;
+       
         $data[]=[
             'type'=>'商家已派出工作人员',
             'value' =>'',
