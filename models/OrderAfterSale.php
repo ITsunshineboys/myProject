@@ -640,15 +640,32 @@ class OrderAfterSale extends ActiveRecord
     public static function RepairGoodsHandleDetail($data,$OrderAfterSale,$role)
     {
         if (!$OrderAfterSale->supplier_send_man){
-            $data[]=[
-                'type'=>'等待商家处理',
-                'value' =>'',
-                'time'=>'',
-                'phone'=>'',
-                'content'=>'',
-                'number'=>'',
-                'code'=>''
-            ];
+            switch ($role)
+            {
+                case 'user':
+                    $data[]=[
+                        'type'=>'等待商家处理',
+                        'value' =>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>''
+                    ];
+                    break;
+                case 'supplier':
+                    $data[]=[
+                        'type'=>'等待商家处理',
+                        'value' =>'',
+                        'time'=>'',
+                        'phone'=>'',
+                        'content'=>'',
+                        'number'=>'',
+                        'code'=>'supplier_unsend'
+                    ];
+                    break;
+            }
+
             return $data;
         }
         $data[]=[
