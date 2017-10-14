@@ -971,6 +971,18 @@ class WithdrawalsController extends Controller
         ]);
     }
 
+    
+    public  function  actionDelData()
+    {
+//        $data=UserAccessdetail::find()->all();
+        $data=UserCashregister::find()->all();
+//        foreach ($data as &$list)
+//        {
+//            $res=$list->delete();
+//        }
+        var_dump($data);
+    }
+
 
 
 }
