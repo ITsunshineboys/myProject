@@ -28,7 +28,7 @@ class SupplieraccountController extends  Controller{
 
     const STATUS_JD=0;
     const STATUS_WJD=1;
-    const STATUS_CG=2;
+    const STATUS_CG=3;
     const ACCESS_LOGGED_IN_USER = [
         'logout',
         'roles',
@@ -577,7 +577,5 @@ class SupplieraccountController extends  Controller{
 
         ]);
     }
-    public function actionTest(){
 
-    }
 }
