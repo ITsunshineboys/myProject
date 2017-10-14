@@ -35,7 +35,7 @@ class SupplierCashManager extends ActiveRecord
             ->from(self::SUP_CASHREGISTER)
             ->orderBy('apply_time Desc')
             ->where(['uid' => $supplier_id, 'role_id' => self::ROLE_ID]);
-
+        var_dump($query->all());exit;
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
             $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
