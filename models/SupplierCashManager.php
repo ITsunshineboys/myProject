@@ -33,6 +33,7 @@ class SupplierCashManager extends ActiveRecord
     {
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
+            ->orderBy('apply_time Desc')
             ->where(['uid' => $supplier_id, 'role_id' => self::ROLE_ID]);
 
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
@@ -89,7 +90,6 @@ class SupplierCashManager extends ActiveRecord
 
         $query = (new \yii\db\Query())
             ->from(self::SUP_CASHREGISTER)
-            ->orderBy('apply_time Desc')
             ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID]);
 
 
