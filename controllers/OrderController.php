@@ -2314,7 +2314,8 @@ class OrderController extends Controller
 
 
 
-    /**售后详情 -- 商家派出人员
+    /**
+     * 售后详情 -- 商家派出人员
      * 上门服务
      * @return string
      */
@@ -2331,11 +2332,13 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
-        if(!$order_no || !$sku){
+        $worker_name=trim($request->post('worker_name',''));
+        $worker_mobile=trim($request->post('worker_mobile',''));
+        if(!$order_no || !$sku || !$worker_name  || !$worker_mobile){
             $code=1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $OrderAfterSale=OrderAfterSale::find()
@@ -2356,7 +2359,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=OrderAfterSale::SupplierSendMan($OrderAfterSale);
+        $code=OrderAfterSale::SupplierSendMan($OrderAfterSale,$worker_mobile,$worker_name);
         if ($code==200){
             return Json::encode([
                 'code'=>$code,
