@@ -1539,7 +1539,7 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
         $points = new Points();
         foreach ($post['two_title'] as $value){
-            if (isset($value['title'])) {
+            if (isset($value['id'])) {
                 $points->findByInsert($value);
             }
             if (isset($value['edit_id'])){
