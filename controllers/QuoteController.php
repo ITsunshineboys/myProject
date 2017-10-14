@@ -1195,8 +1195,7 @@ class QuoteController extends Controller
                 $apartment_area->min_area = $one_post['min_area'];
                 $apartment_area->max_area = $one_post['max_area'];
                 $apartment_area->save();
-            }
-            else {
+            } else {
                 $apartment = new ApartmentArea();
                 $apartment->min_area  = $one_post['min_area'];
                 $apartment->max_area  = $one_post['max_area'];
@@ -1556,17 +1555,11 @@ class QuoteController extends Controller
                 ]);
             }
         }
-        if (isset($post['count'])) {
-           $count_points = $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['count']['title']);
-            if (!$count_points){
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => '总数'.\Yii::$app->params['errorCodes'][$code],
-                ]);
+        foreach ($post['count'] as $count){
+            if (isset($count)) {
+                $points->findByUpdate($post['count'],$post['id'],$post['title']);
             }
         }
-
         return Json::encode([
            'code' => 200,
            'msg' => 'OK',
