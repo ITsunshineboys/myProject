@@ -133,8 +133,7 @@ class SupplierCashController extends Controller
         $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
         $status = (int)$request->post('status', '');
 
-        if (!array_key_exists($time_type, \Yii::$app->params['timeTypes'])
-            || ($status && !array_key_exists($status, self::USER_CASH_STATUSES))
+        if (($status && !array_key_exists($status, self::USER_CASH_STATUSES))
             || ($time_type == 'custom' && $time_end && $time_start > $time_end)
         ) {
             $code = 1000;
