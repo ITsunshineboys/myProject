@@ -2334,14 +2334,14 @@ class GoodsOrder extends ActiveRecord
            $freight+=$arr[$k]['freight']*0.01;
            $arr[$k]['return_insurance']=self::switchMoney($arr[$k]['return_insurance']*0.01);
            $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
-           switch ($arr[$k]['shipping_type']){
-               case 0:
-                   $arr[$k]['shipping_type']='快递物流';
-                   break;
-               case 1:
-                   $arr[$k]['shipping_type']='送货上门';
-                   break;
-           }
+           // switch ($arr[$k]['shipping_type']){
+           //     case 0:
+           //         $arr[$k]['shipping_type']='快递物流';
+           //         break;
+           //     case 1:
+           //         $arr[$k]['shipping_type']='送货上门';
+           //         break;
+           // }
            $list[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
            $list[$k]['goods_price']=$arr[$k]['goods_price'];
            if ($arr[$k]['send_time']==0){
