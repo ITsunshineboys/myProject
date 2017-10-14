@@ -320,7 +320,6 @@ class SupplieraccountController extends  Controller{
      * @return array
      */
     public function actionFreezeList(){
-        var_dump(UserFreezelist::find()->asArray()->all());die;
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -578,5 +577,7 @@ class SupplieraccountController extends  Controller{
 
         ]);
     }
+    public function actionTest(){
 
+    }
 }
