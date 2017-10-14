@@ -1013,11 +1013,14 @@ class OwnerController extends Controller
         $_where = ['or',['style_id'=>$style],['series_id'=>$series],['and',['<=','min_area',$area],['>=','max_area',$area]]];
         $add = DecorationMessage::findById($_select,$_where);
         $max = [];
-        foreach ($add as $k=>$v){
-            if ($v['quantity'] < $max){
-                $max = $v;
+        for ($i =1; $i<count($add);$i++){
+            foreach ($add as $k=>$v){
+                if ($v['quantity'] > $max){
+                    $max = $v;
+                }
             }
         }
+
         var_dump($max);exit;
     }
 
