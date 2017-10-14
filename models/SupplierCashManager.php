@@ -94,7 +94,6 @@ class SupplierCashManager extends ActiveRecord
 
 
         $arr = $query->one();
-        var_dump($arr);
         if (!$arr) {
             return null;
         }
