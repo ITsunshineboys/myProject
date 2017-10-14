@@ -375,6 +375,7 @@ class SupplierCashController extends Controller
     }
 
     public function actionTest(){
+        var_dump(UserCashregister::find()->asArray()->all());
         var_dump(UserCashregister::find()->where(['id'=>102])->one());
     }
 }
