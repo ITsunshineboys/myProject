@@ -387,7 +387,7 @@ class OrderAfterSale extends ActiveRecord
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
             ->one();
         if (!$PlatForm){
-            return $data;
+           return ['data'=>$data,'platform'=>[]];
         }
         $tran = Yii::$app->db->beginTransaction();
         try{
