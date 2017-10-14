@@ -195,17 +195,17 @@ class OrderAfterSale extends ActiveRecord
         if ($data['supplier_handle_time']!=0){
             $data['supplier_handle_time']=date('Y-m-d H:i',$data['supplier_handle_time']);
         }
-        switch ($data['supplier_handle']){
-            case 0:
-                $data['supplier_handle']='未处理';
-                break;
-            case 1:
-                $data['supplier_handle']='同意';
-                break;
-            case 2:
-                $data['supplier_handle']='驳回';
-                break;
-        }
+//        switch ($data['supplier_handle']){
+//            case 0:
+//                $data['supplier_handle']='未处理';
+//                break;
+//            case 1:
+//                $data['supplier_handle']='同意';
+//                break;
+//            case 2:
+//                $data['supplier_handle']='驳回';
+//                break;
+//        }
         return $data;
     }
 
@@ -329,7 +329,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return ['data'=>$data,'platform'=>[]];
+        return $data;
     }
 
 
@@ -468,7 +468,10 @@ class OrderAfterSale extends ActiveRecord
                 $data=self::ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role);
                 break;
         }
-        return ['data'=>$data,'platform'=>[]];
+        return [
+            'data'=>$data,
+            'platform'=>[]
+        ];
     }
 
     /**
@@ -506,7 +509,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return ['data'=>$data,'platform'=>[]];
+            return $data;
         }
         $data[]=[
             'type'=>'商家已派出工作人员',
@@ -544,7 +547,7 @@ class OrderAfterSale extends ActiveRecord
                     break;
             }
 
-            return ['data'=>$data,'platform'=>[]];
+            return $data;
         }
         $data[]=[
             'type'=>'商家已确认',
@@ -626,7 +629,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return ['data'=>$data,'platform'=>[]];
+        return $data;
     }
 
     /**
@@ -646,7 +649,7 @@ class OrderAfterSale extends ActiveRecord
                 'number'=>'',
                 'code'=>''
             ];
-            return ['data'=>$data,'platform'=>[]];
+            return $data;
         }
         $data[]=[
             'type'=>'商家已派出工作人员',
@@ -684,7 +687,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return ['data'=>$data,'platform'=>[]];
+            return $data;
         }
         $data[]=[
             'type'=>'顾客已确认',
@@ -722,7 +725,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return ['data'=>$data,'platform'=>[]];
+        return $data;
     }
     /**
      * @param $data
@@ -758,7 +761,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return ['data'=>$data,'platform'=>[]];
+            return $data;
         }
         $buyer_express=Express::find()
             ->where(['id'=>$OrderAfterSale->buyer_express_id])
@@ -796,7 +799,6 @@ class OrderAfterSale extends ActiveRecord
             $hour=floor(($time-$day*(24*60*60))/(60*60));
             $min=floor(($time-$day*(24*60*60)-$hour*3600)/60);
             $s=$time-$day*(24*60*60)-$hour*3600-$min*60;
-
             switch ($role)
             {
                 case 'user':
@@ -822,7 +824,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return ['data'=>$data,'platform'=>[]];
+            return $data;
         }
         $data[]=[
             'type'=>'商家已收货',
@@ -905,7 +907,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return ['data'=>$data,'platform'=>[]];
+        return $data;
     }
     /**
      * @param $data
@@ -940,7 +942,7 @@ class OrderAfterSale extends ActiveRecord
                     ];
                     break;
             }
-            return ['data'=>$data,'platform'=>[]];
+            return $data;
         }
         $buyer_express=Express::find()
             ->where(['id'=>$OrderAfterSale->buyer_express_id])
@@ -1005,7 +1007,7 @@ class OrderAfterSale extends ActiveRecord
                         break;
                 }
 
-            return ['data'=>$data,'platform'=>[]];
+            return $data;
             }
             $data[]=[
                 'type'=>'商家已收货',
@@ -1042,7 +1044,7 @@ class OrderAfterSale extends ActiveRecord
                         ];
                         break;
                 }
-                return ['data'=>$data,'platform'=>[]];
+                return $data;
             }
         $supplier_express=Express::find()
             ->where(['id'=>$OrderAfterSale->supplier_express_id])
@@ -1104,7 +1106,7 @@ class OrderAfterSale extends ActiveRecord
                         ];
                         break;
                 }
-                return ['data'=>$data,'platform'=>[]];
+                return $data;
             }
         $data[]=[
             'type'=>'顾客已收货',
@@ -1141,7 +1143,7 @@ class OrderAfterSale extends ActiveRecord
             'number'=>'',
             'code'=>''
         ];
-        return ['data'=>$data,'platform'=>[]];
+        return $data;
     }
 
     /**

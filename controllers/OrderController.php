@@ -2240,7 +2240,7 @@ class OrderController extends Controller
         }
     }
 
-    /**售后详情
+     /**售后详情
      * @return array|string
      */
     public  function   actionUserAfterSaleDetail(){
@@ -2310,6 +2310,8 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
+
 
 
     /**售后详情 -- 商家派出人员
