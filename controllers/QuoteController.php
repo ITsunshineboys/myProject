@@ -1550,7 +1550,7 @@ class QuoteController extends Controller
             $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
         }
         if (isset($post['count'])) {
-            $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['title']);
+           $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['count']['title']);
         }
         return Json::encode([
            'code' => 200,
