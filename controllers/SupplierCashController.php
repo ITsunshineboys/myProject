@@ -374,4 +374,7 @@ class SupplierCashController extends Controller
         return $user->getId();
     }
 
+    public function actionTest(){
+        var_dump(UserCashregister::find()->where(['id'=>102])->one());
+    }
 }
