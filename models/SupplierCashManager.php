@@ -73,7 +73,11 @@ class SupplierCashManager extends ActiveRecord
 
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
 
-        $data['supplier_id'] = $supplier_id;
+        $data['supplier_id'] = Supplier::find()
+        ->select('id')
+        ->where(['uid'=>$user])
+        ->asArray()
+        ->one()['id'];
 
         return $data;
     }
