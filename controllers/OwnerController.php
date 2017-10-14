@@ -6,6 +6,7 @@ use app\models\BrainpowerInitalSupervise;
 use app\models\CarpentryAdd;
 use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
+use app\models\DecorationMessage;
 use app\models\Effect;
 use app\models\EffectPicture;
 use app\models\EngineeringStandardCraft;
@@ -997,7 +998,20 @@ class OwnerController extends Controller
      */
     public function actionAddMaterials()
     {
-
+        $code = trim(Yii::$app->request->post('code',''));
+        $series = trim(Yii::$app->request->post('series',''));
+        $style = trim(Yii::$app->request->post('style',''));
+        $area = trim(Yii::$app->request->post('area',''));
+        $add_select = 'id,one_materials,two_materials,three_materials,sku';
+        $add_where = 'city_code = '.$code;
+        $add_materials = DecorationAdd::findByAll($add_select,$add_where);
+        foreach ($add_materials as $one_materials){
+            $ids[] = $one_materials['id'];
+            $codes [] = $one_materials['sku'];
+        }
+        $_select = 'id,decoration_add_id,quantity';
+        $_where = ['or',['style_id'=>$style],['series_id'=>$series],['and',['<=','min_area',$area],['>=','max_area',$area]]];
+        $add = DecorationMessage::findById($_select,$_where);
     }
 
     /**
