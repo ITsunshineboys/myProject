@@ -104,7 +104,6 @@ class SupplierCashManager extends ActiveRecord
         }
         $bankcard = self::GetBankcard($arr['bank_log_id']);
         $supplier = self::GetSupplier($supplier_id);
-        var_dump($bankcard,$supplier);die;
         if (!$bankcard || !$supplier) {
             return null;
         }
