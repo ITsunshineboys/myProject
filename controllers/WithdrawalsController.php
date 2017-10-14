@@ -552,7 +552,7 @@ class WithdrawalsController extends Controller
             $UserAccessdetail->role_id=6;
             $UserAccessdetail->access_money=$money*100;
             $UserAccessdetail->create_time=$time;
-            $UserAccessdetail->transaction_no=GoodsOrder::SetTransactionNo($supplier->shop_no);
+            $UserAccessdetail->transaction_no=$transaction_no;
             if (!$UserAccessdetail->save(false))
             {
                 $code=500;
