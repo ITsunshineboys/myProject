@@ -228,14 +228,14 @@ class OrderAfterSale extends ActiveRecord
             return $code;
         }
         switch ($postData['handle']){
-            case self::AFTER_SALE_HANDLE_DISAGREE:
+            case 2:
                 if (!array_key_exists('reject_reason',$postData)){
                     $code=1000;
                     return $code;
                 }
                 $code=self::disagreeAfterSale($after_sale,$postData);
                 break;
-            case self::AFTER_SALE_HANDLE_AGREE:
+            case 1:
                 $code=self::agreeAfterSale($after_sale,$postData);
                 break;
         }
