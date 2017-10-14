@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\controllers\SupplierCashController;
 use app\services\ModelService;
+use app\services\StringService;
 use yii\data\Pagination;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
@@ -271,6 +272,7 @@ class SupplierCashManager extends ActiveRecord
 
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
+
             $query->andWhere(['between', 'g.paytime', $time_start, $time_end]);
         } elseif ($time_start) {
             $query->andWhere(['>=', 'g.paytime', $time_start]);
@@ -314,7 +316,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
-    public static function getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
+    public static function  getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
     {
             $query = (new Query())
             ->from(self::SUP_CASHREGISTER . ' as g')
@@ -325,15 +327,15 @@ class SupplierCashManager extends ActiveRecord
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
-
-        if ($time_start && $time_end && $time_end > $time_start) {
             list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
-            $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
-        } elseif ($time_start) {
-            $query->andWhere(['>=', 'g.apply_time', $time_start]);
-        } elseif ($time_end) {
-            $query->andWhere(['<=', 'g.apply_time', $time_end]);
-        }
+            if ($time_start && $time_end && $time_end > $time_start) {
+                $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
+            } elseif ($time_start) {
+                $query->andWhere(['>=', 'g.apply_time', $time_start]);
+            } elseif ($time_end) {
+                $query->andWhere(['<=', 'g.apply_time', $time_end]);
+            }
+
         if (isset($search) && trim($search) == $search) {
             $query->andFilterWhere(['like', 'g.uid', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);
