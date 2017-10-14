@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\controllers\SupplieraccountController;
 use app\services\ModelService;
 use Yii;
 
@@ -62,7 +63,6 @@ class UserFreezelist extends \yii\db\ActiveRecord
             ->limit($size)
             ->asArray()
             ->all();
-
         foreach ($freezeList as &$freeze) {
             $freeze['create_time']=date('Y-m-d H:i',$freeze['create_time']);
             $freeze['freeze_money']=sprintf('%.2f',(float)$freeze['freeze_money']*0.01);
