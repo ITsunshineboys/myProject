@@ -523,7 +523,7 @@ class WithdrawalsController extends Controller
             $UserCashRegister->role_id=6;
             $UserCashRegister->cash_money=$money*100;
             $UserCashRegister->apply_time=$time;
-            $UserCashRegister->status=1;
+            $UserCashRegister->status=2; //2：提现中  3.已提现
             $UserCashRegister->transaction_no=$transaction_no;
             $UserCashRegister->bank_log_id=$userBankInfo->log_id;
             $res1=$UserCashRegister->save(false);
