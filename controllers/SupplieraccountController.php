@@ -338,7 +338,7 @@ class SupplieraccountController extends  Controller{
                     ]);
                 }
                 $timeType = trim(Yii::$app->request->get('time_type', ''));
-                $where=" role_id=".Supplier::ROLE_SUPPLIER and "status=".self::STATUS_JD;
+                $where=" role_id=".Supplier::ROLE_SUPPLIER ." AND status=".self::STATUS_JD;
                 if ($timeType == 'custom') {
                     $startTime = trim(Yii::$app->request->get('start_time', ''));
                     $endTime = trim(Yii::$app->request->get('end_time', ''));
