@@ -31,10 +31,10 @@ class SupplierCashController extends Controller
         'cash-deal'
     ];
 
-    const CASH_STATUS_WEI=1;
-    const CASH_STATUS_ING = 2;
-    const CASH_STATUS_DONE = 3;
-    const CASH_STATUS_FAIL = 4;
+
+    const CASH_STATUS_ING = 1;
+    const CASH_STATUS_DONE = 2;
+    const CASH_STATUS_FAIL = 3;
 
 
 
@@ -342,7 +342,6 @@ class SupplierCashController extends Controller
             }
 
             $data = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
-            var_dump($data);die;
             if ($data) {
                 return Json::encode([
                     'code' => 200,
