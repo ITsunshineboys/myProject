@@ -193,6 +193,18 @@ class FindworkerController extends Controller{
                 'data' => $data
             ]);
         }
+    public function actionGenerateWorkerOrder(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $post=\Yii::$app->request->post();
+        var_dump($post);
+    }
     /**
      * 生成订单
      * @return string

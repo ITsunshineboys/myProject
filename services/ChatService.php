@@ -7,13 +7,13 @@ use Yii;
 class ChatService
 {
     //YXA6DxGD4HQZEee78SNJqGuchQ
-    private $client_id = '';
+    private $client_id = 'YXA67St1MHTPEeer-uM5B5Uv0Q';
     //YXA6isIrLRTIwuEyLOIGXGHGTPMX3WE
-    private $client_secret = '';
+    private $client_secret = 'YXA6eMPzUAg-pRfHTyxBq8jM4n3OIH0';
     //123456
-    private $org_name = '';
+    private $org_name = '1185170730178177';
     //111
-    private $app_name = '';
+    private $app_name = 'push-msg';
     private $url;
 //------------------------------------------------------用户体系
 
