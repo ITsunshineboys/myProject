@@ -648,6 +648,7 @@ class GoodsOrder extends ActiveRecord
                 $array['platform_price']=self::switchMoney($array['platform_price']*0.01);
                 $array['market_price']=self::switchMoney($array['market_price']*0.01);
                 $array['freight']=self::switchMoney($array['freight']);
+                $array['allCost']=self::switchMoney($array['platform_price']*$goods_num+$array['freight']);
                 return $array;
         }
 
