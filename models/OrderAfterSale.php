@@ -698,7 +698,7 @@ class OrderAfterSale extends ActiveRecord
             'status'=>''
         ];
 
-        if (!$OrderAfterSale->buyer_confirm!=1){
+        if ($OrderAfterSale->buyer_confirm!=1){
             switch ($role)
             {
                 case 'user':
