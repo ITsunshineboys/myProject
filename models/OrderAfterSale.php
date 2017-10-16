@@ -327,7 +327,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>'in'
         ];
         return $data;
     }
@@ -346,7 +347,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
         $data[]=[
             'type'=>'商家反馈',
@@ -355,7 +357,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>$OrderAfterSale->supplier_handle_reason,
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
         $tran = Yii::$app->db->beginTransaction();
         try{
@@ -380,14 +383,15 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>'over'
         ];
 
         $PlatForm=OrderPlatForm::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
             ->one();
         if (!$PlatForm){
-           return ['data'=>$data,'platform'=>[]];
+            return ['data'=>$data,'platform'=>[]];
         }
         $tran = Yii::$app->db->beginTransaction();
         try{
@@ -440,7 +444,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
         $data[]=[
             'type'=>'商家反馈',
@@ -449,7 +454,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>$OrderAfterSale->supplier_handle_reason,
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
         switch ($OrderAfterSale->type){
             case 1:
@@ -494,7 +500,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>''
+                        'code'=>'',
+                        'status'=>'in'
                     ];
                     break;
                 case 'supplier':
@@ -505,7 +512,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unsend'
+                        'code'=>'supplier_unsend',
+                        'status'=>'in'
                     ];
                     break;
             }
@@ -518,7 +526,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
             'number'=>'',
-            'code'=>'supplier_unsend'
+            'code'=>'supplier_unsend',
+            'status'=>''
         ];
         if (!$OrderAfterSale->supplier_confirm){
             switch ($role)
@@ -531,7 +540,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>''
+                        'code'=>'',
+                        'status'=>'in'
                     ];
                     break;
                 case 'supplier':
@@ -542,7 +552,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unconfirm'
+                        'code'=>'supplier_unconfirm',
+                        'status'=>'in'
                     ];
                     break;
             }
@@ -556,7 +567,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
         $OrderGoods=OrderGoods::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
@@ -618,7 +630,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'已退至顾客钱包',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
         $data[]=[
             'type'=>'售后完成',
@@ -627,7 +640,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>'over'
         ];
         return $data;
     }
@@ -650,7 +664,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>''
+                        'code'=>'',
+                        'status'=>'in'
                     ];
                     break;
                 case 'supplier':
@@ -661,14 +676,14 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unsend'
+                        'code'=>'supplier_unsend',
+                        'status'=>'in'
                     ];
                     break;
             }
 
             return $data;
         }
-       
         $data[]=[
             'type'=>'商家已派出工作人员',
             'value' =>'',
@@ -676,7 +691,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
 
         if (!$OrderAfterSale->buyer_confirm!=1){
@@ -690,7 +706,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'user_unconfirm'
+                        'code'=>'user_unconfirm',
+                        'status'=>'in'
                     ];
                     break;
                 case 'supplier':
@@ -701,7 +718,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'0',
                         'number'=>'',
-                        'code'=>''
+                        'code'=>'',
+                        'status'=>'in'
                     ];
                     break;
             }
@@ -714,7 +732,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
 
         $OrderGoods=OrderGoods::find()->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])->one();
@@ -741,7 +760,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>'over'
         ];
         return $data;
     }
@@ -764,7 +784,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'user_unshipped'
+                        'code'=>'user_unshipped',
+                        'status'=>'in'
                     ];
                     break;
                 case 'supplier':
@@ -775,7 +796,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>''
+                        'code'=>'',
+                        'status'=>'in'
                     ];
                     break;
             }
@@ -791,7 +813,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>$buyer_express->waybillname,
             'number'=>$buyer_express->waybillnumber,
-            'code'=>'shipped'
+            'code'=>'shipped',
+            'status'=>''
         ];
         $time=15*24*60*60+$buyer_express->create_time-time();
         if ($time<0){
@@ -827,7 +850,8 @@ class OrderAfterSale extends ActiveRecord
                         'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
                         'phone'=>'',
                         'number'=>'',
-                        'code'=>'countdown'
+                        'code'=>'countdown',
+                        'status'=>'in'
                     ];
                     break;
                 case 'supplier':
@@ -838,7 +862,8 @@ class OrderAfterSale extends ActiveRecord
                         'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
                         'phone'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unconfirm'
+                        'code'=>'supplier_unconfirm',
+                        'status'=>'in'
                     ];
                     break;
             }
@@ -851,7 +876,8 @@ class OrderAfterSale extends ActiveRecord
             'content'=>'',
             'phone'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
 
         ];
         $OrderGoods=OrderGoods::find()
@@ -914,7 +940,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'已退至顾客钱包',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
         $data[]=[
             'type'=>'售后完成',
@@ -923,7 +950,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'已退至顾客钱包',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>'over'
         ];
         return $data;
     }
@@ -945,7 +973,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'user_unshipped'
+                        'code'=>'user_unshipped',
+                        'status'=>'in'
                     ];
                     break;
                 case 'supplier':
@@ -956,7 +985,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>''
+                        'code'=>'',
+                        'status'=>'in'
                     ];
                     break;
             }
@@ -972,7 +1002,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content' =>$buyer_express->waybillname,
             'number'=>$buyer_express->waybillnumber,
-            'code'=>'shipped'
+            'code'=>'shipped',
+            'status'=>''
         ];
             $time=15*24*60*60+$buyer_express->create_time-time();
             $tran = Yii::$app->db->beginTransaction();
@@ -1009,7 +1040,8 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$time,
                             'number'=>'',
-                            'code'=>'countdown'
+                            'code'=>'countdown',
+                            'status'=>'in'
                         ];
                         break;
                     case 'supplier':
@@ -1020,7 +1052,8 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
                             'number'=>'',
-                            'code'=>'supplier_unconfirm'
+                            'code'=>'supplier_unconfirm',
+                            'status'=>'in'
                         ];
                         break;
                 }
@@ -1034,7 +1067,8 @@ class OrderAfterSale extends ActiveRecord
                 'phone'=>'',
                 'content'=>'',
                 'number'=>'',
-                'code'=>''
+                'code'=>'',
+                'status'=>''
             ];
             if(!$OrderAfterSale->supplier_express_id){
                 switch ($role)
@@ -1047,7 +1081,8 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>'',
                             'number'=>'',
-                            'code'=>''
+                            'code'=>'',
+                            'status'=>'in'
                         ];
                         break;
                     case 'supplier':
@@ -1058,7 +1093,8 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>'',
                             'number'=>'',
-                            'code'=>'supplier_unshipped'
+                            'code'=>'supplier_unshipped',
+                            'status'=>'in'
                         ];
                         break;
                 }
@@ -1074,7 +1110,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>$supplier_express->waybillname,
             'number'=>$supplier_express->waybillnumber,
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
 
         $time=15*24*60*60+$supplier_express->create_time-time();
@@ -1109,7 +1146,8 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$time,
                             'number'=>'',
-                            'code'=>'user_unconfirm'
+                            'code'=>'user_unconfirm',
+                            'status'=>'in'
                         ];
                         break;
                     case 'supplier':
@@ -1120,7 +1158,8 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$time,
                             'number'=>'',
-                            'code'=>'countdown'
+                            'code'=>'countdown',
+                            'status'=>'in'
                         ];
                         break;
                 }
@@ -1133,7 +1172,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>''
         ];
         $OrderGoods=OrderGoods::find()->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])->one();
         if ($OrderGoods->customer_service!=2){
@@ -1159,7 +1199,8 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>''
+            'code'=>'',
+            'status'=>'over'
         ];
         return $data;
     }
