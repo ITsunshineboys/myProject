@@ -98,7 +98,7 @@ class OrderRefund extends ActiveRecord
     //     return ['data'=>$order_refund,'platform'=>$OrderPlatform];
     // }
     // 
-     /**
+    /**
      * @param $order_no
      * @param $sku
      * @return array|int
@@ -153,7 +153,8 @@ class OrderRefund extends ActiveRecord
                     'value'=>$unusualList[$k]['apply_reason'],
                     'content'=>'',
                     'time'=>$unusualList[$k]['create_time'],
-                    'stage'=>$unusualList[$k]['order_type']
+                    'stage'=>$unusualList[$k]['order_type'],
+                    'status'=>'in'
                 ];
             }else{
                 $arr[]=[
@@ -161,7 +162,8 @@ class OrderRefund extends ActiveRecord
                     'value'=>$unusualList[$k]['apply_reason'],
                     'content'=>'',
                     'time'=>$unusualList[$k]['create_time'],
-                    'stage'=>$unusualList[$k]['order_type']
+                    'stage'=>$unusualList[$k]['order_type'],
+                    'status'=>''
                 ];
                 switch ($unusualList[$k]['handle'])
                 {
@@ -183,22 +185,35 @@ class OrderRefund extends ActiveRecord
                     'value'=>$type,
                     'content'=>$data_code[$k]['reason'],
                     'time'=>$unusualList[$k]['handle_time'],
-                    'stage'=>$unusualList[$k]['order_type']
+                    'stage'=>$unusualList[$k]['order_type'],
+                    'status'=>''
                 ];
-                $arr[]=[
-                    'type'=>'退款结果',
-                    'value'=>$result,
-                    'content'=>'',
-                    'time'=>$data_code[$k]['complete_time'],
-                    'stage'=>$unusualList[$k]['order_type']
-                ];
+
                 if ($unusualList[$k]['handle']==1){
+                    $arr[]=[
+                        'type'=>'退款结果',
+                        'value'=>$result,
+                        'content'=>'',
+                        'time'=>$data_code[$k]['complete_time'],
+                        'stage'=>$unusualList[$k]['order_type'],
+                        'status'=>''
+                    ];
                     $arr[]=[
                         'type'=>'退款去向',
                         'value'=>$refund_type,
                         'content'=>'',
                         'time'=>$data_code[$k]['complete_time'],
-                        'stage'=>$unusualList[$k]['order_type']
+                        'stage'=>$unusualList[$k]['order_type'],
+                        'status'=>'over'
+                    ];
+                }else{
+                    $arr[]=[
+                        'type'=>'退款结果',
+                        'value'=>$result,
+                        'content'=>'',
+                        'time'=>$data_code[$k]['complete_time'],
+                        'stage'=>$unusualList[$k]['order_type'],
+                        'status'=>'over'
                     ];
                 }
             }
@@ -212,7 +227,7 @@ class OrderRefund extends ActiveRecord
                     break;
             }
 //            $data[$k]['order_type']=$unusualList[$k]['order_type'];
-            $data[$k]['list']=$arr;;
+            $data[$k]['list']=$arr;
         }
 
         $OrderPlatform=OrderPlatForm::find()
@@ -222,7 +237,6 @@ class OrderRefund extends ActiveRecord
         {
             $OrderPlatform=[];
         }else{
-
             $OrderPlatform->creat_time=date('Y-m-d H:i',$OrderPlatform->creat_time);
             $OrderPlatform->refund_time=date('Y-m-d H:i',$OrderPlatform->refund_time);
             $arr[]=[
@@ -230,19 +244,22 @@ class OrderRefund extends ActiveRecord
                 'value'=>'关闭订单，退款',
                 'content'=>$OrderPlatform->reasons,
                 'time'=>$OrderPlatform->creat_time,
-                'stage'=>''
+                'stage'=>'',
+                'status'=>''
             ];
             $arr[]=[
                 'type'=>'退款结果',
                 'value'=>'成功',
                 'content'=>'',
                 'time'=>$OrderPlatform->refund_time,
-                'stage'=>''
+                'stage'=>'',
+                'status'=>'over'
             ];
         }
 
         return ['data'=>$data,'platform'=>$OrderPlatform];
     }
+
 
 
 
