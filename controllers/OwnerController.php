@@ -648,7 +648,7 @@ class OwnerController extends Controller
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
+        $select = 'goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name';
         $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL,$select);
         $goods_price = BasisDecorationService::priceConversion($goods);
 
@@ -1002,13 +1002,25 @@ class OwnerController extends Controller
         $series = trim(Yii::$app->request->post('series',''));
         $style = trim(Yii::$app->request->post('style',''));
         $area = trim(Yii::$app->request->post('area',''));
-        $add_select = 'id,one_materials,two_materials,three_materials,sku,quantity';
+        $add_select = 'id,one_materials,two_materials,three_materials,sku,max(quantity)';
         $add_where = ['and',['city_code'=>$code],['or',['style_id'=>$style],['series_id'=>$series],['and',['<=','min_area',$area],['>=','max_area',$area]]]];
         $add_materials = DecorationAdd::findByAll($add_select,$add_where);
         foreach ($add_materials as $one_materials){
-            $ids[] = $one_materials['id'];
             $codes [] = $one_materials['sku'];
         }
+        $goods_select = 'id,platform_price,sku';
+        $goods = Goods::findBySkuAll($codes,$goods_select);
+        foreach ($add_materials as &$material){
+            foreach ($goods as $one_goods){
+                if ($one_goods['sku'] == $material['sku']) {
+                    $material['platform_price'] = $one_goods['platform_price'] / 100;
+                    $material['cost'] = $material['max(quantity)'] * $one_goods['platform_price'] / 100;
+                }
+            }
+        }
+        return Json::encode([
+           'add_list' =>  $add_materials,
+        ]);
     }
 
     /**
