@@ -1273,7 +1273,7 @@ class OrderAfterSale extends ActiveRecord
             return $code;
         }
     }
-
+ 
     /**
      * @param $OrderAfterSale
      * @return int
