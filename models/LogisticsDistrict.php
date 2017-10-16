@@ -189,10 +189,10 @@ class LogisticsDistrict extends ActiveRecord
             if ($a==1){
                 $code=200;
             }else{
-                $code=500;
+                $code=1000;
             }
         }else{
-            $code=500;
+            $code=1000;
         }
         return  $code;
 

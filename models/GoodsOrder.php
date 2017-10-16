@@ -285,7 +285,7 @@ class GoodsOrder extends ActiveRecord
             $goods_order->invoicer_card=$invoice->invoicer_card;
             $goods_order->invoice_header=$invoice->invoice_header;
             $goods_order->invoice_content=$invoice->invoice_content;
-            $res1=$goods_order->save();
+            $res1=$goods_order->save(false);
             if (!$res1){
                 $tran->rollBack();
                 return false;
