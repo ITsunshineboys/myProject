@@ -415,10 +415,11 @@ class SupplierCashManager extends ActiveRecord
             $real_money && $real_money *= 100;
             $real_money > $cash_money && $real_money = $cash_money;
         }
-
+        var_dump($transaction_no);
         $supplier_accessdetail = UserAccessdetail::find()
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID])
             ->one();
+        var_dump($supplier_accessdetail);die;
         if ($supplier_accessdetail == null) {
             return false;
         }
