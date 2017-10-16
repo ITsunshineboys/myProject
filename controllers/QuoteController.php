@@ -1595,35 +1595,19 @@ class QuoteController extends Controller
          * 户型面积
          */
         if (isset($post['apartment_area'])) {
+            ApartmentArea::deleteAll([]);
             foreach ($post as $apartment_area){
                 if (isset($apartment_area['add'])){
                     foreach ($apartment_area['add'] as $add){
                         $add_apartment_area = ApartmentArea::findInset($add);
                     }
-                } else {
-                    $add_apartment_area = false;
-                }
-                if (isset($apartment_area['edit'])){
-                    foreach ($apartment_area['edit'] as $edit){
-                        $edit_apartment_area = ApartmentArea::findUpdate($edit);
-                    }
-                } else {
-                    $edit_apartment_area = false;
-                }
-                if (isset($apartment_area['del'])){
-                    foreach ($apartment_area['del'] as $del){
-                        $del_apartment_area = ApartmentArea::deleteAll(['id'=>$del]);
-                        var_dump($del_apartment_area);exit;
-                    }
-                } else {
-                    $edit_apartment_area = false;
                 }
             }
-            if (!$add_apartment_area || !$edit_apartment_area || !$del_apartment_area){
+            if (!$add_apartment_area) {
                 $code = 1000;
                 return Json::encode([
-                    'code'=>$code,
-                    'msg'=>\Yii::$app->params['errorCodes'][$code],
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
             return Json::encode([
