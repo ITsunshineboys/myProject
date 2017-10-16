@@ -1517,8 +1517,7 @@ CREATE TABLE `decoration_message` (
 
 CREATE TABLE `apartment_area` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `province_code` int(11) DEFAULT NULL,
-  `city_code` int(11) DEFAULT NULL,
+  `points_id` int(11) DEFAULT NULL,
   `min_area` int(11) DEFAULT NULL,
   `max_area` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)

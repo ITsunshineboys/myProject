@@ -1636,10 +1636,9 @@ class QuoteController extends Controller
              */
             if (isset($post['else']['value'])){
                 foreach ($post['else']['value'] as $value){
-                    $a = ProjectView::findByUpdate($value['coefficient'],$value['edit_id']);
+                     ProjectView::findByUpdate($value['coefficient'],$value['edit_id']);
                 }
             }
-            var_dump($a);exit;
             foreach ($post['else']['area'] as $area_value){
                 if (isset($area_value['id'])){
                     Apartment::findByUpdate($area_value['value'],$area_value['id']);
