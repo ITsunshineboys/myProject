@@ -179,7 +179,6 @@ class LogisticsDistrict extends ActiveRecord
         $code=Yii::$app->params['districts'][0];
         $query=new \yii\db\Query();
         $array  = $query->from('logistics_template AS a')->select('a.id,b.district_code')->leftJoin('logistics_district AS b', 'b.template_id = a.id')->where(['a.id' =>$template_id])->one();
-        var_dump($array);exit;
         if ($array){
             $a=0;
             foreach ($code[$array['district_code']] AS $k =>$v ){
