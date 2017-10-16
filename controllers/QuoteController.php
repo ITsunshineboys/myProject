@@ -1596,12 +1596,8 @@ class QuoteController extends Controller
          */
         if (isset($post['apartment_area'])) {
             ApartmentArea::deleteAll([]);
-            foreach ($post as $apartment_area){
-                if (isset($apartment_area['add'])){
-                    foreach ($apartment_area['add'] as $add){
-                        $add_apartment_area = ApartmentArea::findInset($add);
-                    }
-                }
+            foreach ($post['apartment_area'] as $apartment_area){
+                $add_apartment_area = ApartmentArea::findInset($apartment_area);
             }
             if (!$add_apartment_area) {
                 $code = 1000;
