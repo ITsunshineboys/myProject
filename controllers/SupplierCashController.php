@@ -358,6 +358,7 @@ class SupplierCashController extends Controller
             $status = (int)$request->post('status', '');
             $reason = trim(htmlspecialchars($request->post('reason', '')), '');
             $real_money = (int)$request->post('real_money', '');
+            var_dump($status);die;
             if (($status == self::CASH_STATUS_DONE && $real_money <= 0)  || !$cash_id
             ) {
                 return Json::encode([
@@ -367,7 +368,6 @@ class SupplierCashController extends Controller
             }
 
             $data = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
-
             if ($data) {
                 return Json::encode([
                     'code' => 200,
