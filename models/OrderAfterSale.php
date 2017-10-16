@@ -330,7 +330,10 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'',
             'status'=>'in'
         ];
-        return $data;
+         return [
+            'data'=>$data,
+            'platform'=>[]
+        ];
     }
 
 
