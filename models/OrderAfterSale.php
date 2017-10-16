@@ -419,13 +419,13 @@ class OrderAfterSale extends ActiveRecord
                 $res=self::ExangeGoodsHandleDetail($res,$OrderAfterSale,$role);
                 break;
             case 5:
-                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role);
+                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role,'repair');
                 break;
             case 6:
                 $res=self::ToDoorReturnGoodsHandleDetail($res,$OrderAfterSale,$role);
                 break;
             case 7:
-                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role);
+                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role,'exchange');
                 break;
         }
         return ['data'=>$data,'platform'=>$res];
@@ -465,10 +465,10 @@ class OrderAfterSale extends ActiveRecord
                 $data=self::ExangeGoodsHandleDetail($data,$OrderAfterSale,$role);
                 break;
             case 3:
-                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role);
+                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role,'repair');
                 break;
             case 4:
-                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role);
+                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role,'exchange');
                 break;
             case 5:
                 $data=self::ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role);
@@ -552,7 +552,7 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unconfirm',
+                        'code'=>'supplier_unconfirm_retunrn_to_door',
                         'status'=>'in'
                     ];
                     break;
@@ -651,7 +651,7 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public static function RepairGoodsHandleDetail($data,$OrderAfterSale,$role)
+    public static function RepairGoodsHandleDetail($data,$OrderAfterSale,$role,$type)
     {
         if (!$OrderAfterSale->supplier_send_man){
             switch ($role)
@@ -699,16 +699,33 @@ class OrderAfterSale extends ActiveRecord
             switch ($role)
             {
                 case 'user':
-                    $data[]=[
-                        'type'=>'顾客待确认',
-                        'value' =>'',
-                        'time'=>'',
-                        'phone'=>'',
-                        'content'=>'',
-                        'number'=>'',
-                        'code'=>'user_unconfirm',
-                        'status'=>'in'
-                    ];
+                    switch ($type)
+                    {
+                        case 'repair':
+                            $data[]=[
+                                'type'=>'顾客待确认',
+                                'value' =>'',
+                                'time'=>'',
+                                'phone'=>'',
+                                'content'=>'',
+                                'number'=>'',
+                                'code'=>'user_unconfirm_repair',
+                                'status'=>'in'
+                            ];
+                            break;
+                        case 'exchange':
+                            $data[]=[
+                                'type'=>'顾客待确认',
+                                'value' =>'',
+                                'time'=>'',
+                                'phone'=>'',
+                                'content'=>'',
+                                'number'=>'',
+                                'code'=>'user_unconfirm_exchange',
+                                'status'=>'in'
+                            ];
+                            break;
+                    }
                     break;
                 case 'supplier':
                     $data[]=[
@@ -862,7 +879,7 @@ class OrderAfterSale extends ActiveRecord
                         'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
                         'phone'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unconfirm',
+                        'code'=>'supplier_unconfirm_received',
                         'status'=>'in'
                     ];
                     break;
@@ -1052,7 +1069,7 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
                             'number'=>'',
-                            'code'=>'supplier_unconfirm',
+                            'code'=>'supplier_unconfirm_received',
                             'status'=>'in'
                         ];
                         break;
@@ -1146,7 +1163,7 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$time,
                             'number'=>'',
-                            'code'=>'user_unconfirm',
+                            'code'=>'user_unconfirm_received',
                             'status'=>'in'
                         ];
                         break;
