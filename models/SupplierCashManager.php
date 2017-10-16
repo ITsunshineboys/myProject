@@ -326,8 +326,11 @@ class SupplierCashManager extends ActiveRecord
             ->from(self::SUP_CASHREGISTER . ' as g')
             ->where(['g.role_id' => self::ROLE_ID])
             ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.id')
-            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no'])
+            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
             ->orderBy('g.apply_time Desc');
+            if($time_type=='today'){
+                $query->orderBy('g.handle_time Desc');
+            }
 
         if ($status) {
             $query->andWhere(['g.status' => $status]);
@@ -353,6 +356,11 @@ class SupplierCashManager extends ActiveRecord
             ->limit($pagination->limit)
             ->all();
         foreach ($arr as &$v) {
+            if(!$v['handle_time']){
+                $v['handle_time']='-';
+            }else{
+                $v['handle_time'] = date('Y-m-d H:i', $v['handle_time']);
+            }
             $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
             $v['cash_money'] = sprintf('%.2f', (float)$v['cash_money'] / 100);
             if ($v['real_money']) {
