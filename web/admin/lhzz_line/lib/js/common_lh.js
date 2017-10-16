@@ -65,7 +65,7 @@ app.service('_ajax', function ($http, $state) {
  *     itemsPerPage: number, 每页个数
  *     totalItems: number,   数据总条数
  *     currentPage: number,  当前所在页数
- *     onChange: function    页面改变发生事件
+ *     onChange: function    分页发生改变的执行函数
  * }
  */
     .directive('tmPagination', function () {
