@@ -358,7 +358,6 @@ class SupplierCashController extends Controller
             $status = (int)$request->post('status', '');
             $reason = trim(htmlspecialchars($request->post('reason', '')), '');
             $real_money = (int)$request->post('real_money', '');
-            var_dump($status);die;
             if (($status == self::CASH_STATUS_DONE && $real_money <= 0)  || !$cash_id
             ) {
                 return Json::encode([

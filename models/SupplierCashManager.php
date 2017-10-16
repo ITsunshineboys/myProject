@@ -415,11 +415,9 @@ class SupplierCashManager extends ActiveRecord
             $real_money && $real_money *= 100;
             $real_money > $cash_money && $real_money = $cash_money;
         }
-        var_dump($transaction_no);
         $supplier_accessdetail = UserAccessdetail::find()
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID])
             ->one();
-        var_dump($supplier_accessdetail);die;
         if ($supplier_accessdetail == null) {
             return false;
         }
@@ -451,6 +449,8 @@ class SupplierCashManager extends ActiveRecord
                 //修改明细单数据
                 $supplier_accessdetail->access_type = SupplierCashController::ACCESS_TYPE_REJECT;
                 $supplier_accessdetail->update(false);
+
+
             }
             //提现成功
             if ($status == SupplierCashController::CASH_STATUS_DONE) {
