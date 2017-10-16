@@ -454,6 +454,7 @@ class SupplierCashManager extends ActiveRecord
             //提现成功
             if ($status == SupplierCashController::CASH_STATUS_DONE) {
                 $supplier_accessdetail->access_type = SupplierCashController::ACCESS_TYPE_CASH_DONE;
+                $supplier_accessdetail->update(false);
             }
 
             $trans->commit();
