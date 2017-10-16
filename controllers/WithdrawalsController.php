@@ -630,7 +630,13 @@ class WithdrawalsController extends Controller
             $startTime && $where .= " and create_time >= {$startTime}";
         }
         if ($endTime) {
-            $endTime = (int)strtotime($endTime);
+            if ($timeType=='today')
+            {
+                $endTime = (int)(strtotime($endTime)+24*60*60);
+
+            }else{
+                $endTime = (int)strtotime($endTime);
+            }
             $endTime && $where .= " and create_time <= {$endTime}";
         }
         $sort_time=trim($request->get('sort_time','2'));
