@@ -394,7 +394,7 @@ class SupplierCashManager extends ActiveRecord
             ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID])
             ->select(['cash_money', 'uid', 'status', 'transaction_no'])
             ->one();
-
+        $code=1000;
         $cash_money = $supplier_cash['cash_money'];
         $supplier_id = (int)$supplier_cash['uid'];
         $old_status = (int)$supplier_cash['status'];
@@ -402,7 +402,7 @@ class SupplierCashManager extends ActiveRecord
         //初始状态不能为已经处理过的
         if (!$cash_money || !$supplier_id || !$old_status
         ) {
-            return null;
+            return $code;
         }
         //提现失败
         if ($status == SupplierCashController::CASH_STATUS_FAIL) {
@@ -417,12 +417,11 @@ class SupplierCashManager extends ActiveRecord
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID])
             ->one();
         if ($supplier_accessdetail == null) {
-            return false;
+            return $code;
         }
 
         $time = time();
         $trans = \Yii::$app->db->beginTransaction();
-        $e = 1;
         try {
             \Yii::$app->db->createCommand()
                 ->update(self::SUP_CASHREGISTER, [
@@ -439,7 +438,7 @@ class SupplierCashManager extends ActiveRecord
                 //钱退回供货商
                 $supplier = Supplier::find()->where(['id' => $supplier_id])->one();
                 if (!$supplier) {
-                    return null;
+                    return $code;
                 }
                 $supplier->balance += $cash_money;
                 $supplier->availableamount += $cash_money;
@@ -457,11 +456,14 @@ class SupplierCashManager extends ActiveRecord
             }
 
             $trans->commit();
+            $code=200;
+            return $code;
 
         } catch (Exception $e) {
             $trans->rollBack();
+            $code=500;
+            return $code;
         }
 
-        return $e;
     }
 }

@@ -366,24 +366,13 @@ class SupplierCashController extends Controller
                 ]);
             }
 
-            $data = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
-            if ($data) {
+            $code = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
                 return Json::encode([
                     'code' => 200,
-                    'msg' => 'ok',
-                    'data' => $data
-                ]);
-            }else{
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                    'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
                 ]);
 
             }
-
-
-        }
-
         $code = 1050;
         return Json::encode([
             'code' => $code,
@@ -406,7 +395,7 @@ class SupplierCashController extends Controller
     }
 
     public function actionTest(){
-        var_dump(UserCashregister::find()->asArray()->all());
+        var_dump(UserCashregister::find()->asArray()->where(['status'=>2])->all());
         var_dump(UserCashregister::find()->where(['id'=>102])->one());
     }
 }
