@@ -11,6 +11,7 @@ namespace app\models;
 use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class LogisticsDistrict extends ActiveRecord
 {
