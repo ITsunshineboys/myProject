@@ -368,7 +368,7 @@ class SupplierCashController extends Controller
 
             $code = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
                 return Json::encode([
-                    'code' => 200,
+                    'code' => $code,
                     'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
                 ]);
 
