@@ -3848,6 +3848,101 @@ class OrderController extends Controller
         }
 
 
+            /**
+     * 售后发货
+     * @return string
+     */
+    public function  actionAfterSaleDelivery()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code = 1000;
+        $request = Yii::$app->request;
+        $waybillnumber=$request->post('waybillnumber');
+        $order_no=$request->post('order_no');
+        $sku=$request->post('sku');
+        $role=$request->post('role');
+        if (!$role)
+        {
+            $role='user';
+        }
+        if (!$waybillnumber || !$order_no || !$sku)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $waybillname=(new Express())->GetExpressName($waybillnumber);
+        if (!$waybillname)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $orderAfterSale=OrderAfterSale::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
+        if (!$orderAfterSale)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        $time=time();
+        try{
+            $express=new Express();
+            $express->waybillnumber=$waybillnumber;
+            $express->waybillname=$waybillname;
+            $express->create_time=$time;
+            if (!$express->save(false))
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            };
+            switch ($role)
+            {
+                case 'user':
+                    $orderAfterSale->buyer_express_id=$express->id;
+                    break;
+                case 'supplier':
+                    $orderAfterSale->supplier_express_id=$express->id;
+                    break;
+            }
+            if (!$orderAfterSale->save(false))
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            };
+            $tran->commit();
+            return Json::encode([
+                'code' =>  200,
+                'msg'  => 'ok'
+            ]);
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+
 
 
 }
