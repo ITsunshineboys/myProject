@@ -1263,6 +1263,7 @@ class GoodsOrder extends ActiveRecord
                         if ($data[$k]['RemainingTime']<=0){
                             $data[$k]['complete_time']=$express->receive_time;
                             $data[$k]['status']='已完成';
+                            $data[$k]['is_unusual']=0;
                             $supplier_id[$k]=self::find()
                                 ->select('supplier_id')
                                 ->where(['order_no'=>$data[$k]['order_no']])
@@ -1291,6 +1292,7 @@ class GoodsOrder extends ActiveRecord
                     $data[$k]['RemainingTime']=Express::findRemainingTime($express);
                     $data[$k]['complete_time']=$express->receive_time;
                 }
+                 $data[$k]['is_unusual']=0;
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             $data[$k]['pay_term']=0;
