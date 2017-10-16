@@ -394,7 +394,7 @@ class SupplierCashManager extends ActiveRecord
             ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID])
             ->select(['cash_money', 'uid', 'status', 'transaction_no'])
             ->one();
-        var_dump($supplier_cash);die;
+
         $cash_money = $supplier_cash['cash_money'];
         $supplier_id = (int)$supplier_cash['uid'];
         $old_status = (int)$supplier_cash['status'];

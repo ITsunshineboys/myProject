@@ -367,7 +367,6 @@ class SupplierCashController extends Controller
             }
 
             $data = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
-            var_dump($data);die;
             if ($data) {
                 return Json::encode([
                     'code' => 200,
