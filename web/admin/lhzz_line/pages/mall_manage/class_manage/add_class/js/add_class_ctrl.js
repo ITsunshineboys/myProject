@@ -4,22 +4,23 @@
 /*已下架 添加分类*/
 var add_class = angular.module("addclassModule",['ngFileUpload']);
 add_class.controller("addClass",function ($scope, $http,Upload,$state) {
-	$scope.showsub = false; /*初始无二级下拉选项*/
-	let pattern = /^[\u4e00-\u9fa5]{0,10}$/;
+    const picprefix = "http://test.cdlhzz.cn:888/";
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformRequest: function (data) {
+            return $.param(data)
+        }
+    };
+    let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
+    let pid;
+    $scope.showsub = false; /*初始无二级下拉选项*/
 	$scope.showtishi = false;
 	$scope.idarr = [];
-	const picprefix = "http://test.cdlhzz.cn:888/";
 	$scope.picwarning = false;
 	$scope.iconpath = 'pages/mall_manage/class_manage/add_class/images/default.png';
-	let pid;
 	$scope.picwarningtext = '';
 	$scope.classicon = '';
-	const config = {
-		headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-		transformRequest: function (data) {
-			return $.param(data)
-		}
-	};
+
 
 
 	/*富文本编辑器初始化*/
