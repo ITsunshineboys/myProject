@@ -396,11 +396,11 @@ class SupplierCashManager extends ActiveRecord
             ->one();
         $code=1000;
         $cash_money = $supplier_cash['cash_money'];
-        $supplier_id = (int)$supplier_cash['uid'];
+        $supplier_uid = (int)$supplier_cash['uid'];
         $old_status = (int)$supplier_cash['status'];
         $transaction_no = $supplier_cash['transaction_no'];
         //初始状态不能为已经处理过的
-        if (!$cash_money || !$supplier_id || !$old_status
+        if (!$cash_money || !$supplier_uid || !$old_status
         ) {
             return $code;
         }
@@ -416,9 +416,9 @@ class SupplierCashManager extends ActiveRecord
         $supplier_accessdetail = UserAccessdetail::find()
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID])
             ->one();
-        var_dump($supplier_accessdetail);die;
 
-        if ($supplier_accessdetail == null) {
+
+        if (!$supplier_accessdetail) {
             return $code;
         }
 
@@ -438,7 +438,7 @@ class SupplierCashManager extends ActiveRecord
             //提现失败
             if ($status == SupplierCashController::CASH_STATUS_FAIL) {
                 //钱退回供货商
-                $supplier = Supplier::find()->where(['id' => $supplier_id])->one();
+                $supplier = Supplier::find()->where(['uid' => $supplier_uid])->one();
                 if (!$supplier) {
                     return $code;
                 }
