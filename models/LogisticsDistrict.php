@@ -169,7 +169,7 @@ class LogisticsDistrict extends ActiveRecord
     }
 
 
-    /**
+   /**
      * 判断是否在指定收货区域
      * @param $districtcode
      * @param $template_id
@@ -177,12 +177,17 @@ class LogisticsDistrict extends ActiveRecord
      */
     public function is_apply($districtcode, $template_id){
         $code=Yii::$app->params['districts'][0];
-        $query=new \yii\db\Query();
-        $array  = $query->from('logistics_template AS a')->select('a.id,b.district_code')->leftJoin('logistics_district AS b', 'b.template_id = a.id')->where(['a.id' =>$template_id])->one();
+        $query=new Query();
+        $array  = $query
+            ->from('logistics_template AS a')
+            ->select('a.id,b.district_code')
+            ->leftJoin('logistics_district AS b', 'b.template_id = a.id')
+            ->where(['a.id' =>$template_id])
+            ->all();
         if ($array){
             $a=0;
-            foreach ($code[$array['district_code']] AS $k =>$v ){
-                if ($k==$districtcode){
+            foreach ($array AS $k =>$v ){
+                if ($array[$k]['district_code']=$districtcode){
                     $a=1;
                 }
             }
@@ -195,6 +200,5 @@ class LogisticsDistrict extends ActiveRecord
             $code=1000;
         }
         return  $code;
-
     }
 }
