@@ -416,6 +416,7 @@ class SupplierCashManager extends ActiveRecord
         $supplier_accessdetail = UserAccessdetail::find()
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID])
             ->one();
+        var_dump($supplier_accessdetail);die;
         if ($supplier_accessdetail == null) {
             return $code;
         }
