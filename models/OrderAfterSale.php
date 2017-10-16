@@ -710,7 +710,7 @@ class OrderAfterSale extends ActiveRecord
                                 'value' =>'',
                                 'time'=>'',
                                 'phone'=>'',
-                                'content'=>'',
+                                'content'=>'0',
                                 'number'=>'',
                                 'code'=>'user_unconfirm_repair',
                                 'status'=>'in'
