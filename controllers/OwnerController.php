@@ -194,7 +194,7 @@ class OwnerController extends Controller
     }
 
     /**
-     * Series style and  stair list interface
+     * 系列、风格和楼梯
      * @return string
      */
     public function actionSeriesAndStyle()
@@ -214,58 +214,37 @@ class OwnerController extends Controller
     }
 
     /**
-     * Search interface
+     * 搜索功能
      * @return string
      */
     public function actionSearch()
     {
-        $post = Yii::$app->request->post();
-        if (array_key_exists('id', $post)) {
-            $list_effect = Effect::find()->where(['id' => $post['id']])->one();
-            $list_effect_picture = EffectPicture::find()->where(['id' => $list_effect['id']])->all();
-            $effect = Effect::districtSearch($list_effect['toponymy']);
-            foreach ($effect as $one_effect) {
-                $id [] = $one_effect['id'];
+        $id  = trim(Yii::$app->request->post('id',''));
+        $str = trim(Yii::$app->request->post('str',''));
+        if ($str != null){
+            $select = 'id,toponymy,province,city,district,street';
+            $effect = Effect::districtSearch($str,$select);
+            foreach ($effect as &$value){
+                $value['detailed_address'] = $value['province'].$value['city'].$value['district'].$value['street'];
             }
-            $effect_picture = EffectPicture::find()
-                ->where(['in', 'effect_id', $id])
-                ->all();
-        } elseif (array_key_exists('str', $post)) {
-            if ($post['str'] !== null) {
-                $list_effect = null;
-                $list_effect_picture = null;
-                $effect = Effect::districtSearch($post['str']);
-                foreach ($effect as $one_effect) {
-                    $id = $one_effect['id'];
-                }
-                $effect_picture = EffectPicture::find()
-                    ->asArray()
-                    ->where(['in', 'id', $id])
-                    ->all();
-            } else {
-                $list_effect = null;
-                $list_effect_picture = null;
-                $effect = null;
-                $effect_picture = null;
-            }
-
-        } elseif ($post == null) {
-            $list_effect = null;
-            $list_effect_picture = null;
-            $effect = null;
-            $effect_picture = null;
+            return Json::encode([
+                'code' => 200,
+                'msg' => '成功',
+                'data' => [
+                    'list_effect' => $effect,
+                ]
+            ]);
         }
 
-        return Json::encode([
-            'code' => 200,
-            'msg' => '成功',
-            'data' => [
-                'list_effect' => $list_effect,
-                'list_effect_picture' => $list_effect_picture,
-                'effect' => $effect,
-                'effect_picture' => $effect_picture,
-            ]
-        ]);
+        if ($id != null){
+            $id_effect = Effect::findOne(['id'=>$id]);
+            return Json::encode([
+                'code' => 200,
+                'msg'  => '成功',
+                'data' => Effect::findAll(['toponymy'=>$id_effect->toponymy]),
+            ]);
+        }
+
     }
 
     /**
@@ -1111,7 +1090,6 @@ class OwnerController extends Controller
 
     /**
      * Owner certification action(app)
-     *
      * @return string
      */
     public function actionCertification()

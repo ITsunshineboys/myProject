@@ -67,11 +67,13 @@ class Effect extends ActiveRecord
      * @param string $search
      * @return array|ActiveRecord[]
      */
-    public static function districtSearch($search = '花好月圆')
+    public static function districtSearch($search = '花好月圆',$select = [])
     {
         $detail = self::find()
             ->asArray()
+            ->select($select)
             ->where(['like','toponymy',$search])
+            ->groupBy('toponymy')
             ->all();
         return $detail;
     }
