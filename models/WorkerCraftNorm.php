@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
 
 class WorkerCraftNorm extends ActiveRecord
 {
+    const SELECT_FIND = 'quantity,worker_kind_details';
     /**
      * @inheritdoc
      */
@@ -35,7 +36,7 @@ class WorkerCraftNorm extends ActiveRecord
      * @param $details
      * @return array|null|ActiveRecord
      */
-    public static function findByLaborCostId($id,$details,$select =[])
+    public static function findByLaborCostId($id,$details,$select =self::SELECT_FIND)
     {
         return self::find()
             ->asArray()

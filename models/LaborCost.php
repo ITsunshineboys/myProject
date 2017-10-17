@@ -22,6 +22,7 @@ class LaborCost extends ActiveRecord
         'worker_kind_details'
     ];
     const LABOR_COST ='labor_cost';
+    const SELECT_FIND = 'id,univalence,worker_kind';
     const LABOR_LEVEL = '白银';
     const WORKER_KIND_DETAILS = [
             'weak'=> '弱电',
@@ -67,7 +68,7 @@ class LaborCost extends ActiveRecord
      * @param string $rank
      * @return array|null|ActiveRecord
      */
-    public static function profession($arr,$craft,$select = [],$rank = self::LABOR_LEVEL)
+    public static function profession($arr,$craft,$select = self::SELECT_FIND ,$rank = self::LABOR_LEVEL)
     {
         $labors = self::find()
             ->asArray()

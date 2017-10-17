@@ -384,9 +384,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $_select = 'id,univalence,worker_kind';
-        $__select = 'quantity,worker_kind_details';
-        $waterway_labor = LaborCost::profession($post, self::WORK_CATEGORY['plumber'],$_select);
+        $waterway_labor = LaborCost::profession($post, self::WORK_CATEGORY['plumber']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway'],$__select);
 
         //强电点位
@@ -419,6 +417,11 @@ class OwnerController extends Controller
                 'waterway_material_price' => $material,
             ]
         ]);
+    }
+
+    public function actionPlumber()
+    {
+
     }
 
     /**
