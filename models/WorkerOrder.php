@@ -134,6 +134,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'reason' => '修改原因',
         ];
     }
+    public static function OrderView(){
+
+    }
 
     /**
      * 工人智管工地列表-工人
