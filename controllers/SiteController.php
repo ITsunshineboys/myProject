@@ -515,6 +515,79 @@ class SiteController extends Controller
     }
 
     /**
+     * Admin forget password action.
+     *
+     * @return string
+     */
+    public function actionAdminForgetPassword()
+    {
+        $postData = Yii::$app->request->post();
+        $code = 1000;
+
+        if (empty($postData['mobile'])
+            || empty($postData['validation_code'])
+            || empty($postData['new_password'])
+            || mb_strlen(($postData['new_password'])) < User::PASSWORD_MIN_LEN
+            || mb_strlen(($postData['new_password'])) > User::PASSWORD_MAX_LEN
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user = User::find()->where(['mobile' => $postData['mobile']])->one();
+        if (!$user || $user->deadtime > 0 || !UserRole::roleUser($user, Yii::$app->params['supplierRoleId'])) {
+            $code = !$user ? 1010 : ($user->deadtime > 0 ? 1015 : 1040);
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $codeValidationRes = SmValidationService::validCode($postData['mobile'], $postData['validation_code']);
+        if ($codeValidationRes !== true) {
+            $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if ($user->validatePassword($postData['new_password'])) {
+            SmValidationService::deleteCode($user->mobile);
+            return Json::encode([
+                'code' => 200,
+                'msg' => '重设密码成功',
+            ]);
+        }
+
+        $user->attributes = $postData;
+        if (!$user->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $user->password = Yii::$app->security->generatePasswordHash($postData['new_password']);
+        if (!$user->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        SmValidationService::deleteCode($postData['mobile']);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '重设密码成功',
+        ]);
+    }
+
+    /**
      * Reset password check action.
      *
      * @return string
