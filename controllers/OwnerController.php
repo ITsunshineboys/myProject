@@ -1018,6 +1018,34 @@ class OwnerController extends Controller
     }
 
     /**
+     * 系数管理
+     */
+    public function actionCoefficient()
+    {
+        $post = Yii::$app->request->post();
+//        $post = [
+//            ['one'=>'辅材','two'=>'辅材','price'=>18],
+//            ['one'=>'辅材','two'=>'辅材','price'=>19],
+//            ['one'=>'辅材','two'=>'辅材','price'=>20],
+//        ];
+        $coefficient = CoefficientManagement::find()->all();
+        foreach ($coefficient as $one_coefficient){
+            foreach ($post as &$materials){
+                if ($one_coefficient->classify == $materials['one']){
+                   $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
+                }
+            }
+        }
+        $special_offer = 0;
+        foreach ($post as $price){
+            $special_offer += $price['goods_price'];
+        }
+        return Json::encode([
+           'special_offer' => $special_offer,
+        ]);
+    }
+
+    /**
      * 配套设备列表
      * @return string
      */
