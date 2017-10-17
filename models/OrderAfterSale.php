@@ -526,8 +526,8 @@ class OrderAfterSale extends ActiveRecord
             'type'=>'商家已派出工作人员',
             'value'=>'',
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_send_time),
-            'phone'=>'',
-            'content'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
+            'phone'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
+            'content'=>'',
             'number'=>'',
             'code'=>'supplier_unsend',
             'status'=>''
