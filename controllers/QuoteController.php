@@ -1580,7 +1580,7 @@ class QuoteController extends Controller
             'list' => ProjectView::findByAll($select,$where),
             'area' => Apartment::findByAll($area_select,$where),
             'apartment_area' => ApartmentArea::findCondition([],$where),
-            'else_area'=> ApartmentArea::findByAll(['min_area,max_area']),
+            'else_area'=> ApartmentArea::findByAll('min_area,max_area'),
         ]);
 
     }
