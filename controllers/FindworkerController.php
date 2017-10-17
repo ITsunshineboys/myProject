@@ -222,6 +222,13 @@ class FindworkerController extends Controller{
         }
         $data['worker_type_id']=WorkerType::getparenttype($post['worker_type_id']);
         $data['home_infos']=WorkerOrderItem::getWorkeitem($post['worker_type_id'],$post);
+        if(is_numeric($data['home_infos'])){
+            $code=$data['home_infos'];
+            return Json::encode([
+                'code'=>$code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         return Json::encode([
             'code' => 200,
             'msg' =>'ok',
