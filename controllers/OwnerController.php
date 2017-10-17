@@ -293,10 +293,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $_select = 'id,univalence,worker_kind';
-        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber'],$_select);
-        $__select = 'quantity,worker_kind_details';
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current'],$__select);
+        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
 
         //      点位 和 材料查询
         $points_select = 'count';
@@ -339,10 +337,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $_select = 'id,univalence,worker_kind';
-        $__select = 'quantity,worker_kind_details';
-        $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber'],$_select);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current'],$__select);
+        $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber']);
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current']);
 
         //强电点位
         $points_select = 'count';
@@ -384,8 +380,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $waterway_labor = LaborCost::profession($post, self::WORK_CATEGORY['plumber']);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway'],$__select);
+        $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
 
         //强电点位
         $points_select = 'count';
@@ -418,12 +414,7 @@ class OwnerController extends Controller
             ]
         ]);
     }
-
-    public function actionPlumber()
-    {
-
-    }
-
+    
     /**
      * 防水
      * @return string
