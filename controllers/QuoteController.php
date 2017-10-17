@@ -135,17 +135,30 @@ class QuoteController extends Controller
             if ($one_post['quantity']){
                 $worker_craft_norm = WorkerCraftNorm::findOne($one_post['id']);
                 $worker_craft_norm->quantity = $one_post['quantity'];
-                $worker_craft_norm->save();
+                $worker = $worker_craft_norm->save();
             }
         }
-        $labor_cost = LaborCost::findOne($post['id']);
-        $labor_cost->univalence = $post['univalence'];
-        if ($labor_cost->save()){
+        if (!$worker){
+            $code = 1000;
             return Json::encode([
-               'code' =>200,
-                'msg'=>'OK'
+               'code'=>$code,
+               'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        $labor_cost = LaborCost::findOne($post['id']);
+        $labor_cost->univalence = $post['univalence'];
+        if (!$labor_cost->save()){
+            $code = 1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        return Json::encode([
+            'code' =>200,
+            'msg'=>'OK'
+        ]);
     }
 
     /**
@@ -179,7 +192,14 @@ class QuoteController extends Controller
         foreach ($post['material'] as $one_material){
             $material = EngineeringStandardCraft::findOne($one_material['id']);
             $material->material = $one_material['material'];
-            $material->save();
+            $edit_material = $material->save();
+        }
+        if (!$edit_material){
+            $code = 1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
         }
         return Json::encode([
            'code'=>200,

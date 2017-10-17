@@ -90,7 +90,6 @@ class LaborCost extends ActiveRecord
             ->groupBy($group)
             ->asArray()
             ->all();
-
     }
 
 
