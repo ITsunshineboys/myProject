@@ -1591,9 +1591,7 @@ class QuoteController extends Controller
     public function actionCommonalityElseEdit()
     {
         $post = \Yii::$app->request->post();
-        /*
-         * 户型面积
-         */
+         // 户型面积
         if (isset($post['apartment_area'])) {
             ApartmentArea::deleteAll([]);
             foreach ($post['apartment_area'] as $apartment_area){
@@ -1611,9 +1609,7 @@ class QuoteController extends Controller
                 'msg' => 'OK',
             ]);
         } elseif (isset($post['else'])) {
-            /*
-             * 其它修改
-             */
+             // 其它修改
             if (isset($post['else']['value'])){
                 foreach ($post['else']['value'] as $value){
                      ProjectView::findByUpdate($value['coefficient'],$value['edit_id']);
