@@ -38,11 +38,17 @@ class Apartment extends ActiveRecord
             ->all();
     }
 
-    public static function findByInsert($rows,$columns)
+    public static function findByInsert($rows)
     {
         return \Yii::$app->db
             ->createCommand()
-            ->batchInsert(self::TABLE_NAME,$rows,$columns)
+            ->insert(self::TABLE_NAME,[
+                'min_area'=>$rows['min_area'],
+                'max_area'=>$rows['max_area'],
+                'points_id'=>$rows['points_id'],
+                'project_name'=>$rows['min_area'],
+                'project_value'=>$rows['min_area'],
+            ])
             ->execute();
     }
 
@@ -51,6 +57,6 @@ class Apartment extends ActiveRecord
         $row = \Yii::$app->db->createCommand();
         return $row->update(self::TABLE_NAME,[
             'project_value'=>$rows
-        ],'id',$id)->execute();
+        ],['id'=>$id])->execute();
     }
 }
