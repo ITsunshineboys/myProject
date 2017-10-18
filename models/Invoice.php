@@ -52,7 +52,7 @@ class Invoice extends ActiveRecord
                 $invoice->invoice_header=$invoice_header;
                 $invoice->invoice_type=$invoice_type;
                 $invoice->invoice_content=$invoice_content;
-                $invoice->creat_time=$creat_time;
+                // $invoice->creat_time=$creat_time;
                 $invoice->invoicer_card=$invoicer_card;
                 $invoice->invoicetoken=$invoicetoken;
                 $res=$invoice->save(false);
