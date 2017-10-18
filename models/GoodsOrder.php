@@ -345,7 +345,7 @@ class GoodsOrder extends ActiveRecord
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
     {
         $offset = ($page - 1) * $size;
-        $query = (new Query())
+        $OrderList = (new Query())
             ->from(self::tableName().' AS a')
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
             ->leftJoin(User::tableName(). ' AS u','u.id=a.user_id')
