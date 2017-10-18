@@ -1074,7 +1074,7 @@ class OrderAfterSale extends ActiveRecord
                             'value' =>'剩余确认时间',
                             'time'=>date('Y-m-d H:i',$buyer_express->create_time),
                             'phone'=>'',
-                            'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
+                            'content'=>$time,
                             'number'=>'',
                             'code'=>'supplier_unconfirm_received',
                             'status'=>'in'
