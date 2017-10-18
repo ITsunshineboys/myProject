@@ -1644,7 +1644,7 @@ class QuoteController extends Controller
             foreach ($post['else'] as $else){
                 // 其它修改
                 if (isset($else['value'])){
-                    foreach ($post['else']['value'] as $value){
+                    foreach ($else['value'] as $value){
                         ProjectView::findByUpdate($value['coefficient'],$value['id']);
                     }
                 }
@@ -1656,7 +1656,7 @@ class QuoteController extends Controller
                     }
                 }
             }
-            
+
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
