@@ -1470,7 +1470,6 @@ class OrderController extends Controller
                 ->where(['waybillnumber'=>$order_no])
                 ->asArray()
                 ->one();
-                var_dump($express);exit;
         }else
         {
             $shipping_type=GoodsOrder::findshipping_type($order_no,$sku);
