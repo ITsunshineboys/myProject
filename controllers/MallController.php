@@ -2298,7 +2298,7 @@ class MallController extends Controller
         $code = 1000;
 
         $sort = Yii::$app->request->get('sort', []);
-        $model = new GoodsBrand;
+        $model = new BrandApplication;
         $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
         if ($orderBy === false) {
             return Json::encode([
@@ -2349,7 +2349,7 @@ class MallController extends Controller
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', GoodsBrand::PAGE_SIZE_DEFAULT);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
 
         return Json::encode([
             'code' => 200,
