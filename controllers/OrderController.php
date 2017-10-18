@@ -832,7 +832,7 @@ class OrderController extends Controller
                 $startTime = explode(' ', $startTime)[0];
                 $endTime = explode(' ', $endTime)[0];
             }
-        if($type=='all')
+          if($type=='all')
         {
             if($supplier_id)
             {
@@ -860,29 +860,15 @@ class OrderController extends Controller
                 $where .=" and a.supplier_id={$supplier_id}";
             }
         }
-        if ($type=='all' && !$supplier_id)
-        {
-           if($keyword){
-                    $where .="  z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'  or   a.consignee_mobile like '%{$keyword}%'  or   u.mobile like '%{$keyword}%'";
-                }
-            }else{
+
+
             if($keyword){
-                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'  or   a.consignee_mobile like '%{$keyword}%'  or   u.mobile like '%{$keyword}%'";
+                $keyword='';
             }
-        }
+
             if ($type=='all' && !$supplier_id )
             {
-                if ($keyword)
-                {
-                    if ($startTime) {
-                        $startTime = (int)strtotime($startTime);
-                        $startTime && $where .= " and   a.create_time >= {$startTime}";
-                    }
-                    if ($endTime) {
-                        $endTime = (int)strtotime($endTime);
-                        $endTime && $where .= " and a.create_time <= {$endTime}";
-                    }
-                }else{
+
                     if ($startTime) {
                         $startTime = (int)strtotime($startTime);
                         $startTime && $where .= "a.create_time >= {$startTime}";
@@ -891,7 +877,7 @@ class OrderController extends Controller
                         $endTime = (int)strtotime($endTime);
                         $endTime && $where .= " and a.create_time <= {$endTime}";
                     }
-                }
+
             }
             else
                 {
@@ -904,12 +890,9 @@ class OrderController extends Controller
                     $endTime && $where .= " and a.create_time <= {$endTime}";
                 }
            }
-
-
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
-
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,$keyword);
         $code=200;
         return Json::encode([
              'code'=>$code,
@@ -1157,8 +1140,9 @@ class OrderController extends Controller
                     $where .=" and supplier_id={$supplier->id}";
                 }
 
-                if($keyword){
-                    $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'";
+               if(!$keyword){
+
+                    $keyword='';
                 }
 
                 if ($startTime) {
@@ -1173,7 +1157,7 @@ class OrderController extends Controller
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
 
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money);
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,$keyword);
         $code=200;
         return Json::encode([
             'code'=>$code,
