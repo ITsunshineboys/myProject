@@ -333,26 +333,33 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-     /**
-     * find by pagination
+   /**
      * @param array $where
      * @param array $select
      * @param int $page
      * @param int $size
-     * @param $sort
+     * @param $sort_time
+     * @param $sort_money
      * @return array
      */
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money,$keyword)
     {
         $offset = ($page - 1) * $size;
-        $OrderList = (new Query())
+        $query = (new Query())
             ->from(self::tableName().' AS a')
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
             ->leftJoin(User::tableName(). ' AS u','u.id=a.user_id')
             ->select($select)
             ->where($where)
-            ->orderBy('a.create_time desc')
-            ->all();
+            ->orderBy('a.create_time desc');
+        if($keyword)
+        {
+            $OrderList=$query->andFilterWhere(['like', 'z.order_no', $keyword])
+                ->orFilterWhere(['like', 'a.consignee_mobile', $keyword])
+                ->orFilterWhere(['like', 'u.mobile', $keyword])
+                ->orFilterWhere(['like', 'z.goods_name', $keyword])
+                ->all();
+        }
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
@@ -404,9 +411,9 @@ class GoodsOrder extends ActiveRecord
             $amount_order[$k]  = $arr[$k]['amount_order'];
             $create_time[$k]  = $arr[$k]['create_time'];
         }
-    
+
         if ($arr){
-                       if ($sort_money==1 && $sort_time=='')
+            if ($sort_money==1 && $sort_time=='')
             {
                 array_multisort($amount_order, SORT_ASC, $arr);
             }else if ($sort_money==2 && $sort_time=='')
@@ -426,7 +433,7 @@ class GoodsOrder extends ActiveRecord
             $data=array_slice($arr, ($page-1)*$size,$size);
             return [
                 'total_page' =>$total_page,
-                'count'=>$count,
+                'count'=>count($data),
                 'details' => $data
             ];
         }else{
@@ -438,6 +445,7 @@ class GoodsOrder extends ActiveRecord
         }
 
     }
+
 
      /**
      * @param array $where
