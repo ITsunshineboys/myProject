@@ -2,7 +2,7 @@
 <div ng-controller="invoice_ctrl">
    <header>
        <div>
-           <img src="images/mall_nav_return.png" alt="">
+           <img src="images/mall_nav_return.png" alt="" ng-click="getOrderPre()">
            <span>发票信息</span>
        </div>
    </header>
@@ -19,20 +19,20 @@
             <div class="shu"></div>
             <span class="invoice_rise">发票抬头</span>
             <div class="invoice_radio">
-                <label>
+                <label ng-click="choosePersonal ()">
                     <input type="radio" name="invoice_radio"  checked>
                      个人
                 </label>
-                <label>
+                <label ng-click="chooseCompany ()">
                      <input type="radio" name="invoice_radio">
                       单位
                 </label>
             </div>
             <!--s输入框-->
             <div class="invoice_input">
-                <input type="text" placeholder="请输入抬头名称">
-                <input type="text" placeholder="请输入纳税人识别号"> <br>
-                <span>纳税人识别号为18位数字和英文字母组成，请仔细填写</span>
+                <input type="text" ng-show="choose_personal" placeholder="请输入抬头名称" ng-model="invoice_name">
+                <input type="text" ng-show="choose_company" placeholder="请输入纳税人识别号" ng-model="invoice_number" maxlength="18"> <br>
+                <span ng-show="choose_company">纳税人识别号为18位数字和英文字母组成，请仔细填写</span>
             </div>
         </div>
         <div class="bag_div"></div>
@@ -46,7 +46,7 @@
             </label>
         </div>
         <!--按钮-->
-        <div class="invoice_btn" data-toggle="modal" data-target=".bs-example-modal-sm">
+        <div class="invoice_btn" ng-click="getSave ()" data-toggle="modal" data-target="{{invoice_model}}">
             <button>确认</button>
         </div>
 
@@ -54,9 +54,9 @@
         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div class="modal-dialog modal-sm" id="sm_model" role="document">
                 <div class="modal-content" id="num_modal">
-                    <p>纳税人识别号输入不正确</p>
+                    <p>{{contentInvoice}}</p>
                     <div class="xian"></div>
-                    <button class="btn_num" data-dismiss="modal">确认</button>
+                    <button class="btn_num" ng-click="jumpOrder()" data-dismiss="modal">确认</button>
                 </div>
             </div>
         </div>

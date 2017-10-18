@@ -3980,9 +3980,9 @@ class MallController extends Controller
         }
 
         $where = ['supplier_id' => $supplierId];
-        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
-            $where = array_merge($where, ['review_status' => Role::AUTHENTICATION_STATUS_APPROVED]);
-        }
+//        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+//            $where = array_merge($where, ['review_status' => Role::AUTHENTICATION_STATUS_APPROVED]);
+//        }
 
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', BrandApplication::PAGE_SIZE_DEFAULT);

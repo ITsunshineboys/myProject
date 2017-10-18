@@ -4,7 +4,7 @@
         <div class="header_cell">
             <img src="images/mall_search_1.png" alt=""/>
             <input type="text" placeholder="请输入想要购买的商品" ng-model="data" ng-change="getSearch ()"/>
-            <span><a ng-click="goPrev({'pid':pid})">取消</a></span>
+            <span><a ng-click="goPrevIndex()">取消</a></span>
         </div>
     </header>
 
@@ -15,7 +15,6 @@
                 <li ng-repeat="item in search_data" ng-click="getBackData (item)">
                     <a >
                         <span class="first_fru">{{item.title}}</span><br/>
-                        <!--<span class="second_fru">{{item.site_particulars}}</span>-->
                     </a>
                 </li>
             </ul>
@@ -24,7 +23,6 @@
         <!--无数据显示-->
         <div class="no_data" ng-if="!search_data.length">
             <span>暂无数据显示</span><br/>
-            <!--<a ui-sref="nodata({message:data})">没有我的小区?</a>-->
         </div>
     </section>
 </div>
