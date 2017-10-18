@@ -1464,13 +1464,13 @@ class OrderController extends Controller
 
         if($sku =='-1')
         {
-            echo 1;exit;
             $shipping_type=0;
             $express=Express::find()
                 ->select('waybillnumber,waybillname,create_time')
                 ->where(['waybillnumber'=>$order_no])
                 ->asArray()
                 ->one();
+                var_dump($express);exit;
         }else
         {
             $shipping_type=GoodsOrder::findshipping_type($order_no,$sku);
