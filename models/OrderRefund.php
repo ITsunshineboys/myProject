@@ -161,7 +161,7 @@ class OrderRefund extends ActiveRecord
                 }
             }
             $data[]=[
-                'order_type'=>'unshipped',
+                'order_type'=>'待发货',
                 'list'=>$arr1
             ];
         }else{
@@ -247,7 +247,7 @@ class OrderRefund extends ActiveRecord
                 }
             }
             $data[]=[
-                'order_type'=>'unreceived',
+                'order_type'=>'待收货',
                 'list'=>$arr2
             ];
         }else{
