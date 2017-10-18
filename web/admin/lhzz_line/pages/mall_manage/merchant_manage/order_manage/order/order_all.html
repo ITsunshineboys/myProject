@@ -7,10 +7,10 @@
         <option value="year">本年</option>
         <option value="custom">自定义</option>
     </select>
-    <input id="startTime" ng-if="params.time_type == 'custom'" ng-model="params.start_time"
-           max-date="{{params.end_time}}" class="form-control" type="text" placeholder="开始时间" ngc-lay-date>
-    <input id="endTime" ng-if="params.time_type == 'custom'" ng-model="params.end_time" min-date="{{params.start_time}}"
-           max-date="" class="form-control" type="text" placeholder="结束时间" ngc-lay-date>
+    <input id="startTime" ng-if="params.time_type == 'custom'" class="form-control" type="text" placeholder="开始时间"
+           ngc-lay-date ng-model="params.start_time" max-date="{{params.end_time}}">
+    <input id="endTime" ng-if="params.time_type == 'custom'" class="form-control" type="text" placeholder="结束时间"
+           ngc-lay-date ng-model="params.end_time" min-date="{{params.start_time}}">
     <div class="form-group pull-right">
         <div class="input-group">
             <input class="form-control" type="text" ng-model="params.keyword" placeholder="搜索订单号、商品名称或手机号">

@@ -15,10 +15,10 @@ app.service('_ajax', function ($http, $state) {
             params: params
         }).then(function (response) {
             let res = response.data;
-            if (res.code == '403') {
+            if (res.code === 403) {
                 $state.go('login')
-            } else if (res.code == '200') {
-                if (typeof callback == 'function') {
+            } else if (res.code === 200) {
+                if (typeof callback === 'function') {
                     callback(res)
                 }
             } else {
@@ -40,10 +40,10 @@ app.service('_ajax', function ($http, $state) {
             }
         }).then(function (response) {
             let res = response.data;
-            if (res.code == '403') {
+            if (res.code === 403) {
                 $state.go('login')
-            } else if (res.code == '200') {
-                if (typeof callback == 'function') {
+            } else if (res.code === 200) {
+                if (typeof callback === 'function') {
                     callback(res)
                 }
             } else {
