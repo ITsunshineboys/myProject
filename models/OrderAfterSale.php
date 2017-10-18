@@ -534,7 +534,7 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>$OrderAfterSale->worker_name.' '.$OrderAfterSale->worker_mobile,
             'content'=>'',
             'number'=>'',
-            'code'=>'supplier_unsend',
+            'code'=>'',
             'status'=>''
         ];
         if (!$OrderAfterSale->supplier_confirm){
