@@ -1462,8 +1462,9 @@ class OrderController extends Controller
             ]);
         }
 
-        if($sku=='-1')
+        if($sku =='-1')
         {
+            echo 1;exit;
             $shipping_type=0;
             $express=Express::find()
                 ->select('waybillnumber,waybillname,create_time')
