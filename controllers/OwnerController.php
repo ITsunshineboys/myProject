@@ -1151,14 +1151,15 @@ class OwnerController extends Controller
      */
     public function actionHomepage()
     {
-       return Json::encode([
-          'code' =>200,
-           'msg'=>'ok',
-           'data'=> BrainpowerInitalSupervise::find()
-               ->where(['status'=>BrainpowerInitalSupervise::STATUS_OPEN])
-               ->orderBy(['sort' => SORT_ASC])
-               ->all()
-       ]);
+        return Json::encode([
+            'code' =>200,
+            'msg'=>'ok',
+            'data'=> BrainpowerInitalSupervise::find()
+                ->select('id,image,district_code,street,toponymy')
+                ->where(['status'=>BrainpowerInitalSupervise::STATUS_OPEN])
+                ->orderBy(['sort' => SORT_ASC])
+                ->all()
+        ]);
     }
 
     /**
