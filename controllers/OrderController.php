@@ -1480,9 +1480,10 @@ class OrderController extends Controller
                 ->one();
 
         }
-        var_dump($express);exit;
+        // var_dump($express);exit;
         if (!$express)
         {
+            echo 1;exit;
             $code=1000;
             return Json::encode([
                 'code' => $code,
