@@ -90,7 +90,7 @@ class BrandApplication extends ActiveRecord
         $brand = GoodsBrand::findOne($brandApplication->brand_id);
 
         $brandApplication->brand_name = $brand->name;
-        $brandApplication->brand_logo = $brand->brand_logo;
+        $brandApplication->brand_logo = $brand->logo;
         $brandApplication->category_title = $category->fullTitle();
         if (!$brandApplication->save()) {
             $code = 500;
