@@ -1445,7 +1445,7 @@ class OrderController extends Controller
         }
     }
 
-    /**
+   /**
      * 获取物流信息
      * @return string
      */
@@ -1454,18 +1454,32 @@ class OrderController extends Controller
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
         if (!$order_no  || !$sku) {
+
             $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $shipping_type=GoodsOrder::findshipping_type($order_no,$sku);
-        $express=Express::find()
-            ->select('waybillnumber,waybillname,create_time')
-            ->where(['order_no'=>$order_no,'sku'=>$sku])
-            ->asArray()
-            ->one();
+
+        if($sku=='-1')
+        {
+            $shipping_type=0;
+            $express=Express::find()
+                ->select('waybillnumber,waybillname,create_time')
+                ->where(['waybillnumber'=>$order_no])
+                ->asArray()
+                ->one();
+        }else
+        {
+            $shipping_type=GoodsOrder::findshipping_type($order_no,$sku);
+            $express=Express::find()
+                ->select('waybillnumber,waybillname,create_time')
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->asArray()
+                ->one();
+
+        }
         if (!$express)
         {
             $code=1000;
@@ -1513,6 +1527,10 @@ class OrderController extends Controller
             ],
         ]);
     }
+
+
+
+
 
 
     /**
