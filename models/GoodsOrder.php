@@ -359,6 +359,10 @@ class GoodsOrder extends ActiveRecord
                 ->orFilterWhere(['like', 'u.mobile', $keyword])
                 ->orFilterWhere(['like', 'z.goods_name', $keyword])
                 ->all();
+        }else
+        {
+            $OrderList=$query
+                ->all(); 
         }
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
