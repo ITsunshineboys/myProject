@@ -158,11 +158,20 @@ class Express extends ActiveRecord
      */
     public static  function Findexresslist($order_no,$sku)
     {
-        $waybill=Express::find()
-            ->select('waybillnumber,waybillname,create_time')
-            ->where(['order_no'=>$order_no,'sku'=>$sku])
-            ->asArray()
-            ->one();
+         if ($sku=='-1')
+        {
+            $waybill=Express::find()
+                ->select('waybillnumber,waybillname,create_time')
+                ->where(['waybillnumber'=>$order_no])
+                ->asArray()
+                ->one();
+        }else{
+            $waybill=Express::find()
+                ->select('waybillnumber,waybillname,create_time')
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->asArray()
+                ->one();
+        }
         if (!$waybill){
             $code = 1000;
             return $code;
