@@ -863,6 +863,7 @@ class OrderAfterSale extends ActiveRecord
 
             switch ($role)
             {
+                
                 case 'user':
                     $data[]=[
                         'type'=>'商家确认收货',
