@@ -138,7 +138,7 @@ class AlipayTradeService {
         $aop->debugInfo=true;
         if($ispage)
         {
-            $result = $aop->pageExecute($request,"post");
+            $result = $aop->pageExecute($request,"GET");
             echo $result;
         }
         else
