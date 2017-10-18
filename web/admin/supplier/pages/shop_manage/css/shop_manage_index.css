@@ -1,0 +1,227 @@
+/*顶部导航*/
+li{
+    list-style: none;
+}
+
+header{
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #E6E9F0 ;
+    position: relative;
+}
+.order_manage{
+    font-size: 14px;
+    color: #2F3033;
+    line-height: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header img {
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+/*顶部导航结束*/
+
+section{
+    padding-left: 40px;
+}
+/*选项卡开始*/
+.tab{
+    width: 90%;
+    height: 60px;
+    border-bottom: 1px solid #E6E9F0;
+    margin-bottom: 16px;
+
+}
+.tab>ul{
+    list-style: none;
+    padding: 0;
+}
+.tab ul:after{
+    content: "";
+    display: table;
+    clear: both;
+}
+.tab>ul>li{
+    float: left;
+    height: 60px;
+    line-height: 60px;
+    margin-right: 25px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.tab_blue{
+    color: #5677FC;
+    border-bottom: 1px solid #5677FC ;
+}
+
+/*内容开始*/
+.storedetail>div:not(:first-child){
+    margin-top: 18px;
+}
+
+.margin_left_86{
+    margin-left: 86px;
+}
+
+.margin_left_100{
+    margin-left: 100px;
+}
+
+/*店铺logo*/
+.cla_pic{
+    height: 220px;
+}
+
+.upload_pic{
+    display: inline;
+    margin-left: 88px;
+    overflow: hidden;
+}
+
+#cla_pic_uploadpic{
+    width: 120px;
+    height: 120px;
+    vertical-align: top;
+}
+
+.upload_tishi{
+    font-size: 12px;
+}
+
+.upload_pic h6{
+    font-size: 12px;
+    width: 300px;
+    color: #BFC0C2;
+    margin-left: 146px;
+}
+
+.upload{
+    width: 300px;
+}
+
+#upload_btn{
+    width: 67px;
+    height: 24px;
+    border: 1px solid #BFC0C2;
+    border-radius: 3px;
+    padding-left: 5px;
+    margin-left: 146px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #BFC0C2;
+    background-color: white;
+}
+
+.reload_tishi{
+    width: 300px;
+    font-size: 12px;
+    color: red;
+    margin-left: 146px;
+    margin-top: 10px;
+}
+
+/*店铺评分*/
+.storegrade ul{
+    display: inline-block;
+    padding: 0;
+    vertical-align: text-top;
+}
+
+.storegrade ul span{
+    display: inline-block;
+    margin-right: 100px;
+    margin-bottom: 13px;
+}
+
+#savebtn{
+    margin-top: 36px;
+}
+
+/*店铺资质*/
+.storelevel>div:not(:first-child){
+    margin-top: 18px;
+}
+
+.shop_money span:nth-child(2){
+    text-decoration:line-through;
+    /*margin-left: 100px;*/
+}
+.shop_money span:nth-child(3){
+    color: #E8502E;
+    margin-left: 20px;
+}
+
+/*线下体验店*/
+.offline_shop span:nth-child(2){
+    margin-left: 16px;
+}
+
+/*社会信用代码*/
+.society_code span:nth-child(2){
+    margin-left: 56px;
+}
+
+/*营业执照*/
+.license img{
+    vertical-align: text-top;
+    width: 120px;
+}
+
+.idcard span:nth-child(2){
+    margin-left: 58px;
+}
+
+/*身份证照片*/
+.license_pic img{
+    vertical-align: text-top;
+    margin-left: 40px;
+    width: 120px;
+}
+
+.backpic{
+    margin-bottom: 52px;
+}
+
+/*品牌授权*/
+.apply_brand{
+    margin-top: 24px;
+    overflow: hidden;
+}
+
+/*品牌授权表格*/
+/*表格部分*/
+.store_mag_table{
+    margin-top: 9px;
+}
+
+table{
+    width: 90%;
+    color: #7A8599;
+}
+
+table tr{
+    height: 40px;
+}
+.table_content{
+    border-top: 1px solid #e6e6e6;
+}
+
+#delivery_service_score{
+    margin-left: -14px;
+}
+
+.status-green {
+    color: #8bc34a;
+}
+
+.status-red {
+    color: #e8502e;
+}
+
+.status-blue {
+    color: #26c6da;
+}

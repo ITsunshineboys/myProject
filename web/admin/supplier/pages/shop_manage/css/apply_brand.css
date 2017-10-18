@@ -1,0 +1,89 @@
+/*顶部导航*/
+li{
+    list-style: none;
+}
+
+header{
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #E6E9F0 ;
+    position: relative;
+}
+
+header span:nth-child(2){
+    font-size: 14px;
+    color: #2F3033;
+    line-height: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header span:nth-child(3){
+    color: rgba(171, 171, 171, 1);
+}
+
+header img{
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+
+/*所属分类*/
+.sel_group{
+    margin-top: 20px;
+
+}
+
+/*授权期限*/
+.red_mark{
+    color: red;
+}
+
+/*授权书上传*/
+.picstyle{
+    width: 120px;
+    vertical-align: top;
+}
+
+.addpic{
+    position: absolute;
+    left: -10px;
+    top: 2px;
+    padding: 0 2px;
+    line-height: normal;
+    font-size: 12px;
+    color: #666f80;
+    cursor: pointer;
+    border: 1px solid #666f80;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
+.body_font{
+    font-size: 16px;
+}
+
+/* 输入框通用样式 */
+.inp-style{
+    width: 245px;
+    height: 31px;
+    padding-left: 10px;
+    line-height: 31px;
+    border:1px solid #a9a9a9;
+    border-radius: 3px;
+}
+.tip-msg {
+    font-size: 12px;
+    color: #ababab;
+}
+
+.btn-upload[disabled],
+.btn-upload[disabled]:hover {
+    color: #aeaeae !important;
+    border-color: #bfc0c2 !important;
+}
+.form-control.reg-error {
+    border-color: #ff0000;
+}

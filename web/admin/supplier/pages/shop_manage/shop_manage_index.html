@@ -1,0 +1,234 @@
+<link rel="stylesheet" href="pages/shop_manage/css/shop_manage_index.css">
+<div ng-controller="shopmanage_ctrl">
+    <!--顶部导航-->
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="order_manage" ng-click="tabFunc('basic_flag')">店铺管理</span>
+            <img src="pages/shop_manage/shop_manage_index/image/user.png" alt=""/>
+        </div>
+    </header>
+
+    <section>
+        <!--选项卡-->
+        <div class="tab">
+            <ul>
+                <li ng-class="{'tab_blue':basic_flag}"  ng-click="tabFunc('basic_flag')">基本信息</li>
+                <li ng-class="{'tab_blue':level_flag}" ng-click="tabFunc('level_flag')">店铺资质</li>
+                <li ng-class="{'tab_blue':authorize_flag}" ng-click="tabFunc('authorize_flag')">品牌授权</li>
+            </ul>
+        </div>
+
+        <!----------基本信息---------->
+        <div class="storedetail" ng-show="basic_flag">
+            <div>
+                <span>店铺名称</span>
+                <span class="margin_left_86" ng-bind="result.shop_name"></span>
+            </div>
+
+            <!--店铺号-->
+            <div>
+                <span>店铺号</span>
+                <span class="margin_left_100" ng-bind="result.shop_no"></span>
+            </div>
+
+            <!--开店时间-->
+            <div>
+                <span>开店时间</span>
+                <span class="margin_left_86" ng-bind="result.create_time"></span>
+            </div>
+
+            <!--登录账号-->
+            <div>
+                <span>登录账号</span>
+                <span class="margin_left_86" ng-bind="result.mobile"></span>
+            </div>
+
+            <!--店铺状态-->
+            <div>
+                <span>店铺状态</span>
+                <span class="margin_left_86" ng-bind="result.status"></span>
+            </div>
+
+            <!--店铺Logo-->
+            <div class="cla_pic">
+                <span class="each_title">店铺logo</span>
+                <div class="upload_pic">
+                    <img ng-src="{{iconpath}}"  alt="" id="cla_pic_uploadpic" class="picstyle">
+                    <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                    <div class="upload">
+                        <button type="button" ngf-pattern="image/*"  ng-change="upload(data.file)" ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
+                    </div>
+                    <div class="reload_tishi" ng-if="picwarning">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                        <!--<span>请上传图片</span>-->
+                    </div>
+                </div>
+            </div>
+
+            <!--店铺评分-->
+            <div class="storegrade">
+                <span>店铺评分</span>
+                <ul class="margin_left_86">
+                    <li><span>综合评分</span><span ng-bind="result.comprehensive_score"></span></li>
+                    <li><span>店家服务</span><span ng-bind="result.store_service_score"></span></li>
+                    <li><span>物流速度</span><span ng-bind="result.logistics_speed_score"></span></li>
+                    <li><span>配送员服务</span><span ng-bind="result.delivery_service_score" id="delivery_service_score"></span></li>
+                </ul>
+            </div>
+
+            <!--关注粉丝-->
+            <div>
+                <span>关注粉丝</span>
+                <span class="margin_left_86" ng-bind="result.follower_number"></span>
+            </div>
+
+
+            <button ng-click="resetLogo()" class="btn btn-primary pull-left" id="savebtn" data-toggle="modal" data-target={{savemodal}}><i class="glyphicon glyphicon-floppy-disk"></i>保存</button>
+        </div>
+
+        <!----------店铺资质---------->
+        <div class="storelevel" ng-show="level_flag">
+            <div>
+                <span>单位类型</span>
+                <span class="margin_left_86" ng-bind="result.type_org"></span>
+            </div>
+
+            <!--店铺号-->
+            <div>
+                <span>店铺分类</span>
+                <span class="margin_left_86" ng-bind="result.category_name">基础装修-地面材料</span>
+            </div>
+
+            <!--店铺类型-->
+            <div>
+                <span>店铺类型</span>
+                <span class="margin_left_86" ng-bind="result.type_shop">专卖店</span>
+            </div>
+
+            <!--资质日期-->
+            <div>
+                <span>资质日期</span>
+                <span class="margin_left_86">{{result.create_time}}至{{onemoreyear}}</span>
+            </div>
+
+            <!--质保金-->
+            <div class="shop_money">
+                <span>质保金</span>
+                <span class="margin_left_100" ng-bind="result.quality_guarantee_deposit"></span>
+                <span>已免除</span>
+            </div>
+
+            <!--是否支持线下体验店-->
+            <div class="offline_shop">
+                <span>是否支持线下体验店</span>
+                <span ng-bind="result.support_offline_shop"></span>
+            </div>
+
+            <hr/>
+
+            <!--公司名称-->
+            <div>
+                <span>公司名称</span>
+                <span class="margin_left_86" ng-bind="result.name"></span>
+            </div>
+
+            <!--社会信用代码-->
+            <div class="society_code">
+                <span>社会信用代码</span>
+                <span class="margin_left_86" ng-bind="result.licence"></span>
+            </div>
+
+            <!--营业执照-->
+            <div class="license">
+                <span>营业执照</span>
+                <img class="margin_left_86" src="http://test.cdlhzz.cn:888/{{result.licence_image}}" alt="营业执照">
+            </div>
+
+            <hr/>
+
+            <!--法人名称-->
+            <div>
+                <span>法人名称</span>
+                <span class="margin_left_86" ng-bind="result.legal_person"></span>
+            </div>
+
+            <!--法人身份证号-->
+            <div class="idcard">
+                <span>法人身份证号</span>
+                <span ng-bind="result.identity_no"></span>
+            </div>
+
+            <!--法人身份证正面-->
+            <div class="license_pic">
+                <span>法人身份证正面</span>
+                <img class="margin_left_86" src="http://test.cdlhzz.cn:888/{{result.identity_card_front_image}}" alt="">
+            </div>
+
+            <!--法人身份证背面-->
+            <div class="license_pic backpic">
+                <span>法人身份证反面</span>
+                <img class="margin_left_86" src="http://test.cdlhzz.cn:888/{{result.identity_card_back_image}}" alt=""/>
+            </div>
+        </div>
+
+
+        <!----------品牌授权-------------->
+        <div ng-show='authorize_flag'>
+            <div class="apply_brand">
+                <button class="btn btn-info pull-left" ui-sref="apply_brand"><i class="glyphicon glyphicon-plus"></i>申请品牌</button>
+            </div>
+
+            <div class="store_mag_table">
+                <table>
+                    <tr>
+                        <td>品牌名称</td>
+                        <td>申请日期</td>
+                        <td>授权期限</td>
+                        <td>状态</td>
+                        <td>审核备注</td>
+                        <td>详情</td>
+                    </tr>
+                    <tr class="table_content" ng-repeat="obj in authList">
+                        <td>{{obj.brand_name}}</td>
+                        <td>{{obj.create_time}}</td>
+                        <td>{{obj.authorization_start}} 至 {{obj.authorization_end}}</td>
+                        <td>
+                            <span class="status-green" ng-if="obj.review_status == '通过'">{{obj.review_status}}</span>
+                            <span class="status-red" ng-if="obj.review_status == '不通过'">{{obj.review_status}}</span>
+                            <span class="status-blue" ng-if="obj.review_status == '待审核'">{{obj.review_status}}</span>
+                        </td>
+                        <td>
+                            <a href="javascript: void (0);" ng-if="obj.review_note != ''" ng-click="showInfo(obj.review_note)">{{obj.review_note}}</a>
+                            <span ng-if="obj.review_note == ''">无</span>
+                        </td>
+                        <td>
+                            <a href="javascript: void (0);" ng-click="goDetails(obj)">查看</a>
+                        </td>
+                    </tr>
+                </table>
+                <tm-pagination conf="pageConfig"></tm-pagination>
+            </div>
+        </div>
+    </section>
+
+    <!--保存确认模态框-->
+    <div class="modal customer_modal detail_modal fade" id="suresave" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">详情</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row form_box">
+                        <span class="col-md-12 form_txt">保存成功</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
