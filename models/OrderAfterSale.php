@@ -149,7 +149,7 @@ class OrderAfterSale extends ActiveRecord
     }
 
 
-    /**
+     /**
      * @param $postData
      * @param $user
      * @return array|int|null|ActiveRecord
@@ -160,15 +160,8 @@ class OrderAfterSale extends ActiveRecord
             $code=1000;
             return $code;
         }
-        $supplier=Supplier::find()
-            ->select(['id'])
-            ->where(['uid'=>$user->id])
-            ->one();
-        if (!$supplier)
-        {
-            $code=1010;
-            return $code;
-        }
+
+
         $goodsOrder=GoodsOrder::find()
             ->select(['supplier_id'])
             ->where(['order_no'=>$postData['order_no']])
@@ -177,10 +170,23 @@ class OrderAfterSale extends ActiveRecord
             $code=1000;
             return $code;
         }
-        if ($goodsOrder->supplier_id!= $supplier->id){
-            $code=1036;
-            return $code;
+        if ($user->last_role_id_app==6)
+        {
+            $supplier=Supplier::find()
+                ->select(['id'])
+                ->where(['uid'=>$user->id])
+                ->one();
+            if (!$supplier)
+            {
+                $code=1010;
+                return $code;
+            }
+            if ($goodsOrder->supplier_id!= $supplier->id){
+                $code=1036;
+                return $code;
+            }
         }
+
         $data=self::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
             ->asArray()
@@ -208,7 +214,6 @@ class OrderAfterSale extends ActiveRecord
 //        }
         return $data;
     }
-
 
     /**
      * @param $postData
