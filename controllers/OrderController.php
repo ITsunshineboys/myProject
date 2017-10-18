@@ -291,7 +291,7 @@ class OrderController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg'  =>'ok',
-                'dara' =>[
+                'data' =>[
                     'invoice_id'=>$res
                 ]
             ]);
