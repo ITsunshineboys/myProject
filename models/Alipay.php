@@ -33,7 +33,7 @@ class Alipay extends  ActiveRecord
 
   public function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
         $notify_url='http://test.cdlhzz.cn:888/order/alipaylinenotify';
-        $return_url='http://test.cdlhzz.cn:888/line/http://cross.local.com:808/line/#!/pay_success';
+        $return_url='http://cross.local.com:808/line/#!/pay_success';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id.'&'.$supplier_id.'&'.$freight.'&'.$return_insurance.'&'.$buyer_message;
         $passback_params=urlencode($str);
