@@ -241,19 +241,48 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             }
         }
         //线路
-//        if(isset($array[''])) {
-//            $data['point_item']['point_id'] = $array['point']['point_id'];
-//            $data['point_item']['point_item_name'] = WorkerItem::findtitlebyId($array['point']['point_id']);
-//            unset($array['point']['point_id']);
-//            foreach ($array['point'] as $k => &$point) {
-//                if ($point['point_count'] && $point['point_count'] > 200) {
-//                    return 1000;
-//                }
-//                $data['point_item'][$k]['point_count'] = $point['point_count'];
-//                $data['point_item'][$k]['point_electricity'] = $point['point_electricity'] ? '强电' : '弱电';
-//            }
-//        }
+        if(isset($array['line'])) {
+            $data['line_item']['line_id'] = $array['line']['line_id'];
+            $data['line_item']['line_item_name'] = WorkerItem::findtitlebyId($array['line']['line_id']);
+            unset($array['line']['line_id']);
+            foreach ($array['line'] as $k => &$line) {
+                if ($line['line_count'] && $line['line_length'] > 200) {
+                    return 1000;
+                }
+                $data['line_item'][$k]['line_length'] = $line['line_length'];
+                $data['line_item'][$k]['line_electricity'] = $line['line_electricity'] ? '强电' : '弱电';
+            }
+        }
+        //开关面板
+        if(isset($array['switch_panel'])){
 
+            $data['switch_panel_item']['switch_panel_id'] = $array['switch_panel']['switch_panel_id'];
+            $data['switch_panel_item']['switch_panel_item_name'] = WorkerItem::findtitlebyId($array['switch_panel']['switch_panel_id']);
+            unset($array['switch_panel']['switch_panel_id']);
+            foreach ($array['switch_panel'] as $k => &$switch_panel) {
+                if ($switch_panel['switch_panel_count'] && $switch_panel['switch_panel_count'] > 200) {
+                    return 1000;
+                }
+                $data['switch_panel_item'][$k]['switch_panel_count'] = $switch_panel['switch_panel_count'];
+                $data['switch_panel_item'][$k]['switch_panel_electricity'] = $switch_panel['switch_panel_electricity'] ? '强电' : '弱电';
+            }
+        }
+        //排水路线
+        if(isset($array['drainage_waterway'])){
+            $data['drainage_waterway_itme']['drainage_waterway_id']=$array['drainage_waterway']['drainage_waterway_id'];
+            $data['drainage_waterway_itme']['drainage_waterway_item_name'] = WorkerItem::findtitlebyId($array['drainage_waterway']['drainage_waterway_id']);
+
+            $data['drainage_waterway_itme']['drainage_waterway_length']=$array['drainage_waterway']['drainage_waterway_length'];
+
+        }
+        //进水路线
+        if(isset($array['inlet_waterway'])){
+            $data['inlet_waterwa_itme']['inlet_waterwa_id']=$array['inlet_waterwa']['drainage_waterway_id'];
+            $data['inlet_waterwa_itme']['inlet_waterwa_item_name'] = WorkerItem::findtitlebyId($array['inlet_waterwa']['inlet_waterwa_id']);
+
+            $data['inlet_waterwa_itme']['inlet_waterwa_length']=$array['inlet_waterwa']['inlet_waterwa_length'];
+
+        }
         return $data;
     }
     /**
