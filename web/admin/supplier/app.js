@@ -6,7 +6,7 @@ const app = angular.module("app", ["ui.router", "shop_style", "freight_template"
   "supplier_index", "login","shop_decoration_module","supplier_wallet_module",
   "intelligent_directive","shop_data_module","wallet_detail_module","income_pay_module"
   /*三阶段王杰---结束*/
-
+  , "shopmanageModule", "applybrandModule", "authorizedetailModule"
 ]);
 //路由拦截
 app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
@@ -48,7 +48,16 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
     .state("shop_manage", {   //店铺管理
       url: "/shop_manage",
-      templateUrl: "pages/shop_manage/shop_manage.html"
+      templateUrl: "pages/shop_manage/shop_manage_index.html",
+      params:{authorize_flag:null}
+    })
+    .state("apply_brand", {   //申请新品牌
+        url: "/apply_brand",
+        templateUrl: "pages/shop_manage/apply_brand.html"
+    })
+    .state("authorize_detail", {   //品牌授权详情
+        url: "/authorize_detail",
+        templateUrl: "pages/shop_manage/authorize_detail.html"
     })
     .state("commodity_manage", {   //商品管理
       url: "/commodity_manage",

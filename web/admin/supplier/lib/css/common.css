@@ -169,7 +169,7 @@ input
 /*******************
 分页
 *******************/
-.pagination>li>a, .pagination>li>span{
+/*.pagination>li>a, .pagination>li>span{
 	color: #666F80;
 	border: 1px solid #E6E9F0;
 }
@@ -207,7 +207,7 @@ input
 
 .page_input .input-group-btn .btn{
 	border: 1px solid #E6E9F0;
-}
+}*/
 
 /*******************
 Btn
@@ -556,7 +556,56 @@ Nav tabs
 	margin-right: 20px;
 }
 
+/* 分页样式 lh */
+.page-list {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
 
+.pagination {
+	float: left;
+	margin-top: 0;
+	margin-bottom: 0;
+}
 
+.pagination li:not(.separate) {
+	cursor: pointer;
+}
 
+.page-list .jump {
+	float: left;
+	margin-left: 50px;
+}
 
+.page-list .jump input {
+	display: inline-block !important;
+	margin-right: 10px;
+	width: 80px;
+	vertical-align: middle;
+}
+
+.pagination-total {
+	float: left;
+	margin-top: 0.7%;
+	margin-right: 20px;
+}
+
+/* 星级评分样式 lh */
+.rating {
+	display: inline-block;
+	margin-bottom: 0;
+	padding-left: 0;
+}
+
+.rating li {
+	display: inline-block;
+	color: #d0d0d0;
+}
+
+.rating li + li {
+	margin-left: 5px;
+}
+
+.rating li.filled {
+	color: #ff5722;
+}

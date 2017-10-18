@@ -21,7 +21,7 @@
             </a>
         </dt>
     </dl>
-    <dl ng-click="dl_click(2)">
+    <dl ng-click="dl_click(2)" ui-sref="shop_manage">
         <dt ng-class="{dl_active:show_class==2}">
             <a ng-class="{a_active:show_class==2}">
                 <i class="glyphicon glyphicon-home"></i>
@@ -114,12 +114,16 @@
 <script src="pages/supplier_wallet/js/wallet_detail.js"></script>
 <script src="pages/supplier_wallet/js/income_pay.js"></script>
 <!--三阶段王杰----- 结束-->
+<script src="pages/shop_manage/js/shop_manage_index_ctrl.js"></script> <!--店铺管理-->
+<script src="pages/shop_manage/js/apply_brand_ctrl.js"></script> <!--申请新品牌-->
+<script src="pages/shop_manage/js/authorize_detail_ctrl.js"></script> <!--品牌授权详情页-->
 <script src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="lib/js/ng-file-upload.js"></script>
 <script src="lib/js/ng-file-upload-shim.js"></script>
 <script src="lib/js/ngDraggable.js"></script>
 <script src="lib/js/index.js"></script>
 <script src="app.js"></script>
+<script src="lib/js/common_lh.js"></script>
 </body>
 
 </html>
