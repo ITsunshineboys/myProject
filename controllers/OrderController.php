@@ -291,7 +291,7 @@ class OrderController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg'  =>'ok',
-                'dara' =>[
+                'data' =>[
                     'invoice_id'=>$res
                 ]
             ]);
@@ -480,12 +480,12 @@ class OrderController extends Controller
         $pay_name='线上支付-支付宝支付';
         $invoice_id=trim($request->post('invoice_id'),' ');
         $supplier_id=trim($request->post('supplier_id'),' ');
-        $freight=trim($request->post('freight'),' ');
+        $freight=trim($request->post('freight'),'0');
         $return_insurance=trim($request->post('return_insurance'),' ');
         $buyer_message=trim($request->post('buyer_message','0'));
         //商品描述，可空
         $body = trim($request->post('body'),' ');
-        if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id||! $invoice_id||!$supplier_id||!$freight ){
+        if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id||! $invoice_id||!$supplier_id ){
             $c=1000;
             return Json::encode([
                 'code' =>  $c,
@@ -493,6 +493,11 @@ class OrderController extends Controller
                 'data' => null
             ]);
         }
+        if (!$freight)
+        {
+            $freight=0;
+        }
+        $return_insurance=0;
         $iscorrect_money=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
         if ($iscorrect_money!=true)
         {
@@ -504,17 +509,25 @@ class OrderController extends Controller
         }
         $model=new Alipay();
         $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
+        if ($res)
+            {
+                $c=200;
+                return Json::encode([
+                    'code' =>  $c,
+                    'msg'  => Yii::$app->params['errorCodes'][$c]
+                ]);
+            }
     }
-
+    
     /**
      * 支付宝线下店商城异步返回操作
      */
     public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
-        $alipaySevice=$model->Alipaylinenotify();
-        $result = $alipaySevice->check($post);
-        if ($result){
+//        $alipaySevice=$model->Alipaylinenotify();
+//        $result = $alipaySevice->check($post);
+//        if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS') {
                 $arr=explode('&',$post['passback_params']);
                 $order_no=$post['out_trade_no'];
@@ -529,11 +542,12 @@ class OrderController extends Controller
                     echo "fail";
                 }
             }
-        }else{
-            //验证失败
-            echo "fail";    //请不要修改或删除
-        }
+//        }else{
+//            //验证失败
+//            echo "fail";  //请不要修改或删除
+//        }
     }
+
 
     public function actionAlipaygetnotify(){
         $data=(new \yii\db\Query())->from('alipayreturntest')->all();
@@ -1080,7 +1094,7 @@ class OrderController extends Controller
         }else{
             return Json::encode([
                 'code' => $data,
-                'msg' => '收货地址异常'
+                'msg' => '不支持'
             ]);
         }
     }
@@ -1322,6 +1336,7 @@ class OrderController extends Controller
             $name=(new  Express())->GetExpressName($waybillnumber);
             if(!$name)
             {
+                $code=1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],

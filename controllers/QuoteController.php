@@ -135,17 +135,30 @@ class QuoteController extends Controller
             if ($one_post['quantity']){
                 $worker_craft_norm = WorkerCraftNorm::findOne($one_post['id']);
                 $worker_craft_norm->quantity = $one_post['quantity'];
-                $worker_craft_norm->save();
+                $worker = $worker_craft_norm->save();
             }
         }
-        $labor_cost = LaborCost::findOne($post['id']);
-        $labor_cost->univalence = $post['univalence'];
-        if ($labor_cost->save()){
+        if (!$worker){
+            $code = 1000;
             return Json::encode([
-               'code' =>200,
-                'msg'=>'OK'
+               'code'=>$code,
+               'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+        $labor_cost = LaborCost::findOne($post['id']);
+        $labor_cost->univalence = $post['univalence'];
+        if (!$labor_cost->save()){
+            $code = 1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        return Json::encode([
+            'code' =>200,
+            'msg'=>'OK'
+        ]);
     }
 
     /**
@@ -179,7 +192,14 @@ class QuoteController extends Controller
         foreach ($post['material'] as $one_material){
             $material = EngineeringStandardCraft::findOne($one_material['id']);
             $material->material = $one_material['material'];
-            $material->save();
+            $edit_material = $material->save();
+        }
+        if (!$edit_material){
+            $code = 1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
         }
         return Json::encode([
            'code'=>200,
@@ -1545,6 +1565,7 @@ class QuoteController extends Controller
                 $points->findByUpdate($value['count'],$value['edit_id'],$value['title']);
             }
         }
+
         if (isset($post['del_id'])) {
             $del_points = $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
             if (!$del_points){
@@ -1555,10 +1576,9 @@ class QuoteController extends Controller
                 ]);
             }
         }
-        foreach ($post['count'] as $count){
-            if (isset($count)) {
-                $points->findByUpdate($post['count'],$post['id'],$post['title']);
-            }
+
+        if (isset($post['count'])){
+            $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['count']['title']);
         }
         return Json::encode([
            'code' => 200,
@@ -1580,6 +1600,7 @@ class QuoteController extends Controller
             'list' => ProjectView::findByAll($select,$where),
             'area' => Apartment::findByAll($area_select,$where),
             'apartment_area' => ApartmentArea::findCondition([],$where),
+            'else_area'=> ApartmentArea::findByAll('min_area,max_area'),
         ]);
 
     }
@@ -1591,39 +1612,17 @@ class QuoteController extends Controller
     public function actionCommonalityElseEdit()
     {
         $post = \Yii::$app->request->post();
-        /*
-         * 户型面积
-         */
+         // 户型面积
         if (isset($post['apartment_area'])) {
-            foreach ($post as $apartment_area){
-                if (isset($apartment_area['add'])){
-                    foreach ($apartment_area['add'] as $add){
-                        $add_apartment_area = ApartmentArea::findInset($add);
-                    }
-                } else {
-                    $add_apartment_area = false;
-                }
-                if (isset($apartment_area['edit'])){
-                    foreach ($apartment_area['edit'] as $edit){
-                        $edit_apartment_area = ApartmentArea::findUpdate($edit);
-                    }
-                } else {
-                    $edit_apartment_area = false;
-                }
-                if (isset($apartment_area['del'])){
-                    foreach ($apartment_area['del'] as $del){
-                        $del_apartment_area = ApartmentArea::deleteAll(['id'=>$del]);
-                        var_dump($del_apartment_area);exit;
-                    }
-                } else {
-                    $edit_apartment_area = false;
-                }
+            ApartmentArea::deleteAll([]);
+            foreach ($post['apartment_area'] as $apartment_area){
+                $add_apartment_area = ApartmentArea::findInset($apartment_area);
             }
-            if (!$add_apartment_area || !$edit_apartment_area || !$del_apartment_area){
+            if (!$add_apartment_area) {
                 $code = 1000;
                 return Json::encode([
-                    'code'=>$code,
-                    'msg'=>\Yii::$app->params['errorCodes'][$code],
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
             return Json::encode([
@@ -1631,9 +1630,7 @@ class QuoteController extends Controller
                 'msg' => 'OK',
             ]);
         } elseif (isset($post['else'])) {
-            /*
-             * 其它修改
-             */
+             // 其它修改
             if (isset($post['else']['value'])){
                 foreach ($post['else']['value'] as $value){
                      ProjectView::findByUpdate($value['coefficient'],$value['edit_id']);

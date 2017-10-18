@@ -194,6 +194,50 @@ class FindworkerController extends Controller{
             ]);
         }
     /**
+     * 用户下单详情-工种
+     * @return string
+     */
+    public function actionWorkerOrdeView(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $post=\Yii::$app->request->post();
+        $con_info=WorkerOrder::find()
+            ->select('con_people,con_tel,map_location,address')
+            ->where(['uid'=>$user_id->getId()])
+            ->distinct()
+            ->asArray()
+            ->one();
+        $data=[];
+        if($con_info){
+            $data['con_info']=$con_info;
+        }else{
+            $data['con_info']='';
+        }
+        $data['worker_type_id']=WorkerType::getparenttype($post['worker_type_id']);
+        $data['home_infos']=WorkerOrderItem::getWorkeitem($post['worker_type_id'],$post);
+        if(is_numeric($data['home_infos'])){
+            $code=$data['home_infos'];
+            return Json::encode([
+                'code'=>$code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data'=>$data
+        ]);
+
+
+    }
+    /**
      * 生成订单
      * @return string
      */
@@ -206,6 +250,7 @@ class FindworkerController extends Controller{
                  'msg' =>\ Yii::$app->params['errorCodes'][$code]
              ]);
          }
+
          $post=\Yii::$app->request->post();
          $front_money=trim(\Yii::$app->request->post('front_money',''),'');
          $amount=trim(\Yii::$app->request->post('amount',''),'');
@@ -233,7 +278,7 @@ class FindworkerController extends Controller{
          $code=WorkerOrder::addorderinfo($user_id->getId(),$homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe);
          return Json::encode([
              'code' => $code,
-             'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+             'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
          ]);
     }
     /**

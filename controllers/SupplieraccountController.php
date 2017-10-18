@@ -352,19 +352,25 @@ class SupplieraccountController extends  Controller{
                     }
                 } else {
                     list($startTime, $endTime) = StringService::startEndDate($timeType);
+
                     $startTime = explode(' ', $startTime)[0];
                     $endTime = explode(' ', $endTime)[0];
 
                 }
                 if ($startTime) {
-                    $startTime = strtotime($startTime);
+                    $startTime = (int)strtotime($startTime);
                     $startTime && $where .= " and create_time >= {$startTime}";
                 }
                 if ($endTime) {
-                    $endTime = strtotime($endTime);
+                    if ($timeType=='today')
+                    {
+                        $endTime = (int)(strtotime($endTime)+24*60*60);
+
+                    }else{
+                        $endTime = (int)strtotime($endTime);
+                    }
                     $endTime && $where .= " and create_time <= {$endTime}";
                 }
-
                 $page = (int)Yii::$app->request->get('page', 1);
                 $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
 
@@ -526,7 +532,13 @@ class SupplieraccountController extends  Controller{
             $startTime && $where .= " and apply_time >= {$startTime}";
         }
         if ($endTime) {
-            $endTime = strtotime($endTime);
+            if ($timeType=='today')
+            {
+                $endTime = (int)(strtotime($endTime)+24*60*60);
+
+            }else{
+                $endTime = (int)strtotime($endTime);
+            }
             $endTime && $where .= " and apply_time <= {$endTime}";
         }
         $page = (int)Yii::$app->request->get('page', 1);

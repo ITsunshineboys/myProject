@@ -358,7 +358,6 @@ class SupplierCashController extends Controller
             $status = (int)$request->post('status', '');
             $reason = trim(htmlspecialchars($request->post('reason', '')), '');
             $real_money = (int)$request->post('real_money', '');
-            var_dump($status);die;
             if (($status == self::CASH_STATUS_DONE && $real_money <= 0)  || !$cash_id
             ) {
                 return Json::encode([
@@ -367,24 +366,13 @@ class SupplierCashController extends Controller
                 ]);
             }
 
-            $data = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
-            if ($data) {
-                return Json::encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-                    'data' => $data
-                ]);
-            }else{
+            $code = SupplierCashManager::doCashDeal($cash_id, $status, $reason, $real_money);
                 return Json::encode([
                     'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                    'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
                 ]);
 
             }
-
-
-        }
-
         $code = 1050;
         return Json::encode([
             'code' => $code,
@@ -407,7 +395,6 @@ class SupplierCashController extends Controller
     }
 
     public function actionTest(){
-        var_dump(UserCashregister::find()->asArray()->all());
-        var_dump(UserCashregister::find()->where(['id'=>102])->one());
+        var_dump(UserCashregister::find()->asArray()->where(['status'=>2])->all());
     }
 }

@@ -194,7 +194,7 @@ class OwnerController extends Controller
     }
 
     /**
-     * Series style and  stair list interface
+     * 系列、风格和楼梯
      * @return string
      */
     public function actionSeriesAndStyle()
@@ -214,62 +214,41 @@ class OwnerController extends Controller
     }
 
     /**
-     * Search interface
+     * 搜索功能
      * @return string
      */
     public function actionSearch()
     {
-        $post = Yii::$app->request->post();
-        if (array_key_exists('id', $post)) {
-            $list_effect = Effect::find()->where(['id' => $post['id']])->one();
-            $list_effect_picture = EffectPicture::find()->where(['id' => $list_effect['id']])->all();
-            $effect = Effect::districtSearch($list_effect['toponymy']);
-            foreach ($effect as $one_effect) {
-                $id [] = $one_effect['id'];
+        $id  = trim(Yii::$app->request->post('id',''));
+        $str = trim(Yii::$app->request->post('str',''));
+        if ($str != null){
+            $select = 'id,toponymy,province,city,district,street';
+            $effect = Effect::districtSearch($str,$select);
+            foreach ($effect as &$value){
+                $value['detailed_address'] = $value['province'].$value['city'].$value['district'].$value['street'];
             }
-            $effect_picture = EffectPicture::find()
-                ->where(['in', 'effect_id', $id])
-                ->all();
-        } elseif (array_key_exists('str', $post)) {
-            if ($post['str'] !== null) {
-                $list_effect = null;
-                $list_effect_picture = null;
-                $effect = Effect::districtSearch($post['str']);
-                foreach ($effect as $one_effect) {
-                    $id = $one_effect['id'];
-                }
-                $effect_picture = EffectPicture::find()
-                    ->asArray()
-                    ->where(['in', 'id', $id])
-                    ->all();
-            } else {
-                $list_effect = null;
-                $list_effect_picture = null;
-                $effect = null;
-                $effect_picture = null;
-            }
-
-        } elseif ($post == null) {
-            $list_effect = null;
-            $list_effect_picture = null;
-            $effect = null;
-            $effect_picture = null;
+            return Json::encode([
+                'code' => 200,
+                'msg' => '成功',
+                'data' => [
+                    'list_effect' => $effect,
+                ]
+            ]);
         }
 
-        return Json::encode([
-            'code' => 200,
-            'msg' => '成功',
-            'data' => [
-                'list_effect' => $list_effect,
-                'list_effect_picture' => $list_effect_picture,
-                'effect' => $effect,
-                'effect_picture' => $effect_picture,
-            ]
-        ]);
+        if ($id != null){
+            $id_effect = Effect::findOne(['id'=>$id]);
+            return Json::encode([
+                'code' => 200,
+                'msg'  => '成功',
+                'data' => Effect::findAll(['toponymy'=>$id_effect->toponymy]),
+            ]);
+        }
+
     }
 
     /**
-     * classify interface
+     * 商品分类
      * @return string
      */
     public function actionClassify()
@@ -293,10 +272,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $_select = 'id,univalence,worker_kind';
-        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber'],$_select);
-        $__select = 'quantity,worker_kind_details';
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current'],$__select);
+        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
 
         //      点位 和 材料查询
         $points_select = 'count';
@@ -339,10 +316,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $_select = 'id,univalence,worker_kind';
-        $__select = 'quantity,worker_kind_details';
-        $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber'],$_select);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current'],$__select);
+        $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber']);
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current']);
 
         //强电点位
         $points_select = 'count';
@@ -384,10 +359,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
         //人工价格
-        $_select = 'id,univalence,worker_kind';
-        $__select = 'quantity,worker_kind_details';
-        $waterway_labor = LaborCost::profession($post, self::WORK_CATEGORY['plumber'],$_select);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway'],$__select);
+        $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
 
         //强电点位
         $points_select = 'count';
@@ -648,7 +621,7 @@ class OwnerController extends Controller
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
+        $select = 'goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name';
         $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL,$select);
         $goods_price = BasisDecorationService::priceConversion($goods);
 
@@ -1002,17 +975,53 @@ class OwnerController extends Controller
         $series = trim(Yii::$app->request->post('series',''));
         $style = trim(Yii::$app->request->post('style',''));
         $area = trim(Yii::$app->request->post('area',''));
-        $add_select = 'id,one_materials,two_materials,three_materials,sku';
-        $add_where = 'city_code = '.$code;
+        $add_select = 'id,one_materials,two_materials,three_materials,sku,max(quantity)';
+        $add_where = ['and',['city_code'=>$code],['or',['style_id'=>$style],['series_id'=>$series],['and',['<=','min_area',$area],['>=','max_area',$area]]]];
         $add_materials = DecorationAdd::findByAll($add_select,$add_where);
         foreach ($add_materials as $one_materials){
-            $ids[] = $one_materials['id'];
             $codes [] = $one_materials['sku'];
         }
-        $_select = 'id,decoration_add_id,quantity';
-        $_where = ['or',['style_id'=>$style],['series_id'=>$series],['and',['<=','min_area',$area],['>=','max_area',$area]]];
-        $add = DecorationMessage::findById($_select,$_where);
-        var_dump($add);exit;
+        $goods_select = 'id,platform_price,sku';
+        $goods = Goods::findBySkuAll($codes,$goods_select);
+        foreach ($add_materials as &$material){
+            foreach ($goods as $one_goods){
+                if ($one_goods['sku'] == $material['sku']) {
+                    $material['platform_price'] = $one_goods['platform_price'] / 100;
+                    $material['cost'] = $material['max(quantity)'] * $one_goods['platform_price'] / 100;
+                }
+            }
+        }
+        return Json::encode([
+           'add_list' =>  $add_materials,
+        ]);
+    }
+
+    /**
+     * 系数管理
+     */
+    public function actionCoefficient()
+    {
+        $post = Yii::$app->request->post();
+//        $post = [
+//            ['one'=>'辅材','two'=>'辅材','price'=>18],
+//            ['one'=>'辅材','two'=>'辅材','price'=>19],
+//            ['one'=>'辅材','two'=>'辅材','price'=>20],
+//        ];
+        $coefficient = CoefficientManagement::find()->all();
+        foreach ($coefficient as $one_coefficient){
+            foreach ($post as &$materials){
+                if ($one_coefficient->classify == $materials['one']){
+                   $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
+                }
+            }
+        }
+        $special_offer = 0;
+        foreach ($post as $price){
+            $special_offer += $price['goods_price'];
+        }
+        return Json::encode([
+           'special_offer' => $special_offer,
+        ]);
     }
 
     /**
@@ -1081,7 +1090,6 @@ class OwnerController extends Controller
 
     /**
      * Owner certification action(app)
-     *
      * @return string
      */
     public function actionCertification()

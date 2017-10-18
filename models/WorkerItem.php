@@ -36,6 +36,17 @@ class WorkerItem extends \yii\db\ActiveRecord
         ];
     }
     /**
+     * 工种名称
+     * @param $id
+     * @return mixed
+     */
+    public static function findtitlebyId($id){
+        return WorkerItem::find()
+            ->where(['id'=>$id])
+            ->asArray()
+            ->one()['title'];
+    }
+    /**
      * 获取该工种所负责的地方
      * @param $worker_type_id
      * @return array

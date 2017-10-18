@@ -99,6 +99,7 @@ class DecorationAdd extends ActiveRecord
             ->asArray()
             ->select($select)
             ->where($where)
+            ->groupBy('three_materials')
             ->all();
     }
 

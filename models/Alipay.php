@@ -37,6 +37,7 @@ class Alipay extends  ActiveRecord
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id.'&'.$supplier_id.'&'.$freight.'&'.$return_insurance.'&'.$buyer_message;
         $passback_params=urlencode($str);
+        $total_amount=0.01;
         //超时时间
         $timeout_express="1m";
         $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
@@ -48,7 +49,6 @@ class Alipay extends  ActiveRecord
         $payRequestBuilder->setPassback_params($passback_params);
         $payResponse = new AlipayTradeService($config);
         $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
-        return ;
     }
 
     public  static function  effect_earnstsubmit($effect_id,$name,$phone,$out_trade_no)

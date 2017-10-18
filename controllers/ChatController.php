@@ -30,7 +30,7 @@ class ChatController extends Controller
     public function actionTest()
     {
         $code = sprintf('%6d', 22);
-        var_dump($code);
+        var_dump(time());
     }
     /**
      *第一次登陆app时创建环信用户和本地环信关联数据

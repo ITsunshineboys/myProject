@@ -285,7 +285,7 @@ class GoodsOrder extends ActiveRecord
             $goods_order->invoicer_card=$invoice->invoicer_card;
             $goods_order->invoice_header=$invoice->invoice_header;
             $goods_order->invoice_content=$invoice->invoice_content;
-            $res1=$goods_order->save();
+            $res1=$goods_order->save(false);
             if (!$res1){
                 $tran->rollBack();
                 return false;
@@ -648,6 +648,7 @@ class GoodsOrder extends ActiveRecord
                 $array['platform_price']=self::switchMoney($array['platform_price']*0.01);
                 $array['market_price']=self::switchMoney($array['market_price']*0.01);
                 $array['freight']=self::switchMoney($array['freight']);
+                $array['allCost']=self::switchMoney($array['platform_price']*$goods_num+$array['freight']);
                 return $array;
         }
 
@@ -1262,6 +1263,7 @@ class GoodsOrder extends ActiveRecord
                         if ($data[$k]['RemainingTime']<=0){
                             $data[$k]['complete_time']=$express->receive_time;
                             $data[$k]['status']='已完成';
+                            $data[$k]['is_unusual']=0;
                             $supplier_id[$k]=self::find()
                                 ->select('supplier_id')
                                 ->where(['order_no'=>$data[$k]['order_no']])
@@ -1290,6 +1292,7 @@ class GoodsOrder extends ActiveRecord
                     $data[$k]['RemainingTime']=Express::findRemainingTime($express);
                     $data[$k]['complete_time']=$express->receive_time;
                 }
+                 $data[$k]['is_unusual']=0;
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             $data[$k]['pay_term']=0;

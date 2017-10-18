@@ -428,4 +428,97 @@ class StringService
     {
         return sprintf('%.' . $decimalDigits . 'f', $price);
     }
+
+    /**
+     * Http get
+     *
+     * @param string $url
+     * @return string|bool
+     */
+    public static function httpGet($url)
+    {
+        $oCurl = curl_init();
+        if (stripos($url, "https://") !== FALSE) {
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }
+        curl_setopt($oCurl, CURLOPT_URL, $url);
+        curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+        $sContent = curl_exec($oCurl);
+        $aStatus = curl_getinfo($oCurl);
+        curl_close($oCurl);
+        if (intval($aStatus["http_code"]) == 200) {
+            return $sContent;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Http post
+     *
+     * @param string $url
+     * @param string $param default empty
+     * @return string|bool
+     */
+    public static function httpPost($url, $param = '')
+    {
+        $oCurl = curl_init();
+        if (stripos($url, "https://") !== FALSE) {
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+        if (is_string($param)) {
+            $strPOST = $param;
+        } else {
+            $aPOST = array();
+            foreach ($param as $key => $val) {
+                $aPOST[] = $key . "=" . urlencode($val);
+            }
+            $strPOST = join("&", $aPOST);
+        }
+        curl_setopt($oCurl, CURLOPT_URL, $url);
+        curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($oCurl, CURLOPT_POST, true);
+        curl_setopt($oCurl, CURLOPT_POSTFIELDS, $strPOST);
+        $sContent = curl_exec($oCurl);
+        $aStatus = curl_getinfo($oCurl);
+        curl_close($oCurl);
+        if (intval($aStatus["http_code"]) == 200) {
+            return $sContent;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Http put
+     *
+     * @param string $url
+     * @param string $param
+     * @param int $port default 80
+     * @return string|bool
+     */
+    public static function httpPut($url, $param, $port = 80)
+    {
+        $ci = curl_init();
+
+        curl_setopt($ci, CURLOPT_URL, $url);
+        curl_setopt($ci, CURLOPT_PORT, $port);
+        curl_setopt($ci, CURLOPT_TIMEOUT, 200);
+        curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);
+        curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ci, CURLOPT_POSTFIELDS, $param);
+
+        $sContent = curl_exec($ci);
+        $aStatus = curl_getinfo($ci);
+        curl_close($ci);
+
+        if (intval($aStatus["http_code"]) == 201) {
+            return $sContent;
+        } else {
+            return false;
+        }
+    }
 }
