@@ -3,7 +3,7 @@
 <div ng-controller="details_ctrl">
     <header>
         <div>
-            <img src="images/mall_nav_return.png" class="left_retrun" ng-click="curGoPrev()" alt=""/>
+            <img src="images/mall_nav_return.png" class="left_retrun" ng-click="goPrev({'pid':pid,'id':id,'commentThree':commentThree})" alt=""/>
             <img src="images/mall_search_1.png" class="search_details" alt=""/>
             <a ui-sref="commodity_search">
                 <input type="text" placeholder="请输入想购买的商品" />
@@ -14,7 +14,7 @@
     <section>
         <!--便签栏-->
         <div class="memo_pad">
-        <li ng-click="changeOrder('sold_number',0)">销量优先</li>
+        <li >销量优先</li>
         <li >
             价格
             <img class="up_down" src="images/mall_arrow_up.png"  ng-show=pic_flag  ng-click="changePic ()" alt=""/>
@@ -33,7 +33,7 @@
         <!--商品展示列表-->
         <div class="mall_list">
             <div class="flex_div" >
-                <div class="item_commodity"  ng-repeat="item in detailsList " ng-click="go_three_details(item)">
+                <div class="item_commodity"  ng-repeat="item in detailsList " ng-click="getDetailsProduct(item)">
                     <div class="item_commodity_divimg">
                         <img src="images/bed.png" alt="" class="img_item " />
                     </div>

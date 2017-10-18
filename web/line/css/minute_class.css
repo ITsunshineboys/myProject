@@ -103,11 +103,15 @@ a{
 }
 .comment_li {
     width: 5rem;
-    border-left: 1px solid  #CDD3D7;;
+    border-left: 1px solid  #CDD3D7;
 }
 .font_class{
     font-size: 1rem;
     color: #6C6C6C;
+}
+#img_three{
+    width: 4rem;
+    height: 4rem;
 }
 .hor_line{
     background-color:#CDD3D7;
