@@ -6,14 +6,14 @@
         <img src="images/mall_location_white.png" class="icon_color" alt=""/>
         <!--<i class="icon icon-map-marker icon-3x icon_color"></i>-->
         <span class="address">成都</span>
-        <a ui-sref="commodity_search" class="search">超级无敌地暖片</a>
+        <a ui-sref="commodity_search({'search_flag':search_flag})" class="search">超级无敌地暖片</a>
         <!--<img src="searchimages/message_icon.png" class="massage" alt=""/>-->
     </div>
     <!--banner图开始-->
-    <div class="carousel" swiper>
+    <div class="carousel" >
         <div class="swiper-container" swiper>
-            <div class="swiper-wrapper">
-                 <div class="swiper-slide"  ng-repeat="n in swiper_img">
+            <div class="swiper-wrapper" swiper>
+                 <div class="swiper-slide"  ng-repeat="n in swiper_img" >
                       <img ng-click="getDetails(n)" src="http://test.cdlhzz.cn:888/{{n.image}}" alt="" class="size_img"/>
                  </div>
             </div>

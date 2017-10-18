@@ -31,9 +31,9 @@ class Alipay extends  ActiveRecord
 //        }
     }
 
-    public function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
-        $notify_url='http://test.cdlhzz.cn:888/order/alipayeffect_earnstnotify';
-        $return_url='http://test.cdlhzz.cn:888/line/effect_earnstsuccess_pay';
+  public function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
+        $notify_url='http://test.cdlhzz.cn:888/order/alipaylinenotify';
+        $return_url='http://test.cdlhzz.cn:888/line/#!/pay_success';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id.'&'.$supplier_id.'&'.$freight.'&'.$return_insurance.'&'.$buyer_message;
         $passback_params=urlencode($str);
@@ -49,6 +49,7 @@ class Alipay extends  ActiveRecord
         $payRequestBuilder->setPassback_params($passback_params);
         $payResponse = new AlipayTradeService($config);
         $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+        return $result;
     }
 
     public  static function  effect_earnstsubmit($effect_id,$name,$phone,$out_trade_no)

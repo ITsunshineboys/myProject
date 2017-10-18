@@ -860,18 +860,16 @@ class OrderAfterSale extends ActiveRecord
             }
         }
         if (!$OrderAfterSale->supplier_express_confirm){
-            $day=floor($time/(24*60*60));
-            $hour=floor(($time-$day*(24*60*60))/(60*60));
-            $min=floor(($time-$day*(24*60*60)-$hour*3600)/60);
-            $s=$time-$day*(24*60*60)-$hour*3600-$min*60;
+
             switch ($role)
             {
+                
                 case 'user':
                     $data[]=[
                         'type'=>'商家确认收货',
                         'value' =>'剩余确认时间',
                         'time'=>date('Y-m-d H:i',$buyer_express->create_time),
-                        'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
+                        'content'=>$time,
                         'phone'=>'',
                         'number'=>'',
                         'code'=>'countdown',
@@ -883,7 +881,7 @@ class OrderAfterSale extends ActiveRecord
                         'type'=>'商家确认收货',
                         'value' =>'剩余确认时间',
                         'time'=>date('Y-m-d H:i',$buyer_express->create_time),
-                        'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
+                        'content'=>$time,
                         'phone'=>'',
                         'number'=>'',
                         'code'=>'supplier_unconfirm_received',
@@ -1074,7 +1072,7 @@ class OrderAfterSale extends ActiveRecord
                             'value' =>'剩余确认时间',
                             'time'=>date('Y-m-d H:i',$buyer_express->create_time),
                             'phone'=>'',
-                            'content'=>$day.'天'.$hour.'小时'.$min.'分钟'.$s.'秒',
+                            'content'=>$time,
                             'number'=>'',
                             'code'=>'supplier_unconfirm_received',
                             'status'=>'in'

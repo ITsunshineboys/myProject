@@ -13,15 +13,27 @@ header div img{
     margin-left: 1.5rem;
 }
 .address_map{
-    line-height: 4rem;
+    /*line-height: 4rem;*/
     /*height: 6rem;*/
+    padding-bottom: 1rem;
+    position: relative;
 }
 .address_map img:nth-child(1){
     margin-left: 1.5rem;
+    margin-top: .3rem;
 }
-.address_map img:nth-child(3){
-    margin-left: 17rem;
+.img_harvest{
+    position: absolute;
+    right: 1.5rem;
+    top:.7rem;
+    width: .7rem;
+}
+#img_harvest{
+    position: absolute;
+    right: 1.5rem;
     width: .8rem;
+    vertical-align: middle;
+    top:2.2rem;
 }
 .delivery_address{
     font-size: 1.4rem;
@@ -29,10 +41,26 @@ header div img{
     vertical-align: top;
     margin-left: 1rem;
 }
+.address_content{
+    display: inline-block;
+    width: 25rem;
+    font-size: 1.4rem;
+    margin-left: 1.2rem;
+    vertical-align: middle;
+}
+.address_content span:nth-child(5){
+    color: #6C6C6C;
+}
+.address_content span:nth-child(6){
+    color: #6C6C6C;
+}
 .bag_div{
     background-color: #F6F6F6;
     width: 32rem;
     height: 1rem
+}
+#bottom_div{
+    margin-bottom: 3rem;
 }
 .inoc_title{
     height: 3.4rem;
@@ -147,6 +175,7 @@ header div img{
     height: 4rem;
     line-height: 4rem;
     position: relative;
+    bottom: .5rem;
 }
 .need_required span:nth-child(2){
     position: absolute;
@@ -159,29 +188,35 @@ header div img{
     right: 8rem;
     font-size: 1.3rem;
 }
+/*section{*/
+    /*position: relative;*/
+/*}*/
 .go_play{
     height: 4rem;
-    line-height: 4rem;
-    position: relative;
+    /*line-height: 4rem;*/
+    position: fixed;
+    bottom: 0;
 }
 .go_play span:nth-child(1){
     color: #6C6C6C;
     font-size: 1.3rem;
     margin-left: 1.5rem;
+    vertical-align: middle;
 }
 .go_play span:nth-child(2){
     font-size: 1.3rem;
     color: #F55122;
+    vertical-align: middle;
 }
 .go_play button{
     width: 8.5rem;
-    height: 4rem;
+    height: 3.8rem;
     /*line-height: 4rem;*/
     background-color: #F55122;
     font-size: 1.4rem;
     color: white;
-    position: absolute;
-    right: 0;
+    margin-left: 13.1rem;
+    margin-top: 0.2rem;
 }
 #address_body{
     width: 32rem!important;
@@ -254,13 +289,13 @@ header div img{
     margin-left: 1rem;
     font-size: 1.5rem;
     outline: none;
-    opacity: .6;
+    /*opacity: .6;*/
 }
 /*弹出 判断框*/
-#sm_model{
+#sm_model ,#address_model{
     width: 21rem;
 }
-#num_modal{
+#num_modal, #address_order_modal{
     height: 12rem;
     margin-top: 16rem;
     line-height: 6rem;
@@ -282,9 +317,38 @@ header div img{
     outline: none;
     padding: 0;
 }
+#address_order_modal p{
+    font-size: 1.4rem;
+    color: #4A4A4A;
+}
+#address_order_modal button{
+    color: #53A8F4;
+    background-color: white;
+    width: 20.5rem;
+    height: 2.8rem;
+    line-height: 2.8rem;
+    border: 0;
+    font-size: 1.4rem;
+    outline: none;
+    padding: 0;
+}
 .xian{
     background-color:#E9EDEE;
     width: 21rem;
     height: .2rem;
     margin-top: 1.2rem;
+}
+
+/*三级联动模态框*/
+#three_modal{
+    /*position: relative;*/
+}
+#level_model{
+    width: 32rem;
+
+}
+#link_modal{
+    height: 25rem;
+    /*padding-bottom: 2rem;*/
+    margin-top: 31rem;
 }
