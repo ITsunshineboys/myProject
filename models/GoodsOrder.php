@@ -342,7 +342,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sort_money
      * @return array
      */
-    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money,$keyword)
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
     {
         $offset = ($page - 1) * $size;
         $query = (new Query())
@@ -351,15 +351,8 @@ class GoodsOrder extends ActiveRecord
             ->leftJoin(User::tableName(). ' AS u','u.id=a.user_id')
             ->select($select)
             ->where($where)
-            ->orderBy('a.create_time desc');
-        if($keyword)
-        {
-            $OrderList=$query->andFilterWhere(['like', 'z.order_no', $keyword])
-                ->orFilterWhere(['like', 'a.consignee_mobile', $keyword])
-                ->orFilterWhere(['like', 'u.mobile', $keyword])
-                ->orFilterWhere(['like', 'z.goods_name', $keyword])
-                ->all();
-        }
+            ->orderBy('a.create_time desc')
+            ->all();
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
