@@ -248,7 +248,7 @@ class OwnerController extends Controller
     }
 
     /**
-     * classify interface
+     * 商品分类
      * @return string
      */
     public function actionClassify()

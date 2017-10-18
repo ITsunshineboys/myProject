@@ -1565,6 +1565,7 @@ class QuoteController extends Controller
                 $points->findByUpdate($value['count'],$value['edit_id'],$value['title']);
             }
         }
+
         if (isset($post['del_id'])) {
             $del_points = $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
             if (!$del_points){
@@ -1575,10 +1576,9 @@ class QuoteController extends Controller
                 ]);
             }
         }
-        foreach ($post['count'] as $count){
-            if (isset($count)) {
-                $points->findByUpdate($post['count'],$post['id'],$post['title']);
-            }
+
+        if (isset($post['count'])){
+            $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['count']['title']);
         }
         return Json::encode([
            'code' => 200,
