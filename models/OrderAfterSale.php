@@ -702,8 +702,6 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'',
             'status'=>''
         ];
-        $OrderGoods=OrderGoods::find()->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])->one()->customer_service;
-        echo $OrderGoods;exit;
         if ($OrderAfterSale->buyer_confirm!=1){
             switch ($role)
             {
