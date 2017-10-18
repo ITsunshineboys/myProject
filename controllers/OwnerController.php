@@ -908,17 +908,20 @@ class OwnerController extends Controller
         $total_day = BasisDecorationService::wallArea($post,$worker_kind_details);
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($labor['worker_kind'], $post['city']);
+
         if ($post['building_scrap'] == true) {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
         } else {
             $building_scrap = BasisDecorationService::nothingBuildingScrap($post, $craft);
         }
+
 //        总人工费
         $labor_cost['price'] = $total_day['total_day'] * $labor['univalence'] + $building_scrap['cost'];
         $labor_cost['worker_kind'] = $labor['worker_kind'];
 
         //材料费
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL);
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL,$select);
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = [];
         foreach ($goods_price as $max) {
@@ -1002,25 +1005,27 @@ class OwnerController extends Controller
     public function actionCoefficient()
     {
         $post = Yii::$app->request->post();
-//        $post = [
-//            ['one'=>'辅材','two'=>'辅材','price'=>18],
-//            ['one'=>'辅材','two'=>'辅材','price'=>19],
-//            ['one'=>'辅材','two'=>'辅材','price'=>20],
-//        ];
         $coefficient = CoefficientManagement::find()->all();
         foreach ($coefficient as $one_coefficient){
-            foreach ($post as &$materials){
+            foreach ($post['list'] as &$materials){
                 if ($one_coefficient->classify == $materials['one']){
                    $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
                 }
             }
         }
         $special_offer = 0;
-        foreach ($post as $price){
+        $total_prices = 0;
+        foreach ($post['list'] as $price){
+            $total_prices += $price['price'];
             $special_offer += $price['goods_price'];
         }
         return Json::encode([
-           'special_offer' => $special_offer,
+            'code'=> 200,
+            'msg'=> 'OK',
+           'data' => [
+               'special_offer'=>$special_offer,
+               'total_prices'=>$total_prices,
+           ],
         ]);
     }
 
@@ -1055,6 +1060,7 @@ class OwnerController extends Controller
         $material[]   = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
         $material[]   = BasisDecorationService::mild($goods_price,$post);
         $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
+
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
@@ -1140,7 +1146,7 @@ class OwnerController extends Controller
     }
 
     /**
-     * homepage  list
+     * 主页列表
      * @return string
      */
     public function actionHomepage()
@@ -1156,7 +1162,7 @@ class OwnerController extends Controller
     }
 
     /**
-     * case list
+     * 案例列表
      * @return string
      */
     public function actionCaseList(){
