@@ -519,7 +519,7 @@ class OrderController extends Controller
             }
     }
     
-    /**
+  /**
      * 支付宝线下店商城异步返回操作
      */
     public function actionAlipaylinenotify(){
@@ -528,12 +528,16 @@ class OrderController extends Controller
 //        $alipaySevice=$model->Alipaylinenotify();
 //        $result = $alipaySevice->check($post);
 //        if ($result){
-            if ($post['trade_status'] == 'TRADE_SUCCESS') {
+            if ($post['trade_status'] == 'TRADE_SUCCESS'){
                 $arr=explode('&',$post['passback_params']);
                 $order_no=$post['out_trade_no'];
-                $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$order_no])->asArray()->one();
+                $order=GoodsOrder::find()
+                    ->select('order_no')
+                    ->where(['order_no'=>$order_no])
+                    ->asArray()
+                    ->one();
                 if ($order){
-                    exit;
+                    echo "success";
                 }
                 $res=GoodsOrder::Alipaylinenotifydatabase($arr,$post);
                 if ($res==true){
@@ -547,6 +551,7 @@ class OrderController extends Controller
 //            echo "fail";  //请不要修改或删除
 //        }
     }
+
 
 
     public function actionAlipaygetnotify(){
