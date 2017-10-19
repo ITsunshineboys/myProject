@@ -45,12 +45,11 @@ class SupplierCashManager extends ActiveRecord
         }
 
         if ($status) {
-           $where= $query->andWhere(['status' => $status]);
+           $query->andWhere(['status' => $status]);
         }
-        var_dump($query->count());die;
 
-            $count = $query->andWhere($where)->count();
 
+        $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
