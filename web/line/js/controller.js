@@ -2,9 +2,8 @@ angular.module("all_controller", [])
 //首页控制器
     .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         $http({   //轮播接口调用
-
             method: 'get',
-            url: "http://test.cdlhzz.cn:888/mall/carousel"
+            url: "http://common.cdlhzz.cn/mall/carousel"
         }).then(function successCallback(response) {
             console.log($scope.swiper_img);
             console.log(response);
@@ -14,7 +13,7 @@ angular.module("all_controller", [])
         });
         $http({   //商品分类列表
             method: 'get',
-            url: "http://test.cdlhzz.cn:888/mall/categories"
+            url: "http://common.cdlhzz.cn/mall/categories"
         }).then(function successCallback (response) {
             $scope.message=response.data.data.categories;
             console.log( $scope.message);
@@ -35,7 +34,7 @@ angular.module("all_controller", [])
 
         $http({   //推荐分类商品列表
             method: 'get',
-            url: "http://test.cdlhzz.cn:888/mall/recommend-second"
+            url: "http://common.cdlhzz.cn/mall/recommend-second"
         }).then(function successCallback (response) {
             console.log(response);
             $scope.commodity = response.data.data.recommend_second;
@@ -72,7 +71,7 @@ angular.module("all_controller", [])
         //左侧数据获取
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/categories'
+            url: 'http://common.cdlhzz.cn/mall/categories'
         }).then(function successCallback(response) {
             $scope.star = response.data.data.categories;
             console.log(response)
@@ -80,7 +79,7 @@ angular.module("all_controller", [])
         //首页列表点击分类列表传值id获取数据(一级id查去二级)
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/categories?pid=' + $stateParams.pid
+            url: 'http://common.cdlhzz.cn/mall/categories?pid=' + $stateParams.pid
         }).then(function successCallback(response) {
             $scope.details = response.data.data.categories;
             //console.log(response.data.data.categories[0].id);
@@ -90,7 +89,7 @@ angular.module("all_controller", [])
         //首页列表点击分类列表传值id获取数据(一级id查去三级)
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/categories-level3?pid=' + $stateParams.pid
+            url: 'http://common.cdlhzz.cn/mall/categories-level3?pid=' + $stateParams.pid
         }).then(function successCallback(response) {
             let arr= {};
             for(let [key,value] of response.data.categories_level3.entries()){
@@ -110,7 +109,7 @@ angular.module("all_controller", [])
             $scope.pid = item.id;
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/categories?pid=' + item.id
+                url: 'http://common.cdlhzz.cn/mall/categories?pid=' + item.id
             }).then(function successCallback(response) {
                 $scope.details = response.data.data.categories;
                 //console.log(response.data.data.categories[0].id);
@@ -120,7 +119,7 @@ angular.module("all_controller", [])
             //首页列表点击分类列表传值id获取数据(一级id查去三级)
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/categories-level3?pid=' + item.id
+                url: 'http://common.cdlhzz.cn/mall/categories-level3?pid=' + item.id
             }).then(function successCallback(response) {
                 let arr= {};
                 for(let [key,value] of response.data.categories_level3.entries()){
@@ -150,7 +149,7 @@ angular.module("all_controller", [])
             let arr=[];
             $http({
                 method:'get',
-                url:"http://test.cdlhzz.cn:888/mall/search?keyword="+$scope.data
+                url:"http://common.cdlhzz.cn/mall/search?keyword="+$scope.data
             }).then( function successCallback (response) {
                 console.log(response);
                 $scope.commoditySearch= response.data.data.search.goods;
@@ -198,7 +197,7 @@ angular.module("all_controller", [])
         //展示数据 默认展示
         $http({
             method:"get",
-            url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$scope.id,
+            url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
             params:{
                 "sort[]":"sold_number:4"
             }
@@ -217,7 +216,7 @@ angular.module("all_controller", [])
             $scope.pic_flag = false;
             $http({
                 method: 'get',
-                url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+                url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id,
                 params:{
                     "sort[]":"platform_price:3"
                 }
@@ -233,7 +232,7 @@ angular.module("all_controller", [])
             $scope.pic_strat = false;
             $http({
                 method: 'get',
-                url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+                url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id,
                 params:{
                     "sort[]":"platform_price:4"
                 }
@@ -250,7 +249,7 @@ angular.module("all_controller", [])
             $scope.good_pra_filter = true;
             $http({
                 method: 'get',
-                url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+                url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id,
                 params:{
                     "sort[]":"favourable_comment_rate:3"
                 }
@@ -265,7 +264,7 @@ angular.module("all_controller", [])
             $scope.good_pra_filter = false;
             $http({
                 method: 'get',
-                url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id,
+                url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id,
                 params:{
                     "sort[]":"favourable_comment_rate:4"
                 }
@@ -278,7 +277,7 @@ angular.module("all_controller", [])
         //风格  系类 品牌 接数据调用
         $http({
             method:"get",
-            url:"http://test.cdlhzz.cn:888/mall/category-brands-styles-series",
+            url:"http://common.cdlhzz.cn/mall/category-brands-styles-series",
             params:{
                 category_id:+$scope.id
             }
@@ -324,7 +323,7 @@ angular.module("all_controller", [])
         console.log($scope.mall_id);
         $http({
             method:'get',
-            url:"http://test.cdlhzz.cn:888/mall/goods-view",
+            url:"http://common.cdlhzz.cn/mall/goods-view",
             params:{
                 id:+$scope.mall_id
             }
@@ -445,14 +444,14 @@ angular.module("all_controller", [])
         console.log($stateParams.id);
         $http({
             method:"get",
-            url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$stateParams.id
+            url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id
         }).then(function successCallback (response) {
             $scope.detailsList = response.data.data.category_goods;
             console.log(response)
         });
         $http({   //分类商品列表
             method: 'get',
-            url: "http://test.cdlhzz.cn:888/mall/recommend-second"
+            url: "http://common.cdlhzz.cn/mall/recommend-second"
         }).then(function successCallback (response) {
             $scope.commodity=response.data.data.recommend_second;
             console.log( $scope.commodity);
