@@ -1666,7 +1666,7 @@ class QuoteController extends Controller
      */
     public function actionGoodsManagementList()
     {
-        $select = 'title,pid,path,category_id';
+        $select = 'title,pid,path,category_id,quantity';
         $where = 'state = 1';
         return Json::encode([
            'list'=> AssortGoods::findByAll($select,$where),
