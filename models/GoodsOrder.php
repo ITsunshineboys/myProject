@@ -432,11 +432,11 @@ class GoodsOrder extends ActiveRecord
                 ->select($select)
                 ->where($where)->count();
             $total_page=ceil($count/$size);
-            $data=array_slice($arr, ($page-1)*$size,$size);
+           //            $data=array_slice($arr, ($page-1)*$size,$size);
             return [
                 'total_page' =>$total_page,
                 'count'=>$count,
-                'details' => $data
+                'details' => $arr
             ];
         }else{
             return [
