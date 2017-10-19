@@ -106,7 +106,11 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             }
             $list['create_time']=date('Y-m-d H:i',$list['create_time']);
         }
-        $total=count($Accessdetaillist);
+                $total=self::find()
+            ->select($select)
+            ->where($where)
+            ->asArray()
+            ->count();
         return ModelService::pageDeal($Accessdetaillist, $total, $page, $size);
     }
 

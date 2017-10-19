@@ -91,8 +91,8 @@ class SupplierCashManager extends ActiveRecord
     public static function GetCash($transaction_no,$supplier_id)
     {
 
-        $query = (new \yii\db\Query())
-            ->from(self::SUP_CASHREGISTER)
+        $query =UserCashregister::find()
+            ->asArray()
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID]);
 
 
