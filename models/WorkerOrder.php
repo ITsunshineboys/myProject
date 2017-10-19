@@ -594,30 +594,30 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return implode(',', $date);
     }
 
-    /**
-     * add guarantee info into worker_order_item
-     * @param $id
-     * @param $item_id
-     * @param $guarantee
-     * @return bool
-     */
-    public static function inserstatus($id, $item_id, $status)
-    {
-        $connection = \Yii::$app->db;
-        $res = $connection->createCommand()
-            ->insert('worker_order_item',
-                [
-                    'worker_order_id' => $id,
-                    'worker_item_id' => $item_id,
-                    'status' => $status
-                ])
-            ->execute();
-        if ($res) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    /**
+//     * add guarantee info into worker_order_item
+//     * @param $id
+//     * @param $item_id
+//     * @param $guarantee
+//     * @return bool
+//     */
+//    public static function inserstatus($id, $item_id, $status)
+//    {
+//        $connection = \Yii::$app->db;
+//        $res = $connection->createCommand()
+//            ->insert('worker_order_item',
+//                [
+//                    'worker_order_id' => $id,
+//                    'worker_item_id' => $item_id,
+//                    'status' => $status
+//                ])
+//            ->execute();
+//        if ($res) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     /**
      * 生成订单
@@ -629,22 +629,24 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return int
      */
 
-    public static function addorderinfo($uid, $homeinfos, $ownerinfos, $front_money, $amount, $demand, $describe)
+    public static function addorderinfo($uid,array $array)
+
     {
+
         $worker_order = new self();
         $worker_order->uid = $uid;
-        $worker_order->worker_type_id = $homeinfos['worker_type_id'];
+        $worker_order->worker_type_id = $array['worker_type_id'];
         $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
         $worker_order->create_time = time();
-        $start_time = $worker_order->start_time = $homeinfos['start_time'];
-        $end_time = $worker_order->end_time = $homeinfos['end_time'];
-        $worker_order->need_time = $homeinfos['need_time'];
-        $worker_order->map_location = $ownerinfos['map_location'];
-        $worker_order->address = $ownerinfos['address'];
-        $worker_order->con_people = $ownerinfos['con_people'];
-        $worker_order->con_tel = $ownerinfos['con_tel'];
-        $worker_order->amount = $amount * 100;
-        $worker_order->front_money = $front_money * 100;
+        $start_time = $worker_order->start_time = strtotime($array['start_time']);
+        $end_time = $worker_order->end_time = strtotime($array['end_time']);
+        $worker_order->need_time = $array['need_time'];
+        $worker_order->map_location = $array['map_location'];
+        $worker_order->address = $array['address'];
+        $worker_order->con_people = $array['con_people'];
+        $worker_order->con_tel = $array['con_tel'];
+        $worker_order->amount = $array['amount'] * 100;
+        $worker_order->front_money = $array['front_money'] * 100;
         $worker_order->status=self::WORKER_ORDER_NOT_BEGIN;
         $days = self::dataeveryday($start_time, $end_time);
         $worker_order->days = $days;
@@ -663,29 +665,45 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
             $worker_order_img = new WorkerOrderImg();
             $order_no = $worker_order_img->worker_order_no = $worker_order->order_no;
-            $rest = self::saveorderimgs($homeinfos['images'], $order_no);
+            $rest = self::saveorderimgs($array['images'], $order_no);
             if ($rest == false) {
                 $transaction->rollBack();
                 $code = 500;
                 return $code;
             }
-            $data = [];
-            $worker_order_item = new WorkerOrderItem();
-            $id = $worker_order_item->worker_order_id = $worker_order->id;
-            $keys = array_keys($homeinfos);
-            foreach ($keys as $k => &$key) {
-                if (preg_match('/(item)/', $key, $m)) {
-                    $data[$k] = $homeinfos[$key];
-                    foreach ($data as &$dat) {
-                        $dat['id'] = $id;
-                    }
+            $type=WorkerType::getparenttype($array['worker_type_id']);
+            if(!$type){
+                return null;
+            }
+            $ks=array_keys($array);
+            foreach ($ks as $k=>$key){
+                if(preg_match('/(items)/',$key,$v)){
+                        $data=$array[$key];
                 }
             }
-
-            $infos = self::saveorderitems($data, $id);
-            if ($infos == false) {
+            switch ($type){
+                case '泥工';
+                    $res=self::saveMuditem($data,$worker_order->id);
+                    break;
+                case '水电工';
+                    $res=self::savehydropoweritem($data,$worker_order->id);
+                    break;
+                case '木工';
+                    $res=self::savecarpentryitem($data,$worker_order->id);
+                    break;
+                case '防水工';
+                    $res=self::savewaterproofitme($data,$worker_order->id);
+                    break;
+                case '油漆工';
+                    $res=self::savepainteritem($data,$worker_order->id);
+                    break;
+                case '杂工';
+                    $code=self::savecarpentryitem($array);
+                    break;
+            }
+            if(!$res){
+                $code=500;
                 $transaction->rollBack();
-                $code = 500;
                 return $code;
             }
             $transaction->commit();
@@ -697,22 +715,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
     }
 
-    /**
-     * 添加订单工艺，条目，面积，长度信息
-     * @param $items
-     * @param $order_id
-     * @return bool
-     */
-    public static function saveorderitems($items, $order_id)
+    public static function saveMuditem(array $array,$order_id)
     {
 
-        $worker_order_item = new WorkerOrderItem();
-        foreach ($items as $attributes) {
+        $mud_order = new MudWorkerOrder();
 
-            $_model = clone $worker_order_item;
-            $_model->worker_order_id = $order_id;
+        foreach ($array as $attributes) {
+
+            $_model = clone $mud_order;
+            $_model->order_id = $order_id;
             foreach (array_keys($attributes) as &$k) {
-                if (preg_match('/(item)/', $k, $m)) {
+                if (preg_match('/(id)/', $k, $m)) {
                     $_model->worker_item_id = $attributes[$k];
                 }
                 if (preg_match('/(craft)/', $k, $m)) {
@@ -720,18 +733,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 }
                 if (preg_match('/(area)/', $k, $m)) {
                     $_model->area = $attributes[$k];
-                }
-                if (preg_match('/(status)/', $k)) {
-                    $_model->status = $attributes[$k];
-                }
-                if (preg_match('/(length)/', $k)) {
-                    $_model->length = $attributes[$k];
-                }
-                if (preg_match('/(count)/', $k)) {
-                    $_model->count = $attributes[$k];
-                }
-                if (preg_match('/(electricity)/', $k)) {
-                    $_model->electricity = $attributes[$k];
                 }
             }
             $res = $_model->save();
@@ -741,9 +742,59 @@ class WorkerOrder extends \yii\db\ActiveRecord
         } else {
             return true;
         }
-
-
     }
+
+
+
+
+
+//    /**
+//     * 添加订单工艺，条目，面积，长度信息
+//     * @param $items
+//     * @param $order_id
+//     * @return bool
+//     */
+//    public static function saveorderitems($items, $order_id)
+//    {
+//
+//        $worker_order_item = new WorkerOrderItem();
+//        foreach ($items as $attributes) {
+//
+//            $_model = clone $worker_order_item;
+//            $_model->worker_order_id = $order_id;
+//            foreach (array_keys($attributes) as &$k) {
+//                if (preg_match('/(item)/', $k, $m)) {
+//                    $_model->worker_item_id = $attributes[$k];
+//                }
+//                if (preg_match('/(craft)/', $k, $m)) {
+//                    $_model->worker_craft_id = $attributes[$k];
+//                }
+//                if (preg_match('/(area)/', $k, $m)) {
+//                    $_model->area = $attributes[$k];
+//                }
+//                if (preg_match('/(status)/', $k)) {
+//                    $_model->status = $attributes[$k];
+//                }
+//                if (preg_match('/(length)/', $k)) {
+//                    $_model->length = $attributes[$k];
+//                }
+//                if (preg_match('/(count)/', $k)) {
+//                    $_model->count = $attributes[$k];
+//                }
+//                if (preg_match('/(electricity)/', $k)) {
+//                    $_model->electricity = $attributes[$k];
+//                }
+//            }
+//            $res = $_model->save();
+//        }
+//        if (!$res) {
+//            return false;
+//        } else {
+//            return true;
+//        }
+//
+//
+//    }
 
     /**
      * 刷新订单随机

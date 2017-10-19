@@ -30,7 +30,7 @@ class ChatController extends Controller
     public function actionTest()
     {
         $code = sprintf('%6d', 22);
-        var_dump(time());
+        var_dump(date('Y-m-d H:i:s',1508319253));
     }
     /**
      *第一次登陆app时创建环信用户和本地环信关联数据
@@ -188,5 +188,11 @@ class ChatController extends Controller
             'msg' => 'ok',
             'msg_count' => $msg_count['count']
         ]);
+    }
+
+    public function actionAllUser(){
+        $chat=new ChatService();
+        var_dump($chat->getUsersForPage(0,''));
+
     }
 }

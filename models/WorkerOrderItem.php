@@ -291,7 +291,6 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
      */
     public static function addwaterproofdata(array $array){
         $data=[];
-        $data['worker_type_id']=$array['worker_type_id'];
         if(isset($array['demand'])){
             $data['demand']=$array['demand'];
         }
@@ -303,32 +302,42 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
             $code = 1000;
             return $code;
         }
-        $data['start_time']=strtotime($array['start_time']);
-        $data['end_time']=strtotime($array['end_time']);
-        if(isset($array['indoor_id'])){
-            if (!isset($array['indoor_craft_id']) || !isset($array['indoor_area'])) {
+        $data['start_time']=$array['start_time'];
+        $data['end_time']=$array['end_time'];
+        if(isset($array['indoor'])){
+            if (!isset($array['indoor']['indoor_craft_id']) || !isset($array['indoor']['indoor_area'])) {
                 $code = 1000;
                 return $code;
             }else {
-                $data['indoor_item']['indoor_item_id'] = $array['indoor_id'];
-                $data['indoor_item']['indoor_craft_id'] = $array['indoor_craft_id'];
-                $data['indoor_item']['indoor_area'] = $array['indoor_area'];
+                $data['indoor_item']['indoor_item_name']= WorkerItem::findtitlebyId($array['indoor']['indoor_id']);
+                $data['indoor_item']['indoor_item_id'] = $array['indoor']['indoor_id'];
+                $data['indoor_item']['indoor_craft_id'] = WorkerCraft::getcraftitle($array['indoor']['indoor_craft_id'])['craft'];
+                $data['indoor_item']['indoor_area'] = $array['indoor']['indoor_area'];
 
             }
         }
-        if(isset($array['outdoor_id'])){
-            if (!isset($array['outdoor_craft_id']) || !isset($array['outdoor_area'])) {
+        if(isset($array['outdoor'])){
+            if (!isset($array['outdoor']['outdoor_craft_id']) || !isset($array['outdoor']['outdoor_area'])) {
                 $code = 1000;
                 return $code;
             }else {
-                $data['outdoor_item']['outdoor_item_id'] = $array['outdoor_id'];
-                $data['outdoor_item']['outdoor_craft_id'] = $array['outdoor_craft_id'];
-                $data['outdoor_item']['outdoor_area'] = $array['outdoor_area'];
+                $data['outdoor_item']['indoor_item_name']= WorkerItem::findtitlebyId($array['outdoor']['outdoor_id']);
+                $data['outdoor_item']['outdoor_item_id'] = $array['outdoor']['outdoor_id'];
+                $data['outdoor_item']['outdoor_craft_id'] = WorkerCraft::getcraftitle($array['outdoor']['outdoor_craft_id'])['craft'];
+                $data['outdoor_item']['outdoor_area'] = $array['outdoor']['outdoor_area'];
+
 
             }
         }
 
         return $data;
+    }
+    /**
+     * 油漆工 添加
+     * @param array $array
+     */
+    public static function addpainterdata(array $array){
+
     }
         /**
      * 业主联系信息
@@ -379,22 +388,22 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
         }
         switch ($type){
             case '泥工';
-                $homeinfos=WorkerOrderItem::addMudorderitem($post);
+                $homeinfos=self::addMudorderitem($post);
                 break;
             case '水电工';
-                $homeinfos=WorkerOrderItem::addhydropowerdata($post);
+                $homeinfos=self::addhydropowerdata($post);
                 break;
             case '木工';
-                $homeinfos=WorkerOrderItem::addcarpentrydata($post);
+                $homeinfos=self::addcarpentrydata($post);
                 break;
             case '防水工';
-                $homeinfos=WorkerOrderItem::addwaterproofdata($post);
+                $homeinfos=self::addwaterproofdata($post);
                 break;
             case '油漆工';
-                $homeinfos=WorkerOrderItem::addcarpentrydata($post);
+                $homeinfos=self::addpainterdata($post);
                 break;
             case '杂工';
-                $homeinfos=WorkerOrderItem::addcarpentrydata($post);
+                $homeinfos=self::addcarpentrydata($post);
                 break;
         }
         if($homeinfos==1000){

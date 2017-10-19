@@ -88,6 +88,7 @@ class UserChat extends \yii\db\ActiveRecord
         $chat_online = new ChatService();
         $username = $chat->chat_username;
         if ($chat_online->getUser($username)) {
+            $trans->rollBack();
             return false;
         }
         $password = \Yii::$app->security->generatePasswordHash($username);

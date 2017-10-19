@@ -131,10 +131,9 @@ class FindworkerController extends Controller{
      *根据厅室获取所有工艺
      *@return string
      */
-    public function actionGetcraftinfo()
+    private static function Getcraftinfo($item_id)
     {
         $code = 1000;
-        $item_id = trim(\Yii::$app->request->get('item_id', ''), '');
         if (!$item_id) {
             return Json::encode([
                 'code' => $code,
@@ -142,11 +141,8 @@ class FindworkerController extends Controller{
             ]);
         }
         $data = WorkerItem::getcraft($item_id);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data' => $data
-        ]);
+        return $data;
+
 
     }
     /**
@@ -173,7 +169,7 @@ class FindworkerController extends Controller{
     }
 
     /**
-     *根据条目id 获取子条目
+     *根据条目id 获取子条目+工艺
      *@return string
      */
     public function actionGetChliditem(){
@@ -186,18 +182,21 @@ class FindworkerController extends Controller{
             ]);
         }
         $data=WorkerItem::getchliditem($item_id);
-
+        $craft=self::Getcraftinfo($item_id);
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
-                'data' => $data
+                'data' => [
+                    'items_child'=>$data,
+                    'items_craft'=>$craft
+                ]
             ]);
         }
     /**
      * 用户下单详情-工种
      * @return string
      */
-    public function actionWorkerOrdeView(){
+    public function actionWorkerOrderView(){
         $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
@@ -220,7 +219,8 @@ class FindworkerController extends Controller{
         }else{
             $data['con_info']='';
         }
-        $data['worker_type_id']=WorkerType::getparenttype($post['worker_type_id']);
+        $data['worker_type']=WorkerType::getparenttype($post['worker_type_id']);
+        $data['worker_type_id']=$post['worker_type_id'];
         $data['home_infos']=WorkerOrderItem::getWorkeitem($post['worker_type_id'],$post);
         if(is_numeric($data['home_infos'])){
             $code=$data['home_infos'];
@@ -237,11 +237,12 @@ class FindworkerController extends Controller{
 
 
     }
+
     /**
-     * 生成订单
+     * 泥作下单生成订单
      * @return string
      */
-     public function actionGenerateOrder(){
+     public function actionMudGenerateOrder(){
          $user_id = \Yii::$app->user->identity;
          $code=1052;
          if(!$user_id){
@@ -252,30 +253,7 @@ class FindworkerController extends Controller{
          }
 
          $post=\Yii::$app->request->post();
-         $front_money=trim(\Yii::$app->request->post('front_money',''),'');
-         $amount=trim(\Yii::$app->request->post('amount',''),'');
-         $demand=trim(\Yii::$app->request->post('demand',''),'');
-         $describe=trim(\Yii::$app->request->post('describe',''),'');
-         $need_time = self::getOrderNeedTime($post['homeinfos']);
-         $homeinfos=WorkerOrderItem::getWorkeitem($post['homeinfos']['worker_type_id'],$post);
-         if(is_numeric($homeinfos)){
-            $code=$homeinfos;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-         }
-         $ownerinfos=WorkerOrderItem::addownerinfo($post['ownerinfos']);
-            if(is_numeric($ownerinfos)){
-                $code=$ownerinfos;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-         $homeinfos['need_time'] = $need_time;
-         $code=WorkerOrder::addorderinfo($user_id->getId(),$homeinfos,$ownerinfos,$front_money,$amount,$demand,$describe);
+         $code=WorkerOrder::addorderinfo($user_id->getId(),$post);
          return Json::encode([
              'code' => $code,
              'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
