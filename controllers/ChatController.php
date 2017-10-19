@@ -29,8 +29,8 @@ class ChatController extends Controller
 
     public function actionTest()
     {
-        $code = sprintf('%6d', 22);
-        var_dump(date('Y-m-d H:i:s',1508319253));
+
+        var_dump((new ChatService())->getUsers(0));
     }
     /**
      *第一次登陆app时创建环信用户和本地环信关联数据
@@ -43,6 +43,8 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
+        $username=trim(\Yii::$app->request->post('username',''));
+        $password=trim(\Yii::$app->request->post('password',''));
         if (UserChat::find()->where(['u_id' => $u_id, 'role_id' => $role_id])->one()) {
             $code = 1000;
             return Json::encode([
@@ -50,8 +52,7 @@ class ChatController extends Controller
                 'msg' => '已有聊天号，无须新建'
             ]);
         }
-
-        $user_chat = (new UserChat())->newChatUser($u_id, $role_id);
+        $user_chat = UserChat::newChatUser($username,$password,$u_id,$role_id);
         if (!$user_chat) {
             $code = 500;
             return Json::encode([
@@ -61,7 +62,6 @@ class ChatController extends Controller
         }
 
         list($chat, $hx) = $user_chat;
-
         if (array_key_exists('error', $hx)) {
             return Json::encode([
                 'code' => 1000,

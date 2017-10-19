@@ -11,10 +11,10 @@ class ChatService
     //YXA6isIrLRTIwuEyLOIGXGHGTPMX3WE
     private $client_secret = 'YXA6eMPzUAg-pRfHTyxBq8jM4n3OIH0';
     //123456
-    private $org_name = '1185170730178177';
+    private $org_name ='1185170730178177';
     //111
     private $app_name = 'push-msg';
-    private $url;
+    private $url='https://a1.easemob.com/1185170730178177/push-msg/';
 //------------------------------------------------------用户体系
 
 

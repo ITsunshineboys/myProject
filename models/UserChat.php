@@ -58,9 +58,9 @@ class UserChat extends \yii\db\ActiveRecord
         $time = time();
         if ($insert) {
             $this->create_time = $time;
-            $username = sprintf('%6d', $this->u_id . $this->role_id);
-            $chat_username = \Yii::$app->security->generatePasswordHash($username);
-            $this->chat_username = str_replace(['$' ,'/'], 's', $chat_username);
+//            $username = sprintf('%6d', $this->u_id . $this->role_id);
+//            $chat_username = \Yii::$app->security->generatePasswordHash($username);
+//            $this->chat_username = str_replace(['$' ,'/'], 's', $chat_username);
         }
         $this->login_time = $time;
         return parent::beforeSave($insert);
@@ -71,28 +71,32 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $role_id
      * @return array|bool
      */
-    public static function newChatUser($u_id, $role_id)
+    public static function newChatUser($username,$password,$u_id, $role_id)
     {
+
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat = new self();
             $chat->u_id = $u_id;
             $chat->role_id = $role_id;
+            $chat->chat_username=$username;
             $chat->save();
             $trans->commit();
         } catch (Exception $e) {
             $trans->rollBack();
             return false;
         }
+
         //创建环信号
         $chat_online = new ChatService();
-        $username = $chat->chat_username;
+        $username=$chat->chat_username;
         if ($chat_online->getUser($username)) {
             $trans->rollBack();
             return false;
         }
-        $password = \Yii::$app->security->generatePasswordHash($username);
+        $password = \Yii::$app->security->generatePasswordHash($password);
         $hx = $chat_online->createUser($username, $password);
+
         return [$chat, $hx];
     }
 }
