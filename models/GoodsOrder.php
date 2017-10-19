@@ -253,9 +253,10 @@ class GoodsOrder extends ActiveRecord
             ->where(['a.id'=>$goods_id])
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
-        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100){
-            return false;
-        }
+//        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100){
+//            return false;
+//        }
+        $post['total_amount']=$freight*100+$return_insurance*100+$goods['platform_price']*$goods_num;
         $address=Addressadd::findById($address_id);
         $invoice=Invoice::findById($invoice_id);
         if (! $address  || !$invoice){
@@ -266,7 +267,7 @@ class GoodsOrder extends ActiveRecord
         try{
             $goods_order=new self();
             $goods_order->order_no=$post['out_trade_no'];
-            $goods_order->amount_order=$post['total_amount']*100;
+            $goods_order->amount_order=$post['total_amount'];
             $goods_order->supplier_id=$supplier_id;
             $goods_order->invoice_id=$invoice_id;
             $goods_order->pay_status=1;
