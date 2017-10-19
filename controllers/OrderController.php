@@ -158,6 +158,55 @@ class OrderController extends Controller
         }
     }
 
+        /**
+     * @return string
+     */
+    public  function   actionGetDistrict()
+    {
+        //获取一级
+        $data=Yii::$app->params['districts'];
+        $one=$data[0][86];
+        foreach ($one as $k =>$v)
+        {
+            $datas[$k]['id']=$k;
+            $datas[$k]['name']=$one[$k];
+            $datas[$k]['child']=array();
+
+            if (array_key_exists($k, $data[0]))
+            {
+                $datas[$k]['child']=$data[0][$k];
+                foreach ($datas[$k]['child'] as $key =>$val)
+                {
+                    $datas[$k]['child'][$key]=array();
+                    $datas[$k]['child'][$key]['id']=$key;
+                    $datas[$k]['child'][$key]['name']=$datas[$k]['child'][$key];
+                    if (array_key_exists($key, $data[0]))
+                    {
+                        $datas[$k]['child'][$key]['child']=$data[0][$key];
+                        foreach ($datas[$k]['child'][$key]['child'] as $ke =>$va)
+                        {
+                            $datas[$k]['child'][$key]['child'][$ke]=array();
+                            $datas[$k]['child'][$key]['child'][$ke]['id']=$ke;
+                            $datas[$k]['child'][$key]['child'][$ke]['name']=$datas[$k]['child'][$key]['child'][$ke];
+                        }
+                    }else{
+                        $datas[$k]['child'][$key]['child']=[];
+                    }
+
+
+                }
+            }else{
+                $datas[$k]['child']=[];
+            }
+
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data'=>$datas
+        ]);
+    }
+
     /**
      * 获取省份
      * @return string
