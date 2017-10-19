@@ -1185,11 +1185,11 @@ class OrderController extends Controller
         if($keyword){
             if ($type=='all')
             {
-                $where ="  CONCAT(IFNULL(`z.order_no`,''),IFNULL(`z.goods_name`,'')) like '%{$keyword}%'";
+                $where ="  CONCAT(z.order_no),z.goods_name) like '%{$keyword}%'";
 
             }else{
 
-                $where ="  CONCAT(IFNULL(`z.order_no`,''),IFNULL(`z.goods_name`,'')) like '%{$keyword}%' and  ".GoodsOrder::GetTypeWhere($type);
+                $where ="  CONCAT(z.order_no,z.goods_name) like '%{$keyword}%' and  ".GoodsOrder::GetTypeWhere($type);
             }
             $where.=" and a.supplier_id={$supplier->id}";
         }else{
