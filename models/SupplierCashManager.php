@@ -95,9 +95,7 @@ class SupplierCashManager extends ActiveRecord
             ->asArray()
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID]);
 
-
         $arr = $query->one();
-        var_dump($arr);die;
         if (!$arr) {
             return null;
         }
