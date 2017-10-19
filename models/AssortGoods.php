@@ -27,12 +27,19 @@ class AssortGoods extends ActiveRecord
      * @param $post
      * @return int
      */
-    public static function add($post)
+    public static function add($add)
     {
         $db= \Yii::$app->db;
         $res = $db
             ->createCommand()
-            ->batchInsert(self::tableName(),self::FIELDS_NAME,$post)
+            ->insert(self::tableName(),[
+                'title'=>$add['title'],
+                'category_id'=>$add['id'],
+                'pid'=>$add['pid'],
+                'path'=>$add['path'],
+                'state'=>0,
+                'quantity'=>0,
+            ])
             ->execute();
         return $res;
     }

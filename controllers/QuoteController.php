@@ -919,41 +919,22 @@ class QuoteController extends Controller
     public function actionAssortGoodsAdd()
     {
         $post = \Yii::$app->request->post();
-        $array = [];
-        foreach ($post['assort'] as $one_post) {
-            ksort($one_post);
-            $array [] = $one_post;
+//        $user = \Yii::$app->user->identity;
+//        if (!$user) {
+//            $code = 1052;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+        (new AssortGoods())->deleteAll(['state'=>0]);
+        foreach($post['assort'] as $management) {
+            $add = AssortGoods::add($management);
         }
-        $user = \Yii::$app->user->identity;
-        if (!$user) {
-            $code = 1052;
+        if ($add){
             return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $find = AssortGoods::findAll([]);
-
-        if (!empty($find)) {
-            $id = [];
-            foreach ($find as $find_one) {
-                $id [] = $find_one['category_id'];
-            }
-            (new AssortGoods())->deleteAll(['and',['category_id'=>$id],['state'=> 0]]);
-        }
-
-        $assort = (new AssortGoods())->add($array);
-        if ($assort) {
-            $code = 200;
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok'
-            ]);
-        } else {
-            $code = 1051;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
+               'code'=> 200,
+               'msg'=> 'ok',
             ]);
         }
     }
