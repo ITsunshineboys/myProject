@@ -37,19 +37,19 @@ class SupplierCashManager extends ActiveRecord
             ->where(['uid' => $user, 'role_id' => self::ROLE_ID]);
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end > $time_start) {
-            $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
+            $where= $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
         } elseif ($time_start) {
-            $query->andWhere(['>=', 'apply_time', $time_start]);
+            $where =$query->andWhere(['>=', 'apply_time', $time_start]);
         } elseif ($time_end) {
-            $query->andWhere(['<=', 'apply_time', $time_end]);
+            $where =$query->andWhere(['<=', 'apply_time', $time_end]);
         }
 
         if ($status) {
-            $query->andWhere(['status' => $status]);
+           $where= $query->andWhere(['status' => $status]);
         }
-
-        $count = $query->count();
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size,'page'=>$page, 'pageSizeParam' => false]);
+//        var_dump($query->count());die;
+        $count = $query->andWhere($where)->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
