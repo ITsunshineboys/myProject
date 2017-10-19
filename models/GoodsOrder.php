@@ -343,7 +343,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sort_money
      * @return array
      */
-   public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money,$keyword)
+   public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
     {
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
