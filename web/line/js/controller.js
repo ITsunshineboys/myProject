@@ -441,6 +441,7 @@ angular.module("all_controller", [])
         $scope.styles = '';
         $scope.orderType = 'sold_number';
         $scope.order = '-';
+        
         console.log($stateParams.id);
         $http({
             method:"get",
