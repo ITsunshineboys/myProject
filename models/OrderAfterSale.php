@@ -859,7 +859,7 @@ class OrderAfterSale extends ActiveRecord
                 return $code;
             }
         }
-        if (!$OrderAfterSale->supplier_express_confirm){
+        if ($OrderAfterSale->supplier_express_confirm!=1){
 
             switch ($role)
             {
