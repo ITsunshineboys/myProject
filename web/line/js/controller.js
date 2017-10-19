@@ -4,7 +4,7 @@ angular.module("all_controller", [])
         $scope.search_flag = false;
         $http({   //轮播接口调用
             method: 'get',
-            url: "http://test.cdlhzz.cn:888/mall/carousel"
+            url: "http://common.cdlhzz.cn/mall/carousel"
         }).then(function successCallback(response) {
             console.log($scope.swiper_img);
             console.log(response);
@@ -645,7 +645,9 @@ angular.module("all_controller", [])
             $scope.harvestName    = '';
             $scope.harvestNum     = '';
             $scope.harvestAddress = '';
-            $scope.harvestMadel ='#delivery_address'
+            $scope.harvestMadel ='#delivery_address';
+            // 点击编写收货地址 获取城市内容
+
         };
         //订单信息===>获取商品的信息
         $http.post('http://test.cdlhzz.cn:888/order/getgoodsdata',{
@@ -795,11 +797,11 @@ angular.module("all_controller", [])
                                     buyer_message:"我日"
                                 },config).then(function (response) {
                                     console.log(response);
-                                    $scope.status = response.status;
-                                    $scope.dataFram = response.data;
-                                    console.log($scope.dataFram);
-                                    console.log($scope.status);
-                                    $('body').append($scope.dataFram)
+                                    // $scope.status = response.status;
+                                    // $scope.dataFram = response.data;
+                                    // console.log($scope.dataFram);
+                                    // console.log($scope.status);
+                                    // $('body').append($scope.dataFram)
 
                                 })
                             }
@@ -832,7 +834,41 @@ angular.module("all_controller", [])
                 });
             }
 
-        }
+        };
+        // 判断三级
+        var LAreaData = [{
+            "id": "2",
+            "name": "一级",
+            "child": [{
+                "id": "21",
+                "name": "二级1",
+                "child": [{
+                    "id": "211",
+                    "name": "三级1"
+                }, {
+                    "id": "212",
+                    "name": "三级2"
+                }, {
+                    "id": "213",
+                    "name": "三级3"
+                }]
+            }, {
+                "id": "22",
+                "name": "二级2"
+            }, {
+                "id": "23",
+                "name": "二级3"
+            }]
+        }];
+        var area = new LArea();
+        area.init({
+            'trigger': '#demo1',//触发选择控件的文本框，同时选择完毕后name属性输出到该位置
+            'valueTo':'#value1',//选择完毕后id属性输出到该位置
+            'keys':{id:'id',name:'name'},//绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
+            'type':1,//数据源类型
+            'data':LAreaData//数据源
+        });
+
     })
 
      //发票信息

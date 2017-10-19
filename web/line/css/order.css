@@ -271,11 +271,11 @@ header div img{
     position: absolute;
     left: 10rem;
 }
-.address_more{
-    position: absolute;
-    right: 2rem;
-    color: #4A4A4A;
-}
+/*.address_more{*/
+    /*position: absolute;*/
+    /*right: 2rem;*/
+    /*color: #4A4A4A;*/
+/*}*/
 .btn_hold{
     margin-top: 2rem;
 }
