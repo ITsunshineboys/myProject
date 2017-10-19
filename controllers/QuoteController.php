@@ -1625,6 +1625,7 @@ class QuoteController extends Controller
 //            ],
 //                ]
 //        ];
+        var_dump($post);exit;
          // 户型面积
         if (isset($post['apartment_area'])) {
             ApartmentArea::deleteAll([]);
