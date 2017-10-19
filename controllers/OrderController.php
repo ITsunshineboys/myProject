@@ -157,8 +157,7 @@ class OrderController extends Controller
             ]);
         }
     }
-
-        /**
+    /**
      * @return string
      */
     public  function   actionGetDistrict()
@@ -178,22 +177,25 @@ class OrderController extends Controller
                 foreach ($datas[$k]['child'] as $key =>$val)
                 {
                     $datas[$k]['child'][$key]=array();
+
                     $datas[$k]['child'][$key]['id']=$key;
-                    $datas[$k]['child'][$key]['name']=$datas[$k]['child'][$key];
+
+                        $datas[$k]['child'][$key]['name']=$val;
+
+
                     if (array_key_exists($key, $data[0]))
                     {
+
                         $datas[$k]['child'][$key]['child']=$data[0][$key];
                         foreach ($datas[$k]['child'][$key]['child'] as $ke =>$va)
                         {
                             $datas[$k]['child'][$key]['child'][$ke]=array();
                             $datas[$k]['child'][$key]['child'][$ke]['id']=$ke;
-                            $datas[$k]['child'][$key]['child'][$ke]['name']=$datas[$k]['child'][$key]['child'][$ke];
+                            $datas[$k]['child'][$key]['child'][$ke]['name']=$va;
                         }
                     }else{
                         $datas[$k]['child'][$key]['child']=[];
                     }
-
-
                 }
             }else{
                 $datas[$k]['child']=[];
@@ -206,7 +208,6 @@ class OrderController extends Controller
             'data'=>$datas
         ]);
     }
-
     /**
      * 获取省份
      * @return string
