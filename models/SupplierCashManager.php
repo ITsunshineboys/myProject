@@ -49,7 +49,7 @@ class SupplierCashManager extends ActiveRecord
         }
 
         $count = $query->count();
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size,'page'=>$page, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
