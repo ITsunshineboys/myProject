@@ -46,8 +46,8 @@ class Apartment extends ActiveRecord
                 'min_area' =>$rows['min_area'],
                 'max_area' =>$rows['max_area'],
                 'points_id'=>$rows['points_id'],
-                'project_name' =>$rows['min_area'],
-                'project_value'=>$rows['min_area'],
+                'project_name' =>$rows['project_name'],
+                'project_value'=>$rows['project_value'],
             ])
             ->execute();
     }

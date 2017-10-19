@@ -1640,19 +1640,18 @@ class QuoteController extends Controller
 
                 }
 
-                if (isset($else['area']['id'])){
-                    $area_update = $else['area'];
-                    foreach ($area_update as $update){
-                        Apartment::findByUpdate($update['value'],$update['id']);
+                foreach ($else['area'] as $one_else){
+                    if (isset($one_else['id'])){
+                        Apartment::findByUpdate($one_else['value'],$one_else['id']);
                     }
-                } else {
-                    $area_insert = $else['area'];
-                    foreach ($area_insert as $insert){
-                        Apartment::findByInsert($insert);
+
+                    if (isset($one_else['min_area'])) {
+
+                        Apartment::findByInsert($one_else);
                     }
                 }
-            };
 
+            };
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
@@ -1666,7 +1665,7 @@ class QuoteController extends Controller
      */
     public function actionGoodsManagementList()
     {
-        $select = 'title,pid,path,category_id,quantity';
+        $select = 'title,pid,path,category_id as id,quantity';
         $where = 'state = 1';
         return Json::encode([
            'list'=> AssortGoods::findByAll($select,$where),
