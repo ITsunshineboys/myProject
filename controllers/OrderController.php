@@ -2446,6 +2446,7 @@ class OrderController extends Controller
         $OrderAfterSale=OrderAfterSale::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku])
             ->one();
+        var_dump($OrderAfterSale);exit;
         if (!$OrderAfterSale){
             $code=1000;
             return Json::encode([
