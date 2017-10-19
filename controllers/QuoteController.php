@@ -1649,12 +1649,11 @@ class QuoteController extends Controller
                     ProjectView::findByUpdate($else['value']['coefficient'],$else['value']['id']);
                 }
 
-
-                    if (isset($else['area']['id'])){
-                        Apartment::findByUpdate($else['area']['value'],$else['area']['id']);
-                    } else {
-                        Apartment::findByInsert($else['area']);
-                    }
+                if (isset($else['area']['id'])){
+                    Apartment::findByUpdate($else['area']['value'],$else['area']['id']);
+                } else {
+                    Apartment::findByInsert($else['area']);
+                }
             };
 
             return Json::encode([
