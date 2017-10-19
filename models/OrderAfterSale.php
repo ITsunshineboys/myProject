@@ -1258,14 +1258,18 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return int
      */
-    public static  function  SupplierConfirm($OrderAfterSale)
+    public static  function  SupplierConfirm($OrderAfterSale,$type)
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
-
-            $OrderAfterSale->supplier_confirm=1;
-            $OrderAfterSale->supplier_confirm_time=time();
-            $res=$OrderAfterSale->save();
+            if ($type=='received')
+            {
+                $OrderAfterSale->supplier_express_confirm=1;
+            }else{
+                $OrderAfterSale->supplier_confirm=1;
+                $OrderAfterSale->supplier_confirm_time=time();
+            }
+            $res=$OrderAfterSale->save(false);
             if (!$res){
                 $tran->rollBack();
             }
@@ -1278,7 +1282,6 @@ class OrderAfterSale extends ActiveRecord
             return $code;
         }
     }
- 
     /**
      * @param $OrderAfterSale
      * @return int

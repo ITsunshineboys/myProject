@@ -2419,7 +2419,7 @@ class OrderController extends Controller
         }
     }
 
-    /**售后详情 -- 商家确认
+     /**售后详情 -- 商家确认
      * 上门服务
      * @return string
      */
@@ -2443,10 +2443,14 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $type=trim($request->post('type',''));
+        if (!$type)
+        {
+            $type='';
+        }
         $OrderAfterSale=OrderAfterSale::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku])
             ->one();
-        var_dump($OrderAfterSale);exit;
         if (!$OrderAfterSale){
             $code=1000;
             return Json::encode([
@@ -2462,7 +2466,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=OrderAfterSale::SupplierConfirm($OrderAfterSale);
+        $code=OrderAfterSale::SupplierConfirm($OrderAfterSale,$type);
         if ($code==200){
             return Json::encode([
                 'code'=>$code,
