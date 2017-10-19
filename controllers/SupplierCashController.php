@@ -126,11 +126,11 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $page = (int)$request->post('page', 1);
-        $page_size = (int)$request->post('page_size', ModelService::PAGE_SIZE_DEFAULT);
-        $time_type = trim(htmlspecialchars($request->post('time_type', 'all')), '');
-        $time_start = trim(htmlspecialchars($request->post('time_start', '')), '');
-        $time_end = trim(htmlspecialchars($request->post('time_end', '')), '');
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+        $time_type = trim(htmlspecialchars($request->get('time_type', 'all')), '');
+        $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
+        $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
         $status = (int)$request->post('status', '');
 
         if (($status && !array_key_exists($status, self::USER_CASH_STATUSES))
