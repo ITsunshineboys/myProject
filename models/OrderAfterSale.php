@@ -609,7 +609,7 @@ class OrderAfterSale extends ActiveRecord
                 $supplier_accessdetail=new UserAccessdetail();
                 $supplier_accessdetail->uid=$user->id;
                 $supplier_accessdetail->role_id=6;
-                $supplier_accessdetail->access_type=4;
+                $supplier_accessdetail->access_type=2;
                 $supplier_accessdetail->access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
                 $supplier_accessdetail->order_no=$OrderGoods->order_no;
                 $supplier_accessdetail->sku=$OrderGoods->sku;
@@ -933,7 +933,7 @@ class OrderAfterSale extends ActiveRecord
                 $supplier_accessdetail=new UserAccessdetail();
                 $supplier_accessdetail->uid=$user->id;
                 $supplier_accessdetail->role_id=6;
-                $supplier_accessdetail->access_type=4;
+                $supplier_accessdetail->access_type=2;
                 $supplier_accessdetail->access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
                 $supplier_accessdetail->order_no=$OrderGoods->order_no;
                 $supplier_accessdetail->sku=$OrderGoods->sku;
