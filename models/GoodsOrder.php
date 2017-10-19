@@ -435,7 +435,7 @@ class GoodsOrder extends ActiveRecord
             $data=array_slice($arr, ($page-1)*$size,$size);
             return [
                 'total_page' =>$total_page,
-                'count'=>count($data),
+                'count'=>$count,
                 'details' => $data
             ];
         }else{
