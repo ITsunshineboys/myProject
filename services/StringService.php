@@ -521,4 +521,31 @@ class StringService
             return false;
         }
     }
+
+    /**
+     * Http delete
+     *
+     * @param string $url
+     * @return string|bool
+     */
+    public static function httpDelete($url)
+    {
+        $ci = curl_init();
+
+        curl_setopt($ci, CURLOPT_URL, $url);
+        curl_setopt($ci, CURLOPT_TIMEOUT, 200);
+        curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);
+        curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'DELETE');
+
+        $sContent = curl_exec($ci);
+        $aStatus = curl_getinfo($ci);
+        curl_close($ci);
+
+        if (intval($aStatus["http_code"]) == 200) {
+            return $sContent;
+        } else {
+            return false;
+        }
+    }
 }
