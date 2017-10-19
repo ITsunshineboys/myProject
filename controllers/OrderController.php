@@ -1185,7 +1185,7 @@ class OrderController extends Controller
         if($keyword){
             if ($type=='all')
             {
-                $where ="  CONCAT(z.order_no),z.goods_name) like '%{$keyword}%'";
+                $where ="  CONCAT(z.order_no,z.goods_name) like '%{$keyword}%'";
 
             }else{
 
