@@ -131,7 +131,7 @@ class SupplierCashController extends Controller
         $time_type = trim(htmlspecialchars($request->get('time_type', 'all')), '');
         $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
-        $status = (int)$request->post('status', '');
+        $status = (int)$request->get('status', '');
 
         if (($status && !array_key_exists($status, self::USER_CASH_STATUSES))
             || ($time_type == 'custom' && $time_end && $time_start > $time_end)
