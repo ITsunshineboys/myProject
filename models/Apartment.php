@@ -43,10 +43,10 @@ class Apartment extends ActiveRecord
         return \Yii::$app->db
             ->createCommand()
             ->insert(self::TABLE_NAME,[
-                'min_area'=>$rows['min_area'],
-                'max_area'=>$rows['max_area'],
+                'min_area' =>$rows['min_area'],
+                'max_area' =>$rows['max_area'],
                 'points_id'=>$rows['points_id'],
-                'project_name'=>$rows['min_area'],
+                'project_name' =>$rows['min_area'],
                 'project_value'=>$rows['min_area'],
             ])
             ->execute();

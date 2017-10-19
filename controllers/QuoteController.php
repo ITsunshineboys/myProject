@@ -1646,18 +1646,16 @@ class QuoteController extends Controller
             foreach ($post['else'] as $else){
                 // 其它修改
                 if (isset($else['value'])){
-                    foreach ($else['value'] as $value){
-                        ProjectView::findByUpdate($value['coefficient'],$value['id']);
-                    }
+                    ProjectView::findByUpdate($else['value']['coefficient'],$else['value']['id']);
                 }
-                foreach ($else['area'] as $area_value){
-                    if (isset($area_value['id'])){
-                        Apartment::findByUpdate($area_value['value'],$area_value['id']);
+
+
+                    if (isset($else['area']['id'])){
+                        Apartment::findByUpdate($else['area']['value'],$else['area']['id']);
                     } else {
-                        Apartment::findByInsert($area_value);
+                        Apartment::findByInsert($else['area']);
                     }
-                }
-            }
+            };
 
             return Json::encode([
                 'code' => 200,
