@@ -1614,14 +1614,16 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
 //        $post = [
 //            'else'=>[
+//                [
 //              'area'=>[
 //                ['min_area'=> 1 ,'max_area'=>50,'project_value'=>1,'project_name'=>'防水面积' , 'points_id'=>69],
-////                  ['id'=>1,'value'=>10]
+//                  ['id'=>1,'value'=>10]
 //              ],
 //                'value'=>[
 //                    ['id'=>1,'coefficient'=>10]
 //                ],
 //            ],
+//                ]
 //        ];
          // 户型面积
         if (isset($post['apartment_area'])) {
