@@ -919,24 +919,21 @@ class QuoteController extends Controller
     public function actionAssortGoodsAdd()
     {
         $post = \Yii::$app->request->post();
-//        $user = \Yii::$app->user->identity;
-//        if (!$user) {
-//            $code = 1052;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
         (new AssortGoods())->deleteAll(['state'=>0]);
         foreach($post['assort'] as $management) {
             $add = AssortGoods::add($management);
         }
-        if ($add){
+        if (!$add){
+            $code = 1000;
             return Json::encode([
-               'code'=> 200,
-               'msg'=> 'ok',
+               'code'=> $code,
+               'msg'=> \Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        return Json::encode([
+           'code' => 200,
+           'msg' => 'ok',
+        ]);
     }
 
     /**
