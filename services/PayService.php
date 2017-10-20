@@ -53,6 +53,7 @@ class PayService
             $baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
             // return $baseUrl;exit;
             $url = $this->__CreateOauthUrlForCode($baseUrl);
+            
              echo $url;exit;
             Header("Location: $url");
             exit();
