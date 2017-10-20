@@ -33,21 +33,6 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.logistics_flag=false;
     }
 
-    //等待上架
-    if($stateParams.wait_flag==true){
-      $scope.on_flag=false;
-      $scope.down_flag=false;
-      $scope.wait_flag=true;
-      $scope.logistics_flag=false;
-    }
-    // 物流模板
-    if($stateParams.logistics_flag==true){
-      $scope.on_flag=false;
-      $scope.down_flag=false;
-      $scope.wait_flag=false;
-      $scope.logistics_flag=true;
-    }
-
     //已上架
     $scope.on_shelves=function () {
       $scope.on_flag=true;
@@ -56,28 +41,12 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.logistics_flag=false;
 
       // 初始化已上架搜索
-      $scope.search_content='';//搜索输入框的值
-      $scope.sort_status='online_time:3';
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:2,
-          keyword:$scope.search_content,
-          'sort[]':$scope.sort_status
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.up_list_arr=res.data.data.goods_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-        $scope.page=1;
-      },function (err) {
-        console.log(err);
-      })
+      $scope.up_search_value='';//搜索输入框的值
+      $scope.params.keyword='';
+      $scope.params['sort[]']='online_time:3';
+      $scope.params.status=2;
+      $scope.up_menu_init();
+      tablePages();
     };
   //已下架
     $scope.down_shelves=function () {
@@ -86,30 +55,14 @@ let commodity_manage = angular.module("commodity_manage",[])
       $scope.wait_flag=false;
       $scope.logistics_flag=false;
       /*初始化已下架的搜索*/
-      $scope.off_search_content='';//清空输入框值
-      $scope.sort_status='offline_time:3';
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:0,
-          keyword:$scope.off_search_content,
-          'sort[]':$scope.sort_status
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.down_list_arr=res.data.data.goods_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.down_history_list=[];
-        $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.down_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.down_history_list.push(i+1)
-        }
-        $scope.page=1;
-      },function (err) {
-        console.log(err);
-      })
+      $scope.down_search_value='';//清空输入框值
+      $scope.params.keyword='';
+      $scope.params['sort[]']='offline_time:3';
+      $scope.params.status=0;
+      $scope.down_menu_init();
+      tablePages();
     };
-    //等待上架
+    //等待下架
     $scope.wait_shelves=function () {
       $scope.wait_flag=true;
       $scope.on_flag=false;
@@ -127,144 +80,143 @@ let commodity_manage = angular.module("commodity_manage",[])
 
 
   /*已上架表格Menu切换 开始*/
-  $scope.on_menu_flag=false;
-    $scope.on_menu=function (m) {
-      m===true?$scope.on_menu_flag=false:$scope.on_menu_flag=true
-    };
 
-    $scope.show_1=true;
+  //初始化已上架Menu状态
+      $scope.up_menu_init=function(){
+        $scope.show_1=true;
+        $scope.show_2=true;
+        $scope.show_3=true;
+        $scope.show_4=true;
+        $scope.show_5=true;
+        $scope.show_6=false;
+        $scope.show_7=false;
+        $scope.show_8=false;
+        $scope.show_9=true;
+        $scope.show_10=true;
+        $scope.show_11=true;
+        $scope.show_12=true;
+        $scope.show_13=true;
+        $scope.show_14=true;
+        $scope.show_15=true;
+      }
+      $scope.up_menu_init();
     $scope.show_a= function (m) {
       m===true?$scope.show_1=true:$scope.show_1=false;
     };
-    $scope.show_2=true;
     $scope.show_b= function (m) {
       m===true?$scope.show_2=true:$scope.show_2=false;
     };
-    $scope.show_3=true;
     $scope.show_c= function (m) {
       m===true?$scope.show_3=true:$scope.show_3=false;
     };
-    $scope.show_4=true;
     $scope.show_d= function (m) {
       m===true?$scope.show_4=true:$scope.show_4=false;
     };
-    $scope.show_5=true;
     $scope.show_e= function (m) {
       m===true?$scope.show_5=true:$scope.show_5=false;
     };
-    $scope.show_6=false;
     $scope.show_f= function (m) {
       m===true?$scope.show_6=true:$scope.show_6=false;
     };
-    $scope.show_7=false;
     $scope.show_g= function (m) {
       m===true?$scope.show_7=true:$scope.show_7=false;
     };
-    $scope.show_8=false;
     $scope.show_h= function (m) {
       m===true?$scope.show_8=true:$scope.show_8=false;
     };
-    $scope.show_9=true;
     $scope.show_i= function (m) {
       m===true?$scope.show_9=true:$scope.show_9=false;
     };
-    $scope.show_10=true;
     $scope.show_j= function (m) {
       m===true?$scope.show_10=true:$scope.show_10=false;
     };
-    $scope.show_11=true;
     $scope.show_k= function (m) {
       m===true?$scope.show_11=true:$scope.show_11=false;
     };
-    $scope.show_12=true;
     $scope.show_l= function (m) {
       m===true?$scope.show_12=true:$scope.show_12=false;
     };
-    $scope.show_13=true;
     $scope.show_m= function (m) {
       m===true?$scope.show_13=true:$scope.show_13=false;
     };
-    $scope.show_14=true;
     $scope.show_n= function (m) {
       m===true?$scope.show_14=true:$scope.show_14=false;
     };
-    $scope.show_15=true;
     $scope.show_n= function (m) {
       m===true?$scope.show_15=true:$scope.show_15=false;
     };
   /*已上架表格Menu切换 结束*/
 
     /*已下架表格Menu切换 开始*/
-    $scope.down_menu_flag=false;
-    $scope.down_menu=function (m) {
-      m===true?$scope.down_menu_flag=false:$scope.down_menu_flag=true;
-    };
+  $scope.down_menu_init=function(){
+      $scope.down_1=true;
+      $scope.down_2=true;
+      $scope.down_3=true;
+      $scope.down_4=true;
+      $scope.down_5=true;
+      $scope.down_6=false;
+      $scope.down_7=false;
+      $scope.down_8=false;
+      $scope.down_9=true;
+      $scope.down_10=false;
+      $scope.down_11=true;
+      $scope.down_12=true;
+      $scope.down_13=true;
+      $scope.down_14=true;
+      $scope.down_15=true;
+      $scope.down_16=true;
+      $scope.down_17=true;
+  }
+  $scope.down_menu_init();
 
-  $scope.down_1=true;
   $scope.down_a=function (m) {
     m===true?$scope.down_1=true:$scope.down_1=false;
   };
-    $scope.down_2=true;
     $scope.down_b=function (m) {
       m===true?$scope.down_2=true:$scope.down_2=false;
     };
-    $scope.down_3=true;
     $scope.down_c=function (m) {
       m===true?$scope.down_3=true:$scope.down_3=false;
     };
-    $scope.down_4=true;
     $scope.down_d=function (m) {
       m===true?$scope.down_4=true:$scope.down_4=false;
     };
-    $scope.down_5=true;
     $scope.down_e=function (m) {
       m===true?$scope.down_5=true:$scope.down_5=false;
     };
-    $scope.down_6=false;
     $scope.down_f=function (m) {
       m===true?$scope.down_6=true:$scope.down_6=false;
     };
-    $scope.down_7=false;
     $scope.down_g=function (m) {
       m===true?$scope.down_7=true:$scope.down_7=false;
     };
-    $scope.down_8=false;
     $scope.down_h=function (m) {
       m===true?$scope.down_8=true:$scope.down_8=false;
     };
-    $scope.down_9=true;
     $scope.down_i=function (m) {
       m===true?$scope.down_9=true:$scope.down_9=false;
     };
-    $scope.down_10=false;
     $scope.down_j=function (m) {
       m===true?$scope.down_10=true:$scope.down_10=false;
     };
-    $scope.down_11=true;
     $scope.down_k=function (m) {
       m===true?$scope.down_11=true:$scope.down_11=false;
     };
-    $scope.down_12=true;
     $scope.down_l=function (m) {
       m===true?$scope.down_12=true:$scope.down_12=false;
     };
-    $scope.down_13=true;
     $scope.down_m=function (m) {
       m===true?$scope.down_13=true:$scope.down_13=false;
     };
-    $scope.down_14=true;
     $scope.down_n=function (m) {
       m===true?$scope.down_14=true:$scope.down_14=false;
     };
-    $scope.down_15=true;
     $scope.down_o=function (m) {
       m===true?$scope.down_15=true:$scope.down_15=false;
     };
-    $scope.down_16=true;
     $scope.down_p=function (m) {
       m===true?$scope.down_16=true:$scope.down_16=false;
     };
-    $scope.down_17=true;
     $scope.down_q=function (m) {
       m===true?$scope.down_17=true:$scope.down_17=false;
     };
@@ -353,273 +305,70 @@ let commodity_manage = angular.module("commodity_manage",[])
     };
 
     /*-------------------公共功能 结束---------------------------*/
-
-
     /*--------------------已上架 开始-------------------------*/
-
-    $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-      params:{
-        status:2,
-        'sort[]':'online_time:3'
-      }
-    }).then(function (res) {
-      console.log('已上架列表返回');
-      console.log(res);
-      $scope.up_list_arr=res.data.data.goods_list_admin.details;
-      /*--------------------分页------------------------*/
-      $scope.on_history_list=[];
-      $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-      let all_num=$scope.on_history_all_page;//循环总页数
-      for(let i=0;i<all_num;i++){
-        $scope.on_history_list.push(i+1)
-      }
-      //$scope.sort_status='sold_number:4';
-      $scope.page=1;
-      //点击数字，跳转到多少页
-      $scope.on_choosePage=function (page) {
-        $scope.selectAll=false;//取消全选
-        if($scope.on_history_list.indexOf(parseInt(page))!=-1){
-          if($scope.sort_status==undefined){
-            $scope.sort_status='online_time:3'
+      $scope.up_list_arr=[]
+      /*分页配置*/
+      $scope.wjConfig = {
+          showJump: true,
+          itemsPerPage: 12,
+          currentPage: 1,
+          onChange: function () {
+              tablePages();
           }
-          $scope.page=page;
-          $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-            params:{
-              status:2,
-              page:$scope.page,
-              'sort[]':$scope.sort_status
-            }
+      }
+      let tablePages=function () {
+          $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
+          $http.get(baseUrl+'/mall/goods-list-admin',{
+              params:$scope.params
           }).then(function (res) {
-            console.log(res);
-            $scope.up_list_arr=res.data.data.goods_list_admin.details;
+              console.log(res);
+              if($scope.on_flag==true){
+                  $scope.up_list_arr=res.data.data.goods_list_admin.details;
+              }else if($scope.down_flag==true){
+                  $scope.down_list_arr=res.data.data.goods_list_admin.details;
+              }
+              $scope.wjConfig.totalItems = res.data.data.goods_list_admin.total;
           },function (err) {
-            console.log(err);
-          });
-        }
+              console.log(err);
+          })
       };
-      //显示当前是第几页的样式
-      $scope.isActivePage=function (page) {
-        return $scope.page==page;
+      $scope.params = {
+          status:2,                       //状态
+          'sort[]': 'online_time:3',      //默认排序
+          keyword: '',                    // 关键字查询
       };
-      //进入页面，默认设置为第一页
-      if($scope.page===undefined){
-        $scope.page=1;
-      }
-      //上一页
-      $scope.on_Previous=function () {
-        $scope.selectAll=false;//取消全选
-        if($scope.page>1){                //当页数大于1时，执行
-          $scope.page--;
-          $scope.on_choosePage($scope.page);
-        }
-      };
-      //下一页
-      $scope.on_Next=function () {
-        $scope.selectAll=false;//取消全选
-        if($scope.page<$scope.on_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
-          $scope.page++;
-          $scope.on_choosePage($scope.page);
-        }
-      }
-    },function (err) {
-      console.log(err)
-    });
-
-
-    /*------------------------排序---------------------------*/
-    /*默认时间降序*/
-    $scope.on_time_flag=false;
-    $scope.down_time_flag=true;
-    /*-------------------------销量排序-----------------------------*/
-    $scope.default_sale_flag=true;
-    $scope.on_sale_flag=false;
-    $scope.down_sale_flag=false;
-    //默认排序
-    $scope.default_sale_sort=function () {
-      $scope.on_sale_flag=false;
-      $scope.default_sale_flag=false;
-      $scope.down_sale_flag=true;
-      $scope.sort_status='sold_number:4';
-      $scope.page=1;
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:2,
-          page:$scope.page,
-          'sort[]':$scope.sort_status
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.up_list_arr=res.data.data.goods_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-        $scope.page=1;
-      },function (err) {
-        console.log(err)
-      })
-    };
-    //降序
-    $scope.down_sale_sort=function () {
-      $scope.on_sale_flag=true;
-      $scope.down_sale_flag=false;
-      $scope.sort_status='sold_number:3';
-      $scope.page=1;
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:2,
-          page:$scope.page,
-          'sort[]':$scope.sort_status
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.up_list_arr=res.data.data.goods_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-        $scope.page=1;
-      },function (err) {
-        console.log(err)
-      })
-    };
-    //升序
-    $scope.up_sale_sort=function () {
-      $scope.on_sale_flag=false;
-      $scope.down_sale_flag=true;
-      $scope.sort_status='sold_number:4';
-      $scope.page=1;
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:2,
-          page:$scope.page,
-          'sort[]':$scope.sort_status
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.up_list_arr=res.data.data.goods_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-        $scope.page=1;
-      },function (err) {
-        console.log(err)
-      })
-    };
-    /*上架时间排序*/
-    /*降序*/
-    $scope.on_time_sort=function (status) {
-      if(status==0){
-        $scope.my_sort_status=0;
-        $scope.sort_status='offline_time:3';
-      }else if(status==2){
-        $scope.my_sort_status=2
-        $scope.sort_status='online_time:3';
-      }
-      $scope.on_time_flag=false;
-      $scope.down_time_flag=true;
-
-      $scope.page=1;
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:+$scope.my_sort_status,
-          page:$scope.page,
-          'sort[]':$scope.sort_status
-        }
-      }).then(function (res) {
-        console.log(res);
-        if(status==2){
-          $scope.up_list_arr=res.data.data.goods_list_admin.details;
-          /*--------------------分页------------------------*/
-          $scope.on_history_list=[];
-          $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-          let all_num=$scope.on_history_all_page;//循环总页数
-          for(let i=0;i<all_num;i++){
-            $scope.on_history_list.push(i+1)
+    /*-------------------销量排序-----------------------*/
+      $scope.up_sort_sale_img='lib/images/arrow_default.png';
+      $scope.up_sort_sale_click=function(){
+          $scope.up_sort_time_img='lib/images/arrow_default.png';
+          if($scope.up_sort_sale_img=='lib/images/arrow_default.png'){
+              $scope.up_sort_sale_img='lib/images/arrow_down.png';
+              $scope.params['sort[]']='sold_number:3';
+          }else if($scope.up_sort_sale_img=='lib/images/arrow_down.png'){ //------> 升序
+              $scope.up_sort_sale_img='lib/images/arrow_up.png';
+              $scope.params['sort[]']='sold_number:4';
+          }else{                                                //-------> 降序
+              $scope.up_sort_sale_img='lib/images/arrow_down.png';
+              $scope.params['sort[]']='sold_number:3';
           }
-        }else if(status==0){
-          $scope.down_list_arr=res.data.data.goods_list_admin.details;
-          /*--------------------分页------------------------*/
-          $scope.down_history_list=[];
-          $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-          let all_num=$scope.down_history_all_page;//循环总页数
-          for(let i=0;i<all_num;i++){
-            $scope.down_history_list.push(i+1)
-          }
-        }
-
-        $scope.page=1;
-      },function (err) {
-        console.log(err)
-      })
-    };
-    /*升序*/
-    $scope.down_time_sort=function (status) {
-      if(status==0){
-        $scope.my_sort_status=0;
-        $scope.sort_status='offline_time:4';
-      }else if(status==2){
-        $scope.my_sort_status=2;
-        $scope.sort_status='online_time:4';
+          tablePages();
       }
-      $scope.on_time_flag=true;
-      $scope.down_time_flag=false;
-      $scope.page=1;
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:+$scope.my_sort_status,
-          page:$scope.page,
-          'sort[]':$scope.sort_status
-        }
-      }).then(function (res) {
-        console.log(res);
-        if(status==2){
-          $scope.up_list_arr=res.data.data.goods_list_admin.details;
-          /*--------------------分页------------------------*/
-          $scope.on_history_list=[];
-          $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-          let all_num=$scope.on_history_all_page;//循环总页数
-          for(let i=0;i<all_num;i++){
-            $scope.on_history_list.push(i+1)
+      /*-----------------时间排序-----------------------*/
+      $scope.up_sort_time_img='lib/images/arrow_down.png';
+      $scope.up_sort_time_click=function () {
+          $scope.up_sort_sale_img='lib/images/arrow_default.png'
+          if($scope.up_sort_time_img=='lib/images/arrow_default.png'){
+              $scope.up_sort_time_img='lib/images/arrow_down.png';
+              $scope.params['sort[]']='online_time:3';
+          }else if($scope.up_sort_time_img=='lib/images/arrow_down.png'){ //------> 升序
+              $scope.up_sort_time_img='lib/images/arrow_up.png';
+              $scope.params['sort[]']='online_time:4';
+          }else{                                                //-------> 降序
+              $scope.up_sort_time_img='lib/images/arrow_down.png';
+              $scope.params['sort[]']='online_time:3';
           }
-        }else if(status==0){
-          $scope.down_list_arr=res.data.data.goods_list_admin.details;
-          /*--------------------分页------------------------*/
-          $scope.down_history_list=[];
-          $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-          let all_num=$scope.down_history_all_page;//循环总页数
-          for(let i=0;i<all_num;i++){
-            $scope.down_history_list.push(i+1)
-          }
-        }
-
-        $scope.page=1;
-      },function (err) {
-        console.log(err)
-      })
-    };
-    /*--------已上架全选按钮----------*/
-    $scope.selectAll=false;
-    $scope.up_list_arr_slice=[]
-    $scope.up_list_arr_slice=$scope.up_list_arr.slice(0,12);
-    $scope.all= function (m) {
-      console.log($scope.up_list_arr);
-      console.log($scope.up_list_arr_slice);
-      for(let[key,value] of $scope.up_list_arr.entries()){
-        console.log(value)
-        m===true?(value.state=false,$scope.selectAll=false):(value.state=true,$scope.selectAll=true)
+          tablePages();
       }
-    };
 
   /*------------单个下架商品------------*/
   //点击下架
@@ -629,25 +378,10 @@ let commodity_manage = angular.module("commodity_manage",[])
   //确认下架按钮
   $scope.offline_solo_btn=function () {
     $http.post('http://test.cdlhzz.cn:888/mall/goods-status-toggle',{
-      id:+$scope.offline_id
+      id:$scope.offline_id
     },config).then(function (res) {
       console.log(res);
-      /*重新请求数据，达到刷新的效果*/
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:2
-        }
-      }).then(function (res) {
-        $scope.up_list_arr=res.data.data.goods_list_admin.details;
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-      },function (err) {
-        console.log(err)
-      });
+      tablePages();
     },function (err) {
       console.log(err);
     })
@@ -676,49 +410,20 @@ let commodity_manage = angular.module("commodity_manage",[])
       ids:$scope.batch_off_shelf.join(',')
     },config).then(function (res) {
       /*重新请求数据，达到刷新的效果*/
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:2
-        }
-      }).then(function (res) {
-        $scope.up_list_arr=res.data.data.goods_list_admin.details;
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-      },function (err) {
-        console.log(err)
-      });
+        tablePages();
     },function (err) {
       console.log(err);
     })
   };
 
-
-
     /*----------------搜索---------------*/
     $scope.search_btn=function () {
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:2,
-          keyword:$scope.search_content
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.up_list_arr=res.data.data.goods_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-        $scope.page=1;
-      },function (err) {
-        console.log(err);
-      })
+        $scope.up_sort_time_img='lib/images/arrow_down.png';
+        $scope.up_sort_sale_img='lib/images/arrow_default.png';
+        $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+        $scope.params.keyword=$scope.up_search_value;
+        $scope.params['sort[]']='online_time:3';
+        tablePages();
     };
 
 
@@ -731,8 +436,6 @@ let commodity_manage = angular.module("commodity_manage",[])
     }).then(function successCallback(response) {
       $scope.details = response.data.data.categories;
       $scope.oneColor= $scope.details[0];
-      // console.log(response);
-      // console.log($scope.details)
     });
     //获取二级
     $http({
@@ -741,14 +444,12 @@ let commodity_manage = angular.module("commodity_manage",[])
     }).then(function successCallback(response) {
       $scope.second = response.data.data.categories;
       $scope.twoColor= $scope.second[0];
-      // console.log($scope.second)
     });
     //获取三级
     $http({
       method: 'get',
       url: 'http://test.cdlhzz.cn:888/mall/categories?pid=2'
     }).then(function successCallback(response) {
-      // console.log(response)
       $scope.three = response.data.data.categories;
       for(let [key,value] of $scope.three.entries()){
         if($scope.item_check.length == 0){
@@ -891,95 +592,27 @@ let commodity_manage = angular.module("commodity_manage",[])
     /*--------------------已下架 开始-------------------------*/
 
     $scope.down_list_arr=[];
-    $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-      params:{
-        status:0,
-        'sort[]':"offline_time:3"
+      /*-----------------时间排序-----------------------*/
+      $scope.down_sort_time_img='lib/images/arrow_down.png';
+      $scope.down_sort_time_click=function () {
+          //$scope.down_sort_time_img='lib/images/arrow_default.png'
+          if($scope.down_sort_time_img=='lib/images/arrow_default.png'){
+              $scope.down_sort_time_img='lib/images/arrow_down.png';
+              $scope.params['sort[]']='offline_time:3';
+          }else if($scope.down_sort_time_img=='lib/images/arrow_down.png'){ //------> 升序
+              $scope.down_sort_time_img='lib/images/arrow_up.png';
+              $scope.params['sort[]']='offline_time:4';
+          }else{                                                //-------> 降序
+              $scope.down_sort_time_img='lib/images/arrow_down.png';
+              $scope.params['sort[]']='offline_time:3';
+          }
+          console.log($scope.down_sort_time_img)
+          tablePages();
       }
-    }).then(function (res) {
-      console.log('已下架');
-      console.log(res);
-      $scope.down_list_arr=res.data.data.goods_list_admin.details;
-      /*--------------------分页------------------------*/
-      $scope.down_history_list=[];
-      $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-      let all_num=$scope.down_history_all_page;//循环总页数
-      for(let i=0;i<all_num;i++){
-        $scope.down_history_list.push(i+1)
-      }
-      $scope.page=1;
-      //点击数字，跳转到多少页
-      $scope.down_choosePage=function (page) {
-        if($scope.down_history_list.indexOf(parseInt(page))!=-1){
-          $scope.page=page;
-          $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-            params:{
-              status:0,
-              page:$scope.page,
-              'sort[]':$scope.sort_status
-            }
-          }).then(function (res) {
-            console.log(res);
-            $scope.down_list_arr=res.data.data.goods_list_admin.details;
-          },function (err) {
-            console.log(err);
-          });
-        }
-      };
-      //显示当前是第几页的样式
-      $scope.isActivePage=function (page) {
-        return $scope.page==page;
-      };
-      //进入页面，默认设置为第一页
-      if($scope.page===undefined){
-        $scope.page=1;
-      }
-      //上一页
-      $scope.down_Previous=function () {
-        if($scope.page>1){                //当页数大于1时，执行
-          $scope.page--;
-          $scope.down_choosePage($scope.page);
-        }
-      };
-      //下一页
-      $scope.down_Next=function () {
-        if($scope.page<$scope.down_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
-          $scope.page++;
-          $scope.down_choosePage($scope.page);
-        }
-      }
-    },function (err) {
-      console.log(err)
-    });
-    /*--------已下架全选按钮----------*/
-    // $scope.off_selectAll=false;
-    // $scope.off_all= function (m) {
-    //   for(let[key,value] of $scope.down_list_arr.entries()){
-    //     m===true?(value.state=false,$scope.off_selectAll=false):(value.state=true,$scope.off_selectAll=true)
-    //   }
-    // };
-    /*------------批量上架---------------*/
-    // $scope.batch_on_shelf=[];
-    // //点击下架按钮
-    // $scope.all_on_shelf=function () {
-    //   $scope.batch_on_shelf=[];
-    //   for(let[key,value] of $scope.down_list_arr.entries()){
-    //     //如果没有勾选，提示勾选
-    //     if(JSON.stringify($scope.down_list_arr).indexOf('"state":true')===-1){
-    //       $scope.on_prompt='#please_check';
-    //     }
-    //     //正常下架
-    //     if(value.state){
-    //       $scope.batch_on_shelf.push(value.id);
-    //       $scope.on_prompt='#all_up_shelves_modal'
-    //     }
-    //   }
-    // };
+
     //单个上架
     $scope.sole_on_shelf=function (id) {
-      //$scope.batch_on_shelf=[];
       $scope.on_shelf_id=id;
-      console.log($scope.on_shelf_id)
     };
     //上架确认按钮
     $scope.all_on_shelf_confirm=function () {
@@ -993,46 +626,11 @@ let commodity_manage = angular.module("commodity_manage",[])
     };
 
     /*----------------搜索---------------*/
-    $scope.off_search_btn=function () {
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-        params:{
-          status:0,
-          keyword:$scope.off_search_content,
-          'sort[]':$scope.sort_status
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.down_list_arr=res.data.data.goods_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.down_history_list=[];
-        $scope.down_history_all_page=Math.ceil(res.data.data.goods_list_admin.total/12);//获取总页数
-        let all_num=$scope.down_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.down_history_list.push(i+1)
-        }
-        $scope.page=1;
-      },function (err) {
-        console.log(err);
-      })
+    $scope.down_search_btn=function () {
+        $scope.down_sort_time_img='lib/images/arrow_down.png';
+        $scope.params['sort[]']='offline_time:3';
+        tablePages();
     };
-
-    //批量删除
-    // $scope.batch_del=[];
-    // $scope.all_del_off=function () {
-    //   $scope.batch_del=[];
-    //   for(let[key,value] of $scope.down_list_arr.entries()){
-    //     //如果没有勾选，提示勾选
-    //     if(JSON.stringify($scope.down_list_arr).indexOf('"state":true')===-1){
-    //       $scope.del_prompt='#please_check';
-    //     }
-    //     //正常下架
-    //     if(value.state){
-    //       $scope.batch_del.push(value.id);
-    //       $scope.del_prompt='#off_del_modal'
-    //     }
-    //   }
-    // };
-
 
     //单个删除
     $scope.solo_del_off=function (id) {
@@ -1044,28 +642,10 @@ let commodity_manage = angular.module("commodity_manage",[])
       $http.post('http://test.cdlhzz.cn:888/mall/goods-delete-batch',{
         ids:$scope.batch_del.join(',')
       },config).then(function (res) {
-        console.log('删除');
         console.log(res);
-        $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
-          params:{
-            status:0,
-            'sort[]':$scope.sort_status
-          }
-        }).then(function (res) {
-          console.log(res);
-          $scope.down_list_arr = res.data.data.goods_list_admin.details;
-          /*--------------------分页------------------------*/
-          $scope.down_history_list = [];
-          $scope.down_history_all_page = Math.ceil(res.data.data.goods_list_admin.total / 12);//获取总页数
-          let all_num = $scope.down_history_all_page;//循环总页数
-          for (let i = 0; i < all_num; i++) {
-            $scope.down_history_list.push(i + 1)
-          }
-        });
+          tablePages();
       },function (err) {
         console.log(err);
-      },function (err) {
-        console.log(err)
       })
     };
     //下架原因
@@ -1150,11 +730,8 @@ let commodity_manage = angular.module("commodity_manage",[])
     });
     //查看获取审核备注
     $scope.getRest = function (item) {
-      if(item !== ''){
-          $scope.reset = item;
-        $scope.reason_model = '#wait_shelves_remarks_modal'
-      }
-    };
+      $scope.reset = item
+    }
 
     /*----------------搜索---------------*/
     $scope.wait_search_btn=function () {
@@ -1180,7 +757,7 @@ let commodity_manage = angular.module("commodity_manage",[])
       })
     };
     //监听搜索框的值为空时，返回最初的值
-    $scope.$watch("wait_search_content",function (newVal,oldVal) {
+    $scope.$watch("off_search_content",function (newVal,oldVal) {
       if(newVal == ""){
         $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin',{
             params:{
