@@ -606,267 +606,6 @@ angular.module("all_controller", [])
         }
     })
 
-     //确认订单
-    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams) {
-        $scope.show_harvest = false;
-        $scope.show_address = true; //显示第一个
-        $scope.mall_id = $stateParams.mall_id;
-        $scope.shopNum = $stateParams.shopNum;
-        $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
-        $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
-        $scope.supplier_id  = $stateParams.supplier_id;//纳税人识别号
-        console.log($scope.leaveMessage);
-        alert($scope.supplier_id);
-        if($stateParams.show_address !== ''){
-            console.log(12345456);
-            $scope.show_address = $stateParams.show_address;
-            $scope.show_harvest = $stateParams.show_harvest;
-            $scope.harvestNum = $stateParams.harvestNum;//收获人号码
-            $scope.harvestName = $stateParams.harvestName;//收货人名字
-            $scope.harvestAddress = $stateParams.harvestAddress;//收货人地址
-            $scope.consigneeName = $stateParams.consigneeName;
-            $scope.mobile = $stateParams.mobile;
-            $scope.districtMore = $stateParams.districtMore;
-            $scope.regionMore = $stateParams.regionMore;
-            $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
-            $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
-
-            console.log($scope.invoice_name );
-            console.log($scope.invoice_id );
-            console.log($scope.harvestName);
-            console.log($scope.harvestAddress)
-
-        }
-
-
-        console.log($scope.mall_id);
-        console.log($scope.shopNum);
-        console.log($scope.show_address+"显示第一个");
-        console.log($scope.show_harvest+"显示第二个");
-        console.log($scope.harvestNum);
-        console.log($scope.shopNum);
-        let config = {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            transformRequest: function (data) {
-                return $.param(data)
-            }
-        };
-        // 点击收货地址 ===== 模态框
-        $scope.harvestMadel = '';
-        $scope.getHarvestMadel = function () {
-            $scope.harvestName    = '';
-            $scope.harvestNum     = '';
-            $scope.harvestAddress = '';
-            $scope.harvestMadel ='#delivery_address';
-
-            // 判断三级 =========== 初始化  ===========
-
-            var area = new LArea();
-            area.init({
-                'trigger': '#demo1',//触发选择控件的文本框，同时选择完毕后name属性输出到该位置
-                'valueTo':'#value1',//选择完毕后id属性输出到该位置
-                'keys':{id:'id',name:'name'},//绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
-                'type':1,//数据源类型
-                'data':LAreaData1//数据源
-            });
-
-            // 点击编写收货地址 获取城市内容
-
-
-        };
-        //订单信息===>获取商品的信息
-        $http.post('http://common.cdlhzz.cn/order/getgoodsdata',{
-            goods_id:+$scope.mall_id,
-            goods_num:+$scope.shopNum
-        },config).then(function (response) {
-            console.log(response);
-            $scope.title =  response.data.data.title;
-            $scope.subtitle =  response.data.data.subtitle;
-            $scope.shop_name =  response.data.data.shop_name;//店铺名称
-            $scope.platform_price =  response.data.data.platform_price;//优惠价格
-            $scope.market_price =  response.data.data.market_price;//原始价格
-            $scope.freight =  response.data.data.freight;//运费
-            $scope.allCost = response.data.data.allCost;//总费用
-            $scope.cover_image =  response.data.data.cover_image; //封面图
-            $scope.icon =  response.data.data.icon; //店家头像
-            $scope.goods_num =  response.data.data.goods_num;//购买数量
-        });
-
-        // 编辑收货地址的信息
-        $scope.harvestName    = '';
-        $scope.harvestNum     = '';
-        $scope.harvestAddress = '';
-        $scope.flagContent    = '';
-        let rag =/^1[3|4|5|7|8][0-9]{9}$/;
-        // $scope.numModel ='';
-        // 点击保存按钮保存编辑收获地址的信息
-        $scope.getAddress = function () {
-            $scope.numModel= '';
-            console.log(111);
-            console.log($scope.harvestNum);
-            if(!rag.test($scope.harvestNum)){
-                console.log(222);
-                $scope.numModel = '#harvestNum_modal';
-                $scope.flagContent = '请输入正确的手机号';
-                $('#harvestNum_modal').modal('hide');
-                $('#delivery_address').modal('show');
-            }
-            if($scope.harvestNum == '' ||  $scope.harvestName == '' || $scope.harvestAddress == ''){
-                $scope.numModel = '#harvestNum_modal';
-                $scope.flagContent = '请填写完整信息'
-            }
-            if(rag.test($scope.harvestNum) && !$scope.harvestNum == '' && ! $scope.harvestName == '' && !$scope.harvestAddress == ''){
-                // 添加收货地址
-                $http.post('http://common.cdlhzz.cn/order/adduseraddress',{
-                    mobile:+$scope.harvestNum,
-                    consignee:$scope.harvestName,
-                    districtcode:110100,
-                    region:$scope.harvestAddress
-                },config).then(function (response) {
-                    console.log(response);
-                    $scope.address_id = response.data.data.address_id;
-                    console.log($scope.address_id);
-                    alert($scope.address_id)
-                });
-                $scope.numModel = '#harvestNum_modal';
-                $scope.flagContent = '保存成功'
-            }
-        };
-         // 点击保存成功按钮获取收获地址信息
-
-         $scope.getHarvest = function () {
-             if(!rag.test($scope.harvestNum) || $scope.harvestNum == '' || $scope.harvestName == '' || $scope.harvestAddress == ''){
-                 $('#harvestNum_modal').modal('hide');
-             }else {
-                 $('#delivery_address').modal('hide');
-                 $('#harvestNum_modal').modal('hide');
-                 // 获取订单收货信息
-                 $http({
-                     method: 'get',
-                     url: 'http://common.cdlhzz.cn/order/getaddress',
-                     params:{
-                         address_id:+$scope.address_id
-                     }
-                 }).then(function successCallback(response) {
-                     console.log(response);
-                     $scope.show_harvest = true;
-                     $scope.show_address = false;
-                     $scope.consigneeName = response.data.data[0].consignee;
-                     $scope.mobile = response.data.data[0].mobile;
-                     $scope.districtMore = response.data.data[0].district;
-                     $scope.regionMore = response.data.data[0].region;
-                     console.log($scope.consigneeName);
-                     console.log($scope.mobile)
-                 });
-             }
-         };
-        // 获取发票信息
-        if($scope.invoice_id != ''){
-            $http({
-                method: 'get',
-                url: 'http://common.cdlhzz.cn/order/getinvoicelinedata',
-                params:{
-                    invoice_id:+$scope.invoice_id
-                }
-            }).then(function successCallback(response) {
-                console.log(response);
-                $scope.invoice_content = response.data.data.invoice_content;
-                $scope.invoice_header = response.data.data.invoice_header + '-';
-                console.log($scope.invoice_content)
-            })
-        }
-
-         // 点击去支付判断是否填写完整
-        $scope.getModel = function () {
-            $scope.order_order = '';
-            $scope.order_address_model = '';
-            if( $scope.show_harvest == false && $scope.show_address == true ){
-                $scope.order_address_model = '#order_address_modal';
-                $scope.order_order = '请填写完整信息'
-            }
-            if($scope.show_harvest == true && $scope.show_address == false ){
-                console.log(222222);
-                //判断收货地址是否在配送范围内
-                $http.post('http://common.cdlhzz.cn/order/judegaddress',{
-                    goods_id:+$scope.mall_id,
-                    districtcode:110100
-                },config).then(function (response) {
-                    console.log(response);
-                    $scope.code = response.data.code;
-                    if($scope.code == 1000){
-                        console.log(123456);
-                        $('#order_address_modal').modal('show');
-                        // $scope.order_address_model = '#order_address_modal';
-                        $scope.order_order = '不在配送范围内，请重新填写'
-                    }
-                    if($scope.code == 200){
-                        console.log('成功');
-                        // 判断是否微信浏览器打开
-                        $http({
-                            method: 'get',
-                            url: 'http://common.cdlhzz.cn/order/iswxlogin'
-                        }).then(function successCallback(response) {
-                            console.log(response);
-                            $scope.codeWX = response.data.code;
-                            // 是微信浏览器打开
-                            if($scope.codeWX == 200){  // 微信支付
-                                alert('调用微信接口');
-                                // 微信接口
-                                $http.post('http://common.cdlhzz.cn/order/lineplaceorder',{
-                                    goods_name: $scope.title,
-                                    order_price:$scope.allCost,
-                                    goods_num:+$scope.shopNum,
-                                    goods_id:+$scope.mall_id,
-                                    address_id:+$scope.address_id,
-                                    invoice_id:+$scope.invoice_id,
-                                    supplier_id:+$scope.supplier_id,
-                                    freight:+$scope.freight,
-                                    buyer_message: $scope.leaveMessage
-                                },config).then(function (response) {
-                                    console.log(response);
-                                    alert(JSON.stringify(response));
-                                    // $scope.status = response.status;
-                                    // $scope.dataFram = response.data;
-                                    // console.log($scope.dataFram);
-                                    // console.log($scope.status);
-                                    // $('body').append($scope.dataFram)
-
-                                })
-                            }
-                            if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
-                                // 支付宝接口
-                                $http.post('http://test.cdlhzz.cn:888/order/alipaylinesubmit',{
-                                    goods_name: $scope.title,
-                                    order_price:$scope.allCost,
-                                    goods_num:+$scope.shopNum,
-                                    goods_id:+$scope.mall_id,
-                                    address_id:+$scope.address_id,
-                                    invoice_id:+$scope.invoice_id,
-                                    supplier_id:+$scope.supplier_id,
-                                    freight:+$scope.freight,
-                                    buyer_message: $scope.leaveMessage
-                                },config).then(function (response) {
-                                    console.log(response);
-                                    $scope.status = response.status;
-                                    $scope.dataFram = response.data;
-                                    console.log($scope.dataFram);
-                                    console.log($scope.status);
-                                    $('body').append($scope.dataFram)
-
-                                })
-                            }
-
-                        });
-
-                    }
-                });
-            }
-
-        };
-
-
-    })
-
      //发票信息
     .controller('invoice_ctrl',function($scope,$http,$state,$stateParams){
        $scope.harvestAddress  = $stateParams.harvestAddress;
@@ -1020,6 +759,266 @@ angular.module("all_controller", [])
 
     })
 
+    //确认订单
+    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams) {
+        $scope.show_harvest = false;
+        $scope.show_address = true; //显示第一个
+        $scope.mall_id = $stateParams.mall_id;
+        $scope.shopNum = $stateParams.shopNum;
+        $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
+        $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
+        $scope.supplier_id  = $stateParams.supplier_id;//纳税人识别号
+        console.log($scope.leaveMessage);
+        alert($scope.supplier_id);
+        if($stateParams.show_address !== ''){
+            console.log(12345456);
+            $scope.show_address = $stateParams.show_address;
+            $scope.show_harvest = $stateParams.show_harvest;
+            $scope.harvestNum = $stateParams.harvestNum;//收获人号码
+            $scope.harvestName = $stateParams.harvestName;//收货人名字
+            $scope.harvestAddress = $stateParams.harvestAddress;//收货人地址
+            $scope.consigneeName = $stateParams.consigneeName;
+            $scope.mobile = $stateParams.mobile;
+            $scope.districtMore = $stateParams.districtMore;
+            $scope.regionMore = $stateParams.regionMore;
+            $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
+            $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
+
+            console.log($scope.invoice_name );
+            console.log($scope.invoice_id );
+            console.log($scope.harvestName);
+            console.log($scope.harvestAddress)
+
+        }
+
+
+        console.log($scope.mall_id);
+        console.log($scope.shopNum);
+        console.log($scope.show_address+"显示第一个");
+        console.log($scope.show_harvest+"显示第二个");
+        console.log($scope.harvestNum);
+        console.log($scope.shopNum);
+        let config = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function (data) {
+                return $.param(data)
+            }
+        };
+        // 点击收货地址 ===== 模态框
+        $scope.harvestMadel = '';
+        $scope.getHarvestMadel = function () {
+            $scope.harvestName    = '';
+            $scope.harvestNum     = '';
+            $scope.harvestAddress = '';
+            $scope.harvestMadel ='#delivery_address';
+
+            // 判断三级 =========== 初始化  ===========
+
+            var area = new LArea();
+            area.init({
+                'trigger': '#demo1',//触发选择控件的文本框，同时选择完毕后name属性输出到该位置
+                'valueTo':'#value1',//选择完毕后id属性输出到该位置
+                'keys':{id:'id',name:'name'},//绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
+                'type':1,//数据源类型
+                'data':LAreaData1//数据源
+            });
+
+            // 点击编写收货地址 获取城市内容
+
+
+        };
+        //订单信息===>获取商品的信息
+        $http.post('http://common.cdlhzz.cn/order/getgoodsdata',{
+            goods_id:+$scope.mall_id,
+            goods_num:+$scope.shopNum
+        },config).then(function (response) {
+            console.log(response);
+            $scope.title =  response.data.data.title;
+            $scope.subtitle =  response.data.data.subtitle;
+            $scope.shop_name =  response.data.data.shop_name;//店铺名称
+            $scope.platform_price =  response.data.data.platform_price;//优惠价格
+            $scope.market_price =  response.data.data.market_price;//原始价格
+            $scope.freight =  response.data.data.freight;//运费
+            $scope.allCost = response.data.data.allCost;//总费用
+            $scope.cover_image =  response.data.data.cover_image; //封面图
+            $scope.icon =  response.data.data.icon; //店家头像
+            $scope.goods_num =  response.data.data.goods_num;//购买数量
+        });
+
+        // 编辑收货地址的信息
+        $scope.harvestName    = '';
+        $scope.harvestNum     = '';
+        $scope.harvestAddress = '';
+        $scope.flagContent    = '';
+        let rag =/^1[3|4|5|7|8][0-9]{9}$/;
+        // $scope.numModel ='';
+        // 点击保存按钮保存编辑收获地址的信息
+        $scope.getAddress = function () {
+            $scope.numModel= '';
+            console.log(111);
+            console.log($scope.harvestNum);
+            if(!rag.test($scope.harvestNum)){
+                console.log(222);
+                $scope.numModel = '#harvestNum_modal';
+                $scope.flagContent = '请输入正确的手机号';
+                $('#harvestNum_modal').modal('hide');
+                $('#delivery_address').modal('show');
+            }
+            if($scope.harvestNum == '' ||  $scope.harvestName == '' || $scope.harvestAddress == ''){
+                $scope.numModel = '#harvestNum_modal';
+                $scope.flagContent = '请填写完整信息'
+            }
+            if(rag.test($scope.harvestNum) && !$scope.harvestNum == '' && ! $scope.harvestName == '' && !$scope.harvestAddress == ''){
+                // 添加收货地址
+                $http.post('http://common.cdlhzz.cn/order/adduseraddress',{
+                    mobile:+$scope.harvestNum,
+                    consignee:$scope.harvestName,
+                    districtcode:110100,
+                    region:$scope.harvestAddress
+                },config).then(function (response) {
+                    console.log(response);
+                    $scope.address_id = response.data.data.address_id;
+                    console.log($scope.address_id);
+                    alert($scope.address_id)
+                });
+                $scope.numModel = '#harvestNum_modal';
+                $scope.flagContent = '保存成功'
+            }
+        };
+        // 点击保存成功按钮获取收获地址信息
+
+        $scope.getHarvest = function () {
+            if(!rag.test($scope.harvestNum) || $scope.harvestNum == '' || $scope.harvestName == '' || $scope.harvestAddress == ''){
+                $('#harvestNum_modal').modal('hide');
+            }else {
+                $('#delivery_address').modal('hide');
+                $('#harvestNum_modal').modal('hide');
+                // 获取订单收货信息
+                $http({
+                    method: 'get',
+                    url: 'http://common.cdlhzz.cn/order/getaddress',
+                    params:{
+                        address_id:+$scope.address_id
+                    }
+                }).then(function successCallback(response) {
+                    console.log(response);
+                    $scope.show_harvest = true;
+                    $scope.show_address = false;
+                    $scope.consigneeName = response.data.data[0].consignee;
+                    $scope.mobile = response.data.data[0].mobile;
+                    $scope.districtMore = response.data.data[0].district;
+                    $scope.regionMore = response.data.data[0].region;
+                    console.log($scope.consigneeName);
+                    console.log($scope.mobile)
+                });
+            }
+        };
+        // 获取发票信息
+        if($scope.invoice_id != ''){
+            $http({
+                method: 'get',
+                url: 'http://common.cdlhzz.cn/order/getinvoicelinedata',
+                params:{
+                    invoice_id:+$scope.invoice_id
+                }
+            }).then(function successCallback(response) {
+                console.log(response);
+                $scope.invoice_content = response.data.data.invoice_content;
+                $scope.invoice_header = response.data.data.invoice_header + '-';
+                console.log($scope.invoice_content)
+            })
+        }
+
+        // 点击去支付判断是否填写完整
+        $scope.getModel = function () {
+            $scope.order_order = '';
+            $scope.order_address_model = '';
+            if( $scope.show_harvest == false && $scope.show_address == true ){
+                $scope.order_address_model = '#order_address_modal';
+                $scope.order_order = '请填写完整信息'
+            }
+            if($scope.show_harvest == true && $scope.show_address == false ){
+                console.log(222222);
+                //判断收货地址是否在配送范围内
+                $http.post('http://common.cdlhzz.cn/order/judegaddress',{
+                    goods_id:+$scope.mall_id,
+                    districtcode:110100
+                },config).then(function (response) {
+                    console.log(response);
+                    $scope.code = response.data.code;
+                    if($scope.code == 1000){
+                        console.log(123456);
+                        $('#order_address_modal').modal('show');
+                        // $scope.order_address_model = '#order_address_modal';
+                        $scope.order_order = '不在配送范围内，请重新填写'
+                    }
+                    if($scope.code == 200){
+                        console.log('成功');
+                        // 判断是否微信浏览器打开
+                        $http({
+                            method: 'get',
+                            url: 'http://common.cdlhzz.cn/order/iswxlogin'
+                        }).then(function successCallback(response) {
+                            console.log(response);
+                            $scope.codeWX = response.data.code;
+                            // 是微信浏览器打开
+                            if($scope.codeWX == 200){  // 微信支付
+                                alert('调用微信接口');
+                                // 微信接口
+                                $http.post('http://common.cdlhzz.cn/order/lineplaceorder',{
+                                    goods_name: $scope.title,
+                                    order_price:$scope.allCost,
+                                    goods_num:+$scope.shopNum,
+                                    goods_id:+$scope.mall_id,
+                                    address_id:+$scope.address_id,
+                                    invoice_id:+$scope.invoice_id,
+                                    supplier_id:+$scope.supplier_id,
+                                    freight:+$scope.freight,
+                                    buyer_message: $scope.leaveMessage
+                                },config).then(function (response) {
+                                    console.log(response);
+                                    alert(JSON.stringify(response));
+                                    // $scope.status = response.status;
+                                    // $scope.dataFram = response.data;
+                                    // console.log($scope.dataFram);
+                                    // console.log($scope.status);
+                                    // $('body').append($scope.dataFram)
+
+                                })
+                            }
+                            if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
+                                // 支付宝接口
+                                $http.post('http://test.cdlhzz.cn:888/order/alipaylinesubmit',{
+                                    goods_name: $scope.title,
+                                    order_price:$scope.allCost,
+                                    goods_num:+$scope.shopNum,
+                                    goods_id:+$scope.mall_id,
+                                    address_id:+$scope.address_id,
+                                    invoice_id:+$scope.invoice_id,
+                                    supplier_id:+$scope.supplier_id,
+                                    freight:+$scope.freight,
+                                    buyer_message: $scope.leaveMessage
+                                },config).then(function (response) {
+                                    console.log(response);
+                                    $scope.status = response.status;
+                                    $scope.dataFram = response.data;
+                                    console.log($scope.dataFram);
+                                    console.log($scope.status);
+                                    $('body').append($scope.dataFram)
+
+                                })
+                            }
+
+                        });
+
+                    }
+                });
+            }
+
+        };
+
+
+    })
     // 支付成功
     .controller('pay_success_ctrl',function($scope,$http,$state,$stateParams,$interval){
         $scope.timeOut = 5;
