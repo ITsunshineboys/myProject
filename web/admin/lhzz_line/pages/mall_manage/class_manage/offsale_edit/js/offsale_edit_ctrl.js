@@ -202,7 +202,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 			let url = "http://test.cdlhzz.cn:888/mall/category-edit";
 			let data =  {id:+$scope.onsaleclassid,title:$scope.class_name,pid:+pid,icon:$scope.classicon||$stateParams.iconpath,description:$scope.offlinedes,offline_reason:$scope.offlinereason};
 			$http.post(url,data,config).then(function (res) {
-				console.log(res)
+				// console.log(res)
 			})
 			$scope.savemodal = '#save_tishi'
 			$scope.savesuccess = true;
