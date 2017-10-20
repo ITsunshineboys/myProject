@@ -964,15 +964,7 @@ angular.module("all_controller", [])
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
                                 // 微信接口
-                                $http.get('http://common.cdlhzz.cn/order/lineplaceorder',{
-                                    goods_name: $scope.title,
-                                    order_price:$scope.allCost,
-                                    goods_num:+$scope.shopNum,
-                                    goods_id:+$scope.mall_id,
-                                    address_id:+$scope.address_id,
-                                    invoice_id:+$scope.invoice_id,
-                                    supplier_id:+$scope.supplier_id,
-                                    freight:+$scope.freight,
+                                $http.get({'http://common.cdlhzz.cn/order/lineplaceorder?goods_name='+$scope.title+'&order_price='+$scope.allCost+'&goods_num='+$scope.shopNum+'&goods_id='+$scope.mall_id+'&address_id='+$scope.address_id+'&invoice_id='+$scope.invoice_id+'&supplier_id='+$scope.supplier_id+'&freight='+$scope.freight
                                     // buyer_message: $scope.leaveMessage
                                 }).then(function (response) {
                                     // console.log(response);
