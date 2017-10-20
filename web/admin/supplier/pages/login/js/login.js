@@ -104,7 +104,7 @@ login.controller("login_ctrl",function ($scope,$http,$state,$stateParams) {
                 })
             }
         }
-    }
+    };
     //点击忘记密码，初始化状态
     $scope.forget_pw_click=function () {
         $scope.forget_v_txt='';
