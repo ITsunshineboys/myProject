@@ -60,7 +60,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
     /*排序按钮样式控制*/
     $scope.sortStyleFunc = () => {
-        return $scope.params['sort[]'].split(':')[1]
+        return $scope.params['sort[]'].split(':')[1];
     }
 
     firstClass();
