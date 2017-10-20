@@ -63,7 +63,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         return $scope.params['sort[]'].split(':')[1]
     }
 
-
     firstClass();
     /*分类选择一级下拉框*/
     function firstClass() {
