@@ -44,6 +44,7 @@ class Wxpay  extends ActiveRecord
             //、获取用户openid
             $tools = new PayService();
             $openId = $tools->GetOpenid();
+            return $openId;
             //②、统一下单
             $input = new WxPayUnifiedOrder();
             $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
