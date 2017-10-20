@@ -1225,6 +1225,7 @@ var_dump($logistics);exit;
         return Json::encode([
            'brainpower_inital_supervise'=> (new BrainpowerInitalSupervise())->find()->All(),
            'effect'=> (new Effect())->find()->All(),
+            'logisticsTemplate'=> (new LogisticsTemplate())->find()->all(),
         ]);
     }
 
