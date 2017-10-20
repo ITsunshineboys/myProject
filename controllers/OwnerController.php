@@ -1206,8 +1206,12 @@ class OwnerController extends Controller
         foreach ($goods_effect as $logistics_id) {
             $ids = $logistics_id['logistics_template_id'];
         }
-        var_dump($ids);die;
-        $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+        if (is_array($ids)){
+            $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+        } else {
+            $logistics = LogisticsTemplate::GoodsLogisticsTemplateId($ids,[]);
+        }
+
         $new =  new LogisticsService($logistics,$goods_effect);
         $effect['goods'] = $new->minQuantity();
         return Json::encode([
