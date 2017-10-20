@@ -1,11 +1,13 @@
 <?php
 
 namespace app\models;
+use app\services\ModelService;
 use Yii;
 use yii\db\ActiveRecord;
 use vendor\alipay\AlipayTradeWapPayContentBuilder;
 use vendor\alipay\Alipayconfig;
 use app\services\AlipayTradeService;
+use yii\helpers\Json;
 
 class Alipay extends  ActiveRecord
 {
