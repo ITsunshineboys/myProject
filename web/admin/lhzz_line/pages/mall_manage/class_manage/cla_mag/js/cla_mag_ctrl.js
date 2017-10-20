@@ -131,12 +131,10 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         }
         if (value) {
             $scope.params.pid = value;
-            $scope.params.sort_time = 3;      // 下单时间排序
             tableList()
         } else {
             //二级分类id为0
             $scope.params.pid = $scope.dropdown.firstselect;
-            $scope.params.sort_time = 3;      // 下单时间排序
             tableList()
         }
     });
