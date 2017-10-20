@@ -366,7 +366,9 @@ angular.module("all_controller", [])
         }).then( function successCallback (response) {
             console.log(response);
             $scope.datailsShop = response.data.data.goods_view;
+            $scope.supplier_id = response.data.data.goods_view.supplier.id;
             console.log($scope.datailsShop);
+            console.log($scope.supplier_id);
             $scope.style_parameter = false;
             $scope.series_parameter = false;
             // 判断是否存在系列
@@ -448,7 +450,7 @@ angular.module("all_controller", [])
             console.log($scope.id);
             console.log($scope.shopNum);
             setTimeout(function () {
-                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum})
+                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id})
             },300)
         }
     })
@@ -612,7 +614,9 @@ angular.module("all_controller", [])
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
+        $scope.supplier_id  = $stateParams.supplier_id;//纳税人识别号
         console.log($scope.leaveMessage);
+        console.log($scope.supplier_id);
         if($stateParams.show_address !== ''){
             console.log(12345456);
             $scope.show_address = $stateParams.show_address;
@@ -721,7 +725,7 @@ angular.module("all_controller", [])
                 },config).then(function (response) {
                     console.log(response);
                     $scope.address_id = response.data.data.address_id;
-                    console.log($scope.address_id)
+                    console.log($scope.address_id);
                     alert($scope.address_id)
                 });
                 $scope.numModel = '#harvestNum_modal';
@@ -806,7 +810,7 @@ angular.module("all_controller", [])
                             $scope.codeWX = response.data.code;
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
-                                alert('wocao');
+                                alert('调用微信接口');
                                 // 微信接口
                                 $http.post('http://common.cdlhzz.cn/order/lineplaceorder',{
                                     goods_name: $scope.title,
@@ -819,6 +823,7 @@ angular.module("all_controller", [])
                                     freight:+$scope.freight,
                                     buyer_message: $scope.leaveMessage
                                 },config).then(function (response) {
+                                    console.log(response);
                                     alert(JSON.stringify(response));
                                     // $scope.status = response.status;
                                     // $scope.dataFram = response.data;
@@ -949,9 +954,7 @@ angular.module("all_controller", [])
                        invoice_content:$scope.invoice_name,
                    },config).then(function (response) {
                        console.log(response);
-                       $scope.invoice_id = response.data.data.invoice_id;
-                       alert( $scope.invoice_id);
-
+                       $scope.invoice_id = response.data.data.invoice_id
                    });
                    // 模态框确认按钮 == 跳转保存数据
                    $scope.jumpOrder = function () {

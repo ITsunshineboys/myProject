@@ -48,7 +48,9 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     "": {templateUrl: "product_details.html"}
                 },
                 controller: "product_details_ctrl",
-                params:{'pid':'',"id":"", 'mall_id':"",'datailsShop':'datailsShop','shopNum':''}
+                params:{'pid':'',"id":"", 'mall_id':"",'datailsShop':'datailsShop','shopNum':''
+                 'supplier_id':''
+                }
             })
             .state("shop_front", {   //店铺首页和全部商品
                 url: "/shop_front",
@@ -67,7 +69,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
                 'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
                  'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
-                    'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':''
+                    'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':''
                 }
             })
             .state("invoice", {    //发票信息
