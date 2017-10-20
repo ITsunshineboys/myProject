@@ -1,5 +1,5 @@
 angular.module("all_controller", [])
-    //首页控制器
+//首页控制器
     .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         $scope.search_flag = false;
         $http({   //轮播接口调用
@@ -39,7 +39,7 @@ angular.module("all_controller", [])
         }).then(function successCallback (response) {
             console.log(response);
             $scope.commodity = response.data.data.recommend_second;
-           for(let [key,value] of  $scope.commodity.entries()) {
+            for(let [key,value] of  $scope.commodity.entries()) {
                 // console.log(value.url)
             }
             console.log( $scope.commodity);
@@ -347,7 +347,7 @@ angular.module("all_controller", [])
 
     //某个 商品详细信息展示
     .controller("product_details_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
-       let vm = $scope.vm = {};
+        let vm = $scope.vm = {};
         $scope.id=$stateParams.id;
         $scope.datailsShop = $stateParams.datailsShop;
         // $scope.title=$stateParams.title;
@@ -393,27 +393,27 @@ angular.module("all_controller", [])
             $scope.doorPay     = false;
             $scope.show_service = true;
             for( let [key,vaule] of $scope.datailsShop.after_sale_services.entries()){
-               if(vaule == "上门维修"){
-                   $scope.on_site     = true;
-               }
-               else if(vaule == "上门换货"){
-                   $scope.changeGoods = true;
-               }
-               else if(vaule == "上门退货"){
-                   $scope.returnGoods = true;
-               }
-               else if(vaule == "换货"){
-                   $scope.changeMore  = true;
-               }
-               else if(vaule == "退货"){
-                   $scope.returnMore  = true;
-               }
-               else if(vaule == "提供发票"){
-                   $scope.getInvoice  = true;
-               }
-               else if(vaule == "上门安装"){
-                   $scope.doorPay     = true
-               }
+                if(vaule == "上门维修"){
+                    $scope.on_site     = true;
+                }
+                else if(vaule == "上门换货"){
+                    $scope.changeGoods = true;
+                }
+                else if(vaule == "上门退货"){
+                    $scope.returnGoods = true;
+                }
+                else if(vaule == "换货"){
+                    $scope.changeMore  = true;
+                }
+                else if(vaule == "退货"){
+                    $scope.returnMore  = true;
+                }
+                else if(vaule == "提供发票"){
+                    $scope.getInvoice  = true;
+                }
+                else if(vaule == "上门安装"){
+                    $scope.doorPay     = true
+                }
                 console.log(vaule);
             }
             // 判断售后服务 不存在时  不显示售后
@@ -455,10 +455,10 @@ angular.module("all_controller", [])
         }
     })
 
-     //店铺首页和全部商品
+    //店铺首页和全部商品
     .controller("shop_front_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         let vm = $scope.vm = {};
-       //获取商品列表
+        //获取商品列表
         console.log($stateParams);
         $scope.id  = $stateParams.id;
         $scope.pid = $stateParams.pid;
@@ -584,7 +584,7 @@ angular.module("all_controller", [])
             method: 'get',
             url: "http://common.cdlhzz.cn/supplier/view",
             params:{
-               id:+$scope.supplier_id
+                id:+$scope.supplier_id
             }
         }).then(function successCallback (response) {
             console.log(response);
@@ -606,155 +606,154 @@ angular.module("all_controller", [])
         }
     })
 
-     //发票信息
+    //发票信息
     .controller('invoice_ctrl',function($scope,$http,$state,$stateParams){
-       $scope.harvestAddress  = $stateParams.harvestAddress;
-       $scope.harvestName     = $stateParams.harvestName;
-       $scope.harvestNum      = $stateParams.harvestNum;
-       $scope.show_address    = $stateParams.show_address;
-       $scope.show_harvest    = $stateParams.show_harvest;
-       $scope.mall_id         = $stateParams.mall_id;
-       $scope.shopNum         = $stateParams.shopNum;
+        $scope.harvestAddress  = $stateParams.harvestAddress;
+        $scope.harvestName     = $stateParams.harvestName;
+        $scope.harvestNum      = $stateParams.harvestNum;
+        $scope.show_address    = $stateParams.show_address;
+        $scope.show_harvest    = $stateParams.show_harvest;
+        $scope.mall_id         = $stateParams.mall_id;
+        $scope.shopNum         = $stateParams.shopNum;
 
-       $scope.consigneeName   = $stateParams.consigneeName;
-       $scope.mobile          = $stateParams.mobile;
-       $scope.districtMore    = $stateParams.districtMore;
-       $scope.regionMore      = $stateParams.regionMore;
-       $scope.leaveMessage    = $stateParams.leaveMessage;
-       $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
-       $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
-       $scope.invoice_id      = $stateParams.invoice_id;//纳税人识别号  id
-       $scope.choose_personal = true;
-       $scope.choose_company  = false;
-       $scope.invoice_name    = ''; //纳税人名称抬头
-       $scope.invoice_number  = '';//纳税人识别号
-       $scope.invoice_model   = '';
-       $scope.contentInvoice  = '';
-       console.log( $scope.mall_id );
-       console.log( $scope.invoice_id );
+        $scope.consigneeName   = $stateParams.consigneeName;
+        $scope.mobile          = $stateParams.mobile;
+        $scope.districtMore    = $stateParams.districtMore;
+        $scope.regionMore      = $stateParams.regionMore;
+        $scope.leaveMessage    = $stateParams.leaveMessage;
+        $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
+        $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
+        $scope.invoice_id      = $stateParams.invoice_id;//纳税人识别号  id
+        $scope.choose_personal = true;
+        $scope.choose_company  = false;
+        $scope.invoice_name    = ''; //纳税人名称抬头
+        $scope.invoice_number  = '';//纳税人识别号
+        $scope.invoice_model   = '';
+        $scope.contentInvoice  = '';
+        console.log( $scope.mall_id );
+        console.log( $scope.invoice_id );
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
                 return $.param(data)
             }
         };
-       let numMap = /^(?![0-9]+$)(?![A-Z]+$)[0-9A-Z]{18,}/;
-       // 点击返回按钮传参到上一个页面
-       $scope.getOrderPre = function () {
-           console.log(123);
-           if($scope.show_address == true){
-               $scope.show_harvest = false;
-               $scope.show_address = true;
-           }else {
-               $scope.show_harvest = true;
-               $scope.show_address = false;
-           }
-           $state.go('order_commodity',({harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-               harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-               platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-               goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-               mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-               regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-               invoice_id:$scope.invoice_id
-           }))
-       };
-       // 切换个人和单位
-       $scope.choosePersonal = function () { //个人
-           console.log('个人');
-           $scope.choose_personal = true;
-           $scope.choose_company  = false;
-       };
-       $scope.chooseCompany = function () { //单位
-           console.log('单位');
-           $scope.choose_personal = true;
-           $scope.choose_company  = true;
-       };
-       // 点击确认按钮时保存数据
-       $scope.getSave = function () {
-           console.log('确认');
-           console.log($scope.invoice_name );
-           console.log($scope.invoice_number );
-           // 选择为个人时
-           if($scope.choose_personal == true && $scope.choose_company  == false ){
-               if($scope.invoice_name == ''){
-                   $scope.invoice_model = '.bs-example-modal-sm';
-                   $scope.contentInvoice = '请输入抬头名称';
-                   console.log(11111111111111)
-               }
-               else {
-                   $scope.invoice_model = '.bs-example-modal-sm';
-                   $scope.contentInvoice = '保存成功';
-                   console.log(222222222222);
-                   // 添加发票接口
-                   $http.post('http://common.cdlhzz.cn/order/orderinvoicelineadd',{
-                       invoice_type: 1,
-                       invoice_header_type:1,
-                       invoice_header:'发票抬头',
-                       invoice_content:$scope.invoice_name,
-                   },config).then(function (response) {
-                       console.log(response);
-                       $scope.invoice_id = response.data.data.invoice_id;
-                       alert( $scope.invoice_id)
-                   });
-                   // 模态框确认按钮 == 跳转保存数据
-                   $scope.jumpOrder = function () {
-                       $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-                           harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-                           harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-                           platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-                           goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-                           mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                           regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage}))
-                   }
-               }
-           }
-           // 选择为单位时
-           if($scope.choose_personal == true && $scope.choose_company  == true ){
-               console.log('选择支付吧');
-               console.log($scope.invoice_name );
-               console.log($scope.invoice_number );
-               if($scope.invoice_name == '' || $scope.invoice_number == ''){
-                   console.log(13333333333333)
-                   $scope.invoice_model = '.bs-example-modal-sm';
-                   $scope.contentInvoice = '请填写完整';
-               }
-               if($scope.invoice_name != '' && $scope.invoice_number != '' && !numMap.test($scope.invoice_number)){
-                   console.log(44444444444444)
-                   $scope.invoice_model = '.bs-example-modal-sm';
-                   $scope.contentInvoice = '请填写正确的纳税人识别号'
+        let numMap = /^(?![0-9]+$)(?![A-Z]+$)[0-9A-Z]{18,}/;
+        // 点击返回按钮传参到上一个页面
+        $scope.getOrderPre = function () {
+            console.log(123);
+            if($scope.show_address == true){
+                $scope.show_harvest = false;
+                $scope.show_address = true;
+            }else {
+                $scope.show_harvest = true;
+                $scope.show_address = false;
+            }
+            $state.go('order_commodity',({harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
+                harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
+                platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
+                goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
+                mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
+                regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
+                invoice_id:$scope.invoice_id
+            }))
+        };
+        // 切换个人和单位
+        $scope.choosePersonal = function () { //个人
+            console.log('个人');
+            $scope.choose_personal = true;
+            $scope.choose_company  = false;
+        };
+        $scope.chooseCompany = function () { //单位
+            console.log('单位');
+            $scope.choose_personal = true;
+            $scope.choose_company  = true;
+        };
+        // 点击确认按钮时保存数据
+        $scope.getSave = function () {
+            console.log('确认');
+            console.log($scope.invoice_name );
+            console.log($scope.invoice_number );
+            // 选择为个人时
+            if($scope.choose_personal == true && $scope.choose_company  == false ){
+                if($scope.invoice_name == ''){
+                    $scope.invoice_model = '.bs-example-modal-sm';
+                    $scope.contentInvoice = '请输入抬头名称';
+                    console.log(11111111111111)
+                }
+                else {
+                    $scope.invoice_model = '.bs-example-modal-sm';
+                    $scope.contentInvoice = '保存成功';
+                    console.log(222222222222);
+                    // 添加发票接口
+                    $http.post('http://common.cdlhzz.cn/order/orderinvoicelineadd',{
+                        invoice_type: 1,
+                        invoice_header_type:1,
+                        invoice_header:'发票抬头',
+                        invoice_content:$scope.invoice_name,
+                    },config).then(function (response) {
+                        console.log(response);
+                        $scope.invoice_id = response.data.data.invoice_id
+                    });
+                    // 模态框确认按钮 == 跳转保存数据
+                    $scope.jumpOrder = function () {
+                        $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
+                            harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
+                            harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
+                            platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
+                            goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
+                            mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
+                            regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage}))
+                    }
+                }
+            }
+            // 选择为单位时
+            if($scope.choose_personal == true && $scope.choose_company  == true ){
+                console.log('选择支付吧');
+                console.log($scope.invoice_name );
+                console.log($scope.invoice_number );
+                if($scope.invoice_name == '' || $scope.invoice_number == ''){
+                    console.log(13333333333333)
+                    $scope.invoice_model = '.bs-example-modal-sm';
+                    $scope.contentInvoice = '请填写完整';
+                }
+                if($scope.invoice_name != '' && $scope.invoice_number != '' && !numMap.test($scope.invoice_number)){
+                    console.log(44444444444444)
+                    $scope.invoice_model = '.bs-example-modal-sm';
+                    $scope.contentInvoice = '请填写正确的纳税人识别号'
 
-               }
-              if($scope.invoice_name != '' && $scope.invoice_number != '' && numMap.test($scope.invoice_number) ){
-                  console.log(15555555555555);
-                  $scope.invoice_model = '.bs-example-modal-sm';
-                  $scope.contentInvoice = '保存成功';
-                  // 添加发票接口
-                  $http.post('http://common.cdlhzz.cn/order/orderinvoicelineadd',{
-                      invoice_type: 1,
-                      invoice_header_type:2,
-                      invoice_header:'发票抬头',
-                      invoice_content:$scope.invoice_name,
-                      invoicer_card:$scope.invoice_number
-                  },config).then(function (response) {
-                      console.log(response);
-                      $scope.invoice_id = response.data.data.invoice_id;
-                      console.log($scope.invoice_id);
+                }
+                if($scope.invoice_name != '' && $scope.invoice_number != '' && numMap.test($scope.invoice_number) ){
+                    console.log(15555555555555);
+                    $scope.invoice_model = '.bs-example-modal-sm';
+                    $scope.contentInvoice = '保存成功';
+                    // 添加发票接口
+                    $http.post('http://common.cdlhzz.cn/order/orderinvoicelineadd',{
+                        invoice_type: 1,
+                        invoice_header_type:2,
+                        invoice_header:'发票抬头',
+                        invoice_content:$scope.invoice_name,
+                        invoicer_card:$scope.invoice_number
+                    },config).then(function (response) {
+                        console.log(response);
+                        $scope.invoice_id = response.data.data.invoice_id;
+                        console.log($scope.invoice_id);
 
-                  });
-                  $scope.jumpOrder = function () {
-                      $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-                          harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-                          harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-                          platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-                          goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-                          mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                          regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage
-                      }))
-                  }
-              }
-           }
+                    });
+                    $scope.jumpOrder = function () {
+                        $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
+                            harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
+                            harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
+                            platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
+                            goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
+                            mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
+                            regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage
+                        }))
+                    }
+                }
+            }
 
-       }
+        }
 
 
     })
@@ -767,9 +766,9 @@ angular.module("all_controller", [])
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
-        $scope.supplier_id  = $stateParams.supplier_id;//纳税人识别号
+
         console.log($scope.leaveMessage);
-        alert($scope.supplier_id);
+        console.log($scope.supplier_id);
         if($stateParams.show_address !== ''){
             console.log(12345456);
             $scope.show_address = $stateParams.show_address;
@@ -783,6 +782,7 @@ angular.module("all_controller", [])
             $scope.regionMore = $stateParams.regionMore;
             $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
             $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
+            $scope.supplier_id  = $stateParams.supplier_id;//商家ID
 
             console.log($scope.invoice_name );
             console.log($scope.invoice_id );
@@ -790,14 +790,6 @@ angular.module("all_controller", [])
             console.log($scope.harvestAddress)
 
         }
-
-
-        console.log($scope.mall_id);
-        console.log($scope.shopNum);
-        console.log($scope.show_address+"显示第一个");
-        console.log($scope.show_harvest+"显示第二个");
-        console.log($scope.harvestNum);
-        console.log($scope.shopNum);
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
@@ -976,14 +968,9 @@ angular.module("all_controller", [])
                                     freight:+$scope.freight,
                                     buyer_message: $scope.leaveMessage
                                 },config).then(function (response) {
-                                    console.log(response);
+                                    // console.log(response);
+                                    alert($scope.mall_id +'和'+ $scope.address_id+'和'+$scope.invoice_id+'和'+$scope.supplier_id)
                                     alert(JSON.stringify(response));
-                                    // $scope.status = response.status;
-                                    // $scope.dataFram = response.data;
-                                    // console.log($scope.dataFram);
-                                    // console.log($scope.status);
-                                    // $('body').append($scope.dataFram)
-
                                 })
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
@@ -1019,15 +1006,16 @@ angular.module("all_controller", [])
 
 
     })
+
     // 支付成功
     .controller('pay_success_ctrl',function($scope,$http,$state,$stateParams,$interval){
         $scope.timeOut = 5;
         $interval(function () {
-          if($scope.timeOut!=0)  {
-              $scope.timeOut --;
-          }else {
-              $state.go('home')
-          }
+            if($scope.timeOut!=0)  {
+                $scope.timeOut --;
+            }else {
+                $state.go('home')
+            }
         },1000)
 
 
