@@ -8,74 +8,48 @@ angular.module('shop_data_module',[])
     }
   };
   $scope.data_list=[];
+    /*分页配置*/
+    $scope.wjConfig = {
+        showJump: true,
+        itemsPerPage: 12,
+        currentPage: 1,
+        onChange: function () {
+            tablePages();
+        }
+    }
+    let tablePages=function () {
+        $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
+        $http.get(baseUrl+'/mall/shop-data',{
+            params:$scope.params
+        }).then(function (res) {
+            console.log(res);
+            $scope.data_list=res.data.data.shop_data.details;
+            $scope.wjConfig.totalItems = res.data.data.shop_data.total;
+            $scope.total_sold_number=res.data.data.shop_data.total_sold_number;//销量
+            $scope.total_amount_sold=res.data.data.shop_data.total_amount_sold;//销量额
+            $scope.total_ip_number=res.data.data.shop_data.total_ip_number;//游客数
+            $scope.total_viewed_number=res.data.data.shop_data.total_viewed_number;//访问量
+        },function (err) {
+            console.log(err);
+        })
+    };
+    $scope.params = {
+        page: 1,                        // 当前页数
+        time_type: 'all',               // 时间类型
+        start_time: '',                 // 自定义开始时间
+        end_time: '',                   // 自定义结束时间
+    };
   //时间类型
-  $http.get('http://test.cdlhzz.cn:888/site/time-types').then(function (response) {
+  $http.get(baseUrl+'/site/time-types').then(function (response) {
     $scope.time = response.data.data.time_types;
-    $scope.selectValue = response.data.data.time_types[0].value;
+    $scope.params.time_type = response.data.data.time_types[0].value;
   });
-  //列表数据
-  $scope.$watch('selectValue',function (newVal,oldVal) {
-    if(!!newVal){
-      $http.get('http://test.cdlhzz.cn:888/mall/shop-data',{
-        params:{
-          time_type:newVal
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.data_list=res.data.data.shop_data.details;
-        $scope.total_sold_number=res.data.data.shop_data.total_sold_number;//销量
-        $scope.total_amount_sold=res.data.data.shop_data.total_amount_sold;//销量额
-        $scope.total_ip_number=res.data.data.shop_data.total_ip_number;//游客数
-        $scope.total_viewed_number=res.data.data.shop_data.total_viewed_number;//访问量
-      },function (err) {
-        console.log(err);
-      })
-    }
-  });
-  //监听开始时间
-  $scope.$watch('begin_time',function (newVal,oldVal) {
-    //$scope.page=1;//默认第一页
-    console.log(newVal);
-    if(newVal!=undefined && newVal!='' && $scope.begin_time!=undefined && $scope.end_time!=undefined){
-      let url='http://test.cdlhzz.cn:888/mall/shop-data';
-      $http.get(url,{
-        params:{
-          'time_type':'custom',
-          'start_time':newVal,
-          'end_time': $scope.end_time
-        }
-      }).then(function (res) {
-        $scope.data_list=res.data.data.shop_data.details;
-        $scope.total_sold_number=res.data.data.shop_data.total_sold_number;//销量
-        $scope.total_amount_sold=res.data.data.shop_data.total_amount_sold;//销量额
-        $scope.total_ip_number=res.data.data.shop_data.total_ip_number;//游客数
-        $scope.total_viewed_number=res.data.data.shop_data.total_viewed_number;//访问量
-      },function (err) {
-        console.log(err)
-      })
-    }
-  });
-  //监听结束时间
-  $scope.$watch('end_time',function (newVal,oldVal) {
-    //$scope.page=1;//默认第一页
-    console.log(newVal);
-    if(newVal!=undefined && newVal!='' && $scope.begin_time!=undefined && $scope.end_time!=undefined){
-      let url='http://test.cdlhzz.cn:888/mall/shop-data';
-      $http.get(url,{
-        params:{
-          'time_type':'custom',
-          'start_time':$scope.begin_time,
-          'end_time':newVal
-        }
-      }).then(function (res) {
-        $scope.data_list=res.data.data.shop_data.details;
-        $scope.total_sold_number=res.data.data.shop_data.total_sold_number;//销量
-        $scope.total_amount_sold=res.data.data.shop_data.total_amount_sold;//销量额
-        $scope.total_ip_number=res.data.data.shop_data.total_ip_number;//游客数
-        $scope.total_viewed_number=res.data.data.shop_data.total_viewed_number;//访问量
-      },function (err) {
-        console.log(err)
-      })
-    }
-  });
+  //监听开始和结束时间
+    $scope.time_change=function () {
+        $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+        tablePages();
+    };
+
+
+//    
 });
