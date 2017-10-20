@@ -45,22 +45,22 @@ class PayService
      *
      * @return 用户的openid
      */
-  public function GetOpenid()
+    public function GetOpenid()
     {
         //通过code获得openid
-//        if (!isset($_GET['code'])){
+        if (!isset($_GET['code'])){
             //触发微信返回code码
             $baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
             $url = $this->__CreateOauthUrlForCode($baseUrl);
-            return $url;
-//            Header("Location: $url");
-//            exit();
-//        } else {
-//            //获取code码，以获取openid
-//            $code = $_GET['code'];
-//            $openid = $this->getOpenidFromMp($code);
-//            return $openid;
-//        }
+//            return $url;
+            Header("Location: $url");
+            exit();
+        } else {
+            //获取code码，以获取openid
+            $code = $_GET['code'];
+            $openid = $this->getOpenidFromMp($code);
+            return $openid;
+        }
     }
 
     /**

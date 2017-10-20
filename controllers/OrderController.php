@@ -694,11 +694,16 @@ class OrderController extends Controller
             'order_no'=>$order_no,
             'buyer_message'=>$buyer_message
         );
+       //、获取用户openid
+        $tools = new PayService();
+        $openId = $tools->GetOpenid();
+        echo $openId;exit;
         $model=new Wxpay();
-        $data=$model->Wxlineapipay($orders);
+        $data=$model->Wxlineapipay($orders,$openId);
+        $code=200;
         return Json::encode([
-            'code' => 200,
-            'msg' =>'ok',
+            'code'=>$code,
+            'msg'=>'ok',
             'data'=>$data
         ]);
     }
