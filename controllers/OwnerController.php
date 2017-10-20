@@ -1171,6 +1171,7 @@ class OwnerController extends Controller
         $street   = trim(Yii::$app->request->post('street',''));
         $toponymy = trim(Yii::$app->request->post('toponymy',''));
         $effect['case_effect'] = Effect::findByCode($code,$street,$toponymy);
+        var_dump($effect['case_effect']);die;
         foreach ($effect['case_effect'] as $one_effect){
             if ($one_effect['type'] == 1){
                 $effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
