@@ -10,6 +10,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller:"mall_index_ctrl",
                 params:{"pid":"","id":"",platform_price:"",title:"title",description:"description"}
             })
+
             .state("minute_class", {   //分类页
                 url: "/minute_class",
                 views: {
@@ -26,6 +27,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "search_ctrl"
                 //params:{"pid":"","title":""}
             })
+
             .state("commodity_search", {   //商品搜索页
                 url: "/commodity_search",
                 views: {
@@ -34,6 +36,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "commodity_search_ctrl",
                 params:{"pid":"","id":"",'search_flag':'','search_flag_details':''}
             })
+
             .state("details", {   //某个商品详细列表
                 url: "/details",
                 views: {
@@ -42,16 +45,18 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "details_ctrl",
                 params:{'pid':'',"id":"",'mall_id':"",'search_flag_details':''}
             })
+
             .state("product_details", {   //某个商品详细信息
                 url: "/product_details",
                 views: {
                     "": {templateUrl: "product_details.html"}
                 },
                 controller: "product_details_ctrl",
-                params:{'pid':'',"id":"", 'mall_id':"",'datailsShop':'datailsShop','shopNum':''
+                params:{'pid':'',"id":"", 'mall_id':"",'datailsShop':'datailsShop','shopNum':'',
                  'supplier_id':''
                 }
             })
+
             .state("shop_front", {   //店铺首页和全部商品
                 url: "/shop_front",
                 views: {
@@ -60,6 +65,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "shop_front_ctrl",
                 params:{'pid':'',"id":'','mall_id':'','datailsShop':'datailsShop'}
             })
+
             .state("order_commodity", {    //订单确认
                 url: "/order_commodity",
                 views: {
@@ -69,9 +75,10 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
                 'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
                  'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
-                    'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':''
+                  'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':''
                 }
             })
+
             .state("invoice", {    //发票信息
                 url: "/invoice",
                 views: {
@@ -84,6 +91,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':''
                 }
             })
+
             .state("pay_success", {    //支付成功
                 url: "/pay_success",
                 views: {
@@ -100,7 +108,6 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "cut_net_ctrl",
                 params:{}
             })
-
     }])
 
     .run(["$rootScope","$state",function ($rootScope,$state) {
