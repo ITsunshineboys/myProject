@@ -616,7 +616,7 @@ angular.module("all_controller", [])
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
         $scope.supplier_id  = $stateParams.supplier_id;//纳税人识别号
         console.log($scope.leaveMessage);
-        console.log($scope.supplier_id);
+        alert($scope.supplier_id);
         if($stateParams.show_address !== ''){
             console.log(12345456);
             $scope.show_address = $stateParams.show_address;
@@ -954,7 +954,8 @@ angular.module("all_controller", [])
                        invoice_content:$scope.invoice_name,
                    },config).then(function (response) {
                        console.log(response);
-                       $scope.invoice_id = response.data.data.invoice_id
+                       $scope.invoice_id = response.data.data.invoice_id;
+                       alert( $scope.invoice_id)
                    });
                    // 模态框确认按钮 == 跳转保存数据
                    $scope.jumpOrder = function () {
