@@ -964,7 +964,7 @@ angular.module("all_controller", [])
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
                                 // 微信接口
-                                $http.post('http://common.cdlhzz.cn/order/lineplaceorder',{
+                                $http.get('http://common.cdlhzz.cn/order/lineplaceorder',{
                                     goods_name: $scope.title,
                                     order_price:$scope.allCost,
                                     goods_num:+$scope.shopNum,
