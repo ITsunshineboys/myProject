@@ -26,20 +26,41 @@ header button{
     font-weight:bold!important;
 }
 .dark{
-    color: #2F3033!important; ;
+    color: #2F3033!important;
     font-weight: normal!important;
 }
-/*分销详情*/
-.distribution_detail{
+/*添加材料项*/
+.add_material{
     padding-left:40px;
     padding-right:40px;
-    padding-top:15px;
 }
-.distribution_detail .row > p,.distribution_detail .row > div{
-    margin-top:15px;
-    margin-bottom:15px;
+.add_material .location{
+    font-size: 16px;
+    margin-top:60px;
+    font-weight:bold;
+    margin-bottom:30px;
 }
-.distribution_detail button{
+.add_material button{
+    padding:8px;
+    margin-right:20px;
+    font-size:14px;
+    background:none;
+    border:.5px solid #5677FC;
+    border-radius:2px;
+    color: #5677FC;
+}
+.add_material table{
+    font-size:14px;
+}
+.add_material table th{
+    border: 0 !important;
+    font-weight:normal!important;
+    color: #7A8599;
+}
+.add_material table td{
+    color: #666F80;
+}
+.add_material button.btn{
     width:70px;
     height: 32px;
     font-size:12px;
@@ -49,15 +70,7 @@ header button{
     margin-right:10px;
     border-radius:2px;
 }
-.distribution_detail .remove{
+.add_material .remove{
     border-color: #3F94F6!important;
     color: #3F94F6;
-}
-.distribution_detail .submit{
-    margin-top:100px;
-    position: absolute;
-    bottom:50px;
-}
-.distribution_detail .error{
-    color: red!important;
 }

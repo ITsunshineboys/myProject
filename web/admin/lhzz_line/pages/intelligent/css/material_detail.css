@@ -26,20 +26,41 @@ header button{
     font-weight:bold!important;
 }
 .dark{
-    color: #2F3033!important; ;
+    color: #2F3033!important;
     font-weight: normal!important;
 }
-/*分销详情*/
-.distribution_detail{
+/*添加材料详情*/
+.material_detail{
     padding-left:40px;
     padding-right:40px;
-    padding-top:15px;
 }
-.distribution_detail .row > p,.distribution_detail .row > div{
-    margin-top:15px;
-    margin-bottom:15px;
+.material_detail .remove{
+    border:1px solid #3F94F6!important;
+    color: #3F94F6;
 }
-.distribution_detail button{
+.material_detail button{
+    padding:8px;
+    margin-right:20px;
+    font-size:14px;
+    background:none;
+    border-radius:2px;
+    color: #5677FC;
+}
+.material_detail .cur_choose{
+    color: #3F94F6;
+    border-bottom:1px solid #3F94F6;
+}
+.material_detail .tab_title{
+    display: inline-block;
+    width:80px;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.material_detail .tab-item .row{
+    padding-top:10px;
+    padding-bottom:10px;
+}
+.material_detail .submit button{
     width:70px;
     height: 32px;
     font-size:12px;
@@ -48,16 +69,12 @@ header button{
     margin-left:10px;
     margin-right:10px;
     border-radius:2px;
+    color: #666;
 }
-.distribution_detail .remove{
+.material_detail .remove{
     border-color: #3F94F6!important;
-    color: #3F94F6;
+    color: #3F94F6!important;
 }
-.distribution_detail .submit{
+.material_detail .submit{
     margin-top:100px;
-    position: absolute;
-    bottom:50px;
-}
-.distribution_detail .error{
-    color: red!important;
 }
