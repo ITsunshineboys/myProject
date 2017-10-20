@@ -1179,7 +1179,6 @@ class OwnerController extends Controller
                 $goods_effect = WorksData::findById($one_effect['id']);
             }
         }
-        var_dump($goods_effect);die;
         // 系数查找
         $management = CoefficientManagement::findByAll();
         foreach ($goods_effect as $one_goods){
