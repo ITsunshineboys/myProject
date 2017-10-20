@@ -965,20 +965,20 @@ angular.module("all_controller", [])
                                 alert('调用微信接口');
                                 // 微信接口
                                 // http://common.cdlhzz.cn/order/lineplaceorder
-                                $http.get('http://baidu.com',{
-                                    params:{
-                                        goods_name: $scope.title,
-                                        order_price:$scope.allCost,
-                                        goods_num:+$scope.shopNum,
-                                        goods_id:+$scope.mall_id,
-                                        address_id:+$scope.address_id,
-                                        invoice_id:+$scope.invoice_id,
-                                        supplier_id:+$scope.supplier_id,
-                                        freight:+$scope.freight,
+                                $http.get('http://www.baidu.com',{
+                                    // params:{
+                                    //     goods_name: $scope.title,
+                                    //     order_price:$scope.allCost,
+                                    //     goods_num:+$scope.shopNum,
+                                    //     goods_id:+$scope.mall_id,
+                                    //     address_id:+$scope.address_id,
+                                    //     invoice_id:+$scope.invoice_id,
+                                    //     supplier_id:+$scope.supplier_id,
+                                    //     freight:+$scope.freight,
 
                                         // buyer_message: $scope.leaveMessage
-                                }}).then(function (response) {
-                                    
+                                // }
+                            }).then(function (response) {
                                     alert('跳转成功');
                                     alert($scope.mall_id +'商品ID');
                                     alert($scope.address_id+'地址id');
