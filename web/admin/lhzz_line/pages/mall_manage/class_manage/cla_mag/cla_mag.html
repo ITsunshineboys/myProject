@@ -83,52 +83,16 @@
                         <td ng-if="!onsale_flag" class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>
                     </tr>
                 </table>
-                <tm-pagination conf="pageConfig"></tm-pagination>
+                <tm-pagination conf="pageConfig"></tm-pagination >
             <!--</div>-->
             </div>
 
 
         </div>
         <!--已下架--------------------------------------------------------------->
-        <div class="off_sale" id="off_sale">
+        <!--<div class="off_sale" id="off_sale">-->
 
-
-            <!--下架Table内容-->
-            <!--<div class="onsale_table offsale_table">-->
-                <!--<table>-->
-                    <!--<tr class="th">-->
-                        <!--<td>&nbsp;</td>-->
-                        <!--<td>所属分类</td>-->
-                        <!--<td>分类图片</td>-->
-                        <!--<td>分类名称</td>-->
-                        <!--<td>分类级别</td>-->
-                        <!--<td class="sort">-->
-                            <!--下架时间-->
-                            <!--<img src="pages/mall_manage/class_manage/cla_mag/images/arrow_up.png" alt="" ng-show="offascorder" ng-click="offchangepic()">-->
-                            <!--<img src="pages/mall_manage/class_manage/cla_mag/images/arrow_down.png" alt="" ng-show="offdesorder" ng-click="offchangepictwo()">-->
-                        <!--</td>-->
-                        <!--<td>操作人员</td>-->
-                        <!--<td>状态</td>-->
-                        <!--<td>下架原因</td>-->
-                        <!--<td>详情</td>-->
-                        <!--<td>操作</td>-->
-                    <!--</tr>-->
-                    <!--<tr ng-repeat="item in listdata">-->
-                        <!--<td><input type="checkbox" ng-checked="selectoffAll" ng-model="item.state"></td>-->
-                        <!--<td>{{item.parent_title}}</td>-->
-                        <!--<td><img src="http://test.cdlhzz.cn:888/{{item.icon}}" alt=""></td>-->
-                        <!--<td>{{item.title}}</td>-->
-                        <!--<td>{{item.level}}</td>-->
-                        <!--<td>{{item.offline_time}}</td>-->
-                        <!--<td>{{item.applicant}}</td>-->
-                        <!--<td class="yesred">{{item.status}}</td>-->
-                        <!--<td id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal" ng-click="resetOffReason(item.id,item.offline_reason)" ng-bind="item.offline_reason||'点击输入'" ></td>-->
-                        <!--<td class="edit" ui-sref="offsale_edit({classtitle:item.title,classid:item.id,classlevel:item.level,classtitles:item.titles,classpath:item.path,iconpath:item.icon,addperson:item.applicant,offline_time:item.offline_time,offline_reason:item.offline_reason})">编辑</td>-->
-                        <!--<td class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="tobeonline(item.id,item.level)">上架</td>-->
-                    <!--</tr>-->
-                <!--</table>-->
-            <!--下架table结束-->
-        </div>
+        <!--</div>-->
     </div>
 
     <!--已上架 单个下架 模态框-->
