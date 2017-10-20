@@ -468,8 +468,7 @@ class QuoteController extends Controller
                         ( new EffectPicture())->plotAdd($effect_id,$effect_images,$series_id,$style_id,$images_user);
                     }
                 }
-            }
-            else {
+            } else {
 
                 // 案例添加
                 $bedroom = $house['cur_room'];
@@ -494,7 +493,7 @@ class QuoteController extends Controller
                 $sort_id = $house['sort_id'];
                 if ($stairway != 1){
                     $stair_id = 0;
-                }else{
+                } else {
                     $stair_id = $house['stair'];
                 }
 
