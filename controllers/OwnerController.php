@@ -1225,6 +1225,11 @@ class OwnerController extends Controller
         }
     }
 
+    /**
+     * 测试数据
+     *
+     * @return string
+     */
     public function actionTest(){
         return Json::encode([
            'brainpower_inital_supervise'=> (new BrainpowerInitalSupervise())->find()->All(),
