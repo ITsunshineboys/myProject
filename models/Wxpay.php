@@ -33,34 +33,34 @@ class Wxpay  extends ActiveRecord
      *无登录-微信公众号支付接口
      */
     public function Wxlineapipay($orders){
-        ini_set('date.timezone','Asia/Shanghai');
-        //打印输出数组信息
-        function printf_info($data)
-        {
-            foreach($data as $key=>$value){
-                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+            ini_set('date.timezone','Asia/Shanghai');
+            //打印输出数组信息
+            function printf_info($data)
+            {
+                foreach($data as $key=>$value){
+                    echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+                }
             }
-        }
-        //、获取用户openid
-        $tools = new PayService();
-        $openId = $tools->GetOpenid();
-        //②、统一下单
-        $input = new WxPayUnifiedOrder();
-        $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
-        $input->SetBody($orders['body']);
-        $input->SetAttach($attach);
-        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-        $input->SetTotal_fee($orders['order_price']);
-        $input->SetTime_start(date("YmdHis"));
-        $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetGoods_tag("goods");
-        $input->SetNotify_url(self::LINEPAY_NOTIFY_URL);
-        $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($openId);
-        $order = WxPayApi::unifiedOrder($input);
-        $jsApiParameters = $tools->GetJsApiParameters($order);
-//        $editAddress = $tools->GetEditAddressParameters();
-        return $editAddress;
+            //、获取用户openid
+            $tools = new PayService();
+            $openId = $tools->GetOpenid();
+            return $openId;
+            //②、统一下单
+            $input = new WxPayUnifiedOrder();
+            $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
+            $input->SetBody($orders['body']);
+            $input->SetAttach($attach);
+            $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+            $input->SetTotal_fee($orders['order_price']);
+            $input->SetTime_start(date("YmdHis"));
+            $input->SetTime_expire(date("YmdHis", time() + 600));
+            $input->SetGoods_tag("goods");
+            $input->SetNotify_url(self::LINEPAY_NOTIFY_URL);
+            $input->SetTrade_type("JSAPI");
+            $input->SetOpenid($openId);
+            $order = WxPayApi::unifiedOrder($input);
+            $jsApiParameters = $tools->GetJsApiParameters($order);
+            return $jsApiParameters;
         }
 
         /**
