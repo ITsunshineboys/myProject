@@ -1206,6 +1206,7 @@ class OwnerController extends Controller
         foreach ($goods_effect as $logistics_id) {
             $ids = $logistics_id['logistics_template_id'];
         }
+        var_dump($ids);die;
         $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
         $new =  new LogisticsService($logistics,$goods_effect);
         $effect['goods'] = $new->minQuantity();
@@ -1213,6 +1214,13 @@ class OwnerController extends Controller
             'code' =>200,
             'msg'=>'ok',
             'data'=> $effect
+        ]);
+    }
+
+    public function actionTest(){
+        return Json::encode([
+           'brainpower_inital_supervise'=> (new BrainpowerInitalSupervise())->find()->All(),
+           'effect'=> (new Effect())->find()->All(),
         ]);
     }
 
