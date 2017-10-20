@@ -1206,21 +1206,30 @@ class OwnerController extends Controller
         foreach ($goods_effect as $logistics_id) {
             $ids = $logistics_id['logistics_template_id'];
         }
-        if (is_array($ids)){
-            $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+        $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+        if ($logistics != null){
+            $new =  new LogisticsService($logistics,$goods_effect);
+            $effect['goods'] = $new->minQuantity();
+            return Json::encode([
+                'code' =>200,
+                'msg'=>'ok',
+                'data'=> $effect
+            ]);
         } else {
-            $logistics = LogisticsTemplate::GoodsLogisticsTemplateId($ids,[]);
+            $effect['goods'] = 0;
+            return Json::encode([
+                'code' =>200,
+                'msg'=>'ok',
+                'data'=> $effect
+            ]);
         }
-var_dump($logistics);exit;
-        $new =  new LogisticsService($logistics,$goods_effect);
-        $effect['goods'] = $new->minQuantity();
-        return Json::encode([
-            'code' =>200,
-            'msg'=>'ok',
-            'data'=> $effect
-        ]);
     }
 
+    /**
+     * 测试数据
+     *
+     * @return string
+     */
     public function actionTest(){
         return Json::encode([
            'brainpower_inital_supervise'=> (new BrainpowerInitalSupervise())->find()->All(),
