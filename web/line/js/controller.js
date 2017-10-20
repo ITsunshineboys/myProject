@@ -975,9 +975,10 @@ angular.module("all_controller", [])
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
+
                                         // buyer_message: $scope.leaveMessage
                                 }}).then(function (response) {
-                                    // $scope.dataWx = response.data;
+                                    
                                     alert('跳转成功');
                                     alert($scope.mall_id +'商品ID');
                                     alert($scope.address_id+'地址id');
