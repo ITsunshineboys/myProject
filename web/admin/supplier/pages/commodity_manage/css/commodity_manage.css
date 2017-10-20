@@ -89,7 +89,7 @@ section{
   display: table;
   clear: both;
 }
-.operating ul li{
+.operating_ul li{
   float: left;
   height: 35px;
   margin-right: 25px;
@@ -138,7 +138,19 @@ section{
   padding: 10px;
   font-size: 12px;
 }
-
+.dropdown-menu > li:hover{
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+.dropdown-menu > li {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+}
 /*操作菜单结束*/
 
 /*表格内容开始*/
