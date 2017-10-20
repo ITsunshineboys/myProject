@@ -663,7 +663,7 @@ class OrderController extends Controller
         $freight=trim($request->get('freight'));
         $return_insurance=trim($request->get('return_insurance'));
         $buyer_message=trim($request->get('buyer_message','0'));
-        if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name || $invoice_id || !$supplier_id || !$freight )
+       if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name || $invoice_id || !$supplier_id )
         {
             $code=1000;
             return Json::encode([
@@ -671,6 +671,10 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code],
                 'data' => null
             ]);
+        }
+        if (!$freight)
+        {
+            $freight=0;
         }
         $order_no =self::Setorder_no();
         //商品描述，可空
