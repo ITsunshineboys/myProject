@@ -977,20 +977,18 @@ angular.module("all_controller", [])
                                         freight:+$scope.freight,
                                         // buyer_message: $scope.leaveMessage
                                 }}).then(function (response) {
-                                    $scope.dataWx = response.data;
-                                    alert($scope.dataFram);
-
+                                    // $scope.dataWx = response.data;
+                                    // alert($scope.dataFram);
                                     alert($scope.mall_id +'商品ID');
                                     alert($scope.address_id+'地址id');
                                     alert($scope.invoice_id+'发票id');
-
                                     alert($scope.supplier_id+'商家id');
                                     alert(JSON.stringify(response));
                                     alert(JSON.stringify(response.data));
                                     alert(JSON.stringify(response.config));
-                                    $('body').append($scope.dataWx);
+                                    // $('body').append($scope.dataWx);
                                 },function (error) {
-                                    alert(error)
+                                    alert("错误")
                                 })
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
