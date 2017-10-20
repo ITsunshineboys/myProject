@@ -86,7 +86,6 @@ class UserChat extends \yii\db\ActiveRecord
             $trans->rollBack();
             return false;
         }
-
         //创建环信号
         $chat_online = new ChatService();
         $username=$chat->chat_username;
@@ -95,7 +94,7 @@ class UserChat extends \yii\db\ActiveRecord
             return false;
         }
         $password = \Yii::$app->security->generatePasswordHash($password);
-        $hx = $chat_online->createUser($username, $password);
+        $hx = $chat_online->createUser($username,$password);
 
         return [$chat, $hx];
     }

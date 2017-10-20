@@ -163,10 +163,10 @@ return [
     ],
     //聊天服务配置
     'chatOptions' => [
-        'client_id' => 'YXA62Z2DULStEeedFi-va_g7pw',
-        'client_secret' => 'YXA65yxSGgFor9VfzzjUfV60yKfFCQk',
+        'client_id' => 'YXA6i1icgLV5Eee3tef56bpxaQ',
+        'client_secret' => 'YXA69F9p-SBqT-pW7F_3Zi_-dcxSC78',
         'org_name' => '1185170730178177',
-        'app_name' => 'aitecude'
+        'app_name' => 'aitecube'
     ],
     'value_all' => -1, // 下拉框“全部”的值
     'style_series' => [

@@ -193,7 +193,9 @@ class ChatController extends Controller
             'msg_count' => $msg_count['count']
         ]);
     }
+    public function actionEditNickname(){
 
+    }
     public function actionAllUser(){
         $chat=new ChatService();
         var_dump($chat->getUsersForPage(0,''));

@@ -50,12 +50,12 @@ class ChatService
     /**
      * 授权注册
      */
-    function createUser($username, $password)
+    function createUser($username,$password)
     {
         $url = $this->url . 'users';
         $options = array(
             "username" => $username,
-            "password" => $password
+            "password" => $password,
         );
         $body = json_encode($options);
         $header = array($this->getToken());
