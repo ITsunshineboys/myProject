@@ -8,7 +8,7 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
   "seriesdetailModule","addstyleModule","choose_styleModule","styledetailModule",
   "storedetailModule",
 
-  "intelligent_index",'angularCSS','intelligent_directive','apply_case','distribution',
+  "intelligent_index",'angularCSS','intelligent_directive','apply_case','distribution','mall_finance',
 
   //  王杰 开始
   "index_module",
@@ -33,7 +33,7 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
 /*路由拦截*/
 app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
   $httpProvider.defaults.withCredentials = true;
-  $urlRouterProvider.otherwise("/login");
+  $urlRouterProvider.otherwise("/intelligent/index");
   $stateProvider
 
     //  ==============王杰  开始====================
@@ -264,7 +264,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       .state("add_series",{ /*系列/风格/属性管理-添加新系列*/
         url:"/add_series",
         templateUrl:"pages/mall_manage/style_manage/add_series/add_series.html",
-        params:{"list":""},
+        params:{"list":""}
       })
       .state("series_detail",{ /*系列/风格/属性管理-系列详情页*/
         url:"/series_detail",
@@ -290,7 +290,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       .state('intelligent',{//智能报价头部
           url:'/intelligent/',
           templateUrl:'pages/intelligent/index.html',
-          css:'pages/intelligent/css/apply_case_header.css',
+          css:'pages/intelligent/css/apply_case_header.css'
       })
       .state('intelligent.intelligent_index',{//智能报价首页
           url:'index',
@@ -362,10 +362,50 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
           templateUrl:'pages/intelligent/engineering_process.html',
           css:'pages/intelligent/css/engineering_process.css'
       })
+      .state('intelligent.coefficient_manage',{//系数管理
+          url:'coefficient_manage',
+          templateUrl:'pages/intelligent/coefficient_manage.html',
+          css:'pages/intelligent/css/coefficient_manage.css'
+      })
+      .state('intelligent.add_material',{//添加材料项
+          url:'add_material',
+          templateUrl:'pages/intelligent/add_material.html',
+          css:'pages/intelligent/css/add_material.css'
+      })
+      .state('intelligent.material_detail',{//添加材料详情
+          url:'material_detail',
+          templateUrl:'pages/intelligent/material_detail.html',
+          css:'pages/intelligent/css/material_detail.css'
+      })
+      .state('intelligent.house_area',{//房屋面积编辑
+          url:'house_area',
+          templateUrl:'pages/intelligent/house_area.html',
+          css:'pages/intelligent/css/house_area.css'
+      })
+      .state('intelligent.general_manage',{//通用管理列表
+          url:'general_manage',
+          templateUrl:'pages/intelligent/general_manage.html',
+          css:'pages/intelligent/css/engineering_standards.css'
+      })
+      .state('intelligent.general_detail',{//通用管理详情
+          url:'general_detail',
+          templateUrl:'pages/intelligent/general_detail.html',
+          css:'pages/intelligent/css/general_detail.css'
+      })
+      .state('intelligent.else_general_manage',{//其他通用管理
+          url:'else_general_manage',
+          templateUrl:'pages/intelligent/else_general_manage.html',
+          css:'pages/intelligent/css/else_general_manage.css'
+      })
+      .state('intelligent.goods_manage',{//智能报价商品管理
+          url:'goods_manage',
+          templateUrl:'pages/intelligent/goods_manage.html',
+          css:'pages/intelligent/css/goods_manage.css'
+      })
     //样板间申请
       .state('apply_case',{
           url:'/apply_case/',
-          templateUrl:'pages/apply_case/index.html',
+          templateUrl:'pages/apply_case/index.html'
           // css:'pages/apply_case/css/apply_case_header.css'
       })
       .state('apply_case.index',{//样板间申请主页
@@ -393,10 +433,66 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
           templateUrl:'pages/distribution/distribution_detail.html',
           css:'pages/distribution/css/distribution_detail.css'
       })
-      .state('distribution.associate_list',{
+      .state('distribution.associate_list',{//相关联订单
           url:'associate_list',
           templateUrl:'pages/distribution/associate_list.html',
           css:'pages/distribution/css/associate_list.css'
+      })
+    //财务中心
+    //商城财务
+      .state('mall_finance',{
+          url:'/mall_finance/',
+          templateUrl:'pages/financial_center/mall/index.html'
+      })
+      .state('mall_finance.index',{//商城财务主页
+          url:'index',
+          templateUrl:'pages/financial_center/mall/mall_finance.html',
+          css:'pages/financial_center/mall/css/mall_finance.css'
+      })
+      .state('mall_finance.withdraw',{//商家提现管理
+          url:'withdraw',
+          templateUrl:'pages/financial_center/mall/withdraw_manage.html',
+          css:'pages/financial_center/mall/css/withdraw_manage.css'
+      })
+      .state('mall_finance.withdraw_manage_detail',{//商家提现管理详情
+          url:'withdraw_manage_detail',
+          templateUrl:'pages/financial_center/mall/withdraw_manage_detail.html',
+          css:'pages/financial_center/mall/css/account_detail.css'
+      })
+      .state('mall_finance.account',{//财务账户管理
+          url:'account',
+          templateUrl:'pages/financial_center/mall/account.html',
+          css:'pages/financial_center/mall/css/account.css'
+      })
+      .state('mall_finance.account_detail',{//财务账户详情
+          url:'account_detail',
+          templateUrl:'pages/financial_center/mall/account_detail.html',
+          css:'pages/financial_center/mall/css/account_detail.css'
+      })
+      .state('mall_finance.freeze_money',{//冻结金额
+          url:'freeze_money',
+          templateUrl:'pages/financial_center/mall/freeze_money.html',
+          css:'pages/financial_center/mall/css/freeze_money.css'
+      })
+      .state('mall_finance.withdraw_list',{//提现列表
+          url:'withdraw_list',
+          templateUrl:'pages/financial_center/mall/withdraw_list.html',
+          css:'pages/financial_center/mall/css/withdraw_list.css'
+      })
+      .state('mall_finance.freeze_list',{//冻结金额列表
+          url:'freeze_list',
+          templateUrl:'pages/financial_center/mall/freeze_list.html',
+          css:'pages/financial_center/mall/css/withdraw_list.css'
+      })
+      .state('mall_finance.withdraw_detail',{//提现详情
+          url:'withdraw_detail',
+          templateUrl:'pages/financial_center/mall/withdraw_detail.html',
+          css:'pages/financial_center/mall/css/account_detail.css'
+      })
+      .state('mall_finance.recorded_detail',{
+          url:'recorded_detail',
+          templateUrl:'pages/financial_center/mall/recorded_detail.html',
+          css:'pages/financial_center/mall/css/withdraw_manage.css'
       })
       /*=============== 廖欢 start ===============*/
       .state('home', {  // 首页
@@ -497,6 +593,17 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
       })
     /*=============== 廖欢 end ===============*/
 })
+    // .run(function ($rootScope,$state,$stateParams) {
+    //     $rootScope.$state = $state;
+    //     $rootScope.$stateParams = $stateParams;
+    //     $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
+    //         $rootScope.previousState_name = fromState.name;
+    //         $rootScope.previousState_params = fromParams;
+    //     });
+    //     $rootScope.back = function() {//实现返回的函数
+    //         $state.go($rootScope.previousState_name,$rootScope.previousState_params);
+    //     };
+    // })
   .directive('wdatePicker',function(){
     return{
       restrict:"A",
