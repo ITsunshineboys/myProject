@@ -1,0 +1,31 @@
+<div class="withdraw_list">
+    <div class="row">
+        <div class="col-md-2">
+            <select ng-model="ctrlScope.cur_time_type" ng-options="item.name for item in time_type" class="form-control"></select>
+        </div>
+        <div class="col-md-2">
+            <input ng-if="cur_time_type.str == 'custom'" ng-model="ctrlScope.start_time" id="start_time" class="form-control" placeholder="开始时间" type="text" ngc-lay-date>
+        </div>
+        <div class="col-md-2">
+            <input ng-if="cur_time_type.str == 'custom'" ng-model="ctrlScope.end_time" id="end_time" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
+        </div>
+    </div>
+    <table class="table">
+        <tr>
+            <th>申请时间</th>
+            <th>申请金额</th>
+            <th>实到账金额</th>
+            <th>扣除费用</th>
+            <th>交易单号</th>
+            <th>详情</th>
+        </tr>
+        <tr>
+            <td>111</td>
+            <td>111</td>
+            <td>111</td>
+            <td>111</td>
+            <td>111</td>
+            <td style="color: #5677FC;" ng-click="go_withdraw_detail()">查看</td>
+        </tr>
+    </table>
+</div>

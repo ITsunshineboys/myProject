@@ -1,0 +1,64 @@
+<div class="account">
+    <div class="row">
+        <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">分类选择</p>
+        <div class="col-md-1">
+            <select ng-model="ctrlScope.cur_first_level" ng-options="item.title for item in first_level" ng-change="get_second_level(item)"  class="form-control"></select>
+        </div>
+        <div class="col-md-1" >
+            <select ng-if="cur_first_level.title!='全部'&&cur_first_level!=''" ng-model="ctrlScope.cur_second_level" ng-options="item.title for item in second_level" class="form-control"></select>
+        </div>
+        <div class="col-md-1" >
+            <select ng-if="cur_second_level!=''&&cur_second_level.title!='全部'" ng-model="ctrlScope.cur_third_level" ng-options="item.title for item in third_level"  class="form-control"></select>
+        </div>
+        <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">店铺类型</p>
+        <div class="col-md-1">
+            <select ng-model="ctrlScope.cur_shop_type" ng-options="item.name for item in shop_type"  class="form-control"></select>
+        </div>
+        <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">状态</p>
+        <div class="col-md-1">
+            <select ng-model="ctrlScope.cur_shop_status" ng-options="item.name for item in shop_status" class="form-control"></select>
+        </div>
+        <button  ng-click="get_list()">查询</button>
+        <div class="col-md-2 col-md-offset-1">
+            <input class="form-control" ng-model="ctrlScope.keyword" placeholder="搜索商家名称或商家编号" type="text">
+        </div>
+    </div>
+    <table class="table">
+        <tr>
+            <th>商家编号</th>
+            <th>商家名称</th>
+            <th>店铺类型</th>
+            <th>所属类目</th>
+            <th>钱包余额</th>
+            <th>状态</th>
+            <th>详情</th>
+        </tr>
+        <tr ng-repeat="item in account_list">
+            <td>{{item.shop_no}}</td>
+            <td>{{item.shop_name}}</td>
+            <td>{{item.type_shop}}</td>
+            <td>{{item.category_name}}</td>
+            <td>{{item.balance}}</td>
+            <td ng-style="{'color':item.status == '正常营业'?'#26C6DA':'#E8502E'}">{{item.status}}</td>
+            <td style="color: #5677FC;" ng-click="go_account_detail(item)">详情</td>
+        </tr>
+    </table>
+    <div class="modal fade" id="remarks" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    <h4 class="modal-title text-left">备注</h4>
+                </div>
+                <div class="modal-body row">
+                    <p class="col-md-3">备注(选填)</p>
+                    <textarea  ng-model="cur_item.remark" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>
+                    <button type="button" data-dismiss="modal">取消</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
