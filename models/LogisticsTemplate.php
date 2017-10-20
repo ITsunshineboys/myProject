@@ -207,4 +207,13 @@ class LogisticsTemplate extends ActiveRecord
             ->where(['and',['in','id',$ids],['status'=>self::STATUS_ONLINE]])
             ->all();
     }
+
+    public static function GoodsLogisticsTemplateId($id,$select = [])
+    {
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->where(['and',['id'=>$id],['status'=>self::STATUS_ONLINE]])
+            ->all();
+    }
 }
