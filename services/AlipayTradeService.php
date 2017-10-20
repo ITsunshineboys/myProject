@@ -78,7 +78,8 @@ class AlipayTradeService {
      * @param $notify_url 异步通知地址，公网可以访问
      * @return $response 支付宝返回的信息
      */
-   function appPay($builder,$return_url,$notify_url) {
+    function appPay($builder,$return_url,$notify_url) {
+
         $aop=new AopClient();
         $aop->gatewayUrl = $this->gateway_url;
         $aop->appId = $this->appid;
@@ -96,7 +97,7 @@ class AlipayTradeService {
         $request->setBizContent($bizcontent);
         //这里和普通的接口调用不同，使用的是sdkExecute
         $response = $aop->sdkExecute($request);
-        return htmlspecialchars($response);
+        echo  htmlspecialchars($response);exit;
     }
 
     /**

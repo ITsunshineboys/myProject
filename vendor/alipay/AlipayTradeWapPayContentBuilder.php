@@ -51,7 +51,8 @@ class AlipayTradeWapPayContentBuilder
     public function getBizContentApp()
     {
         if(!empty($this->bizContentarr)){
-            $this->bizContent = json_encode("QUICK_MSECURITY_PAY",JSON_UNESCAPED_UNICODE);
+            $this->bizContentarr['productCode'] = "QUICK_MSECURITY_PAY";
+            $this->bizContent = json_encode($this->bizContentarr,JSON_UNESCAPED_UNICODE);
         }
         return $this->bizContent;
     }
