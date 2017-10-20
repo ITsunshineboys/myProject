@@ -150,6 +150,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
             url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
             params: $scope.params,
         }).then(function (res) {
+            console.log(res);
             $scope.pageConfig.totalItems = res.data.data.category_list_admin.total;
             $scope.listdata = res.data.data.category_list_admin.details;
         })
