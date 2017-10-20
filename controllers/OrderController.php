@@ -649,20 +649,20 @@ class OrderController extends Controller
    /**
      *提交订单-线下店商城-微信支付
      */
-    public function  actionLineplaceorder(){
+     public function  actionLineplaceorder(){
         $request=Yii::$app->request;
-        $subject=trim(htmlspecialchars($request->post('goods_name')),' ');
+        $subject=trim($request->get('goods_name'));
         //付款金额，必填
-        $total_amount =trim(htmlspecialchars($request->post('order_price')),' ');
-        $goods_id=trim(htmlspecialchars($request->post('goods_id')),' ');
-        $goods_num=trim(htmlspecialchars($request->post('goods_num')),' ');
-        $address_id=trim(htmlspecialchars($request->post('address_id')),' ');
+        $total_amount =trim($request->get('order_price'));
+        $goods_id=trim($request->get('goods_id'));
+        $goods_num=trim($request->get('goods_num'));
+        $address_id=trim($request->get('address_id'));
         $pay_name='线上支付-微信支付';
-        $invoice_id=trim(htmlspecialchars($request->post('invoice_id')),' ');
-        $supplier_id=trim(htmlspecialchars($request->post('supplier_id')),' ');
-        $freight=trim(htmlspecialchars($request->post('freight')),' ');
-        $return_insurance=trim(htmlspecialchars($request->post('return_insurance')),'0');
-        $buyer_message=trim($request->post('buyer_message','0'));
+        $invoice_id=trim($request->get('invoice_id'));
+        $supplier_id=trim($request->get('supplier_id'));
+        $freight=trim($request->get('freight'));
+        $return_insurance=trim($request->get('return_insurance'));
+        $buyer_message=trim($request->get('buyer_message','0'));
         if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name || $invoice_id || !$supplier_id || !$freight )
         {
             $code=1000;
@@ -698,6 +698,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 微信公众号样板间申请定金异步返回
      * wxpay notify action
