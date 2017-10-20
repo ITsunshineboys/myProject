@@ -964,7 +964,7 @@ angular.module("all_controller", [])
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
                                 // 微信接口
-                                $http.post('http://common.cdlhzz.cn/order/lineplaceorder',{
+                                $http.get('http://common.cdlhzz.cn/order/lineplaceorder',{
                                     goods_name: $scope.title,
                                     order_price:$scope.allCost,
                                     goods_num:+$scope.shopNum,
@@ -974,13 +974,15 @@ angular.module("all_controller", [])
                                     supplier_id:+$scope.supplier_id,
                                     freight:+$scope.freight,
                                     // buyer_message: $scope.leaveMessage
-                                },config).then(function (response) {
+                                }).then(function (response) {
                                     // console.log(response);
                                     alert($scope.mall_id +'商品ID');
                                     alert($scope.address_id+'地址id');
                                     alert($scope.invoice_id+'发票id');
                                     alert($scope.supplier_id+'商家id');
                                     alert(JSON.stringify(response));
+                                    alert(JSON.stringify(response.data));
+                                    alert(JSON.stringify(response.config));
                                 })
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
