@@ -1201,12 +1201,12 @@ class OwnerController extends Controller
                 }
             }
         }
-var_dump($goods_effect);exit;
         //物流信息
         foreach ($goods_effect as $logistics_id) {
             $ids = $logistics_id['logistics_template_id'];
         }
         $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+        var_dump($logistics);die;
         $new =  new LogisticsService($logistics,$goods_effect);
         $effect['goods'] = $new->minQuantity();
         return Json::encode([
