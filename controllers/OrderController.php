@@ -697,6 +697,13 @@ class OrderController extends Controller
         );
        //、获取用户openid
         $tools = new PayService();
+        $code=$request->get('code');
+        if ($code)
+        {
+            echo 1;
+        }else{
+            echo 2;
+        }exit;
         $openId = $tools->GetOpenid();
         echo $openId;exit;
         $model=new Wxpay();
