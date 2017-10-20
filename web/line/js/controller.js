@@ -632,9 +632,9 @@ angular.module("all_controller", [])
         $scope.invoice_number  = '';//纳税人识别号
         $scope.invoice_model   = '';
         $scope.contentInvoice  = '';
-        console.log( $scope.supplier_id );
-        console.log( $scope.invoice_id );
-        console.log( $scope.address_id );
+        alert( $scope.supplier_id );
+        alert( $scope.invoice_id );
+        alert( $scope.address_id );
 
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},

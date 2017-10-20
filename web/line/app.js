@@ -74,9 +74,9 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "order_commodity",
                 params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
                 'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
-                 'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
-                  'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
-                    'address_id':''
+                'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
+                'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
+                'address_id':''
                 }
             })
 
