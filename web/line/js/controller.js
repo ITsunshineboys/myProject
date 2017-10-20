@@ -964,7 +964,6 @@ angular.module("all_controller", [])
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
                                 // 微信接口
-
                                 $http.get('http://common.cdlhzz.cn/order/lineplaceorder',{
                                     params:{
                                         goods_name: $scope.title,
@@ -989,6 +988,7 @@ angular.module("all_controller", [])
                                     // $('body').append($scope.dataWx);
                                 },function (error) {
                                     alert("错误")
+                                    alert(JSON.stringify(error));
                                 })
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
