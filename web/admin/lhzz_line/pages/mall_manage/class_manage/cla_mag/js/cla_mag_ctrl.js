@@ -110,6 +110,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     // 下单时间排序
     $scope.sortTime = function () {
         $scope.params['sort[]'] = $scope.params['sort[]'] == 'id:3' ? 'id:4' : 'id:3';
+        $scope.table.roles.length = 0;
         $scope.pageConfig.currentPage = 1;
         tableList();
     }
@@ -148,7 +149,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
             url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
             params: $scope.params,
         }).then(function (res) {
-            console.log(res);
             $scope.pageConfig.totalItems = res.data.data.category_list_admin.total;
             $scope.listdata = res.data.data.category_list_admin.details;
         })
