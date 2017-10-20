@@ -616,6 +616,8 @@ angular.module("all_controller", [])
         $scope.mall_id         = $stateParams.mall_id;
         $scope.shopNum         = $stateParams.shopNum;
         $scope.supplier_id     = $stateParams.supplier_id;
+        $scope.address_id     = $stateParams.address_id;
+
         $scope.consigneeName   = $stateParams.consigneeName;
         $scope.mobile          = $stateParams.mobile;
         $scope.districtMore    = $stateParams.districtMore;
@@ -632,6 +634,8 @@ angular.module("all_controller", [])
         $scope.contentInvoice  = '';
         console.log( $scope.supplier_id );
         console.log( $scope.invoice_id );
+        console.log( $scope.address_id );
+
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
@@ -704,7 +708,7 @@ angular.module("all_controller", [])
                             platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
                             goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
                             mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                            regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,supplier_id:$scope.supplier_id
+                            regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,supplier_id:$scope.supplier_id,address_id:$scope.address_id
                         }))
                     }
                 }
@@ -767,8 +771,10 @@ angular.module("all_controller", [])
         $scope.mall_id = $stateParams.mall_id;
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
-        $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
+        $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
         $scope.supplier_id  = $stateParams.supplier_id;//商家ID
+        $scope.address_id  = $stateParams.address_id;//地址ID
+
         console.log($scope.invoice_id);
         console.log($scope.supplier_id);
         if($stateParams.show_address !== ''){

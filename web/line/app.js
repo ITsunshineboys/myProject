@@ -75,7 +75,8 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
                 'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
                  'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
-                  'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':''
+                  'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
+                    'address_id':''
                 }
             })
 
@@ -88,7 +89,8 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
                     'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
                     'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
-                    'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':''
+                    'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
+                    'address_id':''
                 }
             })
 
