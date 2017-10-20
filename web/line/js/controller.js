@@ -818,7 +818,7 @@ angular.module("all_controller", [])
                                     freight:+$scope.freight,
                                     buyer_message: $scope.leaveMessage
                                 },config).then(function (response) {
-                                    console.log(response);
+                                    alert(response);
                                     // $scope.status = response.status;
                                     // $scope.dataFram = response.data;
                                     // console.log($scope.dataFram);
