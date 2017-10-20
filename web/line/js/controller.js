@@ -949,8 +949,9 @@ angular.module("all_controller", [])
                        invoice_content:$scope.invoice_name,
                    },config).then(function (response) {
                        console.log(response);
-                       $scope.invoice_id = response.data.data.invoice_id
+                       $scope.invoice_id = response.data.data.invoice_id;
                        alert( $scope.invoice_id);
+
                    });
                    // 模态框确认按钮 == 跳转保存数据
                    $scope.jumpOrder = function () {
