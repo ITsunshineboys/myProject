@@ -722,6 +722,7 @@ angular.module("all_controller", [])
                     console.log(response);
                     $scope.address_id = response.data.data.address_id;
                     console.log($scope.address_id)
+                    alert($scope.address_id)
                 });
                 $scope.numModel = '#harvestNum_modal';
                 $scope.flagContent = '保存成功'
@@ -949,6 +950,7 @@ angular.module("all_controller", [])
                    },config).then(function (response) {
                        console.log(response);
                        $scope.invoice_id = response.data.data.invoice_id
+                       alert( $scope.invoice_id);
                    });
                    // 模态框确认按钮 == 跳转保存数据
                    $scope.jumpOrder = function () {
