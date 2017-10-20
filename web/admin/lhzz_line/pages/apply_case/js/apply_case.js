@@ -33,6 +33,7 @@ angular.module('apply_case',[])
             //修改全部时间
             $scope.$watch('cur_time_type',function (newVal,oldVal) {
                 // $scope.keyword = ''
+                console.log(newVal)
                 if(newVal.str!='custom'){
                     $http.get('/effect/effect-list',{
                         params:{

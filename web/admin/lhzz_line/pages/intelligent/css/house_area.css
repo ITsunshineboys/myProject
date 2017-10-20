@@ -26,20 +26,36 @@ header button{
     font-weight:bold!important;
 }
 .dark{
-    color: #2F3033!important; ;
+    color: #2F3033!important;
     font-weight: normal!important;
 }
-/*分销详情*/
-.distribution_detail{
+/*系数管理样式*/
+.house_area{
     padding-left:40px;
     padding-right:40px;
-    padding-top:15px;
 }
-.distribution_detail .row > p,.distribution_detail .row > div{
-    margin-top:15px;
-    margin-bottom:15px;
+.house_area .location{
+    font-size: 16px;
+    margin-top:60px;
+    font-weight:bold;
+    margin-bottom:30px;
 }
-.distribution_detail button{
+.house_area button{
+    background: #000;
+    color: #fff;
+    border:0;
+    border-radius:5px ;
+    height:30px;
+    width:30px;
+}
+.house_area .submit{
+    margin-top:100px;
+}
+.house_area .else_submit{
+    position: absolute;
+    bottom: 50px;
+}
+.house_area .submit button{
     width:70px;
     height: 32px;
     font-size:12px;
@@ -48,16 +64,9 @@ header button{
     margin-left:10px;
     margin-right:10px;
     border-radius:2px;
+    color: #000;
 }
-.distribution_detail .remove{
+.house_area .remove{
     border-color: #3F94F6!important;
-    color: #3F94F6;
-}
-.distribution_detail .submit{
-    margin-top:100px;
-    position: absolute;
-    bottom:50px;
-}
-.distribution_detail .error{
-    color: red!important;
+    color: #3F94F6!important;
 }

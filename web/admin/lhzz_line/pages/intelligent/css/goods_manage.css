@@ -50,6 +50,7 @@ header button{
     margin-right: 9px;
     vertical-align: top;
 }
+
 .ulright ul li{
     padding-top: 9px;
     padding-bottom: 9px;
@@ -59,8 +60,14 @@ header button{
 .thirdul{
     width: 180px!important;
 }
-
-.lastul li{
+.ulright .lastul li{
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+.lastul div{
+    display: inline-block;
+    width:161px;
     padding: 6px 7px 8px 7px;
     text-align: start;
     margin:  9px 9px 9px 0;
@@ -68,7 +75,15 @@ header button{
     color: #5677FC;
     position: relative;
 }
-
+.lastul input{
+    width:161px;
+    padding: 6px 7px 8px 7px;
+    text-align: start;
+    margin:  9px 9px 9px 0;
+}
+.ulright .lastul{
+    width:400px;
+}
 .lastul img{
     position: absolute;
     width: 24px;

@@ -26,20 +26,24 @@ header button{
     font-weight:bold!important;
 }
 .dark{
-    color: #2F3033!important; ;
+    color: #2F3033!important;
     font-weight: normal!important;
 }
-/*分销详情*/
-.distribution_detail{
+/*其他通用管理*/
+.else_general_manage{
     padding-left:40px;
     padding-right:40px;
-    padding-top:15px;
 }
-.distribution_detail .row > p,.distribution_detail .row > div{
-    margin-top:15px;
-    margin-bottom:15px;
+.else_general_manage .red_mark{
+    color: red;
 }
-.distribution_detail button{
+.else_general_manage .submit{
+    margin-top:100px;
+    /*position: absolute;*/
+    /*bottom: 50px;*/
+    margin-bottom:50px;
+}
+.else_general_manage .submit button{
     width:70px;
     height: 32px;
     font-size:12px;
@@ -48,16 +52,9 @@ header button{
     margin-left:10px;
     margin-right:10px;
     border-radius:2px;
+    color: #000;
 }
-.distribution_detail .remove{
+.else_general_manage .remove{
     border-color: #3F94F6!important;
-    color: #3F94F6;
-}
-.distribution_detail .submit{
-    margin-top:100px;
-    position: absolute;
-    bottom:50px;
-}
-.distribution_detail .error{
-    color: red!important;
+    color: #3F94F6!important;
 }

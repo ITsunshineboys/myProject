@@ -1,5 +1,5 @@
 <div class="associate_list">
-    <p><span>关联订单：111</span><span>关联金额：111</span></p>
+    <p><span>关联订单：{{total_orders}}</span><span>关联金额：{{total_amount}}</span></p>
     <table class="table">
         <tr>
             <th>手机号</th>
@@ -8,14 +8,14 @@
             <th>交易时间</th>
             <th>备注</th>
         </tr>
-        <tr ng-repeat="item in apply_list">
-            <td>{{item.name}}111</td>
-            <td>{{item.phone}}111</td>
-            <td>{{item.earnest | currency:'￥'}}111</td>
-            <td>{{item.create_time}}111</td>
+        <tr ng-repeat="item in all_order_detail">
+            <td>{{item.mobile}}</td>
+            <td>{{item.order_no}}</td>
+            <td>{{item.amount_order | currency:'￥'}}</td>
+            <td>{{item.create_time}}</td>
             <td>
                 <div class="col-sm-5" style="padding-left: 0!important;">
-                    <input data-toggle="modal" ng-click="replace_remarks(item)" data-target="#remarks" type="text" class="form-control" ng-model="item.remark">
+                    <input data-toggle="modal" ng-click="replace_remarks(item)" data-target="#remarks" type="text" class="form-control" ng-model="item.remarks">
                 </div>
             </td>
         </tr>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="modal-body row">
                     <p class="col-md-3">备注(选填)</p>
-                    <textarea  ng-model="cur_item.remark" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
+                    <textarea  ng-model="cur_associate_item.remarks" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>

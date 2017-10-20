@@ -1,0 +1,12 @@
+<div class="engineering_standards">
+    <table class="table" style="margin-top: 60px;">
+        <tr>
+            <th>名称</th>
+            <th>操作</th>
+        </tr>
+        <tr ng-repeat="item in all_general_manage">
+            <td>{{item.title}}</td>
+            <td style="color: #5677FC;" ng-click="go_general_detail(item)">编辑</td>
+        </tr>
+    </table>
+</div>
