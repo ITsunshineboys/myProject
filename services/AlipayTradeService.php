@@ -78,8 +78,7 @@ class AlipayTradeService {
      * @param $notify_url 异步通知地址，公网可以访问
      * @return $response 支付宝返回的信息
      */
-    function appPay($builder,$return_url,$notify_url) {
-
+   function appPay($builder,$return_url,$notify_url) {
         $aop=new AopClient();
         $aop->gatewayUrl = $this->gateway_url;
         $aop->appId = $this->appid;
@@ -88,7 +87,8 @@ class AlipayTradeService {
         $aop->charset = "UTF-8";
         $aop->signType = "RSA2";
         $aop->alipayrsaPublicKey = $this->alipay_public_key;
-        $biz_content=$builder->getBizContent();
+//        $biz_content=$builder->getBizContent();
+        $biz_content=$builder->getBizContentApp();
         $request = new AlipayTradeAppPayRequest();
 //SDK已经封装掉了公共参数，这里只需要传入业务参数
         $bizcontent =$biz_content;
