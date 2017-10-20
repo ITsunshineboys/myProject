@@ -91,7 +91,7 @@ class Alipay extends  ActiveRecord
      */
     public static  function OrderAppPay($orderAmount,$orders=[])
     {
-        $notify_url='http://test.cdlhzz.cn:888/order/alipayeffect_earnstnotify';
+        $notify_url='http://test.cdlhzz.cn:888/order/app-order-pay-database';
         $return_url='http://test.cdlhzz.cn:888/line/effect_earnstsuccess_pay';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $str=Json::encode($orders);

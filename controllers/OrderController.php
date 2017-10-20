@@ -3339,7 +3339,7 @@ class OrderController extends Controller
         }
     }
 
-    /**
+   /**
      * 去付款支付宝app支付
      * @return string
      */
@@ -3387,6 +3387,73 @@ class OrderController extends Controller
             'msg' => 'ok',
             'data'=>$data
         ]);
+    }
+
+
+        /**
+     * 支付宝APP支付付款数据库操作--异步返回
+     */
+    public  function  actionAppOrderPayDatabase()
+    {
+        $post=Yii::$app->request->post();
+        $model=new Alipay();
+//        $alipaySevice=$model->Alipaylinenotify();
+//        $result = $alipaySevice->check($post);
+//        if ($result){
+        if ($post['trade_status'] == 'TRADE_SUCCESS'){
+            $orders=explode(',',$post['passback_params']);
+            $total_amount=$post['total_amount'];
+            $orderAmount=GoodsOrder::CalculationCost($orders);
+            if ($total_amount*100!=$orderAmount)
+            {
+                echo 'fail';
+                exit;
+            }
+            foreach ($orders as $k =>$v){
+                $GoodsOrder=GoodsOrder::find()
+                    ->where(['order_no'=>$orders[$k]])
+                    ->one();
+                $OrderGoods=OrderGoods::find()
+                    ->where(['order_no'=>$orders[$k]])
+                    ->asArray()
+                    ->all();
+                foreach ($OrderGoods as &$Goods)
+                {
+                    if ($Goods['order_status']!=0)
+                    {
+                       echo 'fail';
+                       exit;
+                    }
+                }
+                if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+                {
+                    echo 'fail';
+                    exit;
+                }
+                $tran = Yii::$app->db->beginTransaction();
+                try{
+                    $GoodsOrder->pay_status=1;
+                    $GoodsOrder->pay_name='支付宝APP支付';
+                    $res=$GoodsOrder->save(false);
+                    if (!$res)
+                    {
+                        $tran->rollBack();
+                        echo 'fail';
+                        die;
+                    }
+                    $tran->commit();
+                }catch (Exception $e){
+                    $tran->rollBack();
+                       echo 'fail';
+                       die;
+                }
+            }
+            echo 'success';
+        }
+//        }else{
+//            //验证失败
+//            echo "fail";  //请不要修改或删除
+//        }
     }
 
    public  function  actionGetOrderNum()
