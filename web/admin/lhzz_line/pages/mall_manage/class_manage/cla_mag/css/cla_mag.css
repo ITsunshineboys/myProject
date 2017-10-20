@@ -164,9 +164,25 @@ input[type="checkbox"]{
     cursor: pointer;
 }
 
-.sort img{
-    width: 13px!important;
-    height: 15px!important;
+/*.sort img{*/
+    /*width: 13px!important;*/
+    /*height: 15px!important;*/
+/*}*/
+
+table .sortpic {
+    display: inline-block;
+    margin-top: -4px;
+    vertical-align: middle;
+}
+
+table .sortpic i{
+    display: block;
+    font-size: 12px;
+    color: #ababab;
+}
+
+table .sortpic .glyphicon-triangle-bottom {
+    margin-top: -4px;
 }
 
 /*已下架tab样式*/
@@ -351,67 +367,44 @@ textarea{
     margin-right: 20px;
 }
 
-/*分页处理*/
-.pages{
-    margin-top: 20px;
-    /*outline: 1px solid red;*/
-    overflow: hidden;
-    padding-left: 0;
-}
 
-.pages>div{
-    float: left;
-    overflow: hidden;
-}
+/*!*分页样式*!*/
+/*.page-list {*/
+    /*margin-top: 10px;*/
+    /*margin-bottom: 10px;*/
+/*}*/
 
-.pages li{
-    float: left;
-    margin-right: 10px;
-    font-family: Helvetica;
-    font-size: 12px;
-    color: #999;
-    line-height: 12px;
-    padding: 6px 18px;
-    background-color: white;
-    border: 1px solid #5677FC;
-    border-radius: 3px;
-    cursor: pointer;
-}
+/*.pagination {*/
+    /*float: left;*/
+    /*margin-top: 0;*/
+    /*margin-bottom: 0;*/
+/*}*/
 
-.pages #jumpto{
-    border: none;
-    padding:0 0 0 5px;
-}
+/*.pagination li:not(.separate) {*/
+    /*cursor: pointer;*/
+/*}*/
 
-#jumpto input{
-    height: 25px;
-    width: 62px;
-}
+/*.page-list .jump {*/
+    /*float: left;*/
+    /*margin-left: 50px;*/
+/*}*/
 
-.pagenum{
-    padding-left: 9px!important;
-    padding-right: 9px!important;
-}
+/*.page-list .jump input {*/
+    /*display: inline-block !important;*/
+    /*margin-right: 10px;*/
+    /*width: 80px;*/
+    /*vertical-align: middle;*/
+/*}*/
 
-#omit,#off{
-    border:none;!important;
-    padding:6px 0 0 0;
-    cursor: default;
-}
+/*.pagination-total {*/
+    /*float: left;*/
+    /*margin-top: 0.7%;*/
+    /*margin-right: 20px;*/
+/*}*/
 
-
-.pages #offjumpto{
-    border: none;
-    padding:0 0 0 5px;
-}
-
-#offjumpto input{
-    height: 25px;
-}
 
 .active{
-    background:#487af8!important;
-    color: white!important;
+    color: #1B7CEE!important;
 }
 
 
