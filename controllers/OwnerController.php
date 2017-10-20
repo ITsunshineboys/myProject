@@ -1201,7 +1201,7 @@ class OwnerController extends Controller
                 }
             }
         }
-
+var_dump($goods_effect);exit;
         //物流信息
         foreach ($goods_effect as $logistics_id) {
             $ids = $logistics_id['logistics_template_id'];
