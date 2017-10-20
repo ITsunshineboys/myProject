@@ -91,8 +91,10 @@ class Alipay extends  ActiveRecord
      */
     public static  function OrderAppPay($orderAmount,$orders=[])
     {
+        $time=time();
+        $out_trade_no=date('Y',$time).date('m',$time).date('d',$time).date('H',$time).date('i',$time).date('s',$time);
         $notify_url='http://test.cdlhzz.cn:888/order/app-order-pay-database';
-        $return_url='http://test.cdlhzz.cn:888/line/effect_earnstsuccess_pay';
+        $return_url='';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $str=Json::encode($orders);
         $passback_params=urlencode($str);
@@ -101,7 +103,7 @@ class Alipay extends  ActiveRecord
         $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
         $payRequestBuilder->setBody('此订单包含一条或多条商品数据');
         $payRequestBuilder->setSubject('艾特魔方商城订单');
-        $payRequestBuilder->setOutTradeNo($orders[0]);
+        $payRequestBuilder->setOutTradeNo($out_trade_no);
         $payRequestBuilder->setTotalAmount($orderAmount);
         $payRequestBuilder->setTimeExpress($timeout_express);
         $payRequestBuilder->setPassback_params($passback_params);
