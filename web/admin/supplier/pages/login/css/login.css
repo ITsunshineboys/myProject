@@ -3,8 +3,11 @@ html,body{
   height: 100%;
 }
 #login_ctrl{
+
+}
+.all_content{
   position: absolute;
-  z-index: 9999;
+  z-index: 999;
   left: 0;
   width: 100%;
   height: 100%!important;
@@ -15,6 +18,7 @@ html,body{
   top:50%;
   left:50%;
   transform: translate(-50%,-50%);
+  text-align: center;
 }
 .txt_left{
   margin-right: 10px;
@@ -34,6 +38,7 @@ html,body{
   border-radius: 3px;
   border: 1px solid #666F80;
   padding-left: 5px;
+  outline: 0;
 }
 .margin_top{
   margin-top: 40px;
@@ -49,4 +54,41 @@ html,body{
   line-height: 35px;
   float: right;
   margin-top: 30px;
+}
+.forget_pw:after{
+  content: '';
+  display: table;
+  clear: both;
+}
+.forget_pw{
+  color: #487AF8;
+  margin-top: 10px;
+  float: right;
+}
+.img_logo{
+  margin-bottom: 60px;
+}
+.send{
+  display: inline-block;
+  text-align: center;
+  width: 60px;
+  height: 34px;
+  line-height: 31px;
+  color: #5677FC;
+  border: 1px solid #5677FC;
+  background-color: #F0F2FF;
+  border-radius: 3px;
+  padding: 1px;
+}
+.border_red{
+  border: 1px solid #E51C23;
+}
+.prompt_txt{
+  color:#E51C23;
+  margin: 5px 0 0 60px;
+}
+.error_red{
+  margin-top:10px;
+  color: #E51C23;
+  text-align: left;
 }
