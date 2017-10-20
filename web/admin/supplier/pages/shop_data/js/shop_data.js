@@ -48,5 +48,5 @@ angular.module('shop_data_module',[])
     $scope.time_change=function () {
         $scope.wjConfig.currentPage = 1; //页数跳转到第一页
         tablePages();
-    }
+    };
 });
