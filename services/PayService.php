@@ -57,6 +57,7 @@ class PayService
         } else {
             //获取code码，以获取openid
             $code = $_GET['code'];
+            echo $code;exit;
             $openid = $this->getOpenidFromMp($code);
             return $openid;
         }
