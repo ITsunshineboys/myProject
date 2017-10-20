@@ -166,7 +166,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
 
     /*-----------------------已上架操作--------------------*/
-
     /*已上架单个分类下架种类统计*/
     $scope.singleOffline = function (id) {
         singleoffid = id;
