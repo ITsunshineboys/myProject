@@ -1207,8 +1207,10 @@ class OwnerController extends Controller
             $ids = $logistics_id['logistics_template_id'];
         }
         if (is_array($ids)){
+            echo 'shi';die;
             $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
         } else {
+            echo 'bushi';die;
             $logistics = LogisticsTemplate::GoodsLogisticsTemplateId($ids,[]);
         }
 
