@@ -7,8 +7,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         }
     };
 
-    console.log($stateParams.offsale_flag)
-
     let singleoffid;   //单个下架分类id
     let singleonid;    //单个上架分类id
 
@@ -80,6 +78,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
     /*分类选择二级下拉框*/
     function subClass(obj) {
+        $scope.table.roles = [];
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
@@ -120,6 +119,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
     /*分类筛选方法*/
     $scope.$watch('dropdown.firstselect', function (value, oldValue) {
+        $scope.table.roles = [];
         $scope.params['sort[]'] = 'id:3';      // 下单时间排序
         subClass(value);
         $scope.params.pid = value;
@@ -128,6 +128,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
 
     $scope.$watch('dropdown.secselect', function (value, oldValue) {
+        $scope.table.roles = [];
         $scope.params['sort[]'] = 'id:3';      // 下单时间排序
         if (value == oldValue) {
             return
