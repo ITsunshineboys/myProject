@@ -484,7 +484,7 @@ class StringService
         $sContent = curl_exec($oCurl);
         $aStatus = curl_getinfo($oCurl);
         curl_close($oCurl);
-        if (intval($aStatus["http_code"]) == 200) {
+        if (in_array(intval($aStatus["http_code"]), [200, 201])) {
             return $sContent;
         } else {
             return false;
