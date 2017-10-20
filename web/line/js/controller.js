@@ -963,25 +963,33 @@ angular.module("all_controller", [])
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
-                                // 微信接口
-                                $http.post('http://common.cdlhzz.cn/order/lineplaceorder',{
-                                    goods_name: $scope.title,
-                                    order_price:$scope.allCost,
-                                    goods_num:+$scope.shopNum,
-                                    goods_id:+$scope.mall_id,
-                                    address_id:+$scope.address_id,
-                                    invoice_id:+$scope.invoice_id,
-                                    supplier_id:+$scope.supplier_id,
-                                    freight:+$scope.freight,
-                                    // buyer_message: $scope.leaveMessage
-                                },config).then(function (response) {
-                                    // console.log(response);
+                                // 微信接口 === 调用
+                                $http({
+                                    method: 'get',
+                                    url: 'http://common.cdlhzz.cn/order/lineplaceorder',
+                                    params:{
+                                        goods_name: $scope.title,
+                                        order_price:$scope.allCost,
+                                        goods_num:+$scope.shopNum,
+                                        goods_id:+$scope.mall_id,
+                                        address_id:+$scope.address_id,
+                                        invoice_id:+$scope.invoice_id,
+                                        supplier_id:+$scope.supplier_id,
+                                        freight:+$scope.freight,
+                                        // buyer_message: $scope.leaveMessage
+                                    }
+                                }).then(function successCallback(response) {
+                                    console.log('成功');
+
                                     alert($scope.mall_id +'商品ID');
                                     alert($scope.address_id+'地址id');
                                     alert($scope.invoice_id+'发票id');
                                     alert($scope.supplier_id+'商家id');
+
+                                    alert(JSON.stringify(response.data));
+                                    alert(JSON.stringify(response.config));
                                     alert(JSON.stringify(response));
-                                })
+                                });
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
                                 // 支付宝接口
