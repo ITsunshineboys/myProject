@@ -615,6 +615,7 @@ angular.module("all_controller", [])
         $scope.show_harvest    = $stateParams.show_harvest;
         $scope.mall_id         = $stateParams.mall_id;
         $scope.shopNum         = $stateParams.shopNum;
+        $scope.supplier_id         = $stateParams.supplier_id;
 
         $scope.consigneeName   = $stateParams.consigneeName;
         $scope.mobile          = $stateParams.mobile;
@@ -703,7 +704,8 @@ angular.module("all_controller", [])
                             platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
                             goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
                             mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                            regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage}))
+                            regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,supplier_id:$scope.supplier_id
+                        }))
                     }
                 }
             }
@@ -765,8 +767,6 @@ angular.module("all_controller", [])
         $scope.mall_id = $stateParams.mall_id;
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
-        $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
-
         console.log($scope.leaveMessage);
         console.log($scope.supplier_id);
         if($stateParams.show_address !== ''){
@@ -783,6 +783,7 @@ angular.module("all_controller", [])
             $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
             $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
             $scope.supplier_id  = $stateParams.supplier_id;//商家ID
+            $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
 
             console.log($scope.invoice_name );
             console.log($scope.invoice_id );
@@ -969,7 +970,7 @@ angular.module("all_controller", [])
                                     buyer_message: $scope.leaveMessage
                                 },config).then(function (response) {
                                     // console.log(response);
-                                    alert($scope.mall_id +'和'+ $scope.address_id+'和'+$scope.invoice_id+'和'+$scope.supplier_id)
+                                    alert($scope.mall_id +'和'+ $scope.address_id+'和'+$scope.invoice_id+'和'+$scope.supplier_id);
                                     alert(JSON.stringify(response));
                                 })
                             }
