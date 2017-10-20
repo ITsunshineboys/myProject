@@ -7,14 +7,14 @@ use Yii;
 class ChatService
 {
     //YXA6DxGD4HQZEee78SNJqGuchQ
-    private $client_id = 'YXA67St1MHTPEeer-uM5B5Uv0Q';
+    private $client_id;
     //YXA6isIrLRTIwuEyLOIGXGHGTPMX3WE
-    private $client_secret = 'YXA6eMPzUAg-pRfHTyxBq8jM4n3OIH0';
+    private $client_secret;
     //123456
-    private $org_name ='1185170730178177';
+    private $org_name;
     //111
-    private $app_name = 'push-msg';
-    private $url='https://a1.easemob.com/1185170730178177/push-msg/';
+    private $app_name;
+    private $url;
 //------------------------------------------------------用户体系
 
 

@@ -30,7 +30,11 @@ class ChatController extends Controller
     public function actionTest()
     {
 
-        var_dump((new ChatService())->getUsers(0));
+        $username=trim(\Yii::$app->request->post('username',''));
+        $password=trim(\Yii::$app->request->post('password',''));
+        $chat=new ChatService();
+        $a=$chat->createUser($username,$password);
+        var_dump($a);
     }
     /**
      *第一次登陆app时创建环信用户和本地环信关联数据
