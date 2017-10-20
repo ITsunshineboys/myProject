@@ -965,7 +965,7 @@ angular.module("all_controller", [])
                                 alert('调用微信接口');
                                 // 微信接口
                                 // http://common.cdlhzz.cn/order/lineplaceorder
-                                $http.get('http://common.cdlhzz.cn/order/lineplaceorder?goods_name=%E6%89%AB%E6%B2%B3%E6%B2%99&order_price=30&goods_num=1&goods_id=276&address_id=168&invoice_id=57&supplier_id=81&freight=0',{
+                                $http.get('http://common.cdlhzz.cn/order/find-order-list',{
                                     // params:{
                                         // goods_name: $scope.title,
                                         // order_price:$scope.allCost,
@@ -989,7 +989,7 @@ angular.module("all_controller", [])
                                     alert(JSON.stringify(response.config));
                                     // $('body').append($scope.dataWx);
                                 },function (error) {
-                                    alert("错误")
+                                    alert("错误");
                                     alert(JSON.stringify(error));
                                 })
                             }
