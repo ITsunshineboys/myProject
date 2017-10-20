@@ -49,4 +49,7 @@ angular.module('shop_data_module',[])
         $scope.wjConfig.currentPage = 1; //页数跳转到第一页
         tablePages();
     };
+
+
+//    
 });
