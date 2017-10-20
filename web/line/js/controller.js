@@ -974,7 +974,7 @@ angular.module("all_controller", [])
                                     supplier_id:+$scope.supplier_id,
                                     freight:+$scope.freight,
                                     // buyer_message: $scope.leaveMessage
-                                },config).then(function (response) {
+                                }).then(function (response) {
                                     // console.log(response);
                                     alert($scope.mall_id +'商品ID');
                                     alert($scope.address_id+'地址id');
