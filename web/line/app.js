@@ -32,7 +32,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     "": {templateUrl: "commodity_search.html"}
                 },
                 controller: "commodity_search_ctrl",
-                params:{"pid":"","id":"",'search_flag':''}
+                params:{"pid":"","id":"",'search_flag':'','search_flag_details':''}
             })
             .state("details", {   //某个商品详细列表
                 url: "/details",
@@ -40,7 +40,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     "": {templateUrl: "details.html"}
                 },
                 controller: "details_ctrl",
-                params:{'pid':'',"id":"",'mall_id':""}
+                params:{'pid':'',"id":"",'mall_id':"",'search_flag_details':''}
             })
             .state("product_details", {   //某个商品详细信息
                 url: "/product_details",
