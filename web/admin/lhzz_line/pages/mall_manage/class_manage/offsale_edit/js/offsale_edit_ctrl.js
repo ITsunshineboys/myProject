@@ -209,11 +209,11 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 		}
 	}
 
-	//*保存模态框确认*/
-        $scope.suresave = function () {
-		setTimeout(function () {
+    //*保存模态框确认*/
+    $scope.suresave = function () {
+        setTimeout(function () {
             $state.go("fenleiguanli",{offsale_flag:true});
-		},200)
-	}
+        },200)
+    }
 })
 

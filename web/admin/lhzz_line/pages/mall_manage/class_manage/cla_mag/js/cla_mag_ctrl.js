@@ -6,7 +6,8 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
             return $.param(data)
         }
     };
-    console.log($stateParams.offsale_flag);
+
+    console.log($stateParams.offsale_flag)
 
     let singleoffid;   //单个下架分类id
     let singleonid;    //单个上架分类id
