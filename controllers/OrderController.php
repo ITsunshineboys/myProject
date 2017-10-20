@@ -3363,7 +3363,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $orders=explode($postData['list'],',');
+         $orders=explode(',',$postData['list']);
         if (!is_array($orders))
         {
             $code=1000;
