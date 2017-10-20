@@ -1,64 +1,70 @@
-/*分类管理
- * 控制器
- **/
-
-var cla_mag = angular.module("clamagModule", []);
-cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $state) {
-
+let cla_mag = angular.module("clamagModule", []);
+cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
             return $.param(data)
         }
     };
-    /*当前页*/
-    $scope.firstselect = 1;
-    $scope.parentclass = [];
-    $scope.selPage = 1;
-    /*起始页面页码*/
-    $scope.seloffPage = 1;
-    $scope.secclass = 0;
-    /*一级分类下的二级分类数*/
-    $scope.totaloffclass = 0;
-    /*总的分类数*/
-    $scope.classidinoffsec = [];
-    /*下架的二级分类中的id，包括三级和它本身*/
-    $scope.classidinofffirst = [];
-    /*下架的一级分类中的id，包括三级、二级和它本身*/
-    $scope.secclassidin_offfirst = [];
-    /*下架的一级分类中的二级分类*/
-    $scope.allpages = 0;
-    $scope.offlinereason = '';
+
+    let singleoffid;   //单个下架分类id
+    let singleonid;    //单个上架分类id
+
+    /*默认参数*/
+    $scope.params = {
+        status: 1, //已上架
+        pid: 0,   //父分类id
+        page: 1,  //当前页数
+        'sort[]': "id:3" //排序规则 默认按创建时间降序排列
+    }
+    /*全选ID数组*/
+    $scope.table = {
+        roles: [],
+    };
     /*已上架单个下架初始化下架原因*/
-    $scope.xiajiaarr = [];
-    /*已上架批量下架初始化数组*/
-    $scope.shangjiaarr = [];
-    $scope.piliangofflinereason = '';
+    $scope.offlinereason = '';
     /*已上架批量下架初始化下架原因*/
+    $scope.piliangofflinereason = '';
+    /*分类选择下拉框初始化*/
+    $scope.dropdown = {
+        firstselect: 0,
+        secselect: 0
+    }
 
-    $scope.selectAll = false;
-    $scope.selectoffAll = false;
-    /*已上架默认时间排序*/
-    $scope.ascorder = true;
-    $scope.desorder = false;
-    /*已下架默认时间排序*/
-    $scope.offascorder = true;
-    $scope.offdesorder = false;
-
-    /*选项卡默认选中*/
-    $scope.tabChange = (function () {
-        if ($stateParams.showoffsale) {
-            $scope.showonsale = false;
-            $scope.showoffsale = $stateParams.showoffsale;
-        } else {
-            $scope.showoffsale = false;
-            $scope.showonsale = true;
+    /*分页配置*/
+    $scope.pageConfig = {
+        showJump: true,
+        itemsPerPage: 12,
+        currentPage: 1,
+        onChange: function () {
+            $scope.table.roles = [];
+            tableList();
         }
-    })()
+    }
+
+    /*选项卡切换方法*/
+    $scope.tabFunc = (obj) => {
+        $scope.onsale_flag = false;
+        $scope.offsale_flag = false;
+        $scope[obj] = true;
+        initFunc(obj);
+    }
+
+    /*根据参数执行选项卡方法*/
+    if ($stateParams.offsale_flag) {
+        $scope.tabFunc('offsale_flag');
+    } else {
+        $scope.tabFunc('onsale_flag');
+    }
+
+
+    /*排序按钮样式控制*/
+    $scope.sortStyleFunc = () => {
+        return $scope.params['sort[]'].split(':')[1]
+    }
+
 
     firstClass();
-
-
     /*分类选择一级下拉框*/
     function firstClass() {
         $http({
@@ -66,488 +72,189 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams, $sta
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
         }).then((response) => {
             $scope.firstclass = response.data.data.categories;
-            $scope.firstselect = response.data.data.categories[0].id;
+            $scope.dropdown.firstselect = response.data.data.categories[0].id;
         })
     }
 
     /*分类选择二级下拉框*/
-    $scope.subClass = function (obj) {
+    function subClass(obj) {
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
             params: {pid: obj}
-        }).then((response) => {
+        }).then(function (response) {
             $scope.secondclass = response.data.data.categories;
-            $scope.secselect = response.data.data.categories[0].id;
+            $scope.dropdown.secselect = response.data.data.categories[0].id;
         })
     }
 
-    /*选项卡切换方法*/
-    $scope.changeToonsale = function () {
-        $scope.showonsale = true;
-        $scope.showoffsale = false;
-        $scope.firstselect = 0;
-        onlineRefresh();
-        firstClass();
 
-    }
-
-    $scope.changeTooffsale = function () {
-        $scope.showonsale = false;
-        $scope.showoffsale = true;
-        $scope.firstselect = 0;
-        offlineRefresh();
-        firstClass();
-    }
-
-
-    /*已上架页码处理*/
-    function pageHandle(obj) {
-        $scope.allpages = Math.ceil(obj.data.data.category_list_admin.total / 12);
-        $scope.selPage = 1;
-        /*总页数*/
-        $scope.newPages = $scope.allpages > 5 ? 5 : $scope.allpages;
-        for (var i = 1; i <= $scope.newPages; i++) {
-            $scope.pageList.push(i);
+    /*列表初始化方法*/
+    function initFunc(obj) {
+        $scope.table.roles.length = 0;
+        let tab = obj == 'onsale_flag' ? 1 : 0;
+        $scope.params = {
+            status: tab, //已上架
+            pid: 0,   //父分类id
+            page: 1,  //当前页数
+            'sort[]': "id:3" //排序规则 默认按创建时间降序排列
         }
+        $scope.dropdown = {
+            firstselect: 0,
+            secselect: 0
+        }
+        tableList();
     }
 
 
-    /*已上架列表内容*/
-    function onlineRefresh() {
-        $scope.ascorder = true;
-        $scope.desorder = false;
-        $scope.pageList = [];
+    // 下单时间排序
+    $scope.sortTime = function () {
+        $scope.params['sort[]'] = $scope.params['sort[]'] == 'id:3' ? 'id:4' : 'id:3';
+        $scope.pageConfig.currentPage = 1;
+        tableList();
+    }
+
+
+    /*分类筛选方法*/
+    $scope.$watch('dropdown.firstselect', function (value, oldValue) {
+        $scope.params['sort[]'] = 'id:3';      // 下单时间排序
+        subClass(value);
+        $scope.params.pid = value;
+        tableList()
+    });
+
+
+    $scope.$watch('dropdown.secselect', function (value, oldValue) {
+        $scope.params['sort[]'] = 'id:3';      // 下单时间排序
+        if (value == oldValue) {
+            return
+        }
+        if (value) {
+            $scope.params.pid = value;
+            $scope.params.sort_time = 3;      // 下单时间排序
+            tableList()
+        } else {
+            //二级分类id为0
+            $scope.params.pid = $scope.dropdown.firstselect;
+            $scope.params.sort_time = 3;      // 下单时间排序
+            tableList()
+        }
+    });
+
+
+    /*列表数据获取*/
+    function tableList() {
+        $scope.params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-            params: {status: 1, "sort[]": "id:3"},
+            params: $scope.params,
         }).then(function (res) {
-            $scope.allonsalepro = res.data.data.category_list_admin.details;
-            pageHandle(res);
-        })
-    }
-
-    /*已下架页码处理*/
-    function offpageHandle(obj) {
-        $scope.alloffpages = Math.ceil(obj.data.data.category_list_admin.total / 12);
-        $scope.seloffPage = 1;
-        /*总页数*/
-        $scope.offnewPages = $scope.alloffpages > 5 ? 5 : $scope.alloffpages;
-        /*总页数大于5就显示5页 小于5页有多少页显示多少页*/
-        for (var i = 1; i <= $scope.offnewPages; i++) {
-            $scope.offpageList.push(i);
-        }
-    }
-
-    /*已下架列表内容*/
-    function offlineRefresh() {
-        $scope.offascorder = true;
-        $scope.offdesorder = false;
-        $scope.offpageList = [];
-        $http({
-            method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-            params: {status: 0, "sort[]": "id:3"},
-        }).then(function (res) {
-            $scope.alloffsalepro = res.data.data.category_list_admin.details;
-            offpageHandle(res);
+            $scope.pageConfig.totalItems = res.data.data.category_list_admin.total;
+            $scope.listdata = res.data.data.category_list_admin.details;
         })
     }
 
 
-    /*初始已上架table数据内容*/
-    $scope.tableContent = (function () {
-        onlineRefresh();
-    })()
-
-
-    $scope.tableContent = (function () {
-        offlineRefresh();
-    })()
-
-    /*已上架列表创建时间排序*/
-    $scope.changepic = function () {
-        $scope.ascorder = false;
-        $scope.desorder = true;
-        $http({
-            method: "get",
-            params: $scope.temp == 0 ? {status: 1, "sort[]": "id:4"} : {status: 1, "sort[]": "id:4", pid: $scope.temp},
-            url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-        }).then(function (response) {
-            $scope.allonsalepro = response.data.data.category_list_admin.details;
-            $scope.selPage = 1;
-        })
-    }
-
-    /*已上架列表创建时间逆序*/
-    $scope.changepictwo = function () {
-        $scope.ascorder = true;
-        $scope.desorder = false;
-        $http({
-            method: "get",
-            params: $scope.temp == 0 ? {status: 1, "sort[]": "id:3"} : {status: 1, "sort[]": "id:3", pid: $scope.temp},
-            url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-        }).then(function (response) {
-            $scope.allonsalepro = response.data.data.category_list_admin.details;
-            $scope.selPage = 1;
-        })
-    }
-
-    /*已下架创建时间排序*/
-    $scope.offchangepic = function () {
-        $scope.offascorder = false;
-        $scope.offdesorder = true;
-        $http({
-            method: "get",
-            params: $scope.offtemp == 0 ? {status: 0, "sort[]": "id:4"} : {
-                status: 0,
-                "sort[]": "id:4",
-                pid: $scope.offtemp
-            },
-            url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-        }).then(function (response) {
-            $scope.alloffsalepro = response.data.data.category_list_admin.details;
-            $scope.seloffPage = 1;
-        })
-    }
-
-    /*已下架创建时间逆序*/
-    $scope.offchangepictwo = function () {
-        $scope.offascorder = true;
-        $scope.offdesorder = false;
-        $http({
-            method: "get",
-            params: $scope.offtemp == 0 ? {status: 0, "sort[]": "id:3"} : {
-                status: 0,
-                "sort[]": "id:3",
-                pid: $scope.offtemp
-            },
-            url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-        }).then(function (response) {
-            $scope.alloffsalepro = response.data.data.category_list_admin.details;
-            $scope.seloffPage = 1;
-        })
-    }
-
-
-    /*已上架点击跳转至相应页数*/
-    $scope.choosePage = function (page) {
-        $http({
-            method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-            params: $scope.temp == 0 ? {status: 1, page: page} : {status: 1, pid: $scope.temp, page: page},
-        }).then(function (res) {
-            $scope.allonsalepro = res.data.data.category_list_admin.details;
-            $scope.selPage = page;
-            $scope.isActivePage(page);
-        })
-    }
-
-    /*已下架点击跳转至相应页数*/
-    $scope.chooseOffPage = function (page) {
-        $http({
-            method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-            params: $scope.offtemp == 0 ? {status: 0, page: page} : {status: 0, pid: $scope.offtemp, page: page},
-        }).then(function (res) {
-            $scope.alloffsalepro = res.data.data.category_list_admin.details;
-            $scope.seloffPage = page;
-            $scope.isOffActivePage(page);
-        })
-    }
-
-
-//上一页
-    $scope.Previous = function () {
-        if ($scope.selPage > 1) {
-            $scope.selPage--
-            $scope.choosePage($scope.selPage);
-        }
-    }
-
-    $scope.offPrevious = function () {
-        if ($scope.seloffPage > 1) {
-            $scope.seloffPage--
-            $scope.chooseOffPage($scope.seloffPage);
-        }
-    }
-
-//下一页
-    $scope.Next = function () {
-        if ($scope.selPage < $scope.allpages) {
-            $scope.selPage++;
-            $scope.choosePage($scope.selPage);
-        }
-    };
-
-    $scope.offNext = function () {
-        if ($scope.seloffPage < $scope.alloffpages) {
-            $scope.seloffPage++;
-            $scope.chooseOffPage($scope.seloffPage);
-        }
-    };
-
-    /*点击页码加样式*/
-    $scope.isActivePage = function (page) {
-        return $scope.selPage == page;
-    };
-
-    $scope.isOffActivePage = function (page) {
-        return $scope.seloffPage == page;
+    /*全选*/
+    $scope.checkAll = function () {
+        !$scope.table.roles.length ? $scope.table.roles = $scope.listdata.map(function (item) {
+            return item.id;
+        }) : $scope.table.roles.length = 0;
     };
 
 
-    /*已下架通用跳转*/
-    $scope.selectOffPage = function (page, url) {
-        $http({
-            method: "get",
-            url: url,
-            params: {status: 0, page: page},
-        }).then(function (res) {
-            $scope.alloffsalepro = res.data.data.category_list_admin.details;
-            $scope.seloffPage = page;
-            $scope.isOffActivePage(page);
-        })
-    }
-
-
-    /*===========================已上架 下架操作==========================*/
-    /*=已上架列表 单个下架*/
+    /*-----------------------已上架操作--------------------*/
 
     /*已上架单个分类下架种类统计*/
-    $scope.tobeoffline = function (id, level) {
-        $scope.singleoffid = id;
-        $scope.singleofflevel = level;
-    }
-
-    /*已下架单个分类上架种类统计*/
-    $scope.tobeonline = function (id, level) {
-        $scope.singleonid = id;
-        $scope.singleonlevel = level;
+    $scope.singleOffline = function (id) {
+        singleoffid = id;
     }
 
     /*单个确认下架*/
-    $scope.sureoffline = function () {
+    $scope.sureOffline = function () {
         let url = "http://test.cdlhzz.cn:888/mall/category-status-toggle";
-        let data = {id: $scope.singleoffid, offline_reason: $scope.offlinereason};
+        let data = {id: singleoffid, offline_reason: $scope.offlinereason};
         $http.post(url, data, config).then(function (res) {
             $scope.offlinereason = '';
-            onlineRefresh();
-        })
-    }
-
-    /*单个确认上架*/
-    $scope.sureonline = function () {
-        let url = "http://test.cdlhzz.cn:888/mall/category-status-toggle";
-        let data = {id: $scope.singleonid};
-        $http.post(url, data, config).then(function (res) {
-            offlineRefresh();
+            $scope.pageConfig.currentPage = 1;
+            tableList();
         })
     }
 
     /*单个取消下架*/
-    $scope.canceloffline = function () {
+    $scope.cancelOffline = function () {
         $scope.offlinereason = '';
     }
 
-    /*单个取消上架无操作*/
-
-    /*已上架列表 批量下架*/
-    $scope.piliangxiajia = function () {
-        $scope.xiajiaarr.length = 0;
-        for (let [key, value] of $scope.allonsalepro.entries()) {
-            if (value.state) {
-                $scope.xiajiaarr.push(value.id)
-            }
-        }
-    }
-
-    $scope.surepiliangoffline = function () {
-        $scope.piliangoffids = $scope.xiajiaarr.join(',');
+    /*确认批量下架*/
+    $scope.sureBatchOffline = function () {
+        let batchoffids = $scope.table.roles.join(',');
         let url = "http://test.cdlhzz.cn:888/mall/category-disable-batch";
-        let data = {ids: $scope.piliangoffids, offline_reason: $scope.piliangofflinereason};
+        let data = {ids: batchoffids, offline_reason: $scope.batchoffline_reason};
         $http.post(url, data, config).then(function (res) {
-            $scope.piliangofflinereason = '';
-            onlineRefresh();
+            $scope.batchoffline_reason = '';
+            $scope.pageConfig.currentPage = 1;
+            tableList()
         })
     }
 
-    $scope.cancelplliangoffline = function () {
-        $scope.xiajiaarr.length = 0;
-        $scope.piliangofflinereason = '';
+    /*取消批量下架*/
+    $scope.cancelBatchOffline = function () {
+        $scope.batchoffline_reason = '';
 
     }
 
-    /*已下架列表 批量上架*/
-    $scope.piliangshangjia = function () {
-        $scope.shangjiaarr.length = 0;
-        for (let [key, value] of $scope.alloffsalepro.entries()) {
-            if (value.state) {
-                $scope.shangjiaarr.push(value.id)
-            }
-        }
+    /*-----------------------已下架操作--------------------*/
+
+    /*已下架单个分类上架种类统计*/
+    $scope.singleOnline = function (id) {
+        singleonid = id;
     }
 
+
+    /*单个确认上架*/
+    $scope.sureOnline = function () {
+        let url = "http://test.cdlhzz.cn:888/mall/category-status-toggle";
+        let data = {id: singleonid};
+        $http.post(url, data, config).then(function (res) {
+            $scope.pageConfig.currentPage = 1;
+            tableList();
+        })
+    }
+
+
+    /*单个取消上架无操作*/
     $scope.surepiliangonline = function () {
-        $scope.piliangonids = $scope.shangjiaarr.join(',');
+        $scope.piliangonids = $scope.table.roles.join(',');
         let url = "http://test.cdlhzz.cn:888/mall/category-enable-batch";
         let data = {ids: $scope.piliangonids};
         $http.post(url, data, config).then(function (res) {
-            offlineRefresh();
-
+            $scope.pageConfig.currentPage = 1;
+            tableList()
         })
-    }
-
-
-    $scope.cancelplliangonline = function () {
-        $scope.shangjiaarr.length = 0;
-    }
-
-    /*全选*/
-    $scope.all = function (m) {
-        for (let i = 0; i < $scope.allonsalepro.length; i++) {
-            if (m === true) {
-                $scope.allonsalepro[i].state = false;
-                $scope.selectAll = false;
-            } else {
-                $scope.allonsalepro[i].state = true;
-                $scope.selectAll = true;
-            }
-        }
-    };
-
-
-    /*===========================下架/下架处理结束=======================*/
-
-    /*筛选查询*/
-    $scope.chaxun = function () {
-        $scope.ascorder = true;
-        $scope.desorder = false;
-        $scope.pageList.length = 0;
-        $scope.selPage = 1;
-        if (($scope.firstselect == 0 && $scope.secselect == 0) || ($scope.firstselect == 0 && $scope.secselect == null)) {
-            $scope.temp = 0;
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-                params: {status: 1},
-            }).then(function (res) {
-                $scope.allonsalepro = res.data.data.category_list_admin.details;
-                pageHandle(res);
-            })
-            /*二级下拉为全部*/
-        } else if ($scope.firstselect != 0 && $scope.secselect == 0) {
-            $scope.temp = $scope.firstselect;
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-                params: {status: 1, pid: $scope.firstselect},
-            }).then(function (res) {
-                $scope.allonsalepro = res.data.data.category_list_admin.details;
-                pageHandle(res)
-            })
-            /*两个都不为全部*/
-        } else if ($scope.firstselect != 0 && $scope.secselect != 0) {
-            $scope.temp = $scope.secselect;
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-                params: {status: 1, pid: $scope.secselect},
-            }).then(function (res) {
-                $scope.allonsalepro = res.data.data.category_list_admin.details;
-                pageHandle(res);
-            })
-        }
-    }
-
-
-    /*已下架筛选*/
-    $scope.offchaxun = function () {
-        $scope.offascorder = true;
-        $scope.offdesorder = false;
-        $scope.offpageList.length = 0;
-        $scope.seloffPage = 1;
-        // 	/*只有一级下拉的全部*/
-        if (($scope.firstselect == 0 && $scope.secselect == 0) || ($scope.firstselect == 0 && $scope.secselect == null)) {
-            $scope.offtemp = 0;
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-                params: {status: 0},
-            }).then(function (res) {
-                $scope.alloffsalepro = res.data.data.category_list_admin.details;
-                offpageHandle(res);
-            })
-            /*二级下拉为全部*/
-        } else if ($scope.firstselect != 0 && $scope.secselect == 0) {
-            $scope.offtemp = $scope.firstselect;
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-                params: {status: 0, pid: $scope.firstselect},
-            }).then(function (res) {
-                $scope.alloffsalepro = res.data.data.category_list_admin.details;
-                offpageHandle(res);
-
-            })
-            /*两个都不为全部*/
-        } else if ($scope.firstselect != 0 && $scope.secselect != 0) {
-            $scope.offtemp = $scope.secselect;
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-                params: {status: 0, pid: $scope.secselect},
-            }).then(function (res) {
-                $scope.alloffsalepro = res.data.data.category_list_admin.details;
-                offpageHandle(res);
-            })
-        }
-    }
-
-    $scope.alloff = function (m) {
-        for (let i = 0; i < $scope.alloffsalepro.length; i++) {
-            if (m === true) {
-                $scope.alloffsalepro[i].state = false;
-                $scope.selectoffAll = false;
-            } else {
-                $scope.alloffsalepro[i].state = true;
-                $scope.selectoffAll = true;
-            }
-        }
     }
 
     /*重设下架原因*/
     $scope.resetOffReason = function (id, offline_reason) {
         $scope.resetid = Number(id);
-        // $scope.offline_reason = offline_reason;
-        $scope.xiajiareason = offline_reason;
+        $scope.original_reason  = offline_reason;
     }
 
     $scope.surereset = function () {
         let url = "http://test.cdlhzz.cn:888/mall/category-offline-reason-reset";
-        let data = {id: $scope.resetid, offline_reason: $scope.xiajiareason};
+        let data = {id: $scope.resetid, offline_reason: $scope.original_reason};
         $http.post(url, data, config).then(function (res) {
-            $scope.xiajiareason = '';
-            $http({
-                method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
-                params: $scope.offtemp == 0 ? {status: 0, page: $scope.seloffPage} : {
-                    status: 0,
-                    pid: $scope.offtemp,
-                    page: $scope.seloffPage
-                },
-            }).then(function (res) {
-                $scope.alloffsalepro = res.data.data.category_list_admin.details;
-                $scope.isOffActivePage($scope.seloffPage);
-            })
+            if(res.data.code==200){
+                $scope.original_reason = '';
+                tableList()
+            }
         })
     }
 
     $scope.cancelReset = function () {
-        $scope.xiajiareason = '';
+        $scope.original_reason= '';
     }
-
 })
 
 
