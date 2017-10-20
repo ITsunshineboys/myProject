@@ -653,7 +653,7 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $subject=trim($request->get('goods_name'));
         //付款金额，必填
-        $total_amount =trim($request->get('order_price'));
+        $total_amount =(int)trim($request->get('order_price'));
         $goods_id=trim($request->get('goods_id'));
         $goods_num=trim($request->get('goods_num'));
         $address_id=trim($request->get('address_id'));
