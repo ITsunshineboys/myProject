@@ -615,8 +615,7 @@ angular.module("all_controller", [])
         $scope.show_harvest    = $stateParams.show_harvest;
         $scope.mall_id         = $stateParams.mall_id;
         $scope.shopNum         = $stateParams.shopNum;
-        $scope.supplier_id         = $stateParams.supplier_id;
-
+        $scope.supplier_id     = $stateParams.supplier_id;
         $scope.consigneeName   = $stateParams.consigneeName;
         $scope.mobile          = $stateParams.mobile;
         $scope.districtMore    = $stateParams.districtMore;
@@ -631,7 +630,7 @@ angular.module("all_controller", [])
         $scope.invoice_number  = '';//纳税人识别号
         $scope.invoice_model   = '';
         $scope.contentInvoice  = '';
-        console.log( $scope.mall_id );
+        console.log( $scope.supplier_id );
         console.log( $scope.invoice_id );
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -694,7 +693,8 @@ angular.module("all_controller", [])
                         invoice_content:$scope.invoice_name,
                     },config).then(function (response) {
                         console.log(response);
-                        $scope.invoice_id = response.data.data.invoice_id
+                        $scope.invoice_id = response.data.data.invoice_id;
+                        alert($scope.invoice_id)
                     });
                     // 模态框确认按钮 == 跳转保存数据
                     $scope.jumpOrder = function () {
@@ -767,7 +767,9 @@ angular.module("all_controller", [])
         $scope.mall_id = $stateParams.mall_id;
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
-        console.log($scope.leaveMessage);
+        $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
+        $scope.supplier_id  = $stateParams.supplier_id;//商家ID
+        console.log($scope.invoice_id);
         console.log($scope.supplier_id);
         if($stateParams.show_address !== ''){
             console.log(12345456);
@@ -782,8 +784,6 @@ angular.module("all_controller", [])
             $scope.regionMore = $stateParams.regionMore;
             $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
             $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
-            $scope.supplier_id  = $stateParams.supplier_id;//商家ID
-            $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号
 
             console.log($scope.invoice_name );
             console.log($scope.invoice_id );
@@ -967,10 +967,13 @@ angular.module("all_controller", [])
                                     invoice_id:+$scope.invoice_id,
                                     supplier_id:+$scope.supplier_id,
                                     freight:+$scope.freight,
-                                    buyer_message: $scope.leaveMessage
+                                    // buyer_message: $scope.leaveMessage
                                 },config).then(function (response) {
                                     // console.log(response);
-                                    alert($scope.mall_id +'和'+ $scope.address_id+'和'+$scope.invoice_id+'和'+$scope.supplier_id);
+                                    alert($scope.mall_id +'商品ID');
+                                    alert($scope.address_id+'地址id');
+                                    alert($scope.invoice_id+'发票id');
+                                    alert($scope.supplier_id+'商家id');
                                     alert(JSON.stringify(response));
                                 })
                             }
@@ -1004,8 +1007,6 @@ angular.module("all_controller", [])
             }
 
         };
-
-
     })
 
     // 支付成功
