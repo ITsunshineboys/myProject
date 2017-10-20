@@ -964,7 +964,8 @@ angular.module("all_controller", [])
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
                                 // 微信接口
-                                $http.get('http://common.cdlhzz.cn/order/lineplaceorder',{
+                                // http://common.cdlhzz.cn/order/lineplaceorder
+                                $http.get('http://baidu.com',{
                                     params:{
                                         goods_name: $scope.title,
                                         order_price:$scope.allCost,
@@ -977,7 +978,7 @@ angular.module("all_controller", [])
                                         // buyer_message: $scope.leaveMessage
                                 }}).then(function (response) {
                                     // $scope.dataWx = response.data;
-                                    // alert($scope.dataFram);
+                                    alert('跳转成功');
                                     alert($scope.mall_id +'商品ID');
                                     alert($scope.address_id+'地址id');
                                     alert($scope.invoice_id+'发票id');
