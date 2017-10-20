@@ -965,19 +965,19 @@ angular.module("all_controller", [])
                                 alert('调用微信接口');
                                 // 微信接口
                                 // http://common.cdlhzz.cn/order/lineplaceorder
-                                $http.get('http://common.cdlhzz.cn/order/getinvoicelinedata',{
-                                    params:{
+                                $http.get('http://common.cdlhzz.cn/order/lineplaceorder?goods_name=%E6%89%AB%E6%B2%B3%E6%B2%99&order_price=30&goods_num=1&goods_id=276&address_id=168&invoice_id=57&supplier_id=81&freight=0',{
+                                    // params:{
                                         // goods_name: $scope.title,
                                         // order_price:$scope.allCost,
                                         // goods_num:+$scope.shopNum,
                                         // goods_id:+$scope.mall_id,
                                         // address_id:+$scope.address_id,
-                                        invoice_id:+$scope.invoice_id,
+                                        // invoice_id:+$scope.invoice_id,
                                         // supplier_id:+$scope.supplier_id,
                                         // freight:+$scope.freight,
 
                                         // buyer_message: $scope.leaveMessage
-                                }
+                                // }
                             }).then(function (response) {
                                     alert('跳转成功');
                                     alert($scope.mall_id +'商品ID');
