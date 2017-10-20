@@ -805,7 +805,7 @@ angular.module("all_controller", [])
                             $scope.codeWX = response.data.code;
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
-                                alert('wocao')
+                                alert('wocao');
                                 // 微信接口
                                 $http.post('http://common.cdlhzz.cn/order/lineplaceorder',{
                                     goods_name: $scope.title,
