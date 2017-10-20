@@ -115,7 +115,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
 
 
     .state("fenleiguanli",{
-      params:{'showoffsale':null},
+      params:{'offsale_flag':null},
       url:"/fenleiguanli",
       templateUrl:"pages/mall_manage/class_manage/cla_mag/cla_mag.html"
     })
