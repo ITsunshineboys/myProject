@@ -433,9 +433,11 @@ class StringService
      * Http get
      *
      * @param string $url
+     * @param string $username username default empty
+     * @param string $password password default empty
      * @return string|bool
      */
-    public static function httpGet($url)
+    public static function httpGet($url, $username = '', $password = '')
     {
         $oCurl = curl_init();
         if (stripos($url, "https://") !== FALSE) {
@@ -444,6 +446,10 @@ class StringService
         }
         curl_setopt($oCurl, CURLOPT_URL, $url);
         curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+        if ($username && $password) {
+            curl_setopt($oCurl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($oCurl, CURLOPT_USERPWD, "{$username}:{$password}");
+        }
         $sContent = curl_exec($oCurl);
         $aStatus = curl_getinfo($oCurl);
         curl_close($oCurl);
