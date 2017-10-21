@@ -3409,7 +3409,7 @@ class OrderController extends Controller
         $post=Yii::$app->request->post();
 
         $res2=Yii::$app->db->createCommand()->insert("alipayreturntest",[
-            'content'=>$post['total_amount']
+            'content'=>$post['passback_params']
         ])->execute();
         if ($res2)
         {
