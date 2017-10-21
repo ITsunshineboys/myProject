@@ -80,4 +80,8 @@ if (YII_ENV_DEV) {
     ];
 }
 
+if (file_exists(__DIR__ . '/params_online.php')) {
+    $config['params']['online'] = require_once(__DIR__ . '/params_online.php');
+}
+
 return $config;
