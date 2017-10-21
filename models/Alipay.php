@@ -96,8 +96,7 @@ class Alipay extends  ActiveRecord
         $notify_url='http://test.cdlhzz.cn:888/order/app-order-pay-database';
         $return_url='';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
-        $str=Json::encode($orders);
-        $passback_params=urlencode($str);
+        $passback_params=urlencode($orders);
         //超时时间
         $timeout_express="1m";
         $payRequestBuilder = new AlipayTradeWapPayContentBuilder();

@@ -3391,7 +3391,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         };
-        $data=Alipay::OrderAppPay($orderAmount,$orders);
+       $data=Alipay::OrderAppPay($orderAmount,$postData['list']);
         $code=200;
         return Json::encode([
             'code' => $code,
@@ -3408,7 +3408,8 @@ class OrderController extends Controller
     {
         $post=Yii::$app->request->post();
 
-         $res2=Yii::$app->db->createCommand()->insert("alipayreturntest",[
+        
+        $res2=Yii::$app->db->createCommand()->insert("alipayreturntest",[
             'content'=>urldecode($post['passback_params'])
         ])->execute();
         if ($res2)
