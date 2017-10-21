@@ -82,11 +82,36 @@ class AlipayTradeService {
         $aop=new AopClient();
         $aop->gatewayUrl = $this->gateway_url;
         $aop->appId = $this->appid;
-        $aop->rsaPrivateKey =  $this->private_key;
+        $aop->rsaPrivateKey ="MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDV8sawR4B7D3BE
+RjUE7bbkYCAHAiI+gtf+RnwHFgxeKcgIBWT83Q/HxPblK1xKaAbl8ZQHyPQKDxHQ
+gdgeLZRJX95xu8+BRg5cPQ7wuzPgVK+lnw6JQshZuE47r9Yk1Nn8hp1ILTgoYrIN
+dzYkxFQUXK7mxA9QHMJ6KhjMp3AAfaoGHe2ejY31ZJnpZkD0gmf0V7HUgxrWnBzx
+XZfUoS/as0qQD6lDS0haRpHUN6GN0weLq9It2+qAtJonQI12u21B9m0OpSlzME6+
+zlagZOeZm9HYZEXIcxEQn97BzYLmeImHwNcCmZUp7lJ+haLTTLK6C5vkI/rcP5Fh
+w/afb7LZAgMBAAECggEAJMgXNokkYoO19lbnmJBRqBOKjgnk30BZZ+KwQfudZrbi
+J9bdlMdghiSrmZyJwlT+Epwkqe33Xp9WnbUk9ZM6ch7kPENgmkX0BBGPNv3IHmIQ
+zHV650gu75XLBWHme/CIBW0TLyxvAiptl/kNuuZx2gpRG2VLiKdZG+2O0+hZTgv8
+IoI7I5Vd4OuwNgsQcrkmBA66ra/nL71/PpUTUA/H+EVQHDOcWuhPWrOpyB5qgbEh
+PYIE8Cv01VyMTZQQl9lXu16R6AIIQJMEBuoNEjKKEDZnj+5b1OBIyd1DKza4SuOY
+Ok/Pf3XQHd1soBsh7ALExM0GkfKLiOCzgyP1yIJ6MQKBgQDx6HA2KhZ60+0VdkXF
+g+YRxQJMamLuKnB7SgbcbE1D0lgYC80Ci2a6NsU7tj1qzJVZD2i95cekekc6HraN
+sv7uto2YjMOUj+5JaaBHGRX80p4hoX1OV8O/6VQnRD6X+N5zc0LpNTq+GoWTXFAO
+COrEFdBVkQxros6np8auuLINFQKBgQDiaWCb2lXp+d+lT4oIqDf7otqjrxgWr76u
+/T2PMF0CgLRBgD67BPK0YNRTdrMDm194Nm8OsBOdUBSt2cU6umY7OmbHaCOxxnya
+7kvk2joTaJLbt80u8Vo70Jz3k4JupuVhuJs+XZMzCwL9ZoPJelHrMpt9mx2ddgKu
++RkjiWVntQKBgHqleTbM8ebGSb6G32r7q4q40qiBi7TqiWrIpl/c/PN00rsmSIOQ
+v72LhUX36H2cSeAEgvs8Y5LNeA1Mgwumg7/tiC6et447xvkrd1p0qoQrGIc+g/RT
+ZOiI2OSrofyU7dukxXjNRwIZGj4TIHdtJ/HQiXbIen6b5aB03LO66nLdAoGAapP0
+OClE/Aj1sBmK/pxBDiERDrAjhLph5nmq+rZncgAn2hWGcf7YSPSzvj5H8lC3Vh05
+lg5ojUrfER9L6mNIMGVDcGajNtIaYcv+ydG4ON6nEuqomYpfUXzYBurXIUNLAv8l
+hOwDmKl8VNBnBPahjTebXjsga7jbdoYnwUSyCWkCgYAwoFvVMB2jNE0u/UGqFIGI
+L0GevRVNaVlch2DdC6PTBLT0h2IZeagZwnnrlHJRgujHF9DxC80AXz1PWADDPz+r
+Lcle+izQ0XIx7A5LOg2oSgBz3DYaqlYCqdusSa2zOswHflVfQqtmA1MinlMAdWDq
+HjgB2RoiyDxqCgSbpgAOUA==";
         $aop->format = "json";
         $aop->charset = "UTF-8";
         $aop->signType = "RSA2";
-        $aop->alipayrsaPublicKey = $this->alipay_public_key;
+        $aop->alipayrsaPublicKey ="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1fLGsEeAew9wREY1BO225GAgBwIiPoLX/kZ8BxYMXinICAVk/N0Px8T25StcSmgG5fGUB8j0Cg8R0IHYHi2USV/ecbvPgUYOXD0O8Lsz4FSvpZ8OiULIWbhOO6/WJNTZ/IadSC04KGKyDXc2JMRUFFyu5sQPUBzCeioYzKdwAH2qBh3tno2N9WSZ6WZA9IJn9Fex1IMa1pwc8V2X1KEv2rNKkA+pQ0tIWkaR1DehjdMHi6vSLdvqgLSaJ0CNdrttQfZtDqUpczBOvs5WoGTnmZvR2GRFyHMREJ/ewc2C5niJh8DXApmVKe5SfoWi00yyugub5CP63D+RYcP2n2+y2QIDAQAB";
 //        $biz_content=$builder->getBizContent();
         $biz_content=$builder->getBizContentApp();
         $request = new AlipayTradeAppPayRequest();
@@ -96,7 +121,8 @@ class AlipayTradeService {
         $request->setBizContent($bizcontent);
         //这里和普通的接口调用不同，使用的是sdkExecute
         $response = $aop->sdkExecute($request);
-        return   htmlspecialchars($response);
+        return  htmlspecialchars($response);
+
     }
     /**
      * alipay.trade.wap.pay
