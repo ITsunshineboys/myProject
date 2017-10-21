@@ -3406,13 +3406,11 @@ class OrderController extends Controller
      */
     public  function  actionAppOrderPayDatabase()
     {
-         $post=Yii::$app->request->post();
-        $posts = Yii::$app->db->createCommand('DELETE  FROM  alipayreturntest')
-            ->queryAll();
+        $post=Yii::$app->request->post();
 
-//        $res2=Yii::$app->db->createCommand()->insert("alipayreturntest",[
-//            'content'=>$post['total_amount']
-//        ])->execute();
+        $res2=Yii::$app->db->createCommand()->insert("alipayreturntest",[
+            'content'=>$post['total_amount']
+        ])->execute();
         if ($res2)
         {
             echo 'success';
