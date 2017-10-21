@@ -3411,11 +3411,11 @@ class OrderController extends Controller
             $orders=explode(',',$post['passback_params']);
             $total_amount=$post['total_amount'];
             $orderAmount=GoodsOrder::CalculationCost($orders);
-            if ($total_amount*100!=$orderAmount)
-            {
-                echo 'fail';
-                exit;
-            }
+//            if ($total_amount*100!=$orderAmount)
+//            {
+//                echo 'fail';
+//                exit;
+//            }
             foreach ($orders as $k =>$v){
                 $GoodsOrder=GoodsOrder::find()
                     ->where(['order_no'=>$orders[$k]])
