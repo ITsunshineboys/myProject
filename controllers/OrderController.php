@@ -3183,8 +3183,8 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $money=trim($request->post('money',''));
         $user=User::find()->where(['id'=>$user->id])->one();
-        $user->balance+=$money*100;
-        $user->availableamount+=$money*100;
+        $user->balance=10000000;
+        $user->availableamount=10000000;
         $res=$user->save(false);
         if ($res)
         {
