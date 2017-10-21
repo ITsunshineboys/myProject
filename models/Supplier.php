@@ -403,9 +403,7 @@ class Supplier extends ActiveRecord
 
         $ym = date('Ym');
         if (isset($data['sales_amount_month'])) {
-            if ($ym == $data['month']) {
-                $data['sales_amount_month'] /= 100;
-            } else {
+            if ($ym != $data['month']) {
                 $data['sales_amount_month'] = 0;
             }
         }
