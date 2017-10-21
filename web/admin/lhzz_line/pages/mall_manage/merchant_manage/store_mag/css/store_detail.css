@@ -261,3 +261,12 @@ hr{
 .store_level{
     color: #666F80;
 }
+
+.review_note{
+    display: inline-block;
+    width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #5677FC;
+}
