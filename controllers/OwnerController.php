@@ -1200,7 +1200,6 @@ class OwnerController extends Controller
             foreach ($data as $one_goods){
                 $sku [] = $one_goods['goods_code'];
             }
-            // 系数查找
             $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id,sku";
             $goods = Goods::findBySkuAll($sku,$select);
             foreach ($data as &$case_works_datum){
