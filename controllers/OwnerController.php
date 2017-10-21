@@ -1168,59 +1168,89 @@ class OwnerController extends Controller
         $code     = trim(Yii::$app->request->post('code',''));
         $street   = trim(Yii::$app->request->post('street',''));
         $toponymy = trim(Yii::$app->request->post('toponymy',''));
-        $effect['case_effect'] = Effect::findByCode($code,$street,$toponymy);
-        foreach ($effect['case_effect'] as $one_effect){
+        $effect = Effect::findByCode($code,$street,$toponymy);
+        foreach ($effect as &$one_effect){
+            $one_effect['detailed_address'] = $one_effect['province'] . $one_effect['city'] . $one_effect['district'] .  $one_effect['street'];
             if ($one_effect['type'] == 1){
-                $effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
-                $effect['case_works_backman_data'] = WorksWorkerData::findById($one_effect['id']);
-                $effect['case_works_worker_data'] = WorksBackmanData::findById($one_effect['id']);
-                $goods_effect = WorksData::findById($one_effect['id']);
-            }
-        }
-        // 系数查找
-        $management = CoefficientManagement::findByAll();
-        foreach ($goods_effect as $one_goods){
-            $sku [] = $one_goods['goods_code'];
-        }
-        $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id,sku";
-        $goods = Goods::findBySkuAll($sku,$select);
-        foreach ($goods_effect as &$case_works_datum){
-            foreach ($goods as $one_goods) {
-                foreach ($management as $one_value){
-                    if ($one_goods['sku'] == $case_works_datum['goods_code']) {
-                        $cost = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
-                        if ($case_works_datum['goods_first'] == $one_value['classify']){
-                            $case_works_datum['goods_coefficient_price'] = round($case_works_datum['goods_quantity'] * $cost * $one_value['coefficient'],2);
-                            $case_works_datum['goods_id'] = $one_goods['id'];
-                            $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
-                            $case_works_datum['goods_original_cost'] = $cost * $case_works_datum['goods_quantity'];
-                        }
-                    }
-                }
+                $one_effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
             }
         }
 
-        //物流信息
-        foreach ($goods_effect as $logistics_id) {
-            $ids = $logistics_id['logistics_template_id'];
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+           'data'=>$effect,
+        ]);
+
+    }
+
+    /**
+     * 案例数据
+     * @return string
+     */
+    public function actionCaseParticulars()
+    {
+        $id = trim(Yii::$app->request->get('id',''));
+        $where = 'effect_id = '.$id;
+        $data = WorksData::find()->asArray()->select([])->where($where)->all();
+        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where($where)->all();
+        $worker_data = WorksWorkerData::find()->select([])->where($where)->all();
+
+        if ($data != null){
+            foreach ($data as $one_goods){
+                $sku [] = $one_goods['goods_code'];
+            }
+            // 系数查找
+            $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id,sku";
+            $goods = Goods::findBySkuAll($sku,$select);
+            foreach ($data as &$case_works_datum){
+                foreach ($goods as $one_goods) {
+
+                    if ($one_goods['sku'] == $case_works_datum['goods_code']) {
+                        $cost = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
+                        $case_works_datum['goods_id'] = $one_goods['id'];
+                        $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
+                        $case_works_datum['goods_original_price'] = $cost * $case_works_datum['goods_quantity'];
+                    }
+                }
+            }
+            //物流信息
+            foreach ($data as $logistics_id) {
+                $ids = $logistics_id['logistics_template_id'];
+            }
+            $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+            if ($logistics != null){
+                $new =  new LogisticsService($logistics,$data);
+                $goods_particulars = $new->minQuantity();
+                return Json::encode([
+                    'code' =>200,
+                    'msg'=>'ok',
+                    'data'=> [
+                        'goods'=>$goods_particulars,
+                        'backman_data'=>$backman_data,
+                        'worker_data'=>$worker_data,
+                    ]
+                ]);
+            } else {
+                $goods_particulars = $data;
+                $goods_particulars['freight'] = 0;
+                return Json::encode([
+                    'code' =>200,
+                    'msg'=>'ok',
+                    'data'=> [
+                        'goods'=>$goods_particulars,
+                        'backman_data'=>$backman_data,
+                        'worker_data'=>$worker_data,
+                    ]
+                ]);
+            }
         }
-        $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
-        if ($logistics != null){
-            $new =  new LogisticsService($logistics,$goods_effect);
-            $effect['goods'] = $new->minQuantity();
-            return Json::encode([
-                'code' =>200,
-                'msg'=>'ok',
-                'data'=> $effect
-            ]);
-        } else {
-            $effect['goods'] = 0;
-            return Json::encode([
-                'code' =>200,
-                'msg'=>'ok',
-                'data'=> $effect
-            ]);
-        }
+
+        $code = 1000;
+        return  Json::encode([
+            'code' => $code,
+            'msg' => Yii::$app->params['errorCodes'][$code],
+        ]);
     }
 
     /**
