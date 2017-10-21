@@ -271,19 +271,45 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         //人工价格
         $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
+        if ($workers == null){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
+        if ($worker_kind_details == null){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         //      点位 和 材料查询
         $points_select = 'count';
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne($points_select,$points_where);
+        if ($points == null){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name';
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL,$goods_select);
+        if ($goods == null){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $judge = BasisDecorationService::priceConversion($goods);
-        var_dump($goods);
-        die;
         $weak_current = BasisDecorationService::judge($judge, $post);
 
         //当地工艺
