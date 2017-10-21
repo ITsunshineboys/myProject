@@ -166,11 +166,6 @@ input[type="checkbox"]{
     cursor: pointer;
 }
 
-/*.sort img{*/
-    /*width: 13px!important;*/
-    /*height: 15px!important;*/
-/*}*/
-
 table .sortpic {
     display: inline-block;
     margin-top: -4px;
@@ -368,41 +363,6 @@ textarea{
     border-radius: 3px;
     margin-right: 20px;
 }
-
-
-/*!*分页样式*!*/
-/*.page-list {*/
-    /*margin-top: 10px;*/
-    /*margin-bottom: 10px;*/
-/*}*/
-
-/*.pagination {*/
-    /*float: left;*/
-    /*margin-top: 0;*/
-    /*margin-bottom: 0;*/
-/*}*/
-
-/*.pagination li:not(.separate) {*/
-    /*cursor: pointer;*/
-/*}*/
-
-/*.page-list .jump {*/
-    /*float: left;*/
-    /*margin-left: 50px;*/
-/*}*/
-
-/*.page-list .jump input {*/
-    /*display: inline-block !important;*/
-    /*margin-right: 10px;*/
-    /*width: 80px;*/
-    /*vertical-align: middle;*/
-/*}*/
-
-/*.pagination-total {*/
-    /*float: left;*/
-    /*margin-top: 0.7%;*/
-    /*margin-right: 20px;*/
-/*}*/
 
 
 .active{

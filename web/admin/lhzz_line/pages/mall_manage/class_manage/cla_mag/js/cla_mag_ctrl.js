@@ -118,6 +118,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
     /*分类筛选方法*/
     $scope.$watch('dropdown.firstselect', function (value, oldValue) {
+        $scope.pageConfig.currentPage = 1;
         $scope.table.roles = [];
         $scope.params['sort[]'] = 'id:3';      // 下单时间排序
         subClass(value);
@@ -127,6 +128,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
 
     $scope.$watch('dropdown.secselect', function (value, oldValue) {
+        $scope.pageConfig.currentPage = 1;
         $scope.table.roles = [];
         $scope.params['sort[]'] = 'id:3';      // 下单时间排序
         if (value == oldValue) {
