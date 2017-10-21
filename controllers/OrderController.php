@@ -3406,8 +3406,10 @@ class OrderController extends Controller
      */
     public  function  actionAppOrderPayDatabase()
     {
-        $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            'content'=>$_POST
+        $post=Yii::$app->request->post();
+
+        $res2=Yii::$app->db->createCommand()->insert("alipayreturntest",[
+            'content'=>json_encode($post)
         ])->execute();
         if ($res2)
         {
