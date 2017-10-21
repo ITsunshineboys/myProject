@@ -89,7 +89,7 @@ class Alipay extends  ActiveRecord
      * @param array $orders
      * @return string
      */
-    public static  function OrderAppPay($orderAmount,$orders=[])
+  public static  function OrderAppPay($orderAmount,$orders=[])
     {
         $time=time();
         $out_trade_no=date('Y',$time).date('m',$time).date('d',$time).date('H',$time).date('i',$time).date('s',$time);
@@ -104,7 +104,7 @@ class Alipay extends  ActiveRecord
         $payRequestBuilder->setBody('此订单包含一条或多条商品数据');
         $payRequestBuilder->setSubject('艾特魔方商城订单');
         $payRequestBuilder->setOutTradeNo($out_trade_no);
-        $payRequestBuilder->setTotalAmount($orderAmount);
+        $payRequestBuilder->setTotalAmount($orderAmount*0.01);
         $payRequestBuilder->setTimeExpress($timeout_express);
         $payRequestBuilder->setPassback_params($passback_params);
         $payResponse = new AlipayTradeService($config);
@@ -112,5 +112,4 @@ class Alipay extends  ActiveRecord
         $result=$payResponse->appPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
         return $result;
     }
-
 }
