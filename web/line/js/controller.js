@@ -1016,13 +1016,8 @@ angular.module("all_controller", [])
                                     }
                                 }).then(function successCallback(response) {
                                     console.log('成功');
-                                    alert($scope.mall_id +'商品ID');
-                                    alert($scope.address_id+'地址id');
-                                    alert($scope.invoice_id+'发票id');
-                                    alert($scope.supplier_id+'商家id');
-                                    alert(JSON.stringify(response.data));
+                                    alert(JSON.stringify(response.data.data));
                                     alert(JSON.stringify(response.config));
-                                    alert(JSON.stringify(response));
                                 },function (error) {
                                     alert('不成功');
                                     alert(error);
