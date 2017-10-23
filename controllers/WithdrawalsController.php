@@ -136,8 +136,46 @@ class WithdrawalsController extends Controller
         }
     }
 
+
+   /**
+     * 移动端查询银行卡信息
+     * @return string
+     */
+    public function actionUserFindBankCard(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $role_id=trim(Yii::$app->request->get('role_id',7));
+//        $UserBankInfo=UserBankInfo::findByUidAndRole_id($user->id,$role_id);
+        $UserBankInfo=(new Query())
+            ->from(UserBankInfo::tableName().' as u')
+            ->leftJoin(BankinfoLog::tableName().' as b','u.log_id=b.id')
+            ->where(['u.uid'=>$user->id,'u.role_id'=>$role_id])
+            ->all();
+        if ($UserBankInfo)
+        {
+            foreach ($UserBankInfo as &$list)
+            {
+                $list['create_time']=date('Y-m-d H:i',$list['create_time']);
+            }
+            $data=$UserBankInfo;
+        }else{
+            $data=[];
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
+    }
      /**
-     * 查询银行卡信息
+     * 商家后台-查询银行卡信息
      * @return string
      */
     public function actionFindBankCard(){
