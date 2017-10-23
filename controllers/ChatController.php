@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\User;
 use app\models\UserChat;
 use app\services\ChatService;
+use app\services\FileService;
 use yii\helpers\Json;
 use yii\web\Controller;
 
@@ -23,7 +24,7 @@ class ChatController extends Controller
             ]);
         }
         $u_id = $user->getId();
-        $role_id = User::find()->where(['id' => $u_id])->one()->login_role_id;
+        $role_id = User::find()->where(['id' => $u_id])->one()->last_role_id_app;
         return [$u_id, $role_id];
     }
 
@@ -268,7 +269,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
-        $img=trim(\Yii::$app->request->post('img'));
+
         $to_user=trim(\Yii::$app->request->post('to_user'));
         $user_hx=new ChatService();
         $res=$user_hx->getUser($to_user);
@@ -286,8 +287,21 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::sendImg($img,$nickname,$chat_bd['id'],$to_user);
-
+        $filepath=FileService::uploadMore();
+        $data=UserChat::SendImg($nickname,$chat_bd['id'],$to_user,$filepath[0]);
+        if(is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }else{
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
 
     }
 

@@ -507,7 +507,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendImage($filePath, $from = "admin", $target_type, $target, $filename)
+    function sendImage($filePath, $from = "admin", $target_type, $target)
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
@@ -518,7 +518,7 @@ class ChatService
         $body['target'] = $target;
         $options['type'] = "img";
         $options['url'] = $uri . '/' . $uuid;
-        $options['filename'] = $filename;
+//        $options['filename'] = $filename;
         $options['secret'] = $shareSecret;
         $options['size'] = array(
             "width" => 480,

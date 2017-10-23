@@ -1,8 +1,11 @@
 <?php
 
 namespace app\models;
+use app\controllers\SiteController;
 use app\services\ChatService;
+use app\services\FileService;
 use yii\db\Exception;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "user_chat".
@@ -141,7 +144,14 @@ class UserChat extends \yii\db\ActiveRecord
 
 
     }
-
+    /**
+     * 发送文本消息
+     * @param $content
+     * @param string $nickname
+     * @param $chat_id
+     * @param $to_user
+     * @return int|mixed
+     */
     public static function sendTextMessage($content, $nickname='admin',$chat_id,$to_user)
     {
         $trans = \Yii::$app->db->beginTransaction();
@@ -169,6 +179,44 @@ class UserChat extends \yii\db\ActiveRecord
             $trans->rollBack();
             return $code = 500;
 
+        }
+    }
+    /**
+     * 发送图片消息
+     * @param string $nickname
+     * @param $chat_id
+     * @param $to_user
+     * @param $filepath
+     * @return int|mixed
+     */
+    public static function SendImg($nickname='admin',$chat_id,$to_user,$filepath){
+
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $chat_hx = new ChatService();
+            $from = $nickname;
+            $target = [$to_user];
+
+            $re = $chat_hx->sendImage($filepath,$from, $target_type = 'users', $target);
+            if($re) {
+                $chat_record = new ChatRecord();
+                $chat_record->chat_id = $chat_id;
+                $chat_record->content = $filepath;
+                if (!$chat_record->save()) {
+                    $trans->rollBack();
+                    return $code = 500;
+                }
+            }
+            else{
+                $trans->rollBack();
+                return $code=500;
+            }
+            $trans->commit();
+            return $re;
+
+        }catch (Exception $e){
+            $trans->rollBack();
+            return $code = 500;
         }
     }
 }
