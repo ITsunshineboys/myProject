@@ -20,7 +20,7 @@ class BasisDecorationService
      * goods name
      */
     const GOODS_NAME =[
-        'reticle'=>'网线',
+        'reticle' => '网线',
         'wire'=>'电线',
         'spool'=>'线管',
         'bottom_case'=>'底盒',
@@ -178,7 +178,6 @@ class BasisDecorationService
             }
         }
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-        var_dump($ids);exit;
         if ($ids == null){
             $code = 1061;
             return Json::encode([
@@ -190,8 +189,6 @@ class BasisDecorationService
             switch ($one_unit) {
                 case $one_unit['title'] == self::GOODS_NAME['reticle'] || $one_unit['title'] == self::GOODS_NAME['wire']:
                     $goods_value = $one_unit['value'];
-                    break;
-                case $one_unit['title'] == self::GOODS_NAME['reticle']:
                     $spool_value = $one_unit['value'];
                     break;
             }
