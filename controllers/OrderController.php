@@ -4122,8 +4122,13 @@ class OrderController extends Controller
         }
     }
  
+       public function actionGetOpenId()
+        {
+            $tools = new PayService();
+            $openId = $tools->GetOpenid();
+        }
 
- public function  actionGetOpenId()
+        public function  actionFindOpenId()
         {
             $appid = "wx9814aafe9b6b847f";
             $secret = "4560eeb7b386701ddc7085827f65e40e secret";
