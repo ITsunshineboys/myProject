@@ -302,12 +302,11 @@ class OwnerController extends Controller
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name';
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL,$goods_select);
-        if ($goods == null){
-            $code = 1000;
+        if ($worker_kind_details == null){
+            $code = 1061;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => $goods,
             ]);
         }
         $judge = BasisDecorationService::priceConversion($goods);
@@ -345,7 +344,7 @@ class OwnerController extends Controller
         //人工价格
         $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber']);
         if ($workers == null){
-            $code = 1000;
+            $code = 1056;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -353,7 +352,7 @@ class OwnerController extends Controller
         }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current']);
         if ($worker_kind_details == null){
-            $code = 1000;
+            $code = 1057;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -365,7 +364,7 @@ class OwnerController extends Controller
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne($points_select,$points_where);
         if ($points == null){
-            $code = 1000;
+            $code = 1058;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -375,8 +374,8 @@ class OwnerController extends Controller
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name';
         $goods = Goods::priceDetail(self::WALL_SPACE, self::STRING_MATERIAL,$goods_select);
-        if ($goods == null){
-            $code = 1000;
+        if ($worker_kind_details == null){
+            $code = 1061;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -416,7 +415,7 @@ class OwnerController extends Controller
         //人工价格
         $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
         if ($waterway_labor == null){
-            $code = 1000;
+            $code = 1056;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -424,7 +423,7 @@ class OwnerController extends Controller
         }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
         if ($worker_kind_details == null){
-            $code = 1000;
+            $code = 1057;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -436,7 +435,7 @@ class OwnerController extends Controller
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne($points_select,$points_where);
         if ($points == null){
-            $code = 1000;
+            $code = 1058;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -446,8 +445,8 @@ class OwnerController extends Controller
         //查询弱电所需要材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE,self::WATERWAY_MATERIAL,$select);
-        if ($goods == null){
-            $code = 1000;
+        if ($worker_kind_details == null){
+            $code = 1061;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -488,11 +487,32 @@ class OwnerController extends Controller
         $_select = 'id,univalence,worker_kind';
         $__select = 'quantity,worker_kind_details';
         $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker'],$_select);
+        if ($waterproof_labor == null){
+            $code = 1056;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area'],$__select);
+        if ($worker_kind_details == null){
+            $code = 1057;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         //防水所需材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WATERPROOF_MATERIAL,$select);
+        if ($worker_kind_details == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
 
@@ -507,6 +527,13 @@ class OwnerController extends Controller
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterproof'], $post['city']);
+        if ($craft == null){
+            $code = 1059;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
         $labor_all_cost['price'] = ceil($total_area / $worker_kind_details['quantity']) * $waterproof_labor['univalence'];
@@ -544,7 +571,21 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         $_select = 'id,univalence,worker_kind';
         $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker'],$_select);
+        if ($labor_cost == null){
+            $code = 1056;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
+        if ($worker_kind_details == null){
+            $code = 1057;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($worker_kind_details as $one_labor) {
             switch ($one_labor) {
                 case $one_labor['worker_kind_details'] == self::WORKMANSHIP['flat_area']:
@@ -556,8 +597,29 @@ class OwnerController extends Controller
             }
         }
         $series_all = Series::find()->asArray()->all();
+        if ($series_all == null){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '系列不能为空',
+            ]);
+        }
         $style_all = Style::find()->asArray()->all();
+        if ($style_all == null){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '风格不能为空',
+            ]);
+        }
         $carpentry_add = CarpentryAdd::findByStipulate($post['series'], $post['style']);
+        if ($carpentry_add == null){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '木工添加项不能为空',
+            ]);
+        }
         // 造型长度
         $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add, $series_all, $post['series']);
         //造型天数
@@ -572,6 +634,13 @@ class OwnerController extends Controller
         //材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL,$select);
+        if ($worker_kind_details == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $judge = BasisDecorationService::priceConversion($goods);
         $goods_price = BasisDecorationService::judge($judge, $post);
 
@@ -632,7 +701,21 @@ class OwnerController extends Controller
         //工人一天单价
         $_select = 'id,univalence,worker_kind';
         $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters'],$_select);
+        if ($labor_costs == null){
+            $code = 1056;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
+        if ($worker_kind_details == null){
+            $code = 1057;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($worker_kind_details as $_labor_cost) {
             switch ($_labor_cost) {
                 case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_primer_area']:
@@ -653,8 +736,22 @@ class OwnerController extends Controller
         // 面积比例
         $points_where = ['title'=>self::AREA_PROPORTION];
         $points = Points::findByOne([],$points_where);
+        if ($worker_kind_details == null){
+            $code = 1058;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $proportion_where = ['points_id'=>$points['id']];
         $proportion = ProjectView::findByAll([],$proportion_where);
+        if ($proportion == null){
+            $code = 1060;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($proportion as $one_proportion){
             if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
                 $kitchen_area = $one_proportion;
@@ -706,10 +803,24 @@ class OwnerController extends Controller
 
         $select = 'goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name';
         $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL,$select);
+        if ($goods == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $goods_price = BasisDecorationService::priceConversion($goods);
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['emulsion_varnish'], $post['city']);
+        if ($crafts == null){
+            $code = 1059;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price, $post);
         foreach ($crafts as $craft) {
             switch ($craft) {
@@ -804,7 +915,21 @@ class OwnerController extends Controller
         //工人一天单价
         $_select = 'id,univalence,worker_kind';
         $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason'],$_select);
+        if ($labor_costs == null){
+            $code = 1056;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
+        if ($labor_costs == null){
+            $code = 1057;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($worker_kind_details as $labor_cost) {
             switch ($labor_cost) {
                 case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['protective_layer_length']:
@@ -829,9 +954,15 @@ class OwnerController extends Controller
         $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['hall'],self::ROOM_AREA['hall_area']);
         $drawing_room_area = $post['area'] * $drawing_room_particulars['project_value'];
 
-
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['tiler'], $post['city']);
+        if ($craft == null){
+            $code = 1059;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($craft as $local_craft) {
             switch ($local_craft) {
                 case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['tiling']:
@@ -876,15 +1007,39 @@ class OwnerController extends Controller
         //材料费
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL,$select);
+        if ($goods == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => $goods,
+            ]);
+        }
         $goods_price = BasisDecorationService::priceConversion($goods);
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
 
         $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['wall_brick'], $post);
+        if ($goods == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => $goods,
+            ]);
+        }
         $wall_brick_price = BasisDecorationService::priceConversion($wall_brick);
         $wall_brick_max = BasisDecorationService::profitMargin($wall_brick_price);
         $wall_brick_area = BasisDecorationService::wallBrickAttr($wall_brick_max['id']);
 
         $floor_tile = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['floor_tile'], $post);
+        if ($goods == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => $goods,
+            ]);
+        }
         $floor_tile_price = BasisDecorationService::priceConversion($floor_tile);
         $floor_tile_attr = BasisDecorationService::floorTile($floor_tile_price);
 
@@ -986,11 +1141,32 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->post();
         $_select = 'id,univalence,worker_kind';
         $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman'],$_select);
+        if ($labor == null){
+            $code = 1056;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
+        if ($worker_kind_details == null){
+            $code = 1057;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 //        总天数
         $total_day = BasisDecorationService::wallArea($post,$worker_kind_details);
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($labor['worker_kind'], $post['city']);
+        if ($craft == null){
+            $code = 1062;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         if ($post['building_scrap'] == true) {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
@@ -1005,6 +1181,13 @@ class OwnerController extends Controller
         //材料费
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL,$select);
+        if ($craft == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $goods_price = BasisDecorationService::priceConversion($goods);
         $material = [];
         foreach ($goods_price as $max) {
@@ -1012,6 +1195,13 @@ class OwnerController extends Controller
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
+                    if ($craft == null){
+                        $code = 1061;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
                     //水泥费用
                     $cement_cost = BasisDecorationService::cementCost($post, $craft, $goods_max, $goods_attr);
                     $goods_max['quantity'] = $cement_cost['quantity'];
@@ -1022,6 +1212,13 @@ class OwnerController extends Controller
                     $goods_max = BasisDecorationService::profitMargin($max);
                     //空心砖费用
                     $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
+                    if ($craft == null){
+                        $code = 1061;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
                     $brick_cost = BasisDecorationService::brickCost($post, $goods_max, $brick_standard);
                     $goods_max['quantity'] = $brick_cost['quantity'];
                     $goods_max['cost'] = $brick_cost['cost'];
@@ -1030,6 +1227,13 @@ class OwnerController extends Controller
                 case $max['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
+                    if ($craft == null){
+                        $code = 1061;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
                     //河沙费用
                     $river_sand = BasisDecorationService::riverSandCost($post, $goods_max, $craft, $goods_attr);
                     $goods_max['quantity'] = $river_sand['quantity'];
@@ -1064,11 +1268,25 @@ class OwnerController extends Controller
         $add_select = 'id,one_materials,two_materials,three_materials,sku,max(quantity)';
         $add_where = ['and',['city_code'=>$code],['or',['style_id'=>$style],['series_id'=>$series],['and',['<=','min_area',$area],['>=','max_area',$area]]]];
         $add_materials = DecorationAdd::findByAll($add_select,$add_where);
+        if ($add_materials == null){
+            $code = 1063;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($add_materials as $one_materials){
             $codes [] = $one_materials['sku'];
         }
         $goods_select = 'id,platform_price,sku';
         $goods = Goods::findBySkuAll($codes,$goods_select);
+        if ($add_materials == null){
+        $code = 1061;
+        return Json::encode([
+            'code' => $code,
+            'msg' => Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
         foreach ($add_materials as &$material){
             foreach ($goods as $one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
@@ -1089,6 +1307,13 @@ class OwnerController extends Controller
     {
         $post = Yii::$app->request->post();
         $coefficient = CoefficientManagement::find()->all();
+        if ($coefficient == null) {
+            $code = 1064;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($coefficient as $one_coefficient){
             foreach ($post['list'] as &$materials){
                 if ($one_coefficient->classify == $materials['one']){
@@ -1120,6 +1345,13 @@ class OwnerController extends Controller
     {
         $post = Yii::$app->request->post();
         $assort_material = MaterialPropertyClassify::findByStatus();
+        if ($assort_material == null) {
+            $code = 1065;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($assort_material as $assort){
             if ($assort['status'] != MaterialPropertyClassify::DEFAULT_STATUS){
                 $have_assort[] = $assort;
@@ -1134,6 +1366,13 @@ class OwnerController extends Controller
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
         $goods = Goods::assortList($material_name,self::DEFAULT_CITY_CODE);
+        if ($assort_material == null) {
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
@@ -1146,6 +1385,13 @@ class OwnerController extends Controller
 
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
+            if ($assort_material == null) {
+                $code = 1061;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             foreach ($stairs_price as $one_stairs_price) {
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
@@ -1165,6 +1411,13 @@ class OwnerController extends Controller
             $without_assort_one[$one_without_assort['material']] = $one_without_assort;
         }
         $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
+        if ($assort_material == null) {
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
@@ -1254,6 +1507,13 @@ class OwnerController extends Controller
         $street   = trim(Yii::$app->request->post('street',''));
         $toponymy = trim(Yii::$app->request->post('toponymy',''));
         $effect = Effect::findByCode($code,$street,$toponymy);
+        if ($effect == null) {
+            $code = 1066;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($effect as &$one_effect){
             $one_effect['detailed_address'] = $one_effect['province'] . $one_effect['city'] . $one_effect['district'] .  $one_effect['street'];
             if ($one_effect['type'] == 1){
@@ -1278,8 +1538,29 @@ class OwnerController extends Controller
         $id = trim(Yii::$app->request->get('id',''));
         $where = 'effect_id = '.$id;
         $data = WorksData::find()->asArray()->select([])->where($where)->all();
+        if ($data == null) {
+            $code = 1067;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '信息有误',
+            ]);
+        }
         $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where($where)->all();
+        if ($data == null) {
+            $code = 1067;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '信息有误',
+            ]);
+        }
         $worker_data = WorksWorkerData::find()->select([])->where($where)->all();
+        if ($data == null) {
+            $code = 1067;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '信息有误',
+            ]);
+        }
 
         if ($data != null){
             foreach ($data as $one_goods){
@@ -1287,6 +1568,13 @@ class OwnerController extends Controller
             }
             $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id,sku";
             $goods = Goods::findBySkuAll($sku,$select);
+            if ($data == null) {
+                $code = 1061;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => '信息有误',
+                ]);
+            }
             foreach ($data as &$case_works_datum){
                 foreach ($goods as $one_goods) {
 
@@ -1303,6 +1591,13 @@ class OwnerController extends Controller
                 $ids = $logistics_id['logistics_template_id'];
             }
             $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+            if ($data == null) {
+                $code = 1067;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => '信息有误',
+                ]);
+            }
             if ($logistics != null){
                 $new =  new LogisticsService($logistics,$data);
                 $goods_particulars = $new->minQuantity();
