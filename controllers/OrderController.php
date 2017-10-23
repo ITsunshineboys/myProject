@@ -4150,6 +4150,7 @@ class OrderController extends Controller
 //根据openid和access_token查询用户信息
             $access_token = $json_obj['access_token'];
             $openid = $json_obj['openid'];
+            echo $openid;exit;
             $get_user_info_url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
 
             $ch = curl_init();
