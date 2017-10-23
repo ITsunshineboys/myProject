@@ -110,8 +110,8 @@ class UserChat extends \yii\db\ActiveRecord
     {
         $trans = \Yii::$app->db->beginTransaction();
         try {
-            $user = UserChat::find()
-                ->where(['u_id' => $u_id, 'role_id' => $role_id])
+            $user = User::find()
+                ->where(['id' => $u_id])
                 ->one();
             if (!$user) {
                 $code = 1000;
@@ -142,13 +142,14 @@ class UserChat extends \yii\db\ActiveRecord
 
     }
 
-    public static function sendTextMessage($content, $nickname,$chat_id,$to_user)
+    public static function sendTextMessage($content, $nickname='admin',$chat_id,$to_user)
     {
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat_hx = new ChatService();
             $from = $nickname;
             $target = [$to_user];
+
             $re = $chat_hx->sendText($from, $target_type = 'users', $target, $content);
             if($re){
                 $chat_record=new ChatRecord();
