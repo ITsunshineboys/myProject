@@ -393,6 +393,13 @@ class OwnerController extends Controller
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['strong_current'], $post['city']);
+        if ($craft == null){
+            $code = 1059;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers,$worker_kind_details);
