@@ -4169,4 +4169,16 @@ class OrderController extends Controller
 
         }
 
+
+        public function  actionGetOpenId1()
+        {
+            $tools = new PayService();
+            $openId = $tools->GetOpenid1();
+            return Json::encode([
+                'code' => 200,
+                'msg'  => 'ok',
+                'data' =>$openId
+            ]);
+        }
+
 }
