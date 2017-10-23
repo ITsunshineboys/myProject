@@ -202,7 +202,7 @@ class GoodsRecommend extends ActiveRecord
         $key = self::CACHE_KEY_CAROUSEL;
         $cache = Yii::$app->cache;
         $recommendGoods = $cache->get($key);
-        if (!$recommendGoods) {
+        if (!$recommendGoods) {die('test');
             $recommendGoods = self::_carousel($districtCode, self::$appFields);
             if ($recommendGoods) {
                 $cache->set($key, $recommendGoods);
