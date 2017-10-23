@@ -1189,14 +1189,12 @@ class BasisDecorationService
      */
     public static function priceConversion($goods)
     {
-        $conversion = [];
-        foreach ($goods as $one_goods) {
+        foreach ($goods as &$one_goods) {
             $one_goods['platform_price'] =  $one_goods['platform_price'] / self::GOODS_PRICE_UNITS;
             $one_goods['supplier_price'] =  $one_goods['supplier_price'] / self::GOODS_PRICE_UNITS;
             $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / self::GOODS_PRICE_UNITS;
-            $conversion [] = $one_goods;
         }
-        return $conversion;
+        return $goods;
     }
 
     /**
