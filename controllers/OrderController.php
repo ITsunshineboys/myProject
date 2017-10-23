@@ -4138,6 +4138,7 @@ class OrderController extends Controller
             $appid = "wx9814aafe9b6b847f";
             $secret = "4560eeb7b386701ddc7085827f65e40e secret";
             $code = $_GET["code"];
+            echo $code;exit;
             $get_token_url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$appid.'&secret='.$secret.'&code='.$code.'&grant_type=authorization_code';
             $ch = curl_init();
             curl_setopt($ch,CURLOPT_URL,$get_token_url);
