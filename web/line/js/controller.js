@@ -990,7 +990,7 @@ angular.module("all_controller", [])
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
                                 // 微信接口 === 调用
-                                $http({
+                                $http({//获取openid 的地址
                                     method: 'get',
                                     url: 'http://common.cdlhzz.cn/order/get-open-id',
                                 }).then(function successCallback(response) {
@@ -998,22 +998,24 @@ angular.module("all_controller", [])
                                     $scope.open_id = response.data.data;
                                     alert('获取open_id'+$scope.open_id);
                                     alert(JSON.stringify(response.data));
-                                    alert(JSON.stringify(response.data.data))
+                                    alert(JSON.stringify(response.data.data));
+                                    if(  $scope.open_id != undefined){
+                                        $http({  //获取openid
+                                            method: 'get',
+                                            url: $scope.open_id,
+                                        }).then(function successCallback(response) {
+                                            console.log(response);
+                                            alert(11);
+                                            $scope.openId = response.data.data;
+                                            alert('获取open_id'+$scope.openId);
+                                            alert(JSON.stringify(response.data.data))
+                                        },function (error) {
+                                            alert(error);
+                                            alert(JSON.stringify(error))
+                                        });
+                                    }
                                 });
-                                $http({
-                                    method: 'get',
-                                    url: $scope.open_id,
-                                }).then(function successCallback(response) {
-                                    console.log(response);
-                                    alert(11)
-                                    $scope.openId = response.data.data;
-                                    alert('获取open_id'+$scope.openId);
-                                    alert(JSON.stringify(response.data.data))
-                                },function (error) {
-                                    alert(error)
-                                    alert(JSON.stringify(error))
 
-                                });
 
                                 $http({  //调用微信支付接口
                                     method: 'get',
