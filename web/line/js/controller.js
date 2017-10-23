@@ -996,12 +996,11 @@ angular.module("all_controller", [])
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data.data;
-                                    alert('获取open_id');
-                                    alert($scope.open_id);
+                                    alert('获取open_id'+$scope.open_id);
                                     alert(JSON.stringify(response.data))
                                     alert(JSON.stringify(response.data.data))
                                 });
-                                $http({
+                                $http({  //调用微信支付接口
                                     method: 'get',
                                     url: 'http://common.cdlhzz.cn/order/lineplaceorder',
                                     params:{
@@ -1024,6 +1023,9 @@ angular.module("all_controller", [])
                                     alert(JSON.stringify(response.data));
                                     alert(JSON.stringify(response.config));
                                     alert(JSON.stringify(response));
+                                },function (error) {
+                                    alert(error)
+                                    alert(JSON.stringify(error))
                                 });
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
