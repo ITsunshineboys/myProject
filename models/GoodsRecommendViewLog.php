@@ -65,7 +65,7 @@ class GoodsRecommendViewLog extends ActiveRecord
             if ($insert) {
                 $this->create_time = time();
 
-                if (self::canLogIpNumber()) {
+                if ($this->canLogIpNumber()) {
                     $this->log_ip_number = self::CAN_LOG_IP_NUMBER;
                 } else {
                     $this->log_ip_number = self::CANNOT_LOG_IP_NUMBER;
