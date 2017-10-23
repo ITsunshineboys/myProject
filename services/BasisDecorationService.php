@@ -1194,6 +1194,7 @@ class BasisDecorationService
             $one_goods['supplier_price'] =  $one_goods['supplier_price'] / self::GOODS_PRICE_UNITS;
             $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / self::GOODS_PRICE_UNITS;
         }
+        var_dump($goods);exit;
         return $goods;
     }
 

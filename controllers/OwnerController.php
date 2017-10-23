@@ -310,7 +310,7 @@ class OwnerController extends Controller
             ]);
         }
         $judge = BasisDecorationService::priceConversion($goods);
-        $weak_current = BasisDecorationService::judge($judge, $post);
+        $weak_current = BasisDecorationService::judge($judge,$post);
 
         //当地工艺
         $craft_select = 'id,material,project_details';
