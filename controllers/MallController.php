@@ -1004,7 +1004,7 @@ class MallController extends Controller
         $recommendViewLog->attributes = Yii::$app->request->post();
         $recommendViewLog->ip = ip2long(Yii::$app->request->userIP);
 
-        if (!$recommendViewLog->validate()) {
+        if (!$recommendViewLog->validate()) {print_r($recommendViewLog->errors);
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
