@@ -4135,7 +4135,6 @@ class OrderController extends Controller
 
         public function  actionFindOpenId()
         {
-            echo 1;exit;
             $appid = "wx9814aafe9b6b847f";
             $secret = "4560eeb7b386701ddc7085827f65e40e secret";
             $code = $_GET["code"];
