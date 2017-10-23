@@ -1009,6 +1009,10 @@ angular.module("all_controller", [])
                                     $scope.openId = response.data.data;
                                     alert('获取open_id'+$scope.openId);
                                     alert(JSON.stringify(response.data.data))
+                                },function (error) {
+                                    alert(error)
+                                    alert(JSON.stringify(error))
+
                                 });
 
                                 $http({  //调用微信支付接口
