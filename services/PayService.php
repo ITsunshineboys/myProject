@@ -46,7 +46,7 @@ class PayService
      * @return 用户的openid
      */
       public function GetOpenid()
-      { 
+      {  
             //通过code获得openid
     //        if (!isset($_GET['code'])){
                 //触发微信返回code码
