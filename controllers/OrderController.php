@@ -4127,6 +4127,11 @@ class OrderController extends Controller
         {
             $model=new PayService();
             $data=$model->GetOpenid();
+            return Json::encode([
+                'code' => 200,
+                'msg'  =>'ok',
+                'data'=>$data
+            ]);
 
         }
 
