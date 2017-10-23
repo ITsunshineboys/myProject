@@ -1663,7 +1663,7 @@ class OwnerController extends Controller
      */
     public function actionTest(){
         return Json::encode([
-           'goods'=> (new Goods())->find()->All(),
+           'goods'=> (new LaborCost())->find()->All(),
         ]);
     }
 
