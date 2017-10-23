@@ -178,7 +178,6 @@ class BasisDecorationService
             }
         }
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-        var_dump($ids);exit;
         if ($ids == null){
             $code = 1061;
             return Json::encode([
@@ -191,7 +190,7 @@ class BasisDecorationService
                 case $one_unit['title'] == self::GOODS_NAME['reticle'] || $one_unit['title'] == self::GOODS_NAME['wire']:
                     $goods_value = $one_unit['value'];
                     break;
-                case $one_unit['title'] == self::GOODS_NAME['spool']:
+                case $one_unit['title'] == self::GOODS_NAME['reticle']:
                     $spool_value = $one_unit['value'];
                     break;
             }
