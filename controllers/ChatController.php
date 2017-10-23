@@ -193,12 +193,75 @@ class ChatController extends Controller
             'msg_count' => $msg_count['count']
         ]);
     }
+    /**
+     * 环信用户修改昵称
+     * @return array|string
+     */
     public function actionEditNickname(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $nickname=trim(\Yii::$app->request->post('nickname'));
+
+        $code=UserChat::editnickname($nickname,$u_id,$role_id);
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
 
     }
-    public function actionAllUser(){
+    /**
+     * 发送文本消息给指定用户
+     * @return array|string
+     */
+    public function actionSendMessage(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $code=1000;
+        $message=trim(\Yii::$app->request->post('message'));
+        $to_user=trim(\Yii::$app->request->post('to_user'));
+        $chat_hx=new ChatService();
+        $hx_user=$chat_hx->getUser($to_user);
+        if (array_key_exists('error', $hx_user)) {
+            return Json::encode([
+                'code' => 1000,
+                'msg' => $hx_user['error']
+            ]);
+        }
+        $chat_bd=UserChat::find()->where(['u_id'=>$u_id,'role_id'=>$role_id])->asArray()->one();
+        if(!$chat_bd ){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>$code==\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=UserChat::sendTextMessage($message,$chat_bd['chat_username'],$chat_bd['id'],$to_user);
+        if(is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>$code==\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }else{
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
+
+    }
+    public function actionSendImgMessage(){
+
+    }
+    public function actionTesta(){
         $chat=new ChatService();
-        var_dump($chat->getUsersForPage(0,''));
+        var_dump($chat->getChatRecord());
 
     }
 }
