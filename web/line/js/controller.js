@@ -997,7 +997,8 @@ angular.module("all_controller", [])
                                     console.log(response);
                                     $scope.open_id = response.data;
                                     alert('获取open_id');
-                                    alert($scope.open_id)
+                                    alert(JSON.stringify(response.data))
+                                    alert(JSON.stringify(response.data.data))
                                 });
                                 $http({
                                     method: 'get',
