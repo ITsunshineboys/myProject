@@ -1040,7 +1040,6 @@ CREATE TABLE `user_chat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `u_id` INT(11) NOT NULL COMMENT '用户id',
   `role_id` INT(11) NOT NULL COMMENT '角色id',
-  `nickname` varchar(100) DEFAULT '昵称',
   `chat_username`  VARCHAR(100) NOT NULL COMMENT '环信用户名',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
   `login_time` int(11) DEFAULT NULL COMMENT '最后登录时间',
