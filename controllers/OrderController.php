@@ -668,8 +668,8 @@ class OrderController extends Controller
         $freight=trim($request->get('freight'));
         $return_insurance=trim($request->get('return_insurance'));
         $buyer_message=trim($request->get('buyer_message','0'));
-
-        if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name ||! $invoice_id || !$supplier_id )
+        $openid=trim($request->get('openid'));
+        if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name ||! $invoice_id || !$supplier_id ||!$openid )
         {
             $code=1000;
             return Json::encode([
@@ -681,6 +681,7 @@ class OrderController extends Controller
         {
             $freight=0;
         }
+
         $order_no =self::Setorder_no();
         //商品描述，可空
         $body =self::WXPAY_LINE_GOODS.'-'.$subject;
@@ -699,8 +700,9 @@ class OrderController extends Controller
             'order_no'=>$order_no,
             'buyer_message'=>$buyer_message
         );
+
         $model=new Wxpay();
-        $data=$model->Wxlineapipay($orders);
+        $data=$model->Wxlineapipay($orders,$openid);
         $code=200;
         return Json::encode([
             'code'=>$code,
