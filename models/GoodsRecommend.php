@@ -199,17 +199,17 @@ class GoodsRecommend extends ActiveRecord
      */
     public static function carousel($districtCode)
     {
-        $key = self::CACHE_KEY_CAROUSEL;
-        $cache = Yii::$app->cache;
-        $recommendGoods = $cache->get($key);
-        if (1) {
-            $recommendGoods = self::_carousel($districtCode, self::$appFields);
-            if ($recommendGoods) {
-                $cache->set($key, $recommendGoods);
-            }
-        }
+//        $key = self::CACHE_KEY_CAROUSEL;
+//        $cache = Yii::$app->cache;
+//        $recommendGoods = $cache->get($key);
+//        if (!$recommendGoods) {
+//            $recommendGoods = self::_carousel($districtCode, self::$appFields);
+//            if ($recommendGoods) {
+//                $cache->set($key, $recommendGoods);
+//            }
+//        }
 
-        return $recommendGoods;
+        return self::_carousel($districtCode, self::$appFields);
     }
 
     /**
