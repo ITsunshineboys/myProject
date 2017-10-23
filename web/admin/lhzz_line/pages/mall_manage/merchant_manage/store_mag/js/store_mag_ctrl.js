@@ -193,7 +193,7 @@ store_mag.controller("store_mag", function ($scope, $http) {
             url: "http://test.cdlhzz.cn:888/mall/supplier-list",
             params: $scope.params,
         }).then(function (res) {
-            console.log(res)
+            // console.log(res)
             $scope.pageConfig.totalItems = res.data.data.supplier_list.total;
             $scope.stores = res.data.data.supplier_list.details;
         })
