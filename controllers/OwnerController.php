@@ -1375,6 +1375,7 @@ class OwnerController extends Controller
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
         $goods = Goods::assortList($material_name,self::DEFAULT_CITY_CODE);
+        var_dump($goods);exit;
         if ($goods == null) {
             $code = 1061;
             return Json::encode([
