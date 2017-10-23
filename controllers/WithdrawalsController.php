@@ -1,7 +1,7 @@
 <?php
 
 namespace app\controllers;
-use app\models\Alipay;
+use app\models\Alipay; 
 use app\models\BankinfoLog;
 use app\models\Goods;
 use app\models\GoodsOrder;
