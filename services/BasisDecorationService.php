@@ -150,6 +150,7 @@ class BasisDecorationService
      */
     public static function quantity($points,$goods,$crafts)
     {
+        var_dump($goods);exit;
         foreach ($crafts as $craft) {
             switch ($craft) {
                 case $craft['project_details'] == self::GOODS_NAME['reticle'] || $craft['project_details'] == self::GOODS_NAME['wire']:
