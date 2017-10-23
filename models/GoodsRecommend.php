@@ -335,7 +335,7 @@ class GoodsRecommend extends ActiveRecord
     {
         $createTime = (int)$createTime;
         $deleteTime = (int)$deleteTime;
-        if (!$createTime || !$deleteTime) {
+        if (!$createTime) {
             return 0;
         }
 
