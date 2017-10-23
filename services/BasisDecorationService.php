@@ -1532,10 +1532,12 @@ class BasisDecorationService
      */
     public static function principalMaterialSeriesStyle($goods,$add,$post,$area)
     {
+        var_dump($goods);
+        var_dump($post);
+        exit;
         $material = [];
         foreach ($goods as $one_goods) {
             if ($one_goods['title'] == self::GOODS_NAME['wood_floor'] && $one_goods['series_id'] == $post['series']) {
-                var_dump($one_goods);exit;
                 $bedroom_area = $post['area'] * $area['project_value'];
                 $goods_area = GoodsAttr::findByGoodsIdUnit($one_goods['id']);
                 foreach ($goods_area as $one_goods_area) {
