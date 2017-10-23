@@ -339,15 +339,15 @@ class GoodsRecommend extends ActiveRecord
             return 0;
         }
 
-        $key = self::CACHE_KEY_PREFIX_VIEWED_NUMBER . $createTime . '_' . $deleteTime;
-        $cache = Yii::$app->cache;
-        $viewedNumber = $cache->get($key);
-        if ($viewedNumber === false) {
-            $viewedNumber = self::_viewedNumber($createTime, $deleteTime, $recommendId);
-            $cache->set($key, $viewedNumber);
-        }
+//        $key = self::CACHE_KEY_PREFIX_VIEWED_NUMBER . $createTime . '_' . $deleteTime;
+//        $cache = Yii::$app->cache;
+//        $viewedNumber = $cache->get($key);
+//        if ($viewedNumber === false) {
+//            $viewedNumber = self::_viewedNumber($createTime, $deleteTime, $recommendId);
+//            $cache->set($key, $viewedNumber);
+//        }
 
-        return $viewedNumber;
+        return self::_viewedNumber($createTime, $deleteTime, $recommendId);
     }
 
     /**
