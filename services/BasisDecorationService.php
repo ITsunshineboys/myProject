@@ -703,14 +703,6 @@ class BasisDecorationService
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
         $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $area_material + $video_wall);
 
-        var_dump($plasterboard_cost['quantity']);
-        var_dump($plasterboard['platform_price']);
-        var_dump($modelling_length);
-        var_dump($plasterboard_material);
-        var_dump($flat_area);
-        var_dump($area_material);
-        var_dump($video_wall);
-        die;
 //            石膏板费用：个数×商品价格
         $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
         return $plasterboard_cost;
