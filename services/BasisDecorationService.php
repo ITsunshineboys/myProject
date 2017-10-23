@@ -1856,8 +1856,7 @@ class BasisDecorationService
             }
         }
 
-        var_dump($goods_price);exit;
-        return BasisDecorationService::profitMargin($elbow);;
+        return BasisDecorationService::profitMargin($goods_price);;
     }
 
     /**
