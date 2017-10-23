@@ -447,9 +447,9 @@ class BasisDecorationService
                 $series_one = $coefficient_one['modelling_length_coefficient'];
             }
         }
+
         //造型长度 = 木作添加项 *  系数
-        $modelling_length = $series_one * $length;
-        return $modelling_length;
+        return $series_one * $length;;
     }
 
     /**
@@ -700,7 +700,7 @@ class BasisDecorationService
             }
         }
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
-        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $area_material +$video_wall);
+        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $area_material + $video_wall);
 
 //            石膏板费用：个数×商品价格
         $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];

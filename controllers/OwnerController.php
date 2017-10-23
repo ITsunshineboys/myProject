@@ -635,7 +635,7 @@ class OwnerController extends Controller
             ]);
         }
         // 造型长度
-        $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add, $series_all, $post['series']);
+        $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$series_all,$post['series']);
         //造型天数
         $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $modelling, $series_all, $style_all, $post['series']);
         //平顶天数
@@ -678,28 +678,29 @@ class OwnerController extends Controller
         $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
 
         $material_total = [];
-        foreach ($goods_price as $one_goods_price) {
+        foreach ($goods_price as &$one_goods_price) {
             switch ($one_goods_price) {
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['plasterboard']:
-                    $goods_max = BasisDecorationService::profitMargin($one_goods_price);
-                    $goods_max['quantity'] = $plasterboard_cost['quantity'];
-                    $goods_max['cost'] = $plasterboard_cost['cost'];
-                    $material_total ['material'][] = $goods_max;
+                    $one_goods_price['quantity'] = $plasterboard_cost['quantity'];
+                    $one_goods_price['cost'] = $plasterboard_cost['cost'];
+                    $plasterboard [] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['keel']:
-                    $goods_max = BasisDecorationService::profitMargin($one_goods_price);
-                    $goods_max['quantity'] = $keel_cost['quantity'];
-                    $goods_max['cost'] = $keel_cost['cost'];
-                    $material_total ['material'][] = $goods_max;
+                    $one_goods_price['quantity'] = $keel_cost['quantity'];
+                    $one_goods_price['cost'] = $keel_cost['cost'];
+                    $keel [] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['lead_screw']:
-                    $goods_max = BasisDecorationService::profitMargin($one_goods_price);
-                    $goods_max['quantity'] = $pole_cost['quantity'];
-                    $goods_max['cost'] = $pole_cost['cost'];
-                    $material_total ['material'][] = $goods_max;
+                    $one_goods_price['quantity'] = $pole_cost['quantity'];
+                    $one_goods_price['cost'] = $pole_cost['cost'];
+                    $pole [] = $one_goods_price;
                     break;
             }
         }
+   
+        $material_total['plasterboard'] = BasisDecorationService::profitMargin($plasterboard);
+        $material_total['keel'] = BasisDecorationService::profitMargin($keel);
+        $material_total['pole'] = BasisDecorationService::profitMargin($pole);
         $material_total['total_cost'][] = $material_cost;
 
         return Json::encode([
