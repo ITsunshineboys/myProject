@@ -1040,6 +1040,7 @@ CREATE TABLE `user_chat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `u_id` INT(11) NOT NULL COMMENT '用户id',
   `role_id` INT(11) NOT NULL COMMENT '角色id',
+  `nickname` varchar(100) DEFAULT '',
   `chat_username`  VARCHAR(100) NOT NULL COMMENT '环信用户名',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
   `login_time` int(11) DEFAULT NULL COMMENT '最后登录时间',
@@ -1545,3 +1546,11 @@ CREATE TABLE `deleted_goods_comment` (
   `comment_id` int(11) NOT NULL COMMENT '评论ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- 10.23 start
+CREATE TABLE `chat_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `chat_id` int(11) NOT NULL COMMENT '用户id',
+  `content` varchar(255) NOT NULL COMMENT '内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
