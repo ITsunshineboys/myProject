@@ -75,19 +75,19 @@ angular.module("all_controller", [])
             }
         };
 
-        // 判断是否微信浏览器打开
-        $http({
-            method: 'get',
-            url: 'http://common.cdlhzz.cn/order/iswxlogin'
-        }).then(function successCallback(response) {
-            console.log(response);
-            $scope.codeWX = response.data.code;
-            // 是微信浏览器打开
-            if($scope.codeWX == 200){  // 微信支付
-                alert('调用微信接口');
-
-            }
-        })
+        // // 判断是否微信浏览器打开
+        // $http({
+        //     method: 'get',
+        //     url: 'http://common.cdlhzz.cn/order/iswxlogin'
+        // }).then(function successCallback(response) {
+        //     console.log(response);
+        //     $scope.codeWX = response.data.code;
+        //     // 是微信浏览器打开
+        //     if($scope.codeWX == 200){  // 微信支付
+        //         alert('调用微信接口');
+        //
+        //     }
+        // })
     })
 
     //分类详情控制器
@@ -1024,7 +1024,8 @@ angular.module("all_controller", [])
                                     alert(JSON.stringify(response.config));
                                     alert(JSON.stringify(response));
                                 },function (error) {
-                                    alert(error)
+                                    alert('不成功');
+                                    alert(error);
                                     alert(JSON.stringify(error))
                                 });
                             }
