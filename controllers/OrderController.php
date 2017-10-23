@@ -4122,7 +4122,7 @@ class OrderController extends Controller
         }
     }
  
-        public function actionGetOpenId()
+          public function actionGetOpenId()
         {
             $tools = new PayService();
             $openId = $tools->GetOpenid();
@@ -4135,49 +4135,14 @@ class OrderController extends Controller
 
         public function  actionFindOpenId()
         {
-            $appid = "wx9814aafe9b6b847f";
-            $secret = "4560eeb7b386701ddc7085827f65e40e secret";
+
             $code = $_GET["code"];
-            echo $code;exit;
-            $get_token_url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$appid.'&secret='.$secret.'&code='.$code.'&grant_type=authorization_code';
-            $ch = curl_init();
-            curl_setopt($ch,CURLOPT_URL,$get_token_url);
-            curl_setopt($ch,CURLOPT_HEADER,0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            $res = curl_exec($ch);
-            curl_close($ch);
-            $json_obj = json_decode($res,true);
-//根据openid和access_token查询用户信息
-            $access_token = $json_obj['access_token'];
-            $openid = $json_obj['openid'];
-            echo $openid;exit;
-            $get_user_info_url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
-
-            $ch = curl_init();
-            curl_setopt($ch,CURLOPT_URL,$get_user_info_url);
-            curl_setopt($ch,CURLOPT_HEADER,0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            $res = curl_exec($ch);
-            curl_close($ch);
-
-//解析json
-            $user_obj = json_decode($res,true);
-            $_SESSION['user'] = $user_obj;
-            print_r($user_obj);
-
-        }
-
-
-        public function  actionGetOpenId1()
-        {
             $tools = new PayService();
-            $openId = $tools->GetOpenid1();
-            return Json::encode([
+            $openid = $tools->getOpenidFromMp($code);
+             return Json::encode([
                 'code' => 200,
                 'msg'  => 'ok',
-                'data' =>$openId
+                'data' =>$openid
             ]);
         }
 

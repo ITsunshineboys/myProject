@@ -48,30 +48,11 @@ class PayService
     public function GetOpenid()
     {
         //通过code获得openid
-//        if (!isset($_GET['code'])){
+        if (!isset($_GET['code'])){
             //触发微信返回code码
             $baseUrl = urlencode('http://common.cdlhzz.cn/order/find-open-id');
             $url = $this->__CreateOauthUrlForCode($baseUrl);
             return $url;
-//            Header("Location: $url");
-//            exit();
-//        } else {
-//            //获取code码，以获取openid
-//            $code = $_GET['code'];
-//            $openid = $this->getOpenidFromMp($code);
-//            return $openid;
-//        }
-    }
-
-
-        public function GetOpenid1()
-    {
-        //通过code获得openid
-        if (!isset($_GET['code'])){
-        //触发微信返回code码
-        $baseUrl = urlencode('http://common.cdlhzz.cn/order/find-open-id');
-        $url = $this->__CreateOauthUrlForCode($baseUrl);
-        return $url;
 //            Header("Location: $url");
 //            exit();
         } else {
@@ -81,6 +62,7 @@ class PayService
             return $openid;
         }
     }
+
     /**
      *
      * 获取jsapi支付的参数
