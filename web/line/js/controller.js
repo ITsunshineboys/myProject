@@ -2,13 +2,20 @@ angular.module("all_controller", [])
 //首页控制器
     .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         $scope.search_flag = false;
+        let config = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function (data) {
+                return $.param(data)
+            }
+        };
         $http({   //轮播接口调用
             method: 'get',
             url: "http://common.cdlhzz.cn/mall/carousel"
         }).then(function successCallback(response) {
-            console.log($scope.swiper_img);
             console.log(response);
             $scope.swiper_img = response.data.data.carousel;
+            $scope.carousel_id = response.data.data.carousel[0].id;
+            console.log($scope.carousel_id);
         }, function errorCallback(response) {
             console.log(response)
         });
@@ -24,12 +31,18 @@ angular.module("all_controller", [])
         });
         // 点击轮播图跳转
         $scope.getDetails = function (item) {
+            $http.post('http://test.cdlhzz.cn:888/mall/recommend-click-record',{
+                recommend_id:$scope.carousel_id
+            },config).then(function (response) {
+                console.log(response)
+            });
             console.log(item);
+            $scope.mall_id = item.url.split('=')[1];
             if(item.from_type == 1){
-                $state.go('product_details',{'id':$state.mall_id})
+                $state.go('product_details',{'mall_id':$scope.mall_id,'id':$state.mall_id})
             }else{
                 alert(121);
-                $state.go(item.url)
+                window.location = item.url
             }
         };
 
@@ -58,9 +71,23 @@ angular.module("all_controller", [])
                 console.log($scope.id);
             }else {              //链接类型
                 console.log(222);
-                $state.go('m.url')
+                window.location = m.url
             }
-        }
+        };
+
+        // 判断是否微信浏览器打开
+        $http({
+            method: 'get',
+            url: 'http://common.cdlhzz.cn/order/iswxlogin'
+        }).then(function successCallback(response) {
+            console.log(response);
+            $scope.codeWX = response.data.code;
+            // 是微信浏览器打开
+            if($scope.codeWX == 200){  // 微信支付
+                alert('调用微信接口');
+
+            }
+        })
     })
 
     //分类详情控制器
@@ -375,7 +402,6 @@ angular.module("all_controller", [])
             if($scope.series_name == '' ){
                 $scope.style_parameter = false;
             }else {
-                $scope.style_parameter = true;
             }
             // 判断是否存在风格
             if($scope.series_parameter == ''){
@@ -823,7 +849,8 @@ angular.module("all_controller", [])
             });
 
             // 点击编写收货地址 获取城市内容
-
+            console.log(area.value);
+            console.log($('#value1').val());
 
         };
         //订单信息===>获取商品的信息
@@ -885,7 +912,6 @@ angular.module("all_controller", [])
             }
         };
         // 点击保存成功按钮获取收获地址信息
-
         $scope.getHarvest = function () {
             if(!rag.test($scope.harvestNum) || $scope.harvestNum == '' || $scope.harvestName == '' || $scope.harvestAddress == ''){
                 $('#harvestNum_modal').modal('hide');
@@ -963,9 +989,18 @@ angular.module("all_controller", [])
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
-                                // 微信接口
-                                // http://common.cdlhzz.cn/order/lineplaceorder
-                                $http.get('http://common.cdlhzz.cn/order/lineplaceorder',{
+                                // 微信接口 === 调用
+                                $http({
+                                    method: 'get',
+                                    url: 'common.cdlhzz.cn/order/get-open-id',
+                                }).then(function successCallback(response) {
+                                    console.log(response);
+                                    $scope.open_id = response.data;
+                                    alert($scope.dataUrl)
+                                });
+                                $http({
+                                    method: 'get',
+                                    url: 'http://common.cdlhzz.cn/order/lineplaceorder',
                                     params:{
                                         goods_name: $scope.title,
                                         order_price:$scope.allCost,
@@ -975,23 +1010,18 @@ angular.module("all_controller", [])
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
-
-                                        // buyer_message: $scope.leaveMessage
-                                }
-                            }).then(function (response) {
-                                    alert('跳转成功');
+                                        openid:+open_id
+                                    }
+                                }).then(function successCallback(response) {
+                                    console.log('成功');
                                     alert($scope.mall_id +'商品ID');
                                     alert($scope.address_id+'地址id');
                                     alert($scope.invoice_id+'发票id');
                                     alert($scope.supplier_id+'商家id');
-                                    alert(JSON.stringify(response));
                                     alert(JSON.stringify(response.data));
                                     alert(JSON.stringify(response.config));
-                                    // $('body').append($scope.dataWx);
-                                },function (error) {
-                                    alert("错误");
-                                    alert(JSON.stringify(error));
-                                })
+                                    alert(JSON.stringify(response));
+                                });
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
                                 // 支付宝接口
