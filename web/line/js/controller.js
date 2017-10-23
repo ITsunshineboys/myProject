@@ -1006,11 +1006,13 @@ angular.module("all_controller", [])
                                         }).then(function successCallback(response) {
                                             console.log(response);
                                             alert(11);
+                                            
                                             $scope.openId = response.data.data;
                                             alert('获取open_id'+$scope.openId);
                                             alert(JSON.stringify(response.data.data))
                                         },function (error) {
                                             alert(error);
+
                                             alert(JSON.stringify(error))
                                         });
                                     }
