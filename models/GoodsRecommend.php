@@ -328,6 +328,7 @@ class GoodsRecommend extends ActiveRecord
      *
      * @param int $createTime banner create time default 0
      * @param int $deleteTime banner delete time default 0
+     * @param int $recommendId recommend id default 0
      * @return int
      */
     public static function viewedNumber($createTime = 0, $deleteTime = 0, $recommendId = 0)

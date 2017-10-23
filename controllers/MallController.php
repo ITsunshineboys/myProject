@@ -54,7 +54,7 @@ class MallController extends Controller
         'recommend-add',
         'recommend-edit',
         'recommend-sort',
-        'recommend-click-record',
+//        'recommend-click-record',
         'recommend-add-supplier',
         'recommend-edit-supplier',
         'recommend-delete-supplier',
