@@ -181,6 +181,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
             $scope.offlinereason = '';
             $scope.pageConfig.currentPage = 1;
             tableList();
+            firstClass();
         })
     }
 
@@ -197,7 +198,8 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         $http.post(url, data, config).then(function (res) {
             $scope.batchoffline_reason = '';
             $scope.pageConfig.currentPage = 1;
-            tableList()
+            tableList();
+            firstClass();
         })
     }
 
@@ -222,18 +224,20 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         $http.post(url, data, config).then(function (res) {
             $scope.pageConfig.currentPage = 1;
             tableList();
+            firstClass();
         })
     }
 
 
-    /*单个取消上架无操作*/
+    /*确认批量上架*/
     $scope.surepiliangonline = function () {
         $scope.piliangonids = $scope.table.roles.join(',');
         let url = "http://test.cdlhzz.cn:888/mall/category-enable-batch";
         let data = {ids: $scope.piliangonids};
         $http.post(url, data, config).then(function (res) {
             $scope.pageConfig.currentPage = 1;
-            tableList()
+            tableList();
+            firstClass();
         })
     }
 
