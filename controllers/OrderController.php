@@ -4135,10 +4135,22 @@ class OrderController extends Controller
             ]);
         }
 
+           /**
+         * 获取openID2-微信
+         * @return string
+         */
         public function  actionFindOpenId()
         {
 
             $code = $_GET["code"];
+            if (!$code)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $tools = new PayService();
             $openid = $tools->getOpenidFromMp($code);
              return Json::encode([
@@ -4147,5 +4159,4 @@ class OrderController extends Controller
                 'data' =>$openid
             ]);
         }
-
 }
