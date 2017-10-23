@@ -8,6 +8,7 @@
 namespace app\services;
 
 use app\models\GoodsAttr;
+use yii\helpers\Json;
 
 class BasisDecorationService
 {
@@ -177,6 +178,14 @@ class BasisDecorationService
             }
         }
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+        var_dump($ids);exit;
+        if ($ids == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($ids as $one_unit) {
             switch ($one_unit) {
                 case $one_unit['title'] == self::GOODS_NAME['reticle'] || $one_unit['title'] == self::GOODS_NAME['wire']:
@@ -1194,7 +1203,7 @@ class BasisDecorationService
             $one_goods['supplier_price'] =  $one_goods['supplier_price'] / self::GOODS_PRICE_UNITS;
             $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / self::GOODS_PRICE_UNITS;
         }
-      
+
         return $goods;
     }
 
