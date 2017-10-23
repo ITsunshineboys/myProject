@@ -1028,7 +1028,7 @@ CREATE TABLE `user_bankinfo` (
   `uid` int(11) NOT NULL COMMENT '用户id',
   `role_id` int(50) NOT NULL COMMENT '角色id',
   `log_id` int(11) NOT NULL COMMENT '银行卡记录id',
-  `default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未默认  1：默认',
+  `selected` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未默认  1：默认',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡信息';
 
