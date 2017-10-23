@@ -58,7 +58,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
     public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
     {
             $bankInfo=self::find()
-                ->where(['uid'=>$user->id,'role_id'=>$role_id,'default'=>1])
+                ->where(['uid'=>$user->id,'role_id'=>$role_id,'selected'=>1])
                 ->one();
             $time=time();
             if ($bankInfo)
@@ -120,7 +120,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     {
                         foreach ( $bank as &$list)
                         {
-                            $list->default=0;
+                            $list->selected=0;
                             $resu=$list->save(false);
                             if (!$resu)
                             {
@@ -135,7 +135,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     $bankInfo->log_id=$log->id;
                     $bankInfo->uid=$user->id;
                     $bankInfo->role_id=$role_id;
-                    $bankInfo->default=1;
+                    $bankInfo->selected=1;
                     $res1=$bankInfo->save(false);
                     if (!$res1){
                         $code=500;

@@ -1139,4 +1139,94 @@ class WithdrawalsController extends Controller
     }
 
 
+     /**解绑银行卡
+     * @return string
+     */
+    public function  actionDelBankCard()
+    {
+        $user=Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $bank_id=$request->post('bank_id');
+        if (!$bank_id)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $bank=UserBankInfo::find()->where(['id'=>$bank_id])->one();
+        if (!$bank)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $tran=Yii::$app->db->beginTransaction();
+        try{
+            if ($bank->default==1)
+            {
+                $res=$bank->delete();
+                if (!$res)
+                {
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $bankInfo=UserBankInfo::find()
+                    ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
+                    ->one();
+                $bankInfo->selected=1;
+                $res1=$bankInfo->save(false);
+                if (!$res1)
+                {
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }else{
+                $res=$bank->delete();
+                if (!$res)
+                {
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }catch (Exception $e)
+        {
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+    }
+
+
+
 }
