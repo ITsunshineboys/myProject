@@ -209,7 +209,7 @@ class GoodsRecommend extends ActiveRecord
 //            }
 //        }
 
-        return self::_carousel($districtCode, self::$appFields);
+        return self::_carousel($districtCode, self::$appFields, ['sorting_number' => SORT_ASC]);
     }
 
     /**
