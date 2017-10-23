@@ -4123,6 +4123,11 @@ class OrderController extends Controller
     }
 
 
+        public function  actionGetOpenId()
+        {
+            $model=new PayService();
+            $data=$model->GetOpenid();
 
+        }
 
 }
