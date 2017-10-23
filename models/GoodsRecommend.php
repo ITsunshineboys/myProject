@@ -648,7 +648,7 @@ class GoodsRecommend extends ActiveRecord
 
         $cache = Yii::$app->cache;
         if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
-            $cache->delete(self::CACHE_KEY_CAROUSEL);
+//            $cache->delete(self::CACHE_KEY_CAROUSEL);
         } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
             $cache->delete(self::CACHE_KEY_SECOND);
         }
