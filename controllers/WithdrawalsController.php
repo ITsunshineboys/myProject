@@ -984,19 +984,38 @@ class WithdrawalsController extends Controller
     }
 
     
-   public  function  actionDelData()
+    /**
+     * 移动端-用户充值-支付宝
+     * @return string
+     */
+    public function actionAliPayRecharge()
     {
-        $datas=UserAccessdetail::find()->all();
-        $data=UserCashregister::find()->all();
-        foreach ($data as &$list)
+        $user=Yii::$app->user->identity;
+        if (!$user)
         {
-            $res1=$list->delete();
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
-        foreach ($datas as &$list1)
+        $request=Yii::$app->request;
+        $money=$request->post('money');
+        if (!$money)
         {
-            $res2=$list1->delete();
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
-        var_dump($data);
+        $data=Alipay::UserRecharge($money,$user);
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
     }
 
 
