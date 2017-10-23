@@ -1358,8 +1358,7 @@ class BasisDecorationService
      */
     public static function fixationFurnitureSeriesStyle($goods,$post)
     {
-        $material = [];
-        foreach ($goods as $one_goods) {
+        foreach ($goods as &$one_goods) {
             switch ($one_goods) {
                 case $one_goods['title'] == self::GOODS_NAME['closet'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']:
                     $one_goods['quantity'] = $post['bedroom'];
@@ -1368,8 +1367,8 @@ class BasisDecorationService
                     break;
             }
         }
-        $material[] = self::profitMargin($chest);
-        return $material;
+
+        return self::profitMargin($goods);
     }
 
     /**
