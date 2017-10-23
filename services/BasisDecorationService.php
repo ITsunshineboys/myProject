@@ -1589,13 +1589,13 @@ class BasisDecorationService
             }
         }
 
-        $material []  = self::profitMargin($wood_floor);
-        $material []  = self::profitMargin($aluminium_alloy_door);
-        $material []  = self::profitMargin($bath_heater);
-        $material []  = self::profitMargin($ventilator);
-        $material []  = self::profitMargin($ceiling_lamp);
-        $material []  = self::profitMargin($faucet);
-        $material []  = self::profitMargin($marble);
+//        $material []  = self::profitMargin($wood_floor);
+//        $material []  = self::profitMargin($aluminium_alloy_door);
+//        $material []  = self::profitMargin($bath_heater);
+//        $material []  = self::profitMargin($ventilator);
+//        $material []  = self::profitMargin($ceiling_lamp);
+//        $material []  = self::profitMargin($faucet);
+//        $material []  = self::profitMargin($marble);
         return $material;
     }
 
