@@ -8,6 +8,7 @@ use app\models\GoodsOrder;
 use app\models\Role;
 use app\models\Supplier;
 use app\models\User;
+use app\models\Worker;
 use app\models\UserAccessdetail;
 use app\models\UserCashregister;
 use app\models\UserBankInfo;
@@ -1017,6 +1018,86 @@ class WithdrawalsController extends Controller
             'msg' => 'ok',
             'data'=>$data
         ]);
+    }
+
+
+        /**
+     * 用户充值 支付宝 APP支付 异步返回
+     * @return string
+     */
+    public  function  actionAliPayUserRechargeDatabase()
+    {
+        $post=Yii::$app->request->post();
+        $model=new Alipay();
+        $alipaySevice=$model->Alipaylinenotify();
+        $result = $alipaySevice->check($post);
+        if ($result){
+            if ($post['trade_status'] == 'TRADE_SUCCESS'){
+                $out_trade_no=$post['out_trade_no'];
+                $total_amount=$post['total_amount'];
+                $passback_params=explode(',',urldecode($post['passback_params']));
+                $role_id=$passback_params[0];
+                $uid=$passback_params[1];
+                $access=UserAccessdetail::find()->where(['transaction_no'=>$out_trade_no])->one();
+                $user=User::find()->where(['id'=>$uid])->one();
+                if (!$user)
+                {
+                    echo "success";
+                    exit;
+                }
+                if ($access)
+                {
+                    echo "success";
+                    exit;
+                }
+                $tran=Yii::$app->db->beginTransaction();
+                try{
+                    $role=Role::GetRoleByRoleId($role_id,$user);
+                    $role->balance=$role->balance+$total_amount*100;
+                    $role->availableamount=$role->availableamount+$total_amount*100;
+                    $res1=$role->save(false);
+                    if (!$res1)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                    $accessDetail=new UserAccessdetail();
+                    $accessDetail->uid=$uid;
+                    $accessDetail->role_id=$role_id;
+                    $accessDetail->access_type=1;
+                    $accessDetail->access_money=$total_amount*100;
+                    $accessDetail->create_time=time();
+                    $accessDetail->transaction_no=$out_trade_no;
+                    $res2=$role->save(false);
+                    if (!$res2)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                    $tran->commit();
+                    echo 'success';
+                }catch (Exception $e)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+        }else{
+            //验证失败
+            echo "fail";    //请不要修改或删除
+        }
     }
 
 
