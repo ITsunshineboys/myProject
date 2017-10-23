@@ -1000,6 +1000,16 @@ angular.module("all_controller", [])
                                     alert(JSON.stringify(response.data))
                                     alert(JSON.stringify(response.data.data))
                                 });
+                                $http({
+                                    method: 'get',
+                                    url: $scope.open_id,
+                                }).then(function successCallback(response) {
+                                    console.log(response);
+                                    $scope.openId = response.data.data;
+                                    alert('获取open_id'+$scope.openId);
+                                    alert(JSON.stringify(response.data.data))
+                                });
+
                                 $http({  //调用微信支付接口
                                     method: 'get',
                                     url: 'http://common.cdlhzz.cn/order/lineplaceorder',
@@ -1012,7 +1022,7 @@ angular.module("all_controller", [])
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
-                                        openid:+open_id
+                                        openid:+openId
                                     }
                                 }).then(function successCallback(response) {
                                     console.log('成功');
