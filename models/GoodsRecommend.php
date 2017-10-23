@@ -373,25 +373,26 @@ class GoodsRecommend extends ActiveRecord
      *
      * @param int $createTime banner create time default 0
      * @param int $deleteTime banner delete time default 0
+     * @param int $recommendId recommend id default 0
      * @return int
      */
     public static function soldNumber($createTime = 0, $deleteTime = 0, $recommendId = 0)
     {
         $createTime = (int)$createTime;
         $deleteTime = (int)$deleteTime;
-        if (!$createTime || !$deleteTime) {
+        if (!$createTime) {
             return 0;
         }
 
-        $key = self::CACHE_KEY_PREFIX_SOLD_NUMBER . $createTime . '_' . $deleteTime;
-        $cache = Yii::$app->cache;
-        $viewedNumber = $cache->get($key);
-        if ($viewedNumber === false) {
-            $viewedNumber = self::_soldNumber($createTime, $deleteTime, $recommendId);
-            $cache->set($key, $viewedNumber);
-        }
+//        $key = self::CACHE_KEY_PREFIX_SOLD_NUMBER . $createTime . '_' . $deleteTime;
+//        $cache = Yii::$app->cache;
+//        $viewedNumber = $cache->get($key);
+//        if ($viewedNumber === false) {
+//            $viewedNumber = self::_soldNumber($createTime, $deleteTime, $recommendId);
+//            $cache->set($key, $viewedNumber);
+//        }
 
-        return $viewedNumber;
+        return self::_soldNumber($createTime, $deleteTime, $recommendId);
     }
 
     /**
@@ -400,11 +401,13 @@ class GoodsRecommend extends ActiveRecord
      * @access private
      * @param int $createTime banner create time
      * @param int $deleteTime banner delete time
+     * @param int $recommendId recommend id default 0
      * @return int
      */
     public static function _soldNumber($createTime, $deleteTime, $recommendId = 0)
     {
-        $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
+        $where = "create_time >= {$createTime}";
+        $deleteTime && $where .= " and create_time <= {$deleteTime}";
         $recommendId = (int)$recommendId;
         $recommendId && $where .= " and recommend_id = {$recommendId}";
         return (int)GoodsRecommendSaleLog::find()
