@@ -1535,6 +1535,7 @@ class BasisDecorationService
         $material = [];
         foreach ($goods as $one_goods) {
             if ($one_goods['title'] == self::GOODS_NAME['wood_floor'] && $one_goods['series_id'] == $post['series']) {
+                var_dump($one_goods);exit;
                 $bedroom_area = $post['area'] * $area['project_value'];
                 $goods_area = GoodsAttr::findByGoodsIdUnit($one_goods['id']);
                 foreach ($goods_area as $one_goods_area) {
@@ -1549,7 +1550,6 @@ class BasisDecorationService
                 $one_goods['quantity'] = ceil($bedroom_area / $area);
                 $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
                 $wood_floor [] = $one_goods;
-                var_dump($wood_floor);exit;
             }
             if ($one_goods['title'] == self::GOODS_NAME['aluminium_alloy'] && $one_goods['series_id'] == $post['series']) {
                 $one_goods['quantity'] = $post['toilet'] + $post['kitchen'];
@@ -1589,13 +1589,13 @@ class BasisDecorationService
             }
         }
 
-//        $material []  = self::profitMargin($wood_floor);
-//        $material []  = self::profitMargin($aluminium_alloy_door);
-//        $material []  = self::profitMargin($bath_heater);
-//        $material []  = self::profitMargin($ventilator);
-//        $material []  = self::profitMargin($ceiling_lamp);
-//        $material []  = self::profitMargin($faucet);
-//        $material []  = self::profitMargin($marble);
+        $material []  = self::profitMargin($wood_floor);
+        $material []  = self::profitMargin($aluminium_alloy_door);
+        $material []  = self::profitMargin($bath_heater);
+        $material []  = self::profitMargin($ventilator);
+        $material []  = self::profitMargin($ceiling_lamp);
+        $material []  = self::profitMargin($faucet);
+        $material []  = self::profitMargin($marble);
         return $material;
     }
 
