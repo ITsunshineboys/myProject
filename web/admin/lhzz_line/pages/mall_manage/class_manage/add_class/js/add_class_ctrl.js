@@ -80,15 +80,18 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 
 	/*分类名称是否存在的判断*/
 	$scope.addClassName = function () {
-		if (!pattern.test($scope.class_name)||$scope.class_name=='') {
+        console.log($scope.class_name);
+        if (!pattern.test($scope.class_name)||$scope.class_name==''||$scope.class_name==undefined) {
 			$scope.tishi = "您的输入不满足条件,请重新输入"
 			$scope.showtishi = true;
+			return;
+            console.log('输入不满足条件');
 		} else {
 			for (let i = 0; i < $scope.idarr.length; i++) {
 				if ($scope.class_name == $scope.idarr[i]) {
 						$scope.tishi = "分类名称不能重复，请重新输入";
 						$scope.showtishi = true;
-						break;
+						return;
 				} else {
 					$scope.showtishi = false;
 				}
@@ -179,7 +182,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 	//*保存模态框确认*/
 	$scope.suresave = function () {
 		setTimeout(function () {
-			$state.go("fenleiguanli");
+			$state.go("fenleiguanli",{offsale_flag:true});
 		},200)
 	}
 
