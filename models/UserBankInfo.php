@@ -44,10 +44,21 @@ class UserBankInfo extends \yii\db\ActiveRecord
      * @param $user
      * @return int
      */
-   public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
+     /**
+     * 添加、修改银行卡操作
+     * @param $bankname
+     * @param $bankcard
+     * @param $username
+     * @param $position
+     * @param $bankbranch
+     * @param $role_id
+     * @param $user
+     * @return int
+     */
+    public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
     {
             $bankInfo=self::find()
-                ->where(['uid'=>$user->id,'role_id'=>$role_id])
+                ->where(['uid'=>$user->id,'role_id'=>$role_id,'status'=>1])
                 ->one();
             $time=time();
             if ($bankInfo)
@@ -65,6 +76,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     if (!$res2)
                     {
                         $code=500;
+                        $trans->rollBack();
                         return $code;
                     }
                     $bankInfo->log_id=$log->id;
@@ -73,6 +85,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     $res1=$bankInfo->save(false);
                     if (!$res1){
                         $code=500;
+                        $trans->rollBack();
                         return $code;
                     }
                     $trans->commit();
@@ -97,15 +110,36 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     if (!$res2)
                     {
                         $code=500;
+                        $trans->rollBack();
                         return $code;
+                    }
+                    $bank=UserBankInfo::find()
+                        ->where(['uid'=>$user->id,'role_id'=>$role_id])
+                        ->all();
+                    if ($bank)
+                    {
+                        foreach ( $bank as &$list)
+                        {
+                            $list->status=0;
+                            $resu=$list->save(false);
+                            if (!$resu)
+                            {
+                                $code=500;
+                                $trans->rollBack();
+                                return $code;
+                            }
+                        }
+
                     }
                     $bankInfo=new self;
                     $bankInfo->log_id=$log->id;
                     $bankInfo->uid=$user->id;
                     $bankInfo->role_id=$role_id;
+                    $bankInfo->status=1;
                     $res1=$bankInfo->save(false);
                     if (!$res1){
                         $code=500;
+                        $trans->rollBack();
                         return $code;
                     }
                     $trans->commit();
@@ -118,7 +152,6 @@ class UserBankInfo extends \yii\db\ActiveRecord
                 }
             }
     }
-
         /**
      * @param $role_id
      * @param $user
