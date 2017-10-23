@@ -150,7 +150,6 @@ class BasisDecorationService
      */
     public static function quantity($points,$goods,$crafts)
     {
-        var_dump($goods);exit;
         foreach ($crafts as $craft) {
             switch ($craft) {
                 case $craft['project_details'] == self::GOODS_NAME['reticle'] || $craft['project_details'] == self::GOODS_NAME['wire']:
@@ -178,7 +177,6 @@ class BasisDecorationService
                     break;
             }
         }
-        var_dump($goods_id);exit;
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
         if ($ids == null){
             $code = 1061;
