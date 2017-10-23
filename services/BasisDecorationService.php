@@ -177,6 +177,7 @@ class BasisDecorationService
                     break;
             }
         }
+        var_dump($goods_id);exit;
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
         if ($ids == null){
             $code = 1061;
