@@ -992,11 +992,11 @@ angular.module("all_controller", [])
                                 // 微信接口 === 调用
                                 $http({
                                     method: 'get',
-                                    url: 'common.cdlhzz.cn/order/get-open-id',
+                                    url: 'http://common.cdlhzz.cn/order/get-open-id',
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data;
-                                    alert('获取open_id')
+                                    alert('获取open_id');
                                     alert($scope.open_id)
                                 });
                                 $http({
