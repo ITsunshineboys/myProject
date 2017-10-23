@@ -1375,7 +1375,6 @@ class OwnerController extends Controller
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
         $goods = Goods::assortList($material_name,self::DEFAULT_CITY_CODE);
-        var_dump($goods);exit;
         if ($goods == null) {
             $code = 1061;
             return Json::encode([
@@ -1386,7 +1385,7 @@ class OwnerController extends Controller
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
-        $material[]   = BasisDecorationService::capacity($goods_price, $post);
+        $material[]   = BasisDecorationService::capacity($goods_price,$post);
         $material[]   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
         $material[]   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
         $material[]   = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);

@@ -1849,15 +1849,15 @@ class BasisDecorationService
      */
     public static function capacity($goods_price,$post)
     {
-        foreach ($goods_price as $one_goods) {
+        foreach ($goods_price as &$one_goods) {
             if ($one_goods['title'] == self::GOODS_NAME['elbow']) {
                 $one_goods['quantity'] = $post['toilet'] * self::WALL_SPACE;
                 $one_goods['cost'] = $one_goods['quantity'] * $one_goods['platform_price'];
-                $elbow [] = $one_goods;
             }
         }
-        $material [] = BasisDecorationService::profitMargin($elbow);
-        return $material;
+
+        var_dump($goods_price);exit;
+        return BasisDecorationService::profitMargin($elbow);;
     }
 
     /**
