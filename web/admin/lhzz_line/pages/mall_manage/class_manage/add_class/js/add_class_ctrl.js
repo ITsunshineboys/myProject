@@ -80,7 +80,6 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 
 	/*分类名称是否存在的判断*/
 	$scope.addClassName = function () {
-        console.log($scope.class_name);
         if (!pattern.test($scope.class_name)||$scope.class_name==''||$scope.class_name==undefined) {
 			$scope.tishi = "您的输入不满足条件,请重新输入"
 			$scope.showtishi = true;
