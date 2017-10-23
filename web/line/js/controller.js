@@ -996,8 +996,6 @@ angular.module("all_controller", [])
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data.data;
-                                    alert('获取open_id'+$scope.open_id);
-                                    alert(JSON.stringify(response.data));
                                     alert(JSON.stringify(response.data.data));
                                     if(  $scope.open_id != undefined){
                                         $http({  //获取openid
@@ -1006,16 +1004,15 @@ angular.module("all_controller", [])
                                         }).then(function successCallback(response) {
                                             console.log(response);
                                             alert(11);
-                                            
                                             $scope.openId = response.data.data;
-                                            alert('获取open_id'+$scope.openId);
                                             alert(JSON.stringify(response.data.data))
                                         },function (error) {
                                             alert(error);
-
                                             alert(JSON.stringify(error))
                                         });
                                     }
+                                },function (error) {
+                                    alert(JSON.stringify(error))
                                 });
 
 
