@@ -697,10 +697,10 @@ class OwnerController extends Controller
                     break;
             }
         }
-   
-        $material_total['plasterboard'] = BasisDecorationService::profitMargin($plasterboard);
-        $material_total['keel'] = BasisDecorationService::profitMargin($keel);
-        $material_total['pole'] = BasisDecorationService::profitMargin($pole);
+
+        $material_total[] = BasisDecorationService::profitMargin($plasterboard);
+        $material_total[] = BasisDecorationService::profitMargin($keel);
+        $material_total[] = BasisDecorationService::profitMargin($pole);
         $material_total['total_cost'][] = $material_cost;
 
         return Json::encode([
