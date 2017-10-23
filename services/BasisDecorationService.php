@@ -823,6 +823,13 @@ class BasisDecorationService
     public static function paintedCost($goods,$craft,$area)
     {
         $goods_value = GoodsAttr::findByGoodsIdUnit($goods['id']);
+        if ($goods_value == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $goods_value_one = '';
         foreach ($goods_value as $value) {
             if ($goods['title'] == self::GOODS_NAME['concave_line']) {
