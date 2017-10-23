@@ -997,7 +997,7 @@ angular.module("all_controller", [])
                                     console.log(response);
                                     $scope.open_id = response.data.data;
                                     alert('获取open_id'+$scope.open_id);
-                                    alert(JSON.stringify(response.data))
+                                    alert(JSON.stringify(response.data));
                                     alert(JSON.stringify(response.data.data))
                                 });
                                 $http({
@@ -1005,6 +1005,7 @@ angular.module("all_controller", [])
                                     url: $scope.open_id,
                                 }).then(function successCallback(response) {
                                     console.log(response);
+                                    alert(11)
                                     $scope.openId = response.data.data;
                                     alert('获取open_id'+$scope.openId);
                                     alert(JSON.stringify(response.data.data))
