@@ -995,8 +995,9 @@ angular.module("all_controller", [])
                                     url: 'http://common.cdlhzz.cn/order/get-open-id',
                                 }).then(function successCallback(response) {
                                     console.log(response);
-                                    $scope.open_id = response.data;
+                                    $scope.open_id = response.data.data;
                                     alert('获取open_id');
+                                    alert($scope.open_id);
                                     alert(JSON.stringify(response.data))
                                     alert(JSON.stringify(response.data.data))
                                 });
