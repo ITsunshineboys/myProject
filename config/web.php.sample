@@ -12,7 +12,7 @@ $config = [
             'cookieValidationKey' => 'Cc5b5BT6QrmSSrnJwh7-ryKolxhOn3La',
             'enableCsrfValidation' => false,
         ],
-        'cache' => [
+        'fileCache' => [
             'class' => 'yii\caching\FileCache',
             'cachePath' => '/tmp',
             'directoryLevel' => 0,
