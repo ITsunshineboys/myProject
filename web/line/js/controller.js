@@ -1036,7 +1036,7 @@ angular.module("all_controller", [])
                                 }).then(function successCallback(response) {
                                     console.log('成功');
                                     $scope.contentWx = response.data.data;
-                                    // alert(JSON.stringify(response.data.data));
+                                    alert(JSON.stringify(response.data.data));
                                     // alert(JSON.stringify(response.config));
                                 },function (error) {
                                     alert('不成功');
