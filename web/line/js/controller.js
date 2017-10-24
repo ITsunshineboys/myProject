@@ -990,9 +990,9 @@ angular.module("all_controller", [])
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
                                 // 微信接口 === 调用
-                                $http({//获取openid 的地址
+                                $http({     //获取openid 的地址
                                     method: 'get',
-                                    url: 'http://common.cdlhzz.cn/order/get-open-id',
+                                    url: 'http://common.cdlhzz.cn/order/lineplaceorder',
                                     params:{
                                         goods_name: $scope.title,
                                         order_price:$scope.allCost,
@@ -1046,6 +1046,9 @@ angular.module("all_controller", [])
             }
 
         };
+        $scope.getProduct_details =  function () {
+            $state.go('product_details',{'mall_id':$scope.mall_id,'id':$scope.id})
+        }
     })
 
     // 支付成功
