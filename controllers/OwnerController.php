@@ -1116,7 +1116,7 @@ class OwnerController extends Controller
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['wall_brick']:
                     $one_goods_price['quantity'] = $wall_brick_cost['quantity'];
                     $one_goods_price['cost'] = $wall_brick_cost['cost'];
-                    $wall_brick[] = $one_goods_price;
+                    $wall[] = $one_goods_price;
                     break;
             }
         }
@@ -1124,7 +1124,7 @@ class OwnerController extends Controller
         $material_total['material'][] = BasisDecorationService::profitMargin($river_sand);
         $material_total['material'][] = BasisDecorationService::profitMargin($cement);
         $material_total['material'][] = BasisDecorationService::profitMargin($self_leveling);
-        $material_total['material'][] = BasisDecorationService::profitMargin($wall_brick);
+        $material_total['material'][] = BasisDecorationService::profitMargin($wall);
 //        $wall_brick_max['material'] = $wall_brick_cost['quantity'];
 //        $wall_brick_max['material'] = $wall_brick_cost['cost'];
 //        $material_total ['material'][] = $wall_brick_max;
