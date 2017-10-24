@@ -1,0 +1,80 @@
+* {
+    outline: none;
+}
+
+header {
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #E6E9F0;
+    position: relative;
+}
+
+header span:nth-child(2),
+header span:nth-child(3){
+    font-size: 14px;
+    color: #2F3033;
+    line-height: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header span:nth-child(4) {
+    color: rgba(171, 171, 171, 1);
+}
+
+header img {
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+
+/*内容开始*/
+section{
+    padding-left: 40px;
+}
+
+.red_mark{
+    color: red;
+}
+
+.money{
+    margin-top: 90px;
+}
+
+.input_style{
+    margin-left: 90px;
+    width: 217px;
+    height: 36px;
+    border: 1px solid #ABABAB;
+    border-radius: 3px;
+    padding-left: 5px;
+}
+
+form>div:not(:first-child){
+    margin-top: 40px;
+}
+
+.bank_user input{
+    margin-left: 75px;
+}
+
+.district input{
+    margin-left: 61px;
+}
+
+.btn_group{
+    margin-top: 273px!important;
+}
+
+#back{
+    margin-left: 20px;
+}
+
+.body_font{
+    font-size: 16px;
+}
+
+.tored{
+    border: 1px solid red!important;
+}

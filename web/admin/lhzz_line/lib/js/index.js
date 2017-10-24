@@ -4,7 +4,7 @@ index.controller("index_ctrl",function ($scope,$http) {
   let url= '/site/admin-login';
   let params= {
     role_id:1,
-    username:13551201821,
+    username:18281688966,
     password:"demo123"
   };
   let config = {
@@ -14,8 +14,6 @@ index.controller("index_ctrl",function ($scope,$http) {
     }
   };
   $http.post(url,params,config).then(function (response) {
-    // console.log("主页登录：");
-    // console.log(response);
   },function (error) {
     console.log(error)
   })

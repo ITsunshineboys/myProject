@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="pages/supplier_wallet/css/withdraw_deposit.css">
+<div ng-controller="withdraw_deposit_ctrl">
+    <!--顶部导航-->
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="order_manage" ui-sref="supplier_wallet">钱包</span>
+            <span ui-sref="supplier_account">>商家账户信息</span>
+            <span>>提现</span>
+            <img src="lib/images/user.png" alt=""/>
+        </div>
+    </header>
+
+    <section>
+        <form name="withdraw_deposit_form" novalidate>
+        <div class="money">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>提现金额</span>
+            <input type="text" placeholder="请输入提现金额" ng-model="money_num" name="money_num" id="money_num" class="input_style"  required ng-blur="moneyjudge=!!withdraw_deposit_form.money_num.$error" ng-class={'tored':withdraw_deposit_form.money_num.$invalid&&alljudgefalse||withdraw_deposit_form.money_num.$error.required&&moneyjudge||test}>
+            <span>*可提现金额:¥{{totalmoney}}</span>
+            <p class='red_mark warning' ng-show="moneywarning">
+                <span class="glyphicon glyphicon-asterisk">{{moneywrong}}</span>
+            </p>
+        </div>
+
+        <div class="money">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span>交易密码</span>
+            <input type="password" placeholder="请输入交易密码" ng-model="password" name="password" id="password" class="input_style" maxlength=6 required ng-blur="pwdjudge=!!withdraw_deposit_form.password.$error" ng-class={'tored':withdraw_deposit_form.password.$invalid&&alljudgefalse||withdraw_deposit_form.password.$error.required&&pwdjudge} onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
+            <p class='red_mark warning' ng-show="psdwarning">
+                <span class="glyphicon glyphicon-asterisk"></span>
+               {{psdwrong}}
+            </p>
+        </div>
+
+            <div class="btn_group">
+                <button class="btn btn-primary pull-left" data-toggle="modal" data-target={{modaltarget}} ng-click="sureWithdraw(withdraw_deposit_form.$valid,withdraw_deposit_form.$error.required)">确认</button>
+                <button class="btn btn-default" id="back" ui-sref="supplier_account">返回</button>
+            </div>
+        </form>
+    </section>
+
+    <div class="modal customer_modal detail_modal fade" id="withdraw_warning" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body body_font">
+                    <div>
+                        <span ng-bind="failwarning"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal" ng-show="backpage" ng-click="backpPage()">确认</button>
+                    <button class="btn btn-primary" data-dismiss="modal" ng-show="!backpage">确认</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

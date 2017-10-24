@@ -11,17 +11,17 @@
     <section>
         <!--Tab-->
         <ul class="nav_ul">
-            <li>商家账户信息</li>
+            <li ui-sref="supplier_account">商家账户信息</li>
             <li ui-sref="income_pay">收支明细</li>
-            <li>交易密码</li>
+            <li ui-sref="set_password">交易密码</li>
         </ul>
         <div class="select_top">
-            <select  name="province" ng-model="selectValue" class="time_select" ng-options="item.name for item in time">
+            <select  name="province" ng-model="params.time_type" ng-change="time_status_change()" class="time_select" ng-options="item.value as item.name for item in time">
             </select>
-            <input ng-if="selectValue.name=='自定义'" id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
-            <input ng-if="selectValue.name=='自定义'" id="stop_time"   ng-model="myng.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+            <input ng-if="params.time_type=='custom'" id="start_time"  ng-model="params.time_start" ng-change="time_change()" max-date="{{params.time_end}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
+            <input ng-if="params.time_type=='custom'" id="stop_time"   ng-model="params.time_end" ng-change="time_change()"  min-date="{{params.time_start}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
             <span style="margin-right: 10px">状态选择</span>
-            <select ng-model="selectStatus" class="time_select" ng-options="items.id as items.value for items in status_arr"></select>
+            <select ng-model="params.status" class="time_select" ng-change="time_change()" ng-options="items.id as items.value for items in status_arr"></select>
         </div>
         <!-- 表格 -->
         <table class="table table-responsive">
@@ -44,9 +44,11 @@
                 <td>{{item.lost_money}}</td>
                 <td>{{item.status}}</td>
                 <td class="blue">{{item.supplier_reason}}</td>
-                <td class="blue" ui-sref="wallet_detail({id:item.id})">查看</td>
+                <td class="blue" ui-sref="wallet_detail({transaction_no:item.transaction_no})">查看</td>
             </tr>
             </tbody>
         </table>
+        <!--分页-->
+        <tm-pagination conf="wjConfig"></tm-pagination>
     </section>
 </div>

@@ -1,0 +1,142 @@
+* {
+    outline: none;
+}
+
+header {
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #E6E9F0;
+    position: relative;
+}
+
+header span:nth-child(2),
+header span:nth-child(3) {
+    font-size: 14px;
+    color: #2F3033;
+    line-height: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header span:nth-child(4) {
+    color: rgba(171, 171, 171, 1);
+}
+
+header img {
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+
+/*内容开始*/
+section {
+    padding-left: 40px;
+    color: #666F80;
+}
+
+.btns {
+    margin-top: 90px;
+}
+
+#time_choose {
+    width: 200px;
+    height: 37px;
+    border-radius: 3px;
+    padding-left: 10px;
+    line-height: 37px;
+}
+
+.time_interval {
+    width: 143px;
+    height: 37px;
+    border: 1px solid rgb(169, 169, 169);
+    border-radius: 3px;
+    padding-left: 5px;
+    margin-left: 22px;
+}
+
+/*表格样式*/
+table {
+    width: 90%;
+    color: #7A8599;
+    margin-top: 25px;
+}
+
+table tr {
+    height: 40px;
+}
+
+table .sortpic {
+    display: inline-block;
+    margin-top: -4px;
+    vertical-align: middle;
+}
+
+table .sortpic i{
+    display: block;
+    font-size: 12px;
+    color: #ababab;
+}
+
+table .sortpic .glyphicon-triangle-bottom {
+    margin-top: -4px;
+}
+
+
+.table_content {
+    border-top: 1px solid #e6e6e6;
+}
+
+.sortpic {
+    width: 10px;
+}
+
+.frozen_reason{
+    display: inline-block;
+    width: 80px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    color: #5677FC;
+}
+
+
+/*分页样式*/
+.page-list {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pagination {
+    float: left;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.pagination li:not(.separate) {
+    cursor: pointer;
+}
+
+.page-list .jump {
+    float: left;
+    margin-left: 50px;
+}
+
+.page-list .jump input {
+    display: inline-block !important;
+    margin-right: 10px;
+    width: 80px;
+    vertical-align: middle;
+}
+
+.pagination-total {
+    float: left;
+    margin-top: 0.7%;
+    margin-right: 20px;
+}
+
+
+.active{
+    color: #1B7CEE!important;
+}

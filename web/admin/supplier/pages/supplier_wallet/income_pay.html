@@ -3,7 +3,7 @@
     <!--头部开始-->
     <div class="header clearfix">
         <i class="glyphicon glyphicon-shopping-cart"></i>
-        <a class="crumbs">钱包</a>
+        <a class="crumbs" style="font-weight: bold" ui-sref="supplier_wallet">钱包</a>
         <a class="crumbs crumbs_on">&gt;收支明细</a>
         <img class="pull-right" src="lib/images/user.png" alt="">
         <!--<a class="pull-right">退出</a>-->
@@ -11,12 +11,67 @@
     <!--头部结束-->
     <section>
         <div class="select_top">
-            <select  name="province" ng-model="selectValue" class="time_select" ng-options="item.name for item in time">
+            <!--时间-->
+            <select  name="province" ng-model="params.time_type" ng-change="time_status_change()" class="time_select" ng-options="item.value as item.name for item in time">
             </select>
-            <input ng-if="selectValue.name=='自定义'" id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
-            <input ng-if="selectValue.name=='自定义'" id="stop_time"   ng-model="myng.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+            <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
+            <input ng-if="params.time_type=='custom'" id="end_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+            <!--类型-->
             <span style="margin-right: 10px">类型选择</span>
-            <select ng-model="selectStatus" class="time_select" ng-options="items.id as items.value for items in status_arr"></select>
+            <select ng-model="params.type" class="time_select" ng-change="status_change()" ng-options="items.id as items.value for items in status_arr"></select>
+            <!--搜索-->
+            <div class="search_box">
+                <div class="search_div">
+                    <input type="text" placeholder="搜索订单号或交易单号" ng-model="income_search" style="outline: 0">
+                    <i class="glyphicon glyphicon-search search_logo"></i>
+                </div>
+                <button class="btn btn-default search_btn" style="margin-left: 30px" ng-click="search_click()">搜索</button>
+            </div>
+        </div>
+        <!-- 表格 -->
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th>时间 <img ng-src="{{time_src}}" ng-click="time_sort()" class="img_size"></th>
+                <th>金额</th>
+                <th>交易单号</th>
+                <th>订单号</th>
+                <th>资金类型</th>
+                <th>详情</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in income_pay_list">
+                <td>{{item.create_time}}</td>
+                <td>{{item.access_money}}</td>
+                <td>{{item.transaction_no}}</td>
+                <td>{{item.order_no}}</td>
+                <td>{{item.access_type}}</td>
+                <td class="blue" ng-click="show_click(item.transaction_no,item.access_type)">查看</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--分页-->
+        <tm-pagination conf="wjConfig"></tm-pagination>
+        <!--详情模态框-->
+        <div class="modal customer_modal detail_modal fade" id="detail_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" ng-if="detail_list[1].name=='货款金额'">货款详情</h4>
+                        <h4 class="modal-title" ng-if="detail_list[1].name=='扣款金额'">扣款详情</h4>
+                    </div>
+                    <div class="modal-body body_font">
+                        <div ng-repeat="item in detail_list">
+                            <span style="display:inline-block;width: 90px ">{{item.name}}：</span>
+                            <span ng-class="{'orange_color':$index==1}">{{item.value}}</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>

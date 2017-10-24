@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="pages/supplier_wallet/css/supplier_account.css">
+<div ng-controller="supplier_account_ctrl">
+    <!--顶部导航-->
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="order_manage" ui-sref="supplier_wallet">钱包</span>
+            <span>>商家账户信息</span>
+            <img src="lib/images/user.png" alt=""/>
+        </div>
+    </header>
+
+    <section>
+        <!--商家名称-->
+        <div class="supplier_name">
+            <span>商家名称</span>
+            <span class="margin_left_86" ng-bind="result.shop_name"></span>
+        </div>
+
+        <div>
+            <span>开户银行</span>
+            <span class="margin_left_86" ng-bind="result.bankname"></span>
+        </div>
+
+        <div>
+            <span>银行账号</span>
+            <span class="margin_left_86" ng-bind="result.bankcard"></span>
+        </div>
+
+        <div>
+            <span>开户行所在地</span>
+            <span class="margin_left_58" ng-bind="result.position"></span>
+        </div>
+
+        <div>
+            <span>开户所在支行</span>
+            <span class="margin_left_58" ng-bind="result.bankbranch"></span>
+        </div>
+
+        <div class="account_owner">
+            <span>开户人</span>
+            <span ng-bind="result.username"></span>
+        </div>
+
+        <hr/>
+
+        <div>
+            <span>账户余额</span>
+            <span class="margin_left_86">¥{{result.balance}}</span>
+        </div>
+
+        <div>
+            <span>可提现金额</span>
+            <span class="margin_left_72">¥{{result.balance}}</span>
+        </div>
+
+        <div>
+            <span>已提现金额</span>
+            <span class="margin_left_72">¥{{result.cashed_money}}</span>
+        </div>
+
+        <div class="forzen_money">
+            <span>冻结金额</span>
+            <span class="margin_left_86">¥{{result.freeze_money}}</span>
+            <span ui-sref="frozen_money">详情</span>
+        </div>
+
+        <div class="btn_group">
+            <button class="btn btn-primary pull-left" ui-sref="withdraw_deposit">提现</button>
+            <button class="btn btn-default" id="edit" ui-sref="edit_card">编辑银行卡</button>
+            <button class="btn btn-default" id="back" ui-sref="supplier_wallet">返回</button>
+        </div>
+    </section>
+
+
+</div>
