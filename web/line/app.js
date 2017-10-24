@@ -53,7 +53,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 },
                 controller: "product_details_ctrl",
                 params:{'pid':'',"id":"", 'mall_id':"",'datailsShop':'datailsShop','shopNum':'',
-                    'supplier_id':''
+                 'supplier_id':''
                 }
             })
 
@@ -73,10 +73,10 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 },
                 controller: "order_commodity",
                 params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
-                    'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
-                    'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
-                    'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
-                    'address_id':''
+                'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
+                'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
+                'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
+                'address_id':''
                 }
             })
 

@@ -992,25 +992,27 @@ angular.module("all_controller", [])
                                 // 微信接口 === 调用
                                 $http({//获取openid 的地址
                                     method: 'get',
-                                    url: 'http://common.cdlhzz.cn/order/get-open-id',
+                                    url: 'https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN',
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data.data;
                                     alert(JSON.stringify(response.data.data));
-                                    if( $scope.open_id != undefined){
-                                        $http({  //获取openid
-                                            method: 'get',
-                                            url: $scope.open_id,
-                                        }).then(function successCallback(response) {
-                                            console.log(response);
-                                            alert(11);
-                                            $scope.openId = response.data.data;
-                                            alert(JSON.stringify(response.data.data))
-                                        },function (error) {
-                                            alert(error);
-                                            alert(JSON.stringify(error))
-                                        });
-                                    }
+                                    alert(JSON.stringify($scope.open_id ));
+                                    // if( $scope.open_id != undefined){
+                                    //     alert(1212);
+                                    //     $http({  //获取openid
+                                    //         method: 'get',
+                                    //         url: $scope.open_id,
+                                    //     }).then(function successCallback(response) {
+                                    //         console.log(response);
+                                    //         alert(11);
+                                    //         $scope.openId = response.data.data;
+                                    //         alert(JSON.stringify(response.data.data))
+                                    //     },function (error) {
+                                    //         alert(error);
+                                    //         alert(JSON.stringify(error))
+                                    //     });
+                                    // }
                                 },function (error) {
                                     alert(JSON.stringify(error))
                                 });
