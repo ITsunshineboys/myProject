@@ -992,13 +992,13 @@ angular.module("all_controller", [])
                                 // 微信接口 === 调用
                                 $http({//获取openid 的地址
                                     method: 'get',
-                                    url: 'https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN',
+                                    url: 'https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419317851&token=&lang=zh_CN',
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data.data;
                                     alert('打印open——id');
                                     alert(JSON.stringify(response));
-                                    alert(JSON.stringify($scope.open_id ));
+                                    alert(JSON.stringify($scope.open_id));
                                     // if( $scope.open_id != undefined){
                                     //     alert(1212);
                                     //     $http({  //获取openid
