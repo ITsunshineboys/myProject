@@ -129,4 +129,30 @@ class Role extends ActiveRecord
         }
         return $model;
     }
+
+
+       public  static  function    GetRoleByRoleId($role_id,$user)
+    {
+        switch ($role_id){
+            case 2:
+                $model=Worker::find()->where(['uid'=>$user->id])->one();
+                break;
+            case 3:
+                $model=Designer::find()->where(['uid'=>$user->id])->one();
+                break;
+            case 4:
+                $model=Manager::find()->where(['uid'=>$user->id])->one();
+                break;
+            case 5:
+                $model=DecorationCompany::find()->where(['uid'=>$user->id])->one();
+                break;
+            case 6:
+                $model=Supplier::find()->where(['uid'=>$user->id])->one();
+                break;
+            case 7:
+                $model=User::find()->where(['id'=>$user->id])->one();
+                break;
+        }
+        return $model;
+    }
 }

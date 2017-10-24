@@ -658,9 +658,9 @@ angular.module("all_controller", [])
         $scope.invoice_number  = '';//纳税人识别号
         $scope.invoice_model   = '';
         $scope.contentInvoice  = '';
-        alert( $scope.supplier_id );
-        alert( $scope.invoice_id );
-        alert( $scope.address_id );
+        // alert( $scope.supplier_id );
+        // alert( $scope.invoice_id );
+        // alert( $scope.address_id );
 
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -905,7 +905,7 @@ angular.module("all_controller", [])
                     console.log(response);
                     $scope.address_id = response.data.data.address_id;
                     console.log($scope.address_id);
-                    alert($scope.address_id)
+                    // alert($scope.address_id)
                 });
                 $scope.numModel = '#harvestNum_modal';
                 $scope.flagContent = '保存成功'
@@ -992,7 +992,7 @@ angular.module("all_controller", [])
                                 // 微信接口 === 调用
                                 $http({//获取openid 的地址
                                     method: 'get',
-                                    url: 'https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419317851&token=&lang=zh_CN',
+                                    url: 'https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN',
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data.data;

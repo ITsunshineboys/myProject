@@ -152,7 +152,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                 }
             }
     }
-        /**
+    /**
      * @param $role_id
      * @param $user
      * @return array
