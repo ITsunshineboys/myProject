@@ -993,80 +993,27 @@ angular.module("all_controller", [])
                                 $http({//获取openid 的地址
                                     method: 'get',
                                     url: 'http://common.cdlhzz.cn/order/get-open-id',
+                                    params:{
+                                        goods_name: $scope.title,
+                                        order_price:$scope.allCost,
+                                        goods_num:+$scope.shopNum,
+                                        goods_id:+$scope.mall_id,
+                                        address_id:+$scope.address_id,
+                                        invoice_id:+$scope.invoice_id,
+                                        supplier_id:+$scope.supplier_id,
+                                        freight:+$scope.freight,
+                                        // openid:'oyKJL0oHDKwyzBXidhyhshxluBOg'
+                                    }
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data.data;
-                                    alert('打印open——id');
+                                    alert('打印第一个成功');
                                     alert(JSON.stringify(response));
                                     alert(JSON.stringify($scope.open_id));
-                                    $http({  //调用微信支付接口
-                                        method: 'get',
-                                        url: $scope.open_id,
-                                        params:{
-                                            goods_name: $scope.title,
-                                            order_price:$scope.allCost,
-                                            goods_num:+$scope.shopNum,
-                                            goods_id:+$scope.mall_id,
-                                            address_id:+$scope.address_id,
-                                            invoice_id:+$scope.invoice_id,
-                                            supplier_id:+$scope.supplier_id,
-                                            freight:+$scope.freight,
-                                            // openid:'oyKJL0oHDKwyzBXidhyhshxluBOg'
-                                        }
-                                    }).then(function successCallback(response) {
-                                        console.log('成功');
-                                        // $scope.contentWx = response.data.data;
-                                        // $scope.appId = response.data.data.appId;
-                                        // $scope.timeStamp = response.data.data.timeStamp;
-                                        // $scope.nonceStr = response.data.data.nonceStr;
-                                        // $scope.package = response.data.data.package;
-                                        // $scope.signType = response.data.data.signType;
-                                        // $scope.paySign = response.data.data.paySign;
-                                        //
-                                        // callpay()
-                                        // alert(JSON.stringify(response.data.data));
-                                        // alert(JSON.stringify(response.config));
-                                        //调用微信JS api 支付
-                                        // function jsApiCall(){
-                                        //     WeixinJSBridge.invoke(
-                                        //         'getBrandWCPayRequest', $scope.contentWx,
-                                        //     // {
-                                        //         //     "appId":$scope.appId,     //公众号名称，由商户传入
-                                        //         //     "timeStamp":$scope.timeStamp, //时间戳，自1970年以来的秒数
-                                        //         //     "nonceStr":$scope.nonceStr, //随机串
-                                        //         //     "package": $scope.package,
-                                        //         //     "signType":$scope.signType,  //微信签名方式：
-                                        //         //     "paySign":$scope.paySign  //微信签名
-                                        //         // },
-                                        //         function(res){
-                                        //             WeixinJSBridge.log(res.err_msg);
-                                        //             alert(res.err_code+res.err_desc+res.err_msg);
-                                        //         });
-                                        // }
-                                        // function callpay(){
-                                        //     if (typeof WeixinJSBridge == "undefined"){
-                                        //         if( document.addEventListener ){
-                                        //             document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                                        //         }else if (document.attachEvent){
-                                        //             document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                                        //             document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                                        //         }
-                                        //     }else{
-                                        //         jsApiCall();
-                                        //     }
-                                        // }
-                                    },function (error) {
-                                        alert('不成功');
-                                        alert(error);
-                                        alert(JSON.stringify(error))
-                                    });
-
+                                    window.location = $scope.open_id
                                 },function (error) {
                                     alert(JSON.stringify(error))
                                 });
-
-
-
 
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
