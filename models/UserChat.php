@@ -219,5 +219,35 @@ class UserChat extends \yii\db\ActiveRecord
             return $code = 500;
         }
     }
+
+    public static function SendAudio($nickname='admin',$chat_id,$to_user,$filepath,$length){
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $chat_hx = new ChatService();
+            $from = $nickname;
+            $target = [$to_user];
+
+            $re = $chat_hx->sendAudio($filepath,$from, $target_type = 'users', $target,$length);
+            if($re) {
+                $chat_record = new ChatRecord();
+                $chat_record->chat_id = $chat_id;
+                $chat_record->content = $filepath;
+                if (!$chat_record->save()) {
+                    $trans->rollBack();
+                    return $code = 500;
+                }
+            }
+            else{
+                $trans->rollBack();
+                return $code=500;
+            }
+            $trans->commit();
+            return $re;
+
+        }catch (Exception $e){
+            $trans->rollBack();
+            return $code = 500;
+        }
+    }
 }
 
