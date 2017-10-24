@@ -1125,11 +1125,11 @@ class OwnerController extends Controller
         $material_total['material'][] = BasisDecorationService::profitMargin($self_leveling);
 
         // 墙砖 卫生间地砖 厨房地砖 客厅地砖
-        foreach ($wall_brick_max as &$one_wall){
-            $one_wall['quantity'] = $wall_brick_cost['quantity'];
-            $one_wall['cost'] = $wall_brick_cost['cost'];
-        }
-        $material_total['material'][] = BasisDecorationService::profitMargin($wall_brick_max);
+//        foreach ($wall_brick_max as &$one_wall){
+//            $one_wall['quantity'] = $wall_brick_cost['quantity'];
+//            $one_wall['cost'] = $wall_brick_cost['cost'];
+//        }
+//        $material_total['material'][] = BasisDecorationService::profitMargin($wall_brick_max);
 
         foreach ($floor_tile as &$one_floor){
             $one_floor['quantity'] = $floor_cost['quantity'];
