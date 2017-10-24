@@ -1092,10 +1092,14 @@ class OwnerController extends Controller
 //        客厅地砖费用
         $hall_wall_brick_cost['quantity'] = ceil($drawing_room_area / $floor_tile_attr['hall']['area']);
         $hall_wall_brick_cost['cost'] = $hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'];
+//        地砖总数量和费用
+        $floor_cost['quantity'] = $toilet_wall_brick_cost['quantity'] + $kitchen_wall_brick_cost['quantity'] +  $hall_wall_brick_cost['quantity'];
+        $floor_cost['cost'] = $toilet_wall_brick_cost['cost'] + $kitchen_wall_brick_cost['cost'] +  $hall_wall_brick_cost['cost'];
 
         //材料总费用
         $material_cost_total = $cement_cost['cost'] + $self_leveling_cost['cost'] + $river_sand_cost['cost'] + $wall_brick_cost['cost'] + $toilet_wall_brick_cost['cost'] + $kitchen_wall_brick_cost['cost'] + $hall_wall_brick_cost['cost'];
 
+        // 水泥，河沙，自流平信息
         foreach ($goods_price as &$one_goods_price) {
             switch ($one_goods_price) {
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
@@ -1119,12 +1123,19 @@ class OwnerController extends Controller
         $material_total['material'][] = BasisDecorationService::profitMargin($river_sand);
         $material_total['material'][] = BasisDecorationService::profitMargin($cement);
         $material_total['material'][] = BasisDecorationService::profitMargin($self_leveling);
-//        $material_total['material'][] = BasisDecorationService::profitMargin($wall);
-//        $wall_brick_max['material'] = $wall_brick_cost['quantity'];
-//        $wall_brick_max['material'] = $wall_brick_cost['cost'];
-//        $material_total ['material'][] = $wall_brick_max;
 
+        // 墙砖 卫生间地砖 厨房地砖 客厅地砖
+        foreach ($wall_brick_max as &$one_wall){
+            $one_wall['quantity'] = $wall_brick_cost['quantity'];
+            $one_wall['cost'] = $wall_brick_cost['cost'];
+        }
+        $material_total['material'][] = BasisDecorationService::profitMargin($wall_brick_max);
 
+        foreach ($floor_tile as &$one_floor){
+            $one_floor['quantity'] = $floor_cost['quantity'];
+            $one_floor['cost'] = $floor_cost['cost'];
+        }
+        $material_total['material'][] = BasisDecorationService::profitMargin($floor_tile);
         $material_total['total_cost'] = $material_cost_total;
 
         return Json::encode([
