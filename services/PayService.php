@@ -62,6 +62,36 @@ class PayService
             return $openid;
         }
     }
+   /**
+     *
+     * 通过跳转获取用户的openid，跳转流程如下：
+     * 1、设置自己需要调回的url及其其他参数，跳转到微信服务器https://open.weixin.qq.com/connect/oauth2/authorize
+     * 2、微信服务处理完成之后会跳转回用户redirect_uri地址，此时会带上一些参数，如：code
+     *
+     * @return 用户的openid
+     */
+    public function GetOrderOpenid($orders)
+    {
+
+            Yii::$app->session['address_id']=$orders['address_id'];
+            Yii::$app->session['invoice_id']=$orders['invoice_id'];
+            Yii::$app->session['goods_id']=$orders['goods_id'];
+            Yii::$app->session['goods_num']=$orders['goods_num'];
+            Yii::$app->session['order_price']=$orders['order_price'];
+            Yii::$app->session['goods_name']=$orders['goods_name'];
+            Yii::$app->session['pay_name']=$orders['pay_name'];
+            Yii::$app->session['freight']=$orders['freight'];
+            Yii::$app->session['supplier_id']=$orders['supplier_id'];
+            Yii::$app->session['return_insurance']=$orders['return_insurance'];
+            Yii::$app->session['body']=$orders['body'];
+            Yii::$app->session['order_no']=$orders['order_no'];
+            Yii::$app->session['buyer_message']=$orders['buyer_message'];
+
+            //触发微信返回code码
+            $baseUrl = urlencode("http://common.cdlhzz.cn/order/wx-line-pay");
+            $url = $this->__CreateOauthUrlForCode($baseUrl);
+            return $url;
+    }
 
     /**
      *

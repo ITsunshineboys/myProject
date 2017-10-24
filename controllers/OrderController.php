@@ -651,10 +651,10 @@ class OrderController extends Controller
             'data' => $res
         ]);
     }
-   /**
+  /**
      *提交订单-线下店商城-微信支付
      */
-  public function  actionLineplaceorder(){
+    public function  actionLineplaceorder(){
         $request=Yii::$app->request;
         $subject=trim($request->get('goods_name'));
         //付款金额，必填
@@ -698,16 +698,49 @@ class OrderController extends Controller
             'order_no'=>$order_no,
             'buyer_message'=>$buyer_message
         );
-        $openid=(new PayService())->GetOpenid();
-        $model=new Wxpay();
-        $data=$model->Wxlineapipay($orders,$openid);
+        $url=(new PayService())->GetOrderOpenid($orders);
         $code=200;
         return Json::encode([
             'code'=>$code,
             'msg'=>'ok',
-            'data'=>$data
+            'data'=>$url
         ]);
     }
+
+
+
+           /**
+         * 获取openID2-微信
+         * @return string
+         */
+        public function  actionWxLinePay()
+        {
+
+            $orders=array(
+                'address_id'=> Yii::$app->session['address_id'],
+                'invoice_id'=> Yii::$app->session['invoice_id'],
+                'goods_id'=> Yii::$app->session['goods_id'],
+                'goods_num'=> Yii::$app->session['goods_num'],
+                'order_price'=> Yii::$app->session['order_price'],
+                'goods_name'=> Yii::$app->session['goods_name'],
+                'pay_name'=> Yii::$app->session['pay_name'],
+                'supplier_id'=> Yii::$app->session['supplier_id'],
+                'freight'=> Yii::$app->session['freight'],
+                'return_insurance'=> Yii::$app->session['return_insurance'],
+                'body'=> Yii::$app->session['body'],
+                'order_no'=> Yii::$app->session['order_no'],
+                'buyer_message'=> Yii::$app->session['buyer_message']
+            );
+            $openid=(new PayService())->GetOpenid();
+            $model=new Wxpay();
+            $data=$model->Wxlineapipay($orders,$openid);
+            $code=200;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
     /**
      * 微信公众号样板间申请定金异步返回
      * wxpay notify action
