@@ -701,7 +701,7 @@ class OwnerController extends Controller
         $material_total[] = BasisDecorationService::profitMargin($plasterboard);
         $material_total[] = BasisDecorationService::profitMargin($keel);
         $material_total[] = BasisDecorationService::profitMargin($pole);
-        $material_total['total_cost'][] = $material_cost;
+        $material_total[] ['total_cost'] = $material_cost;
 
         return Json::encode([
             'code' => 200,
