@@ -701,7 +701,7 @@ class OwnerController extends Controller
         $material_total[] = BasisDecorationService::profitMargin($plasterboard);
         $material_total[] = BasisDecorationService::profitMargin($keel);
         $material_total[] = BasisDecorationService::profitMargin($pole);
-        $material_total[] ['total_cost'] = $material_cost;
+        $material_total['total_cost'] = $material_cost;
 
         return Json::encode([
             'code' => 200,
@@ -1113,18 +1113,18 @@ class OwnerController extends Controller
                     $one_goods_price['cost'] = $self_leveling_cost['cost'];
                     $self_leveling[] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['wall_brick']:
-                    $one_goods_price['quantity'] = $wall_brick_cost['quantity'];
-                    $one_goods_price['cost'] = $wall_brick_cost['cost'];
-                    $wall[] = $one_goods_price;
-                    break;
+//                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['wall_brick']:
+//                    $one_goods_price['quantity'] = $wall_brick_cost['quantity'];
+//                    $one_goods_price['cost'] = $wall_brick_cost['cost'];
+//                    $wall[] = $one_goods_price;
+//                    break;
             }
         }
 
         $material_total['material'][] = BasisDecorationService::profitMargin($river_sand);
         $material_total['material'][] = BasisDecorationService::profitMargin($cement);
         $material_total['material'][] = BasisDecorationService::profitMargin($self_leveling);
-        $material_total['material'][] = BasisDecorationService::profitMargin($wall);
+//        $material_total['material'][] = BasisDecorationService::profitMargin($wall);
 //        $wall_brick_max['material'] = $wall_brick_cost['quantity'];
 //        $wall_brick_max['material'] = $wall_brick_cost['cost'];
 //        $material_total ['material'][] = $wall_brick_max;
