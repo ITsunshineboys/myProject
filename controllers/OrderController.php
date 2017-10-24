@@ -654,7 +654,7 @@ class OrderController extends Controller
    /**
      *提交订单-线下店商城-微信支付
      */
-     public function  actionLineplaceorder(){
+  public function  actionLineplaceorder(){
         $request=Yii::$app->request;
         $subject=trim($request->get('goods_name'));
         //付款金额，必填
@@ -668,8 +668,7 @@ class OrderController extends Controller
         $freight=trim($request->get('freight'));
         $return_insurance=trim($request->get('return_insurance'));
         $buyer_message=trim($request->get('buyer_message','0'));
-        $openid=trim($request->get('openid'));
-        if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name ||! $invoice_id || !$supplier_id ||!$openid )
+        if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name ||! $invoice_id || !$supplier_id )
         {
             $code=1000;
             return Json::encode([
@@ -681,7 +680,6 @@ class OrderController extends Controller
         {
             $freight=0;
         }
-
         $order_no =self::Setorder_no();
         //商品描述，可空
         $body =self::WXPAY_LINE_GOODS.'-'.$subject;
@@ -700,7 +698,7 @@ class OrderController extends Controller
             'order_no'=>$order_no,
             'buyer_message'=>$buyer_message
         );
-
+        $openid=(new PayService())->GetOpenid();
         $model=new Wxpay();
         $data=$model->Wxlineapipay($orders,$openid);
         $code=200;
@@ -710,7 +708,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
     /**
      * 微信公众号样板间申请定金异步返回
      * wxpay notify action

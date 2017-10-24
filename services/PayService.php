@@ -50,7 +50,7 @@ class PayService
         //通过code获得openid
         if (!isset($_GET['code'])){
             //触发微信返回code码
-            $baseUrl = urlencode('http://common.cdlhzz.cn/order/find-open-id');
+            $baseUrl = urlencode('http://common.cdlhzz.cn/order/lineplaceorder');
             $url = $this->__CreateOauthUrlForCode($baseUrl);
             return $url;
 //            Header("Location: $url");
@@ -87,7 +87,7 @@ class PayService
         $jsapi->SetPackage("prepay_id=" . $UnifiedOrderResult['prepay_id']);
         $jsapi->SetSignType("MD5");
         $jsapi->SetPaySign($jsapi->MakeSign());
-        $parameters =$jsapi->GetValues();
+       $parameters = json_encode($jsapi->GetValues());
         return $parameters;
     }
 
