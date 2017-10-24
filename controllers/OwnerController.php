@@ -910,7 +910,7 @@ class OwnerController extends Controller
                     break;
             }
         }
-        $material_total['total_cost'] = $total_cost;
+        $material_total[]['total_cost'] = $total_cost;
         //总天数   乳胶漆天数+阴角线天数+腻子天数
         $total_day = ceil($primer_day + $finishing_coat_day + $putty_day + $concave_line_day);
 
