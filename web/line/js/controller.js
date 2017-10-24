@@ -1036,7 +1036,7 @@ angular.module("all_controller", [])
                                 }).then(function successCallback(response) {
                                     console.log('成功');
                                     $scope.contentWx = response.data.data;
-                                    jsApiCall();
+                                    jsApiCall($scope.contentWx);
                                     alert(JSON.stringify(response.data.data));
                                     // alert(JSON.stringify(response.config));
                                 },function (error) {
@@ -1046,9 +1046,9 @@ angular.module("all_controller", [])
                                 });
 
                                 //调用微信JS api 支付
-                                function jsApiCall(){
+                                function jsApiCall(item){
                                     WeixinJSBridge.invoke(
-                                        'getBrandWCPayRequest',$scope.contentWx,
+                                        'getBrandWCPayRequest',item,
                                     function(res){
                                         WeixinJSBridge.log(res.err_msg);
                                         alert(res.err_code+res.err_desc+res.err_msg);
