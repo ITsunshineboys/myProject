@@ -50,7 +50,7 @@ class Wxpay  extends ActiveRecord
         $input->SetBody($orders['body']);
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-        $input->SetTotal_fee($orders['order_price']);
+        $input->SetTotal_fee(1);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
