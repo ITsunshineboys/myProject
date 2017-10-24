@@ -1036,36 +1036,37 @@ angular.module("all_controller", [])
                                 }).then(function successCallback(response) {
                                     console.log('成功');
                                     $scope.contentWx = response.data.data;
-                                    jsApiCall($scope.contentWx);
+                                    callpay();
                                     alert(JSON.stringify(response.data.data));
                                     // alert(JSON.stringify(response.config));
+                                    //调用微信JS api 支付
+                                    function jsApiCall(){
+                                        WeixinJSBridge.invoke(
+                                            'getBrandWCPayRequest',$scope.contentWx,
+                                            function(res){
+                                                WeixinJSBridge.log(res.err_msg);
+                                                alert(res.err_code+res.err_desc+res.err_msg);
+                                            });
+                                    }
+                                    function callpay(){
+                                        if (typeof WeixinJSBridge == "undefined"){
+                                            if( document.addEventListener ){
+                                                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                                            }else if (document.attachEvent){
+                                                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                                                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                                            }
+                                        }else{
+                                            jsApiCall();
+                                        }
+                                    }
                                 },function (error) {
                                     alert('不成功');
                                     alert(error);
                                     alert(JSON.stringify(error))
                                 });
 
-                                //调用微信JS api 支付
-                                function jsApiCall(item){
-                                    WeixinJSBridge.invoke(
-                                        'getBrandWCPayRequest',item,
-                                    function(res){
-                                        WeixinJSBridge.log(res.err_msg);
-                                        alert(res.err_code+res.err_desc+res.err_msg);
-                                    });
-                                }
-                                function callpay(){
-                                    if (typeof WeixinJSBridge == "undefined"){
-                                        if( document.addEventListener ){
-                                            document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                                        }else if (document.attachEvent){
-                                            document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                                            document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                                        }
-                                    }else{
-                                        jsApiCall();
-                                    }
-                                }
+
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
                                 // 支付宝接口
