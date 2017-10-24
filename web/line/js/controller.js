@@ -996,7 +996,8 @@ angular.module("all_controller", [])
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data.data;
-                                    alert(JSON.stringify(response.data.data));
+                                    alert('打印open——id');
+                                    alert(JSON.stringify(response));
                                     alert(JSON.stringify($scope.open_id ));
                                     // if( $scope.open_id != undefined){
                                     //     alert(1212);
