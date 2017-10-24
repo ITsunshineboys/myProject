@@ -1399,11 +1399,11 @@ class BasisDecorationService
                 case $one_goods['title'] == self::GOODS_NAME['closet'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']:
                     $one_goods['quantity'] = $post['bedroom'];
                     $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $materials[] = $one_goods;
                     break;
             }
         }
-
-        return self::profitMargin($goods);
+        return self::profitMargin($materials);
     }
 
     /**
@@ -1895,10 +1895,11 @@ class BasisDecorationService
             if ($one_goods['title'] == self::GOODS_NAME['elbow']) {
                 $one_goods['quantity'] = $post['toilet'] * self::WALL_SPACE;
                 $one_goods['cost'] = $one_goods['quantity'] * $one_goods['platform_price'];
+                $materials[] = $one_goods;
             }
         }
 
-        return BasisDecorationService::profitMargin($goods_price);;
+        return BasisDecorationService::profitMargin($materials);
     }
 
     /**

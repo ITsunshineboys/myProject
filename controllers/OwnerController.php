@@ -1380,7 +1380,7 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['material'];
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
-        $goods = Goods::assortList($material_name,self::DEFAULT_CITY_CODE);
+        $goods = Goods::assortList($material_name,$post['city_code']);
         if ($goods == null) {
             $code = 1061;
             return Json::encode([
@@ -1399,7 +1399,7 @@ class OwnerController extends Controller
         //   移动家具
         $material[]   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
         //   固定家具
-        $material[][]   = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        $material[][]  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
         //   软装配套
         $material[]   = BasisDecorationService::mild($goods_price,$post);
         //   主材
