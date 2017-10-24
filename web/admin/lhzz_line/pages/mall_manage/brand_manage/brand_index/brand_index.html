@@ -19,14 +19,14 @@
 <!--已上架开始-->
     <section ng-if="on_flag==true">
         <div>
-            <span class="border" ng-modal="on_select_all"  ng-click="on_all(on_select_all)">全选</span>
+            <span class="border"  ng-click="checkAll()">全选</span>
             <span class="border" data-toggle="modal" data-target="#{{on_modal_v}}" ng-click="batch_down_shelves()">下架</span>
             <span style="margin-right: 15px;">分类选择</span>
             <select name="" class="time_select" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)">
             </select>
             <select name="" class="time_select" ng-show="firstselect!=0" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)">
             </select>
-            <select name="" class="time_select" ng-show="firstselect!=0&&secselect!=0" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class">
+            <select name="" class="time_select" ng-show="firstselect!=0&&secselect!=0" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)">
             </select>
             <!--表格-->
             <table>
@@ -36,8 +36,7 @@
                     <td>品牌名称</td>
                     <td>
                         <span>上架时间</span>
-                        <img ng-click="online_time_change(1)" ng-if="online_up_flag" class="img_sort_size" src="pages/mall_manage/brand_manage/brand_index/images/sort_down.png" alt="">
-                        <img ng-click="online_time_change(1)" ng-if="online_down_flag" class="img_sort_size" src="pages/mall_manage/brand_manage/brand_index/images/sort_up.png" alt="">
+                        <img ng-click="time_sort_click()"  class="img_sort_size" ng-src="{{time_img}}" alt="">
                     </td>
                     <td>添加人员</td>
                     <td>状态</td>
@@ -45,7 +44,7 @@
                     <td>操作</td>
                 </tr>
                 <tr ng-repeat="item in on_shelves_list">
-                    <td><input ng-checked="on_select_all" ng-model="item.state" type="checkbox"></td>
+                    <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
                     <td><img class="img_size" src="http://test.cdlhzz.cn:888/{{item.logo}}" alt=""></td>
                     <td>{{item.name}}</td>
                     <td>{{item.online_time}}</td>
@@ -55,19 +54,9 @@
                     <td class="blue" data-toggle="modal" data-target="#on_shelves_down_reason_modal" ng-click="down_shelver_btn(item.id)">下架</td>
                 </tr>
             </table>
-            <!--分页开始-->
-            <ul class="pages">
-                <li ng-click="on_Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-                <li class="pagenum" ng-repeat="page in on_history_list" ng-click="on_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-                <!--<li id="omit" ng-show="allpages>5">...</li>-->
-                <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-                <li ng-click="on_Next()">下一页</li>
-                <li class="jumpto"><input type="text" ng-model="on_topage"></li>
-                <li ng-click="on_choosePage(on_topage)">跳转</li>
-            </ul>
-            <!--分页结束-->
+            <!--分页-->
+            <tm-pagination conf="wjConfig"></tm-pagination>
         </div>
-
     </section>
 
     <!--批量下架原因 模态框-->
@@ -98,14 +87,14 @@
     <section ng-if="down_flag==true">
         <div>
             <span class="border" ui-sref="add_brand">添加</span>
-            <span class="border" ng-modal="down_select_all"  ng-click="down_all(down_select_all)">全选</span>
+            <span class="border" ng-click="checkAll()">全选</span>
             <span class="border" data-toggle="modal" data-target="#{{down_modal_v}}" ng-click="batch_on_shelves()">上架</span>
             <span style="margin-right:15px;">分类选择</span>
             <select name="" class="time_select" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)">
             </select>
             <select name="" class="time_select" ng-show="firstselect!=0" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)">
             </select>
-            <select name="" class="time_select" ng-show="firstselect!=0&&secselect!=0" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class">
+            <select name="" class="time_select" ng-show="firstselect!=0&&secselect!=0" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)">
             </select>
             <!--表格-->
             <table>
@@ -115,8 +104,7 @@
                     <td>品牌名称</td>
                     <td>
                         <span>下架时间</span>
-                        <img ng-click="online_time_change(0)" ng-if="online_up_flag" class="img_sort_size" src="pages/mall_manage/brand_manage/brand_index/images/sort_down.png" alt="">
-                        <img ng-click="online_time_change(0)" ng-if="online_down_flag" class="img_sort_size" src="pages/mall_manage/brand_manage/brand_index/images/sort_up.png" alt="">
+                        <img ng-click="time_sort_click()"  class="img_sort_size" ng-src="{{time_img}}" alt="">
                     </td>
                     <td>添加人员</td>
                     <td>状态</td>
@@ -125,7 +113,7 @@
                     <td>操作</td>
                 </tr>
                 <tr ng-repeat="item in down_shelves_list">
-                    <td><input ng-checked="down_select_all" ng-model="item.state" type="checkbox"></td>
+                    <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
                     <td><img class="img_size" src="http://test.cdlhzz.cn:888/{{item.logo}}" alt=""></td>
                     <td>{{item.name}}</td>
                     <td>{{item.offline_time}}</td>
@@ -138,17 +126,8 @@
                 </tr>
             </table>
         </div>
-        <!--分页开始-->
-        <ul class="pages">
-            <li ng-click="Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-            <li class="pagenum" ng-repeat="page in history_list" ng-click="choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-            <!--<li id="omit" ng-show="allpages>5">...</li>-->
-            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="Next()">下一页</li>
-            <li class="jumpto"><input type="text" ng-model="topage"></li>
-            <li ng-click="choosePage(topage)">跳转</li>
-        </ul>
-        <!--分页结束-->
+        <!--分页-->
+        <tm-pagination conf="wjConfig"></tm-pagination>
     </section>
 
     <!--批量上架模态框-->
@@ -160,7 +139,7 @@
                     <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    <p>上架{{batch_num.length}}个品牌，是否确认上架</p>
+                    <p>上架{{table.roles.length}}个品牌，是否确认上架</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary " data-dismiss="modal" ng-click="on_shelver_ok()">确认</button>
@@ -236,15 +215,12 @@
         </div>
         <!--时间-->
         <div class="inline_block">
-            <select  name="province" ng-model="myng.selectValue" class="time_select" ng-options="item.name for item in types">
-            </select>
-            <input  id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="time_input" type="text" placeholder="开始时间">
-            <input  id="stop_time"   ng-model="myng.end_time" ngc-lay-date  class="time_input" type="text"  placeholder="结束时间">
+            <select  name="province" ng-model="brand_params.review_status" ng-change="brand_types()" class="time_select" ng-options="item.id as item.value for item in brand_types_arr"></select>
+            <input  id="start_time"  ng-model="brand_params.start_time" ng-change='brand_time_change()' max-date="{{brand_params.end_time}}" ngc-lay-date  class="time_input" type="text" placeholder="开始时间">
+            <input  id="stop_time"   ng-model="brand_params.end_time" ng-change='brand_time_change()' min-date="{{brand_params.start_time}}" ngc-lay-date  class="time_input" type="text"  placeholder="结束时间">
         </div>
-
-
         <!--搜索-->
-        <span class="menu" ng-click="search_btn()">查询</span>
+        <span class="menu" ng-click="brand_search_btn()">查询</span>
         <div class="search_box">
             <input ng-model="myng.search_input_ok" class="search_input" type="text" placeholder="搜索商家名称或账户">
             <span class="glyphicon glyphicon-search search"></span>
@@ -257,7 +233,7 @@
                 <td>品牌名称</td>
                 <td>
                     <span>申请时间</span>
-                    <img class="img_sort_size" src="pages/mall_manage/brand_manage/brand_index/images/sort_up.png" alt="">
+                    <img ng-click="brand_img_src_click()" class="img_sort_size" ng-src="{{brand_img_src}}" alt="">
                 </td>
                 <td>商家名称</td>
                 <td>申请帐户</td>
@@ -267,8 +243,8 @@
                 <td>操作</td>
             </tr>
             <tr class="table_content" ng-repeat="item in brand_review_list">
-                <td><img class="img_size" src="http://test.cdlhzz.cn:888/{{item.logo}}" alt=""></td>
-                <td>{{item.name}}</td>
+                <td><img class="img_size" src="http://test.cdlhzz.cn:888/{{item.brand_logo}}" alt=""></td>
+                <td>{{item.brand_name}}</td>
                 <td>{{item.create_time}}</td>
                 <td>{{item.supplier_name}}</td>
                 <td>{{item.mobile}}</td>
@@ -276,8 +252,8 @@
                 <td ng-if="item.review_status=='审核不通过'" class="red">不通过</td>
                 <td ng-if="item.review_status=='待审核'" class="sky_blue">{{item.review_status}}</td>
                 <!--<td ng-if="item.reason!=''&& item.review_status!='待审核'"><span  class="gay_input" data-toggle="modal" data-target="#review_modal">{{item.reason}}</span></td>-->
-                <td ng-if="item.reason ==''&& item.review_status!='待审核'"><span  class="gay_input" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.reason)">点击输入</span></td>
-                <td ng-if="item.reason !=''&& item.review_status!='待审核'"><span  class="gay_input" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.reason)">{{item.reason}}</span></td>
+                <td ng-if="item.reason ==''&& item.review_status!='待审核'"><span  class="gay_input" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.review_note)">点击输入</span></td>
+                <td ng-if="item.reason !=''&& item.review_status!='待审核'"><span  class="gay_input" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.review_note)">{{item.review_note}}</span></td>
                 <td ng-if="item.review_status=='待审核'"><span>&nbsp;</span></td>
                 <td ng-if="item.review_status!='待审核'" class="blue" ui-sref="brand_details({item:item})">查看</td>
                 <td ng-if="item.review_status=='待审核'" class="blue">&nbsp;</td>
@@ -285,18 +261,8 @@
                 <td ng-if="item.review_status!='待审核'" class="blue">&nbsp;</td>
             </tr>
         </table>
-
-        <!--分页开始-->
-        <ul class="pages">
-            <li ng-click="check_Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-            <li class="pagenum" ng-repeat="page in check_history_list" ng-click="check_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-            <!--<li id="omit" ng-show="allpages>5">...</li>-->
-            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="check_Next()">下一页</li>
-            <li class="jumpto"><input type="text" ng-model="topage"></li>
-            <li ng-click="check_choosePage(topage)">跳转</li>
-        </ul>
-        <!--分页结束-->
+        <!--分页-->
+        <tm-pagination conf="brand_Config"></tm-pagination>
     </section>
     <!--审核备注模态框-->
     <div class="modal fade" id="review_modal" data-backdrop="static" data-keyboard="false">
