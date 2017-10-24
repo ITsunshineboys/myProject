@@ -1031,7 +1031,7 @@ angular.module("all_controller", [])
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
-                                        openid:'oyKJL0sAuv0fKqgMaEyU3sG6UGZ0'
+                                        openid:'oyKJL0oHDKwyzBXidhyhshxluBOg'
                                     }
                                 }).then(function successCallback(response) {
                                     console.log('成功');
