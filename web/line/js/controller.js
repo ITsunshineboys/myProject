@@ -990,15 +990,15 @@ angular.module("all_controller", [])
                             if($scope.codeWX == 200){  // 微信支付
                                 alert('调用微信接口');
                                 // 微信接口 === 调用
-                                $http({//获取openid 的地址
-                                    method: 'get',
-                                    url: 'https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open18780024172&token=&lang=zh_CN',
-                                }).then(function successCallback(response) {
-                                    console.log(response);
-                                    $scope.open_id = response.data.data;
-                                    alert('打印open——id');
-                                    alert(JSON.stringify(response));
-                                    alert(JSON.stringify($scope.open_id));
+                                // $http({//获取openid 的地址
+                                //     method: 'get',
+                                //     url: '',
+                                // }).then(function successCallback(response) {
+                                //     console.log(response);
+                                //     $scope.open_id = response.data.data;
+                                //     alert('打印open——id');
+                                //     alert(JSON.stringify(response));
+                                //     alert(JSON.stringify($scope.open_id));
                                     // if( $scope.open_id != undefined){
                                     //     alert(1212);
                                     //     $http({  //获取openid
@@ -1014,9 +1014,9 @@ angular.module("all_controller", [])
                                     //         alert(JSON.stringify(error))
                                     //     });
                                     // }
-                                },function (error) {
-                                    alert(JSON.stringify(error))
-                                });
+                                // },function (error) {
+                                //     alert(JSON.stringify(error))
+                                // });
 
 
                                 $http({  //调用微信支付接口
@@ -1031,7 +1031,7 @@ angular.module("all_controller", [])
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
-                                        openid:+openId
+                                        openid:'oyKJL0sAuv0fKqgMaEyU3sG6UGZ0'
                                     }
                                 }).then(function successCallback(response) {
                                     console.log('成功');
