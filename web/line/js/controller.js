@@ -1036,13 +1036,27 @@ angular.module("all_controller", [])
                                 }).then(function successCallback(response) {
                                     console.log('成功');
                                     $scope.contentWx = response.data.data;
+                                    $scope.appId = response.data.data.appId;
+                                    $scope.timeStamp = response.data.data.timeStamp;
+                                    $scope.nonceStr = response.data.data.nonceStr;
+                                    $scope.package = response.data.data.package;
+                                    $scope.signType = response.data.data.signType;
+                                    $scope.paySign = response.data.data.paySign;
+
                                     callpay();
                                     alert(JSON.stringify(response.data.data));
                                     // alert(JSON.stringify(response.config));
                                     //调用微信JS api 支付
                                     function jsApiCall(){
                                         WeixinJSBridge.invoke(
-                                            'getBrandWCPayRequest',$scope.contentWx,
+                                            'getBrandWCPayRequest',{
+                                                "appId":$scope.appId,     //公众号名称，由商户传入
+                                                "timeStamp":$scope.timeStamp, //时间戳，自1970年以来的秒数
+                                                "nonceStr":$scope.nonceStr, //随机串
+                                                "package": $scope.package,
+                                                "signType":$scope.signType,  //微信签名方式：
+                                                "paySign":$scope.paySign  //微信签名
+                                            },
                                             function(res){
                                                 WeixinJSBridge.log(res.err_msg);
                                                 alert(res.err_code+res.err_desc+res.err_msg);
