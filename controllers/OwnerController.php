@@ -1124,25 +1124,25 @@ class OwnerController extends Controller
         $wall_brick_max['cost'] = $wall_brick_cost['cost'];
         $material_total ['material'][] = $wall_brick_max;
 
-        foreach ($floor_tile_price as $one_floor_tile_price) {
-            switch ($one_floor_tile_price) {
-                case $one_floor_tile_price['id'] == $floor_tile_attr['hall']['id']:
-                    $one_floor_tile_price['quantity'] = $hall_wall_brick_cost['quantity'];
-                    $one_floor_tile_price['cost'] = $hall_wall_brick_cost['cost'];
-                    $material_total ['material'][] = $one_floor_tile_price;
-                    break;
-                case $one_floor_tile_price['id'] == $floor_tile_attr['kitchen']['id']:
-                    $one_floor_tile_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
-                    $one_floor_tile_price['cost'] = $kitchen_wall_brick_cost['cost'];
-                    $material_total ['material'][] = $one_floor_tile_price;
-                    break;
-                case $one_floor_tile_price['id'] == $floor_tile_attr['toilet']['id']:
-                    $one_floor_tile_price['quantity'] = $toilet_wall_brick_cost['quantity'];
-                    $one_floor_tile_price['cost'] = $toilet_wall_brick_cost['cost'];
-                    $material_total['material'][] = $one_floor_tile_price;
-                    break;
-            }
-        }
+//        foreach ($floor_tile_price as $one_floor_tile_price) {
+//            switch ($one_floor_tile_price) {
+//                case $one_floor_tile_price['id'] == $floor_tile_attr['hall']['id']:
+//                    $one_floor_tile_price['quantity'] = $hall_wall_brick_cost['quantity'];
+//                    $one_floor_tile_price['cost'] = $hall_wall_brick_cost['cost'];
+//                    $material_total ['material'][] = $one_floor_tile_price;
+//                    break;
+//                case $one_floor_tile_price['id'] == $floor_tile_attr['kitchen']['id']:
+//                    $one_floor_tile_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
+//                    $one_floor_tile_price['cost'] = $kitchen_wall_brick_cost['cost'];
+//                    $material_total ['material'][] = $one_floor_tile_price;
+//                    break;
+//                case $one_floor_tile_price['id'] == $floor_tile_attr['toilet']['id']:
+//                    $one_floor_tile_price['quantity'] = $toilet_wall_brick_cost['quantity'];
+//                    $one_floor_tile_price['cost'] = $toilet_wall_brick_cost['cost'];
+//                    $material_total['material'][] = $one_floor_tile_price;
+//                    break;
+//            }
+//        }
         $material_total['total_cost'] = $material_cost_total;
 
         return Json::encode([
