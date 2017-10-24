@@ -1113,11 +1113,6 @@ class OwnerController extends Controller
                     $one_goods_price['cost'] = $self_leveling_cost['cost'];
                     $self_leveling[] = $one_goods_price;
                     break;
-//                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['wall_brick']:
-//                    $one_goods_price['quantity'] = $wall_brick_cost['quantity'];
-//                    $one_goods_price['cost'] = $wall_brick_cost['cost'];
-//                    $wall[] = $one_goods_price;
-//                    break;
             }
         }
 
