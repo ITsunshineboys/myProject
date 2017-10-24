@@ -1390,15 +1390,23 @@ class OwnerController extends Controller
         }
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
+        //   生活配套
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
-        $material[]   = BasisDecorationService::capacity($goods_price,$post);
+        //   基础装修
+        $material[][]   = BasisDecorationService::capacity($goods_price,$post);
+        //   家电配套
         $material[]   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
+        //   移动家具
         $material[]   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
-        $material[]   = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        //   固定家具
+        $material[][]   = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        //   软装配套
         $material[]   = BasisDecorationService::mild($goods_price,$post);
+        //   主材
         $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
 
         if ($post['stairway_id'] == 1) {
+            //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
             if ($assort_material == null) {
                 $code = 1061;
@@ -1408,7 +1416,7 @@ class OwnerController extends Controller
                 ]);
             }
             $stairs_price = BasisDecorationService::priceConversion($stairs);
-            foreach ($stairs_price as $one_stairs_price) {
+            foreach ($stairs_price as &$one_stairs_price) {
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
                     $one_stairs_price['quantity'] = $material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
                     $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
@@ -1418,7 +1426,7 @@ class OwnerController extends Controller
         } else {
             $condition_stairs = null;
         }
-        $material[] = BasisDecorationService::profitMargin($condition_stairs);
+        $material[][] = BasisDecorationService::profitMargin($condition_stairs);
 
         //无计算公式
         foreach ($without_assort as $one_without_assort){
@@ -1439,9 +1447,9 @@ class OwnerController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
-            'data' => [
-                'goods' => $material,
-            ]
+            'data' =>[
+               'goods' => $material
+            ],
         ]);
     }
 
