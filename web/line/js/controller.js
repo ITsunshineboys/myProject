@@ -1031,17 +1031,38 @@ angular.module("all_controller", [])
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
-                                        openid:'oyKJL0sAuv0fKqgMaEyU3sG6UGZ0'
+                                        openid:'oyKJL0oHDKwyzBXidhyhshxluBOg'
                                     }
                                 }).then(function successCallback(response) {
                                     console.log('成功');
-                                    alert(JSON.stringify(response.data.data));
-                                    alert(JSON.stringify(response.config));
+                                    $scope.contentWx = response.data.data;
+                                    // alert(JSON.stringify(response.data.data));
+                                    // alert(JSON.stringify(response.config));
                                 },function (error) {
                                     alert('不成功');
                                     alert(error);
                                     alert(JSON.stringify(error))
                                 });
+
+                                // 跳转微信支付界面
+                                function onBridgeReady(){
+                                    WeixinJSBridge.invoke(
+                                        'getBrandWCPayRequest', $scope.contentWx,
+                                        function(res){
+                                            if(res.err_msg == "get_brand_wcpay_request:ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                                        }
+                                    );
+                                }
+                                if (typeof WeixinJSBridge == "undefined"){
+                                    if( document.addEventListener ){
+                                        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                                    }else if (document.attachEvent){
+                                        document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                                        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                                    }
+                                }else{
+                                    onBridgeReady();
+                                }
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
                                 // 支付宝接口
