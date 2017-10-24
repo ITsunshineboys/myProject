@@ -546,7 +546,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendAudio($filePath, $from = "admin", $target_type, $target, $filename, $length)
+    function sendAudio($filePath, $from = "admin", $target_type, $target, $length)
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
@@ -557,7 +557,7 @@ class ChatService
         $body['target'] = $target;
         $options['type'] = "audio";
         $options['url'] = $uri . '/' . $uuid;
-        $options['filename'] = $filename;
+//        $options['filename'] = $filename;
         $options['length'] = $length;
         $options['secret'] = $shareSecret;
         $body['msg'] = $options;

@@ -269,7 +269,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
-
+        $filepath=trim(\Yii::$app->request->post('filepath'));
         $to_user=trim(\Yii::$app->request->post('to_user'));
         $user_hx=new ChatService();
         $res=$user_hx->getUser($to_user);
@@ -287,8 +287,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $filepath=FileService::uploadMore();
-        $data=UserChat::SendImg($nickname,$chat_bd['id'],$to_user,$filepath[0]);
+        $data=UserChat::SendImg($nickname,$chat_bd['id'],$to_user,$filepath);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -303,6 +302,51 @@ class ChatController extends Controller
             ]);
         }
 
+    }
+    /**
+     * 发送语音消息
+     * @return array|string
+     */
+    public function actionSendAudioMessage(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $code=1000;
+        $filepath=trim(\Yii::$app->request->post('filepath'));
+        $to_user=trim(\Yii::$app->request->post('to_user'));
+        $length=trim(\Yii::$app->request->post('length'));//语音长度
+        $user_hx=new ChatService();
+        $res=$user_hx->getUser($to_user);
+        if(array_key_exists('error',$res)){
+            return Json::encode([
+                'code'=>1000,
+                'msg'=>$res['error']
+            ]);
+        }
+        $chat_bd=UserChat::find()->where(['u_id'=>$u_id,'role_id'=>$role_id])->asArray()->one();
+        $nickname=User::find()->where(['id'=>$chat_bd['u_id']])->asArray()->one()['nickname'];
+        if(!$chat_bd || !$nickname ){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=UserChat::SendAudio($nickname,$chat_bd['id'],$to_user,$filepath,$length);
+        if(is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }else{
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
     }
 
 
