@@ -361,9 +361,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     public static function  getWorkerWorkerOrderList($uid, $status, $page, $page_size){
         $worker_id=Worker::find()->select('id')
+            ->asArray()
             ->where(['uid'=>$uid])
-            ->one()
-            ->id;
+            ->one()['id'];
 
         $query = self::find()
             ->select(['id','create_time', 'amount', 'status', 'worker_id'])
