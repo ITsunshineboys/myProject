@@ -1,4 +1,4 @@
 <?php
 return [
-    'testKey' => 'testValue',
+    'env' => 'dev', // env: dev | prod
 ];
