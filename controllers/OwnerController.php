@@ -51,7 +51,7 @@ class OwnerController extends Controller
     const CARPENTRY_MATERIAL = ['石膏板', '龙骨', '丝杆'];
     const LATEX_MATERIAL = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
     const TILER_MATERIAL = ['水泥', '自流平', '河沙'];
-    const BACKMAN_MATERIAL = ['水泥', '河沙', '空心砖'];
+    const BACKMAN_MATERIAL = ['水泥','河沙','空心砖'];
     /**
      * work category details
      */
@@ -1186,7 +1186,7 @@ class OwnerController extends Controller
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                     if ($goods_attr == null){
-                        $code = 1061;
+                        $code = 1067;
                         return Json::encode([
                             'code' => $code,
                             'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1203,7 +1203,7 @@ class OwnerController extends Controller
                     //空心砖费用
                     $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
                     if ($brick_standard == null){
-                        $code = 1061;
+                        $code = 1067;
                         return Json::encode([
                             'code' => $code,
                             'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1218,7 +1218,7 @@ class OwnerController extends Controller
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                     if ($goods_attr == null){
-                        $code = 1061;
+                        $code = 1067;
                         return Json::encode([
                             'code' => $code,
                             'msg' => Yii::$app->params['errorCodes'][$code],
