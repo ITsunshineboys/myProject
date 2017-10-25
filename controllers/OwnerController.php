@@ -1204,7 +1204,7 @@ class OwnerController extends Controller
                     $goods_max = BasisDecorationService::profitMargin($max);
                     //空心砖费用
                     $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
-                    echo 111;
+                    echo 222;
                     var_dump($brick_standard);
                     if ($brick_standard == null){
                         $code = 1067;
@@ -1221,7 +1221,7 @@ class OwnerController extends Controller
                 case $max['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
-                    echo 111;
+                    echo 333;
                     var_dump($goods_attr);
                     if ($goods_attr == null){
                         $code = 1067;
@@ -1238,6 +1238,8 @@ class OwnerController extends Controller
                     break;
             }
         }
+
+        var_dump($material);
         die;
         //总材料费
         $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand['cost'];
