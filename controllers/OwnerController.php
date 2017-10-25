@@ -678,9 +678,7 @@ class OwnerController extends Controller
         $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //材料费用
         $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
-
         $material_total = BasisDecorationService::carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost);
-
 
         return Json::encode([
             'code' => 200,
@@ -1359,7 +1357,7 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['material'];
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
-        $goods = Goods::assortList($material_name,$post['city_code']);
+        $goods = Goods::assortList($material_name,$post['city']);
         if ($goods == null) {
             $code = 1061;
             return Json::encode([
