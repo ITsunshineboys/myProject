@@ -186,30 +186,37 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       };
 
       //物流模块类别
+    $scope.logistics_flag=false;
       $http.post('http://test.cdlhzz.cn:888/mall/logistics-templates-supplier',{},config).then(function (res) {
         console.log('物流模板');
-        console.log(res);
-        $scope.logistics=res.data.data.logistics_templates_supplier;
-        $scope.shop_logistics=res.data.data.logistics_templates_supplier[0].id;
-        //物流模块详情
-        $scope.$watch('shop_logistics',function (newVal,oldVal) {
-          $http.get('http://test.cdlhzz.cn:888/mall/logistics-template-view',{
-            params:{
-              id:+newVal
-            }
-          }).then(function (res) {
-            console.log('物流详情');
-            console.log(res);
-            $scope.logistics_method=res.data.data.logistics_template.delivery_method;//快递方式
-            $scope.district_names=res.data.data.logistics_template.district_names;//地区
-            $scope.delivery_cost_default=res.data.data.logistics_template.delivery_cost_default;//默认运费
-            $scope.delivery_number_default=res.data.data.logistics_template.delivery_number_default;//默认运费的数量
-            $scope.delivery_cost_delta=res.data.data.logistics_template.delivery_cost_delta;//增加件费用
-            $scope.delivery_number_delta=res.data.data.logistics_template.delivery_number_delta;//增加件的数量
-          },function (err) {
-            console.log(err);
-          });
-        });
+          console.log(res);
+          if(res.data.data.logistics_templates_supplier.length==0){
+                $scope.logistics_flag=false;
+          }else{
+              $scope.logistics_flag=true;
+              $scope.logistics=res.data.data.logistics_templates_supplier;
+              $scope.shop_logistics=res.data.data.logistics_templates_supplier[0].id;
+              //物流模块详情
+              $scope.$watch('shop_logistics',function (newVal,oldVal) {
+                  $http.get('http://test.cdlhzz.cn:888/mall/logistics-template-view',{
+                      params:{
+                          id:+newVal
+                      }
+                  }).then(function (res) {
+                      console.log('物流详情');
+                      console.log(res);
+                      $scope.logistics_method=res.data.data.logistics_template.delivery_method;//快递方式
+                      $scope.district_names=res.data.data.logistics_template.district_names;//地区
+                      $scope.delivery_cost_default=res.data.data.logistics_template.delivery_cost_default;//默认运费
+                      $scope.delivery_number_default=res.data.data.logistics_template.delivery_number_default;//默认运费的数量
+                      $scope.delivery_cost_delta=res.data.data.logistics_template.delivery_cost_delta;//增加件费用
+                      $scope.delivery_number_delta=res.data.data.logistics_template.delivery_number_delta;//增加件的数量
+                  },function (err) {
+                      console.log(err);
+                  });
+              });
+          }
+
       },function (err) {
         console.log(err)
       });

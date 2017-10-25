@@ -143,6 +143,8 @@
             <!--物流模板-->
             <div class="template">
                 <span>商品物流</span>
+                <span  ng-if="!logistics_flag" class="add_logistics">*请先添加物流模板</span>
+                <div style='display: inline' ng-if='logistics_flag'>
                 <select class="class_name_input wl_input" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics">
                 </select>
                 <br/>
@@ -170,6 +172,7 @@
                     </div>
                 </div>
                 <hr/>
+                </div>
             </div>
             <!--售后-->
             <div class="service">

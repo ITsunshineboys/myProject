@@ -110,7 +110,7 @@
     </section>
 
     <!--添加模态框-->
-    <div class="modal fade" id="on_shelves_add_modal">
+    <div class="modal fade" id="on_shelves_add_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -145,7 +145,7 @@
                                 {{n.title}}
                             </li>
                         </ul>
-                        <p ng-if="add_confirm_red" class="red">请至少选择一项三级分类</p>
+                        <p ng-if="add_confirm_red" class="red">*请至少选择一项三级分类</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -159,7 +159,7 @@
         </div>
     </div>
     <!--批量下架模态框-->
-    <div class="modal fade" id="down_shelves_modal">
+    <div class="modal fade" id="down_shelves_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -180,7 +180,7 @@
         </div>
     </div>
     <!--单个下架商品 模态框-->
-    <div class="modal fade" id="down_shelves_solo_modal">
+    <div class="modal fade" id="down_shelves_solo_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -201,7 +201,7 @@
         </div>
     </div>
     <!--请勾选后再操作-->
-    <div class="modal fade" id="please_check">
+    <div class="modal fade" id="please_check" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -268,7 +268,6 @@
         </div>
         <table>
             <tr>
-                <!--<td>&nbsp;</td>-->
                 <td ng-if="down_1">商品编号</td>
                 <td ng-if="down_2">商品名称</td>
                 <td ng-if="down_3">供货价格</td>
@@ -291,7 +290,6 @@
                 <td ng-if="down_17">操作</td>
             </tr>
             <tr class="table_content" ng-repeat="item in down_list_arr">
-                <!--<td><input type="checkbox" ng-checked="off_selectAll" ng-model="item.state"></td>-->
                 <td ng-if="down_1">{{item.sku}}</td>
                 <td ng-if="down_2">{{item.title}}</td>
                 <td ng-if="down_3">¥{{item.supplier_price}}</td>
@@ -329,7 +327,7 @@
     </section>
 
     <!--下架原因模态框-->
-    <div class="modal fade" id="down_shelves_reason_modal">
+    <div class="modal fade" id="down_shelves_reason_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -348,7 +346,7 @@
         </div>
     </div>
     <!--上架商品模态框-->
-    <div class="modal fade" id="all_up_shelves_modal">
+    <div class="modal fade" id="all_up_shelves_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -369,7 +367,7 @@
         </div>
     </div>
     <!--删除模态框-->
-    <div class="modal fade" id="off_del_modal">
+    <div class="modal fade" id="off_del_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
