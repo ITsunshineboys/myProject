@@ -129,9 +129,9 @@ class UserAccessdetail extends \yii\db\ActiveRecord
      * @param $access_type
      * @return string
      */
-    public static  function  findAccessType($access_type)
+   public static  function  findAccessType($access_type)
     {
-
+        //1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款  7.使用
         switch ($access_type)
         {
             case 1:
@@ -151,6 +151,9 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 break;
             case 6:
                 $type=self::ACCESS_TYPE_DESC_PAYMENT_GOODS;
+                break;
+            case 7:
+                $type=self::ACCESS_TYPE_DESC_PAYMENT_BUY;
                 break;
         }
         return $type;
