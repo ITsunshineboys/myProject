@@ -24,7 +24,7 @@
             <select ng-model="params.status" class="time_select" ng-change="time_change()" ng-options="items.id as items.value for items in status_arr"></select>
         </div>
         <!-- 表格 -->
-        <table class="table table-responsive">
+        <table class="table table-responsive" style="width: 100%;table-layout: fixed">
             <thead>
             <tr>
                 <th>申请时间</th>
@@ -43,8 +43,8 @@
                 <td>{{item.real_money}}</td>
                 <td>{{item.lost_money}}</td>
                 <td>{{item.status}}</td>
-                <td class="blue">{{item.supplier_reason}}</td>
-                <td class="blue" ui-sref="wallet_detail({transaction_no:item.transaction_no})">查看</td>
+                <td class="blue supplier_reason">{{item.supplier_reason}}</td>
+                <td class="blue"   ui-sref="wallet_detail({transaction_no:item.transaction_no})">查看</td>
             </tr>
             </tbody>
         </table>
