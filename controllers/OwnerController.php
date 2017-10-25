@@ -1648,7 +1648,7 @@ class OwnerController extends Controller
      */
     public function actionTest(){
         return Json::encode([
-           'goods'=> (new LaborCost())->find()->All(),
+           'goods'=> (new Goods())->find()->where(['id'=>210])->All(),
         ]);
     }
 
