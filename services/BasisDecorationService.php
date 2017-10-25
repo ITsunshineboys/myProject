@@ -1075,9 +1075,6 @@ class BasisDecorationService
         $new_24 = $get_area['24_new_construction'] * $cement_24;
         $new_repair = $get_area['repair'] * $repair;
         $new_dosage = $new_12 + $new_24 + $new_repair;
-        var_dump($new_dosage);
-        var_dump($goods_attr);
-        var_dump($value);die;
 //        个数：（水泥用量÷抓取的商品的KG）
         $cement['quantity'] = ceil($new_dosage / $value);
 //        水泥费用：个数×抓取的商品价格
