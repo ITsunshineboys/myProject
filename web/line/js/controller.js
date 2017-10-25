@@ -946,7 +946,7 @@ angular.module("all_controller", ['ngCookies'])
                 });
             }
         };
-
+        // 获取sessionStorage
         if (sessionStorage.getItem('adressInfo') != null) {
             let adressInfo = JSON.parse(sessionStorage.getItem('adressInfo'));
             console.log(adressInfo);

@@ -56,6 +56,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 /*params:{'pid':'',"id":"", 'mall_id':"",'datailsShop':'datailsShop','shopNum':'',
                     'supplier_id':''
                 }*/
+
             })
 
             .state("shop_front", {   //店铺首页和全部商品
@@ -65,6 +66,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 },
                 controller: "shop_front_ctrl",
                 params:{'pid':'',"id":'','mall_id':'','datailsShop':'datailsShop'}
+
             })
 
             .state("order_commodity", {    //订单确认
