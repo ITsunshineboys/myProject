@@ -51,7 +51,7 @@ class OwnerController extends Controller
     const CARPENTRY_MATERIAL = ['石膏板', '龙骨', '丝杆'];
     const LATEX_MATERIAL = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
     const TILER_MATERIAL = ['水泥', '自流平', '河沙'];
-    const BACKMAN_MATERIAL = ['水泥', '河沙', '空心砖'];
+    const BACKMAN_MATERIAL = ['水泥','河沙','空心砖'];
     /**
      * work category details
      */
@@ -1171,6 +1171,7 @@ class OwnerController extends Controller
         //材料费
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL,$select);
+        var_dump($goods);die;
         if ($goods == null){
             $code = 1061;
             return Json::encode([
