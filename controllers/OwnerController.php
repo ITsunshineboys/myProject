@@ -1230,6 +1230,7 @@ class OwnerController extends Controller
             }
         }
         $material['material'][] = BasisDecorationService::profitMargin($cement);
+        var_dump($material);exit;
         $material['material'][] = BasisDecorationService::profitMargin($air_brick);
         $material['material'][] = BasisDecorationService::profitMargin($river_sand);
         $material['total_cost'] = 0;
