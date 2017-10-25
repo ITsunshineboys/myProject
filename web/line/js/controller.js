@@ -1051,6 +1051,7 @@ angular.module("all_controller", ['ngCookies'])
             }
 
         };
+        $cookieStore.put('goods_name',$scope.title);
         $scope.getProduct_details =  function () {
             $state.go('product_details',{'mall_id':$scope.mall_id,'id':$scope.id})
         }
