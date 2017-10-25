@@ -1962,4 +1962,9 @@ class BasisDecorationService
         $material_total['total_cost'][] = $material_cost;
         return $material_total;
     }
+
+    public static function handymanGoods()
+    {
+
+    }
 }

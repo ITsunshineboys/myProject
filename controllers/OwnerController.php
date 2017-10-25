@@ -1183,11 +1183,7 @@ class OwnerController extends Controller
         foreach ($goods_price as $max) {
             switch ($max) {
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
-                    $goods_max = BasisDecorationService::profitMargin($max);
-                    $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
-                    echo 111;
-                    var_dump($goods_attr);
-                    var_dump($goods_max);
+                    $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
                     if ($goods_attr == null){
                         $code = 1067;
                         return Json::encode([
@@ -1196,15 +1192,14 @@ class OwnerController extends Controller
                         ]);
                     }
                     //水泥费用
-                    $cement_cost = BasisDecorationService::cementCost($post, $craft, $goods_max, $goods_attr);
-                    $goods_max['quantity'] = $cement_cost['quantity'];
-                    $goods_max['cost'] = $cement_cost['cost'];
-                    $material ['material'][] = $goods_max;
+                    $cement_cost = BasisDecorationService::cementCost($post,$craft,$max,$goods_attr);
+                    $max['quantity'] = $cement_cost['quantity'];
+                    $max['cost'] = $cement_cost['cost'];
+                    $cement[] = $max;
                     break;
                 case $max['title'] == BasisDecorationService::GOODS_NAME['air_brick']:
-                    $goods_max = BasisDecorationService::profitMargin($max);
                     //空心砖费用
-                    $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
+                    $brick_standard = GoodsAttr::findByGoodsId($max['id']);
                     if ($brick_standard == null){
                         $code = 1067;
                         return Json::encode([
@@ -1212,14 +1207,13 @@ class OwnerController extends Controller
                             'msg' => Yii::$app->params['errorCodes'][$code],
                         ]);
                     }
-                    $brick_cost = BasisDecorationService::brickCost($post, $goods_max, $brick_standard);
-                    $goods_max['quantity'] = $brick_cost['quantity'];
-                    $goods_max['cost'] = $brick_cost['cost'];
-                    $material['material'] [] = $goods_max;
+                    $brick_cost = BasisDecorationService::brickCost($post, $max, $brick_standard);
+                    $max['quantity'] = $brick_cost['quantity'];
+                    $max['cost'] = $brick_cost['cost'];
+                    $air_brick[] = $max;
                     break;
                 case $max['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
-                    $goods_max = BasisDecorationService::profitMargin($max);
-                    $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
+                    $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
                     if ($goods_attr == null){
                         $code = 1067;
                         return Json::encode([
@@ -1228,17 +1222,25 @@ class OwnerController extends Controller
                         ]);
                     }
                     //河沙费用
-                    $river_sand = BasisDecorationService::riverSandCost($post, $goods_max, $craft, $goods_attr);
-                    $goods_max['quantity'] = $river_sand['quantity'];
-                    $goods_max['cost'] = $river_sand['cost'];
-                    $material['material'][] = $goods_max;
+                    $river_sand_cost = BasisDecorationService::riverSandCost($post, $max, $craft, $goods_attr);
+                    $max['quantity'] = $river_sand_cost['quantity'];
+                    $max['cost'] = $river_sand_cost['cost'];
+                    $river_sand[] = $max;
                     break;
             }
         }
-        die;
-        //总材料费
-        $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand['cost'];
-        $material['total_cost'] = $total_material_cost;
+        $material['material'][] = BasisDecorationService::profitMargin($cement);
+        $material['material'][] = BasisDecorationService::profitMargin($air_brick);
+        $material['material'][] = BasisDecorationService::profitMargin($river_sand);
+        $material['total_cost'] = 0;
+        foreach ($material['material'] as $total_cost){
+            $material['total_cost'] += $total_cost['cost'];
+        }
+
+//        //总材料费
+//        $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand_cost['cost'];
+//        $material['total_cost'] = $total_material_cost;
+
 
         return Json::encode([
             'code' => 200,
