@@ -1932,4 +1932,33 @@ class BasisDecorationService
         }
         return $series_style_goods;
     }
+
+    public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost)
+    {
+        $material_total = [];
+        foreach ($goods_price as &$one_goods_price) {
+            switch ($one_goods_price) {
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['plasterboard']:
+                    $one_goods_price['quantity'] = $plasterboard_cost['quantity'];
+                    $one_goods_price['cost'] = $plasterboard_cost['cost'];
+                    $plasterboard [] = $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['keel']:
+                    $one_goods_price['quantity'] = $keel_cost['quantity'];
+                    $one_goods_price['cost'] = $keel_cost['cost'];
+                    $keel [] = $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['lead_screw']:
+                    $one_goods_price['quantity'] = $pole_cost['quantity'];
+                    $one_goods_price['cost'] = $pole_cost['cost'];
+                    $pole [] = $one_goods_price;
+                    break;
+            }
+        }
+
+        $material_total[] = BasisDecorationService::profitMargin($plasterboard);
+        $material_total[] = BasisDecorationService::profitMargin($keel);
+        $material_total[] = BasisDecorationService::profitMargin($pole);
+        return $material_total;
+    }
 }

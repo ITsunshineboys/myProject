@@ -564,7 +564,7 @@ class OwnerController extends Controller
             }
         }
         $material_total ['material'][] = BasisDecorationService::profitMargin($goods_max);
-        $material_total['total_cost'][] = $material_price['cost'];
+        $material_total ['total_cost'][] = $material_price['cost'];
 
         return Json::encode([
             'code' => 200,
@@ -642,6 +642,7 @@ class OwnerController extends Controller
         $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $modelling, $series_all, $style_all, $post['series']);
         //平顶天数
         $flat_day = BasisDecorationService::flatDay($carpentry_add, $flat, $series_all, $style_all, $post['series']);
+
         //人工费
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
@@ -678,31 +679,8 @@ class OwnerController extends Controller
         //材料费用
         $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
 
-        $material_total = [];
-        foreach ($goods_price as &$one_goods_price) {
-            switch ($one_goods_price) {
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['plasterboard']:
-                    $one_goods_price['quantity'] = $plasterboard_cost['quantity'];
-                    $one_goods_price['cost'] = $plasterboard_cost['cost'];
-                    $plasterboard [] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['keel']:
-                    $one_goods_price['quantity'] = $keel_cost['quantity'];
-                    $one_goods_price['cost'] = $keel_cost['cost'];
-                    $keel [] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['lead_screw']:
-                    $one_goods_price['quantity'] = $pole_cost['quantity'];
-                    $one_goods_price['cost'] = $pole_cost['cost'];
-                    $pole [] = $one_goods_price;
-                    break;
-            }
-        }
-
-        $material_total[] = BasisDecorationService::profitMargin($plasterboard);
-        $material_total[] = BasisDecorationService::profitMargin($keel);
-        $material_total[] = BasisDecorationService::profitMargin($pole);
-        $material_total['total_cost'] = $material_cost;
+        $material_total['material'][] = BasisDecorationService::carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost);
+        $material_total['total_cost'][] = $material_cost;
 
         return Json::encode([
             'code' => 200,
@@ -911,7 +889,7 @@ class OwnerController extends Controller
                     break;
             }
         }
-        $material_total['material']['total_cost'] = $total_cost;
+        $material_total['total_cost'] [] = $total_cost;
         //总天数   乳胶漆天数+阴角线天数+腻子天数
         $total_day = ceil($primer_day + $finishing_coat_day + $putty_day + $concave_line_day);
 
