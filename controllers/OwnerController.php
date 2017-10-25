@@ -1179,11 +1179,13 @@ class OwnerController extends Controller
             ]);
         }
         $goods_price = BasisDecorationService::priceConversion($goods);
-        $material = [];
         foreach ($goods_price as $max) {
             switch ($max) {
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
+                    var_dump($goods_attr);
+                    var_dump($max['id']);
+                    die;
                     if ($goods_attr == null){
                         $code = 1067;
                         return Json::encode([
