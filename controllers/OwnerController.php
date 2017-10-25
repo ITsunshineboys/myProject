@@ -1187,6 +1187,7 @@ class OwnerController extends Controller
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                     echo 111;
                     var_dump($goods_attr);
+                    var_dump($goods_max);
                     if ($goods_attr == null){
                         $code = 1067;
                         return Json::encode([
