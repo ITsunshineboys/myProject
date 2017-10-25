@@ -137,7 +137,7 @@ class WithdrawalsController extends Controller
     }
 
 
-   /**
+  /**
      * 移动端查询银行卡信息
      * @return string
      */
@@ -150,13 +150,22 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $role_id=trim(Yii::$app->request->get('role_id',7));
-//        $UserBankInfo=UserBankInfo::findByUidAndRole_id($user->id,$role_id);
+        $role_id=$user->last_role_id_app;
+        $role=Role::GetRoleByRoleId($role_id,$user);
+        if (!$role)
+        {
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $UserBankInfo=(new Query())
             ->from(UserBankInfo::tableName().' as u')
             ->leftJoin(BankinfoLog::tableName().' as b','u.log_id=b.id')
             ->where(['u.uid'=>$user->id,'u.role_id'=>$role_id])
             ->all();
+
         if ($UserBankInfo)
         {
             foreach ($UserBankInfo as &$list)
@@ -171,7 +180,10 @@ class WithdrawalsController extends Controller
         return Json::encode([
             'code' => $code,
             'msg' => 'ok',
-            'data'=>$data
+            'data'=>[
+                'balance'=>GoodsOrder::switchMoney($role->availableamount*0.01),
+                'list'=>$data
+            ]
         ]);
     }
      /**
