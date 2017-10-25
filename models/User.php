@@ -1729,10 +1729,12 @@ class User extends ActiveRecord implements IdentityInterface
 
         $sessionId = Yii::$app->session->id;
 
-        $appOrAdminAuthKey = $roleId ? $this->authKeyAdmin : $this->authKey;
-        $sessFile = Yii::$app->fileCache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $appOrAdminAuthKey;
-        if ($appOrAdminAuthKey != $sessionId && file_exists($sessFile)) {
-            @unlink($sessFile);
+        if (!YII_DEBUG) {
+            $appOrAdminAuthKey = $roleId ? $this->authKeyAdmin : $this->authKey;
+            $sessFile = Yii::$app->fileCache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $appOrAdminAuthKey;
+            if ($appOrAdminAuthKey != $sessionId && file_exists($sessFile)) {
+                @unlink($sessFile);
+            }
         }
 
         if ($roleId) {
