@@ -1185,7 +1185,7 @@ class OwnerController extends Controller
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
                     var_dump($goods_attr);
                     var_dump($max['id']);
-                    die;
+
                     if ($goods_attr == null){
                         $code = 1067;
                         return Json::encode([
@@ -1231,8 +1231,8 @@ class OwnerController extends Controller
                     break;
             }
         }
+        die;
         $material['material'][] = BasisDecorationService::profitMargin($cement);
-        var_dump($material);exit;
         $material['material'][] = BasisDecorationService::profitMargin($air_brick);
         $material['material'][] = BasisDecorationService::profitMargin($river_sand);
         $material['total_cost'] = 0;
