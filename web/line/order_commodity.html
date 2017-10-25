@@ -1,178 +1,178 @@
 <link rel="stylesheet" href="css/order.css"/>
 <link rel="stylesheet" href="css/LArea.min.css"/>
 <div ng-controller="order_commodity_ctrl" ng-cloak>
- <header>
-     <div>
-         <img src="images/mall_nav_return.png" ng-click="getProduct_details()" alt="">
-         <span>确认订单</span>
-     </div>
- </header>
- <section>
-     <div class="address_map" data-toggle="modal" ng-click="getHarvestMadel()" data-target="{{harvestMadel}}" >
-         <div ng-show="show_address">
-             <img src="images/mall_location_blue.png" alt="">
-             <span class="delivery_address" >填写收货地址</span>
-             <img src="images/left_com.png" class="img_harvest" alt="">
-         </div>
+    <header>
+        <div>
+            <img src="images/mall_nav_return.png" ng-click="getProduct_details()" alt="">
+            <span>确认订单</span>
+        </div>
+    </header>
+    <section>
+        <div class="address_map" data-toggle="modal" ng-click="getHarvestMadel()" data-target="{{harvestMadel}}" >
+            <div ng-show="show_address">
+                <img src="images/mall_location_blue.png" alt="">
+                <span class="delivery_address" >填写收货地址</span>
+                <img src="images/left_com.png" class="img_harvest" alt="">
+            </div>
 
-         <div  ng-show="show_harvest">
-             <img src="images/mall_location_blue.png" alt="">
-             <div class="address_content">
-                 <span>收货人：</span>
-                 <span>{{consigneeName}}</span>
-                 <span>{{mobile}}</span><br>
-                 <span>地址：</span>
-                 <span>{{districtMore}}{{regionMore}}</span>
-             </div>
-             <img src="images/left_com.png" id="img_harvest" alt="">
-         </div>
+            <div  ng-show="show_harvest">
+                <img src="images/mall_location_blue.png" alt="">
+                <div class="address_content">
+                    <span>收货人：</span>
+                    <span>{{consigneeName}}</span>
+                    <span>{{mobile}}</span><br>
+                    <span>地址：</span>
+                    <span>{{districtMore}}{{regionMore}}</span>
+                </div>
+                <img src="images/left_com.png" id="img_harvest" alt="">
+            </div>
 
 
 
-     </div>
-     <!--商品详情展示-->
-     <div class="bag_div"></div>
-     <div class="address_shop" >
-         <div class="inoc_title">
-             <img src="http://test.cdlhzz.cn:888/{{icon}}" alt="">
-             <span>{{shop_name}}</span>
-         </div>
-         <div class="address_commodity">
-             <img src="http://test.cdlhzz.cn:888/{{cover_image}}" alt="">
-             <div class="left_commodity">
-                 <p>{{title}}</p>
-                 <p>{{subtitle}}</p>
-                 <span>￥{{platform_price}}</span>
-                 <span>x {{goods_num}}</span>
-             </div>
-         </div>
-     </div>
-     <!--发票 付款 留言-->
-     <div class="bag_div"></div>
-     <div class="more_details">
-         <ul>
-             <li class="show_in" ui-sref="invoice({harvestName:harvestName,harvestNum:harvestNum,harvestAddress:harvestAddress,
+        </div>
+        <!--商品详情展示-->
+        <div class="bag_div"></div>
+        <div class="address_shop" >
+            <div class="inoc_title">
+                <img src="http://test.cdlhzz.cn:888/{{icon}}" alt="">
+                <span>{{shop_name}}</span>
+            </div>
+            <div class="address_commodity">
+                <img src="http://test.cdlhzz.cn:888/{{cover_image}}" alt="">
+                <div class="left_commodity">
+                    <p>{{title}}</p>
+                    <p>{{subtitle}}</p>
+                    <span>￥{{platform_price}}</span>
+                    <span>x {{goods_num}}</span>
+                </div>
+            </div>
+        </div>
+        <!--发票 付款 留言-->
+        <div class="bag_div"></div>
+        <div class="more_details">
+            <ul>
+                <li class="show_in" ui-sref="invoice({harvestName:harvestName,harvestNum:harvestNum,harvestAddress:harvestAddress,
               title:title,subtitle:subtitle,shop_name:shop_name,platform_price:platform_price,cover_image:cover_image,icon:icon,
-              goods_num:goods_num,show_harvest:show_harvest,show_address:show_address,mall_id:mall_id,shopNum:shopNum ,
+              goods_num:goods_num,show_harvest:show_harvest,show_address:show_address,mall_id:mall_id,shopNum:shopNum,
               consigneeName:consigneeName,mobile:mobile,districtMore:districtMore,regionMore:regionMore,leaveMessage:leaveMessage,
               invoice_name:invoice_name,invoice_number:invoice_number,invoice_id:invoice_id,address_id:address_id,supplier_id:supplier_id
              })">
 
-                 <span>发票信息</span>
-                 <span>{{invoice_header}} {{invoice_content}}&nbsp; 〉</span>
-             </li>
-             <li>
-                 <span>付款方式</span>
-                 <span>在线支付</span>
-             </li>
-             <li>
-                 <span>买家留言</span>
-                 <input type="text" maxlength="30" placeholder="选填：对本次交易的说明" ng-model="leaveMessage">
-             </li>
-         </ul>
-     </div>
-     <!--商品价格 优惠价格 运费-->
-     <div class="bag_div"></div>
-     <div class="commodity_pic">
-         <ul>
-             <li>
-                 <span>商品价格</span>
-                 <span class="commodity_pic_num">￥{{market_price}}</span>
-             </li>
-             <li>
-                 <span>优惠价格</span>
-                 <span class="commodity_pic_r">￥{{platform_price}}</span>
-             </li>
-             <li>
-                 <span>+运费</span>
-                 <span>￥{{freight}}</span>
-             </li>
-         </ul>
-     </div>
-     <!--需要付款-->
-     <div class="need_required">
-         <span>需付款：</span>
-         <span>￥{{allCost}}</span>
-     </div>
-     <!--<div class="bag_div " id=" bottom_div"></div>-->
-     <!--去支付-->
-     <div class="go_play">
-         <span>合计：</span>
-         <span>￥{{allCost}}</span>
-         <button ng-click="getModel()"  data-toggle="modal"  data-target="{{order_address_model}}">去支付</button>
-     </div>
+                    <span>发票信息</span>
+                    <span>{{invoice_header}} {{invoice_content}}&nbsp; 〉</span>
+                </li>
+                <li>
+                    <span>付款方式</span>
+                    <span>在线支付</span>
+                </li>
+                <li>
+                    <span>买家留言</span>
+                    <input type="text" maxlength="30" placeholder="选填：对本次交易的说明" ng-model="leaveMessage">
+                </li>
+            </ul>
+        </div>
+        <!--商品价格 优惠价格 运费-->
+        <div class="bag_div"></div>
+        <div class="commodity_pic">
+            <ul>
+                <li>
+                    <span>商品价格</span>
+                    <span class="commodity_pic_num">￥{{market_price}}</span>
+                </li>
+                <li>
+                    <span>优惠价格</span>
+                    <span class="commodity_pic_r">￥{{platform_price}}</span>
+                </li>
+                <li>
+                    <span>+运费</span>
+                    <span>￥{{freight}}</span>
+                </li>
+            </ul>
+        </div>
+        <!--需要付款-->
+        <div class="need_required">
+            <span>需付款：</span>
+            <span>￥{{allCost}}</span>
+        </div>
+        <!--<div class="bag_div " id=" bottom_div"></div>-->
+        <!--去支付-->
+        <div class="go_play">
+            <span>合计：</span>
+            <span>￥{{allCost}}</span>
+            <button ng-click="getModel()"  data-toggle="modal"  data-target="{{order_address_model}}">去支付</button>
+        </div>
 
 
-     <!--编辑收货地址-->
-     <div class="modal fade" id="delivery_address" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-         <div class="modal-dialog" role="document" id="address_body">
-             <div class="modal-content" id="two_address">
-                 <div class="modal-header" id="address_header">
-                     <img src="images/mall_nav_return.png" alt="" data-dismiss="modal">
-                     <span class="modal-title" >编辑收货地址</span>
-                 </div>
-                 <div class="bag_div"></div>
-                 <div class="modal-body"  >
-                     <!--表格填写-->
-                     <div class="input-group">
-                         <span>收货人</span>
-                         <div class="shu"></div>
-                         <input type="text" placeholder="请输入姓名" ng-model="harvestName">
-                     </div>
-                     <div class="input-group" >
-                         <span>联系电话</span>
-                         <div class="shu"></div>
-                         <input type="text"  placeholder="请输入联系电话" maxlength="11" ng-model="harvestNum">
-                     </div>
-                     <div class="input-group" data-toggle="modal" data-target="#three_modal" >
-                         <span>所在区域</span>
-                         <div class="shu"></div>
-                         <input class="address_more" id="demo1" type="text" readonly="" name="input_area" placeholder="请选择城市"/>
-                         <input class="address_more" id="value1" type="hidden" readonly="" />
-                     </div>
-                     <div class="input-group">
-                         <span>详细地址</span>
-                         <div class="shu"></div>
-                         <input type="text"  cols="10" rows="2" placeholder="请输入详细地址" ng-model="harvestAddress">
-                     </div>
-                     <!--按钮-->
-                     <div class="btn_hold">
-                         <button ng-click="getAddress ()" data-toggle="modal" data-target="{{numModel}}">保存</button>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
+        <!--编辑收货地址-->
+        <div class="modal fade" id="delivery_address" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" id="address_body">
+                <div class="modal-content" id="two_address">
+                    <div class="modal-header" id="address_header">
+                        <img src="images/mall_nav_return.png" alt="" data-dismiss="modal">
+                        <span class="modal-title" >编辑收货地址</span>
+                    </div>
+                    <div class="bag_div"></div>
+                    <div class="modal-body"  >
+                        <!--表格填写-->
+                        <div class="input-group">
+                            <span>收货人</span>
+                            <div class="shu"></div>
+                            <input type="text" placeholder="请输入姓名" ng-model="harvestName">
+                        </div>
+                        <div class="input-group" >
+                            <span>联系电话</span>
+                            <div class="shu"></div>
+                            <input type="text"  placeholder="请输入联系电话" maxlength="11" ng-model="harvestNum">
+                        </div>
+                        <div class="input-group" data-toggle="modal" data-target="#three_modal" >
+                            <span>所在区域</span>
+                            <div class="shu"></div>
+                            <input class="address_more" id="demo1" type="text" readonly="" name="input_area" placeholder="请选择城市"/>
+                            <input class="address_more" id="value1" type="hidden" readonly="" />
+                        </div>
+                        <div class="input-group">
+                            <span>详细地址</span>
+                            <div class="shu"></div>
+                            <input type="text"  cols="10" rows="2" placeholder="请输入详细地址" ng-model="harvestAddress">
+                        </div>
+                        <!--按钮-->
+                        <div class="btn_hold">
+                            <button ng-click="getAddress ()" data-toggle="modal" data-target="{{numModel}}">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-     <!--手机号码判断错误模态框-->
-     <div class="modal fade " id="harvestNum_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-         <div class="modal-dialog modal-sm" id="sm_model" role="document">
-             <div class="modal-content" id="num_modal">
-                 <p>{{flagContent}}</p>
-                 <div class="xian"></div>
-                 <button class="btn_num" ng-click="getHarvest ()" data-dismiss="modal">确认</button>
-             </div>
-         </div>
-     </div>
+        <!--手机号码判断错误模态框-->
+        <div class="modal fade " id="harvestNum_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" id="sm_model" role="document">
+                <div class="modal-content" id="num_modal">
+                    <p>{{flagContent}}</p>
+                    <div class="xian"></div>
+                    <button class="btn_num" ng-click="getHarvest ()" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
 
-     <!--选择省市区  模态框-->
-     <!--<div class="modal fade " id="three_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">-->
-         <!--<div class="modal-dialog " id="level_model" role="document">-->
-             <!--<div class="modal-content" id="link_modal">-->
-                <!--<p>三级联动</p>-->
-             <!--</div>-->
-         <!--</div>-->
-     <!--</div>-->
+        <!--选择省市区  模态框-->
+        <!--<div class="modal fade " id="three_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">-->
+        <!--<div class="modal-dialog " id="level_model" role="document">-->
+        <!--<div class="modal-content" id="link_modal">-->
+        <!--<p>三级联动</p>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
 
-      <!--判断收货地址   模态框-->
-     <div class="modal fade " id="order_address_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-         <div class="modal-dialog modal-sm" id="address_model" role="document">
-             <div class="modal-content" id="address_order_modal">
-                 <p>{{order_order}}</p>
-                 <div class="xian"></div>
-                 <button class="btn_num" data-dismiss="modal">确认</button>
-             </div>
-         </div>
-     </div>
- </section>
+        <!--判断收货地址   模态框-->
+        <div class="modal fade " id="order_address_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" id="address_model" role="document">
+                <div class="modal-content" id="address_order_modal">
+                    <p>{{order_order}}</p>
+                    <div class="xian"></div>
+                    <button class="btn_num" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>

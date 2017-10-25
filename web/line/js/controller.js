@@ -476,7 +476,7 @@ angular.module("all_controller", ['ngCookies'])
             console.log($scope.id);
             console.log($scope.shopNum);
             setTimeout(function () {
-                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id})
+                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
             },300)
         }
     })
@@ -637,8 +637,8 @@ angular.module("all_controller", ['ngCookies'])
         $scope.harvestAddress  = $stateParams.harvestAddress;
         $scope.harvestName     = $stateParams.harvestName;
         $scope.harvestNum      = $stateParams.harvestNum;
-        $scope.show_address    = $stateParams.show_address;
-        $scope.show_harvest    = $stateParams.show_harvest;
+        // $scope.show_address    = $stateParams.show_address;
+        // $scope.show_harvest    = $stateParams.show_harvest;
         $scope.mall_id         = $stateParams.mall_id;
         $scope.shopNum         = $stateParams.shopNum;
         $scope.supplier_id     = $stateParams.supplier_id;
@@ -792,8 +792,6 @@ angular.module("all_controller", ['ngCookies'])
 
     //确认订单
     .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams,$cookieStore,$cookies) {
-        alert($cookieStore.get('goods_name'));
-        alert(JSON.stringify($cookies));
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
@@ -802,13 +800,12 @@ angular.module("all_controller", ['ngCookies'])
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
         $scope.supplier_id  = $stateParams.supplier_id;//商家ID
         $scope.address_id  = $stateParams.address_id;//地址ID
-
         console.log($scope.invoice_id);
         console.log($scope.supplier_id);
         if($stateParams.show_address !== ''){
             console.log(12345456);
-            $scope.show_address = $stateParams.show_address;
-            $scope.show_harvest = $stateParams.show_harvest;
+            // $scope.show_address = $stateParams.show_address;
+            // $scope.show_harvest = $stateParams.show_harvest;
             $scope.harvestNum = $stateParams.harvestNum;//收获人号码
             $scope.harvestName = $stateParams.harvestName;//收货人名字
             $scope.harvestAddress = $stateParams.harvestAddress;//收货人地址
@@ -929,6 +926,15 @@ angular.module("all_controller", ['ngCookies'])
                     }
                 }).then(function successCallback(response) {
                     console.log(response);
+                    let adressObj = {
+                        show_harvest: true,
+                        show_address: false,
+                        name: response.data.data[0].consignee,
+                        phone: response.data.data[0].mobile,
+                        city: response.data.data[0].district,
+                        address: response.data.data[0].region
+                    };
+                    sessionStorage.setItem('adressInfo', JSON.stringify(adressObj));
                     $scope.show_harvest = true;
                     $scope.show_address = false;
                     $scope.consigneeName = response.data.data[0].consignee;
@@ -940,8 +946,20 @@ angular.module("all_controller", ['ngCookies'])
                 });
             }
         };
+
+        if (sessionStorage.getItem('adressInfo') != null) {
+            let adressInfo = JSON.parse(sessionStorage.getItem('adressInfo'));
+            console.log(adressInfo);
+            $scope.show_address = false;
+            $scope.show_harvest = true;
+            $scope.consigneeName = adressInfo.name;
+            $scope.mobile = adressInfo.phone;
+            $scope.districtMore = adressInfo.city;
+            $scope.regionMore = adressInfo.address;
+        }
+
         // 获取发票信息
-        if($scope.invoice_id != ''){
+        if($scope.invoice_id != undefined){
             $http({
                 method: 'get',
                 url: 'http://common.cdlhzz.cn/order/getinvoicelinedata',
@@ -958,6 +976,7 @@ angular.module("all_controller", ['ngCookies'])
 
         // 点击去支付判断是否填写完整
         $scope.getModel = function () {
+            alert(212)
             $scope.order_order = '';
             $scope.order_address_model = '';
             if( $scope.show_harvest == false && $scope.show_address == true ){
@@ -1013,12 +1032,9 @@ angular.module("all_controller", ['ngCookies'])
                                     alert(JSON.stringify(response));
                                     alert(JSON.stringify($scope.open_id));
                                     window.location = $scope.open_id
-
                                 },function (error) {
                                     alert(JSON.stringify(error))
                                 });
-                                alert(JSON.stringify($cookieStore));
-                                alert(JSON.stringify($cookies))
 
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
@@ -1051,7 +1067,6 @@ angular.module("all_controller", ['ngCookies'])
             }
 
         };
-        $cookieStore.put('goods_name',$scope.title);
         $scope.getProduct_details =  function () {
             $state.go('product_details',{'mall_id':$scope.mall_id,'id':$scope.id})
         }
