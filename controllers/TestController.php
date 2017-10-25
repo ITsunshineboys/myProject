@@ -157,6 +157,6 @@ class TestController extends Controller
 
     public function actionTest()
     {
-        return time();
+        return time() . 'a';
     }
 }
