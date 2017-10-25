@@ -60,8 +60,8 @@ class Wxpay  extends ActiveRecord
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
         // return $jsApiParameters;
-        echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){WeixinJSBridge.log(res.err_msg);alert(res.err_code+res.err_desc+res.err_msg);});}
+      echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
+ function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='http://common.cdlhzz.cn/line/#!/order_commodity';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='http://common.cdlhzz.cn/line/#!/pay_success';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='http://common.cdlhzz.cn/line/#!/order_commodity';};});}
 </script>";
 exit;
     }

@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="pages/order_manage/css/express.css">
+<div ng-controller="express_ctrl">
+    <!--顶部导航-->
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="order_manage" ui-sref="order_manage">订单管理</span>
+            <span>>订单详情</span>
+            <span>>物流详情 </span>
+            <img src="lib/images/user.png" alt=""/>
+        </div>
+    </header>
+
+    <section>
+        <div class="order_detail">
+            <h3>订单信息</h3>
+
+            <!--订单号-->
+            <div class="order_num">
+                <span>订单号</span>
+                <span ng-bind="order_no"></span>
+            </div>
+
+            <!--订单状态-->
+            <div class="order_state">
+                <span>配送方式</span>
+                <span ng-bind="order_info.waybillname||'送货上门'"></span>
+            </div>
+
+            <!--用户-->
+            <div class="order_state" ng-if="!order_info.shipping_type">
+                <span>快递单号</span>
+                <span ng-bind="order_info.waybillnumber"></span>
+            </div>
+        </div>
+        <hr>
+
+        <!--物流信息-->
+        <div class="order_detail">
+            <h3>物流信息</h3>
+
+            <ul>
+                <li ng-repeat="item in order_info.list">
+                    <p ng-bind="item.context"></p>
+                    <p ng-bind="item.time"></p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="btns">
+            <button class="btn btn-default" id="back" ng-click="backPage()">返回</button>
+        </div>
+    </section>
+</div>

@@ -41,10 +41,6 @@ store_mag.controller("store_mag", function ($scope, $http) {
         }
     }
 
-    /*已关闭状态样式*/
-    $scope.isClosed = function (obj) {
-        return obj == "已关闭";
-    }
 
     /*分类选择下拉框*/
    //一级下拉框
@@ -224,7 +220,12 @@ store_mag.controller("store_mag", function ($scope, $http) {
         let data = {supplier_id: tempshop_no};
         $http.post(url, data, config).then(function (res) {
             console.log(res)
-            tempshop_no = '';
+            if(res.data.code==1037){
+                $("#unblock_modal").modal('show');  //手动开启
+            }else {
+                $scope.pageConfig.currentPage = 1;
+                tableList();
+            }
         })
     }
 });

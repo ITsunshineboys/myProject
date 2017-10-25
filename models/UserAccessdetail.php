@@ -85,7 +85,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
      * @param string $orderBy
      * @return array
      */
-    public  static  function  pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+   public  static  function  pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
         $select = array_diff($select, self::FIELDS_EXTRA);
         $offset = ($page - 1) * $size;
@@ -106,12 +106,23 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             }
             $list['create_time']=date('Y-m-d H:i',$list['create_time']);
         }
-                $total=self::find()
+        $total=self::find()
             ->select($select)
             ->where($where)
             ->asArray()
             ->count();
-        return ModelService::pageDeal($Accessdetaillist, $total, $page, $size);
+        if ($total>0)
+        {
+            return ModelService::pageDeal($Accessdetaillist, $total, $page, $size);
+        }else{
+            return array(
+                'list' => [],
+                'total_page' => 0,
+                'count' => 0,
+                'page' => 0
+            );
+        }
+
     }
 
         /**

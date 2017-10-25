@@ -8,7 +8,8 @@ const app = angular.module("app", ["ui.router", "shop_style", "freight_template"
   /*三阶段王杰---结束*/
   /*三阶段芳子---开始*/
     "supplier_accountModule","withdraw_depositModule",
-    "edit_cardModule","frozen_moneyModule"
+    "edit_cardModule","frozen_moneyModule","ordermanageModule",
+    "waitpay_detailModule","done_detailModule","cancel_detailModule","expressModule"
   /*三阶段芳子---结束*/
 ]);
 
@@ -91,13 +92,38 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
           url: "/withdraw_deposit",
           templateUrl: "pages/supplier_wallet/withdraw_deposit.html"
       })
-      .state("edit_card", {   //添加/修改银行卡
+      .state("edit_card", {         //添加/修改银行卡
           url: "/edit_card",
           templateUrl: "pages/supplier_wallet/edit_card.html"
       })
-      .state("frozen_money", {   //冻结银行卡
+      .state("frozen_money", {      //冻结银行卡
           url: "/frozen_money",
           templateUrl: "pages/supplier_wallet/frozen_money.html"
+      })
+      .state("order_manage", {      //订单管理
+          params:{tabflag:null},
+          url: "/order_manage",
+          templateUrl: "pages/order_manage/order_manage_index.html"
+      })
+      .state("waitpay_detail", {   //待付款订单详情
+          params:{order_no:null,sku:null,tabflag:null},
+          url: "/waitpay_detail",
+          templateUrl: "pages/order_manage/waitpay_detail.html"
+      })
+      .state("done_detail", {     //已完成订单详情
+          params:{order_no:null,sku:null,tabflag:null},
+          url: "/done_detail",
+          templateUrl: "pages/order_manage/done_detail.html"
+      })
+      .state("cancel_detail", {   //已取消订单详情
+          params:{order_no:null,sku:null,tabflag:null},
+          url: "/cancel_detail",
+          templateUrl: "pages/order_manage/cancel_detail.html"
+      })
+      .state("express", {        //物流详情
+          params:{express_params:null},
+          url: "/express",
+          templateUrl: "pages/order_manage/express.html"
       })
       /*--------------三阶段结束----芳子-----------------*/
 
@@ -119,10 +145,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
       url: "/commodity_manage",
       templateUrl: "pages/commodity_manage/commodity_manage.html",
       params: {id: 'id', name: 'name', on_flag: '', down_flag: ''}
-    })
-    .state("order_manage", {   //订单管理
-      url: "/order_manage",
-      templateUrl: "pages/order_manage/order_manage.html"
     })
     .state("brand_manage", {   //品牌管理
       url: "/brand_manage",

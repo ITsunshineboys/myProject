@@ -1,5 +1,4 @@
 <?php
-
 $params = require(__DIR__ . '/params.php');
 
 $config = [
@@ -42,7 +41,7 @@ $config = [
             'useFileTransport' => true,
         ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'traceLevel' => $params['online']['env'] == 'dev' ? 3 : 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
@@ -66,7 +65,7 @@ $config = [
      ],
 ];
 
-if (YII_ENV_DEV) {
+if ($params['online']['env'] == 'dev') {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
@@ -81,10 +80,6 @@ if (YII_ENV_DEV) {
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
-}
-
-if (file_exists(__DIR__ . '/params_online.php')) {
-    $config['params']['online'] = require_once(__DIR__ . '/params_online.php');
 }
 
 return $config;

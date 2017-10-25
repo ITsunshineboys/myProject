@@ -37,7 +37,7 @@
             </a>
         </dt>
     </dl>
-    <dl ng-click="dl_click(4)">
+    <dl ng-click="dl_click(4)" ui-sref="order_manage">
         <dt ng-class="{dl_active:show_class==4}">
             <a ng-class="{a_active:show_class==4}">
                 <i class="glyphicon glyphicon-home"></i>
@@ -119,10 +119,15 @@
 <!--三阶段王杰----- 结束-->
 
 <!--三阶段芳子------开始-->
-<script src="pages/supplier_wallet/js/supplier_account_ctrl.js"></script><!--商家账户-->
-<script src="pages/supplier_wallet/js/withdraw_deposit_ctrl.js"></script><!--提现-->
-<script src="pages/supplier_wallet/js/edit_card_ctrl.js"></script><!--添加/修改银行卡-->
-<script src="pages/supplier_wallet/js/frozen_money_ctrl.js"></script><!--冻结余额列表-->
+<script src="pages/supplier_wallet/js/supplier_account_ctrl.js"></script>       <!--商家账户-->
+<script src="pages/supplier_wallet/js/withdraw_deposit_ctrl.js"></script>       <!--提现-->
+<script src="pages/supplier_wallet/js/edit_card_ctrl.js"></script>              <!--添加/修改银行卡-->
+<script src="pages/supplier_wallet/js/frozen_money_ctrl.js"></script>           <!--冻结余额列表-->
+<script src="pages/order_manage/js/order_manage_index_ctrl.js"></script>        <!--订单管理-->
+<script src="pages/order_manage/js/waitpay_detail_ctrl.js"></script>            <!--待付款详情-->
+<script src="pages/order_manage/js/done_detail_ctrl.js"></script>               <!--已完成订单详情-->
+<script src="pages/order_manage/js/cancel_detail_ctrl.js"></script>             <!--已取消订单详情-->
+<script src="pages/order_manage/js/express_ctrl.js"></script>                   <!--物流-->
 <!--三阶段芳子----- 结束-->
 <script src="pages/shop_manage/js/shop_manage_index_ctrl.js"></script> <!--店铺管理-->
 <script src="pages/shop_manage/js/apply_brand_ctrl.js"></script> <!--申请新品牌-->

@@ -1,4 +1,4 @@
-angular.module("all_controller", [])
+angular.module("all_controller", ['ngCookies'])
 //首页控制器
     .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         $scope.search_flag = false;
@@ -534,7 +534,7 @@ angular.module("all_controller", [])
         // 点击商品判断跳转商品详情
         $scope.getProductMore = function (item) {
             console.log(item);
-            $scope.mall_id = item.url.split('=')[1];
+            $scope.mall_id = item.id;
             $state.go("product_details",{mall_id:$scope.mall_id,datailsShop:$scope.datailsShop});
             console.log( $scope.mall_id)
         };
@@ -791,7 +791,9 @@ angular.module("all_controller", [])
     })
 
     //确认订单
-    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams) {
+    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams,$cookieStore,$cookies) {
+        alert($cookieStore.get('goods_name'));
+        alert(JSON.stringify($cookies));
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
@@ -1011,9 +1013,12 @@ angular.module("all_controller", [])
                                     alert(JSON.stringify(response));
                                     alert(JSON.stringify($scope.open_id));
                                     window.location = $scope.open_id
+
                                 },function (error) {
                                     alert(JSON.stringify(error))
                                 });
+                                alert(JSON.stringify($cookieStore));
+                                alert(JSON.stringify($cookies))
 
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
@@ -1046,6 +1051,7 @@ angular.module("all_controller", [])
             }
 
         };
+        $cookieStore.put('goods_name',$scope.title);
         $scope.getProduct_details =  function () {
             $state.go('product_details',{'mall_id':$scope.mall_id,'id':$scope.id})
         }

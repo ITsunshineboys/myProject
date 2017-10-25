@@ -1,0 +1,257 @@
+<link rel="stylesheet" href="pages/order_manage/css/cancel_detail.css">
+<div ng-controller="cancel_detail_ctrl">
+    <!--顶部导航-->
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="order_manage" ui-sref="order_manage">订单管理</span>
+            <span>>订单详情</span>
+            <img src="lib/images/user.png" alt=""/>
+        </div>
+    </header>
+
+    <section>
+        <div class="order_detail">
+            <h3>订单详情</h3>
+
+            <!--订单号-->
+            <div class="order_num">
+                <span>订单号</span>
+                <span ng-bind="order_no"></span>
+            </div>
+
+            <!--订单状态-->
+            <div class="order_state">
+                <span>订单状态</span>
+                <span ng-bind="order_detail.status"></span>
+            </div>
+
+            <!--用户-->
+            <div class="user">
+                <span>用户</span>
+                <span ng-bind="order_detail.username"></span>
+            </div>
+
+
+            <!--订单金额-->
+            <div class="order_money">
+                <span>订单金额</span>
+                <ul>
+                    <li>总金额</li>
+                    <li ng-bind="order_detail.role"></li>
+                    <li>运费</li>
+                </ul>
+
+                <ul>
+                    <li id="total">{{order_detail.amount_order | currency:"¥"}}</li>
+                    <li>{{order_detail.goods_price | currency:"¥"}}</li>
+                    <li>{{order_detail.freight | currency:"¥"}}</li>
+                </ul>
+            </div>
+
+            <!--供货价-->
+            <div class="supplier_money">
+                <span>供货价</span>
+                <span>{{order_detail.supplier_price | currency:"¥"}}</span>
+            </div>
+
+            <!--供货价-->
+            <div class="market_money">
+                <span>市场价</span>
+                <span>{{order_detail.market_price | currency:"¥"}}</span>
+            </div>
+
+            <!--商品个数-->
+            <div class="order_state">
+                <span>商品个数</span>
+                <span ng-bind="order_detail.goods_number"></span>
+            </div>
+
+            <!--付款方式-->
+            <div class="order_state">
+                <span>付款方式</span>
+                <span ng-bind="order_detail.pay_name"></span>
+            </div>
+
+            <!--下单时间-->
+            <div class="order_state">
+                <span>下单时间</span>
+                <span ng-bind="order_detail.create_time"></span>
+            </div>
+
+            <!--付款时间-->
+            <div class="order_state">
+                <span>付款时间</span>
+                <span ng-bind="order_detail.paytime"></span>
+            </div>
+
+            <!--待收货的情况-->
+            <!--完成时间-->
+            <div>
+            <div class="order_state">
+                <span>完成时间</span>
+                <span ng-bind="order_detail.complete_time"></span>
+            </div>
+
+            <!--配送方式-->
+            <div class="order_state express_method">
+                <span>配送方式</span>
+                <span class="text_blue" ui-sref="express({express_params})" ng-bind="order_detail.shipping_way"></span>
+            </div>
+            </div>
+
+
+        </div>
+        <hr>
+
+        <!-----商品详情----->
+        <div class="good_detail">
+            <h3>商品详情</h3>
+            <button class="view_good">
+                <span class="glyphicon glyphicon-eye-open"></span>
+                查看商品
+            </button>
+
+
+            <!--商品名称-->
+            <div class="order_state">
+                <span>商品名称</span>
+                <span ng-bind="goods_value.goods_name"></span>
+            </div>
+
+            <!--商品编号-->
+            <div class="order_state">
+                <span>商品编号</span>
+                <span ng-bind="sku"></span>
+            </div>
+
+            <!--商品属性-->
+            <div class="order_state">
+                <span>商品属性</span>
+
+                <ul class="good_attr">
+                    <li ng-repeat="item in goods_value.attr">
+                        <span ng-bind="item.name"></span>
+                        <span ng-bind="item.value"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <hr/>
+
+        <!---收货详情---->
+        <div class="order_detail">
+            <h3>收货详情</h3>
+
+            <!--收货人-->
+            <div class="market_money">
+                <span>收货人</span>
+                <span ng-bind="receive_details.consignee"></span>
+            </div>
+
+            <!--收货地址-->
+            <div class="order_state">
+                <span>收货地址</span>
+                <span ng-bind="receive_details.district"></span>
+            </div>
+
+            <!--电话-->
+            <div class="phonenum">
+                <span>电话</span>
+                <span ng-bind="receive_details.consignee_mobile"></span>
+            </div>
+
+            <!--留言-->
+            <div class="phonenum">
+                <span>留言</span>
+                <span ng-bind="receive_details.buyer_message"></span>
+            </div>
+
+            <!--发票类型-->
+            <div class="order_state">
+                <span>发票类型</span>
+                <span ng-bind="receive_details.invoice_header_type"></span>
+            </div>
+
+            <!--抬头-->
+            <div class="phonenum">
+                <span>抬头</span>
+                <span ng-bind="receive_details.invoice_header"></span>
+            </div>
+
+            <!--纳税人识别码-->
+            <div class="udid">
+                <span>纳税人识别码</span>
+                <span ng-bind="receive_details.invoicer_card"></span>
+            </div>
+
+            <!--发票内容-->
+            <div class="order_state">
+                <span>发票内容</span>
+                <span ng-bind="receive_details.invoice_content" ui-sref="done_detail">明细</span>
+            </div>
+        </div>
+        <hr/>
+
+        <!--异常记录-待发货-->
+        <div class='order_manage' ng-if="show_abnormal&&unshipped">
+            <h3 class="abnormal_title">异常记录-待发货</h3>
+            <span class="glyphicon glyphicon-chevron-down arrows" ng-show="send" ng-click="abnormal('send')"></span>
+            <span class="glyphicon glyphicon-chevron-up arrows" ng-show="!send" ng-click="abnormal('send')"></span>
+            <ul class="abnormal_waitsend" ng-show="send">
+                <li ng-repeat="item in unshipped_detail">
+                    <span ng-bind="item.type"></span>
+                    <span ng-bind="item.value"></span>
+                    <span ng-bind="item.time"></span>
+                    <p ng-bind="item.content"></p>
+                </li>
+            </ul>
+        </div>
+
+<!--待收货显示-->
+        <!--异常记录待收货-->
+        <div class='order_manage abnormal' ng-if="show_abnormal&&unreceived">
+            <h3 class="abnormal_title">异常记录-待收货</h3>
+            <span class="glyphicon glyphicon-chevron-down arrows" ng-show="receive"
+                  ng-click="abnormal('receive')"></span>
+            <span class="glyphicon glyphicon-chevron-up arrows" ng-show="!receive"
+                  ng-click="abnormal('receive')"></span>
+            <ul class="abnormal_waitsend" ng-show="receive">
+                <li ng-repeat="item in unreceived_detail">
+                    <span ng-bind="item.type"></span>
+                    <span ng-bind="item.value"></span>
+                    <span ng-bind="item.time"></span>
+                    <p ng-bind="item.content"></p>
+                </li>
+            </ul>
+        </div>
+        <hr ng-if="show_abnormal||show_plat"/>
+
+        <!--平台介入-->
+        <div class='order_manage abnormal' ng-if="show_plat">
+            <h3 class="abnormal_title">平台介入</h3>
+            <span class="glyphicon glyphicon-chevron-down arrows" ng-show="plat_send"
+                  ng-click="abnormal('plat_send')"></span>
+            <span class="glyphicon glyphicon-chevron-up arrows" ng-show="!plat_send"
+                  ng-click="abnormal('plat_send')"></span>
+            <ul class="abnormal_waitsend" ng-show="plat_send">
+                <li>
+                    <span>操作类型</span>
+                    <span ng-bind="handle_type"></span>
+                    <span ng-bind="platforminfo.handle_time"></span>
+                    <p ng-bind="platforminfo.reasons"></p>
+                </li>
+                <li class="refund">
+                    <span>退款结果</span>
+                    <span ng-bind="platforminfo.refund_result"></span>
+                    <span ng-bind="platforminfo.refund_time"></span>
+                    <p ng-bind="platforminfo.refund_type"></p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="btn_group">
+            <button class="btn btn-default" id="back" ui-sref="order_manage({tabflag:tabflag})">返回</button>
+        </div>
+    </section>
+</div>

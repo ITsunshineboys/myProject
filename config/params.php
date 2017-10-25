@@ -3,6 +3,7 @@
 $districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
 $auth = require(__DIR__ . '/auth.php');
+$paramsOnline = require(__DIR__ . '/params_online.php');
 
 return [
     'adminEmail' => 'admin@example.com',
@@ -192,4 +193,5 @@ return [
             '支持',
         ],
     ],
+    'online' => $paramsOnline,
 ];
