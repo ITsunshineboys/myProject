@@ -1876,7 +1876,7 @@ class BasisDecorationService
                     break;
             }
         }
-        $material['total_cost'][] = $material_price['total_cost'];
+        $material ['total_cost'][] = $material_price['total_cost'];
         $material ['material'][] = BasisDecorationService::profitMargin($ppr);
         $material ['material'][] = BasisDecorationService::profitMargin($pvc);
         return $material;
@@ -1933,7 +1933,7 @@ class BasisDecorationService
         return $series_style_goods;
     }
 
-    public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost)
+    public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost)
     {
         $material_total = [];
         foreach ($goods_price as &$one_goods_price) {
@@ -1956,9 +1956,10 @@ class BasisDecorationService
             }
         }
 
-        $material_total[] = BasisDecorationService::profitMargin($plasterboard);
-        $material_total[] = BasisDecorationService::profitMargin($keel);
-        $material_total[] = BasisDecorationService::profitMargin($pole);
+        $material_total['material'][] = BasisDecorationService::profitMargin($plasterboard);
+        $material_total['material'][] = BasisDecorationService::profitMargin($keel);
+        $material_total['material'][] = BasisDecorationService::profitMargin($pole);
+        $material_total['total_cost'][] = $material_cost;
         return $material_total;
     }
 }

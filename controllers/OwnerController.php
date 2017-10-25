@@ -679,8 +679,8 @@ class OwnerController extends Controller
         //材料费用
         $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
 
-        $material_total['material'][] = BasisDecorationService::carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost);
-        $material_total['total_cost'][] = $material_cost;
+        $material_total = BasisDecorationService::carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost);
+
 
         return Json::encode([
             'code' => 200,
