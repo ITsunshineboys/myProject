@@ -1,4 +1,4 @@
-angular.module("all_controller", [])
+angular.module("all_controller", ['ngCookies'])
 //首页控制器
     .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         $scope.search_flag = false;
@@ -791,7 +791,10 @@ angular.module("all_controller", [])
     })
 
     //确认订单
-    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams) {
+    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams,$cookieStore,$cookies) {
+        alert($cookieStore);
+        alert($cookies);
+
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
