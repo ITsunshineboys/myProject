@@ -1185,8 +1185,6 @@ class OwnerController extends Controller
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
-                    echo 111;
-                    var_dump($goods_attr);
                     if ($goods_attr == null){
                         $code = 1067;
                         return Json::encode([
@@ -1204,8 +1202,6 @@ class OwnerController extends Controller
                     $goods_max = BasisDecorationService::profitMargin($max);
                     //空心砖费用
                     $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
-                    echo 222;
-                    var_dump($brick_standard);
                     if ($brick_standard == null){
                         $code = 1067;
                         return Json::encode([
@@ -1221,8 +1217,6 @@ class OwnerController extends Controller
                 case $max['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
-                    echo 333;
-                    var_dump($goods_attr);
                     if ($goods_attr == null){
                         $code = 1067;
                         return Json::encode([
