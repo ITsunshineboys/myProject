@@ -1066,6 +1066,14 @@ class WithdrawalsController extends Controller
     public  function  actionAliPayUserRechargeDatabase()
     {
         $post=Yii::$app->request->post();
+        $data=Json::encode($post);
+        $connection  = Yii::$app->db;
+        $sql     = "INSERT INTO alipayreturntest(content)
+VALUES ('".$data."')"; 
+$res     = $command->queryAll($sql);
+        echo $res;
+        exit;
+        $post=Yii::$app->request->post();
         $model=new Alipay();
         $alipaySevice=$model->Alipaylinenotify();
         $result = $alipaySevice->check($post);
