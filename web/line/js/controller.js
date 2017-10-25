@@ -8,6 +8,10 @@ angular.module("all_controller", ['ngCookies'])
                 return $.param(data)
             }
         };
+        if(sessionStorage.getItem('adressInfo') != null){
+            sessionStorage.removeItem('adressInfo')
+        }
+
         $http({   //轮播接口调用
             method: 'get',
             url: "http://common.cdlhzz.cn/mall/carousel"
@@ -728,6 +732,13 @@ angular.module("all_controller", ['ngCookies'])
                     });
                     // 模态框确认按钮 == 跳转保存数据
                     $scope.jumpOrder = function () {
+                        let invoiceObj = { // 保存
+                            invoice_id: response.data.data.invoice_id,
+                            invoice_content: $scope.invoice_name
+
+                        };
+                        sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
+
                         $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
                             harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
                             harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
@@ -736,6 +747,7 @@ angular.module("all_controller", ['ngCookies'])
                             mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
                             regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,supplier_id:$scope.supplier_id,address_id:$scope.address_id
                         }))
+
                     }
                 }
             }
@@ -773,6 +785,12 @@ angular.module("all_controller", ['ngCookies'])
 
                     });
                     $scope.jumpOrder = function () {
+                        let invoiceObj = { // 保存
+                            invoice_id: response.data.data.invoice_id,
+                            invoice_content: $scope.invoice_name,
+                            invoicer_card: $scope.invoice_number
+                        };
+                        sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
                         $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
                             harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
                             harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
@@ -784,6 +802,15 @@ angular.module("all_controller", ['ngCookies'])
                     }
                 }
             }
+
+        }
+        if (sessionStorage.getItem('invoiceInfo') != null) {
+            //获取 商品信息
+            let invoiceInfo = JSON.parse(sessionStorage.getItem('invoiceInfo'));
+            console.log(invoiceInfo);
+            $scope.invoice_id =  invoiceInfo.invoice_id;
+            $scope.invoice_content =  invoiceInfo.invoice_content;
+            $scope.invoicer_card =  invoiceInfo.invoicer_card;
 
         }
 
@@ -868,6 +895,19 @@ angular.module("all_controller", ['ngCookies'])
             $scope.cover_image =  response.data.data.cover_image; //封面图
             $scope.icon =  response.data.data.icon; //店家头像
             $scope.goods_num =  response.data.data.goods_num;//购买数量
+            let shopObj = { // 保存
+                title: response.data.data.title,
+                subtitle: response.data.data.subtitle,
+                shop_name:  response.data.data.shop_name,
+                platform_price: response.data.data.platform_price,
+                market_price: response.data.data.market_price,
+                freight: response.data.data.freight,
+                allCost: response.data.data.allCost,
+                cover_image:  response.data.data.cover_image,
+                icon: response.data.data.icon,
+                goods_num:response.data.data.goods_num
+            };
+            sessionStorage.setItem('shopInfo', JSON.stringify(shopObj));
         });
 
         // 编辑收货地址的信息
@@ -926,7 +966,7 @@ angular.module("all_controller", ['ngCookies'])
                     }
                 }).then(function successCallback(response) {
                     console.log(response);
-                    let adressObj = {
+                    let adressObj = { // 保存
                         show_harvest: true,
                         show_address: false,
                         name: response.data.data[0].consignee,
@@ -947,15 +987,30 @@ angular.module("all_controller", ['ngCookies'])
             }
         };
         // 获取sessionStorage
-        if (sessionStorage.getItem('adressInfo') != null) {
+        if (sessionStorage.getItem('adressInfo') != null) {  //获取收获的信息
             let adressInfo = JSON.parse(sessionStorage.getItem('adressInfo'));
             console.log(adressInfo);
             $scope.show_address = false;
             $scope.show_harvest = true;
-            $scope.consigneeName = adressInfo.name;
-            $scope.mobile = adressInfo.phone;
-            $scope.districtMore = adressInfo.city;
-            $scope.regionMore = adressInfo.address;
+            $scope.consigneeName = adressInfo.name; //收货人名字
+            $scope.mobile = adressInfo.phone;   ///收货人电话
+            $scope.districtMore = adressInfo.city; //收货人城市
+            $scope.regionMore = adressInfo.address; //收货人地址
+        }
+        if (sessionStorage.getItem('shopInfo') != null) {
+            //获取 商品信息
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+            console.log(shopInfo);
+            $scope.title =  shopInfo.title;
+            $scope.subtitle =  shopInfo.subtitle;
+            $scope.shop_name =  shopInfo.shop_name;//店铺名称
+            $scope.platform_price =  shopInfo.platform_price;//优惠价格
+            $scope.market_price =  shopInfo.market_price;//原始价格
+            $scope.freight =  shopInfo.freight;//运费
+            $scope.allCost = shopInfo.allCost;//总费用
+            $scope.cover_image =  shopInfo.cover_image; //封面图
+            $scope.icon =  shopInfo.icon; //店家头像
+            $scope.goods_num =  shopInfo.goods_num;//购买数量
         }
 
         // 获取发票信息
