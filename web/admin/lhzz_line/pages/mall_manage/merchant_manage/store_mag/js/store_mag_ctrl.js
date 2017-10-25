@@ -41,10 +41,6 @@ store_mag.controller("store_mag", function ($scope, $http) {
         }
     }
 
-    /*已关闭状态样式*/
-    $scope.isClosed = function (obj) {
-        return obj == "已关闭";
-    }
 
     /*分类选择下拉框*/
    //一级下拉框

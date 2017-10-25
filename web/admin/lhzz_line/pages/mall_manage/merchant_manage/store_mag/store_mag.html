@@ -88,7 +88,7 @@
                         <td>{{item.category_name}}</td>
                         <td style="text-align: center">{{item.sales_amount_month | currency:"¥"}}</td>
                         <td style="text-align: center">{{item.sales_volumn_month}}</td>
-                        <td class="running" ng-class="{tored:isClosed(item.status)}">{{item.status}}</td>
+                        <td class="running" ng-class="{tored:item.status=='已闭店'}">{{item.status}}</td>
                         <td class="color_blue clickstyle" ui-sref="store_detail({store:item})">查看</td>
                         <td>
                             <span class="color_blue" ui-sref="commodity_manage({storeid:item.id})">商品管理</span>
