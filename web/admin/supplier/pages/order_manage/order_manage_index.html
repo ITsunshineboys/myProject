@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="pages/order_manage/css/order_manage_index.css">
+<div ng-controller="ordermanage_ctrl">
+    <!--顶部导航-->
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="order_manage" ng-click="tabFunc('all_flag')">订单管理</span>
+            <img src="lib/images/user.png" alt=""/>
+        </div>
+    </header>
+
+    <!--选项卡-->
+    <section>
+        <div class="tab">
+            <ul>
+                <li ng-class="{'tab_blue':all_flag}" ng-click="tabFunc('all_flag')">全部{{listcount.all}}</li>
+                <li ng-class="{'tab_blue':waitpay_flag}" ng-click="tabFunc('waitpay_flag')">待付款{{listcount.unpaid}}</li>
+                <li ng-class="{'tab_blue':waitsend_flag}" ng-click="tabFunc('waitsend_flag')">
+                    待发货{{listcount.unshipped}}
+                </li>
+                <li ng-class="{'tab_blue':waitreceive_flag}" ng-click="tabFunc('waitreceive_flag')">
+                    待收货{{listcount.unreceiveed}}
+                </li>
+                <li ng-class="{'tab_blue':finish_flag}" ng-click="tabFunc('finish_flag')">已完成{{listcount.completed}}
+                </li>
+                <li ng-class="{'tab_blue':cancel_flag}" ng-click="tabFunc('cancel_flag')">已取消{{listcount.canceled}}</li>
+            </ul>
+        </div>
+
+        <!--表格-->
+        <div role="tabpanel" class="tab-pane">
+            <div class="all_choose">
+                <select class="time_choose" ng-model="params.time_type">
+                    <option value="all">全部时间</option>
+                    <option value="today">今天</option>
+                    <option value="week">本周</option>
+                    <option value="month">本月</option>
+                    <option value="year">本年</option>
+                    <option value="custom">自定义</option>
+                </select>
+
+                <input ng-if="params.time_type == 'custom'" id="start_time" ng-model="params.start_time" ngc-lay-date
+                       class="time_interval" type="text" placeholder="开始时间" max-date="{{params.end_time}}">
+                <input ng-if="params.time_type == 'custom'" id="stop_time" ng-model="params.end_time" ngc-lay-date
+                       class="time_interval" type="text" placeholder="结束时间" min-date="{{params.start_time}}">
+
+                <div class="searchbox">
+                    <input type="text" ng-model="keyword">
+                    <span class="glyphicon glyphicon-search search"></span>
+                </div>
+                <button ng-click="search()">搜索</button>
+                <div class="tab_tools clearfix btn_menu_right">
+                    <div class="pull-right">
+                        <!-- 筛选菜单 -->
+                        <div class="btn-group">
+                            <span class="btn btn-default dropdown-toggle btn_list" data-toggle="dropdown"
+                                  aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-th-list"></i></span>
+                            <!--Menu-->
+                            <ul class="dropdown-menu dropdown-menu-right btn_list_menu">
+                                <li ng-repeat="item in menu_list">
+                                    <lable>
+                                        <input type="checkbox" class="right_input"
+                                               ng-model=item.value>{{item.name}}
+                                    </lable>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table>
+                <tr>
+                    <td ng-if="menu_list[0].value">订单编号</td>
+                    <td class='apply_time' ng-if="menu_list[1].value">
+                        商品编号
+                    </td>
+                    <td ng-if="menu_list[2].value">商品名称</td>
+                    <td ng-if="menu_list[3].value" ng-click="sortMoney()">
+                        订单金额
+                        <span class="sortpic">
+                        <i class="glyphicon glyphicon-triangle-top"
+                           ng-class="{'active':params.sort_money == 1}"></i>
+                        <i class="glyphicon glyphicon-triangle-bottom"
+                           ng-class="{'active':params.sort_money == 2}"></i>
+                    </span>
+                    </td>
+                    <td ng-if="menu_list[4].value" ng-click="sortTime()">
+                        下单时间
+                        <span class="sortpic">
+                        <i class="glyphicon glyphicon-triangle-top" ng-class="{'active':params.sort_time == 1}"></i>
+                        <i class="glyphicon glyphicon-triangle-bottom"
+                           ng-class="{'active':params.sort_time == 2}"></i>
+                    </span>
+                    </td>
+                    <td ng-if="menu_list[5].value">用户</td>
+                    <td ng-if="menu_list[6].value">绑定手机</td>
+                    <td ng-if="menu_list[7].value">订单状态</td>
+                    <td ng-if="menu_list[8].value">异常</td>
+                    <td ng-if="menu_list[9].value">评论</td>
+                    <td ng-if="menu_list[10].value">详情</td>
+                    <td ng-if="menu_list[11].value">操作</td>
+                </tr>
+
+                <tr class="table_content" ng-repeat="item in alltabledetail">
+                    <td ng-if="menu_list[0].value" ng-bind="item.order_no"></td>
+                    <td ng-if="menu_list[1].value" ng-bind="item.sku"></td>
+                    <td ng-if="menu_list[2].value" ng-bind="item.goods_name"></td>
+                    <td ng-if="menu_list[3].value">{{item.amount_order | currency:"¥"}}</td>
+                    <td ng-if="menu_list[4].value" ng-bind="item.create_time"></td>
+                    <td ng-if="menu_list[5].value" ng-bind="item.consignee"></td>
+                    <td ng-if="menu_list[6].value" ng-bind="item.mobile"></td>
+                    <td ng-if="menu_list[7].value" ng-bind="item.status"></td>
+                    <td ng-if="menu_list[8].value" ng-bind="item.unusual=='无异常'?'':item.unusual"></td>
+                    <td ng-if="menu_list[9].value" ng-bind="item.comment_grade"></td>
+                    <td ng-if="menu_list[10].value" class="view"
+                        ng-click=viewDetail(item.order_no,item.sku,item.status)>查看
+                    </td>
+                    <td ng-if="menu_list[11].value" ng-bind="item.handle"></td>
+                </tr>
+            </table>
+        </div>
+        <tm-pagination conf="pageConfig"></tm-pagination>
+    </section>
+
+</div>

@@ -224,7 +224,12 @@ store_mag.controller("store_mag", function ($scope, $http) {
         let data = {supplier_id: tempshop_no};
         $http.post(url, data, config).then(function (res) {
             console.log(res)
-            tempshop_no = '';
+            if(res.data.code==1037){
+                $("#unblock_modal").modal('show');  //手动开启
+            }else {
+                $scope.pageConfig.currentPage = 1;
+                tableList();
+            }
         })
     }
 });
