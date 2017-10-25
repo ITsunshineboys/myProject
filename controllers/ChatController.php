@@ -28,15 +28,6 @@ class ChatController extends Controller
         return [$u_id, $role_id];
     }
 
-    public function actionTest()
-    {
-
-        $username=trim(\Yii::$app->request->post('username',''));
-        $password=trim(\Yii::$app->request->post('password',''));
-        $chat=new ChatService();
-        $a=$chat->createUser($username,$password);
-        var_dump($a);
-    }
     /**
      *第一次登陆app时创建环信用户和本地环信关联数据
      * @return array|string
@@ -350,9 +341,12 @@ class ChatController extends Controller
     }
 
 
-    public function actionTesta(){
+    public function actionTest(){
+
+//        var_dump(date('Y-tisort()m-d H:i:s', 1508836969));die;
         $chat=new ChatService();
-        var_dump($chat->getChatRecord(''));
+        $ql="select * where timestamp<1508836969";
+        var_dump($chat->getChatRecord($ql));
 
     }
 }

@@ -295,4 +295,17 @@ class Worker extends \yii\db\ActiveRecord
         }
 
     }
+    public static function worker_monthly_income($uid){
+        $worker_id=Worker::find()->asArray()->where(['uid'=>$uid])->one()['id'];
+        list($start_time,$end_time)=StringService::startEndDate('month');
+        $start_time=(int)strtotime($start_time);
+        $end_time=(int)strtotime($end_time);
+        $income=WorkerOrder::find()
+            ->where(['worker_id'=>$worker_id,'status'=>5,'is_old'=>1])
+            ->andWhere('end_time >='.$start_time and 'end_time <='.$end_time)
+            ->asArray()
+            ->sum('amount');
+        $income=sprintf('%.2f',(float)$income*0.01);
+        return $income;
+    }
 }
