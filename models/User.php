@@ -633,6 +633,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function checkKickedout()
     {
+        if (YII_DEBUG) {
+            return false;
+        }
+
         if (Yii::$app->session->getHasSessionId()) {
             $sessId = Yii::$app->session->id;
             $user = self::find()
