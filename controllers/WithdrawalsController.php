@@ -1069,8 +1069,9 @@ class WithdrawalsController extends Controller
         $data=Json::encode($post);
         $connection  = Yii::$app->db;
         $sql     = "INSERT INTO alipayreturntest(content)
-VALUES ('".$data."')"; 
-$res     = $command->queryAll($sql);
+VALUES ('".$data."')";
+        $command = $connection->createCommand($sql);
+        $res     = $command->queryAll($sql);
         echo $res;
         exit;
         $post=Yii::$app->request->post();
