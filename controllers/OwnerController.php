@@ -626,6 +626,7 @@ class OwnerController extends Controller
                 'msg' => '风格不能为空',
             ]);
         }
+
         $carpentry_add = CarpentryAdd::findByStipulate($post['series'], $post['style']);
         if ($carpentry_add == null){
             $code = 1000;
@@ -634,13 +635,13 @@ class OwnerController extends Controller
                 'msg' => '木工添加项不能为空',
             ]);
         }
+
         // 造型长度
         $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$series_all,$post['series']);
         //造型天数
         $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $modelling, $series_all, $style_all, $post['series']);
         //平顶天数
         $flat_day = BasisDecorationService::flatDay($carpentry_add, $flat, $series_all, $style_all, $post['series']);
-
         //人工费
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
