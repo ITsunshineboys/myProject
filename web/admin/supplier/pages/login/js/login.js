@@ -96,6 +96,8 @@ login.controller("login_ctrl",function ($scope,$http,$state,$stateParams) {
                     }
                     if(res.data.code==1010){
                         $scope.forget_mb_prompt='该手机号还未注册，请联系客服400-3948-398';
+                    }else if(res.data.code==1040){
+                        $scope.forget_mb_prompt='该手机号还未注册商家，请联系客服400-3948-398';
                     }else{
                         $scope.forget_mb_prompt='';
                     }
