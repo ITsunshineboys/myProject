@@ -3437,7 +3437,7 @@ class OrderController extends Controller
    /**
      * 支付宝APP支付付款数据库操作--异步返回
      */
-    public  function  actionAppOrderPayDatabase()
+   public  function  actionAppOrderPayDatabase()
     {
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -3474,6 +3474,9 @@ class OrderController extends Controller
                         echo 'fail';
                         exit;
                     }
+                    $role_id=$GoodsOrder->role_id;
+                    $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
+                    $role=Role::GetRoleByRoleId($role_id,$user);
                     $tran = Yii::$app->db->beginTransaction();
                     try{
                         $GoodsOrder->pay_status=1;
@@ -3484,6 +3487,41 @@ class OrderController extends Controller
                             $tran->rollBack();
                             echo 'fail';
                             die;
+                        }
+
+                        switch ($role_id)
+                        {
+                            case 2:
+                                $role_number=$role->worker_type_id;
+                                break;
+                            case 3:
+                                $role_number=$role->decoration_company_id;
+                                break;
+                            case 4:
+                                $role_number=$role->decoration_company_id;
+                                break;
+                            case 5:
+                                $role_number=$role->id;
+                                break;
+                            case 6:
+                                $role_number=$role->shop_no;
+                                break;
+                            case 7:
+                                $role_number=$role->aite_cube_no;
+                                break;
+                        }
+                        $access=new UserAccessdetail();
+                        $access->uid=$GoodsOrder->user_id;
+                        $access->role_id=$role_id;
+                        $access->access_type=7;
+                        $access->access_money=$GoodsOrder->amount_order;
+                        $access->create_time=time();
+                        $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
+                        $res3=$access->save(false);
+                        if ( !$res3){
+                            $tran->rollBack();
+                            $code=500;
+                            return $code;
                         }
                         $tran->commit();
                     }catch (Exception $e){
