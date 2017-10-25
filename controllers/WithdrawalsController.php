@@ -1394,7 +1394,7 @@ class WithdrawalsController extends Controller
         $role_id=$user->last_role_id_app;
         $where="uid={$user->id} and role_id = {$role_id}";
         $sort='create_time  desc';
-        $paginationData = UserAccessdetail::pagination($where, [],$size, $sort);
+        $paginationData = UserAccessdetail::pagination($where, [],$page,$size, $sort);
         $code=200;
         return Json::encode([
             'code'=>$code,
