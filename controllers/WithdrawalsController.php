@@ -141,7 +141,7 @@ class WithdrawalsController extends Controller
      * 移动端查询银行卡信息
      * @return string
      */
-    public function actionUserFindBankCard(){
+   public function actionUserFindBankCard(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -176,11 +176,17 @@ class WithdrawalsController extends Controller
         }else{
             $data=[];
         }
+        $is_real=0;
+        if ($user->legal_person)
+        {
+            $is_real=1;
+        }
         $code=200;
         return Json::encode([
             'code' => $code,
             'msg' => 'ok',
             'data'=>[
+                'is_real'=>$is_real,
                 'balance'=>GoodsOrder::switchMoney($role->availableamount*0.01),
                 'list'=>$data
             ]
