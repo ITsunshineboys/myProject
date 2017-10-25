@@ -1390,7 +1390,7 @@ class WithdrawalsController extends Controller
         }
         $request = Yii::$app->request;
         $page=$request->get('page','1');
-        $size=$request->get('size',UserAccessdetail::PAGE_SIZE_DEFAULT);
+        $size=$request->get('size',20);
         $role_id=$user->last_role_id_app;
         $where="uid={$user->id} and role_id = {$role_id}";
         $sort='create_time  desc';
