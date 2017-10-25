@@ -1356,7 +1356,7 @@ CREATE TABLE `user_accessdetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
   `role_id` int(50) NOT NULL DEFAULT 0 COMMENT '角色id',
-  `access_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款',
+  `access_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款 7.使用',
   `access_money` bigint(20) NOT NULL DEFAULT 0 COMMENT '收支金额',
   `create_time` int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
