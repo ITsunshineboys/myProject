@@ -270,10 +270,11 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
            $scope.logistics.splice(key,1);
            $scope.logistics.unshift(value);
            $scope.logistics_red=false;
+           $scope.logistics_status=true;
            break;
          }else if(value.id!=$scope.logistics_template_id){  //判断该商品的物流模板是否删除，如果删除，显示提示文字
            $scope.logistics_red=true;
-           $scope.logistics_status=true;//
+           $scope.logistics_status=true;
          }
        }
        $scope.shop_logistics=res.data.data.logistics_templates_supplier[0].id;
@@ -296,6 +297,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
          });
        });
      }else{
+       console.log('asdasdasda')
         $scope.logistics_null=true;//显示“添加物流模板”提示字
         $scope.logistics_status=false;//隐藏select
      }
