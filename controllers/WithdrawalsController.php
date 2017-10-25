@@ -192,7 +192,7 @@ class WithdrawalsController extends Controller
         $UserBankInfo=(new Query())
             ->from(UserBankInfo::tableName().' as u')
             ->leftJoin(BankinfoLog::tableName().' as b','u.log_id=b.id')
-            ->where(['u.uid'=>$user->id,'u.role_id'=>$role_id])
+            ->where(['u.uid'=>$user->id,'u.role_id'=>$role_id,'u.selected'=>1])
             ->one();
         if ($UserBankInfo)
         {
