@@ -327,6 +327,7 @@ class FindworkerController extends Controller{
             ]);
         }
         $worker_info=User::find()->where(['id'=>$user_id->getId()])->one();
+        $worker['monthly_income']=Worker::worker_monthly_income($user_id->getId());
         $worker['aite_cube_no']=$worker_info->aite_cube_no;
         $worker['name']=Worker::getWorkerByUid($user_id->getId())->nickname;
         $worker['uid']=Worker::getWorkerByUid($user_id->getId())->id;

@@ -342,8 +342,10 @@ class ChatController extends Controller
 
 
     public function actionTest(){
+
+//        var_dump(date('Y-tisort()m-d H:i:s', 1508836969));die;
         $chat=new ChatService();
-        $ql="select+*+where+timestamp>1435536480000";
+        $ql="select * where timestamp<1508836969";
         var_dump($chat->getChatRecord($ql));
 
     }
