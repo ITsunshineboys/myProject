@@ -792,9 +792,8 @@ angular.module("all_controller", ['ngCookies'])
 
     //确认订单
     .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams,$cookieStore,$cookies) {
-        alert($cookieStore);
-        alert($cookies);
-
+        alert(JSON.stringify($cookieStore));
+        alert(JSON.stringify($cookies));
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
@@ -1017,6 +1016,8 @@ angular.module("all_controller", ['ngCookies'])
                                 },function (error) {
                                     alert(JSON.stringify(error))
                                 });
+                                alert(JSON.stringify($cookieStore))
+                                alert(JSON.stringify($cookies))
 
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
