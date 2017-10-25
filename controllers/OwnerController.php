@@ -1171,7 +1171,6 @@ class OwnerController extends Controller
         //材料费
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL,$select);
-        var_dump($goods);die;
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -1187,7 +1186,7 @@ class OwnerController extends Controller
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                     if ($goods_attr == null){
-                        $code = 1061;
+                        $code = 1067;
                         return Json::encode([
                             'code' => $code,
                             'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1204,7 +1203,7 @@ class OwnerController extends Controller
                     //空心砖费用
                     $brick_standard = GoodsAttr::findByGoodsId($goods_max['id']);
                     if ($brick_standard == null){
-                        $code = 1061;
+                        $code = 1067;
                         return Json::encode([
                             'code' => $code,
                             'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1219,7 +1218,7 @@ class OwnerController extends Controller
                     $goods_max = BasisDecorationService::profitMargin($max);
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($goods_max['id']);
                     if ($goods_attr == null){
-                        $code = 1061;
+                        $code = 1067;
                         return Json::encode([
                             'code' => $code,
                             'msg' => Yii::$app->params['errorCodes'][$code],
