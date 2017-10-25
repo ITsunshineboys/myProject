@@ -1373,4 +1373,35 @@ class WithdrawalsController extends Controller
     }
 
 
+
+     /**
+     * app端交易明细
+     * @return string
+     */
+    public   function  actionAppTransactionDetail()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $page=$request->get('page','1');
+        $size=$request->get('size',UserAccessdetail::PAGE_SIZE_DEFAULT);
+        $role_id=$user->last_role_id_app;
+        $where="uid={$user->id} and role_id = {$role_id}";
+        $sort='create_time  desc';
+        $paginationData = UserAccessdetail::pagination($where, [],$size, $sort);
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
+    }
+
+
 }
