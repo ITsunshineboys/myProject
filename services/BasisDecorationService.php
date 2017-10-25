@@ -1068,7 +1068,8 @@ class BasisDecorationService
         foreach ($goods_attr as $one_goods) {
             $value = $one_goods['value'];
         }
-
+var_dump($goods_attr);
+var_dump($value);die;
 //            水泥用量=新建用量+补烂用量
 //        新建用量=12墙新建面积×【10kg】+24墙新建面积×【15kg】+补烂长度×【2kg】
         $new_12 = $get_area['12_new_construction'] * $cement_12;
