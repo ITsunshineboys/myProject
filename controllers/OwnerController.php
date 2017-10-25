@@ -1647,8 +1647,9 @@ class OwnerController extends Controller
      * @return string
      */
     public function actionTest(){
+        $id = Yii::$app->request->get('id','');
         return Json::encode([
-           'goods'=> (new Goods())->find()->where(['id'=>215])->All(),
+           'goods'=> (new Goods())->find()->where(['id'=>$id])->All(),
         ]);
     }
 
