@@ -548,6 +548,7 @@ let commodity_manage = angular.module("commodity_manage",[])
     //取消初始化
       $scope.shop_add_close=function () {
         $scope.item_check = [];
+        $scope.add_confirm_red=false;
         //获取一级
         $http({
           method: 'get',
