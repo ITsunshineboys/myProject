@@ -193,7 +193,7 @@ class Worker extends \yii\db\ActiveRecord
         $query=new Query();
         $array=$query
             ->from('worker as w')
-            ->select('w.examine_status,w.icon,w.nickname,lc.rank,lc.worker_kind,u.aite_cube_no')
+            ->select('w.examine_status,w.icon,w.nickname,w.comprehensive_score,lc.rank,lc.worker_kind,u.aite_cube_no')
             ->leftJoin('user as u','w.uid=u.id')
             ->leftJoin('labor_cost as lc','w.labor_cost_id=lc.id')
             ->where(['w.uid'=>$uid])
