@@ -123,7 +123,7 @@ class Alipay extends  ActiveRecord
     {
         $time=time();
         $out_trade_no=GoodsOrder::SetTransactionNo($user->aite_cube_no);
-        $notify_url='http://test.cdlhzz.cn:888/order/ali-pay-user-recharge-database';
+        $notify_url='http://test.cdlhzz.cn:888/withdrawals/ali-pay-user-recharge-database';
         $return_url='';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $passback_params=urlencode($user->last_role_id_app.','.$user->id);
