@@ -57,10 +57,12 @@ class UserBankInfo extends \yii\db\ActiveRecord
      */
     public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
     {
+        $time=time();
+        if ($role_id==6)
+        {
             $bankInfo=self::find()
                 ->where(['uid'=>$user->id,'role_id'=>$role_id,'selected'=>1])
                 ->one();
-            $time=time();
             if ($bankInfo)
             {
                 $trans = \Yii::$app->db->beginTransaction();
@@ -120,7 +122,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     {
                         foreach ( $bank as &$list)
                         {
-                            $list->selected=0;
+                            $list->default=0;
                             $resu=$list->save(false);
                             if (!$resu)
                             {
@@ -135,7 +137,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     $bankInfo->log_id=$log->id;
                     $bankInfo->uid=$user->id;
                     $bankInfo->role_id=$role_id;
-                    $bankInfo->selected=1;
+                    $bankInfo->default=1;
                     $res1=$bankInfo->save(false);
                     if (!$res1){
                         $code=500;
@@ -151,6 +153,63 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     return $code;
                 }
             }
+        }else
+        {
+            $trans = \Yii::$app->db->beginTransaction();
+            try {
+                $log=new BankinfoLog();
+                $log->bankname=$bankname;
+                $log->bankcard=$bankcard;
+                $log->username=$username;
+                $log->position=$position;
+                $log->bankbranch=$bankbranch;
+                $log->create_time=$time;
+                $res2=$log->save(false);
+                if (!$res2)
+                {
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+                $bank=UserBankInfo::find()
+                    ->where(['uid'=>$user->id,'role_id'=>$role_id])
+                    ->all();
+                if ($bank)
+                {
+                    foreach ( $bank as &$list)
+                    {
+                        $list->default=0;
+                        $resu=$list->save(false);
+                        if (!$resu)
+                        {
+                            $code=500;
+                            $trans->rollBack();
+                            return $code;
+                        }
+                    }
+
+                }
+                $bankInfo=new self;
+                $bankInfo->log_id=$log->id;
+                $bankInfo->uid=$user->id;
+                $bankInfo->role_id=$role_id;
+                $bankInfo->default=1;
+                $res1=$bankInfo->save(false);
+                if (!$res1){
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+                $trans->commit();
+                $code=200;
+                return $code;
+            } catch (Exception $e) {
+                $trans->rollBack();
+                $code=500;
+                return $code;
+            }
+        }
+
     }
     /**
      * @param $role_id
