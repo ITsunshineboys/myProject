@@ -107,7 +107,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 ||$list['access_type']==self::ACCESS_TYPE_DESC_UNCASH_IN
             )
             {
-                $list['access_money']=-sprintf('%.2f',(float)$list['access_money']);
+                $list['access_money']=-$list['access_money'];
             }
             $list['create_time']=date('Y-m-d H:i',$list['create_time']);
         }
