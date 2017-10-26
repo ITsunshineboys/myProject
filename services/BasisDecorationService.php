@@ -1064,7 +1064,7 @@ class BasisDecorationService
                     break;
             }
         }
-        $value = '';
+        $value = 0;
         foreach ($goods_attr as $one_goods) {
             $value = $one_goods['value'];
         }
@@ -1084,7 +1084,7 @@ class BasisDecorationService
         var_dump($new_dosage);
         var_dump($value);
         var_dump($new_dosage / $value);exit;
-        $cement['quantity'] = ceil((int)$new_dosage / (int)$value);
+        $cement['quantity'] = ceil($new_dosage / $value);
 //        水泥费用：个数×抓取的商品价格
         $cement['cost'] = $cement['quantity'] * $goods['platform_price'];
         return $cement;
