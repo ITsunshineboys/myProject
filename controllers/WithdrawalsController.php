@@ -1465,7 +1465,7 @@ class WithdrawalsController extends Controller
             $access['access_money']=sprintf('%.2f',(float)$access['access_money']*0.01);
             $name="出账金额";
         }else{
-            $access['access_money']=-sprintf('%.2f',(float)$access['access_money']*0.01);
+            $access['access_money']=sprintf('%.2f',-$access['access_money']*0.01);
             $name="入账金额";
         }
         $type=UserAccessdetail::findAccessType($access['access_type']);
