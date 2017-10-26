@@ -3453,82 +3453,86 @@ class OrderController extends Controller
     //                echo 'fail';
     //                exit;
     //            }
-                foreach ($orders as $k =>$v){
-                    $GoodsOrder=GoodsOrder::find()
-                        ->where(['order_no'=>$orders[$k]])
-                        ->one();
-                    $OrderGoods=OrderGoods::find()
-                        ->where(['order_no'=>$orders[$k]])
-                        ->asArray()
-                        ->all();
-                    foreach ($OrderGoods as &$Goods)
-                    {
-                        if ($Goods['order_status']!=0)
+                $tran = Yii::$app->db->beginTransaction();
+                try{
+                    foreach ($orders as $k =>$v){
+                        $GoodsOrder=GoodsOrder::find()
+                            ->where(['order_no'=>$orders[$k]])
+                            ->one();
+                        $OrderGoods=OrderGoods::find()
+                            ->where(['order_no'=>$orders[$k]])
+                            ->asArray()
+                            ->all();
+                        foreach ($OrderGoods as &$Goods)
                         {
-                           echo 'fail';
-                           exit;
+                            if ($Goods['order_status']!=0)
+                            {
+                               echo 'fail';
+                               exit;
+                            }
                         }
-                    }
-                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
-                    {
-                        echo 'fail';
-                        exit;
-                    }
-                    $role_id=$GoodsOrder->role_id;
-                    $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
-                    $role=Role::GetRoleByRoleId($role_id,$user);
-                    $tran = Yii::$app->db->beginTransaction();
-                    try{
-                        $GoodsOrder->pay_status=1;
-                        $GoodsOrder->pay_name='支付宝APP支付';
-                        $res=$GoodsOrder->save(false);
-                        if (!$res)
+                        if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                         {
-                            $tran->rollBack();
                             echo 'fail';
-                            die;
+                            exit;
                         }
+                        $role_id=$GoodsOrder->role_id;
+                        $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
 
-                        switch ($role_id)
-                        {
-                            case 2:
-                                $role_number=$role->worker_type_id;
-                                break;
-                            case 3:
-                                $role_number=$role->decoration_company_id;
-                                break;
-                            case 4:
-                                $role_number=$role->decoration_company_id;
-                                break;
-                            case 5:
-                                $role_number=$role->id;
-                                break;
-                            case 6:
-                                $role_number=$role->shop_no;
-                                break;
-                            case 7:
-                                $role_number=$role->aite_cube_no;
-                                break;
-                        }
-                        $access=new UserAccessdetail();
-                        $access->uid=$GoodsOrder->user_id;
-                        $access->role_id=$role_id;
-                        $access->access_type=7;
-                        $access->access_money=$GoodsOrder->amount_order;
-                        $access->create_time=time();
-                        $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
-                        $res3=$access->save(false);
-                        if ( !$res3){
-                            $tran->rollBack();
-                            $code=500;
-                            return $code;
-                        }
-                        $tran->commit();
-                    }catch (Exception $e){
-                        $tran->rollBack();
-                           echo 'fail';
-                           die;
+
+                            $GoodsOrder->pay_status=1;
+                            $GoodsOrder->pay_name='支付宝APP支付';
+                            $res=$GoodsOrder->save(false);
+                            if (!$res)
+                            {
+                                $tran->rollBack();
+                                echo 'fail';
+                                die;
+                            }
+
+
+
                     }
+                    $role=Role::GetRoleByRoleId($role_id,$user);
+                    switch ($role_id)
+                    {
+                        case 2:
+                            $role_number=$role->worker_type_id;
+                            break;
+                        case 3:
+                            $role_number=$role->decoration_company_id;
+                            break;
+                        case 4:
+                            $role_number=$role->decoration_company_id;
+                            break;
+                        case 5:
+                            $role_number=$role->id;
+                            break;
+                        case 6:
+                            $role_number=$role->shop_no;
+                            break;
+                        case 7:
+                            $role_number=$role->aite_cube_no;
+                            break;
+                    }
+                    $access=new UserAccessdetail();
+                    $access->uid=$user->id;
+                    $access->role_id=$role_id;
+                    $access->access_type=7;
+                    $access->access_money=$total_amount*100;
+                    $access->create_time=time();
+                    $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
+                    $res3=$access->save(false);
+                    if ( !$res3){
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                    $tran->commit();
+                }catch (Exception $e){
+                    $tran->rollBack();
+                    echo 'fail';
+                    die;
                 }
                 echo 'success';
             }
