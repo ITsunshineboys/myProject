@@ -516,7 +516,7 @@ angular.module("all_controller", ['ngCookies'])
                     //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
                     wx.onMenuShareTimeline({
                         title: '艾特魔方极力推荐产品',      // 分享标题
-                        link:  'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link:  'http://common.cdlhzz.cn/line/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         imgUrl: $scope.datailsShop.image, // 分享图标
                         success: function () {
                             // 用户确认分享后执行的回调函数
