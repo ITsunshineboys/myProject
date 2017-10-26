@@ -494,6 +494,9 @@ angular.module("all_controller", ['ngCookies'])
             $scope.signature  = response.data.data.signature;
             alert($scope.appId);
             alert(JSON.stringify($scope.appId));
+            alert(JSON.stringify($scope.timestamp));
+            alert(JSON.stringify($scope.nonceStr));
+            alert(JSON.stringify($scope.signature));
 
             if ($scope.codeWX == 200) {  // 微信支付
                 wx.config({
