@@ -445,10 +445,10 @@ class OrderController extends Controller
             ]);
         } else {
             // 微信浏览器，允许访问
-
             return Json::encode([
                 'code' => 200,
                 'msg' =>'微信内打开',
+                'data'=>Wxpay::GetWxJsSign()
             ]);
         }
     }

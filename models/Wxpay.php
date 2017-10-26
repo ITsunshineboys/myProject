@@ -22,6 +22,9 @@ class Wxpay  extends ActiveRecord
     const  EFFECT_NOTIFY_URL='http://common.cdlhzz.cn/order/wxpayeffect_earnstnotify';
     const  LINEPAY_NOTIFY_URL='http://common.cdlhzz.cn/order/orderlinewxpaynotify';
     const  EFFECT_BODY='样板间申请费';
+    const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
+    const  ACCESS_TOKEN='access_token';
+    const  TICKET='ticket';
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -164,5 +167,94 @@ exit;
             return false;
         }
         return true;
+    }
+
+
+            /**
+         * @return array
+         */
+        public  static  function  GetWxJsSign()
+        {
+            $cache = Yii::$app->cache;
+            $data = $cache->get(self::ACCESS_TOKEN);
+            if ($data)
+            {
+                $access_token=$data;
+            }else{
+                $sendUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx9814aafe9b6b847f&secret=4560eeb7b386701ddc7085827f65e40e';
+                $content =self::curl($sendUrl,false,0); //请求发送短信
+                if($content){
+                    $result = json_decode($content,true);
+                    $access_token=$result['access_token'];
+                    $data = $cache->set(self::ACCESS_TOKEN,$access_token,7200);
+                }else{
+                    //返回内容异常，以下可根据业务逻辑自行修改
+                    echo "请求发送短信失败";
+                }
+            }
+            $ticket=$cache->get(self::TICKET);
+            if (!$ticket)
+            {
+                $sendUrl = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket';
+                $smsConf = array(
+                    'access_token'   =>$access_token,
+                    'type'=>'jsapi'
+                );
+                $content =self::curl($sendUrl,$smsConf,0); //请求发送短信
+                if($content){
+                    $result = json_decode($content,true);
+                    if ($result['expires_in']==7200)
+                    {
+                        $ticket=$result['ticket'];
+                    }else{
+                        $ticket=$result['ticket'];
+                    }
+                }
+            }
+            $noncestr=WxPayApi::getNonceStr();
+            $timestamp=time();
+            $url=$_SERVER['HTTP_REFERER'];
+            $appid=WxPayConfig::APPID;
+            $str="jsapi_ticket=".$ticket."&noncestr=".$noncestr.'&timestamp='.$timestamp.'&url='.$url;
+            $sign=sha1($str);
+            return [
+                'appId'=>$appid,
+                'timestamp'=>$timestamp,
+                'nonceStr'=>$noncestr,
+                'signature'=>$sign
+            ];
+        }
+
+    public static   function curl($url,$params=false,$ispost=0){
+        $httpInfo = array();
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
+        curl_setopt( $ch, CURLOPT_USERAGENT , 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22' );
+        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 30 );
+        curl_setopt( $ch, CURLOPT_TIMEOUT , 30);
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER , true );
+        if( $ispost )
+        {
+            curl_setopt( $ch , CURLOPT_POST , true );
+            curl_setopt( $ch , CURLOPT_POSTFIELDS , $params );
+            curl_setopt( $ch , CURLOPT_URL , $url );
+        }
+        else
+        {
+            if($params){
+                curl_setopt( $ch , CURLOPT_URL , $url.'?'.$params );
+            }else{
+                curl_setopt( $ch , CURLOPT_URL , $url);
+            }
+        }
+        $response = curl_exec( $ch );
+        if ($response === FALSE) {
+            //echo "cURL Error: " . curl_error($ch);
+            return false;
+        }
+        $httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
+        $httpInfo = array_merge( $httpInfo , curl_getinfo( $ch ) );
+        curl_close( $ch );
+        return $response;
     }
 }
