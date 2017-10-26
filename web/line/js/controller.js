@@ -534,6 +534,7 @@ angular.module("all_controller", ['ngCookies'])
                     });
                     // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
                     wx.onMenuShareAppMessage({
+                        
                         title: '艾特魔方极力推荐产品', // 分享标题
                         desc: '艾特魔方极力推荐产品', // 分享描述
                         link: 'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
