@@ -1462,10 +1462,10 @@ class WithdrawalsController extends Controller
         if ($access['access_type']==1 || $access['access_type']==5 || $access['access_type']==6 )
         {
             //"1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款 7.使用"
-            $access['access_money']=-sprintf('%.2f',(float)$access['access_money']*0.01);
+            $access['access_money']=sprintf('%.2f',(float)$access['access_money']*0.01);
             $name="出账金额";
         }else{
-            $access['access_money']=sprintf('%.2f',(float)$access['access_money']*0.01);
+            $access['access_money']=-sprintf('%.2f',(float)$access['access_money']*0.01);
             $name="入账金额";
         }
         $type=UserAccessdetail::findAccessType($access['access_type']);

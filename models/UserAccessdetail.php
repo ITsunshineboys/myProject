@@ -97,7 +97,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ->offset($offset)
             ->limit($size)
             ->asArray()
-            ->all();
+            ->all(); 
          foreach ($Accessdetaillist as &$list) {
             $list['access_type']=self::findAccessType($list['access_type']);
              if ($list['access_type']==self::ACCESS_TYPE_DESC_DEBIT
