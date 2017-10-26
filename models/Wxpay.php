@@ -195,12 +195,8 @@ exit;
             $ticket=$cache->get(self::TICKET);
             if (!$ticket)
             {
-                $sendUrl = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket';
-                $smsConf = array(
-                    'access_token'   =>$access_token,
-                    'type'=>'jsapi'
-                );
-                $content =self::curl($sendUrl,$smsConf,0); //请求发送短信
+                 $sendUrl = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='.$access_token.'&type=jsapi';
+                $content =self::curl($sendUrl,false,0); //请求发送短信
                 if($content){
                     $result = json_decode($content,true);
                     if ($result['expires_in']==7200)
@@ -209,6 +205,7 @@ exit;
                     }else{
                         $ticket=$result['ticket'];
                     }
+                     $data = $cache->set(self::TICKET,$ticket,7200);
                 }
             }
             $noncestr=WxPayApi::getNonceStr();
