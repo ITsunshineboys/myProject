@@ -1064,7 +1064,7 @@ class BasisDecorationService
                     break;
             }
         }
-        $value = '';
+        $value = 0;
         foreach ($goods_attr as $one_goods) {
             $value = $one_goods['value'];
         }
@@ -1075,7 +1075,6 @@ class BasisDecorationService
         $new_24 = $get_area['24_new_construction'] * $cement_24;
         $new_repair = $get_area['repair'] * $repair;
         $new_dosage = $new_12 + $new_24 + $new_repair;
-        var_dump($new_dosage);exit;
         if ($new_dosage == 0){
             $cement['quantity'] = 0;
             $cement['cost'] = 0;
@@ -1083,6 +1082,7 @@ class BasisDecorationService
         }
 //        个数：（水泥用量÷抓取的商品的KG）
         $cement['quantity'] = ceil((int)$new_dosage / (int)$value);
+
 //        水泥费用：个数×抓取的商品价格
         $cement['cost'] = $cement['quantity'] * $goods['platform_price'];
         return $cement;
