@@ -529,21 +529,21 @@ angular.module("all_controller", ['ngCookies'])
                             // 用户取消分享后执行的回调函数
                         }
                     });
-                    // // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
-                    // wx.onMenuShareAppMessage({
-                    //     title: '', // 分享标题
-                    //     desc: '', // 分享描述
-                    //     link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                    //     imgUrl: '', // 分享图标
-                    //     type: '', // 分享类型,music、video或link，不填默认为link
-                    //     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                    //     success: function () {
-                    //         // 用户确认分享后执行的回调函数
-                    //     },
-                    //     cancel: function () {
-                    //         // 用户取消分享后执行的回调函数
-                    //     }
-                    // });
+                    // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+                    wx.onMenuShareAppMessage({
+                        title: '艾特魔方极力推荐产品', // 分享标题
+                        desc: '艾特魔方极力推荐产品', // 分享描述
+                        link: 'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: $scope.datailsShop.image, // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
                     // // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
                     // wx.onMenuShareQQ({
                     //     title: '', // 分享标题
@@ -558,33 +558,6 @@ angular.module("all_controller", ['ngCookies'])
                     //     }
                     // });
                 });
-                alert('调用微信接口');
-                // 微信接口 === 调用
-                $http({     //获取openid 的地址
-                    method: 'get',
-                    url: 'http://common.cdlhzz.cn/order/lineplaceorder',
-                    params: {
-                        goods_name: $scope.title,
-                        order_price: $scope.allCost,
-                        goods_num: +$scope.shopNum,
-                        goods_id: +$scope.mall_id,
-                        address_id: +$scope.address_id,
-                        invoice_id: +$scope.invoice_id,
-                        supplier_id: +$scope.supplier_id,
-                        freight: +$scope.freight,
-                        // openid:'oyKJL0oHDKwyzBXidhyhshxluBOg'
-                    }
-                }).then(function successCallback(response) {
-                    console.log(response);
-                    $scope.open_id = response.data.data;
-                    // alert('打印第一个成功');
-                    // alert(JSON.stringify(response));
-                    // alert(JSON.stringify($scope.open_id));
-                    window.location = $scope.open_id
-                }, function (error) {
-                    alert(JSON.stringify(error))
-                });
-
             }
         });
         // 跳转到订单页面
