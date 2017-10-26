@@ -1255,7 +1255,7 @@ class WithdrawalsController extends Controller
         $money=trim($request->post('money',''));
         $pay_password=trim($request->post('pay_pwd',''));
         $bank_id=trim($request->post('bank_id',''));
-        if (!$money ||!$pay_password  || $bank_id){
+        if (!$money ||!$pay_password  || !$bank_id){
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -1426,12 +1426,8 @@ class WithdrawalsController extends Controller
     }
 
 
-    
-    /**
-     * 交易详情 -app
-     * @return string
-     */
-    public  function  actionAppTransactionDetailData()
+
+   public  function  actionAppTransactionDetailData()
     {
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -1508,7 +1504,7 @@ class WithdrawalsController extends Controller
                 ];
                 $list[]=[
                     'name'=>'交易单号',
-                    'value'=>$access['transaction_no']
+                    'value'=>$transaction_no
                 ];
                 break;
             case 3:
@@ -1531,7 +1527,7 @@ class WithdrawalsController extends Controller
                 ];
                 $list[]=[
                     'name'=>'交易单号',
-                    'value'=>$cashData['transaction_no']
+                    'value'=>$transaction_no
                 ];
                 break;
             case 4:
@@ -1551,7 +1547,7 @@ class WithdrawalsController extends Controller
 
                 $list[]=[
                     'name'=>'交易单号',
-                    'value'=>$cashData['transaction_no']
+                    'value'=>$transaction_no
                 ];
                 break;
             case 5:
@@ -1574,7 +1570,7 @@ class WithdrawalsController extends Controller
                 ];
                 $list[]=[
                     'name'=>'交易单号',
-                    'value'=>$cashData['transaction_no']
+                    'value'=>$transaction_no
                 ];
                 $list[]=[
                     'name'=>'备注',
@@ -1589,7 +1585,7 @@ class WithdrawalsController extends Controller
 
                 $list[]=[
                     'name'=>'交易单号',
-                    'value'=>$access['transaction_no']
+                    'value'=>$transaction_no
                 ];
                 $list[]=[
                     'name'=>'商品订单号',
@@ -1635,7 +1631,7 @@ class WithdrawalsController extends Controller
                 ];
                 $list[]=[
                     'name'=>'交易单号',
-                    'value'=>$access['transaction_no']
+                    'value'=>$transaction_no
                 ];
                 break;
         }
@@ -1648,8 +1644,10 @@ class WithdrawalsController extends Controller
                 'list'=>$list
             ]
         ]);
-        
     }
+
+
+
 
 
 
