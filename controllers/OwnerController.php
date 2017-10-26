@@ -1183,6 +1183,7 @@ class OwnerController extends Controller
             switch ($max) {
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
+                    var_dump($goods_attr);
                     if ($goods_attr == null){
                         $code = 1067;
                         return Json::encode([
@@ -1228,6 +1229,7 @@ class OwnerController extends Controller
                     break;
             }
         }
+        exit;
         $material['material'][] = BasisDecorationService::profitMargin($cement);
         $material['material'][] = BasisDecorationService::profitMargin($air_brick);
         $material['material'][] = BasisDecorationService::profitMargin($river_sand);
