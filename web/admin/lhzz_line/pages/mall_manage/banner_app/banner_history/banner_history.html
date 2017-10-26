@@ -16,18 +16,18 @@
         <!--选择城市开始-->
         <div class="city">
             <div class="formDiv">
-                <select  name="province" ng-model="selectValue" class="time_select" ng-options="item.name for item in time">
+                <select  name="province" ng-model="params.time_type" ng-change="type_change()" class="time_select" ng-options="item.value as item.name for item in time">
                 </select>
-                <input  ng-if="selectValue.name=='自定义'" id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
-                <input  ng-if="selectValue.name=='自定义'" id="stop_time"   ng-model="myng.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+                <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
+                <input ng-if="params.time_type=='custom'" id="end_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
             </div>
         </div>
         <!--选择城市结束-->
 
         <!--Table内容  开始-->
         <div class="tabTable">
-            <table>
-                <tr class="th">
+            <table class="table" style="table-layout:fixed;">
+                <tr id="th">
                     <td>类型</td>
                     <td>商品编号</td>
                     <td>标题</td>
@@ -53,7 +53,7 @@
                 <tr ng-repeat="item in recommendList">
                     <td>{{item.from_type}}</td>
                     <td>{{item.sku=='0'?'无':item.sku}}</td>
-                    <td>{{item.title}}</td>
+                    <td class="table_txt">{{item.title}}</td>
                     <td><a href="">{{item.supplier_name==''?'链接':item.supplier_name}}</a></td>
                     <td>{{item.viewed_number}}</td>
                     <td>{{item.sold_number}}</td>
@@ -63,19 +63,10 @@
                     <td><img id="show_img_size" ng-src="http://test.cdlhzz.cn:888/{{item.image}}" alt=""></td>
                 </tr>
             </table>
+            <!--分页-->
+            <tm-pagination conf="Config"></tm-pagination>
         </div>
         <!--Table内容  结束-->
 
-        <!--分页开始-->
-        <ul class="pages">
-            <li ng-click="Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-            <li class="pagenum" ng-repeat="page in banner_history_list" ng-click="choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-            <!--<li id="omit" ng-show="allpages>5">...</li>-->
-            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="Next()">下一页</li>
-            <li id="jumpto"><input type="text" ng-model="topage"></li>
-            <li ng-click="choosePage(topage)">跳转</li>
-        </ul>
-        <!--分页结束-->
     </div>
 </div>

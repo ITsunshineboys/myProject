@@ -71,24 +71,20 @@ table{
   width: 90%;
   margin: 0 auto;
 }
-.tabTable table tr{
-  height: 42px;
-  border-bottom: 1px solid #E6E9F0;
-}
+
 .tabTable table tr td{
   font-family: Helvetica;
   font-size: 14px;
   color: #666F80;
-  line-height: 14px;
-  /*padding: 0 22px;*/
 }
 .tabTable table tr td a{
   color: #3F94F6;
 }
-.th td{
+#th td{
   font-family: Helvetica;
   font-size: 14px;
   color: #7A8599!important;
+  border-top:0!important;
 }
 #show_img_size{
   width: 30px;
@@ -98,60 +94,5 @@ table{
   width: 10px;
   height: 16px;
 }
+
 /*Table内容 结束-*/
-
-/*分页*/
-/*分页处理*/
-.pages{
-  width: 90%;
-  margin: 20px auto 0;
-  /*outline: 1px solid red;*/
-  overflow: hidden;
-  padding-left: 0;
-  list-style: none;
-}
-
-.pages>div{
-  float: left;
-  overflow: hidden;
-}
-
-.pages li{
-  float: left;
-  margin-right: 10px;
-  font-family: Helvetica;
-  font-size: 12px;
-  color: #999;
-  line-height: 12px;
-  padding: 6px 18px;
-  background-color: white;
-  border: 1px solid #5677FC;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.pages #jumpto{
-  border: none;
-  padding:0 0 0 5px;
-}
-
-#jumpto input{
-  height: 25px;
-  width: 62px;
-}
-
-.pagenum{
-  padding-left: 9px!important;
-  padding-right: 9px!important;
-}
-
-#omit,#off{
-  border:none;!important;
-  padding:6px 0 0 0;
-  cursor: default;
-}
-
-.active{
-  background:#487af8!important;
-  color: white!important;
-}
