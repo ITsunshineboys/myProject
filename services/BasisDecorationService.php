@@ -1080,16 +1080,11 @@ class BasisDecorationService
             $cement['cost'] = 0;
             return  $cement;
         }
-        var_dump($new_dosage);
-        var_dump($value);
-        var_dump((int)$new_dosage);
-        var_dump((int)$value);
 //        个数：（水泥用量÷抓取的商品的KG）
         $cement['quantity'] = ceil((int)$new_dosage / (int)$value);
 
 //        水泥费用：个数×抓取的商品价格
         $cement['cost'] = $cement['quantity'] * $goods['platform_price'];
-        var_dump($cement);exit;
         return $cement;
     }
 
