@@ -1499,6 +1499,7 @@ CREATE TABLE `bankinfo_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bankname` varchar(50) NOT NULL COMMENT '开户银行',
   `bankcard` bigint(30) NOT NULL COMMENT '银行卡号',
+  `bank_type` tinyint(1) NOT NULL DEFAULT '2' COMMENT '1.信用卡  2.借记卡',
   `username` varchar(50) NOT NULL COMMENT '开户名',
   `position` varchar(150) NOT NULL COMMENT '开户行所在地',
   `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
