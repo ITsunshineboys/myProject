@@ -3773,7 +3773,7 @@ class MallController extends Controller
             ]);
         }
 
-        $cacheKey = 'goods_' . $id;
+        $cacheKey = Goods::GOODS_QR_PREFIX . $id;
         $cache = Yii::$app->cache;
         $data = $cache->get($cacheKey);
         if ($data) {
@@ -3801,7 +3801,7 @@ class MallController extends Controller
         }
 
         $data = $goods->view(Yii::$app->request->userIP);
-        $cache->set($cacheKey, $data, 30);
+        $cache->set($cacheKey, $data, Yii::$app->params['goods']['viewCacheTime']);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
