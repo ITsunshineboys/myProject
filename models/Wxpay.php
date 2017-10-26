@@ -210,8 +210,8 @@ exit;
             }
             $noncestr=WxPayApi::getNonceStr();
             $timestamp=time();
-            $url='https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115';
-//            $url=$_SERVER['HTTP_REFERER'];
+            // $url='https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115';
+           $url=$_SERVER['HTTP_REFERER'];
             $appid=WxPayConfig::APPID;
             $str="jsapi_ticket=".$ticket."&noncestr=".$noncestr.'&timestamp='.$timestamp.'&url='.$url;
             $sign=sha1($str);
