@@ -649,6 +649,10 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
     })
   };
 
+    $scope.show_all = function (m) {
+        m === true ? $scope[m] = false : $scope[m] = true;
+    };
+
   // 分类菜单
   $scope.show_1=true;
   $scope.show_a= function (m) {

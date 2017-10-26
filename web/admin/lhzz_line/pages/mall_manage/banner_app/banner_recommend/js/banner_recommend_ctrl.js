@@ -640,127 +640,25 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
     })
   };
 
+    $scope.show_all = function (m) {
+        m === true ? $scope[m] = false : $scope[m] = true;
+    };
+
   // 分类菜单
   $scope.show_1=true;
-  $scope.show_a= function (m) {
-    if(m===true){
-      $scope.show_1=true;
-    }else {
-      $scope.show_1=false;
-    }
-  };
   $scope.show_2=true;
-  $scope.show_b= function (m) {
-    if(m===true){
-      $scope.show_2=true;
-    }else {
-      $scope.show_2=false;
-    }
-  };
   $scope.show_3=true;
-  $scope.show_c= function (m) {
-    if(m===true){
-      $scope.show_3=true;
-    }else {
-      $scope.show_3=false;
-    }
-  };
   $scope.show_4=true;
-  $scope.show_d= function (m) {
-    if(m===true){
-      $scope.show_4=true;
-    }else {
-      $scope.show_4=false;
-    }
-  };
   $scope.show_5=true;
-  $scope.show_e= function (m) {
-    if(m===true){
-      $scope.show_5=true;
-    }else {
-      $scope.show_5=false;
-    }
-  };
   $scope.show_6=true;
-  $scope.show_f= function (m) {
-    if(m===true){
-      $scope.show_6=true;
-    }else {
-      $scope.show_6=false;
-    }
-  };
   $scope.show_7=true;
-  $scope.show_g= function (m) {
-    if(m===true){
-      $scope.show_7=true;
-    }else {
-      $scope.show_7=false;
-    }
-  };
-  $scope.show_8=true;
-  $scope.show_h= function (m) {
-    if(m===true){
-      $scope.show_8=true;
-    }else {
-      $scope.show_8=false;
-    }
-  };
+  $scope.show_8=true
   $scope.show_9=true;
-  $scope.show_i= function (m) {
-    if(m===true){
-      $scope.show_9=true;
-    }else {
-      $scope.show_9=false;
-    }
-  };
   $scope.show_10=false;
-  $scope.show_j= function (m) {
-    if(m===true){
-      $scope.show_10=true;
-    }else {
-      $scope.show_10=false;
-    }
-  };
   $scope.show_11=false;
-  $scope.show_k= function (m) {
-    if(m===true){
-      $scope.show_11=true;
-    }else {
-      $scope.show_11=false;
-    }
-  };
   $scope.show_12=false;
-  $scope.show_l= function (m) {
-    if(m===true){
-      $scope.show_12=true;
-    }else {
-      $scope.show_12=false;
-    }
-  };
   $scope.show_13=false;
-  $scope.show_m= function (m) {
-    if(m===true){
-      $scope.show_13=true;
-    }else {
-      $scope.show_13=false;
-    }
-  };
   $scope.show_14=true;
-  $scope.show_n= function (m) {
-    if(m===true){
-      $scope.show_14=true;
-    }else {
-      $scope.show_14=false;
-    }
-  };
-  change_m=false;
-  $scope.change_menu=function (m) {
-    if(m===true){
-      $scope.change_m=false;
-    }else {
-      $scope.change_m=true;
-    }
-  };
 
   // //清楚链接link_submit
   // $scope.clear_link_submit=function () {

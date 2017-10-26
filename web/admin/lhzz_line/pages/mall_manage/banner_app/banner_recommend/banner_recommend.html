@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="pages/mall_manage/banner_app/banner_recommend/css/banner_recommend.css">
 
 <div ng-controller="banner_recommend_ctrl">
+    <section>
     <!--头部导航开始-->
     <div class="header_box">
         <div class="header_txt">
@@ -36,37 +37,41 @@
         <!--Banner、推荐选项卡结束-->
 
         <!--Table操作（增删改查）开始-->
-        <div class="tabContent">
-            <div class="topTab">
-                <span ng-click="save_btn_ok()" class="topTabE topTabActive" data-toggle="modal" data-target="#my_modal_save"><i class="glyphicon glyphicon-home"></i> 保存</span>
-                <span ng-click="clear_add_content()" class="topTabE" data-toggle="modal" data-target="#recommend_shop_modal_add" ><i class="glyphicon glyphicon-home" ></i> 添加</span>
-                <span class="topTabS" ng-modal="selectAll"  ng-click="all(selectAll)">全选</span>
-                <span class="topTabS" data-toggle="modal" data-target="#{{del_or_stop}}" ng-click="delete_batch_del()">删除</span>
-                <span class="topTabS" data-toggle="modal" data-target="#{{stop_flag}}" ng-click="disable_batch()">停用</span>
+
+        <div class="tab_tools clearfix tab_class">
+            <div class="pull-left">
+                <button class="btn btn-primary pull-left" type="submit" ng-click="save_btn_ok()" data-toggle="modal" data-target="#my_modal_save"><i class="glyphicon glyphicon-floppy-disk"></i>保存</button>
+                <button class="btn btn-info pull-left" ng-click="clear_add_content()" type="submit" data-toggle="modal" data-target="#recommend_shop_modal_add"><i class="glyphicon glyphicon-plus"></i>添加</button>
+                <button class="btn btn-default pull-left"  ng-modal="selectAll"  ng-click="all(selectAll)">全选</button>
+                <button class="btn btn-default pull-left"  data-toggle="modal" data-target="#{{del_or_stop}}" ng-click="delete_batch_del()">删除</button>
+                <button class="btn btn-default pull-left" data-toggle="modal" data-target="#{{stop_flag}}" ng-click="disable_batch()">停用</button>
                 <a class="topTabE" ui-sref="banner_history"><i class="glyphicon glyphicon-home"></i> 历史数据</a>
-                <span ng-model="change_m" ng-click="change_menu(change_m)" class="topTabS topTabList"><i class="glyphicon glyphicon-th-list"></i></span>
-                <div class="classification_menu" ng-if="change_m">
-                    <ul>
-                        <li><input type="checkbox" checked="checked" ng-model="show_1" ng-click="show_a(show_1)"><span>类型</span></li>
-                        <li><input type="checkbox" checked="checked" ng-model="show_2" ng-click="show_b(show_2)"><span>商品编号</span></li>
-                        <li><input type="checkbox" checked="checked" ng-model="show_3" ng-click="show_c(show_3)"><span>名称</span></li>
-                        <li><input type="checkbox" checked="checked" ng-model="show_4" ng-click="show_d(show_4)"><span>来源商家</span></li>
-                        <li><input type="checkbox" checked="checked" ng-model="show_5" ng-click="show_e(show_5)"><span>上架浏览</span></li>
-                        <li><input type="checkbox" checked="checked" ng-model="show_6" ng-click="show_f(show_6)"><span>上架销量</span></li>
-                        <li><input type="checkbox" checked="checked" ng-model="show_7" ng-click="show_g(show_7)"><span>是否启用</span></li>
-                        <li><input type="checkbox" checked="checked" ng-model="show_8" ng-click="show_h(show_8)"><span>创建时间</span></li>
-                        <li><input type="checkbox" checked="checked" ng-model="show_9" ng-click="show_i(show_9)"><span>图片</span></li>
-                        <li><input type="checkbox" ng-model="show_10" ng-click="show_j(show_10)"><span>库存</span></li>
-                        <li><input type="checkbox" ng-model="show_11" ng-click="show_k(show_11)"><span>供货价格</span></li>
-                        <li><input type="checkbox" ng-model="show_12" ng-click="show_l(show_12)"><span>平台价格</span></li>
-                        <li><input type="checkbox" ng-model="show_13" ng-click="show_m(show_13)"><span>市场价格</span></li>
-                        <li><input type="checkbox" ng-model="show_14" ng-click="show_n(show_14)"><span>操作</span></li>
+            </div>
+            <div class="pull-right">
+                <!-- 筛选菜单 -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle btn_list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-th-list"></i>
+                    </button>
+                    <!--Menu-->
+                    <ul class="dropdown-menu dropdown-menu-right btn_list_menu">
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_1" ng-click="show_all(show_1)">类型</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_2" ng-click="show_all(show_2)">商品编号</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_3" ng-click="show_all(show_3)">名称</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_4" ng-click="show_all(show_4)">来源商家</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_5" ng-click="show_all(show_5)">上架浏览</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_6" ng-click="show_all(show_6)">上架销量</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_7" ng-click="show_all(show_7)">是否启用</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_8" ng-click="show_all(show_8)">创建时间</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_9" ng-click="show_all(show_9)">图片</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_10" ng-click="show_all(show_10)">库存</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_11" ng-click="show_all(show_11)">供货价格</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_12" ng-click="show_all(show_12)">平台价格</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_13" ng-click="show_all(show_13)">市场价格</li>
+                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_14" ng-click="show_all(show_14)">操作</li>
                     </ul>
                 </div>
             </div>
         </div>
-        <!--Table操作（增删改查）结束-->
-
         <!--Table内容  开始-->
         <div class="tabTable">
             <table>
@@ -656,4 +661,5 @@
         <!--单个启用模态框 结束-->
 
     </div>
+    </section>
 </div>
