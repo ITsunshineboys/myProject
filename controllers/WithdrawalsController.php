@@ -1377,9 +1377,12 @@ class WithdrawalsController extends Controller
             }
             $code=200;
             $tran->commit();
-            return Json::encode([
+              return Json::encode([
                 'code' => $code,
-                'msg' => 'ok'
+                'msg' => 'ok',
+                'data'=>[
+                    'arrival_time'=>date('Y-m-d h:i',$time+21*60*60*3)
+                ]
             ]);
         }catch (Exception $e){
             $tran->rollBack();

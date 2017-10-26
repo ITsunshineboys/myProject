@@ -2052,7 +2052,7 @@ class OrderController extends Controller
      * 余额支付
      * @return string
      */
-    public  function  actionBalancePay(){
+  public  function  actionBalancePay(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
