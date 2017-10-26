@@ -1636,11 +1636,11 @@ class WithdrawalsController extends Controller
                 break;
         }
         $code=200;
-        return Json::encode([
+         return Json::encode([
             'code'=>$code,
            'msg'=>'ok',
             'data'=>[
-                'type'=>$type,
+                'type'=>'交易详情-'.$type,
                 'list'=>$list
             ]
         ]);
