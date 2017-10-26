@@ -71,6 +71,7 @@ angular.module('income_pay_module',[])
     }
   //监听开始和结束时间
   $scope.time_change=function () {
+      $scope.wjConfig.currentPage = 1; //页数跳转到第一页
       tablePages();
   };
   //监听搜索
@@ -120,6 +121,7 @@ angular.module('income_pay_module',[])
             $scope.time_src='lib/images/arrow_down.png';
             $scope.params.sort_time=2;
         }
+        $scope.wjConfig.currentPage = 1; //页数跳转到第一页
         tablePages();
     };
 });

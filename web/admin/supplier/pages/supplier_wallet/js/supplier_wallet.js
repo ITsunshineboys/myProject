@@ -58,5 +58,5 @@ angular.module('supplier_wallet_module',[])
     $scope.time_change=function () {
         $scope.wjConfig.currentPage=1;
         tablePages();
-    }
+    };
 });
