@@ -1423,4 +1423,231 @@ class WithdrawalsController extends Controller
     }
 
 
+    
+    /**
+     * 交易详情 -app
+     * @return string
+     */
+    public  function  actionAppTransactionDetailData()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $transaction_no=$request->get('transaction_no','1');
+        if (!$transaction_no)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $access=UserAccessdetail::find()
+            ->where(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one();
+        if (!$access)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if ($access['access_type']==1 || $access['access_type']==5 || $access['access_type']==6 )
+        {
+            //"1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款 7.使用"
+            $access['access_money']=-sprintf('%.2f',(float)$access['access_money']*0.01);
+            $name="出账金额";
+        }else{
+            $access['access_money']=sprintf('%.2f',(float)$access['access_money']*0.01);
+            $name="入账金额";
+        }
+        $type=UserAccessdetail::findAccessType($access['access_type']);
+        $list[]=[
+            'name'=>$name,
+            'value'=>$access['access_money']
+        ];
+        $list[]=[
+            'name'=>'类型',
+            'value'=>$type
+        ];
+        switch ($access['access_type'])
+        {
+            case 1:
+                $list[]=[
+                    'name'=>'充值方式',
+                    'value'=>'支付宝支付'
+                ];
+                $list[]=[
+                    'name'=>'时间',
+                    'value'=>$access['create_time']
+                ];
+                $list[]=[
+                    'name'=>'交易单号',
+                    'value'=>$access['transaction_no']
+                ];
+                break;
+            case 2:
+                $list[]=[
+                    'name'=>'充值方式',
+                    'value'=>'支付宝支付'
+                ];
+                $list[]=[
+                    'name'=>'时间',
+                    'value'=>$access['create_time']
+                ];
+                $list[]=[
+                    'name'=>'交易单号',
+                    'value'=>$access['transaction_no']
+                ];
+                break;
+            case 3:
+                $cashData=(new Query())
+                    ->from(UserCashregister::tableName().' as c')
+                    ->leftJoin(BankinfoLog::tableName().' as b','c.bank_log_id=b.id')
+                    ->where(['c.transaction_no'=>$transaction_no])
+                    ->one();
+                $list[]=[
+                    'name'=>'到账银行卡',
+                    'value'=>$cashData['bankname']
+                ];
+                $list[]=[
+                    'name'=>'申请时间',
+                    'value'=>date('Y-m-d H:i',$cashData['apply_time'])
+                ];
+                $list[]=[
+                    'name'=>'处理时间',
+                    'value'=>date('Y-m-d H:i',$cashData['handle_time'])
+                ];
+                $list[]=[
+                    'name'=>'交易单号',
+                    'value'=>$cashData['transaction_no']
+                ];
+                break;
+            case 4:
+                $cashData=(new Query())
+                    ->from(UserCashregister::tableName().' as c')
+                    ->leftJoin(BankinfoLog::tableName().' as b','c.bank_log_id=b.id')
+                    ->where(['c.transaction_no'=>$transaction_no])
+                    ->one();
+                $list[]=[
+                    'name'=>'到账银行卡',
+                    'value'=>$cashData['bankname']
+                ];
+                $list[]=[
+                    'name'=>'申请时间',
+                    'value'=>date('Y-m-d H:i',$cashData['apply_time'])
+                ];
+
+                $list[]=[
+                    'name'=>'交易单号',
+                    'value'=>$cashData['transaction_no']
+                ];
+                break;
+            case 5:
+                $cashData=(new Query())
+                    ->from(UserCashregister::tableName().' as c')
+                    ->leftJoin(BankinfoLog::tableName().' as b','c.bank_log_id=b.id')
+                    ->where(['c.transaction_no'=>$transaction_no])
+                    ->one();
+                $list[]=[
+                    'name'=>'到账银行卡',
+                    'value'=>$cashData['bankname']
+                ];
+                $list[]=[
+                    'name'=>'申请时间',
+                    'value'=>date('Y-m-d H:i',$cashData['apply_time'])
+                ];
+                $list[]=[
+                    'name'=>'处理时间',
+                    'value'=>date('Y-m-d H:i',$cashData['handle_time'])
+                ];
+                $list[]=[
+                    'name'=>'交易单号',
+                    'value'=>$cashData['transaction_no']
+                ];
+                $list[]=[
+                    'name'=>'备注',
+                    'value'=>$cashData['supplier_reason']
+                ];
+                break;
+            case 6:
+                $list[]=[
+                    'name'=>'时间',
+                    'value'=>$access['create_time']
+                ];
+
+                $list[]=[
+                    'name'=>'交易单号',
+                    'value'=>$access['transaction_no']
+                ];
+                $list[]=[
+                    'name'=>'商品订单号',
+                    'value'=>$access['order_no']
+                ];
+                break;
+            case 7:
+                $orders=explode(',',$access['order_no']);
+                foreach ($orders as $order)
+                {
+                    $goodsOrder=GoodsOrder::find()
+                        ->select('pay_name')
+                        ->where(['order_no'=>$order])
+                        ->one();
+                    $pay_name=$goodsOrder->pay_name;
+                    $orderGoods=OrderGoods::find()
+                        ->select('goods_name')
+                        ->where(['order_no'=>$order])
+                        ->asArray()
+                        ->all();
+                    foreach ($orderGoods as $orderGood)
+                    {
+                         $goods_name[]=   $orderGood['goods_name'];
+                    }
+                }
+                if (count($goods_name)>1)
+                {
+                    $title=$goods_name[0]."...";
+                }else{
+                    $title=$goods_name[0];
+                }
+                $list[]=[
+                    'name'=>'支付类型',
+                    'value'=>$pay_name
+                ];
+                $list[]=[
+                    'name'=>'商品名称',
+                    'value'=>$title
+                ];
+                $list[]=[
+                    'name'=>'时间',
+                    'value'=>$access['create_time']
+                ];
+                $list[]=[
+                    'name'=>'交易单号',
+                    'value'=>$access['transaction_no']
+                ];
+                break;
+        }
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+           'msg'=>'ok',
+            'data'=>[
+                'type'=>$type,
+                'list'=>$list
+            ]
+        ]);
+        
+    }
+
+
+
 }
