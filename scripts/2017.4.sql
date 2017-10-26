@@ -959,6 +959,7 @@ CREATE TABLE `effect_earnst` (
   `phone` char(11) NOT NULL COMMENT '电话号码',
   `name` varchar(255) NOT NULL COMMENT '名字',
   `earnest` bigint(20) NOT NULL DEFAULT '0' COMMENT '定金',
+  `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
   `remark` text NOT NULL COMMENT '备注',
   `create_time` int(11) NOT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
