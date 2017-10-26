@@ -1183,19 +1183,18 @@ class OwnerController extends Controller
             switch ($max) {
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
-                    var_dump($goods_attr);
-//                    if ($goods_attr == null){
-//                        $code = 1067;
-//                        return Json::encode([
-//                            'code' => $code,
-//                            'msg' => Yii::$app->params['errorCodes'][$code],
-//                        ]);
-//                    }
-//                    //水泥费用
-//                    $cement_cost = BasisDecorationService::cementCost($post,$craft,$max,$goods_attr);
-//                    $max['quantity'] = $cement_cost['quantity'];
-//                    $max['cost'] = $cement_cost['cost'];
-//                    $cement[] = $max;
+                    if ($goods_attr == null){
+                        $code = 1067;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
+                    //水泥费用
+                    $cement_cost = BasisDecorationService::cementCost($post,$craft,$max,$goods_attr);
+                    $max['quantity'] = $cement_cost['quantity'];
+                    $max['cost'] = $cement_cost['cost'];
+                    $cement[] = $max;
                     break;
                 case $max['title'] == BasisDecorationService::GOODS_NAME['air_brick']:
                     //空心砖费用
@@ -1229,7 +1228,6 @@ class OwnerController extends Controller
                     break;
             }
         }
-        exit;
         $material['material'][] = BasisDecorationService::profitMargin($cement);
         $material['material'][] = BasisDecorationService::profitMargin($air_brick);
         $material['material'][] = BasisDecorationService::profitMargin($river_sand);
