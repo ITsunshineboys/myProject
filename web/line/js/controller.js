@@ -500,7 +500,7 @@ angular.module("all_controller", ['ngCookies'])
 
             if ($scope.codeWX == 200) {  // 微信支付
                 wx.config({
-                    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                     appId: $scope.appId, // 必填，公众号的唯一标识
                     timestamp:$scope.timestamp, // 必填，生成签名的时间戳
                     nonceStr: $scope.nonceStr, // 必填，生成签名的随机串
@@ -522,8 +522,8 @@ angular.module("all_controller", ['ngCookies'])
                     //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
                     wx.onMenuShareTimeline({
                         title: '艾特魔方极力推荐产品',      // 分享标题
-                        link:  'http://common.cdlhzz.cn/line/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        imgUrl: $scope.datailsShop.image, // 分享图标
+                        link:  'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: 'http:common.cdlhzz.cn/'+$scope.datailsShop.image, // 分享图标
                         success: function () {
                             // 用户确认分享后执行的回调函数
 
