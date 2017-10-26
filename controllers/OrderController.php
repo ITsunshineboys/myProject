@@ -436,7 +436,6 @@ class OrderController extends Controller
      * 判断是否是微信登录
      */
     public function  actionIswxlogin(){
-         var_dump(Wxpay::GetWxJsSign());exit;
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
         if (strpos($user_agent, 'MicroMessenger') === false) {
             // 非微信浏览器禁止浏览
