@@ -6,7 +6,6 @@
         <h6>商城管理</h6>
         <h6>> 系列/风格/属性管理 </h6>
     </div>
-
     <!--内容-->
     <div class="style_content">
         <!--选项卡-->
@@ -15,45 +14,43 @@
             <span id="style_mag" ng-click="changeTostyle()" ng-class="{clickstyle:showstyle}">风格管理</span>
             <span id="attr_mag" ng-click="changeToattr()" ng-class="{clickstyle:showattr}">属性管理</span>
         </div>
-
         <!--系列管理-->
         <div ng-if="showseries==true" class="series_mag">
             <!--按钮组-->
             <div class="series_btn">
-            <div class="series_btn">
-                <button ui-sref="add_series({list:series_arr})" ng-if="series_arr.length!=10">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span>添加</span>
-                </button>
-                <button ui-sref="choose_series">选择系列</button>
-            </div>
+                <div class="series_btn">
+                    <button ui-sref="add_series({list:series_arr})" ng-if="series_arr.length!=10">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <span>添加</span>
+                    </button>
+                    <button ui-sref="choose_series">选择系列</button>
+                </div>
+                <!--系列管理Table内容-->
+                <div class="series_mag_table">
+                    <table>
+                        <tr class="th">
+                            <td width="224">系列名称</td>
+                            <td width="270">创建时间
+                                <img ng-click="ser_time_sort()" src="{{ser_time_img}}" alt="">
 
-            <!--系列管理Table内容-->
-            <div class="series_mag_table">
-                <table>
-                    <tr class="th">
-                        <td width="224">系列名称</td>
-                        <td width="270">创建时间
-                            <img ng-click="ser_time_sort(0)" ng-if="ser_time_sort_on_flag" src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
-                            <img ng-click="ser_time_sort(1)" ng-if="ser_time_sort_down_flag" src="pages/mall_manage/style_manage/style_index/images/arrow_down.png" alt="">
-                        </td>
-                        <td width="224">状态</td>
-                        <td width="224">详情</td>
-                        <td>操作</td>
-                    </tr>
+                            </td>
+                            <td width="224">状态</td>
+                            <td width="224">详情</td>
+                            <td>操作</td>
+                        </tr>
 
-                    <tr ng-repeat="item in series_arr">
-                        <td>{{item.series}}</td>
-                        <td>{{item.creation_time}}</td>
-                        <td class="color_red" ng-if="item.status=='0'">关闭</td>
-                        <td class="color_skyblue" ng-if="item.status=='1'">启动中</td>
-                        <td class="color_blue" ui-sref="series_detail({item:item,ser_arr:series_arr,index:$index})">编辑</td>
-                        <td class="color_blue" ng-if="item.status=='0'" data-toggle="modal" data-target="#open_modal" ng-click="open_status(item)">开启</td>
-                        <td class="color_blue" ng-if="item.status=='1'" data-toggle="modal" data-target="#close_modal" ng-click="close_status(item)">关闭</td>
-                    </tr>
-                </table>
+                        <tr ng-repeat="item in series_arr">
+                            <td>{{item.series}}</td>
+                            <td>{{item.creation_time}}</td>
+                            <td class="color_red" ng-if="item.status=='0'">关闭</td>
+                            <td class="color_skyblue" ng-if="item.status=='1'">启动中</td>
+                            <td class="color_blue" ui-sref="series_detail({item:item,ser_arr:series_arr,index:$index})">编辑</td>
+                            <td class="color_blue" ng-if="item.status=='0'" data-toggle="modal" data-target="#open_modal" ng-click="open_status(item)">开启</td>
+                            <td class="color_blue" ng-if="item.status=='1'" data-toggle="modal" data-target="#close_modal" ng-click="close_status(item)">关闭</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
         </div>
 
         <!--风格管理-->
@@ -73,8 +70,7 @@
                     <tr class="th">
                         <td width="224">风格名称</td>
                         <td width="270">创建时间
-                            <img ng-click="style_time_sort(0)" ng-if="style_time_sort_on_flag" src="pages/mall_manage/style_manage/style_index/images/arrow_up.png" alt="">
-                            <img ng-click="style_time_sort(1)" ng-if="style_time_sort_down_flag" src="pages/mall_manage/style_manage/style_index/images/arrow_down.png" alt="">
+                            <img ng-click="style_time_sort()"  ng-src="{{style_time_img}}" alt="">
                         </td>
                         <td width="224">状态</td>
                         <td width="224">详情</td>
@@ -91,17 +87,8 @@
                         <td class="color_blue" ng-if="style_item.status=='1'" ng-click="style_close(style_item)" data-toggle="modal" data-target="#style_close_modal">关闭</td>
                     </tr>
                 </table>
-                <!--分页开始-->
-                <ul class="pages">
-                    <li ng-click="style_Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-                    <li class="pagenum" ng-repeat="page in style_history_list" ng-click="style_choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-                    <!--<li id="omit" ng-show="allpages>5">...</li>-->
-                    <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-                    <li ng-click="style_Next()">下一页</li>
-                    <li class="jumpto"><input type="text" ng-model="topage"></li>
-                    <li ng-click="style_choosePage(topage)">跳转</li>
-                </ul>
-                <!--分页结束-->
+                <!--分页-->
+                <tm-pagination conf="Config"></tm-pagination>
             </div>
         </div>
 
@@ -220,8 +207,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 
