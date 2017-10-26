@@ -155,6 +155,7 @@ return [
     'auth' => $auth,
     'goods' => [
         'maxImagesCnt' => 5,
+        'viewCacheTime' => 60, // unit: second
     ],
     'brand' => [
         'offline_reason' => '品牌下架',
