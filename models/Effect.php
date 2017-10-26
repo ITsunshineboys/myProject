@@ -152,13 +152,14 @@ class Effect extends ActiveRecord
     public function geteffectdata($effect_id){
         $query=new Query();
         $array= $query->from('effect_earnst As ea')
-            ->select('e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
+            ->select('e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
             ->leftJoin('effect as e','ea.effect_id=e.id')
             ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.id'=>$effect_id])->one();
         if($array){
+            $array['area']=mb_substr($array['particulars'],5,4);
             $array['particulars']=mb_substr($array['particulars'],0,4);
             $array['create_time']=date('Y-m-d',$array['create_time']);
             $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
