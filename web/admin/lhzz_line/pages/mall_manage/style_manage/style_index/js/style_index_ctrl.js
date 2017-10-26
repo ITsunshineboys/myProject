@@ -29,6 +29,8 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         page: 1,                        // 当前页数
         sort:0
     };
+
+
     //POST请求的响应头
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -41,7 +43,6 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     //系列——展示数据数组
     $scope.series_arr = [];  //系列所有数据列表
     $scope.style_arr = [];  //风格所有数据列表
-
     /*属性管理*/
     $scope.handledesorder = true; //排序初始值
     $scope.handleascorder = false; //排序初始值
