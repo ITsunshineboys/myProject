@@ -3773,6 +3773,19 @@ class MallController extends Controller
             ]);
         }
 
+        $cacheKey = 'goods_' . $id;
+        $cache = Yii::$app->cache;
+        $data = $cache->get($cacheKey);
+        if ($data) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+                'data' => [
+                    'goods_view' => $data,
+                ],
+            ]);
+        }
+
         $where['id'] = $id;
         $where['status'] = Goods::STATUS_ONLINE;
         if (Yii::$app->user->identity) {
@@ -3787,11 +3800,13 @@ class MallController extends Controller
             ]);
         }
 
+        $data = $goods->view(Yii::$app->request->userIP);
+        $cache->set($cacheKey, $data, 30);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'goods_view' => $goods->view(Yii::$app->request->userIP),
+                'goods_view' => $data,
             ],
         ]);
     }
