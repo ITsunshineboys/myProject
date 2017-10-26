@@ -492,11 +492,11 @@ angular.module("all_controller", ['ngCookies'])
             $scope.timestamp  = response.data.data.timestamp;
             $scope.nonceStr  = response.data.data.nonceStr;
             $scope.signature  = response.data.data.signature;
-            alert($scope.appId);
-            alert(JSON.stringify($scope.appId));
-            alert(JSON.stringify($scope.timestamp));
-            alert(JSON.stringify($scope.nonceStr));
-            alert(JSON.stringify($scope.signature));
+            // alert($scope.appId);
+            // alert(JSON.stringify($scope.appId));
+            // alert(JSON.stringify($scope.timestamp));
+            // alert(JSON.stringify($scope.nonceStr));
+            // alert(JSON.stringify($scope.signature));
 
             if ($scope.codeWX == 200) {  // 微信支付
                 wx.config({
@@ -514,6 +514,9 @@ angular.module("all_controller", ['ngCookies'])
                         // 'menuItem:openWithQQBrowser',
                         // 'menuItem:openWithSafari'
                     ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                });
+                wx.error(function (res) {
+                    alert(res)
                 });
                 wx.ready(function () {
                     //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
