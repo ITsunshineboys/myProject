@@ -1647,6 +1647,25 @@ class WithdrawalsController extends Controller
     }
 
 
+ /**
+     * @return string
+     */
+    public  function  actionFindIdCard()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'idcard'=>$user->identity_no,
+            'realname'=>$user->legal_person
+        ]);
+    }
+
 
 
 
