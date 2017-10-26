@@ -73,17 +73,16 @@ table{
 }
 
 .tabTable table tr td{
-  font-family: Helvetica;
-  font-size: 14px;
   color: #666F80;
 }
 .tabTable table tr td a{
   color: #3F94F6;
 }
+.table>tbody > tr > td{
+  vertical-align: middle;
+}
 #th td{
-  font-family: Helvetica;
-  font-size: 14px;
-  color: #7A8599!important;
+  color: #666F80!important;
   border-top:0!important;
 }
 #show_img_size{
@@ -94,5 +93,11 @@ table{
   width: 10px;
   height: 16px;
 }
-
+.table_txt{
+  width: 100%;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /*Table内容 结束-*/
