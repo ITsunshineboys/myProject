@@ -100,14 +100,15 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ->all();
          foreach ($Accessdetaillist as &$list) {
             $list['access_type']=self::findAccessType($list['access_type']);
-            $list['access_money']=sprintf('%.2f',(float)$list['access_money']*0.01);
-            if ($list['access_type']==self::ACCESS_TYPE_DESC_DEBIT
+             if ($list['access_type']==self::ACCESS_TYPE_DESC_DEBIT
                 ||$list['access_type']==self::ACCESS_TYPE_DESC_CASH
                 ||$list['access_type']==self::ACCESS_TYPE_DESC_PAYMENT_BUY
                 ||$list['access_type']==self::ACCESS_TYPE_DESC_UNCASH_IN
             )
             {
-                $list['access_money']=-$list['access_money'];
+                $list['access_money']=-sprintf('%.2f',(float)$list['access_money']*0.01);
+            }else{
+                $list['access_money']=sprintf('%.2f',(float)$list['access_money']*0.01);
             }
             $list['create_time']=date('Y-m-d H:i',$list['create_time']);
         }
