@@ -151,7 +151,7 @@ class Effect extends ActiveRecord
      */
     public function geteffectdata($effect_id){
         $query=new Query();
-        $array= $query->from('effect_earnst As ea')
+        $array= $query->from('effect_earnest As ea')
             ->select('e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
             ->leftJoin('effect as e','ea.effect_id=e.id')
             ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
