@@ -1631,7 +1631,7 @@ class OwnerController extends Controller
                 $code = 1067;
                 return Json::encode([
                     'code' => $code,
-                    'msg' => '信息有误',
+                    'msg' => '物流信息有误',
                 ]);
             }
             if ($logistics != null){
@@ -1676,7 +1676,7 @@ class OwnerController extends Controller
     public function actionTest(){
         $id = Yii::$app->request->get('id','');
         return Json::encode([
-           'goods'=> (new Goods())->find()->where(['id'=>$id])->All(),
+           'goods'=> (new LogisticsTemplate())->find()->where(['id'=>$id])->All(),
         ]);
     }
 
