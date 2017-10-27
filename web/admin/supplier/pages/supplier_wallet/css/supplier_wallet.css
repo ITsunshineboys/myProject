@@ -45,3 +45,11 @@ section{
 .blue{
   color: #5677FC!important;
 }
+
+.supplier_reason{
+  width: 100%;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

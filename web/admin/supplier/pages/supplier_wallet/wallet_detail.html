@@ -3,10 +3,10 @@
     <!--头部开始-->
     <div class="header clearfix">
         <i class="glyphicon glyphicon-shopping-cart"></i>
-        <a class="crumbs" style="font-weight: bold">钱包</a>
+        <a class="crumbs" style="font-weight: bold" ui-sref="supplier_wallet">钱包</a>
         <a class="crumbs crumbs_on">&gt;钱包详情</a>
-        <img class="pull-right" src="lib/images/user.png" alt="">
-        <!--<a class="pull-right">退出</a>-->
+        <img class="pull-right" src="lib/images/user.png" alt="" ng-click="show_sign()">
+        <a class="pull-right sign_out" ng-if="sign_out_flag" ng-click="sign_out()">退出登录</a>
     </div>
     <!--头部结束-->
     <section>
@@ -68,7 +68,7 @@
             <span>{{wallet_detail.supplier_reason}}</span>
         </div>
         <div>
-            <button class="btn btn-default"  style="margin-top: 20px" ui-sref="supplier_wallet">返回</button>
+            <button class="btn btn-default"  style="margin-top: 20px" ng-click="wallet_back()">返回</button>
         </div>
     </section>
 </div>

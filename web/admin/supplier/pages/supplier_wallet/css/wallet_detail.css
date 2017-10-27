@@ -9,5 +9,11 @@ section div span:nth-child(1){
   display: inline-block;
   width: 100px;
   margin-right: 50px;
+}
+span{
   color: #666F80;
+}
+.sign_out{
+  margin: 60px -65px 0 0 ;
+  line-height: 20px;
 }
