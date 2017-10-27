@@ -46,6 +46,7 @@ CREATE TABLE `user` (
   `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
+  `registration_id` varchar(100) NOT NULL COMMENT '极光注册id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
