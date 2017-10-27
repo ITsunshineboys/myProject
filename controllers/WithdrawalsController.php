@@ -165,6 +165,7 @@ class WithdrawalsController extends Controller
         $UserBankInfo=(new Query())
             ->from(UserBankInfo::tableName().' as u')
             ->leftJoin(BankinfoLog::tableName().' as b','u.log_id=b.id')
+            ->select('u.id,u.uid,u.role_id,u.selected,u.log_id,b.bankname,b.bankcard,b.bank_type,b.username,b.position,b.bankbranch,b.create_time')
             ->where(['u.uid'=>$user->id,'u.role_id'=>$role_id])
             ->all();
 
@@ -1178,7 +1179,6 @@ class WithdrawalsController extends Controller
         $bank_id=$request->post('bank_id');
         if (!$bank_id)
         {
-            echo 1;exit;
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -1188,7 +1188,6 @@ class WithdrawalsController extends Controller
         $bank=UserBankInfo::find()->where(['id'=>$bank_id])->one();
         if (!$bank)
         {
-             echo 1;exit;
             $code=1000;
             return Json::encode([
                 'code' => $code,
