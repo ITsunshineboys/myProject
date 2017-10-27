@@ -3178,7 +3178,7 @@ angular.module("all_controller", [])
     })
 
 
-    .controller('nodata_ctrl', function ($scope, $http, $state, $timeout,$stateParams) {
+    .controller('nodata_ctrl', function ($scope, $http, $state,$rootScope,$timeout,$stateParams) {
         console.log($stateParams)
         $scope.ctrlScope = $scope
         //post请求配置
