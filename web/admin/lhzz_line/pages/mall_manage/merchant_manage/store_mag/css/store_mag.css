@@ -111,7 +111,7 @@ input,button,select{
 
 .search_box{
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 202px;
     position: relative;
 }
 .search_input{
@@ -173,25 +173,28 @@ input,button,select{
     line-height: 14px;
 }
 
-/*闭店提示模态框*/
-/*保存提示框*/
-#save_content{
+/*
+闭店提示模态框
+保存提示框
+解封账号提示框
+*/
+#save_content,#unblock_content,#unblock_content{
     width: 636px;
     height: 256px;
 }
 
-#tishi{
+#tishi,#unblock_tishi{
     padding-left: 13px;
     padding-top: 6px;
     font-weight: bold;
 }
 
-#tishi_wenzi{
+#tishi_wenzi,#unbolck_warning{
     font-size: 16px;
     padding-left: 13px;
 }
 
-#caozuo_sure,#caozuo_cancel{
+#caozuo_sure,#caozuo_cancel,#unblock_sure{
     width: 84px;
     height: 36px;
     padding-left: 5px;
@@ -218,12 +221,38 @@ input,button,select{
     margin-right: 20px;
 }
 
+#unblock_sure{
+    margin-left:512px;
+    margin-right:20px;
+}
+
 .tored{
     color: red!important;
 }
 
 .clickstyle{
     cursor: pointer;
+}
+
+table .sortpic {
+    display: inline-block;
+    margin-top: -4px;
+    vertical-align: middle;
+}
+
+table .sortpic i{
+    display: block;
+    font-size: 12px;
+    color: #ababab;
+}
+
+table .sortpic .glyphicon-triangle-bottom {
+    margin-top: -4px;
+}
+
+
+.active{
+    color: #1B7CEE!important;
 }
 
 
