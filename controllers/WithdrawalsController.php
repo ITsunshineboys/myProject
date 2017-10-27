@@ -26,6 +26,7 @@ use yii\helpers\Json;
 use yii\web\Controller;
 use yii\db\Exception;
 use yii\web\ServerErrorHttpException;
+use app\models\Wxpay;
 use Yii;
 class WithdrawalsController extends Controller
 {
