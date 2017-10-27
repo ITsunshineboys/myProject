@@ -1178,6 +1178,7 @@ class WithdrawalsController extends Controller
         $bank_id=$request->post('bank_id');
         if (!$bank_id)
         {
+            echo 1;exit;
             $code=1000;
             return Json::encode([
                 'code' => $code,
