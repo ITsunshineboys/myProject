@@ -1546,7 +1546,7 @@ class OwnerController extends Controller
         $stairway = trim(Yii::$app->request->post('stairway',''));
         $stair_id = trim(Yii::$app->request->post('stair_id',''));
         if ($stairway == 0){
-            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway]];
+            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['type'=>1]];
             $effect = Effect::effectAndEffectPicture('effect.id',$where);
             if ($effect == null) {
                 $code = 1068;
@@ -1557,7 +1557,7 @@ class OwnerController extends Controller
                 ]);
             }
         } elseif ($stairway == 1) {
-            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id]];
+            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['type'=>1]];
             $effect = Effect::effectAndEffectPicture('effect.id',$where);
             if ($effect == null) {
                 $code = 1068;
