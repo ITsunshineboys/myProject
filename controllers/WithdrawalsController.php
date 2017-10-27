@@ -1648,8 +1648,7 @@ class WithdrawalsController extends Controller
         ]);
     }
 
-
- /**
+   /**
      * @return string
      */
     public  function  actionFindIdCard()
@@ -1662,12 +1661,16 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $code=200;
         return Json::encode([
-            'idcard'=>$user->identity_no,
-            'realname'=>$user->legal_person
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>[
+                'idcard'=>$user->identity_no,
+                'realname'=>$user->legal_person
+            ]
         ]);
     }
-
 
 
        /**
@@ -1706,6 +1709,63 @@ class WithdrawalsController extends Controller
             'data'=>$bankBranch
         ]);
     }
+
+
+       /**
+     * 通过银行卡号获取银行卡信息
+     * @return string
+     */
+    public  function  actionFindBankData()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $bank_card=Yii::$app->request->post('bank_card');
+        if (!$bank_card)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $sendUrl = 'http://api.avatardata.cn/Bank/Query?key=fc79d5cf0de64f9bb60759045e5977d0&cardnum='.$bank_card;
+        $content =Wxpay::curl($sendUrl,false,0);
+        if($content){
+            $result = json_decode($content,true);
+            if ($result['error_code']==0)
+            {
+                $code=200;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => 'ok',
+                    'data'=>[
+                        'bank_name'=>$result['result']['bankname'],
+                        'cardtype'=>$result['result']['cardtype']
+                    ]
+                ]);
+            }else{
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }else{
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+    }
+
 
 
 
