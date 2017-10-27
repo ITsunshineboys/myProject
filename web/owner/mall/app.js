@@ -279,9 +279,11 @@ angular.module("app", ["ui.router","directives", "all_controller","ngAnimate",'a
     .run(["$rootScope","$state",function ($rootScope,$state) {
         $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
             document.body.scrollTop = document.documentElement.scrollTop = 0
-            $rootScope.goPrev = function (obj) {
-                $state.go(fromState.name,obj)
-            }
+            $rootScope.fromState_name = fromState.name
+            $rootScope.curState_name = toState.name
         })
+        $rootScope.goPrev = function () {
+            $state.go($rootScope.fromState_name)
+        }
     }])
 

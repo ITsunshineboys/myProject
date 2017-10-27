@@ -3401,6 +3401,7 @@ angular.module("all_controller", [])
             if (item.title == '辅材') {
                 $state.go('nodata.basics_decoration')
                 $scope.cur_header = '基础装修'
+                $scope.inner_header = '基础装修'
                 $scope.cur_project = 0
                 $scope.is_city = false
                 $scope.is_edit = false
@@ -3409,12 +3410,14 @@ angular.module("all_controller", [])
                 $scope.replaced_goods = []//被替换的商品
                 $scope.goods_replaced = []//替换的商品
                 $scope.cur_header = '主材料'
+                $scope.inner_header = '主材料'
                 $scope.cur_project = 1
                 $scope.is_city = false
                 $scope.is_edit = false
             } else {
                 $state.go('nodata.other_material')
                 $scope.cur_header = item.title
+                $scope.inner_header = item.title
                 $scope.replaced_goods = []//被替换的商品
                 $scope.goods_replaced = []//替换的商品
                 $scope.all_delete_goods = []//其他材料删除的材料
@@ -3470,9 +3473,9 @@ angular.module("all_controller", [])
                 $('#myModal').modal('hide')
                 $timeout(function () {
                     $scope.have_header = false
-                    $scope.cur_header = ''
-                    $scope.is_city = false
-                    $scope.is_edit = false
+                    // $scope.cur_header = ''
+                    // $scope.is_city = false
+                    // $scope.is_edit = false
                     $state.go('nodata.product_detail')
                 }, 300)
                 console.log(response)
@@ -3508,7 +3511,7 @@ angular.module("all_controller", [])
                     $scope.cur_replace_material.push({
                         id: value.id,
                         image: value.cover_image,
-                        cost: value.platform_price,
+                        cost: +value.platform_price,
                         // name: $scope.cur_goods_detail.name,
                         favourable_comment_rate: value.favourable_comment_rate,
                         sold_number: value.sold_number,
@@ -3565,7 +3568,7 @@ angular.module("all_controller", [])
                                         platform_price: $scope.check_goods.platform_price,
                                         profit_rate: $scope.check_goods.profit_rate,
                                         purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
-                                        quantity: $scope.check_goods.quantity,
+                                        quantity: +$scope.check_goods.quantity,
                                         series_id: $scope.check_goods.series_id,
                                         style_id: $scope.check_goods.style_id,
                                         subtitle: $scope.check_goods.subtitle,
@@ -3600,7 +3603,7 @@ angular.module("all_controller", [])
                                         platform_price: $scope.check_goods.platform_price,
                                         profit_rate: $scope.check_goods.profit_rate,
                                         purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
-                                        quantity: $scope.check_goods.quantity,
+                                        quantity: +$scope.check_goods.quantity,
                                         series_id: $scope.check_goods.series_id,
                                         style_id: $scope.check_goods.style_id,
                                         subtitle: $scope.check_goods.subtitle,
@@ -3627,7 +3630,7 @@ angular.module("all_controller", [])
                                                 platform_price: $scope.check_goods.platform_price,
                                                 profit_rate: $scope.check_goods.profit_rate,
                                                 purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
-                                                quantity: $scope.check_goods.quantity,
+                                                quantity: +$scope.check_goods.quantity,
                                                 series_id: $scope.check_goods.series_id,
                                                 style_id: $scope.check_goods.style_id,
                                                 subtitle: $scope.check_goods.subtitle,
@@ -3650,7 +3653,7 @@ angular.module("all_controller", [])
                                                         platform_price: $scope.check_goods.platform_price,
                                                         profit_rate: $scope.check_goods.profit_rate,
                                                         purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
-                                                        quantity: $scope.check_goods.quantity,
+                                                        quantity: +$scope.check_goods.quantity,
                                                         series_id: $scope.check_goods.series_id,
                                                         style_id: $scope.check_goods.style_id,
                                                         subtitle: $scope.check_goods.subtitle,
@@ -3659,7 +3662,7 @@ angular.module("all_controller", [])
                                                     })
                                                 }else{
                                                     value2.goods_detail[goods_item].cost += $scope.check_goods.platform_price * $scope.check_goods.quantity
-                                                    value2.goods_detail[goods_item].quantity += $scope.check_goods.quantity
+                                                    value2.goods_detail[goods_item].quantity += +$scope.check_goods.quantity
                                                 }
                                             }
                                         }
@@ -3669,6 +3672,8 @@ angular.module("all_controller", [])
                         }
                     }
                 }
+                $scope.cur_status = 0
+                console.log($scope.all_goods)
             }
             if($scope.cur_project == 1){
                 $scope.is_edit = false
@@ -3678,6 +3683,34 @@ angular.module("all_controller", [])
                 $scope.is_delete_btn = false
                 $state.go('nodata.other_material')
             }
+        }
+        //智能报价无资料返回
+        $scope.returnPrev = function () {
+            console.log($rootScope.curState_name)
+            if($rootScope.curState_name == 'nodata.product_detail'){
+                $scope.have_header = true
+            }else if($rootScope.curState_name == 'nodata.all_goods'){
+                if($scope.cur_status == 2){
+                    $scope.cur_header = $scope.inner_first_level
+                    $rootScope.fromState_name = 'nodata.second_level'
+                }else if($scope.cur_project == 2&&$scope.cur_status == 1){
+                    $scope.cur_header = $scope.inner_header
+                    $rootScope.fromState_name = 'nodata.other_material'
+                }else if($scope.cur_project == 1&&$scope.cur_status == 1){
+                    $scope.cur_header = $scope.inner_header
+                    $rootScope.fromState_name = 'nodata.main_material'
+                }
+            }else if($rootScope.curState_name == 'nodata.second_level'){
+                $scope.cur_header = $scope.inner_header
+                $rootScope.fromState_name = 'nodata.other_material'
+            }else if($rootScope.curState_name == 'nodata.main_material'||$rootScope.curState_name == 'nodata.basics_decoration'||$rootScope.curState_name == 'nodata.other_material'){
+                $scope.cur_header = '智能报价'
+                $rootScope.fromState_name = 'nodata.house_list'
+            }else if($rootScope.curState_name == 'nodata.house_list'){
+                $scope.have_header = false
+                $rootScope.fromState_name = 'home'
+            }
+            $rootScope.goPrev()
         }
         //直接返回
         $scope.returnIntelligent = function () {
@@ -3738,6 +3771,7 @@ angular.module("all_controller", [])
             }).then(function(response){
                 console.log(response)
                 $scope.cur_header = $scope.cur_item.title
+                $scope.inner_first_level = $scope.cur_item.title
                 $scope.is_city = false
                 $scope.is_edit = false
                 $scope.all_three_level = response.data.categories_level3
@@ -3769,7 +3803,7 @@ angular.module("all_controller", [])
                     $scope.cur_replace_material.push({
                         id: value.id,
                         image: value.cover_image,
-                        cost: value.platform_price,
+                        cost: +value.platform_price,
                         // name: $scope.cur_goods_detail.name,
                         favourable_comment_rate: value.favourable_comment_rate,
                         sold_number: value.sold_number,
@@ -3864,12 +3898,12 @@ angular.module("all_controller", [])
                                     let cur_obj = {
                                         id: value3.id,
                                         image: value3.cover_image,
-                                        cost: value3.cost,
+                                        cost: +value3.cost,
                                         name: value3.name,
                                         platform_price: value3.platform_price,
                                         profit_rate: value3.profit_rate,
                                         purchase_price_decoration_company: value3.purchase_price_decoration_company,
-                                        quantity: value3.quantity,
+                                        quantity: +value3.quantity,
                                         series_id: value3.series_id,
                                         style_id: value3.style_id,
                                         subtitle: value3.subtitle,
@@ -3890,7 +3924,9 @@ angular.module("all_controller", [])
                                             for (let [key4, value4] of value2.goods_detail.entries()) {
                                                 if (value3.id == value4.id) {
                                                     value4.cost += value3.cost
-                                                    value4.quantity += value3.quantity
+                                                    value4.quantity +=  cur_obj.quantity
+                                                    console.log(value4.quantity)
+                                                    console.log(typeof value3.quantity)
                                                 }
                                             }
                                         }
@@ -3967,12 +4003,12 @@ angular.module("all_controller", [])
                                     let cur_obj = {
                                         id: value3.id,
                                         image: value3.cover_image,
-                                        cost: value3.cost,
+                                        cost: +value3.cost,
                                         name: value3.name,
                                         platform_price: value3.platform_price,
                                         profit_rate: value3.profit_rate,
                                         purchase_price_decoration_company: value3.purchase_price_decoration_company,
-                                        quantity: value3.quantity,
+                                        quantity: +value3.quantity,
                                         series_id: value3.series_id,
                                         style_id: value3.style_id,
                                         subtitle: value3.subtitle,
@@ -3991,9 +4027,9 @@ angular.module("all_controller", [])
                                             for (let [key4, value4] of value2.goods_detail.entries()) {
                                                 if (value3.id == value4.id) {
                                                     value4.cost += value3.cost
-                                                    value4.quantity += value3.quantity
-                                                    console.log(value4.cost)
-                                                    console.log(value3.cost)
+                                                    value4.quantity += cur_obj.quantity
+                                                    console.log(value4.quantity)
+                                                    console.log(typeof value3.quantity)
                                                 }
                                             }
                                         }
@@ -4070,12 +4106,12 @@ angular.module("all_controller", [])
                                     let cur_obj = {
                                         id: value3.id,
                                         image: value3.cover_image,
-                                        cost: value3.cost,
+                                        cost: +value3.cost,
                                         name: value3.name,
                                         platform_price: value3.platform_price,
                                         profit_rate: value3.profit_rate,
                                         purchase_price_decoration_company: value3.purchase_price_decoration_company,
-                                        quantity: value3.quantity,
+                                        quantity: +value3.quantity,
                                         series_id: value3.series_id,
                                         style_id: value3.style_id,
                                         subtitle: value3.subtitle,
@@ -4094,7 +4130,7 @@ angular.module("all_controller", [])
                                             for (let [key4, value4] of value2.goods_detail.entries()) {
                                                 if (value3.id == value4.id) {
                                                     value4.cost += value3.cost
-                                                    value4.quantity += value3.quantity
+                                                    value4.quantity += cur_obj.quantity
                                                     console.log(value4.cost)
                                                     console.log(value3.cost)
                                                 }
@@ -4197,7 +4233,7 @@ angular.module("all_controller", [])
                                             for (let [key4, value4] of value2.goods_detail.entries()) {
                                                 if (value3.id == value4.id) {
                                                     value4.cost += value3.cost
-                                                    value4.quantity += value3.quantity
+                                                    value4.quantity +=  cur_obj.quantity
                                                     console.log(value4.cost)
                                                     console.log(value3.cost)
                                                 }
@@ -4298,7 +4334,7 @@ angular.module("all_controller", [])
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                     if (value3.id == value4.id) {
                                                         value4.cost += value3.cost
-                                                        value4.quantity += value3.quantity
+                                                        value4.quantity +=  cur_obj.quantity
                                                         console.log(value4.cost)
                                                         console.log(value3.cost)
                                                     }
@@ -4404,7 +4440,7 @@ angular.module("all_controller", [])
                                             for (let [key4, value4] of value2.goods_detail.entries()) {
                                                 if (value3.id == value4.id) {
                                                     value4.cost += value3.cost
-                                                    value4.quantity += value3.quantity
+                                                    value4.quantity +=  cur_obj.quantity
                                                     console.log(value4.cost)
                                                     console.log(value3.cost)
                                                 }
@@ -4507,7 +4543,7 @@ angular.module("all_controller", [])
                                             for (let [key4, value4] of value2.goods_detail.entries()) {
                                                 if (value3.id == value4.id) {
                                                     value4.cost += value3.cost
-                                                    value4.quantity += value3.quantity
+                                                    value4.quantity +=  cur_obj.quantity
                                                     console.log(value4.cost)
                                                     console.log(value3.cost)
                                                 }
@@ -4630,7 +4666,7 @@ angular.module("all_controller", [])
                                                         for (let [key4, value4] of value2.goods_detail.entries()) {
                                                             if (value3.id == value4.id) {
                                                                 value4.cost += value3.cost
-                                                                value4.quantity += value3.quantity
+                                                                value4.quantity +=  cur_obj.quantity
                                                                 console.log(value4.cost)
                                                                 console.log(value3.cost)
                                                             }
@@ -4669,10 +4705,10 @@ angular.module("all_controller", [])
                     str: newVal
                 }, config).then(function (response) {
                     console.log(response)
-                    $scope.cur_all_house = response.data.data.effect
+                    $scope.cur_all_house = response.data.data.list_effect
                     $scope.$watch('cur_all_house', function (newVal, oldVal) {
                         $scope.search_data = []//搜索出的小区
-                        for (let [key, value] of response.data.data.effect.entries()) {
+                        for (let [key, value] of response.data.data.list_effect.entries()) {
                             $scope.search_data.push({
                                 id: value.id,
                                 toponymy: value.toponymy,

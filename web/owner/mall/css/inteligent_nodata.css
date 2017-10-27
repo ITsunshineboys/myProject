@@ -109,7 +109,7 @@ header div span {
 }
 
 .pic_span {
-    margin-left: 12.8rem;
+    /*margin-left: 12.8rem;*/
     font-size: 1.5rem;
 }
 .pos_span{
@@ -202,7 +202,7 @@ header div i{
     font-size: 1.3rem!important;
     border-radius: 1.5rem!important;
     height: 3rem!important;
-    padding-left: 2rem!important;
+    padding-left: 2.5rem!important;
 }
 .quarters_adress {
     /*padding-left: 1rem;*/
@@ -242,7 +242,7 @@ header div i{
     height: 2.2rem;
     border: 1px solid #C2C2C2;
     border-radius: 1rem;
-    padding-left: 1rem;
+    padding-left: 2rem;
     font-size: 1rem;
     margin-left: 2rem;
 }
@@ -370,6 +370,7 @@ header div i{
     border-radius: .3rem;
     padding-left: 1rem;
     padding-top: .5rem;
+    padding-right:.5rem;
 }
 
 .address_content {

@@ -6,8 +6,8 @@
         <div class="shu"></div>
         <h1>{{item.title}}</h1>
         <ul class="wall_ul">
-            <div ng-repeat="item1 in item.three_level">
-                <li data-toggle="modal" data-target="#myModal" ng-repeat="item2 in item1.goods_detail" ng-click="get_basic_details(item2,item1.title)">
+            <div ng-repeat="item1 in item.three_level" style="border: none!important;">
+                <li data-toggle="modal" data-target="#myModal" ng-class="{'last_item':$parent.$index == item.three_level.length-1&&$last}" ng-repeat="item2 in item1.goods_detail" ng-click="get_basic_details(item2,item1.title)">
                     <span class="wall_span">{{item1.title}}x{{item2.quantity}}</span><br/>
                     <span class="wall_brand">{{item2.name}}</span>
                     <span class="wall_money">{{item2.cost | currency:"￥"}} <img
@@ -63,7 +63,7 @@
                             <img src="images/mall_list_radio.png" alt=""/>
                             <label class="jianzha" for="yes">小区有建渣</label>
                         </li>
-                        <li>
+                        <li style="border: 0!important;">
                             <input type="radio" name="building_scrap" id="no" ng-checked="!building_scrap"
                                    ng-click="building_scrap = false" class="zagong_check zagong_radio"/>
                             <img src="images/mall_list_radio.png" alt=""/>

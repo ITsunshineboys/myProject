@@ -2,9 +2,9 @@ angular.module("directives", [])
     .directive("swiper", function () {
         return {
             restrict: "EA",
-            scope:false,
             link: function (scope, element, attrs) {
                 scope.$watch(scope.cur_style,function (newVal,oldVal) {
+                    console.log(newVal)
                     if(newVal!=''||newVal!=undefined){
                         var mySwiper = new Swiper('.swiper-container', {
                             direction: 'horizontal',

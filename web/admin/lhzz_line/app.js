@@ -27,12 +27,12 @@ var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router"
   "add_user_module",
   //第三次需求开始
   "login_module",
-    "checklist-model",
+    // "checklist-model",
   //第三次需求结束
   //王杰 结束
 ]);
 /*路由拦截*/
-app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
+app.config(function ($stateProvider,$httpProvider,$urlRouterProvider,$locationProvider) {
   $httpProvider.defaults.withCredentials = true;
   $urlRouterProvider.otherwise("/intelligent/index");
   $stateProvider
@@ -618,4 +618,14 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider) {
         });
       }
     }
-  });
+  })
+    .run(["$rootScope","$state",function ($rootScope,$state) {
+        $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
+            document.body.scrollTop = document.documentElement.scrollTop = 0
+            $rootScope.fromState_name = fromState.name
+            $rootScope.curState_name = toState.name
+        })
+        $rootScope.goPrev = function () {
+            $state.go($rootScope.fromState_name)
+        }
+    }])
