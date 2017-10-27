@@ -1196,7 +1196,7 @@ class WithdrawalsController extends Controller
         }
         $tran=Yii::$app->db->beginTransaction();
         try{
-            if ($bank->default==1)
+            if ($bank->selected==1)
             {
                 $res=$bank->delete();
                 if (!$res)
