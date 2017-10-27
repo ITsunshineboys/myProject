@@ -431,4 +431,14 @@ class Effect extends ActiveRecord
             ])
             ->all();
     }
+
+    public static function effectAndEffectPicture($select = [] ,$where)
+    {
+        return self::find()
+            ->leftJoin('effect_picture','effect_picture.effect_id = effect.id')
+            ->select($select)
+            ->where($where)
+            ->asArray()
+            ->one();
+    }
 }
