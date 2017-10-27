@@ -3787,10 +3787,10 @@ class MallController extends Controller
         }
 
         $where['id'] = $id;
-        $where['status'] = Goods::STATUS_ONLINE;
-        if (Yii::$app->user->identity) {
-            unset($where['status']);
-        }
+//        $where['status'] = Goods::STATUS_ONLINE;
+//        if (Yii::$app->user->identity) {
+//            unset($where['status']);
+//        }
         $goods = Goods::find()->where($where)->one();
 
         if (!$goods) {
