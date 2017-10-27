@@ -1688,7 +1688,7 @@ class OrderController extends Controller
      * user apply refund
      * @return string
      */
-    public  function  actionUserCancelOrder(){
+     public  function  actionUserCancelOrder(){
         $user = \Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -1725,8 +1725,8 @@ class OrderController extends Controller
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-
                     $trans = \Yii::$app->db->beginTransaction();
+                $content = "订单号{$order_no},{$OrderGoods[0]->goods_name}";
                     try {
                         $goods->order_status=2;
                         $res=$goods->save(false);
@@ -1737,6 +1737,20 @@ class OrderController extends Controller
                                 'msg' => \Yii::$app->params['errorCodes'][$code]
                             ]);
                         }
+                        $record=new UserNewsRecord();
+                        $record->uid=$user->id;
+                        $record->role_id=$user->last_role_id_app;
+                        $record->title='已取消订单';
+                        $record->content=$content;
+                         $record->send_time=time();
+                         if (!$record->save(false))
+                         {
+                             $code=500;
+                             return Json::encode([
+                                 'code' => $code,
+                                 'msg' => \Yii::$app->params['errorCodes'][$code]
+                             ]);
+                         }
                         $trans->commit();
                     } catch (Exception $e) {
                         $trans->rollBack();
@@ -1746,7 +1760,22 @@ class OrderController extends Controller
                             'msg' => \Yii::$app->params['errorCodes'][$code]
                         ]);
                     }
+                $registration_id=$user->registration_id;
+                $push=new Jpush();
+                $extras = [];//推送附加字段的类型
+                $m_time = '86400'*3;//离线保留时间
+                $receive = ['registration_id'=>[$registration_id]];//设备的id标识
+                $title='已取消订单';
 
+                $result = $push->push($receive,$title,$content,$extras, $m_time);
+                if (!$result)
+                {
+                    $code=200;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => 'ok'
+                    ]);
+                }
                 $code=200;
                 return Json::encode([
                     'code' => $code,
