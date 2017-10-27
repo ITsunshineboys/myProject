@@ -1572,7 +1572,6 @@ class OwnerController extends Controller
         $where = 'effect_id = '.$effect['id'];
         var_dump($where);
         $data = WorksData::find()->asArray()->select([])->where($where)->all();
-        var_dump($data);exit;
         if ($data == null) {
             $code = 1067;
             return Json::encode([
