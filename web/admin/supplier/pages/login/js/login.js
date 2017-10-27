@@ -87,19 +87,21 @@ login.controller("login_ctrl",function ($scope,$http,$state,$stateParams) {
                     validation_code:$scope.forget_v_code
                 },config).then(function (res) {
                     console.log(res);
-                    if(res.data.code==1002){
+                    if(res.data.code==200){
+                        $('#forget_pw_modal').modal('hide');
+                        $('#modity_success').modal('show');
+                    }
+                    else if(res.data.code==1002){
                         $scope.forget_v_txt='验证码错误，请重新输入';
                     }else if(res.data.code==1020){
                         $scope.forget_v_txt='验证码超时，请重新获取';
-                    }else {
-                        $scope.forget_v_txt='';
-                    }
-                    if(res.data.code==1010){
+                    }else if(res.data.code==1010){
                         $scope.forget_mb_prompt='该手机号还未注册，请联系客服400-3948-398';
                     }else if(res.data.code==1040){
                         $scope.forget_mb_prompt='该手机号还未注册商家，请联系客服400-3948-398';
                     }else{
                         $scope.forget_mb_prompt='';
+                        $scope.forget_v_txt='';
                     }
                 },function (err) {
                     console.log(err);
