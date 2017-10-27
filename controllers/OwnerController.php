@@ -1540,8 +1540,35 @@ class OwnerController extends Controller
      */
     public function actionCaseParticulars()
     {
-        $id = trim(Yii::$app->request->get('id',''));
-        $where = 'effect_id = '.$id;
+//        $id = trim(Yii::$app->request->post('id',''));
+        $series = trim(Yii::$app->request->post('series',''));
+        $style = trim(Yii::$app->request->post('style',''));
+        $stairway = trim(Yii::$app->request->post('stairway',''));
+        $stair_id = trim(Yii::$app->request->post('stair_id',''));
+        if ($stairway == 0){
+            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway]];
+            $effect = Effect::effectAndEffectPicture('effect.id',$where);
+            if ($effect == null) {
+                $code = 1068;
+                return Json::encode([
+                   'code' => $code,
+                   'msg' => Yii::$app->params['errorCodes'][$code],
+                    'data'=> $effect
+                ]);
+            }
+        } elseif ($stairway == 1) {
+            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id]];
+            $effect = Effect::effectAndEffectPicture('effect.id',$where);
+            if ($effect == null) {
+                $code = 1068;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                    'data'=> $effect
+                ]);
+            }
+        }
+        $where = ['effect_id'=>$effect['id']];
         $data = WorksData::find()->asArray()->select([])->where($where)->all();
         if ($data == null) {
             $code = 1067;
