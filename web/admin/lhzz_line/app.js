@@ -1,14 +1,14 @@
-var app = angular.module("app",["ng.ueditor","intelligent_directive","ui.router",
-  "clamagModule","onsaleeditModule",
-  "offsaleeditModule","addclassModule",'brand_details_module',
-  'brand_check','check_right','account_comment','change_num',
-  'bind_record','operation_record',"mallmagModule","storemagModule","addstoreModule",
-  "onlineeditModule","offlineeditModule","addbrandModule","styleindexModule","chooseseriesModule",
-  "addseriesModule",
-  "seriesdetailModule","addstyleModule","choose_styleModule","styledetailModule",
-  "storedetailModule",
+var app = angular.module("app", ["ng.ueditor", "intelligent_directive", "ui.router",
+    "clamagModule", "onsaleeditModule",
+    "offsaleeditModule", "addclassModule", 'brand_details_module',
+    'account_comment', 'change_num',
+    'bind_record', 'operation_record', "mallmagModule", "storemagModule", "addstoreModule",
+    "onlineeditModule", "offlineeditModule", "addbrandModule", "styleindexModule", "chooseseriesModule",
+    "addseriesModule",
+    "seriesdetailModule", "addstyleModule", "choose_styleModule", "styledetailModule",
+    "storedetailModule", "merchant_details",
 
-  "intelligent_index",'angularCSS','intelligent_directive','apply_case','distribution','mall_finance',
+    "intelligent_index", 'angularCSS', 'intelligent_directive', 'apply_case', 'distribution', 'mall_finance',
 
   //  王杰 开始
   "index_module",
@@ -112,7 +112,7 @@ app.config(function ($stateProvider,$httpProvider,$urlRouterProvider,$locationPr
       })
 
 
-    // =================王杰  结束==============
+        // =================王杰  结束==============
 
 
     .state("fenleiguanli",{
