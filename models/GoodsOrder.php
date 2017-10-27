@@ -951,7 +951,7 @@ class GoodsOrder extends ActiveRecord
      * @param $shipping_type
      * @return bool
      */
-   public static function Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type){
+  public static function Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type){
         $create_time=time();
         if($shipping_type==1){
             $trans = \Yii::$app->db->beginTransaction();
@@ -967,9 +967,11 @@ class GoodsOrder extends ActiveRecord
                     ->where(['sku'=>$sku,'order_no'=>$order_no])
                     ->one();
                 if ($express){
-                    \Yii::$app->db->createCommand()->update(self::EXPRESS, [
+                    \Yii::$app->db->createCommand()
+                        ->update(self::EXPRESS, [
                         'waybillname'      =>'送货上门',
-                        'create_time'=>$create_time],'sku='.$sku.' and order_no='.$order_no)->execute();
+                        'create_time'=>$create_time],'sku='.$sku.' and order_no='.$order_no)
+                        ->execute();
                 }else{
                     \Yii::$app->db->createCommand()->insert(self::EXPRESS,[
                         'sku'    => $sku,
@@ -981,14 +983,13 @@ class GoodsOrder extends ActiveRecord
             } catch (Exception $e) {
                 $trans->rollBack();
             }
-            $trans->commit();
-            return $e;
+
         }else{
             $trans = \Yii::$app->db->beginTransaction();
             $waybillname=(new Express())->GetExpressName($waybillnumber);
             if (!$waybillname)
             {
-                $waybillname='未知快递公司';
+                $waybillname='未知';
             }
             $e=1;
             try {
@@ -1016,9 +1017,28 @@ class GoodsOrder extends ActiveRecord
             } catch (Exception $e) {
                 $trans->rollBack();
             }
-            $trans->commit();
-            return $e;
         }
+        $registration_id=User::find()
+            ->where(['id'=>GoodsOrder::find()
+                ->select('user_id')
+                ->where(['order_no'=>$order_no])
+                ->asArray()
+                ->one()['user_id']
+            ])
+            ->one()->registration_id;
+        $push=new Jpush();
+        $extras = [];//推送附加字段的类型
+        $m_time = '86400';//离线保留时间
+        $receive = ['registration_id'=>[$registration_id]];//设备的id标识
+        $title='订单发货了!';
+        $content = '你的订单已经发货,点击详情查看!';
+        $result = $push->push($receive,$title,$content,$extras, $m_time);
+        if (!$result)
+        {
+            $trans->rollBack();
+        }
+        $trans->commit();
+        return $e;
     }
 
    /**
