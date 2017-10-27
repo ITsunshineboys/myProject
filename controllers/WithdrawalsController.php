@@ -1188,6 +1188,7 @@ class WithdrawalsController extends Controller
         $bank=UserBankInfo::find()->where(['id'=>$bank_id])->one();
         if (!$bank)
         {
+             echo 1;exit;
             $code=1000;
             return Json::encode([
                 'code' => $code,
