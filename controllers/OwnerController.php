@@ -1624,14 +1624,15 @@ class OwnerController extends Controller
                 $ids = $logistics_id['logistics_template_id'];
             }
             $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
-            var_dump($ids);
-            var_dump($logistics);
-            exit;
             if ($logistics == null) {
-                $code = 1067;
                 return Json::encode([
-                    'code' => $code,
-                    'msg' => '物流信息有误',
+                    'code' =>200,
+                    'msg'=>'ok',
+                    'data'=> [
+                        'goods'=>$data,
+                        'backman_data'=>$backman_data,
+                        'worker_data'=>$worker_data,
+                    ]
                 ]);
             }
             if ($logistics != null){
