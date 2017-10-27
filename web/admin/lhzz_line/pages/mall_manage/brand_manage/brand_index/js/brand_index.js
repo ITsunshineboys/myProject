@@ -9,14 +9,66 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
       return $.param(data)
     }
   };
-  /*品牌审核开始*/
-  $scope.on_shelves_list=[];
-  $scope.down_shelves_list=[];
-  $scope.firstclass=[]; //一级分类
-  $scope.brand_review_list=[];//列表循环数组
-  $scope.application_num=[];//申请个数
-  $scope.types=[];//品牌使用审核
-  /*品牌审核结束*/
+    /*品牌审核开始*/
+    $scope.on_shelves_list=[];
+    $scope.down_shelves_list=[];
+    $scope.firstclass=[]; //一级分类
+    $scope.brand_review_list=[];//列表循环数组
+    $scope.application_num=[];//申请个数
+    $scope.types=[];//品牌使用审核
+    /*品牌审核结束*/
+
+    /*分页配置*/
+    $scope.wjConfig = {
+        showJump: true,
+        itemsPerPage: 12,
+        currentPage: 1,
+        onChange: function () {
+            $scope.table.roles=[];//清空全选状态
+            tablePages();
+        }
+    }
+    let tablePages=function () {
+        $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
+        $http.get(baseUrl+'/mall/brand-list-admin',{
+            params:$scope.params
+        }).then(function (res) {
+            console.log(res);
+            if($scope.on_flag==true){  //--------------已上架
+                $scope.on_shelves_list=res.data.data.brand_list_admin.details;
+                $scope.wjConfig.totalItems = res.data.data.brand_list_admin.total;
+            }else if($scope.down_flag==true){
+                $scope.down_shelves_list=res.data.data.brand_list_admin.details;
+                $scope.wjConfig.totalItems = res.data.data.brand_list_admin.total;
+            }
+        },function (err) {
+            console.log(err);
+        })
+    };
+    $scope.params = {
+        page: 1,                        // 当前页数
+        status: '1',                  // 0：已下架，1：已上架
+        pid: '0',                      // 父分类id，0：全部
+        'sort[]':'online_time:3'
+    };
+
+    //全选ID数组
+    $scope.table = {
+        roles: [],
+    };
+    $scope.checkAll = function () {
+      if($scope.on_flag==true){
+          !$scope.table.roles.length ? $scope.table.roles = $scope.on_shelves_list.map(function (item) {
+              return item.id;
+          }) : $scope.table.roles.length = 0;
+      }else{
+          !$scope.table.roles.length ? $scope.table.roles = $scope.down_shelves_list.map(function (item) {
+              return item.id;
+          }) : $scope.table.roles.length = 0;
+      }
+    };
+
+
 
   /*--------------点击TAB 切换内容----------------*/
   //页面初始化
@@ -24,17 +76,14 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
     $scope.on_flag=false;
     $scope.down_flag=true;
     $scope.check_flag=false;
-    $scope.page=1;
   }else if($stateParams.check_flag){
     $scope.on_flag=false;
     $scope.down_flag=false;
     $scope.check_flag=true;
-    $scope.page=1;
   }else{
     $scope.on_flag=true;
     $scope.down_flag=false;
     $scope.check_flag=false;
-    $scope.page=1;
   }
 
 
@@ -43,22 +92,15 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
     $scope.on_flag=true;
     $scope.down_flag=false;
     $scope.check_flag=false;
-    $scope.page=1;
     $scope.firstselect=0;
-    $scope.online_up_flag=true;
-    $scope.online_down_flag=false;
-    $scope.online_time_flag='online_time:3';//上架时间，降序
-    $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-      params:{
-        status:1,
-        'sort[]':$scope.online_time_flag
-      }
-    }).then(function (res) {
-      // console.log(res);
-      $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-    },function (err) {
-      console.log(err);
-    });
+
+    $scope.table.roles=[];//清空全选状态
+    $scope.time_img='lib/images/sort_down.png';//时间排序图片
+    $scope.params.page=1;
+    $scope.params.status='1';
+    $scope.params.pid='0'
+    $scope.params['sort[]']='online_time:3';//上架时间，降序
+    tablePages();
   };
   //已下架
 
@@ -66,482 +108,153 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
     $scope.down_flag=true;
     $scope.on_flag=false;
     $scope.check_flag=false;
-    $scope.page=1;
     $scope.firstselect=0;
-    $scope.online_up_flag=true;
-    $scope.online_down_flag=false;
-    $scope.online_time_flag='offline_time:3';//下架时间，降序排序
-    $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-      params:{
-        status:0,
-        'sort[]':$scope.online_time_flag
-      }
-    }).then(function (res) {
-      console.log("已下架后台列表");
-      console.log(res);
-      $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-    },function (err) {
-      console.log(err);
-    });
 
-    /*监听*/
-    $scope.$watch('firstselect',function (newVal,oldVal) {
-      $scope.down_two=newVal;
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:0,
-          pid:newVal,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        console.log('下架')
-        console.log(res);
-        $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-        /*--------------------分页------------------------*/
-        $scope.history_list=[];
-        $scope.history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);//获取总页数
-        let all_num=$scope.history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.history_list.push(i+1)
-        }
-        $scope.page=1;
-        //点击数字，跳转到多少页
-        $scope.choosePage=function (page) {
-          if($scope.history_list.indexOf(parseInt(page))!=-1){
-            $scope.page=page;
-            $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-              params:{
-                status:0,
-                pid:newVal,
-                page:$scope.page,
-                'sort[]':$scope.online_time_flag
-              }
-            }).then(function (res) {
-              console.log(newVal);
-              console.log($scope.page)
-              $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-            },function (err) {
-              console.log(err);
-            });
-          }
-        };
-        //显示当前是第几页的样式
-        $scope.isActivePage=function (page) {
-          return $scope.page==page;
-        };
-        //进入页面，默认设置为第一页
-        if($scope.page===undefined){
-          $scope.page=1;
-        }
-        //上一页
-        $scope.Previous=function () {
-          if($scope.page>1){                //当页数大于1时，执行
-            $scope.page--;
-            $scope.choosePage($scope.page);
-          }
-        };
-        //下一页
-        $scope.Next=function () {
-          if($scope.page<$scope.history_all_page){ //判断是否为最后一页，如果不是，页数+1,
-            $scope.page++;
-            $scope.choosePage($scope.page);
-          }
-        }
-      },function (err) {
-        console.log(err);
-      });
-    });
-    //监听二级
-    $scope.$watch('secselect',function (newVal,oldVal) {
-      if(newVal==0){
-        newVal=$scope.down_two
-      }
-      $scope.down_three=newVal;
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:0,
-          pid:newVal,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-        /*重新计算页数 开始*/
-        $scope.history_list=[];
-        $scope.history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);//获取总页数
-        let all_num=$scope.history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.history_list.push(i+1)
-        }
-        $scope.page=1;
-        /*重新计算页数 结束*/
-      },function (err) {
-        console.log(err);
-      });
-    });
-    //监听三级
-    $scope.$watch('three_select',function (newVal,oldVal) {
-      if(newVal==0){
-        newVal=$scope.down_three
-      }
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:0,
-          pid:newVal,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-        /*重新计算页数 开始*/
-        $scope.history_list=[];
-        $scope.history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);//获取总页数
-        let all_num=$scope.history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.history_list.push(i+1)
-        }
-        $scope.page=1;
-        /*重新计算页数 结束*/
-      },function (err) {
-        console.log(err);
-      });
-    });
+    $scope.table.roles=[];//清空全选状态
+    $scope.time_img='lib/images/sort_down.png';//时间排序图片
+    $scope.params.page=1;
+    $scope.params.status='0';
+    $scope.params.pid='0'
+    $scope.params['sort[]']='offline_time:3';//下架时间，降序排序
+    tablePages();
   };
-
-
 
   //品牌审核
   $scope.wait_shelves=function () {
     $scope.check_flag=true;
     $scope.on_flag=false;
     $scope.down_flag=false;
-    $scope.page=1;
-    $http.get('http://test.cdlhzz.cn:888/mall/brand-application-review-list',{
-      params:{
-        review_status:-1
-      }
-    }).then(function (res) {
-      console.log("品牌审核");
-      console.log(res);
-      $scope.brand_review_list=res.data.data.brand_application_review_list.details;
-      console.log($scope.brand_review_list)
-      /*判断多少个申请个数*/
-      for(let [key,value] of $scope.brand_review_list.entries()){
-        if(value.review_status==='待审核'){
-          $scope.application_num.push(value);
-        }
-      }
-    },function (err) {
-      console.log(err);
-    });
-  };
 
+    $scope.brand_params.review_status=$scope.brand_types_arr[0].id;
+    $scope.brand_params.start_time='';
+    $scope.brand_params.end_time='';
+    $scope.brand_img_src='lib/images/sort_down.png';
+    $scope.brand_params['sort[]']='create_time:3';
+    $scope.brand_params.keyword='';
+    $scope.search_input_ok='';
+    brand_Pages();
+  };
+    /*--------------点击TAB 切换内容 结束----------------*/
 
 
   /*分类选择一级下拉框*/
-
   $scope.firstClass = (function () {
     $http({
       method: "get",
       url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
     }).then(function (response) {
-      // console.log(response)
       $scope.firstclass = response.data.data.categories;
       $scope.firstselect = response.data.data.categories[0].id;
     })
   })();
-
-
+  //监听一级，返回数据
+  $scope.$watch('firstselect',function (newVal,oldVal) {
+      $scope.down_two=newVal;
+      $scope.params.pid=$scope.down_two;
+      $scope.table.roles=[];//清空全选状态
+      tablePages();
+  });
   /*分类选择二级下拉框*/
   $scope.secondclass=[];//二级分类数组
-  $scope.subClass = function (obj) {
+  $scope.subClass = function (pid) {
+    console.log(pid);
     $http({
       method: "get",
       url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
-      params: {pid: obj}
+      params: {pid: pid}
     }).then(function (response) {
-      //console.log(response);
       $scope.secondclass = response.data.data.categories;
       $scope.secselect = response.data.data.categories[0].id;
-    })
+    });
   };
+    //监听二级
+    $scope.$watch('secselect',function (newVal,oldVal) {
+        if(newVal==0){
+            newVal=$scope.down_two
+        }
+        $scope.down_three=newVal;
+        $scope.params.pid=newVal;
+        $scope.table.roles=[];//清空全选状态
+        tablePages();
+    });
+
   /*分类选择三级下拉框*/
   $scope.three_class=[];//二级分类数组
-  $scope.three_Class = function (obj) {
+  $scope.three_Class = function (pid) {
     $http({
       method: "get",
       url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
-      params: {pid: obj}
+      params: {pid: pid}
     }).then(function (response) {
       $scope.three_class = response.data.data.categories;
       $scope.three_select = response.data.data.categories[0].id;
     })
   };
+    //监听三级
+  $scope.$watch('three_select',function (newVal,oldVal) {
+      if(newVal==0){
+          newVal=$scope.down_three
+      }
+      $scope.last_value=newVal;
+      $scope.params.pid=newVal;
+      $scope.table.roles=[];//清空全选状态
+      tablePages();
+    });
+  // $scope.last_Class=function (pid) {
+  //     $scope.params.pid=pid;
+  //     tablePages();
+  // }
 
   /*==============================已上架===================================*/
-  //已上架后台列表
-  $scope.online_time_flag='online_time:3';
-  $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-    params:{
-      status:1,
-      'sort[]':$scope.online_time_flag
-    }
-  }).then(function (res) {
-    console.log("已上架")
-     console.log(res);
-    $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-  },function (err) {
-    console.log(err);
-  });
-  /*三级联动搜索*/
-  //监听一级
-  $scope.$watch('firstselect',function (newVal,oldVal) {
-    $scope.on_two=newVal;
-    $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-      params:{
-        status:1,
-        'sort[]':$scope.online_time_flag,
-        pid:newVal
-      }
-    }).then(function (res) {
-      // console.log('已上架一级')
-      // console.log(res);
-      $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-      /*--------------------分页------------------------*/
-      $scope.on_history_list=[];
-      $scope.on_history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);//获取总页数
-      let all_num=$scope.on_history_all_page;//循环总页数
-      for(let i=0;i<all_num;i++){
-        $scope.on_history_list.push(i+1)
-      }
-      $scope.page=1;
-      //点击数字，跳转到多少页
-      $scope.on_choosePage=function (page) {
-        if($scope.on_history_list.indexOf(parseInt(page))!=-1){
-          $scope.page=page;
-          $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-            params:{
-              status:1,
-              'sort[]':$scope.online_time_flag,
-              pid:newVal,
-              page:$scope.page
-            }
-          }).then(function (res) {
-            console.log(newVal);
-            console.log(res);
-            $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-          },function (err) {
-            console.log(err);
-          });
-        }
-      };
-      //显示当前是第几页的样式
-      $scope.isActivePage=function (page) {
-        return $scope.page==page;
-      };
-      //进入页面，默认设置为第一页
-      if($scope.page===undefined){
-        $scope.page=1;
-      }
-      //上一页
-      $scope.on_Previous=function () {
-        if($scope.page>1){                //当页数大于1时，执行
-          $scope.page--;
-          $scope.on_choosePage($scope.page);
-        }
-      };
-      //下一页
-      $scope.on_Next=function () {
-        if($scope.page<$scope.on_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
-          $scope.page++;
-          $scope.on_choosePage($scope.page);
-        }
-      }
-    },function (err) {
-      console.log(err);
-    });
-  });
-  //监听二级
-  $scope.$watch('secselect',function (newVal,oldVal) {
-    if(newVal==0){
-      newVal=$scope.on_two
-    }
-    $scope.on_three=newVal;
-    $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-      params:{
-        status:1,
-        'sort[]':$scope.online_time_flag,
-        pid:newVal
-      }
-    }).then(function (res) {
-      $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-      /*重新计算页数 开始*/
-      $scope.on_history_list=[];
-      $scope.on_history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);//获取总页数
-      let all_num=$scope.on_history_all_page;//循环总页数
-      for(let i=0;i<all_num;i++){
-        $scope.on_history_list.push(i+1)
-      }
-      $scope.page=1;
-      /*重新计算页数 结束*/
-    },function (err) {
-      console.log(err);
-    });
-  });
-  //监听三级
-  $scope.$watch('three_select',function (newVal,oldVal) {
-    if(newVal==0){
-      newVal=$scope.on_three
-    }
-    $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-      params:{
-        status:1,
-        'sort[]':$scope.online_time_flag,
-        pid:newVal
-      }
-    }).then(function (res) {
-      $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-      /*重新计算页数 开始*/
-      $scope.on_history_list=[];
-      $scope.on_history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);//获取总页数
-      let all_num=$scope.on_history_all_page;//循环总页数
-      for(let i=0;i<all_num;i++){
-        $scope.on_history_list.push(i+1)
-      }
-      $scope.page=1;
-      /*重新计算页数 结束*/
-    },function (err) {
-      console.log(err);
-    });
-  });
-
-  //全选按钮
-  $scope.on_select_all=false;
-  $scope.on_all= function (m) {
-    for(let i=0;i<$scope.on_shelves_list.length;i++){
-      if(m===true){
-        $scope.on_shelves_list[i].state=false;
-        $scope.on_select_all=false;
-      }else {
-        $scope.on_shelves_list[i].state=true;
-        $scope.on_select_all=true;
-      }
-    }
-  };
-
   //时间排序
-  $scope.online_up_flag=true;
-  $scope.online_down_flag=false;
-  $scope.online_time_change=function (num) {
-    console.log(num);
-    if($scope.online_up_flag==true){
-      if(num==1){
-        $scope.online_time_flag='online_time:4';
-        $scope.online_status=1;
-      }else{
-        $scope.online_time_flag='offline_time:4';
-        $scope.online_status=0;
-      }
-      $scope.online_up_flag=false;
-      $scope.online_down_flag=true;
-    }else if($scope.online_down_flag==true){
-      if(num==1){
-        $scope.online_time_flag='online_time:3';
-        $scope.online_status=1;
-      }else{
-        $scope.online_time_flag='offline_time:3';
-        $scope.online_status=0;
-      }
-      $scope.online_down_flag=false;
-      $scope.online_up_flag=true;
+    $scope.time_img='lib/images/sort_down.png';
+    $scope.time_sort_click=function () {
+        if($scope.time_img=='lib/images/sort_down.png'){
+            $scope.time_img='lib/images/sort_up.png';
+            if($scope.on_flag==true){
+                $scope.params['sort[]']="online_time:4";
+            }else{
+                $scope.params['sort[]']="offline_time:4";
+            }
+        }else{
+            $scope.time_img='lib/images/sort_down.png';
+            if($scope.on_flag==true){
+                $scope.params['sort[]']="online_time:3";
+            }else{
+                $scope.params['sort[]']="offline_time:3";
+            }
+        }
+        $scope.table.roles=[];
+        tablePages();
     }
-    $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-      params:{
-        status:$scope.online_status,
-        'sort[]':$scope.online_time_flag
-      }
-    }).then(function (res) {
-      console.log(res);
-      console.log($scope.online_status)
-      if($scope.online_status==1){
-        $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-      }else{
-        $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-      }
-
-    },function (err) {
-      console.log(err);
-    })
-  };
 
   //批量下架
-  $scope.batch_down_num=[];
   $scope.batch_down_shelves=function () {
-    $scope.batch_down_num=[];
     $scope.sole_down_shelves_reason='';
-    for(let [key,value] of $scope.on_shelves_list.entries()){
-      if(JSON.stringify($scope.on_shelves_list).indexOf('"state":true')===-1){  //提示请勾选再删除
-        $scope.on_modal_v='place_check_modal';
-      }
-      if(value.state){
+    if($scope.table.roles.length!=0){
         $scope.on_modal_v='on_shelves_down_reason_modal';
-        $scope.batch_down_num.push(value.id);
-      }
+    }else{
+        $scope.on_modal_v='place_check_modal';
     }
   };
   //批量下架确认按钮
   $scope.down_shelver_ok=function () {
     let url='http://test.cdlhzz.cn:888/mall/brand-disable-batch';
     $http.post(url,{
-      ids:$scope.batch_down_num.join(','),
+      ids:$scope.table.roles.join(','),
       offline_reason:$scope.sole_down_shelves_reason
     },config).then(function (res) {
       console.log(res);
-      $scope.on_select_all=false;//初始化check的勾选
-      //重新请求已上架列表，达到刷新的作用
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:1,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-
-        /*重新判断已上架的页数*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-      },function (err) {
-        console.log(err);
-      });
-      //重新请求已下架列表，达到刷新的作用
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:0,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-
-        /*重新判断已下架的页数*/
-        $scope.history_list=[];
-        $scope.history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);
-        let all_num=$scope.history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.history_list.push(i+1)
-        }
-      },function (err) {
-        console.log(err);
-      });
+      $scope.table.roles=[];//清空全选状态
+      $scope.wjConfig.currentPage=1;//返回第一页
+      tablePages();
     },function (err) {
-      console.log()
+      console.log(err)
     })
   };
 
   /*单个下架*/
   $scope.down_shelver_btn=function (id) {
-    $scope.batch_down_num=[];
     $scope.sole_down_shelves_reason='';
     $scope.down_shelver_ok=function () {
       let url='http://test.cdlhzz.cn:888/mall/brand-status-toggle';
@@ -550,155 +263,37 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
         offline_reason:$scope.sole_down_shelves_reason
       },config).then(function (res) {
         console.log(res);
-        //重新请求已上架列表，达到刷新的作用
-        $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-          params:{
-          status:1,
-          'sort[]':$scope.online_time_flag
-        }
-        }).then(function (res) {
-          $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-
-          /*重新判断已上架的页数*/
-          $scope.on_history_list=[];
-          $scope.on_history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);
-          let all_num=$scope.on_history_all_page;//循环总页数
-          for(let i=0;i<all_num;i++){
-            $scope.on_history_list.push(i+1)
-          }
-        },function (err) {
-          console.log(err);
-        });
-        //重新请求已下架列表，达到刷新的作用
-        $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-          params:{
-            status:0,
-            'sort[]':$scope.online_time_flag
-          }
-        }).then(function (res) {
-          $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-
-          /*重新判断已下架的页数*/
-          $scope.history_list=[];
-          $scope.history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);
-          let all_num=$scope.history_all_page;//循环总页数
-          for(let i=0;i<all_num;i++){
-            $scope.history_list.push(i+1)
-          }
-        },function (err) {
-          console.log(err);
-        });
+        $scope.table.roles=[];//清空全选状态
+        $scope.wjConfig.currentPage=1;//返回第一页
+        tablePages();
       },function (err) {
-        console.log()
+        console.log(err)
       })
     }
   };
 
   /*================================已下架===================================*/
 
-  /*三级联动搜索*/
-  //监听一级
-
-  //请求后台列表
-  $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-    params:{
-      status:0,
-      'sort[]':'offline_time:3'
-    }
-  }).then(function (res) {
-    console.log("已下架后台列表");
-    console.log(res);
-    $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-    /*--------------------分页------------------------*/
-    $scope.history_list=[];
-    $scope.history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);//获取总页数
-    let all_num=$scope.history_all_page;//循环总页数
-    for(let i=0;i<all_num;i++){
-      $scope.history_list.push(i+1)
-    }
-    $scope.page=1;
-  },function (err) {
-    console.log(err);
-  });
-  // $scope.down_shelves_list=[];
-
-  //全选按钮
-  $scope.down_select_all=false;
-  $scope.down_all= function (m) {
-    for(let i=0;i<$scope.down_shelves_list.length;i++){
-      if(m===true){
-        $scope.down_shelves_list[i].state=false;
-        $scope.down_select_all=false;
-      }else {
-        $scope.down_shelves_list[i].state=true;
-        $scope.down_select_all=true;
-      }
-    }
-  };
   //批量上架
-  $scope.batch_num=[];
   $scope.batch_on_shelves=function () {
-    $scope.batch_num=[];
-    for(let [key,value] of $scope.down_shelves_list.entries()){
-      if(JSON.stringify($scope.down_shelves_list).indexOf('"state":true')===-1){  //提示请勾选再删除
-        $scope.down_modal_v='place_check_modal';
-      }
-      if(value.state){
+    if($scope.table.roles.length!=0){
         $scope.down_modal_v='on_shelves_modal';
-        $scope.batch_num.push(value.id);
-      }
+    }else{
+        $scope.down_modal_v='place_check_modal';
     }
   };
   //批量上架确认按钮
   $scope.on_shelver_ok=function () {
     let url='http://test.cdlhzz.cn:888/mall/brand-enable-batch';
     $http.post(url,{
-      ids:$scope.batch_num.join(',')
+      ids:$scope.table.roles.join(',')
     },config).then(function (res) {
       console.log(res);
-      $scope.down_select_all=false;//初始化check的勾选
-      //重新请求已上架列表，达到刷新的作用
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:1,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-
-        /*重新判断已上架的页数*/
-        $scope.on_history_list=[];
-        $scope.on_history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);
-        let all_num=$scope.on_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.on_history_list.push(i+1)
-        }
-
-      },function (err) {
-        console.log(err);
-      });
-      //重新请求已下架列表，达到刷新的作用
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:0,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-
-        /*重新判断已下架的页数*/
-        $scope.history_list=[];
-        $scope.history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);
-        let all_num=$scope.history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.history_list.push(i+1)
-        }
-
-      },function (err) {
-        console.log(err);
-      });
+      $scope.table.roles=[];//清空全选状态
+      $scope.wjConfig.currentPage=1;//返回第一页
+      tablePages();
     },function (err) {
-      console.log()
+      console.log(err)
     })
   };
   //
@@ -710,49 +305,14 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
         ids:id
       },config).then(function (res) {
         console.log(res);
-        //重新请求已上架列表，达到刷新的作用
-        $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-          params:{
-            status:1,
-            'sort[]':$scope.online_time_flag
-          }
-        }).then(function (res) {
-          $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-          /*重新判断已上架的页数*/
-          $scope.on_history_list=[];
-          $scope.on_history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);
-          let all_num=$scope.on_history_all_page;//循环总页数
-          for(let i=0;i<all_num;i++){
-            $scope.on_history_list.push(i+1)
-          }
-        },function (err) {
-          console.log(err);
-        });
-        //重新请求已下架列表，达到刷新的作用
-        $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-          params:{
-            status:0,
-            'sort[]':$scope.online_time_flag
-          }
-        }).then(function (res) {
-          $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-          /*重新判断已下架的页数*/
-          $scope.history_list=[];
-          $scope.history_all_page=Math.ceil(res.data.data.brand_list_admin.total/12);
-          let all_num=$scope.history_all_page;//循环总页数
-          for(let i=0;i<all_num;i++){
-            $scope.history_list.push(i+1)
-          }
-        },function (err) {
-          console.log(err);
-        });
+        $scope.table.roles=[];//清空全选状态
+        $scope.wjConfig.currentPage=1;//返回第一页
+        tablePages();
       },function (err) {
-        console.log()
+        console.log(err)
       })
     }
   };
-
-  /*===========下架原因===========*/
 
   //点击输入下架原因
   $scope.down_reason_click=function (id,reason) {
@@ -767,150 +327,106 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
       id:$scope.down_id,
       offline_reason:$scope.down_reason
     },config).then(function (res) {
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:0,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-      },function (err) {
-        console.log(err);
-      });
-    },function (err) {
-      console.log(err);
-    })
+        $scope.table.roles=[];//清空全选状态
+        tablePages();
+    });
   };
 
-
   /*==============================品牌使用审核==================================*/
+    /*分页配置*/
+    $scope.brand_Config = {
+        showJump: true,
+        itemsPerPage: 12,
+        currentPage: 1,
+        onChange: function () {
+            brand_Pages();
+        }
+    };
+    let brand_Pages=function () {
+        $scope.brand_params.page=$scope.brand_Config.currentPage;//点击页数，传对应的参数
+        $http.get(baseUrl+'/mall/brand-application-review-list',{
+            params:$scope.brand_params
+        }).then(function (res) {
+            console.log(res);
+            $scope.brand_review_list=res.data.data.brand_application_review_list.details;
+            $scope.brand_Config.totalItems = res.data.data.brand_application_review_list.total;
+        },function (err) {
+            console.log(err);
+        })
+    };
+    $scope.brand_params = {
+        page: 1,                        // 当前页数
+        review_status:'-1',           //状态 -1：全部，0: 待审核，1: 审核不通过，2: 审核通过
+        start_time:'',
+        end_time:'',
+        'sort[]':'create_time:3',
+        keyword: '',
+    };
+
+    //判断有多少个申请
+    $http.get(baseUrl+'/mall/brand-application-review-list',{
+        params:{
+            size:99999
+        }
+    }).then(function (res) {
+        console.log(res);
+        /*判断多少个申请个数*/
+        $scope.application_num=[];
+        for(let [key,value] of res.data.data.brand_application_review_list.details.entries()){
+            if(value.review_status=='0'){
+                $scope.application_num.push(value);
+            }
+        }
+    },function (err) {
+        console.log(err);
+    });
 
   //获取审核类型
-  $http.get('http://test.cdlhzz.cn:888/site/review-statuses').then(function (res) {
-    $scope.types=res.data.data.review_statuses;
-    $scope.types.unshift({"name":"全部","value":-1});//接口没有全部，自己加！！
-    $scope.selectValue=res.data.data.review_statuses[0];//全部
-  },function (err) {
-    console.log(err);
-  });
+  $scope.brand_types_arr=[
+      {id:'-1',value:'全部'},
+      {id:'0',value:'等待审核'},
+      {id:'1',value:'审核不通过'},
+      {id:'2',value:'审核通过'}
+  ];
+  $scope.brand_params.review_status=$scope.brand_types_arr[0].id;
   //监听类型
-  $scope.$watch('selectValue',function (newVal,oldVal) {
-    if(!!newVal){
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-application-review-list',{
-        params:{
-          review_status:+newVal.value,
-          start_time:$scope.begin_time,
-          end_time:$scope.end_time
+  $scope.brand_types=function () {
+      $scope.search_input_ok='';//清除搜索栏
+      $scope.brand_params.keyword='';//清除搜索栏
+      $scope.brand_Config.currentPage=1;
+      brand_Pages();
+  }
+  //监听时间
+  $scope.brand_time_change=function () {
+      $scope.brand_Config.currentPage=1;
+      brand_Pages();
+  }
+    //时间排序
+    $scope.brand_img_src='lib/images/sort_down.png';
+    $scope.brand_img_src_click=function () {
+        if($scope.brand_img_src=='lib/images/sort_down.png'){
+            $scope.brand_img_src='lib/images/sort_up.png';
+            $scope.brand_params['sort[]']="create_time:4";
+        }else{
+            $scope.brand_img_src='lib/images/sort_down.png';
+            $scope.brand_params['sort[]']="create_time:3"
         }
-      }).then(function (res) {
-        $scope.search_input_ok='';//清空搜索输入框
-        $scope.brand_review_list=res.data.data.brand_application_review_list.details;
+        $scope.brand_Config.currentPage=1;
+        brand_Pages();
+    };
 
-        /*--------------------分页------------------------*/
-        $scope.check_history_list=[];
-        $scope.check_history_all_page=Math.ceil(res.data.data.brand_application_review_list.total/12);//获取总页数
-        let all_num=$scope.check_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.check_history_list.push(i+1)
-        }
-        $scope.page=1;
-        //点击数字，跳转到多少页
-        $scope.check_choosePage=function (page) {
-          if($scope.check_history_list.indexOf(parseInt(page))!=-1){
-            $scope.page=page;
-            $http.get('http://test.cdlhzz.cn:888/mall/brand-application-review-list',{
-              params:{
-                review_status:+newVal.value,
-                start_time:$scope.begin_time,
-                end_time:$scope.end_time,
-                page:$scope.page
-              }
-            }).then(function (res) {
-              $scope.brand_review_list=res.data.data.brand_application_review_list.details;
-            },function (err) {
-              console.log(err);
-            });
-          }
-        };
-        //显示当前是第几页的样式
-        $scope.isActivePage=function (page) {
-          return $scope.page==page;
-        };
-        //进入页面，默认设置为第一页
-        if($scope.page===undefined){
-          $scope.page=1;
-        }
-        //上一页
-        $scope.check_Previous=function () {
-          if($scope.page>1){                //当页数大于1时，执行
-            $scope.page--;
-            $scope.check_choosePage($scope.page);
-          }
-        };
-        //下一页
-        $scope.check_Next=function () {
-          if($scope.page<$scope.check_history_all_page){ //判断是否为最后一页，如果不是，页数+1,
-            $scope.page++;
-            $scope.check_choosePage($scope.page);
-          }
-        }
-      },function (err) {
-        console.log(err);
-      })
-    }
-  });
-  //监听开始时间
-  $scope.$watch('begin_time',function (newVal,oldVal) {
-    if(!!newVal){
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-application-review-list',{
-        params:{
-          review_status:+$scope.selectValue.value,
-          start_time:newVal,
-          end_time:$scope.end_time
-        }
-      }).then(function (res) {
-        $scope.search_input_ok='';//清空搜索输入框
-        $scope.brand_review_list=res.data.data.brand_application_review_list.details;
-        /*重新计算页数 开始*/
-        $scope.check_history_list=[];
-        $scope.check_history_all_page=Math.ceil(res.data.data.brand_application_review_list.total/12);//获取总页数
-        let all_num=$scope.check_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.check_history_list.push(i+1)
-        }
-        $scope.page=1;
-        /*重新计算页数 结束*/
-      },function (err) {
-        console.log(err);
-      })
-    }
-  });
-  //监听结束时间
-  $scope.$watch('end_time',function (newVal,oldVal) {
-    if(!!newVal){
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-application-review-list',{
-        params:{
-          review_status:+$scope.selectValue.value,
-          start_time:$scope.begin_time,
-          end_time:newVal
-        }
-      }).then(function (res) {
-        $scope.search_input_ok='';//清空搜索输入框
-        $scope.brand_review_list=res.data.data.brand_application_review_list.details;
-        /*重新计算页数 开始*/
-        $scope.check_history_list=[];
-        $scope.check_history_all_page=Math.ceil(res.data.data.brand_application_review_list.total/12);//获取总页数
-        let all_num=$scope.check_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.check_history_list.push(i+1)
-        }
-        $scope.page=1;
-        /*重新计算页数 结束*/
-      },function (err) {
-        console.log(err);
-      })
-    }
-  });
+    //搜索
+    $scope.brand_search_btn=function () {
+       $scope.brand_params.keyword= $scope.search_input_ok;
+       $scope.brand_params.review_status=$scope.brand_types_arr[0].id;
+       $scope.brand_params.start_time='';
+       $scope.brand_params.end_time='';
+       $scope.brand_img_src='lib/images/sort_down.png';
+       $scope.brand_params['sort[]']='create_time:3';
+       $scope.brand_Config.currentPage=1;
+       brand_Pages();
+    };
+
   //审核备注
   $scope.review_click=function (id,reason) {
     $scope.review_id=id;
@@ -924,41 +440,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
     },config).then(function (res) {
       console.log('审核备注返回');
       console.log(res);
-      //重新请求已下架列表，达到刷新的作用
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin',{
-        params:{
-          status:0,
-          'sort[]':$scope.online_time_flag
-        }
-      }).then(function (res) {
-        $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-      },function (err) {
-        console.log(err);
-      });
-    },function (err) {
-      console.log(err);
-    })
+      brand_Pages();
+    });
   };
-  //搜索
-    $scope.search_btn=function () {
-      $http.get('http://test.cdlhzz.cn:888/mall/brand-application-review-list',{
-        params:{
-          keyword:$scope.search_input_ok
-        }
-      }).then(function (res) {
-        console.log(res);
-        $scope.brand_review_list=res.data.data.brand_application_review_list.details;
-        /*重新计算页数 开始*/
-        $scope.check_history_list=[];
-        $scope.check_history_all_page=Math.ceil(res.data.data.brand_application_review_list.total/12);//获取总页数
-        let all_num=$scope.check_history_all_page;//循环总页数
-        for(let i=0;i<all_num;i++){
-          $scope.check_history_list.push(i+1)
-        }
-        $scope.page=1;
-        /*重新计算页数 结束*/
-      },function (err) {
-        console.log(err);
-      })
-    }
 });
