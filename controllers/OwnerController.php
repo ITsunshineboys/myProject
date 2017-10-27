@@ -1560,6 +1560,7 @@ class OwnerController extends Controller
         } elseif ($stairway == 1) {
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['type'=>1]];
             $effect = Effect::effectAndEffectPicture('effect.id',$where);
+            var_dump($effect);exit;
             if ($effect == null) {
                 $code = 1068;
                 return Json::encode([
