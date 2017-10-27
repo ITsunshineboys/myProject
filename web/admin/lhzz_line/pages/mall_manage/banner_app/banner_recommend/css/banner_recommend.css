@@ -1,12 +1,12 @@
+section{
+  padding-left: 40px;
+}
 /*头部导航开始*/
 .header_box{
   height: 60px;
   border-bottom: 1px solid #cccccc;
-  /*margin-left: 200px;*/
 }
 .header_txt{
-  width: 90%;
-  margin: 0 auto;
   line-height: 60px;
 }
 /*头部导航 结束*/
@@ -126,9 +126,7 @@ table{
   /*margin-left: 200px;*/
 }
 .city{
-  width: 90%;
-  margin: 20px auto;
-  /*border: 1px solid red;*/
+  margin: 20px 0;
 }
 .changeCity{
   /*padding: 0 5px;*/
@@ -147,8 +145,6 @@ table{
 
 /*选项卡开始*/
 .myTab{
-  width: 90%;
-  margin: 0 auto;
   border-bottom: 1px solid #E6E9F0;
   overflow: hidden;
 }
@@ -166,7 +162,6 @@ table{
 
 /*选项卡内容*/
 .tabContent{
-  width: 90%;
   margin:20px auto;
 }
 .all_check_span{
@@ -209,6 +204,14 @@ table{
 }
 .topTabE{
   width: 85px;
+  display: inline-block;
+  height: 32px;
+  margin: 5px;
+  text-align: center;
+  line-height: 32px;
+  font-family: Helvetica;
+  font-size: 12px;
+  color: #3F94F6;
 }
 .topTabS{
   width: 60px;
@@ -220,9 +223,8 @@ table{
   float: right;
 }
 /*Table内容-*/
-.tabTable{
-  width: 90%;
-  margin: 0 auto;
+.tab_class{
+  margin: 30px 0 20px 0;
 }
 .tabTable table tr{
   height: 42px;
@@ -357,4 +359,18 @@ input[type="checkbox"]{
 
 .border_red{
   border:1px solid red!important;
+}
+
+.dropdown-menu > li:hover{
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+.dropdown-menu > li {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
 }

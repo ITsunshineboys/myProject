@@ -71,10 +71,7 @@ table{
   width: 90%;
   margin: 0 auto;
 }
-.tabTable table tr{
-  height: 42px;
-  border-bottom: 1px solid #E6E9F0;
-}
+
 .tabTable table tr td{
   font-family: Helvetica;
   font-size: 14px;
@@ -82,13 +79,19 @@ table{
   line-height: 14px;
   /*padding: 0 22px;*/
 }
+.table>tbody > tr > td{
+  vertical-align: middle;
+}
+
 .tabTable table tr td a{
   color: #3F94F6;
 }
-.th td{
+
+#th td{
   font-family: Helvetica;
   font-size: 14px;
   color: #7A8599!important;
+  border-top:0!important;
 }
 #show_img_size{
   width: 30px;
@@ -97,6 +100,13 @@ table{
 .img_sort_size{
   width: 10px;
   height: 16px;
+}
+.table_txt{
+  width: 100%;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /*Table内容 结束-*/
 
