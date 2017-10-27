@@ -1569,9 +1569,9 @@ class OwnerController extends Controller
                 ]);
             }
         }
-        $where = 'effect_id = '.$effect['id'];
+        $effect_where = 'effect_id = '.$effect['id'];
         var_dump($where);
-        $data = WorksData::find()->asArray()->select([])->where($where)->all();
+        $data = WorksData::find()->asArray()->select([])->where($effect_where)->all();
         var_dump($data);
         if ($data == null) {
             $code = 1067;
@@ -1580,7 +1580,7 @@ class OwnerController extends Controller
                 'msg' => '信息有误',
             ]);
         }
-        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where($where)->all();
+        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where($effect_where)->all();
         var_dump($backman_data);
         if ($backman_data == null) {
             $code = 1067;
@@ -1589,7 +1589,7 @@ class OwnerController extends Controller
                 'msg' => '信息有误',
             ]);
         }
-        $worker_data = WorksWorkerData::find()->select([])->where($where)->all();
+        $worker_data = WorksWorkerData::find()->select([])->where($effect_where)->all();
         var_dump($worker_data);exit;
         if ($worker_data == null) {
             $code = 1067;
