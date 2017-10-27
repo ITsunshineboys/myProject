@@ -116,12 +116,16 @@ class WithdrawalsController extends Controller
         $position=trim($request->post('position',''));
         $bankbranch=trim($request->post('bankbranch',''));
         $role_id=trim($request->post('role_id',''));
-        if (!$bankname || !$bankcard || !$username || !$position || !$bankbranch  || !$role_id){
+        if (!$bankname || !$bankcard || !$username || !$position || !$bankbranch  ){
             $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        if (!$role_id)
+        {
+            $role_id=$user->last_role_id_app;
         }
         $code=UserBankInfo::SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user);
         if ($code==200)

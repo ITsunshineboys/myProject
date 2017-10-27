@@ -156,12 +156,11 @@ class UserBankInfo extends \yii\db\ActiveRecord
         }else
         {
            $cardType=Yii::$app->request->post('cardtype');
-            // if (!$cardType)
-            // {
-            //     $code=1000;
-            //     return $code;
-            // }
-            echo 1;exit;
+            if (!$cardType)
+            {
+                $code=1000;
+                return $code;
+            }
             if ($cardType=='借记卡')
             {
                 $cardType=2;
