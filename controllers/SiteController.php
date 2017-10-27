@@ -169,6 +169,7 @@ class SiteController extends Controller
                 }
 
                 $user = Yii::$app->user->identity;
+                !empty($postData[$modelName]['registration_id']) && $user->registration_id = $postData[$modelName]['registration_id'];
                 $user->afterLogin();
 
                 return Json::encode([
