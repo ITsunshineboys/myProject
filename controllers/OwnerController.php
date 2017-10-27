@@ -1570,9 +1570,7 @@ class OwnerController extends Controller
             }
         }
         $effect_where = 'effect_id = '.$effect['id'];
-        var_dump($where);
         $data = WorksData::find()->asArray()->select([])->where($effect_where)->all();
-        var_dump($data);
         if ($data == null) {
             $code = 1067;
             return Json::encode([
@@ -1581,7 +1579,6 @@ class OwnerController extends Controller
             ]);
         }
         $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where($effect_where)->all();
-        var_dump($backman_data);
         if ($backman_data == null) {
             $code = 1067;
             return Json::encode([
@@ -1590,7 +1587,6 @@ class OwnerController extends Controller
             ]);
         }
         $worker_data = WorksWorkerData::find()->select([])->where($effect_where)->all();
-        var_dump($worker_data);exit;
         if ($worker_data == null) {
             $code = 1067;
             return Json::encode([
