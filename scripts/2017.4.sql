@@ -953,19 +953,6 @@ CREATE TABLE `supplier_cashregister` (
 
 -- 8.3 end
 -- 8.5 start
-CREATE TABLE `effect_earnst` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `effect_id` int(11) NOT NULL COMMENT '样板id',
-  `phone` char(11) NOT NULL COMMENT '电话号码',
-  `name` varchar(255) NOT NULL COMMENT '名字',
-  `earnest` bigint(20) NOT NULL DEFAULT '0' COMMENT '定金',
-  `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
-  `remark` text NOT NULL COMMENT '备注',
-  `create_time` int(11) NOT NULL COMMENT '申请时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 CREATE TABLE `assort_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(20) DEFAULT NULL COMMENT '商品名称',
@@ -1554,5 +1541,19 @@ CREATE TABLE `chat_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `chat_id` int(11) NOT NULL COMMENT '聊天用户id',
   `content` varchar(255) NOT NULL COMMENT '消息内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- 10.27 start
+CREATE TABLE `effect_earnest` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `effect_id` int(11) NOT NULL COMMENT '样板id',
+  `phone` char(11) NOT NULL COMMENT '电话号码',
+  `name` varchar(255) NOT NULL COMMENT '名字',
+  `earnest` bigint(20) NOT NULL DEFAULT '0' COMMENT '定金',
+  `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
+  `remark` text NOT NULL COMMENT '备注',
+  `create_time` int(11) NOT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
