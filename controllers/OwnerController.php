@@ -1546,9 +1546,11 @@ class OwnerController extends Controller
         $stairway = trim(Yii::$app->request->post('stairway',''));
         $stair_id = trim(Yii::$app->request->post('stair_id',''));
         $toponymy = trim(Yii::$app->request->post('toponymy',''));
+        $particulars = trim(Yii::$app->request->post('particulars',''));
+        $area = trim(Yii::$app->request->post('area',''));
         if ($stairway == 0){
-            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.toponymy'=>$toponymy],['type'=>1]];
-            $effect = Effect::effectAndEffectPicture('effect.id',$where);
+            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
+            $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images',$where);
             if ($effect == null) {
                 $code = 1068;
                 return Json::encode([
@@ -1558,8 +1560,8 @@ class OwnerController extends Controller
                 ]);
             }
         } elseif ($stairway == 1) {
-            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['type'=>1]];
-            $effect = Effect::effectAndEffectPicture('effect.id',$where);
+            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
+            $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images',$where);
             if ($effect == null) {
                 $code = 1068;
                 return Json::encode([
@@ -1629,6 +1631,7 @@ class OwnerController extends Controller
                     'code' =>200,
                     'msg'=>'ok',
                     'data'=> [
+                        'images'=> $effect,
                         'goods'=>$data,
                         'backman_data'=>$backman_data,
                         'worker_data'=>$worker_data,
@@ -1642,6 +1645,7 @@ class OwnerController extends Controller
                     'code' =>200,
                     'msg'=>'ok',
                     'data'=> [
+                        'images'=> $effect,
                         'goods'=>$goods_particulars,
                         'backman_data'=>$backman_data,
                         'worker_data'=>$worker_data,
@@ -1654,6 +1658,7 @@ class OwnerController extends Controller
                     'code' =>200,
                     'msg'=>'ok',
                     'data'=> [
+                        'images'=> $effect,
                         'goods'=>$goods_particulars,
                         'backman_data'=>$backman_data,
                         'worker_data'=>$worker_data,
