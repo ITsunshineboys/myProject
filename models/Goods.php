@@ -1244,6 +1244,7 @@ class Goods extends ActiveRecord
         GoodsStat::updateDailyViewedNumberAndIpNumberBySupplierId($this->supplier_id, $ip);
 
         return [
+            'status' => $this->status,
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'cover_image' => $this->cover_image,
