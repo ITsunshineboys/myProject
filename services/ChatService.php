@@ -50,12 +50,12 @@ class ChatService
     /**
      * 授权注册
      */
-    function createUser($username, $password)
+    function createUser($username,$password)
     {
         $url = $this->url . 'users';
         $options = array(
             "username" => $username,
-            "password" => $password
+            "password" => $password,
         );
         $body = json_encode($options);
         $header = array($this->getToken());
@@ -507,7 +507,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendImage($filePath, $from = "admin", $target_type, $target, $filename)
+    function sendImage($filePath, $from = "admin", $target_type, $target)
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
@@ -518,7 +518,7 @@ class ChatService
         $body['target'] = $target;
         $options['type'] = "img";
         $options['url'] = $uri . '/' . $uuid;
-        $options['filename'] = $filename;
+//        $options['filename'] = $filename;
         $options['secret'] = $shareSecret;
         $options['size'] = array(
             "width" => 480,
@@ -546,7 +546,7 @@ class ChatService
      * @param $ext
      * @return mixed
      */
-    function sendAudio($filePath, $from = "admin", $target_type, $target, $filename, $length)
+    function sendAudio($filePath, $from = "admin", $target_type, $target, $length)
     {
         $result = $this->uploadFile($filePath);
         $uri = $result['uri'];
@@ -557,7 +557,7 @@ class ChatService
         $body['target'] = $target;
         $options['type'] = "audio";
         $options['url'] = $uri . '/' . $uuid;
-        $options['filename'] = $filename;
+//        $options['filename'] = $filename;
         $options['length'] = $length;
         $options['secret'] = $shareSecret;
         $body['msg'] = $options;
@@ -1307,7 +1307,7 @@ class ChatService
             case "POST":
                 curl_setopt($ch, CURLOPT_POST, true);
                 break;
-            case "PUT"://使用一个自定义的请求信息来代替"GET"或"HEAD"作为HTTP请									                     求。这对于执行"DELETE" 或者其他更隐蔽的HTT
+            case "PUT"://使用一个自定义的请求信息来代替"GET"或"HEAD"作为HTTP请                                                      求。这对于执行"DELETE" 或者其他更隐蔽的HTT
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
                 break;
             case "DELETE":

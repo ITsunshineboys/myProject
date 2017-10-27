@@ -252,7 +252,9 @@ class WorkerController extends Controller
             'data' => $data
         ]);
     }
-
+    /**
+     * 智管工地详情--工人
+     */
     public function actionWorkerSiteWorkerDetail(){
 
     }

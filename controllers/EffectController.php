@@ -2,13 +2,9 @@
 namespace app\controllers;
 
 use app\models\Effect;
-use app\models\EffectEarnst;
-use app\models\EffectPicture;
-use app\models\Series;
-use app\models\Style;
+use app\models\EffectEarnest;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
-use function PHPSTORM_META\elementType;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -121,7 +117,7 @@ class EffectController extends Controller
         $request = new Request();
 
         if ($request->isPost) {
-            $model = new EffectEarnst();
+            $model = new Effectearnest();
             //保存样板Id
             $model->effect_id = trim($request->post('effect_id', ''), '');
             $name = $model->name = trim($request->post('name', ''), '');
@@ -187,7 +183,7 @@ class EffectController extends Controller
             ]);
         }else{
 
-            $model=EffectEarnst::find()->where(['effect_id'=>$effect_id])->one();
+            $model=Effectearnest::find()->where(['effect_id'=>$effect_id])->one();
             return json_encode([
                 'code' => 200,
                 'msg' => 'ok',
@@ -227,7 +223,7 @@ class EffectController extends Controller
 
                 ]);
             }
-            $remark=EffectEarnst::findOne(['id'=>$effect_id]);
+            $remark=Effectearnest::findOne(['id'=>$effect_id]);
             if(!$remark){
                 return json_encode([
                     'code' => $code,
@@ -297,8 +293,6 @@ class EffectController extends Controller
 
         $where = '1';
         if(!$keyword){
-
-
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));
                 $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -341,9 +335,9 @@ class EffectController extends Controller
             $where=" name like '%{$keyword}%' or phone like '%{$keyword}%'";
         }
         $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', EffectEarnst::PAGE_SIZE_DEFAULT);
-        $paginationData = EffectEarnst::pagination($where, EffectEarnst::FIELDS_ADMIN, $page, $size);
-        $earnest=new EffectEarnst();
+        $size = (int)Yii::$app->request->get('size', EffectEarnest::PAGE_SIZE_DEFAULT);
+        $paginationData = EffectEarnest::pagination($where, EffectEarnest::FIELDS_ADMIN, $page, $size);
+        $earnest=new EffectEarnest();
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -386,7 +380,7 @@ class EffectController extends Controller
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-            $model=EffectEarnst::findone(['id'=>$effect_id]);
+            $model=Effectearnest::findone(['id'=>$effect_id]);
             $model->remark=trim($request->post('remark',''),'');
             $model->save();
             return json_encode([

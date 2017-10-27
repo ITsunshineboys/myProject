@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\User;
 use app\models\UserChat;
 use app\services\ChatService;
+use app\services\FileService;
 use yii\helpers\Json;
 use yii\web\Controller;
 
@@ -23,19 +24,10 @@ class ChatController extends Controller
             ]);
         }
         $u_id = $user->getId();
-        $role_id = User::find()->where(['id' => $u_id])->one()->login_role_id;
+        $role_id = User::find()->where(['id' => $u_id])->one()->last_role_id_app;
         return [$u_id, $role_id];
     }
 
-    public function actionTest()
-    {
-
-        $username=trim(\Yii::$app->request->post('username',''));
-        $password=trim(\Yii::$app->request->post('password',''));
-        $chat=new ChatService();
-        $a=$chat->createUser($username,$password);
-        var_dump($a);
-    }
     /**
      *第一次登陆app时创建环信用户和本地环信关联数据
      * @return array|string
@@ -193,10 +185,168 @@ class ChatController extends Controller
             'msg_count' => $msg_count['count']
         ]);
     }
+    /**
+     * 环信用户修改昵称
+     * @return array|string
+     */
+    public function actionEditNickname(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $nickname=trim(\Yii::$app->request->post('nickname'));
 
-    public function actionAllUser(){
+        $code=UserChat::editnickname($nickname,$u_id,$role_id);
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
+
+    }
+    /**
+     * 发送文本消息给指定用户
+     * @return array|string
+     */
+    public function actionSendTextMessage(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $code=1000;
+        $message=trim(\Yii::$app->request->post('message'));
+        $to_user=trim(\Yii::$app->request->post('to_user'));
+        $user_hx=new ChatService();
+        $res=$user_hx->getUser($to_user);
+        if(array_key_exists('error',$res)){
+            return Json::encode([
+                'code'=>1000,
+                'msg'=>$res['error']
+            ]);
+        }
+        $chat_bd=UserChat::find()->where(['u_id'=>$u_id,'role_id'=>$role_id])->asArray()->one();
+        $nickname=User::find()->where(['id'=>$chat_bd['u_id']])->asArray()->one()['nickname'];
+        if(!$chat_bd || !$nickname ){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=UserChat::sendTextMessage($message,$nickname,$chat_bd['id'],$to_user);
+        if(is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }else{
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
+
+    }
+    /**
+     * 发送图片信息给指定用户
+     * @return array|string
+     */
+    public function actionSendImgMessage(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $code=1000;
+        $filepath=trim(\Yii::$app->request->post('filepath'));
+        $to_user=trim(\Yii::$app->request->post('to_user'));
+        $user_hx=new ChatService();
+        $res=$user_hx->getUser($to_user);
+        if(array_key_exists('error',$res)){
+            return Json::encode([
+                'code'=>1000,
+                'msg'=>$res['error']
+            ]);
+        }
+        $chat_bd=UserChat::find()->where(['u_id'=>$u_id,'role_id'=>$role_id])->asArray()->one();
+        $nickname=User::find()->where(['id'=>$chat_bd['u_id']])->asArray()->one()['nickname'];
+        if(!$chat_bd || !$nickname ){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=UserChat::SendImg($nickname,$chat_bd['id'],$to_user,$filepath);
+        if(is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }else{
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
+
+    }
+    /**
+     * 发送语音消息
+     * @return array|string
+     */
+    public function actionSendAudioMessage(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $code=1000;
+        $filepath=trim(\Yii::$app->request->post('filepath'));
+        $to_user=trim(\Yii::$app->request->post('to_user'));
+        $length=trim(\Yii::$app->request->post('length'));//语音长度
+        $user_hx=new ChatService();
+        $res=$user_hx->getUser($to_user);
+        if(array_key_exists('error',$res)){
+            return Json::encode([
+                'code'=>1000,
+                'msg'=>$res['error']
+            ]);
+        }
+        $chat_bd=UserChat::find()->where(['u_id'=>$u_id,'role_id'=>$role_id])->asArray()->one();
+        $nickname=User::find()->where(['id'=>$chat_bd['u_id']])->asArray()->one()['nickname'];
+        if(!$chat_bd || !$nickname ){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=UserChat::SendAudio($nickname,$chat_bd['id'],$to_user,$filepath,$length);
+        if(is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }else{
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
+    }
+
+
+    public function actionTest(){
+
+//        var_dump(date('Y-tisort()m-d H:i:s', 1508836969));die;
         $chat=new ChatService();
-        var_dump($chat->getUsersForPage(0,''));
+        $ql="select * where timestamp<1508836969";
+        var_dump($chat->getChatRecord($ql));
 
     }
 }

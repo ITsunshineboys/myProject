@@ -1,8 +1,11 @@
 <?php
 
 namespace app\models;
+use app\controllers\SiteController;
 use app\services\ChatService;
+use app\services\FileService;
 use yii\db\Exception;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "user_chat".
@@ -10,6 +13,7 @@ use yii\db\Exception;
  * @property integer $id
  * @property integer $u_id
  * @property integer $role_id
+ * @property integer $nickname
  * @property string $chat_username
  * @property integer $create_time
  * @property integer $login_time
@@ -33,7 +37,7 @@ class UserChat extends \yii\db\ActiveRecord
         return [
             [['u_id', 'role_id'], 'required'],
             [['u_id', 'role_id', 'status'], 'integer'],
-            [['chat_username'], 'string', 'max' => 60],
+            [['chat_username', 'nickname'], 'string', 'max' => 100],
         ];
     }
 
@@ -71,7 +75,7 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $role_id
      * @return array|bool
      */
-    public static function newChatUser($username,$password,$u_id, $role_id)
+    public static function newChatUser($username, $password, $u_id, $role_id)
     {
 
         $trans = \Yii::$app->db->beginTransaction();
@@ -79,19 +83,17 @@ class UserChat extends \yii\db\ActiveRecord
             $chat = new self();
             $chat->u_id = $u_id;
             $chat->role_id = $role_id;
-            $chat->chat_username=$username;
+            $chat->chat_username = $username;
             $chat->save();
             $trans->commit();
         } catch (Exception $e) {
             $trans->rollBack();
             return false;
         }
-
         //创建环信号
         $chat_online = new ChatService();
-        $username=$chat->chat_username;
+        $username = $chat->chat_username;
         if ($chat_online->getUser($username)) {
-            $trans->rollBack();
             return false;
         }
         $password = \Yii::$app->security->generatePasswordHash($password);
@@ -99,4 +101,153 @@ class UserChat extends \yii\db\ActiveRecord
 
         return [$chat, $hx];
     }
+
+    /**
+     * 修改Nickname
+     * @param $nickename
+     * @param $u_id
+     * @param $role_id
+     * @return bool
+     */
+    public static function editnickname($nickname, $u_id, $role_id)
+    {
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $user = User::find()
+                ->where(['id' => $u_id])
+                ->one();
+            if (!$user) {
+                $code = 1000;
+                $trans->rollBack();
+                return $code;
+            }
+            $user->nickname = $nickname;
+
+            if (!$user->save()) {
+                $trans->rollBack();
+                $code = 500;
+                return $code;
+            }
+            $chat_hx = new ChatService();
+            $re = $chat_hx->editNickname($user->chat_username, $nickname);
+            if (!$re) {
+                $trans->rollBack();
+                $code = 500;
+                return $code;
+            }
+            $trans->commit();
+            return 200;
+        } catch (Exception $e) {
+            $trans->rollBack();
+            return 500;
+        }
+
+
+    }
+    /**
+     * 发送文本消息
+     * @param $content
+     * @param string $nickname
+     * @param $chat_id
+     * @param $to_user
+     * @return int|mixed
+     */
+    public static function sendTextMessage($content, $nickname='admin',$chat_id,$to_user)
+    {
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $chat_hx = new ChatService();
+            $from = $nickname;
+            $target = [$to_user];
+
+            $re = $chat_hx->sendText($from, $target_type = 'users', $target, $content);
+            if($re){
+                $chat_record=new ChatRecord();
+                $chat_record->chat_id=$chat_id;
+                $chat_record->content=$content;
+                if(!$chat_record->save()){
+                    $trans->rollBack();
+                    return $code=500;
+                }
+            }else{
+                $trans->rollBack();
+                return $code=500;
+            }
+            $trans->commit();
+            return $re;
+        } catch (Exception $e) {
+            $trans->rollBack();
+            return $code = 500;
+
+        }
+    }
+    /**
+     * 发送图片消息
+     * @param string $nickname
+     * @param $chat_id
+     * @param $to_user
+     * @param $filepath
+     * @return int|mixed
+     */
+    public static function SendImg($nickname='admin',$chat_id,$to_user,$filepath){
+
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $chat_hx = new ChatService();
+            $from = $nickname;
+            $target = [$to_user];
+
+            $re = $chat_hx->sendImage($filepath,$from, $target_type = 'users', $target);
+            if($re) {
+                $chat_record = new ChatRecord();
+                $chat_record->chat_id = $chat_id;
+                $chat_record->content = $filepath;
+                if (!$chat_record->save()) {
+                    $trans->rollBack();
+                    return $code = 500;
+                }
+            }
+            else{
+                $trans->rollBack();
+                return $code=500;
+            }
+            $trans->commit();
+            return $re;
+
+        }catch (Exception $e){
+            $trans->rollBack();
+            return $code = 500;
+        }
+    }
+
+    public static function SendAudio($nickname='admin',$chat_id,$to_user,$filepath,$length){
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $chat_hx = new ChatService();
+            $from = $nickname;
+            $target = [$to_user];
+
+            $re = $chat_hx->sendAudio($filepath,$from, $target_type = 'users', $target,$length);
+            if($re) {
+                $chat_record = new ChatRecord();
+                $chat_record->chat_id = $chat_id;
+                $chat_record->content = $filepath;
+                if (!$chat_record->save()) {
+                    $trans->rollBack();
+                    return $code = 500;
+                }
+            }
+            else{
+                $trans->rollBack();
+                return $code=500;
+            }
+            $trans->commit();
+            return $re;
+
+        }catch (Exception $e){
+            $trans->rollBack();
+            return $code = 500;
+        }
+    }
 }
+

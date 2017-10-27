@@ -41,6 +41,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
     const ACCESS_TYPE_DESC_UNCASH_IN='提现中';
     const ACCESS_TYPE_DESC_DISAGREE='驳回';
     const ACCESS_TYPE_DESC_PAYMENT_GOODS='货款';
+    const ACCESS_TYPE_DESC_PAYMENT_BUY='使用';
     /**
      * @inheritdoc
      */
@@ -85,7 +86,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
      * @param string $orderBy
      * @return array
      */
-    public  static  function  pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+   public  static  function  pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
         $select = array_diff($select, self::FIELDS_EXTRA);
         $offset = ($page - 1) * $size;
@@ -96,31 +97,47 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ->offset($offset)
             ->limit($size)
             ->asArray()
-            ->all();
-        foreach ($Accessdetaillist as &$list) {
+            ->all(); 
+         foreach ($Accessdetaillist as &$list) {
             $list['access_type']=self::findAccessType($list['access_type']);
-            $list['access_money']=sprintf('%.2f',(float)$list['access_money']*0.01);
-            if ($list['access_type']==self::ACCESS_TYPE_DESC_DEBIT)
+             if ($list['access_type']==self::ACCESS_TYPE_DESC_DEBIT
+                ||$list['access_type']==self::ACCESS_TYPE_DESC_CASH
+                ||$list['access_type']==self::ACCESS_TYPE_DESC_PAYMENT_BUY
+                ||$list['access_type']==self::ACCESS_TYPE_DESC_UNCASH_IN
+            )
             {
-                $list['access_money']=-sprintf('%.2f',(float)$list['access_money']*0.01);
+                $list['access_money']=sprintf('%.2f',-$list['access_money']*0.01);
+            }else{
+                $list['access_money']=sprintf('%.2f',$list['access_money']*0.01);
             }
             $list['create_time']=date('Y-m-d H:i',$list['create_time']);
         }
-                $total=self::find()
+        $total=self::find()
             ->select($select)
             ->where($where)
             ->asArray()
             ->count();
-        return ModelService::pageDeal($Accessdetaillist, $total, $page, $size);
+        if ($total>0)
+        {
+            return ModelService::pageDeal($Accessdetaillist, $total, $page, $size);
+        }else{
+            return array(
+                'list' => [],
+                'total_page' => 0,
+                'count' => 0,
+                'page' => 0
+            );
+        }
+
     }
 
         /**
      * @param $access_type
      * @return string
      */
-    public static  function  findAccessType($access_type)
+   public static  function  findAccessType($access_type)
     {
-
+        //1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款  7.使用
         switch ($access_type)
         {
             case 1:
@@ -140,6 +157,9 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 break;
             case 6:
                 $type=self::ACCESS_TYPE_DESC_PAYMENT_GOODS;
+                break;
+            case 7:
+                $type=self::ACCESS_TYPE_DESC_PAYMENT_BUY;
                 break;
         }
         return $type;

@@ -8,6 +8,7 @@
 namespace app\services;
 
 use app\models\GoodsAttr;
+use yii\helpers\Json;
 
 class BasisDecorationService
 {
@@ -177,6 +178,13 @@ class BasisDecorationService
             }
         }
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+        if ($ids == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($ids as $one_unit) {
             switch ($one_unit) {
                 case $one_unit['title'] == self::GOODS_NAME['reticle'] || $one_unit['title'] == self::GOODS_NAME['wire']:
@@ -226,13 +234,22 @@ class BasisDecorationService
                     break;
             }
         }
+
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+        if ($goods == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         foreach ($ids as $one_unit) {
             switch ($one_unit) {
-                case $one_unit['title'] == self::GOODS_NAME['pvc']:
+                case $one_unit['title'] == self::GOODS_NAME['ppr']:
                     $ppr_value = $one_unit['value'];
                     break;
-                case $one_unit['title'] == self::GOODS_NAME['ppr']:
+                case $one_unit['title'] == self::GOODS_NAME['pvc']:
                     $pvc_value = $one_unit['value'];
                     break;
             }
@@ -248,6 +265,8 @@ class BasisDecorationService
                     break;
             }
         }
+
+
 //           PPR费用：个数×抓取的商品价格
 //           个数：（水路总点位×【2m】÷抓取的商品的长度）
 //           PVC费用：个数×抓取的商品价格
@@ -256,8 +275,8 @@ class BasisDecorationService
         $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
 
         $waterway['ppr_cost'] = $waterway['ppr_quantity'] * $ppr_price;
-        //PPR费用
         $waterway['pvc_cost'] = $waterway['pvc_quantity'] * $pvc_price;
+
         $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
         return $waterway;
     }
@@ -428,9 +447,9 @@ class BasisDecorationService
                 $series_one = $coefficient_one['modelling_length_coefficient'];
             }
         }
+
         //造型长度 = 木作添加项 *  系数
-        $modelling_length = $series_one * $length;
-        return $modelling_length;
+        return $series_one * $length;;
     }
 
     /**
@@ -680,8 +699,9 @@ class BasisDecorationService
                     break;
             }
         }
+
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
-        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $area_material +$video_wall);
+        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $area_material + $video_wall);
 
 //            石膏板费用：个数×商品价格
         $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
@@ -815,6 +835,13 @@ class BasisDecorationService
     public static function paintedCost($goods,$craft,$area)
     {
         $goods_value = GoodsAttr::findByGoodsIdUnit($goods['id']);
+        if ($goods_value == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $goods_value_one = '';
         foreach ($goods_value as $value) {
             if ($goods['title'] == self::GOODS_NAME['concave_line']) {
@@ -827,8 +854,10 @@ class BasisDecorationService
                 $goods_value_one = $value['value'];
             }
         }
+
 //        个数：（腻子面积×【0.33kg】÷抓取的商品的规格重量）
-        $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods_value_one);
+        $putty_cost ['quantity'] = ceil($area * (int)$craft['material'] / (int)$goods_value_one);
+
 //        腻子费用：个数×商品价格
         $putty_cost ['cost']  =  $putty_cost['quantity'] * $goods['platform_price'];
         return $putty_cost;
@@ -1035,7 +1064,7 @@ class BasisDecorationService
                     break;
             }
         }
-        $value = '';
+        $value = 0;
         foreach ($goods_attr as $one_goods) {
             $value = $one_goods['value'];
         }
@@ -1046,8 +1075,13 @@ class BasisDecorationService
         $new_24 = $get_area['24_new_construction'] * $cement_24;
         $new_repair = $get_area['repair'] * $repair;
         $new_dosage = $new_12 + $new_24 + $new_repair;
+        if ($new_dosage == 0){
+            $cement['quantity'] = 0;
+            $cement['cost'] = 0;
+            return  $cement;
+        }
 //        个数：（水泥用量÷抓取的商品的KG）
-        $cement['quantity'] = ceil($new_dosage / $value);
+        $cement['quantity'] = ceil($new_dosage/$value);
 //        水泥费用：个数×抓取的商品价格
         $cement['cost'] = $cement['quantity'] * $goods['platform_price'];
         return $cement;
@@ -1189,14 +1223,13 @@ class BasisDecorationService
      */
     public static function priceConversion($goods)
     {
-        $conversion = [];
-        foreach ($goods as $one_goods) {
+        foreach ($goods as &$one_goods) {
             $one_goods['platform_price'] =  $one_goods['platform_price'] / self::GOODS_PRICE_UNITS;
             $one_goods['supplier_price'] =  $one_goods['supplier_price'] / self::GOODS_PRICE_UNITS;
             $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / self::GOODS_PRICE_UNITS;
-            $conversion [] = $one_goods;
         }
-        return $conversion;
+
+        return $goods;
     }
 
     /**
@@ -1271,6 +1304,14 @@ class BasisDecorationService
                 $id[] = $one_goods['id'];
             }
             $goods_property = GoodsAttr::findByGoodsIdUnit($id);
+            if ($goods_property == null){
+                $code = 1061;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                    'data' => $goods,
+                ]);
+            }
             foreach ($goods_property as $one_goods_property) {
                 switch ($one_goods_property) {
                     case $one_goods_property['title'] == self::GOODS_NAME['river_sand']:
@@ -1358,18 +1399,16 @@ class BasisDecorationService
      */
     public static function fixationFurnitureSeriesStyle($goods,$post)
     {
-        $material = [];
-        foreach ($goods as $one_goods) {
+        foreach ($goods as &$one_goods) {
             switch ($one_goods) {
                 case $one_goods['title'] == self::GOODS_NAME['closet'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']:
                     $one_goods['quantity'] = $post['bedroom'];
                     $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
-                    $chest [] = $one_goods;
+                    $materials[] = $one_goods;
                     break;
             }
         }
-        $material[] = self::profitMargin($chest);
-        return $material;
+        return self::profitMargin($materials);
     }
 
     /**
@@ -1425,6 +1464,13 @@ class BasisDecorationService
     {
         if ($id) {
             $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
+            if ($goods_attr == null){
+                $code = 1061;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
             foreach ($goods_attr as $one_goods_attr) {
                 if ($one_goods_attr['name'] == self::UNITS['length']) {
                     $length = $one_goods_attr['value'] / self::BRICK_UNITS;
@@ -1588,6 +1634,7 @@ class BasisDecorationService
 
             }
         }
+
         $material []  = self::profitMargin($wood_floor);
         $material []  = self::profitMargin($aluminium_alloy_door);
         $material []  = self::profitMargin($bath_heater);
@@ -1828,13 +1875,13 @@ class BasisDecorationService
                     $ppr[] = $one_waterway_current;
                     break;
                 case $one_waterway_current['title'] == self::GOODS_NAME['pvc'];
-                    $one_waterway_current['quantity'] = $material_price['ppr_quantity'];
-                    $one_waterway_current['cost'] = $material_price['ppr_cost'];
+                    $one_waterway_current['quantity'] = $material_price['pvc_quantity'];
+                    $one_waterway_current['cost'] = $material_price['pvc_cost'];
                     $pvc[] = $one_waterway_current;
                     break;
             }
         }
-        $material['total_cost'][] = $material_price['total_cost'];
+        $material ['total_cost'][] = $material_price['total_cost'];
         $material ['material'][] = BasisDecorationService::profitMargin($ppr);
         $material ['material'][] = BasisDecorationService::profitMargin($pvc);
         return $material;
@@ -1849,15 +1896,15 @@ class BasisDecorationService
      */
     public static function capacity($goods_price,$post)
     {
-        foreach ($goods_price as $one_goods) {
+        foreach ($goods_price as &$one_goods) {
             if ($one_goods['title'] == self::GOODS_NAME['elbow']) {
                 $one_goods['quantity'] = $post['toilet'] * self::WALL_SPACE;
                 $one_goods['cost'] = $one_goods['quantity'] * $one_goods['platform_price'];
-                $elbow [] = $one_goods;
+                $materials[] = $one_goods;
             }
         }
-        $material [] = BasisDecorationService::profitMargin($elbow);
-        return $material;
+
+        return BasisDecorationService::profitMargin($materials);
     }
 
     /**
@@ -1889,5 +1936,40 @@ class BasisDecorationService
             }
         }
         return $series_style_goods;
+    }
+
+    public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost)
+    {
+        $material_total = [];
+        foreach ($goods_price as &$one_goods_price) {
+            switch ($one_goods_price) {
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['plasterboard']:
+                    $one_goods_price['quantity'] = $plasterboard_cost['quantity'];
+                    $one_goods_price['cost'] = $plasterboard_cost['cost'];
+                    $plasterboard [] = $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['keel']:
+                    $one_goods_price['quantity'] = $keel_cost['quantity'];
+                    $one_goods_price['cost'] = $keel_cost['cost'];
+                    $keel [] = $one_goods_price;
+                    break;
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['lead_screw']:
+                    $one_goods_price['quantity'] = $pole_cost['quantity'];
+                    $one_goods_price['cost'] = $pole_cost['cost'];
+                    $pole [] = $one_goods_price;
+                    break;
+            }
+        }
+
+        $material_total['material'][] = BasisDecorationService::profitMargin($plasterboard);
+        $material_total['material'][] = BasisDecorationService::profitMargin($keel);
+        $material_total['material'][] = BasisDecorationService::profitMargin($pole);
+        $material_total['total_cost'][] = $material_cost;
+        return $material_total;
+    }
+
+    public static function handymanGoods()
+    {
+
     }
 }

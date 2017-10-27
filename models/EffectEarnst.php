@@ -3,22 +3,22 @@
 namespace app\models;
 
 use app\services\ModelService;
-use app\services\StringService;
 use Yii;
 use yii\db\Query;
 
 /**
- * This is the model class for table "effect_earnst".
+ * This is the model class for table "effect_earnest".
  *
  * @property string $id
+ * @property integer $effect_id
  * @property string $phone
  * @property string $name
  * @property string $earnest
  * @property string $remark
- * @property string $create_time
- * @property string $effect_id
+ * @property integer $create_time
+ * @property string $transaction_no
  */
-class EffectEarnst extends \yii\db\ActiveRecord
+class EffectEarnest extends \yii\db\ActiveRecord
 {
     const INSET_EARNST = 8900;
     const PAGE_SIZE_DEFAULT = 10;
@@ -30,6 +30,7 @@ class EffectEarnst extends \yii\db\ActiveRecord
         'phone',
         'earnest',
         'remark',
+        'transaction_no'
 
     ];
     /**
@@ -37,8 +38,7 @@ class EffectEarnst extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'effect_earnst';
-
+        return 'effect_earnest';
     }
 
     /**
@@ -47,14 +47,30 @@ class EffectEarnst extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['phone', 'name'], 'required'],
+            [['effect_id', 'earnest', 'create_time'], 'integer'],
             [['remark'], 'string'],
-
-            [['name'], 'string', 'min' => 1, 'max' => 8],
-            [['create_time'], 'integer']
+            [['phone'], 'string', 'max' => 11],
+            [['name'], 'string', 'max' => 255],
+            [['transaction_no'], 'string', 'max' => 50],
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'effect_id' => 'Effect ID',
+            'phone' => 'Phone',
+            'name' => 'Name',
+            'earnest' => 'Earnest',
+            'remark' => 'Remark',
+            'create_time' => 'Create Time',
+            'transaction_no' => 'Transaction No',
+        ];
+    }
     /**
      * @inheritdoc
      */
@@ -112,7 +128,7 @@ class EffectEarnst extends \yii\db\ActiveRecord
      */
     public static function getallapply(){
 
-        return $sum=(new Query())->from('effect_earnst')->count('*');
+        return $sum=(new Query())->from('effect_earnest')->count('*');
     }
 
 
@@ -122,9 +138,9 @@ class EffectEarnst extends \yii\db\ActiveRecord
      *
      */
     public static function gettodayapply(){
-               $today=self::getToday();
+        $today=self::getToday();
 
-        return $sum=(new Query())->from('effect_earnst')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->count('*');
+        return $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->count('*');
     }
 
     /**
@@ -136,7 +152,7 @@ class EffectEarnst extends \yii\db\ActiveRecord
 
         $today=self::getToday();
 
-        $sum=(new Query())->from('effect_earnst')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->sum("earnest");
+        $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->sum("earnest");
         return sprintf('%.2f',(float)$sum*0.01);
     }
 
@@ -147,7 +163,7 @@ class EffectEarnst extends \yii\db\ActiveRecord
      */
     public static function getallearnest(){
 
-         $sum=(new Query())->from('effect_earnst')->sum("earnest");
+        $sum=(new Query())->from('effect_earnest')->sum("earnest");
         return sprintf('%.2f',(float)$sum*0.01);
     }
 }

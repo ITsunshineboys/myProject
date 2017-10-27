@@ -113,7 +113,23 @@ class SupplierCashController extends Controller
 
 
     //---------------------------商家后台---------------------------
-
+    /**
+     * 商家详情
+     * @return int|string
+     */
+    public function actionMallView(){
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+        $supplier_id=Supplier::find()->where(['uid'=>$user])->asArray()->one()['id'];
+        $data=Supplier::getsupplierdata($supplier_id,$user);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data,
+        ]);
+    }
     /**
      * 获取商家提现列表
      * @return mixed

@@ -54,7 +54,7 @@ class MallController extends Controller
         'recommend-add',
         'recommend-edit',
         'recommend-sort',
-        'recommend-click-record',
+//        'recommend-click-record',
         'recommend-add-supplier',
         'recommend-edit-supplier',
         'recommend-delete-supplier',
@@ -797,7 +797,7 @@ class MallController extends Controller
     public function actionRecommendAdminIndex()
     {
         $type = (int)Yii::$app->request->get('type', GoodsRecommend::RECOMMEND_GOODS_TYPE_CAROUSEL);
-        $districtCode = (int)Yii::$app->request->get('district_code', 0);
+        $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
 
         if (!in_array($type, GoodsRecommend::$types)) {
             $code = 1000;
@@ -894,7 +894,7 @@ class MallController extends Controller
             $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
             $supplier = Supplier::findOne($goods->supplier_id);
             $recommend->supplier_id = $supplier->id;
-            $recommend->supplier_name = $supplier->nickname;
+            $recommend->supplier_name = $supplier->shop_name;
             $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
         }
 
@@ -947,7 +947,7 @@ class MallController extends Controller
             $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
             $supplier = Supplier::findOne($goods->supplier_id);
             $recommend->supplier_id = $supplier->id;
-            $recommend->supplier_name = $supplier->nickname;
+            $recommend->supplier_name = $supplier->shop_name;
             $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
         }
 
@@ -1003,6 +1003,12 @@ class MallController extends Controller
         $recommendViewLog = new GoodsRecommendViewLog;
         $recommendViewLog->attributes = Yii::$app->request->post();
         $recommendViewLog->ip = ip2long(Yii::$app->request->userIP);
+//        if (!$recommendViewLog->canLogIpNumber()) {
+//            return Json::encode([
+//                'code' => 200,
+//                'msg' => 'OK',
+//            ]);
+//        }
 
         if (!$recommendViewLog->validate()) {
             return Json::encode([
@@ -3767,6 +3773,19 @@ class MallController extends Controller
             ]);
         }
 
+        $cacheKey = Goods::GOODS_QR_PREFIX . $id;
+        $cache = Yii::$app->cache;
+        $data = $cache->get($cacheKey);
+        if ($data) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+                'data' => [
+                    'goods_view' => $data,
+                ],
+            ]);
+        }
+
         $where['id'] = $id;
         $where['status'] = Goods::STATUS_ONLINE;
         if (Yii::$app->user->identity) {
@@ -3781,11 +3800,13 @@ class MallController extends Controller
             ]);
         }
 
+        $data = $goods->view(Yii::$app->request->userIP);
+        $cache->set($cacheKey, $data, Yii::$app->params['goods']['viewCacheTime']);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'goods_view' => $goods->view(Yii::$app->request->userIP),
+                'goods_view' => $data,
             ],
         ]);
     }
@@ -4506,7 +4527,7 @@ class MallController extends Controller
 
             $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
             $recommend->supplier_id = $supplier->id;
-            $recommend->supplier_name = $supplier->nickname;
+            $recommend->supplier_name = $supplier->shop_name;
             $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
             $recommend->platform_price = $goods->platform_price;
             $recommend->description = $goods->subtitle;
@@ -4570,7 +4591,7 @@ class MallController extends Controller
 
             $goods = Goods::find()->where(['sku' => $recommend->sku])->one();
             $recommend->supplier_id = $supplier->id;
-            $recommend->supplier_name = $supplier->nickname;
+            $recommend->supplier_name = $supplier->shop_name;
             $recommend->url = Goods::GOODS_DETAIL_URL_PREFIX . $goods->id;
             $recommend->platform_price = $goods->platform_price;
             $recommend->description = $goods->subtitle;

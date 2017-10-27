@@ -403,9 +403,7 @@ class Supplier extends ActiveRecord
 
         $ym = date('Ym');
         if (isset($data['sales_amount_month'])) {
-            if ($ym == $data['month']) {
-                $data['sales_amount_month'] /= 100;
-            } else {
+            if ($ym != $data['month']) {
                 $data['sales_amount_month'] = 0;
             }
         }
@@ -502,8 +500,8 @@ class Supplier extends ActiveRecord
             ->leftJoin('user_bankinfo as ub', 'ub.uid=s.uid')
             ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
             ->leftJoin('user_freezelist as sf', 'sf.uid=s.uid')
-            ->andWhere(['ub.role' => self::ROLE_SUPPLIER])
-            ->where(['s.id' => $supplier_id])
+            ->andWhere(['ub.role_id' => self::ROLE_SUPPLIER])
+            ->where(['s.id' => $supplier_id,'ub.selected'=>1])
             ->one();
 
         $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_OFFLINE])->sum('freeze_money');

@@ -154,4 +154,9 @@ class TestController extends Controller
     {
         return $this->render('login');
     }
+
+    public function actionTest()
+    {
+        return time() . 'a';
+    }
 }

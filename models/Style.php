@@ -111,7 +111,12 @@ class Style extends ActiveRecord
                 $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);
                 $all [] = $one_series;
             }
-            return $all;
+            return [
+                'total' => (int)self::find()->where([])->asArray()->count(),
+                'page'=>$page,
+                'size'=>$size,
+                'details' => $all
+            ];
         }elseif ($sort  == self::STATUS_ONLINE){
             $style= self::find()
                 ->asArray()
@@ -123,7 +128,12 @@ class Style extends ActiveRecord
                 $one_series['creation_time'] = date('Y-m-d H:i', $one_series['creation_time']);
                 $all [] = $one_series;
             }
-            return $all;
+            return [
+                'total' => (int)self::find()->where([])->asArray()->count(),
+                'page'=>$page,
+                'size'=>$size,
+                'details' => $all
+            ];
         }
     }
 }

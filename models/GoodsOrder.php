@@ -1906,8 +1906,7 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return int
      */
-    public  static  function  orderBalanceSub($postData,$user){
-
+       public  static  function  orderBalanceSub($postData,$user){
         $orders=explode(',',$postData['list']);
         if(!is_array($orders))
         {
@@ -1923,66 +1922,109 @@ class GoodsOrder extends ActiveRecord
             $code=1000;
             return $code;
         };
-        foreach ($orders as $k =>$v){
-            $GoodsOrder=self::find()
-                ->where(['order_no'=>$orders[$k]])
-                ->one();
-            $OrderGoods=OrderGoods::find()
-                ->where(['order_no'=>$orders[$k]])
-                ->asArray()
-                ->all();
-            foreach ($OrderGoods as &$Goods)
-            {
-                if ($Goods['order_status']!=0)
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+
+            $role=Role::GetRoleByRoleId($user->last_role_id_app,$user);
+            foreach ($orders as $k =>$v){
+                $GoodsOrder=self::find()
+                    ->where(['order_no'=>$orders[$k]])
+                    ->one();
+                $OrderGoods=OrderGoods::find()
+                    ->where(['order_no'=>$orders[$k]])
+                    ->asArray()
+                    ->all();
+                foreach ($OrderGoods as &$Goods)
+                {
+                    if ($Goods['order_status']!=0)
+                    {
+                        $code=1000;
+                        return $code;
+                    }
+                }
+                if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                 {
                     $code=1000;
                     return $code;
                 }
-            }
-            if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
-            {
-                $code=1000;
-                return $code;
-            }
-            $tran = Yii::$app->db->beginTransaction();
-            try{
-                $order_money=$GoodsOrder->amount_order;
-                $GoodsOrder->pay_status=1;
-                $res=$GoodsOrder->save();
-                if ($user->last_role_id_app==0)
-                {
-                    $user->last_role_id_app=7;
-                    $user=User::find()
-                        ->where(['id'=>$user->id])
-                        ->one();
-                }else{
-                    if ($user->last_role_id_app==7)
+
+
+                    $order_money=$GoodsOrder->amount_order;
+                    $GoodsOrder->pay_status=1;
+                    $res=$GoodsOrder->save(false);
+                    if ($user->last_role_id_app==0)
                     {
                         $user->last_role_id_app=7;
                         $user=User::find()
                             ->where(['id'=>$user->id])
                             ->one();
                     }else{
-                       $user=Role::CheckUserRole($user->last_role_id_app)
-                           ->where(['uid'=>$user->id])
-                           ->one();
+                        if ($user->last_role_id_app==7)
+                        {
+                            $user->last_role_id_app=7;
+                            $user=User::find()
+                                ->where(['id'=>$user->id])
+                                ->one();
+                        }else{
+                           $user=Role::CheckUserRole($user->last_role_id_app)
+                               ->where(['uid'=>$user->id])
+                               ->one();
+                        }
                     }
-                }
-                $user->balance=($user->balance-$order_money);
-                $user->availableamount=($user->availableamount-$order_money);
-                $res2=$user->save(false);
-                if (!$res || !$res2){
-                    $tran->rollBack();
-                    $code=500;
-                    return $code;
-                }
-                $tran->commit();
-            }catch (Exception $e){
+                    $user->balance=($user->balance-$order_money);
+                    $user->availableamount=($user->availableamount-$order_money);
+                    $res2=$user->save(false);
+                    if (!$res || !$res2){
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+
+
+
+            }
+            switch ($user->last_role_id_app)
+            {
+                case 2:
+                    $role_number=$role->worker_type_id;
+                    break;
+                case 3:
+                    $role_number=$role->decoration_company_id;
+                    break;
+                case 4:
+                    $role_number=$role->decoration_company_id;
+                    break;
+                case 5:
+                    $role_number=$role->id;
+                    break;
+                case 6:
+                    $role_number=$role->shop_no;
+                    break;
+                case 7:
+                    $role_number=$role->aite_cube_no;
+                    break;
+            }
+            $access=new UserAccessdetail();
+            $access->uid=$user->id;
+            $access->role_id=$user->last_role_id_app;
+            $access->access_type=7;
+            $access->access_money=$postData['total_amount']*100;
+            $access->create_time=time();
+            $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
+            $res3=$access->save(false);
+            if ( !$res3){
                 $tran->rollBack();
                 $code=500;
                 return $code;
             }
+            $tran->commit();
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
         }
+
+
         $code=200;
         return $code;
     }

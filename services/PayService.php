@@ -50,16 +50,47 @@ class PayService
         //通过code获得openid
         if (!isset($_GET['code'])){
             //触发微信返回code码
-            $baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
+            $baseUrl = urlencode('http://common.cdlhzz.cn/order/lineplaceorder');
             $url = $this->__CreateOauthUrlForCode($baseUrl);
-            Header("Location: $url");
-            exit();
+            return $url;
+//            Header("Location: $url");
+//            exit();
         } else {
             //获取code码，以获取openid
             $code = $_GET['code'];
             $openid = $this->getOpenidFromMp($code);
             return $openid;
         }
+    }
+   /**
+     *
+     * 通过跳转获取用户的openid，跳转流程如下：
+     * 1、设置自己需要调回的url及其其他参数，跳转到微信服务器https://open.weixin.qq.com/connect/oauth2/authorize
+     * 2、微信服务处理完成之后会跳转回用户redirect_uri地址，此时会带上一些参数，如：code
+     *
+     * @return 用户的openid
+     */
+    public function GetOrderOpenid($orders)
+    {
+
+            Yii::$app->session['address_id']=$orders['address_id'];
+            Yii::$app->session['invoice_id']=$orders['invoice_id'];
+            Yii::$app->session['goods_id']=$orders['goods_id'];
+            Yii::$app->session['goods_num']=$orders['goods_num'];
+            Yii::$app->session['order_price']=$orders['order_price'];
+            Yii::$app->session['goods_name']=$orders['goods_name'];
+            Yii::$app->session['pay_name']=$orders['pay_name'];
+            Yii::$app->session['freight']=$orders['freight'];
+            Yii::$app->session['supplier_id']=$orders['supplier_id'];
+            Yii::$app->session['return_insurance']=$orders['return_insurance'];
+            Yii::$app->session['body']=$orders['body'];
+            Yii::$app->session['order_no']=$orders['order_no'];
+            Yii::$app->session['buyer_message']=$orders['buyer_message'];
+
+            //触发微信返回code码
+            $baseUrl = urlencode("http://common.cdlhzz.cn/order/wx-line-pay");
+            $url = $this->__CreateOauthUrlForCode($baseUrl);
+            return $url;
     }
 
     /**
@@ -86,7 +117,7 @@ class PayService
         $jsapi->SetPackage("prepay_id=" . $UnifiedOrderResult['prepay_id']);
         $jsapi->SetSignType("MD5");
         $jsapi->SetPaySign($jsapi->MakeSign());
-        $parameters = json_encode($jsapi->GetValues());
+       $parameters = json_encode($jsapi->GetValues());
         return $parameters;
     }
 

@@ -260,6 +260,27 @@ class FindworkerController extends Controller{
          ]);
     }
     /**
+     * 防水下单生成订单
+     * @return string
+     */
+    public function actionWaterproofGenerateOrder(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $post=\Yii::$app->request->post();
+        $code=WorkerOrder::addorderinfo($user_id->getId(),$post);
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+    /**
      *add home images
      *@return string
      */
@@ -294,21 +315,21 @@ class FindworkerController extends Controller{
      * @param $home_info
      * @return string
      */
-    public static function getOrderNeedTime($home_info)
+    public static function getOrderNeedTime($array)
     {
         $sum = 0;
         $code = 1000;
-        $keys = array_keys($home_info);
+        $keys = array_keys($array);
         foreach ($keys as $k => &$key) {
 
             if (preg_match('/(area)/', $key, $m)) {
-                if ($home_info[$key] > 200) {
+                if ($array[$key] > 200) {
                     return Json::encode([
                         'code' => $code,
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                $sum += $home_info[$key];
+                $sum += $array[$key];
             }
         }
         return  ceil($sum / 12 + 1);
@@ -327,6 +348,7 @@ class FindworkerController extends Controller{
             ]);
         }
         $worker_info=User::find()->where(['id'=>$user_id->getId()])->one();
+        $worker['monthly_income']=Worker::worker_monthly_income($user_id->getId());
         $worker['aite_cube_no']=$worker_info->aite_cube_no;
         $worker['name']=Worker::getWorkerByUid($user_id->getId())->nickname;
         $worker['uid']=Worker::getWorkerByUid($user_id->getId())->id;

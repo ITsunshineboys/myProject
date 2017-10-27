@@ -9,8 +9,8 @@ namespace app\models;
 
 class Jpush{
 
-    private $app_key = '7973f8b4ad32cb15c10ea2b0';            //待发送的应用程序(appKey)，只能填一个。
-    private $master_secret = '7cf2502eba69046f73bebb39';      //主密码
+    private $app_key = 'c00134223dd89221dec89314';            //待发送的应用程序(appKey)，只能填一个。
+    private $master_secret = 'ad4f1b86363e9a9f0fbb65d1';      //主密码
     private $url = "https://api.jpush.cn/v3/push";            //推送的地址
 
     //若实例化的时候传入相应的值则按新的相应值进行

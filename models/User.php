@@ -633,6 +633,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function checkKickedout()
     {
+        if (YII_DEBUG) {
+            return false;
+        }
+
         if (Yii::$app->session->getHasSessionId()) {
             $sessId = Yii::$app->session->id;
             $user = self::find()
@@ -1731,7 +1735,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         if (!YII_DEBUG) {
             $appOrAdminAuthKey = $roleId ? $this->authKeyAdmin : $this->authKey;
-            $sessFile = Yii::$app->cache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $appOrAdminAuthKey;
+            $sessFile = Yii::$app->fileCache->cachePath . '/' . self::PREFIX_SESSION_FILENAME . $appOrAdminAuthKey;
             if ($appOrAdminAuthKey != $sessionId && file_exists($sessFile)) {
                 @unlink($sessFile);
             }

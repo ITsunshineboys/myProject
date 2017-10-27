@@ -953,18 +953,6 @@ CREATE TABLE `supplier_cashregister` (
 
 -- 8.3 end
 -- 8.5 start
-CREATE TABLE `effect_earnst` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `effect_id` int(11) NOT NULL COMMENT '样板id',
-  `phone` char(11) NOT NULL COMMENT '电话号码',
-  `name` varchar(255) NOT NULL COMMENT '名字',
-  `earnest` bigint(20) NOT NULL DEFAULT '0' COMMENT '定金',
-  `remark` text NOT NULL COMMENT '备注',
-  `create_time` int(11) NOT NULL COMMENT '申请时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 CREATE TABLE `assort_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(20) DEFAULT NULL COMMENT '商品名称',
@@ -1028,6 +1016,7 @@ CREATE TABLE `user_bankinfo` (
   `uid` int(11) NOT NULL COMMENT '用户id',
   `role_id` int(50) NOT NULL COMMENT '角色id',
   `log_id` int(11) NOT NULL COMMENT '银行卡记录id',
+  `selected` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未默认  1：默认',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡信息';
 
@@ -1355,7 +1344,7 @@ CREATE TABLE `user_accessdetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
   `role_id` int(50) NOT NULL DEFAULT 0 COMMENT '角色id',
-  `access_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款',
+  `access_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款 7.使用',
   `access_money` bigint(20) NOT NULL DEFAULT 0 COMMENT '收支金额',
   `create_time` int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   `order_no` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
@@ -1497,6 +1486,7 @@ CREATE TABLE `bankinfo_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bankname` varchar(50) NOT NULL COMMENT '开户银行',
   `bankcard` bigint(30) NOT NULL COMMENT '银行卡号',
+  `bank_type` tinyint(1) NOT NULL DEFAULT '2' COMMENT '1.信用卡  2.借记卡',
   `username` varchar(50) NOT NULL COMMENT '开户名',
   `position` varchar(150) NOT NULL COMMENT '开户行所在地',
   `bankbranch` varchar(150) NOT NULL COMMENT '开户行支行名',
@@ -1545,3 +1535,25 @@ CREATE TABLE `deleted_goods_comment` (
   `comment_id` int(11) NOT NULL COMMENT '评论ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- 10.23 start
+CREATE TABLE `chat_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `chat_id` int(11) NOT NULL COMMENT '聊天用户id',
+  `content` varchar(255) NOT NULL COMMENT '消息内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- 10.27 start
+CREATE TABLE `effect_earnest` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `effect_id` int(11) NOT NULL COMMENT '样板id',
+  `phone` char(11) NOT NULL COMMENT '电话号码',
+  `name` varchar(255) NOT NULL COMMENT '名字',
+  `earnest` bigint(20) NOT NULL DEFAULT '0' COMMENT '定金',
+  `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
+  `remark` text NOT NULL COMMENT '备注',
+  `create_time` int(11) NOT NULL COMMENT '申请时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

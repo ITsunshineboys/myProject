@@ -96,10 +96,10 @@ class QuoteController extends Controller
      */
     public function actionLaborCostList()
     {
-        $select = 'worker_kind';
-        $group  = 'worker_kind';
         return Json::encode([
-            'list' => LaborCost::LaborCostList($select,$group),
+            'code'=> 200,
+            'msg'=> 'ok',
+            'list' => LaborCost::LaborCostList('worker_kind','worker_kind'),
         ]);
     }
 

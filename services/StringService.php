@@ -433,9 +433,11 @@ class StringService
      * Http get
      *
      * @param string $url
+     * @param string $username username default empty
+     * @param string $password password default empty
      * @return string|bool
      */
-    public static function httpGet($url)
+    public static function httpGet($url, $username = '', $password = '')
     {
         $oCurl = curl_init();
         if (stripos($url, "https://") !== FALSE) {
@@ -444,6 +446,10 @@ class StringService
         }
         curl_setopt($oCurl, CURLOPT_URL, $url);
         curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+        if ($username && $password) {
+            curl_setopt($oCurl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($oCurl, CURLOPT_USERPWD, "{$username}:{$password}");
+        }
         $sContent = curl_exec($oCurl);
         $aStatus = curl_getinfo($oCurl);
         curl_close($oCurl);
@@ -459,9 +465,11 @@ class StringService
      *
      * @param string $url
      * @param string $param default empty
+     * @param string $username username default empty
+     * @param string $password password default empty
      * @return string|bool
      */
-    public static function httpPost($url, $param = '')
+    public static function httpPost($url, $param = '', $username = '', $password = '')
     {
         $oCurl = curl_init();
         if (stripos($url, "https://") !== FALSE) {
@@ -481,6 +489,10 @@ class StringService
         curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($oCurl, CURLOPT_POST, true);
         curl_setopt($oCurl, CURLOPT_POSTFIELDS, $strPOST);
+        if ($username && $password) {
+            curl_setopt($oCurl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($oCurl, CURLOPT_USERPWD, "{$username}:{$password}");
+        }
         $sContent = curl_exec($oCurl);
         $aStatus = curl_getinfo($oCurl);
         curl_close($oCurl);
@@ -497,9 +509,11 @@ class StringService
      * @param string $url
      * @param string $param
      * @param int $port default 80
+     * @param string $username username default empty
+     * @param string $password password default empty
      * @return string|bool
      */
-    public static function httpPut($url, $param, $port = 80)
+    public static function httpPut($url, $param, $port = 80, $username = '', $password = '')
     {
         $ci = curl_init();
 
@@ -510,6 +524,10 @@ class StringService
         curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);
         curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ci, CURLOPT_POSTFIELDS, $param);
+        if ($username && $password) {
+            curl_setopt($ci, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($ci, CURLOPT_USERPWD, "{$username}:{$password}");
+        }
 
         $sContent = curl_exec($ci);
         $aStatus = curl_getinfo($ci);
@@ -526,9 +544,11 @@ class StringService
      * Http delete
      *
      * @param string $url
+     * @param string $username username default empty
+     * @param string $password password default empty
      * @return string|bool
      */
-    public static function httpDelete($url)
+    public static function httpDelete($url, $username = '', $password = '')
     {
         $ci = curl_init();
 
@@ -537,6 +557,10 @@ class StringService
         curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ci, CURLOPT_FORBID_REUSE, 0);
         curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        if ($username && $password) {
+            curl_setopt($ci, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($ci, CURLOPT_USERPWD, "{$username}:{$password}");
+        }
 
         $sContent = curl_exec($ci);
         $aStatus = curl_getinfo($ci);

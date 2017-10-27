@@ -151,7 +151,7 @@ class Effect extends ActiveRecord
      */
     public function geteffectdata($effect_id){
         $query=new Query();
-        $array= $query->from('effect_earnst As ea')
+        $array= $query->from('effect_earnest As ea')
             ->select('e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
             ->leftJoin('effect as e','ea.effect_id=e.id')
             ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
@@ -159,6 +159,8 @@ class Effect extends ActiveRecord
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.id'=>$effect_id])->one();
         if($array){
+            $array['area']=mb_substr($array['particulars'],5,4);
+            $array['particulars']=mb_substr($array['particulars'],0,4);
             $array['create_time']=date('Y-m-d',$array['create_time']);
             $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
             $array['address']=$array['city'].$array['district'].$array['street'];
@@ -428,5 +430,15 @@ class Effect extends ActiveRecord
                 ['type'=>self::TYPE_STATUS_YES]
             ])
             ->all();
+    }
+
+    public static function effectAndEffectPicture($select = [] ,$where)
+    {
+        return self::find()
+            ->leftJoin('effect_picture','effect_picture.effect_id = effect.id')
+            ->select($select)
+            ->where($where)
+            ->asArray()
+            ->one();
     }
 }

@@ -29,6 +29,7 @@ use app\models\Goods;
 use app\models\Supplier;
 use app\models\LogisticsDistrict;
 use app\models\Lhzz;
+use app\services\PayService;
 use app\services\StringService;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
@@ -444,10 +445,10 @@ class OrderController extends Controller
             ]);
         } else {
             // 微信浏览器，允许访问
-
             return Json::encode([
                 'code' => 200,
                 'msg' =>'微信内打开',
+                'data'=>Wxpay::GetWxJsSign()
             ]);
         }
     }
@@ -605,8 +606,12 @@ class OrderController extends Controller
 
 
     public function actionAlipaygetnotify(){
-        $data=(new \yii\db\Query())->from('alipayreturntest')->all();
-        var_dump($data);
+        $data=(new Query())->from('alipayreturntest')->all();
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data' => $data
+        ]);
     }
 
      /**
@@ -646,10 +651,10 @@ class OrderController extends Controller
             'data' => $res
         ]);
     }
-   /**
+  /**
      *提交订单-线下店商城-微信支付
      */
-     public function  actionLineplaceorder(){
+    public function  actionLineplaceorder(){
         $request=Yii::$app->request;
         $subject=trim($request->get('goods_name'));
         //付款金额，必填
@@ -663,7 +668,6 @@ class OrderController extends Controller
         $freight=trim($request->get('freight'));
         $return_insurance=trim($request->get('return_insurance'));
         $buyer_message=trim($request->get('buyer_message','0'));
-    
         if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name ||! $invoice_id || !$supplier_id )
         {
             $code=1000;
@@ -694,15 +698,49 @@ class OrderController extends Controller
             'order_no'=>$order_no,
             'buyer_message'=>$buyer_message
         );
-        $model=new Wxpay();
-        $data=$model->Wxlineapipay($orders);
+        $url=(new PayService())->GetOrderOpenid($orders);
+        $code=200;
         return Json::encode([
-            'code' => 200,
-            'msg' =>'ok',
-            'data'=>$data
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$url
         ]);
     }
 
+
+
+           /**
+         * 获取openID2-微信
+         * @return string
+         */
+        public function  actionWxLinePay()
+        {
+
+            $orders=array(
+                'address_id'=> Yii::$app->session['address_id'],
+                'invoice_id'=> Yii::$app->session['invoice_id'],
+                'goods_id'=> Yii::$app->session['goods_id'],
+                'goods_num'=> Yii::$app->session['goods_num'],
+                'order_price'=> Yii::$app->session['order_price'],
+                'goods_name'=> Yii::$app->session['goods_name'],
+                'pay_name'=> Yii::$app->session['pay_name'],
+                'supplier_id'=> Yii::$app->session['supplier_id'],
+                'freight'=> Yii::$app->session['freight'],
+                'return_insurance'=> Yii::$app->session['return_insurance'],
+                'body'=> Yii::$app->session['body'],
+                'order_no'=> Yii::$app->session['order_no'],
+                'buyer_message'=> Yii::$app->session['buyer_message']
+            );
+            $openid=(new PayService())->GetOpenid();
+            $model=new Wxpay();
+            $data=$model->Wxlineapipay($orders,$openid);
+            $code=200;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+        }
     /**
      * 微信公众号样板间申请定金异步返回
      * wxpay notify action
@@ -916,15 +954,16 @@ class OrderController extends Controller
             }
         }
         if ($type=='all' && !$supplier_id)
-        {
-           if($keyword){
-                    $where .="  z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'  or   a.consignee_mobile like '%{$keyword}%'  or   u.mobile like '%{$keyword}%'";
+                {
+
+                    if($keyword){
+                        $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile,u.mobile) like '%{$keyword}%'";
+                    }
+                }else{
+                    if($keyword){
+                        $where .=" and CONCAT(z.order_no,z.goods_name,a.consignee_mobile,u.mobile) like '%{$keyword}%'";
+                    }
                 }
-            }else{
-            if($keyword){
-                $where .=" and z.order_no like '%{$keyword}%' or  z.goods_name like '%{$keyword}%'  or   a.consignee_mobile like '%{$keyword}%'  or   u.mobile like '%{$keyword}%'";
-            }
-        }
             if ($type=='all' && !$supplier_id )
             {
                 if ($keyword)
@@ -2013,7 +2052,7 @@ class OrderController extends Controller
      * 余额支付
      * @return string
      */
-    public  function  actionBalancePay(){
+  public  function  actionBalancePay(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -3176,8 +3215,8 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $money=trim($request->post('money',''));
         $user=User::find()->where(['id'=>$user->id])->one();
-        $user->balance+=$money*100;
-        $user->availableamount+=$money*100;
+        $user->balance=10000000;
+        $user->availableamount=10000000;
         $res=$user->save(false);
         if ($res)
         {
@@ -3385,7 +3424,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         };
-        $data=Alipay::OrderAppPay($orderAmount,$orders);
+       $data=Alipay::OrderAppPay($orderAmount,$postData['list']);
         $code=200;
         return Json::encode([
             'code' => $code,
@@ -3395,70 +3434,112 @@ class OrderController extends Controller
     }
 
 
-        /**
+   /**
      * 支付宝APP支付付款数据库操作--异步返回
      */
-    public  function  actionAppOrderPayDatabase()
+   public  function  actionAppOrderPayDatabase()
     {
         $post=Yii::$app->request->post();
         $model=new Alipay();
-//        $alipaySevice=$model->Alipaylinenotify();
-//        $result = $alipaySevice->check($post);
-//        if ($result){
-        if ($post['trade_status'] == 'TRADE_SUCCESS'){
-            $orders=explode(',',$post['passback_params']);
-            $total_amount=$post['total_amount'];
-            $orderAmount=GoodsOrder::CalculationCost($orders);
-            if ($total_amount*100!=$orderAmount)
-            {
-                echo 'fail';
-                exit;
-            }
-            foreach ($orders as $k =>$v){
-                $GoodsOrder=GoodsOrder::find()
-                    ->where(['order_no'=>$orders[$k]])
-                    ->one();
-                $OrderGoods=OrderGoods::find()
-                    ->where(['order_no'=>$orders[$k]])
-                    ->asArray()
-                    ->all();
-                foreach ($OrderGoods as &$Goods)
-                {
-                    if ($Goods['order_status']!=0)
-                    {
-                       echo 'fail';
-                       exit;
-                    }
-                }
-                if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
-                {
-                    echo 'fail';
-                    exit;
-                }
+        $alipaySevice=$model->Alipaylinenotify();
+        $result = $alipaySevice->check($post);
+        if ($result){
+            if ($post['trade_status'] == 'TRADE_SUCCESS'){
+                $orders=explode(',',urldecode($post['passback_params']));
+                $total_amount=$post['total_amount'];
+                $orderAmount=GoodsOrder::CalculationCost($orders);
+    //            if ($total_amount*100!=$orderAmount)
+    //            {
+    //                echo 'fail';
+    //                exit;
+    //            }
                 $tran = Yii::$app->db->beginTransaction();
                 try{
-                    $GoodsOrder->pay_status=1;
-                    $GoodsOrder->pay_name='支付宝APP支付';
-                    $res=$GoodsOrder->save(false);
-                    if (!$res)
+                    foreach ($orders as $k =>$v){
+                        $GoodsOrder=GoodsOrder::find()
+                            ->where(['order_no'=>$orders[$k]])
+                            ->one();
+                        $OrderGoods=OrderGoods::find()
+                            ->where(['order_no'=>$orders[$k]])
+                            ->asArray()
+                            ->all();
+                        foreach ($OrderGoods as &$Goods)
+                        {
+                            if ($Goods['order_status']!=0)
+                            {
+                               echo 'fail';
+                               exit;
+                            }
+                        }
+                        if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+                        {
+                            echo 'fail';
+                            exit;
+                        }
+                        $role_id=$GoodsOrder->role_id;
+                        $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
+
+
+                            $GoodsOrder->pay_status=1;
+                            $GoodsOrder->pay_name='支付宝APP支付';
+                            $res=$GoodsOrder->save(false);
+                            if (!$res)
+                            {
+                                $tran->rollBack();
+                                echo 'fail';
+                                die;
+                            }
+
+
+
+                    }
+                    $role=Role::GetRoleByRoleId($role_id,$user);
+                    switch ($role_id)
                     {
+                        case 2:
+                            $role_number=$role->worker_type_id;
+                            break;
+                        case 3:
+                            $role_number=$role->decoration_company_id;
+                            break;
+                        case 4:
+                            $role_number=$role->decoration_company_id;
+                            break;
+                        case 5:
+                            $role_number=$role->id;
+                            break;
+                        case 6:
+                            $role_number=$role->shop_no;
+                            break;
+                        case 7:
+                            $role_number=$role->aite_cube_no;
+                            break;
+                    }
+                    $access=new UserAccessdetail();
+                    $access->uid=$user->id;
+                    $access->role_id=$role_id;
+                    $access->access_type=7;
+                    $access->access_money=$total_amount*100;
+                    $access->create_time=time();
+                    $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
+                    $res3=$access->save(false);
+                    if ( !$res3){
                         $tran->rollBack();
-                        echo 'fail';
-                        die;
+                        $code=500;
+                        return $code;
                     }
                     $tran->commit();
                 }catch (Exception $e){
                     $tran->rollBack();
-                       echo 'fail';
-                       die;
+                    echo 'fail';
+                    die;
                 }
+                echo 'success';
             }
-            echo 'success';
+        }else{
+            //验证失败
+            echo "fail";    //请不要修改或删除
         }
-//        }else{
-//            //验证失败
-//            echo "fail";  //请不要修改或删除
-//        }
     }
 
    public  function  actionGetOrderNum()
@@ -4114,8 +4195,40 @@ class OrderController extends Controller
             ]);
         }
     }
+ 
+          public function actionGetOpenId()
+        {
+            $tools = new PayService();
+            $openId = $tools->GetOpenid();
+             return Json::encode([
+                'code' => 200,
+                'msg'  => 'ok',
+                'data' =>$openId
+            ]);
+        }
 
+           /**
+         * 获取openID2-微信
+         * @return string
+         */
+        public function  actionFindOpenId()
+        {
 
-
-
+            $code = $_GET["code"];
+            if (!$code)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $tools = new PayService();
+            $openid = $tools->getOpenidFromMp($code);
+             return Json::encode([
+                'code' => 200,
+                'msg'  => 'ok',
+                'data' =>$openid
+            ]);
+        }
 }

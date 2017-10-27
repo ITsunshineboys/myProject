@@ -287,21 +287,87 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
         return $return;
     }
+    /**
+     * 泥作条目详情
+     * @param $order_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function MudorderView($order_id){
+        $mud_item_data=MudWorkerOrder::find()->asArray()->where(['order_id'=>$order_id])->all();
 
+        foreach ($mud_item_data as &$mud_item){
+            $mud_item['worker_item']=WorkerItem::find()
+                ->where(['id'=>$mud_item['worker_item_id']])
+                ->asArray()
+                ->one()['title'];
+
+            $mud_item['worker_item_craft']=WorkerCraft::getcraftitle($mud_item['worker_craft_id'])['craft'];
+            if($mud_item['worker_item_craft']==null){
+                unset($mud_item['worker_item_craft']);
+            }
+            if($mud_item['guarantee']==null){
+                unset($mud_item['guarantee']);
+            }else{
+                $mud_item['guarantee']='是';
+            }
+            if($mud_item['chip']==null){
+                unset($mud_item['chip']);
+            }
+            unset($mud_item['order_id']);
+            unset($mud_item['id']);
+            unset($mud_item['worker_item_id']);
+            unset($mud_item['worker_craft_id']);
+        }
+       return $mud_item_data;
+
+    }
+    /**
+     * 防水详情
+     * @param $order_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function WaterprooforderView($order_id){
+        $water_item_data=WaterproofWorkerOrder::find()->asArray()->where(['order_id'=>$order_id])->all();
+        foreach ($water_item_data as &$water_item){
+            $water_item['worker_item']=WorkerItem::find()
+                ->where(['id'=>$water_item['worker_item_id']])
+                ->asArray()
+                ->one()['title'];
+
+            $water_item['worker_item_craft']=WorkerCraft::getcraftitle($water_item['worker_craft_id'])['craft'];
+            if($water_item['worker_item_craft']==null){
+                unset($water_item['worker_item_craft']);
+            }
+            unset($water_item['order_id']);
+            unset($water_item['id']);
+            unset($water_item['worker_item_id']);
+            unset($water_item['worker_craft_id']);
+        }
+        return $water_item_data;
+    }
     private static function dealOrder($order)
     {
         $worker_type_id = $order->worker_type_id;
+        $type=WorkerType::getparenttype($worker_type_id);
 
-        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
-        $worker_items = [];
-        foreach ($worker_type_items as $worker_type_item) {
-            $worker_item_id = $worker_type_item->worker_item_id;
-            $worker_item = WorkerItem::find()
-                ->where(['id' => $worker_item_id])
-                ->select(['id', 'title'])
-                ->asArray()->one();
-            $worker_items[] = $worker_item;
+        switch ($type){
+            case '泥工':
+                $data=self::MudorderView($order->id);
+                break;
+            case '防水工':
+                $data=self::WaterprooforderView($order->id);
+                break;
         }
+//        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
+//        $worker_items = [];
+//        foreach ($worker_type_items as $worker_type_item) {
+//            $worker_item_id = $worker_type_item->worker_item_id;
+//            $worker_item = WorkerItem::find()
+//                ->where(['id' => $worker_item_id])
+//                ->select(['id', 'title'])
+//                ->asArray()->one();
+//            $worker_items[] = $worker_item;
+//        }
         $order->worker_type_id=WorkerType::getparenttype($order->worker_type_id);
         $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
         $order->modify_time && $order->modify_time = date('Y-m-d H:i', $order->modify_time);
@@ -311,7 +377,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 //        $order->cancel_time && $order->cancel_time = date('Y-m-d H:i', $order->cancel_time);
         $order->amount && $order->amount = sprintf('%.2f', (float)$order->amount / 100);
         $order->front_money && $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
-        return [$order, $worker_items];
+        return [$order, $data];
     }
 
     /**
@@ -361,9 +427,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     public static function  getWorkerWorkerOrderList($uid, $status, $page, $page_size){
         $worker_id=Worker::find()->select('id')
+            ->asArray()
             ->where(['uid'=>$uid])
-            ->one()
-            ->id;
+            ->one()['id'];
 
         $query = self::find()
             ->select(['id','create_time', 'amount', 'status', 'worker_id'])
@@ -698,7 +764,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     $res=self::savepainteritem($data,$worker_order->id);
                     break;
                 case '杂工';
-                    $code=self::savecarpentryitem($array);
+                    $res=self::savecarpentryitem($array);
                     break;
             }
             if(!$res){
@@ -714,7 +780,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
 
     }
-
+    /**
+     * 保存泥作条目信息
+     * @param array $array
+     * @param $order_id
+     * @return bool
+     */
     public static function saveMuditem(array $array,$order_id)
     {
 
@@ -724,18 +795,23 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
             $_model = clone $mud_order;
             $_model->order_id = $order_id;
+
             foreach (array_keys($attributes) as &$k) {
-                if (preg_match('/(id)/', $k, $m)) {
+//
+                if (preg_match('/(item_id)/', $k, $m)) {
                     $_model->worker_item_id = $attributes[$k];
                 }
-                if (preg_match('/(craft)/', $k, $m)) {
-                    $_model->worker_craft_id = $attributes[$k];
-                }
+             if (preg_match('/(craft)/', $k, $m)) {
+                   $_model->worker_craft_id = $attributes[$k];
+               }
                 if (preg_match('/(area)/', $k, $m)) {
                     $_model->area = $attributes[$k];
                 }
+               if (preg_match('/(guarantee)/', $k, $m)) {
+                    $_model->guarantee = $attributes[$k];
+                }
             }
-            $res = $_model->save();
+            $res = $_model->save(false);
         }
         if (!$res) {
             return false;
@@ -745,56 +821,37 @@ class WorkerOrder extends \yii\db\ActiveRecord
     }
 
 
+    public static function savewaterproofitme(array $array,$order_id){
+        $mud_order = new WaterproofWorkerOrder();
 
+        foreach ($array as $attributes) {
 
+            $_model = clone $mud_order;
+            $_model->order_id = $order_id;
 
-//    /**
-//     * 添加订单工艺，条目，面积，长度信息
-//     * @param $items
-//     * @param $order_id
-//     * @return bool
-//     */
-//    public static function saveorderitems($items, $order_id)
-//    {
+            foreach (array_keys($attributes) as &$k) {
 //
-//        $worker_order_item = new WorkerOrderItem();
-//        foreach ($items as $attributes) {
-//
-//            $_model = clone $worker_order_item;
-//            $_model->worker_order_id = $order_id;
-//            foreach (array_keys($attributes) as &$k) {
-//                if (preg_match('/(item)/', $k, $m)) {
-//                    $_model->worker_item_id = $attributes[$k];
-//                }
-//                if (preg_match('/(craft)/', $k, $m)) {
-//                    $_model->worker_craft_id = $attributes[$k];
-//                }
-//                if (preg_match('/(area)/', $k, $m)) {
-//                    $_model->area = $attributes[$k];
-//                }
-//                if (preg_match('/(status)/', $k)) {
-//                    $_model->status = $attributes[$k];
-//                }
-//                if (preg_match('/(length)/', $k)) {
-//                    $_model->length = $attributes[$k];
-//                }
-//                if (preg_match('/(count)/', $k)) {
-//                    $_model->count = $attributes[$k];
-//                }
-//                if (preg_match('/(electricity)/', $k)) {
-//                    $_model->electricity = $attributes[$k];
-//                }
-//            }
-//            $res = $_model->save();
-//        }
-//        if (!$res) {
-//            return false;
-//        } else {
-//            return true;
-//        }
-//
-//
-//    }
+                if (preg_match('/(item_id)/', $k, $m)) {
+                    $_model->worker_item_id = $attributes[$k];
+                }
+                if (preg_match('/(craft)/', $k, $m)) {
+                    $_model->worker_craft_id = $attributes[$k];
+                }
+                if (preg_match('/(area)/', $k, $m)) {
+                    $_model->area = $attributes[$k];
+                }
+                if (preg_match('/(brand)/', $k, $m)) {
+                    $_model->brand = $attributes[$k];
+                }
+            }
+            $res = $_model->save(false);
+        }
+        if (!$res) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     /**
      * 刷新订单随机

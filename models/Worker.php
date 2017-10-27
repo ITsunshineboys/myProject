@@ -193,7 +193,7 @@ class Worker extends \yii\db\ActiveRecord
         $query=new Query();
         $array=$query
             ->from('worker as w')
-            ->select('w.examine_status,w.icon,w.nickname,lc.rank,lc.worker_kind,u.aite_cube_no')
+            ->select('w.examine_status,w.icon,w.nickname,w.comprehensive_score,lc.rank,lc.worker_kind,u.aite_cube_no')
             ->leftJoin('user as u','w.uid=u.id')
             ->leftJoin('labor_cost as lc','w.labor_cost_id=lc.id')
             ->where(['w.uid'=>$uid])
@@ -294,5 +294,18 @@ class Worker extends \yii\db\ActiveRecord
             return null;
         }
 
+    }
+    public static function worker_monthly_income($uid){
+        $worker_id=Worker::find()->asArray()->where(['uid'=>$uid])->one()['id'];
+        list($start_time,$end_time)=StringService::startEndDate('month');
+        $start_time=(int)strtotime($start_time);
+        $end_time=(int)strtotime($end_time);
+        $income=WorkerOrder::find()
+            ->where(['worker_id'=>$worker_id,'status'=>5,'is_old'=>1])
+            ->andWhere('end_time >='.$start_time and 'end_time <='.$end_time)
+            ->asArray()
+            ->sum('amount');
+        $income=sprintf('%.2f',(float)$income*0.01);
+        return $income;
     }
 }

@@ -96,15 +96,14 @@ class Alipay extends  ActiveRecord
         $notify_url='http://test.cdlhzz.cn:888/order/app-order-pay-database';
         $return_url='';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
-        $str=Json::encode($orders);
-        $passback_params=urlencode($str);
+        $passback_params=urlencode($orders);
         //超时时间
         $timeout_express="1m";
         $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
         $payRequestBuilder->setBody('此订单包含一条或多条商品数据');
         $payRequestBuilder->setSubject('艾特魔方商城订单');
         $payRequestBuilder->setOutTradeNo($out_trade_no);
-        $payRequestBuilder->setTotalAmount($orderAmount);
+        $payRequestBuilder->setTotalAmount(0.01);
         $payRequestBuilder->setTimeExpress($timeout_express);
         $payRequestBuilder->setPassback_params($passback_params);
         $payResponse = new AlipayTradeService($config);
@@ -113,4 +112,32 @@ class Alipay extends  ActiveRecord
         return $result;
     }
 
+
+        /**
+     * app充值
+     * @param $money
+     * @param $user
+     * @return string
+     */
+    public  static  function  UserRecharge($money,$user)
+    {
+        $time=time();
+        $out_trade_no=GoodsOrder::SetTransactionNo($user->aite_cube_no);
+        $notify_url='http://test.cdlhzz.cn:888/withdrawals/ali-pay-user-recharge-database';
+        $return_url='';
+        $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
+        $passback_params=urlencode($user->last_role_id_app.','.$user->id);
+        //超时时间
+        $timeout_express="1m";
+        $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
+        $payRequestBuilder->setBody('此订单包含一条或多条商品数据');
+        $payRequestBuilder->setSubject('艾特魔方商城充值');
+        $payRequestBuilder->setOutTradeNo($out_trade_no);
+        $payRequestBuilder->setTotalAmount($money);
+        $payRequestBuilder->setTimeExpress($timeout_express);
+        $payRequestBuilder->setPassback_params($passback_params);
+        $payResponse = new AlipayTradeService($config);
+        $result=$payResponse->appPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+        return $result;
+    }
 }

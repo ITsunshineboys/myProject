@@ -199,17 +199,17 @@ class GoodsRecommend extends ActiveRecord
      */
     public static function carousel($districtCode)
     {
-        $key = self::CACHE_KEY_CAROUSEL;
-        $cache = Yii::$app->cache;
-        $recommendGoods = $cache->get($key);
-        if (!$recommendGoods) {
-            $recommendGoods = self::_carousel($districtCode, self::$appFields);
-            if ($recommendGoods) {
-                $cache->set($key, $recommendGoods);
-            }
-        }
+//        $key = self::CACHE_KEY_CAROUSEL;
+//        $cache = Yii::$app->cache;
+//        $recommendGoods = $cache->get($key);
+//        if (!$recommendGoods) {
+//            $recommendGoods = self::_carousel($districtCode, self::$appFields);
+//            if ($recommendGoods) {
+//                $cache->set($key, $recommendGoods);
+//            }
+//        }
 
-        return $recommendGoods;
+        return self::_carousel($districtCode, self::$appFields, ['sorting_number' => SORT_ASC]);
     }
 
     /**
@@ -328,25 +328,26 @@ class GoodsRecommend extends ActiveRecord
      *
      * @param int $createTime banner create time default 0
      * @param int $deleteTime banner delete time default 0
+     * @param int $recommendId recommend id default 0
      * @return int
      */
     public static function viewedNumber($createTime = 0, $deleteTime = 0, $recommendId = 0)
     {
         $createTime = (int)$createTime;
         $deleteTime = (int)$deleteTime;
-        if (!$createTime || !$deleteTime) {
+        if (!$createTime) {
             return 0;
         }
 
-        $key = self::CACHE_KEY_PREFIX_VIEWED_NUMBER . $createTime . '_' . $deleteTime;
-        $cache = Yii::$app->cache;
-        $viewedNumber = $cache->get($key);
-        if ($viewedNumber === false) {
-            $viewedNumber = self::_viewedNumber($createTime, $deleteTime, $recommendId);
-            $cache->set($key, $viewedNumber);
-        }
+//        $key = self::CACHE_KEY_PREFIX_VIEWED_NUMBER . $createTime . '_' . $deleteTime;
+//        $cache = Yii::$app->cache;
+//        $viewedNumber = $cache->get($key);
+//        if ($viewedNumber === false) {
+//            $viewedNumber = self::_viewedNumber($createTime, $deleteTime, $recommendId);
+//            $cache->set($key, $viewedNumber);
+//        }
 
-        return $viewedNumber;
+        return self::_viewedNumber($createTime, $deleteTime, $recommendId);
     }
 
     /**
@@ -360,7 +361,8 @@ class GoodsRecommend extends ActiveRecord
      */
     public static function _viewedNumber($createTime, $deleteTime, $recommendId = 0)
     {
-        $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
+        $where = "create_time >= {$createTime}";
+        $deleteTime && $where .= " and create_time <= {$deleteTime}";
         $recommendId = (int)$recommendId;
         $recommendId && $where .= " and recommend_id = {$recommendId}";
         return (int)GoodsRecommendViewLog::find()->where($where)->asArray()->count();
@@ -371,25 +373,26 @@ class GoodsRecommend extends ActiveRecord
      *
      * @param int $createTime banner create time default 0
      * @param int $deleteTime banner delete time default 0
+     * @param int $recommendId recommend id default 0
      * @return int
      */
     public static function soldNumber($createTime = 0, $deleteTime = 0, $recommendId = 0)
     {
         $createTime = (int)$createTime;
         $deleteTime = (int)$deleteTime;
-        if (!$createTime || !$deleteTime) {
+        if (!$createTime) {
             return 0;
         }
 
-        $key = self::CACHE_KEY_PREFIX_SOLD_NUMBER . $createTime . '_' . $deleteTime;
-        $cache = Yii::$app->cache;
-        $viewedNumber = $cache->get($key);
-        if ($viewedNumber === false) {
-            $viewedNumber = self::_soldNumber($createTime, $deleteTime, $recommendId);
-            $cache->set($key, $viewedNumber);
-        }
+//        $key = self::CACHE_KEY_PREFIX_SOLD_NUMBER . $createTime . '_' . $deleteTime;
+//        $cache = Yii::$app->cache;
+//        $viewedNumber = $cache->get($key);
+//        if ($viewedNumber === false) {
+//            $viewedNumber = self::_soldNumber($createTime, $deleteTime, $recommendId);
+//            $cache->set($key, $viewedNumber);
+//        }
 
-        return $viewedNumber;
+        return self::_soldNumber($createTime, $deleteTime, $recommendId);
     }
 
     /**
@@ -398,11 +401,13 @@ class GoodsRecommend extends ActiveRecord
      * @access private
      * @param int $createTime banner create time
      * @param int $deleteTime banner delete time
+     * @param int $recommendId recommend id default 0
      * @return int
      */
     public static function _soldNumber($createTime, $deleteTime, $recommendId = 0)
     {
-        $where = "create_time >= {$createTime} and create_time <= {$deleteTime}";
+        $where = "create_time >= {$createTime}";
+        $deleteTime && $where .= " and create_time <= {$deleteTime}";
         $recommendId = (int)$recommendId;
         $recommendId && $where .= " and recommend_id = {$recommendId}";
         return (int)GoodsRecommendSaleLog::find()
@@ -643,7 +648,7 @@ class GoodsRecommend extends ActiveRecord
 
         $cache = Yii::$app->cache;
         if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
-            $cache->delete(self::CACHE_KEY_CAROUSEL);
+//            $cache->delete(self::CACHE_KEY_CAROUSEL);
         } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
             $cache->delete(self::CACHE_KEY_SECOND);
         }
