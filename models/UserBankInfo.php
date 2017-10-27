@@ -155,6 +155,20 @@ class UserBankInfo extends \yii\db\ActiveRecord
             }
         }else
         {
+           $cardType=Yii::$app->request->post('cardtype');
+            if (!$cardType)
+            {
+                $code=1000;
+                return $code;
+            }
+            if ($cardType=='借记卡')
+            {
+                $cardType=2;
+            }
+            if ($cardType=='信用卡')
+            {
+                $cardType=1;
+            }
             $trans = \Yii::$app->db->beginTransaction();
             try {
                 $log=new BankinfoLog();
@@ -164,6 +178,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                 $log->position=$position;
                 $log->bankbranch=$bankbranch;
                 $log->create_time=$time;
+                $log->bank_type=$cardType;
                 $res2=$log->save(false);
                 if (!$res2)
                 {
