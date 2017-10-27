@@ -439,6 +439,6 @@ class Effect extends ActiveRecord
             ->select($select)
             ->where($where)
             ->asArray()
-            ->all();
+            ->one();
     }
 }
