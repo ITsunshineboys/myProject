@@ -3,6 +3,7 @@
 $districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
 $auth = require(__DIR__ . '/auth.php');
+$params = require(__DIR__ . '/params_online.php');
 
 return [
     'adminEmail' => 'admin@example.com',
@@ -132,7 +133,7 @@ return [
         'offline_reason' => '分类下架',
     ],
     'reviewStatuses' => [
-        '0' => '待审核',
+        '0' => '等待审核',
         '1' => '审核不通过',
         '2' => '审核通过',
         '3' => '未认证',
@@ -181,4 +182,5 @@ return [
             '支持',
         ],
     ],
+    'online' => $params,
 ];
