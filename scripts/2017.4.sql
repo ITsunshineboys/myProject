@@ -1558,3 +1558,13 @@ CREATE TABLE `effect_earnest` (
   `create_time` int(11) NOT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user_news_record` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL,
+  `role_id` int(11) unsigned NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `send_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
