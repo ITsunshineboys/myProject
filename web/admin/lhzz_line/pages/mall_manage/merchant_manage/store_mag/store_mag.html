@@ -17,26 +17,33 @@
                 </button>
                 <span class="fenleichoose_span">分类选择</span>
                 <!--/*分类选择一级下拉框*/-->
-                <select name=""  class="cailiaochoose" ng-model="firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+                <select name="" class="cailiaochoose" ng-model="firstselect"
+                        ng-options="item.id as item.title for item in firstclass"
+                        ng-change="subClass(firstselect)"></select>
                 <!--/*分类选择二级菜单*/-->
-                <select name="" class="cailiaochoose" ng-show="firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="secselect" ng-change="thirdClass(secselect)"></select>
-                <select name="" class="cailiaochoose" ng-show="firstselect=='0'||secselect=='0'?false:true" ng-options="item.id as item.title for item in thirdclass" ng-model="thirdselect" ng-change="finalSelect(thirdselect)"></select>
-
+                <select name="" class="cailiaochoose" ng-show="firstselect=='0'?false:true"
+                        ng-options="item.id as item.title for item in secondclass" ng-model="secselect"
+                        ng-change="thirdClass(secselect)"></select>
+                <select name="" class="cailiaochoose" ng-show="firstselect=='0'||secselect=='0'?false:true"
+                        ng-options="item.id as item.title for item in thirdclass" ng-model="thirdselect"
+                        ng-change="finalSelect(thirdselect)"></select>
 
 
                 <span class="fenleichoose_span" id="store_type">店铺类型</span>
-                <select name="" class="cailiaochoose" ng-options="item.id as item.storetype for item in storetype_arr" ng-model="typeselect" ng-change="selectType(typeselect)">
+                <select name="" class="cailiaochoose" ng-options="item.id as item.storetype for item in storetype_arr"
+                        ng-model="params.shop_type" ng-change="selectType(typeselect)">
                     <!--<option value="456">全部</option>-->
                 </select>
 
                 <span class="fenleichoose_span" id="store_state">状态</span>
-                <select name="" class="cailiaochoose" ng-options="item.id as item.status for item in status_arr" ng-model="statusselect" ng-change="selectStatus(statusselect)">
+                <select name="" class="cailiaochoose" ng-options="item.id as item.status for item in status_arr"
+                        ng-model="params.status" ng-change="selectStatus(statusselect)">
 
                 </select>
 
 
                 <div class="search_box">
-                    <input class="search_input" type="text" placeholder="搜索商品编号或名称" ng-model="searchcontent">
+                    <input class="search_input" type="text" placeholder="搜索商家编号或名称" ng-model="keyword">
                     <span class="glyphicon glyphicon-search search"></span>
                 </div>
                 <button id="search_btn" ng-click="searchStore()">搜索</button>
@@ -51,19 +58,27 @@
                         <td>商家名称</td>
                         <td>店铺类型</td>
                         <td>所属类目</td>
-                        <td>本月销售额
-                            <img src="pages/mall_manage/merchant_manage/store_mag/images/arrow_up.png" alt=""  ng-show="soldnum_ascorder" ng-click="storeSoldNumDesorder()">
-                            <img src="pages/mall_manage/merchant_manage/store_mag/images/arrow_down.png" alt="" ng-show="soldnum_desorder" ng-click="storeSoldNumAscorder()">
+                        <td ng-click="sortAmount()">本月销售额
+                            <span class="sortpic">
+                                 <i class="glyphicon glyphicon-triangle-top"
+                                    ng-class="{'active':amount_ascorder}"></i>
+                                 <i class="glyphicon glyphicon-triangle-bottom"
+                                    ng-class="{'active':amount_desorder}"></i>
+                            </span>
                         </td>
-                        <td>
-                           本月销量
-                            <img src="pages/mall_manage/merchant_manage/store_mag/images/arrow_up.png" alt="" ng-show="sold_ascorder" ng-click="storeSoldDesorder()">
-                            <img src="pages/mall_manage/merchant_manage/store_mag/images/arrow_down.png" alt="" ng-show="sold_desorder" ng-click="storeSoldAscorder()">
+                        <td ng-click="sortVolumn()">
+                            本月销量
+                            <span class="sortpic">
+                                 <i class="glyphicon glyphicon-triangle-top"
+                                    ng-class="{'active':volumn_ascorder}"></i>
+                                 <i class="glyphicon glyphicon-triangle-bottom"
+                                    ng-class="{'active':volumn_desorder}"></i>
+                             </span>
                         </td>
                         <td>状态</td>
                         <td>详情</td>
                         <td>管理</td>
-                        <td>操作</td>
+                        <td data-toggle="modal" data-target="#unblock_modal">操作</td>
                     </tr>
 
                     <tr ng-repeat="item in stores track by $index">
@@ -73,21 +88,23 @@
                         <td>{{item.category_name}}</td>
                         <td style="text-align: center">{{item.sales_amount_month | currency:"¥"}}</td>
                         <td style="text-align: center">{{item.sales_volumn_month}}</td>
-                        <td  class="running" ng-class="{tored:isClosed(item.status)}">{{item.status}}</td>
+                        <td class="running" ng-class="{tored:item.status=='已闭店'}">{{item.status}}</td>
                         <td class="color_blue clickstyle" ui-sref="store_detail({store:item})">查看</td>
                         <td>
-                            <span class="color_blue" ui-sref="commodity_manage({storeid:item.id})">商品管理</span>
+                            <span class="color_blue" ui-sref="commodity.online({id:item.id})">商品管理</span>
                             <a class="color_blue" ui-sref="order.all({id: item.id})">订单管理</a>
                             <a class="color_blue" ui-sref="store_data({id: item.id})">数据</a>
                         </td>
                         <td class="color_blue clickstyle">
-                            <span data-toggle="modal" data-target="#bidian_tishi"  ng-click=changeStatus(item.id,item.status) ng-bind="item.status=='正常营业'?'闭店':'开店'"></span>
-                            <!--<span data-toggle="modal" data-target="#bidian_tishi">闭店</span>-->
+                            <span data-toggle="modal" data-target="#bidian_tishi"
+                                  ng-click=changeStatus(item.id,item.status)
+                                  ng-bind="item.status=='正常营业'?'闭店':'开店'"></span>
                         </td>
 
                     </tr>
                 </table>
 
+                <tm-pagination conf="pageConfig"></tm-pagination>
             </div>
         </div>
     </div>
@@ -102,12 +119,32 @@
                     </h4>
                 </div>
                 <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">是否确认{{storestatus=='已关闭'?'开启':'关闭'}}店铺</h6>
+                    <h6 id="tishi_wenzi">是否确认{{storestatus=='已闭店'?'开启':'关闭'}}店铺</h6>
                 </div>
 
                 <div class="btn_modal_two">
                     <button id="caozuo_sure" data-dismiss="modal" ng-click=sureCloseStore()>确认</button>
                     <button id="caozuo_cancel" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--解封提示框-->
+    <div class="modal fade" id="unblock_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="unblock_content">
+                <div class="modal-header" id="unblock_header">
+                    <h4 class="modal-title" id="unblock_tishi">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <h6 id="unbolck_warning">此账号已被封号，请先解禁账号</h6>
+                </div>
+
+                <div class="btn_modal_two">
+                    <button id="unblock_sure" data-dismiss="modal">确认</button>
                 </div>
             </div>
         </div>

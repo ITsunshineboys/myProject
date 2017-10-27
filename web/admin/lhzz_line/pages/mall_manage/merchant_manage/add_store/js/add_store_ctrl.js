@@ -36,18 +36,18 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
     $scope.backpath = picpath;
     $scope.support = 0;
     
-    test();
-    function test() {
-        let url = "http://test.cdlhzz.cn:888/mall/user-add";
-        let data = {
-           mobile:13093355262,
-            password:'123456'
-        };
-        $http.post(url, data, config).then(function (res) {
-            console.log(res)
-            // $scope.suremodal = '#suremodal';
-        })
-    }
+    // test();
+    // function test() {
+    //     let url = "http://test.cdlhzz.cn:888/mall/user-add";
+    //     let data = {
+    //        mobile:13093355262,
+    //         password:'123456'
+    //     };
+    //     $http.post(url, data, config).then(function (res) {
+    //         console.log(res)
+    //         // $scope.suremodal = '#suremodal';
+    //     })
+    // }
 
  function firstDefault() {
         $http({
@@ -216,27 +216,28 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
                         url: "http://test.cdlhzz.cn:888/mall/check-role-get-identity",
                         params: {mobile: Number($scope.login_account)}
                     }).then(function (res) {
-                        if (!res.data.data) {
-                            /*未注册平台用户 或已成为商家的处理*/
-                            $scope.showwarning = true;
-                            $scope.accountwarning = res.data.msg;
-                        }else{
-                            /*输入的是手机号 未实名认证的商家*/
-                            if(!res.data.data.identity.identity_no){
-                                $scope.defaultshow = true;
-                                $scope.accountdefault = false;
-                            }else{
-                                /*输入的是手机号  已实名认证的商家*/
-                                $scope.legal_person = res.data.data.identity.legal_person;
-                                $scope.identity_no = res.data.data.identity.identity_no;
-                                $scope.frontdefault = res.data.data.identity.identity_card_front_image;
-                                $scope.backdefault = res.data.data.identity.identity_card_front_image;
-                                $scope._frontpath = picprefix + res.data.data.identity.identity_card_front_image;
-                                $scope._backpath =  picprefix + res.data.data.identity.identity_card_front_image;
-                                $scope.defaultshow = true;
-                                $scope.accountdefault = true;
-                            }
-                       }
+                        console.log(res);
+                        //  if (!res.data.data) {
+                       //      /*未注册平台用户 或已成为商家的处理*/
+                       //      $scope.showwarning = true;
+                       //      $scope.accountwarning = res.data.msg;
+                       //  }else{
+                       //      /*输入的是手机号 未实名认证的商家*/
+                       //      if(!res.data.data.identity.identity_no){
+                       //          $scope.defaultshow = true;
+                       //          $scope.accountdefault = false;
+                       //      }else{
+                       //          /*输入的是手机号  已实名认证的商家*/
+                       //          $scope.legal_person = res.data.data.identity.legal_person;
+                       //          $scope.identity_no = res.data.data.identity.identity_no;
+                       //          $scope.frontdefault = res.data.data.identity.identity_card_front_image;
+                       //          $scope.backdefault = res.data.data.identity.identity_card_front_image;
+                       //          $scope._frontpath = picprefix + res.data.data.identity.identity_card_front_image;
+                       //          $scope._backpath =  picprefix + res.data.data.identity.identity_card_front_image;
+                       //          $scope.defaultshow = true;
+                       //          $scope.accountdefault = true;
+                       //      }
+                       // }
                     })
                 }else{
                     /*输入的不是手机号的处理*/
@@ -291,7 +292,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
                 };
                 $scope.suremodal = '#suremodal';
                 $http.post(url, data, config).then(function (res) {
-                    // console.log(res)
+                    console.log(res)
                     // if(res.data.code==200){
 
                     // setTimeout(()=>{
