@@ -1570,6 +1570,7 @@ class OwnerController extends Controller
             }
         }
         $where = ['effect_id'=>$effect['id']];
+        var_dump($where);exit;
         $data = WorksData::find()->asArray()->select([])->where($where)->all();
         if ($data == null) {
             $code = 1067;
