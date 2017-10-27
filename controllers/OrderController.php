@@ -10,6 +10,7 @@ use app\models\GoodsComment;
 use app\models\GoodsAttr;
 use app\models\GoodsBrand;
 use app\models\GoodsImage;
+use app\models\Jpush;
 use app\models\GoodsCategory;
 use app\models\Series;
 use app\models\Style;
