@@ -3,7 +3,7 @@
 $districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
 $auth = require(__DIR__ . '/auth.php');
-$params = require(__DIR__ . '/params_online.php');
+$paramsOnline = require(__DIR__ . '/params_online.php');
 
 return [
     'adminEmail' => 'admin@example.com',
@@ -41,7 +41,7 @@ return [
         1021 => '请上传jpg/jpeg/png类型的文件',
         1022 => '商品所在分类风格或系列已移除，请商家重新添加新商品。',
         1023 => '您的账户在另一地点登录',
-		1024 => '今日修改次数已达5次',
+        1024 => '今日修改次数已达5次',
         1025 => '该手机号与当前绑定手机号相同',
         1026 => '您最多只能添加6个收货地址',
         1027 => '每日修改手机号码次数为3次，请明日再修改',
@@ -65,6 +65,19 @@ return [
         1053 => '两次输入密码不一致',
         1054 => '提现金额超出可提现限额，请重新填写',
         1055 => '支付密码错误',
+        1056 => '工人信息有误',
+        1057 => '工人详情有误',
+        1058 => '点位信息有误',
+        1059 => '工艺信息有误',
+        1060 => '点位详情有误',
+        1061 => '商品详情有误',
+        1062 => '杂工信息有误',
+        1063 => '材料添加项有误',
+        1064 => '系数信息有误',
+        1065 => '材料信息有误',
+        1066 => '案列信息有误',
+        1067 => '商品属性有误',
+        1068 => '效果图为空'
     ],
     'events' => [
         'supplier' => [
@@ -166,10 +179,10 @@ return [
     ],
     //聊天服务配置
     'chatOptions' => [
-        'client_id' => 'YXA62Z2DULStEeedFi-va_g7pw',
-        'client_secret' => 'YXA65yxSGgFor9VfzzjUfV60yKfFCQk',
+        'client_id' => 'YXA6i1icgLV5Eee3tef56bpxaQ',
+        'client_secret' => 'YXA69F9p-SBqT-pW7F_3Zi_-dcxSC78',
         'org_name' => '1185170730178177',
-        'app_name' => 'aitecude'
+        'app_name' => 'aitecube'
     ],
     'value_all' => -1, // 下拉框“全部”的值
     'style_series' => [
@@ -184,5 +197,5 @@ return [
             '支持',
         ],
     ],
-    'online' => $params,
+    'online' => $paramsOnline,
 ];
