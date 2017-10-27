@@ -3695,6 +3695,7 @@ angular.module("all_controller", [])
                     $rootScope.fromState_name = 'nodata.second_level'
                 }else if($scope.cur_project == 2&&$scope.cur_status == 1){
                     $scope.cur_header = $scope.inner_header
+                    $scope.is_edit = true
                     $rootScope.fromState_name = 'nodata.other_material'
                 }else if($scope.cur_project == 1&&$scope.cur_status == 1){
                     $scope.cur_header = $scope.inner_header
@@ -3702,9 +3703,12 @@ angular.module("all_controller", [])
                 }
             }else if($rootScope.curState_name == 'nodata.second_level'){
                 $scope.cur_header = $scope.inner_header
+                $scope.is_edit = true
                 $rootScope.fromState_name = 'nodata.other_material'
             }else if($rootScope.curState_name == 'nodata.main_material'||$rootScope.curState_name == 'nodata.basics_decoration'||$rootScope.curState_name == 'nodata.other_material'){
                 $scope.cur_header = '智能报价'
+                $scope.is_edit = false
+                $scope.is_city = true
                 $rootScope.fromState_name = 'nodata.house_list'
             }else if($rootScope.curState_name == 'nodata.house_list'){
                 $scope.have_header = false
