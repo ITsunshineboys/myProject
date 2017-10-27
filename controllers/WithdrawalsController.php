@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 use app\models\Alipay; 
+use app\models\BankBranch;
 use app\models\BankinfoLog;
+use app\models\BankName;
 use app\models\Goods;
 use app\models\GoodsOrder;
 use app\models\Role;
@@ -1663,6 +1665,45 @@ class WithdrawalsController extends Controller
         return Json::encode([
             'idcard'=>$user->identity_no,
             'realname'=>$user->legal_person
+        ]);
+    }
+
+
+
+       /**
+     * 获取支行
+     * @return string
+     */
+    public function  actionGetBankBranch()
+    {
+        $request = Yii::$app->request;
+        $bank_name=$request->post('bank_name');
+        $city_id=$request->post('city_id');
+        if (!$bank_name || !$city_id)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $bank=BankName::find()->where("  name  like '%{$bank_name}%'")->one();
+        if (!$bank)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $bankBranch=BankBranch::find()
+            ->where(['cityId'=>$city_id,'bankId'=>$bank->value])
+            ->all();
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$bankBranch
         ]);
     }
 
