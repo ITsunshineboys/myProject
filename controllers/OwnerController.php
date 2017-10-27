@@ -1548,7 +1548,7 @@ class OwnerController extends Controller
         $toponymy = trim(Yii::$app->request->post('toponymy',''));
         if ($stairway == 0){
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.toponymy'=>$toponymy],['type'=>1]];
-            $effect = Effect::effectAndEffectPicture('effect.id',$where);
+            $effect = Effect::effectAndEffectPicture([],$where);
             if ($effect == null) {
                 $code = 1068;
                 return Json::encode([
@@ -1558,7 +1558,7 @@ class OwnerController extends Controller
                 ]);
             }
         } elseif ($stairway == 1) {
-            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy]]; // ,['type'=>1]
+            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['type'=>1]]; // ,['effect.toponymy'=>$toponymy]
             $effect = Effect::effectAndEffectPicture('effect.id',$where);
             var_dump($effect);exit;
             if ($effect == null) {
