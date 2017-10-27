@@ -1558,9 +1558,8 @@ class OwnerController extends Controller
                 ]);
             }
         } elseif ($stairway == 1) {
-            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['type'=>1]]; //
+            $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['type'=>1]];
             $effect = Effect::effectAndEffectPicture([],$where);
-            var_dump($effect);exit;
             if ($effect == null) {
                 $code = 1068;
                 return Json::encode([
@@ -1571,7 +1570,6 @@ class OwnerController extends Controller
             }
         }
         $where = ['effect_id'=>$effect['id']];
-        var_dump($where);exit;
         $data = WorksData::find()->asArray()->select([])->where($where)->all();
         if ($data == null) {
             $code = 1067;
