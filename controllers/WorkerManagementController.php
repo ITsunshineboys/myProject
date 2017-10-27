@@ -8,6 +8,8 @@
 
 namespace app\controllers;
 
+use app\models\Worker;
+use app\models\WorkerOrder;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -63,7 +65,13 @@ class WorkerManagementController extends Controller
 
     public function actionHomepageList()
     {
-        echo 11;exit;
+        // 工人总数
+        $worker_count = Worker::find()->count('id');
+        //工人订单
+        $worker_order = WorkerOrder::find()->groupBy('order_no')->count('id');
+        //工人总金额
+//        $worker_picer = WorkerOrder::
+        var_dump($worker_order);exit;
     }
 
 }

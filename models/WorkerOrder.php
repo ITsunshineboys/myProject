@@ -1328,4 +1328,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         return $return;
     }
+
+    public static function countMoney()
+    {
+//        return self::
+    }
 }
