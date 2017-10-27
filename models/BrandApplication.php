@@ -146,7 +146,7 @@ class BrandApplication extends ActiveRecord
             }
 
             if (isset($brandApplication['review_status'])) {
-                $brandApplication['review_status'] = Yii::$app->params['reviewStatuses'][$brandApplication['review_status']];
+                $brandApplication['review_status' . ModelService::SUFFIX_FIELD_DESCRIPTION] = Yii::$app->params['reviewStatuses'][$brandApplication['review_status']];
             }
 
             if (in_array('images', $selectOld)) {
