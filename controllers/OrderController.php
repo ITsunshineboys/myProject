@@ -1437,6 +1437,7 @@ class OrderController extends Controller
         $shipping_type = trim($request->post('shipping_type', '0'), '');
          if ($shipping_type!=1){
             if (!$sku|| !$waybillnumber || !$order_no) {
+                $code=1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
