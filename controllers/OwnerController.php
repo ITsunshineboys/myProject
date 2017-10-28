@@ -1511,6 +1511,7 @@ class OwnerController extends Controller
         $code     = trim(Yii::$app->request->post('code',''));
         $street   = trim(Yii::$app->request->post('street',''));
         $toponymy = trim(Yii::$app->request->post('toponymy',''));
+
         $effect = Effect::findByCode($code,$street,$toponymy);
         if ($effect == null) {
             $code = 1066;
@@ -1519,6 +1520,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         foreach ($effect as &$one_effect){
             $one_effect['detailed_address'] = $one_effect['province'] . $one_effect['city'] . $one_effect['district'] .  $one_effect['street'];
             if ($one_effect['type'] == 1){
@@ -1559,7 +1561,9 @@ class OwnerController extends Controller
                     'data'=> $effect
                 ]);
             }
-        } elseif ($stairway == 1) {
+        }
+        elseif
+        ($stairway == 1) {
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
             $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images',$where);
             if ($effect == null) {
@@ -1571,6 +1575,7 @@ class OwnerController extends Controller
                 ]);
             }
         }
+
         $effect_where = 'effect_id = '.$effect['id'];
         $data = WorksData::find()->asArray()->select([])->where($effect_where)->all();
         if ($data == null) {
@@ -1580,6 +1585,7 @@ class OwnerController extends Controller
                 'msg' => '信息有误',
             ]);
         }
+
         $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where($effect_where)->all();
         if ($backman_data == null) {
             $code = 1067;
@@ -1588,6 +1594,7 @@ class OwnerController extends Controller
                 'msg' => '信息有误',
             ]);
         }
+
         $worker_data = WorksWorkerData::find()->select([])->where($effect_where)->all();
         if ($worker_data == null) {
             $code = 1067;
@@ -1625,7 +1632,9 @@ class OwnerController extends Controller
             foreach ($data as $logistics_id) {
                 $ids = $logistics_id['logistics_template_id'];
             }
+
             $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
+
             if ($logistics == null) {
                 return Json::encode([
                     'code' =>200,
@@ -1638,6 +1647,7 @@ class OwnerController extends Controller
                     ]
                 ]);
             }
+
             if ($logistics != null){
                 $new =  new LogisticsService($logistics,$data);
                 $goods_particulars = $new->minQuantity();
@@ -1651,7 +1661,9 @@ class OwnerController extends Controller
                         'worker_data'=>$worker_data,
                     ]
                 ]);
-            } else {
+            }
+            else
+            {
                 $goods_particulars = $data;
                 $goods_particulars['freight'] = 0;
                 return Json::encode([
