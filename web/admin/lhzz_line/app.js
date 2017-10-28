@@ -321,66 +321,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
 
         /*芳子------------------------------------start*/
-        .state('commodity', { // 商品管理
-            abstract: true,
-            url: '/commodity?id',
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity.html",
-            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
-            controller: 'commodity'
-        })
-        .state('commodity.online', { // 已上架
-            url: '/online',
-            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity_online.html',
-            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
-            controller: 'commodity_online'
-        })
-        .state('commodity.offline', { // 已下架
-            url: '/offline',
-            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity_offline.html',
-            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
-            controller: 'commodity_offline'
-        })
-        .state('commodity.wait', { // 等待上架
-            url: '/wait',
-            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity_wait.html',
-            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
-            controller: 'commodity_wait'
-        })
-        .state('commodity.deleted', { // 已删除
-            url: '/deleted',
-            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity_deleted.html',
-            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
-            controller: 'commodity_deleted'
-        })
-        .state("commodity_detail_on", {   //商品详情（已上架）
-            params: {onlinegood: null,storeid:null},
-            url: "/commodity_detail_on",
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_on.html",
-            css:"pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_on.css"
-        })
-        .state("commodity_detail_down", {   //商品详情（已下架）
-            params: {offlinegood: null,storeid:null},
-            url: "/commodity_detail_down",
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_down.html",
-            css:"pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_down.css"
-        })
-        .state("commodity_detail_wait", {   //商品详情（等待上架）
-            params: {waitgood: null,storeid:null},
-            url: "/commodity_detail_wait",
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_wait.html",
-            css:"pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_wait.css"
-        })
-        .state("commodity_detail_del", {   //商品详情（已删除）
-            params: {deletegood: null,storeid:null},
-            url: "/commodity_detail_del",
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_del.html",
-            css:"pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_del.css"
-        })
-        .state("edit_attribute", {   //属性管理——属性编辑
-            params: {titles: '', propattrs: '', propid: ''},
-            url: "/edit_attribute",
-            templateUrl: "pages/mall_manage/style_manage/edit_attribute/edit_attribute.html"
-        })
         .state("fenleiguanli", {
             params: {'offsale_flag': null},
             url: "/fenleiguanli",
@@ -417,32 +357,90 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: "/add_class",
             templateUrl: "pages/mall_manage/class_manage/add_class/add_class.html"
         })
-        .state("store_detail", {
-            params: {"store": null,"authorize_flag":null},
-            url: "/store_detail",
-            templateUrl: "pages/mall_manage/merchant_manage/store_mag/store_detail.html"
-        })
-        .state("merchant_details", {
-            params: {"itemdetail": null,"store":null},
-            url: "/merchant_details",
-            templateUrl: "pages/mall_manage/merchant_manage/merchant_comment/merchant_details.html"
-        })
-        .state("merchant_index", {  //商城管理
+
+        .state("merchant_index", {  //商城管理首页
             url: "/merchant_index",
             templateUrl: "pages/mall_manage/merchant_manage/merchant_index/merchant_index.html"
         })
-        .state("store_mag", {   //商城管理-商家管理
-
+        .state("store_mag", {       //商家管理
             url: "/store_mag",
             templateUrl: "pages/mall_manage/merchant_manage/store_mag/store_mag.html"
         })
-        .state("add_store", {    //商城管理-商家管理-添加商家
+        .state("add_store", {       //添加商家
             url: "/add_store",
             templateUrl: "pages/mall_manage/merchant_manage/add_store/add_store.html"
         })
+        .state("store_detail", {    //商家详情
+            params: {"store": null, "authorize_flag": null},
+            url: "/store_detail",
+            templateUrl: "pages/mall_manage/merchant_manage/store_mag/store_detail.html"
+        })
+        .state("merchant_details", { //品牌授权详情
+            params: {"itemdetail": null, "store": null},
+            url: "/merchant_details",
+            templateUrl: "pages/mall_manage/merchant_manage/merchant_comment/merchant_details.html"
+        })
+        .state('commodity', {       //商品管理
+            abstract: true,
+            url: '/commodity?id',
+            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity.html",
+            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
+            controller: 'commodity'
+        })
+        .state('commodity.online', { //已上架
+            url: '/online',
+            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity_online.html',
+            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
+            controller: 'commodity_online'
+        })
+        .state('commodity.offline', { //已下架
+            url: '/offline',
+            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity_offline.html',
+            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
+            controller: 'commodity_offline'
+        })
+        .state('commodity.wait', { //等待上架
+            url: '/wait',
+            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity_wait.html',
+            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
+            controller: 'commodity_wait'
+        })
+        .state('commodity.deleted', { //已删除
+            url: '/deleted',
+            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity/commodity_deleted.html',
+            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
+            controller: 'commodity_deleted'
+        })
+        .state("commodity_detail_on", {   //商品详情（已上架）
+            params: {onlinegood: null, storeid: null},
+            url: "/commodity_detail_on",
+            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_on.html",
+            css: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_on.css"
+        })
+        .state("commodity_detail_down", {   //商品详情（已下架）
+            params: {offlinegood: null, storeid: null},
+            url: "/commodity_detail_down",
+            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_down.html",
+            css: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_down.css"
+        })
+        .state("commodity_detail_wait", {   //商品详情（等待上架）
+            params: {waitgood: null, storeid: null},
+            url: "/commodity_detail_wait",
+            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_wait.html",
+            css: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_wait.css"
+        })
+        .state("commodity_detail_del", {   //商品详情（已删除）
+            params: {deletegood: null, storeid: null},
+            url: "/commodity_detail_del",
+            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_del.html",
+            css: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_del.css"
+        })
+        .state("edit_attribute", {   //属性管理——属性编辑
+            params: {titles: '', propattrs: '', propid: ''},
+            url: "/edit_attribute",
+            templateUrl: "pages/mall_manage/style_manage/edit_attribute/edit_attribute.html"
+        })
         /*芳子-------------------------------------end*/
-
-
 
         //========================张放====================================
         //智能报价
@@ -752,32 +750,36 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
     /*=============== 廖欢 end ===============*/
 })
-    // .run(function ($rootScope,$state,$stateParams) {
-    //     $rootScope.$state = $state;
-    //     $rootScope.$stateParams = $stateParams;
-    //     $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
-    //         $rootScope.previousState_name = fromState.name;
-    //         $rootScope.previousState_params = fromParams;
-    //     });
-    //     $rootScope.back = function() {//实现返回的函数
-    //         $state.go($rootScope.previousState_name,$rootScope.previousState_params);
-    //     };
-    // })
-  .directive('wdatePicker',function(){
-    return{
-      restrict:"A",
-      link:function(scope,element,attr){
-        element.bind('click',function(){
-          window.WdatePicker({
-            onpicked: function(){element.change()},
-            oncleared:function(){element.change()}
-          })
-        });
-      }
-    }
-  })
-    .run(["$rootScope","$state",function ($rootScope,$state) {
-        $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
+// .run(function ($rootScope,$state,$stateParams) {
+//     $rootScope.$state = $state;
+//     $rootScope.$stateParams = $stateParams;
+//     $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
+//         $rootScope.previousState_name = fromState.name;
+//         $rootScope.previousState_params = fromParams;
+//     });
+//     $rootScope.back = function() {//实现返回的函数
+//         $state.go($rootScope.previousState_name,$rootScope.previousState_params);
+//     };
+// })
+    .directive('wdatePicker', function () {
+        return {
+            restrict: "A",
+            link: function (scope, element, attr) {
+                element.bind('click', function () {
+                    window.WdatePicker({
+                        onpicked: function () {
+                            element.change()
+                        },
+                        oncleared: function () {
+                            element.change()
+                        }
+                    })
+                });
+            }
+        }
+    })
+    .run(["$rootScope", "$state", function ($rootScope, $state) {
+        $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
             document.body.scrollTop = document.documentElement.scrollTop = 0
             $rootScope.fromState_name = fromState.name
             $rootScope.curState_name = toState.name
