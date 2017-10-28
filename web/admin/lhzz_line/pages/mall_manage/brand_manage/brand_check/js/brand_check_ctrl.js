@@ -20,13 +20,13 @@ brand_check.controller("brand_check_ctrl",function ($scope,$http,$stateParams,$s
     });
     //审核确认按钮
   $scope.review_btn=function () {
-    $http.post('http://test.cdlhzz.cn:888/mall/brand-review',{
+    $http.post(baseUrl+'/mall/brand-application-review',{
         id:+$scope.item.id,
         review_status:$scope.check_select,
-        reason:$scope.review_txt
+        review_note:$scope.review_txt
     },config).then(function (res) {
       console.log(res);
-      // $state.go('brand_index',{check_flag:true})
+      $state.go('brand_index',{check_flag:true})
     },function (err) {
       console.log(err);
     })

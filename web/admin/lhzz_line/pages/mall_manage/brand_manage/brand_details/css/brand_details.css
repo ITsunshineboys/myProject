@@ -1,4 +1,4 @@
-/*Í·²¿¿ªÊ¼*/
+/*Í·ï¿½ï¿½ï¿½ï¿½Ê¼*/
 header{
     height: 60px;
     line-height: 60px;
@@ -19,10 +19,10 @@ header{
 header img{
     margin-left:66%;
 }
-/*Í·²¿½áÊø*/
+/*Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
 
-/*Ö÷ÌåÄÚÈÝ*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 section{
     padding-left: 40px;
 }
@@ -64,8 +64,7 @@ hr{
 .shop_img img{
     width: 310px;
     height: 222px;
-    border: 1px solid #ABABAB;
-    margin-left: 75px;
+    margin-left: 85px;
     vertical-align: text-top;
 }
 .shop_img_more{
@@ -86,13 +85,6 @@ hr{
 .btn_back{
     margin-top: 30px;
     margin-bottom: 40px;
-}
-.btn_back button{
-    width: 80px;
-    height: 34px;
-    background-color: white;
-    color: #5E6166;
-    border: 1px solid #5E6166;
 }
 .red{
     color:#FF5722!important;

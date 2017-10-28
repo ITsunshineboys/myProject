@@ -13,29 +13,24 @@
         <!--品牌分类-->
         <div class="shop_name">
             <span>品牌分类</span>
-            <span>{{item.category_titles[0].root_category_title}}-{{item.category_titles[0].parent_category_title}}-{{item.category_titles[0].level3_category_titles}}</span>
+            <span>{{item.category_title}}</span>
         </div>
         <!--品牌名称-->
         <div class="shop_name">
             <span>品牌名称</span>
-            <span>{{item.name}}</span>
+            <span>{{item.brand_name}}</span>
         </div>
         <!--授权期限-->
         <div class="shop_name">
             <span>授权期限</span>
-            <span>2017-10-05 至 2018-10-05</span>
+            <span>{{item.authorization_start}} 至 {{item.authorization_end}}</span>
         </div>
 
         <hr/>
         <!--授权书上传-->
-        <div class="shop_img">
-            <span>授权书上传</span>
-            <img src="" alt=""/>
-        </div>
-        <!--逐级授权-->
-        <div class="shop_img_more">
-            <span>逐级授权</span>
-            <img src="" alt=""/>
+        <div class="shop_img" ng-repeat="imgs in (item.images)">
+            <span style="display: inline-block; min-width:56px ">{{imgs.authorization_name}}</span>
+            <img ng-src="http://test.cdlhzz.cn:888/{{imgs.image}}" alt=""/>
         </div>
         <hr/>
         <!--商家名称-->
@@ -46,12 +41,12 @@
         <!--账户申请-->
         <div class="shop_name">
             <span>申请账户</span>
-            <span>123456789</span>
+            <span>{{item.mobile}}</span>
         </div>
         <!--申请时间-->
         <div class="shop_name">
             <span>申请时间</span>
-            <span>{{item.review_time}}</span>
+            <span>{{item.create_time}}</span>
         </div>
         <hr/>
         <!--审核状态-->
