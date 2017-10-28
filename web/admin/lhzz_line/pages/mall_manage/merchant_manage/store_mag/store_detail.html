@@ -12,23 +12,23 @@
     <section>  <!--图文详情和参数-->
         <div class="pic_comment">
             <div>
-                <ul class="nav nav-tabs list_tab" ng-init="vm.activeTab=1">
-                    <li ng-class="{active:vm.activeTab == 1}">
-                        <a href="javascript:;" ng-click="vm.activeTab = 1" >基本信息</a>
-                        <span ng-class="{line_com:vm.activeTab==1}" ></span>
+                <ul class="nav nav-tabs list_tab">
+                    <li ng-class="{active:basic_flag}">
+                        <a href="javascript:;" ng-click="tabFunc('basic_flag')">基本信息</a>
+                        <span ng-class="{line_com:basic_flag}"></span>
                     </li>
-                    <li ng-class="{active: vm.activeTab == 2}">
-                        <a href="javascript:;" ng-click="vm.activeTab = 2">店铺咨质</a>
-                        <span ng-class="{line_com:vm.activeTab==2}" ></span>
+                    <li ng-class="{active:aptitude_flag}">
+                        <a href="javascript:;" ng-click="tabFunc('aptitude_flag')">店铺咨质</a>
+                        <span ng-class="{line_com:aptitude_flag}"></span>
                     </li>
-                    <li ng-class="{active: vm.activeTab == 3}">
-                        <a href="javascript:;" ng-click="vm.activeTab = 3">品牌授权</a>
-                        <span ng-class="{line_com:vm.activeTab==3}" ></span>
+                    <li ng-class="{active:authorize_flag}">
+                        <a href="javascript:;" ng-click="tabFunc('authorize_flag')">品牌授权</a>
+                        <span ng-class="{line_com:authorize_flag}"></span>
                     </li>
                 </ul>
                 <div class="tab-content tab-bordered">
                     <!--基本信息-->
-                    <div class="tab-panel" ng-show="vm.activeTab == 1">
+                    <div class="tab-panel" ng-show="basic_flag">
                         <div class="shop_name">
                             <span>店铺名称</span>
                             <span ng-bind="shop_name"></span>
@@ -87,7 +87,7 @@
 
                     </div>
                     <!---------------------店铺资质-------------------->
-                    <div class="tab-panel store_level" ng-show="vm.activeTab == 2">
+                    <div class="tab-panel store_level" ng-show="aptitude_flag">
                         <div class="shop_name">
                             <span>单位类型</span>
                             <span ng-bind="type_org"></span>
@@ -146,7 +146,7 @@
                         <!--法人身份证号-->
                         <div class="shop_card">
                             <span>法人身份证号</span>
-                            <span ng-bind="identity_card_no"></span>
+                            <span ng-bind="identity_no"></span>
                         </div>
                         <!--法人身份证正面-->
                         <div class="shop_face">
@@ -164,7 +164,7 @@
                         </div>
                     </div>
                     <!--品牌授权-->
-                    <div class="tab-panel" ng-show="vm.activeTab == 3">
+                    <div class="tab-panel" ng-show="authorize_flag">
                         <div class="table_div">
                             <table class="table table-condensed">
                                 <tr>
@@ -175,23 +175,20 @@
                                     <th>审核备注</th>
                                     <th>详情</th>
                                 </tr>
-                                <tr>
-                                    <td>升达木地板专卖店</td>
-                                    <td>2017-09-10 10:35</td>
-                                    <td>2017-09-10 至 2018-09-10</td>
-                                    <td>通过</td>
-                                    <td>无</td>
-                                    <td><a href="">查看</a></td>
-                                </tr>
-                                <tr>
-                                    <td>升达木地板专卖店</td>
-                                    <td>2017-09-10 10:35</td>
-                                    <td>2017-09-10 至 2018-09-10</td>
-                                    <td>通过</td>
-                                    <td data-toggle="modal" data-target=".bs-example-modal-md">营业执照</td>
-                                    <td><a ui-sref="merchant_details">查看</a></td>
+                                <tr ng-repeat="item in listdata">
+                                    <td ng-bind="item.brand_name"></td>
+                                    <td ng-bind="item.create_time"></td>
+                                    <td>{{item.authorization_start}} 至 {{item.authorization_end}}</td>
+                                    <td ng-bind="item.review_status"></td>
+                                    <td ng-if="!item.review_note"><span ng-bind="item.review_note"
+                                                                        class="review_note"></span></td>
+                                    <td ng-if="item.review_note" data-toggle="modal" data-target=".bs-example-modal-md"
+                                        ng-click="showNote(item.review_note)"><span ng-bind="item.review_note"
+                                                                                    class="review_note"></span></td>
+                                    <td><a ui-sref="merchant_details({itemdetail:item,store:store})">查看</a></td>
                                 </tr>
                             </table>
+                            <tm-pagination conf="pageConfig"></tm-pagination>
                         </div>
                     </div>
                 </div>
@@ -204,7 +201,7 @@
                     <h4>审核备注</h4>
                     <hr/>
                     <span>说明</span>
-                    <span>营业执照不清晰，请重新上传</span>
+                    <span ng-bind="notedetail"></span>
                     <br/>
                     <button class="modal_size_btn" data-dismiss="modal">确认</button>
                 </div>

@@ -14,65 +14,63 @@
         <!--所属分类-->
         <div class="shop_name">
             <span>所属分类</span>
-            <span>基础装修-地面材料-木地板</span>
+            <span ng-bind="authorizedata.category_title"></span>
         </div>
         <!--品牌-->
         <div class="shop_num">
             <span>品牌</span>
-            <span>美的</span>
+            <span ng-bind="authorizedata.brand_name"></span>
         </div>
         <!--授权期限-->
         <div class="shop_name">
             <span>授权期限</span>
-            <span>2017-10-05 至 2018-10-05</span>
+            <span>{{authorizedata.authorization_start}}至 {{authorizedata.authorization_end}}</span>
         </div>
 
         <hr/>
         <!--授权书上传-->
         <div class="shop_img">
-            <span>授权书上传</span>
-            <img src="" alt=""/>
-        </div>
-        <!--逐级授权-->
-        <div class="shop_img_more">
-            <span>逐级授权</span>
-            <img src="" alt=""/>
+            <h6 id="upload">授权书上传</h6>
+            <div ng-repeat="item in authorizedata.images">
+                <span ng-bind="item.authorization_name"></span>
+                <img ng-src="http://test.cdlhzz.cn:888/{{item.image}}" alt="">
+            </div>
         </div>
         <hr/>
         <!--申请人-->
         <div class="shop_name">
             <span>申请人</span>
-            <span>我曹</span>
+            <span ng-bind="authorizedata.supplier_name"></span>
         </div>
         <!--账户申请-->
         <div class="shop_name">
             <span>账户申请</span>
-            <span>123456789</span>
+            <span ng-bind="authorizedata.mobile"></span>
         </div>
         <!--申请时间-->
         <div class="shop_name">
             <span>申请时间</span>
-            <span>2014-2-3</span>
+            <span ng-bind="authorizedata.create_time"></span>
         </div>
         <hr/>
         <!--审核状态-->
         <div class="shop_name">
             <span>审核状态</span>
-            <span>通过</span>
+            <span ng-bind="authorizedata.review_status"></span>
         </div>
         <!--审核备注-->
         <div class="shop_name">
             <span>审核备注</span>
-            <span>一区王者</span>
+            <span ng-bind="authorizedata.review_note"></span>
         </div>
         <!--审核时间-->
         <div class="shop_name">
             <span>审核时间</span>
-            <span>2017-2-6</span>
+            <span ng-bind="authorizedata.review_time"></span>
         </div>
         <!--按钮-->
         <div class="btn_back">
-            <button>返回</button>
+            <button ui-sref="store_detail({authorize_flag:true,store:store})">返回</button>
         </div>
     </section>
 </div>
