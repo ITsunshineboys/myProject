@@ -288,9 +288,8 @@ class OwnerController extends Controller
         }
 
         //      点位 和 材料查询
-        $points_select = 'count';
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
-        $points = Points::findByOne($points_select,$points_where);
+        $points = Points::findByOne('count',$points_where);
         if ($points == null){
             $code = 1058;
             return Json::encode([
@@ -1341,6 +1340,7 @@ class OwnerController extends Controller
     public function actionAssortFacility()
     {
         $post = Yii::$app->request->post();
+
         $assort_material = MaterialPropertyClassify::findByStatus();
         if ($assort_material == null) {
             $code = 1065;
@@ -1349,6 +1349,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         foreach ($assort_material as $assort){
             if ($assort['status'] != MaterialPropertyClassify::DEFAULT_STATUS){
                 $have_assort[] = $assort;
@@ -1362,6 +1363,7 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['material'];
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
+
         $goods = Goods::assortList($material_name,$post['city']);
         if ($goods == null) {
             $code = 1061;
@@ -1370,6 +1372,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         //   生活配套
@@ -1415,6 +1418,7 @@ class OwnerController extends Controller
             $without_assort_name[] = $one_without_assort['material'];
             $without_assort_one[$one_without_assort['material']] = $one_without_assort;
         }
+
         $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
         if ($without_assort_goods == null) {
             $code = 1061;
@@ -1423,6 +1427,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
