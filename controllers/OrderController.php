@@ -1774,7 +1774,7 @@ class OrderController extends Controller
                 $result = $push->push($receive,$title,$content,$extras, $m_time);
                 if (!$result)
                 {
-                    $code=200;
+                    $code=1000;
                     return Json::encode([
                         'code' => $code,
                         'msg' => 'ok'
