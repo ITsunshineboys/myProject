@@ -1,0 +1,92 @@
+* {
+    outline: none;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+header {
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #E6E9F0;
+    position: relative;
+}
+
+header span:nth-child(2),
+header span:nth-child(3){
+    font-size: 14px;
+    color: #2F3033;
+    line-height: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header span:nth-child(4) {
+    color: rgba(171, 171, 171, 1);
+}
+
+header img {
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+
+/*内容开始*/
+section{
+    padding-left: 40px;
+    color: #666F80;
+}
+
+.red_mark{
+    color: red;
+}
+
+.money{
+    margin-top: 90px;
+}
+
+.input_style{
+    margin-left: 90px;
+    width: 217px;
+    height: 36px;
+    border: 1px solid #ABABAB;
+    border-radius: 3px;
+    padding-left: 5px;
+}
+.money span:nth-child(4){
+    color: #ABABAB;
+    margin-left: 10px;
+}
+
+.warning{
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 170px;
+}
+
+form>div:nth-child(2){
+    margin-top: 40px!important;
+}
+
+.btn_group{
+    margin-top: 430px;
+}
+
+#back{
+    margin-left: 20px;
+}
+
+.body_font{
+    font-size: 16px;
+}
+
+.tored{
+    border:1px solid red!important;
+}

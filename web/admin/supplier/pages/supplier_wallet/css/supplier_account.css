@@ -1,0 +1,82 @@
+* {
+    outline: none;
+}
+
+header {
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-bottom: 1px solid #E6E9F0;
+    position: relative;
+}
+
+header span:nth-child(2) {
+    font-size: 14px;
+    color: #2F3033;
+    line-height: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header span:nth-child(3) {
+    color: rgba(171, 171, 171, 1);
+}
+
+header img {
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+
+/*内容开始*/
+section{
+    padding-left: 40px;
+    color: #666F80;
+}
+
+section>div:not(:first-child){
+    margin-top:18px;
+}
+
+/*商家名称*/
+.supplier_name{
+    margin-top: 93px;
+}
+
+.margin_left_86{
+    margin-left: 86px;
+}
+
+.margin_left_58{
+    margin-left: 58px;
+}
+
+.margin_left_72{
+    margin-left: 72px;
+}
+
+.account_owner span:last-child{
+    margin-left: 100px;
+}
+
+.forzen_money span:last-child{
+    margin-left: 42px;
+    color: #3F59B5;
+}
+
+hr{
+    margin-top: 53px;
+    margin-bottom: 32px;
+}
+
+/*按钮*/
+.btn_group{
+    margin-top: 82px!important;
+}
+
+.btn_group button{
+    margin-right: 20px;
+}
+
+
+
