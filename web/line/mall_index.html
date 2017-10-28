@@ -1,65 +1,65 @@
 <link rel="stylesheet" href="css/mall_index.css"/>
 
 <div ng-controller="mall_index_ctrl">
-    <div class="main" ng-cloak>
-        <div class="search_box">
-            <img src="images/mall_location_white.png" class="icon_color" alt=""/>
-            <!--<i class="icon icon-map-marker icon-3x icon_color"></i>-->
-            <span class="address">成都</span>
-            <a ui-sref="commodity_search({'search_flag':search_flag})" class="search">超级无敌地暖片</a>
-            <!--<img src="searchimages/message_icon.png" class="massage" alt=""/>-->
-        </div>
-        <!--banner图开始-->
-        <div class="carousel" >
-            <div  id='swiperList' class="swiper-container" >
-                <div class="swiper-wrapper" >
-                    <div class="swiper-slide"  ng-repeat="n in swiper_img" >
-                        <img ng-click="getDetails(n)" src="http://test.cdlhzz.cn:888/{{n.image}}" alt="" class="size_img"/>
-                    </div>
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination "></div>
+<div class="main" ng-cloak>
+    <div class="search_box">
+        <img src="images/mall_location_white.png" class="icon_color" alt=""/>
+        <!--<i class="icon icon-map-marker icon-3x icon_color"></i>-->
+        <span class="address">成都</span>
+        <a ui-sref="commodity_search({'search_flag':search_flag})" class="search">超级无敌地暖片</a>
+        <!--<img src="searchimages/message_icon.png" class="massage" alt=""/>-->
+    </div>
+    <!--banner图开始-->
+    <div class="carousel" >
+        <div  id='swiperList' class="swiper-container" >
+            <div class="swiper-wrapper" >
+                 <div class="swiper-slide"  ng-repeat="n in swiper_img" >
+                      <img ng-click="getDetails(n)" src="http://test.cdlhzz.cn:888/{{n.image}}" alt="" class="size_img"/>
+                 </div>
             </div>
+              <!-- 如果需要分页器 -->
+            <div class="swiper-pagination "></div>
         </div>
+    </div>
 
 
-        <!--banner图结束-->
-        <!--分类开始-->
-        <div class="classify-box">
-            <ul class="classify-ul">
-                <li ng-repeat="n in message" >
-                    <a ui-sref="minute_class({'pid':n.id ,'title':n.title})" >
-                        <img src="http://test.cdlhzz.cn:888/{{n.icon}}" alt=""/><br/>
-                        <!--<img src="images/material.png" alt=""/><br/>-->
-                        <!--<img src="{{n.icon}}" alt=""/><br/>-->
-                        <span>{{n.title}}</span>
+    <!--banner图结束-->
+    <!--分类开始-->
+    <div class="classify-box">
+        <ul class="classify-ul">
+            <li ng-repeat="n in message" >
+                <a ui-sref="minute_class({'pid':n.id ,'title':n.title})" >
+                    <img src="http://test.cdlhzz.cn:888/{{n.icon}}" alt=""/><br/>
+                    <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<img src="{{n.icon}}" alt=""/><br/>-->
+                <span>{{n.title}}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--分类结束-->
+
+    <!--推荐开始-->
+    <div class="recommend_box">
+        <!--推荐数据列表-->
+        <div class="recommend2_box">
+            <p class="recommend_p">推荐</p>
+            <ul >
+                <li ng-repeat="n in commodity">
+                    <!--ui-sref="product_details({id:n.id,title:n.title,description:n.description,-->
+                    <!--platform_price:n.platform_price,url:n.url})"-->
+                    <a  ng-click="getProduct(n)">
+                        <img src="http://test.cdlhzz.cn:888/{{n.image}}" alt=""/>
+                        <div class="title2">{{n.title}}</div>
+                        <div class="describe2">{{n.description}}</div>
+                        <div class="price2">¥ {{n.platform_price}}</div>
                     </a>
                 </li>
             </ul>
         </div>
-        <!--分类结束-->
-
-        <!--推荐开始-->
-        <div class="recommend_box">
-            <!--推荐数据列表-->
-            <div class="recommend2_box">
-                <p class="recommend_p">推荐</p>
-                <ul >
-                    <li ng-repeat="n in commodity">
-                        <!--ui-sref="product_details({id:n.id,title:n.title,description:n.description,-->
-                        <!--platform_price:n.platform_price,url:n.url})"-->
-                        <a  ng-click="getProduct(n)">
-                            <img src="http://test.cdlhzz.cn:888/{{n.image}}" alt=""/>
-                            <div class="title2">{{n.title}}</div>
-                            <div class="describe2">{{n.description}}</div>
-                            <div class="price2">¥ {{n.platform_price}}</div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-
     </div>
+
+
+</div>
 
 </div>

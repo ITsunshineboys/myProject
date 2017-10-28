@@ -575,11 +575,11 @@ angular.module("all_controller", ['ngCookies'])
         // 跳转到订单页面
         $scope.getOrder =function () {
 
-            console.log($scope.id);
-            console.log($scope.shopNum);
-            setTimeout(function () {
-                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
-            },300)
+                console.log($scope.id);
+                console.log($scope.shopNum);
+                setTimeout(function () {
+                    $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
+                },300)
 
 
         }
@@ -1319,20 +1319,20 @@ angular.module("all_controller", ['ngCookies'])
 
     })
 
-//=================分割 飞机线========================
-// .directive("swiper", function () {
-//     return {
-//         restrict: "EA",
-//         link: function (scope, element, attrs) {
-//             var mySwiper = new Swiper('.swiper-container', {
-//                 direction:'horizontal',
-//                 loop: true,
-//                 autoplay: 1000,
-//
-//                 // 分页器
-//                 pagination : '.swiper-pagination',
-//                 paginationClickable :true,
-//             })
-//         }
-//     }
-// });s
+    //=================分割 飞机线========================
+    // .directive("swiper", function () {
+    //     return {
+    //         restrict: "EA",
+    //         link: function (scope, element, attrs) {
+    //             var mySwiper = new Swiper('.swiper-container', {
+    //                 direction:'horizontal',
+    //                 loop: true,
+    //                 autoplay: 1000,
+    //
+    //                 // 分页器
+    //                 pagination : '.swiper-pagination',
+    //                 paginationClickable :true,
+    //             })
+    //         }
+    //     }
+    // });
