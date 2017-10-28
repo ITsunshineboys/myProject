@@ -1763,16 +1763,7 @@ class OrderController extends Controller
                             'msg' => \Yii::$app->params['errorCodes'][$code]
                         ]);
                     }
-                    $supplier_uid=Supplier::find()->select('uid')
-                        ->asArray()
-                        ->where(['id'=>$GoodsOrder->supplier_id])
-                        ->one()['uid'];
-                    $registration_id=User::find()
-                        ->select('registration_id')
-                        ->asArray()
-                        ->where(['id'=>$supplier_uid,'last_role_id_app'=>6])
-                        ->one()['registration_id'];
-//                        var_dump($registration_id);die;
+                $registration_id=$user->registration_id;
                 $push=new Jpush();
                 $extras = [];//推送附加字段的类型
                 $m_time = '86400'*3;//离线保留时间
