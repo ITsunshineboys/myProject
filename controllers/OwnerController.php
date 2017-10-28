@@ -37,6 +37,8 @@ use Yii;
 class OwnerController extends Controller
 {
 
+    const JUDGE_VALUE = 0;
+    const TYPE_VALUE = 1;
     const WALL_HIGH = 2.8;
     const WALL = 4;
     const WALL_SPACE = 3;
@@ -1555,7 +1557,8 @@ class OwnerController extends Controller
         $toponymy = trim(Yii::$app->request->post('toponymy',''));
         $particulars = trim(Yii::$app->request->post('particulars',''));
         $area = trim(Yii::$app->request->post('area',''));
-        if ($stairway == 0){
+
+        if ($stairway == self::JUDGE_VALUE){
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
             $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images',$where);
             if ($effect == null) {
@@ -1568,7 +1571,7 @@ class OwnerController extends Controller
             }
         }
         elseif
-        ($stairway == 1) {
+        ($stairway == self::TYPE_VALUE) {
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
             $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images',$where);
             if ($effect == null) {
