@@ -192,10 +192,15 @@ header div img{
     /*position: relative;*/
 /*}*/
 .go_play{
+    width: 32rem;
     height: 4rem;
     /*line-height: 4rem;*/
-    position: fixed;
+    position: absolute;
     bottom: 0;
+}
+.go_play div{
+    float: left;
+   margin-top: 1rem;
 }
 .go_play span:nth-child(1){
     color: #6C6C6C;
@@ -215,7 +220,8 @@ header div img{
     background-color: #F55122;
     font-size: 1.4rem;
     color: white;
-    margin-left: 13.1rem;
+    float: right;
+    /*margin-left: 13.1rem;*/
     margin-top: 0.2rem;
 }
 #address_body{
@@ -352,3 +358,6 @@ header div img{
     /*padding-bottom: 2rem;*/
     margin-top: 31rem;
 }
+
+
+

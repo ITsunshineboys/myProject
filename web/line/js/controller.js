@@ -1,14 +1,39 @@
-angular.module("all_controller", [])
+angular.module("all_controller", ['ngCookies'])
 //首页控制器
     .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         $scope.search_flag = false;
+        let config = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function (data) {
+                return $.param(data)
+            }
+        };
+        //轮播变量
+        let mySwiper = new Swiper("#swiperList", {
+            autoplay: 3000,
+            loop: true,
+            observer: true,
+            pagination: ".swiper-pagination"
+        });
+        //清空支付后的cookie
+        if(sessionStorage.getItem('adressInfo') != null){
+            sessionStorage.removeItem('adressInfo')
+        }
+        if(sessionStorage.getItem('shopInfo') != null){
+            sessionStorage.removeItem('shopInfo')
+        }
+        if(sessionStorage.getItem('invoiceInfo') != null){
+            sessionStorage.removeItem('invoiceInfo')
+        }
+
         $http({   //轮播接口调用
             method: 'get',
             url: "http://common.cdlhzz.cn/mall/carousel"
         }).then(function successCallback(response) {
-            console.log($scope.swiper_img);
             console.log(response);
             $scope.swiper_img = response.data.data.carousel;
+            $scope.carousel_id = response.data.data.carousel[0].id;
+            console.log($scope.carousel_id);
         }, function errorCallback(response) {
             console.log(response)
         });
@@ -16,20 +41,26 @@ angular.module("all_controller", [])
             method: 'get',
             url: "http://common.cdlhzz.cn/mall/categories"
         }).then(function successCallback (response) {
-            $scope.message=response.data.data.categories;
-            console.log( $scope.message);
             console.log(response);
+            $scope.message=response.data.data.categories;
         }, function errorCallback (response) {
 
         });
+
         // 点击轮播图跳转
         $scope.getDetails = function (item) {
+            $http.post('http://test.cdlhzz.cn:888/mall/recommend-click-record',{
+                recommend_id:$scope.carousel_id
+            },config).then(function (response) {
+                console.log(response)
+            });
             console.log(item);
+            $scope.mall_id = item.url.split('=')[1];
             if(item.from_type == 1){
-                $state.go('product_details',{'id':$state.mall_id})
+                $state.go('product_details',{'mall_id':$scope.mall_id,'id':$state.mall_id})
             }else{
-                alert(121);
-                $state.go(item.url)
+                // alert(121);
+                window.location = item.url
             }
         };
 
@@ -58,9 +89,9 @@ angular.module("all_controller", [])
                 console.log($scope.id);
             }else {              //链接类型
                 console.log(222);
-                $state.go('m.url')
+                window.location = m.url
             }
-        }
+        };
     })
 
     //分类详情控制器
@@ -204,7 +235,6 @@ angular.module("all_controller", [])
 
     //某个商品的详细列表
     .controller("details_ctrl", function ($scope,$http ,$state,$stateParams) {
-        console.log($stateParams);
         $scope.id  = $stateParams.id;
         $scope.pid = $stateParams.pid;
         console.log($scope.id);
@@ -223,8 +253,9 @@ angular.module("all_controller", [])
         //展示数据 默认展示
         $http({
             method:"get",
-            url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
+            url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$scope.id,
             params:{
+
                 "sort[]":"sold_number:4"
             }
         }).then(function successCallback (response) {
@@ -234,7 +265,7 @@ angular.module("all_controller", [])
         // 点击产品列表商品跳转到产品详情页面
         $scope.getDetailsProduct = function (item) {
             console.log(item);
-            console.log($scope.id);
+            console.log(item.id);
             $scope.mall_id = item.id;
             $state.go('product_details',{mall_id:$scope.mall_id,id:$scope.id})
         };
@@ -348,15 +379,22 @@ angular.module("all_controller", [])
     //某个 商品详细信息展示
     .controller("product_details_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         let vm = $scope.vm = {};
+        let mySwiper = new Swiper("#swiperList", {
+            autoplay: 3000,
+            loop: true,
+            observer: true,
+            pagination: ".swiper-pagination"
+        });
         $scope.id=$stateParams.id;
         $scope.datailsShop = $stateParams.datailsShop;
+        // $scope.supplier_id = $stateParams.supplier_id;
         // $scope.title=$stateParams.title;
         // $scope.description=$stateParams.description;
         // $scope.platform_price=$stateParams.platform_price;
         $scope.mall_id = $stateParams.mall_id;
         console.log( $scope.mall_id);
         console.log( $scope.id);
-        console.log($stateParams);
+
         $http({
             method:'get',
             url:"http://common.cdlhzz.cn/mall/goods-view",
@@ -367,7 +405,19 @@ angular.module("all_controller", [])
             console.log(response);
             $scope.datailsShop = response.data.data.goods_view;
             $scope.supplier_id = response.data.data.goods_view.supplier.id;
-            console.log($scope.datailsShop);
+            $scope.status = response.data.data.goods_view.status;
+            $scope.showPrompt = false;
+
+            if($scope.status == 2){
+                $scope.myModal = '#myModal';
+                $scope.myModal_sec = '#myModal_sec'
+            }else {
+                $scope.showPrompt = true;
+                $scope.myModal = '';
+                $scope.myModal_sec = ''
+            }
+
+            console.log($scope.status);
             console.log($scope.supplier_id);
             $scope.style_parameter = false;
             $scope.series_parameter = false;
@@ -375,7 +425,6 @@ angular.module("all_controller", [])
             if($scope.series_name == '' ){
                 $scope.style_parameter = false;
             }else {
-                $scope.style_parameter = true;
             }
             // 判断是否存在风格
             if($scope.series_parameter == ''){
@@ -445,25 +494,113 @@ angular.module("all_controller", [])
             }
         };
 
+
+        // 判断是否是微信浏览器打开 =======是微信浏览器打开 做分享的配置
+        $http({   // 判断是否微信浏览器打开
+            method: 'get',
+            url: 'http://common.cdlhzz.cn/order/iswxlogin'
+        }).then(function successCallback(response) {
+            console.log(response);
+            $scope.codeWX = response.data.code;
+            $scope.appId  = response.data.data.appId;
+            $scope.timestamp  = response.data.data.timestamp;
+            $scope.nonceStr  = response.data.data.nonceStr;
+            $scope.signature  = response.data.data.signature;
+            if ($scope.codeWX == 200) {  // 微信支付
+                wx.config({
+                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId: $scope.appId, // 必填，公众号的唯一标识
+                    timestamp:$scope.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: $scope.nonceStr, // 必填，生成签名的随机串
+                    signature:$scope.signature,// 必填，签名，见附录1
+                    jsApiList: [
+                        'onMenuShareTimeline',    //分享到朋友圈
+                        'onMenuShareAppMessage',  //分享给朋友
+                        'onMenuShareQQ',          // 分享到扣扣
+                        'onMenuShareWeibo',       //分享到微博
+                        'onMenuShareQZone',       //分享到空间
+                        // 'menuItem:openWithQQBrowser',
+                        // 'menuItem:openWithSafari'
+                    ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                });
+                wx.error(function (res) {
+                    alert(res)
+                });
+                wx.ready(function () {
+                    //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+                    wx.onMenuShareTimeline({
+                        title: '艾特魔方极力推荐产品',      // 分享标题
+                        link:  'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: 'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+                    wx.onMenuShareAppMessage({
+
+                        title: '艾特魔方极力推荐产品', // 分享标题
+                        desc: '艾特魔方极力推荐产品', // 分享描述
+                        link: 'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: 'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
+                    wx.onMenuShareQQ({
+                        title: '生活家居产品', // 分享标题
+                        desc: '百中挑一你值得拥有的', // 分享描述
+                        link: 'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接
+                        imgUrl:'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+            }
+        });
         // 跳转到订单页面
         $scope.getOrder =function () {
+
             console.log($scope.id);
             console.log($scope.shopNum);
             setTimeout(function () {
-                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id})
+                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
             },300)
+
+
         }
     })
 
     //店铺首页和全部商品
     .controller("shop_front_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         let vm = $scope.vm = {};
+        //轮播变量
+        let mySwiper = new Swiper("#swiperList", {
+            autoplay: 3000,
+            loop: true,
+            observer: true,
+            pagination: ".swiper-pagination"
+        });
         //获取商品列表
         console.log($stateParams);
         $scope.id  = $stateParams.id;
         $scope.pid = $stateParams.pid;
         $scope.mall_id = $stateParams.mall_id;
-        $scope.supplier_id = $stateParams.datailsShop.supplier.id;
+        $scope.supplier_id = $stateParams.supplier_id;
         $scope.datailsShop = $stateParams.datailsShop;
         $scope.brands = '';
         $scope.series = '';
@@ -472,7 +609,7 @@ angular.module("all_controller", [])
         $scope.good_pic_down = true;
         $scope.praise_up = true;
         $scope.praise_down = false;
-        console.log($scope.id);
+        console.log($scope.mall_id);
         console.log($scope.supplier_id);
         $http({
             method:"get",
@@ -505,12 +642,17 @@ angular.module("all_controller", [])
             console.log(response);
             $scope.supplier_goods=response.data.data.supplier_goods;
         });
-        // 点击商品判断跳转商品详情
+        // 点击推荐商品判断跳转商品详情
         $scope.getProductMore = function (item) {
             console.log(item);
             $scope.mall_id = item.url.split('=')[1];
             $state.go("product_details",{mall_id:$scope.mall_id,datailsShop:$scope.datailsShop});
             console.log( $scope.mall_id)
+        };
+        // 点击全部商品跳转到商品详情页面
+        $scope.allGetProdouct = function (item) {
+            $scope.mall_id = item.id;
+            $state.go("product_details",{mall_id:$scope.mall_id})
         };
         // 点击上下排序
         //价格排序  升序
@@ -526,7 +668,7 @@ angular.module("all_controller", [])
                 }
             }).then(function successCallback(response) {
                 console.log(response);
-                $scope.supplier_goods=response.data.data.supplier_goods;
+                $scope.supplier_goods = response.data.data.supplier_goods;
             });
         };
         // 价格降序
@@ -611,8 +753,8 @@ angular.module("all_controller", [])
         $scope.harvestAddress  = $stateParams.harvestAddress;
         $scope.harvestName     = $stateParams.harvestName;
         $scope.harvestNum      = $stateParams.harvestNum;
-        $scope.show_address    = $stateParams.show_address;
-        $scope.show_harvest    = $stateParams.show_harvest;
+        // $scope.show_address    = $stateParams.show_address;
+        // $scope.show_harvest    = $stateParams.show_harvest;
         $scope.mall_id         = $stateParams.mall_id;
         $scope.shopNum         = $stateParams.shopNum;
         $scope.supplier_id     = $stateParams.supplier_id;
@@ -632,9 +774,9 @@ angular.module("all_controller", [])
         $scope.invoice_number  = '';//纳税人识别号
         $scope.invoice_model   = '';
         $scope.contentInvoice  = '';
-        alert( $scope.supplier_id );
-        alert( $scope.invoice_id );
-        alert( $scope.address_id );
+        // alert( $scope.supplier_id );
+        // alert( $scope.invoice_id );
+        // alert( $scope.address_id );
 
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -702,14 +844,22 @@ angular.module("all_controller", [])
                     });
                     // 模态框确认按钮 == 跳转保存数据
                     $scope.jumpOrder = function () {
-                        $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-                            harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-                            harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-                            platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-                            goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-                            mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                            regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,supplier_id:$scope.supplier_id,address_id:$scope.address_id
-                        }))
+                        let invoiceObj = { // 保存
+                            invoice_id: $scope.invoice_id,
+                            invoice_content: $scope.invoice_name
+
+                        };
+                        sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
+                        setTimeout(function () {
+                            $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
+                                harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
+                                harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
+                                platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
+                                goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
+                                mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
+                                regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,supplier_id:$scope.supplier_id,address_id:$scope.address_id
+                            }))
+                        },300);
                     }
                 }
             }
@@ -747,17 +897,34 @@ angular.module("all_controller", [])
 
                     });
                     $scope.jumpOrder = function () {
-                        $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-                            harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-                            harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-                            platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-                            goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-                            mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                            regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage
-                        }))
+                        let invoiceObj = { // 保存
+                            invoice_id: $scope.invoice_id,
+                            invoice_content: $scope.invoice_name,
+                            invoicer_card: $scope.invoice_number
+                        };
+                        sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
+                        setTimeout(function () {
+                            $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
+                                harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
+                                harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
+                                platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
+                                goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
+                                mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
+                                regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage
+                            }))
+                        },300);
                     }
                 }
             }
+
+        };
+        if (sessionStorage.getItem('invoiceInfo') != null) {
+            //获取 商品信息
+            let invoiceInfo = JSON.parse(sessionStorage.getItem('invoiceInfo'));
+            console.log(invoiceInfo);
+            $scope.invoice_id =  invoiceInfo.invoice_id;
+            $scope.invoice_content =  invoiceInfo.invoice_content;
+            $scope.invoicer_card =  invoiceInfo.invoicer_card;
 
         }
 
@@ -765,7 +932,7 @@ angular.module("all_controller", [])
     })
 
     //确认订单
-    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams) {
+    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams,$cookieStore,$cookies) {
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
@@ -774,13 +941,12 @@ angular.module("all_controller", [])
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
         $scope.supplier_id  = $stateParams.supplier_id;//商家ID
         $scope.address_id  = $stateParams.address_id;//地址ID
-
         console.log($scope.invoice_id);
         console.log($scope.supplier_id);
         if($stateParams.show_address !== ''){
             console.log(12345456);
-            $scope.show_address = $stateParams.show_address;
-            $scope.show_harvest = $stateParams.show_harvest;
+            // $scope.show_address = $stateParams.show_address;
+            // $scope.show_harvest = $stateParams.show_harvest;
             $scope.harvestNum = $stateParams.harvestNum;//收获人号码
             $scope.harvestName = $stateParams.harvestName;//收货人名字
             $scope.harvestAddress = $stateParams.harvestAddress;//收货人地址
@@ -823,7 +989,8 @@ angular.module("all_controller", [])
             });
 
             // 点击编写收货地址 获取城市内容
-
+            console.log(area.value);
+            console.log($('#value1').val());
 
         };
         //订单信息===>获取商品的信息
@@ -842,6 +1009,19 @@ angular.module("all_controller", [])
             $scope.cover_image =  response.data.data.cover_image; //封面图
             $scope.icon =  response.data.data.icon; //店家头像
             $scope.goods_num =  response.data.data.goods_num;//购买数量
+            let shopObj = { // 保存
+                title: response.data.data.title,
+                subtitle: response.data.data.subtitle,
+                shop_name:  response.data.data.shop_name,
+                platform_price: response.data.data.platform_price,
+                market_price: response.data.data.market_price,
+                freight: response.data.data.freight,
+                allCost: response.data.data.allCost,
+                cover_image:  response.data.data.cover_image,
+                icon: response.data.data.icon,
+                goods_num:response.data.data.goods_num
+            };
+            sessionStorage.setItem('shopInfo', JSON.stringify(shopObj));
         });
 
         // 编辑收货地址的信息
@@ -878,14 +1058,13 @@ angular.module("all_controller", [])
                     console.log(response);
                     $scope.address_id = response.data.data.address_id;
                     console.log($scope.address_id);
-                    alert($scope.address_id)
+                    // alert($scope.address_id)
                 });
                 $scope.numModel = '#harvestNum_modal';
                 $scope.flagContent = '保存成功'
             }
         };
         // 点击保存成功按钮获取收获地址信息
-
         $scope.getHarvest = function () {
             if(!rag.test($scope.harvestNum) || $scope.harvestNum == '' || $scope.harvestName == '' || $scope.harvestAddress == ''){
                 $('#harvestNum_modal').modal('hide');
@@ -901,6 +1080,15 @@ angular.module("all_controller", [])
                     }
                 }).then(function successCallback(response) {
                     console.log(response);
+                    let adressObj = { // 保存
+                        show_harvest: true,
+                        show_address: false,
+                        name: response.data.data[0].consignee,
+                        phone: response.data.data[0].mobile,
+                        city: response.data.data[0].district,
+                        address: response.data.data[0].region
+                    };
+                    sessionStorage.setItem('adressInfo', JSON.stringify(adressObj));
                     $scope.show_harvest = true;
                     $scope.show_address = false;
                     $scope.consigneeName = response.data.data[0].consignee;
@@ -912,8 +1100,35 @@ angular.module("all_controller", [])
                 });
             }
         };
+        // 获取sessionStorage
+        if (sessionStorage.getItem('adressInfo') != null) {  //获取收获的信息
+            let adressInfo = JSON.parse(sessionStorage.getItem('adressInfo'));
+            console.log(adressInfo);
+            $scope.show_address = false;
+            $scope.show_harvest = true;
+            $scope.consigneeName = adressInfo.name; //收货人名字
+            $scope.mobile = adressInfo.phone;   ///收货人电话
+            $scope.districtMore = adressInfo.city; //收货人城市
+            $scope.regionMore = adressInfo.address; //收货人地址
+        }
+        if (sessionStorage.getItem('shopInfo') != null) {
+            //获取 商品信息
+            let shopInfo = JSON.parse(sessionStorage.getItem('shopInfo'));
+            console.log(shopInfo);
+            $scope.title =  shopInfo.title;
+            $scope.subtitle =  shopInfo.subtitle;
+            $scope.shop_name =  shopInfo.shop_name;//店铺名称
+            $scope.platform_price =  shopInfo.platform_price;//优惠价格
+            $scope.market_price =  shopInfo.market_price;//原始价格
+            $scope.freight =  shopInfo.freight;//运费
+            $scope.allCost = shopInfo.allCost;//总费用
+            $scope.cover_image =  shopInfo.cover_image; //封面图
+            $scope.icon =  shopInfo.icon; //店家头像
+            $scope.goods_num =  shopInfo.goods_num;//购买数量
+        }
+
         // 获取发票信息
-        if($scope.invoice_id != ''){
+        if($scope.invoice_id != undefined){
             $http({
                 method: 'get',
                 url: 'http://common.cdlhzz.cn/order/getinvoicelinedata',
@@ -930,6 +1145,7 @@ angular.module("all_controller", [])
 
         // 点击去支付判断是否填写完整
         $scope.getModel = function () {
+            alert(212)
             $scope.order_order = '';
             $scope.order_address_model = '';
             if( $scope.show_harvest == false && $scope.show_address == true ){
@@ -962,10 +1178,70 @@ angular.module("all_controller", [])
                             $scope.codeWX = response.data.code;
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
+                                // wx.config({
+                                //     debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                                //     appId: '', // 必填，公众号的唯一标识
+                                //     timestamp: , // 必填，生成签名的时间戳
+                                //     nonceStr: '', // 必填，生成签名的随机串
+                                //     signature: '',// 必填，签名，见附录1
+                                //     jsApiList: [
+                                //         'onMenuShareTimeline',
+                                //         'onMenuShareAppMessage',
+                                //         'onMenuShareQQ',
+                                //         'onMenuShareWeibo',
+                                //         'onMenuShareQZone',
+                                //         'menuItem:openWithQQBrowser',
+                                //         'menuItem:openWithSafari'
+                                //     ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                                // });
+                                // wx.ready(function(){
+                                //     //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+                                //     wx.onMenuShareTimeline({
+                                //         title: '艾特魔方极力推荐产品', // 分享标题
+                                //         link: 'http://common.cdlhzz.cn/line/#!/product_details?id=1495&mall_id=276', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                //         imgUrl: '', // 分享图标
+                                //         success: function () {
+                                //             // 用户确认分享后执行的回调函数
+                                //
+                                //         },
+                                //         cancel: function () {
+                                //             // 用户取消分享后执行的回调函数
+                                //         }
+                                //     });
+                                //     // // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+                                //     // wx.onMenuShareAppMessage({
+                                //     //     title: '', // 分享标题
+                                //     //     desc: '', // 分享描述
+                                //     //     link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                //     //     imgUrl: '', // 分享图标
+                                //     //     type: '', // 分享类型,music、video或link，不填默认为link
+                                //     //     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                                //     //     success: function () {
+                                //     //         // 用户确认分享后执行的回调函数
+                                //     //     },
+                                //     //     cancel: function () {
+                                //     //         // 用户取消分享后执行的回调函数
+                                //     //     }
+                                //     // });
+                                //     // // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
+                                //     // wx.onMenuShareQQ({
+                                //     //     title: '', // 分享标题
+                                //     //     desc: '', // 分享描述
+                                //     //     link: '', // 分享链接
+                                //     //     imgUrl: '', // 分享图标
+                                //     //     success: function () {
+                                //     //         // 用户确认分享后执行的回调函数
+                                //     //     },
+                                //     //     cancel: function () {
+                                //     //         // 用户取消分享后执行的回调函数
+                                //     //     }
+                                //     // });
+                                // });
                                 alert('调用微信接口');
-                                // 微信接口
-                                // http://common.cdlhzz.cn/order/lineplaceorder
-                                $http.get('http://common.cdlhzz.cn/order/lineplaceorder',{
+                                // 微信接口 === 调用
+                                $http({     //获取openid 的地址
+                                    method: 'get',
+                                    url: 'http://common.cdlhzz.cn/order/lineplaceorder',
                                     params:{
                                         goods_name: $scope.title,
                                         order_price:$scope.allCost,
@@ -975,23 +1251,19 @@ angular.module("all_controller", [])
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
-
-                                        // buyer_message: $scope.leaveMessage
-                                }
-                            }).then(function (response) {
-                                    alert('跳转成功');
-                                    alert($scope.mall_id +'商品ID');
-                                    alert($scope.address_id+'地址id');
-                                    alert($scope.invoice_id+'发票id');
-                                    alert($scope.supplier_id+'商家id');
-                                    alert(JSON.stringify(response));
-                                    alert(JSON.stringify(response.data));
-                                    alert(JSON.stringify(response.config));
-                                    // $('body').append($scope.dataWx);
+                                        // openid:'oyKJL0oHDKwyzBXidhyhshxluBOg'
+                                    }
+                                }).then(function successCallback(response) {
+                                    console.log(response);
+                                    $scope.open_id = response.data.data;
+                                    // alert('打印第一个成功');
+                                    // alert(JSON.stringify(response));
+                                    // alert(JSON.stringify($scope.open_id));
+                                    window.location = $scope.open_id
                                 },function (error) {
-                                    alert("错误");
-                                    alert(JSON.stringify(error));
-                                })
+                                    alert(JSON.stringify(error))
+                                });
+
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
                                 // 支付宝接口
@@ -1023,6 +1295,9 @@ angular.module("all_controller", [])
             }
 
         };
+        $scope.getProduct_details =  function () {
+            $state.go('product_details',{'mall_id':$scope.mall_id,'id':$scope.id})
+        }
     })
 
     // 支付成功
@@ -1044,20 +1319,20 @@ angular.module("all_controller", [])
 
     })
 
-    //=================分割 飞机线========================
-    .directive("swiper", function () {
-        return {
-            restrict: "EA",
-            link: function (scope, element, attrs) {
-                var mySwiper = new Swiper('.swiper-container', {
-                    direction:'horizontal',
-                    loop: true,
-                    autoplay: 1000,
-
-                    // 分页器
-                    pagination : '.swiper-pagination',
-                    paginationClickable :true,
-                })
-            }
-        }
-    });
+//=================分割 飞机线========================
+// .directive("swiper", function () {
+//     return {
+//         restrict: "EA",
+//         link: function (scope, element, attrs) {
+//             var mySwiper = new Swiper('.swiper-container', {
+//                 direction:'horizontal',
+//                 loop: true,
+//                 autoplay: 1000,
+//
+//                 // 分页器
+//                 pagination : '.swiper-pagination',
+//                 paginationClickable :true,
+//             })
+//         }
+//     }
+// });s

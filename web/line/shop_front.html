@@ -36,8 +36,8 @@
                     <div class="device">
                         <div >
                             <div class="carousel">
-                                <div class="swiper-container" swiper>
-                                    <div class="swiper-wrapper" swiper>
+                                <div id='swiperList' class="swiper-container" >
+                                    <div class="swiper-wrapper">
                                         <div class="swiper-slide"  ng-repeat=" n in swiperList" >
                                             <img src="http://test.cdlhzz.cn:888/{{n.image}}" ng-click="getProductMore(n)" id="size_img" alt="" />
                                         </div>
@@ -87,7 +87,7 @@
                     <!--商品展示列表-->
                     <div class="mall_list">
                         <div class="flex_div" >
-                            <div class="item_commodity"  ng-repeat="n in supplier_goods" ng-click="getProductMore(n)">
+                            <div class="item_commodity"  ng-repeat="n in supplier_goods" ng-click="allGetProdouct(n)">
                                 <div class="item_commodity_divimg">
                                     <img src="http://test.cdlhzz.cn:888/{{n.cover_image}}" alt="" class="img_item " />
                                 </div>

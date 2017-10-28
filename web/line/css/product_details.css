@@ -34,9 +34,9 @@
     margin-bottom:.66rem;
 }
 .main .intro_box  .introduce{
-    font-size:1rem;
+    font-size:1.2rem;
     color: #6C6C6C;
-    margin-bottom:1.2rem;
+    margin-bottom:1.1rem;
 }
 .main .intro_box .cost{
     margin-bottom:0!important;
@@ -592,4 +592,34 @@
     font-size: 1.3rem;
     position: absolute;
     right: 2rem;
+}
+.bg_btn{
+    background-color: #dbdbbd!important;
+
+}
+.Prompt{
+    background-color: #dbdbbd;
+    width: 32rem;
+    height: 4rem;
+    z-index: 99999;
+    position: fixed;
+    bottom: 4rem;
+    text-align: center;
+    line-height: 4rem;
+    opacity: .5;
+}
+.Prompt span{
+    font-size: 1.4rem;
+
+}
+/*修改样式*/
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    border: none!important;
+}
+
+.nav-tabs>li>a {
+    border: none!important;
+}
+.nav-tabs>li>a:hover {
+    border: none!important;
 }

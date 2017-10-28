@@ -1,6 +1,7 @@
 angular.module("app", ["ui.router","ngAnimate", "all_controller"])
-    .config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
+    .config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider,$locationProvider) {
         $urlRouterProvider.otherwise("/");
+        // $locationProvider.html5Mode(true);
         $stateProvider
             .state("home", {  //首页
                 url: "/",
@@ -12,7 +13,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
             })
 
             .state("minute_class", {   //分类页
-                url: "/minute_class",
+                url: "/minute_class?pid",
                 views: {
                     "": {templateUrl: "minute_class.html"}
                 },
@@ -38,7 +39,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
             })
 
             .state("details", {   //某个商品详细列表
-                url: "/details",
+                url: "/details?id",
                 views: {
                     "": {templateUrl: "details.html"}
                 },
@@ -47,51 +48,57 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
             })
 
             .state("product_details", {   //某个商品详细信息
-                url: "/product_details",
+                url: "/product_details?mall_id&supplier_id$id",
                 views: {
                     "": {templateUrl: "product_details.html"}
                 },
-                controller: "product_details_ctrl",
-                params:{'pid':'',"id":"", 'mall_id':"",'datailsShop':'datailsShop','shopNum':'',
-                 'supplier_id':''
-                }
+                controller: "product_details_ctrl"
+                /*params:{'pid':'',"id":"", 'mall_id':"",'datailsShop':'datailsShop','shopNum':'',
+                    'supplier_id':''
+                }*/
             })
 
             .state("shop_front", {   //店铺首页和全部商品
-                url: "/shop_front",
+                url: "/shop_front?supplier_id&mall_id",
                 views: {
                     "": {templateUrl: "shop_front.html"}
                 },
                 controller: "shop_front_ctrl",
-                params:{'pid':'',"id":'','mall_id':'','datailsShop':'datailsShop'}
+                // params:{'pid':'',"id":'','mall_id':'','datailsShop':'datailsShop'}
             })
 
             .state("order_commodity", {    //订单确认
-                url: "/order_commodity",
+                url: "/order_commodity?mall_id&shopNum&harvestName&harvestNum&harvestAddress&title&subtitle&shop_name&platform_price&cover_image&icon&goods_num&show_harvest&show_address&consigneeName&mobile&districtMore&regionMore&leaveMessage&invoice_name&invoice_number&invoice_id&supplier_id&address_id",
                 views: {
                     "": {templateUrl: "order_commodity.html"}
                 },
-                controller: "order_commodity",
-                params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
-                'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
-                'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
-                'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
-                'address_id':''
-                }
-            })
-
-            .state("invoice", {    //发票信息
-                url: "/invoice",
-                views: {
-                    "": {templateUrl: "invoice.html"}
-                },
-                controller: "invoice_ctrl",
-                params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
+                controller: "order_commodity"
+                /*params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
                     'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
                     'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
                     'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
                     'address_id':''
-                }
+                }*/
+            })
+
+
+
+
+
+
+
+            .state("invoice", {    //发票信息
+                url: "/invoice?mall_id&shopNum&harvestName&harvestNum&harvestAddress&title&subtitle&shop_name&platform_price&cover_image&icon&goods_num&show_harvest&show_address&consigneeName&mobile&districtMore&regionMore&leaveMessage&invoice_name&invoice_number&invoice_id&supplier_id&address_id",
+                views: {
+                    "": {templateUrl: "invoice.html"}
+                },
+                controller: "invoice_ctrl"
+                // params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
+                //     'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
+                //     'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
+                //     'regionMore':'','leaveMessage':'','invoice_name':'','invoice_number':'','invoice_id':'','supplier_id':'',
+                //     'address_id':''
+                // }
             })
 
             .state("pay_success", {    //支付成功
