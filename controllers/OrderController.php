@@ -1772,7 +1772,7 @@ class OrderController extends Controller
                         ->asArray()
                         ->where(['id'=>$supplier_uid,'last_role_id_app'=>6])
                         ->one()['registration_id'];
-                        var_dump($registration_id);die;
+//                        var_dump($registration_id);die;
                 $push=new Jpush();
                 $extras = [];//推送附加字段的类型
                 $m_time = '86400'*3;//离线保留时间
