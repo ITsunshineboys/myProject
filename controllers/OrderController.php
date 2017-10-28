@@ -1712,7 +1712,8 @@ class OrderController extends Controller
             ]);
         }
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-
+        $supplier=Supplier::find()->where(['id'=>$GoodsOrder->supplier_id])->one();
+        $supplier_user=User::findOne($supplier->uid);
         if ($GoodsOrder->pay_status==0)
         {
             $OrderGoods=OrderGoods::find()
@@ -1741,8 +1742,8 @@ class OrderController extends Controller
                             ]);
                         }
                         $record=new UserNewsRecord();
-                        $record->uid=$user->id;
-                        $record->role_id=$user->last_role_id_app;
+                        $record->uid=$supplier_user->id;
+                        $record->role_id=6;
                         $record->title='已取消订单';
                         $record->content=$content;
                          $record->send_time=time();
@@ -1763,10 +1764,10 @@ class OrderController extends Controller
                             'msg' => \Yii::$app->params['errorCodes'][$code]
                         ]);
                     }
-                $registration_id=$user->registration_id;
+                $registration_id=$supplier_user->registration_id;
                 $push=new Jpush();
                 $extras = [];//推送附加字段的类型
-                $m_time = '86400'*3;//离线保留时间
+                $m_time = '86400';//离线保留时间
                 $receive = ['registration_id'=>[$registration_id]];//设备的id标识
                 $title='已取消订单';
 
@@ -1799,7 +1800,7 @@ class OrderController extends Controller
                ]);
            }
     }
-    /**
+  /**
      * get refund list
      * by order_no and sku
      * @return string
