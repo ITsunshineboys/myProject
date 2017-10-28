@@ -1,4 +1,4 @@
-const baseUrl = 'http://test.cdlhzz.cn:888';
+// const baseUrl = 'http://test.cdlhzz.cn:888';
 // const baseUrl = 'http://v1.cdlhzz.cn:888';
 
 /**
