@@ -5,6 +5,8 @@ namespace app\controllers;
 
 use app\models\User;
 use app\models\UserChat;
+use app\models\UserFreezelist;
+use app\models\UserNewsRecord;
 use app\services\ChatService;
 use app\services\FileService;
 use yii\helpers\Json;
@@ -40,7 +42,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $username=trim(\Yii::$app->request->post('username',''));
-        $password=trim(\Yii::$app->request->post('password',''));
+        $password=trim(\Yii::$app->request->post(' ',''));
         if (UserChat::find()->where(['u_id' => $u_id, 'role_id' => $role_id])->one()) {
             $code = 1000;
             return Json::encode([
@@ -339,10 +341,17 @@ class ChatController extends Controller
             ]);
         }
     }
+    public function actionNewsIndex(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
 
+    }
 
     public function actionTest(){
-        var_dump(User::find()->where(['id'=>7])->one());
+        var_dump(UserNewsRecord::find()->all());
 
     }
 }
