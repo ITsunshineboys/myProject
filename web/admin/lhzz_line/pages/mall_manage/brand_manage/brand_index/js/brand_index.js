@@ -1,6 +1,6 @@
 ;
 let brand_index = angular.module("brand_index_module",[]);
-brand_index.controller("brand_index_ctrl",function ($scope,$http,$stateParams) {
+brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$stateParams) {
   $scope.myng=$scope;
   //POST请求的响应头
   let config = {

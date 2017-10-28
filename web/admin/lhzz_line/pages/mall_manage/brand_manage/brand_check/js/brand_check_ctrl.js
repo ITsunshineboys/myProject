@@ -1,5 +1,5 @@
 ;
-let brand_check= angular.module("brand_check",[]);
+let brand_check= angular.module("brand_check_module",[]);
 brand_check.controller("brand_check_ctrl",function ($scope,$http,$stateParams,$state) {
   //POST请求的响应头
   let config = {

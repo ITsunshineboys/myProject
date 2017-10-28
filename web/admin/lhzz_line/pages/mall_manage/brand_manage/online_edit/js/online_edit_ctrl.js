@@ -28,6 +28,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
       size:9999,
       'sort[]':$scope.online_time_flag
     }}).then(function (res) {
+      console.log(res);
     $scope.cycle_arr=res.data.data.brand_list_admin.details;
   },function (err) {
     console.log(err);

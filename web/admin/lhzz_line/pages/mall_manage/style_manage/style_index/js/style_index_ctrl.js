@@ -4,6 +4,33 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     if ($scope.page == '') {
         $scope.page = 1;
     }
+    /*分页配置*/
+    $scope.Config = {
+        showJump: true,
+        itemsPerPage: 12,
+        currentPage: 1,
+        onChange: function () {
+            tablePages();
+        }
+    };
+    let tablePages=function () {
+        $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+        $http.get(baseUrl+'/mall/style-time-sort',{
+            params:$scope.params
+        }).then(function (res) {
+            console.log(res);
+            $scope.style_arr=res.data.list.details;
+            $scope.Config.totalItems = res.data.list.total;
+        },function (err) {
+            console.log(err);
+        })
+    };
+    $scope.params = {
+        page: 1,                        // 当前页数
+        sort:0
+    };
+
+
     //POST请求的响应头
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -16,7 +43,6 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     //系列——展示数据数组
     $scope.series_arr = [];  //系列所有数据列表
     $scope.style_arr = [];  //风格所有数据列表
-
     /*属性管理*/
     $scope.handledesorder = true; //排序初始值
     $scope.handleascorder = false; //排序初始值
@@ -38,18 +64,35 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     })()
 
     /*选项卡切换方法*/
+    //系列
     $scope.changeToseries = function () {
         $scope.showseries = true;
         $scope.showstyle = false;
         $scope.showattr = false;
-    };
 
+        $scope.ser_time_img='lib/images/sort_down.png';
+        $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort',{
+            params:{
+                sort:0
+            }
+        }).then(function (res) {
+            $scope.series_arr=res.data.list;
+        },function (err) {
+            console.log(err);
+        });
+    };
+    //风格
     $scope.changeTostyle = function () {
         $scope.showseries = false;
         $scope.showstyle = true;
         $scope.showattr = false;
+        $scope.params.page=1;
+        $scope.params.sort=0;
+        $scope.style_time_img='lib/images/sort_down.png';
+        $scope.Config.currentPage=1;
+        tablePages();
     };
-
+    //属性
     $scope.changeToattr = function () {
         $scope.showseries = false;
         $scope.showstyle = false;
@@ -58,199 +101,132 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     /************************系列开始*******************************/
 
 //	系列——展示数据
-    $http.get('http://test.cdlhzz.cn:888/mall/series-list').then(function (res) {
-        $scope.series_arr = res.data.data.series_list.details;
+    $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort',{
+        params:{
+            sort:0
+        }
+    }).then(function (res) {
+        $scope.series_arr=res.data.list;
         console.log("系列列表返回");
         console.log(res);
-    }, function (err) {
+    },function (err) {
         console.log(err);
     });
     //开启操作
-    $scope.open_status = function (item) {
-        $scope.open_item = item;
+    $scope.open_status=function (item) {
+        $scope.open_item=item;
     };
     //开启确认按钮
-    $scope.open_btn_ok = function () {
-        let url = 'http://test.cdlhzz.cn:888/mall/series-status';
-        $http.post(url, {
-            id: +$scope.open_item.id,
-            status: 1
-        }, config).then(function (res) {
-            $http.get('http://test.cdlhzz.cn:888/mall/series-list').then(function (res) {
-                $scope.series_arr = res.data.data.series_list.details;
-            }, function (err) {
+    $scope.open_btn_ok=function () {
+        let url='http://test.cdlhzz.cn:888/mall/series-status';
+        $http.post(url,{
+            id:+$scope.open_item.id,
+            status:1
+        },config).then(function (res) {
+            $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort').then(function (res) {
+                $scope.series_arr=res.data.list;
+            },function (err) {
                 console.log(err);
             });
-        }, function (err) {
+        },function (err) {
             console.log(err);
         })
     };
 
     //关闭操作
-    $scope.close_status = function (item) {
-        $scope.close_item = item;
+    $scope.close_status=function (item) {
+        $scope.close_item=item;
     };
     //关闭确认按钮
-    $scope.close_btn_ok = function () {
-        let url = 'http://test.cdlhzz.cn:888/mall/series-status';
-        $http.post(url, {
-            id: +$scope.close_item.id,
-            status: 0
-        }, config).then(function (res) {
-            $http.get('http://test.cdlhzz.cn:888/mall/series-list').then(function (res) {
-                $scope.series_arr = res.data.data.series_list.details;
-            }, function (err) {
+    $scope.close_btn_ok=function () {
+        let url='http://test.cdlhzz.cn:888/mall/series-status';
+        $http.post(url,{
+            id:+$scope.close_item.id,
+            status:0
+        },config).then(function (res) {
+            $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort').then(function (res) {
+                $scope.series_arr=res.data.list;
+            },function (err) {
                 console.log(err);
             });
-        }, function (err) {
+        },function (err) {
             console.log(err);
         })
     };
     //系类时间排序
-    $scope.ser_time_sort_on_flag = true;
-    $scope.ser_time_sort_down_flag = false;
-    $scope.ser_time_sort = function (num) {
-        if (num == 0) {
-            $scope.ser_time_sort_on_flag = false;
-            $scope.ser_time_sort_down_flag = true;
-        } else {
-            $scope.ser_time_sort_on_flag = true;
-            $scope.ser_time_sort_down_flag = false;
+    $scope.ser_time_img='lib/images/sort_down.png';
+    $scope.ser_time_sort=function () {
+        if($scope.ser_time_img=='lib/images/sort_down.png'){
+            $scope.ser_time_img='lib/images/sort_up.png';
+            $scope.ser_sort_num=1;
+        }else{
+            $scope.ser_time_img='lib/images/sort_down.png';
+            $scope.ser_sort_num=0;
         }
-        $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort', {
-            params: {
-                sort: +num
+        $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort',{
+            params:{
+                sort:$scope.ser_sort_num
             }
         }).then(function (res) {
-            $scope.series_arr = res.data.list;
+            $scope.series_arr=res.data.list;
             console.log(res);
-        }, function (err) {
-            console.log(err);
-        });
-    };
-    //风格时间排序
-    $scope.style_time_sort_on_flag = true;
-    $scope.style_time_sort_down_flag = false;
-    $scope.style_time_sort = function (num) {
-        if (num == 0) {
-            $scope.style_time_sort_on_flag = false;
-            $scope.style_time_sort_down_flag = true;
-        } else {
-            $scope.style_time_sort_on_flag = true;
-            $scope.style_time_sort_down_flag = false;
-        }
-        $http.get('http://test.cdlhzz.cn:888/mall/style-time-sort', {
-            params: {
-                sort: +num
-            }
-        }).then(function (res) {
-            $scope.style_arr = res.data.list;
-            console.log(res);
-        }, function (err) {
+        },function (err) {
             console.log(err);
         });
     };
     /******************************系列结束******************************/
 
     /*********************************风格开始*******************************/
-
-//列表数据展示
-    $http.get('http://test.cdlhzz.cn:888/mall/style-list', {params: {page: $scope.page}}).then(function (res) {
-        console.log("风格列表返回");
-        console.log($scope.page);
-        console.log(res);
-        $scope.style_arr = res.data.data.series_list.details;
-        //分页
-        /*--------------------分页------------------------*/
-        $scope.style_history_list = [];
-        $scope.style_history_all_page = Math.ceil(res.data.data.series_list.total / 12);//获取总页数
-        let all_num = $scope.style_history_all_page;//循环总页数
-        for (let i = 0; i < all_num; i++) {
-            $scope.style_history_list.push(i + 1)
+    //风格时间排序
+    $scope.style_time_img='lib/images/sort_down.png';
+    $scope.style_time_sort=function () {
+        if($scope.style_time_img=='lib/images/sort_down.png'){
+            $scope.style_time_img='lib/images/sort_up.png';
+            $scope.params.sort=1;
+            $scope.Config.currentPage=1;
+            tablePages();
+        }else{
+            $scope.style_time_img='lib/images/sort_down.png';
+            $scope.params.sort=0;
+            $scope.Config.currentPage=1;
+            tablePages();
         }
-        console.log();
-        //点击数字，跳转到多少页
-        $scope.style_choosePage = function (page) {
-            //判断输入的页数有没有，如果没有，不进行请求
-            if ($scope.style_history_list.indexOf(parseInt(page)) != -1) {
-                $scope.page = page;
-                $http.get('http://test.cdlhzz.cn:888/mall/style-list', {params: {page: $scope.page}}).then(function (res) {
-                    console.log(res);
-                    $scope.style_arr = res.data.data.series_list.details;
-                }, function (err) {
-                    console.log(err);
-                });
-            }
-        };
-        //显示当前是第几页的样式
-        $scope.isActivePage = function (page) {
-            return $scope.page == page;
-        };
-        //进入页面，默认设置为第一页
-        if ($scope.page === undefined) {
-            $scope.page = 1;
-        }
-        //上一页
-        $scope.style_Previous = function () {
-            if ($scope.page > 1) {                //当页数大于1时，执行
-                $scope.page--;
-                $scope.style_choosePage($scope.page);
-            }
-        };
-        //下一页
-        $scope.style_Next = function () {
-            if ($scope.page < $scope.style_history_all_page) { //判断是否为最后一页，如果不是，页数+1,
-                $scope.page++;
-                $scope.style_choosePage($scope.page);
-            }
-        }
-    }, function (err) {
-        console.log(err);
-    });
+    }
 //开启操作
-    $scope.style_open = function (item) {
-        $scope.style_open_item = item;
+    $scope.style_open=function (item) {
+        $scope.style_open_item=item;
     };
     //开启确认按钮
-    $scope.style_open_btn_ok = function () {
-
-        let url = 'http://test.cdlhzz.cn:888/mall/style-status';
-        $http.post(url, {
-            id: +$scope.style_open_item.id,
-            status: 1
-        }, config).then(function (res) {
-            $http.get('http://test.cdlhzz.cn:888/mall/style-list').then(function (res) {
-                $scope.style_arr = res.data.data.series_list.details;
-            }, function (err) {
-                console.log(err);
-            });
-            $scope.page = 1;
-        }, function (err) {
+    $scope.style_open_btn_ok=function () {
+        let url='http://test.cdlhzz.cn:888/mall/style-status';
+        $http.post(url,{
+            id:+$scope.style_open_item.id,
+            status:1
+        },config).then(function (res) {
+            $scope.Config.currentPage=1;
+            tablePages();
+        },function (err) {
             console.log(err);
         })
     };
 //关闭操作
-    $scope.style_close = function (item) {
-        $scope.style_close_item = item;
+    $scope.style_close=function (item) {
+        $scope.style_close_item=item;
     };
 //关闭确认按钮
-    $scope.style_close_btn_ok = function () {
-
-        let url = 'http://test.cdlhzz.cn:888/mall/style-status';
-        $http.post(url, {
-            id: +$scope.style_close_item.id,
-            status: 0
-        }, config).then(function (res) {
-            $http.get('http://test.cdlhzz.cn:888/mall/style-list').then(function (res) {
-                $scope.style_arr = res.data.data.series_list.details;
-            }, function (err) {
-                console.log(err);
-            });
-            $scope.page = 1;
-        }, function (err) {
+    $scope.style_close_btn_ok=function () {
+        let url='http://test.cdlhzz.cn:888/mall/style-status';
+        $http.post(url,{
+            id:+$scope.style_close_item.id,
+            status:0
+        },config).then(function (res) {
+            $scope.Config.currentPage=1;
+            tablePages();
+        },function (err) {
             console.log(err);
         })
     };
+
 
     /*********************************风格结束*******************************/
 
