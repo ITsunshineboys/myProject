@@ -1767,6 +1767,7 @@ class OrderController extends Controller
                         ->asArray()
                         ->where(['id'=>$GoodsOrder->supplier_id])
                         ->one()['uid'];
+                        var_dump($supplier_uid);die;
                     $registration_id=User::find()
                         ->select('registration_id')
                         ->asArray()
