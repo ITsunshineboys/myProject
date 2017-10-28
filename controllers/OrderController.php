@@ -1770,7 +1770,7 @@ class OrderController extends Controller
                     $registration_id=User::find()
                         ->select('registration_id')
                         ->asArray()
-                        ->where(['id'=>$supplier_uid])
+                        ->where(['id'=>$supplier_uid,'last_role_id_app'=>6])
                         ->one()['registration_id'];
                 $push=new Jpush();
                 $extras = [];//推送附加字段的类型
