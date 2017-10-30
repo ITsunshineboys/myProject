@@ -365,7 +365,9 @@ class ChatController extends Controller
             ->one();
         $res['news']['send_time']=date('Y-m-d H:i:s',$res['news']['send_time']);
         $data=ChatRecord::userlog($u_id,$role_id);
-        var_dump($data);die;
+        if(!$data){
+            $data=[];
+        }
        foreach ($data as &$v){
           $user_info=User::find()->select('id,last_role_id_app')->asArray()->where(['id'=>$v['lxr']])->one();
           switch ($user_info['last_role_id_app']){
