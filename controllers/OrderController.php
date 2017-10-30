@@ -1700,7 +1700,6 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        var_dump($user->id);exit;
         $request=Yii::$app->request;
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
@@ -1713,8 +1712,10 @@ class OrderController extends Controller
             ]);
         }
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-        
         $supplier=Supplier::find()->where(['id'=>$GoodsOrder->supplier_id])->one();
+        $supplier->uid=$user->id;
+        $supplier->save(false);
+        exit;
        $supplier_user=User::find()->where(['id'=>$supplier->uid])->one();
          var_dump($supplier_user);exit;
         if ($GoodsOrder->pay_status==0)
