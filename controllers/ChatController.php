@@ -4,10 +4,12 @@ namespace app\controllers;
 
 
 use app\models\ChatRecord;
+use app\models\Supplier;
 use app\models\User;
 use app\models\UserChat;
 use app\models\UserFreezelist;
 use app\models\UserNewsRecord;
+use app\models\Worker;
 use app\services\ChatService;
 use app\services\FileService;
 use yii\helpers\Json;
@@ -15,6 +17,10 @@ use yii\web\Controller;
 
 class ChatController extends Controller
 {
+
+    const SUPPLIER_ROLE=6;
+    const OWNER_ROLE=7;
+    const WORKER_ROLE=2;
 
     private static function getUser()
     {
@@ -358,13 +364,30 @@ class ChatController extends Controller
             ->orderBy('send_time Desc')
             ->one();
         $data=ChatRecord::userlog($u_id,$role_id);
+
        foreach ($data as &$v){
-          $user_info=User::find()->select('icon,nickname')->asArray()->where(['id'=>$v['lxr']])->one();
+          $user_info=User::find()->select('id,last_role_id_app')->asArray()->where(['id'=>$v['lxr']])->one();
+          switch ($user_info['last_role_id_app']){
+              case 6:
+                  $v['nickname']=Supplier::find()->select('shop_name')->asArray()->where(['uid'=>$v['lxr']])->one()['shop_name'];
+                  $v['icon']=Supplier::find()->select('icon')->asArray()->where(['uid'=>$v['lxr']])->one()['icon'];
+                  break;
+              case 7:
+                  $v['nickname']=User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
+                  $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
+                  break;
+              case 2:
+                  $v['nickname']='工人-'.Worker::find()->select('nickname')->asArray()->where(['uid'=>$v['lxr']])->one()['nickname'];
+                  $v['icon']=Worker::find()->select('icon')->asArray()->where(['uid'=>$v['lxr']])->one()['icon'];
+
+
+          }
           $v['send_time']=date('Y-m-d H:i:s',$v['send_time']);
           unset($v['send_role_id']);
           unset($v['to_role_id']);
           unset($v['send_uid']);
           unset($v['to_uid']);
+
          $res['chat_news'][]= array_merge($user_info,$v);
 
        }
@@ -376,16 +399,25 @@ class ChatController extends Controller
 
 
     }
+    /**
+     * 消息列表
+     * @return array|string
+     */
     public function actionUserNewsList(){
         $user = self::getUser();
         if (!is_array($user)) {
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $info=UserNewsRecord::find()
+        $new_infos=UserNewsRecord::find()
             ->where(['role_id'=>$role_id,'uid'=>$u_id])
             ->asArray()
+            ->orderBy('send_time Desc')
             ->all();
+         foreach ($new_infos as $k=>&$info){
+             $info['send_time']=date('Y-m-d H:i;s ',$info['send_time']);
+
+         }
         if(!$info){
             return Json::encode([
                 'code'=>200,
@@ -396,7 +428,7 @@ class ChatController extends Controller
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>$info
+            'data'=>$new_infos
         ]);
 
     }
