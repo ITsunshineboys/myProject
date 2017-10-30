@@ -581,7 +581,7 @@ class StringService
      */
     public static function getUniqueStringBySalt($salt)
     {
-        $ret = str_split($salt . time());
+        $ret = str_split($salt . time() . rand(10000, 99999));
         shuffle($ret);
         return join($ret);
     }
