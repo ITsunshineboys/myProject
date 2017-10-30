@@ -572,4 +572,17 @@ class StringService
             return false;
         }
     }
+
+    /**
+     * Get unique string by salt
+     *
+     * @param string $salt salt
+     * @return string
+     */
+    public static function getUniqueStringBySalt($salt)
+    {
+        $ret = str_split($salt . time());
+        shuffle($ret);
+        return join($ret);
+    }
 }

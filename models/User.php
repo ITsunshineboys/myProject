@@ -5,6 +5,7 @@ namespace app\models;
 use app\services\StringService;
 use app\services\SmValidationService;
 use app\services\ModelService;
+use app\services\ChatService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -1714,6 +1715,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
+
+        if ($insert) {
+            (new ChatService)->createUser(StringService::getUniqueStringBySalt($this->mobile),
+                Yii::$app->params['chatOptions']['user_password_default']);
+        }
 
         $key = self::CACHE_PREFIX . $this->id;
         $cache = Yii::$app->cache;

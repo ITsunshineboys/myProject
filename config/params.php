@@ -182,7 +182,8 @@ return [
         'client_id' => 'YXA6i1icgLV5Eee3tef56bpxaQ',
         'client_secret' => 'YXA69F9p-SBqT-pW7F_3Zi_-dcxSC78',
         'org_name' => '1185170730178177',
-        'app_name' => 'aitecube'
+        'app_name' => 'aitecube',
+        'user_password_default' => 'a123',
     ],
     'value_all' => -1, // 下拉框“全部”的值
     'style_series' => [
