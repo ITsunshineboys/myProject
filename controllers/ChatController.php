@@ -353,7 +353,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $push_news=UserNewsRecord::find()
-            ->where(['u_id'=>$u_id,'role_id'=>$role_id])
+            ->where(['uid'=>$u_id,'role_id'=>$role_id])
             ->asArray()
             ->orderBy('sned_time Desc')
             ->one();
