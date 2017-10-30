@@ -9,32 +9,32 @@
     <div class="merchant_content">
         <p>
             <span class="glyphicon glyphicon-calendar"></span>
-            当前日期:<span>2017-08-08</span>
+            当前日期:<span ng-bind="result.today_date"></span>
         </p>
         <div class="panels">
             <div>
                 <span>今日订单金额</span>
-                <span>4155</span>
+                <span ng-bind="result.today_amount_order"></span>
             </div>
             <div>
-                <span>今日订单</span>
-                <span>233</span>
+                <span>今日订单数</span>
+                <span ng-bind="result.today_order_number"></span>
             </div>
             <div>
                 <span>今日游客数</span>
-                <span>85</span>
+                <span ng-bind="result.today_ip_number"></span>
             </div>
             <div>
                 <span>今日访问量</span>
-                <span>315</span>
+                <span ng-bind="result.today_viewed_number"></span>
             </div>
             <div>
                 <span>新增商家</span>
-                <span>4454</span>
+                <span ng-bind="result.delta_supplier_number"></span>
             </div>
             <div>
                 <span>商家总数</span>
-                <span>3600</span>
+                <span ng-bind="result.total_supplier_number"></span>
             </div>
         </div>
     </div>

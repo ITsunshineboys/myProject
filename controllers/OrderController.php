@@ -4369,7 +4369,7 @@ class OrderController extends Controller
                     'data' =>$end_time
                 ]);
             }else{
-                $code=1000;
+                $code=200;
                 return Json::encode([
                     'code' => $code,
                     'msg'  =>'你已经提醒过发货了。'

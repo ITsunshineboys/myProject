@@ -231,116 +231,219 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     /*********************************风格结束*******************************/
 
     /*********************************属性开始*******************************/
-    /*分类选择下拉框*/
+    /*分类选择下拉框初始化*/
+    $scope.dropdown = {
+        firstselect: 0,
+        secselect: 0
+    }
+
+    /*分页配置*/
+    $scope.pageConfig = {
+        showJump: true,
+        itemsPerPage: 12,
+        currentPage: 1,
+        onChange: function () {
+            tableList();
+        }
+    }
+
+
+    /*默认参数*/
+    $scope.attr_params = {
+        pid: 0,   //父分类id
+        page: 1,  //当前页数
+        'sort[]': "attr_op_time:3" //排序规则 默认按最后操作时间降序排列
+    }
+
+    /*排序按钮样式控制*/
+    $scope.sortStyleFunc = () => {
+        return $scope.attr_params['sort[]'].split(':')[1]
+    }
+
+    firstClass();
     /*分类选择一级下拉框*/
-    $scope.firstClass = (function () {
+    function firstClass() {
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
-        }).then(function (response) {
+        }).then((response) => {
             $scope.firstclass = response.data.data.categories;
-            $scope.firstselect = response.data.data.categories[0].id;
+            $scope.dropdown.firstselect = response.data.data.categories[0].id;
         })
-    })()
+    }
 
     /*分类选择二级下拉框*/
-    $scope.subClass = function (obj) {
-        console.log(obj)
+    function subClass(obj) {
         $http({
             method: "get",
             url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
             params: {pid: obj}
         }).then(function (response) {
             $scope.secondclass = response.data.data.categories;
-            $scope.secselect = response.data.data.categories[0].id;
+            $scope.dropdown.secselect = response.data.data.categories[0].id;
         })
     }
 
-    /*属性管理table*/
-    $scope.allproperties = (function () {
-        $http({
-            method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
-            params: {"sort[]": "attr_op_time:3"}
-        }).then(function (res) {
-            $scope.proptable = res.data.data.goods_attr_list_admin.details;
-        })
-    })()
 
-    /*属性分类选择*/
-    $scope.$watch('firstselect', function (newVal,oldVal) {
-        $scope.handledesorder = true;
-        $scope.handleascorder = false;
-        if (!$scope.secselect) {
-            $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
-                params: {pid: +newVal},
-            }).then(function (res) {
-                console.log('属性管理分类选择第一个下拉框')
-                console.log(res);
-                $scope.proptable = res.data.data.goods_attr_list_admin.details;
-            }, function (err) {
-                console.log(err);
-            })
-        } else {
-            return;
-        }
-        ;
-    })
+    // /*分类选择下拉框*/
+    // /*分类选择一级下拉框*/
+    // $scope.firstClass = (function () {
+    //     $http({
+    //         method: "get",
+    //         url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+    //     }).then(function (response) {
+    //         $scope.firstclass = response.data.data.categories;
+    //         $scope.firstselect = response.data.data.categories[0].id;
+    //     })
+    // })()
+    //
+    // /*分类选择二级下拉框*/
+    // $scope.subClass = function (obj) {
+    //     console.log(obj)
+    //     $http({
+    //         method: "get",
+    //         url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+    //         params: {pid: obj}
+    //     }).then(function (response) {
+    //         $scope.secondclass = response.data.data.categories;
+    //         $scope.secselect = response.data.data.categories[0].id;
+    //     })
+    // }
 
-    $scope.$watch('secselect', function (newVal,oldVal) {
-        $scope.handledesorder = true;
-        $scope.handleascorder = false;
-        if (newVal != 0) {
-            $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
-                params: {pid: +newVal},
-            }).then(function (res) {
-                console.log(res);
-                $scope.proptable = res.data.data.goods_attr_list_admin.details;
-            }, function (err) {
-                console.log(err);
-            })
-        } else {
-            $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
-                params: {pid: +$scope.firstselect},
-            }).then(function (res) {
-                $scope.proptable = res.data.data.goods_attr_list_admin.details;
-            }, function (err) {
-                console.log(err);
-            })
-        }
+
+    /*分类筛选方法*/
+    $scope.$watch('dropdown.firstselect', function (value, oldValue) {
+        $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 下单时间排序
+        $scope.pageConfig.currentPage = 1;
+        subClass(value);
+        $scope.attr_params.pid = value;
+        tableList()
     });
 
 
-    /*操作时间降序*/
-    $scope.handleDesorder = () => {
-        $scope.handledesorder = true;
-        $scope.handleascorder = false;
-        sortTime(3);
+    $scope.$watch('dropdown.secselect', function (value, oldValue) {
+        $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 下单时间排序
+        $scope.pageConfig.currentPage = 1;
+        if (value == oldValue) {
+            return
+        }
+        if (value) {
+            $scope.attr_params.pid = value;
+            tableList()
+        } else {
+            //二级分类id为0
+            $scope.attr_params.pid = $scope.dropdown.firstselect;
+            tableList()
+        }
+    });
+
+    // 最后操作时间排序
+    $scope.sortTime = function () {
+        $scope.attr_params['sort[]'] = $scope.attr_params['sort[]'] == 'attr_op_time:3' ? 'attr_op_time:4' : 'attr_op_time:3';
+        $scope.pageConfig.currentPage = 1;
+        tableList();
     }
 
 
-    /*操作时间升序*/
-    $scope.handleAsorder = () => {
-        $scope.handledesorder = false;
-        $scope.handleascorder = true;
-        sortTime(4);
-    }
-
-    /*排序公共方法*/
-    function sortTime(sortmethod) {
-        $scope.firstselect == 0 && !$scope.secselect ? $scope.pid = $scope.firstselect : false; //第一个下拉框为全部
-        $scope.firstselect != 0 && !$scope.secselect ? $scope.pid = $scope.firstselect : false; //二级下拉为全部
-        $scope.firstselect != 0 && $scope.secselect ? $scope.pid = $scope.secselect : false; //两个都不为全部
-        sortparam = 'attr_op_time:' + sortmethod;
+    /*列表数据获取*/
+    function tableList() {
+        $scope.attr_params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
-            params: {"sort[]": sortparam, pid: $scope.pid || 0},
             url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+            params: $scope.attr_params,
         }).then(function (res) {
-            $scope.proptable = res.data.data.goods_attr_list_admin.details;
-            // $scope.selPage = 1;
+            console.log(res);
+            $scope.pageConfig.totalItems = res.data.data.goods_attr_list_admin.total;
+            $scope.listdata = res.data.data.goods_attr_list_admin.details;
         })
     }
+
+    // /*属性管理table*/
+    // $scope.allproperties = (function () {
+    //     $http({
+    //         method: "get",
+    //         url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+    //         params: {"sort[]": "attr_op_time:3"}
+    //     }).then(function (res) {
+    //         $scope.proptable = res.data.data.goods_attr_list_admin.details;
+    //     })
+    // })()
+    //
+    // /*属性分类选择*/
+    // $scope.$watch('firstselect', function (newVal,oldVal) {
+    //     $scope.handledesorder = true;
+    //     $scope.handleascorder = false;
+    //     if (!$scope.secselect) {
+    //         $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+    //             params: {pid: +newVal},
+    //         }).then(function (res) {
+    //             console.log('属性管理分类选择第一个下拉框')
+    //             console.log(res);
+    //             $scope.proptable = res.data.data.goods_attr_list_admin.details;
+    //         }, function (err) {
+    //             console.log(err);
+    //         })
+    //     } else {
+    //         return;
+    //     }
+    //     ;
+    // })
+    //
+    // $scope.$watch('secselect', function (newVal,oldVal) {
+    //     $scope.handledesorder = true;
+    //     $scope.handleascorder = false;
+    //     if (newVal != 0) {
+    //         $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+    //             params: {pid: +newVal},
+    //         }).then(function (res) {
+    //             console.log(res);
+    //             $scope.proptable = res.data.data.goods_attr_list_admin.details;
+    //         }, function (err) {
+    //             console.log(err);
+    //         })
+    //     } else {
+    //         $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+    //             params: {pid: +$scope.firstselect},
+    //         }).then(function (res) {
+    //             $scope.proptable = res.data.data.goods_attr_list_admin.details;
+    //         }, function (err) {
+    //             console.log(err);
+    //         })
+    //     }
+    // });
+    //
+    //
+    // /*操作时间降序*/
+    // $scope.handleDesorder = () => {
+    //     $scope.handledesorder = true;
+    //     $scope.handleascorder = false;
+    //     sortTime(3);
+    // }
+    //
+    //
+    // /*操作时间升序*/
+    // $scope.handleAsorder = () => {
+    //     $scope.handledesorder = false;
+    //     $scope.handleascorder = true;
+    //     sortTime(4);
+    // }
+    //
+    // /*排序公共方法*/
+    // function sortTime(sortmethod) {
+    //     $scope.firstselect == 0 && !$scope.secselect ? $scope.pid = $scope.firstselect : false; //第一个下拉框为全部
+    //     $scope.firstselect != 0 && !$scope.secselect ? $scope.pid = $scope.firstselect : false; //二级下拉为全部
+    //     $scope.firstselect != 0 && $scope.secselect ? $scope.pid = $scope.secselect : false; //两个都不为全部
+    //     sortparam = 'attr_op_time:' + sortmethod;
+    //     $http({
+    //         method: "get",
+    //         params: {"sort[]": sortparam, pid: $scope.pid || 0},
+    //         url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+    //     }).then(function (res) {
+    //         $scope.proptable = res.data.data.goods_attr_list_admin.details;
+    //     })
+    // }
+    /**/
 
     /*********************************属性结束*******************************/
 });
