@@ -394,6 +394,10 @@ class ChatController extends Controller
          $res['chat_news'][]= array_merge($user_info,$v);
 
        }
+       $res['service']=[
+            'phone'=>'18349132391',
+            'time'=>'8:00-21:00'
+       ];
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
