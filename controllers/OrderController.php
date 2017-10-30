@@ -1712,7 +1712,7 @@ class OrderController extends Controller
             ]);
         }
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-
+        var_dump($GoodsOrder->supplier_id);exit;
         $supplier=Supplier::find()->where(['id'=>$GoodsOrder->supplier_id])->one();
        $supplier_user=User::find()->where(['id'=>$supplier->uid])->one();
          var_dump($supplier_user);exit;
