@@ -4243,7 +4243,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'index-admin' => [
+                'index_admin' => [
                     'today_date' => date('Y-m-d'),
                     'today_amount_order' => $todayAmountOrder,
                     'today_order_number' => $todayOrderNumber,
