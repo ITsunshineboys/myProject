@@ -4264,4 +4264,117 @@ class OrderController extends Controller
                 'data' =>$openid
             ]);
         }
+        
+        /**
+         * 提醒发货接口
+         * @return string
+         */
+        public function actionRemindSendGoods()
+        {
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $order_no=Yii::$app->request->post('order_no','');
+            $sku=Yii::$app->request->post('sku','');
+            $code=1000;
+            if (!$sku ||  !$order_no)
+            {
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $cache = Yii::$app->cache;
+            $data = $cache->get(GoodsOrder::REMIND_SEND_GOODS.$user->id);
+            if (!$data)
+            {
+                $cacheData=GoodsOrder::REMIND_SEND_GOODS.$user->id;
+                $res= $cache->set(GoodsOrder::REMIND_SEND_GOODS.$user->id,$cacheData,strtotime(date('Y-m-d',time()+23*60*60+59*60))-time());
+                if (!$res)
+                {
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+                $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+                if (!$GoodsOrder || !$OrderGoods)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $tran = Yii::$app->db->beginTransaction();
+                try{
+                    $supplier=Supplier::find()
+                        ->where(['id'=>$GoodsOrder->supplier_id])
+                        ->one();
+                    $supplier_user=User::find()
+                        ->where(['id'=>$supplier->uid])
+                        ->one();
+                    $content = "订单号{$order_no},{$OrderGoods[0]->goods_name}...";
+                    $record=new UserNewsRecord();
+                    $record->uid=$supplier_user->id;
+                    $record->role_id=6;
+                    $record->title='请尽快发货';
+                    $record->content=$content;
+                    $record->send_time=time();
+                    if (!$record->save(false))
+                    {
+                        $code=500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                    $tran->commit();
+                }catch (Exception $e){
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $registration_id=$supplier_user->registration_id;
+                $push=new Jpush();
+                $extras = [];//推送附加字段的类型
+                $m_time = '86400';//离线保留时间
+                $receive = ['registration_id'=>[$registration_id]];//设备的id标识
+                $title='请尽快发货';
+                $result = $push->push($receive,$title,$content,$extras, $m_time);
+                if (!$result)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                return Json::encode([
+                    'code' =>  200,
+                    'msg'  => 'ok'
+                ]);
+            }else{
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  =>'你已经提醒过发货了。'
+                ]);
+            }
+        }
+
+
+
+
 }
