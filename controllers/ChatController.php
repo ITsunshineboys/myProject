@@ -48,7 +48,7 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $phone=trim(\Yii::$app->request->post('mobile',''));
+        $username=trim(\Yii::$app->request->post('username',''));
         $password=trim(\Yii::$app->request->post('password',''));
         if (UserChat::find()->where(['u_id' => $u_id, 'role_id' => $role_id])->one()) {
             $code = 1000;
@@ -57,7 +57,7 @@ class ChatController extends Controller
                 'msg' => '已有聊天号，无须新建'
             ]);
         }
-        $user_chat = UserChat::newChatUser($phone,$password,$u_id,$role_id);
+        $user_chat = UserChat::newChatUser($username,$password,$u_id,$role_id);
         if (!$user_chat) {
             $code = 500;
             return Json::encode([
@@ -441,8 +441,8 @@ class ChatController extends Controller
     }
 
     public function actionTest(){
-        $chat=new ChatService();
-       $a= $chat->getUser('15608058683');
-        return json_encode($a);
+        $encryptedData = \Yii::$app->getSecurity()->generatePasswordHash('123');
+        var_dump($encryptedData);
+
     }
 }
