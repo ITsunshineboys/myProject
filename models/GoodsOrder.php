@@ -2516,12 +2516,7 @@ class GoodsOrder extends ActiveRecord
        $output['discount_price']=GoodsOrder::switchMoney($amount_order);
        $output['amount_order']=GoodsOrder::switchMoney($freight+$amount_order);
        $output['consignee']=$arr[0]['consignee'];
-       if (array_key_exists($arr[0]['district_code'],Yii::$app->params['districts'][0]))
-       {
-           $output['district']=LogisticsDistrict::getdistrict($arr[0]['district_code']).$arr[0]['region'];
-       }else{
-           $output['district']='';
-       }
+        $output['district']=LogisticsDistrict::getdistrict($arr[0]['district_code']).$arr[0]['region'];
        $output['invoice_information']=$arr[0]['invoice_content'].'-'.$arr[0]['invoice_header'];
        $output['invoicer_card']=$arr[0]['invoicer_card'];
        $output['consignee_mobile']=$arr[0]['consignee_mobile'];
@@ -2637,7 +2632,7 @@ class GoodsOrder extends ActiveRecord
                    break;
                case  '售后结束':
                    $arr[$k]['status_code']='after_sale_completed';
-                   $arr[$k]['status_desc']='售后结束';
+                   $arr[$k]['status_desc']='售后完成';
                    break;
                case self::ORDER_TYPE_DESC_COMPLETED:
                    $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
