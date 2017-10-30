@@ -1540,10 +1540,15 @@ CREATE TABLE `deleted_goods_comment` (
 -- 10.23 start
 CREATE TABLE `chat_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `chat_id` int(11) NOT NULL COMMENT '聊天用户id',
-  `content` varchar(255) NOT NULL COMMENT '消息内容',
+  `send_role_id` int(11) NOT NULL,
+  `send_uid` int(11) NOT NULL,
+  `to_role_id` int(11) NOT NULL,
+  `to_uid` int(11) NOT NULL,
+  `content` varchar(255) NOT NULL COMMENT '内容',
+  `send_time` int(11) NOT NULL,
+  `type` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
 -- 10.27 start
