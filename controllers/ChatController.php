@@ -371,15 +371,15 @@ class ChatController extends Controller
        foreach ($data as &$v){
           $user_info=User::find()->select('id,last_role_id_app')->asArray()->where(['id'=>$v['lxr']])->one();
           switch ($user_info['last_role_id_app']){
-              case 6:
+              case self::SUPPLIER_ROLE:
                   $v['nickname']=Supplier::find()->select('shop_name')->asArray()->where(['uid'=>$v['lxr']])->one()['shop_name'];
                   $v['icon']=Supplier::find()->select('icon')->asArray()->where(['uid'=>$v['lxr']])->one()['icon'];
                   break;
-              case 7:
+              case self::OWNER_ROLE:
                   $v['nickname']=User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
                   $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
                   break;
-              case 2:
+              case self::WORKER_ROLE:
                   $v['nickname']='工人-'.Worker::find()->select('nickname')->asArray()->where(['uid'=>$v['lxr']])->one()['nickname'];
                   $v['icon']=Worker::find()->select('icon')->asArray()->where(['uid'=>$v['lxr']])->one()['icon'];
 
