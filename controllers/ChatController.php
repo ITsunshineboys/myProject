@@ -352,12 +352,11 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $push_news=UserNewsRecord::find()
+        $res['news']=UserNewsRecord::find()
             ->where(['uid'=>$u_id,'role_id'=>$role_id])
             ->asArray()
             ->orderBy('send_time Desc')
             ->one();
-        var_dump($push_news);die;
         $data=ChatRecord::userlog($u_id,$role_id);
        foreach ($data as &$v){
           $user_info=User::find()->select('icon,nickname')->asArray()->where(['id'=>$v['lxr']])->one();
@@ -366,7 +365,7 @@ class ChatController extends Controller
           unset($v['to_role_id']);
           unset($v['send_uid']);
           unset($v['to_uid']);
-         $res[]= array_merge($user_info,$v);
+         $res['chat_news']= array_merge($user_info,$v);
 
        }
         return Json::encode([
