@@ -1388,9 +1388,7 @@ class WithdrawalsController extends Controller
               return Json::encode([
                 'code' => $code,
                 'msg' => 'ok',
-                'data'=>[
-                    'arrival_time'=>date('Y-m-d h:i',$time+21*60*60*3)
-                ]
+                'data'=>date('Y-m-d h:i',$time+21*60*60*3)
             ]);
         }catch (Exception $e){
             $tran->rollBack();
@@ -1774,7 +1772,7 @@ class WithdrawalsController extends Controller
 
 
 
-    
+
     public function  actionFindUser()
     {
         $user = Yii::$app->user->identity;
