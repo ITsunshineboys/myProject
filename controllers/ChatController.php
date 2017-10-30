@@ -356,7 +356,7 @@ class ChatController extends Controller
             ->where(['u_id'=>$u_id,'role_id'=>$role_id])
             ->asArray()
             ->orderBy('sned_time Desc')
-            ->limit(1);
+            ->one();
         var_dump($push_news);die;
         $data=ChatRecord::userlog($u_id,$role_id);
        foreach ($data as &$v){
