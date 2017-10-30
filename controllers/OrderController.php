@@ -1768,7 +1768,7 @@ class OrderController extends Controller
                 $push=new Jpush();
                 $extras = [];//推送附加字段的类型
                 $m_time = '86400';//离线保留时间
-                $receive = ['registration_id'=>['100d855909432a20899']];//设备的id标识
+                $receive = ['registration_id'=>[$registration_id]];//设备的id标识
                 $title='已取消订单';
 
                 $result = $push->push($receive,$title,$content,$extras, $m_time);
