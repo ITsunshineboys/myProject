@@ -75,7 +75,7 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $role_id
      * @return array|bool
      */
-    public static function newChatUser($username, $password, $u_id, $role_id)
+    public static function newChatUser($mobile, $password, $u_id, $role_id)
     {
 
         $trans = \Yii::$app->db->beginTransaction();
@@ -83,21 +83,24 @@ class UserChat extends \yii\db\ActiveRecord
             $chat = new self();
             $chat->u_id = $u_id;
             $chat->role_id = $role_id;
-            $chat->chat_username = $username;
+            $chat->chat_username = $mobile;
             $chat->save();
+            $chat_online = new ChatService();
+            $username = $chat->chat_username;
+
+            $password = \Yii::$app->security->generatePasswordHash($password);
+            $hx = $chat_online->createUser($username, $password);
+            if(!$hx){
+                $trans->rollBack();
+                return false;
+            }
             $trans->commit();
+
         } catch (Exception $e) {
             $trans->rollBack();
             return false;
         }
         //创建环信号
-        $chat_online = new ChatService();
-        $username = $chat->chat_username;
-        if ($chat_online->getUser($username)) {
-            return false;
-        }
-        $password = \Yii::$app->security->generatePasswordHash($password);
-        $hx = $chat_online->createUser($username, $password);
 
         return [$chat, $hx];
     }
@@ -152,22 +155,28 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $to_user
      * @return int|mixed
      */
-    public static function sendTextMessage($content, $nickname='admin',$chat_id,$to_user)
+    public static function sendTextMessage($content, $mobile,$send_uid,$send_role_id,$to_uid)
     {
+
+        $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat_hx = new ChatService();
-            $from = $nickname;
-            $target = [$to_user];
-
+            $from = $mobile;
+            $target = [$to_user['mobile']];
             $re = $chat_hx->sendText($from, $target_type = 'users', $target, $content);
-            if($re){
-                $chat_record=new ChatRecord();
-                $chat_record->chat_id=$chat_id;
-                $chat_record->content=$content;
-                if(!$chat_record->save()){
+            if($re) {
+                $chat_record = new ChatRecord();
+                $chat_record->to_uid = $to_uid;
+                $chat_record->to_role_id = $to_user['last_role_id_app'];
+                $chat_record->send_uid = $send_uid;
+                $chat_record->send_role_id = $send_role_id;
+                $chat_record->content = $content;
+                $chat_record->send_time = time();
+                $chat_record->type = 'text';
+                if (!$chat_record->save()) {
                     $trans->rollBack();
-                    return $code=500;
+                    return $code = 500;
                 }
             }else{
                 $trans->rollBack();
@@ -175,6 +184,7 @@ class UserChat extends \yii\db\ActiveRecord
             }
             $trans->commit();
             return $re;
+
         } catch (Exception $e) {
             $trans->rollBack();
             return $code = 500;
@@ -189,64 +199,75 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $filepath
      * @return int|mixed
      */
-    public static function SendImg($nickname='admin',$chat_id,$to_user,$filepath){
+    public static function SendImg($mobile,$send_uid,$send_role_id,$to_uid,$filepath){
 
+        $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat_hx = new ChatService();
-            $from = $nickname;
-            $target = [$to_user];
-
+            $from = $mobile;
+            $target = [$to_user['mobile']];
             $re = $chat_hx->sendImage($filepath,$from, $target_type = 'users', $target);
             if($re) {
                 $chat_record = new ChatRecord();
-                $chat_record->chat_id = $chat_id;
+                $chat_record->to_uid = $to_uid;
+                $chat_record->to_role_id = $to_user['last_role_id_app'];
+                $chat_record->send_uid = $send_uid;
+                $chat_record->send_role_id = $send_role_id;
                 $chat_record->content = $filepath;
+                $chat_record->send_time = time();
+                $chat_record->type = 'img';
                 if (!$chat_record->save()) {
                     $trans->rollBack();
                     return $code = 500;
                 }
-            }
-            else{
+            }else{
                 $trans->rollBack();
                 return $code=500;
             }
             $trans->commit();
             return $re;
 
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $trans->rollBack();
             return $code = 500;
+
         }
     }
 
-    public static function SendAudio($nickname='admin',$chat_id,$to_user,$filepath,$length){
+    public static function SendAudio($mobile,$send_uid,$send_role_id,$to_uid,$filepath,$length){
+
+        $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat_hx = new ChatService();
-            $from = $nickname;
-            $target = [$to_user];
-
+            $from = $mobile;
+            $target = [$to_user['mobile']];
             $re = $chat_hx->sendAudio($filepath,$from, $target_type = 'users', $target,$length);
             if($re) {
                 $chat_record = new ChatRecord();
-                $chat_record->chat_id = $chat_id;
+                $chat_record->to_uid = $to_uid;
+                $chat_record->to_role_id = $to_user['last_role_id_app'];
+                $chat_record->send_uid = $send_uid;
+                $chat_record->send_role_id = $send_role_id;
                 $chat_record->content = $filepath;
+                $chat_record->send_time = time();
+                $chat_record->type = 'audio';
                 if (!$chat_record->save()) {
                     $trans->rollBack();
                     return $code = 500;
                 }
-            }
-            else{
+            }else{
                 $trans->rollBack();
                 return $code=500;
             }
             $trans->commit();
             return $re;
 
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $trans->rollBack();
             return $code = 500;
+
         }
     }
 }

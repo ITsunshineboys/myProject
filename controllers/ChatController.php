@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 
+use app\models\ChatRecord;
 use app\models\User;
 use app\models\UserChat;
 use app\models\UserFreezelist;
@@ -41,8 +42,8 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $username=trim(\Yii::$app->request->post('username',''));
-        $password=trim(\Yii::$app->request->post(' ',''));
+        $phone=trim(\Yii::$app->request->post('mobile',''));
+        $password=trim(\Yii::$app->request->post('password',''));
         if (UserChat::find()->where(['u_id' => $u_id, 'role_id' => $role_id])->one()) {
             $code = 1000;
             return Json::encode([
@@ -50,7 +51,7 @@ class ChatController extends Controller
                 'msg' => '已有聊天号，无须新建'
             ]);
         }
-        $user_chat = UserChat::newChatUser($username,$password,$u_id,$role_id);
+        $user_chat = UserChat::newChatUser($phone,$password,$u_id,$role_id);
         if (!$user_chat) {
             $code = 500;
             return Json::encode([
@@ -218,24 +219,24 @@ class ChatController extends Controller
         list($u_id, $role_id) = $user;
         $code=1000;
         $message=trim(\Yii::$app->request->post('message'));
-        $to_user=trim(\Yii::$app->request->post('to_user'));
+        $to_uid=trim(\Yii::$app->request->post('to_uid'));
+        $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
-        $res=$user_hx->getUser($to_user);
+        $res=$user_hx->getUser($to_user['mobile']);
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,
                 'msg'=>$res['error']
             ]);
         }
-        $chat_bd=UserChat::find()->where(['u_id'=>$u_id,'role_id'=>$role_id])->asArray()->one();
-        $nickname=User::find()->where(['id'=>$chat_bd['u_id']])->asArray()->one()['nickname'];
-        if(!$chat_bd || !$nickname ){
+        $send_user=User::find()->where(['id'=>$u_id,'last_role_id_app'=>$role_id])->asArray()->one();
+        if(!$send_user ){
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::sendTextMessage($message,$nickname,$chat_bd['id'],$to_user);
+        $data=UserChat::sendTextMessage($message,$send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id']);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -263,24 +264,24 @@ class ChatController extends Controller
         list($u_id, $role_id) = $user;
         $code=1000;
         $filepath=trim(\Yii::$app->request->post('filepath'));
-        $to_user=trim(\Yii::$app->request->post('to_user'));
+        $to_uid=trim(\Yii::$app->request->post('to_uid'));
+        $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
-        $res=$user_hx->getUser($to_user);
+        $res=$user_hx->getUser($to_user['mobile']);
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,
                 'msg'=>$res['error']
             ]);
         }
-        $chat_bd=UserChat::find()->where(['u_id'=>$u_id,'role_id'=>$role_id])->asArray()->one();
-        $nickname=User::find()->where(['id'=>$chat_bd['u_id']])->asArray()->one()['nickname'];
-        if(!$chat_bd || !$nickname ){
+        $send_user=User::find()->where(['id'=>$u_id,'last_role_id_app'=>$role_id])->asArray()->one();
+        if(!$send_user ){
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::SendImg($nickname,$chat_bd['id'],$to_user,$filepath);
+        $data=UserChat::SendImg($send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -308,25 +309,25 @@ class ChatController extends Controller
         list($u_id, $role_id) = $user;
         $code=1000;
         $filepath=trim(\Yii::$app->request->post('filepath'));
-        $to_user=trim(\Yii::$app->request->post('to_user'));
+        $to_uid=trim(\Yii::$app->request->post('to_uid'));
         $length=trim(\Yii::$app->request->post('length'));//语音长度
+        $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
-        $res=$user_hx->getUser($to_user);
+        $res=$user_hx->getUser($to_user['mobile']);
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,
                 'msg'=>$res['error']
             ]);
         }
-        $chat_bd=UserChat::find()->where(['u_id'=>$u_id,'role_id'=>$role_id])->asArray()->one();
-        $nickname=User::find()->where(['id'=>$chat_bd['u_id']])->asArray()->one()['nickname'];
-        if(!$chat_bd || !$nickname ){
+        $send_user=User::find()->where(['id'=>$u_id,'last_role_id_app'=>$role_id])->asArray()->one();
+        if(!$send_user ){
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::SendAudio($nickname,$chat_bd['id'],$to_user,$filepath,$length);
+        $data=UserChat::SendAudio($send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -341,17 +342,36 @@ class ChatController extends Controller
             ]);
         }
     }
+
     public function actionNewsIndex(){
         $user = self::getUser();
         if (!is_array($user)) {
             return $user;
         }
         list($u_id, $role_id) = $user;
+        $data=ChatRecord::userlog($u_id,$role_id);
+       foreach ($data as &$v){
+          $user_info=User::find()->select('icon,nickname')->asArray()->where(['id'=>$v['lxr']])->one();
+          $v['send_time']=date('Y-m-d H:i:s',$v['send_time']);
+          unset($v['send_role_id']);
+          unset($v['to_role_id']);
+          unset($v['send_uid']);
+          unset($v['to_uid']);
+         $res[]= array_merge($user_info,$v);
+
+       }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$res
+        ]);
+
 
     }
 
     public function actionTest(){
-        var_dump(UserNewsRecord::find()->all());
-
+        $chat=new ChatService();
+       $a= $chat->getUser('15608058683');
+        return json_encode($a);
     }
 }
