@@ -1714,6 +1714,7 @@ class OrderController extends Controller
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
         $supplier=Supplier::find()->where(['id'=>$GoodsOrder->supplier_id])->one();
         $supplier_user=User::findOne($supplier->uid);
+         var_dump($supplier_user);exit;
         if ($GoodsOrder->pay_status==0)
         {
             $OrderGoods=OrderGoods::find()
