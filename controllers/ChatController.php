@@ -346,7 +346,7 @@ class ChatController extends Controller
      * 用户消息中心
      * @return array|string
      */
-    public function actionNewsIndex(){
+    public function actionUserNewsIndex(){
         $user = self::getUser();
         if (!is_array($user)) {
             return $user;
@@ -365,7 +365,7 @@ class ChatController extends Controller
           unset($v['to_role_id']);
           unset($v['send_uid']);
           unset($v['to_uid']);
-         $res['chat_news']= array_merge($user_info,$v);
+         $res['chat_news'][]= array_merge($user_info,$v);
 
        }
         return Json::encode([
@@ -374,6 +374,30 @@ class ChatController extends Controller
             'data'=>$res
         ]);
 
+
+    }
+    public function actionUserNewsList(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $info=UserNewsRecord::find()
+            ->where(['role_id'=>$role_id,'uid'=>$u_id])
+            ->asArray()
+            ->all();
+        if(!$info){
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>null
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$info
+        ]);
 
     }
 
