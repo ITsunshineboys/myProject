@@ -4269,7 +4269,7 @@ class OrderController extends Controller
          * 提醒发货接口
          * @return string
          */
-       public function actionRemindSendGoods()
+        public function actionRemindSendGoods()
         {
             $user = Yii::$app->user->identity;
             if (!$user){
@@ -4290,13 +4290,23 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+            if (!$GoodsOrder || !$OrderGoods)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $cache = Yii::$app->cache;
-            $data = $cache->get(GoodsOrder::REMIND_SEND_GOODS.$user->id);
+            $data = $cache->get(GoodsOrder::REMIND_SEND_GOODS.$user->id.$order_no);
             if (!$data)
             {
                 $cacheData=GoodsOrder::REMIND_SEND_GOODS.$user->id;
                 $end_time=strtotime(date('Y-m-d',time()+23*60*60+59*60))-time();
-                $res= $cache->set(GoodsOrder::REMIND_SEND_GOODS.$user->id,$cacheData,$end_time);
+                $res= $cache->set(GoodsOrder::REMIND_SEND_GOODS.$user->id.$order_no,$cacheData,$end_time);
                 if (!$res)
                 {
                     $code=500;
@@ -4305,16 +4315,7 @@ class OrderController extends Controller
                         'msg'  => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-                $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-                if (!$GoodsOrder || !$OrderGoods)
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
+
                 $tran = Yii::$app->db->beginTransaction();
                 try{
                     $supplier=Supplier::find()
@@ -4375,7 +4376,6 @@ class OrderController extends Controller
                 ]);
             }
         }
-
 
 
 
