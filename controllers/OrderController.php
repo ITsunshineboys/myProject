@@ -4269,7 +4269,7 @@ class OrderController extends Controller
          * 提醒发货接口
          * @return string
          */
-        public function actionRemindSendGoods()
+       public function actionRemindSendGoods()
         {
             $user = Yii::$app->user->identity;
             if (!$user){
@@ -4295,7 +4295,8 @@ class OrderController extends Controller
             if (!$data)
             {
                 $cacheData=GoodsOrder::REMIND_SEND_GOODS.$user->id;
-                $res= $cache->set(GoodsOrder::REMIND_SEND_GOODS.$user->id,$cacheData,strtotime(date('Y-m-d',time()+23*60*60+59*60))-time());
+                $end_time=strtotime(date('Y-m-d',time()+23*60*60+59*60))-time();
+                $res= $cache->set(GoodsOrder::REMIND_SEND_GOODS.$user->id,$cacheData,$end_time);
                 if (!$res)
                 {
                     $code=500;
@@ -4363,7 +4364,8 @@ class OrderController extends Controller
                 }
                 return Json::encode([
                     'code' =>  200,
-                    'msg'  => 'ok'
+                    'msg'  => 'ok',
+                    'time' =>$end_time
                 ]);
             }else{
                 $code=1000;
