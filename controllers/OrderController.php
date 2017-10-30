@@ -4365,7 +4365,7 @@ class OrderController extends Controller
                 return Json::encode([
                     'code' =>  200,
                     'msg'  => 'ok',
-                    'time' =>$end_time
+                    'data' =>$end_time
                 ]);
             }else{
                 $code=1000;
