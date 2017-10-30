@@ -4264,7 +4264,7 @@ class OrderController extends Controller
                 'data' =>$openid
             ]);
         }
-        
+
         /**
          * 提醒发货接口
          * @return string
@@ -4323,7 +4323,7 @@ class OrderController extends Controller
                     $supplier_user=User::find()
                         ->where(['id'=>$supplier->uid])
                         ->one();
-                    $content = "订单号{$order_no},{$OrderGoods[0]->goods_name}...";
+                    $content = "订单号{$order_no},{$OrderGoods->goods_name}...";
                     $record=new UserNewsRecord();
                     $record->uid=$supplier_user->id;
                     $record->role_id=6;
