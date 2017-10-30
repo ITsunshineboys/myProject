@@ -1775,14 +1775,7 @@ class WithdrawalsController extends Controller
 
     public function  actionFindUser()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+        $user = User::find()->all();
         return Json::encode([$user]);
     }
 
