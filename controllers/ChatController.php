@@ -342,13 +342,22 @@ class ChatController extends Controller
             ]);
         }
     }
-
+    /**
+     * 用户消息中心
+     * @return array|string
+     */
     public function actionNewsIndex(){
         $user = self::getUser();
         if (!is_array($user)) {
             return $user;
         }
         list($u_id, $role_id) = $user;
+        $push_news=UserNewsRecord::find()
+            ->where(['u_id'=>$u_id,'role_id'=>$role_id])
+            ->asArray()
+            ->orderBy('sned_time Desc')
+            ->limit(1);
+        var_dump($push_news);die;
         $data=ChatRecord::userlog($u_id,$role_id);
        foreach ($data as &$v){
           $user_info=User::find()->select('icon,nickname')->asArray()->where(['id'=>$v['lxr']])->one();
