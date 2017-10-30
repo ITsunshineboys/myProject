@@ -363,6 +363,7 @@ class ChatController extends Controller
             ->asArray()
             ->orderBy('send_time Desc')
             ->one();
+        $res['news']['send_time']=date('Y-m-d H:i:s',$res['news']['send_time']);
         $data=ChatRecord::userlog($u_id,$role_id);
 
        foreach ($data as &$v){
