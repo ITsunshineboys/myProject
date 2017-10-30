@@ -4365,14 +4365,14 @@ class OrderController extends Controller
                 }
                 return Json::encode([
                     'code' =>  200,
-                    'msg'  => 'ok',
+                    'msg'  => '提醒发货',
                     'data' =>$end_time
                 ]);
             }else{
                 $code=200;
                 return Json::encode([
                     'code' => $code,
-                    'msg'  =>'你已经提醒过发货了。'
+                    'msg'  =>'你已经提醒过发货了'
                 ]);
             }
         }
