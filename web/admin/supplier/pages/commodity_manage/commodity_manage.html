@@ -23,7 +23,7 @@
             <div class="all_choose">
                 <ul class="operating_ul">
                     <li data-toggle="modal" data-target="#on_shelves_add_modal">添加</li>
-                    <li ng-modal="selectAll" ng-click="all(selectAll)">全选</li>
+                    <li  ng-click="checkAll()">全选</li>
                     <li data-toggle="modal" data-target="{{prompt}}" ng-click="all_off_shelf()">下架</li>
                 </ul>
                 <!--Menu-->
@@ -87,7 +87,7 @@
                 <td ng-if="show_15">操作</td>
             </tr>
             <tr class="table_content" ng-repeat="item in up_list_arr">
-                <td><input type="checkbox" ng-checked="selectAll" ng-model="item.state"></td>
+                <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
                 <td ng-if="show_1">{{item.sku}}</td>
                 <td ng-if="show_2">{{item.title}}</td>
                 <td ng-if="show_3">¥{{item.supplier_price}}</td>
@@ -107,6 +107,7 @@
         </table>
         <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
+        {{table.roles}}
     </section>
 
     <!--添加模态框-->

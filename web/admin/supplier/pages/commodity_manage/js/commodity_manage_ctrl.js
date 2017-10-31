@@ -17,6 +17,46 @@ let commodity_manage = angular.module("commodity_manage",[])
     $scope.wait_flag=false;
     $scope.logistics_flag=false;
 
+      /*分页配置*/
+      $scope.wjConfig = {
+          showJump: true,
+          itemsPerPage: 12,
+          currentPage: 1,
+          onChange: function () {
+              tablePages();
+          }
+      }
+      let tablePages=function () {
+          $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
+          $http.get(baseUrl+'/mall/goods-list-admin',{
+              params:$scope.params
+          }).then(function (res) {
+              console.log(res);
+              if($scope.on_flag==true){
+                  $scope.up_list_arr=res.data.data.goods_list_admin.details;
+              }else if($scope.down_flag==true){
+                  $scope.down_list_arr=res.data.data.goods_list_admin.details;
+              }
+              $scope.wjConfig.totalItems = res.data.data.goods_list_admin.total;
+          },function (err) {
+              console.log(err);
+          })
+      };
+      $scope.params = {
+          status:2,                       //状态
+          'sort[]': 'online_time:3',      //默认排序
+          keyword: '',                    // 关键字查询
+      };
+      //    全选
+      //全选ID数组
+      $scope.table = {
+          roles: [],
+      };
+      $scope.checkAll = function () {
+          !$scope.table.roles.length ? $scope.table.roles = $scope.up_list_arr.map(function (item) {
+              return item.id;
+          }) : $scope.table.roles.length = 0;
+      };
     /*判断返回*/
       //已上架
     if($stateParams.on_flag==true){
@@ -306,37 +346,8 @@ let commodity_manage = angular.module("commodity_manage",[])
 
     /*-------------------公共功能 结束---------------------------*/
     /*--------------------已上架 开始-------------------------*/
-      $scope.up_list_arr=[]
-      /*分页配置*/
-      $scope.wjConfig = {
-          showJump: true,
-          itemsPerPage: 12,
-          currentPage: 1,
-          onChange: function () {
-              tablePages();
-          }
-      }
-      let tablePages=function () {
-          $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
-          $http.get(baseUrl+'/mall/goods-list-admin',{
-              params:$scope.params
-          }).then(function (res) {
-              console.log(res);
-              if($scope.on_flag==true){
-                  $scope.up_list_arr=res.data.data.goods_list_admin.details;
-              }else if($scope.down_flag==true){
-                  $scope.down_list_arr=res.data.data.goods_list_admin.details;
-              }
-              $scope.wjConfig.totalItems = res.data.data.goods_list_admin.total;
-          },function (err) {
-              console.log(err);
-          })
-      };
-      $scope.params = {
-          status:2,                       //状态
-          'sort[]': 'online_time:3',      //默认排序
-          keyword: '',                    // 关键字查询
-      };
+      //$scope.up_list_arr=[]
+
     /*-------------------销量排序-----------------------*/
       $scope.up_sort_sale_img='lib/images/arrow_default.png';
       $scope.up_sort_sale_click=function(){
