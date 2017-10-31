@@ -18,7 +18,7 @@ insert into role(id, name, admin_module, detail_table, detail_model) values
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(25) DEFAULT '',
+  `username` char(26) DEFAULT '' comment '环信用户名',
   `password` varchar(100) DEFAULT '',
   `authKey` varchar(30) DEFAULT '',
   `authKeyAdmin` varchar(30) DEFAULT '',
