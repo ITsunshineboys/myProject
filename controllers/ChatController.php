@@ -424,7 +424,7 @@ class ChatController extends Controller
             ->orderBy('send_time Desc')
             ->all();
          foreach ($new_infos as $k=>&$info){
-             $info['send_time']=date('Y-m-d H:i;s ',$info['send_time']);
+             $info['send_time']=date('Y-m-d H:i:s ',$info['send_time']);
 
          }
         if(!$info){
