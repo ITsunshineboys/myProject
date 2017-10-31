@@ -1571,5 +1571,7 @@ CREATE TABLE `user_news_record` (
   `title` varchar(100) NOT NULL,
   `content` varchar(255) NOT NULL,
   `send_time` int(11) NOT NULL,
+  `order_no` bigint(30) NOT NULL,
+  `sku` bigint(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
