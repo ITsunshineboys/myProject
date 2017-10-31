@@ -364,6 +364,19 @@ class ChatController extends Controller
             ->orderBy('send_time Desc')
             ->one();
         $res['news']['send_time']=date('Y-m-d H:i:s',$res['news']['send_time']);
+        $res_all=UserNewsRecord::find()
+            ->where(['uid'=>$u_id,'role_id'=>$role_id])
+            ->select('status')
+            ->asArray()
+            ->all();
+      foreach ($res_all as $res){
+
+          if($res['status']==1){
+             $res['news']['status']=$res['status'];
+          }
+      }
+var_dump($res);
+die;
         $data=ChatRecord::userlog($u_id,$role_id);
 
         if(!$data){
