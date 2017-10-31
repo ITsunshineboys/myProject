@@ -367,6 +367,7 @@ class ChatController extends Controller
         $data=ChatRecord::userlog($u_id,$role_id);
 
         if(!$data){
+            $data=[];
             $res['chat_news']=[];
         }
        foreach ($data as $k=>&$v){
