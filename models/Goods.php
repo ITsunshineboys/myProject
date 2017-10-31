@@ -734,11 +734,11 @@ class Goods extends ActiveRecord
      */
     public function canOnline(ActiveRecord $user)
     {
+        $code = 200;
+
         if ($user->login_role_id == Yii::$app->params['lhzzRoleId']
             && in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE])
         ) {
-            $code = 200;
-
             if (!$this->validateCategoryId('category_id')) {
                 $code = 1012;
                 return $code;
@@ -759,7 +759,7 @@ class Goods extends ActiveRecord
                 return $code;
             }
         } else {
-            $code = 403;
+            $this->offline_uid > 0 && $code = 403;
         }
 
         return $code;

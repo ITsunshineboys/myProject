@@ -10,9 +10,11 @@ namespace app\controllers;
 
 use app\models\Worker;
 use app\models\WorkerOrder;
+use app\models\workType;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 use yii\web\Controller;
 
 class WorkerManagementController extends Controller
@@ -73,9 +75,30 @@ class WorkerManagementController extends Controller
         //工人订单
         $worker_order = WorkerOrder::find()->groupBy('order_no')->count('id');
         //工人总金额
-//        $worker_picer = WorkerOrder::
+//        $worker_price = WorkerOrder::
         var_dump($worker_order);exit;
     }
 
+    /**
+     * 工种类型列表
+     * @return string
+     */
+    public function actionWorkTypeList()
+    {
+        $a = trim(\Yii::$app->request->get(''));
+        if (a ){
+
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => WorkType::findByCount(),
+        ]);
+    }
+
+    public function actionWorkTypeAdd()
+    {
+
+    }
 
 }

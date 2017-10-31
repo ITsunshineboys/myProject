@@ -8,6 +8,7 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\db\Query;
 
 class Effect extends ActiveRecord
@@ -103,46 +104,66 @@ class Effect extends ActiveRecord
         }else{
             $post['stairway']=0;
         }
-        $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
-            'bedroom'       => $post['bedroom'],
-            'sittingRoom_diningRoom' => $post['sittingRoom_diningRoom'],
-            'toilet'        => $post['toilet'],
-            'kitchen'       => $post['kitchen'],
-            'window'        => $post['window'],
-            'area'          => $post['area'],
-            'high'          => $post['high'],
-            'province'      => $province,
-            'province_code' => $post['province_code'],
-            'city'          => $city,
-            'city_code'     => $post['city_code'],
-            'district'      => $district,
-            'district_code' => $post['district_code'],
-            'toponymy'      => $post['toponymy'],
-            'street'        => $post['street'],
-            'particulars'   => $post['particulars'],
-            'stairway'      => $post['stairway'],
-            'add_time'      => time(),
-            'house_image'   => $post['house_image'],
-            'type'          => self::TYPE_STATUS_NO,
-            'stair_id'      => $post['stair_id'],
-            'sort_id'      => $sort_id,
-        ])->execute();
+        $tran=\Yii::$app->db->beginTransaction();
+        try{
+            $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
+                'bedroom'       => $post['bedroom'],
+                'sittingRoom_diningRoom' => $post['sittingRoom_diningRoom'],
+                'toilet'        => $post['toilet'],
+                'kitchen'       => $post['kitchen'],
+                'window'        => $post['window'],
+                'area'          => $post['area'],
+                'high'          => $post['high'],
+                'province'      => $province,
+                'province_code' => $post['province_code'],
+                'city'          => $city,
+                'city_code'     => $post['city_code'],
+                'district'      => $district,
+                'district_code' => $post['district_code'],
+                'toponymy'      => $post['toponymy'],
+                'street'        => $post['street'],
+                'particulars'   => $post['particulars'],
+                'stairway'      => $post['stairway'],
+                'add_time'      => time(),
+                'type'          => self::TYPE_STATUS_NO,
+                'stair_id'      => $post['stair_id'],
+                'sort_id'      => $sort_id,
+            ])->execute();
+            if(!$res){
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            $id=\Yii::$app->db->lastInsertID;
+            $effect_earnest=new EffectEarnest();
+            $effect_earnest->effect_id=$id;
+            $effect_earnest->earnest=8900;
+            $effect_earnest->phone=$post['phone'];
+            $effect_earnest->name=$post['name'];
+            $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($post['phone']);
+            $effect_earnest->requirement=$post['requirement'];
+            if(!$effect_earnest->save(false)){
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            $effect_picture=new EffectPicture();
+            $effect_picture->effect_id=$id;
+            $effect_picture->style_id=$post['style'];
+            $effect_picture->series_id=$post['series'];
+            if(!$effect_picture->save(false)){
+                $code=500;
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
 
-         $id=\Yii::$app->db->lastInsertID;
-         $effect_picture=new EffectPicture();
-         $effect_picture->effect_id=$id;
-         $effect_picture->style_id=$post['style_id'];
-         $effect_picture->series_id=$post['series_id'];
-         $data['id']=$id;
-         if(!$effect_picture->save(false)){
-             $code=500;
-             return $code;
-         }
-        if(!$res){
-          $code=500;
-          return $code;
-         }
-        return $data;
     }
     /**
      * get effect view info

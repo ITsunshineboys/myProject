@@ -364,10 +364,24 @@ class ChatController extends Controller
             ->orderBy('send_time Desc')
             ->one();
         $res['news']['send_time']=date('Y-m-d H:i:s',$res['news']['send_time']);
+        $res_all=UserNewsRecord::find()
+            ->where(['uid'=>$u_id,'role_id'=>$role_id])
+            ->select('status')
+            ->asArray()
+            ->all();
+      foreach ($res_all as $res){
+
+          if($res['status']==1){
+             $res['news']['status']=$res['status'];
+          }
+      }
+var_dump($res);
+die;
         $data=ChatRecord::userlog($u_id,$role_id);
 
         if(!$data){
             $data=[];
+            $res['chat_news']=[];
         }
        foreach ($data as $k=>&$v){
 
@@ -448,7 +462,15 @@ class ChatController extends Controller
 
     }
 
-//    public function action
+    public function actionChatInterface(){
+        $code=1000;
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        $chat_uid=(int)trim(\Yii::$app->request->get('chat_uid'));
+        $data=UserChat::chatinfos($chat_uid,$user);
+    }
 
     public function actionTest(){
 
