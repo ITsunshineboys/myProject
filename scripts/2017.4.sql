@@ -1572,6 +1572,7 @@ CREATE TABLE `effect_earnest` (
   `earnest` bigint(20) NOT NULL DEFAULT '0' COMMENT '定金',
   `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
   `remark` text NOT NULL COMMENT '备注',
+  `requirement` varchar(255) DEFAULT NULL,
   `create_time` int(11) NOT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
