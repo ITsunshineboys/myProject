@@ -443,8 +443,8 @@ class ChatController extends Controller
     }
 
     public function actionTest(){
-        $encryptedData = \Yii::$app->getSecurity()->generatePasswordHash('123');
-        var_dump($encryptedData);
+
+        var_dump(User::find()->asArray()->all());
 
     }
 }
