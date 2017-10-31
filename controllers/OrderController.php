@@ -1746,7 +1746,9 @@ class OrderController extends Controller
                         $record->role_id=6;
                         $record->title='已取消订单';
                         $record->content=$content;
-                         $record->send_time=time();
+                        $record->send_time=time();
+                        $record->order_no=$order_no;
+                        $record->sku=$sku;
                          if (!$record->save(false))
                          {
                              $code=500;
