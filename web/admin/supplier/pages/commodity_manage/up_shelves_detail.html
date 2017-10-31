@@ -5,7 +5,7 @@
             <i class="glyphicon glyphicon-home"></i>
             <span class="shop_manage">商品管理 ></span>
             <span class="manage_child">商品详情</span>
-            <img src="image/user.png" alt=""/>
+            <img src="lib/images/user.png" alt=""/>
         </div>
     </header>
     <section>
@@ -29,19 +29,19 @@
             <input type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name" id="des_name" name="des_name" required ng-class="{'border_red':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)}" ng-blur="des_blur=!!form.des_name.$error"/>
             <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
         </div>
-            <div class="class_name" ng-if="brands_arr.length>0">
+            <div class="class_name" ng-if="detail_brand!=''">
                 <span>选择品牌</span>
                 <select ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr">
                 </select>
             </div>
             <!--选择系列-->
-            <div class="class_name" ng-if="series_arr.length>0">
+            <div class="class_name" ng-if="detail_ser!=''">
                 <span>选择系列</span>
                 <select ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr">
                 </select>
             </div>
             <!--选择风格-->
-            <div class="class_name" ng-if="styles_arr.length>0">
+            <div class="class_name" ng-if="detail_style!=''">
                 <span>选择风格</span>
                 <select ng-model="myng.style_model" ng-options="item.id as item.style for item in styles_arr">
                 </select>

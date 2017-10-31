@@ -12,7 +12,6 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
   $scope.myng=$scope;
   let goods_item=$stateParams.item;//点击对应的那条数据
   console.log(goods_item);
-  console.log($stateParams.flag);
   if($stateParams.flag==0){
     $scope.show_flag=false;
   }else if($stateParams.flag==1){
@@ -69,6 +68,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
       category_id:+goods_item.category_id
     }
   }).then(function (res) {
+    console.log(res);
     /*品牌、系列、风格 下拉框开始*/
     $scope.brands_arr=res.data.data.category_brands_styles_series.brands;
     $scope.series_arr=res.data.data.category_brands_styles_series.series;
@@ -79,6 +79,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
         id:$scope.goods_id
       }
     }).then(function (res) {
+      console.log(res);
       $scope.detail_brand=res.data.data.goods_view.brand_name;//品牌名称
       $scope.detail_ser=res.data.data.goods_view.series_name;//系列名称
       $scope.detail_style=res.data.data.goods_view.style_name;//风格名称
@@ -269,6 +270,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
          if(value.id==$scope.logistics_template_id){
            $scope.logistics.splice(key,1);
            $scope.logistics.unshift(value);
+             $scope.logistics_status=true;
            $scope.logistics_red=false;
            break;
          }else if(value.id!=$scope.logistics_template_id){  //判断该商品的物流模板是否删除，如果删除，显示提示文字
@@ -306,6 +308,10 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
 
   /*--------------编辑保存按钮----------------------*/
   $scope.edit_confirm=function (valid,error) {
+      console.log(valid)
+      console.log($scope.upload_cover_src)
+      console.log($scope.logistics_status)
+      console.log(!$scope.price_flag)
     if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag){
       $scope.change_ok='#change_ok';//编辑成功
       $scope.after_sale_services=[];

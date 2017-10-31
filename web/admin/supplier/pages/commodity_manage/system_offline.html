@@ -5,7 +5,7 @@
             <i class="glyphicon glyphicon-home"></i>
             <span class="shop_manage">商品管理 ></span>
             <span class="manage_child">商品详情</span>
-            <img src="image/user.png" alt=""/>
+            <img src="lib/images/user.png" alt=""/>
         </div>
     </header>
     <section>
@@ -31,7 +31,7 @@
             <span class="margin_left">{{detail_arr.brand_name}}</span>
         </div>
         <!--选择系列-->
-        <div class="class_name">
+        <div class="class_name" ng-if="detail_arr.series_name!=''">
             <span>选择系列</span>
             <span class="margin_left">{{detail_arr.series_name}}</span>
         </div>
@@ -119,8 +119,8 @@
                 <br/>
                 <br/>
                 <span class="city_right">城市选择</span>
-                <span class="city_change" ng-repeat="item in logistics_district_names_arr">{{item}}</span>
-                <span>查看</span>
+                <span class="city_change" ng-repeat="item in logistics_district_names_arr.slice(0,3)">{{item}}</span>
+                <span ng-if='logistics_district_names_arr.length>3' style="color: #5677FC" data-toggle="modal" data-target="#show_city">查看</span>
                 <br/>
                 <br/>
                 <span>是否包邮</span>
@@ -190,5 +190,22 @@
             <button ui-sref="commodity_manage({down_flag:true})">返回</button>
         </div>
     </section>
+    <!--查看城市模态框-->
+    <div class="modal fade" id="show_city" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">已选择地区</h4>
+                </div>
+                <div class="modal-body show_city">
+                    <span ng-repeat="item in logistics_district_names_arr">{{item}}</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>

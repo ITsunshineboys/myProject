@@ -299,3 +299,10 @@ hr{
     border-radius: 3px;
 }
 
+.show_city{
+    height: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
