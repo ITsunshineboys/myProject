@@ -1579,5 +1579,6 @@ CREATE TABLE `user_news_record` (
   `send_time` int(11) NOT NULL,
   `order_no` bigint(30) NOT NULL,
   `sku` bigint(30) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未读 1:已读',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
