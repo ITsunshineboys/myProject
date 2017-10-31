@@ -125,7 +125,6 @@ class Effect extends ActiveRecord
                 'particulars'   => $post['particulars'],
                 'stairway'      => $post['stairway'],
                 'add_time'      => time(),
-                'house_image'   => $post['house_image'],
                 'type'          => self::TYPE_STATUS_NO,
                 'stair_id'      => $post['stair_id'],
                 'sort_id'      => $sort_id,
@@ -141,7 +140,8 @@ class Effect extends ActiveRecord
             $effect_earnest->earnest=8900;
             $effect_earnest->phone=$post['phone'];
             $effect_earnest->name=$post['name'];
-            $effect_earnest->transaction_no=date('md', time()) . '1' . rand(10000, 99999);
+            $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($post['phone']);
+            $effect_earnest->requirement=$post['requirement'];
             if(!$effect_earnest->save(false)){
                 $tran->rollBack();
                 $code=500;
@@ -149,8 +149,8 @@ class Effect extends ActiveRecord
             }
             $effect_picture=new EffectPicture();
             $effect_picture->effect_id=$id;
-            $effect_picture->style_id=$post['style_id'];
-            $effect_picture->series_id=$post['series_id'];
+            $effect_picture->style_id=$post['style'];
+            $effect_picture->series_id=$post['series'];
             if(!$effect_picture->save(false)){
                 $code=500;
                 return $code;
