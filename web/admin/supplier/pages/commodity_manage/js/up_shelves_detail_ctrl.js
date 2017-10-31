@@ -252,7 +252,6 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
     (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
   };
 
-
   //售后、保障
   $scope.after_sale_services=[];//售后、保障传值数组
   $scope.invoice_check=true;
