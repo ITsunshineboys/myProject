@@ -387,8 +387,8 @@ class ChatController extends Controller
                   $v['count']=count($all);
                   break;
               case self::WORKER_ROLE:
-                  $v['nickname']='工人-'.Worker::find()->select('nickname')->asArray()->where(['uid'=>$v['lxr']])->one()['nickname'];
-                  $v['icon']=Worker::find()->select('icon')->asArray()->where(['uid'=>$v['lxr']])->one()['icon'];
+                  $v['nickname']='工人-'.User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
+                  $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
                   $v['count']=count($all);
 
 
@@ -447,6 +447,8 @@ class ChatController extends Controller
         ]);
 
     }
+
+//    public function action
 
     public function actionTest(){
 
