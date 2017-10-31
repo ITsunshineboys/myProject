@@ -367,7 +367,7 @@ class ChatController extends Controller
         $data=ChatRecord::userlog($u_id,$role_id);
 
         if(!$data){
-            $data=[];
+            $res['chat_news']=[];
         }
        foreach ($data as $k=>&$v){
 
@@ -448,7 +448,15 @@ class ChatController extends Controller
 
     }
 
-//    public function action
+    public function actionChatInterface(){
+        $code=1000;
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        $chat_uid=(int)trim(\Yii::$app->request->get('chat_uid'));
+        $data=UserChat::chatinfos($chat_uid,$user);
+    }
 
     public function actionTest(){
 
