@@ -944,80 +944,113 @@ class GoodsOrder extends ActiveRecord
     }
 
    /**
-     * 去发货
-     * @param $sku
-     * @param $order_no
-     * @param $waybillname
-     * @param $waybillnumber
-     * @param $shipping_type
-     * @return bool
-     */
+    * 去发货
+    * [Supplierdelivery description]
+    * @param [type] $sku           [description]
+    * @param [type] $order_no      [description]
+    * @param [type] $waybillnumber [description]
+    * @param [type] $shipping_type [description]
+    */
   public static function Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type){
         $create_time=time();
-        if($shipping_type==1){
-            $trans = \Yii::$app->db->beginTransaction();
-            $e=1;
-            try {
-                $res1=\Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>1,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
-                if(!$res1)
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            if($shipping_type==1){
+                    $OrderGoods->shipping_type=1;
+                    $OrderGoods->shipping_status=1;
+                    $res1=$OrderGoods->save(false);
+                    if(!$res1)
+                    {
+                        $trans->rollBack();
+                    }
+                    $express=Express::find()
+                        ->where(['sku'=>$sku,'order_no'=>$order_no])
+                        ->one();
+                    if ($express){
+                        $express->waybillname='送货上门';
+                        $express->create_time=$create_time;
+                       $res2 = $express->save(false);
+                    }else{
+                        $express1=new Express();
+                        $express1->sku=$sku;
+                        $express1->order_no=$order_no;
+                        $express1->waybillname='送货上门';
+                        $express1->create_time=$create_time;
+                        $res2=$express1->save(false);
+                    }
+                    if (!$res2)
+                    {
+                        $trans->rollBack();
+                    }
+            }else
                 {
-                    $trans->rollBack();
-                }
-                $express=Express::find()
-                    ->select('waybillnumber')
-                    ->where(['sku'=>$sku,'order_no'=>$order_no])
-                    ->one();
-                if ($express){
-                    \Yii::$app->db->createCommand()
-                        ->update(self::EXPRESS, [
-                        'waybillname'      =>'送货上门',
-                        'create_time'=>$create_time],'sku='.$sku.' and order_no='.$order_no)
-                        ->execute();
-                }else{
-                    \Yii::$app->db->createCommand()->insert(self::EXPRESS,[
-                        'sku'    => $sku,
-                        'order_no' =>$order_no,
-                        'waybillname'      =>'送货上门',
-                        'create_time'=>$create_time,
-                    ])->execute();
-                }
-            } catch (Exception $e) {
-                $trans->rollBack();
-            }
 
-        }else{
-            $trans = \Yii::$app->db->beginTransaction();
-            $waybillname=(new Express())->GetExpressName($waybillnumber);
-            if (!$waybillname)
+                    $waybillname=(new Express())->GetExpressName($waybillnumber);
+                    if (!$waybillname)
+                    {
+                        $waybillname='未知';
+                    }
+                    $express=Express::find()
+                        ->where(['sku'=>$sku,'order_no'=>$order_no])
+                        ->one();
+                    $OrderGoods->shipping_type=0;
+                    $OrderGoods->shipping_status=1;
+                    $res1=$OrderGoods->save(false);
+                    if (!$res1)
+                    {
+                        $code=500;
+                        $trans->rollBack();
+                        return $code;
+                    }
+                    if ($express){
+                        $express->waybillname=$waybillname;
+                        $express->waybillnumber=$waybillnumber;
+                        $express->create_time=$create_time;
+                           $res2= $express->save(false);
+                           if (!$res2)
+                           {
+                               $code=500;
+                               $trans->rollBack();
+                               return $code;
+                           }
+                    }else{
+                        $express1=new Express();
+                        $express1->sku=$sku;
+                        $express1->order_no=$order_no;
+                        $express1->waybillname=$waybillname;
+                        $express1->waybillnumber=$waybillnumber;
+                        $express1->create_time=$create_time;
+                        $res2=$express1->save(false);
+                        if (!$res2)
+                        {
+                            $code=500;
+                            $trans->rollBack();
+                            return $code;
+                        }
+                    }
+            }
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
+            $content = "订单号{$order_no},{$OrderGoods->goods_name}";
+            $record=new UserNewsRecord();
+            $record->uid=$user->id;
+            $record->role_id=$GoodsOrder->role_id;
+            $record->title='您的订单已发货';
+            $record->content=$content;
+            $record->send_time=time();
+            $record->order_no=$order_no;
+            $record->sku=$sku;
+            if (!$record->save(false))
             {
-                $waybillname='未知';
-            }
-            $e=1;
-            try {
-                $express=Express::find()
-                    ->select('waybillnumber')
-                    ->where(['sku'=>$sku,'order_no'=>$order_no])
-                    ->one();
-                \Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['shipping_type'=>0,'shipping_status'=>1],'sku='.$sku.' and order_no='.$order_no)->execute();
-                if ($express){
-
-                    \Yii::$app->db->createCommand()->update(self::EXPRESS, [
-
-                        'waybillname'      =>$waybillname,
-                        'waybillnumber'  =>$waybillnumber,
-                        'create_time'=>$create_time],'sku='.$sku.' and order_no='.$order_no)->execute();
-                }else{
-                    \Yii::$app->db->createCommand()->insert(self::EXPRESS,[
-                        'sku'    => $sku,
-                        'order_no' =>$order_no,
-                        'waybillname'      =>$waybillname,
-                        'waybillnumber'  =>$waybillnumber,
-                        'create_time'=>$create_time
-                    ])->execute();
-                }
-            } catch (Exception $e) {
+                $code=500;
                 $trans->rollBack();
+                return $code;
             }
+        } catch (Exception $e) {
+            $trans->rollBack();
+            $code=500;
+            return $code;
         }
         $registration_id=User::find()
             ->where(['id'=>GoodsOrder::find()
@@ -1039,9 +1072,9 @@ class GoodsOrder extends ActiveRecord
             $trans->rollBack();
         }
         $trans->commit();
-        return $e;
+         $code=200;
+         return $code;
     }
-
    /**
      * 获取商品信息
      * @param $goods_name

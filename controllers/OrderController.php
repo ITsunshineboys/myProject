@@ -1429,15 +1429,15 @@ class OrderController extends Controller
      * 去发货--商家后台
      * @return string
      */
-    public function actionSupplierdelivery(){
+      public function actionSupplierdelivery(){
         $request = Yii::$app->request;
         $sku = trim($request->post('sku', ''), '');
         $order_no = (string)trim($request->post('order_no', ''), '');
         $waybillnumber = trim($request->post('waybillnumber', ''), '');
         $shipping_type = trim($request->post('shipping_type', '0'), '');
-         if ($shipping_type!=1){
+        $code=1000;
+        if ($shipping_type!=1){
             if (!$sku|| !$waybillnumber || !$order_no) {
-                $code=1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1446,21 +1446,28 @@ class OrderController extends Controller
             $name=(new  Express())->GetExpressName($waybillnumber);
             if(!$name)
             {
-                $code=1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
         }
+
+        if (!OrderGoods::FindByOrderNoAndSku($order_no,$sku))
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $res=GoodsOrder::Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type);
-        if ($res==true){
+        if ($res==200){
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
             ]);
         }else{
-            $code = 1051;
+            $code = $res;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1691,7 +1698,7 @@ class OrderController extends Controller
      * user apply refund
      * @return string
      */
-     public  function  actionUserCancelOrder(){
+    public  function  actionUserCancelOrder(){
         $user = \Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -1713,7 +1720,7 @@ class OrderController extends Controller
         }
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
         $supplier=Supplier::find()->where(['id'=>$GoodsOrder->supplier_id])->one();
-       $supplier_user=User::find()->where(['id'=>$supplier->uid])->one();
+        $supplier_user=User::find()->where(['id'=>$supplier->uid])->one();
         if ($GoodsOrder->pay_status==0)
         {
             $OrderGoods=OrderGoods::find()
@@ -1736,6 +1743,7 @@ class OrderController extends Controller
                         $res=$goods->save(false);
                         if (!$res){
                             $code=500;
+                            $trans->rollBack();
                             return Json::encode([
                                 'code' => $code,
                                 'msg' => \Yii::$app->params['errorCodes'][$code]
@@ -1751,6 +1759,7 @@ class OrderController extends Controller
                         $record->sku=$sku;
                          if (!$record->save(false))
                          {
+                             $trans->rollBack();
                              $code=500;
                              return Json::encode([
                                  'code' => $code,
@@ -1772,14 +1781,13 @@ class OrderController extends Controller
                 $m_time = '86400';//离线保留时间
                 $receive = ['registration_id'=>[$registration_id]];//设备的id标识
                 $title='已取消订单';
-
                 $result = $push->push($receive,$title,$content,$extras, $m_time);
                 if (!$result)
                 {
                     $code=1000;
                     return Json::encode([
                         'code' => $code,
-                        'msg' => 'ok'
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
                 $code=200;
