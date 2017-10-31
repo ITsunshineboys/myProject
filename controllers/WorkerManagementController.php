@@ -10,6 +10,7 @@ namespace app\controllers;
 
 use app\models\Worker;
 use app\models\WorkerOrder;
+use app\models\WorkerType;
 use app\models\workType;
 use app\services\ExceptionHandleService;
 use yii\filters\AccessControl;
@@ -85,20 +86,47 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkTypeList()
     {
-        $a = trim(\Yii::$app->request->get(''));
-        if (a ){
+        $id = (int)trim(\Yii::$app->request->get('id',''));
+        $status = trim(\Yii::$app->request->get('status',''));
+        $del_id = (int)trim(\Yii::$app->request->get('del_id',''));
 
+        //  状态修改
+        if ($status != null){
+            $worker_type = (new WorkerType())->findOne(['id'=>$id]);
+            $worker_type->status = $status;
+            if (!$worker_type->save()) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        //  删除功能
+        if ($del_id != null){
+            $where = 'worker_type.id = '.$del_id;
+            $del_ = WorkerType::findByListOne($where);
+            if ($del_ != null){
+                $code = 1069;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            } else {
+                (new WorkerType())->deleteAll(['id'=>$del_id]);
+            }
         }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
-            'data' => WorkType::findByCount(),
+            'data' => WorkerType::findByList(),
         ]);
     }
 
     public function actionWorkTypeAdd()
     {
-
+        
     }
 
 }
