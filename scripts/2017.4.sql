@@ -158,11 +158,16 @@ CREATE TABLE `project` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-create table work_type (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) NOT NULL DEFAULT '',
+CREATE TABLE `work_type` (
+  `id` int(11) NOT NULL,
+  `worker_name` varchar(10) DEFAULT NULL COMMENT '工种类型',
+  `rank_name` varchar(10) DEFAULT NULL,
+  `min_value` int(11) DEFAULT NULL COMMENT '最小值',
+  `max_value` int(11) DEFAULT NULL COMMENT '最大值',
+  `establish_time` int(11) DEFAULT NULL COMMENT '创建日期',
+  `state` tinyint(4) DEFAULT '0' COMMENT '0：关闭，1：开启',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lhzz` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

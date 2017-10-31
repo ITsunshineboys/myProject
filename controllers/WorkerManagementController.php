@@ -63,6 +63,9 @@ class WorkerManagementController extends Controller
         ];
     }
 
+    /**
+     * 找工人首页 页面
+     */
     public function actionHomepageList()
     {
         // 工人总数
@@ -73,5 +76,6 @@ class WorkerManagementController extends Controller
 //        $worker_picer = WorkerOrder::
         var_dump($worker_order);exit;
     }
+
 
 }
