@@ -172,6 +172,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $chat_record->send_uid = $send_uid;
                 $chat_record->send_role_id = $send_role_id;
                 $chat_record->content = $content;
+                $chat_record->status=0;
                 $chat_record->send_time = time();
                 $chat_record->type = 'text';
                 if (!$chat_record->save()) {
@@ -215,6 +216,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $chat_record->send_uid = $send_uid;
                 $chat_record->send_role_id = $send_role_id;
                 $chat_record->content = $filepath;
+                $chat_record->status=0;
                 $chat_record->send_time = time();
                 $chat_record->type = 'img';
                 if (!$chat_record->save()) {
@@ -251,6 +253,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $chat_record->send_uid = $send_uid;
                 $chat_record->send_role_id = $send_role_id;
                 $chat_record->content = $filepath;
+                $chat_record->status=0;
                 $chat_record->send_time = time();
                 $chat_record->type = 'audio';
                 if (!$chat_record->save()) {

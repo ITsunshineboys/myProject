@@ -1552,6 +1552,7 @@ CREATE TABLE `chat_record` (
   `content` varchar(255) NOT NULL COMMENT '内容',
   `send_time` int(11) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0:未读 1:已读',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
