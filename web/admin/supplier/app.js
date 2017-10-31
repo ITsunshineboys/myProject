@@ -10,8 +10,11 @@ const app = angular.module("app", ["ui.router", "shop_style", "freight_template"
     "supplier_accountModule","withdraw_depositModule",
     "edit_cardModule","frozen_moneyModule",
     "ordermanageModule",
-    "waitpay_detailModule","done_detailModule","cancel_detailModule","expressModule"
+    "waitpay_detailModule","done_detailModule","cancel_detailModule","expressModule",
   /*三阶段芳子---结束*/
+  /*公共开始*/
+  "checklist-model"
+  /*公共结束*/
 ]);
 
 // 传参：通过url的get参数stage来获取，不传则使用默认的开发域名

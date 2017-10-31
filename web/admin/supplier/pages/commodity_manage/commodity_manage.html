@@ -107,7 +107,6 @@
         </table>
         <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
-        {{table.roles}}
     </section>
 
     <!--添加模态框-->
@@ -169,7 +168,7 @@
                     <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    是否确认下架{{batch_off_shelf.length}}个商品
+                    是否确认下架{{table.roles.length}}个商品
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"
