@@ -459,21 +459,29 @@ class OrderController extends Controller
      * 智能报价-样板间支付定金提交
      * @return string
      */
-    public function actionEffectEarnstAlipaySub(){
-        $request=Yii::$app->request;
-        $effect_id = trim($request->post('effect_id', ''), '');
-        $name = trim($request->post('name', ''), '');
-        $phone = trim($request->post('phone', ''), '');
+  public function actionEffectEarnstAlipaySub(){
+        $request = \Yii::$app->request;
+        $post=$request->post();
+        $code=1000;
+        $phone  = trim($request->post('phone', ''), '');
         if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
-            $code=1000;
-            return Json::encode([
+            return json_encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
             ]);
         }
         $out_trade_no =self::Setorder_no();
-        Alipay::effect_earnstsubmit($effect_id,$name,$phone,$out_trade_no);
+        $res=Alipay::effect_earnstsubmit($post,$phone,$out_trade_no);
+        if (!$res)
+        {
+            $code=500;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
     }
 
       public function actionGetEffectlist(){
@@ -494,7 +502,7 @@ class OrderController extends Controller
     /**
      * 样板间支付订单异步返回
      */
-    public function actionAlipayeffect_earnstnotify()
+  public function actionAlipayeffect_earnstnotify()
     {
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -506,10 +514,35 @@ class OrderController extends Controller
                 // if ($post['total_amount'] !=89){
                 //     exit;
                 // }
-                $res=GoodsOrder::Alipayeffect_earnstnotifydatabase($arr,$post);
-                if ($res){
-                    echo "success";
-                }
+
+                $data['province_code']=$arr[0];
+                $data['city_code']=$arr[1];
+                $data['district_code']=$arr[2];
+                $data['bedroom']=$arr[3];
+                $data['toilet']=$arr[4];
+                $data['kitchen']=$arr[5];
+                $data['sittingRoom_diningRoom']=$arr[6];
+                $data['window']=$arr[7];
+                $data['high']=$arr[8];
+                $data['street']=$arr[9];
+                $data['series']=$arr[10];
+                $data['style']=$arr[11];
+                $data['stairway']=$arr[12];
+                $data['stair_id']=$arr[13];
+                $data['toponymy']=$arr[14];
+                $data['particulars']=$arr[15];
+                $data['area']=$arr[16];
+                $data['phone']=$arr[17];
+                $data['name']=$arr[18];
+                $data['requirement']=$arr[19];
+                $code=Effect::addneweffect($data);
+               if ($code==200)
+               {
+                   echo 'success';
+               }else
+               {
+                   echo "fail"; //请不要修改或删除
+               }
             }
         }else{
             //验证失败
