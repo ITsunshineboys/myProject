@@ -1206,11 +1206,17 @@ DROP TABLE IF EXISTS `work_type`;
 
 CREATE TABLE `worker_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pid` INT(11) NOT NULL DEFAULT '0' COMMENT '所属上级工种id',
-  `image` VARCHAR (255) NOT NULL DEFAULT '' COMMENT '服务工种图片',
-  `worker_type` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '工种名字',
+  `pid` int(1) NOT NULL DEFAULT '0' COMMENT '所属上级工种id',
+  `worker_name` varchar(20) NOT NULL DEFAULT '' COMMENT '工种名字',
+  `image` varchar(255) DEFAULT NULL COMMENT '工程图片',
+  `rank_name` varchar(20) DEFAULT NULL COMMENT '等级名称',
+  `min_value` int(10) DEFAULT NULL COMMENT '最小值',
+  `max_value` int(11) DEFAULT NULL COMMENT '最大值',
+  `establish_time` int(11) DEFAULT NULL COMMENT '创建日期',
+  `status` tinyint(4) DEFAULT NULL COMMENT '0：下架，1：上架',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `labor_cost_detail`;
 
