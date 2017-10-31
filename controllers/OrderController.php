@@ -4333,6 +4333,8 @@ class OrderController extends Controller
                     $record->title='请尽快发货';
                     $record->content=$content;
                     $record->send_time=time();
+                    $record->order_no=$order_no;
+                    $record->sku=$sku;
                     if (!$record->save(false))
                     {
                         $code=500;
