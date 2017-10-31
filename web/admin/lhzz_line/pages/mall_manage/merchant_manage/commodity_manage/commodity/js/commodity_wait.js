@@ -66,6 +66,7 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
         {name: '销量', value: true},
         {name: '状态', value: true},
         {name: '发布时间', value: true},
+        {name: '操作人员', value: true},
         {name: '图片', value: true},
         {name: '审核备注', value: true},
         {name: '详情', value: true},

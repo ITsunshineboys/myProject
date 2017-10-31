@@ -59,7 +59,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         $scope.propattrs.splice(obj, 1);
     }
 
-    /*veryinteresting*/
     /*失去光标判断属性名是否重复*/
     $scope.checkname = function (obj, index) {
         $scope.iswarning = false;
@@ -136,10 +135,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         //     $http.post(url,data,config).then(function (res) {
         //         // console.log(res)
         //     })
-    }
-
-    $scope.aiya = function (obj) {
-        console.log(obj)
     }
 
 });
