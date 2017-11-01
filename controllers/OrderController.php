@@ -3859,7 +3859,10 @@ class OrderController extends Controller
                     $after[]='换货';
                 }
             }
-            $qrcode='uploads/image.png';
+            $str = Url::to(['line/#!/product_details?mall_id='. $Goods->id], true);
+            $filename = 'goods_line_'. $Goods->id;
+            StringService::generateQrCodeImage($str, $filename);
+            $qrcode=UploadForm::DIR_PUBLIC . '/goods_line_' . $Goods->id . '.png';
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
@@ -4221,12 +4224,6 @@ class OrderController extends Controller
     }
 
 
-    public function actionQrcode()
-    {
-        $goods_id=Yii::$app->request->post('goods_id','');
-        $data=UploadForm::DIR_PUBLIC . '/goods_' . $goods_id. '.png';
-        echo $data;
-    }
 
 
 
