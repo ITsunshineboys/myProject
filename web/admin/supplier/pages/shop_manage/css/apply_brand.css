@@ -87,3 +87,10 @@ header img{
 .form-control.reg-error {
     border-color: #ff0000;
 }
+
+.dl_active2{
+    background-color: #E6E9F0!important;
+}
+.a_active2{
+    color: #5677FC!important;
+}

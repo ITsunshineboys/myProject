@@ -10,23 +10,22 @@
     </header>
 
     <!--选项卡-->
+    <div class="tab">
+        <ul>
+            <li ng-class="{'tab_blue':all_flag}" ng-click="tabFunc('all_flag')">全部{{listcount.all}}</li>
+            <li ng-class="{'tab_blue':waitpay_flag}" ng-click="tabFunc('waitpay_flag')">待付款{{listcount.unpaid}}</li>
+            <li ng-class="{'tab_blue':waitsend_flag}" ng-click="tabFunc('waitsend_flag')">
+                待发货{{listcount.unshipped}}
+            </li>
+            <li ng-class="{'tab_blue':waitreceive_flag}" ng-click="tabFunc('waitreceive_flag')">
+                待收货{{listcount.unreceiveed}}
+            </li>
+            <li ng-class="{'tab_blue':finish_flag}" ng-click="tabFunc('finish_flag')">已完成{{listcount.completed}}
+            </li>
+            <li ng-class="{'tab_blue':cancel_flag}" ng-click="tabFunc('cancel_flag')">已取消{{listcount.canceled}}</li>
+        </ul>
+    </div>
     <section>
-        <div class="tab">
-            <ul>
-                <li ng-class="{'tab_blue':all_flag}" ng-click="tabFunc('all_flag')">全部{{listcount.all}}</li>
-                <li ng-class="{'tab_blue':waitpay_flag}" ng-click="tabFunc('waitpay_flag')">待付款{{listcount.unpaid}}</li>
-                <li ng-class="{'tab_blue':waitsend_flag}" ng-click="tabFunc('waitsend_flag')">
-                    待发货{{listcount.unshipped}}
-                </li>
-                <li ng-class="{'tab_blue':waitreceive_flag}" ng-click="tabFunc('waitreceive_flag')">
-                    待收货{{listcount.unreceiveed}}
-                </li>
-                <li ng-class="{'tab_blue':finish_flag}" ng-click="tabFunc('finish_flag')">已完成{{listcount.completed}}
-                </li>
-                <li ng-class="{'tab_blue':cancel_flag}" ng-click="tabFunc('cancel_flag')">已取消{{listcount.canceled}}</li>
-            </ul>
-        </div>
-
         <!--表格-->
         <div role="tabpanel" class="tab-pane">
             <div class="all_choose">

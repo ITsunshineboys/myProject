@@ -26,6 +26,7 @@ section{
 }
 /*选项卡开始*/
 .tab{
+    margin-left: 40px;
     width: 90%;
     height: 60px;
     border-bottom: 1px solid #E6E9F0;
