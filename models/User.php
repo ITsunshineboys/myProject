@@ -1717,8 +1717,9 @@ class User extends ActiveRecord implements IdentityInterface
                         'sql' => $update . $where,
                         'table' => self::tableName(),
                     ];
-                    new EventHandleService($data);
-                    Yii::$app->trigger(Yii::$app->params['events']['db']['failed']);
+                    $event = Yii::$app->params['events']['db']['failed'];
+                    new EventHandleService($event, $data);
+                    Yii::$app->trigger($event);
                 }
             }
         }
@@ -1754,8 +1755,9 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if (!$success) {
-            new EventHandleService($username);
-            Yii::$app->trigger(Yii::$app->params['events']['3rd']['failed']['createHuanxinUser']);
+            $event = Yii::$app->params['events']['3rd']['failed']['createHuanxinUser'];
+            new EventHandleService($event, $username);
+            Yii::$app->trigger($event);
         }
 
         return $success;
