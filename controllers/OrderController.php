@@ -4448,7 +4448,7 @@ class OrderController extends Controller
 
                 $templates[]=$wuliu['id'];
             };
-        }
+        } 
         foreach ($templates as &$list)
         {
             $costs[]['id']=$list;
