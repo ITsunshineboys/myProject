@@ -369,14 +369,9 @@ class ChatController extends Controller
             ->select('status')
             ->asArray()
             ->all();
-      foreach ($res_all as $res){
-
-          if($res['status']==1){
-             $res['news']['status']=$res['status'];
-          }
-      }
-var_dump($res);
-die;
+        if(!$res_all){
+            $res['news']['status']=0;
+        }
         $data=ChatRecord::userlog($u_id,$role_id);
 
         if(!$data){
