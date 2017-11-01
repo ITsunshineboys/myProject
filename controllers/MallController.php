@@ -3241,7 +3241,7 @@ class MallController extends Controller
 
         $goods->scenario = Goods::SCENARIO_EDIT_LHZZ;
 
-        if (!$goods->validate()) {
+        if (!$goods->validate()) {print_r($goods->errors);
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
