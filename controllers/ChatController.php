@@ -367,7 +367,7 @@ class ChatController extends Controller
             ->asArray()
             ->orderBy('send_time Desc')
             ->one();
-        $res['news']['send_time']=date('Y-m-d H:i:s',$res['news']['send_time']);
+        $res['news']['send_time']=date('Y-m-d',$res['news']['send_time']);
         $data=ChatRecord::userlog($u_id,$role_id);
 
         if(!$data){
@@ -401,7 +401,7 @@ class ChatController extends Controller
 
 
           }
-          $v['send_time']=date('Y-m-d H:i:s',$v['send_time']);
+          $v['send_time']=date('Y-m-d',$v['send_time']);
           unset($v['send_role_id']);
           unset($v['to_role_id']);
           unset($v['send_uid']);
@@ -445,7 +445,7 @@ class ChatController extends Controller
             ->all();
 
          foreach ($new_infos as $k=>&$info){
-             $info['send_time']=date('Y-m-d H:i:s ',$info['send_time']);
+             $info['send_time']=date('Y-m-d',$info['send_time']);
              $info['image']=OrderGoods::find()
                  ->select('cover_image')
                  ->asArray()
@@ -472,7 +472,7 @@ class ChatController extends Controller
     }
 
     public function actionTest(){
-        var_dump(UserNewsRecord::find()->orderBy('send_time Desc')->asArray()->all());die;
+        var_dump(UserNewsRecord::deleteAll(['role_id'=>6]));die;
         $chat=new ChatService();
        $a= $chat->getChatRecord('select+*+where+timestamp>1403164734226');
         return json_encode($a);
