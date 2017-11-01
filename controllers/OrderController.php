@@ -4429,18 +4429,26 @@ class OrderController extends Controller
      */
     public function actionCalculationFreight()
     {
-        $goods=Yii::$app->request->post('goods');
+         $goods=Yii::$app->request->post('goods');
         foreach ($goods as  $k =>$v)
         {
-            $Good[$k]=LogisticsTemplate::find()
-                ->where(['id'=>Goods::find()
-                    ->where(['id'=>$goods[$k]['goods_id']])
-                    ->one()->logistics_template_id])
-                ->asArray()
+            $sd[$k]=Goods::find()
+                ->where(['id'=>$goods[$k]['goods_id']])
                 ->one();
-            $Good[$k]['goods_id']=$goods[$k]['goods_id'];
-            $Good[$k]['num']=$goods[$k]['num'];
+//            $Good[$k]=LogisticsTemplate::find()
+//                ->where(['id'=>Goods::find()
+//                    ->where(['id'=>$goods[$k]['goods_id']])
+//                    ->one()->logistics_template_id])
+//                ->asArray()
+//                ->one();
+//            $Good[$k]['goods_id']=$goods[$k]['goods_id'];
+//            $Good[$k]['num']=$goods[$k]['num'];
         }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$sd
+        ]);
         $templates=[];
         foreach ($Good as &$wuliu){
             if (!in_array($wuliu['id'],$templates))
