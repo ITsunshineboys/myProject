@@ -348,40 +348,7 @@ class DistributionController extends Controller
     }
 
 
-    /**
-     * 大后台获取分销列表订单
-     * @return array|string
-     */
-    public function actionGetdistributionlist1(){
-        $request = Yii::$app->request;
-        $page = (int)trim($request->get('page', 1));
-        $page_size = (int)trim($request->get('page_size', 15));
-        $time_type = trim($request->get('time_type', 'all'));
-        $time_start = trim($request->get('time_start', ''));
-        $time_end = trim($request->get('time_end', ''));
-        if ($time_type == 'custom') {
-            if (!$time_start || !$time_end) {
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
-        }
-        $search = trim($request->post('search', ''));
-
-        if (!$page_size){
-            $page_size=15;
-        }
-        $list=Distribution::Getdistributionlist($page,$page_size,$time_type,$time_start,$time_end,$search);
-        return Json::encode([
-            'code' => 200,
-            'msg' =>'ok',
-            'data' =>$list
-        ]);
-    }
-    /**
+  /**
      * @return string
      */
     public  function  actionGetdistributionlist()
@@ -425,11 +392,14 @@ class DistributionController extends Controller
                 $endTime && $where .= " and  create_time <= {$endTime}";
             }
 
+        }else
+        {
+            if ($endTime) {
+                $endTime = (int)strtotime($endTime);
+                $endTime && $where .= "  create_time <= {$endTime}";
+            }
         }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= "  create_time <= {$endTime}";
-        }
+
         $sort_time=trim($request->get('sort_time','2'));
         switch ($sort_time)
         {
@@ -442,12 +412,13 @@ class DistributionController extends Controller
         }
         if ($where!='')
         {
+
             if($keyword){
-                $where .=" and mobile like '%{$keyword}%'";
+                $where .=" and  CONCAT(mobile) like '%{$keyword}%'";
             }
         }else{
             if($keyword){
-                $where .="mobile like '%{$keyword}%'";
+                $where .="  CONCAT(mobile) like '%{$keyword}%'";
             }
         }
         $count=Distribution::find()->count();
