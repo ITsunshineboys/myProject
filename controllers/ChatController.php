@@ -371,6 +371,8 @@ class ChatController extends Controller
             ->all();
         if(!$res_all){
             $res['news']['status']=0;
+        }else{
+            $res['news']['status']=1;
         }
         $data=ChatRecord::userlog($u_id,$role_id);
 
