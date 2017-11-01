@@ -186,7 +186,7 @@ class WorkerManagementController extends Controller
             ->asArray()
             ->distinct()
             ->all();
-        
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
