@@ -84,7 +84,7 @@ class WorkerManagementController extends Controller
      * 工种类型列表
      * @return string
      */
-    public function actionWorkTypeList()
+    public function actionWorkerTypeList()
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
         $status = trim(\Yii::$app->request->get('status',''));
@@ -128,7 +128,7 @@ class WorkerManagementController extends Controller
      * 工种类型添加
      * @return string
      */
-    public function actionWorkTypeAdd()
+    public function actionWorkerTypeAdd()
     {
         $post = \Yii::$app->request->post();
         foreach ($post['level'] as $one_post)
@@ -153,7 +153,7 @@ class WorkerManagementController extends Controller
      * 工种类型修改
      * @return string
      */
-    public function actionWorkTypeEdit()
+    public function actionWorkerTypeEdit()
     {
         $post = \Yii::$app->request->post();
         //  修改工种类型
@@ -174,6 +174,11 @@ class WorkerManagementController extends Controller
            'code' => 200,
            'msg' => 'OK',
         ]);
+    }
+
+    public function actionWorkerAdd()
+    {
+
     }
 
 }
