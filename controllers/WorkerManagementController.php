@@ -177,6 +177,30 @@ class WorkerManagementController extends Controller
         ]);
     }
 
+    public function actionWorkerList()
+    {
+        $worker_ = trim(\Yii::$app->request->get('id',''));
+        $worker = WorkerType::find()
+            ->select('id,worker_name')
+            ->where(['and',['status'=>1],['pid'=>0]])
+            ->asArray()
+            ->distinct()
+            ->all();
+        
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => [
+                'level' => WorkerType::find()
+                    ->select('id,rank_name')
+                    ->where(['and',['status'=>1],['pid'=>0]])
+                    ->asArray()
+                    ->distinct()
+                    ->all()
+            ],
+        ]);
+    }
+
     public function actionWorkerAdd()
     {
         $post = \Yii::$app->request->post();
