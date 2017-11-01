@@ -17,6 +17,7 @@ ul{
     color: #2F3033;
     line-height: 14px;
     font-weight: 700;
+    cursor: pointer;
 }
 .manage_child{
     font-size: 14px;
