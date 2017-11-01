@@ -1017,6 +1017,7 @@ class OwnerController extends Controller
         }
         $goods_price = BasisDecorationService::priceConversion($goods);
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
+        var_dump($goods_attr);exit;
 
         $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['wall_brick'], $post);
         if ($wall_brick == null){
