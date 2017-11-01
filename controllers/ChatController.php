@@ -229,7 +229,7 @@ class ChatController extends Controller
         $to_uid=trim(\Yii::$app->request->post('to_uid'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
-        $res=$user_hx->getUser($to_user['mobile']);
+        $res=$user_hx->getUser($to_user['username']);
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,
@@ -243,7 +243,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::sendTextMessage($message,$send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id']);
+        $data=UserChat::sendTextMessage($message,$send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id']);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -274,7 +274,7 @@ class ChatController extends Controller
         $to_uid=trim(\Yii::$app->request->post('to_uid'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
-        $res=$user_hx->getUser($to_user['mobile']);
+        $res=$user_hx->getUser($to_user['username']);
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,
@@ -288,7 +288,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::SendImg($send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
+        $data=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -334,7 +334,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::SendAudio($send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
+        $data=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -469,7 +469,7 @@ class ChatController extends Controller
 
     public function actionTest(){
 
-        var_dump(Worker::find()->asArray()->all());
+        var_dump(User::find()->asArray()->all());
 
     }
 }
