@@ -443,7 +443,6 @@ class ChatController extends Controller
         $new_infos=$query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-        var_dump($new_infos);die;
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d H:i:s ',$info['send_time']);
              $info['image']=OrderGoods::find()
@@ -472,7 +471,7 @@ class ChatController extends Controller
     }
 
     public function actionTest(){
-        var_dump(User::find()->asArray()->all());die;
+        var_dump(UserNewsRecord::find()->orderBy('send_time Desc')->asArray()->all());die;
         $chat=new ChatService();
        $a= $chat->getChatRecord('select+*+where+timestamp>1403164734226');
         return json_encode($a);
