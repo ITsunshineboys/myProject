@@ -4423,5 +4423,90 @@ class OrderController extends Controller
         }
 
 
+  /**
+     * 计算运费
+     * @return string
+     */
+    public function actionCalculationFreight()
+    {
+        $goods=Yii::$app->request->post('goods');
+        foreach ($goods as  $k =>$v)
+        {
+            $Good[$k]=LogisticsTemplate::find()
+                ->where(['id'=>Goods::find()
+                    ->where(['id'=>$goods[$k]['goods_id']])
+                    ->one()->logistics_template_id])
+                ->asArray()
+                ->one();
+            $Good[$k]['goods_id']=$goods[$k]['goods_id'];
+            $Good[$k]['num']=$goods[$k]['num'];
+        }
+        $templates=[];
+        foreach ($Good as &$wuliu){
+            if (!in_array($wuliu['id'],$templates))
+            {
+
+                $templates[]=$wuliu['id'];
+            };
+        }
+        foreach ($templates as &$list)
+        {
+            $costs[]['id']=$list;
+        }
+        foreach ($costs as &$cost)
+        {
+            $cost['num']=0;
+            foreach ($Good as &$list)
+            {
+                if ($list['id']==$cost['id'])
+                {
+
+                    $cost['num']+=$list['num'];
+                }
+            }
+        }
+        $freight=0;
+        foreach ($costs as &$cost)
+        {
+            $logistics_template=LogisticsTemplate::find()
+                ->where(['id'=>$cost['id']])
+                ->asArray()
+                ->one();
+            if ($logistics_template['delivery_number_default']>=$cost['num'])
+            {
+                $freight+=$logistics_template['delivery_cost_default'];
+            }else{
+                if ($logistics_template['delivery_number_delta']==0)
+                {
+                    $logistics_template['delivery_number_delta']=1;
+                }
+                $addnum=ceil(($cost['num']-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
+                $money=$logistics_template['delivery_cost_default']+$addnum*$logistics_template['delivery_cost_delta'];
+                $freight+=$money;
+            }
+        }
+
+//            foreach ($costs as &$cost)
+//            {
+//                foreach ($Good as &$list)
+//                {
+//                    if ($list['id']==$cost['id'])
+//                    {
+//                        $cost['goods'][]=[
+//                            'goods_id'=>$list['goods_id'],
+//                            'num'=>$list['num']
+//                        ];
+//                    }
+//                }
+//            }
+
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>GoodsOrder::switchMoney($freight*0.01)
+        ]);
+    }
+
+
 
 }
