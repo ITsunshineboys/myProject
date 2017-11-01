@@ -274,18 +274,5 @@ class UserChat extends \yii\db\ActiveRecord
         }
     }
 
-    public static function chatinfos($chat_uid,$u_id){
-        $chat_user_infos=User::find()
-            ->select('nickname,icon')
-            ->where(['id'=>$chat_uid])
-            ->asArray()
-            ->one();
-        $user_infos=User::find()
-            ->select('nickname,icon')
-            ->where(['id'=>$u_id])
-            ->asArray()
-            ->one();
-        var_dump($chat_uid,$user_infos);
-    }
 }
 
