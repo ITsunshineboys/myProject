@@ -901,10 +901,10 @@ class BasisDecorationService
                 $goods_unit = $one_goods_attr['value'];
             }
         }
-
-        var_dump($area);
-        var_dump($craft);
-        var_dump($goods_unit);exit;
+        if ($goods_unit == 0){
+            $goods_unit = 1;
+        }
+        
         //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
         $mud_make['quantity'] = ceil($area * $craft / $goods_unit);
         //        水泥费用:个数×抓取的商品价格
