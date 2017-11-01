@@ -1707,21 +1707,9 @@ class User extends ActiveRecord implements IdentityInterface
         parent::afterSave($insert, $changedAttributes);
 
         if ($insert) {
-            $username = StringService::getUniqueStringBySalt($this->mobile);
-            if (self::createHuanXinUser($username)) {
-                $this->username = $username;
-                if (!$this->save()) {
-                    $update = 'update ' . self::tableName() . ' set username = ' . $username;
-                    $where = ' where id = ' . $this->id . ';';
-                    $data = [
-                        'sql' => $update . $where,
-                        'table' => self::tableName(),
-                    ];
-                    $event = Yii::$app->params['events']['db']['failed'];
-                    new EventHandleService($event, $data);
-                    Yii::$app->trigger($event);
-                }
-            }
+            $event = Yii::$app->params['events']['user']['register'];
+            new EventHandleService($event, $this->mobile);
+            Yii::$app->trigger($event);
         }
 
         $key = self::CACHE_PREFIX . $this->id;
