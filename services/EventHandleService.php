@@ -43,7 +43,12 @@ class EventHandleService
 
         // call 3rd. service(create huanxin user) failed
         Yii::$app->on($events['3rd']['failed']['createHuanxinUser'], function () use ($data, $events) {
-            StringService::writeLog($events['3rd']['failed']['createHuanxinUser'], $data->mobile, $data->id);
+            StringService::writeLog($events['3rd']['failed']['createHuanxinUser'], $data);
+        });
+
+        // db failed
+        Yii::$app->on($events['db']['failed'], function () use ($data, $events) {
+            StringService::writeLog($events['db']['failed'], $data['sql'], $data['table']);
         });
     }
 }

@@ -95,6 +95,9 @@ return [
                 'createHuanxinUser' => 'failed_create_huanxin_user',
             ],
         ],
+        'db' => [
+            'failed' => 'failed_db',
+        ],
     ],
     'download' => [
         'directory' => 'down',
