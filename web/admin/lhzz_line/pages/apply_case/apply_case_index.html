@@ -19,6 +19,7 @@
         <tr>
             <th>姓名</th>
             <th>手机号</th>
+            <th>交易单号</th>
             <th>定金</th>
             <th>申请时间</th>
             <th>详情</th>
@@ -27,6 +28,7 @@
         <tr ng-repeat="item in apply_list">
             <td>{{item.name}}</td>
             <td>{{item.phone}}</td>
+            <td>{{item.transaction_no}}</td>
             <td>{{item.earnest | currency:'￥'}}</td>
             <td>{{item.create_time}}</td>
             <td style="color: #5677FC;" ng-click="get_detail(item)">查看</td>

@@ -8,6 +8,47 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 return $.param(data)
             }
         };
+        //添加小区部分
+        /*分页配置*/
+        $scope.Config = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages();
+            }
+        }
+        let tablePages=function () {
+            $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+            $http.get('/supplier-cash/cash-list-today',{
+                params:$scope.params
+            }).then(function (res) {
+                console.log(res);
+                $scope.shop_withdraw_list = res.data.data.list
+                $scope.Config.totalItems = res.data.data.count;
+            },function (err) {
+                console.log(err);
+            })
+        };
+        $scope.params = {
+            time_type:'all',
+            status:2,
+            time_start:'',
+            time_end:'',
+            search:''
+        };
+        $scope.getWithdraw = function () {
+            $scope.Config.currentPage = 1
+            $scope.params.search = ''
+            $scope.keyword = ''
+            if($scope.params.time_type == 'custom'){
+                if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                    tablePages()
+                }
+            }else{
+                tablePages()
+            }
+        }
         $scope.ctrlScope = $scope//解决ngModel无法双向绑定
         $scope.second_title = ''//二级列表项初始化
         $scope.three_title = ''//三级列表项初始化
@@ -1538,7 +1579,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         }
                     }
                 }
+                console.log($scope.house_informations)
                 for (let [key, value] of $scope.house_informations.entries()) {
+                    console.log(value.id)
                     if (!!value.id) {
                         if (!value.is_ordinary) {
                             // for (let [key1, value1] of $scope.drawing_informations.entries()) {
@@ -3013,11 +3056,12 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         pid: $scope.cur_level_one1.id
                     }
                 }).then(function (response) {
+                    console.log(response)
                     $scope.level_two = response.data.data.categories
                     $scope.cur_level_two1 = $scope.level_two[0]
                     $http.get('/quote/assort-goods', {//默认三级
                         params: {
-                            pid: $scope.cur_level_two.id
+                            pid: $scope.cur_level_two1.id
                         }
                     }).then(function (response) {
                         $scope.level_three = response.data.data.categories
@@ -3125,7 +3169,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             let cur = $scope
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.cur_title = '保存成功'
-                data.three_title = ''
+                cur.three_title = ''
                 $scope.common_house = function () {
                     $uibModalInstance.close()
                         $state.go('intelligent.add_material')
@@ -3141,6 +3185,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                 }
             }
+
             let arr = [], arr1 = [], arr2 = [], data = ''
             //保存系列相关
             for (let [key, value] of $scope.cur_all_series.entries()) {
@@ -3189,14 +3234,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     })
                 }
             }
+            console.log($scope.cur_level_three)
             if ($scope.is_add_material) {
                 data = {
                     province: $scope.cur_province.id,
                     city: $scope.cur_city.id,
                     code: $scope.basic_attr.sku,
-                    one_name: $scope.cur_level_one.title,
-                    two_name: $scope.cur_level_two.title,
-                    three_name: $scope.cur_level_three.title,
+                    one_name: $scope.cur_level_one1.title,
+                    two_name: $scope.cur_level_two1.title,
+                    three_name: $scope.cur_level_three1.title,
                     message: $scope.cur_choose_index == 0 ? '系列相关' : ($scope.cur_choose_index == 1 ? '风格相关' : '户型相关'),
                     add: $scope.cur_choose_index == 0 ? arr : ($scope.cur_choose_index == 1 ? arr1 : arr2)
                 }

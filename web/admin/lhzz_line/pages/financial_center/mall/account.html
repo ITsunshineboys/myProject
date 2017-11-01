@@ -2,25 +2,25 @@
     <div class="row">
         <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">分类选择</p>
         <div class="col-md-1">
-            <select ng-model="ctrlScope.cur_first_level" ng-options="item.title for item in first_level" ng-change="get_second_level(item)"  class="form-control"></select>
+            <select ng-model="ctrlScope.cur_first_level" ng-options="item.id as item.title for item in first_level" ng-change="getCategory(1)"  class="form-control"></select>
         </div>
         <div class="col-md-1" >
-            <select ng-if="cur_first_level.title!='全部'&&cur_first_level!=''" ng-model="ctrlScope.cur_second_level" ng-options="item.title for item in second_level" class="form-control"></select>
+            <select ng-if="second_level.length!=0" ng-model="ctrlScope.cur_second_level" ng-options="item.id as item.title for item in second_level" ng-change="getCategory(2)" class="form-control"></select>
         </div>
         <div class="col-md-1" >
-            <select ng-if="cur_second_level!=''&&cur_second_level.title!='全部'" ng-model="ctrlScope.cur_third_level" ng-options="item.title for item in third_level"  class="form-control"></select>
+            <select ng-if="third_level.length!=0" ng-model="ctrlScope.cur_third_level" ng-options="item.id as item.title for item in third_level" ng-change="getCategory(3)" class="form-control"></select>
         </div>
         <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">店铺类型</p>
         <div class="col-md-1">
-            <select ng-model="ctrlScope.cur_shop_type" ng-options="item.name for item in shop_type"  class="form-control"></select>
+            <select ng-model="params2.type_shop" ng-change="getCategory()" ng-options="item.num as item.name for item in shop_type"  class="form-control"></select>
         </div>
         <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">状态</p>
         <div class="col-md-1">
-            <select ng-model="ctrlScope.cur_shop_status" ng-options="item.name for item in shop_status" class="form-control"></select>
+            <select ng-model="params2.status" ng-change="getCategory()" ng-options="item.num as item.name for item in shop_status" class="form-control"></select>
         </div>
-        <button  ng-click="get_list()">查询</button>
+        <button  ng-click="get_account_list()">查询</button>
         <div class="col-md-2 col-md-offset-1">
-            <input class="form-control" ng-model="ctrlScope.keyword" placeholder="搜索商家名称或商家编号" type="text">
+            <input class="form-control" ng-model="ctrlScope.keyword2" placeholder="搜索商家名称或商家编号" type="text">
         </div>
     </div>
     <table class="table">
@@ -43,6 +43,7 @@
             <td style="color: #5677FC;" ng-click="go_account_detail(item)">详情</td>
         </tr>
     </table>
+    <tm-pagination conf="Config2"></tm-pagination>
     <div class="modal fade" id="remarks" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

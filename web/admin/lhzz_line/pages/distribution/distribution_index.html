@@ -2,13 +2,13 @@
     <p><span>今日新加入：{{ctrlScope.nowday_add}}</span><span>分销总人数：{{ctrlScope.total_add}}</span></p>
     <div class="row">
         <div class="col-md-2">
-            <select ng-model="ctrlScope.cur_time_type" ng-options="item.name for item in time_type" class="form-control"></select>
+            <select ng-model="params.time_type" ng-change="getDistribution()" ng-options="item.str as item.name for item in time_type" class="form-control"></select>
         </div>
         <div class="col-md-2">
-            <input ng-if="cur_time_type.str == 'custom'" ng-model="ctrlScope.start_time" id="start_time" class="form-control" placeholder="开始时间" type="text" ngc-lay-date>
+            <input ng-if="params.time_type == 'custom'" ng-change="getDistribution()" ng-model="params.start_time" id="start_time" class="form-control" placeholder="开始时间" type="text" ngc-lay-date>
         </div>
         <div class="col-md-2">
-            <input ng-if="cur_time_type.str == 'custom'" ng-model="ctrlScope.end_time" id="end_time" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
+            <input ng-if="params.time_type == 'custom'" ng-change="getDistribution()" ng-model="params.end_time" id="end_time" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
         </div>
         <button class="pull-right" ng-click="update_keyword()">查询</button>
         <div class="col-md-2 pull-right">
@@ -31,4 +31,5 @@
             <td style="color: #5677FC;" ng-click="get_detail(item)">查看</td>
         </tr>
     </table>
+    <tm-pagination conf="Config"></tm-pagination>
 </div>

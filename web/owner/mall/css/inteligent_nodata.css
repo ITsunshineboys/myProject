@@ -990,20 +990,20 @@ button[disabled]{
     font-size:1rem;
     color: #B8B6B6;
 }
-.footer_settlement button:first-of-type{
-    border:none;
-    float: left;
-    width:6.8rem;
-    height: 4rem;
-    color: #6C6C6C;
-    font-size:1.2rem;
-    border-left:.08rem solid #CDD3D7;
-    background-color: #fff;
-}
+/*.footer_settlement button:first-of-type{*/
+    /*border:none;*/
+    /*float: left;*/
+    /*width:6.8rem;*/
+    /*height: 4rem;*/
+    /*color: #6C6C6C;*/
+    /*font-size:1.2rem;*/
+    /*border-left:.08rem solid #CDD3D7;*/
+    /*background-color: #fff;*/
+/*}*/
 .footer_settlement button:last-of-type{
     border:none;
     float: left;
-    width:6.8rem;
+    width:13.6rem;
     height: 4rem;
     color: #fff;
     font-size:1.2rem;

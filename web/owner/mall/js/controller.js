@@ -3178,7 +3178,7 @@ angular.module("all_controller", [])
     })
 
 
-    .controller('nodata_ctrl', function ($scope, $http, $state,$rootScope,$timeout,$stateParams) {
+    .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
         console.log($stateParams)
         $scope.ctrlScope = $scope
         //post请求配置
@@ -3254,6 +3254,7 @@ angular.module("all_controller", [])
         //切换系列
         $scope.toggleSeries = function (item) {
             $scope.cur_series = item
+            console.log(item)
         }
         //切换风格
         $scope.toggleStyle = function (item) {
@@ -3357,6 +3358,7 @@ angular.module("all_controller", [])
         })
         $scope.$watch('house_bedroom', function (newVal, oldVal) {
             $scope.show_material = false
+            console.log(newVal)
         })
         $scope.$watch('house_hall', function (newVal, oldVal) {
             $scope.show_material = false
@@ -3369,14 +3371,22 @@ angular.module("all_controller", [])
         })
         $scope.$watch('highCrtl', function (newVal, oldVal) {
             $scope.show_material = false
+            console.log(newVal)
         })
         $scope.$watch('window', function (newVal, oldVal) {
             $scope.show_material = false
         })
         $scope.$watch('choose_stairs', function (newVal, oldVal) {
             $scope.show_material = false
+            console.log(newVal)
         })
         $scope.$watch('nowStairs', function (newVal, oldVal) {
+            $scope.show_material = false
+        })
+        $scope.$watch('cur_series', function (newVal, oldVal) {
+            $scope.show_material = false
+        })
+        $scope.$watch('cur_style', function (newVal, oldVal) {
             $scope.show_material = false
         })
         //监听页面是否加载完成操作DOM
@@ -3580,12 +3590,13 @@ angular.module("all_controller", [])
                         }
                     }
                 }
-            }else if($scope.cur_status == 2){
+            }else if($scope.cur_status == 2){//添加
                 console.log($scope.check_goods)
                 $scope.all_add_goods.push($scope.check_goods)
                 for(let [key,value] of $scope.all_goods.entries()){
                     if(value.id == $scope.cur_item.id){
                         value.cost += $scope.check_goods.platform_price * $scope.check_goods.quantity
+                        value.count ++
                         let second_item = value.second_level.findIndex(function (item) {
                             return item.id == $scope.check_goods.path.split(',')[1]
                         })
@@ -3709,6 +3720,7 @@ angular.module("all_controller", [])
                 $scope.cur_header = '智能报价'
                 $scope.is_edit = false
                 $scope.is_city = true
+                $scope.all_goods = $scope.cur_all_goods
                 $rootScope.fromState_name = 'nodata.house_list'
             }else if($rootScope.curState_name == 'nodata.house_list'){
                 $scope.have_header = false
@@ -3723,7 +3735,7 @@ angular.module("all_controller", [])
         }
         // 保存返回
         $scope.save = function () {
-            console.log($scope.all_goods)
+               console.log($scope.all_goods)
                 $scope.have_header = true
                 $scope.is_city = true
                 $scope.is_edit = false
@@ -3755,6 +3767,7 @@ angular.module("all_controller", [])
                         if (cur_id == value2.id) {
                             if (cur_index != -1) {
                                 value.cost -= item.cost
+                                value.count --
                                 $scope.all_delete_goods.push(item)
                                 value2.goods_detail.splice(cur_index, 1)
                             }
@@ -3762,6 +3775,7 @@ angular.module("all_controller", [])
                     }
                 }
             }
+            console.log($scope.all_goods)
         }
         //添加一系列操作
         //添加按钮跳转选择三级页面
@@ -3856,7 +3870,7 @@ angular.module("all_controller", [])
                 }
                 let data1 = angular.copy(data)
                 //弱电
-                $http.post('/owner/weak-current', data, config).then(function (response) {
+                $q.all([$http.post('/owner/weak-current', data, config).then(function (response) {
                     console.log('弱电')
                     console.log(response)
                     //整合一级
@@ -3957,9 +3971,10 @@ angular.module("all_controller", [])
                     }
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
-                }, function (error) {
-                    console.log(error)
-                })
+                }),
+                //     function (error) {
+                //     console.log(error)
+                // })
                 //强电
                 $http.post('/owner/strong-current', data, config).then(function (response) {
                     console.log('强电')
@@ -4060,9 +4075,10 @@ angular.module("all_controller", [])
                     }
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
-                }, function (error) {
-                    console.log(error)
-                })
+                }),
+                //     function (error) {
+                //     console.log(error)
+                // })
                 //水路
                 $http.post('/owner/waterway', data, config).then(function (response) {
                     console.log('水路')
@@ -4163,11 +4179,12 @@ angular.module("all_controller", [])
                     }
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
-                }, function (error) {
-                    console.log(error)
-                })
+                }),
+                //     function (error) {
+                //     console.log(error)
+                // })
                 //防水
-                $http.post('/owner/waterproof', data, config).then(function (response) {
+                $q.all([$http.post('/owner/waterproof', data, config).then(function (response) {
                     console.log('防水')
                     console.log(response)
                     //整合一级
@@ -4267,6 +4284,7 @@ angular.module("all_controller", [])
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
                     data1['waterproof_total_area'] = response.data.data.total_area
+                })]).then(function () {
                     //泥作
                     $http.post('/owner/mud-make', data1, config).then(function (response) {
                         console.log('泥作')
@@ -4367,12 +4385,11 @@ angular.module("all_controller", [])
                         }
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
-                    }, function (error) {
-                        console.log(error)
                     })
-                }, function (error) {
-                    console.log(error)
-                })
+                }),
+                //     function (error) {
+                //     console.log(error)
+                // })
                 //木作
                 $http.post('/owner/carpentry', data, config).then(function (response) {
                     console.log('木作')
@@ -4473,9 +4490,10 @@ angular.module("all_controller", [])
                     }
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
-                }, function (error) {
-                    console.log(error)
-                })
+                }),
+                //     function (error) {
+                //     console.log(error)
+                // })
                 //乳胶漆
                 $http.post('/owner/coating', data, config).then(function (response) {
                     console.log('乳胶漆')
@@ -4576,9 +4594,10 @@ angular.module("all_controller", [])
                     }
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
-                }, function (error) {
-                    console.log(error)
-                })
+                }),
+                //     function (error) {
+                //     console.log(error)
+                // })
                 //主要材料以及其他
                 $http.post('/owner/assort-facility', data, config).then(function (response) {
                     console.log('主要材料及其他')
@@ -4684,10 +4703,48 @@ angular.module("all_controller", [])
                             }
                         }
                     }
-                }, function (error) {
-                    console.log(error)
+                    console.log($scope.all_goods)
+                    console.log($scope.all_workers)
+                    $scope.show_material = true
+                })]).then(function () {
+                    console.log($scope.all_goods)
+                    console.log($scope.all_workers)
+                    let arr = [],arr1 = []
+                    for(let [key,value] of $scope.all_goods.entries()){
+                        arr1.push({
+                            one_title:value.title,
+                            price:value.cost
+                        })
+                        for(let [key1,value1] of value.second_level.entries()){
+                            for(let [key2,value2] of value1.three_level.entries()){
+                                for(let [key3,value3] of value2.goods_detail.entries()){
+                                    arr.push({
+                                        goods_id:value3.id,
+                                        num:value3.quantity
+                                    })
+                                }
+                            }
+                        }
+                    }
+                    $http.post('/order/calculation-freight',{
+                        goods:arr
+                    },config).then(function(res){
+                        console.log(res)
+                    },function (error) {
+                        console.log(error)
+                    })
+                    $http.post('/owner/coefficient',{
+                        list:arr1
+                    },config).then(function (res) {
+                        console.log(res)
+                    },function (error) {
+                        console.log(error)
+                    })
                 })
-                $scope.show_material = true
+                // , function (error) {
+                //     console.log(error)
+                // })
+
             } else {
                 $scope.submitted = true
             }
@@ -4917,6 +4974,5 @@ angular.module("all_controller", [])
                 })
             }
         }
-    /*样板间相关*/
 
     })

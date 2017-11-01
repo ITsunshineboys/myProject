@@ -6,6 +6,200 @@ angular.module('mall_finance', ['ui.bootstrap'])
         $scope.five_title = ''
         $scope.six_title = ''
         $scope.ctrlScope = $scope
+        //提现部分
+        /*分页配置*/
+        $scope.Config = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages();
+            }
+        }
+        let tablePages=function () {
+            $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+            $http.get('/supplier-cash/cash-list-today',{
+                params:$scope.params
+            }).then(function (res) {
+                console.log(res);
+                $scope.shop_withdraw_list = res.data.data.list
+                $scope.Config.totalItems = res.data.data.count;
+            },function (err) {
+                console.log(err);
+            })
+        };
+        $scope.params = {
+            time_type:'all',
+            status:2,
+            time_start:'',
+            time_end:'',
+            search:''
+        };
+        $scope.getWithdraw = function () {
+            $scope.Config.currentPage = 1
+            $scope.params.search = ''
+            $scope.keyword = ''
+            if($scope.params.time_type == 'custom'){
+                if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                    tablePages()
+                }
+            }else{
+                tablePages()
+            }
+        }
+        //入账详情
+        /*分页配置*/
+        $scope.Config1 = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages1();
+            }
+        }
+        let tablePages1=function () {
+            $scope.params1.page=$scope.Config1.currentPage;//点击页数，传对应的参数
+            $http.get('/supplier-cash/order-list-today',{
+               params:$scope.params1
+            }).then(function (res) {
+                console.log(res);
+                $scope.recorded_list = res.data.data.list
+                $scope.Config1.totalItems = res.data.data.count
+            },function (err) {
+                console.log(err);
+            })
+        };
+        $scope.params1 = {
+            time_type:'today',
+            time_start:'',
+            time_end:'',
+            search:''
+        };
+        $scope.getRecord = function () {
+            $scope.Config1.currentPage = 1
+            $scope.params1.search = ''
+            $scope.keyword1 = ''
+            if($scope.params1.time_type == 'custom'){
+                if($scope.params1.time_start!=''||$scope1.params.time_end!=''){
+                    tablePages1()
+                }
+            }else{
+                tablePages1()
+            }
+        }
+        //账户管理
+        /*分页配置*/
+        $scope.Config2 = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages2();
+            }
+        }
+        let tablePages2=function () {
+            $scope.params2.page=$scope.Config2.currentPage;//点击页数，传对应的参数
+            $http.get('/supplieraccount/account-list',{
+               params:$scope.params2
+            }).then(function (res) {
+                console.log(res);
+                $scope.account_list = res.data.data.list
+                $scope.Config2.totalItems = res.data.data.count
+            },function (err) {
+                console.log(err);
+            })
+        };
+        $scope.params2 = {
+            category_id:0,
+            type_shop:-1,
+            status:-1,
+            keyword:''
+        };
+        $scope.getCategory = function (num) {
+            $scope.Config2.currentPage = 1
+            $scope.params2.keyword = ''
+            $scope.keyword2 = ''
+            if(num == 1){
+                $scope.params2.category_id = $scope.cur_first_level
+                if($scope.cur_first_level!= 0){
+                    $http.get('/supplieraccount/category', {
+                        params: {
+                            pid: $scope.cur_first_level
+                        }
+                    }).then(function (res) {
+                        console.log(res)
+                        $scope.second_level = res.data.data
+                        $scope.second_level.unshift({id: $scope.cur_first_level, title: "全部"})
+                        $scope.cur_second_level = $scope.second_level[0].id
+                    }, function (error) {
+                        console.log(error)
+                    })
+                    $scope.third_level = []
+                }else{
+                    $scope.second_level = []
+                    $scope.third_level = []
+                }
+            }else if(num == 2){
+                $scope.params2.category_id = $scope.cur_second_level
+                if($scope.cur_second_level!=$scope.second_level[0].id){
+                    $http.get('/supplieraccount/category', {
+                        params: {
+                            pid: $scope.cur_second_level
+                        }
+                    }).then(function (res) {
+                        console.log(res)
+                        $scope.third_level = res.data.data
+                        $scope.third_level.unshift({id: $scope.cur_second_level, title: "全部"})
+                        $scope.cur_third_level = $scope.third_level[0].id
+                    }, function (error) {
+                        console.log(error)
+                    })
+                }else{
+                    $scope.third_level = []
+                }
+            }else if(num == 3){
+                $scope.params2.category_id = $scope.cur_third_level
+            }
+            tablePages2()
+        }
+        //冻结金额列表
+        /*分页配置*/
+        $scope.Config3 = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages3();
+            }
+        }
+        let tablePages3=function () {
+            $scope.params3.page=$scope.Config3.currentPage;//点击页数，传对应的参数
+            $http.get('/supplieraccount/freeze-list',{
+                params:$scope.params3
+            }).then(function (res) {
+                console.log(res);
+                $scope.freeze_list = res.data.data.list
+                $scope.Config3.totalItems = res.data.data.count
+            },function (err) {
+                console.log(err);
+            })
+        };
+        $scope.params3 = {
+            time_type:'all',
+            start_time:'',
+            end_time:'',
+            supplier_id:''
+        };
+        $scope.getFreeze = function () {
+            $scope.Config3.currentPage = 1
+            if($scope.params3.time_type == 'custom'){
+                if($scope.params3.start_time!=''||$scope1.params.end_time!=''){
+                    tablePages3()
+                }
+            }else{
+                tablePages3()
+            }
+        }
         //post请求配置
         const config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -84,47 +278,18 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $scope.five_title = ''
             $scope.six_title = ''
             $scope.cur_index = 1
-            if(num!=3){
-                if(num==1){
-                    for(let [key,value] of $scope.time_type.entries()){
-                        if(value.name == '今天'){
-                            $scope.cur_time_type = value
-                        }
-                    }
-                }else{
-                    for(let [key,value] of $scope.time_type.entries()){
-                        if(value.name == '全部时间'){
-                            $scope.cur_time_type = value
-                        }
-                    }
-                }
-                for(let [key,value] of $scope.withdraw_status.entries()){
-                    if(value.name == '已提现'){
-                        $scope.cur_withdraw_status = value
-                    }
-                }
+            if(num == 1){
+                $scope.params.time_type = 'today'
+                $scope.params.status = 2
+            }else if(num == 2){
+                $scope.params.time_type = 'all'
+                $scope.params.status = 2
             }else{
-                for(let [key,value] of $scope.withdraw_status.entries()){
-                    if(value.name == '提现中'){
-                        $scope.cur_withdraw_status = value
-                    }
-                }
-                for(let [key,value] of $scope.time_type.entries()){
-                    if(value.name == '全部时间'){
-                        $scope.cur_time_type = value
-                    }
-                }
+                $scope.params.time_type = 'all'
+                $scope.params.status = 1
             }
-            $http.post('/supplier-cash/cash-list-today', {
-                time_type:$scope.cur_time_type.str,
-                status:$scope.cur_withdraw_status.num
-            }, config).then(function (res) {
-                console.log(res)
-                $scope.shop_withdraw_list = res.data.data.list
-                $state.go('mall_finance.withdraw')
-            }, function (error) {
-                console.log(error)
-            })
+            tablePages()
+            $state.go('mall_finance.withdraw')
         }
         //跳转二级页面
         $scope.go_second = function () {
@@ -167,282 +332,6 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 $state.go('')
             }
         }
-        //提现管理改变监听
-        $scope.$watch('cur_time_type',function (newVal,oldVal) {
-            if(newVal.str!='custom'){
-                if($scope.cur_index == 1){
-                    $http.post('/supplier-cash/cash-list-today', {
-                        time_type:newVal.str,
-                        status:$scope.cur_withdraw_status.num
-                    }, config).then(function (res) {
-                        console.log(res)
-                        $scope.shop_withdraw_list = res.data.data.list
-                    }, function (error) {
-                        console.log(error)
-                    })
-                }else if($scope.cur_index == 2){
-                    $http.get('/supplieraccount/freeze-list',{
-                        params:{
-                            supplier_id:$scope.cur_account_detail.id,
-                            time_type:newVal.str
-                        }
-                    }).then(function (res) {
-                        console.log(res)
-                    },function (error) {
-                        console.log(error)
-                    })
-                }else if($scope.cur_index == 3){
-                    $http.get('/supplieraccount/cashed-list',{
-                        params:{
-                            supplier_id:$scope.cur_account_detail.id,
-                            time_type:newVal.str
-                        }
-                    }).then(function (res) {
-                        console.log(res)
-                        $state.go('mall_finance.withdraw_list')
-                    },function (error) {
-                        console.log(error)
-                    })
-                }else{
-                    $http.get('/supplier-cash/order-list-today',{
-                       params:{
-                           time_type:newVal.str
-                       }
-                    }).then(function (res) {
-                        $scope.recorded_list = res.data.data.list
-                        console.log(res)
-                    },function (error) {
-                        console.log(error)
-                    })
-                }
-            }else{
-                $scope.start_time = ''
-                $scope.end_time = ''
-            }
-        })
-        //自定义开始时间监听
-        $scope.$watch('start_time',function (newVal,oldVal) {
-            let obj = ''
-            if(oldVal!=undefined){
-                if($scope.cur_index == 1){
-                    if($scope.end_time == ''){
-                        obj = {
-                            time_type:'custom',
-                            [$scope.cur_index == 1?'time_start':'start_time']:newVal,
-                            status:$scope.cur_withdraw_status.num
-                        }
-                    }else{
-                        if(new Date(newVal).getTime()>new Date($scope.start_time).getTime()) {
-                            obj = {
-                                time_type: 'custom',
-                                [$scope.cur_index == 1 ? 'time_start' : 'start_time']: newVal,
-                                [$scope.cur_index == 1 ? 'time_end' : 'end_time']: $scope.end_time,
-                                status: $scope.cur_withdraw_status.num
-                            }
-                        }
-                    }
-                }else if($scope.cur_index==2||$scope.cur_index==3){
-                    if($scope.end_time == ''){
-                        obj = {
-                            time_type:'custom',
-                            [$scope.cur_index == 1?'time_start':'start_time']:newVal,
-                            supplier_id:$scope.cur_account_detail.id
-                        }
-                    }else{
-                        if(new Date(newVal).getTime()>new Date($scope.start_time).getTime()) {
-                            obj = {
-                                time_type: 'custom',
-                                [$scope.cur_index == 1 ? 'time_start' : 'start_time']: newVal,
-                                [$scope.cur_index == 1 ? 'time_end' : 'end_time']: $scope.end_time,
-                                supplier_id: $scope.cur_account_detail.id
-                            }
-                        }
-                    }
-                }else{
-                    if($scope.end_time == ''){
-                        obj = {
-                            time_type:'custom',
-                            [$scope.cur_index == 1?'time_start':'start_time']:newVal
-                        }
-                    }else{
-                        if(new Date(newVal).getTime()>new Date($scope.start_time).getTime()) {
-                            obj = {
-                                time_type: 'custom',
-                                [$scope.cur_index == 1 ? 'time_start' : 'start_time']: newVal,
-                                [$scope.cur_index == 1 ? 'time_end' : 'end_time']: $scope.end_time
-                            }
-                        }
-                    }
-                }
-            }
-            if(obj!=''){
-                if($scope.cur_index == 1){
-                    $http.post('/supplier-cash/cash-list-today',obj,config).then(function (res) {
-                        console.log(res)
-                        $scope.shop_withdraw_list = res.data.data.list
-                    },function (error) {
-                        console.log(error)
-                    })
-                } else if($scope.cur_index == 2){
-                    $http.get('/supplieraccount/freeze-list',{
-                        params:obj
-                    }).then(function (res) {
-                        console.log(res)
-                    },function (error) {
-                        console.log(error)
-                    })
-                }else if($scope.cur_index==3){
-                    $http.get('/supplieraccount/cashed-list',{
-                        params:obj
-                    }).then(function (res) {
-                        console.log(res)
-                        // $state.go('mall_finance.withdraw_list')
-                    },function (error) {
-                        console.log(error)
-                    })
-                }else{
-                    $http.post('/supplier-cash/order-list-today',obj,config).then(function (res) {
-                        console.log(res)
-                    },function (error) {
-                        console.log(error)
-                    })
-                }
-            }
-        })
-        //自定义结束时间监听
-        $scope.$watch('end_time',function (newVal,oldVal) {
-            let obj = ''
-            if(oldVal!=undefined){
-                if($scope.cur_index == 1){
-                    if($scope.start_time == ''){
-                        obj = {
-                            time_type:'custom',
-                            [$scope.cur_index == 1?'time_end':'end_time']:newVal,
-                            status:$scope.cur_withdraw_status.num
-                        }
-                    }else{
-                        if(new Date(newVal).getTime()>new Date($scope.start_time).getTime()) {
-                            obj = {
-                                time_type: 'custom',
-                                [$scope.cur_index == 1 ? 'time_end' : 'end_time']: newVal,
-                                [$scope.cur_index == 1 ? 'time_start' : 'start_time']: $scope.start_time,
-                                status: $scope.cur_withdraw_status.num
-                            }
-                        }
-                    }
-                }else if($scope.cur_index == 2 || $scope.cur_index == 3){
-                    if($scope.end_time == ''){
-                        obj = {
-                            time_type:'custom',
-                            [$scope.cur_index == 1?'time_end':'end_time']:newVal,
-                            supplier_id:$scope.cur_account_detail.id
-                        }
-                    }else{
-                        if(new Date(newVal).getTime()>new Date($scope.start_time).getTime()) {
-                            obj = {
-                                time_type: 'custom',
-                                [$scope.cur_index == 1 ? 'time_end' : 'end_time']: newVal,
-                                [$scope.cur_index == 1 ? 'time_start' : 'start_time']: $scope.start_time,
-                                supplier_id: $scope.cur_account_detail.id
-                            }
-                        }
-                    }
-                }else{
-                    if($scope.end_time == ''){
-                        obj = {
-                            time_type:'custom',
-                            [$scope.cur_index == 1?'time_end':'end_time']:newVal,
-                        }
-                    }else{
-                        if(new Date(newVal).getTime()>new Date($scope.start_time).getTime()) {
-                            obj = {
-                                time_type: 'custom',
-                                [$scope.cur_index == 1 ? 'time_end' : 'end_time']: newVal,
-                                [$scope.cur_index == 1 ? 'time_start' : 'start_time']: $scope.start_time,
-                            }
-                        }
-                    }
-                }
-            }
-            if(obj!=''){
-                if($scope.cur_index == 1){
-                    $http.post('/supplier-cash/cash-list-today',obj,config).then(function (res) {
-                        console.log(res)
-                        $scope.shop_withdraw_list = res.data.data.list
-                    },function (error) {
-                        console.log(error)
-                    })
-                } else if($scope.cur_index == 2){
-                    $http.get('/supplieraccount/freeze-list',{
-                        params:obj
-                    }).then(function (res) {
-                        console.log(res)
-                    },function (error) {
-                        console.log(error)
-                    })
-                }else if($scope.cur_index == 3){
-                    $http.get('/supplieraccount/cashed-list',{
-                        params:obj
-                    }).then(function (res) {
-                        console.log(res)
-                        // $state.go('mall_finance.withdraw_list')
-                    },function (error) {
-                        console.log(error)
-                    })
-                }else{
-                    $http.post('/supplier-cash/order-list-today',obj,config).then(function (res) {
-                        console.log(res)
-                    },function (error) {
-                        console.log(error)
-                    })
-                }
-            }
-        })
-        //提现状态监听
-        $scope.$watch('cur_withdraw_status',function (newVal,oldVal) {
-            let obj = ''
-            if(oldVal!=undefined){
-                if($scope.cur_time_type.str=='custom'){
-                    if($scope.start_time!=''){
-                        if($scope.end_time!=''){
-                            obj={
-                                time_type:'custom',
-                                time_start:$scope.start_time,
-                                end_time:$scope.end_time,
-                                status:newVal.num
-                            }
-                        }else{
-                            obj={
-                                time_type:'custom',
-                                time_start:$scope.start_time,
-                                status:newVal.num
-                            }
-                        }
-                    }else{
-                        if($scope.end_time!=''){
-                            obj={
-                                time_type:'custom',
-                                end_time:$scope.end_time,
-                                status:newVal.num
-                            }
-                        }
-                    }
-                }else{
-                    obj={
-                        time_type:$scope.cur_time_type.str,
-                        status:newVal.num
-                    }
-                }
-                if(obj!=''){
-                    $http.post('/supplier-cash/cash-list-today',obj,config).then(function (res) {
-                        console.log(res)
-                        $scope.shop_withdraw_list = res.data.data.list
-                    },function (error) {
-                        console.log(error)
-                    })
-                }
-            }
-        })
         //跳转商家提现管理详情
         $scope.go_withdraw_manageDetail = function (item) {
             console.log(item)
@@ -491,45 +380,13 @@ angular.module('mall_finance', ['ui.bootstrap'])
                     reason:$scope.withdraw_remark
                 }
             }
-            if($scope.cur_time_type.str == 'custom'){
-                if($scope.start_time!=''&&$scope.end_time!=''){
-                    data1 = {
-                        time_type:$scope.cur_time_type.str,
-                        status:$scope.cur_withdraw_status.num,
-                        time_start:$scope.start_time,
-                        time_end:$socpe.end_time
-                    }
-                }else if($scope.start_time!=''&&$scope.end_time==''){
-                    data1 = {
-                        time_type:$scope.cur_time_type.str,
-                        status:$scope.cur_withdraw_status.num,
-                        time_start:$scope.start_time,
-                    }
-                }else if($scope.start_time==''&&$scope.end_time!=''){
-                    data1 = {
-                        time_type:$scope.cur_time_type.str,
-                        status:$scope.cur_withdraw_status.num,
-                        time_end:$socpe.end_time
-                    }
-                }
-            }else{
-                data1 = {
-                    time_type:$scope.cur_time_type.str,
-                    status:$scope.cur_withdraw_status.num,
-                }
-            }
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.cur_title = '提交成功'
 
                 $scope.common_house = function () {
                     $uibModalInstance.close()
-                    $http.post('/supplier-cash/cash-list-today',data1, config).then(function (res) {
-                        console.log(res)
-                        str.shop_withdraw_list = res.data.data.list
-                        $state.go('mall_finance.withdraw')
-                    }, function (error) {
-                        console.log(error)
-                    })
+                    tablePages()
+                    $state.go('mall_finance.withdraw')
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
@@ -561,161 +418,68 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 console.log(res)
                 $scope.first_level = res.data.data
                 $scope.first_level.unshift({id: "0", title: "全部"})
-                $scope.cur_first_level = $scope.first_level[0]
-                console.log($scope.cur_first_level)
-                $http.get('/supplieraccount/account-list', {
-                    params: {
-                        category_id: $scope.cur_first_level.id,
-                        type_shop: $scope.cur_shop_type.num,
-                        status: $scope.cur_shop_status.num
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.account_list = res.data.data.list
-                    $state.go('mall_finance.account')
-                }, function (error) {
-                    console.log(error)
-                })
+                $scope.cur_first_level = $scope.first_level[0].id
+                $scope.second_level = []
+                $scope.third_level = []
+                tablePages2()
+                $state.go('mall_finance.account')
             }, function (error) {
                 console.log(error)
             })
         }
-        //改变一级获取二级
-        $scope.$watch('cur_first_level', function (newVal, oldVal) {
-            $scope.cur_category_id = newVal.id
-            if(oldVal!=''){
-                $http.get('/supplieraccount/account-list', {
-                    params: {
-                        category_id: newVal.id,
-                        type_shop: $scope.cur_shop_type.num,
-                        status: $scope.cur_shop_status.num
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.account_list = res.data.data.list
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-            if (oldVal != '' && newVal.title != '全部') {
-                $http.get('/supplieraccount/category', {
-                    params: {
-                        pid: newVal.id
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.second_level = res.data.data
-                    $scope.second_level.unshift({'id': newVal.id, title: '全部'})
-                    $scope.cur_second_level = $scope.second_level[0]
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-            if (newVal.title == '全部') {
-                $scope.cur_second_level = ''
-                $scope.cur_third_level = ''
-            }
-        })
-        //改变二级获取三级
-        $scope.$watch('cur_second_level', function (newVal, oldVal) {
-            $scope.cur_category_id = newVal.id
-            if(oldVal!=''){
-                $http.get('/supplieraccount/account-list', {
-                    params: {
-                        category_id: newVal.id,
-                        type_shop: $scope.cur_shop_type.num,
-                        status: $scope.cur_shop_status.num
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.account_list = res.data.data.list
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-            if (oldVal != '' && newVal.title != '全部') {
-                $http.get('/supplieraccount/category', {
-                    params: {
-                        pid: newVal.id
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.third_level = res.data.data
-                    $scope.third_level.unshift({'id': newVal.id, title: '全部'})
-                    $scope.cur_third_level = $scope.third_level[0]
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-            if (newVal.title == '全部') {
-                $scope.cur_third_level = ''
-            }
-        })
-        //改变三级
-        $scope.$watch('cur_third_level', function (newVal, oldVal) {
-            $scope.cur_category_id = newVal.id
-            if(oldVal!=''){
-                $http.get('/supplieraccount/account-list', {
-                    params: {
-                        category_id: newVal.id,
-                        type_shop: $scope.cur_shop_type.num,
-                        status: $scope.cur_shop_status.num
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.account_list = res.data.data.list
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-        })
         // 改变店铺类型
-        $scope.$watch('cur_shop_type',function (newVal,oldVal) {
-            if(oldVal!=''){
-                $http.get('/supplieraccount/account-list', {
-                    params: {
-                        category_id: $scope.cur_category_id,
-                        type_shop: $scope.cur_shop_type.num,
-                        status: $scope.cur_shop_status.num
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.account_list = res.data.data.list
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-        })
+        // $scope.$watch('cur_shop_type',function (newVal,oldVal) {
+        //     if(oldVal!=''){
+        //         $http.get('/supplieraccount/account-list', {
+        //             params: {
+        //                 category_id: $scope.cur_category_id,
+        //                 type_shop: $scope.cur_shop_type.num,
+        //                 status: $scope.cur_shop_status.num
+        //             }
+        //         }).then(function (res) {
+        //             console.log(res)
+        //             $scope.account_list = res.data.data.list
+        //         }, function (error) {
+        //             console.log(error)
+        //         })
+        //     }
+        // })
         // 改变店铺状态
-        $scope.$watch('cur_shop_status',function (newVal,oldVal) {
-            if(oldVal!=0){
-                $http.get('/supplieraccount/account-list', {
-                    params: {
-                        category_id: $scope.cur_category_id,
-                        type_shop: $scope.cur_shop_type.num,
-                        status: $scope.cur_shop_status.num
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.account_list = res.data.data.list
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-        })
-        //关键词搜索
-        $scope.get_list = function () {
+        // $scope.$watch('cur_shop_status',function (newVal,oldVal) {
+        //     if(oldVal!=0){
+        //         $http.get('/supplieraccount/account-list', {
+        //             params: {
+        //                 category_id: $scope.cur_category_id,
+        //                 type_shop: $scope.cur_shop_type.num,
+        //                 status: $scope.cur_shop_status.num
+        //             }
+        //         }).then(function (res) {
+        //             console.log(res)
+        //             $scope.account_list = res.data.data.list
+        //         }, function (error) {
+        //             console.log(error)
+        //         })
+        //     }
+        // })
+        //提现管理关键词搜索
+        $scope.get_withdraw_list = function () {
             if($scope.keyword!=''){
-                $http.get('/supplieraccount/account-list', {
-                    params: {
-                        keyword:$scope.keyword
-                    }
-                }).then(function (res) {
-                    console.log(res)
-                    $scope.account_list = res.data.data.list
-                }, function (error) {
-                    console.log(error)
-                })
+                $scope.params.search = $scope.keyword
+                $scope.Config.currentPage = 1
+                $scope.params.time_type = 'all'
+                $scope.params.status = 2
+                tablePages()
+            }
+        }
+        //账户管理关键词搜索
+        $scope.get_account_list = function () {
+            if($scope.keyword2!=''){
+                $scope.params2.keyword = $scope.keyword2
+                $scope.Config2.currentPage = 1
+                $scope.params2.category_id = 0
+                $scope.params2.type_shop = -1
+                $scope.params2.status = -1
+                tablePages2()
             }
         }
         //跳转账户详情页
@@ -828,18 +592,13 @@ angular.module('mall_finance', ['ui.bootstrap'])
         //跳转冻结金额列表
         $scope.go_freeze_list = function () {
             $scope.cur_index == 2
-            $scope.cur_time_type = $scope.time_type[0]
-            $http.get('/supplieraccount/freeze-list',{
-                params:{
-                    supplier_id:$scope.cur_account_detail.id
-                }
-            }).then(function (res) {
-                console.log(res)
-                $scope.freeze_list = res.data.data.list
-                $state.go('mall_finance.freeze_list')
-            },function (error) {
-                console.log(error)
-            })
+            $scope.three_title = '账户管理'
+            $scope.four_title = '详情'
+            $scope.five_title = '冻结金额列表'
+            $scope.six_title = ''
+            $scope.params3.supplier_id = $scope.cur_account_detail.id
+            tablePages3()
+            $state.go('mall_finance.freeze_list')
         }
         //查看冻结原因
         $scope.show_freeze_reason = function (item) {
@@ -896,271 +655,15 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $scope.five_title = ''
             $scope.six_title=''
             $scope.cur_index = 0
-            $scope.keyword = ''
-            $scope.cur_time_type = $scope.time_type[1]
-            $http.get('/supplier-cash/order-list-today',{
-                params:{
-                    time_type:$scope.cur_time_type.str
-                }
-            }).then(function (res) {
-                console.log(res)
-                $scope.recorded_list = res.data.data.list
-                $state.go('mall_finance.recorded_detail')
-            },function (error) {
-                console.log(error)
-            })
+            $scope.keyword1 = ''
+            tablePages1()
+            $state.go('mall_finance.recorded_detail')
         }
         //入账列表搜索
         $scope.get_recorded_list = function () {
-            if($scope.keyword!=''){
-                $http.post('/supplier-cash/order-list-today',{
-                    keyword:$scope.keyword
-                },config).then(function (res) {
-                    console.log(res)
-                },function (error) {
-                    console.log(error)
-                })
+            if($scope.keyword1!=''){
+                $scope.params1.search = $scope.keyword1
+                tablePages1()
             }
         }
-        $scope.totalItems = 175
-        $scope.maxSize = 5
-        $scope.currentPage = 1
     })
-    /**
-     * 分页
-     * config = {
- *     prevBtn: string,      上一页(默认显示上一页)
- *     nextBtn: string,      下一页(默认显示下一页)
- *     showTotal: boolean,   是否显示总条数
- *     showJump: boolean,    是否显示跳转
- *     itemsPerPage: number, 每页个数
- *     totalItems: number,   数据总条数
- *     currentPage: number,  当前所在页数
- *     onChange: function    页面改变发生事件
- * }
-     */
-    // .directive('tmPagination', function () {
-    //     return {
-    //         restrict: 'EA',
-    //         template: '<div class="page-list clearfix">' +
-    //         '<span class="pagination-total" ng-class="{true: \'\', false: \'no-data\'}[conf.totalItems != 0]" ng-show="conf.showTotal">总共有 {{conf.totalItems}} 条数据</span>' +
-    //         '<ul class="pagination" ng-show="conf.totalItems > 0">' +
-    //         '<li ng-class="{disabled: conf.currentPage == 1}" ng-click="prevPage()"><span>{{conf.prevBtn || "上一页"}}</span></li>' +
-    //         '<li ng-repeat="item in pageList track by $index" ng-class="{active: item == conf.currentPage, separate: item == \'...\'}" ' +
-    //         'ng-click="changeCurrentPage(item)">' +
-    //         '<span>{{ item }}</span>' +
-    //         '</li>' +
-    //         '<li ng-class="{disabled: conf.currentPage == conf.numberOfPages}" ng-click="nextPage()"><span>{{conf.nextBtn || "下一页"}}</span></li>' +
-    //         '</ul>' +
-    //         '<div class="jump" ng-show="conf.showJump && conf.totalItems > 0"><input id="pageJump" class="form-control" type="text"><button class="btn btn-default" ng-click="jumpPage()">跳转</button></div>' +
-    //         '<div class="no-items" ng-show="conf.totalItems <= 0">暂无数据</div>' +
-    //         '</div>',
-    //         replace: true,
-    //         scope: {
-    //             conf: '='
-    //         },
-    //         link: function (scope, element, attrs) {
-    //
-    //             let conf = scope.conf;
-    //
-    //             // 默认分页长度
-    //             let defaultPagesLength = 9;
-    //
-    //             // 默认分页选项可调整每页显示的条数
-    //             let defaultPerPageOptions = [10, 15, 20, 30, 50];
-    //             conf.perPageOptions = [];
-    //             // 默认每页的个数
-    //             let defaultPerPage = 15;
-    //
-    //             // 获取分页长度
-    //             if (conf.pagesLength) {
-    //                 // 判断一下分页长度
-    //                 conf.pagesLength = parseInt(conf.pagesLength, 10);
-    //
-    //                 if (!conf.pagesLength) {
-    //                     conf.pagesLength = defaultPagesLength;
-    //                 }
-    //
-    //                 // 分页长度必须为奇数，如果传偶数时，自动处理
-    //                 if (conf.pagesLength % 2 === 0) {
-    //                     conf.pagesLength += 1;
-    //                 }
-    //
-    //             } else {
-    //                 conf.pagesLength = defaultPagesLength
-    //             }
-    //
-    //             // 分页选项可调整每页显示的条数
-    //             if (!conf.perPageOptions) {
-    //                 conf.perPageOptions = defaultPagesLength;
-    //             }
-    //
-    //             // pageList数组
-    //             function getPagination(newValue, oldValue) {
-    //
-    //                 // conf.currentPage
-    //                 if (conf.currentPage) {
-    //                     conf.currentPage = parseInt(scope.conf.currentPage, 10);
-    //                 }
-    //
-    //                 if (!conf.currentPage) {
-    //                     conf.currentPage = 1;
-    //                 }
-    //
-    //                 // conf.totalItems
-    //                 if (conf.totalItems) {
-    //                     conf.totalItems = parseInt(conf.totalItems, 10);
-    //                 }
-    //
-    //                 // conf.totalItems
-    //                 if (!conf.totalItems) {
-    //                     conf.totalItems = 0;
-    //                     return;
-    //                 }
-    //
-    //                 // conf.itemsPerPage
-    //                 if (conf.itemsPerPage) {
-    //                     conf.itemsPerPage = parseInt(conf.itemsPerPage, 10);
-    //                 }
-    //                 if (!conf.itemsPerPage) {
-    //                     conf.itemsPerPage = defaultPerPage;
-    //                 }
-    //
-    //                 // numberOfPages
-    //                 conf.numberOfPages = Math.ceil(conf.totalItems / conf.itemsPerPage);
-    //
-    //                 // 如果分页总数>0，并且当前页大于分页总数
-    //                 if (scope.conf.numberOfPages > 0 && scope.conf.currentPage > scope.conf.numberOfPages) {
-    //                     scope.conf.currentPage = scope.conf.numberOfPages;
-    //                 }
-    //
-    //                 // 如果itemsPerPage在不在perPageOptions数组中，就把itemsPerPage加入这个数组中
-    //                 let perPageOptionsLength = scope.conf.perPageOptions.length;
-    //
-    //                 // 定义状态
-    //                 let perPageOptionsStatus;
-    //                 for (var i = 0; i < perPageOptionsLength; i++) {
-    //                     if (conf.perPageOptions[i] == conf.itemsPerPage) {
-    //                         perPageOptionsStatus = true;
-    //                     }
-    //                 }
-    //                 // 如果itemsPerPage在不在perPageOptions数组中，就把itemsPerPage加入这个数组中
-    //                 if (!perPageOptionsStatus) {
-    //                     conf.perPageOptions.push(conf.itemsPerPage);
-    //                 }
-    //
-    //                 // 对选项进行sort
-    //                 conf.perPageOptions.sort(function (a, b) {
-    //                     return a - b
-    //                 });
-    //
-    //
-    //                 // 页码相关
-    //                 scope.pageList = [];
-    //                 if (conf.numberOfPages <= conf.pagesLength) {
-    //                     // 判断总页数如果小于等于分页的长度，若小于则直接显示
-    //                     for (i = 1; i <= conf.numberOfPages; i++) {
-    //                         scope.pageList.push(i);
-    //                     }
-    //                 } else {
-    //                     // 总页数大于分页长度（此时分为三种情况：1.左边没有...2.右边没有...3.左右都有...）
-    //                     // 计算中心偏移量
-    //                     let offset = (conf.pagesLength - 1) / 2;
-    //                     if (conf.currentPage <= offset) {
-    //                         // 左边没有...
-    //                         for (i = 1; i <= offset + 1; i++) {
-    //                             scope.pageList.push(i);
-    //                         }
-    //                         scope.pageList.push('...');
-    //                         scope.pageList.push(conf.numberOfPages);
-    //                     } else if (conf.currentPage > conf.numberOfPages - offset) {
-    //                         scope.pageList.push(1);
-    //                         scope.pageList.push('...');
-    //                         for (i = offset + 1; i >= 1; i--) {
-    //                             scope.pageList.push(conf.numberOfPages - i);
-    //                         }
-    //                         scope.pageList.push(conf.numberOfPages);
-    //                     } else {
-    //                         // 最后一种情况，两边都有...
-    //                         scope.pageList.push(1);
-    //                         scope.pageList.push('...');
-    //
-    //                         for (i = Math.ceil(offset / 2); i >= 1; i--) {
-    //                             scope.pageList.push(conf.currentPage - i);
-    //                         }
-    //                         scope.pageList.push(conf.currentPage);
-    //                         for (i = 1; i <= offset / 2; i++) {
-    //                             scope.pageList.push(conf.currentPage + i);
-    //                         }
-    //
-    //                         scope.pageList.push('...');
-    //                         scope.pageList.push(conf.numberOfPages);
-    //                     }
-    //                 }
-    //
-    //                 scope.$parent.conf = conf;
-    //             }
-    //
-    //             // prevPage
-    //             scope.prevPage = function () {
-    //                 if (conf.currentPage == 1) {
-    //                     return false;
-    //                 }
-    //                 if (conf.currentPage > 1) {
-    //                     conf.currentPage -= 1;
-    //                 }
-    //                 getPagination();
-    //                 if (conf.onChange) {
-    //                     conf.onChange();
-    //                 }
-    //             };
-    //
-    //             // nextPage
-    //             scope.nextPage = function () {
-    //                 if (conf.currentPage == conf.numberOfPages) {
-    //                     return false;
-    //                 }
-    //                 if (conf.currentPage < conf.numberOfPages) {
-    //                     conf.currentPage += 1;
-    //                 }
-    //                 getPagination();
-    //                 if (conf.onChange) {
-    //                     conf.onChange();
-    //                 }
-    //             };
-    //
-    //             // 变更当前页
-    //             scope.changeCurrentPage = function (item) {
-    //
-    //                 if (item == '...' || item == conf.currentPage) {
-    //                     return;
-    //                 } else {
-    //                     conf.currentPage = item;
-    //                     getPagination();
-    //                     // conf.onChange()函数
-    //                     if (conf.onChange) {
-    //                         conf.onChange();
-    //                     }
-    //                 }
-    //             };
-    //
-    //             // 跳转到页面
-    //             scope.jumpPage = function () {
-    //                 let jumpNum = angular.element('#pageJump').val();
-    //                 scope.changeCurrentPage(jumpNum);
-    //                 angular.element('#pageJump').val('')
-    //             };
-    //
-    //             scope.$watch('conf.totalItems', function (value, oldValue) {
-    //                 // 在无值或值不相等的时候，去执行onChange事件
-    //                 if (value == undefined && oldValue == undefined) {
-    //
-    //                     if (conf.onChange) {
-    //                         conf.onChange();
-    //                     }
-    //                 }
-    //                 getPagination();
-    //             });
-    //         }
-    //     };
-    // });
