@@ -983,7 +983,7 @@ class Goods extends ActiveRecord
             [['subtitle'], 'string', 'length' => [1, 16]],
             [['cover_image', 'offline_reason', 'reason'], 'string'],
             [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'style_id', 'series_id'], 'number', 'min' => 0],
-            ['supplier_price', 'validateSupplierPrice', 'on' => self::SCENARIO_REVIEW, SCENARIO_EDIT_LHZZ],
+            ['supplier_price', 'validateSupplierPrice', 'on' => self::SCENARIO_REVIEW, self::SCENARIO_EDIT_LHZZ],
             ['platform_price', 'validatePlatformPrice', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
             ['after_sale_services', 'validateAfterSaleServices'],
             [['category_id'], 'validateCategoryId'],
