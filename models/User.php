@@ -240,9 +240,6 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
 
-//        $username = StringService::getUniqueStringBySalt($user->mobile);
-//        self::createHuanXinUser($username) && $user->username = $username;
-
         $transaction = Yii::$app->db->beginTransaction();
         $code = 500;
         try {
@@ -282,11 +279,6 @@ class User extends ActiveRecord implements IdentityInterface
             if ($checkValidationCode && !empty($data['validation_code'])) {
                 SmValidationService::deleteCode($data['mobile']);
             }
-
-//            if (!$user->username) {
-//                new EventHandleService($user);
-//                Yii::$app->trigger(Yii::$app->params['events']['3rd']['failed']['createHuanxinUser']);
-//            }
 
             $code = 200;
             return [
