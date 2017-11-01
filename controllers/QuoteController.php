@@ -363,7 +363,7 @@ class QuoteController extends Controller
         }
 
     }
-    
+
     /**
      * plot list all
      * @return string
