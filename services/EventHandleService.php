@@ -10,7 +10,6 @@ namespace app\services;
 
 use Yii;
 use app\models\GoodsCategory;
-use app\models\User;
 
 class EventHandleService
 {
