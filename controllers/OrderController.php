@@ -16,6 +16,7 @@ use app\models\Series;
 use app\models\Style;
 use app\models\DeletedGoodsComment;
 use app\models\LogisticsTemplate;
+use app\models\UploadForm;
 use app\models\OrderAfterSale;
 use app\models\OrderGoods;
 use app\models\OrderRefund; 
