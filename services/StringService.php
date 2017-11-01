@@ -593,14 +593,14 @@ class StringService
      *
      * @param string $filename file name
      * @param string $msg message
-     * @param string $extraMsg extra message
+     * @param string $category message category
      * @param int $level log level default error
      */
-    public static function writeLog($filename, $msg, $extraMsg = '', $level = Logger::LEVEL_ERROR)
+    public static function writeLog($filename, $msg, $category = '', $level = Logger::LEVEL_ERROR)
     {
         $log = new FileTarget;
         $log->logFile = Yii::$app->getRuntimePath() . '/logs/' . $filename . '.log';
-        $log->messages[] = [$msg, $level, $extraMsg, time()];
+        $log->messages[] = [$msg, $level, $category, time()];
         $log->export();
     }
 }
