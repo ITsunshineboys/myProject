@@ -280,6 +280,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
         if ($worker_kind_details == null){
             $code = 1057;
