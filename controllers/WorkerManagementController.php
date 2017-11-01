@@ -8,6 +8,7 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use app\models\Worker;
 use app\models\WorkerOrder;
 use app\models\WorkerType;
@@ -179,6 +180,40 @@ class WorkerManagementController extends Controller
     public function actionWorkerAdd()
     {
         $post = \Yii::$app->request->post();
+        $phone = (int)trim(\Yii::$app->request->post('phone',''));
+
+        //  手机号是否正确
+        if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
+            $code = 1070;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        // 该用户是否注册
+        $user = User::find()->select('id')->where(['mobile'=>$phone])->asArray()->one();
+        if ($user == null){
+            $code = 1010;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        // 该手机号是否注册工人
+        $worker = Worker::find()->where(['uid'=>$user])->one();
+        if ($worker != null){
+            $code = 1071;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+        var_dump($worker);exit;
 
     }
 
