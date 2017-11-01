@@ -6,6 +6,7 @@ use app\services\StringService;
 use app\services\SmValidationService;
 use app\services\ModelService;
 use app\services\ChatService;
+use app\services\EventHandleService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -129,6 +130,7 @@ class User extends ActiveRecord implements IdentityInterface
     const LOGIN_ORIGIN_APP = 'login_origin_app';
     const LOGIN_ROLE_ID = 'login_role_id';
     const PREFIX_SESSION_FILENAME = 'sess_';
+    const RETYR_TIMES_CREATE_HUANXIN_USER = 3;
 
     /**
      * @inheritdoc
@@ -246,6 +248,9 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
 
+        $username = StringService::getUniqueStringBySalt($user->mobile);
+        self::createHuanXinUser($username) && $user->username = $username;
+
         $transaction = Yii::$app->db->beginTransaction();
         $code = 500;
         try {
@@ -284,6 +289,11 @@ class User extends ActiveRecord implements IdentityInterface
 
             if ($checkValidationCode && !empty($data['validation_code'])) {
                 SmValidationService::deleteCode($data['mobile']);
+            }
+
+            if (!$user->username) {
+                new EventHandleService($user);
+                Yii::$app->trigger(Yii::$app->params['events']['3rd']['failed']['createHuanxinUser']);
             }
 
             $code = 200;
@@ -1712,11 +1722,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         parent::afterSave($insert, $changedAttributes);
 
-        if ($insert) {
-            (new ChatService)->createUser(StringService::getUniqueStringBySalt($this->mobile),
-                Yii::$app->params['chatOptions']['user_password_default']);
-        }
-
         $key = self::CACHE_PREFIX . $this->id;
         $cache = Yii::$app->cache;
         $cache->set($key, $this);
@@ -1788,5 +1793,28 @@ class User extends ActiveRecord implements IdentityInterface
 
         $this->last_role_id_app = $roleId;
         return $this->save() ? 200 : 500;
+    }
+
+    /**
+     * Create huan xin user by username
+     *
+     * @param string $username username
+     * @param int $retryTimes retry times default 3
+     * @return bool
+     */
+    public static function createHuanXinUser($username, $retryTimes = self::RETYR_TIMES_CREATE_HUANXIN_USER)
+    {
+        $success = false;
+
+        for ($i = 0; $i < $retryTimes; $i++) {
+            $res = (new ChatService)->createUser($username,
+                Yii::$app->params['chatOptions']['user_password_default']);
+            if (!array_key_exists('error', $res)) {
+                $success = true;
+                break;
+            }
+        }
+
+        return $success;
     }
 }

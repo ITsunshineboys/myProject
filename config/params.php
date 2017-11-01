@@ -90,6 +90,11 @@ return [
                 'updateBatch' => 'mall_category_update_batch',
             ],
         ],
+        '3rd' => [
+            'failed' => [
+                'createHuanxinUser' => 'failed_create_huanxin_user',
+            ],
+        ],
     ],
     'download' => [
         'directory' => 'down',

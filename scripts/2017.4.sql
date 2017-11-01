@@ -43,10 +43,10 @@ CREATE TABLE `user` (
   `birthday` int(8) unsigned not null DEFAULT 0,
   `district_code` int(6) unsigned not null default 0 comment '区域码',
   `district_name` varchar(50) NOT NULL DEFAULT '' comment '区域名',
-  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
+  `availableamount` bigint(20) NOT NULL DEFAULT '0' COMMENT '可用余额',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
-  `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
-  `registration_id` varchar(100) NOT NULL COMMENT '极光注册id',
+  `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
+  `registration_id` varchar(100) NOT NULL DEFAULT '0' COMMENT '极光注册id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1161,7 +1161,7 @@ CREATE TABLE `worker` (
   `level` int(10) NOT NULL DEFAULT '0' COMMENT '数值填写对比worker_type等级',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `signature` varchar(100) NOT NULL DEFAULT '' COMMENT '个性签名',
-  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
+  `availableamount` bigint(20) NOT NULL DEFAULT '0' COMMENT '可用余额',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',

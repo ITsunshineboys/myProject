@@ -10,6 +10,7 @@ namespace app\services;
 
 use Yii;
 use app\models\GoodsCategory;
+use app\models\User;
 
 class EventHandleService
 {
@@ -38,6 +39,11 @@ class EventHandleService
         // supplier logout
         Yii::$app->on($events['supplier']['logout'], function () use ($data) {
 //            echo 'you are logged out at ', date('Y-m-d H:i:s');
+        });
+
+        // call 3rd. service(create huanxin user) failed
+        Yii::$app->on($events['3rd']['failed']['createHuanxinUser'], function () use ($data, $events) {
+            StringService::writeLog($events['3rd']['failed']['createHuanxinUser'], $data->mobile, $data->id);
         });
     }
 }
