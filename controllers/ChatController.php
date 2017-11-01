@@ -13,12 +13,13 @@ use app\models\UserNewsRecord;
 use app\models\Worker;
 use app\services\ChatService;
 use app\services\FileService;
+use yii\data\Pagination;
 use yii\helpers\Json;
 use yii\web\Controller;
 
 class ChatController extends Controller
 {
-
+    const DEAF_SIZE=20;
     const SUPPLIER_ROLE=6;
     const OWNER_ROLE=7;
     const WORKER_ROLE=2;
@@ -426,11 +427,12 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
+        $page=(int)\Yii::$app->request->get('page',1);
+        $size=(int)\Yii::$app->request->get('size',self::DEAF_SIZE);
         $new_infos=UserNewsRecord::find()
             ->where(['role_id'=>$role_id,'uid'=>$u_id])
             ->asArray()
-            ->orderBy('send_time Desc')
-            ->all();
+            ->orderBy('send_time Desc');
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d H:i:s ',$info['send_time']);
              $info['image']=OrderGoods::find()
@@ -442,6 +444,10 @@ class ChatController extends Controller
                      $info['image']='';
                  }
          }
+       $count = $new_infos->count();
+        var_dump($count);die;
+          $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+        $new_infos->offset();
         if(!$info){
             return Json::encode([
                 'code'=>200,
@@ -469,7 +475,9 @@ class ChatController extends Controller
 
     public function actionTest(){
 
-        var_dump(User::find()->asArray()->all());
+        $chat=new ChatService();
+       $a= $chat->getChatRecord('select+*+where+timestamp>1403164734226');
+        return json_encode($a);
 
     }
 }
