@@ -34,7 +34,7 @@ var app = angular.module("app", ["ng.ueditor", "intelligent_directive", "ui.rout
 /*路由拦截*/
 app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
     $httpProvider.defaults.withCredentials = true;
-    $urlRouterProvider.otherwise("/intelligent/index");
+    $urlRouterProvider.otherwise("/login");
     $stateProvider
 
     /*---------------------------王杰开始--------------------------------------*/
