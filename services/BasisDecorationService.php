@@ -1308,7 +1308,7 @@ class BasisDecorationService
                 $id[] = $one_goods['id'];
             }
             $goods_property = GoodsAttr::findByGoodsIdUnit($id);
-            var_dump($goods_property);exit;
+            var_dump($goods_property);
             if ($goods_property == null){
                 $code = 1061;
                 return Json::encode([
@@ -1333,6 +1333,7 @@ class BasisDecorationService
                         break;
                 }
             }
+            var_dump($property);exit;
             return $property;
         }
     }
