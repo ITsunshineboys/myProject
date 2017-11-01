@@ -98,6 +98,9 @@ return [
         'db' => [
             'failed' => 'failed_db',
         ],
+        'user' => [
+            'register' => 'user_register',
+        ],
     ],
     'download' => [
         'directory' => 'down',

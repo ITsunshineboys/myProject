@@ -10,6 +10,7 @@ namespace app\services;
 
 use Yii;
 use app\models\GoodsCategory;
+use app\models\User;
 
 class EventHandleService
 {
@@ -29,6 +30,28 @@ class EventHandleService
         $events = Yii::$app->params['events'];
 
         switch ($event) {
+            // register user
+            case $events['user']['register']:
+                Yii::$app->on($events['user']['register'], function () use ($data, $events) {
+                    $username = StringService::getUniqueStringBySalt($data);
+                    if (User::createHuanXinUser($username)) {
+                        $user = User::find()->where(['mobile' => $data])->one();
+                        $user->username = $username;
+                        if (!$user->save()) {
+                            $update = 'update ' . User::tableName() . ' set username = ' . $username;
+                            $where = ' where id = ' . $user->id . ';';
+                            $data = [
+                                'sql' => $update . $where,
+                                'table' => User::tableName(),
+                            ];
+                            $event = Yii::$app->params['events']['db']['failed'];
+                            new self($event, $data);
+                            Yii::$app->trigger($event);
+                        }
+                    }
+                });
+                break;
+
             // call 3rd. service(create huanxin user) failed
             case $events['3rd']['failed']['createHuanxinUser']:
                 Yii::$app->on($events['3rd']['failed']['createHuanxinUser'], function () use ($data, $events) {
