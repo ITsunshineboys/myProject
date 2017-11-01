@@ -3239,7 +3239,7 @@ class MallController extends Controller
         $goods->sanitize($user, $postData);
         $goods->attributes = $postData;
 
-        $goods->scenario = Goods::SCENARIO_REVIEW;
+        $goods->scenario = Goods::SCENARIO_EDIT_LHZZ;
 
         if (!$goods->validate()) {
             return Json::encode([
