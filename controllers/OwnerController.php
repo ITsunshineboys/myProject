@@ -1016,7 +1016,6 @@ class OwnerController extends Controller
             ]);
         }
         $goods_price = BasisDecorationService::priceConversion($goods);
-        var_dump($goods_price);exit;
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
         var_dump($goods_attr);exit;
 
