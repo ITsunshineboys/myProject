@@ -27,6 +27,7 @@ var app = angular.module("app", ["ng.ueditor", "intelligent_directive", "ui.rout
     "add_user_module",
     //第三次需求开始
     "login_module",
+
     "checklist-model",
     //第三次需求结束
     //王杰 结束
