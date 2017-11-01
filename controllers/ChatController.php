@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 use app\models\ChatRecord;
+use app\models\OrderGoods;
 use app\models\Supplier;
 use app\models\User;
 use app\models\UserChat;
@@ -432,7 +433,14 @@ class ChatController extends Controller
             ->all();
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d H:i:s ',$info['send_time']);
-
+             $info['image']=OrderGoods::find()
+                 ->select('cover_image')
+                 ->asArray()
+                 ->where(['order_no'=>$info['order_no'],'sku'=>$info['sku']])
+                 ->one()['cover_image'];
+                 if(!$info['image']){
+                     $info['image']='';
+                 }
          }
         if(!$info){
             return Json::encode([
