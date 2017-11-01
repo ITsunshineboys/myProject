@@ -4220,5 +4220,13 @@ class OrderController extends Controller
     }
 
 
+    public function actionQrcode()
+    {
+        $goods_id=Yii::$app->request->post('goods_id','');
+        $data=UploadForm::DIR_PUBLIC . '/goods_' . $goods_id. '.png';
+        echo $data;
+    }
+
+
 
 }
