@@ -195,14 +195,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'user';
-    }
-
-    /**
      * Register user
      *
      * @param array $data data
@@ -248,9 +240,6 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
 
-        $username = StringService::getUniqueStringBySalt($user->mobile);
-        self::createHuanXinUser($username) && $user->username = $username;
-
         $transaction = Yii::$app->db->beginTransaction();
         $code = 500;
         try {
@@ -289,11 +278,6 @@ class User extends ActiveRecord implements IdentityInterface
 
             if ($checkValidationCode && !empty($data['validation_code'])) {
                 SmValidationService::deleteCode($data['mobile']);
-            }
-
-            if (!$user->username) {
-                new EventHandleService($user);
-                Yii::$app->trigger(Yii::$app->params['events']['3rd']['failed']['createHuanxinUser']);
             }
 
             $code = 200;
@@ -1722,9 +1706,67 @@ class User extends ActiveRecord implements IdentityInterface
     {
         parent::afterSave($insert, $changedAttributes);
 
+        if ($insert) {
+            $username = StringService::getUniqueStringBySalt($this->mobile);
+            if (self::createHuanXinUser($username)) {
+                $this->username = $username;
+                if (!$this->save()) {
+                    $update = 'update ' . self::tableName() . ' set username = ' . $username;
+                    $where = ' where id = ' . $this->id . ';';
+                    $data = [
+                        'sql' => $update . $where,
+                        'table' => self::tableName(),
+                    ];
+                    new EventHandleService($data);
+                    Yii::$app->trigger(Yii::$app->params['events']['db']['failed']);
+                }
+            }
+        }
+
         $key = self::CACHE_PREFIX . $this->id;
         $cache = Yii::$app->cache;
         $cache->set($key, $this);
+    }
+
+    /**
+     * Create huan xin user by username
+     *
+     * @param string $username username
+     * @param int $retryTimes retry times default 3
+     * @return bool
+     */
+    public static function createHuanXinUser($username, $retryTimes = self::RETYR_TIMES_CREATE_HUANXIN_USER)
+    {
+        $success = false;
+
+        $username = trim($username);
+        if (!$username) {
+            return $success;
+        }
+
+        for ($i = 0; $i < $retryTimes; $i++) {
+            $res = (new ChatService)->createUser($username,
+                Yii::$app->params['chatOptions']['user_password_default']);
+            if (!array_key_exists('error', $res)) {
+                $success = true;
+                break;
+            }
+        }
+
+        if (!$success) {
+            new EventHandleService($username);
+            Yii::$app->trigger(Yii::$app->params['events']['3rd']['failed']['createHuanxinUser']);
+        }
+
+        return $success;
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'user';
     }
 
     /**
@@ -1793,28 +1835,5 @@ class User extends ActiveRecord implements IdentityInterface
 
         $this->last_role_id_app = $roleId;
         return $this->save() ? 200 : 500;
-    }
-
-    /**
-     * Create huan xin user by username
-     *
-     * @param string $username username
-     * @param int $retryTimes retry times default 3
-     * @return bool
-     */
-    public static function createHuanXinUser($username, $retryTimes = self::RETYR_TIMES_CREATE_HUANXIN_USER)
-    {
-        $success = false;
-
-        for ($i = 0; $i < $retryTimes; $i++) {
-            $res = (new ChatService)->createUser($username,
-                Yii::$app->params['chatOptions']['user_password_default']);
-            if (!array_key_exists('error', $res)) {
-                $success = true;
-                break;
-            }
-        }
-
-        return $success;
     }
 }
