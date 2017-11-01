@@ -1323,14 +1323,17 @@ class OwnerController extends Controller
         $total_prices = 0;
         foreach ($post['list'] as $price){
             $total_prices += $price['price'];
-            $special_offer += $price['goods_price'];
+           $special_offer += $price['goods_price'];
+
         }
+        $a = sprintf('%.2f', (float)$total_prices);
+        $b = sprintf('%.2f', (float)$special_offer);
         return Json::encode([
             'code'=> 200,
             'msg'=> 'OK',
            'data' => [
-               'special_offer'=>$special_offer,
-               'total_prices'=>$total_prices,
+               'special_offer'=>$a,
+               'total_prices'=>$b,
            ],
         ]);
     }
