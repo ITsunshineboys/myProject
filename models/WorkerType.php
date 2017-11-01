@@ -32,24 +32,14 @@ class WorkerType extends \yii\db\ActiveRecord
     {
         return [
             [['pid'], 'integer'],
-            [['worker_type'], 'string', 'max' => 20],
+            [['worker_name'], 'string','max'=>20],
+            [['rank_name'], 'string','max'=>20],
+            [['min_value'], 'integer','max'=>10],
+            [['max_value'], 'integer','max'=>10],
             [['image'], 'string', 'max' => 255],
         ];
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'pid' => '所属上级工种id',
-            'worker_type' => '工种名字',
-            'image' => '服务工种图片',
-        ];
-    }
-
+    
     /**
      * 根据父级工种找子级
      *@return string
@@ -107,5 +97,31 @@ class WorkerType extends \yii\db\ActiveRecord
             ->where($where)
             ->leftJoin('worker','worker.worker_type_id = worker_type.id')
             ->one();
+    }
+
+    public static function ByInsert($worker)
+    {
+        return Yii::$app->db
+            ->createCommand()
+            ->insert(self::tableName(),[
+                'worker_name'=> $worker['worker_name'],
+                'rank_name'  => $worker['rank_name'],
+                'min_value'  => $worker['min_value'],
+                'max_value'  => $worker['max_value'],
+                'establish_time'=>time(),
+                'status'     => self::PARENT,
+            ])->execute();
+    }
+
+    public static function ByUpdate($worker)
+    {
+        return Yii::$app->db
+            ->createCommand()
+            ->update(self::tableName(),[
+                'worker_name'=> $worker['worker_name'],
+                'rank_name'  => $worker['rank_name'],
+                'min_value'  => $worker['min_value'],
+                'max_value'  => $worker['max_value'],
+            ],['id' => $worker['id']])->execute();
     }
 }

@@ -124,9 +124,56 @@ class WorkerManagementController extends Controller
         ]);
     }
 
+    /**
+     * 工种类型添加
+     * @return string
+     */
     public function actionWorkTypeAdd()
     {
-        
+        $post = \Yii::$app->request->post();
+        foreach ($post['level'] as $one_post)
+        {
+            $worker_type = (new WorkerType())->ByInsert($one_post);
+        }
+        if (!$worker_type)
+        {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        return Json::encode([
+           'code' => 200,
+           'msg' => 'ok',
+        ]);
+    }
+
+    /**
+     * 工种类型修改
+     * @return string
+     */
+    public function actionWorkTypeEdit()
+    {
+        $post = \Yii::$app->request->post();
+        //  修改工种类型
+        if (isset($post['edit'])){
+            foreach ($post['edit'] as $one_post){
+                (new WorkerType())->ByUpdate($one_post);
+            }
+        }
+
+        //  添加工种类型
+        if (isset($post['add'])){
+            foreach ($post['add'] as $one_post){
+                (new WorkerType())->ByInsert($one_post);
+            }
+        }
+
+        return Json::encode([
+           'code' => 200,
+           'msg' => 'OK',
+        ]);
     }
 
 }
