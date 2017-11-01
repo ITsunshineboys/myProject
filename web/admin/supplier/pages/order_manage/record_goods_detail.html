@@ -1,0 +1,203 @@
+<link rel="stylesheet" href="pages/order_manage/css/record_goods_detail.css">
+
+<div ng-controller="goods_detail_ctrl">
+    <header>
+        <div>
+            <i class="glyphicon glyphicon-home"></i>
+            <span class="shop_manage" ng-click="back_list()">订单管理</span>
+            <span class="shop_manage" ui-sref="waitsend_detail({item:item,wait_receive:wait_receive})">>订单详情</span>
+            <span class="commodity_manage">>记录商品详情</span>
+            <img src="lib/images/user.png" alt=""/>
+        </div>
+    </header>
+    <section>
+        <!--商品分类-->
+        <form  name="gooddetail">
+            <div class="margin_top">
+                <span class="left_font">商品分类</span>
+                <span class="margin_left">{{goods_item.category}}</span>
+            </div>
+            <!--商品名称-->
+            <div class="margin_top">
+                <span class="left_font">商品名称</span>
+                <span class="margin_left">{{goods_item.goods_name}}</span>
+            </div>
+            <!--商品特色-->
+            <div class="margin_top">
+                <span class="left_font">商品特色</span>
+                <span class="margin_left">{{goods_item.subtitle}}</span>
+            </div>
+            <!--选择品牌-->
+            <div class="margin_top">
+                <span class="left_font">选择品牌</span>
+                <span class="margin_left">{{goods_item.brand}}</span>
+            </div>
+            <div class="margin_top">
+                <span class="left_font">风格</span>
+                <span class="margin_left">{{goods_item.style}}</span>
+            </div>
+            <div class="margin_top">
+                <span class="left_font">系列</span>
+                <span class="margin_left">{{goods_item.series}}</span>
+            </div>
+            <!--商品属性-->
+            <div class="margin_top">
+                <span class="left_font">商品属性</span>
+                <div class="margin_left inline_block goodattrs">
+                    <div>
+                        <span class="attr_font">属性名称</span>
+                        <span class="attr_font">属性内容</span>
+                        <span class="attr_font">单位</span>
+                    </div>
+                    <div ng-repeat="item in goods_attrs">
+                        <span class="attr_font">{{item.name}}</span>
+                        <span class="attr_font">{{item.value}}</span>
+                        <span class="attr_font">{{item.unit}}</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!--上传图片-->
+            <div class="margin_top picarr">
+                <span class="left_font">上传图片</span>
+                <div class="margin_left inline_block img_size coverimg">
+                    <img src="http://test.cdlhzz.cn:888/{{goods_item.cover_image}}" alt="">
+                    <div id="coverimg_span">封面图</div>
+                </div>
+                <div class="inline_block img_size" ng-repeat="item in goods_images track by $index" style="margin-left: 10px">
+                    <img src="http://test.cdlhzz.cn:888/{{item.image}}" alt="">
+                </div>
+            </div>
+            <!--价格/库存-->
+            <div class="margin_top">
+                <span class="left_font">价格/库存</span>
+                <div class="margin_left inline_block">
+                    <div>
+                        <span class="font_size">供货价格</span>
+                        <span class="font_size">平台价格</span>
+                        <span class="font_size">市场价格</span>
+                        <span class="font_size">库存</span>
+                    </div>
+                    <hr>
+                    <div class="margin_top">
+                        <span class="font_size">{{goods_item.supplier_price | currency:"¥"}}</span>
+                        <span class="font_size">{{goods_item.platform_price | currency:"¥"}}</span>
+                        <span class="font_size">{{goods_item.market_price | currency:"¥"}}</span>
+                        <span class="font_size">{{goods_item.left_number}}</span>
+                    </div>
+                </div>
+            </div>
+            <!--采购价-->
+            <div class="margin_top">
+                <span class="left_font">采购价</span>
+                <div  class="margin_left inline_block">
+                    <div>
+                        <span class="purchase_left">装修公司采购价</span>
+                        <span class="purchase_left">项目经理采购价</span>
+                        <span class="purchase_left">设计师采购价</span>
+                    </div>
+                    <hr>
+                    <div class="margin_top">
+                        <span class="purchase_left">{{goods_item.purchase_price_decoration_company | currency:"¥"}}</span>
+                        <span class="purchase_left">{{goods_item.purchase_price_manager | currency:"¥"}}</span>
+                        <span class="purchase_left">{{goods_item.purchase_price_designer | currency:"¥"}}</span>
+                    </div>
+                </div>
+            </div>
+            <!--物流模块-->
+            <div class="margin_top">
+                <span class="left_font">商品物流</span>
+                <div class="margin_left inline_block">
+                    <div>
+                        <span ng-if="goods_item.logisticsTemplate.delivery_method==0">快递物流</span>
+                        <span ng-if="goods_item.logisticsTemplate.delivery_method==1">送货上门</span>
+                    </div>
+                    <div class="margin_top">
+                        <span>快递方式</span>
+                        <span class="margin_left">{{goods_item.logisticsTemplate.name}}</span>
+                    </div>
+                    <div class="margin_top city_div">
+                        <span>城市选择</span>
+                        <span class="city_left" ng-repeat="city in goods_city.slice(0,3)">{{city.district_name}}</span>
+                        <span style="color:#5677FC" ng-show="goods_city.length > 3" data-toggle="modal" data-target="#showdistricts">查看</span>
+                    </div>
+                    <div class="margin_top">
+                        <span>是否包邮</span>
+                        <span class="margin_left" ng-if="goods_item.logisticsTemplate.delivery_cost_default==0">包邮</span>
+                        <span class="margin_left" ng-if="goods_item.logisticsTemplate.delivery_cost_default!=0">不包邮</span>
+                    </div>
+                    <div class="margin_top" ng-if="goods_item.logisticsTemplate.delivery_cost_default!=0">
+                        <span>收费金额</span>
+                        <div class="margin_left inline_block">
+                            <p>默认{{goods_item.logisticsTemplate.delivery_number_default}}件商品：¥{{goods_item.logisticsTemplate.delivery_cost_default}}</p>
+                            <p>每增加{{goods_item.logisticsTemplate.delivery_number_delta}}件商品，运费增加：¥{{goods_item.logisticsTemplate.delivery_cost_delta}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--地区提示模态框-->
+            <div class="modal fade" id="showdistricts" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="save_content">
+                        <div class="modal-header" id="save_header">
+                            <h4 class="modal-title" id="tishi">
+                                已选择地区
+                            </h4>
+                        </div>
+                        <div class="modal-body" id="save_body">
+                            <span ng-repeat="item in goods_city" class='eachdistrict'>{{item.district_name}}</span>
+                        </div>
+
+                        <div class="btn_modal_two">
+                            <button id="caozuo_sure" data-dismiss="modal">确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!--售后-->
+            <div class="margin_top" ng-if="goods_after.length>0">
+                <span class="left_font">售后</span>
+                <div class="margin_left inline_block" style="margin-top:-15px;margin-left: 85px">
+                    <div class="margin_top" ng-repeat="item in goods_after">
+                        <p>{{item}}</p>
+                    </div>
+                </div>
+            </div>
+            <!--保障-->
+            <div class="margin_top">
+                <span class="left_font">保障</span>
+                <div class="margin_left inline_block" style="margin-left: 85px">
+                    <div ng-repeat="item in goods_guarantee">
+                        <p>{{item}}</p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!--线下商城二维码-->
+            <div class="margin_top">
+                <span class="left_font">线下商城二维码</span>
+                <div style="text-indent:4rem" class="inline_block">
+                    <img style="width: 170px;height: 170px;" src="http://test.cdlhzz.cn:888/{{goods_item.qrcode}}" alt="">
+                </div>
+            </div>
+            <hr>
+            <!--详细描述-->
+            <div class="margin_top">
+                <span class="left_font">详细描述</span>
+                <div class="margin_left inline_block">
+                    <div>
+                        <p>{{goods_item.description}}</p>
+                    </div>
+                </div>
+            </div>
+            <!--操作-->
+            <div class="btn_margin_top">
+                <button class="btn btn-default" ui-sref="waitsend_detail({item:item,wait_receive:wait_receive})">返回</button>
+            </div>
+        </form>
+    </section>
+
+
+
+</div>
