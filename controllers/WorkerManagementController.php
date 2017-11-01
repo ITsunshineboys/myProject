@@ -178,6 +178,7 @@ class WorkerManagementController extends Controller
 
     public function actionWorkerAdd()
     {
+        $post = \Yii::$app->request->post();
 
     }
 
