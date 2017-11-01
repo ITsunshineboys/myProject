@@ -440,7 +440,6 @@ class ChatController extends Controller
             ->orderBy('send_time Desc');
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
-        var_dump($query->all());die;
         $new_infos=$query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
