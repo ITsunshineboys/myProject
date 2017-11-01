@@ -1326,14 +1326,14 @@ class OwnerController extends Controller
            $special_offer += $price['goods_price'];
 
         }
-        $a = sprintf('%.2f', (float)$total_prices);
-        $b = sprintf('%.2f', (float)$special_offer);
+        $total = sprintf('%.2f', (float)$total_prices);
+        $special = sprintf('%.2f', (float)$special_offer);
         return Json::encode([
             'code'=> 200,
             'msg'=> 'OK',
            'data' => [
-               'special_offer'=>$a,
-               'total_prices'=>$b,
+               'special_offer'=>$special,
+               'total_prices'=>$total,
            ],
         ]);
     }
