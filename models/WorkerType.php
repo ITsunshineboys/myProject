@@ -39,7 +39,7 @@ class WorkerType extends \yii\db\ActiveRecord
             [['image'], 'string', 'max' => 255],
         ];
     }
-    
+
     /**
      * 根据父级工种找子级
      *@return string
