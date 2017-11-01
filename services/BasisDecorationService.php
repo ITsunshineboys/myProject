@@ -1332,7 +1332,7 @@ class BasisDecorationService
                         break;
                 }
             }
-            var_dump($property);exit;
+
             return $property;
         }
     }
