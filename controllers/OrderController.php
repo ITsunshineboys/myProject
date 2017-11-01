@@ -3858,7 +3858,7 @@ class OrderController extends Controller
                 {
                     $after[]='换货';
                 }
-            }
+            } 
             $str = Url::to(['line/#!/product_details?mall_id='. $Goods->id], true);
             $filename = 'goods_line_'. $Goods->id;
             StringService::generateQrCodeImage($str, $filename);
