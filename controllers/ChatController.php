@@ -13,7 +13,9 @@ use app\models\UserNewsRecord;
 use app\models\Worker;
 use app\services\ChatService;
 use app\services\FileService;
+use app\services\ModelService;
 use yii\data\Pagination;
+use yii\db\Query;
 use yii\helpers\Json;
 use yii\web\Controller;
 
@@ -429,10 +431,15 @@ class ChatController extends Controller
         list($u_id, $role_id) = $user;
         $page=(int)\Yii::$app->request->get('page',1);
         $size=(int)\Yii::$app->request->get('size',self::DEAF_SIZE);
-        $new_infos=UserNewsRecord::find()
+        $query=(new Query())
+            ->from('user_news_record')
             ->where(['role_id'=>$role_id,'uid'=>$u_id])
-            ->asArray()
             ->orderBy('send_time Desc');
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
+        $new_infos=$query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d H:i:s ',$info['send_time']);
              $info['image']=OrderGoods::find()
@@ -444,10 +451,7 @@ class ChatController extends Controller
                      $info['image']='';
                  }
          }
-       $count = $new_infos->count();
-        var_dump($count);die;
-          $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
-        $new_infos->offset();
+
         if(!$info){
             return Json::encode([
                 'code'=>200,
@@ -458,7 +462,7 @@ class ChatController extends Controller
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>$new_infos
+            'data'=> ModelService::pageDeal($new_infos, $count, $page, $size)
         ]);
 
     }
