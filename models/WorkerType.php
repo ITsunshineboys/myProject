@@ -33,10 +33,6 @@ class WorkerType extends \yii\db\ActiveRecord
         return [
             [['pid'], 'integer'],
             [['worker_name'], 'string','max'=>20],
-            [['rank_name'], 'string','max'=>20],
-            [['min_value'], 'integer','max'=>10],
-            [['max_value'], 'integer','max'=>10],
-            [['image'], 'string', 'max' => 255],
         ];
     }
 

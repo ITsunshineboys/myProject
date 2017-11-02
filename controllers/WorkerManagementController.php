@@ -131,23 +131,20 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkerTypeAdd()
     {
-        $post = \Yii::$app->request->post();
-        foreach ($post['level'] as $one_post)
-        {
-            $worker_type = (new WorkerType())->ByInsert($one_post);
-        }
-        if (!$worker_type)
-        {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        return Json::encode([
-           'code' => 200,
-           'msg' => 'ok',
-        ]);
+       $worker_type =  new  WorkerType();
+       $worker_type->worker_name = \Yii::$app->request->post('worker','');
+       $worker_type->establish_time = time();
+       $worker_type->status = WorkerType::PARENT;
+       if (!$worker_type->save()){
+           $code = 1000;
+           return Json::encode([
+              'code' => $code,
+              'msg' => \Yii::$app->params['errorCodes'][$code],
+           ]);
+       }
+        $id = $worker_type->attributes['id'];
+       var_dump($id);exit;
+
     }
 
     /**
@@ -177,6 +174,10 @@ class WorkerManagementController extends Controller
         ]);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function actionWorkerList()
     {
         $worker_ = trim(\Yii::$app->request->get('id',''));
