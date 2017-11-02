@@ -83,6 +83,8 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
       $scope.params.status='0';
       $scope.params.pid='0';
       $scope.params['sort[]']='offline_time:3';//下架时间，降序排序
+
+      console.log('下架。。。。。。。。。。。')
   }else if($stateParams.check_flag){
     $scope.on_flag=false;
     $scope.down_flag=false;
@@ -98,6 +100,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
       $scope.params.status='1';
       $scope.params.pid='0'
       $scope.params['sort[]']='online_time:3';//上架时间，降序
+      console.log('上架。。。。。。。。。。。')
   }
 
 
