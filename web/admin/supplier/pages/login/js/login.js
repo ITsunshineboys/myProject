@@ -125,4 +125,11 @@ login.controller("login_ctrl",function ($scope,$http,$state,$stateParams) {
         $scope.show_send=true;//发送按钮、倒计时
         $scope.show_prompt=false;//验证码提示字
     };
+    //Enter 键盘事件
+    $scope.myKeyup = function(e){
+        var keycode = window.event?e.keyCode:e.which;
+        if(keycode==13){
+            $scope.supplier_login();
+        }
+    };
   });
