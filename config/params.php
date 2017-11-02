@@ -103,6 +103,9 @@ return [
         'user' => [
             'register' => 'user_register',
         ],
+        'system' => [
+            'error' => 'system_error',
+        ],
     ],
     'download' => [
         'directory' => 'down',
