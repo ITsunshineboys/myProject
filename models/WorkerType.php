@@ -80,7 +80,12 @@ class WorkerType extends \yii\db\ActiveRecord
     public static function findByList()
     {
         $sql = 'SELECT `worker_type`.`worker_name`,`worker_type`.`establish_time`,`worker_type`.`status`,COUNT(worker_rank.rank_name) AS number ,COUNT(worker.id) AS quantity FROM `worker_type` LEFT JOIN `worker_rank` ON worker_type.id = worker_rank.worker_type_id LEFT JOIN `worker` ON worker.worker_type_id = worker_type.id GROUP BY worker_type.worker_name';
-        return Yii::$app->db->createCommand($sql)->queryAll();
+        $rows = Yii::$app->db->createCommand($sql)->queryAll();
+        foreach ($rows as &$one_row){
+            $one_row['establish_time'] = date('Y-m-d H:i:s',$one_row['establish_time']);
+        }
+
+        return $rows;
     }
 
     public static function findByListOne($where)

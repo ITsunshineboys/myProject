@@ -232,13 +232,14 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkerList()
     {
-        $worker_ = trim(\Yii::$app->request->get('id',''));
+//        $worker_ = trim(\Yii::$app->request->get('id',''));
         $worker = WorkerType::find()
             ->select('id,worker_name')
             ->where(['and',['status'=>1],['pid'=>0]])
             ->asArray()
             ->distinct()
             ->all();
+        var_dump($worker);exit;
 
         return Json::encode([
             'code' => 200,
