@@ -9,10 +9,10 @@ offline_edit.controller("offlineedit",function ($scope,$http,$stateParams,$state
     }
   };
 	$scope.myng=$scope;
-  $scope.now_edit_list=[];
+    $scope.now_edit_list=[];
 	$scope.now_edit_list=$stateParams.down_shelves_list;//当前那条数据
 	// $scope.all_list=$stateParams.all_list;//
-	$scope.index=$stateParams.index;//当前那条数据的索
+	$scope.index=$stateParams.index;//当前那条数据的索引
 	 console.log($scope.now_edit_list);
 	 $scope.online_time_flag=$stateParams.online_time_flag;//排序的类型
 	/*===============进入页面显示的数据==================*/
@@ -116,8 +116,6 @@ offline_edit.controller("offlineedit",function ($scope,$http,$stateParams,$state
   }).then(function successCallback(response) {
     // console.log(response)
     $scope.three = response.data.data.categories;
-    console.log('three');
-    console.log($scope.three);
     for(let [key,value] of $scope.three.entries()){
       if($scope.item_check.length == 0){
         value['complete'] = false
@@ -185,14 +183,20 @@ offline_edit.controller("offlineedit",function ($scope,$http,$stateParams,$state
   };
   //添加拥有系列的三级
   $scope.check_item = function(item){
-  	// console.log(item);
-    if(item.complete){
-      $scope.item_check.push(item);
-      // console.log($scope.item_check)
-    }else{
-      $scope.item_check.splice($scope.item_check.indexOf(item),1)
-    }
-    //分类提示文字
+      for(let[key,value] of $scope.item_check.entries()){
+          if(item.id==value.id){
+             $scope.item_check.splice(key,1);
+             $scope.add_three=1;
+             break;
+          }else{
+              $scope.add_three=0
+          }
+          console.log($scope.add_three);
+      }
+      if($scope.add_three==0){
+          $scope.item_check.push(item);
+      }
+      //分类提示文字
     if($scope.item_check.length<1){
       $scope.sort_check='请至少选择一个分类';
     }else{
@@ -201,8 +205,12 @@ offline_edit.controller("offlineedit",function ($scope,$http,$stateParams,$state
   };
   //删除拥有系列的三级
   $scope.delete_item = function (item) {
-    console.log(item)
-    item.complete = false;
+    for(let[key,value] of $scope.three.entries()){
+      console.log(value)
+        if(item.id==value.id){
+            value.complete=false;
+        }
+    }
     $scope.item_check.splice($scope.item_check.indexOf(item),1);
     //分类提示文字
     if($scope.item_check.length<1){
@@ -212,41 +220,15 @@ offline_edit.controller("offlineedit",function ($scope,$http,$stateParams,$state
     }
   };
   //默认进页面获取三级分类所具有的系类
-  for(let[key,now_value] of $scope.now_edit_list.categories.entries()){
-    $http({
-      method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/categories-have-style-series',
-      params:{
-        type:'series',
-        pid:+now_value.pid
-      }
-    }).then(function successCallback(response) {
-      for(let [key,value] of response.data.data.have_style_series_categories.entries()){
-        if(now_value.pid===value.pid && now_value.id===value.id ){
-          value.complete=true;
-          $scope.item_check.push(value);
-        }
-      }
-      for(let [key,value] of $scope.three.entries()){
-        if($scope.item_check.length === 0){
-          value.complete = false
-        }else{
-          for(let [key1,value1] of $scope.item_check.entries()){
-            if(value.id === value1.id){
-              value.complete =true
-            }
-          }
-        }
-      }
-    });
+  for(let[key,value] of $scope.now_edit_list.categories.entries()){
+      $scope.item_check.push(value);
   }
+
   /*===================判断====================*/
   $scope.edit_ok_v='';//模态框
   $scope.ids_arr=[];//三级分类
   //确认按钮
   $scope.save_btn=function (valid,error) {
-    console.log(valid);
-    console.log($scope.cycle_arr)
     let brand_obj = JSON.stringify({"name":""+$scope.brand_name_model});//序列化！！！
       for(let [key,value] of $scope.cycle_arr.entries()){
         if(valid && $scope.item_check.length>=1 && ((value.name==$scope.brand_name_model && key==$scope.index) || (JSON.stringify($scope.cycle_arr).indexOf(brand_obj.slice(1,brand_obj.length-1))==-1))){
