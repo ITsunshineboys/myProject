@@ -1213,8 +1213,6 @@ CREATE TABLE `worker_type` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
 DROP TABLE IF EXISTS `labor_cost_detail`;
 
 CREATE TABLE `labor_cost_detail` (
@@ -1586,3 +1584,13 @@ CREATE TABLE `user_news_record` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未读 1:已读',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 11.2 start
+CREATE TABLE `worker_rank` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `worker_type_id` int(11) DEFAULT NULL,
+  `rank_name` char(20) DEFAULT NULL COMMENT '等级名称',
+  `min_value` int(11) DEFAULT NULL,
+  `max_value` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
