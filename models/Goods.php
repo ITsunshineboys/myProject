@@ -449,6 +449,7 @@ class Goods extends ActiveRecord
             ->asArray()
             ->select($select)
             ->where(['in', 'sku', $sku])
+            ->leftJoin('goods_brand','goods_brand.id = goods.brand_id')
             ->all();
     }
 

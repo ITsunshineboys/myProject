@@ -300,7 +300,7 @@ class WorkerManagementController extends Controller
 
             ]);
         }
-        
+
         // 身份证号码验证
         $identity_no = \Yii::$app->request->post('identity_no','');
         if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $identity_no)) {
