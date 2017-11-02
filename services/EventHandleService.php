@@ -30,22 +30,35 @@ class EventHandleService
         $events = Yii::$app->params['events'];
 
         switch ($event) {
+            // system error
+            case $events['system']['error']:
+                Yii::$app->on($events['system']['error'], function () use ($data, $events) {
+                    StringService::writeLog($events['system']['error'], $data);
+                });
+                break;
+
             // register user
             case $events['user']['register']:
                 Yii::$app->on($events['user']['register'], function () use ($data, $events) {
                     $username = StringService::getUniqueStringBySalt($data);
                     if (User::createHuanXinUser($username)) {
                         $user = User::find()->where(['mobile' => $data])->one();
-                        $user->username = $username;
-                        if (!$user->save()) {
-                            $update = 'update ' . User::tableName() . ' set username = ' . $username;
-                            $where = ' where id = ' . $user->id . ';';
-                            $data = [
-                                'sql' => $update . $where,
-                                'table' => User::tableName(),
-                            ];
-                            $event = Yii::$app->params['events']['db']['failed'];
-                            new self($event, $data);
+                        if ($user) {
+                            $user->username = $username;
+                            if (!$user->save()) {
+                                $update = 'update ' . User::tableName() . ' set username = ' . $username;
+                                $where = ' where id = ' . $user->id . ';';
+                                $data = [
+                                    'sql' => $update . $where,
+                                    'table' => User::tableName(),
+                                ];
+                                $event = $events['db']['failed'];
+                                new self($event, $data);
+                                Yii::$app->trigger($event);
+                            }
+                        } else {
+                            $event = $events['system']['error'];
+                            new self($event, 'cannot find user by mobile: ' . $data);
                             Yii::$app->trigger($event);
                         }
                     }
