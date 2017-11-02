@@ -403,7 +403,7 @@ class FindworkerController extends Controller{
      * 个人资料-工人
      * @return string
      */
-    public function actionOwenInfos(){
+    public function actionWorkerInfos(){
         $user_id = \Yii::$app->user->identity;
         $code=1052;
         if(!$user_id){
@@ -492,7 +492,7 @@ class FindworkerController extends Controller{
         return Json::encode([
            'code'=>200,
            'msg'=>'ok',
-            'data'=>WorkerType::parent()
+            'data'=>WorkerType::find()->where(['pid'=>self::PARENT,'status'=>1])->asArray()->all()
         ]);
     }
     /**
