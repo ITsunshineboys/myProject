@@ -173,15 +173,50 @@ class WorkerManagementController extends Controller
         $post = \Yii::$app->request->post();
         //  修改工种类型
         if (isset($post['edit'])){
-            foreach ($post['edit'] as $one_post){
-                (new WorkerType())->ByUpdate($one_post);
+            $worker = WorkerType::findOne(['id'=>$post['edit']['id']]);
+            $worker->worker_name = $post['edit']['worker_name'];
+            if (!$worker->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            foreach ($post['edit']['level'] as $one_post){
+               $rank = (new WorkerRank())->ByUpdate($one_post);
+            }
+            if (!$rank){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
             }
         }
 
         //  添加工种类型
         if (isset($post['add'])){
-            foreach ($post['add'] as $one_post){
-                (new WorkerType())->ByInsert($one_post);
+            $worker_type =  new  WorkerType();
+            $worker_type->worker_name = $post['add']['worker'];
+            $worker_type->establish_time = time();
+            $worker_type->status = WorkerType::PARENT;
+            if (!$worker_type->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            $id = $worker_type->attributes['id'];
+            foreach ($post['add']['rank'] as $one_post){
+                $worker_rank = (new WorkerRank())->ByInsert($id,$one_post['rank'],$one_post['min'],$one_post['max']);
+            }
+            if (!$worker_rank){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
             }
         }
 

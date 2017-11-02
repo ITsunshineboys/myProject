@@ -29,4 +29,13 @@ class WorkerRank extends ActiveRecord
         ])->execute();
     }
 
+    public static function ByUpdate($level)
+    {
+        return \Yii::$app->db->createCommand()->update(self::tableName(),[
+            'rank_name' => $level['rank_name'],
+            'min_value' => $level['min_value'],
+            'max_value' => $level['max_value'],
+        ],['id'=>$level['id']])->execute();
+    }
+
 }
