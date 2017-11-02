@@ -472,7 +472,7 @@ class ChatController extends Controller
     }
 
     public function actionTest(){
-        var_dump(UserNewsRecord::deleteAll(['order_no'=>930121894]));die;
+
         $chat=new ChatService();
        $a= $chat->getChatRecord('select+*+where+timestamp>1403164734226');
         return json_encode($a);
