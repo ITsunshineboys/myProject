@@ -106,6 +106,7 @@ return [
         'system' => [
             'error' => 'system_error',
         ],
+        'async' => 'async',
     ],
     'download' => [
         'directory' => 'down',
