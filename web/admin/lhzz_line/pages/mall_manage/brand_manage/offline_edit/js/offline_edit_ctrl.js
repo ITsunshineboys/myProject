@@ -193,7 +193,7 @@ offline_edit.controller("offlineedit",function ($scope,$http,$stateParams,$state
           }
           console.log($scope.add_three);
       }
-      if($scope.add_three==0){
+      if($scope.add_three!=1){
           $scope.item_check.push(item);
       }
       //分类提示文字
@@ -206,7 +206,7 @@ offline_edit.controller("offlineedit",function ($scope,$http,$stateParams,$state
   //删除拥有系列的三级
   $scope.delete_item = function (item) {
     for(let[key,value] of $scope.three.entries()){
-      console.log(value)
+      // console.log(value)
         if(item.id==value.id){
             value.complete=false;
         }

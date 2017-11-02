@@ -189,7 +189,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
           }
           console.log($scope.add_three);
       }
-      if($scope.add_three==0){
+      if($scope.add_three!=1){
           $scope.item_check.push(item);
       }
     //分类提示文字
