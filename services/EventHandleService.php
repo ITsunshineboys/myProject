@@ -9,6 +9,7 @@
 namespace app\services;
 
 use Yii;
+use yii\helpers\Json;
 use app\models\GoodsCategory;
 use app\models\User;
 
@@ -30,6 +31,19 @@ class EventHandleService
         $events = Yii::$app->params['events'];
 
         switch ($event) {
+            // async
+            case $events['async']:
+                Yii::$app->on($events['async'], function () use ($data, $events) {
+                    $func = 'fastcgi_finish_request';
+                    if (function_exists($func)) {
+                        $func();
+                        session_write_close();
+                    }
+                    new self($data['event']['name'], $data['event']['data']);
+                    Yii::$app->trigger($data['event']['name']);
+                });
+                break;
+
             // system error
             case $events['system']['error']:
                 Yii::$app->on($events['system']['error'], function () use ($data, $events) {

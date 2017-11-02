@@ -4836,10 +4836,11 @@ class MallController extends Controller
     {
         $data = array_merge(Yii::$app->request->post(), ['operator' => Yii::$app->user->identity]);
         $res = User::register($data, false);
-        return Json::encode([
+        echo Json::encode([
             'code' => is_array($res) ? 200 : $res,
             'msg' => is_array($res) ? 'OK' : Yii::$app->params['errorCodes'][$res]
         ]);
+        Yii::$app->trigger(Yii::$app->params['events']['async']);
     }
 
     /**

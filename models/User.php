@@ -1707,9 +1707,15 @@ class User extends ActiveRecord implements IdentityInterface
         parent::afterSave($insert, $changedAttributes);
 
         if ($insert) {
-            $event = Yii::$app->params['events']['user']['register'];
-            new EventHandleService($event, $this->mobile);
-            Yii::$app->trigger($event);
+            $events = Yii::$app->params['events'];
+            $event = $events['async'];
+            $data = [
+                'event' => [
+                    'name' => $events['user']['register'],
+                    'data' => $this->mobile,
+                ],
+            ];
+            new EventHandleService($event, $data);
         }
 
         $key = self::CACHE_PREFIX . $this->id;
