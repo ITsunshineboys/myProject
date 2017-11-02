@@ -301,5 +301,4 @@ $scope.save_modal_btn=function () {
     $state.go('brand_index',{down_flag:true});//跳转主页
   },300)
 };
-
 });

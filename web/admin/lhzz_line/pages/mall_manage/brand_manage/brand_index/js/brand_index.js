@@ -383,7 +383,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
             size:99999
         }
     }).then(function (res) {
-        //console.log(res);
+        console.log(res);
         /*判断多少个申请个数*/
         $scope.application_num=[];
         for(let [key,value] of res.data.data.brand_application_review_list.details.entries()){
