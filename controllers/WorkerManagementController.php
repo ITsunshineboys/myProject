@@ -232,34 +232,44 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkerList()
     {
-//        $worker_ = trim(\Yii::$app->request->get('id',''));
-        $worker = WorkerType::find()
+        $worker_ = trim(\Yii::$app->request->get('id',''));
+
+        $worker_type = WorkerType::find()
             ->select('id,worker_name')
             ->where(['and',['status'=>1],['pid'=>0]])
             ->asArray()
-            ->distinct()
             ->all();
-        var_dump($worker);exit;
+
+        if ($worker_ != null){
+            $worker_rank = WorkerRank::find()
+                ->select('id,rank_name')
+                ->where(['worker_type_id'=>$worker_])
+                ->asArray()
+                ->all();
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'data' => [
+                    'worker' => $worker_type,
+                    'level' => $worker_rank,
+                ],
+            ]);
+        }
+
 
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
             'data' => [
-                'level' => WorkerType::find()
-                    ->select('id,rank_name')
-                    ->where(['and',['status'=>1],['pid'=>0]])
-                    ->asArray()
-                    ->distinct()
-                    ->all()
+                'worker' => $worker_type,
             ],
         ]);
     }
 
     public function actionWorkerAdd()
     {
-        $post = \Yii::$app->request->post();
         $phone = (int)trim(\Yii::$app->request->post('phone',''));
-
         //  手机号是否正确
         if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
             $code = 1070;
@@ -291,7 +301,39 @@ class WorkerManagementController extends Controller
 
             ]);
         }
-        var_dump($worker);exit;
+
+        // 身份证号码验证
+        $identity_no = \Yii::$app->request->post('identity_no','');
+        if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $identity_no)) {
+            $code = 1072;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        // 检测是否注册
+        $identity_no_ = User::find()->where(['identity_no'=>$identity_no])->one();
+        if (!$identity_no_){
+            $code = 1073;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        $uid = User::find()->select('id')->where(['mobile'=>$phone])->one();
+        $worker = new Worker();
+        $worker->uid = $uid->id;
+        $worker->worker_type_id = (int)trim(\Yii::$app->request->post('worker_type_id',''));
+        $worker->province_code = (int)trim(\Yii::$app->request->post('province',''));
+        $worker->city_code = (int)trim(\Yii::$app->request->post('city',''));
+        $worker->level = (int)trim(\Yii::$app->request->post('worker_rank_id',''));
+        $worker->nickname = trim(\Yii::$app->request->post('worker_type_id',''));
+
+        $user_ = new User();
 
     }
 
