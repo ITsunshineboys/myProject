@@ -233,7 +233,6 @@ class WorkerManagementController extends Controller
     public function actionWorkerList()
     {
         $worker_ = trim(\Yii::$app->request->get('id',''));
-
         $worker_type = WorkerType::find()
             ->select('id,worker_name')
             ->where(['and',['status'=>1],['pid'=>0]])
@@ -301,7 +300,7 @@ class WorkerManagementController extends Controller
 
             ]);
         }
-
+        
         // 身份证号码验证
         $identity_no = \Yii::$app->request->post('identity_no','');
         if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $identity_no)) {
