@@ -11,6 +11,7 @@ namespace app\controllers;
 use app\models\User;
 use app\models\Worker;
 use app\models\WorkerOrder;
+use app\models\WorkerRank;
 use app\models\WorkerType;
 use app\models\workType;
 use app\services\ExceptionHandleService;
@@ -116,6 +117,7 @@ class WorkerManagementController extends Controller
                 ]);
             } else {
                 (new WorkerType())->deleteAll(['id'=>$del_id]);
+                (new WorkerRank())->deleteAll(['worker_type_id'=>$del_id]);
             }
         }
         return Json::encode([
@@ -143,7 +145,22 @@ class WorkerManagementController extends Controller
            ]);
        }
         $id = $worker_type->attributes['id'];
-       var_dump($id);exit;
+       $post = \Yii::$app->request->post();
+       foreach ($post['rank'] as $one_post){
+           $worker_rank = (new WorkerRank())->ByInsert($id,$one_post['rank'],$one_post['min'],$one_post['max']);
+       }
+       if (!$worker_rank){
+           $code = 1000;
+           return Json::encode([
+               'code' => $code,
+               'msg' => \Yii::$app->params['errorCodes'][$code],
+           ]);
+       }
+
+       return Json::encode([
+          'code' => 200,
+          'msg' => 'OK',
+       ]);
 
     }
 
