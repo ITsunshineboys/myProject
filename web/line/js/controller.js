@@ -574,11 +574,11 @@ angular.module("all_controller", ['ngCookies'])
         });
         // 跳转到订单页面
         $scope.getOrder =function () {
-                console.log($scope.id);
-                console.log($scope.shopNum);
-                setTimeout(function () {
-                    $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
-                },300)
+            console.log($scope.id);
+            console.log($scope.shopNum);
+            setTimeout(function () {
+                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
+            },300)
 
 
         }
@@ -671,17 +671,17 @@ angular.module("all_controller", ['ngCookies'])
             $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
                 ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png')
 
-                $http({
-                    method: 'get',
-                    url:'http://common.cdlhzz.cn/supplier/goods',
-                    params:{
-                        supplier_id:+$scope.supplier_id,
-                        "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
-                    }
-                }).then(function successCallback(response) {
-                    console.log(response);
-                    $scope.supplier_goods = response.data.data.supplier_goods;
-                });
+            $http({
+                method: 'get',
+                url:'http://common.cdlhzz.cn/supplier/goods',
+                params:{
+                    supplier_id:+$scope.supplier_id,
+                    "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
+                }
+            }).then(function successCallback(response) {
+                console.log(response);
+                $scope.supplier_goods = response.data.data.supplier_goods;
+            });
         };
         // 好评率排序
         $scope.filterPicUp = function () {
@@ -1147,17 +1147,16 @@ angular.module("all_controller", ['ngCookies'])
                 console.log($scope.invoice_content)
             })
         }
+        // 点击切换购买协议的转状态
         $scope.check_agressment = false;
         $scope.chooseCheck = function () {
             $scope.check_agressment = !$scope.check_agressment;
-            console.log(11);
         };
 
         // 点击去支付判断是否填写完整
         $scope.getModel = function () {
             $scope.order_order = '';
             $scope.order_address_model = '';
-
             if( $scope.show_harvest == false && $scope.show_address == true){
                 $scope.order_address_model = '#order_address_modal';
                 $scope.order_order = '请填写完整信息';
@@ -1220,9 +1219,15 @@ angular.module("all_controller", ['ngCookies'])
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
                                 // 支付宝接口
+                                let config = {
+                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                                    transformRequest: function (data) {
+                                        return $.param(data)
+                                    }
+                                };
                                 $http.post('http://test.cdlhzz.cn:888/order/alipaylinesubmit',{
                                     goods_name: $scope.title,
-                                    order_price:$scope.allCost,
+                                    order_price:+$scope.allCost,
                                     goods_num:+$scope.shopNum,
                                     goods_id:+$scope.mall_id,
                                     address_id:+$scope.address_id,
@@ -1238,6 +1243,8 @@ angular.module("all_controller", ['ngCookies'])
                                     console.log($scope.status);
                                     $('body').append($scope.dataFram)
 
+                                },function (error) {
+                                    console.log(error)
                                 })
                             }
 
@@ -1272,20 +1279,20 @@ angular.module("all_controller", ['ngCookies'])
 
     });
 
-    //=================分割 飞机线========================
-    // .directive("swiper", function () {
-    //     return {
-    //         restrict: "EA",
-    //         link: function (scope, element, attrs) {
-    //             var mySwiper = new Swiper('.swiper-container', {
-    //                 direction:'horizontal',
-    //                 loop: true,
-    //                 autoplay: 1000,
-    //
-    //                 // 分页器
-    //                 pagination : '.swiper-pagination',
-    //                 paginationClickable :true,
-    //             })
-    //         }
-    //     }
-    // });
+//=================分割 飞机线========================
+// .directive("swiper", function () {
+//     return {
+//         restrict: "EA",
+//         link: function (scope, element, attrs) {
+//             var mySwiper = new Swiper('.swiper-container', {
+//                 direction:'horizontal',
+//                 loop: true,
+//                 autoplay: 1000,
+//
+//                 // 分页器
+//                 pagination : '.swiper-pagination',
+//                 paginationClickable :true,
+//             })
+//         }
+//     }
+// });
