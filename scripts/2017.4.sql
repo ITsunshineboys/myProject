@@ -1594,3 +1594,12 @@ CREATE TABLE `worker_rank` (
   `max_value` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `shipping_cart` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) NOT NULL,
+  `role_id` bigint(20) NOT NULL,
+  `goods_id` bigint(20) NOT NULL,
+  `goods_num` bigint(20) NOT NULL DEFAULT '1' COMMENT '购物车商品数量',
+  `create_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
