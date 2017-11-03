@@ -8,7 +8,7 @@ defined('YII_ENV') or define('YII_ENV', $config['params']['online']['env']);
 
 require(__DIR__ . '/../vendor/autoload.php');
 require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
-var_dump(YII_DEBUG);
+
 if (YII_DEBUG) {
     header('Access-Control-Allow-Origin: http://cross.local.com:808');
     header("Access-Control-Allow-Credentials: true");
