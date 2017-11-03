@@ -174,7 +174,7 @@ header div img{
 .need_required{
     height: 4rem;
     line-height: 4rem;
-    position: relative;
+    /*position: relative;*/
     bottom: .5rem;
 }
 .need_required span:nth-child(2){

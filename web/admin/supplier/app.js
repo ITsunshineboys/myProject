@@ -148,7 +148,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("commodity_manage", {   //商品管理
             url: "/commodity_manage",
             templateUrl: "pages/commodity_manage/commodity_manage.html",
-            params: {id: 'id', name: 'name', on_flag: '', down_flag: ''}
+            params: {id: 'id', name: 'name', on_flag: '', down_flag: '',wait_flag:''}
         })
         .state("brand_manage", {   //品牌管理
             url: "/brand_manage",

@@ -376,7 +376,7 @@ angular.module("all_controller", ['ngCookies'])
         //具体几级某个商品跳转到产品详情列表
     })
 
-    //某个 商品详细信息展示
+    //某个商品详细信息展示
     .controller("product_details_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
         let vm = $scope.vm = {};
         let mySwiper = new Swiper("#swiperList", {
