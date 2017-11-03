@@ -3180,9 +3180,6 @@ angular.module("all_controller", [])
 
     .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
         console.log($stateParams)
-        // if($stateParams.type == 1){
-        //     $scope.have_header = false
-        // }
         $scope.ctrlScope = $scope
         //post请求配置
         let config = {
@@ -3235,6 +3232,9 @@ angular.module("all_controller", [])
         }, function (error) {
             console.log(error)
         })
+        if($rootScope.fromState_name == 'modelRoom'&&$rootScope.curState_name=='nodata.cell_search'){
+            $scope.have_header = false
+        }
         //风格轮播图
         $scope.$watch('cur_style', function (newVal, oldVal) {
             if (newVal != '' || newVal != undefined) {
@@ -4783,7 +4783,9 @@ angular.module("all_controller", [])
                             $scope.search_data.push({
                                 id: value.id,
                                 toponymy: value.toponymy,
-                                site_particulars: value.site_particulars
+                                site_particulars: value.site_particulars,
+                                district_code:value.district_code,
+                                street:value.street
                             })
                         }
                     })
