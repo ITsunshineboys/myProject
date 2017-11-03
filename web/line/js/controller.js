@@ -261,6 +261,8 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback (response) {
             console.log(response);
             $scope.detailsList = response.data.data.category_goods;
+        },function (error) {
+            console.log(error);
         });
         // 点击产品列表商品跳转到产品详情页面
         $scope.getDetailsProduct = function (item) {
