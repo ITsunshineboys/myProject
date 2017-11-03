@@ -228,7 +228,7 @@ class WorkerManagementController extends Controller
     }
 
     /**
-     *
+     *  添加工人列表
      * @return string
      */
     public function actionWorkerList()
@@ -267,6 +267,10 @@ class WorkerManagementController extends Controller
         ]);
     }
 
+    /**
+     * 添加工人 手机号验证
+     * @return string
+     */
     public function actionWorkerPhone()
     {
         $phone = (int)trim(\Yii::$app->request->post('phone', ''));
@@ -312,10 +316,15 @@ class WorkerManagementController extends Controller
         ]);
 
     }
+
+    /**
+     * 添加工人 保存页面
+     * @return string
+     */
     public function actionWorkerAdd()
     {
         // 身份证号码验证
-        $identity_no = (int)trim(\Yii::$app->request->post('identity_no',''));
+        $identity_no = trim(\Yii::$app->request->post('identity_no',''));
         if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $identity_no)) {
             $code = 1072;
             return json_encode([
@@ -327,7 +336,7 @@ class WorkerManagementController extends Controller
 
         // 检测是否注册
         $identity_no_ = User::find()->where(['identity_no'=>$identity_no])->one();
-        if (!$identity_no_){
+        if ($identity_no_){
             $code = 1073;
             return json_encode([
                 'code' => $code,
@@ -336,13 +345,11 @@ class WorkerManagementController extends Controller
             ]);
         }
 
-        $uid = User::find()
-            ->select('id')
-            ->where(['mobile'=>(int)trim(\Yii::$app->request->post('phone',''))])
-            ->one();
-
 
         $transaction = \Yii::$app->db->beginTransaction();
+        $uid = User::find()
+            ->where(['mobile'=>(int)trim(\Yii::$app->request->post('phone',''))])
+            ->one();
         try{
             $worker = new Worker();
             $worker->uid = $uid->id;
@@ -350,15 +357,47 @@ class WorkerManagementController extends Controller
             $worker->province_code = (int)trim(\Yii::$app->request->post('province',''));
             $worker->city_code = (int)trim(\Yii::$app->request->post('city',''));
             $worker->level = (int)trim(\Yii::$app->request->post('worker_rank_id',''));
-//        $worker->nickname = trim(\Yii::$app->request->post('worker_type_id',''));
+            $worker->create_time = time();
+
+            if (!$worker->save()) {
+                $transaction->rollBack();
+                $code = 1000;
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+
+                ]);
+            }
+
+            $uid->legal_person = trim(\Yii::$app->request->post('legal_person',''));
+            $uid->identity_no = $identity_no;
+            $uid->identity_card_front_image = trim(\Yii::$app->request->post('front_image',''));
+            $uid->identity_card_back_image = trim(\Yii::$app->request->post('back_image',''));
+
+            if (!$uid->save()){
+                $transaction->rollBack();
+                $code = 1000;
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
             $transaction->commit();
-        } catch(Exception $e) {
+            return Json::encode([
+                'code' =>  200,
+                'msg' =>  'ok',
+            ]);
 
+
+        } catch(\Exception $e) {
+            $transaction->rollBack();
+            $code = 1000;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
-
-
-        $user_ = new User();
-
     }
 
 }
