@@ -4707,9 +4707,9 @@ angular.module("all_controller", [])
                     console.log($scope.all_workers)
                     $scope.show_material = true
                 })]).then(function () {
-                    console.log($scope.all_goods)
-                    console.log($scope.all_workers)
                     let arr = [],arr1 = []
+                    $scope.all_price = 0
+                    $scope.discount_price = 0
                     for(let [key,value] of $scope.all_goods.entries()){
                         arr1.push({
                             one_title:value.title,
@@ -4730,6 +4730,8 @@ angular.module("all_controller", [])
                         goods:arr
                     },config).then(function(res){
                         console.log(res)
+                        $scope.all_price += +res.data.data.total_prices
+                        $scope.discount_price += +res.data.data.special_offer
                     },function (error) {
                         console.log(error)
                     })
@@ -4737,13 +4739,18 @@ angular.module("all_controller", [])
                         list:arr1
                     },config).then(function (res) {
                         console.log(res)
+                        $scope.all_price += +res.data.data
+                        $scope.discount_price += +res.data.data
                     },function (error) {
                         console.log(error)
                     })
+                    let all_worker_price = $scope.all_workers.reduce(function(prev,cur){
+                        return prev + cur
+                    },0)
+                    console.log(all_worker_price)
+                    console.log($scope.all_price)
+                    console.log($scope.discount_price)
                 })
-                // , function (error) {
-                //     console.log(error)
-                // })
 
             } else {
                 $scope.submitted = true

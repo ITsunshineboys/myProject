@@ -20,35 +20,74 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         let tablePages=function () {
             $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
-            $http.get('/supplier-cash/cash-list-today',{
+            $http.get('/quote/plot-list',{
                 params:$scope.params
             }).then(function (res) {
                 console.log(res);
-                $scope.shop_withdraw_list = res.data.data.list
-                $scope.Config.totalItems = res.data.data.count;
+                $scope.house_detail = res.data.model.details
+                $scope.Config.totalItems = res.data.model.total
             },function (err) {
                 console.log(err);
             })
         };
         $scope.params = {
-            time_type:'all',
-            status:2,
-            time_start:'',
-            time_end:'',
-            search:''
+            post:'',
+            city:'',
+            min:'',
+            max:'',
+            toponymy:''
         };
-        $scope.getWithdraw = function () {
+        $scope.getHouseList = function () {
             $scope.Config.currentPage = 1
-            $scope.params.search = ''
-            $scope.keyword = ''
-            if($scope.params.time_type == 'custom'){
-                if($scope.params.time_start!=''||$scope.params.time_end!=''){
-                    tablePages()
-                }
-            }else{
-                tablePages()
+            $scope.params.toponymy = ''
+            $scope.search_txt = ''
+            tablePages()
+        }
+        //添加材料项部分
+        /*分页配置*/
+        $scope.Config1 = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages1();
             }
         }
+        let tablePages1=function () {
+            $scope.params1.page=$scope.Config1.currentPage;//点击页数，传对应的参数
+            $http.post('/quote/decoration-list',$scope.params1,config).then(function (res) {
+                console.log(res);
+                $scope.material_list = res.data.list.details
+                $scope.Config1.totalItems = res.data.list.total
+            },function (err) {
+                console.log(err);
+            })
+        };
+        $scope.params1 = {};
+        //首页管理部分
+        /*分页配置*/
+        $scope.Config2 = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages2();
+            }
+        }
+        let tablePages2=function () {
+            $scope.params2.page=$scope.Config2.currentPage;//点击页数，传对应的参数
+            $http.get('/quote/homepage-list',{
+                params:$scope.params
+            }).then(function (res) {
+                console.log(res);
+                $scope.material_list = res.data.list.details
+                $scope.Config1.totalItems = res.data.list.total
+            },function (err) {
+                console.log(err);
+            })
+        };
+        $scope.params2 = {};
+
         $scope.ctrlScope = $scope//解决ngModel无法双向绑定
         $scope.second_title = ''//二级列表项初始化
         $scope.three_title = ''//三级列表项初始化
@@ -138,9 +177,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             for (let [key, value] of $scope.common_worker.entries()) {
                 if (value.worker_kind == '杂工' && key != $scope.common_worker.length - 1) {
                     value['price'] = ''
+                }
                     $scope.common_worker.splice(key, 1)
                     $scope.common_worker.push(value)
-                }
             }
         }, function (error) {
             console.log(error)
@@ -242,26 +281,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.cur_house_county = $scope.house_county[0]
             $scope.county = arr2
             $scope.county.unshift({'id': $scope.cur_city.id, 'name': '全市'})
-            $scope.cur_county = $scope.county[0]
-            console.log($scope.cur_county.id)
-            //初始化省市区获取全市小区信息
-            $http.get('/quote/plot-list', {
-                params: {
-                    'post': $scope.cur_county.id,
-                    'page': $scope.cur_page
-                }
-            }).then(function (response) {
-                $scope.total_pages = []
-                let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                for (let i = 1; i <= num; i++) {
-                    $scope.total_pages.push(i)
-                }
-                $scope.house_detail = response.data.model.details
-                console.log($scope.total_pages)
-                console.log(response)
-            }, function (error) {
-                console.log(error)
-            })
+            $scope.params.city = $scope.county[0].id
+            $scope.params.post = $scope.county[0].id
+            tablePages()
         }, function (error) {
             console.log(error)
         })
@@ -284,24 +306,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.cur_house_county = $scope.house_county[0]
                 $scope.county = arr2
                 $scope.county.unshift({'id': $scope.cur_city.id, 'name': '全市'})
-                $scope.cur_county = $scope.county[0]
-                //改变省获取全市小区信息
-                $http.get('/quote/plot-list', {
-                    params: {
-                        'post': $scope.cur_county.id,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    console.log(response)
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                }, function (error) {
-                    console.log(error)
-                })
+                $scope.params.city = $scope.county[0].id
+                $scope.params.post = $scope.county[0].id
+                tablePages()
             }, function (error) {
                 console.log(error)
             })
@@ -317,311 +324,18 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.cur_house_county = $scope.house_county[0]
                 $scope.county = arr2
                 $scope.county.unshift({'id': item.id, 'name': '全市'})
-                $scope.cur_county = $scope.county[0]
-                //改变市获取全市小区信息
-                $http.get('/quote/plot-list', {
-                    params: {
-                        'post': $scope.cur_county.id,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            }, function (error) {
-                console.log(error)
+                $scope.params.city = $scope.county[0].id
+                $scope.params.post = $scope.county[0].id
+                tablePages()
             })
         }
-        //分页根据页码跳转
-        $scope.topage = ''
-        $scope.choosePage = function (page) {
-            $scope.cur_page = page
-            if ($scope.start_time != '' && $scope.end_time != '') {
-                $http.get('/quote/plot-time-grabble', {
-                    params: {
-                        'city': $scope.cur_city.id,
-                        'min': $scope.start_time,
-                        'max': $scope.end_time,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            } else if ($scope.search_txt != '') {
-                $http.get('/quote/plot-grabble', {
-                    params: {
-                        'city': $scope.cur_city.id,
-                        'toponymy': $scope.search_txt,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            } else {
-                $http.get('/quote/plot-list', {
-                    params: {
-                        'post': $scope.cur_county.id,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    console.log(response)
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-        }
-        //上一页
-        $scope.Previous = function () {
-            if ($scope.cur_page == 1) {
-                $scope.cur_page = 1
-            } else {
-                $scope.cur_page--
-            }
-            console.log($scope.cur_page)
-            if ($scope.start_time != '' && $scope.end_time != '') {
-                $http.get('/quote/plot-time-grabble', {
-                    params: {
-                        'city': $scope.cur_city.id,
-                        'min': $scope.start_time,
-                        'max': $scope.end_time,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            } else if (($scope.start_time != '' || $scope.end_time != '') && $scope.search_txt != '') {
-                $http.get('/quote/plot-grabble', {
-                    params: {
-                        'city': $scope.cur_city.id,
-                        'toponymy': $scope.search_txt,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            } else {
-                $http.get('/quote/plot-list', {
-                    params: {
-                        'post': $scope.cur_county.id,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    console.log(response)
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-        }
-        //下一页
-        $scope.Next = function () {
-            if ($scope.cur_page == $scope.total_pages.length) {
-                $scope.cur_page = $scope.total_pages.lengt
-            } else {
-                $scope.cur_page++
-            }
-            if ($scope.start_time != '' && $scope.end_time != '') {
-                $http.get('/quote/plot-time-grabble', {
-                    params: {
-                        'city': $scope.cur_city.id,
-                        'min': $scope.start_time,
-                        'max': $scope.end_time,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            } else if ($scope.search_txt != '') {
-                $http.get('/quote/plot-grabble', {
-                    params: {
-                        'city': $scope.cur_city.id,
-                        'toponymy': $scope.search_txt,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            } else {
-                $http.get('/quote/plot-list', {
-                    params: {
-                        'post': $scope.cur_county.id,
-                        'page': $scope.cur_page
-                    }
-                }).then(function (response) {
-                    console.log(response)
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-        }
-        //所有搜索小区的方式
-        //切换区域获取小区列表
-        // $scope.$watch('cur_county', function (newVal, oldVal) {
-        //     // $scope.start_time = ''
-        //     // $scope.end_time  = ''
-        //     // $scope.search_txt = ''
-        //     console.log(newVal)
-        //     if (!!newVal) {
-        //         $http.get('/quote/plot-list', {
-        //             params: {
-        //                 'post': newVal.id
-        //             }
-        //         }).then(function (response) {
-        //             $scope.house_detail = response.data.model.details
-        //             console.log(response)
-        //         }, function (error) {
-        //             console.log(error)
-        //         })
-        //     }
-        // })
-        $scope.cur_county_to_house = function () {
-            $scope.start_time = ''
-            $scope.end_time = ''
-            $scope.search_txt = ''
-            $http.get('/quote/plot-list', {
-                params: {
-                    'post': $scope.cur_county.id,
-                    'page': $scope.cur_page
-                }
-            }).then(function (response) {
-                $scope.total_pages = []
-                let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                for (let i = 1; i <= num; i++) {
-                    $scope.total_pages.push(i)
-                }
-                $scope.house_detail = response.data.model.details
-                console.log(response)
-            }, function (error) {
-                console.log(error)
-            })
-        }
-        //日期筛选小区
-        //改变结束时间
-        $scope.$watch('end_time', function (newVal, oldVal) {
-            // $scope.cur_county = $scope.county[0]
-            $scope.search_txt = ''
-            if (newVal != '' && $scope.start_time != '' && new Date(newVal).getTime() > new Date($scope.start_time).getTime()) {
-                $http.get('/quote/plot-time-grabble', {
-                    params: {
-                        'city': $scope.cur_city.id,
-                        'min': $scope.start_time,
-                        'max': newVal
-                    }
-                }).then(function (response) {
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-        })
-        //改变开始时间
-        $scope.$watch('start_time', function (newVal, oldVal) {
-            // $scope.cur_county = $scope.county[0]
-            $scope.search_txt = ''
-            if (newVal != '' && $scope.start_time != '' && new Date($scope.end_time).getTime() > new Date(newVal).getTime()) {
-                $http.get('/quote/plot-time-grabble', {
-                    params: {
-                        'city': $scope.cur_city.id,
-                        'min': newVal,
-                        'max': $scope.end_time
-                    }
-                }).then(function (response) {
-                    $scope.total_pages = []
-                    let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                    for (let i = 1; i <= num; i++) {
-                        $scope.total_pages.push(i)
-                    }
-                    $scope.house_detail = response.data.model.details
-                    console.log(response)
-                }, function (error) {
-                    console.log(error)
-                })
-            }
-        })
         //输入小区名模糊筛选小区
         $scope.search_house = function () {
             $scope.start_time = ''
             $scope.end_time = ''
-            $scope.cur_county = $scope.county[0]
-            $http.get('/quote/plot-grabble', {
-                params: {
-                    'city': $scope.cur_city.id,
-                    'toponymy': $scope.search_txt
-                }
-            }).then(function (response) {
-                $scope.total_pages = []
-                let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                for (let i = 1; i <= num; i++) {
-                    $scope.total_pages.push(i)
-                }
-                $scope.house_detail = response.data.model.details
-                console.log(response)
-            }, function (error) {
-                console.log(error)
-            })
+            $scope.Config.currentPage = 1
+            $scope.params.toponymy = $scope.search_txt
+            tablePages()
         }
 
         //页面跳转
@@ -3030,14 +2744,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         /*添加材料项*/
         //跳转添加材料项列表
         $scope.go_add_material = function () {
-            $http.post('/quote/decoration-list', {}, config).then(function (res) {
-                console.log(res)
-                $scope.material_list = res.data.list.details
-                $scope.second_title = '添加材料项'
-                $state.go('intelligent.add_material')
-            }, function (error) {
-                console.log(error)
-            })
+            $scope.second_title = '添加材料项'
+            tablePages1()
+            $state.go('intelligent.add_material')
         }
         //跳转添加材料详情
         $scope.go_material_detail = function () {
@@ -3510,9 +3219,19 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
 //保存户型面积
         $scope.save_area = function (valid) {
             let cur_data = $scope.all_area_range[$scope.all_area_range.length - 1]
+            console.log(cur_data)
+            console.log($scope.usable_area_range)
             let is_valid = $scope.usable_area_range.findIndex(function (item) {
                 return +cur_data.min_area >= +item.min_area && +cur_data.max_area <= +item.max_area
             })
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.cur_title = '保存成功'
+                $scope.common_house = function () {
+                    $uibModalInstance.close()
+                    $state.go('intelligent.general_manage')
+                }
+            }
+            all_modal.$inject = ['$scope', '$uibModalInstance']
             console.log(is_valid)
             let arr = []
             for (let [key, value] of $scope.all_area_range.entries()) {
@@ -3533,6 +3252,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         }, config).then(function (res) {
                             console.log(res)
                             $scope.three_title = ''
+                            $uibModal.open({
+                                templateUrl: 'pages/intelligent/cur_model.html',
+                                controller: all_modal
+                            })
                         }, function (error) {
                             console.log(error)
                         })
@@ -3615,9 +3338,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                         if(index != $scope.all_area_range.length - 1){
                                             return {min_area: prev.min_area, max_area: cur.max_area}
                                         }else{
-                                            arr.push({min_area: prev.min_area, max_area: cur.max_area})
+                                            arr.push(prev)
                                         }
-                                    } else {
+                                    }else{
                                         arr.push(prev)
                                     }
                                 })
@@ -3635,7 +3358,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                         })
                                     } else if (+value.min_area == +arr1[cur_index].min_area && +value.max_area != +arr1[cur_index].max_area) {
                                         arr1.push({
-                                            min_area: +value.max_area,
+                                            min_area: +value.max_area+1,
                                             max_area: arr1[cur_index].max_area
                                         })
                                         arr1.splice(cur_index, 1).sort(function (a, b) {
@@ -3644,7 +3367,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                     } else if (+value.min_area != +arr1[cur_index].min_area && +value.max_area == +arr1[cur_index].max_area) {
                                         arr1.push({
                                             min_area: arr1[cur_index].min_area,
-                                            max_area: +value.min_area
+                                            max_area: +value.min_area-1
                                         })
                                         arr1.splice(cur_index, 1).sort(function (a, b) {
                                             return +a.min_area - b.min_area
@@ -3652,9 +3375,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                     } else {
                                         arr1.push({
                                             min_area: arr1[cur_index].min_area,
-                                            max_area: +value.min_area
+                                            max_area: +value.min_area-1
                                         }, {
-                                            min_area: +value.max_area,
+                                            min_area: +value.max_area+1,
                                             max_area: arr1[cur_index].max_area
                                         })
                                         arr1.splice(cur_index, 1).sort(function (a, b) {
@@ -3860,7 +3583,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.one_title.splice(index,1)
             }else{
                 for(let [key,value] of item.two_title.entries()){
-                    $scope.cur_general_count = +$scope.cur_general_count - value.count
+                    $scope.cur_general_count.count = +$scope.cur_general_count.count - value.count
                 }
                 $http.post('/quote/commonality-title-add',{
                     del_id:item.id
@@ -4074,7 +3797,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $http.post('/quote/commonality-else-edit',{
                     else:[{
                         value:arr,
-                        area:arr1
+                        apartment_area:arr1
                     }]
                 },config).then(function (res) {
                    console.log(res)
