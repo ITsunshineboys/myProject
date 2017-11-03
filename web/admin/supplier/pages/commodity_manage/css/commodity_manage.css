@@ -100,6 +100,16 @@ section{
   padding: 10px;
   font-size: 12px;
 }
+.add_ul li{
+  float: left;
+  height: 35px;
+  margin-right: 25px;
+  text-align: center;
+  border: 1px solid #666F80;
+  border-radius: 3px;
+  padding: 10px;
+  font-size: 12px;
+}
 .search_box{
   display: inline-block;
   float: right;
@@ -174,7 +184,7 @@ section{
   text-overflow:ellipsis;/* 支持 IE */
 }
 #span_with{
-  width:150px;/*要显示文字的宽度*/
+  width:250px;/*要显示文字的宽度*/
   overflow:hidden; /*超出的部分隐藏起来。*/
   white-space:nowrap;/*不显示的地方用省略号...代替*/
   text-overflow:ellipsis;/* 支持 IE */

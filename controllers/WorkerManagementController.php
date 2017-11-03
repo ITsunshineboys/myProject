@@ -15,6 +15,7 @@ use app\models\WorkerRank;
 use app\models\WorkerType;
 use app\models\workType;
 use app\services\ExceptionHandleService;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -266,9 +267,9 @@ class WorkerManagementController extends Controller
         ]);
     }
 
-    public function actionWorkerAdd()
+    public function actionWorkerPhone()
     {
-        $phone = (int)trim(\Yii::$app->request->post('phone',''));
+        $phone = (int)trim(\Yii::$app->request->post('phone', ''));
         //  手机号是否正确
         if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
             $code = 1070;
@@ -280,8 +281,8 @@ class WorkerManagementController extends Controller
         }
 
         // 该用户是否注册
-        $user = User::find()->select('id')->where(['mobile'=>$phone])->asArray()->one();
-        if ($user == null){
+        $user = User::find()->select('id')->where(['mobile' => $phone])->asArray()->one();
+        if ($user == null) {
             $code = 1010;
             return json_encode([
                 'code' => $code,
@@ -291,8 +292,8 @@ class WorkerManagementController extends Controller
         }
 
         // 该手机号是否注册工人
-        $worker = Worker::find()->where(['uid'=>$user])->one();
-        if ($worker != null){
+        $worker = Worker::find()->where(['uid' => $user])->one();
+        if ($worker != null) {
             $code = 1071;
             return json_encode([
                 'code' => $code,
@@ -301,8 +302,20 @@ class WorkerManagementController extends Controller
             ]);
         }
 
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => User::find()
+                ->select(['identity_card_front_image,identity_card_back_image,legal_person,identity_no'])
+                ->where(['mobile' => $phone])
+                ->one(),
+        ]);
+
+    }
+    public function actionWorkerAdd()
+    {
         // 身份证号码验证
-        $identity_no = \Yii::$app->request->post('identity_no','');
+        $identity_no = (int)trim(\Yii::$app->request->post('identity_no',''));
         if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $identity_no)) {
             $code = 1072;
             return json_encode([
@@ -323,14 +336,26 @@ class WorkerManagementController extends Controller
             ]);
         }
 
-        $uid = User::find()->select('id')->where(['mobile'=>$phone])->one();
-        $worker = new Worker();
-        $worker->uid = $uid->id;
-        $worker->worker_type_id = (int)trim(\Yii::$app->request->post('worker_type_id',''));
-        $worker->province_code = (int)trim(\Yii::$app->request->post('province',''));
-        $worker->city_code = (int)trim(\Yii::$app->request->post('city',''));
-        $worker->level = (int)trim(\Yii::$app->request->post('worker_rank_id',''));
-        $worker->nickname = trim(\Yii::$app->request->post('worker_type_id',''));
+        $uid = User::find()
+            ->select('id')
+            ->where(['mobile'=>(int)trim(\Yii::$app->request->post('phone',''))])
+            ->one();
+
+
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $worker = new Worker();
+            $worker->uid = $uid->id;
+            $worker->worker_type_id = (int)trim(\Yii::$app->request->post('worker_type_id',''));
+            $worker->province_code = (int)trim(\Yii::$app->request->post('province',''));
+            $worker->city_code = (int)trim(\Yii::$app->request->post('city',''));
+            $worker->level = (int)trim(\Yii::$app->request->post('worker_rank_id',''));
+//        $worker->nickname = trim(\Yii::$app->request->post('worker_type_id',''));
+            $transaction->commit();
+        } catch(Exception $e) {
+
+        }
+
 
         $user_ = new User();
 

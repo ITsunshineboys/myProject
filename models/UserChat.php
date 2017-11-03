@@ -163,7 +163,7 @@ class UserChat extends \yii\db\ActiveRecord
         try {
             $chat_hx = new ChatService();
             $from = $username;
-            $target = [$to_user['mobile']];
+            $target = [$to_user['username']];
             $re = $chat_hx->sendText($from, $target_type = 'users', $target, $content);
             if($re) {
                 $chat_record = new ChatRecord();
@@ -207,7 +207,7 @@ class UserChat extends \yii\db\ActiveRecord
         try {
             $chat_hx = new ChatService();
             $from = $username;
-            $target = [$to_user['mobile']];
+            $target = [$to_user['username']];
             $re = $chat_hx->sendImage($filepath,$from, $target_type = 'users', $target);
             if($re) {
                 $chat_record = new ChatRecord();
@@ -244,7 +244,7 @@ class UserChat extends \yii\db\ActiveRecord
         try {
             $chat_hx = new ChatService();
             $from = $username;
-            $target = [$to_user['mobile']];
+            $target = [$to_user['username']];
             $re = $chat_hx->sendAudio($filepath,$from, $target_type = 'users', $target,$length);
             if($re) {
                 $chat_record = new ChatRecord();

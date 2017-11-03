@@ -323,7 +323,7 @@ class ChatController extends Controller
         $length=trim(\Yii::$app->request->post('length'));//语音长度
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
-        $res=$user_hx->getUser($to_user['mobile']);
+        $res=$user_hx->getUser($to_user['username']);
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,

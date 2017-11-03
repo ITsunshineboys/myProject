@@ -33,6 +33,46 @@ class Alipay extends  ActiveRecord
 //        }
     }
 
+
+    
+    /**
+     * 支付宝线下支付
+     * @param $out_trade_no
+     * @param $subject
+     * @param $total_amount
+     * @param $body
+     * @param $goods_id
+     * @param $goods_num
+     * @param $address_id
+     * @param $pay_name
+     * @param $invoice_id
+     * @param $supplier_id
+     * @param $freight
+     * @param $return_insurance
+     * @param $buyer_message
+     * @return bool|mixed|\SimpleXMLElement|string|\vendor\alipay\提交表单HTML文本
+     */
+    public function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
+        $notify_url='http://test.cdlhzz.cn:888/order/alipaylinenotify';
+        $return_url='http://test.cdlhzz.cn:888/line/#!/pay_success';
+        $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
+        $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id.'&'.$supplier_id.'&'.$freight.'&'.$return_insurance.'&'.$buyer_message;
+        $passback_params=urlencode($str);
+        $total_amount=0.01;
+        //超时时间
+        $timeout_express="1m";
+        $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
+        $payRequestBuilder->setBody($body);
+        $payRequestBuilder->setSubject($subject);
+        $payRequestBuilder->setOutTradeNo($out_trade_no);
+        $payRequestBuilder->setTotalAmount($total_amount);
+        $payRequestBuilder->setTimeExpress($timeout_express);
+        $payRequestBuilder->setPassback_params($passback_params);
+        $payResponse = new AlipayTradeService($config);
+        $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
+        return $result;
+    }
+
    /**
      * 样板间提交定金
      * @param $effect_id

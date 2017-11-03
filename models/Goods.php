@@ -448,7 +448,7 @@ class Goods extends ActiveRecord
         return self::find()
             ->asArray()
             ->select($select)
-            ->where(['and',['status'=>self::STATUS_ONLINE],['in', 'sku', $sku]])
+            ->where(['and',['goods.status'=>self::STATUS_ONLINE],['in', 'goods.sku', $sku]])
             ->leftJoin('goods_brand','goods_brand.id = goods.brand_id')
             ->all();
     }

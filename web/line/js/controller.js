@@ -574,11 +574,11 @@ angular.module("all_controller", ['ngCookies'])
         });
         // 跳转到订单页面
         $scope.getOrder =function () {
-            console.log($scope.id);
-            console.log($scope.shopNum);
-            setTimeout(function () {
-                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
-            },300)
+                console.log($scope.id);
+                console.log($scope.shopNum);
+                setTimeout(function () {
+                    $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
+                },300)
 
 
         }
@@ -671,17 +671,17 @@ angular.module("all_controller", ['ngCookies'])
             $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
                 ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png')
 
-            $http({
-                method: 'get',
-                url:'http://common.cdlhzz.cn/supplier/goods',
-                params:{
-                    supplier_id:+$scope.supplier_id,
-                    "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
-                }
-            }).then(function successCallback(response) {
-                console.log(response);
-                $scope.supplier_goods = response.data.data.supplier_goods;
-            });
+                $http({
+                    method: 'get',
+                    url:'http://common.cdlhzz.cn/supplier/goods',
+                    params:{
+                        supplier_id:+$scope.supplier_id,
+                        "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
+                    }
+                }).then(function successCallback(response) {
+                    console.log(response);
+                    $scope.supplier_goods = response.data.data.supplier_goods;
+                });
         };
         // 好评率排序
         $scope.filterPicUp = function () {
@@ -958,29 +958,36 @@ angular.module("all_controller", ['ngCookies'])
                 return $.param(data)
             }
         };
+        let area = new LArea();
+        area.init({
+            'trigger': '#demo1',//触发选择控件的文本框，同时选择完毕后name属性输出到该位置
+            'valueTo':'#value1',//选择完毕后id属性输出到该位置
+            'keys':{id:'id',name:'name'},//绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
+            'type':1,//数据源类型
+            'data':LAreaData1//数据源
+        });
+        area.value = [22,0,0];
+        // 点击编写收货地址 获取城市内容
+
         // 点击收货地址 ===== 模态框
         $scope.harvestMadel = '';
         $scope.getHarvestMadel = function () {
-            $scope.harvestName    = '';
-            $scope.harvestNum     = '';
-            $scope.harvestAddress = '';
+            if(sessionStorage.getItem('adressInfo') == null){
+                $scope.harvestName    = '';
+                $scope.harvestNum     = '';
+                $scope.harvestAddress = '';
+            }else {
+                let addresObJ = JSON.parse(sessionStorage.getItem('adressInfo'));
+                $scope.harvestName    = addresObJ.name;
+                $scope.harvestNum     = addresObJ.phone;
+                $scope.harvestAddress = addresObJ.address;
+                $scope.prove_city_more = addresObJ.prove +'—'+ addresObJ.prove_city+'—'+ addresObJ.prove_city_qu;
+
+            }
+
             $scope.harvestMadel ='#delivery_address';
 
             // 判断三级 =========== 初始化  ===========
-
-            var area = new LArea();
-            area.init({
-                'trigger': '#demo1',//触发选择控件的文本框，同时选择完毕后name属性输出到该位置
-                'valueTo':'#value1',//选择完毕后id属性输出到该位置
-                'keys':{id:'id',name:'name'},//绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
-                'type':1,//数据源类型
-                'data':LAreaData1//数据源
-            });
-
-            // 点击编写收货地址 获取城市内容
-            console.log(area.value);
-            console.log($('#value1').val());
-
         };
         //订单信息===>获取商品的信息
         $http.post('http://common.cdlhzz.cn/order/getgoodsdata',{
@@ -1038,10 +1045,13 @@ angular.module("all_controller", ['ngCookies'])
             }
             if(rag.test($scope.harvestNum) && !$scope.harvestNum == '' && ! $scope.harvestName == '' && !$scope.harvestAddress == ''){
                 // 添加收货地址
+                $scope.addressCode = document.getElementById("value1").value;
+                $scope.addressCode = $scope.addressCode.split('—');
+                console.log($scope.addressCode);
                 $http.post('http://common.cdlhzz.cn/order/adduseraddress',{
                     mobile:+$scope.harvestNum,
                     consignee:$scope.harvestName,
-                    districtcode:110100,
+                    districtcode:$scope.addressCode[2],
                     region:$scope.harvestAddress
                 },config).then(function (response) {
                     console.log(response);
@@ -1068,14 +1078,19 @@ angular.module("all_controller", ['ngCookies'])
                         address_id:+$scope.address_id
                     }
                 }).then(function successCallback(response) {
-                    console.log(response);
+                    console.log(response.data.data[0]);
                     let adressObj = { // 保存
                         show_harvest: true,
                         show_address: false,
                         name: response.data.data[0].consignee,
                         phone: response.data.data[0].mobile,
                         city: response.data.data[0].district,
-                        address: response.data.data[0].region
+                        address: response.data.data[0].region,
+                        prove:document.getElementById("demo1").value.split('—')[0],
+                        prove_city:document.getElementById("demo1").value.split('—')[1],
+                        prove_city_qu:document.getElementById("demo1").value.split('—')[2]
+                        // code:document.getElementById("value1").value
+
                     };
                     sessionStorage.setItem('adressInfo', JSON.stringify(adressObj));
                     $scope.show_harvest = true;
@@ -1084,6 +1099,7 @@ angular.module("all_controller", ['ngCookies'])
                     $scope.mobile = response.data.data[0].mobile;
                     $scope.districtMore = response.data.data[0].district;
                     $scope.regionMore = response.data.data[0].region;
+
                     console.log($scope.consigneeName);
                     console.log($scope.mobile)
                 });
@@ -1131,18 +1147,29 @@ angular.module("all_controller", ['ngCookies'])
                 console.log($scope.invoice_content)
             })
         }
+        $scope.check_agressment = false;
+        $scope.chooseCheck = function () {
+            $scope.check_agressment = !$scope.check_agressment;
+            console.log(11);
+        };
 
         // 点击去支付判断是否填写完整
         $scope.getModel = function () {
-            alert(212)
             $scope.order_order = '';
             $scope.order_address_model = '';
-            if( $scope.show_harvest == false && $scope.show_address == true ){
+
+            if( $scope.show_harvest == false && $scope.show_address == true){
                 $scope.order_address_model = '#order_address_modal';
-                $scope.order_order = '请填写完整信息'
+                $scope.order_order = '请填写完整信息';
+                return
+            }
+            if (!$scope.check_agressment) {
+                $scope.order_address_model = '#order_address_modal';
+                $scope.order_order = '请勾选商城协议';
+                return
             }
             if($scope.show_harvest == true && $scope.show_address == false ){
-                console.log(222222);
+
                 //判断收货地址是否在配送范围内
                 $http.post('http://common.cdlhzz.cn/order/judegaddress',{
                     goods_id:+$scope.mall_id,
@@ -1167,66 +1194,6 @@ angular.module("all_controller", ['ngCookies'])
                             $scope.codeWX = response.data.code;
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
-                                // wx.config({
-                                //     debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                                //     appId: '', // 必填，公众号的唯一标识
-                                //     timestamp: , // 必填，生成签名的时间戳
-                                //     nonceStr: '', // 必填，生成签名的随机串
-                                //     signature: '',// 必填，签名，见附录1
-                                //     jsApiList: [
-                                //         'onMenuShareTimeline',
-                                //         'onMenuShareAppMessage',
-                                //         'onMenuShareQQ',
-                                //         'onMenuShareWeibo',
-                                //         'onMenuShareQZone',
-                                //         'menuItem:openWithQQBrowser',
-                                //         'menuItem:openWithSafari'
-                                //     ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-                                // });
-                                // wx.ready(function(){
-                                //     //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
-                                //     wx.onMenuShareTimeline({
-                                //         title: '艾特魔方极力推荐产品', // 分享标题
-                                //         link: 'http://common.cdlhzz.cn/line/#!/product_details?id=1495&mall_id=276', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                                //         imgUrl: '', // 分享图标
-                                //         success: function () {
-                                //             // 用户确认分享后执行的回调函数
-                                //
-                                //         },
-                                //         cancel: function () {
-                                //             // 用户取消分享后执行的回调函数
-                                //         }
-                                //     });
-                                //     // // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
-                                //     // wx.onMenuShareAppMessage({
-                                //     //     title: '', // 分享标题
-                                //     //     desc: '', // 分享描述
-                                //     //     link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                                //     //     imgUrl: '', // 分享图标
-                                //     //     type: '', // 分享类型,music、video或link，不填默认为link
-                                //     //     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                                //     //     success: function () {
-                                //     //         // 用户确认分享后执行的回调函数
-                                //     //     },
-                                //     //     cancel: function () {
-                                //     //         // 用户取消分享后执行的回调函数
-                                //     //     }
-                                //     // });
-                                //     // // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
-                                //     // wx.onMenuShareQQ({
-                                //     //     title: '', // 分享标题
-                                //     //     desc: '', // 分享描述
-                                //     //     link: '', // 分享链接
-                                //     //     imgUrl: '', // 分享图标
-                                //     //     success: function () {
-                                //     //         // 用户确认分享后执行的回调函数
-                                //     //     },
-                                //     //     cancel: function () {
-                                //     //         // 用户取消分享后执行的回调函数
-                                //     //     }
-                                //     // });
-                                // });
-                                alert('调用微信接口');
                                 // 微信接口 === 调用
                                 $http({     //获取openid 的地址
                                     method: 'get',
@@ -1245,9 +1212,6 @@ angular.module("all_controller", ['ngCookies'])
                                 }).then(function successCallback(response) {
                                     console.log(response);
                                     $scope.open_id = response.data.data;
-                                    // alert('打印第一个成功');
-                                    // alert(JSON.stringify(response));
-                                    // alert(JSON.stringify($scope.open_id));
                                     window.location = $scope.open_id
                                 },function (error) {
                                     alert(JSON.stringify(error))
@@ -1308,20 +1272,20 @@ angular.module("all_controller", ['ngCookies'])
 
     });
 
-//=================分割 飞机线========================
-// .directive("swiper", function () {
-//     return {
-//         restrict: "EA",
-//         link: function (scope, element, attrs) {
-//             var mySwiper = new Swiper('.swiper-container', {
-//                 direction:'horizontal',
-//                 loop: true,
-//                 autoplay: 1000,
-//
-//                 // 分页器
-//                 pagination : '.swiper-pagination',
-//                 paginationClickable :true,
-//             })
-//         }
-//     }
-// });
+    //=================分割 飞机线========================
+    // .directive("swiper", function () {
+    //     return {
+    //         restrict: "EA",
+    //         link: function (scope, element, attrs) {
+    //             var mySwiper = new Swiper('.swiper-container', {
+    //                 direction:'horizontal',
+    //                 loop: true,
+    //                 autoplay: 1000,
+    //
+    //                 // 分页器
+    //                 pagination : '.swiper-pagination',
+    //                 paginationClickable :true,
+    //             })
+    //         }
+    //     }
+    // });
