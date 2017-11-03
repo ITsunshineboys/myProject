@@ -2079,6 +2079,31 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
+         if(array_key_exists('sku', $postData)){
+            $record=UserNewsRecord::find()
+                ->where(['order_no'=>$postData['order_no']])
+                ->andWhere(['sku'=>$postData['sku']])
+                ->one();
+            if ($record)
+            {
+                $record->status=1;
+                $record->save(false);
+            }
+        }else{
+            $record=UserNewsRecord::find()
+                ->where(['order_no'=>$postData['order_no']])
+                ->andWhere(['sku'=>$postData['sku']])
+                ->all();
+            foreach ($record as $rec)
+            {
+                if ($rec)
+                {
+                    $rec->status=1;
+                    $rec->save(false);
+                }
+            }
+        }
         $arr=GoodsOrder::FindUserOrderDetails($postData,$user);
         $data=GoodsOrder::GetOrderDetailsData($arr,$user);
         $code=200;
