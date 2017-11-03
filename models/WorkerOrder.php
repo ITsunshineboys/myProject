@@ -400,7 +400,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         $query = self::find()
         ->select(['id','uid','create_time', 'amount', 'status', 'worker_id','worker_type_id'])
-        ->where(['uid' => $uid]);
+        ->where(['uid' => $uid])
+        ->orderBy('create_time Desc');
         if ($status != WorkerController::STATUS_ALL) {
             if($status==self::WORKER_ORDER_PREPARE){
             $status=[
@@ -451,7 +452,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->select(['id','create_time', 'amount', 'status', 'worker_id'])
             ->Where(['worker_id'=>$worker_id]);
         if ($status != WorkerController::STATUS_ALL) {
-            $query->andWhere(['status' => $status]);
+            if($status==self::WORKER_ORDER_PREPARE){
+                $status=[
+                    self::WORKER_ORDER_PREPARE,
+                    self::WORKER_WORKS_AFTER,
+                    self::WORKER_ORDER_TOYI
+                ];
+                $worker_status=implode(',',array_values($status));
+                $query->andWhere("status in ($worker_status)");
+            }else{
+                $query->andWhere(['status' => $status]);
+            }
         }
 
         $count = $query->count();
