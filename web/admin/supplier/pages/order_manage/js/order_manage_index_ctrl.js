@@ -27,7 +27,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         $scope.listcount = res.data.data;
         if($stateParams.tabflag=='waitreceive_flag' || $stateParams.tabflag=='waitsend_flag'){
             $scope.tabChange($stateParams.tabflag);
-        }else if ($stateParams.tabflag) {
+        }else if ($stateParams.tabflag=='waitpay_flag'||$stateParams.tabflag=='finish_flag'||$stateParams.tabflag=='cancel_flag') {
             $scope.tabFunc($stateParams.tabflag);
         } else {
             $scope.tabFunc('all_flag');
