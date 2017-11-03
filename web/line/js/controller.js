@@ -574,11 +574,11 @@ angular.module("all_controller", ['ngCookies'])
         });
         // 跳转到订单页面
         $scope.getOrder =function () {
-                console.log($scope.id);
-                console.log($scope.shopNum);
-                setTimeout(function () {
-                    $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
-                },300)
+            console.log($scope.id);
+            console.log($scope.shopNum);
+            setTimeout(function () {
+                $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
+            },300)
 
 
         }
@@ -671,17 +671,17 @@ angular.module("all_controller", ['ngCookies'])
             $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
                 ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png')
 
-                $http({
-                    method: 'get',
-                    url:'http://common.cdlhzz.cn/supplier/goods',
-                    params:{
-                        supplier_id:+$scope.supplier_id,
-                        "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
-                    }
-                }).then(function successCallback(response) {
-                    console.log(response);
-                    $scope.supplier_goods = response.data.data.supplier_goods;
-                });
+            $http({
+                method: 'get',
+                url:'http://common.cdlhzz.cn/supplier/goods',
+                params:{
+                    supplier_id:+$scope.supplier_id,
+                    "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
+                }
+            }).then(function successCallback(response) {
+                console.log(response);
+                $scope.supplier_goods = response.data.data.supplier_goods;
+            });
         };
         // 好评率排序
         $scope.filterPicUp = function () {
@@ -1272,20 +1272,20 @@ angular.module("all_controller", ['ngCookies'])
 
     });
 
-    //=================分割 飞机线========================
-    // .directive("swiper", function () {
-    //     return {
-    //         restrict: "EA",
-    //         link: function (scope, element, attrs) {
-    //             var mySwiper = new Swiper('.swiper-container', {
-    //                 direction:'horizontal',
-    //                 loop: true,
-    //                 autoplay: 1000,
-    //
-    //                 // 分页器
-    //                 pagination : '.swiper-pagination',
-    //                 paginationClickable :true,
-    //             })
-    //         }
-    //     }
-    // });
+//=================分割 飞机线========================
+// .directive("swiper", function () {
+//     return {
+//         restrict: "EA",
+//         link: function (scope, element, attrs) {
+//             var mySwiper = new Swiper('.swiper-container', {
+//                 direction:'horizontal',
+//                 loop: true,
+//                 autoplay: 1000,
+//
+//                 // 分页器
+//                 pagination : '.swiper-pagination',
+//                 paginationClickable :true,
+//             })
+//         }
+//     }
+// });
