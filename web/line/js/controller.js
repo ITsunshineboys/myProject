@@ -1219,6 +1219,12 @@ angular.module("all_controller", ['ngCookies'])
                             }
                             if($scope.codeWX == 201){  //非微信浏览器 === 支付宝
                                 // 支付宝接口
+                                let config = {
+                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                                    transformRequest: function (data) {
+                                        return $.param(data)
+                                    }
+                                };
                                 $http.post('http://test.cdlhzz.cn:888/order/alipaylinesubmit',{
                                     goods_name: $scope.title,
                                     order_price:$scope.allCost,
