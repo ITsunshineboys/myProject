@@ -6,14 +6,19 @@ angular.module('goods_detail_module',[])
             return $.param(data)
         }
     };
-  console.log($stateParams.wait_receive);
-  console.log($stateParams.item);
-  $scope.item=$stateParams.item;
-  $scope.wait_receive=$stateParams.wait_receive;//待收货进入
-  $scope.order_no=$stateParams.item.goods_data.order_no;
-  $scope.sku=$stateParams.item.goods_data.sku;
+    console.log($stateParams.express_params)
+  $scope.order_no=$stateParams.express_params.order_no;
+  $scope.sku=$stateParams.express_params.sku;
+  $scope.tabflag=$stateParams.express_params.tabflag;
+  let statename = $stateParams.express_params.statename;
+
+  $http.post(baseUrl+"/order/getsupplierorderdetails",{
+      order_no:$stateParams.express_params.order_no,
+      sku:$stateParams.express_params.sku
+  },config).then(function (res) {
+      $scope.item=res.data.data;
+  })
   //商品详情
-    $scope.goods_item='';
   if(!!$scope.order_no && !!$scope.sku){
       $http.post(baseUrl+'/order/goods-view',{
           order_no:$scope.order_no,
@@ -44,11 +49,12 @@ angular.module('goods_detail_module',[])
           console.log(err);
       })
   }
-    $scope.back_list=function () {
-        if($scope.wait_receive=='wait_receive'){
-            $state.go('order_manage',{wait_receive_flag:true});//返回待收货列表
-        }else if($scope.wait_receive=='wait_send'){
-            $state.go('order_manage',{wait_send_flag:true});//返回待发货列表
+    /*返回上一个页面*/
+    $scope.backPage = function () {
+        if(statename=='waitsend_detail'){
+            $state.go('waitsend_detail',{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
+        }else{
+            $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku})
         }
-    };
+    }
 });

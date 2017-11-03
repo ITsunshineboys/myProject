@@ -12,8 +12,10 @@ express.controller("express_ctrl", function ($scope, $http, $stateParams,$state)
 
     $scope.order_no = $stateParams.express_params.order_no; //订单号
     $scope.sku = $stateParams.express_params.sku; //商品编号
+    $scope.tabflag = $stateParams.express_params.tabflag; //
     let statename = $stateParams.express_params.statename;
 
+    console.log($stateParams.express_params);
 
     /*获取物流信息*/
     expressDetail();
@@ -33,7 +35,11 @@ express.controller("express_ctrl", function ($scope, $http, $stateParams,$state)
 
     /*返回上一个页面*/
     $scope.backPage = function () {
-        $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku})
+        if(statename=='waitsend_detail'){
+            $state.go('waitsend_detail',{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
+        }else{
+            $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku})
+        }
     }
 
 })

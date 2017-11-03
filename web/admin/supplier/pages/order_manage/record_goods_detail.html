@@ -4,7 +4,7 @@
     <header>
         <div>
             <i class="glyphicon glyphicon-home"></i>
-            <span class="shop_manage" ng-click="back_list()">订单管理</span>
+            <span class="shop_manage" ng-click="backPage()">订单管理</span>
             <span class="shop_manage" ui-sref="waitsend_detail({item:item,wait_receive:wait_receive})">>订单详情</span>
             <span class="commodity_manage">>记录商品详情</span>
             <img src="lib/images/user.png" alt=""/>
@@ -193,7 +193,7 @@
             </div>
             <!--操作-->
             <div class="btn_margin_top">
-                <button class="btn btn-default" ui-sref="waitsend_detail({item:item,wait_receive:wait_receive})">返回</button>
+                <button class="btn btn-default" ng-click="backPage()">返回</button>
             </div>
         </form>
     </section>

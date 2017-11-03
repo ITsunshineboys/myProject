@@ -11,20 +11,23 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         finish_flag: finishInit,
         cancel_flag: cancelInit,
     }
+    $scope.myng=$scope;
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
             return $.param(data)
         }
     };
-
+    console.log($stateParams.tabflag);
     /*选项卡数字获取*/
     $http({
         method: "get",
         url: "http://test.cdlhzz.cn:888/order/get-order-num",
     }).then((res) => {
         $scope.listcount = res.data.data;
-        if ($stateParams.tabflag) {
+        if($stateParams.tabflag=='waitreceive_flag' || $stateParams.tabflag=='waitsend_flag'){
+            $scope.tabChange($stateParams.tabflag);
+        }else if ($stateParams.tabflag) {
             $scope.tabFunc($stateParams.tabflag);
         } else {
             $scope.tabFunc('all_flag');
@@ -366,6 +369,12 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         } else if ($scope.waitpay_flag) {
             tabflag = 'waitpay_flag'
             $state.go('waitpay_detail', {order_no: order_no, sku: sku, tabflag: tabflag});
+        } else if($scope.waitsend_flag){
+            tabflag = 'waitsend_flag'
+            $state.go('waitsend_detail',{order_no:order_no,sku:sku,tabflag:tabflag});
+        } else if($scope.waitreceive_flag){
+            tabflag = 'waitreceive_flag'
+            $state.go('waitsend_detail',{order_no:order_no,sku:sku,tabflag:tabflag});
         } else if ($scope.all_flag) {
             tabflag = 'all_flag'
             if (status == "待付款") {
@@ -374,11 +383,11 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
                 $state.go('done_detail', {order_no: order_no, sku: sku, tabflag: tabflag})
             } else if (status == "已取消") {
                 $state.go('cancel_detail', {order_no: order_no, sku: sku, tabflag: tabflag});
+            }else if(status == '待发货'||status == '待收货'){
+                $state.go('waitsend_detail',{order_no: order_no, sku: sku, tabflag: tabflag});
             }
         }
     }
-
-    /*----------------------------王杰开始-----------------------------------*/
     /*--------------------------------------------王杰开始----------------------------------------------*/
     /*------------------------待发货开始-----------------------------------*/
     $scope.waitsend_list={};
@@ -422,9 +431,9 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
     };
 
     if($stateParams.wait_send_flag){
-        $scope.tabFunc('waitsend_flag');
+        $scope.tabChange('waitsend_flag');
     }else if($stateParams.wait_receive_flag){
-        $scope.tabFunc('waitreceive_flag');
+        $scope.tabChange('waitreceive_flag');
     }
 
     //时间类型
@@ -451,6 +460,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
     $scope.wait_send_search_btn=function () {
         $scope.wjConfig.currentPage = 1; //页数跳转到第一页
         $scope.wjparams.keyword=$scope.w_search;
+        console.log($scope.w_search)
         //初始化"全部时间"
         $http.get(baseUrl+'/site/time-types').then(function (response) {
             $scope.time = response.data.data.time_types;
@@ -496,17 +506,17 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         tablePages();
     }
     //跳转详情页
-    $scope.wait_send_detail=function (order_no,sku,wait_receive) {
-        $http.post(baseUrl+'/order/getsupplierorderdetails',{
-            order_no:order_no,
-            sku:sku
-        },config).then(function (res) {
-            $scope.waitsend_detail_list=res.data.data;
-            $state.go('waitsend_detail',{item:$scope.waitsend_detail_list,sku:sku,wait_receive:wait_receive})
-        },function (err) {
-            console.log(err);
-        });
-    };
+    // $scope.wait_send_detail=function (order_no,sku,wait_receive) {
+    //     $http.post(baseUrl+'/order/getsupplierorderdetails',{
+    //         order_no:order_no,
+    //         sku:sku
+    //     },config).then(function (res) {
+    //         $scope.waitsend_detail_list=res.data.data;
+    //         $state.go('waitsend_detail',{item:$scope.waitsend_detail_list,sku:sku,wait_receive:wait_receive})
+    //     },function (err) {
+    //         console.log(err);
+    //     });
+    // };
     //发货按钮,判断弹出的模态框
     $scope.track_flag=false;
     $scope.wait_send_ship=function (shipping_type,order_no,sku) {

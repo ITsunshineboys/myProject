@@ -8,68 +8,93 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $sta
     }
   };
   $scope.myng=$scope;
-  $scope.item=$stateParams.item;
-  console.log($stateParams.wait_receive);
-  console.log($scope.item);
-  $scope.wait_receive=$stateParams.wait_receive;//待收货页面进入
-  //是否是异常订单
-  $scope.is_unusual=$stateParams.item.is_unusual;
-  //订单详情
-  $scope.order_no=$stateParams.item.goods_data.order_no;//订单号
-  $scope.shipping_type=$stateParams.item.goods_data.shipping_type;//判断送货方式，0为快递 1为送货上门
-  $scope.status=$stateParams.item.goods_data.status;//订单状态
-  $scope.username=$stateParams.item.goods_data.username;//用户名
-  $scope.amount_order=$stateParams.item.goods_data.amount_order;//总金额
-  $scope.role=$stateParams.item.goods_data.role;//总金额后面的价格（实时变化）
-  $scope.goods_price=$stateParams.item.goods_data.goods_price;//goods_price
-  $scope.freight=$stateParams.item.goods_data.freight;//运费
-  $scope.supplier_price=$stateParams.item.goods_data.supplier_price;//供货价格
-  $scope.market_price=$stateParams.item.goods_data.market_price;//市场价
-  $scope.goods_number=$stateParams.item.goods_data.goods_number;//商品个数
-  $scope.pay_name=$stateParams.item.goods_data.pay_name;//付款方式
-  $scope.create_time=$stateParams.item.goods_data.create_time;//下单时间
-  $scope.paytime=$stateParams.item.goods_data.paytime;//付款时间
-  $scope.shipping_way=$stateParams.item.goods_data.shipping_way;//配送方式
-  //商品详情
-  $scope.goods_name=$stateParams.item.goods_value.goods_name;//商品名称
-  $scope.sku=$stateParams.item.goods_data.sku;//商品编号
-  //$scope.goods_id=$stateParams.item.goods_value.goods_id;//商品编号
-  $scope.attr=$stateParams.item.goods_value.attr[0];
-
-    for(let[key,value] of $scope.attr.entries()){
-        if(value.unit==0){
-            value.unit=''
-        }else if(value.unit==1){
-            value.unit='L'
-        }else if(value.unit==2){
-            value.unit='M'
-        }else if(value.unit==3){
-            value.unit='M²'
-        }else if(value.unit==4){
-            value.unit='Kg'
-        }else if(value.unit==5){
-            value.unit='MM'
-        }
-    }
-  //收货详情
-  $scope.consignee=$stateParams.item.receive_details.consignee;//收货人
-  $scope.district=$stateParams.item.receive_details.district;//收获地址
-  $scope.consignee_mobile=$stateParams.item.receive_details.consignee_mobile;//收货人电话
-  $scope.buyer_message=$stateParams.item.receive_details.buyer_message;//留言
-  $scope.invoice_header_type=$stateParams.item.receive_details.invoice_header_type;//发票类型
-  $scope.invoice_header=$stateParams.item.receive_details.invoice_header;//抬头
-  $scope.invoicer_card=$stateParams.item.receive_details.invoicer_card;//纳税人识别码
-  $scope.invoice_content=$stateParams.item.receive_details.invoice_content;//发票内容
-    //异常
-    $http.post(baseUrl+'/order/find-unusual-list',{
-        order_no:$scope.order_no,
-        sku:+$scope.sku
+  $scope.tabflag=$stateParams.tabflag;
+    //$scope.wait_receive=$stateParams.wait_receive;//待收货页面进入
+    //详情数据
+    $http.post(baseUrl+'/order/getsupplierorderdetails',{
+        order_no:$stateParams.order_no,
+        sku:$stateParams.sku
     },config).then(function (res) {
         console.log(res);
-        $scope.is_unusual_list_msg=res.data.data;
+        $scope.item=res.data.data;
+        console.log($scope.item)
+        //是否是异常订单
+        $scope.is_unusual=$scope.item.is_unusual;
+        //订单详情
+        $scope.order_no=$scope.item.goods_data.order_no;//订单号
+        $scope.shipping_type=$scope.item.goods_data.shipping_type;//判断送货方式，0为快递 1为送货上门
+        $scope.status=$scope.item.goods_data.status;//订单状态
+        $scope.username=$scope.item.goods_data.username;//用户名
+        $scope.amount_order=$scope.item.goods_data.amount_order;//总金额
+        $scope.role=$scope.item.goods_data.role;//总金额后面的价格（实时变化）
+        $scope.goods_price=$scope.item.goods_data.goods_price;//goods_price
+        $scope.freight=$scope.item.goods_data.freight;//运费
+        $scope.supplier_price=$scope.item.goods_data.supplier_price;//供货价格
+        $scope.market_price=$scope.item.goods_data.market_price;//市场价
+        $scope.goods_number=$scope.item.goods_data.goods_number;//商品个数
+        $scope.pay_name=$scope.item.goods_data.pay_name;//付款方式
+        $scope.create_time=$scope.item.goods_data.create_time;//下单时间
+        $scope.paytime=$scope.item.goods_data.paytime;//付款时间
+        $scope.shipping_way=$scope.item.goods_data.shipping_way;//配送方式
+        //商品详情
+        $scope.goods_name=$scope.item.goods_value.goods_name;//商品名称
+        $scope.sku=$scope.item.goods_data.sku;//商品编号
+        //$scope.goods_id=$stateParams.item.goods_value.goods_id;//商品编号
+        $scope.attr=$scope.item.goods_value.attr[0];
+
+
+
+        //收货详情
+        $scope.consignee=$scope.item.receive_details.consignee;//收货人
+        $scope.district=$scope.item.receive_details.district;//收获地址
+        $scope.consignee_mobile=$scope.item.receive_details.consignee_mobile;//收货人电话
+        $scope.buyer_message=$scope.item.receive_details.buyer_message;//留言
+        $scope.invoice_header_type=$scope.item.receive_details.invoice_header_type;//发票类型
+        $scope.invoice_header=$scope.item.receive_details.invoice_header;//抬头
+        $scope.invoicer_card=$scope.item.receive_details.invoicer_card;//纳税人识别码
+        $scope.invoice_content=$scope.item.receive_details.invoice_content;//发票内容
+
+        for(let[key,value] of $scope.attr.entries()){
+            if(value.unit==0){
+                value.unit=''
+            }else if(value.unit==1){
+                value.unit='L'
+            }else if(value.unit==2){
+                value.unit='M'
+            }else if(value.unit==3){
+                value.unit='M²'
+            }else if(value.unit==4){
+                value.unit='Kg'
+            }else if(value.unit==5){
+                value.unit='MM'
+            }
+        }
+
+        //异常
+        $http.post(baseUrl+'/order/find-unusual-list',{
+            order_no:$scope.order_no,
+            sku:+$scope.sku
+        },config).then(function (res) {
+            console.log(res);
+            $scope.is_unusual_list_msg=res.data.data;
+        },function (err) {
+            console.log(err);
+        })
+        /*物流页面传值*/
+        $scope.express_params = {
+            order_no: $scope.item.goods_data.order_no,
+            sku: $scope.item.goods_data.sku,
+            statename: "waitsend_detail",
+            tabflag:$stateParams.tabflag
+        }
     },function (err) {
         console.log(err);
-    })
+    });
+
+
+
+
+
   // 同意按钮
     $scope.agree_confirm=function () {
     console.log($scope.order_no)
@@ -172,11 +197,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $sta
     }
    //返回按钮
     $scope.back_list=function () {
-        if($scope.wait_receive=='wait_receive'){
-            $state.go('order_manage',{wait_receive_flag:true});//返回待收货列表
-        }else if($scope.wait_receive=='wait_send'){
-            $state.go('order_manage',{wait_send_flag:true});//返回待发货列表
-        }
+        $state.go('order_manage',{tabflag:$scope.tabflag});//返回待收货列表
     };
     //发货按钮
     $scope.track_flag=false;
