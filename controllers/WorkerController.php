@@ -833,7 +833,6 @@ class WorkerController extends Controller
         $order = WorkerOrder::find()
             ->where(['order_no' => $order_no, 'uid' => $user, 'is_old' => WorkerOrder::IS_NEW])
             ->one();
-
         if (!$order) {
             return Json::encode([
                 'code' => $code,
