@@ -1,0 +1,530 @@
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"] + span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    border: 1px solid #B8B6B6;
+    background-color: white;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+button {
+    outline: none !important;
+}
+
+.back {
+    background-color: #F6F6F6;
+}
+
+/* header start */
+header {
+    width: 32rem;
+    height: 4rem;
+    background-color: white;
+}
+
+header p {
+    margin-bottom: 0;
+}
+
+.return_btn {
+    margin-left: 1rem;
+    color: #53A8F4;
+}
+
+header span {
+    font-size: 1.4rem;
+}
+
+.cur_location {
+    text-align: right;
+    color: #53A8F4;
+}
+
+.cur_location a {
+    display: inline-block;
+    margin-right: 1rem;
+    color: inherit;
+}
+
+.cur_location i {
+    margin-right: .2rem;
+}
+
+.pic_span {
+    text-align: center;
+    font-size: 1.5rem;
+}
+/* header end */
+
+.shu {
+    width: .3rem;
+    height: 1.5rem;
+    background-color: #53A8F4;
+    position: absolute;
+    left: .9rem;
+    margin-top: 1.35rem;
+}
+
+.shu + p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1.6rem;
+    font-size: 1.5rem;
+    color: #4A4A4A;
+}
+
+.quarters_small {
+    width: auto;
+    min-height: 10rem;
+    padding-bottom: 1.5rem;
+}
+
+.choose_quarter {
+    margin-left: 1rem;
+    font-size: 1.3rem;
+    color: #4A4A4A;
+}
+
+.quarters_small input {
+    padding-left: 2.8rem;
+    width: 22rem;
+    height: 2.7rem;
+    color: #4A4A4A;
+    font-size: 1.2rem;
+    border: 1px solid #C2C2C2;
+    border-radius: 2rem;
+}
+
+.quarters_small img {
+    width: 1.5rem;
+    position: relative;
+    left: 2.5rem;
+    top: -.3rem;
+}
+
+.quarters_adress {
+    padding-left: 1rem;
+}
+
+.quarters {
+    margin-left: 2rem;
+}
+
+.quarters_adress,
+.quarters {
+    font-size: 1.3rem;
+    margin-top: 1rem;
+}
+
+.housing_information {
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.housing_information h2 {
+    padding-left: 1.2rem;
+    font-weight: 400;
+    font-size: 1.3rem;
+    color: #4A4A4A;
+}
+
+.list_dis {
+    padding-bottom: 1rem;
+}
+
+.list_dis ul {
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.list_dis ul li {
+    display: inline-block;
+    margin-top: 1rem;
+    margin-left: .5rem;
+    padding: .5rem;
+    font-size: 1rem;
+    text-align: center;
+    list-style: none;
+}
+
+.list_dis ul li:first-child {
+    margin-left: .8rem;
+}
+
+.huxing img {
+    padding: .2rem;
+    margin-bottom: .5rem;
+    width: 6.1rem;
+    border: 2px solid #cccccc;
+}
+
+.huxing.active img {
+    border-color: #53A8F4;
+}
+
+.huxing.active {
+    color: #53a8f4;
+}
+
+.comment_height ul {
+    padding-left: 1rem;
+}
+
+.comment_height ul li {
+    font-size: 1.3rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    color: #4A4A4A;
+    border-top: 1px solid #C2C2C2;
+}
+
+.tag {
+    color: #06CB7E;
+    margin-left: -1.6rem;
+    margin-top: 1.2rem;
+}
+
+.tag span {
+    display: inline-block;
+    margin-right: 1rem;
+    padding: .3rem 1.3rem 0;
+    height: 2rem;
+    font-size: 1rem;
+    text-align: center;
+    background-color: #F9FEFC;
+    border-radius: 1.5rem;
+    border: 1px solid #8DE2C1;
+}
+
+.decoration {
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+.decoration li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.title_p {
+    font-size: 1.1rem;
+    color: #4A4A4A;
+}
+
+.title_p span {
+    color: #6C6C6C;
+    padding-left: 1rem;
+    font-weight: 400 !important;
+}
+
+.pic {
+    font-size: 1.1rem;
+    color: #F59C23;
+}
+
+.edit-btn {
+    display: block;
+    margin: 1.2rem auto 0;
+    width: 12rem;
+    height: 3.2rem;
+    color: #53A8F4;
+    font-size: 1.2rem;
+    text-align: center;
+    background-color: #fff;
+    border: .1rem dashed #e5e5e5;
+    border-radius: 2.5rem;
+}
+
+.decoration li {
+    font-size: 1.2rem;
+    /*margin-left: 1rem;*/
+    color: #888;
+    position: relative;
+    border-bottom: 1px solid #f4f4f4;
+    padding-bottom: .4rem;
+    padding-top: .4rem;
+}
+
+.decoration li span {
+    font-size: 1.1rem;
+    color: #6C6C6C;
+}
+
+.decoration li span.brand {
+    color: #b8b6b6;
+}
+
+.pic_q {
+    position: absolute;
+    right: 0;
+    color: #959292;
+}
+
+.special_requirements {
+    margin-bottom: 5rem;
+}
+
+.main_text {
+    padding-top: .5rem;
+    padding-left: 1rem;
+    margin-left: 1rem;
+    width: 30rem;
+    height: 10rem;
+    font-size: 1.3rem;
+    outline: none;
+    border-radius: 1rem;
+    border: 1px solid #B8B6B6;
+}
+
+.special_requirements span {
+    position: relative;
+    left: 27rem;
+    top: -2rem;
+    font-size: 1rem;
+    color: #999;
+}
+
+.footer_set {
+    padding-left: 1rem;
+}
+
+.footer_set > p:first-child {
+    margin-top: .5rem;
+    margin-bottom: 0;
+    line-height: normal;
+}
+
+.first_span {
+    color: #F55122;
+    font-size: 1.6rem;
+}
+
+.second_span {
+    margin-left: .8rem;
+    font-size: 1.2rem;
+    color: #F59C22;
+}
+
+.three_span {
+    font-size: 1rem;
+    color: #B8B6B6;
+}
+
+.footer_settlement {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    width: 100%;
+    height: 4rem;
+}
+
+.primary_btn {
+    width: 10rem;
+    height: 100%;
+    font-size: 1.3rem;
+    color: #fff;
+    text-align: center;
+    background-color: #53A8F4;
+    border: none;
+}
+
+.structure {
+    border: 1px solid #E5E5E5;
+    width: 30rem;
+    margin-left: 1rem;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-radius: .2rem;
+    margin-bottom: 1.7rem;
+
+}
+
+.structure ul {
+    margin-left: -1rem;
+}
+
+.structure ul li {
+    display: inline-block;
+    margin-left: 3rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #6C6C6C;
+}
+
+.structure ul li label {
+    font-weight: 400;
+}
+
+.series ul li {
+    display: inline-block;
+    font-size: 1rem;
+    margin-left: 2rem;
+    padding-top: 1rem;
+}
+
+.series label {
+    font-weight: normal;
+    vertical-align: middle;
+}
+
+.fit {
+    padding-top: 1rem;
+}
+
+.fit h1 {
+    margin-left: 1rem;
+    font-size: 1.4rem;
+    color: #6C6C6C;
+    font-weight: 400;
+}
+
+.fit p {
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #959292;
+}
+
+.choose_style ul {
+    margin-bottom: 1rem;
+    padding-left: 0;
+    padding-bottom: .5rem;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.choose_style ul li {
+    display: inline-block;
+
+}
+
+.choose_style ul li button {
+    margin-left: 1rem;
+    width: 7.5rem;
+    height: 2.4rem;
+    font-size: 1.2rem;
+    color: #6C6C6C;
+    background-color: white;
+    border: 1px solid #C2C2C2;
+    border-radius: .5rem !important;
+}
+
+.carousel {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    width: 30rem;
+    height: 16rem;
+    border: 1px solid #C2C2C2;
+}
+
+.application {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.application button {
+    width: 28rem;
+    height: 4rem;
+    background-color: #53A8F4;
+    color: white;
+    font-size: 1.2rem;
+    margin-left: 2rem;
+    border-radius: .3rem;
+}
+
+.choose_stairs > span,
+.choose_stairs label {
+    vertical-align: middle;
+}
+
+.choose_stairs label {
+    margin-left: 3rem;
+}
+
+.choose_stairs label span {
+    margin-left: .3rem;
+    font-size: 1.3rem;
+    font-weight: 400;
+    vertical-align: middle;
+}
+
+.tag {
+    margin-left: 1.2rem;
+    color: #06CB7E;
+}
+
+.tag span {
+    display: inline-block;
+    margin-right: 1.2rem;
+    padding: .2rem 1.5rem 0;
+    height: 2rem;
+    text-align: center;
+    font-size: 1rem;
+    background-color: #F9FEFC;
+    border-radius: 1.5rem;
+    border: 1px solid #8DE2C1;
+}
+
+.btn_checked {
+    border: 1px solid #53A8F4 !important;
+    color: #53A8F4 !important;
+}
+
+.item_masonry {
+    padding-bottom: 2rem;
+}
+
+.item_masonry > p {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.masonry {
+    position: relative;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: white;
+}
+
+.masonry .column {
+    float: left;
+    margin-left: 1rem;
+    width: 14.5rem;
+}
+
+.masonry .column:first-child {
+    margin-left: 0;
+}
+
+.masonry .box {
+    margin-bottom: 1rem;
+    padding: .5rem;
+    border: .1rem solid #E5E5E5;
+    border-radius: 2px;
+}
+
+.comment_edit {
+    color: #B8B6B6;
+    font-size: 1rem;
+    margin-left: 1rem;
+    vertical-align: middle;
+}
+
+.checked-active {
+    max-width: 1rem;
+}
+
+.background_w {
+    margin-top: 1rem;
+    background-color: #fff;
+}

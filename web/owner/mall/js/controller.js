@@ -333,17 +333,17 @@ angular.module("all_controller", [])
         };
         $scope.getBack = function (item) {
             if (item == "今日花园") {
-                $state.go("have_data", {
+                $state.go("model_room", {
                     name: '今日花园',
                     address: '四川省成都市郫县高新西区泰山大道',
                     pic_one: '101135',
                     pic_two: '125280'
                 })
             } else if (item == "花好月圆") {
-                $state.go("have_data", {name: '花好月圆', address: '四川省成都市蜀汉路东89号', pic_one: '116688', pic_two: '138280'})
+                $state.go("model_room", {name: '花好月圆', address: '四川省成都市蜀汉路东89号', pic_one: '116688', pic_two: '138280'})
             }
             else if (item == "蓝光COCO时代") {
-                $state.go("have_data", {
+                $state.go("model_room", {
                     name: '蓝光COCO时代',
                     address: '四川省成都市青羊区清百路110号',
                     pic_one: '168135',
@@ -3221,7 +3221,7 @@ angular.module("all_controller", [])
         $scope.cur_operate = '编辑'//其他材料编辑两种状态 编辑/完成
         $scope.is_delete_btn = false //切换编辑状态
         //请求后台数据
-        $http.get('/owner/series-and-style').then(function (response) {
+        $http.get(url + '/owner/series-and-style').then(function (response) {
             console.log(response)
             $scope.stairs_details = response.data.data.show.stairs_details;//楼梯数据
             $scope.series = response.data.data.show.series;//系列数据
@@ -3293,7 +3293,7 @@ angular.module("all_controller", [])
             }
         }
         //一级、二级分类
-        $http.post('/owner/classify', {}, config).then(function (response) {
+        $http.post(url + '/owner/classify', {}, config).then(function (response) {
             console.log(response)
             $scope.stair = response.data.data.pid.stair//一级
             $scope.level = response.data.data.pid.level//二级
@@ -3302,7 +3302,7 @@ angular.module("all_controller", [])
         })
         /*主页操作*/
         //主页推荐
-        $http.get('/owner/homepage').then(function (response) {
+        $http.get(url + '/owner/homepage').then(function (response) {
             $scope.recommend_list = response.data.data
             console.log(response)
         }, function (error) {

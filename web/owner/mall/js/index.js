@@ -1,24 +1,24 @@
-//ÂÖ²¥½Ó¿Ú
+//è½®æ’­æ¥å£
 var carousel1="carousel";
-//ÉÌÆ··ÖÀà
+//å•†å“åˆ†ç±»
 var classify="categories";
-//ÌØÊâÍÆ¼ö
+//ç‰¹æ®Šæ¨è
 //var recommend="recommend-first";
-//ÍÆ¼öÁĞ±í½Ó¿Ú
+//æ¨èåˆ—è¡¨æ¥å£
 var recommend_list="recommend-second";
-//ÂÖ²¥ÉèÖÃ¿ªÊ¼
+//è½®æ’­è®¾ç½®å¼€å§‹
 function carousel() {
     var mySwiper = new Swiper('#swiper-container', {
-        autoplay: 2000,//¿ÉÑ¡Ñ¡Ïî£¬×Ô¶¯»¬¶¯
+        autoplay: 2000,//å¯é€‰é€‰é¡¹ï¼Œè‡ªåŠ¨æ»‘åŠ¨
         pagination: '.pagination',
         loop: true,
         grabCursor: true,
         paginationClickable: true
     });
 }
-//ÂÖ²¥ÉèÖÃ½áÊø
+//è½®æ’­è®¾ç½®ç»“æŸ
 app.controller("index",function($scope,$http){
-        //ÂÖ²¥Êı¾İ
+        //è½®æ’­æ•°æ®
     console.log(url+carousel1)
         $http.get(url+carousel1)
             .success(function(data){
@@ -29,19 +29,19 @@ app.controller("index",function($scope,$http){
             .success(function(data){
                 $scope.class_list=data.data.categories
             });
-        ////ÌØÊâÍÆ¼ö    ÔİÊ±ÏÈ×¢ÊÍ
+        ////ç‰¹æ®Šæ¨è    æš‚æ—¶å…ˆæ³¨é‡Š
         //$http.get(url+recommend)
         //    .success(function(data){
         //        $scope.recommend=data.data;
         //    })
-        //ÍÆ¼öÁĞ±íÊı¾İ
+        //æ¨èåˆ—è¡¨æ•°æ®
         $http.get(url+recommend_list)
             .success(function(data){
                 $scope.recommend_list=data.data;
             });
-        $scope.$on('ngRepeatFinished', function (data) { //½ÓÊÕ¹ã²¥£¬Ò»µ©repeat½áÊø¾Í»áÖ´ĞĞ
+        $scope.$on('ngRepeatFinished', function (data) { //æ¥æ”¶å¹¿æ’­ï¼Œä¸€æ—¦repeatç»“æŸå°±ä¼šæ‰§è¡Œ
             var mySwiper = new Swiper('#swiper-container',{
-                autoplay: 2000,//¿ÉÑ¡Ñ¡Ïî£¬×Ô¶¯»¬¶¯
+                autoplay: 2000,//å¯é€‰é€‰é¡¹ï¼Œè‡ªåŠ¨æ»‘åŠ¨
                 pagination: '.pagination',
                 loop:true,
                 grabCursor: true,
@@ -54,8 +54,8 @@ app.controller("index",function($scope,$http){
 
 app.controller('itemReaptCtrl', ['$scope', function ($scope) {
     $scope.$watch($scope.$last, function () {
-        if($scope.$last){   //$scope.$lastÊÇÀ´ÅĞ¶ÏÊÇ·ñÊÇ×îºóÒ»¸öng-repeat¶ÔÏó£¬ Èç¹ûÊÇÔò$scope.$lastµÄÖµÎªtrue ,·´Ö®ÔòÎªfalse
-            setTimeout(function(){$scope.$emit('ngRepeatFinished')},1); // ÓÉÓÚÊÇÏò¸¸¿ØÖÆÆ÷ÖĞ·¢²¼¹ã²¥£¬ËùÓĞÓÃ$emit
+        if($scope.$last){   //$scope.$lastæ˜¯æ¥åˆ¤æ–­æ˜¯å¦æ˜¯æœ€åä¸€ä¸ªng-repeatå¯¹è±¡ï¼Œ å¦‚æœæ˜¯åˆ™$scope.$lastçš„å€¼ä¸ºtrue ,åä¹‹åˆ™ä¸ºfalse
+            setTimeout(function(){$scope.$emit('ngRepeatFinished')},1); // ç”±äºæ˜¯å‘çˆ¶æ§åˆ¶å™¨ä¸­å‘å¸ƒå¹¿æ’­ï¼Œæ‰€æœ‰ç”¨$emit
         }
     })
 }]);
