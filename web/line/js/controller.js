@@ -1237,6 +1237,8 @@ angular.module("all_controller", ['ngCookies'])
                                     console.log($scope.status);
                                     $('body').append($scope.dataFram)
 
+                                },function (error) {
+                                    console.log(error)
                                 })
                             }
 
