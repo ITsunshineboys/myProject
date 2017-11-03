@@ -15,7 +15,7 @@ $allow_origin = array(
     'http://cross.local.com:808'
 );
 
-if (YII_DEBUG && in_array($origin, $allow_origin)) {
+if (in_array($origin, $allow_origin)) {
     header('Access-Control-Allow-Origin:' . $origin);
 }
 header("Access-Control-Allow-Credentials: true");
