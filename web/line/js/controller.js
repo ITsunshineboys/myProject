@@ -1162,6 +1162,10 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.order_order = '请填写完整信息';
                 return
             }
+            if($scope.invoice_id == ''){
+                $scope.order_address_model = '#order_address_modal';
+                $scope.order_order = '请填写发票信息';
+            }
             if (!$scope.check_agressment) {
                 $scope.order_address_model = '#order_address_modal';
                 $scope.order_order = '请勾选商城协议';

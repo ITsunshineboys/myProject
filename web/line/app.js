@@ -123,7 +123,11 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
         $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
             document.body.scrollTop = document.documentElement.scrollTop = 0;
             $rootScope.goPrev = function (obj) {
-                $state.go(fromState.name,obj)
+                if (toState.name == 'product_details') {
+                    $state.go('home')
+                }else {
+                    $state.go(fromState.name,obj)
+                }
             }
         })
     }]);
