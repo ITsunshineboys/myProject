@@ -15,7 +15,7 @@ use yii\db\Query;
  * @property string $goods_num
  * @property integer $create_time
  */
-class ShippingCart extends \yii\db\ActiveRecord
+class ShippingCart extends \yii\db\ActiveRecord 
 {
     /**
      * @inheritdoc
