@@ -1,25 +1,28 @@
 ;
 let login= angular.module("login_module",[]);
 login.controller('login_ctrl',function ($scope,$http,$state) {
-  $scope.login=function () {
-    //确认身份
-    let url= 'http://test.cdlhzz.cn:888/site/admin-login';
-    let params= {
-      role_id:1,
-      username:13551201821,
-      password:"demo123"
-    };
     let config = {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      transformRequest: function (data) {
-        return $.param(data)
-      }
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformRequest: function (data) {
+            return $.param(data)
+        }
     };
-    $http.post(url,params,config).then(function (response) {
-      $state.go('banner_recommend')
+    $scope.error_flag=false;
+  $scope.login=function () {
+    $http.post(baseUrl+'/site/admin-login',{
+        role_id:1,
+        username:$scope.my_username,
+        password:$scope.my_password
+    },config).then(function (res) {
+      console.log(res);
+      if(res.data.code==200){
+           $state.go('home');
+      }else{
+        $scope.error_flag=true;
+      }
     },function (error) {
       console.log(error)
-    })
-  }
+    });
 
+  }
 });

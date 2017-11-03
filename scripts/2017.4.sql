@@ -18,7 +18,7 @@ insert into role(id, name, admin_module, detail_table, detail_model) values
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(25) DEFAULT '',
+  `username` char(26) DEFAULT '' comment '环信用户名',
   `password` varchar(100) DEFAULT '',
   `authKey` varchar(30) DEFAULT '',
   `authKeyAdmin` varchar(30) DEFAULT '',
@@ -43,10 +43,10 @@ CREATE TABLE `user` (
   `birthday` int(8) unsigned not null DEFAULT 0,
   `district_code` int(6) unsigned not null default 0 comment '区域码',
   `district_name` varchar(50) NOT NULL DEFAULT '' comment '区域名',
-  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
+  `availableamount` bigint(20) NOT NULL DEFAULT '0' COMMENT '可用余额',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
-  `pay_password` varchar(100) NOT NULL COMMENT '支付密码',
-  `registration_id` varchar(100) NOT NULL COMMENT '极光注册id',
+  `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
+  `registration_id` varchar(100) NOT NULL DEFAULT '0' COMMENT '极光注册id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1149,8 +1149,7 @@ CREATE TABLE `worker` (
   `project_manager_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '项目经理id',
   `province_code` int(20) DEFAULT NULL COMMENT '省份编码',
   `city_code` int(20) DEFAULT NULL COMMENT '市编码',
-  `native_place` varchar(100) NOT NULL  DEFAULT '' COMMENT '籍贯',
-  `labor_cost_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工费地区id (包含工人类型和等级)',
+  `native_place` varchar(100) NOT NULL DEFAULT '' COMMENT '籍贯',
   `worker_type_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工种id(只能选pid为0的)',
   `nickname` varchar(25) NOT NULL DEFAULT '' COMMENT '工人名字',
   `icon` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
@@ -1159,15 +1158,15 @@ CREATE TABLE `worker` (
   `feedback` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '好评率',
   `order_total` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '总接单数',
   `order_done` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '完成订单数',
-  `level` tinyint(1) NOT NULL DEFAULT '1' COMMENT '工人级别',
+  `level` int(10) NOT NULL DEFAULT '0' COMMENT '数值填写对比worker_type等级',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `signature` varchar(100) NOT NULL DEFAULT '' COMMENT '个性签名',
-  `availableamount` bigint(20) NOT NULL COMMENT '可用余额',
+  `availableamount` bigint(20) NOT NULL DEFAULT '0' COMMENT '可用余额',
   `balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '余额, unit: fen',
   `pay_password` varchar(100) NOT NULL DEFAULT '' COMMENT '支付密码',
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
   `examine_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '认证状态 0:未认证 1:待审核 2:审核不通过 3:已认证',
-  `status` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '接单状态: 1,接单 0,不接单',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '接单状态: 1,接单 0,不接单',
   `skill_ids` varchar(255) NOT NULL DEFAULT '' COMMENT '特长的id',
   `work_year` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '工龄：单位(年)',
   PRIMARY KEY (`id`)
@@ -1572,6 +1571,7 @@ CREATE TABLE `effect_earnest` (
   `earnest` bigint(20) NOT NULL DEFAULT '0' COMMENT '定金',
   `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
   `remark` text NOT NULL COMMENT '备注',
+  `requirement` varchar(255) DEFAULT NULL,
   `create_time` int(11) NOT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

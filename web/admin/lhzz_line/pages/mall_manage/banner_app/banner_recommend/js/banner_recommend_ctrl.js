@@ -714,7 +714,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
       $scope.sort_order.push(value.id);
     }
   };
-  $scope.save_confirm=function () {
+  $scope.banner_save_confirm=function () {
     console.log($scope.sort_order)
     $http.post('http://test.cdlhzz.cn:888/mall/recommend-sort',{
       ids:$scope.sort_order.join(',')

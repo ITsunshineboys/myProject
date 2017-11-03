@@ -1,6 +1,10 @@
 /*顶部导航*/
-* {
+*{
     outline: none;
+}
+
+li {
+    list-style: none;
 }
 
 header {
@@ -44,7 +48,10 @@ h3 {
     font-weight: bold;
     font-size: 16px;
 }
-
+.arrow_class{
+    margin-left:55px;
+    color: #5677FC;
+}
 /*——订单详情——*/
 .order_detail > div, .good_detail > div {
     margin-top: 20px;
@@ -76,9 +83,8 @@ h3 {
 }
 
 .order_money ul li {
-    list-style: none;
     float: left;
-    width: 98px;
+    width: 120px;
 }
 
 .order_money > ul:last-child {
@@ -101,8 +107,24 @@ h3 {
 
 /*剩余付款时间*/
 .left_paytime span:last-child {
-    margin-left: 56px;
+    margin-left: 83px;
 }
+/*配送方式*/
+.shipping_type span:nth-child(2){
+    margin-left: 83px;
+}
+.shipping_way{
+    cursor: pointer;
+    color: #487AF8;
+}
+.shipping_type span:nth-child(3){
+    margin-left: 10px;
+    padding: 3px;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    color: black;
+}
+
 
 /*————订单详情————*/
 .good_detail h3 {
@@ -124,7 +146,6 @@ h3 {
     vertical-align: text-top;
     margin-left: 83px;
     padding: 0;
-    list-style: none;
 }
 
 .good_attr li {
@@ -141,10 +162,32 @@ h3 {
     margin-left: 56px;
 }
 
-#back {
+.back {
     margin-left: 10px;
 }
-
+/*异常*/
+.unusual_detail{
+    margin-top: 20px;
+}
+.unusual_detail>ul{
+    padding-left: 15px;
+    margin: 20px 0;
+}
+.unusual_detail>ul>li:nth-child(1){
+    list-style: disc;
+}
+.unusual_detail>ul>li{
+    float: left;
+    margin-right:70px;
+}
+.unusual_detail>ul:after{
+    content: '';
+    display: table;
+    clear: both;
+}
+.btn_group{
+    margin: 35px 0;
+}
 /*模态框*/
 .red_mark {
     color: red;
@@ -176,15 +219,11 @@ h3 {
     border-radius: 3px;
 }
 
-.express_method{
-    margin-top: 20px;
-}
-
-.warning {
+.warning{
     width: 522px;
     height: 30px;
     background: #FFF2F2;
-    color: #E82A2A;
+    color:#E82A2A;
     border: 1px solid #E82A2A;
     border-radius: 3px;
     font-weight: bold;
@@ -193,127 +232,43 @@ h3 {
     line-height: 0;
 }
 
-#total {
+#total{
     color: #FF9800;
 }
 
-.text_blue {
-    color: #5677FC;
-}
-
-/*异常记录*/
-.abnormal_waitsend {
-    margin-top: 20px;
-    padding: 0;
-}
-
-.abnormal_waitsend li span:nth-child(2) {
-    margin-left: 83px;
-}
-
-.abnormal_waitsend li span:nth-child(3) {
-    margin-left: 176px;
-}
-
-.abnormal_waitsend li p {
-    margin-top: 16px;
-    margin-left: 142px;
-}
-
-.success_li{
-    margin-top: 16px;
-}
-
-.success_li span:last-child{
-    margin-left: 92px!important;
-}
-
-.abnormal_title {
-    display: inline;
-}
-
-.refund{
-    margin-top:16px;
-}
-
-.arrows {
-    color: #5677FC;
-    margin-left: 55px;
-}
-
-/*.abnormal {*/
-    /*margin-top: 90px;*/
-/*}*/
-
-/*评论回复*/
-.comment {
-    margin-top: 20px;
-}
-
-.comment span:nth-child(2) {
-    margin-left: 83px;
-}
-
-.comment_pic {
-    margin-left: 130px;
-}
-
-.comment_pic img {
-    width: 120px;
-    margin-left: 10px;
-}
-
-.good_score {
-    list-style: none;
-    margin-top: 22px;
-    margin-left: 102px;
-}
-
-.good_score li {
-    padding: 0;
-}
-
-.score_head span:last-child {
-    margin-left: 52px;
-}
-
-.starlist {
-    margin-top: 12px;
-}
-
-.stars {
-    display: inline;
-    vertical-align: text-top;
-    margin-left: 12px;
-}
-
-.express_service {
-    margin-left: -15px;
-}
-
-.stars span {
-    color: #FF5722;
-}
-
-.store_apply {
-    margin-top: 22px;
-}
-
-.store_apply p{
-    display: inline;
-    vertical-align: top;
-    margin-left: 83px;
-}
-
-.store_apply textarea {
-    vertical-align: text-top;
-    margin-left: 83px;
+/*快递单号*/
+.delivery_input{
+    width: 420px;
+    height: 35px;
+    line-height: 35px;
+    outline: none;
+    border: 1px solid rgb(169, 169, 169);
     border-radius: 3px;
+    /*margin-left: 30px;*/
+    float: right;
 }
-
-.btn_group {
-    margin-top: 43px;
-    margin-bottom: 43px;
+.track_p{
+    border: 1px solid red;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    height: 32px;
+    line-height: 32px;
+    background-color: #FFF2F2;
+    color: #E82A2A;
+    padding-left: 10px;
+    font-size: 16px;
+}
+.track_span:nth-child(1){
+    color: red;
+}
+.track_span{
+    font-size: 16px;
+    line-height: 32px;
+}
+/*属性*/
+.attr_span{
+    display: inline-block;
+    width: 80px;
 }
 
 .dl_active4{
@@ -322,4 +277,3 @@ h3 {
 .a_active4{
     color: #5677FC!important;
 }
-

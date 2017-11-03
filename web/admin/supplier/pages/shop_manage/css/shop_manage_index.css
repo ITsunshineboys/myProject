@@ -225,3 +225,10 @@ table tr{
 .status-blue {
     color: #26c6da;
 }
+
+.dl_active2{
+    background-color: #E6E9F0!important;
+}
+.a_active2{
+    color: #5677FC!important;
+}

@@ -1314,7 +1314,7 @@ class OwnerController extends Controller
         }
         foreach ($coefficient as $one_coefficient){
             foreach ($post['list'] as &$materials){
-                if ($one_coefficient->classify == $materials['one']){
+                if ($one_coefficient->classify == $materials['one_title']){
                    $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
                 }
             }
@@ -1323,14 +1323,17 @@ class OwnerController extends Controller
         $total_prices = 0;
         foreach ($post['list'] as $price){
             $total_prices += $price['price'];
-            $special_offer += $price['goods_price'];
+           $special_offer += $price['goods_price'];
+
         }
+        $total = sprintf('%.2f', (float)$total_prices);
+        $special = sprintf('%.2f', (float)$special_offer);
         return Json::encode([
             'code'=> 200,
             'msg'=> 'OK',
            'data' => [
-               'special_offer'=>$special_offer,
-               'total_prices'=>$total_prices,
+               'special_offer'=>$special,
+               'total_prices'=>$total,
            ],
         ]);
     }

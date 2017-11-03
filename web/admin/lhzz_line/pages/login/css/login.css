@@ -34,6 +34,7 @@ html,body{
   border-radius: 3px;
   border: 1px solid #666F80;
   padding-left: 5px;
+  outline: 0;
 }
 .margin_top{
   margin-top: 40px;
@@ -49,4 +50,11 @@ html,body{
   line-height: 35px;
   float: right;
   margin-top: 30px;
+}
+.border_red{
+  border: 1px solid #E51C23;
+}
+.error_red{
+  margin: 10px 0 0 88px;
+  color: #E51C23;
 }

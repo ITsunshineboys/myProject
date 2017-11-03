@@ -889,17 +889,19 @@ class BasisDecorationService
      */
     public static function mudMakeCost($area,$goods,$craft,$goods_attr,$project)
     {
+
         foreach ($goods as $one) {
             if ($one['title'] == $project) {
                 $goods_price = $one['platform_price'];
             }
         }
-        $goods_unit = '';
+        $goods_unit = 0;
         foreach ($goods_attr as $one_goods_attr) {
             if ($one_goods_attr['title'] == $project) {
                 $goods_unit = $one_goods_attr['value'];
             }
         }
+
         //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
         $mud_make['quantity'] = ceil($area * $craft / $goods_unit);
         //        水泥费用:个数×抓取的商品价格
@@ -1328,6 +1330,7 @@ class BasisDecorationService
                         break;
                 }
             }
+
             return $property;
         }
     }

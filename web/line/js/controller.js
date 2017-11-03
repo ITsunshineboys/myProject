@@ -364,10 +364,10 @@ angular.module("all_controller", ['ngCookies'])
             }
             //判断系列是否存在
             if($scope.series.length > 0){
-                console.log(33333)
+                console.log(33333);
                 $scope.show_series = true;
             }else {
-                console.log(444444)
+                console.log(444444);
                 $scope.show_series = false;
             }
         });
@@ -604,12 +604,13 @@ angular.module("all_controller", ['ngCookies'])
         $scope.brands = '';
         $scope.series = '';
         $scope.styles = '';
-        $scope.good_pic_up = false;
-        $scope.good_pic_down = true;
-        $scope.praise_up = true;
-        $scope.praise_down = false;
-        console.log($scope.mall_id);
-        console.log($scope.supplier_id);
+        $scope.good_pic_up = 2;
+        $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
+            ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png');
+        // $scope.good_pic_down = false;
+        $scope.praise_up = 2;
+        $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
+            ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
         $http({
             method:"get",
             url:'http://common.cdlhzz.cn/supplier/index?supplier_id='+$scope.supplier_id
@@ -635,7 +636,8 @@ angular.module("all_controller", ['ngCookies'])
             method: 'get',
             url: "http://common.cdlhzz.cn/supplier/goods",
             params:{
-                supplier_id:+$scope.supplier_id
+                supplier_id:+$scope.supplier_id,
+                "sort[]":"sold_number:4"
             }
         }).then(function successCallback (response) {
             console.log(response);
@@ -654,71 +656,59 @@ angular.module("all_controller", ['ngCookies'])
             $state.go("product_details",{mall_id:$scope.mall_id})
         };
         // 点击上下排序
-        //价格排序  升序
-        $scope.filterPicUp = function () {
-            $scope.good_pic_up = true;
-            $scope.good_pic_down = false;
+        //价格排序
+        $scope.filterPraise = function () {
+            console.log($scope.good_pic_up);
+            $scope.praise_up = 2;
+            $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
+                ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
+            if($scope.good_pic_up == 2){
+                $scope.good_pic_up = 1;
+            }else {
+                $scope.good_pic_up = +!$scope.good_pic_up;
+            }
+
+            $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
+                ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png')
+
             $http({
                 method: 'get',
                 url:'http://common.cdlhzz.cn/supplier/goods',
                 params:{
                     supplier_id:+$scope.supplier_id,
-                    "sort[]":"platform_price:3"
+                    "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
                 }
             }).then(function successCallback(response) {
                 console.log(response);
                 $scope.supplier_goods = response.data.data.supplier_goods;
             });
         };
-        // 价格降序
-        $scope.filterPicDown = function () {
-            $scope.good_pic_up = false;
-            $scope.good_pic_down = true;
-            $http({
-                method: 'get',
-                url:'http://common.cdlhzz.cn/supplier/goods',
-                params:{
-                    supplier_id:+$scope.supplier_id,
-                    "sort[]":"platform_price:4"
-                }
-            }).then(function successCallback(response) {
-                console.log(response);
-                $scope.supplier_goods=response.data.data.supplier_goods;
-            });
-        };
-        //销量排序
-        $scope.filterSalesUp = function () {
-            $scope.praise_up = true;
-            $scope.praise_down = false;
-            $http({
-                method: 'get',
-                url:'http://common.cdlhzz.cn/supplier/goods',
-                params:{
-                    supplier_id:+$scope.supplier_id,
-                    "sort[]":"favourable_comment_rate:3"
-                }
+        // 好评率排序
+        $scope.filterPicUp = function () {
+            $scope.good_pic_up = 2
+            $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
+                ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png')
+            if($scope.praise_up == 2){
+                $scope.praise_up = 1;
+            }else {
+                $scope.praise_up = +!$scope.praise_up;
+            }
 
-            }).then(function successCallback(response) {
-                console.log(response);
-                $scope.supplier_goods=response.data.data.supplier_goods;
-            });
-        };
-        $scope.filterSalesDown = function () {
-            $scope.praise_up = false;
-            $scope.praise_up = true;
+            $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
+                ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
             $http({
                 method: 'get',
                 url:'http://common.cdlhzz.cn/supplier/goods',
                 params:{
                     supplier_id:+$scope.supplier_id,
-                    "sort[]":"favourable_comment_rate:4"
+                    "sort[]":"favourable_comment_rate:"+($scope.good_pic_up?'4':'3')
                 }
-
             }).then(function successCallback(response) {
                 console.log(response);
-                $scope.supplier_goods=response.data.data.supplier_goods;
+                $scope.supplier_goods = response.data.data.supplier_goods;
             });
         };
+
 
         // 店铺简介
         $http({
@@ -1316,7 +1306,7 @@ angular.module("all_controller", ['ngCookies'])
     //断网提示
     .controller('cut_net_ctrl',function($scope,$http,$state,$stateParams){
 
-    })
+    });
 
 //=================分割 飞机线========================
 // .directive("swiper", function () {

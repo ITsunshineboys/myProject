@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 use app\models\ChatRecord;
+use app\models\OrderGoods;
 use app\models\Supplier;
 use app\models\User;
 use app\models\UserChat;
@@ -12,12 +13,15 @@ use app\models\UserNewsRecord;
 use app\models\Worker;
 use app\services\ChatService;
 use app\services\FileService;
+use app\services\ModelService;
+use yii\data\Pagination;
+use yii\db\Query;
 use yii\helpers\Json;
 use yii\web\Controller;
 
 class ChatController extends Controller
 {
-
+    const DEAF_SIZE=20;
     const SUPPLIER_ROLE=6;
     const OWNER_ROLE=7;
     const WORKER_ROLE=2;
@@ -228,7 +232,7 @@ class ChatController extends Controller
         $to_uid=trim(\Yii::$app->request->post('to_uid'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
-        $res=$user_hx->getUser($to_user['mobile']);
+        $res=$user_hx->getUser($to_user['username']);
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,
@@ -242,7 +246,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::sendTextMessage($message,$send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id']);
+        $data=UserChat::sendTextMessage($message,$send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id']);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -273,7 +277,7 @@ class ChatController extends Controller
         $to_uid=trim(\Yii::$app->request->post('to_uid'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
-        $res=$user_hx->getUser($to_user['mobile']);
+        $res=$user_hx->getUser($to_user['username']);
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,
@@ -287,7 +291,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::SendImg($send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
+        $data=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -333,7 +337,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::SendAudio($send_user['mobile'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
+        $data=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
         if(is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -364,19 +368,6 @@ class ChatController extends Controller
             ->orderBy('send_time Desc')
             ->one();
         $res['news']['send_time']=date('Y-m-d H:i:s',$res['news']['send_time']);
-        $res_all=UserNewsRecord::find()
-            ->where(['uid'=>$u_id,'role_id'=>$role_id])
-            ->select('status')
-            ->asArray()
-            ->all();
-      foreach ($res_all as $res){
-
-          if($res['status']==1){
-             $res['news']['status']=$res['status'];
-          }
-      }
-var_dump($res);
-die;
         $data=ChatRecord::userlog($u_id,$role_id);
 
         if(!$data){
@@ -438,15 +429,29 @@ die;
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $new_infos=UserNewsRecord::find()
+        $page=(int)\Yii::$app->request->get('page',1);
+        $size=(int)\Yii::$app->request->get('size',self::DEAF_SIZE);
+        $query=(new Query())
+            ->from('user_news_record')
             ->where(['role_id'=>$role_id,'uid'=>$u_id])
-            ->asArray()
-            ->orderBy('send_time Desc')
+            ->orderBy('send_time Desc');
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
+        $new_infos=$query->offset($pagination->offset)
+            ->limit($pagination->limit)
             ->all();
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d H:i:s ',$info['send_time']);
-
+             $info['image']=OrderGoods::find()
+                 ->select('cover_image')
+                 ->asArray()
+                 ->where(['order_no'=>$info['order_no'],'sku'=>$info['sku']])
+                 ->one()['cover_image'];
+                 if(!$info['image']){
+                     $info['image']='';
+                 }
          }
+
         if(!$info){
             return Json::encode([
                 'code'=>200,
@@ -457,7 +462,7 @@ die;
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>$new_infos
+            'data'=> ModelService::pageDeal($new_infos, $count, $page, $size)
         ]);
 
     }
@@ -474,7 +479,9 @@ die;
 
     public function actionTest(){
 
-        var_dump(Worker::find()->asArray()->all());
+        $chat=new ChatService();
+       $a= $chat->getChatRecord('select+*+where+timestamp>1403164734226');
+        return json_encode($a);
 
     }
 }

@@ -6,6 +6,7 @@ use app\services\StringService;
 use app\services\SmValidationService;
 use app\services\ModelService;
 use app\services\ChatService;
+use app\services\EventHandleService;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -129,6 +130,7 @@ class User extends ActiveRecord implements IdentityInterface
     const LOGIN_ORIGIN_APP = 'login_origin_app';
     const LOGIN_ROLE_ID = 'login_role_id';
     const PREFIX_SESSION_FILENAME = 'sess_';
+    const RETYR_TIMES_CREATE_HUANXIN_USER = 3;
 
     /**
      * @inheritdoc
@@ -190,14 +192,6 @@ class User extends ActiveRecord implements IdentityInterface
         $cache->set($key, $user);
 
         return $user;
-    }
-
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'user';
     }
 
     /**
@@ -634,10 +628,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function checkKickedout()
     {
-        if (YII_DEBUG) {
-            return false;
-        }
-
         if (Yii::$app->session->getHasSessionId()) {
             $sessId = Yii::$app->session->id;
             $user = self::find()
@@ -1717,13 +1707,66 @@ class User extends ActiveRecord implements IdentityInterface
         parent::afterSave($insert, $changedAttributes);
 
         if ($insert) {
-            (new ChatService)->createUser(StringService::getUniqueStringBySalt($this->mobile),
-                Yii::$app->params['chatOptions']['user_password_default']);
+            $username = StringService::getUniqueStringBySalt($this->mobile);
+            if (self::createHuanXinUser($username)) {
+                $this->username = $username;
+                if (!$this->save()) {
+                    $update = 'update ' . self::tableName() . ' set username = ' . $username;
+                    $where = ' where id = ' . $this->id . ';';
+                    $data = [
+                        'sql' => $update . $where,
+                        'table' => self::tableName(),
+                    ];
+                    new EventHandleService($data);
+                    Yii::$app->trigger(Yii::$app->params['events']['db']['failed']);
+                }
+            }
         }
 
         $key = self::CACHE_PREFIX . $this->id;
         $cache = Yii::$app->cache;
         $cache->set($key, $this);
+    }
+
+    /**
+     * Create huan xin user by username
+     *
+     * @param string $username username
+     * @param int $retryTimes retry times default 3
+     * @return bool
+     */
+    public static function createHuanXinUser($username, $retryTimes = self::RETYR_TIMES_CREATE_HUANXIN_USER)
+    {
+        $success = false;
+
+        $username = trim($username);
+        if (!$username) {
+            return $success;
+        }
+
+        for ($i = 0; $i < $retryTimes; $i++) {
+            $res = (new ChatService)->createUser($username,
+                Yii::$app->params['chatOptions']['user_password_default']);
+            if (!array_key_exists('error', $res)) {
+                $success = true;
+                break;
+            }
+        }
+
+        if (!$success) {
+            new EventHandleService($username);
+            Yii::$app->trigger(Yii::$app->params['events']['3rd']['failed']['createHuanxinUser']);
+        }
+
+        return $success;
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'user';
     }
 
     /**

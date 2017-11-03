@@ -459,21 +459,29 @@ class OrderController extends Controller
      * 智能报价-样板间支付定金提交
      * @return string
      */
-    public function actionEffectEarnstAlipaySub(){
-        $request=Yii::$app->request;
-        $effect_id = trim($request->post('effect_id', ''), '');
-        $name = trim($request->post('name', ''), '');
-        $phone = trim($request->post('phone', ''), '');
+  public function actionEffectEarnstAlipaySub(){
+        $request = \Yii::$app->request;
+        $post=$request->post();
+        $code=1000;
+        $phone  = trim($request->post('phone', ''), '');
         if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
-            $code=1000;
-            return Json::encode([
+            return json_encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
             ]);
         }
         $out_trade_no =self::Setorder_no();
-        Alipay::effect_earnstsubmit($effect_id,$name,$phone,$out_trade_no);
+        $res=Alipay::effect_earnstsubmit($post,$phone,$out_trade_no);
+        if (!$res)
+        {
+            $code=500;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
     }
 
       public function actionGetEffectlist(){
@@ -494,7 +502,7 @@ class OrderController extends Controller
     /**
      * 样板间支付订单异步返回
      */
-    public function actionAlipayeffect_earnstnotify()
+  public function actionAlipayeffect_earnstnotify()
     {
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -506,10 +514,35 @@ class OrderController extends Controller
                 // if ($post['total_amount'] !=89){
                 //     exit;
                 // }
-                $res=GoodsOrder::Alipayeffect_earnstnotifydatabase($arr,$post);
-                if ($res){
-                    echo "success";
-                }
+
+                $data['province_code']=$arr[0];
+                $data['city_code']=$arr[1];
+                $data['district_code']=$arr[2];
+                $data['bedroom']=$arr[3];
+                $data['toilet']=$arr[4];
+                $data['kitchen']=$arr[5];
+                $data['sittingRoom_diningRoom']=$arr[6];
+                $data['window']=$arr[7];
+                $data['high']=$arr[8];
+                $data['street']=$arr[9];
+                $data['series']=$arr[10];
+                $data['style']=$arr[11];
+                $data['stairway']=$arr[12];
+                $data['stair_id']=$arr[13];
+                $data['toponymy']=$arr[14];
+                $data['particulars']=$arr[15];
+                $data['area']=$arr[16];
+                $data['phone']=$arr[17];
+                $data['name']=$arr[18];
+                $data['requirement']=$arr[19];
+                $code=Effect::addneweffect($data);
+               if ($code==200)
+               {
+                   echo 'success';
+               }else
+               {
+                   echo "fail"; //请不要修改或删除
+               }
             }
         }else{
             //验证失败
@@ -4388,6 +4421,91 @@ class OrderController extends Controller
                 ]);
             }
         }
+
+
+  /**
+     * 计算运费
+     * @return string
+     */
+    public function actionCalculationFreight()
+    {
+        $goods=Yii::$app->request->post('goods');
+        foreach ($goods as  $k =>$v)
+        {
+            $Good[$k]=LogisticsTemplate::find()
+                ->where(['id'=>Goods::find()
+                    ->where(['id'=>$goods[$k]['goods_id']])
+                    ->one()->logistics_template_id])
+                ->asArray()
+                ->one();
+            $Good[$k]['goods_id']=$goods[$k]['goods_id'];
+            $Good[$k]['num']=$goods[$k]['num'];
+        }
+        $templates=[];
+        foreach ($Good as &$wuliu){
+            if (!in_array($wuliu['id'],$templates))
+            {
+
+                $templates[]=$wuliu['id'];
+            };
+        } 
+        foreach ($templates as &$list)
+        {
+            $costs[]['id']=$list;
+        }
+        foreach ($costs as &$cost)
+        {
+            $cost['num']=0;
+            foreach ($Good as &$list)
+            {
+                if ($list['id']==$cost['id'])
+                {
+
+                    $cost['num']+=$list['num'];
+                }
+            }
+        }
+        $freight=0;
+        foreach ($costs as &$cost)
+        {
+            $logistics_template=LogisticsTemplate::find()
+                ->where(['id'=>$cost['id']])
+                ->asArray()
+                ->one();
+            if ($logistics_template['delivery_number_default']>=$cost['num'])
+            {
+                $freight+=$logistics_template['delivery_cost_default'];
+            }else{
+                if ($logistics_template['delivery_number_delta']==0)
+                {
+                    $logistics_template['delivery_number_delta']=1;
+                }
+                $addnum=ceil(($cost['num']-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
+                $money=$logistics_template['delivery_cost_default']+$addnum*$logistics_template['delivery_cost_delta'];
+                $freight+=$money;
+            }
+        }
+
+//            foreach ($costs as &$cost)
+//            {
+//                foreach ($Good as &$list)
+//                {
+//                    if ($list['id']==$cost['id'])
+//                    {
+//                        $cost['goods'][]=[
+//                            'goods_id'=>$list['goods_id'],
+//                            'num'=>$list['num']
+//                        ];
+//                    }
+//                }
+//            }
+
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>GoodsOrder::switchMoney($freight*0.01)
+        ]);
+    }
 
 
 

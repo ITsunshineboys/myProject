@@ -3,7 +3,7 @@
     <header>
         <div>
             <i class="glyphicon glyphicon-home"></i>
-            <span class="shop_manage">商品管理 ></span>
+            <span class="shop_manage" ui-sref="commodity_manage({down_flag:true})">商品管理 ></span>
             <span class="manage_child">商品详情</span>
             <img src="lib/images/user.png" alt=""/>
         </div>
@@ -166,7 +166,7 @@
         <!--详情描述-->
         <div class="detail">
             <span>详情描述</span>
-            <textarea style="vertical-align: top" ng-model="detail_txt"></textarea>
+            <div class="sec">{{detail_txt}}</div>
         </div>
 
         <div class="done_stuff">

@@ -12,6 +12,8 @@ use app\models\UploadForm;
 use app\models\User;
 use dosamigos\qrcode\QrCode;
 use Yii;
+use yii\log\FileTarget;
+use yii\log\Logger;
 
 class StringService
 {
@@ -584,5 +586,21 @@ class StringService
         $ret = str_split($salt . time() . rand(10000, 99999));
         shuffle($ret);
         return join($ret);
+    }
+
+    /**
+     * Write log under @runtime/logs/
+     *
+     * @param string $filename file name
+     * @param string $msg message
+     * @param string $extraMsg extra message
+     * @param int $level log level default error
+     */
+    public static function writeLog($filename, $msg, $extraMsg = '', $level = Logger::LEVEL_ERROR)
+    {
+        $log = new FileTarget;
+        $log->logFile = Yii::$app->getRuntimePath() . '/logs/' . $filename . '.log';
+        $log->messages[] = [$msg, $level, $extraMsg, time()];
+        $log->export();
     }
 }

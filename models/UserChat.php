@@ -155,14 +155,14 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $to_user
      * @return int|mixed
      */
-    public static function sendTextMessage($content, $mobile,$send_uid,$send_role_id,$to_uid)
+    public static function sendTextMessage($content, $username,$send_uid,$send_role_id,$to_uid)
     {
 
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat_hx = new ChatService();
-            $from = $mobile;
+            $from = $username;
             $target = [$to_user['mobile']];
             $re = $chat_hx->sendText($from, $target_type = 'users', $target, $content);
             if($re) {
@@ -200,13 +200,13 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $filepath
      * @return int|mixed
      */
-    public static function SendImg($mobile,$send_uid,$send_role_id,$to_uid,$filepath){
+    public static function SendImg($username,$send_uid,$send_role_id,$to_uid,$filepath){
 
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat_hx = new ChatService();
-            $from = $mobile;
+            $from = $username;
             $target = [$to_user['mobile']];
             $re = $chat_hx->sendImage($filepath,$from, $target_type = 'users', $target);
             if($re) {
@@ -237,13 +237,13 @@ class UserChat extends \yii\db\ActiveRecord
         }
     }
 
-    public static function SendAudio($mobile,$send_uid,$send_role_id,$to_uid,$filepath,$length){
+    public static function SendAudio($username,$send_uid,$send_role_id,$to_uid,$filepath,$length){
 
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $chat_hx = new ChatService();
-            $from = $mobile;
+            $from = $username;
             $target = [$to_user['mobile']];
             $re = $chat_hx->sendAudio($filepath,$from, $target_type = 'users', $target,$length);
             if($re) {

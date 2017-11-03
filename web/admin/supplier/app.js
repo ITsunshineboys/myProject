@@ -74,16 +74,16 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/supplier_wallet/set_password.html",
             params:{code_status:null}
         })
-        // .state("waitsend_detail", {   //待发货详情
-        //     url: "/waitsend_detail",
-        //     templateUrl: "pages/order_manage/waitsend_detail.html",
-        //     params:{item:null,sku:null,wait_receive:null}
-        // })
-        // .state("record_goods_detail", {   //记录商品详情
-        //     url: "/record_goods_detail",
-        //     templateUrl: "pages/order_manage/record_goods_detail.html",
-        //     params:{item:null,wait_receive:null}
-        // })
+        .state("waitsend_detail", {   //待发货详情
+            url: "/waitsend_detail",
+            templateUrl: "pages/order_manage/waitsend_detail.html",
+            params:{item:null,sku:null,wait_receive:null}
+        })
+        .state("record_goods_detail", {   //记录商品详情
+            url: "/record_goods_detail",
+            templateUrl: "pages/order_manage/record_goods_detail.html",
+            params:{item:null,wait_receive:null}
+        })
         /*--------------三阶段结束----王杰-----------------*/
 
 

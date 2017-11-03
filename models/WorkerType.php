@@ -32,21 +32,11 @@ class WorkerType extends \yii\db\ActiveRecord
     {
         return [
             [['pid'], 'integer'],
-            [['worker_type'], 'string', 'max' => 20],
+            [['worker_name'], 'string','max'=>20],
+            [['rank_name'], 'string','max'=>20],
+            [['min_value'], 'integer','max'=>10],
+            [['max_value'], 'integer','max'=>10],
             [['image'], 'string', 'max' => 255],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'pid' => '所属上级工种id',
-            'worker_type' => '工种名字',
-            'image' => '服务工种图片',
         ];
     }
 
@@ -89,5 +79,49 @@ class WorkerType extends \yii\db\ActiveRecord
 
     public static function parent(){
        return self::find()->where(['pid'=>self::PARENT])->asArray()->all();
+    }
+
+    public static function findByList()
+    {
+        $sql = 'SELECT worker_type.worker_name,worker_type.establish_time,COUNT(worker_type.rank_name) as rank_name_value,COUNT(worker.id) as worker_value FROM worker_type LEFT JOIN worker ON worker.worker_type_id = worker_type.id WHERE worker_type.pid = 0 GROUP BY worker_type.worker_name';
+        return Yii::$app->db
+            ->createCommand($sql)
+            ->queryAll();
+    }
+
+    public static function findByListOne($where)
+    {
+        return self::find()
+            ->asArray()
+            ->select(['count(worker.id)'])
+            ->where($where)
+            ->leftJoin('worker','worker.worker_type_id = worker_type.id')
+            ->one();
+    }
+
+    public static function ByInsert($worker)
+    {
+        return Yii::$app->db
+            ->createCommand()
+            ->insert(self::tableName(),[
+                'worker_name'=> $worker['worker_name'],
+                'rank_name'  => $worker['rank_name'],
+                'min_value'  => $worker['min_value'],
+                'max_value'  => $worker['max_value'],
+                'establish_time'=>time(),
+                'status'     => self::PARENT,
+            ])->execute();
+    }
+
+    public static function ByUpdate($worker)
+    {
+        return Yii::$app->db
+            ->createCommand()
+            ->update(self::tableName(),[
+                'worker_name'=> $worker['worker_name'],
+                'rank_name'  => $worker['rank_name'],
+                'min_value'  => $worker['min_value'],
+                'max_value'  => $worker['max_value'],
+            ],['id' => $worker['id']])->execute();
     }
 }
