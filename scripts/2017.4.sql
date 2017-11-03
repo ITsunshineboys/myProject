@@ -1603,4 +1603,4 @@ CREATE TABLE `shipping_cart` (
   `goods_num` bigint(20) NOT NULL DEFAULT '1' COMMENT '购物车商品数量',
   `create_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
