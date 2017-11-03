@@ -1,6 +1,6 @@
 ;
-let waitsend_detail = angular.module("waitsend_detail_module", ['ui.bootstrap']);
-waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $stateParams,$state,$uibModal) {
+let waitsend_detail = angular.module("waitsend_detail_module", []);
+waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $stateParams,$state) {
   let config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     transformRequest: function (data) {
