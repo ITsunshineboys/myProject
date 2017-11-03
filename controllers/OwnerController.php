@@ -222,7 +222,7 @@ class OwnerController extends Controller
         $id  = trim(Yii::$app->request->post('id',''));
         $str = trim(Yii::$app->request->post('str',''));
         if ($str != null){
-            $select = 'id,toponymy,province_code,province,city_code,city,district_code,district,street';
+            $select = 'id,toponymy,province,city,district_code,district,street';
             $effect = Effect::districtSearch($str,$select);
             foreach ($effect as &$value){
                 $value['detailed_address'] = $value['province'].$value['city'].$value['district'].$value['street'];
