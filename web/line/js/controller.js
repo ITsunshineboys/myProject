@@ -1147,17 +1147,16 @@ angular.module("all_controller", ['ngCookies'])
                 console.log($scope.invoice_content)
             })
         }
+        // 点击切换购买协议的转状态
         $scope.check_agressment = false;
         $scope.chooseCheck = function () {
             $scope.check_agressment = !$scope.check_agressment;
-            console.log(11);
         };
 
         // 点击去支付判断是否填写完整
         $scope.getModel = function () {
             $scope.order_order = '';
             $scope.order_address_model = '';
-
             if( $scope.show_harvest == false && $scope.show_address == true){
                 $scope.order_address_model = '#order_address_modal';
                 $scope.order_order = '请填写完整信息';
