@@ -210,7 +210,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $query = self::find()
             ->select(['id','worker_id','create_time', 'amount', 'status','worker_type_id'])
             ->where(['uid' => $uid])
-            ->andWhere('worker_id!=0');
+        ->orderBy('create_time Desc');
         if ($status != WorkerController::STATUS_ALL) {
             if ($status == self::WORKER_ORDER_CANCELED
                 || $status == self::WORKER_ORDER_DONE
@@ -221,13 +221,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ];
                 $query->andWhere(['status' => $status]);
             }
-            if($status == self::WORKER_WORKS_AFTER){
+            if($status == self::WORKER_ORDER_NOT_BEGIN){
                 $status=[
+                    self::WORKER_ORDER_NOT_BEGIN,
                     self::WORKER_ORDER_PREPARE,
                     self::WORKER_WORKS_AFTER,
+
                 ];
                 $worker_status=implode(',',array_values($status));
-                $query->andWhere("status in ($worker_status)");
+
+              $query->andWhere("status in ($worker_status)");
             }else{
                 $query->andWhere(['status' => $status]);
             }
@@ -399,10 +402,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
         ->select(['id','uid','create_time', 'amount', 'status', 'worker_id','worker_type_id'])
         ->where(['uid' => $uid]);
         if ($status != WorkerController::STATUS_ALL) {
+            if($status==self::WORKER_ORDER_PREPARE){
+            $status=[
+                self::WORKER_ORDER_PREPARE,
+                self::WORKER_WORKS_AFTER,
+                self::WORKER_ORDER_TOYI
+            ];
+            $worker_status=implode(',',array_values($status));
+            $query->andWhere("status in ($worker_status)");
+        }else{
             $query->andWhere(['status' => $status]);
         }
 
-
+        }
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)

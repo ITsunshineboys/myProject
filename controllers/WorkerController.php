@@ -270,7 +270,7 @@ class WorkerController extends Controller
         }
 
         $request = \Yii::$app->request;
-        //工程订单-业主 status=(1,2,3,4,5)
+        //工程订单-业主 status=(1,2,5,6)
         $status = (int)$request->get('status', self::STATUS_ALL);
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
