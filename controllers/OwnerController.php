@@ -522,7 +522,6 @@ class OwnerController extends Controller
         //防水所需材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WATERPROOF_MATERIAL,$select);
-        var_dump($goods);exit;
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -653,6 +652,7 @@ class OwnerController extends Controller
         //材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL,$select);
+        var_dump($goods);exit;
         if ($goods == null){
             $code = 1061;
             return Json::encode([
