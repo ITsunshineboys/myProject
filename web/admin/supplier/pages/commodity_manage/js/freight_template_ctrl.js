@@ -121,10 +121,10 @@ var shop_style= angular.module("freight_template",[])
                         name:$scope.textContent,
                         delivery_method:+$scope.test,
                         district_codes:$scope.chooseCityid,
-                        delivery_cost_default:$scope.test == 0 ? +$scope.cost*100:{},
-                        delivery_cost_delta:$scope.test == 0 ? +$scope.dete*100:{},
-                        delivery_number_default:$scope.test == 0 ? +$scope.num:{},
-                        delivery_number_delta:$scope.test == 0 ? +$scope.ber:{}
+                        delivery_cost_default:$scope.test    == 0 ? +$scope.cost*100:{},
+                        delivery_cost_delta:$scope.test      == 0 ? +$scope.dete*100:{},
+                        delivery_number_default:$scope.test  == 0 ? +$scope.ber:{},
+                        delivery_number_delta:$scope.test    == 0 ? +$scope.num:{}
                     }
                 }).then(function successCallback(response) {
                     console.log(response);

@@ -48,11 +48,11 @@ class AuthService extends AccessControl
 
             return true;
         } else {
-            if (YII_DEBUG) {
+            $code = User::checkKickedout() ? $kickedOutcode : $denyCode;
+            if (YII_DEBUG && $code == $kickedOutcode) {
                 return true;
             }
 
-            $code = User::checkKickedout() ? $kickedOutcode : $denyCode;
             if ($this->denyCallback !== null) {
                 call_user_func($this->denyCallback, $code, $action);
             }

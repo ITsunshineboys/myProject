@@ -43,14 +43,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
     const WORKER_ORDER_NOT_BEGIN = 1;
     const WORKER_ORDER_PREPARE = 2;
     const WORKER_ORDER_READY = 3;
-    const WORKER_ORDER_ING = 4;
-    const WORKER_ORDER_DONE = 5;
+    const WORKER_ORDER_TOYI = 4;
+    const WORKER_ORDER_ING = 5;
+    const WORKER_ORDER_DONE = 6;
 
     const WORKER_ORDER_STATUS = [
         self::WORKER_ORDER_CANCELED => '完工',
         self::WORKER_ORDER_NOT_BEGIN => '未开始',
         self::WORKER_ORDER_PREPARE => '未开始',
         self::WORKER_ORDER_READY => '未开始',
+        self::WORKER_ORDER_TOYI => '未开始',
         self::WORKER_ORDER_ING => '施工中',
         self::WORKER_ORDER_DONE => '完工'
     ];
@@ -60,6 +62,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         self::WORKER_ORDER_NOT_BEGIN => '接单中',
         self::WORKER_ORDER_PREPARE => '已接单',
         self::WORKER_ORDER_READY => '申请开工',
+        self::WORKER_ORDER_TOYI => '同意开工',
         self::WORKER_ORDER_ING => '施工中',
         self::WORKER_ORDER_DONE => '已完工'
     ];
@@ -207,7 +210,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $query = self::find()
             ->select(['id','worker_id','create_time', 'amount', 'status','worker_type_id'])
             ->where(['uid' => $uid])
-            ->andWhere('worker_id!=0');
+        ->orderBy('create_time Desc');
         if ($status != WorkerController::STATUS_ALL) {
             if ($status == self::WORKER_ORDER_CANCELED
                 || $status == self::WORKER_ORDER_DONE
@@ -218,13 +221,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ];
                 $query->andWhere(['status' => $status]);
             }
-            if($status == self::WORKER_WORKS_AFTER){
+            if($status == self::WORKER_ORDER_NOT_BEGIN){
                 $status=[
+                    self::WORKER_ORDER_NOT_BEGIN,
                     self::WORKER_ORDER_PREPARE,
                     self::WORKER_WORKS_AFTER,
+
                 ];
                 $worker_status=implode(',',array_values($status));
-                $query->andWhere("status in ($worker_status)");
+
+              $query->andWhere("status in ($worker_status)");
             }else{
                 $query->andWhere(['status' => $status]);
             }
@@ -358,6 +364,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $data=self::WaterprooforderView($order->id);
                 break;
         }
+
 //        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
 //        $worker_items = [];
 //        foreach ($worker_type_items as $worker_type_item) {
@@ -390,28 +397,38 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     public static function getUserWorkerOrderList($uid, $status, $page, $page_size)
     {
+
         $query = self::find()
-        ->select(['id','create_time', 'amount', 'status', 'worker_id'])
-        ->where(['uid' => $uid]);
+        ->select(['id','uid','create_time', 'amount', 'status', 'worker_id','worker_type_id'])
+        ->where(['uid' => $uid])
+        ->orderBy('create_time Desc');
         if ($status != WorkerController::STATUS_ALL) {
+            if($status==self::WORKER_ORDER_PREPARE){
+            $status=[
+                self::WORKER_ORDER_PREPARE,
+                self::WORKER_WORKS_AFTER,
+                self::WORKER_ORDER_TOYI
+            ];
+            $worker_status=implode(',',array_values($status));
+            $query->andWhere("status in ($worker_status)");
+        }else{
             $query->andWhere(['status' => $status]);
         }
 
+        }
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->asArray()
             ->all();
-
         foreach ($arr as &$v) {
-            $worker = Worker::find()->where(['id' => $v['worker_id']])->one();
-            $worker && $worker_type_id = $worker->worker_type_id;
-            $worker_type_id && $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one();
+            $worker_type = WorkerType::find()->where(['id' => $v['worker_type_id']])->one();
             $worker_type && $v['worker_type'] = $worker_type->worker_type;
             $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
             $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
             $v['status'] = self::USER_WORKER_ORDER_STATUS[$v['status']];
+            unset($v['worker_type_id']);
         }
 
         $data = ModelService::pageDeal($arr, $count, $page, $page_size);
@@ -435,7 +452,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->select(['id','create_time', 'amount', 'status', 'worker_id'])
             ->Where(['worker_id'=>$worker_id]);
         if ($status != WorkerController::STATUS_ALL) {
-            $query->andWhere(['status' => $status]);
+            if($status==self::WORKER_ORDER_PREPARE){
+                $status=[
+                    self::WORKER_ORDER_PREPARE,
+                    self::WORKER_WORKS_AFTER,
+                    self::WORKER_ORDER_TOYI
+                ];
+                $worker_status=implode(',',array_values($status));
+                $query->andWhere("status in ($worker_status)");
+            }else{
+                $query->andWhere(['status' => $status]);
+            }
         }
 
         $count = $query->count();
@@ -477,7 +504,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         if ($order->worker_id) {
             $worker = Worker::find()
-                ->select('id,uid,nickname,icon,order_done,labor_cost_id,worker_type_id,skill_ids')
+                ->select('id,uid,nickname,icon,order_done,level,worker_type_id,skill_ids')
                 ->where(['id' => $order->worker_id])
                 ->asArray()
                 ->one();
@@ -495,19 +522,43 @@ class WorkerOrder extends \yii\db\ActiveRecord
 //            }
 //            unset($worker['skill_ids']);
 //            $worker['skills'] = $skills;
+
             $worker['mobile'] = User::find()
                 ->select('mobile')
                 ->where(['id' => $worker['uid']])
                 ->one()['mobile'];
             $worker['worker_type_id']=WorkerType::getparenttype($worker['worker_type_id']);
-            $rank=LaborCost::find()
+            $rank=WorkerRank::find()
                 ->asArray()
-                ->where(['id'=>$worker['labor_cost_id']])
-                ->select('rank')
+                ->where(['id'=>$worker['level']])
+                ->select('rank_name')
                 ->one();
+            switch ($order->status){
+                case 2:
+                    $worker['info']='工人已接单';
+                    break;
+                case 3:
+                    $worker['info']='工人申请开工';
+                    break;
+                case 4:
+                    $worker['info']='你已同意开工';
+                    break;
+                case 5:
+                    $worker['info']='工人施工中';
+                    break;
+                case 6:
+                    $worker['info']='工人已完成';
+                    break;
+            }
             $worker=array_merge($worker,$rank);
 
+
+        }elseif($order->status==0){
+            $worker['info']='你已取消订单';
+        }elseif($order->status==1){
+            $worker['info']='等待工人接单中';
         }
+
         $order_no = self::getOrderNoById($order_id);
         $works_id = 0;
         if ($order->status == self::WORKER_ORDER_DONE) {

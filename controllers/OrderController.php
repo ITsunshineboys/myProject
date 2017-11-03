@@ -16,6 +16,7 @@ use app\models\Series;
 use app\models\Style;
 use app\models\DeletedGoodsComment;
 use app\models\LogisticsTemplate;
+use app\models\UploadForm;
 use app\models\OrderAfterSale;
 use app\models\OrderGoods;
 use app\models\OrderRefund; 
@@ -39,10 +40,11 @@ use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\Controller;
 use app\models\UserNewsRecord;
 use Yii;
-
+ 
 
 class OrderController extends Controller
 {
@@ -473,15 +475,14 @@ class OrderController extends Controller
         }
         $out_trade_no =self::Setorder_no();
         $res=Alipay::effect_earnstsubmit($post,$phone,$out_trade_no);
-        if (!$res)
-        {
+       
             $code=500;
             return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
+                'code' =>200,
+                'msg' =>'ok'
 
             ]);
-        }
+        
     }
 
       public function actionGetEffectlist(){
@@ -829,74 +830,6 @@ class OrderController extends Controller
 
 
 
-
-    /**
-     * 大后台搜索界面
-     * @return string
-     */
-    public function actionOrder_search(){
-        $user = Yii::$app->user->identity;
-        if (!$user || !$user->checklogin()){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request = Yii::$app->request;
-        $page=trim($request->get('page',1));
-        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-        $keyword = trim($request->get('keyword', ''));
-        $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where='';
-        if($keyword){
-            $where .=" and z.order_no like '%{$keyword}%' or  z.goods_nam like '%{$keyword}%'";
-        }
-        if ($timeType == 'custom') {
-            $startTime = trim(Yii::$app->request->get('start_time', ''));
-            $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime))
-            ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-        }else{
-            list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
-        }
-
-        if ($startTime) {
-            $startTime = (int)strtotime($startTime);
-            $startTime && $where .= " and create_time >= {$startTime}";
-        }
-        if ($endTime) {
-            $endTime = (int)strtotime($endTime);
-            $endTime && $where .= " and create_time <= {$endTime}";
-        }
-        $sort_money=trim($request->post('sort_money',''));
-        $sort_time=trim($request->post('sort_time',''));
-        $sort=GoodsOrder::sort_lhzz_order($sort_money,$sort_time);
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
-    }
 
 
  /**
@@ -2069,47 +2002,6 @@ class OrderController extends Controller
     }
 
 
-    /**
-     * app端  商家获取订单列表
-     * @return string
-     */
-    public function  actionFindSupplierOrder(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request = Yii::$app->request;
-        $type=$request->get('type','all');
-        $page=$request->get('page','1');
-        $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
-        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-        if(!$supplier)
-        {
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        if ($type==GoodsOrder::ORDER_TYPE_ALL){
-            $where ="a.supplier_id={$supplier->id}";
-        }else{
-            $where=GoodsOrder::GetTypeWhere($type);
-            $where .=" and a.supplier_id={$supplier->id}  and order_refer = 2";
-        }
-        $sort=' a.create_time  desc';
-        $paginationData = GoodsOrder::paginationByUserorderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$sort,$user);
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
-    }
 
     /**
      * @return string
@@ -2186,6 +2078,31 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+
+         if(array_key_exists('sku', $postData)){
+            $record=UserNewsRecord::find()
+                ->where(['order_no'=>$postData['order_no']])
+                ->andWhere(['sku'=>$postData['sku']])
+                ->one();
+            if ($record) 
+            {
+                $record->status=1;
+                $record->save(false);
+            }
+        }else{
+            $record=UserNewsRecord::find()
+                ->where(['order_no'=>$postData['order_no']])
+                ->andWhere(['sku'=>$postData['sku']])
+                ->all();
+            foreach ($record as $rec)
+            {
+                if ($rec)
+                {
+                    $rec->status=1;
+                    $rec->save(false);
+                }
+            }
         }
         $arr=GoodsOrder::FindUserOrderDetails($postData,$user);
         $data=GoodsOrder::GetOrderDetailsData($arr,$user);
@@ -3275,189 +3192,10 @@ class OrderController extends Controller
 
 
 
-    /**
-     * @return string
-     */
-    public  function  actionAddBalance()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request=Yii::$app->request;
-        $money=trim($request->post('money',''));
-        $user=User::find()->where(['id'=>$user->id])->one();
-        $user->balance=10000000;
-        $user->availableamount=10000000;
-        $res=$user->save(false);
-        if ($res)
-        {
-            $code=200;
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok',
-            ]);
-        }
-
-    }
-
-   /**
-     * 测试专用
-     * @return string
-     */
-    public  function  actionAddTestRole()
-    {
-        $mobile=Yii::$app->request->post('mobile','');
-        $role_id=Yii::$app->request->post('role_id','');
-        if (!$mobile || !$role_id)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $user=User::find()->where(['mobile'=>$mobile])->one();
-        if (!$user)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $time=time();
-        $userRole=UserRole::find()->where(['user_id'=>$user->id,'role_id'=>7])->one();
-        if (!$userRole)
-        {
-            $role=new UserRole();
-            $role->role_id=$role_id;
-            $role->user_id=$user->id;
-            $role->review_status=2;
-            $role->reviewer_uid=7;
-            $role->review_apply_time=$time;
-            $role->review_time=$time;
-            $res1=$role->save(false);
-            if (!$res1)
-            {
-                $code=1051;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $code=200;
-            return Json::encode([
-                'code' => $code,
-                'msg' =>'ok'
-            ]);
-        }
-
-    }
 
 
-    public  function actionFindExpressData()
-    {
-        $data=Express::find()->asArray()->all();
-        $code=200;
-        return Json::encode([
-            'data' => $data
-        ]);
-    }
 
-      /**
-         * @return string
-         */
-        public function  actionUpdateTestGoods()
-        {
-            $sku=Yii::$app->request->post('sku','');
-            if (!$sku)
-            {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $after_sale_services='0,1,2,3,4,5,6';
-            $tran = Yii::$app->db->beginTransaction();
-            try{
-                $Goods=Goods::findBySku($sku);
-                $Goods->after_sale_services=$after_sale_services;
-                $res=$Goods->save(false);
-                if (!$res)
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $tran->commit();
-                return Json::encode([
-                    'code' =>  200,
-                    'msg'  => 'ok'
-                ]);
-            }catch (Exception $e){
-                $tran->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-        }
-     /**
-     * @return string
-     */
-    public  function  actionAddSupplierBalance()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier=Supplier::find()
-            ->where(['uid'=>$user->id])
-            ->one();
-        if (!$supplier)
-        {
-            $code=1034;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request=Yii::$app->request;
-        $money=trim($request->post('money',''));
-        if (!$money)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier->balance+=$money*100;
-        $supplier->availableamount+=$money*100;
-        $res=$supplier->save(false);
-        if ($res)
-        {
-            $code=200;
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok',
-            ]);
-        }
-    }
+  
 
    /**
      * 去付款支付宝app支付
@@ -4145,8 +3883,11 @@ class OrderController extends Controller
                 {
                     $after[]='换货';
                 }
-            }
-            $qrcode='uploads/image.png';
+            } 
+            $str = Url::to('http://common.cdlhzz.cn/line/#!/product_details?mall_id='. $Goods->id);
+            $filename = 'goods_line_'. $Goods->id;
+            StringService::generateQrCodeImage($str, $filename);
+            $qrcode=UploadForm::DIR_PUBLIC . '/goods_line_' . $Goods->id . '.png';
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
@@ -4506,6 +4247,8 @@ class OrderController extends Controller
             'data'=>GoodsOrder::switchMoney($freight*0.01)
         ]);
     }
+
+
 
 
 

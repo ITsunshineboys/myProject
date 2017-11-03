@@ -1,4 +1,4 @@
-//»ñÈ¡±¾µØjson Êı¾İ
+//è·å–æœ¬åœ°json æ•°æ®
   var myApp = angular.module("myApp",[]);
   myApp.controller("comment_controller",function($scope, $http,$filter){
     $http({
@@ -27,12 +27,12 @@
 
 
     }, function errorCallback(response) {
-        // ÇëÇóÊ§°ÜÖ´ĞĞ´úÂë
+        // è¯·æ±‚å¤±è´¥æ‰§è¡Œä»£ç 
         alert(response);
 
     });
   });
-//µ±µã»÷¼Û¸ñÊÇ°´¼Û¸ñ¸ßµÍÅÅĞò
+//å½“ç‚¹å‡»ä»·æ ¼æ˜¯æŒ‰ä»·æ ¼é«˜ä½æ’åº
 //myApp.controller("prioritycontroller",function ($scope,$http) {
 //  $scope.sales_priority=function () {
 //   this.$(".memo_pad li").on("click",function () {
@@ -43,14 +43,14 @@
 //         $scope.myFilter={
 //             limit:1
 //         };
-//        //if (this.$(".memo_pad li")==0) { //ÅĞ¶Ïµã»÷liµÄÏÂ±êÊÇ0Ê±£¬¾Í°´ÏúÁ¿ÅÅĞò
+//        //if (this.$(".memo_pad li")==0) { //åˆ¤æ–­ç‚¹å‡»liçš„ä¸‹æ ‡æ˜¯0æ—¶ï¼Œå°±æŒ‰é”€é‡æ’åº
 //        //
 //        //}
-//        //if (this.$(".memo_pad li")==1) { //ÅĞ¶Ïµã»÷liµÄÏÂ±êÊÇ0Ê±£¬¾Í°´¼Û¸ñÅÅĞò
+//        //if (this.$(".memo_pad li")==1) { //åˆ¤æ–­ç‚¹å‡»liçš„ä¸‹æ ‡æ˜¯0æ—¶ï¼Œå°±æŒ‰ä»·æ ¼æ’åº
 //        //
 //        //
 //        //}
-//        //if (this.$(".memo_pad li")==2) { //ÅĞ¶Ïµã»÷liµÄÏÂ±êÊÇ0Ê±£¬¾Í°´ºÃÆÀÂÊÅÅĞò
+//        //if (this.$(".memo_pad li")==2) { //åˆ¤æ–­ç‚¹å‡»liçš„ä¸‹æ ‡æ˜¯0æ—¶ï¼Œå°±æŒ‰å¥½è¯„ç‡æ’åº
 //        //
 //        //}
 //      },function () {

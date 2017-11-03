@@ -26,7 +26,9 @@ brand_check.controller("brand_check_ctrl",function ($scope,$http,$stateParams,$s
         review_note:$scope.review_txt
     },config).then(function (res) {
       console.log(res);
-      $state.go('brand_index',{check_flag:true})
+      setTimeout(function () {
+          $state.go('brand_index',{check_flag:true})
+      },300)
     },function (err) {
       console.log(err);
     })

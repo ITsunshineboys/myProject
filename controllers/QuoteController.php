@@ -311,19 +311,37 @@ class QuoteController extends Controller
      */
     public function actionPlotList()
     {
-        $post = \Yii::$app->request->get('post');
         $page = (int)\Yii::$app->request->get('page', 1);
         $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
-        if (substr($post, 4) == 00) {
-            $where = 'city_code = '.$post;
-            $effect = Effect::pagination($where,$page,$size);
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'OK',
-                'model' => $effect
-            ]);
-        } else {
-            $where = 'district_code = '.$post;
+
+        //   市区搜索
+        $post = \Yii::$app->request->get('post');
+        if ($post != null){
+            if (substr($post, 4) == 00) {
+                $where = 'city_code = '.$post;
+                $effect = Effect::pagination($where,$page,$size);
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'OK',
+                    'model' => $effect
+                ]);
+            } else {
+                $where = 'district_code = '.$post;
+                $effect = Effect::pagination($where,$page,$size);
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'OK',
+                    'model' => $effect
+                ]);
+            }
+        }
+
+        // 时间搜索
+        $city = (int)\Yii::$app->request->get('city');
+        $min_time = (int)strtotime(\Yii::$app->request->get('min'));
+        $max_time = (int)strtotime(\Yii::$app->request->get('max'));
+        if ($city != null && $min_time != null && $max_time != null){
+            $where = "add_time >= {$min_time} AND add_time <= {$max_time} AND city_code = {$city}";
             $effect = Effect::pagination($where,$page,$size);
             return Json::encode([
                 'code' => 200,
@@ -332,44 +350,18 @@ class QuoteController extends Controller
             ]);
         }
 
-    }
+        // 模糊搜索
+        $toponymy = \Yii::$app->request->get('toponymy');
+        if ($city != null  && $toponymy != null){
+            $where = "toponymy like '%{$toponymy}%' and city_code = {$city}";
+            $effect = Effect::pagination($where,$page,$size);
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'OK',
+                'model' => $effect
+            ]);
+        }
 
-    /**
-     * time find grabble
-     * @return string
-     */
-    public function actionPlotTimeGrabble()
-    {
-        $city = (int)\Yii::$app->request->get('city');
-        $min_time = (int)strtotime(\Yii::$app->request->get('min'));
-        $max_time = (int)strtotime(\Yii::$app->request->get('max'));
-        $page = (int)\Yii::$app->request->get('page', '1');
-        $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
-        $where = "add_time >= {$min_time} AND add_time <= {$max_time} AND city_code = {$city}";
-        $effect = Effect::pagination($where,$page,$size);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'model' => $effect
-        ]);
-    }
-
-    /**
-     * plot find grabble all
-     * @return string
-     */
-    public function actionPlotGrabble()
-    {
-        $post = \Yii::$app->request->get();
-        $page = (int)\Yii::$app->request->get('page', 1);
-        $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
-        $where = "toponymy like '%{$post['toponymy']}%' and city_code = {$post['city']}";
-        $effect = Effect::pagination($where,$page,$size);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'model' => $effect
-        ]);
     }
 
     /**

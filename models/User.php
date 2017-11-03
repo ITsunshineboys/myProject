@@ -1707,20 +1707,15 @@ class User extends ActiveRecord implements IdentityInterface
         parent::afterSave($insert, $changedAttributes);
 
         if ($insert) {
-            $username = StringService::getUniqueStringBySalt($this->mobile);
-            if (self::createHuanXinUser($username)) {
-                $this->username = $username;
-                if (!$this->save()) {
-                    $update = 'update ' . self::tableName() . ' set username = ' . $username;
-                    $where = ' where id = ' . $this->id . ';';
-                    $data = [
-                        'sql' => $update . $where,
-                        'table' => self::tableName(),
-                    ];
-                    new EventHandleService($data);
-                    Yii::$app->trigger(Yii::$app->params['events']['db']['failed']);
-                }
-            }
+            $events = Yii::$app->params['events'];
+            $event = $events['async'];
+            $data = [
+                'event' => [
+                    'name' => $events['user']['register'],
+                    'data' => $this->mobile,
+                ],
+            ];
+            new EventHandleService($event, $data);
         }
 
         $key = self::CACHE_PREFIX . $this->id;
@@ -1754,8 +1749,9 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if (!$success) {
-            new EventHandleService($username);
-            Yii::$app->trigger(Yii::$app->params['events']['3rd']['failed']['createHuanxinUser']);
+            $event = Yii::$app->params['events']['3rd']['failed']['createHuanxinUser'];
+            new EventHandleService($event, $username);
+            Yii::$app->trigger($event);
         }
 
         return $success;

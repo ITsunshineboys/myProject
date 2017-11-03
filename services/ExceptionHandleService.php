@@ -50,7 +50,7 @@ class ExceptionHandleService
     }
 
     /**
-     * Handle 403 exception
+     * Handle 1023 exception
      */
     public function handle1023()
     {

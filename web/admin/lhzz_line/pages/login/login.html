@@ -5,18 +5,18 @@
         <div class="margin_top">
             <img src="lib/images/red.png" alt="">
             <span class="txt_left">账号</span>
-            <input type="text" placeholder="请输入账号" class="enter_input" ng-model="my_username" ng-class="{'border_red':error_flag}">
+            <input type="text" placeholder="请输入账号" class="enter_input" ng-keyup="myKeyup($event)" ng-model="my_username" ng-class="{'border_red':error_flag}">
         </div>
 
         <!--密码-->
         <div class="margin_top">
             <img src="lib/images/red.png" alt="">
             <span class="txt_left">密码</span>
-            <input type="password" placeholder="请输入密码" class="enter_input" ng-model="my_password" ng-class="{'border_red':error_flag}">
+            <input type="password"  placeholder="请输入密码" class="enter_input" ng-keyup="myKeyup($event)" ng-model="my_password" ng-class="{'border_red':error_flag}">
         </div>
 
         <p class='error_red' ng-if="error_flag">*用户名或密码不正确</p>
-        <button class="login_btn" ng-click="login()">登录</button>
+        <button class="login_btn"  ng-click="login()">登录</button>
 
     </div>
 </div>

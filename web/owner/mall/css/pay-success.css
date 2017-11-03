@@ -1,0 +1,41 @@
+.pay-success {
+    padding-top: 8rem;
+    color: #4a4a4a;
+    text-align: center;
+}
+
+.pay-success .icon {
+    font-size: 5rem;
+    color: #06cb7e;
+}
+
+.pay-text {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+}
+
+.pay-link {
+    margin-top: 2.5rem;
+    font-size: 1.33rem;
+}
+
+.back-home {
+    display: inline-block;
+    margin-top: 4rem;
+    width: 15rem;
+    height: 4rem;
+    text-align: center;
+    line-height: 4rem;
+    color: #53a7f3;
+    font-size: 1.33rem;
+    border: .08rem solid #53a7f3;
+    -webkit-border-radius: 4rem;
+    -moz-border-radius: 4rem;
+    border-radius: 4rem;
+}
+
+.back-home:focus,
+.back-home:active {
+    color: #53a7f3;
+    text-decoration: none;
+}

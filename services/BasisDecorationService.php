@@ -901,6 +901,9 @@ class BasisDecorationService
                 $goods_unit = $one_goods_attr['value'];
             }
         }
+        if ($goods_unit == 0){
+            $goods_unit = 1;
+        }
 
         //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
         $mud_make['quantity'] = ceil($area * $craft / $goods_unit);

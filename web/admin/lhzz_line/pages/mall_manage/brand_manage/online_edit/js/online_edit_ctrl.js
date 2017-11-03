@@ -179,13 +179,19 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   };
   //添加拥有系列的三级
   $scope.check_item = function(item){
-    // console.log(item);
-    if(item.complete){
-      $scope.item_check.push(item);
-      // console.log($scope.item_check)
-    }else{
-      $scope.item_check.splice($scope.item_check.indexOf(item),1)
-    }
+      for(let[key,value] of $scope.item_check.entries()){
+          if(item.id==value.id){
+              $scope.item_check.splice(key,1);
+              $scope.add_three=1;
+              break;
+          }else{
+              $scope.add_three=0
+          }
+          console.log($scope.add_three);
+      }
+      if($scope.add_three!=1){
+          $scope.item_check.push(item);
+      }
     //分类提示文字
     if($scope.item_check.length<1){
       $scope.sort_check='请至少选择一个分类';
@@ -195,9 +201,13 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   };
   //删除拥有系列的三级
   $scope.delete_item = function (item) {
-    console.log(item)
-    item.complete = false;
-    $scope.item_check.splice($scope.item_check.indexOf(item),1);
+      for(let[key,value] of $scope.three.entries()){
+          console.log(value)
+          if(item.id==value.id){
+              value.complete=false;
+          }
+      }
+      $scope.item_check.splice($scope.item_check.indexOf(item),1);
     //分类提示文字
     if($scope.item_check.length<1){
       $scope.sort_check='请至少选择一个分类';
@@ -206,34 +216,9 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
     }
   };
   //默认进页面获取三级分类所具有的系类
-  for(let[key,now_value] of $scope.now_edit_list.categories.entries()){
-    $http({
-      method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/categories-have-style-series',
-      params:{
-        type:'series',
-        pid:+now_value.pid
-      }
-    }).then(function successCallback(response) {
-      for(let [key,value] of response.data.data.have_style_series_categories.entries()){
-        if(now_value.pid===value.pid && now_value.id===value.id ){
-          value.complete=true;
-          $scope.item_check.push(value);
-        }
-      }
-      for(let [key,value] of $scope.three.entries()){
-        if($scope.item_check.length === 0){
-          value.complete = false
-        }else{
-          for(let [key1,value1] of $scope.item_check.entries()){
-            if(value.id === value1.id){
-              value.complete =true
-            }
-          }
-        }
-      }
-    });
-  }
+    for(let[key,value] of $scope.now_edit_list.categories.entries()){
+        $scope.item_check.push(value);
+    }
   /*===========================系列分类结束==============================*/
 
   /*===================判断====================*/

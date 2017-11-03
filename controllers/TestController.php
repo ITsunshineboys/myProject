@@ -4,14 +4,11 @@ namespace app\controllers;
 
 use app\models\Carousel;
 use app\models\Goods;
-use app\models\GoodsCategory;
 use app\models\User;
 use app\services\ExceptionHandleService;
-use app\services\StringService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\Json;
 use yii\web\Controller;
 
 class TestController extends Controller
@@ -132,7 +129,8 @@ class TestController extends Controller
     public function actionRegisterUser()
     {
         $res = User::register(Yii::$app->request->post(), false);
-        return is_array($res) ? 'ok' : 'failed';
+        echo is_array($res) ? 'ok' : 'failed';
+        Yii::$app->trigger(Yii::$app->params['events']['async']);
     }
 
     /**
