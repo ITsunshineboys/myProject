@@ -174,7 +174,7 @@ header div img{
 .need_required{
     height: 4rem;
     line-height: 4rem;
-    /*position: relative;*/
+    position: relative;
     bottom: .5rem;
 }
 .need_required span:nth-child(2){
@@ -195,7 +195,8 @@ header div img{
     width: 32rem;
     height: 4rem;
     /*line-height: 4rem;*/
-    position: absolute;
+    position: fixed;
+    background-color: white;
     bottom: 0;
 }
 .go_play div{
@@ -297,9 +298,38 @@ header div img{
     outline: none;
     /*opacity: .6;*/
 }
+/*协议模态框*/
+#agreement_body{
+    width: 32rem;
+    margin-top: -1rem;
+}
+#agreement{
+    height: 58rem;
+}
+#agreement_header {
+    height: 4rem;
+    line-height: 4rem;
+}
+#agreement_header span{
+    text-align: center;
+    font-size: 1.5rem;
+    vertical-align: middle;
+    margin-left: 10.5rem;
+}
+#agreement_header img{
+    vertical-align: middle;
+}
+.agreement_div{
+    font-size: 1.3rem;
+    padding-top: 1rem;
+}
+.agreement_div p{
+    padding-left: 1rem;
+}
 /*弹出 判断框*/
 #sm_model ,#address_model{
     width: 21rem;
+    height: 12rem;
 }
 #num_modal, #address_order_modal{
     height: 12rem;
@@ -359,5 +389,18 @@ header div img{
     margin-top: 31rem;
 }
 
-
+/*协议/*/
+.agreement{
+    font-size: 1.2rem;
+    margin-bottom: 5rem;
+}
+.agreement input{
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-left: 1.5rem;
+    /*background-color: #0a67fb;*/
+}
+.agreement_span{
+    color:#3F51B5 ;
+}
 
