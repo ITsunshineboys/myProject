@@ -57,4 +57,9 @@ angular.module('goods_detail_module',[])
             $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku})
         }
     }
+
+    //返回订单
+    $scope.back_list=function () {
+        $state.go('order_manage',{tabflag:$scope.tabflag});//返回待收货列表
+    };
 });
