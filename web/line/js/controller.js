@@ -1227,7 +1227,7 @@ angular.module("all_controller", ['ngCookies'])
                                 };
                                 $http.post('http://test.cdlhzz.cn:888/order/alipaylinesubmit',{
                                     goods_name: $scope.title,
-                                    order_price:$scope.allCost,
+                                    order_price:+$scope.allCost,
                                     goods_num:+$scope.shopNum,
                                     goods_id:+$scope.mall_id,
                                     address_id:+$scope.address_id,
