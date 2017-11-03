@@ -1594,6 +1594,7 @@ CREATE TABLE `worker_rank` (
   `max_value` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `shipping_cart` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` bigint(20) NOT NULL,
