@@ -40,7 +40,7 @@ class Alipay extends  ActiveRecord
      * @param $phone
      * @param $out_trade_no
      */
-    public  static function  effect_earnstsubmit($post,$phone,$out_trade_no)
+    public  static function  effect_earnstsubmit($post,$phone,$out_trade_no) 
     {
         $notify_url='http://test.cdlhzz.cn:888/order/alipayeffect_earnstnotify';
         $return_url='http://common.cdlhzz.cn/owner/mall/index.html#!/pay_success';
