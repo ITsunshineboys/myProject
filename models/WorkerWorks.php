@@ -67,7 +67,7 @@ class WorkerWorks extends \yii\db\ActiveRecord
             ->leftJoin('work_result_img as wrj','wr.id=wrj.work_result_id')
             ->leftJoin('worker_order as wo','ww.worker_id=wo.worker_id')
             ->where(['ww.id'=>$worker_id])
-            ->andWhere(['is_old'=>1])
+            ->andWhere(['wo.is_old'=>1])
             ->orderBy('wo.end_time Desc')
             ->one();
         if(!$query){

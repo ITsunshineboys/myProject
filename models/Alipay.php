@@ -40,10 +40,10 @@ class Alipay extends  ActiveRecord
      * @param $phone
      * @param $out_trade_no
      */
-    public  static function  effect_earnstsubmit($post,$phone,$out_trade_no)
+    public  static function  effect_earnstsubmit($post,$phone,$out_trade_no) 
     {
         $notify_url='http://test.cdlhzz.cn:888/order/alipayeffect_earnstnotify';
-        $return_url='http://test.cdlhzz.cn:888/line/effect_earnstsuccess_pay';
+        $return_url='http://test.cdlhzz.cn:888/owner/mall/index.html#!/pay_success';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $str=$post['province_code'].'&'.$post['city_code'].'&'.$post['district_code'].'&'.$post['bedroom'].'&'.$post['toilet'].'&'.$post['kitchen'].'&'.$post['sittingRoom_diningRoom'].'&'.$post['window'].'&'.$post['high'].'&'.$post['street'].'&'.$post['series'].'&'.$post['style'].'&'.$post['stairway'].'&'.$post['stair_id'].'&'.$post['toponymy'].'&'.$post['particulars'].'&'.$post['area'].'&'.$post['phone'].'&'.$post['name'].'&'.$post['requirement'];
         $total_amount=0.01;
@@ -61,26 +61,6 @@ class Alipay extends  ActiveRecord
         $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
     }
 
-    public  static function  effect_earnstsubmit($effect_id,$name,$phone,$out_trade_no)
-    {
-        $notify_url='http://test.cdlhzz.cn:888/order/alipayeffect_earnstnotify';
-        $return_url='http://test.cdlhzz.cn:888/line/effect_earnstsuccess_pay';
-        $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
-        $str=$effect_id.'&'.$name.'&'.$phone;
-        $total_amount=0.01;
-        $passback_params=urlencode($str);
-        //超时时间
-        $timeout_express="1m";
-        $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
-        $payRequestBuilder->setBody('此笔订单为样板间定金');
-        $payRequestBuilder->setSubject('样板间申请费');
-        $payRequestBuilder->setOutTradeNo($out_trade_no);
-        $payRequestBuilder->setTotalAmount($total_amount);
-        $payRequestBuilder->setTimeExpress($timeout_express);
-        $payRequestBuilder->setPassback_params($passback_params);
-        $payResponse = new AlipayTradeService($config);
-        $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
-    }
     public function Alipaylinenotify(){
         $notify_url="http://test.cdlhzz.cn:888/order/alipaylinenotify";
         $return_url="http://test.cdlhzz.cn:888/line/success_pay";

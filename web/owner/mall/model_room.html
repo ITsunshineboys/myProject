@@ -1,0 +1,213 @@
+<header flex="box:mean cross:center">
+    <p>
+        <a class="return_btn" ui-sref="home">
+            <img src="images/mall_nav_return.png" class="in_span">
+        </a>
+    </p>
+    <p class="pic_span">智能报价</p>
+    <div class="cur_location">
+        <a href="javascript: void (0);">
+            <i class="icon icon-map-marker icon-3x map"></i>
+            <span>成都</span>
+        </a>
+    </div>
+</header>
+
+<div class="back clearfix">
+    <!--小区信息-->
+    <div class="background_w clearfix quarters_small animated fadeInUp" style="animation-delay: 0.15s;">
+        <div class="shu"></div>
+        <p>小区信息</p>
+        <span class="choose_quarter">小区选择</span>
+        <img src="images/big.png" alt=""/>
+        <a >
+            <input type="text" readonly ng-model="params.toponymy" ui-sref="nodata.cell_search"/><br/>
+        </a>
+        <div class="address_div" flex="box:first">
+            <span class="quarters_adress">小区地址</span>
+            <span class="quarters">{{params.street}}</span>
+        </div>
+    </div>
+
+    <!--房屋信息-->
+    <div class="background_w housing_information animated fadeInUp" style="animation-delay: 0.3s;">
+        <div class="shu"></div>
+        <p>房屋信息</p>
+        <h2>户型选择</h2>
+        <div class="list_dis">
+            <ul>
+                <li ng-repeat="obj in huxing" class="huxing" ng-class="{'active': activeObj.id === obj.id}" ng-click="huxingFun(obj)">
+                    <img ng-src="{{'http://test.cdlhzz.cn:888/' + obj.house_image}}"/><br/>
+                    <span>{{obj.particulars}} {{obj.area}}<sup>2</sup></span>
+                </li>
+            </ul>
+        </div>
+        <div class="comment_height">
+            <ul>
+                <li>层高 <span>{{activeObj.high}}m</span></li>
+                <li>飘窗 <span>{{activeObj.window}}m</span></li>
+                <li class="choose_stairs">
+                    <span class="choose_span">楼梯选择</span>
+                    <label>
+                        <input type="radio" ng-checked="activeObj.stairway == 1" name="stairway"/>
+                        <span ng-show="activeObj.stairway != 1"></span>
+                        <img class="checked-active" src="images/mall_list_radio.png" ng-show="activeObj.stairway == 1"/>
+                        <span class="have">有</span>
+                    </label>
+                    <label>
+                        <input type="radio" ng-checked="activeObj.stairway == 0" name="stairway"/>
+                        <span ng-show="activeObj.stairway != 0"></span>
+                        <img class="checked-active" src="images/mall_list_radio.png" ng-show="activeObj.stairway == 0"/>
+                        <span class="no">无</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!--结构-->
+        <div class="structure" ng-show="activeObj.stairway == 1">
+            <ul>
+                <li ng-repeat="item in stairsList">
+                    <label>
+                        <input type="radio" name="stairs" ng-checked="activeObj.stair_id == item.id" ng-value="item.id"
+                               ng-click="stairsFun(item)"/>
+                        <span ng-show="activeObj.stair_id != item.id"></span>
+                        <img class="checked-active" src="images/mall_list_radio.png" ng-show="activeObj.stair_id == item.id"/>
+                        <span>{{item.attribute}}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--系类选择-->
+    <div class="background_w">
+        <div class="series clearfix">
+            <div class="shu"></div>
+            <p>系列选择</p>
+            <ul>
+                <li ng-repeat="item in seriesList">
+                    <label>
+                        <input type="radio" name="series" ng-checked="item.id == activeObj.case_picture[0].series_id"
+                               ng-click="seriesFun(item)">
+                        <span ng-show="item.id != activeObj.case_picture[0].series_id"></span>
+                        <img class="checked-active" src="images/mall_list_radio.png" ng-show="item.id == activeObj.case_picture[0].series_id"/>
+                        <span>{{item.series}}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!--适合人群-->
+        <div class="tag">
+            <span ng-repeat="item in seriesDesc.theme.split(',')">{{item}}</span>
+        </div>
+        <div class="fit">
+            <h1>适合人群</h1>
+            <p>{{seriesDesc.intro}}</p>
+        </div>
+    </div>
+
+    <div class="background_w">
+        <div class="choose_style clearfix">
+            <div class="shu"></div>
+            <p>风格选择</p>
+            <ul>
+                <li ng-repeat="item in styleList">
+                    <button type="button" ng-class="{'btn_checked':(item.id == activeObj.case_picture[0].style_id)}"
+                            ng-click="styleFun(item)">{{item.style}}</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="background_w" ng-show="activeObj.type == 1">
+        <div class="choose_style clearfix">
+            <div class="shu"></div>
+            <p>样板间实图</p>
+            <div class="carousel">
+                <div id="swiperList" class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" style="height: 16rem;"
+                             ng-repeat="item in roomPicture.split(',')">
+                            <img style="width: 100%;height: 100%;" ng-src="{{'http://test.cdlhzz.cn:888/' + item}}">
+                        </div>
+                    </div>
+                    <!-- 如果需要分页器 -->
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+        <!--轮播图-->
+    </div>
+
+    <!--材料选择-->
+    <div class="background_w clearfix item_masonry" ng-show="activeObj.type == 1">
+        <div class="shu"></div>
+        <p>材料选择</p>
+        <span class="comment_edit">点击以下版块查看详情</span>
+        <div id="masonry" class="masonry clearfix">
+            <!--辅材-->
+            <div class="column">
+                <div class="box" ng-repeat="obj in materials" ng-if="$even == true">
+                    <h1 class="title_p">
+                        {{obj.title}}
+                        <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
+                    </h1>
+                    <span class="pic" ng-show="obj.goods.length != 0">{{'¥' + obj.totalMoney.toFixed(2)}}</span>
+                    <ul class="decoration" ng-show="obj.goods.length != 0">
+                        <li ng-repeat="data in obj.goods">
+                            <span>{{data.goods_second}}</span>
+                            <br ng-show="$parent.$index != 0">
+                            <span class="brand" ng-show="$parent.$index != 0">{{data.goods_brand_name}}</span>
+                            <span class="pic_q">{{'¥' + data.goods_original_price}}</span>
+                        </li>
+                    </ul>
+                    <button class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</button>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box" ng-repeat="obj in materials" ng-if="$odd == true">
+                    <h1 class="title_p">
+                        {{obj.title}}
+                        <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
+                    </h1>
+                    <span class="pic" ng-show="obj.goods.length != 0">{{'¥' + obj.totalMoney.toFixed(2)}}</span>
+                    <ul class="decoration" ng-show="obj.goods.length != 0">
+                        <li ng-repeat="data in obj.goods">
+                            <span>{{data.goods_second}}</span>
+                            <br ng-show="$parent.$index != 1">
+                            <span class="brand" ng-show="$parent.$index != 1">{{data.goods_brand_name}}</span>
+                            <span class="pic_q">{{'¥' + data.goods_original_price}}</span>
+                        </li>
+                    </ul>
+                    <button class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--特殊要求-->
+    <div class="background_w clearfix special_requirements" ng-show="activeObj.type == 1">
+        <div class="shu"></div>
+        <p>特殊要求</p>
+        <textarea class="main_text" placeholder="请输入你的要求" ng-model="demand.text"></textarea>
+        <span>0/300</span>
+    </div>
+
+    <!--尾部结算-->
+    <div class="background_w footer_settlement" flex="cross:center" ng-show="activeObj.type == 1">
+        <div class="footer_set" flex-box="1">
+            <p>
+                <span class="first_span">{{'¥' + preferential.toFixed(2)}}</span>
+                <del class="second_span">{{'¥' + price.toFixed(2)}}</del>
+            </p>
+            <p class="three_span">已包含工人费用，未包含施工图费用</p>
+        </div>
+        <button class="primary_btn" flex-box="0" ng-click="payDeposit()">申请样板间</button>
+    </div>
+
+    <div class="application" ng-show="activeObj.type == 0">
+        <button type="button" ng-click="payDeposit()">申请新样板间</button>
+    </div>
+</div>

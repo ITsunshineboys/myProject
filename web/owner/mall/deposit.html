@@ -1,0 +1,38 @@
+<div class="pay-content">
+    <header flex="box:mean cross:center">
+        <p>
+            <a class="return_btn" href="javascript: history.back();">
+                <img src="images/mall_nav_return.png" class="in_span">
+            </a>
+        </p>
+        <p class="pic_span">申请</p>
+        <div></div>
+    </header>
+
+    <form class="contact-us animated bounceInDown">
+        <label flex="cross:center box:first">
+            <span>姓名</span>
+            <input type="text" placeholder="请输入你的姓名" maxlength="8" ng-model="user.name">
+        </label>
+        <label flex="cross:center box:first">
+            <span>+86</span>
+            <input type="text" placeholder="请输入方便联系到你的手机号" maxlength="11" ng-model="user.phone">
+        </label>
+    </form>
+    <button class="pay animated bounceInUp" type="button" ng-disabled="!isPay" ng-click="payMoney()">
+        <span>支付定金</span>
+    </button>
+    <p class="help animated bounceInUp">
+        <a href="javascript: void (0);">什么是定金？</a>
+    </p>
+</div>
+
+<div class="model" flex="main:center cross:center" ng-show="isShow">
+    <div class="model-body">
+        <div flex="main:center cross:center dir:top">
+            <p>手机号输入不正确</p>
+            <p>请重新输入</p>
+        </div>
+        <button ng-click="isShow = false">确认</button>
+    </div>
+</div>

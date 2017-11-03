@@ -7,6 +7,14 @@ login.controller('login_ctrl',function ($scope,$http,$state) {
             return $.param(data)
         }
     };
+    //Enter 键盘事件
+    $scope.myKeyup = function(e){
+        var keycode = window.event?e.keyCode:e.which;
+        if(keycode==13){
+            $scope.login();
+        }
+    };
+    // $scope.myKeyup();
     $scope.error_flag=false;
   $scope.login=function () {
     $http.post(baseUrl+'/site/admin-login',{
@@ -23,6 +31,8 @@ login.controller('login_ctrl',function ($scope,$http,$state) {
     },function (error) {
       console.log(error)
     });
-
   }
+  // if(keycode==13){
+  //     console.log(1111)
+  // }
 });

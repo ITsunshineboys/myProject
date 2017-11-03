@@ -24,30 +24,13 @@
             <ul>
                 <li class="animated fadeInUp" ng-repeat="item in recommend_list | orderBy:'sort'"
                 ng-style="{animationDelay:($index==0)?'0s':(($index==1)?'0.15s':'0.3s')}" >
-                    <a ui-sref="nodata.quotation({'item':item})">
+                    <a ui-sref="modelRoom({code: item.district_code, toponymy: item.toponymy, street: item.street})">
                         <!--<span>10.1万</span>-->
                         <!--<h1>今日花园</h1>-->
                         <!--<p>60m<sup>2</sup> 一室一厅一卫 齐家风格 现代简约</p>-->
-                        <img ng-src="http://test.cdlhzz.cn:888/{{item.image}}" style="height: 14.13rem;" alt=""/>
+                        <img ng-src="http://test.cdlhzz.cn:888/{{item.image}}" style="height: 14.13rem;"/>
                     </a>
                 </li>
-                <!--<li class="animated fadeInUp" style="animation-delay: 0.15s;">-->
-                    <!--<a ui-sref="have_data({name:'花好月圆',address:'四川省成都市蜀汉路东89号',pic_one:'116688',pic_two:'138280'})">-->
-                        <!--<span>11.6万</span>-->
-                        <!--<h1>花好月圆</h1>-->
-                        <!--<P>97m<sup>2</sup> 二室一厅双卫 享家风格 欧美风</P>-->
-                        <!--<img src="images/2.png" alt=""/>-->
-                    <!--</a>-->
-                <!--</li>-->
-                <!--<li class="animated fadeInUp" style="animation-delay: 0.3s;">-->
-                    <!--<a ui-sref="have_data({name:'蓝光COCO时代',address:'四川省成都市青羊区清百路110号',pic_one:'168135',pic_two:'185280'})">-->
-                        <!--<span>16.8万</span>-->
-                        <!--<h1>蓝光coco时代</h1>-->
-                        <!--<P>108m<sup>2</sup> 三室一厅双卫 齐家风格 欧美风</P>-->
-                        <!--<img src="images/3.png" alt=""/>-->
-                    <!--</a>-->
-                <!--</li>-->
-
             </ul>
         </div>
     </section>

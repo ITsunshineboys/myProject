@@ -280,6 +280,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
         if ($worker_kind_details == null){
             $code = 1057;
@@ -1619,7 +1620,7 @@ class OwnerController extends Controller
             foreach ($data as $one_goods){
                 $sku [] = $one_goods['goods_code'];
             }
-            $select = "id,sku,platform_price,purchase_price_decoration_company,logistics_template_id,sku";
+            $select = "goods.id,sku,goods.platform_price,goods.purchase_price_decoration_company,goods.logistics_template_id,goods.sku,goods_brand.name";
             $goods = Goods::findBySkuAll($sku,$select);
             if ($goods == null){
                 $code = 1061;
@@ -1636,6 +1637,7 @@ class OwnerController extends Controller
                         $case_works_datum['goods_id'] = $one_goods['id'];
                         $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
                         $case_works_datum['goods_original_price'] = $cost * $case_works_datum['goods_quantity'];
+                        $case_works_datum['goods_brand_name'] = $one_goods['name'];
                     }
                 }
             }

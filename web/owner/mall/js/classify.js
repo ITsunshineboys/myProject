@@ -1,6 +1,5 @@
 //        $("#p").text(GetQueryString("txt"));
 $("#p").text(decodeURI(GetQueryString('txt')));
-console.log("url上带的值=="+decodeURI(GetQueryString('txt')));
 //tab
 //tab页面的动态初始化
 function int(obj,now_class){
@@ -59,6 +58,3 @@ function smallTab() {
 $(function(){
     smallTab();
 });
-app.controller("classify",function($http,$scope){
-
-})

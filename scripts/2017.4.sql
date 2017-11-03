@@ -1208,14 +1208,10 @@ CREATE TABLE `worker_type` (
   `pid` int(1) NOT NULL DEFAULT '0' COMMENT '所属上级工种id',
   `worker_name` varchar(20) NOT NULL DEFAULT '' COMMENT '工种名字',
   `image` varchar(255) DEFAULT NULL COMMENT '工程图片',
-  `rank_name` varchar(20) DEFAULT NULL COMMENT '等级名称',
-  `min_value` int(10) DEFAULT NULL COMMENT '最小值',
-  `max_value` int(11) DEFAULT NULL COMMENT '最大值',
   `establish_time` int(11) DEFAULT NULL COMMENT '创建日期',
-  `status` tinyint(4) DEFAULT NULL COMMENT '0：下架，1：上架',
+  `status` tinyint(4) DEFAULT '0' COMMENT '0：下架，1：上架',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `labor_cost_detail`;
 
@@ -1583,8 +1579,18 @@ CREATE TABLE `user_news_record` (
   `title` varchar(100) NOT NULL,
   `content` varchar(255) NOT NULL,
   `send_time` int(11) NOT NULL,
-  `order_no` bigint(30) NOT NULL,
+  `order_no` varchar(30) NOT NULL,
   `sku` bigint(30) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未读 1:已读',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 11.2 start
+CREATE TABLE `worker_rank` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `worker_type_id` int(11) DEFAULT NULL,
+  `rank_name` char(20) DEFAULT NULL COMMENT '等级名称',
+  `min_value` int(11) DEFAULT NULL,
+  `max_value` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

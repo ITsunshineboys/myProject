@@ -1,12 +1,12 @@
-var url="http://test.cdlhzz.cn:888/";
-// var url="http://local.test.cdlhzz.cn/";
-var app=angular.module("app",[]);
-//»ñÈ¡urlÖĞµÄ£¿ºÅºóÃæµÄÄÚÈİ
+const url = "http://test.cdlhzz.cn:888";
+// const url="http://local.test.cdlhzz.cn/";
+
+//è·å–urlä¸­çš„ï¼Ÿå·åé¢çš„å†…å®¹
 function GetQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    //»ñÈ¡urlÖĞ"?"·ûºóµÄ×Ö·û´®²¢ÕıÔòÆ¥Åä
-    var context = "";
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    let r = window.location.search.substr(1).match(reg);
+    //è·å–urlä¸­"?"ç¬¦åçš„å­—ç¬¦ä¸²å¹¶æ­£åˆ™åŒ¹é…
+    let context = "";
     if (r != null)
         context = r[2];
     reg = null;

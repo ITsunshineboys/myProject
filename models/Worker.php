@@ -193,9 +193,9 @@ class Worker extends \yii\db\ActiveRecord
         $query=new Query();
         $array=$query
             ->from('worker as w')
-            ->select('w.examine_status,w.icon,w.nickname,w.comprehensive_score,lc.rank,lc.worker_kind,u.aite_cube_no')
+            ->select('w.examine_status,w.icon,w.nickname,w.comprehensive_score,wr.rank_name,u.aite_cube_no')
             ->leftJoin('user as u','w.uid=u.id')
-            ->leftJoin('labor_cost as lc','w.labor_cost_id=lc.id')
+            ->leftJoin('worker_rank as wr','wr.id=w.level')
             ->where(['w.uid'=>$uid])
             ->one();
             $array['examine_status']=self::STATUSES[$array['examine_status']];
@@ -271,20 +271,21 @@ class Worker extends \yii\db\ActiveRecord
     public static function workerinfos($worker_id){
         $query=new Query();
         $array=$query->from('worker ')
-            ->select('uid,worker_type_id,nickname,province_code,city_code,work_year,feedback,signature,skill_ids,order_done,labor_cost_id,')
+            ->select('uid,worker_type_id,nickname,province_code,city_code,work_year,feedback,signature,skill_ids,order_done,level,')
             ->where(['id'=>$worker_id])
             ->one();
         if($array){
             $array['province']=District::findByCode($array['province_code'])->name;
             $array['city']=District::findByCode($array['city_code'])->name;
+
             $worker_type=WorkerType::getparenttype($array['worker_type_id']);
-            $rank=LaborCost::find()->where(['id'=>$array['labor_cost_id']])->one()->rank;
+            $rank=WorkerRank::find()->where(['id'=>$array['level']])->one()->rank_name;
             $array['worker_type_rank']=$rank.$worker_type;
             unset($array['worker_type_id']);
             unset($array['skill_ids']);
             unset($array['province_code']);
             unset($array['city_code']);
-            unset($array['labor_cost_id']);
+            unset($array['level']);
             $skills=WorkerSkill::getWorkerSkillname($array['uid']);
             foreach ($skills as $k=>&$vule){
                 $array['skills'][$k]=$vule;

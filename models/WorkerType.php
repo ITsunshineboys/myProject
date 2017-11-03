@@ -33,10 +33,6 @@ class WorkerType extends \yii\db\ActiveRecord
         return [
             [['pid'], 'integer'],
             [['worker_name'], 'string','max'=>20],
-            [['rank_name'], 'string','max'=>20],
-            [['min_value'], 'integer','max'=>10],
-            [['max_value'], 'integer','max'=>10],
-            [['image'], 'string', 'max' => 255],
         ];
     }
 
@@ -83,10 +79,13 @@ class WorkerType extends \yii\db\ActiveRecord
 
     public static function findByList()
     {
-        $sql = 'SELECT worker_type.worker_name,worker_type.establish_time,COUNT(worker_type.rank_name) as rank_name_value,COUNT(worker.id) as worker_value FROM worker_type LEFT JOIN worker ON worker.worker_type_id = worker_type.id WHERE worker_type.pid = 0 GROUP BY worker_type.worker_name';
-        return Yii::$app->db
-            ->createCommand($sql)
-            ->queryAll();
+        $sql = 'SELECT `worker_type`.`worker_name`,`worker_type`.`establish_time`,`worker_type`.`status`,COUNT(worker_rank.rank_name) AS number ,COUNT(worker.id) AS quantity FROM `worker_type` LEFT JOIN `worker_rank` ON worker_type.id = worker_rank.worker_type_id LEFT JOIN `worker` ON worker.worker_type_id = worker_type.id GROUP BY worker_type.worker_name';
+        $rows = Yii::$app->db->createCommand($sql)->queryAll();
+        foreach ($rows as &$one_row){
+            $one_row['establish_time'] = date('Y-m-d H:i:s',$one_row['establish_time']);
+        }
+
+        return $rows;
     }
 
     public static function findByListOne($where)
@@ -105,9 +104,6 @@ class WorkerType extends \yii\db\ActiveRecord
             ->createCommand()
             ->insert(self::tableName(),[
                 'worker_name'=> $worker['worker_name'],
-                'rank_name'  => $worker['rank_name'],
-                'min_value'  => $worker['min_value'],
-                'max_value'  => $worker['max_value'],
                 'establish_time'=>time(),
                 'status'     => self::PARENT,
             ])->execute();
@@ -119,9 +115,6 @@ class WorkerType extends \yii\db\ActiveRecord
             ->createCommand()
             ->update(self::tableName(),[
                 'worker_name'=> $worker['worker_name'],
-                'rank_name'  => $worker['rank_name'],
-                'min_value'  => $worker['min_value'],
-                'max_value'  => $worker['max_value'],
             ],['id' => $worker['id']])->execute();
     }
 }

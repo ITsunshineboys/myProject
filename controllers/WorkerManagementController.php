@@ -8,8 +8,10 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use app\models\Worker;
 use app\models\WorkerOrder;
+use app\models\WorkerRank;
 use app\models\WorkerType;
 use app\models\workType;
 use app\services\ExceptionHandleService;
@@ -115,6 +117,7 @@ class WorkerManagementController extends Controller
                 ]);
             } else {
                 (new WorkerType())->deleteAll(['id'=>$del_id]);
+                (new WorkerRank())->deleteAll(['worker_type_id'=>$del_id]);
             }
         }
         return Json::encode([
@@ -130,23 +133,35 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkerTypeAdd()
     {
-        $post = \Yii::$app->request->post();
-        foreach ($post['level'] as $one_post)
-        {
-            $worker_type = (new WorkerType())->ByInsert($one_post);
-        }
-        if (!$worker_type)
-        {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        return Json::encode([
-           'code' => 200,
-           'msg' => 'ok',
-        ]);
+       $worker_type =  new  WorkerType();
+       $worker_type->worker_name = \Yii::$app->request->post('worker','');
+       $worker_type->establish_time = time();
+       $worker_type->status = WorkerType::PARENT;
+       if (!$worker_type->save()){
+           $code = 1000;
+           return Json::encode([
+              'code' => $code,
+              'msg' => \Yii::$app->params['errorCodes'][$code],
+           ]);
+       }
+        $id = $worker_type->attributes['id'];
+       $post = \Yii::$app->request->post();
+       foreach ($post['rank'] as $one_post){
+           $worker_rank = (new WorkerRank())->ByInsert($id,$one_post['rank'],$one_post['min'],$one_post['max']);
+       }
+       if (!$worker_rank){
+           $code = 1000;
+           return Json::encode([
+               'code' => $code,
+               'msg' => \Yii::$app->params['errorCodes'][$code],
+           ]);
+       }
+
+       return Json::encode([
+          'code' => 200,
+          'msg' => 'OK',
+       ]);
+
     }
 
     /**
@@ -158,15 +173,50 @@ class WorkerManagementController extends Controller
         $post = \Yii::$app->request->post();
         //  修改工种类型
         if (isset($post['edit'])){
-            foreach ($post['edit'] as $one_post){
-                (new WorkerType())->ByUpdate($one_post);
+            $worker = WorkerType::findOne(['id'=>$post['edit']['id']]);
+            $worker->worker_name = $post['edit']['worker_name'];
+            if (!$worker->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            foreach ($post['edit']['level'] as $one_post){
+               $rank = (new WorkerRank())->ByUpdate($one_post);
+            }
+            if (!$rank){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
             }
         }
 
         //  添加工种类型
         if (isset($post['add'])){
-            foreach ($post['add'] as $one_post){
-                (new WorkerType())->ByInsert($one_post);
+            $worker_type =  new  WorkerType();
+            $worker_type->worker_name = $post['add']['worker'];
+            $worker_type->establish_time = time();
+            $worker_type->status = WorkerType::PARENT;
+            if (!$worker_type->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            $id = $worker_type->attributes['id'];
+            foreach ($post['add']['rank'] as $one_post){
+                $worker_rank = (new WorkerRank())->ByInsert($id,$one_post['rank'],$one_post['min'],$one_post['max']);
+            }
+            if (!$worker_rank){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
             }
         }
 
@@ -176,9 +226,113 @@ class WorkerManagementController extends Controller
         ]);
     }
 
+    /**
+     *
+     * @return string
+     */
+    public function actionWorkerList()
+    {
+        $worker_ = trim(\Yii::$app->request->get('id',''));
+        $worker_type = WorkerType::find()
+            ->select('id,worker_name')
+            ->where(['and',['status'=>1],['pid'=>0]])
+            ->asArray()
+            ->all();
+
+        if ($worker_ != null){
+            $worker_rank = WorkerRank::find()
+                ->select('id,rank_name')
+                ->where(['worker_type_id'=>$worker_])
+                ->asArray()
+                ->all();
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'data' => [
+                    'worker' => $worker_type,
+                    'level' => $worker_rank,
+                ],
+            ]);
+        }
+
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => [
+                'worker' => $worker_type,
+            ],
+        ]);
+    }
+
     public function actionWorkerAdd()
     {
-        $post = \Yii::$app->request->post();
+        $phone = (int)trim(\Yii::$app->request->post('phone',''));
+        //  手机号是否正确
+        if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
+            $code = 1070;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        // 该用户是否注册
+        $user = User::find()->select('id')->where(['mobile'=>$phone])->asArray()->one();
+        if ($user == null){
+            $code = 1010;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        // 该手机号是否注册工人
+        $worker = Worker::find()->where(['uid'=>$user])->one();
+        if ($worker != null){
+            $code = 1071;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        // 身份证号码验证
+        $identity_no = \Yii::$app->request->post('identity_no','');
+        if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $identity_no)) {
+            $code = 1072;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        // 检测是否注册
+        $identity_no_ = User::find()->where(['identity_no'=>$identity_no])->one();
+        if (!$identity_no_){
+            $code = 1073;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+
+        $uid = User::find()->select('id')->where(['mobile'=>$phone])->one();
+        $worker = new Worker();
+        $worker->uid = $uid->id;
+        $worker->worker_type_id = (int)trim(\Yii::$app->request->post('worker_type_id',''));
+        $worker->province_code = (int)trim(\Yii::$app->request->post('province',''));
+        $worker->city_code = (int)trim(\Yii::$app->request->post('city',''));
+        $worker->level = (int)trim(\Yii::$app->request->post('worker_rank_id',''));
+        $worker->nickname = trim(\Yii::$app->request->post('worker_type_id',''));
+
+        $user_ = new User();
 
     }
 

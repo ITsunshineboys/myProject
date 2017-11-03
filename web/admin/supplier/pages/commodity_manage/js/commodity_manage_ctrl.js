@@ -444,12 +444,14 @@ let commodity_manage = angular.module("commodity_manage", [])
                     }
                 }
             });
+            $scope.threeColor='';
         };
         //添加拥有系列的三级
         $scope.check_item = function (item) {
             $scope.item_check = [];
             $scope.threeColor = item;
             $scope.item_check.push(item);
+            console.log(item);
         };
 
         /*------------分类确定----------------*/
@@ -457,7 +459,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         $scope.add_confirm_red = false;//提示文字默认为false
         $scope.shop_style_go = function () {
             $scope.category_id = '';
-            if ($scope.item_check.length != 0) {
+            if ($scope.item_check.length != 0 && $scope.threeColor!='') {
                 $scope.add_confirm_modal = 'modal';
                 $scope.category_id = $scope.item_check[0].id;
                 setTimeout(function () {
@@ -476,6 +478,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //取消初始化
         $scope.shop_add_close = function () {
+            $scope.add_confirm_red = false;//提示文字默认为false
             $scope.item_check = [];
             //获取一级
             $http({

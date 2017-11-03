@@ -4,7 +4,7 @@ const app = angular.module("app", ["ui.router", "shop_style", "freight_template"
   /*三阶段王杰---开始*/
     "supplier_index", "login","shop_decoration_module","supplier_wallet_module",
     "intelligent_directive","shop_data_module","wallet_detail_module","income_pay_module",
-    "set_password_module",
+    "set_password_module","waitsend_detail_module","goods_detail_module",
   /*三阶段王杰---结束*/
   /*三阶段芳子---开始*/
     "supplier_accountModule","withdraw_depositModule",
