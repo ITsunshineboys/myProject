@@ -2085,7 +2085,7 @@ class OrderController extends Controller
                 ->where(['order_no'=>$postData['order_no']])
                 ->andWhere(['sku'=>$postData['sku']])
                 ->one();
-            if ($record)
+            if ($record) 
             {
                 $record->status=1;
                 $record->save(false);
