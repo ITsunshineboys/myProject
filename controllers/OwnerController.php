@@ -1622,6 +1622,7 @@ class OwnerController extends Controller
             }
             $select = "goods.id,goods.sku,goods.platform_price,goods.purchase_price_decoration_company,goods.logistics_template_id,goods_brand.name";
             $goods = Goods::findBySkuAll($sku,$select);
+            var_dump($goods);exit;
             if ($goods == null){
                 $code = 1061;
                 return Json::encode([
