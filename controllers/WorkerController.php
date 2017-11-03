@@ -1139,5 +1139,6 @@ class WorkerController extends Controller
     }
     public function actionGrabDetails(){
 
+
     }
 }
