@@ -253,7 +253,7 @@ angular.module("all_controller", ['ngCookies'])
         //展示数据 默认展示
         $http({
             method:"get",
-            url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$scope.id,
+            url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
             params:{
 
                 "sort[]":"sold_number:4"
