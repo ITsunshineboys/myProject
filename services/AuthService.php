@@ -47,8 +47,8 @@ class AuthService extends AccessControl
             }
 
             return true;
-        } else {var_dump(YII_DEBUG);
-            if (YII_DEBUG) {
+        } else {var_dump(Yii::$app->params['online']['env']);
+            if (Yii::$app->params['online']['env'] == 'dev') {
                 return true;
             }
 
