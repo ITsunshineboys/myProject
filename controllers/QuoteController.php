@@ -971,8 +971,13 @@ class QuoteController extends Controller
                                 return $code;
                             }
                         }
+                        $transaction->commit();
                     }
+                    $transaction->commit();
                 }
+
+                
+
                 // 删除功能
                 if (!empty($request['delete_house'])) {
                     $a = Effect::deleteAll(['id' => $request['delete_house']]);
