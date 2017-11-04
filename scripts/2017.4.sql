@@ -1611,7 +1611,7 @@ CREATE TABLE `shipping_cart` (
 --11.3
 CREATE TABLE `effect_material` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `effect_id` int(11) NOT NULL DEFAULT '0' COMMENT '样板间id',
+  `effect_id` int(11) NOT NULL DEFAULT '0' COMMENT '样板id',
   `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
   `price` bigint(20) NOT NULL COMMENT '商品价格',
   `count` int(11) NOT NULL DEFAULT '0' COMMENT '商品个数',
