@@ -19,7 +19,7 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 //if (in_array($origin, $allow_origin)) {
 //    header('Access-Control-Allow-Origin:' . $origin);
 //}
-header('Access-Control-Allow-Origin: http://cross.local.com:808');
+header('Access-Control-Allow-Origin:*');
 header("Access-Control-Allow-Credentials: true");
 
 // if (YII_DEBUG) {
