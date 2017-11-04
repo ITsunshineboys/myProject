@@ -13,11 +13,17 @@ section div span:nth-child(1){
 span{
   color: #666F80;
 }
+.remark_left{
+  float: left;
+}
+.remark_right{
+  float: left;
+  width: 80%;
+}
 .sign_out{
   margin: 60px -65px 0 0 ;
   line-height: 20px;
 }
-
 .dl_active9{
   background-color: #E6E9F0!important;
 }

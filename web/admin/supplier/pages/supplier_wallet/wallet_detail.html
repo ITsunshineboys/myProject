@@ -63,9 +63,9 @@
             <span>交易单号</span>
             <span>{{wallet_detail.transaction_no}}</span>
         </div>
-        <div style="position: relative">
-            <span>备注</span>
-            <span style="position:absolute">{{wallet_detail.supplier_reason}}</span>
+        <div >
+            <span class="remark_left" >备注</span>
+            <span class="remark_right">{{wallet_detail.supplier_reason}}</span>
         </div>
         <div>
             <button class="btn btn-default"  style="margin-top: 20px" ng-click="wallet_back()">返回</button>
