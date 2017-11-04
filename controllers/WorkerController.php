@@ -242,6 +242,30 @@ class WorkerController extends Controller
         ]);
     }
     /**
+     * 智管工地详情-用户
+     * @return int|string
+     */
+    public function actionUserSiteWorkerDetail(){
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+        $code=1000;
+        $order_no=\Yii::$app->request->get('order_no');
+        if(!$order_no){
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=WorkerOrder::usersiteview($order_no,$user);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    /**
      * 智管工地列表-用户
      * @return int|string
      */
