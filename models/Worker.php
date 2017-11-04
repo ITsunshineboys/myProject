@@ -68,13 +68,7 @@ class Worker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'project_manager_id', 'follower_number', 'feedback', 'order_total', 'order_done', 'level', 'create_time', 'balance', 'status', 'worker_type_id', 'work_year', 'availableamount'], 'integer'],
-            [['comprehensive_score'], 'number'],
-            [['availableamount'], 'required'],
-            [['province_code', 'city_code'], 'string', 'max' => 20],
-            [['nickname'], 'string', 'max' => 25],
-            [['icon', 'skill_ids'], 'string', 'max' => 255],
-            [['signature', 'pay_password', 'address'], 'string', 'max' => 100],
+            [['uid', 'worker_type_id','province_code','city_code','level'], 'integer'],
         ];
     }
 

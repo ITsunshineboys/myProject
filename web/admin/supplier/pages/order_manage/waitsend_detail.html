@@ -86,10 +86,10 @@
             </div>
 
             <!--配送方式-->
-            <div class="shipping_type" ng-if="wait_receive=='wait_receive'">
+            <div class="shipping_type" ng-if="tabflag=='waitreceive_flag'">
                 <span>配送方式</span>
-                <span class='shipping_way' ng-if="shipping_way!='送货上门'">{{shipping_way}}</span>
-                <span ng-if="shipping_way=='送货上门'">{{shipping_way}}</span>
+                <span class='shipping_way' ng-if="shipping_way!='送货上门'" ui-sref="express({express_params})">{{shipping_way}}</span>
+                <span class='shipping_way' ng-if="shipping_way=='送货上门'" ui-sref="express({express_params})">{{shipping_way}}</span>
                 <span ng-if="shipping_way!='送货上门'" data-toggle="modal" data-target="#change_track_modal" ng-click='clear_track()'>修改单号</span>
             </div>
         </div>
@@ -98,7 +98,7 @@
         <!-----商品详情----->
         <div class="good_detail">
             <h3>商品详情</h3>
-            <button class="view_good" ui-sref="record_goods_detail({item:item,wait_receive:wait_receive})">
+            <button class="view_good" ui-sref="record_goods_detail({express_params})">
                 <span class="glyphicon glyphicon-eye-open"></span>
                 查看商品
             </button>
@@ -225,12 +225,12 @@
             <button class="btn btn-default back" data-toggle="modal" data-target="#turn_down">驳回</button>
             <button class="btn btn-default back" ng-click="back_list()">返回</button>
         </div>
-        <div ng-if="is_unusual=='0'" ng-hide="wait_receive=='wait_receive'"  class="btn_group">
+        <div ng-if="is_unusual=='0'" ng-hide="tabflag=='waitreceive_flag'"  class="btn_group">
             <button class="btn btn-primary pull-left" ng-click="wait_send_ship()">发货</button>
             <button class="btn btn-default back"  ng-click="back_list()">返回</button>
         </div>
         <!--待收货-->
-        <div ng-if="wait_receive=='wait_receive' && is_unusual!='1'" class="btn_group">
+        <div ng-if="tabflag=='waitreceive_flag' && is_unusual!='1'" class="btn_group">
             <button class="btn btn-default"  ng-click="back_list()">返回</button>
         </div>
 

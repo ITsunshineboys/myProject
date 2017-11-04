@@ -253,7 +253,7 @@ angular.module("all_controller", ['ngCookies'])
         //展示数据 默认展示
         $http({
             method:"get",
-            url:'http://test.cdlhzz.cn:888/mall/category-goods?category_id='+$scope.id,
+            url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
             params:{
 
                 "sort[]":"sold_number:4"
@@ -261,6 +261,8 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback (response) {
             console.log(response);
             $scope.detailsList = response.data.data.category_goods;
+        },function (error) {
+            console.log(error);
         });
         // 点击产品列表商品跳转到产品详情页面
         $scope.getDetailsProduct = function (item) {
@@ -829,7 +831,7 @@ angular.module("all_controller", ['ngCookies'])
                     },config).then(function (response) {
                         console.log(response);
                         $scope.invoice_id = response.data.data.invoice_id;
-                        alert($scope.invoice_id)
+                        // alert($scope.invoice_id)
                     });
                     // 模态框确认按钮 == 跳转保存数据
                     $scope.jumpOrder = function () {
@@ -1162,6 +1164,10 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.order_order = '请填写完整信息';
                 return
             }
+            if($scope.invoice_id == ''){
+                $scope.order_address_model = '#order_address_modal';
+                $scope.order_order = '请填写发票信息';
+            }
             if (!$scope.check_agressment) {
                 $scope.order_address_model = '#order_address_modal';
                 $scope.order_order = '请勾选商城协议';
@@ -1225,7 +1231,8 @@ angular.module("all_controller", ['ngCookies'])
                                         return $.param(data)
                                     }
                                 };
-                                $http.post('http://test.cdlhzz.cn:888/order/alipaylinesubmit',{
+                                // http://test.cdlhzz.cn:888/
+                                $http.post('http://common.cdlhzz.cn/order/alipaylinesubmit',{
                                     goods_name: $scope.title,
                                     order_price:+$scope.allCost,
                                     goods_num:+$scope.shopNum,

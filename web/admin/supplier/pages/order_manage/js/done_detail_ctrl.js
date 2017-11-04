@@ -96,10 +96,12 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
     function commentDetail() {
         let url = "http://test.cdlhzz.cn:888/order/get-comment";
         let data = {
-            order_no: +$stateParams.order_no,
-            sku: +$stateParams.sku
+            order_no: $stateParams.order_no,
+            sku: $stateParams.sku
         };
         $http.post(url, data, config).then(function (res) {
+
+            console.log(res);
             /*判断有无评论*/
             if (res.data.data.length === 0) {
                 $scope.showcomment = false;

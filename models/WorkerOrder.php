@@ -8,6 +8,7 @@ use Codeception\Lib\Generator\Helper;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Exception;
+use yii\db\Query;
 
 /**
  * This is the model class for table "worker_order".
@@ -137,9 +138,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'reason' => '修改原因',
         ];
     }
-    public static function OrderView(){
-
-    }
 
     /**
      * 工人智管工地列表-工人
@@ -164,18 +162,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     self::WORKER_ORDER_CANCELED,
                     self::WORKER_ORDER_DONE
                 ];
-                $query->andWhere(['status' => $status]);
+                $worker_status=implode(',',array_values($status));
+                $query->andWhere("status in ($worker_status)");
             }
             if($status == self::WORKER_WORKS_AFTER){
                 $status=[
                     self::WORKER_ORDER_PREPARE,
                     self::WORKER_WORKS_AFTER,
+                    self::WORKER_ORDER_TOYI,
                 ];
                 $worker_status=implode(',',array_values($status));
                 $query->andWhere("status in ($worker_status)");
-            }else{
-                $query->andWhere(['status' => $status]);
             }
+            $query->andWhere(['status' => $status]);
         }
 
         $count = $query->count();
@@ -598,6 +597,60 @@ class WorkerOrder extends \yii\db\ActiveRecord
         ];
 
     }
+    /**
+     * 智管工地-工人详情
+     * @param $order_no
+     * @param $uid
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function workersiteview($order_no,$uid){
+        //获取今天的时间
+        $today_time=date('Ymd',time());
+        $worker_order=WorkerOrder::find()
+            ->select('status,days')
+            ->asArray()
+            ->where(['order_no'=>$order_no])
+            ->one();
+        $renovation_infos=[];
+        if($worker_order['status']==self::WORKER_ORDER_PREPARE || $worker_order['status']==self::WORKER_WORKS_AFTER || $worker_order['status']==self::WORKER_ORDER_TOYI ){
+              $data['time']=date('Y-m-d',time());
+              $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+              $data['renovation_infos']=$renovation_infos;
+               return $data;
+        }elseif($worker_order['status']==self::WORKER_ORDER_ING ){
+            $days=explode(',',$worker_order['days']);
+            if(in_array($today_time,$days)){
+                $worker_info=Worker::find()
+                    ->select('icon,nickname')
+                    ->asArray()
+                    ->where(['uid'=>$uid])
+                    ->one();
+                $data['time']=date('Y-m-d',time());
+                $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+                $work_result=WorkResult::find()
+                    ->asArray()
+                    ->where(['order_no'=>$order_no])
+                    ->orderBy('create_time Desc')
+                    ->all();
+                foreach ($work_result as $k=>&$value){
+                    $value['create_time']=date('Y-m-d',$value['create_time']);
+                    $img=WorkResultImg::find()
+                        ->select('result_img')
+                        ->asArray()
+                        ->where(['work_result_id'=>$value['id']])
+                        ->all();
+
+                    $value['img']=$img;
+                    $value['worker_info']=$worker_info;
+
+                }
+
+
+                return [$data,$work_result];
+            }
+        }
+
+    }
 
     public static function getOrderImg($order_no, $page_size = self::IMG_PAGE_SIZE_DEFAULT, $page = 1)
     {
@@ -753,7 +806,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order = new self();
         $worker_order->uid = $uid;
         $worker_order->worker_type_id = $array['worker_type_id'];
-        $worker_order->order_no = date('md', time()) . '1' . rand(10000, 99999);
+        $worker_order->order_no = GoodsOrder::SetOrderNo();
         $worker_order->create_time = time();
         $start_time = $worker_order->start_time = strtotime($array['start_time']);
         $end_time = $worker_order->end_time = strtotime($array['end_time']);

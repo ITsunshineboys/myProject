@@ -84,6 +84,7 @@ class Effect extends ActiveRecord
      * @return int
      */
     public static function addneweffect($post){
+
         $effects=self::find()
             ->select('sort_id')
             ->asArray()
@@ -135,13 +136,34 @@ class Effect extends ActiveRecord
                 return $code;
             }
             $id=\Yii::$app->db->lastInsertID;
+            //如果有材料
+            if($post['material']){
+
+
+               foreach ($post['material'] as $attributes){
+                 $res= \Yii::$app->db->createCommand()->insert('effect_material',[
+                       'effect_id'=>$id,
+                       'count'=>$attributes['count'],
+                       'price'=>$attributes['price'],
+                       'goods_id'=>$attributes['goods_id']
+                   ])->execute();
+               }
+                if(!$res){
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+
+            }
+
             $effect_earnest=new EffectEarnest();
             $effect_earnest->effect_id=$id;
-            $effect_earnest->earnest=8900;
             $effect_earnest->phone=$post['phone'];
             $effect_earnest->name=$post['name'];
             $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($post['phone']);
-            $effect_earnest->requirement=$post['requirement'];
+            $effect_earnest->requirement=$post['requirement']*100;
+            $effect_earnest->original_price=$post['original_price']*100;
+            $effect_earnest->sale_price=$post['sale_price'];
             if(!$effect_earnest->save(false)){
                 $tran->rollBack();
                 $code=500;
@@ -159,6 +181,7 @@ class Effect extends ActiveRecord
             $code=200;
             return $code;
         }catch (Exception $e){
+            var_dump($e);die;
             $tran->rollBack();
             $code=500;
             return $code;

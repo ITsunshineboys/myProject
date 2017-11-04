@@ -1568,6 +1568,9 @@ CREATE TABLE `effect_earnest` (
   `transaction_no` varchar(50) NOT NULL COMMENT '交易单号',
   `remark` text NOT NULL COMMENT '备注',
   `requirement` varchar(255) DEFAULT NULL,
+  `original_price` bigint(20) NOT NULL DEFAULT '0' COMMENT '原价',
+  `sale_price` bigint(20) NOT NULL DEFAULT '0' COMMENT '打折价',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未付款 1:已付款',
   `create_time` int(11) NOT NULL COMMENT '申请时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1594,3 +1597,25 @@ CREATE TABLE `worker_rank` (
   `max_value` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `shipping_cart` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) NOT NULL,
+  `role_id` bigint(20) NOT NULL,
+  `goods_id` bigint(20) NOT NULL,
+  `goods_num` bigint(20) NOT NULL DEFAULT '1' COMMENT '购物车商品数量',
+  `create_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--11.3
+CREATE TABLE `effect_material` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `effect_id` int(11) DEFAULT NULL COMMENT '样板间id',
+  `goods_id` int(11) DEFAULT NULL COMMENT '商品id',
+  `price` bigint(20) DEFAULT NULL COMMENT '商品价格',
+  `count` int(11) DEFAULT NULL COMMENT '商品个数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

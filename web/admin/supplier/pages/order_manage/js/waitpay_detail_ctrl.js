@@ -18,6 +18,13 @@ waitpay_detail.controller("waitpaydetail_ctrl", function ($scope, $http, $stateP
     $scope.tabflag = $stateParams.tabflag; //页面跳转
 
 
+    $scope.express_params = {
+        order_no:$scope.order_no,
+        sku:$scope.sku,
+        statename:'waitpay_detail'
+    }
+
+
     /*订单详情
      * 商品详情
      * 收货详情*/

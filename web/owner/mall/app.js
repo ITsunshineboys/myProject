@@ -22,6 +22,11 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                 url:'/cell_search',
                 templateUrl:'cell_search.html',
                 css:'css/cell_search.css',
+                params: {
+                    code: '',
+                    toponymy: '',
+                    street: ''
+                }
             })
             .state('nodata.basics_decoration',{
                 url:'/basics_decoration',
@@ -73,8 +78,8 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
 
     }])
     .service('_ajax', function ($http, $state) {
-        // let baseUrl = "http://test.cdlhzz.cn:888";
-        let baseUrl = "";
+        let baseUrl = "http://test.cdlhzz.cn:888";
+        // let baseUrl = "";
         this.get = function (url, params, callback) {
             $http({
                 method: 'GET',

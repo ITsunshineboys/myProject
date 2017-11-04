@@ -190,7 +190,7 @@
                     <td ng-if="waitsend_9" ng-show="item.unusual !='无异常'" style="color: #FF5722">{{item.unusual}}</td>
                     <td ng-if="waitsend_9" ng-show="item.unusual=='无异常'">&nbsp;</td>
                     <td ng-if="waitsend_10">{{item.comment_grade}}</td>
-                    <td ng-if="waitsend_11" class="font_blue" ng-click="wait_send_detail(item.order_no,item.sku,'wait_send')">查看</td>
+                    <td ng-if="waitsend_11" class="font_blue" ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</td>
                     <td ng-if="waitsend_12" ng-show="item.unusual != '无异常'">&nbsp;</td>
                     <td ng-if="waitsend_12" ng-show="item.unusual=='无异常'" class="font_blue"  ng-click="wait_send_ship(item.shipping_type,item.order_no,item.sku)">发货</td>
                 </tr>
@@ -304,7 +304,7 @@
                     <td ng-if="waitreceive_9" ng-show="item.unusual!='无异常'" style="color: #FF5722">{{item.unusual}}</td>
                     <td ng-if="waitreceive_9" ng-show="item.unusual=='无异常'">&nbsp;</td>
                     <td ng-if="waitreceive_10">{{item.comment_grade}}</td>
-                    <td ng-if="waitreceive_11" class="font_blue" ng-click="wait_send_detail(item.order_no,item.sku,'wait_receive')">查看</td>
+                    <td ng-if="waitreceive_11" class="font_blue" ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</td>
                     <td ng-if="waitreceive_12">&nbsp;</td>
                 </tr>
             </table>

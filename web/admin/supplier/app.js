@@ -77,12 +77,12 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("waitsend_detail", {   //待发货详情
             url: "/waitsend_detail",
             templateUrl: "pages/order_manage/waitsend_detail.html",
-            params:{item:null,sku:null,wait_receive:null}
+            params:{order_no:null,sku:null,tabflag:null}
         })
         .state("record_goods_detail", {   //记录商品详情
             url: "/record_goods_detail",
             templateUrl: "pages/order_manage/record_goods_detail.html",
-            params:{item:null,wait_receive:null}
+            params:{express_params:null},
         })
         /*--------------三阶段结束----王杰-----------------*/
 

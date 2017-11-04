@@ -14,25 +14,37 @@ login.controller('login_ctrl',function ($scope,$http,$state) {
             $scope.login();
         }
     };
-    // $scope.myKeyup();
     $scope.error_flag=false;
   $scope.login=function () {
-    $http.post('/site/admin-login',{
-        role_id:1,
-        username:$scope.my_username,
-        password:$scope.my_password
-    },config).then(function (res) {
-      console.log(res);
-      if(res.data.code==200){
-           $state.go('home');
-      }else{
-        $scope.error_flag=true;
+      $http.post(baseUrl+'/site/admin-login', {
+          role_id: 1,
+          username: $scope.my_username,
+          password: $scope.my_password
+      }, config).then(function (res) {
+          console.log(res);
+          if (res.data.code == 200) {
+              $state.go('home');
+          } else {
+              $scope.error_flag = true;
+          }
+      }, function (error) {
+          console.log(error)
+      });
+      $scope.login = function () {
+          $http.post(baseUrl + '/site/admin-login', {
+              role_id: 1,
+              username: $scope.my_username,
+              password: $scope.my_password
+          }, config).then(function (res) {
+              console.log(res);
+              if (res.data.code == 200) {
+                  $state.go('home');
+              } else {
+                  $scope.error_flag = true;
+              }
+          }, function (error) {
+              console.log(error)
+          });
       }
-    },function (error) {
-      console.log(error)
-    });
   }
-  // if(keycode==13){
-  //     console.log(1111)
-  // }
 });
