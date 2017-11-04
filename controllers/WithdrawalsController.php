@@ -427,6 +427,7 @@ class WithdrawalsController extends Controller
             $sms_code=trim($request->post('sms_code',''));
             $pay_pwd=trim($request->post('pay_pwd',''));
             if (!SmValidationService::validCode($user->mobile,$sms_code)) {
+                echo 1;exit;
                 $code = 1002;
                 return Json::encode([
                     'code' => $code,
