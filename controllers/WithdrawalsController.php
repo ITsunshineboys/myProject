@@ -378,7 +378,8 @@ class WithdrawalsController extends Controller
         if (Yii::$app->getSecurity()->validatePassword(User::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true){
             $pay_pwd_first=trim($request->post('pay_pwd_first',''));
             $pay_pwd_secend=trim($request->post('pay_pwd_secend',''));
-            if (!User::CheckPaypwdFormat($pay_pwd_first) || !User::CheckPaypwdFormat($pay_pwd_secend)){
+            if (!User::CheckPaypwdFormat($pay_pwd_first) ||
+                !User::CheckPaypwdFormat($pay_pwd_secend)){
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -429,7 +430,7 @@ class WithdrawalsController extends Controller
                 $code = 1002;
                 return Json::encode([
                     'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
+                    'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
             SmValidationService::deleteCode($user->mobile);
@@ -471,6 +472,7 @@ class WithdrawalsController extends Controller
             }
         }
     }
+
 
     /**
      * 获取可用余额-商家后台
