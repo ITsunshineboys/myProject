@@ -693,7 +693,6 @@ class QuoteController extends Controller
                         }
                         $transaction->commit();
                     } else {
-
                         // 案例添加
                         $bedroom                = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -786,7 +785,6 @@ class QuoteController extends Controller
                     $transaction->commit();
                 } else {
                     if ($house['is_ordinary'] != 1) {
-                        echo '普通户型修改';
                         //普通户型修改
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
@@ -824,18 +822,16 @@ class QuoteController extends Controller
                         $balcony_area      = $house['balcony_area'];
 
                         $effect = (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-                        var_dump($effect); echo 111;
-//                        if(!$effect){
-//                            $transaction->rollBack();
-//                            return $code;
-//                        }
+                        if(!$effect){
+                            $transaction->rollBack();
+                            return $code;
+                        }
 
                         $decoration = (new DecorationParticulars())->plotEdit($other_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
-                        var_dump($decoration) ;echo 222;
-//                        if (!$decoration){
-//                            $transaction->rollBack();
-//                            return $code;
-//                        }
+                        if (!$decoration){
+                            $transaction->rollBack();
+                            return $code;
+                        }
 
                         if (!empty($house['drawing_list'])) {
                             foreach ($house['drawing_list'] as $images) {
@@ -848,16 +844,13 @@ class QuoteController extends Controller
                                     $effect_picture = (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
                                 }
                             }
-//                            if (!$effect_picture){
-//                                $transaction->rollBack();
-//                                return $code;
-//                            }
+                            if (!$effect_picture){
+                                $transaction->rollBack();
+                                return $code;
+                            }
                         }
-                        var_dump($effect_picture);echo 333 ;exit;
                         $transaction->commit();
                     } else {
-                        echo '案例修改';exit;
-
                         // 案例修改
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
