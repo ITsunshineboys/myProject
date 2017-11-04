@@ -20,33 +20,33 @@ class Effect extends ActiveRecord
     const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_EXTRA = [];
     const FIELDS_VIEW_ADMIN_MODEL = [
-          'id',
-          'series_id',
-          'style_id',
-          'bedroom',
-          'sittingRoom_diningRoom',
-          'toilet',
-          'kitchen',
-          'window',
-          'area',
-          'high',
-          'province',
-          'province_code',
-          'city',
-          'city_code',
-          'district',
-          'district_code',
-          'toponymy',
-          'street',
-          'particulars',
-          'stairway',
-          'add_time',
-          'house_image',
-          'effect_images',
-          'images_name',
-          'type',
-          'stair_id',
-        ];
+        'id',
+        'series_id',
+        'style_id',
+        'bedroom',
+        'sittingRoom_diningRoom',
+        'toilet',
+        'kitchen',
+        'window',
+        'area',
+        'high',
+        'province',
+        'province_code',
+        'city',
+        'city_code',
+        'district',
+        'district_code',
+        'toponymy',
+        'street',
+        'particulars',
+        'stairway',
+        'add_time',
+        'house_image',
+        'effect_images',
+        'images_name',
+        'type',
+        'stair_id',
+    ];
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -136,9 +136,7 @@ class Effect extends ActiveRecord
             }
             $id=\Yii::$app->db->lastInsertID;
             //如果有材料
-           if(array_key_exists('material',$post)){
-
-
+            if(array_key_exists('material',$post)){
                 foreach ($post['material'] as $attributes){
                     $res= \Yii::$app->db->createCommand()->insert('effect_material',[
                         'effect_id'=>$id,
@@ -160,9 +158,9 @@ class Effect extends ActiveRecord
             $effect_earnest->phone=$post['phone'];
             $effect_earnest->name=$post['name'];
             $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($post['phone']);
-            $effect_earnest->requirement=(int)$post['requirement']*100;
+            $effect_earnest->requirement=$post['requirement']*100;
             $effect_earnest->original_price=$post['original_price']*100;
-            $effect_earnest->sale_price=$post['sale_price']*100;
+            $effect_earnest->sale_price=$post['sale_price'];
             if(!$effect_earnest->save(false)){
                 $tran->rollBack();
                 return false;
@@ -189,30 +187,82 @@ class Effect extends ActiveRecord
      * @return array
      */
     public function geteffectdata($effect_id){
+        $data=[];
         $query=new Query();
         $array= $query->from('effect_earnest As ea')
-            ->select('e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
+            ->select('e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
             ->leftJoin('effect as e','ea.effect_id=e.id')
             ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
-            ->where(['ea.id'=>$effect_id])->one();
-        if($array){
-            $array['area']=mb_substr($array['particulars'],5,4);
-            $array['particulars']=mb_substr($array['particulars'],0,4);
-            $array['create_time']=date('Y-m-d',$array['create_time']);
-            $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
-            $array['address']=$array['city'].$array['district'].$array['street'];
-            if($array['stairway']){
-                $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
-                $array['stairway']=$stairway_cl['attribute'];
-            }else{
-                $array['stairway']=null;
-            }
-            return $array;
+            ->where(['ea.effect_id'=>$effect_id])->one();
+        if(!$array){
+            $data['particulars_view']=null;
         }
+        $array['particulars']=mb_substr($array['particulars'],0,4);
+        $array['address']=$array['city'].$array['district'].$array['street'];
+        $array['create_time']=date('Y-m-d',$array['create_time']);
+        $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
+        $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
+        $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
 
-        return null;
+        if($array['stairway']){
+            $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
+            $array['stairway']=$stairway_cl['attribute'];
+        }else{
+            $array['stairway']=null;
+        }
+        $data['particulars_view']=$array;
+
+        $material=EffectMaterial::find()->where(['effect_id'=>$effect_id])->asArray()->all();
+        if(!$material){
+            $data['material']=null;
+        }
+        foreach ($material as &$value){
+            $goods_cate_id=Goods::find()->select('brand_id,category_id')->where(['id'=>$value['goods_id']])->asArray()->one();
+
+            $value['cate_level3']=GoodsCategory::find()->select('title')
+                ->where(['id'=>$goods_cate_id['category_id']])
+                ->asArray()
+                ->one()['title'];
+            $value['brand']=GoodsBrand::find()
+                ->select('name')
+                ->where(['id'=>$goods_cate_id['brand_id']])
+                ->asArray()
+                ->one()['name'];
+            $value['first_cate_id']=GoodsCategory::find()
+                ->select('title')
+                ->where(['id'=>$value['first_cate_id']])
+                ->asArray()->one()['title'];
+
+        }
+        $material_grop=self::array_group_by($material,'first_cate_id');
+
+        $data['material']=$material_grop;
+
+
+        return $data;
+
+
+
+    }
+
+    public static function array_group_by($arr, $key)
+    {
+        $grouped = [];
+        foreach ($arr as $value) {
+            $grouped[$value[$key]][] = $value;
+        }
+        // Recursively build a nested grouping if more parameters are supplied
+        // Each grouped array value is grouped according to the next sequential key
+        if (func_num_args() > 2) {
+            $args = func_get_args();
+            foreach ($grouped as $key => $value) {
+                $parms = array_merge([$value], array_slice($args, 2, func_num_args()));
+                $grouped[$key] = call_user_func_array('array_group_by', $parms);
+            }
+        }
+        return $grouped;
     }
     public function beforeSave($insert)
     {

@@ -215,15 +215,15 @@ class EffectController extends Controller
 
 
         if($request->isPost){
-            $effect_id = trim($request->post('id', ''), '');
-            if(!$effect_id){
+            $effect_enst_id = trim($request->post('id', ''), '');
+            if(!$effect_enst_id){
                 return json_encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
 
                 ]);
             }
-            $remark=Effectearnest::findOne(['id'=>$effect_id]);
+            $remark=Effectearnest::findOne(['id'=>$effect_enst_id]);
             if(!$remark){
                 return json_encode([
                     'code' => $code,
@@ -247,6 +247,7 @@ class EffectController extends Controller
 
             }else{
                     $model = new Effect();
+                    $effect_id=EffectEarnest::find()->asArray()->where(['id'=>$effect_enst_id])->select('effect_id')->one()['effect_id'];
                     $data = $model->geteffectdata($effect_id);
                     if (!$effect_id) {
                         return json_encode([
