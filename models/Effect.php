@@ -136,7 +136,7 @@ class Effect extends ActiveRecord
             }
             $id=\Yii::$app->db->lastInsertID;
             //如果有材料
-            if($post['material']){
+           if(array_key_exists('material',$post)){
 
 
                 foreach ($post['material'] as $attributes){
