@@ -227,7 +227,7 @@ class FileService
     }
 
     /**
-     * Only authenticated user could download file     *
+     * Only authenticated user could download file
      */
     public function download()
     {
@@ -239,7 +239,7 @@ class FileService
     }
 
     /**
-     * Only authenticated user could view file     *
+     * Only authenticated user could view file
      */
     public function show()
     {
