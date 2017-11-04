@@ -16,6 +16,9 @@ class AuthService extends AccessControl
 {
     public function beforeAction($action)
     {
+        if (Yii::$app->params['online']['env'] == 'dev') {
+            return true;
+        }
         $user = Yii::$app->user->identity;
         $denyCode = 403;
         $kickedOutcode = 1023;
@@ -47,12 +50,11 @@ class AuthService extends AccessControl
             }
 
             return true;
-        } else {var_dump(Yii::$app->params['online']['env']);
-            if (Yii::$app->params['online']['env'] == 'dev') {
+        } else {
+            $code = User::checkKickedout() ? $kickedOutcode : $denyCode;
+            if (YII_DEBUG && $code == $kickedOutcode) {
                 return true;
             }
-
-            $code = User::checkKickedout() ? $kickedOutcode : $denyCode;
 
             if ($this->denyCallback !== null) {
                 call_user_func($this->denyCallback, $code, $action);
