@@ -16,9 +16,6 @@ class AuthService extends AccessControl
 {
     public function beforeAction($action)
     {
-        if (Yii::$app->params['online']['env'] == 'dev') {
-            return true;
-        }
         $user = Yii::$app->user->identity;
         $denyCode = 403;
         $kickedOutcode = 1023;
