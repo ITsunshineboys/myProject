@@ -1285,12 +1285,22 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         for (let [key1, value1] of $scope.drawing_informations.entries()) {
                             if (value1.house_type_name.index == value.index) {
                                 console.log(value.drawing_list)
-                                value.drawing_list.push({
-                                    'all_drawing': value1.drawing_list.join(','),
-                                    'series': value1.series.id,
-                                    'style': value1.style.id,
-                                    'drawing_name': value1.drawing_name
-                                })
+                                if(value.id!=undefined){
+                                    value.drawing_list.push({
+                                        'id':value.id,
+                                        'all_drawing': value1.drawing_list.join(','),
+                                        'series': value1.series.id,
+                                        'style': value1.style.id,
+                                        'drawing_name': value1.drawing_name
+                                    })
+                                }else{
+                                    value.drawing_list.push({
+                                        'all_drawing': value1.drawing_list.join(','),
+                                        'series': value1.series.id,
+                                        'style': value1.style.id,
+                                        'drawing_name': value1.drawing_name
+                                    })
+                                }
                                 console.log(1111)
                             }
                         }

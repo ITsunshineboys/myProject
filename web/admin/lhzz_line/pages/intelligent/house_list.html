@@ -19,12 +19,14 @@
                 <th>创建日期</th>
                 <th>所在区域</th>
                 <th>详情</th>
+                <th>操作</th>
             </tr>
             <tr ng-repeat="item in house_detail">
                 <td class="text-left">{{item.toponymy}}</td>
                 <td class="text-left">{{item.add_time}}</td>
                 <td class="text-left">{{item.district}}</td>
                 <td class="text-left" style="color: #3F94F6;" ng-click="go_edit_house(item)">编辑</td>
+                <td class="text-left" style="color: #3F94F6;">删除</td>
             </tr>
         </table>
         <tm-pagination conf="Config"></tm-pagination>
