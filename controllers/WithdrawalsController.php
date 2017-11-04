@@ -470,10 +470,6 @@ class WithdrawalsController extends Controller
                 ]);
             }
         }
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
     }
 
     /**
