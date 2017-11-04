@@ -160,7 +160,7 @@ class Effect extends ActiveRecord
             $effect_earnest->phone=$post['phone'];
             $effect_earnest->name=$post['name'];
             $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($post['phone']);
-            $effect_earnest->requirement=$post['requirement']*100;
+            $effect_earnest->requirement=(int)$post['requirement']*100;
             $effect_earnest->original_price=$post['original_price']*100;
             $effect_earnest->sale_price=$post['sale_price'];
             if(!$effect_earnest->save(false)){
