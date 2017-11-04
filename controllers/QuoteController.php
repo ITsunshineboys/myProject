@@ -835,35 +835,43 @@ class QuoteController extends Controller
                             }
                     }
 
-                    foreach ($house['all_goods'] as $goods){
-                        if (!empty($goods['id'])){
-                            $goods_id = $goods['id'];
-                            $goods_first = $goods['first_name'];
-                            $goods_second = $goods['second_name'];
-                            $goods_three = $goods['three_name'];
-                            $goods_code = $goods['good_code'];
-                            $goods_quantity = $goods['good_quantity'];
-                            (new WorksData())->plotEdit($goods_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity);
+                    if (!empty($house['all_goods'])) {
+                        foreach ($house['all_goods'] as $goods){
+                            if (!empty($goods['id'])){
+                                $goods_id = $goods['id'];
+                                $goods_first = $goods['first_name'];
+                                $goods_second = $goods['second_name'];
+                                $goods_three = $goods['three_name'];
+                                $goods_code = $goods['good_code'];
+                                $goods_quantity = $goods['good_quantity'];
+                                (new WorksData())->plotEdit($goods_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity);
+                            }
                         }
                     }
 
-                    foreach ($house['worker_list'] as $worker){
-                        if (!empty($worker['id'])){
-                            $worker_id = $worker['id'];
-                            $worker_kind = $worker['worker_kind'];
-                            $worker_price = $worker['price'];
-                            (new WorksWorkerData())->plotEdit($worker_id,$worker_kind,$worker_price);
+                    if (!empty($house['worker_list'])){
+                        foreach ($house['worker_list'] as $worker){
+                            if (!empty($worker['id'])){
+                                $worker_id = $worker['id'];
+                                $worker_kind = $worker['worker_kind'];
+                                $worker_price = $worker['price'];
+                                (new WorksWorkerData())->plotEdit($worker_id,$worker_kind,$worker_price);
+                            }
+                        }
+                    }
+                    
+
+                    if (!empty($house['backman_option'])){
+                        foreach ($house['backman_option'] as $backman){
+                            if (!empty($backman['id'])){
+                                $backman_id = $backman['id'];
+                                $backman_option = $backman['name'];
+                                $backman_value  = $backman['num'];
+                                (new WorksBackmanData())->plotEdit($backman_id,$backman_option,$backman_value);
+                            }
                         }
                     }
 
-                    foreach ($house['backman_option'] as $backman){
-                        if (!empty($backman['id'])){
-                            $backman_id = $backman['id'];
-                            $backman_option = $backman['name'];
-                            $backman_value  = $backman['num'];
-                            (new WorksBackmanData())->plotEdit($backman_id,$backman_option,$backman_value);
-                        }
-                    }
                     if (!empty($house['delete_goods'])){
                         WorksData::deleteAll(['id'=>$house['delete_goods']]);
                     }
