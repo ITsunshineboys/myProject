@@ -61,7 +61,6 @@ angular.module('set_password_module',[])
           console.log(err);
         })
       }else{
-        console.log('64646464')
         $scope.submitted=true;
       }
       //判断两次密码是否一致
@@ -74,14 +73,12 @@ angular.module('set_password_module',[])
           sms_code:$scope.v_code
         },config).then(function (res) {
           console.log(res);
-            if(res.data.code=200){
-              $('#save_modal').modal('show');
-              console.log('79797979')
-              $scope.show_prompt=false;
-            }else if(res.data.code=1002){
-              console.log('82828282')
-              $scope.show_prompt=true;
-            }
+          if(res.data.code == 200){
+            $('#save_modal').modal('show');
+            $scope.show_prompt=false;
+          }else if(res.data.code == 1002){
+            $scope.show_prompt=true;
+          }
         },function (err) {
           console.log(err);
         })
