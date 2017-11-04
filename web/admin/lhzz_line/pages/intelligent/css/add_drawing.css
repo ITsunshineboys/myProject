@@ -103,3 +103,6 @@ header button{
     margin-top:5px;
     color: red;
 }
+.add_drawing .error{
+    border:1px solid red;
+}

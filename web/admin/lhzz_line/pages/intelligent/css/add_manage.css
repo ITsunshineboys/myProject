@@ -80,3 +80,6 @@ header button{
     border-color: #3F94F6!important;
     color: #3F94F6;
 }
+.add_manage .error{
+    border:1px solid red;
+}

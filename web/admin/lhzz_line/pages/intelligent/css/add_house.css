@@ -62,6 +62,9 @@ header button{
 .add_house .all_btn{
     position: relative;
 }
+.add_house .error{
+    border:1px solid red;
+}
 .add_house .btn_up{
     position: absolute;
     top: 0;
