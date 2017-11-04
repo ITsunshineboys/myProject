@@ -984,26 +984,10 @@ class QuoteController extends Controller
                         $transaction->rollBack();
                         return $code;
                     }
-                    $b = EffectPicture::deleteAll(['effect_id' => $request['delete_house']]);
-                    if (!$b){
-                        $transaction->rollBack();
-                        return $code;
-                    }
-                    $c = WorksBackmanData::deleteAll(['effect_id' => $request['delete_house']]);
-                    if (!$c){
-                        $transaction->rollBack();
-                        return $code;
-                    }
-                    $d = WorksWorkerData::deleteAll(['effect_id' => $request['delete_house']]);
-                    if (!$d){
-                        $transaction->rollBack();
-                        return $code;
-                    }
-                    $e = WorksData::deleteAll(['effect_id' => $request['delete_house']]);
-                    if (!$e){
-                        $transaction->rollBack();
-                        return $code;
-                    }
+                    EffectPicture::deleteAll(['effect_id' => $request['delete_house']]);
+                    WorksBackmanData::deleteAll(['effect_id' => $request['delete_house']]);
+                    WorksWorkerData::deleteAll(['effect_id' => $request['delete_house']]);
+                    WorksData::deleteAll(['effect_id' => $request['delete_house']]);
                 }
 
                 if (!empty($request['delete_drawing'])) {
