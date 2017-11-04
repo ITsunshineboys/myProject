@@ -974,29 +974,6 @@ class QuoteController extends Controller
                     }
                     $transaction->commit();
                 }
-
-
-
-                // 删除功能
-                if (!empty($request['delete_house'])) {
-                    $a = Effect::deleteAll(['id' => $request['delete_house']]);
-                    if (!$a){
-                        $transaction->rollBack();
-                        return $code;
-                    }
-                    EffectPicture::deleteAll(['effect_id' => $request['delete_house']]);
-                    WorksBackmanData::deleteAll(['effect_id' => $request['delete_house']]);
-                    WorksWorkerData::deleteAll(['effect_id' => $request['delete_house']]);
-                    WorksData::deleteAll(['effect_id' => $request['delete_house']]);
-                }
-
-                if (!empty($request['delete_drawing'])) {
-                    $delete = EffectPicture::deleteAll(['id' => $request['delete_drawing']]);
-                    if (!$delete){
-                        $transaction->rollBack();
-                        return $code;
-                    }
-                }
                 $transaction->commit();
             }catch (\Exception $e) {
                 $transaction->rollBack();
@@ -1007,6 +984,32 @@ class QuoteController extends Controller
                 ]);
             }
         }
+
+        // 删除功能
+        if (!empty($request['delete_house'])) {
+            Effect::deleteAll(['id' => $request['delete_house']]);
+            EffectPicture::deleteAll(['effect_id' => $request['delete_house']]);
+            WorksBackmanData::deleteAll(['effect_id' => $request['delete_house']]);
+            WorksWorkerData::deleteAll(['effect_id' => $request['delete_house']]);
+            WorksData::deleteAll(['effect_id' => $request['delete_house']]);
+        }
+
+        if (!empty($request['delete_drawing'])) {
+            $delete = EffectPicture::deleteAll(['id' => $request['delete_drawing']]);
+            if (!$delete){
+                $transaction->rollBack();
+                return $code;
+            }
+        }
+        return Json::encode([
+           'code' => 200,
+           'msg' => 'ok',
+        ]);
+    }
+
+    public function actionPlotDel()
+    {
+        $del_id = trim(\Yii::$app->request->post());
     }
 
     /**
