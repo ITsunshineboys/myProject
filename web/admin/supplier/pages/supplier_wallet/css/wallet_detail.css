@@ -20,6 +20,11 @@ span{
   float: left;
   width: 80%;
 }
+.remark:after{
+  content: '';
+  display: table;
+  clear: both;
+}
 .sign_out{
   margin: 60px -65px 0 0 ;
   line-height: 20px;
