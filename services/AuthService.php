@@ -47,7 +47,7 @@ class AuthService extends AccessControl
             }
 
             return true;
-        } else {
+        } else {var_dump(YII_DEBUG);
             if (YII_DEBUG) {
                 return true;
             }
