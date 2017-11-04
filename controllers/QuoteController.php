@@ -824,14 +824,14 @@ class QuoteController extends Controller
                         $balcony_area      = $house['balcony_area'];
 
                         $effect = (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-                        var_dump($effect);
+                        var_dump($effect); echo 111;
 //                        if(!$effect){
 //                            $transaction->rollBack();
 //                            return $code;
 //                        }
 
                         $decoration = (new DecorationParticulars())->plotEdit($other_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
-                        var_dump($decoration);
+                        var_dump($decoration) ;echo 222;
 //                        if (!$decoration){
 //                            $transaction->rollBack();
 //                            return $code;
@@ -853,7 +853,7 @@ class QuoteController extends Controller
 //                                return $code;
 //                            }
                         }
-                        var_dump($effect_picture);exit;
+                        var_dump($effect_picture);echo 333 ;exit;
                         $transaction->commit();
                     } else {
                         echo '案例修改';exit;
