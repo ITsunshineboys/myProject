@@ -17,7 +17,7 @@ login.controller('login_ctrl',function ($scope,$http,$state) {
     // $scope.myKeyup();
     $scope.error_flag=false;
   $scope.login=function () {
-    $http.post(baseUrl+'/site/admin-login',{
+    $http.post('/site/admin-login',{
         role_id:1,
         username:$scope.my_username,
         password:$scope.my_password
