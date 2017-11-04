@@ -3312,41 +3312,6 @@ angular.module("all_controller", [])
         }, function (error) {
             console.log(error)
         })
-        //跳转案例页
-        if(Object.keys($stateParams).length!=0){
-            $http.get('/owner/case-list', {
-                params: {
-                    code: $stateParams.item.district_code,
-                    street: $stateParams.item.street,
-                    toponymy: $stateParams.item.toponymy
-                }
-            }).then(function (response) {
-                console.log(response)
-                $scope.toponymy = response.data.data.case_effect.toponymy
-                $scope.message = response.data.data.case_effect.city+response.data.data.case_effect.district+response.data.data.case_effect.street
-                $scope.highCrtl = response.data.data.case_effect.high
-                $scope.window = response.data.data.case_effect.window
-                $scope.choose_stairs = response.data.data.case_effect.stairway
-                $scope.nowStairs = response.data.data.case_effect.stair_id
-                for(let [key,value] of $scope.series.entries()){
-                    if(value.id == response.data.data.case_picture.series_id){
-                        $scope.cur_series = value
-                    }
-                }
-                for(let [key,value] of $scope.style.entries()){
-                    if(value.id == response.data.data.case_picture.style_id){
-                        $scope.cur_style = value
-                    }
-                }
-            }, function (error) {
-                console.log(error)
-            })
-            $http.get('/effect/getparticulars').then(function(response){
-                console.log(response)
-            },function(error){
-                console.log(error)
-            })
-        }
 
         /*无资料操作*/
         //修改了基础表单数据
@@ -3554,6 +3519,7 @@ angular.module("all_controller", [])
         }
         //较正式更换或者添加商品
         $scope.first_replace = function () {
+            $timeout(function () {
             console.log($scope.check_goods)
             console.log($scope.cur_project)
             $scope.have_header = true
@@ -3697,6 +3663,7 @@ angular.module("all_controller", [])
                 $scope.is_delete_btn = false
                 $state.go('nodata.other_material')
             }
+            },300)
         }
         //智能报价无资料返回
         $scope.returnPrev = function () {
@@ -4709,7 +4676,7 @@ angular.module("all_controller", [])
                     console.log($scope.all_goods)
                     console.log($scope.all_workers)
                     $scope.show_material = true
-                })]).then(function () {
+                })]).then(function () {//计算总费用
                     let arr = [],arr1 = []
                     $scope.all_price = 0
                     $scope.discount_price = 0
@@ -4729,30 +4696,33 @@ angular.module("all_controller", [])
                             }
                         }
                     }
-                    $http.post('/order/calculation-freight',{
+                    $q.all([$http.post('/order/calculation-freight',{
                         goods:arr
                     },config).then(function(res){
                         console.log(res)
-                        $scope.all_price += +res.data.data.total_prices
-                        $scope.discount_price += +res.data.data.special_offer
-                    },function (error) {
-                        console.log(error)
-                    })
-                    $http.post('/owner/coefficient',{
+                        $scope.all_price += +res.data.data
+                        $scope.discount_price += +res.data.data
+                        console.log($scope.all_price)
+                        console.log($scope.discount_price)
+                    }),$http.post('/owner/coefficient',{
                         list:arr1
                     },config).then(function (res) {
                         console.log(res)
-                        $scope.all_price += +res.data.data
-                        $scope.discount_price += +res.data.data
-                    },function (error) {
-                        console.log(error)
+                        $scope.all_price += +res.data.data.total_prices
+                        $scope.discount_price += +res.data.data.special_offer
+                        console.log($scope.all_price)
+                        console.log($scope.discount_price)
+                    })]).then(function () {
+                        let all_worker_price = $scope.all_workers.reduce(function(prev,cur){
+                            return prev + cur.price
+                        },0)
+                        console.log($scope.all_workers)
+                        console.log(all_worker_price)
+                        $scope.all_price += all_worker_price
+                        $scope.discount_price += all_worker_price
+                        console.log($scope.all_price)
+                        console.log($scope.discount_price)
                     })
-                    let all_worker_price = $scope.all_workers.reduce(function(prev,cur){
-                        return prev + cur
-                    },0)
-                    console.log(all_worker_price)
-                    console.log($scope.all_price)
-                    console.log($scope.discount_price)
                 })
 
             } else {
@@ -4798,9 +4768,9 @@ angular.module("all_controller", [])
         })
         //取消返回
         $scope.cancel = function () {
-            $state.go('nodata.house_list')
             $scope.toponymy = $scope.cur_toponymy
             $scope.have_header = true
+            $rootScope.goPrev()
         }
         // 跳转到无资料
         $scope.go_nodata = function () {

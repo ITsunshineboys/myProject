@@ -180,6 +180,9 @@ header button{
     margin-top: 0!important;
     position: relative;
 }
+.add_case .error{
+    border:1px solid red;
+}
 .add_case .backman label{
     font-size:14px !important;
     font-weight:normal;

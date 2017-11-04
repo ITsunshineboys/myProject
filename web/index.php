@@ -12,7 +12,8 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 
 $allow_origin = array(
-    'http://cross.local.com:808'
+    'http://cross.local.com:808',
+    'http://cross.local.com'
 );
 
 if (in_array($origin, $allow_origin)) {

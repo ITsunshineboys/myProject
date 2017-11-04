@@ -7,15 +7,53 @@ angular.module('apply_case',[])
                     return $.param(data)
                 }
             };
+            //添加小区部分
+            /*分页配置*/
+            $scope.Config = {
+                showJump: true,
+                itemsPerPage: 12,
+                currentPage: 1,
+                onChange: function () {
+                    tablePages();
+                }
+            }
+            let tablePages=function () {
+                $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+                $http.get('/effect/effect-list',{
+                    params:$scope.params
+                }).then(function (res) {
+                    console.log(res);
+                    $scope.cur_today_apply = res.data.data.today_apply
+                    $scope.cur_today_earnest = res.data.data.today_earnest
+                    $scope.cur_all_apply = res.data.data.all_apply
+                    $scope.cur_all_earnest = res.data.data.all_earnest
+                    $scope.apply_list = res.data.data['0'].list
+                    // $scope.house_detail = res.data.model.details
+                    $scope.Config.totalItems = res.data.data['0'].total_page
+                },function (err) {
+                    console.log(err);
+                })
+            };
+            $scope.params = {
+                time_type:'all',
+                keyword:''
+            };
+            $scope.getHouseList = function () {
+                $scope.Config.currentPage = 1
+                $scope.params.toponymy = ''
+                $scope.search_txt = ''
+                tablePages()
+            }
+            tablePages()
             //默认登录状态(后期会删除)
-            $http.post('/site/login', {
-                'username': 13551201821,
-                'password': 'demo123'
-            }, config).then(function (response) {
-                console.log(response)
-            }, function (error) {
-                console.log(error)
-            })
+            // $http.post('/site/login', {
+            //     'username': 13551201821,
+            //     'password': 'demo123'
+            // }, config).then(function (response) {
+            //     console.log(response)
+            // }, function (error) {
+            //     console.log(error)
+            // })
             $scope.ctrlScope = $scope
             $scope.keyword = ''
             $scope.start_time = ''
@@ -31,100 +69,100 @@ angular.module('apply_case',[])
             $scope.cur_time_type = $scope.time_type[0]
             //获取样板间列表
             //修改全部时间
-            $scope.$watch('cur_time_type',function (newVal,oldVal) {
-                // $scope.keyword = ''
-                console.log(newVal)
-                if(newVal.str!='custom'){
-                    $http.get('/effect/effect-list',{
-                        params:{
-                            time_type:$scope.cur_time_type.str
-                        }
-                    }).then(function (response) {
-                        console.log(response)
-                        $scope.cur_today_apply = response.data.data.today_apply
-                        $scope.cur_today_earnest = response.data.data.today_earnest
-                        $scope.cur_all_apply = response.data.data.all_apply
-                        $scope.cur_all_earnest = response.data.data.all_earnest
-                        $scope.apply_list = response.data.data['0'].list
-                        $scope.cur_page = response.data.data['0'].page
-                    },function (error) {
-                        console.log(error)
-                    })
-                }else{
-                   $scope.start_time = ''
-                   $scope.end_time = ''
-                }
-            })
-            //开始时间修改
-            $scope.$watch('start_time',function (newVal,oldVal) {
-                console.log(newVal)
-                let obj = ''
-                    if($scope.end_time == ''){
-                        obj = {
-                            time_type:'custom',
-                            start_time:newVal
-                        }
-                    }else{
-                        if(new Date(newVal).getTime()<new Date($scope.end_time).getTime()) {
-                            obj = {
-                                time_type: 'custom',
-                                start_time: newVal,
-                                end_time: $scope.end_time
-                            }
-                        }
-                    }
-                    console.log(obj)
-                    if(obj!=''){
-                    $http.get('/effect/effect-list',{
-                        params:obj
-                    }).then(function (response) {
-                        console.log(response)
-                        $scope.cur_today_apply = response.data.data.today_apply
-                        $scope.cur_today_earnest = response.data.data.today_earnest
-                        $scope.cur_all_apply = response.data.data.all_apply
-                        $scope.cur_all_earnest = response.data.data.all_earnest
-                        $scope.apply_list = response.data.data['0'].list
-                        $scope.cur_page = response.data.data['0'].page
-                    },function (error) {
-                        console.log(error)
-                    })
-                }
-            })
-            //结束时间修改
-            $scope.$watch('end_time',function (newVal,oldVal) {
-                console.log(newVal)
-                let obj = ''
-                    if($scope.start_time == ''){
-                         obj = {
-                            time_type:'custom',
-                            end_time:newVal
-                        }
-                    }else {
-                        if (new Date(newVal).getTime() > new Date($scope.start_time).getTime()) {
-                             obj = {
-                                time_type: 'custom',
-                                start_time: $scope.start_time,
-                                end_time: newVal
-                            }
-                        }
-                    }
-                    console.log(obj)
-                    if(obj!=''){
-                    $http.get('/effect/effect-list',{
-                        params:obj
-                    }).then(function (response) {
-                        console.log(response)
-                        $scope.cur_today_apply = response.data.data.today_apply
-                        $scope.cur_today_earnest = response.data.data.today_earnest
-                        $scope.cur_all_apply = response.data.data.all_apply
-                        $scope.cur_all_earnest = response.data.data.all_earnest
-                        $scope.apply_list = response.data.data['0'].list
-                        $scope.cur_page = response.data.data['0'].page
-                    },function (error) {
-                        console.log(error)
-                    })
-                }
-            })
+            // $scope.$watch('cur_time_type',function (newVal,oldVal) {
+            //     // $scope.keyword = ''
+            //     console.log(newVal)
+            //     if(newVal.str!='custom'){
+            //         $http.get('/effect/effect-list',{
+            //             params:{
+            //                 time_type:$scope.cur_time_type.str
+            //             }
+            //         }).then(function (response) {
+            //             console.log(response)
+            //             $scope.cur_today_apply = response.data.data.today_apply
+            //             $scope.cur_today_earnest = response.data.data.today_earnest
+            //             $scope.cur_all_apply = response.data.data.all_apply
+            //             $scope.cur_all_earnest = response.data.data.all_earnest
+            //             $scope.apply_list = response.data.data['0'].list
+            //             $scope.cur_page = response.data.data['0'].page
+            //         },function (error) {
+            //             console.log(error)
+            //         })
+            //     }else{
+            //        $scope.start_time = ''
+            //        $scope.end_time = ''
+            //     }
+            // })
+            // //开始时间修改
+            // $scope.$watch('start_time',function (newVal,oldVal) {
+            //     console.log(newVal)
+            //     let obj = ''
+            //         if($scope.end_time == ''){
+            //             obj = {
+            //                 time_type:'custom',
+            //                 start_time:newVal
+            //             }
+            //         }else{
+            //             if(new Date(newVal).getTime()<new Date($scope.end_time).getTime()) {
+            //                 obj = {
+            //                     time_type: 'custom',
+            //                     start_time: newVal,
+            //                     end_time: $scope.end_time
+            //                 }
+            //             }
+            //         }
+            //         console.log(obj)
+            //         if(obj!=''){
+            //         $http.get('/effect/effect-list',{
+            //             params:obj
+            //         }).then(function (response) {
+            //             console.log(response)
+            //             $scope.cur_today_apply = response.data.data.today_apply
+            //             $scope.cur_today_earnest = response.data.data.today_earnest
+            //             $scope.cur_all_apply = response.data.data.all_apply
+            //             $scope.cur_all_earnest = response.data.data.all_earnest
+            //             $scope.apply_list = response.data.data['0'].list
+            //             $scope.cur_page = response.data.data['0'].page
+            //         },function (error) {
+            //             console.log(error)
+            //         })
+            //     }
+            // })
+            // //结束时间修改
+            // $scope.$watch('end_time',function (newVal,oldVal) {
+            //     console.log(newVal)
+            //     let obj = ''
+            //         if($scope.start_time == ''){
+            //              obj = {
+            //                 time_type:'custom',
+            //                 end_time:newVal
+            //             }
+            //         }else {
+            //             if (new Date(newVal).getTime() > new Date($scope.start_time).getTime()) {
+            //                  obj = {
+            //                     time_type: 'custom',
+            //                     start_time: $scope.start_time,
+            //                     end_time: newVal
+            //                 }
+            //             }
+            //         }
+            //         console.log(obj)
+            //         if(obj!=''){
+            //         $http.get('/effect/effect-list',{
+            //             params:obj
+            //         }).then(function (response) {
+            //             console.log(response)
+            //             $scope.cur_today_apply = response.data.data.today_apply
+            //             $scope.cur_today_earnest = response.data.data.today_earnest
+            //             $scope.cur_all_apply = response.data.data.all_apply
+            //             $scope.cur_all_earnest = response.data.data.all_earnest
+            //             $scope.apply_list = response.data.data['0'].list
+            //             $scope.cur_page = response.data.data['0'].page
+            //         },function (error) {
+            //             console.log(error)
+            //         })
+            //     }
+            // })
             //修改样板间备注
             //弹出备注模态框
             $scope.replace_remarks = function (item) {

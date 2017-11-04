@@ -139,6 +139,9 @@ header button{
 .edit_house .special_radio label:last-of-type{
     width:140px;
 }
+.edit_house .error{
+    border:1px solid red;
+}
 .edit_house .button{
     width: 75px !important;
     height: 25px !important;

@@ -83,3 +83,6 @@ header button{
 .general_detail .red_mark{
     color: red;
 }
+.general_detail .error{
+    border:1px solid red;
+}

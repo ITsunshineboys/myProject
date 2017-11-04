@@ -108,3 +108,6 @@ header button{
     margin-right:10px;
     border-radius:2px;
 }
+.ulright .error{
+    border:1px solid red;
+}

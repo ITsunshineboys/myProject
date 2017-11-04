@@ -281,6 +281,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.cur_house_county = $scope.house_county[0]
             $scope.county = arr2
             $scope.county.unshift({'id': $scope.cur_city.id, 'name': '全市'})
+            $scope.cur_county = angular.copy($scope.county)[0]
             $scope.params.city = $scope.county[0].id
             $scope.params.post = $scope.county[0].id
             tablePages()
@@ -306,6 +307,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.cur_house_county = $scope.house_county[0]
                 $scope.county = arr2
                 $scope.county.unshift({'id': $scope.cur_city.id, 'name': '全市'})
+                $scope.cur_county = angular.copy($scope.county)[0]
                 $scope.params.city = $scope.county[0].id
                 $scope.params.post = $scope.county[0].id
                 tablePages()
@@ -324,6 +326,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.cur_house_county = $scope.house_county[0]
                 $scope.county = arr2
                 $scope.county.unshift({'id': item.id, 'name': '全市'})
+                $scope.cur_county = angular.copy($scope.county)[0]
                 $scope.params.city = $scope.county[0].id
                 $scope.params.post = $scope.county[0].id
                 tablePages()
@@ -1452,6 +1455,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         'address': $scope.address,
                         'house_informations': arr
                     }, config).then(function (response) {
+                        console.log($scope.cur_county)
                         //请求小区数据
                         $http.get('/quote/plot-list', {
                             params: {
