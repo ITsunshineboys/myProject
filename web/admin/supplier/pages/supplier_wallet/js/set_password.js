@@ -48,10 +48,9 @@ angular.module('set_password_module',[])
     })
   };
   $scope.confirm_btn=function (valid,error) {
-    console.log($scope.new_pw==$scope.again_pw);
     if($scope.show_first==true){
       if(valid && $scope.new_pw==$scope.again_pw && !$scope.pw_flag){
-        $scope.modal_v='#save_modal';
+        $('#save_modal').modal('show');
         $http.post('http://test.cdlhzz.cn:888/withdrawals/set-pay-pwd',{
           key:$scope.pw_key,
           pay_pwd_first:$scope.new_pw,
@@ -62,6 +61,7 @@ angular.module('set_password_module',[])
           console.log(err);
         })
       }else{
+        console.log('64646464')
         $scope.submitted=true;
       }
       //判断两次密码是否一致
@@ -74,9 +74,13 @@ angular.module('set_password_module',[])
           sms_code:$scope.v_code
         },config).then(function (res) {
           console.log(res);
-          res.data.code=1002?$scope.show_prompt=true:$scope.show_prompt=false;
             if(res.data.code=200){
-              $scope.modal_v='#save_modal';
+              $('#save_modal').modal('show');
+              console.log('79797979')
+              $scope.show_prompt=false;
+            }else if(res.data.code=1002){
+              console.log('82828282')
+              $scope.show_prompt=true;
             }
         },function (err) {
           console.log(err);
