@@ -141,7 +141,7 @@ class Effect extends ActiveRecord
                     $res= \Yii::$app->db->createCommand()->insert('effect_material',[
                         'effect_id'=>$id,
                         'count'=>$attributes['count'],
-                        'price'=>$attributes['price'],
+                        'price'=>$attributes['price']*100,
                         'goods_id'=>$attributes['goods_id'],
                         'first_cate_id'=>$attributes['first_cate_id']
                     ])->execute();
@@ -205,7 +205,9 @@ class Effect extends ActiveRecord
         $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
-
+        unset($array['city']);
+        unset($array['district']);
+        unset($array['street']);
         if($array['stairway']){
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
             $array['stairway']=$stairway_cl['attribute'];
@@ -220,7 +222,7 @@ class Effect extends ActiveRecord
         }
         foreach ($material as &$value){
             $goods_cate_id=Goods::find()->select('brand_id,category_id')->where(['id'=>$value['goods_id']])->asArray()->one();
-
+            $value['prcie']= sprintf('%.2f',(float)$value['prcie']*0.01);
             $value['cate_level3']=GoodsCategory::find()->select('title')
                 ->where(['id'=>$goods_cate_id['category_id']])
                 ->asArray()
