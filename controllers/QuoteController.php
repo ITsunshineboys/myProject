@@ -786,6 +786,7 @@ class QuoteController extends Controller
                     $transaction->commit();
                 } else {
                     if ($house['is_ordinary'] != 1) {
+                        echo '普通户型修改';exit;
                         //普通户型修改
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
@@ -852,6 +853,8 @@ class QuoteController extends Controller
                         }
                         $transaction->commit();
                     } else {
+                        echo '案例修改';exit;
+
                         // 案例修改
                         $house_id               = $house['id'];
                         $bedroom                = $house['cur_room'];
@@ -976,7 +979,7 @@ class QuoteController extends Controller
                     $transaction->commit();
                 }
 
-                
+
 
                 // 删除功能
                 if (!empty($request['delete_house'])) {
