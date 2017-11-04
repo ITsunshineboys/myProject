@@ -611,6 +611,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->asArray()
             ->where(['order_no'=>$order_no])
             ->one();
+
         $renovation_infos=[];
         if($worker_order['status']==self::WORKER_ORDER_PREPARE || $worker_order['status']==self::WORKER_WORKS_AFTER || $worker_order['status']==self::WORKER_ORDER_TOYI ){
               $data['time']=date('Y-m-d',time());
@@ -650,6 +651,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
         }
 
+    }
+
+    public static function usersiteview($order_no,$uid){
+        $today_time=date('Ymd',time());
+        $worker_order=WorkerOrder::find()
+            ->select('status,days')
+            ->asArray()
+            ->where(['order_no'=>$order_no])
+            ->one();
+
+        $renovation_infos=[];
     }
 
     public static function getOrderImg($order_no, $page_size = self::IMG_PAGE_SIZE_DEFAULT, $page = 1)
