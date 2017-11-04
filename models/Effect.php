@@ -145,7 +145,8 @@ class Effect extends ActiveRecord
                        'effect_id'=>$id,
                        'count'=>$attributes['count'],
                        'price'=>$attributes['price'],
-                       'goods_id'=>$attributes['goods_id']
+                       'goods_id'=>$attributes['goods_id'],
+                       'first_cate_id'=>$attributes['first_cate_id']
                    ])->execute();
                }
                 if(!$res){
@@ -181,7 +182,7 @@ class Effect extends ActiveRecord
             $code=200;
             return $code;
         }catch (Exception $e){
-            var_dump($e);die;
+
             $tran->rollBack();
             $code=500;
             return $code;
