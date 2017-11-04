@@ -84,7 +84,6 @@ class Effect extends ActiveRecord
      * @return int
      */
     public static function addneweffect($post){
-
         $effects=self::find()
             ->select('sort_id')
             ->asArray()
