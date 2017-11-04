@@ -463,6 +463,7 @@ class OrderController extends Controller
     public function actionEffectEarnstAlipaySub(){
         $request = \Yii::$app->request;
         $post=$request->post();
+        var_dump($post);exit;
         $code=1000;
         $phone  = trim($request->post('phone', ''), '');
         if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
