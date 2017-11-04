@@ -652,7 +652,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
 
     }
-
+    /**
+     * 智管工地详情-用户
+     * @param $order_no
+     * @param $uid
+     * @return array
+     */
     public static function usersiteview($order_no,$uid){
         $today_time=date('Ymd',time());
         $worker_order=WorkerOrder::find()
@@ -662,6 +667,44 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->one();
 
         $renovation_infos=[];
+        if($worker_order['status']==self::WORKER_ORDER_PREPARE || $worker_order['status']==self::WORKER_WORKS_AFTER || $worker_order['status']==self::WORKER_ORDER_TOYI ){
+            $data['time']=date('Y-m-d',time());
+            $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+            $data['renovation_infos']=$renovation_infos;
+            return $data;
+        }elseif($worker_order['status']==self::WORKER_ORDER_ING ){
+            $days=explode(',',$worker_order['days']);
+            if(in_array($today_time,$days)){
+                $worker_info=Worker::find()
+                    ->select('icon,nickname')
+                    ->asArray()
+                    ->where(['uid'=>$uid])
+                    ->one();
+                $data['time']=date('Y-m-d',time());
+                $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+                $work_result=WorkResult::find()
+                    ->asArray()
+                    ->where(['order_no'=>$order_no])
+                    ->orderBy('create_time Desc')
+                    ->all();
+                foreach ($work_result as $k=>&$value){
+                    $value['create_time']=date('Y-m-d',$value['create_time']);
+                    $img=WorkResultImg::find()
+                        ->select('result_img')
+                        ->asArray()
+                        ->where(['work_result_id'=>$value['id']])
+                        ->all();
+
+                    $value['img']=$img;
+                    $value['worker_info']=$worker_info;
+
+                }
+
+
+                return [$data,$work_result];
+            }
+        }
+
     }
 
     public static function getOrderImg($order_no, $page_size = self::IMG_PAGE_SIZE_DEFAULT, $page = 1)
