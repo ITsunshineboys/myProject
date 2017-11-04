@@ -473,6 +473,14 @@ class OrderController extends Controller
         }
         $out_trade_no =self::Setorder_no();
         $res=Alipay::effect_earnstsubmit($post,$phone,$out_trade_no);
+           if (!$res)
+        {
+            $code=1000;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=200;
         return json_encode([
             'code' => $code,
