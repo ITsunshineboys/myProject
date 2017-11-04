@@ -38,7 +38,7 @@ class WorksWorkerData extends ActiveRecord
 
             'worker_kind'   => $worker_kind,
             'worker_price'  => $worker_price,
-        ],'id='. $id)->execute();
+        ],['id'=>$id])->execute();
 
         return $res;
     }

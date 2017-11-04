@@ -357,7 +357,7 @@ class Effect extends ActiveRecord
             'stair_id'      => $stair_id,
             'type'          => $type,
             'sort_id'       => $sort_id
-        ],'id='. $id)->execute();
+        ],['id'=>$id])->execute();
 
         return $res;
     }

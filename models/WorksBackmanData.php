@@ -37,7 +37,7 @@ class WorksBackmanData extends ActiveRecord
         $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
             'backman_option'   => $backman_option,
             'backman_value'  => $backman_value,
-        ],'id='. $id)->execute();
+        ],['id'=>$id])->execute();
 
         return $res;
     }

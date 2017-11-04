@@ -99,7 +99,7 @@ class DecorationParticulars extends ActiveRecord
             'modelling_length'  => $modelling_length,
             'flat_area'         => $flat_area,
             'balcony_area'      => $balcony_area,
-        ],'id='.$id)->execute();
+        ],['id'=>$id])->execute();
 
         return $res;
     }

@@ -42,7 +42,7 @@ class WorksData extends ActiveRecord
             'goods_three'=>$goods_three,
             'goods_code'=>$goods_code,
             'goods_quantity'=>$goods_quantity,
-        ],'id='.$id)->execute();
+        ],['id'=>$id])->execute();
 
         return $res;
     }
