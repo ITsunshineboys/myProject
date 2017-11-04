@@ -80,12 +80,17 @@ class Alipay extends  ActiveRecord
      * @param $phone
      * @param $out_trade_no
      */
-    public  static function  effect_earnstsubmit($post,$phone,$out_trade_no) 
+   public  static function  effect_earnstsubmit($post,$phone,$out_trade_no)
     {
         $notify_url='http://test.cdlhzz.cn:888/order/alipayeffect_earnstnotify';
-        $return_url='http://test.cdlhzz.cn:888/owner/mall/index.html#!/pay_success';
+        $return_url='http://test.cdlhzz.cn:888/line/effect_earnstsuccess_pay';
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
-        $str=$post['province_code'].'&'.$post['city_code'].'&'.$post['district_code'].'&'.$post['bedroom'].'&'.$post['toilet'].'&'.$post['kitchen'].'&'.$post['sittingRoom_diningRoom'].'&'.$post['window'].'&'.$post['high'].'&'.$post['street'].'&'.$post['series'].'&'.$post['style'].'&'.$post['stairway'].'&'.$post['stair_id'].'&'.$post['toponymy'].'&'.$post['particulars'].'&'.$post['area'].'&'.$post['phone'].'&'.$post['name'].'&'.$post['requirement'];
+        $id=Effect::addneweffect($post);
+        if ($id==false)
+        {
+            return false;
+        }
+        $str=$id;
         $total_amount=0.01;
         $passback_params=urlencode($str);
         //超时时间

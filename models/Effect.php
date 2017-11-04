@@ -132,27 +132,25 @@ class Effect extends ActiveRecord
             ])->execute();
             if(!$res){
                 $tran->rollBack();
-                $code=500;
-                return $code;
+                return false;
             }
             $id=\Yii::$app->db->lastInsertID;
             //如果有材料
             if($post['material']){
 
 
-               foreach ($post['material'] as $attributes){
-                 $res= \Yii::$app->db->createCommand()->insert('effect_material',[
-                       'effect_id'=>$id,
-                       'count'=>$attributes['count'],
-                       'price'=>$attributes['price'],
-                       'goods_id'=>$attributes['goods_id'],
-                       'first_cate_id'=>$attributes['first_cate_id']
-                   ])->execute();
-               }
+                foreach ($post['material'] as $attributes){
+                    $res= \Yii::$app->db->createCommand()->insert('effect_material',[
+                        'effect_id'=>$id,
+                        'count'=>$attributes['count'],
+                        'price'=>$attributes['price'],
+                        'goods_id'=>$attributes['goods_id'],
+                        'first_cate_id'=>$attributes['first_cate_id']
+                    ])->execute();
+                }
                 if(!$res){
                     $tran->rollBack();
-                    $code=500;
-                    return $code;
+                    return false;
                 }
 
             }
@@ -167,25 +165,21 @@ class Effect extends ActiveRecord
             $effect_earnest->sale_price=$post['sale_price'];
             if(!$effect_earnest->save(false)){
                 $tran->rollBack();
-                $code=500;
-                return $code;
+                return false;
             }
             $effect_picture=new EffectPicture();
             $effect_picture->effect_id=$id;
             $effect_picture->style_id=$post['style'];
             $effect_picture->series_id=$post['series'];
             if(!$effect_picture->save(false)){
-                $code=500;
-                return $code;
+                $tran->rollBack();
+                return false;
             }
             $tran->commit();
-            $code=200;
-            return $code;
+            return $id;
         }catch (Exception $e){
-
             $tran->rollBack();
-            $code=500;
-            return $code;
+            return false;
         }
 
     }

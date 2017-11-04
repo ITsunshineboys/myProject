@@ -456,12 +456,11 @@ class OrderController extends Controller
             ]);
         }
     }
-
     /**
      * 智能报价-样板间支付定金提交
      * @return string
      */
-  public function actionEffectEarnstAlipaySub(){
+    public function actionEffectEarnstAlipaySub(){
         $request = \Yii::$app->request;
         $post=$request->post();
         $code=1000;
@@ -470,20 +469,18 @@ class OrderController extends Controller
             return json_encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
-
             ]);
         }
         $out_trade_no =self::Setorder_no();
         $res=Alipay::effect_earnstsubmit($post,$phone,$out_trade_no);
-       
-            $code=500;
-            return json_encode([
-                'code' =>200,
-                'msg' =>'ok'
+        $code=200;
+        return json_encode([
+            'code' => $code,
+            'msg' => 'ok'
+        ]);
 
-            ]);
-        
     }
+
 
       public function actionGetEffectlist(){
         $effect=EffectEarnst::find()
@@ -503,7 +500,7 @@ class OrderController extends Controller
     /**
      * 样板间支付订单异步返回
      */
-  public function actionAlipayeffect_earnstnotify()
+    public function actionAlipayeffect_earnstnotify()
     {
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -511,39 +508,34 @@ class OrderController extends Controller
         $result = $alipaySevice->check($post);
         if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS') {
-                $arr=explode('&',$post['passback_params']);
+                $id=urldecode($post['passback_params']);
                 // if ($post['total_amount'] !=89){
                 //     exit;
                 // }
-
-                $data['province_code']=$arr[0];
-                $data['city_code']=$arr[1];
-                $data['district_code']=$arr[2];
-                $data['bedroom']=$arr[3];
-                $data['toilet']=$arr[4];
-                $data['kitchen']=$arr[5];
-                $data['sittingRoom_diningRoom']=$arr[6];
-                $data['window']=$arr[7];
-                $data['high']=$arr[8];
-                $data['street']=$arr[9];
-                $data['series']=$arr[10];
-                $data['style']=$arr[11];
-                $data['stairway']=$arr[12];
-                $data['stair_id']=$arr[13];
-                $data['toponymy']=$arr[14];
-                $data['particulars']=$arr[15];
-                $data['area']=$arr[16];
-                $data['phone']=$arr[17];
-                $data['name']=$arr[18];
-                $data['requirement']=$arr[19];
-                $code=Effect::addneweffect($data);
-               if ($code==200)
-               {
-                   echo 'success';
-               }else
-               {
-                   echo "fail"; //请不要修改或删除
-               }
+                $effect=Effect::findOne($id);
+                if (!$effect)
+                {
+                    echo 'sucess';
+                    exit;
+                }
+                $tran = Yii::$app->db->beginTransaction();
+                try{
+                    $earnst=EffectEarnst::find()
+                        ->where(['effect_id'=>$id])
+                        ->one();
+                    $earnst->status=1;
+                    if (!$earnst->save(false))
+                    {
+                        echo 'fail';
+                        exit;
+                    }
+                }catch (Exception $e){
+                    $tran->rollBack();
+                    echo 'fail';
+                    exit;
+                }
+                $tran->commit();
+                echo 'sucess';
             }
         }else{
             //验证失败
