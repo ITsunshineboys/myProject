@@ -1705,12 +1705,13 @@ class OwnerController extends Controller
      * @return string
      */
     public function actionTest(){
-        $id = Yii::$app->request->get('id','');
-        $redis = Yii::$app->redis; //$redis->get('key');$redis->set('k','v');
-        $redis->get('111111');
-        var_dump($redis->set());
+//        $id = Yii::$app->request->get('id','');
+//        $redis = Yii::$app->redis; //$redis->get('key');$redis->set('k','v');
+//        $redis->get('111111');
+//        var_dump($redis->set());
         return Json::encode([
-           'goods'=> (new LogisticsTemplate())->find()->where(['id'=>$id])->All(),
+            'list' => Effect::findAll(),
+//           'goods'=> (new LogisticsTemplate())->find()->where(['id'=>$id])->All(),
         ]);
     }
 
