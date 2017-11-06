@@ -127,7 +127,7 @@ app.controller('commodity_deleted', ['$scope', '$stateParams','$http', function 
         $scope.params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
+            url: baseUrl+"/mall/goods-list-admin",
             params: $scope.params,
         }).then(function (res) {
             console.log(res);

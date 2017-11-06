@@ -87,7 +87,7 @@ add_series.controller("add_series",function ($scope,$http,$stateParams,$state) {
   };
 	//添加确认按钮
 	$scope.add_ok=function () {
-    let url='http://test.cdlhzz.cn:888/mall/series-add';
+    let url=baseUrl+'/mall/series-add';
     $http.post(url,{
       series:$scope.series_name, //名称
       theme:$scope.tran_arr.join(','), //标签

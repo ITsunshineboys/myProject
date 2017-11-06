@@ -16,7 +16,7 @@ style_detail.controller("style_detail",function ($scope,$http,$state,$stateParam
   };
   //风格列表所有数据
   $scope.style_arr=[];
-  $http.get('http://test.cdlhzz.cn:888/mall/style-list',{
+  $http.get(baseUrl+'/mall/style-list',{
     params:{
       size:99999
     }
@@ -62,7 +62,7 @@ style_detail.controller("style_detail",function ($scope,$http,$state,$stateParam
     }
     console.log($scope.data);
     Upload.upload({
-      url:'http://test.cdlhzz.cn:888/site/upload',
+      url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       if(!response.data.data){
@@ -79,7 +79,7 @@ style_detail.controller("style_detail",function ($scope,$http,$state,$stateParam
   //删除图片
   $scope.del_img=function (item) {
     //判断图片列表是否为空
-    $http.post('http://test.cdlhzz.cn:888/site/upload-delete',{
+    $http.post(baseUrl+'/site/upload-delete',{
       file_path:item
     },config).then(function (res) {
       console.log(res);
@@ -126,7 +126,7 @@ style_detail.controller("style_detail",function ($scope,$http,$state,$stateParam
   };
   //跳转页面
   $scope.style_go=function () {
-      $http.post('http://test.cdlhzz.cn:888/mall/style-edit',{
+      $http.post(baseUrl+'/mall/style-edit',{
         id:+$scope.style_item.id,
         style:$scope.style_name,
         theme:$scope.tran_arr.join(','),

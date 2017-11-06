@@ -125,7 +125,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         // {'addition_types[]':'0&1&0'}
 
 
-        // let url = "http://test.cdlhzz.cn:888/mall/goods-attr-add";
+        // let url = baseUrl+"/mall/goods-attr-add";
         // let data = {
         //     id: $scope.onsaleclassid,
         //     title: $scope.class_name,

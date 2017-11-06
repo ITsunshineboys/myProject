@@ -23,7 +23,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
     //console.log(1112)
     $http({
       method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/user-list',
+      url: baseUrl+'/mall/user-list',
       params:{
         "sort[]":"id:3",
         status:1
@@ -42,7 +42,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
     $scope.flag = true;
     $http({
       method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/user-list',
+      url: baseUrl+'/mall/user-list',
       params:{
         "sort[]":"id:4",
         status:1
@@ -61,7 +61,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
       console.log($scope.search_text);
     $http({
       method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/user-list',
+      url: baseUrl+'/mall/user-list',
       params:{
         keyword:$scope.search_text,
         status:1
@@ -83,7 +83,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
     if (newVal == "") {
       $http({
         method: 'get',
-        url: 'http://test.cdlhzz.cn:888/mall/user-list',
+        url: baseUrl+'/mall/user-list',
         params:{
           status:1
         }
@@ -108,7 +108,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   //获取账户管理列表 正常状态
   $http({
       method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/user-list',
+      url: baseUrl+'/mall/user-list',
       params:{
         status:1
       }
@@ -129,7 +129,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
           return $.param(data)
         },
         method: 'post',
-        url: 'http://test.cdlhzz.cn:888/mall/user-status-toggle',
+        url: baseUrl+'/mall/user-status-toggle',
         data:{
           user_id:+$scope.id,
           remark:$scope.text
@@ -138,7 +138,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
         console.log(response);
         $http({
           method: 'get',
-          url: 'http://test.cdlhzz.cn:888/mall/user-list',
+          url: baseUrl+'/mall/user-list',
           params:{
             status:1
           }
@@ -183,7 +183,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
          return $.param(data)
        },
        method: 'post',
-       url: 'http://test.cdlhzz.cn:888/mall/user-disable-batch',
+       url: baseUrl+'/mall/user-disable-batch',
        data:{
            user_ids: $scope.nemArr,
            remark:$scope.more
@@ -192,7 +192,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
        console.log(response);
        $http({
          method: 'get',
-         url: 'http://test.cdlhzz.cn:888/mall/user-list',
+         url: baseUrl+'/mall/user-list',
          params:{
              status:1
          }
@@ -211,10 +211,10 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   //正常状态 选择时间排顺序  选择自定义 显示开始结束框
 
   console.log($scope.search_text);
-  $http.get('http://test.cdlhzz.cn:888/site/time-types').then(function (response) {
+  $http.get(baseUrl+'/site/time-types').then(function (response) {
     $scope.time = response.data.data.time_types;
     $scope.selectValue = response.data.data.time_types[0];
-    $http.get('http://test.cdlhzz.cn:888/mall/user-list', {
+    $http.get(baseUrl+'/mall/user-list', {
       params: {
         'time_type': $scope.selectValue.value,
         'status':1
@@ -230,7 +230,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   //============监听下拉框值的变化===========
   $scope.$watch('selectValue',function(newVal,oldVal){
     if(!!newVal){
-      $http.get('http://test.cdlhzz.cn:888/mall/user-list', {
+      $http.get(baseUrl+'/mall/user-list', {
         params: {
           'time_type': newVal.value,
           'status':1
@@ -255,7 +255,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
           if($scope.search_text == "") {
             $http({
               method: 'get',
-              url: 'http://test.cdlhzz.cn:888/mall/user-list',
+              url: baseUrl+'/mall/user-list',
               params:{
                 status:1
               }
@@ -266,7 +266,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
           }
           //不为空时分页处理
           else {
-            $http.get('http://test.cdlhzz.cn:888/mall/user-list',{
+            $http.get(baseUrl+'/mall/user-list',{
               params:{
                 'time_type': newVal.value,
                 'page':$scope.page,
@@ -312,7 +312,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   $scope.$watch('begin_time',function (newVal,oldVal) {
     $scope.page=1;//默认第一页
     if(newVal!=undefined && newVal!='' && $scope.begin_time!=undefined && $scope.end_time!=undefined){
-      let url='http://test.cdlhzz.cn:888/mall/user-list';
+      let url=baseUrl+'/mall/user-list';
       $http.get(url,{
         params:{
           'time_type':'custom',
@@ -339,7 +339,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   $scope.$watch('end_time',function (newVal,oldVal) {
     $scope.page=1;//默认第一页
     if(newVal!=undefined && newVal!='' && $scope.begin_time!=undefined && $scope.end_time!=undefined){
-      let url='http://test.cdlhzz.cn:888/mall/user-list';
+      let url=baseUrl+'/mall/user-list';
       $http.get(url,{
         params:{
           'time_type':'custom',
@@ -369,7 +369,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   //获取账户管理列表 关闭状态
   $http({
     method: 'get',
-    url: 'http://test.cdlhzz.cn:888/mall/user-list',
+    url: baseUrl+'/mall/user-list',
     params:{
       status:0
     }
@@ -397,7 +397,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
           return $.param(data)
         },
         method: 'POST',
-        url: 'http://test.cdlhzz.cn:888/mall/user-status-toggle',
+        url: baseUrl+'/mall/user-status-toggle',
         data:{
           user_id:item.id,
           remark:item.status_remark
@@ -405,7 +405,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
       }).then(function successCallback(response) {
         $http({
           method: 'get',
-          url: 'http://test.cdlhzz.cn:888/mall/user-list',
+          url: baseUrl+'/mall/user-list',
           params:{
             status:0
           }
@@ -452,7 +452,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
         return $.param(data)
       },
       method: 'post',
-      url: 'http://test.cdlhzz.cn:888/mall/user-enable-batch',
+      url: baseUrl+'/mall/user-enable-batch',
       data:{
         user_ids: $scope.nemArr
       }
@@ -460,7 +460,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
       console.log(response);
       $http({
         method: 'get',
-        url: 'http://test.cdlhzz.cn:888/mall/user-list',
+        url: baseUrl+'/mall/user-list',
         params:{
           status:0
         }
@@ -476,11 +476,11 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   };
 
   //关闭状态 选择时间排顺序  选择自定义 显示开始结束框
-  $http.get('http://test.cdlhzz.cn:888/site/time-types').then(function (response) {
+  $http.get(baseUrl+'/site/time-types').then(function (response) {
     $scope.timeClose = response.data.data.time_types;
     $scope.selectValueClose = response.data.data.time_types[0];
     // console.log($scope.selectValue.value)
-    $http.get('http://test.cdlhzz.cn:888/mall/user-list', {
+    $http.get(baseUrl+'/mall/user-list', {
       params: {
         'time_type': $scope.selectValueClose.value,
         'status':0
@@ -496,7 +496,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   //============监听下拉框值的变化===========
   $scope.$watch('selectValueClose',function(newVal,oldVal){
     if(!!newVal){
-      $http.get('http://test.cdlhzz.cn:888/mall/user-list', {
+      $http.get(baseUrl+'/mall/user-list', {
         params: {
           'time_type': newVal.value,
           'status':0
@@ -521,7 +521,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
           // $scope.isActivePage=function (now_page) {
           //console.log($scope.page);
           // };
-          $http.get('http://test.cdlhzz.cn:888/mall/user-list',{
+          $http.get(baseUrl+'/mall/user-list',{
             params:{
               'time_type': newVal.value,
               'page':$scope.page,
@@ -573,7 +573,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
     $scope.page=1;//默认第一页
     if(newVal!=undefined && newVal !='' && $scope.begin_time_more!=undefined && $scope.end_time_more!=undefined){
       console.log("测试判断");
-      let url='http://test.cdlhzz.cn:888/mall/user-list';
+      let url=baseUrl+'/mall/user-list';
       $http.get(url,{
         params:{
           'time_type':'custom',
@@ -599,7 +599,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
   $scope.$watch('end_time_more',function (newVal,oldVal) {
     $scope.page = 1;//默认第一页
     if (newVal != undefined && newVal != '' && $scope.begin_time_more != undefined && $scope.end_time_more != undefined) {
-      let url = 'http://test.cdlhzz.cn:888/mall/user-list';
+      let url = baseUrl+'/mall/user-list';
       $http.get(url, {
         params: {
           'time_type': 'custom',
@@ -630,7 +630,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
     console.log($scope.name_num);
     $http({
       method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/user-list',
+      url: baseUrl+'/mall/user-list',
       params:{
         keyword:$scope.name_num,
         status:0
@@ -653,7 +653,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
      if (newVal == "") {
        $http({
          method: 'get',
-         url: 'http://test.cdlhzz.cn:888/mall/user-list',
+         url: baseUrl+'/mall/user-list',
          params:{
            status:0
          }

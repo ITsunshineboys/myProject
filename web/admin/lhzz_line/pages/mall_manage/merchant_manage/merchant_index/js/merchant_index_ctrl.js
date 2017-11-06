@@ -7,7 +7,7 @@ var mall_mag = angular.module("mallmagModule",[]);
 mall_mag.controller("mall_mag",function ($scope,$http) {
     $http({
         method:"get",
-        url:"http://test.cdlhzz.cn:888/mall/index-admin",
+        url:baseUrl+"/mall/index-admin",
     }).then(function (res) {
         $scope.result = res.data.data.index_admin;
     })

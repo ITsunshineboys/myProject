@@ -6,7 +6,7 @@
 var offsale_edit = angular.module("offsaleeditModule",['ngFileUpload']);
 offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http,Upload) {
 	let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
-	const picprefix = "http://test.cdlhzz.cn:888/";
+	const picprefix = baseUrl+"/";
 	$scope.showtishi = false;
 	$scope.idarr = [];
 	$scope.firstclass = []; /*一级下拉框*/
@@ -78,13 +78,13 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 	$scope.alltitles = (function () {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 		}).then(function (res) {
 			for (let key in res.data.data.categories) {
 				$scope.idarr.push(res.data.data.categories[key].title)
 				$http({
 					method: "get",
-					url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+					url: baseUrl+"/mall/categories-manage-admin",
 					params: {pid: res.data.data.categories[key].id}
 				}).then(function (res) {
 					for (let key in res.data.data.categories) {
@@ -122,7 +122,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 	$scope.findParentClass =  (function () {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 		}).then(function (res) {
 			$scope.firstclass = res.data.data.categories.splice(1);
 			for(let i=0;i<$scope.firstclass.length;i++){
@@ -138,7 +138,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 	$scope.subClassDefault = (function () {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 			params: {pid: $scope.finalpatharr[0]}
 		}).then(function (res) {
 			$scope.secondclass = res.data.data.categories.splice(1);
@@ -155,7 +155,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 	$scope.subClass = function (obj) {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 			params: {pid: obj}
 		}).then(function (response) {
 			$scope.secondclass = response.data.data.categories.splice(1);
@@ -171,7 +171,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 			return
 		}
 		Upload.upload({
-			url:'http://test.cdlhzz.cn:888/site/upload',
+			url:baseUrl+'/site/upload',
 			data:{'UploadForm[file]':file}
 		}).then(function (response) {
 			if(!response.data.data){
@@ -199,7 +199,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 				pid = 0;
 			}
 
-			let url = "http://test.cdlhzz.cn:888/mall/category-edit";
+			let url = baseUrl+"/mall/category-edit";
 			let data =  {id:+$scope.onsaleclassid,title:$scope.class_name,pid:+pid,icon:$scope.classicon||$stateParams.iconpath,description:$scope.offlinedes,offline_reason:$scope.offlinereason};
 			$http.post(url,data,config).then(function (res) {
 				// console.log(res)

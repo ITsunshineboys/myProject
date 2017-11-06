@@ -40,7 +40,7 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$s
         $http({
             method: "get",
             params: {id:Number(gooddetail.id)},
-            url: "http://test.cdlhzz.cn:888/mall/goods-view",
+            url: baseUrl+"/mall/goods-view",
         }).then(function (res) {
             good_partdetail = res.data.data.goods_view;
             $scope.subtitle = good_partdetail.subtitle;
@@ -54,7 +54,7 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$s
      function logisticsTemplate () {
         $http({
             method:"get",
-            url:"http://test.cdlhzz.cn:888/mall/logistics-template-view",
+            url:baseUrl+"/mall/logistics-template-view",
             params:{id:Number($scope.logistics_template_id)}
         }).then(function (res) {
             logistics = res.data.data.logistics_template;
@@ -76,7 +76,7 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$s
 
     /*单个商品确认下架*/
     $scope.sureGoodOffline = () => {
-        let url = "http://test.cdlhzz.cn:888/mall/goods-status-toggle";
+        let url = baseUrl+"/mall/goods-status-toggle";
         let data = {id: Number(goodid), offline_reason: $scope.offline_reason};
         $http.post(url, data, config).then((res) => {
             setTimeout(()=>
@@ -134,7 +134,7 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$s
         if(val&&!$scope.price_flag){
             $scope.savemodal = "#savesuremodal"
             // console.log($scope.price_flag)
-            let url = "http://test.cdlhzz.cn:888/mall/goods-edit-lhzz";
+            let url = baseUrl+"/mall/goods-edit-lhzz";
             let data = {
                 id:+goodid,
                 purchase_price_decoration_company:Number($scope.purchase_price_decoration_company)*100,

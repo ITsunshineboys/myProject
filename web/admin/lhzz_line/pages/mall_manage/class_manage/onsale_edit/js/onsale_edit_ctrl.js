@@ -4,7 +4,7 @@
 /*已上架 编辑*/
 var onsale_edit = angular.module("onsaleeditModule", ['ngFileUpload']);
 onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$http,Upload) {
-	const picprefix = "http://test.cdlhzz.cn:888/";
+	const picprefix = baseUrl+"/";
 	const config = {
 		headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 		transformRequest: function (data) {
@@ -74,13 +74,13 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 	$scope.alltitles = (function () {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 		}).then(function (res) {
 			for (let key in res.data.data.categories) {
 				$scope.idarr.push(res.data.data.categories[key].title)
 				$http({
 					method: "get",
-					url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+					url: baseUrl+"/mall/categories-manage-admin",
 					params: {pid: res.data.data.categories[key].id}
 				}).then(function (res) {
 					for (let key in res.data.data.categories) {
@@ -119,7 +119,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 	$scope.findParentClass =  (function () {
 			$http({
 				method: "get",
-				url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+				url: baseUrl+"/mall/categories-manage-admin",
 			}).then(function (res) {
 				$scope.firstclass = res.data.data.categories.splice(1);
 				for(let i=0;i<$scope.firstclass.length;i++){
@@ -135,7 +135,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 	$scope.subClassDefault = (function () {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 			params: {pid: $scope.finalpatharr[0]}
 		}).then(function (res) {
 			$scope.secondclass = res.data.data.categories.splice(1);
@@ -152,7 +152,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 	$scope.subClass = function (obj) {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 			params: {pid: obj}
 		}).then(function (response) {
 			$scope.secondclass = response.data.data.categories.splice(1);
@@ -170,7 +170,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 		}
 		// console.log($scope.data)
 		Upload.upload({
-			url:'http://test.cdlhzz.cn:888/site/upload',
+			url:baseUrl+'/site/upload',
 			data:{'UploadForm[file]':file}
 		}).then(function (response) {
 			if(!response.data.data){
@@ -189,7 +189,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 
 	/*编辑里的下架*/
 	$scope.sureoffline = function () {
-		let url = "http://test.cdlhzz.cn:888/mall/category-status-toggle";
+		let url = baseUrl+"/mall/category-status-toggle";
 		let data =  {id:$scope.offsaleclassid,offline_reason:$scope.offlinereason};
 		$http.post(url,data,config).then(function (res) {
 			$scope.offlinereason = '';
@@ -215,7 +215,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 			}else{
 				pid = 0;
 			}
-			let url = "http://test.cdlhzz.cn:888/mall/category-edit";
+			let url = baseUrl+"/mall/category-edit";
 			let data =  {id:$scope.offsaleclassid,title:$scope.class_name,pid:pid,icon:$scope.classicon||$stateParams.iconpath,description:$scope.onlinedes};
 			$http.post(url,data,config).then(function (res) {
 				// console.log(res)

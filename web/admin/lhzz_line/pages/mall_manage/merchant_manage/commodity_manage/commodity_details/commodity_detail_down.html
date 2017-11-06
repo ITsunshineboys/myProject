@@ -53,11 +53,11 @@
         <div class="margin_top  picarr">
             <span>上传图片</span>
             <div class="margin_left inline_block img_size coverimg">
-                <img ng-src="http://test.cdlhzz.cn:888/{{cover_image}}" alt="">
+                <img ng-src="{{baseUrl + '/'+ cover_image}}" alt="">
                 <div id="coverimg_span">封面图</div>
             </div>
             <div class="inline_block img_size" ng-repeat="item in images track by $index" style="margin-left: 10px">
-                <img ng-src="http://test.cdlhzz.cn:888/{{item}}" alt="">
+                <img ng-src="{{baseUrl + '/'+ item}}" alt="">
             </div>
         </div>
         <!--价格/库存-->
@@ -170,7 +170,7 @@
         <div class="margin_top">
             <span >线下商城二维码</span>
             <div style="text-indent:2rem" class="inline_block">
-                <img style="width: 170px;height: 170px;" ng-src="http://test.cdlhzz.cn:888/{{qr_code}}" alt="">
+                <img style="width: 170px;height: 170px;" ng-src="{{baseUrl + '/'+ qr_code}}" alt="">
             </div>
         </div>
         <hr>

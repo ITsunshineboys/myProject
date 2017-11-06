@@ -71,7 +71,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         $scope.showattr = false;
 
         $scope.ser_time_img='lib/images/sort_down.png';
-        $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort',{
+        $http.get(baseUrl+'/mall/series-time-sort',{
             params:{
                 sort:0
             }
@@ -101,7 +101,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     /************************系列开始*******************************/
 
 //	系列——展示数据
-    $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort',{
+    $http.get(baseUrl+'/mall/series-time-sort',{
         params:{
             sort:0
         }
@@ -118,12 +118,12 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     };
     //开启确认按钮
     $scope.open_btn_ok=function () {
-        let url='http://test.cdlhzz.cn:888/mall/series-status';
+        let url=baseUrl+'/mall/series-status';
         $http.post(url,{
             id:+$scope.open_item.id,
             status:1
         },config).then(function (res) {
-            $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort').then(function (res) {
+            $http.get(baseUrl+'/mall/series-time-sort').then(function (res) {
                 $scope.series_arr=res.data.list;
             },function (err) {
                 console.log(err);
@@ -139,12 +139,12 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     };
     //关闭确认按钮
     $scope.close_btn_ok=function () {
-        let url='http://test.cdlhzz.cn:888/mall/series-status';
+        let url=baseUrl+'/mall/series-status';
         $http.post(url,{
             id:+$scope.close_item.id,
             status:0
         },config).then(function (res) {
-            $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort').then(function (res) {
+            $http.get(baseUrl+'/mall/series-time-sort').then(function (res) {
                 $scope.series_arr=res.data.list;
             },function (err) {
                 console.log(err);
@@ -163,7 +163,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
             $scope.ser_time_img='lib/images/sort_down.png';
             $scope.ser_sort_num=0;
         }
-        $http.get('http://test.cdlhzz.cn:888/mall/series-time-sort',{
+        $http.get(baseUrl+'/mall/series-time-sort',{
             params:{
                 sort:$scope.ser_sort_num
             }
@@ -198,7 +198,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     };
     //开启确认按钮
     $scope.style_open_btn_ok=function () {
-        let url='http://test.cdlhzz.cn:888/mall/style-status';
+        let url=baseUrl+'/mall/style-status';
         $http.post(url,{
             id:+$scope.style_open_item.id,
             status:1
@@ -215,7 +215,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     };
 //关闭确认按钮
     $scope.style_close_btn_ok=function () {
-        let url='http://test.cdlhzz.cn:888/mall/style-status';
+        let url=baseUrl+'/mall/style-status';
         $http.post(url,{
             id:+$scope.style_close_item.id,
             status:0
@@ -265,7 +265,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     function firstClass() {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
         }).then((response) => {
             $scope.firstclass = response.data.data.categories;
             $scope.dropdown.firstselect = response.data.data.categories[0].id;
@@ -276,7 +276,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     function subClass(obj) {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
             params: {pid: obj}
         }).then(function (response) {
             $scope.secondclass = response.data.data.categories;
@@ -290,7 +290,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     // $scope.firstClass = (function () {
     //     $http({
     //         method: "get",
-    //         url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+    //         url: baseUrl+"/mall/categories-manage-admin",
     //     }).then(function (response) {
     //         $scope.firstclass = response.data.data.categories;
     //         $scope.firstselect = response.data.data.categories[0].id;
@@ -302,7 +302,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     //     console.log(obj)
     //     $http({
     //         method: "get",
-    //         url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+    //         url: baseUrl+"/mall/categories-manage-admin",
     //         params: {pid: obj}
     //     }).then(function (response) {
     //         $scope.secondclass = response.data.data.categories;
@@ -350,7 +350,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         $scope.attr_params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+            url: baseUrl+"/mall/goods-attr-list-admin",
             params: $scope.attr_params,
         }).then(function (res) {
             console.log(res);
@@ -363,7 +363,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     // $scope.allproperties = (function () {
     //     $http({
     //         method: "get",
-    //         url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+    //         url: baseUrl+"/mall/goods-attr-list-admin",
     //         params: {"sort[]": "attr_op_time:3"}
     //     }).then(function (res) {
     //         $scope.proptable = res.data.data.goods_attr_list_admin.details;
@@ -375,7 +375,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     //     $scope.handledesorder = true;
     //     $scope.handleascorder = false;
     //     if (!$scope.secselect) {
-    //         $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+    //         $http.get(baseUrl+'/mall/goods-attr-list-admin', {
     //             params: {pid: +newVal},
     //         }).then(function (res) {
     //             console.log('属性管理分类选择第一个下拉框')
@@ -394,7 +394,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     //     $scope.handledesorder = true;
     //     $scope.handleascorder = false;
     //     if (newVal != 0) {
-    //         $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+    //         $http.get(baseUrl+'/mall/goods-attr-list-admin', {
     //             params: {pid: +newVal},
     //         }).then(function (res) {
     //             console.log(res);
@@ -403,7 +403,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     //             console.log(err);
     //         })
     //     } else {
-    //         $http.get('http://test.cdlhzz.cn:888/mall/goods-attr-list-admin', {
+    //         $http.get(baseUrl+'/mall/goods-attr-list-admin', {
     //             params: {pid: +$scope.firstselect},
     //         }).then(function (res) {
     //             $scope.proptable = res.data.data.goods_attr_list_admin.details;
@@ -438,7 +438,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     //     $http({
     //         method: "get",
     //         params: {"sort[]": sortparam, pid: $scope.pid || 0},
-    //         url: "http://test.cdlhzz.cn:888/mall/goods-attr-list-admin",
+    //         url: baseUrl+"/mall/goods-attr-list-admin",
     //     }).then(function (res) {
     //         $scope.proptable = res.data.data.goods_attr_list_admin.details;
     //     })

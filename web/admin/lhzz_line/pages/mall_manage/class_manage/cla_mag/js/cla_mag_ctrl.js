@@ -71,7 +71,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     function firstClass() {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
         }).then((response) => {
             $scope.firstclass = response.data.data.categories;
             $scope.dropdown.firstselect = response.data.data.categories[0].id;
@@ -82,7 +82,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     function subClass(obj) {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
             params: {pid: obj}
         }).then(function (response) {
             $scope.secondclass = response.data.data.categories;
@@ -148,7 +148,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         $scope.params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/category-list-admin",
+            url: baseUrl+"/mall/category-list-admin",
             params: $scope.params,
         }).then(function (res) {
             $scope.pageConfig.totalItems = res.data.data.category_list_admin.total;
@@ -174,7 +174,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
     /*单个确认下架*/
     $scope.sureOffline = function () {
-        let url = "http://test.cdlhzz.cn:888/mall/category-status-toggle";
+        let url = baseUrl+"/mall/category-status-toggle";
         let data = {id: singleoffid, offline_reason: $scope.offlinereason};
         $http.post(url, data, config).then(function (res) {
             $scope.offlinereason = '';
@@ -191,7 +191,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     /*确认批量下架*/
     $scope.sureBatchOffline = function () {
         let batchoffids = $scope.table.roles.join(',');
-        let url = "http://test.cdlhzz.cn:888/mall/category-disable-batch";
+        let url = baseUrl+"/mall/category-disable-batch";
         let data = {ids: batchoffids, offline_reason: $scope.batchoffline_reason};
         $http.post(url, data, config).then(function (res) {
             $scope.batchoffline_reason = '';
@@ -216,7 +216,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
     /*单个确认上架*/
     $scope.sureOnline = function () {
-        let url = "http://test.cdlhzz.cn:888/mall/category-status-toggle";
+        let url = baseUrl+"/mall/category-status-toggle";
         let data = {id: singleonid};
         $http.post(url, data, config).then(function (res) {
             $scope.pageConfig.currentPage = 1;
@@ -228,7 +228,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     /*单个取消上架无操作*/
     $scope.surepiliangonline = function () {
         $scope.piliangonids = $scope.table.roles.join(',');
-        let url = "http://test.cdlhzz.cn:888/mall/category-enable-batch";
+        let url = baseUrl+"/mall/category-enable-batch";
         let data = {ids: $scope.piliangonids};
         $http.post(url, data, config).then(function (res) {
             $scope.pageConfig.currentPage = 1;
@@ -243,7 +243,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     }
 
     $scope.surereset = function () {
-        let url = "http://test.cdlhzz.cn:888/mall/category-offline-reason-reset";
+        let url = baseUrl+"/mall/category-offline-reason-reset";
         let data = {id: $scope.resetid, offline_reason: $scope.original_reason};
         $http.post(url, data, config).then(function (res) {
             if(res.data.code==200){

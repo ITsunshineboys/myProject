@@ -7,7 +7,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
     // allstore();
     // const storename_arr = [];
     const picpath = 'pages/mall_manage/merchant_manage/add_store/images/default.png'
-    const picprefix = "http://test.cdlhzz.cn:888/";
+    const picprefix = baseUrl+"/";
     const pattern = /^0?(13[0-9]|15[012356789]|18[0236789]|14[57])[0-9]{8}$/;
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -38,7 +38,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
     
     // test();
     // function test() {
-    //     let url = "http://test.cdlhzz.cn:888/mall/user-add";
+    //     let url = baseUrl+"/mall/user-add";
     //     let data = {
     //        mobile:13093355262,
     //         password:'123456'
@@ -52,7 +52,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
  function firstDefault() {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
         }).then(function (response) {
             response.data.data.categories.splice(0,1);
             $scope.firstclass = response.data.data.categories;
@@ -63,7 +63,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
     function secDefault() {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
             params: {pid: 1}
         }).then(function (res) {
             res.data.data.categories.splice(0,1);
@@ -75,7 +75,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
     function thirdDefault() {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
             params: {pid: 2}
         }).then(function (res) {
             res.data.data.categories.splice(0,1);
@@ -89,7 +89,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
 		/*二级下拉框内容*/
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
             params: {pid: obj}
         }).then(function (response) {
            	response.data.data.categories.splice(0,1);
@@ -97,7 +97,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
 			$scope.secselect = response.data.data.categories[0].id;
             $http({
                 method: "get",
-                url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+                url: baseUrl+"/mall/categories-manage-admin",
                 params: {pid: $scope.secselect}
             }).then(function (response) {
                 response.data.data.categories.splice(0,1);
@@ -110,7 +110,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
     $scope.thirdClass = function (obj) {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
             params: {pid: obj}
         }).then(function (response) {
             response.data.data.categories.splice(0,1);
@@ -133,7 +133,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
                 return
             }
             Upload.upload({
-                url: 'http://test.cdlhzz.cn:888/site/upload',
+                url: baseUrl+'/site/upload',
                 data: {'UploadForm[file]': file}
             }).then(function (response) {
                 if (!response.data.data) {
@@ -158,7 +158,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
             }
 
             Upload.upload({
-                url: 'http://test.cdlhzz.cn:888/site/upload',
+                url: baseUrl+'/site/upload',
                 data: {'UploadForm[file]': file}
             }).then(function (response) {
                 if (!response.data.data) {
@@ -183,7 +183,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
             }
 
             Upload.upload({
-                url: 'http://test.cdlhzz.cn:888/site/upload',
+                url: baseUrl+'/site/upload',
                 data: {'UploadForm[file]': file}
             }).then(function (response) {
                 if (!response.data.data) {
@@ -213,7 +213,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
                 if(pattern.test($scope.login_account)){
                     $http({
                         method: "get",
-                        url: "http://test.cdlhzz.cn:888/mall/check-role-get-identity",
+                        url: baseUrl+"/mall/check-role-get-identity",
                         params: {mobile: Number($scope.login_account)}
                     }).then(function (res) {
                         console.log(res);
@@ -274,7 +274,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
             $scope.legalperson = 'default';
             $scope.idcard = 622626199403253024;
             if (val) {
-                let url = "http://test.cdlhzz.cn:888/mall/supplier-add";
+                let url = baseUrl+"/mall/supplier-add";
                 let data = {
                     type_org: +$scope.unittype, //单位类型
                     category_id: +$scope.thirdselect, //店铺分类
@@ -324,7 +324,7 @@ add_store.controller("addstore",function ($scope,$http,Upload,$location,$anchorS
             if (val && $scope.picflag) {
 
                 /*right*/
-                let url = "http://test.cdlhzz.cn:888/mall/supplier-add";
+                let url = baseUrl+"/mall/supplier-add";
                 let data = {
                     type_org: +$scope.unittype, //单位类型
                     category_id: +$scope.thirdselect, //店铺分类
