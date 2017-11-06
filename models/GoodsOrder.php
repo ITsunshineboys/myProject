@@ -2137,7 +2137,7 @@ class GoodsOrder extends ActiveRecord
             ->where($where)
             ->all();
         $arr=self::getorderstatus($OrderList);
-        $arr=self::findOrderData($arr);
+         $arr=self::findOrderData($arr,$user,$role);
         if ($type=='all' || $type=='unpaid')
         {
             switch ($role){
@@ -2163,7 +2163,12 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['handle']='';
                 $sup=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one();
                 $GoodsOrder[$k]['shop_name']=$sup->nickname;
-                $GoodsOrder[$k]['uid']=$sup->uid;
+                   if ($role=='user')
+                    {
+                        $GoodsOrder[$k]['uid']=$sup->uid;
+                    }else{
+                        $GoodsOrder[$k]['uid']=$GoodsOrder[$k]['user_id'];
+                    }
                 $GoodsOrder[$k]['list']=OrderGoods::find()
                     ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                     ->andWhere(['order_status' =>0])
@@ -2243,7 +2248,7 @@ class GoodsOrder extends ActiveRecord
      * @param $arr
      * @return mixed
      */
-   public static function  findOrderData($arr)
+    public static function  findOrderData($arr,$user,$role)
     {
         foreach ($arr as $k=>$v){
             if ($arr[$k]['status']=='待付款'){
@@ -2273,9 +2278,16 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
             $arr[$k]['freight']=self::switchMoney($arr[$k]['freight']*0.01);
-             $supplier=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one();
+            $supplier=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one();
             $arr[$k]['shop_name']=$supplier->nickname;
-            $arr[$k]['uid']=$supplier->uid;
+           if ($role=='user')
+            {
+                $arr[$k]['uid']=$supplier->uid;
+
+            }else
+            {
+                $arr[$k]['uid']= $arr[$k]['user_id'];
+            }
             $arr_list=[];
             $arr_list['goods_name']=$arr[$k]['goods_name'];
             $arr_list['goods_price']=$arr[$k]['goods_price'];
@@ -2287,7 +2299,6 @@ class GoodsOrder extends ActiveRecord
             $arr_list['cover_image']=$arr[$k]['cover_image'];
             $arr_list['unusual']=$arr[$k]['unusual'];
             $arr_list['shipping_type']=$arr[$k]['shipping_type'];
-
             unset($arr[$k]['goods_name']);
             unset($arr[$k]['goods_price']);
             unset($arr[$k]['goods_number']);
@@ -2308,6 +2319,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $arr;
     }
+
 
 
     /**
