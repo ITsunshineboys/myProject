@@ -115,18 +115,6 @@ hr{
     margin-top: 30px;
     margin-bottom: 40px;
 }
-.btn_back button{
-    width: 80px;
-    height: 34px;
-    background-color: white;
-    color: #5E6166;
-    border: 1px solid #5E6166;
-    border-radius: 3px;
-    font-size: 12px;
-}
-.btn_ok{
-    color: #487AF8!important;
-    border: 1px solid #487AF8!important;
-    background: #F2F4FF!important;
-    margin-right: 20px;
+.btn_left{
+    margin-left: 20px;
 }

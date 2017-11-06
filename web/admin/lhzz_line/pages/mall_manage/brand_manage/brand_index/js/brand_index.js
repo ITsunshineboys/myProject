@@ -223,6 +223,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   //时间排序
     $scope.time_img='lib/images/sort_down.png';
     $scope.time_sort_click=function () {
+        $scope.wjConfig.currentPage=1;
         if($scope.time_img=='lib/images/sort_down.png'){
             $scope.time_img='lib/images/sort_up.png';
             if($scope.on_flag==true){

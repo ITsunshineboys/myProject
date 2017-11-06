@@ -180,25 +180,8 @@ p{
 .btn_sure{
     margin-top: 70px;
 }
-
-
-.btn_sure button{
-    width: 80px;
-    height: 34px;
-    border: 1px solid #c2c2c2;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 34px;
-    font-size: 12px;
-    color: #5e6166;
-    background-color: white;
-    margin-right: 20px;
-}
-
-#save{
-    color:#487AF8;
-    background-color: #F2F4FF;
-    border: 1px solid #487AF8;
+.btn_left{
+    margin-left: 20px;
 }
 
 /*确认*/
