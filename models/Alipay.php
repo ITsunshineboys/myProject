@@ -14,25 +14,6 @@ class Alipay extends  ActiveRecord
 
 
 
-    public function Alipay($out_trade_no,$subject,$total_amount,$body){
-        $notify_url="http://test.cdlhzz.cn:888/order/alipaylinenotify";
-        $return_url="http://test.cdlhzz.cn:888/line/success_pay";
-        $config=(new AlipayConfig())->alipayconfig($notify_url,$return_url);
-        //超时时间
-        $timeout_express="1m";
-        $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
-        $payRequestBuilder->setBody($body);
-        $payRequestBuilder->setSubject($subject);
-        $payRequestBuilder->setOutTradeNo($out_trade_no);
-        $payRequestBuilder->setTotalAmount($total_amount);
-        $payRequestBuilder->setTimeExpress($timeout_express);
-        $payRequestBuilder->setGoods_type(0);
-        $payResponse = new AlipayTradeService($config);
-        $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
-        return ;
-//        }
-    }
-
 
     
     /**
