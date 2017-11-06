@@ -3641,8 +3641,11 @@ angular.module("all_controller", [])
                                                         shop_name: $scope.check_goods.shop_name
                                                     })
                                                 }else{
+                                                    console.log($scope.check_goods)
+                                                    console.log(value2)
+                                                    value.count--
                                                     value2.goods_detail[goods_item].cost += $scope.check_goods.platform_price * $scope.check_goods.quantity
-                                                    value2.goods_detail[goods_item].quantity += +$scope.check_goods.quantity
+                                                    value2.goods_detail[goods_item].quantity = +value2.goods_detail[goods_item].quantity+$scope.check_goods.quantity
                                                 }
                                             }
                                         }

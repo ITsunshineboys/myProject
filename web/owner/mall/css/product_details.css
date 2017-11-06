@@ -59,10 +59,10 @@
 /*}*/
 .img_size{
     width: .8rem!important;
-    margin-left: .2rem!important;
+    /*margin-left: .2rem!important;*/
 }
 .img_size_1{
-    margin-left: .5rem!important;
+    /*margin-left: .5rem!important;*/
     width: .8rem!important;
 }
 .main .standard >div:nth-child(2){
@@ -248,6 +248,9 @@
     padding-left: 1.2rem;
     position: relative;
     color: #6C6C6C;
+    height: 4.08rem;
+    line-height: 4.08rem;
+    border-bottom: 3px solid #CDD3D7;
 }
 .comment_num {
     position: absolute;
@@ -393,7 +396,7 @@
 }
 .service_item ul li:last-child{
     float: right;
-    margin-right: 1rem;
+    margin-right: 1.5rem;
 }
 .service_item ul li img {
     width: 2rem;

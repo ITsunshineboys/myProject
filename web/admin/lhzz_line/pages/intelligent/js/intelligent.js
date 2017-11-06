@@ -1284,10 +1284,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     if (!value.is_ordinary) {
                         for (let [key1, value1] of $scope.drawing_informations.entries()) {
                             if (value1.house_type_name.index == value.index) {
-                                console.log(value.drawing_list)
-                                if(value.id!=undefined){
+                                console.log($scope.drawing_informations)
+                                if(value1.id!=undefined){
                                     value.drawing_list.push({
-                                        'id':value.id,
+                                        'id':value1.id,
                                         'all_drawing': value1.drawing_list.join(','),
                                         'series': value1.series.id,
                                         'style': value1.style.id,
@@ -1316,7 +1316,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             arr.push({
                                 'id': value.id,
                                 'house_type_name': value.house_type_name,//户型名
-                                'other_id': value.id,
+                                'other_id': value.other_id,
                                 'area': value.area,//房屋面积
                                 'cur_room': value.cur_room,//室
                                 'cur_hall': value.cur_hall,//厅
