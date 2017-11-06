@@ -428,21 +428,21 @@ class GoodsOrder extends ActiveRecord
         }
 
         if ($arr){
-            if ($sort_money==1 && $sort_time=='')
-            {
-                array_multisort($amount_order, SORT_ASC, $arr);
-            }else if ($sort_money==2 && $sort_time=='')
-            {
-                array_multisort($amount_order, SORT_DESC, $arr);
-            }
-            else if ($sort_money=='' && $sort_time==1)
-            {
-                array_multisort($create_time, SORT_ASC, $arr);
-            }
-            else if ($sort_money=='' && $sort_time==2)
-            {
-                array_multisort($create_time, SORT_DESC, $arr);
-            }
+            // if ($sort_money==1 && $sort_time=='')
+            // {
+            //     array_multisort($amount_order, SORT_ASC, $arr);
+            // }else if ($sort_money==2 && $sort_time=='')
+            // {
+            //     array_multisort($amount_order, SORT_DESC, $arr);
+            // }
+            // else if ($sort_money=='' && $sort_time==1)
+            // {
+            //     array_multisort($create_time, SORT_ASC, $arr);
+            // }
+            // else if ($sort_money=='' && $sort_time==2)
+            // {
+            //     array_multisort($create_time, SORT_DESC, $arr);
+            // }
             $count=(new Query())
                 ->from(self::tableName().' AS a')
                 ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
