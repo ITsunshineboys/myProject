@@ -968,8 +968,8 @@ class OrderController extends Controller
                 }
            }
 
-        $sort_money=trim($request->get('sort_money',2));
-        $sort_time=trim($request->get('sort_time',2));
+        $sort_money=trim($request->get('sort_money'));
+        $sort_time=trim($request->get('sort_time'));
          if ($sort_time==''  ||$sort_money==2)
         {
             $where.=' order by a.amount_order desc';
