@@ -111,7 +111,7 @@ return [
         'async' => 'async',
     ],
     'download' => [
-        'directory' => 'down',
+        'directory' => 'uploads',
         'enableBuffering' => 'yes',
         'rate' => 102400, // 速度限制 Byte/s
     ],

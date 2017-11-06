@@ -39,7 +39,7 @@ class FileService
             return;
         }
 
-        $upload = Yii::$app->params['upload'];
+        $upload = Yii::$app->params['download'];
         $fullPath = Yii::$app->basePath . '/' . $upload['directory'] . '/' . $filepath;
         if (!file_exists($fullPath)) {
             return;
