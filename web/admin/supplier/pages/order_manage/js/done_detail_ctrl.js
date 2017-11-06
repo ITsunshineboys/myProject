@@ -51,7 +51,7 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
      * 商品详情
      * 收货详情*/
     function orderDetail() {
-        let url = "http://test.cdlhzz.cn:888/order/getsupplierorderdetails";
+        let url = baseUrl+"/order/getsupplierorderdetails";
         let data = {
             order_no: $stateParams.order_no,
             sku: +$stateParams.sku
@@ -71,7 +71,7 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
         $scope.unreceived = false;
         $scope.is_refund == 1 ? $scope.show_abnormal = false : $scope.show_abnormal = true;
         if ($scope.is_refund == 2) {
-            let url = "http://test.cdlhzz.cn:888/order/find-unusual-list";
+            let url = baseUrl+"/order/find-unusual-list";
             let data = {
                 order_no: $stateParams.order_no,
                 sku: $stateParams.sku
@@ -94,7 +94,7 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
 
     /*评论详情*/
     function commentDetail() {
-        let url = "http://test.cdlhzz.cn:888/order/get-comment";
+        let url = baseUrl+"/order/get-comment";
         let data = {
             order_no: $stateParams.order_no,
             sku: $stateParams.sku
@@ -138,7 +138,7 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
             return
         } else {
             $scope.savemodal = "#send_modal";
-            let url = "http://test.cdlhzz.cn:888/order/comment-reply";
+            let url = baseUrl+"/order/comment-reply";
             let data = {
                 order_no: +$stateParams.order_no,
                 sku: +$stateParams.sku,
@@ -159,6 +159,6 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
 
     /*已完成图片放大显示*/
     $scope.showImgs = (src) => {
-        $scope.showImg = 'http://test.cdlhzz.cn:888/'+ src;
+        $scope.showImg = baseUrl+'/'+ src;
     }
 })

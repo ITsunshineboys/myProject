@@ -30,7 +30,7 @@ waitpay_detail.controller("waitpaydetail_ctrl", function ($scope, $http, $stateP
      * 商品详情
      * 收货详情*/
     function orderDetail() {
-        let url = "http://test.cdlhzz.cn:888/order/getsupplierorderdetails";
+        let url = baseUrl+"/order/getsupplierorderdetails";
         let data = {
             order_no: $stateParams.order_no,
             sku: +$stateParams.sku

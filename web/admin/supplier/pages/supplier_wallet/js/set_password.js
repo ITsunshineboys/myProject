@@ -8,7 +8,7 @@ angular.module('set_password_module',[])
     }
   };
   //判断 first or unfirst
-  $http.post('http://test.cdlhzz.cn:888/withdrawals/check-isset-pay-pwd',{},config).then(function (res) {
+  $http.post(baseUrl+'/withdrawals/check-isset-pay-pwd',{},config).then(function (res) {
     console.log(res);
     $scope.pw_key=res.data.data.key;
     $scope.mobile=res.data.data.mobile.toString();
@@ -51,7 +51,7 @@ angular.module('set_password_module',[])
     if($scope.show_first==true){
       if(valid && $scope.new_pw==$scope.again_pw && !$scope.pw_flag){
         $('#save_modal').modal('show');
-        $http.post('http://test.cdlhzz.cn:888/withdrawals/set-pay-pwd',{
+        $http.post(baseUrl+'/withdrawals/set-pay-pwd',{
           key:$scope.pw_key,
           pay_pwd_first:$scope.new_pw,
           pay_pwd_secend:$scope.again_pw
@@ -67,7 +67,7 @@ angular.module('set_password_module',[])
       $scope.new_pw!=$scope.again_pw?$scope.pw_flag=true:$scope.pw_flag=false;
     }else{
       if(valid){
-        $http.post('http://test.cdlhzz.cn:888/withdrawals/set-pay-pwd',{
+        $http.post(baseUrl+'/withdrawals/set-pay-pwd',{
           key:$scope.pw_key,
           pay_pwd:$scope.new_pw,
           sms_code:$scope.v_code

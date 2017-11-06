@@ -233,7 +233,7 @@
             </div>
 
             <div class="comment_pic">
-                <img ng-src="{{'http://test.cdlhzz.cn:888/'+item.image}}" alt="" ng-repeat="item in comment.image" data-toggle="modal" data-target="#myModal" ng-click="showImgs(item.image)">
+                <img ng-src="{{baseUrl+'/'+item.image}}" alt="" ng-repeat="item in comment.image" data-toggle="modal" data-target="#myModal" ng-click="showImgs(item.image)">
 
             </div>
 

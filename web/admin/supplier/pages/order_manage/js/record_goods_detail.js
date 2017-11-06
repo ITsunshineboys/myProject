@@ -54,7 +54,7 @@ angular.module('goods_detail_module',[])
         if(statename=='waitsend_detail'){
             $state.go('waitsend_detail',{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
         }else{
-            $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku})
+            $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
         }
     }
 
