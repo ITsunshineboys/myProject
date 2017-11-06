@@ -807,29 +807,8 @@ class QuoteController extends Controller
                         $house_image            = $house['cur_imgSrc'];
                         $type                   = $house['is_ordinary'];
                         $sort_id                = $house['sort_id'];
-
-                        var_dump($house_id);
-                        var_dump($bedroom);
-                        var_dump($sittingRoom_diningRoom);
-                        var_dump($toilet);
-                        var_dump($kitchen);
-                        var_dump($window);
-                        var_dump($area);
-                        var_dump($high);
-                        var_dump($province);
-                        var_dump($province_code);
-                        var_dump($city);
-                        var_dump($city_code);
-                        var_dump($district);
-                        var_dump($district_code);
-                        var_dump($toponymy);
-                        var_dump($street);
-                        var_dump($particulars);
-                        var_dump($stairway);
-                        var_dump($house_image);
-                        var_dump($type);
-                        var_dump($sort_id);exit;
                         $effect = (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
+                        var_dump($effect);exit;
                         if(!$effect){
                             $transaction->rollBack();
                             return $code;
