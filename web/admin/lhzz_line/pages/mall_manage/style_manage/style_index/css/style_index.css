@@ -68,25 +68,28 @@
 }
 
 /*系列管理按钮组*/
-.series_btn button{
-    width: 70px;
-    height: 34px;
+.btn_right{
     margin-right: 10px;
-    line-height: 34px;
-    text-align: center;
-    font-family: Helvetica;
-    font-size: 12px;
-    color: #666F80;
-    background-color: white;
-    border: 1px solid #BFC0C2;
-    border-radius: 3px;
 }
+/*.series_btn button{*/
+    /*width: 70px;*/
+    /*height: 34px;*/
+    /*margin-right: 10px;*/
+    /*line-height: 34px;*/
+    /*text-align: center;*/
+    /*font-family: Helvetica;*/
+    /*font-size: 12px;*/
+    /*color: #666F80;*/
+    /*background-color: white;*/
+    /*border: 1px solid #BFC0C2;*/
+    /*border-radius: 3px;*/
+/*}*/
 
-.series_btn>button:last-child{
-    width: 81px;
-    height: 34px;
-    line-height: 34px;
-}
+/*.series_btn>button:last-child{*/
+    /*width: 81px;*/
+    /*height: 34px;*/
+    /*line-height: 34px;*/
+/*}*/
 
 /*系列管理表格*/
 /*表格部分*/

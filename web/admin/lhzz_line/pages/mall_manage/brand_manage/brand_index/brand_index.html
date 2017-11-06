@@ -19,8 +19,8 @@
 <!--已上架开始-->
     <section ng-if="on_flag==true">
         <div>
-            <span class="border"  ng-click="checkAll()">全选</span>
-            <span class="border" data-toggle="modal" data-target="#{{on_modal_v}}" ng-click="batch_down_shelves()">下架</span>
+            <button class="btn btn-default btn_right"  ng-click="checkAll()">全选</button>
+            <button class="btn btn-default btn_right" data-toggle="modal" data-target="#{{on_modal_v}}" ng-click="batch_down_shelves()">下架</button>
             <span style="margin-right: 15px;">分类选择</span>
             <select name="" class="time_select" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)">
             </select>
@@ -86,9 +86,9 @@
 <!--已下架 开始-->
     <section ng-if="down_flag==true">
         <div>
-            <span class="border" ui-sref="add_brand">添加</span>
-            <span class="border" ng-click="checkAll()">全选</span>
-            <span class="border" data-toggle="modal" data-target="#{{down_modal_v}}" ng-click="batch_on_shelves()">上架</span>
+            <button class="btn btn-default btn_right" ui-sref="add_brand"><i class="glyphicon glyphicon-plus"></i>添加</button>
+            <button class="btn btn-default btn_right" ng-click="checkAll()">全选</button>
+            <button class="btn btn-default btn_right" data-toggle="modal" data-target="#{{down_modal_v}}" ng-click="batch_on_shelves()">上架</button>
             <span style="margin-right:15px;">分类选择</span>
             <select name="" class="time_select" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)">
             </select>

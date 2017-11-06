@@ -19,11 +19,11 @@
             <!--按钮组-->
             <div class="series_btn">
                 <div class="series_btn">
-                    <button ui-sref="add_series({list:series_arr})" ng-if="series_arr.length!=10">
+                    <button class="btn btn-default btn_right" ui-sref="add_series({list:series_arr})" ng-if="series_arr.length!=10">
                         <span class="glyphicon glyphicon-plus"></span>
                         <span>添加</span>
                     </button>
-                    <button ui-sref="choose_series">选择系列</button>
+                    <button class="btn btn-default btn_right" ui-sref="choose_series">选择系列</button>
                 </div>
                 <!--系列管理Table内容-->
                 <div class="series_mag_table">
@@ -57,11 +57,11 @@
         <div ng-if="showstyle==true" class="series_mag">
             <!--按钮组-->
             <div class="series_btn">
-                <button ui-sref="add_style({style_arr:style_arr})">
+                <button class="btn btn-default btn_right" ui-sref="add_style({style_arr:style_arr})">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span>添加</span>
                 </button>
-                <button ui-sref="choose_style">选择风格</button>
+                <button class="btn btn-default btn_right" ui-sref="choose_style">选择风格</button>
             </div>
 
             <!--风格管理Table内容-->
