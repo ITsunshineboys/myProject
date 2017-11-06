@@ -435,6 +435,11 @@ class QuoteController extends Controller
                     $house_image            = $house['cur_imgSrc'];
                     $type                   = $house['is_ordinary'];
                     $sort_id                = $house['sort_id'];
+                    $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
+                    if (!$effect) {
+                        $transaction->rollBack();
+                        return $code;
+                    }
 
                     $hall_area         = $house['hall_area'];
                     $hall_perimeter    = $house['hall_girth'];
@@ -447,16 +452,8 @@ class QuoteController extends Controller
                     $modelling_length  = $house['other_length'];
                     $flat_area         = $house['flattop_area'];
                     $balcony_area      = $house['balcony_area'];
-
-                    $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-                    if (!$effect) {
-                        $transaction->rollBack();
-                        return $code;
-                    }
-
                     $effect_id  = \Yii::$app->db->getLastInsertID();
                     $decoration = (new DecorationParticulars())->plotAdd($effect_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
-
                     if (!$decoration) {
                         $transaction->rollBack();
                         return $code;
@@ -568,6 +565,7 @@ class QuoteController extends Controller
                     }
                     $transaction->commit();
                 }
+                $transaction->commit();
                 return Json::encode([
                    'code' => 200,
                    'msg' => 'ok',
