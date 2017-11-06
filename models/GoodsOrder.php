@@ -346,6 +346,14 @@ class GoodsOrder extends ActiveRecord
      */
    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
     {
+
+        if ($sort_money==2 && $sort_time==1)
+        {
+            $sort='a.create_time asc';
+        }else if ($sort_money==1 && $sort_time==2)
+        {
+            $sort='a.amount_order asc';
+        }
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
