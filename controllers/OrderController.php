@@ -13,6 +13,7 @@ use app\models\GoodsImage;
 use app\models\Jpush;
 use app\models\GoodsCategory;
 use app\models\Series;
+use app\models\ShippingCart;
 use app\models\Style;
 use app\models\DeletedGoodsComment;
 use app\models\LogisticsTemplate;
