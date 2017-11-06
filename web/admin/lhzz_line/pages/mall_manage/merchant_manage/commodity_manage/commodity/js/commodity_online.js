@@ -143,7 +143,7 @@ app.controller('commodity_online', ['$scope', '$stateParams','$http', function (
 
     /*单个商品确认下架*/
     $scope.sureGoodOffline = function () {
-        let url = "http://test.cdlhzz.cn:888/mall/goods-status-toggle";
+        let url = baseUrl+"/mall/goods-status-toggle";
         let data = {id: Number(tempoffgoodid), offline_reason:$scope.offline_reason||''};
         $http.post(url, data, config).then(function (res) {
             if(res.data.code==200){
@@ -164,7 +164,7 @@ app.controller('commodity_online', ['$scope', '$stateParams','$http', function (
     /*确认批量下架*/
     $scope.surepiliangoffline = function () {
         let batchoffids = $scope.table.roles.join(',');
-        let url = "http://test.cdlhzz.cn:888/mall/goods-disable-batch";
+        let url = baseUrl+"/mall/goods-disable-batch";
         let data = {ids:batchoffids, offline_reason: $scope.batch_offlinereason};
         $http.post(url, data, config).then(function (res) {
             $scope.batch_offlinereason = ''
@@ -188,7 +188,7 @@ app.controller('commodity_online', ['$scope', '$stateParams','$http', function (
         $scope.params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
+            url: baseUrl+"/mall/goods-list-admin",
             params: $scope.params,
         }).then(function (res) {
             console.log(res);

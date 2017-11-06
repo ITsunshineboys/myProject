@@ -31,7 +31,7 @@ var account_comment= angular.module("account_comment",[])
         console.log($scope.review_time);
         //$http({
         //    method: 'get',
-        //    url: 'http://test.cdlhzz.cn:888/mall/user-list'
+        //    url: baseUrl+'/mall/user-list'
         //}).then(function successCallback(response) {
         //    $scope.account = response.data.data.user_list.details;
         //    for(let [key,value] of $scope.account.entries()){

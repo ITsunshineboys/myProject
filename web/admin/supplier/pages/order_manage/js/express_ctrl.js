@@ -20,7 +20,7 @@ express.controller("express_ctrl", function ($scope, $http, $stateParams,$state)
     /*获取物流信息*/
     expressDetail();
     function expressDetail() {
-        let url = "http://test.cdlhzz.cn:888/order/getexpress";
+        let url = baseUrl+"/order/getexpress";
         let data = {
             order_no: $scope.order_no,
             sku: +$scope.sku

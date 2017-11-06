@@ -15,7 +15,7 @@ add_user.controller("add_user_ctrl",function ($scope,$http,$stateParams,$state) 
                     return $.param(data)
                 },
                 method: 'post',
-                url: 'http://test.cdlhzz.cn:888/mall/user-add',
+                url: baseUrl+'/mall/user-add',
                 data:{
                     mobile:$scope.new_num,
                     password:$scope.new_password
@@ -44,7 +44,7 @@ add_user.controller("add_user_ctrl",function ($scope,$http,$stateParams,$state) 
             $scope.flag = false;
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/user-list'
+                url: baseUrl+'/mall/user-list'
             }).then(function successCallback(response) {
                 let arr= [];
                 $scope.old_num = response.data.data.user_list.details;

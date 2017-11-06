@@ -65,7 +65,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 	$scope.brands_arr=[];
 	$scope.series_arr=[];
 	$scope.styles_arr=[];
-	$http.get('http://test.cdlhzz.cn:888/mall/category-brands-styles-series',{
+	$http.get(baseUrl+'/mall/category-brands-styles-series',{
 		params:{
 			category_id:+goods_item.category_id
 		}
@@ -75,7 +75,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 		$scope.series_arr=res.data.data.category_brands_styles_series.series;
 		$scope.styles_arr=res.data.data.category_brands_styles_series.styles;
 		//商品详情接口，获取品牌、系列、风格名称、重置 第一项下拉框
-		$http.get('http://test.cdlhzz.cn:888/mall/goods-view',{
+		$http.get(baseUrl+'/mall/goods-view',{
 			params:{
 				id:$scope.goods_id
 			}
@@ -127,7 +127,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 	$scope.pass_attrs_name=[];//名称
 	$scope.pass_attrs_value=[];//值
 
-	$http.get('http://test.cdlhzz.cn:888/mall/goods-attrs-admin',{
+	$http.get(baseUrl+'/mall/goods-attrs-admin',{
 		params:{
 			goods_id:+$scope.goods_id
 		}
@@ -185,7 +185,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 		}
 		console.log($scope.data);
 		Upload.upload({
-			url:'http://test.cdlhzz.cn:888/site/upload',
+			url:baseUrl+'/site/upload',
 			data:{'UploadForm[file]':file}
 		}).then(function (response) {
 			console.log(response);
@@ -212,7 +212,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 		}
 		console.log($scope.data);
 		Upload.upload({
-			url:'http://test.cdlhzz.cn:888/site/upload',
+			url:baseUrl+'/site/upload',
 			data:{'UploadForm[file]':file}
 		}).then(function (response) {
 			if(!response.data.data){
@@ -227,7 +227,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 	};
 	//删除图片
 	$scope.del_img=function (item) {
-		$http.post('http://test.cdlhzz.cn:888/site/upload-delete',{
+		$http.post(baseUrl+'/site/upload-delete',{
 			file_path:item
 		},config).then(function (res) {
 			console.log(res);
@@ -242,7 +242,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 	$scope.invoice_check=true;
 
 	//物流模块
-	$http.post('http://test.cdlhzz.cn:888/mall/logistics-templates-supplier',{},config).then(function (res) {
+	$http.post(baseUrl+'/mall/logistics-templates-supplier',{},config).then(function (res) {
 		console.log('物流模板')
 		console.log(res);
 		$scope.logistics=res.data.data.logistics_templates_supplier;
@@ -255,7 +255,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 		}
 		$scope.shop_logistics=res.data.data.logistics_templates_supplier[0].id;
 		$scope.$watch('shop_logistics',function (newVal,oldVal) {
-			$http.get('http://test.cdlhzz.cn:888/mall/logistics-template-view',{
+			$http.get(baseUrl+'/mall/logistics-template-view',{
 				params:{
 					id:+newVal
 				}
@@ -382,7 +382,7 @@ wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,
 			}
 			console.log($scope.pass_attrs_name);
 			console.log($scope.pass_attrs_value);
-			$http.post('http://test.cdlhzz.cn:888/mall/goods-edit',{
+			$http.post(baseUrl+'/mall/goods-edit',{
 				id:+$scope.goods_id, //id
 				title:$scope.goods_name,//名称
 				subtitle:$scope.des_name,//特色

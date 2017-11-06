@@ -2,7 +2,7 @@ angular.module('wallet_detail_module',[])
 .controller('wallet_detail_ctrl',function ($scope,$http,$state,$stateParams) {
   console.log($stateParams.transaction_no);//交易单号
   $scope.wallet_detail=[];
-  $http.get('http://test.cdlhzz.cn:888/supplier-cash/get-cash',{
+  $http.get(baseUrl+'/supplier-cash/get-cash',{
     params:{
         transaction_no:$stateParams.transaction_no
     }

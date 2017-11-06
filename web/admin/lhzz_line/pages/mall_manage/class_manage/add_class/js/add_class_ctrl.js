@@ -4,7 +4,7 @@
 /*已下架 添加分类*/
 var add_class = angular.module("addclassModule",['ngFileUpload']);
 add_class.controller("addClass",function ($scope, $http,Upload,$state) {
-    const picprefix = "http://test.cdlhzz.cn:888/";
+    const picprefix = baseUrl+"/";
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -60,13 +60,13 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 	$scope.alltitles = (function () {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 		}).then(function (res) {
 			for (let key in res.data.data.categories) {
 				$scope.idarr.push(res.data.data.categories[key].title)
 				$http({
 					method: "get",
-					url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+					url: baseUrl+"/mall/categories-manage-admin",
 					params: {pid: res.data.data.categories[key].id}
 				}).then(function (res) {
 					for (let key in res.data.data.categories) {
@@ -100,7 +100,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 	$scope.findParentClass =  (function () {
 		$http({
 			method: "get",
-			url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+			url: baseUrl+"/mall/categories-manage-admin",
 		}).then(function (res) {
 			$scope.firstclass = res.data.data.categories.splice(1);
 		})
@@ -112,7 +112,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 			$scope.showsub = true;
 			$http({
 				method: "get",
-				url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+				url: baseUrl+"/mall/categories-manage-admin",
 				params: {pid: obj}
 			}).then(function (response) {
 				$scope.secondclass = response.data.data.categories.splice(1);
@@ -133,7 +133,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 			return
 		}
 		Upload.upload({
-			url:'http://test.cdlhzz.cn:888/site/upload',
+			url:baseUrl+'/site/upload',
 			data:{'UploadForm[file]':file}
 		}).then(function (response) {
 			if(!response.data.data){
@@ -167,7 +167,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 				pid = $scope.secselect;
 			}
 
-			let url = "http://test.cdlhzz.cn:888/mall/category-add";
+			let url = baseUrl+"/mall/category-add";
 			let data =  {title:$scope.class_name,pid:pid,icon:$scope.classicon,description:$scope.addclassdes};
 			$http.post(url,data,config).then(function (res) {
 				// console.log(res)

@@ -147,7 +147,7 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
 
     /*等待上架 单个确认上架*/
     $scope.sureWaitToOnline = function () {
-        let url = "http://test.cdlhzz.cn:888/mall/goods-status-toggle";
+        let url = baseUrl+"/mall/goods-status-toggle";
         let data = {id: tempwaitgoodid};
         $http.post(url, data, config).then(function (res) {
             console.log(res);
@@ -172,7 +172,7 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
     /*等待上架确认批量上架*/
     $scope.surewaitonline = function () {
         let batchids = $scope.table.roles.join(',');
-        let url = "http://test.cdlhzz.cn:888/mall/goods-enable-batch";
+        let url = baseUrl+"/mall/goods-enable-batch";
         let data = {ids: batchids};
         $http.post(url, data, config).then(function (res) {
             console.log(res);
@@ -208,7 +208,7 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
     /*确认更新审核备注*/
     $scope.sureCheckReason = function () {
         console.log(123456);
-        let url = "http://test.cdlhzz.cn:888/mall/goods-reason-reset";
+        let url = baseUrl+"/mall/goods-reason-reset";
         let data  = {id:Number(checkId),reason:$scope.lastreason||''};
         $http.post(url,data,config).then((res)=>{
             console.log(res);
@@ -222,7 +222,7 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
         $scope.params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/goods-list-admin",
+            url: baseUrl+"/mall/goods-list-admin",
             params: $scope.params,
         }).then(function (res) {
             console.log(res);

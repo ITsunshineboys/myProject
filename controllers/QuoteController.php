@@ -651,6 +651,11 @@ class QuoteController extends Controller
                         $house_image            = $house['cur_imgSrc'];
                         $type                   = $house['is_ordinary'];
                         $sort_id                = $house['sort_id'];
+                        $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
+                        if (!$effect){
+                            $transaction->rollBack();
+                            return $code;
+                        }
 
                         $hall_area         = $house['hall_area'];
                         $hall_perimeter    = $house['hall_girth'];
@@ -663,14 +668,6 @@ class QuoteController extends Controller
                         $modelling_length  = $house['other_length'];
                         $flat_area         = $house['flattop_area'];
                         $balcony_area      = $house['balcony_area'];
-
-                        $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-                        if (!$effect){
-                            $transaction->rollBack();
-                            return $code;
-                        }
-
-
                         $effect_id = \Yii::$app->db->getLastInsertID();
                         $decoration = (new DecorationParticulars())->plotAdd($effect_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
                         if (!$decoration){
@@ -828,15 +825,10 @@ class QuoteController extends Controller
                                     $series_id     = $images['series'];
                                     $style_id      = $images['style'];
                                     $images_user   = $images['drawing_name'];
-                                    $effect_picture = (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                                    (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
                                 }
                             }
-                            if (!$effect_picture){
-                                $transaction->rollBack();
-                                return $code;
-                            }
                         }
-                        $transaction->commit();
                     } else {
                         // 案例修改
                         $house_id               = $house['id'];
@@ -874,11 +866,7 @@ class QuoteController extends Controller
                                 $series_id     = $house['series'];
                                 $style_id      = $house['style'];
                                 $images_user   = '案例图片';
-                                $effect_picture = (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
-                            }
-                            if (!$effect_picture){
-                                $transaction->rollBack();
-                                return $code;
+                                (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
                             }
                         }
 
@@ -891,12 +879,8 @@ class QuoteController extends Controller
                                     $goods_three    = $goods['three_name'];
                                     $goods_code     = $goods['good_code'];
                                     $goods_quantity = $goods['good_quantity'];
-                                    $works_data = (new WorksData())->plotEdit($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity);
+                                    (new WorksData())->plotEdit($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity);
                                 }
-                            }
-                            if (!$works_data){
-                                $transaction->rollBack();
-                                return $code;
                             }
                         }
 
@@ -906,12 +890,8 @@ class QuoteController extends Controller
                                     $worker_id    = $worker['id'];
                                     $worker_kind  = $worker['worker_kind'];
                                     $worker_price = $worker['price'];
-                                    $works_worker_data = (new WorksWorkerData())->plotEdit($worker_id, $worker_kind, $worker_price);
+                                    (new WorksWorkerData())->plotEdit($worker_id, $worker_kind, $worker_price);
                                 }
-                            }
-                            if (!$works_worker_data){
-                                $transaction->rollBack();
-                                return $code;
                             }
                         }
 
@@ -922,43 +902,24 @@ class QuoteController extends Controller
                                     $backman_id     = $backman['id'];
                                     $backman_option = $backman['name'];
                                     $backman_value  = $backman['num'];
-                                    $works_backman_data = (new WorksBackmanData())->plotEdit($backman_id, $backman_option, $backman_value);
+                                    (new WorksBackmanData())->plotEdit($backman_id, $backman_option, $backman_value);
                                 }
-                            }
-                            if (!$works_backman_data){
-                                $transaction->rollBack();
-                                return $code;
                             }
                         }
 
                         if (!empty($house['delete_goods'])) {
-                            $del_works_data = WorksData::deleteAll(['id' => $house['delete_goods']]);
-                            if (!$del_works_data){
-                                $transaction->rollBack();
-                                return $code;
-                            }
+                            WorksData::deleteAll(['id' => $house['delete_goods']]);
                         }
 
                         if (!empty($house['delete_workers'])) {
-                            $del_works_worker_data = WorksWorkerData::deleteAll(['id' => $house['delete_workers']]);
-                            if (!$del_works_worker_data){
-                                $transaction->rollBack();
-                                return $code;
-                            }
+                            WorksWorkerData::deleteAll(['id' => $house['delete_workers']]);
                         }
 
                         if (!empty($house['delete_backman'])) {
-                            $del_works_backman_data = WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
-                            if (!$del_works_backman_data){
-                                $transaction->rollBack();
-                                return $code;
-                            }
+                            WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
                         }
-                        $transaction->commit();
                     }
-                    $transaction->commit();
                 }
-                $transaction->commit();
             }catch (\Exception $e) {
                 $transaction->rollBack();
                 $code = 1000;
@@ -979,12 +940,9 @@ class QuoteController extends Controller
         }
 
         if (!empty($request['delete_drawing'])) {
-            $delete = EffectPicture::deleteAll(['id' => $request['delete_drawing']]);
-            if (!$delete){
-                $transaction->rollBack();
-                return $code;
-            }
+            EffectPicture::deleteAll(['id' => $request['delete_drawing']]);
         }
+        
         return Json::encode([
            'code' => 200,
            'msg' => 'ok',

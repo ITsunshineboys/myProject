@@ -155,7 +155,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   $scope.firstClass = (function () {
     $http({
       method: "get",
-      url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+      url: baseUrl+"/mall/categories-manage-admin",
     }).then(function (response) {
       $scope.firstclass = response.data.data.categories;
       $scope.firstselect = response.data.data.categories[0].id;
@@ -174,7 +174,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     console.log(pid);
     $http({
       method: "get",
-      url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+      url: baseUrl+"/mall/categories-manage-admin",
       params: {pid: pid}
     }).then(function (response) {
       $scope.secondclass = response.data.data.categories;
@@ -197,7 +197,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   $scope.three_Class = function (pid) {
     $http({
       method: "get",
-      url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+      url: baseUrl+"/mall/categories-manage-admin",
       params: {pid: pid}
     }).then(function (response) {
       $scope.three_class = response.data.data.categories;
@@ -253,7 +253,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   };
   //批量下架确认按钮
   $scope.down_shelver_ok=function () {
-    let url='http://test.cdlhzz.cn:888/mall/brand-disable-batch';
+    let url=baseUrl+'/mall/brand-disable-batch';
     $http.post(url,{
       ids:$scope.table.roles.join(','),
       offline_reason:$scope.sole_down_shelves_reason
@@ -271,7 +271,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   $scope.down_shelver_btn=function (id) {
     $scope.sole_down_shelves_reason='';
     $scope.down_shelver_ok=function () {
-      let url='http://test.cdlhzz.cn:888/mall/brand-status-toggle';
+      let url=baseUrl+'/mall/brand-status-toggle';
       $http.post(url,{
         id:+id,
         offline_reason:$scope.sole_down_shelves_reason
@@ -298,7 +298,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   };
   //批量上架确认按钮
   $scope.on_shelver_ok=function () {
-    let url='http://test.cdlhzz.cn:888/mall/brand-enable-batch';
+    let url=baseUrl+'/mall/brand-enable-batch';
     $http.post(url,{
       ids:$scope.table.roles.join(',')
     },config).then(function (res) {
@@ -314,7 +314,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   //单个上架
   $scope.on_shelver_btn=function (id) {
     $scope.sole_on_shelver_ok=function () {
-      let url='http://test.cdlhzz.cn:888/mall/brand-enable-batch';
+      let url=baseUrl+'/mall/brand-enable-batch';
       $http.post(url,{
         ids:id
       },config).then(function (res) {
@@ -336,7 +336,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   //确定按钮
   $scope.down_reason_btn=function () {
     $scope.page=1;
-    let url='http://test.cdlhzz.cn:888/mall/brand-offline-reason-reset';
+    let url=baseUrl+'/mall/brand-offline-reason-reset';
     $http.post(url,{
       id:$scope.down_id,
       offline_reason:$scope.down_reason
@@ -448,7 +448,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   };
   //审核备注模态框，确认按钮
   $scope.review_btn=function () {
-    $http.post('http://test.cdlhzz.cn:888/mall/brand-application-review-note-reset',{
+    $http.post(baseUrl+'/mall/brand-application-review-note-reset',{
       id:+$scope.review_id,
       review_note:$scope.check_review
     },config).then(function (res) {

@@ -21,7 +21,7 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($scope, $http, $s
 
     /*可提现金额*/
     function totalMoney() {
-        let url = "http://test.cdlhzz.cn:888/withdrawals/find-supplier-balance";
+        let url = baseUrl+"/withdrawals/find-supplier-balance";
         $http.post(url, {}, config).then(function (res) {
             $scope.totalmoney = res.data.data;
         })
@@ -52,7 +52,7 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($scope, $http, $s
         //     $scope.test = true;
         //     return;
         // }
-            let url = "http://test.cdlhzz.cn:888/withdrawals/supplier-withdrawals-apply";
+            let url = baseUrl+"/withdrawals/supplier-withdrawals-apply";
             let data = {money: +$scope.money_num, pay_pwd: +$scope.password};
             $http.post(url, data, config).then(function (res) {
                 $scope.moneywarning = false;

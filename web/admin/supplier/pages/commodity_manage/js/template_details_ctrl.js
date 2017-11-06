@@ -11,7 +11,7 @@ var shop_style= angular.module("template_details",[])
         //查看物流模板开始
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/logistics-template-view",
+            url: baseUrl+"/mall/logistics-template-view",
             params: {
                 id:+$scope.id
             }
@@ -145,7 +145,7 @@ var shop_style= angular.module("template_details",[])
                        return $.param(data)
                    },
                    method: 'POST',
-                   url: 'http://test.cdlhzz.cn:888/mall/logistics-template-edit',
+                   url: baseUrl+'/mall/logistics-template-edit',
                    data:{
                        id:+$scope.id,
                        name:$scope.name_input,

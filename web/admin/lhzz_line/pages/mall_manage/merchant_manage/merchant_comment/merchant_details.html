@@ -33,7 +33,7 @@
             <h6 id="upload">授权书上传</h6>
             <div ng-repeat="item in authorizedata.images">
                 <span ng-bind="item.authorization_name"></span>
-                <img ng-src="http://test.cdlhzz.cn:888/{{item.image}}" alt="">
+                <img ng-src="{{baseUrl + '/'+ item.image}}" alt="">
             </div>
         </div>
         <hr/>

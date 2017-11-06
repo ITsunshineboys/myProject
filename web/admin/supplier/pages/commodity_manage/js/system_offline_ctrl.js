@@ -16,7 +16,7 @@ system_offline.controller("system_offline",function ($scope,$http,$stateParams,$
 		}
 	}
 	/*-----------------------------商品详情---------------------------------*/
-  $http.get('http://test.cdlhzz.cn:888/mall/goods-view',{
+  $http.get(baseUrl+'/mall/goods-view',{
 		params:{
 			id:+$scope.detail_item.id
 		}
@@ -28,7 +28,7 @@ system_offline.controller("system_offline",function ($scope,$http,$stateParams,$
   });
 
   /*------------------------------物流模板-------------------------------------*/
-  $http.get('http://test.cdlhzz.cn:888/mall/logistics-templates-supplier',{}).then(function (res) {
+  $http.get(baseUrl+'/mall/logistics-templates-supplier',{}).then(function (res) {
 		$scope.logistics_templates_supplier=res.data.data.logistics_templates_supplier;
 		for(let [key,value] of $scope.logistics_templates_supplier.entries()){
       if($scope.detail_item.logistics_template_id==value.id){
@@ -39,7 +39,7 @@ system_offline.controller("system_offline",function ($scope,$http,$stateParams,$
 		console.log(err);
   });
   /*-------------物流模板的内容------------------*/
-  $http.get('http://test.cdlhzz.cn:888/mall/logistics-template-view',{
+  $http.get(baseUrl+'/mall/logistics-template-view',{
   	params:{
       id:+$scope.detail_item.logistics_template_id
 		}

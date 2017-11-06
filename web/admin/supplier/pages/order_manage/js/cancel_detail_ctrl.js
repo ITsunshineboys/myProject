@@ -50,7 +50,7 @@ cancel_detail.controller("cancel_detail_ctrl", function ($scope, $http, $statePa
      * 商品详情
      * 收货详情*/
     function orderDetail() {
-        let url = "http://test.cdlhzz.cn:888/order/getsupplierorderdetails";
+        let url = baseUrl+"/order/getsupplierorderdetails";
         let data = {
             order_no: $stateParams.order_no,
             sku: +$stateParams.sku
@@ -77,7 +77,7 @@ cancel_detail.controller("cancel_detail_ctrl", function ($scope, $http, $statePa
         $scope.unreceived = false;
         $scope.is_refund == 1 ? $scope.show_abnormal = false : $scope.show_abnormal = true;
         if ($scope.is_refund == 2) {
-            let url = "http://test.cdlhzz.cn:888/order/find-unusual-list";
+            let url = baseUrl+"/order/find-unusual-list";
             let data = {
                 order_no: $stateParams.order_no,
                 sku: $stateParams.sku
@@ -100,7 +100,7 @@ cancel_detail.controller("cancel_detail_ctrl", function ($scope, $http, $statePa
     /*平台介入异常*/
     function platAbnormalHandle() {
        $scope.show_plat = true;//显示平台记录
-        let url = "http://test.cdlhzz.cn:888/order/getplatformdetail";
+        let url = baseUrl+"/order/getplatformdetail";
         let data = {
             order_no: $stateParams.order_no,
             sku: $stateParams.sku

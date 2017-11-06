@@ -79,7 +79,7 @@
 let app=angular.module("app",[]);
 app.controller("admin_login",function($scope,$http){
     $scope.login=function () {
-      let url="http://test.cdlhzz.cn:888/site/admin-login";
+      let url=baseUrl+"/site/admin-login";
       let params={
         role_id:1,
         username:13551201821,
