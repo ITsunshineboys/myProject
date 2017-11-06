@@ -3887,7 +3887,7 @@ class OrderController extends Controller
             $filename = 'goods_line_'. $Goods->id;
             StringService::generateQrCodeImage($str, $filename);
             $qrcode=UploadForm::DIR_PUBLIC . '/goods_line_' . $Goods->id . '.png';
-            $code=200;
+            $code=200; 
             return Json::encode([
                 'code'=>$code,
                 'msg'=>'ok',
