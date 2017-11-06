@@ -3796,6 +3796,7 @@ class OrderController extends Controller
                 ]);
             }
             $Goods=Goods::findBySku($OrderGoods->sku);
+               var_dump($Goods);exit;
             if (!$Goods)
             {
                 return Json::encode([
