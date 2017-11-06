@@ -5,7 +5,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
             .state("home", {
                 url: "/",
                 templateUrl: "intelligent.html",
-                controller:'nodata_ctrl',
+                controller:'intelligent_index_ctrl',
                 css:['css/intelligent_index.css','zui-1.7.0-dist/dist/css/zui.min.css']
             })
             .state('nodata',{

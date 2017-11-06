@@ -336,22 +336,6 @@ angular.module("all_controller", [])
         }
 
     })
-    .controller("intelligent_index_ctrl", function ($scope, $http) {//主页控制器
-        /* $scope.get_quotation = function () {
-         $http({
-         url:"/owner/search?id=1",
-         method:"get"
-         }).then(function (response) {
-         $scope.data = response.data.data.effect
-         $scope.imgSrc =  response.data.data.effect_picture
-         $scope.all_data = {toponymy:$scope.data.toponymy,site_particulars:$scope.data.site_particulars,
-         high:$scope.data.high,particulars:$scope.data.particulars,window:$scope.data.window}
-         console.log(response)
-         },function (response) {
-
-         })
-         }*/
-    })
     .controller("intelligent_nodata_ctrl", function ($timeout, $scope, $stateParams, $http, $state, $location, $anchorScroll) { //无数据控制器
         // let all_url = 'http://test.cdlhzz.cn:888'
         let all_url = ""
@@ -3176,7 +3160,16 @@ angular.module("all_controller", [])
         }
     })
 
-
+    .controller("intelligent_index_ctrl", function ($scope, $http) {//主页控制器
+        /*主页操作*/
+        //主页推荐
+        $http.get('/owner/homepage').then(function (response) {
+            $scope.recommend_list = response.data.data
+            console.log(response)
+        }, function (error) {
+            console.log(error)
+        })
+    })
     .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
         console.log($stateParams)
         $scope.ctrlScope = $scope
@@ -3304,14 +3297,7 @@ angular.module("all_controller", [])
         }, function (error) {
             console.log(error)
         })
-        /*主页操作*/
-        //主页推荐
-        $http.get('/owner/homepage').then(function (response) {
-            $scope.recommend_list = response.data.data
-            console.log(response)
-        }, function (error) {
-            console.log(error)
-        })
+
 
         /*无资料操作*/
         //修改了基础表单数据
