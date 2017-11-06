@@ -273,6 +273,12 @@ class UserChat extends \yii\db\ActiveRecord
 
         }
     }
+    /**
+     * @param $uid
+     * @param $role_id
+     * @param $recipient_id
+     * @return array|null
+     */
     public static function userinfos($uid,$role_id,$recipient_id){
         $rec_role_id=User::find()->select('last_role_id_app')->asArray()->where(['id'=>$recipient_id])->one()['last_role_id_app'];
         $data=[];

@@ -470,6 +470,10 @@ class ChatController extends Controller
         ]);
 
     }
+    /**
+     * 聊天中心
+     * @return array|string
+     */
     public function actionChatView(){
         $user = self::getUser();
         if (!is_array($user)) {
