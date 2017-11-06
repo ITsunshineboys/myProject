@@ -1529,7 +1529,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             //删除小区判断
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.cur_title = '是否删除小区？'
-
+                $scope.is_cancel = true
                 $scope.common_house = function () {
                     $http.post('/quote/plot-del', {
                         del_id: item.id
