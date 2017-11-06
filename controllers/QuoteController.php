@@ -942,6 +942,7 @@ class QuoteController extends Controller
         if (!empty($request['delete_drawing'])) {
             EffectPicture::deleteAll(['id' => $request['delete_drawing']]);
         }
+        
         return Json::encode([
            'code' => 200,
            'msg' => 'ok',
