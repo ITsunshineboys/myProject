@@ -54,7 +54,7 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $username=trim(\Yii::$app->request->post('username',''));
+        $username=trim(\Yii::$app->request->post('moblie',''));
         $password=trim(\Yii::$app->request->post('password',''));
         if (UserChat::find()->where(['u_id' => $u_id, 'role_id' => $role_id])->one()) {
             $code = 1000;
@@ -498,7 +498,10 @@ class ChatController extends Controller
         ]);
     }
     public function actionTest(){
-
+       $a=User::find()->where(['mobile'=>'13551201821'])->one();
+       $a->username='14913354591625880052103055';
+       $b=$a->save(false);
+       var_dump($b);
 
     }
 }
