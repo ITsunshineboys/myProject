@@ -1138,6 +1138,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             'cur_kitchen': value.cur_kitchen,//厨
                             'cur_imgSrc': value.cur_imgSrc,//户型图
                             'have_stair': value.have_stair,//是否有楼梯
+                            'stair':value.stair,//楼梯结构
                             'high': value.high,//层高
                             'sort_id': arr.length + 1,
                             'window': value.window,//飘窗长度
