@@ -1466,6 +1466,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         'house_informations': arr
                     }, config).then(function (response) {
                         console.log($scope.cur_county)
+                        console.log(response)
                         //请求小区数据
                         // $http.get('/quote/plot-list', {
                         //     params: {

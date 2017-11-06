@@ -37,7 +37,7 @@
         <div class="list_dis">
             <ul>
                 <li ng-repeat="obj in huxing" class="huxing" ng-class="{'active': activeObj.id === obj.id}" ng-click="huxingFun(obj)">
-                    <img ng-src="{{'http://test.cdlhzz.cn:888/' + obj.house_image}}"/><br/>
+                    <img ng-src="{{'http://test.cdlhzz.cn/' + obj.house_image}}"/><br/>
                     <span>{{obj.particulars}} {{obj.area}}<sup>2</sup></span>
                 </li>
             </ul>

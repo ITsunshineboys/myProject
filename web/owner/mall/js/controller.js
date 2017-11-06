@@ -3708,12 +3708,13 @@ angular.module("all_controller", [])
         }
         // 保存返回
         $scope.save = function () {
-               console.log($scope.all_goods)
-                $scope.have_header = true
-                $scope.is_city = true
-                $scope.is_edit = false
-                $scope.cur_header = '智能报价'
-                $state.go('nodata.house_list')
+            console.log($scope.all_goods)
+            $scope.have_header = true
+            $scope.is_city = true
+            $scope.is_edit = false
+            $scope.cur_header = '智能报价'
+            get_all_price()
+            $state.go('nodata.house_list')
         }
         //切换编辑/完成
         $scope.switch_delete = function () {
@@ -4157,7 +4158,7 @@ angular.module("all_controller", [])
                 //     console.log(error)
                 // })
                 //防水
-                $q.all([$http.post('/owner/waterproof', data, config).then(function (response) {
+                $http.post('/owner/waterproof', data, config).then(function (response) {
                     console.log('防水')
                     console.log(response)
                     //整合一级
@@ -4257,108 +4258,7 @@ angular.module("all_controller", [])
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
                     data1['waterproof_total_area'] = response.data.data.total_area
-                })]).then(function () {
-                    //泥作
-                    $http.post('/owner/mud-make', data1, config).then(function (response) {
-                        console.log('泥作')
-                        console.log(response)
-                        //整合一级
-                        for (let [key, value] of $scope.stair.entries()) {
-                            for (let [key1, value1] of response.data.data.mud_make_material.material.entries()) {
-                                let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
-                                let cur_title = {title: value.title}
-                                if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                                    $scope.all_goods.push(cur_obj)
-                                }
-                            }
-                        }
-                        //整合二级
-                        for (let [key, value] of $scope.level.entries()) {
-                            for (let [key1, value1] of  $scope.all_goods.entries())
-                                for (let [key2, value2] of response.data.data.mud_make_material.material.entries()) {
-                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
-                                    let cur_title = {title: value.title}
-                                    if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
-                                        JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                                        value1.second_level.push(cur_obj)
-                                    }
-                                }
-                        }
-                        //整合三级
-                        for (let [key, value] of  $scope.all_goods.entries()) {
-                            for (let [key1, value1] of value.second_level.entries()) {
-                                for (let [key2, value2] of response.data.data.mud_make_material.material.entries()) {
-                                    let cur_obj = {id: value2.path.split(',')[2], title: value2.title, goods_detail: []}
-                                    let cur_title = {title: value2.title}
-                                    if (value2.path.split(',')[1] == value1.id && value2.path.split(',')[0] == value.id &&
-                                        JSON.stringify(value1.three_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                                        value1.three_level.push(cur_obj)
-                                    }
-                                }
-                            }
-                        }
-                        //整合商品
-                        for (let [key, value] of  $scope.all_goods.entries()) {
-                            for (let [key1, value1] of value.second_level.entries()) {
-                                for (let [key2, value2] of value1.three_level.entries()) {
-                                    for (let [key3, value3] of response.data.data.mud_make_material.material.entries()) {
-                                        let cur_obj = {
-                                            id: value3.id,
-                                            image: value3.cover_image,
-                                            cost: value3.cost,
-                                            name: value3.name,
-                                            platform_price: value3.platform_price,
-                                            profit_rate: value3.profit_rate,
-                                            purchase_price_decoration_company: value3.purchase_price_decoration_company,
-                                            quantity: value3.quantity,
-                                            series_id: value3.series_id,
-                                            style_id: value3.style_id,
-                                            subtitle: value3.subtitle,
-                                            supplier_price: value3.supplier_price,
-                                            shop_name: value3.shop_name
-                                        }
-                                        let cur_goods = {id: value3.id}
-                                        if (value3.path.split(',')[1] == value1.id && value3.path.split(',')[0] == value.id &&
-                                            value3.path.split(',')[2] == value2.id) {
-                                            value.cost += value3.cost
-                                            value1.cost += value3.cost
-                                            if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
-                                                value2.goods_detail.push(cur_obj)
-                                                value.count++
-                                            } else {
-                                                for (let [key4, value4] of value2.goods_detail.entries()) {
-                                                    if (value3.id == value4.id) {
-                                                        value4.cost += value3.cost
-                                                        value4.quantity +=  cur_obj.quantity
-                                                        console.log(value4.cost)
-                                                        console.log(value3.cost)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        //工人费用
-                        let cur_worker = {worker_kind: response.data.data.mud_make_labor_price.worker_kind}
-                        let cur_worker_price = response.data.data.mud_make_labor_price.price
-                        if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
-                                JSON.stringify(cur_worker).length - 1)) == -1) {
-                            $scope.all_workers.push({
-                                worker_kind: cur_worker.worker_kind,
-                                price: cur_worker_price
-                            })
-                        } else {
-                            for (let [key, value] of $scope.all_workers.entries()) {
-                                if (cur_worker.worker_kind == value.worker_kind) {
-                                    value.price += cur_worker_price
-                                }
-                            }
-                        }
-                        console.log($scope.all_workers)
-                        console.log($scope.all_goods)
-                    })
+
                 }),
                 //     function (error) {
                 //     console.log(error)
@@ -4680,57 +4580,211 @@ angular.module("all_controller", [])
                     console.log($scope.all_workers)
                     $scope.show_material = true
                 })]).then(function () {//计算总费用
-                    let arr = [],arr1 = []
-                    $scope.all_price = 0
-                    $scope.discount_price = 0
-                    for(let [key,value] of $scope.all_goods.entries()){
-                        arr1.push({
-                            one_title:value.title,
-                            price:value.cost
-                        })
-                        for(let [key1,value1] of value.second_level.entries()){
-                            for(let [key2,value2] of value1.three_level.entries()){
-                                for(let [key3,value3] of value2.goods_detail.entries()){
-                                    arr.push({
-                                        goods_id:value3.id,
-                                        num:value3.quantity
-                                    })
+                    $q.all([
+                        //泥作
+                        $http.post('/owner/mud-make', data1, config).then(function (response) {
+                            console.log('泥作')
+                            console.log(response)
+                            //整合一级
+                            for (let [key, value] of $scope.stair.entries()) {
+                                for (let [key1, value1] of response.data.data.mud_make_material.material.entries()) {
+                                    let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
+                                    let cur_title = {title: value.title}
+                                    if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
+                                        $scope.all_goods.push(cur_obj)
+                                    }
                                 }
                             }
-                        }
-                    }
-                    $q.all([$http.post('/order/calculation-freight',{
-                        goods:arr
-                    },config).then(function(res){
-                        console.log(res)
-                        $scope.all_price += +res.data.data
-                        $scope.discount_price += +res.data.data
-                        console.log($scope.all_price)
-                        console.log($scope.discount_price)
-                    }),$http.post('/owner/coefficient',{
-                        list:arr1
-                    },config).then(function (res) {
-                        console.log(res)
-                        $scope.all_price += +res.data.data.total_prices
-                        $scope.discount_price += +res.data.data.special_offer
-                        console.log($scope.all_price)
-                        console.log($scope.discount_price)
-                    })]).then(function () {
-                        let all_worker_price = $scope.all_workers.reduce(function(prev,cur){
-                            return prev + cur.price
-                        },0)
-                        console.log($scope.all_workers)
-                        console.log(all_worker_price)
-                        $scope.all_price += all_worker_price
-                        $scope.discount_price += all_worker_price
-                        console.log($scope.all_price)
-                        console.log($scope.discount_price)
+                            //整合二级
+                            for (let [key, value] of $scope.level.entries()) {
+                                for (let [key1, value1] of  $scope.all_goods.entries())
+                                    for (let [key2, value2] of response.data.data.mud_make_material.material.entries()) {
+                                        let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                        let cur_title = {title: value.title}
+                                        if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
+                                            JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
+                                            value1.second_level.push(cur_obj)
+                                        }
+                                    }
+                            }
+                            //整合三级
+                            for (let [key, value] of  $scope.all_goods.entries()) {
+                                for (let [key1, value1] of value.second_level.entries()) {
+                                    for (let [key2, value2] of response.data.data.mud_make_material.material.entries()) {
+                                        let cur_obj = {id: value2.path.split(',')[2], title: value2.title, goods_detail: []}
+                                        let cur_title = {title: value2.title}
+                                        if (value2.path.split(',')[1] == value1.id && value2.path.split(',')[0] == value.id &&
+                                            JSON.stringify(value1.three_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
+                                            value1.three_level.push(cur_obj)
+                                        }
+                                    }
+                                }
+                            }
+                            //整合商品
+                            for (let [key, value] of  $scope.all_goods.entries()) {
+                                for (let [key1, value1] of value.second_level.entries()) {
+                                    for (let [key2, value2] of value1.three_level.entries()) {
+                                        for (let [key3, value3] of response.data.data.mud_make_material.material.entries()) {
+                                            let cur_obj = {
+                                                id: value3.id,
+                                                image: value3.cover_image,
+                                                cost: value3.cost,
+                                                name: value3.name,
+                                                platform_price: value3.platform_price,
+                                                profit_rate: value3.profit_rate,
+                                                purchase_price_decoration_company: value3.purchase_price_decoration_company,
+                                                quantity: value3.quantity,
+                                                series_id: value3.series_id,
+                                                style_id: value3.style_id,
+                                                subtitle: value3.subtitle,
+                                                supplier_price: value3.supplier_price,
+                                                shop_name: value3.shop_name
+                                            }
+                                            let cur_goods = {id: value3.id}
+                                            if (value3.path.split(',')[1] == value1.id && value3.path.split(',')[0] == value.id &&
+                                                value3.path.split(',')[2] == value2.id) {
+                                                value.cost += value3.cost
+                                                value1.cost += value3.cost
+                                                if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
+                                                    value2.goods_detail.push(cur_obj)
+                                                    value.count++
+                                                } else {
+                                                    for (let [key4, value4] of value2.goods_detail.entries()) {
+                                                        if (value3.id == value4.id) {
+                                                            value4.cost += value3.cost
+                                                            value4.quantity +=  cur_obj.quantity
+                                                            console.log(value4.cost)
+                                                            console.log(value3.cost)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            //工人费用
+                            let cur_worker = {worker_kind: response.data.data.mud_make_labor_price.worker_kind}
+                            let cur_worker_price = response.data.data.mud_make_labor_price.price
+                            if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
+                                    JSON.stringify(cur_worker).length - 1)) == -1) {
+                                $scope.all_workers.push({
+                                    worker_kind: cur_worker.worker_kind,
+                                    price: cur_worker_price
+                                })
+                            } else {
+                                for (let [key, value] of $scope.all_workers.entries()) {
+                                    if (cur_worker.worker_kind == value.worker_kind) {
+                                        value.price += cur_worker_price
+                                    }
+                                }
+                            }
+                            console.log($scope.all_workers)
+                            console.log($scope.all_goods)
+                        })
+                    ]).then(function () {
+                        get_all_price()
                     })
+                    // let arr = [],arr1 = []
+                    // $scope.all_price = 0
+                    // $scope.discount_price = 0
+                    // for(let [key,value] of $scope.all_goods.entries()){
+                    //     arr1.push({
+                    //         one_title:value.title,
+                    //         price:value.cost
+                    //     })
+                    //     for(let [key1,value1] of value.second_level.entries()){
+                    //         for(let [key2,value2] of value1.three_level.entries()){
+                    //             for(let [key3,value3] of value2.goods_detail.entries()){
+                    //                 arr.push({
+                    //                     goods_id:value3.id,
+                    //                     num:value3.quantity
+                    //                 })
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    // $q.all([$http.post('/order/calculation-freight',{
+                    //     goods:arr
+                    // },config).then(function(res){
+                    //     console.log(res)
+                    //     $scope.all_price += +res.data.data
+                    //     $scope.discount_price += +res.data.data
+                    //     console.log($scope.all_price)
+                    //     console.log($scope.discount_price)
+                    // }),$http.post('/owner/coefficient',{
+                    //     list:arr1
+                    // },config).then(function (res) {
+                    //     console.log(res)
+                    //     $scope.all_price += +res.data.data.total_prices
+                    //     $scope.discount_price += +res.data.data.special_offer
+                    //     console.log($scope.all_price)
+                    //     console.log($scope.discount_price)
+                    // })]).then(function () {
+                    //     let all_worker_price = $scope.all_workers.reduce(function(prev,cur){
+                    //         return prev + cur.price
+                    //     },0)
+                    //     console.log($scope.all_workers)
+                    //     console.log(all_worker_price)
+                    //     $scope.all_price += all_worker_price
+                    //     $scope.discount_price += all_worker_price
+                    //     console.log($scope.all_price)
+                    //     console.log($scope.discount_price)
+                    // })
                 })
 
             } else {
                 $scope.submitted = true
             }
+        }
+        //获取价格
+        function get_all_price(){
+            let arr = [],arr1 = []
+            $scope.all_price = 0
+            $scope.discount_price = 0
+            for(let [key,value] of $scope.all_goods.entries()){
+                arr1.push({
+                    one_title:value.title,
+                    price:value.cost
+                })
+                for(let [key1,value1] of value.second_level.entries()){
+                    for(let [key2,value2] of value1.three_level.entries()){
+                        for(let [key3,value3] of value2.goods_detail.entries()){
+                            arr.push({
+                                goods_id:value3.id,
+                                num:value3.quantity
+                            })
+                        }
+                    }
+                }
+            }
+            $q.all([$http.post('/order/calculation-freight',{
+                goods:arr
+            },config).then(function(res){
+                console.log(res)
+                $scope.all_price += +res.data.data
+                $scope.discount_price += +res.data.data
+                console.log($scope.all_price)
+                console.log($scope.discount_price)
+            }),$http.post('/owner/coefficient',{
+                list:arr1
+            },config).then(function (res) {
+                console.log(res)
+                $scope.all_price += +res.data.data.total_prices
+                $scope.discount_price += +res.data.data.special_offer
+                console.log($scope.all_price)
+                console.log($scope.discount_price)
+            })]).then(function () {
+                let all_worker_price = $scope.all_workers.reduce(function(prev,cur){
+                    return prev + cur.price
+                },0)
+                console.log($scope.all_workers)
+                console.log(all_worker_price)
+                $scope.all_price += all_worker_price
+                $scope.discount_price += all_worker_price
+                console.log($scope.all_price)
+                console.log($scope.discount_price)
+            })
         }
         //跳转搜索页面
         $scope.go_search = function () {
@@ -4951,6 +5005,7 @@ angular.module("all_controller", [])
                         }
                     }
                     $scope.cur_header = '智能报价'
+                    get_all_price()
                     $state.go('nodata.house_list')
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
