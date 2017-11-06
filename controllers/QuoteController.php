@@ -719,8 +719,6 @@ class QuoteController extends Controller
                         } else {
                             $stair_id = $house['stair'];
                         }
-
-
                         $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
                         if (!$effect){
                             $transaction->rollBack();
@@ -948,7 +946,7 @@ class QuoteController extends Controller
                                 return $code;
                             }
                         }
-                        
+
                         if (!empty($house['delete_backman'])) {
                             $del_works_backman_data = WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
                             if (!$del_works_backman_data){
