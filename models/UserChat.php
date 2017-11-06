@@ -289,6 +289,7 @@ class UserChat extends \yii\db\ActiveRecord
                     ->where(['uid'=>$recipient_id])
                     ->one();
             $data['recipient']['hx_name']=User::find()->asArray()->select('username')->where(['id'=>$recipient_id])->one()['username'];
+            var_dump($data['recipient']);die;
         }elseif($rec_role_id==7){
             $data['recipient']=User::find()
                 ->select(['id','icon','nickname as name','username'])
