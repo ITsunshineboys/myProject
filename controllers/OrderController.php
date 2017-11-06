@@ -3796,7 +3796,6 @@ class OrderController extends Controller
                 ]);
             }
             $Goods=Goods::find()->where(['sku'=>$OrderGoods->sku])->one();
-               var_dump($Goods);exit;
             if (!$Goods)
             {
                 return Json::encode([
