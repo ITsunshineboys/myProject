@@ -47,23 +47,6 @@ angular.module("all_controller", [])
 
     }
 })
-    .controller("intelligent_index_ctrl", function ($scope, $http) {//主页控制器
-        /* $scope.get_quotation = function () {
-         $http({
-         url:"/owner/search?id=1",
-         method:"get"
-         }).then(function (response) {
-         $scope.data = response.data.data.effect
-         $scope.imgSrc =  response.data.data.effect_picture
-         $scope.all_data = {toponymy:$scope.data.toponymy,site_particulars:$scope.data.site_particulars,
-         high:$scope.data.high,particulars:$scope.data.particulars,window:$scope.data.window}
-         console.log(response)
-         },function (response) {
-
-         })
-         }*/
-    })
-
     .controller("move_furniture_ctrl", function ($scope, $http) {//移动家具控制器
         $http({
             method: 'get',
@@ -352,6 +335,22 @@ angular.module("all_controller", [])
             }
         }
 
+    })
+    .controller("intelligent_index_ctrl", function ($scope, $http) {//主页控制器
+        /* $scope.get_quotation = function () {
+         $http({
+         url:"/owner/search?id=1",
+         method:"get"
+         }).then(function (response) {
+         $scope.data = response.data.data.effect
+         $scope.imgSrc =  response.data.data.effect_picture
+         $scope.all_data = {toponymy:$scope.data.toponymy,site_particulars:$scope.data.site_particulars,
+         high:$scope.data.high,particulars:$scope.data.particulars,window:$scope.data.window}
+         console.log(response)
+         },function (response) {
+
+         })
+         }*/
     })
     .controller("intelligent_nodata_ctrl", function ($timeout, $scope, $stateParams, $http, $state, $location, $anchorScroll) { //无数据控制器
         // let all_url = 'http://test.cdlhzz.cn:888'
