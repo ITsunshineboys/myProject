@@ -3188,6 +3188,7 @@ angular.module("all_controller", [])
                 return $.param(data)
             }
         }
+        $scope.baseUrl = 'http://test.cdlhzz.cn/'
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
         $scope.area = 60//房屋面积
