@@ -29,6 +29,9 @@ header button{
     color: #2F3033!important; ;
     font-weight: normal!important;
 }
+.remove{
+    border:1px solid #5677FC;
+}
 /*=智能报价主页*/
 .intelligent_index{
     margin-left:40px;
