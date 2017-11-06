@@ -1007,6 +1007,10 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 小区案例添加  删除功能
+     * @return string
+     */
     public function actionPlotDel()
     {
         $del_id = (int)trim(\Yii::$app->request->post('del_id',''));
