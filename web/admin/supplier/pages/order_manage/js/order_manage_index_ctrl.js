@@ -18,7 +18,6 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
             return $.param(data)
         }
     };
-    console.log($stateParams.tabflag);
     /*选项卡数字获取*/
     $http({
         method: "get",
