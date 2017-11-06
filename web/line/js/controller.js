@@ -49,7 +49,7 @@ angular.module("all_controller", ['ngCookies'])
 
         // 点击轮播图跳转
         $scope.getDetails = function (item) {
-            $http.post('http://test.cdlhzz.cn:888/mall/recommend-click-record',{
+            $http.post('http://test.cdlhzz.cn/mall/recommend-click-record',{
                 recommend_id:$scope.carousel_id
             },config).then(function (response) {
                 console.log(response)
@@ -115,7 +115,7 @@ angular.module("all_controller", ['ngCookies'])
             method: 'get',
             url: 'http://test.cdlhzz.cn/mall/categories?pid=' + $scope.pid
         }).then(function successCallback(response) {
-            console.log(response)
+            console.log(response);
             $scope.details = response.data.data.categories;
             //console.log(response.data.data.categories[0].id);
 
@@ -571,7 +571,7 @@ angular.module("all_controller", ['ngCookies'])
                     wx.onMenuShareTimeline({
                         title: '艾特魔方极力推荐产品',      // 分享标题
                         link:  'http://test.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        imgUrl: 'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
+                        imgUrl: 'http://test.cdlhzz.cn/'+$scope.datailsShop.cover_image, // 分享图标
                         success: function () {
                             // 用户确认分享后执行的回调函数
 
@@ -586,7 +586,7 @@ angular.module("all_controller", ['ngCookies'])
                         title: '艾特魔方极力推荐产品', // 分享标题
                         desc: '艾特魔方极力推荐产品', // 分享描述
                         link: 'http://test.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        imgUrl: 'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
+                        imgUrl: 'http://test.cdlhzz.cn/'+$scope.datailsShop.cover_image, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                         success: function () {
@@ -601,7 +601,7 @@ angular.module("all_controller", ['ngCookies'])
                         title: '生活家居产品', // 分享标题
                         desc: '百中挑一你值得拥有的', // 分享描述
                         link: 'http://test.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接
-                        imgUrl:'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
+                        imgUrl:'http://test.cdlhzz.cn/'+$scope.datailsShop.cover_image, // 分享图标
                         success: function () {
                             // 用户确认分享后执行的回调函数
                         },
@@ -1269,7 +1269,7 @@ angular.module("all_controller", ['ngCookies'])
                                         return $.param(data)
                                     }
                                 };
-                                // http://test.cdlhzz.cn:888/
+                                // http://test.cdlhzz.cn/
                                 $http.post('http://test.cdlhzz.cn/order/alipaylinesubmit',{
                                     goods_name: $scope.title,
                                     order_price:+$scope.allCost,
