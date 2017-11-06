@@ -15,7 +15,10 @@ class BankBranch extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'bank_branch';
+        if (empty(Yii::$app->params['online']['basicDbName'])) {
+            return 'bank_branch';
+        }
+        return Yii::$app->params['online']['basicDbName'] . '.bank_branch';
     }
 
 
