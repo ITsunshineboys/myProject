@@ -1612,7 +1612,6 @@ CREATE TABLE `shipping_cart` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
---11.3
 CREATE TABLE `effect_material` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `effect_id` int(11) NOT NULL DEFAULT '0' COMMENT '样板id',
