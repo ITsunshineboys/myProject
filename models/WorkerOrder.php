@@ -5,6 +5,7 @@ namespace app\models;
 use app\controllers\WorkerController;
 use app\services\ModelService;
 use Codeception\Lib\Generator\Helper;
+use function PHPSTORM_META\elementType;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Exception;
@@ -598,7 +599,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
     }
     /**
-     * 智管工地-工人详情
+     * 智管工地详情-工人
      * @param $order_no
      * @param $uid
      * @return array|\yii\db\ActiveRecord[]
@@ -614,26 +615,26 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
         $renovation_infos=[];
         if($worker_order['status']==self::WORKER_ORDER_PREPARE || $worker_order['status']==self::WORKER_WORKS_AFTER || $worker_order['status']==self::WORKER_ORDER_TOYI ){
-              $data['time']=date('Y-m-d',time());
-              $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
-              $data['renovation_infos']=$renovation_infos;
-               return $data;
+            $data['time']=date('Y-m-d',time());
+            $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+            $data['renovation_infos']=$renovation_infos;
+            return $data;
         }elseif($worker_order['status']==self::WORKER_ORDER_ING ){
             $days=explode(',',$worker_order['days']);
             if(in_array($today_time,$days)){
                 $worker_info=Worker::find()
-                    ->select('icon,nickname')
+                    ->select('icon,nickname,id')
                     ->asArray()
                     ->where(['uid'=>$uid])
                     ->one();
-                $data['time']=date('Y-m-d',time());
-                $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
-                $work_result=WorkResult::find()
+                $data['view']['time']=date('Y-m-d',time());
+                $data['view']['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+                $work_result['result']=WorkResult::find()
                     ->asArray()
                     ->where(['order_no'=>$order_no])
                     ->orderBy('create_time Desc')
                     ->all();
-                foreach ($work_result as $k=>&$value){
+                foreach ($work_result['result'] as $k=>&$value){
                     $value['create_time']=date('Y-m-d',$value['create_time']);
                     $img=WorkResultImg::find()
                         ->select('result_img')
@@ -643,14 +644,37 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
                     $value['img']=$img;
                     $value['worker_info']=$worker_info;
+                }
+            }
+        }elseif($worker_order['status']==self::WORKER_ORDER_DONE) {
+            $days = explode(',', $worker_order['days']);
+            if (in_array($today_time, $days)) {
+                $worker_info = Worker::find()
+                    ->select('icon,nickname')
+                    ->asArray()
+                    ->where(['uid' => $uid])
+                    ->one();
+                $data['view']['status'] = self::WORKER_ORDER_STATUS[$worker_order['status']];
+                $work_result['result'] = WorkResult::find()
+                    ->asArray()
+                    ->where(['order_no' => $order_no])
+                    ->orderBy('create_time Desc')
+                    ->all();
+                foreach ($work_result['result'] as $k => &$value) {
+                    $value['create_time'] = date('Y-m-d', $value['create_time']);
+                    $img = WorkResultImg::find()
+                        ->select('result_img')
+                        ->asArray()
+                        ->where(['work_result_id' => $value['id']])
+                        ->all();
+
+                    $value['img'] = $img;
+                    $value['worker_info'] = $worker_info;
 
                 }
-
-
-                return [$data,$work_result];
             }
         }
-
+                return array_merge($data, $work_result);
     }
     /**
      * 智管工地详情-用户
@@ -676,37 +700,62 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $days=explode(',',$worker_order['days']);
             if(in_array($today_time,$days)){
                 $worker_info=Worker::find()
+                    ->select('worker.id,worker.icon,worker.nickname,worker_rank.rank_name,worker_type.worker_type')
+                    ->leftJoin('worker_type','worker.worker_type_id=worker_type.id')
+                    ->leftJoin('worker_rank','worker_rank.id=worker.level')
+                    ->asArray()
+                    ->where(['uid'=>$uid])
+                    ->one();
+                $data['view']['time']=date('Y-m-d',time());
+                $data['view']['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+                $data['view']['worker_info']=$worker_info;
+                $work_result['result']=self::worksresult($order_no,$worker_info);
+            }else{
+                $worker_info=Worker::find()
                     ->select('icon,nickname')
                     ->asArray()
                     ->where(['uid'=>$uid])
                     ->one();
-                $data['time']=date('Y-m-d',time());
-                $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
-                $work_result=WorkResult::find()
+                $data['view']['time']=date('Y-m-d',time());
+                $data['view']['status']='休息';
+                $work_result['result']=self::worksresult($order_no,$worker_info);
+            }
+        }elseif($worker_order['status']==self::WORKER_ORDER_DONE) {
+            $days = explode(',', $worker_order['days']);
+            if (in_array($today_time, $days)) {
+                $worker_info = Worker::find()
+                    ->select('icon,nickname')
                     ->asArray()
-                    ->where(['order_no'=>$order_no])
-                    ->orderBy('create_time Desc')
-                    ->all();
-                foreach ($work_result as $k=>&$value){
-                    $value['create_time']=date('Y-m-d',$value['create_time']);
-                    $img=WorkResultImg::find()
-                        ->select('result_img')
-                        ->asArray()
-                        ->where(['work_result_id'=>$value['id']])
-                        ->all();
-
-                    $value['img']=$img;
-                    $value['worker_info']=$worker_info;
-
-                }
-
-
-                return [$data,$work_result];
+                    ->where(['uid' => $uid])
+                    ->one();
+                $data['view']['status'] = self::WORKER_ORDER_STATUS[$worker_order['status']];
+               $work_result['result']=self::worksresult($order_no,$worker_info);
             }
         }
-
+        return array_merge($data, $work_result);
     }
 
+
+    public static function worksresult($order_no,$worker_info){
+        $data= WorkResult::find()
+            ->asArray()
+            ->where(['order_no' => $order_no])
+            ->orderBy('create_time Desc')
+            ->all();
+        foreach ($data as $k => &$value) {
+            $value['create_time'] = date('Y-m-d', $value['create_time']);
+            $img = WorkResultImg::find()
+                ->select('result_img')
+                ->asArray()
+                ->where(['work_result_id' => $value['id']])
+                ->all();
+
+            $value['img'] = $img;
+            $value['worker_info'] = $worker_info;
+
+        }
+        return $data;
+    }
     public static function getOrderImg($order_no, $page_size = self::IMG_PAGE_SIZE_DEFAULT, $page = 1)
     {
         $query = WorkerOrderImg::find()
