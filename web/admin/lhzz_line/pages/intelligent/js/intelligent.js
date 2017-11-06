@@ -1469,23 +1469,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         console.log($scope.cur_county)
                         console.log(response)
                         //请求小区数据
-                        // $http.get('/quote/plot-list', {
-                        //     params: {
-                        //         'post': $scope.cur_county.id,
-                        //         'page': $scope.cur_page
-                        //     }
-                        // }).then(function (response) {
-                        //     $scope.house_detail = response.data.model.details
-                        //     $scope.total_pages = []
-                        //     let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                        //     for (let i = 1; i <= num; i++) {
-                        //         $scope.total_pages.push(i)
-                        //     }
-                        //     console.log(response)
-                        // }, function (error) {
-                        //     console.log(error)
-                        // })
-                        // console.log(response)
                         tablePages()
                         //弹出保存成功模态框
                         $uibModal.open({
@@ -1508,22 +1491,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }, config).then(function (response) {
                         console.log(response)
                         //请求小区数据
-                        // $http.get('/quote/plot-list', {
-                        //     params: {
-                        //         'post': $scope.cur_county.id,
-                        //         'page': $scope.cur_page
-                        //     }
-                        // }).then(function (response) {
-                        //     $scope.house_detail = response.data.model.details
-                        //     $scope.total_pages = []
-                        //     let num = Math.ceil(+response.data.model.total / +response.data.model.size)
-                        //     for (let i = 1; i <= num; i++) {
-                        //         $scope.total_pages.push(i)
-                        //     }
-                        //     console.log(response)
-                        // }, function (error) {
-                        //     console.log(error)
-                        // })
                         tablePages()
                         console.log(response)
                         //弹出保存成功模态框
@@ -1556,7 +1523,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             console.log($scope.house_informations)
             console.log(arr)
         }
-
+        //删除小区数据
+        $scope.delete_house = function (item) {
+            $http.post('/quote/plot-del',{
+                del_id:item.id
+            },config).then(function(res){
+                console.log(res)
+                tablePages()
+            })
+        }
         //编辑所有页面配置
         $scope.go_edit_house = function (item) {
             $scope.three_title = '编辑小区信息'
