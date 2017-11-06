@@ -283,15 +283,15 @@ class UserChat extends \yii\db\ActiveRecord
         $rec_role_id=User::find()->select('last_role_id_app')->asArray()->where(['id'=>$recipient_id])->one()['last_role_id_app'];
         $data=[];
         if($rec_role_id==6){
-            $data['recipient']=
-                Supplier::find()
+            $data['recipient']= Supplier::find()
                     ->select(['id','icon','shop_name as name'])
                     ->asArray()
                     ->where(['uid'=>$recipient_id])
                     ->one();
+            $data['recipient']['hx_name']=User::find()->asArray()->select('username')->where(['id'=>$recipient_id])->one()['username'];
         }elseif($rec_role_id==7){
             $data['recipient']=User::find()
-                ->select(['id','icon','nickname as name'])
+                ->select(['id','icon','nickname as name','username'])
                 ->asArray()
                 ->where(['id'=>$recipient_id])
                 ->one();
@@ -302,6 +302,7 @@ class UserChat extends \yii\db\ActiveRecord
                 ->asArray()
                 ->where(['uid'=>$uid])
                 ->one();
+            $data['user']['hx_name']=User::find()->asArray()->select('username')->where(['id'=>$uid])->one()['username'];
         }elseif($role_id==7){
             $data['user']=User::find()
                 ->select(['id','icon','nickname as name'])
