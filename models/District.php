@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 class District extends ActiveRecord
@@ -14,7 +15,10 @@ class District extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'district';
+        if (empty(Yii::$app->params['online']['basicDbName'])) {
+            return 'district';
+        }
+        return Yii::$app->params['online']['basicDbName'] . '.district';
     }
 
     /**
