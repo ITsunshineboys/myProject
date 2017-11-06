@@ -808,6 +808,33 @@ class QuoteController extends Controller
                         $type                   = $house['is_ordinary'];
                         $sort_id                = $house['sort_id'];
 
+                        var_dump($house_id);
+                        var_dump($bedroom);
+                        var_dump($sittingRoom_diningRoom);
+                        var_dump($toilet);
+                        var_dump($kitchen);
+                        var_dump($window);
+                        var_dump($area);
+                        var_dump($high);
+                        var_dump($province);
+                        var_dump($province_code);
+                        var_dump($city);
+                        var_dump($city_code);
+                        var_dump($district);
+                        var_dump($district_code);
+                        var_dump($toponymy);
+                        var_dump($street);
+                        var_dump($particulars);
+                        var_dump($stairway);
+                        var_dump($house_image);
+                        var_dump($type);
+                        var_dump($sort_id);exit;
+                        $effect = (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
+                        if(!$effect){
+                            $transaction->rollBack();
+                            return $code;
+                        }
+
                         $other_id          = $house['other_id'];
                         $hall_area         = $house['hall_area'];
                         $hall_perimeter    = $house['hall_girth'];
@@ -821,15 +848,7 @@ class QuoteController extends Controller
                         $flat_area         = $house['flattop_area'];
                         $balcony_area      = $house['balcony_area'];
 
-                        $effect = (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-                        var_dump($effect);
-                        if(!$effect){
-                            $transaction->rollBack();
-                            return $code;
-                        }
-
                         $decoration = (new DecorationParticulars())->plotEdit($other_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
-                        var_dump($decoration);exit;
                         if (!$decoration){
                             $transaction->rollBack();
                             return $code;
