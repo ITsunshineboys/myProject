@@ -833,27 +833,27 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $worker_items;
     }
 
-//    /**
-//     * save images
-//     * @param array $images
-//     * @param $order_id
-//     * @return bool
-//     */
-//    public static function saveorderimgs(array $images, $order_no)
-//    {
-//        $worker_order_img = new WorkerOrderImg();
-//        foreach ($images as $attributes) {
-//            $_model = clone $worker_order_img;
-//            $_model->order_img = $attributes;
-//            $_model->worker_order_no = $order_no;
-//            $res = $_model->save();
-//        }
-//        if (!$res) {
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
+    /**
+     * save images
+     * @param array $images
+     * @param $order_id
+     * @return bool
+     */
+    public static function saveorderimgs(array $images, $order_no)
+    {
+        $worker_order_img = new WorkerOrderImg();
+        foreach ($images as $attributes) {
+            $_model = clone $worker_order_img;
+            $_model->order_img = $attributes;
+            $_model->worker_order_no = $order_no;
+            $res = $_model->save();
+        }
+        if (!$res) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     /**
      * 获取时间段精确到具体每一天
