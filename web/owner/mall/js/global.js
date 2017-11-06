@@ -1,4 +1,4 @@
-const url = "http://test.cdlhzz.cn:888";
+const url = "http://test.cdlhzz.cn";
 // const url="http://local.test.cdlhzz.cn/";
 
 //获取url中的？号后面的内容

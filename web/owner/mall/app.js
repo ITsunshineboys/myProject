@@ -78,7 +78,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
 
     }])
     .service('_ajax', function ($http, $state) {
-        let baseUrl = "http://test.cdlhzz.cn:888";
+        let baseUrl = "http://test.cdlhzz.cn";
         // let baseUrl = "";
         this.get = function (url, params, callback) {
             $http({
@@ -97,7 +97,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                     alert(res.msg)
                 }
             }, function (response) {
-                console.log(response.statusText);
+                console.log(response);
                 alert(response.statusText)
             })
         };
