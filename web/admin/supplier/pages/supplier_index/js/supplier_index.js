@@ -1,7 +1,7 @@
 ;
 let supplier_index = angular.module("supplier_index",[])
   .controller("supplier_index_ctrl",function ($scope,$http,$state,$stateParams,$filter) {
-        $http.get('http://test.cdlhzz.cn:888/mall/supplier-index-admin').then(function (res) {
+        $http.get(baseUrl+'/mall/supplier-index-admin').then(function (res) {
           console.log('首页返回');
           console.log(res);
           $scope.today_amount_order=res.data.data.supplier_index_admin.today_amount_order;//今日订单金额
