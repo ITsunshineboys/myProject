@@ -510,6 +510,7 @@ class ChatService
     function sendImage($filePath, $from = "admin", $target_type, $target)
     {
         $result = $this->uploadFile($filePath);
+        var_dump($result);die;
         $uri = $result['uri'];
         $uuid = $result['entities'][0]['uuid'];
         $shareSecret = $result['entities'][0]['share-secret'];

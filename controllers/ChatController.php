@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\ChatRecord;
 use app\models\OrderGoods;
 use app\models\Supplier;
+use app\models\UploadForm;
 use app\models\User;
 use app\models\UserChat;
 use app\models\UserFreezelist;
@@ -18,6 +19,7 @@ use yii\data\Pagination;
 use yii\db\Query;
 use yii\helpers\Json;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 
 class ChatController extends Controller
 {
@@ -228,8 +230,8 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
-        $message=trim(\Yii::$app->request->post('message'));
-        $to_uid=trim(\Yii::$app->request->post('to_uid'));
+        $message=trim(\Yii::$app->request->get('message'));
+        $to_uid=trim(\Yii::$app->request->get('to_uid'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
         $res=$user_hx->getUser($to_user['username']);
@@ -273,8 +275,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
-        $filepath=trim(\Yii::$app->request->post('filepath'));
-        $to_uid=trim(\Yii::$app->request->post('to_uid'));
+        $to_uid=trim(\Yii::$app->request->get('to_uid'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
         $res=$user_hx->getUser($to_user['username']);
@@ -291,6 +292,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $filepath=FileService::upload();
         $data=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
         if(is_numeric($data)){
             $code=$data;
@@ -318,9 +320,8 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
-        $filepath=trim(\Yii::$app->request->post('filepath'));
-        $to_uid=trim(\Yii::$app->request->post('to_uid'));
-        $length=trim(\Yii::$app->request->post('length'));//语音长度
+        $to_uid=trim(\Yii::$app->request->get('to_uid'));
+        $length=trim(\Yii::$app->request->get('length'));//语音长度
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
         $res=$user_hx->getUser($to_user['username']);
@@ -337,6 +338,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $filepath=FileService::upload();
         $data=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
         if(is_numeric($data)){
             $code=$data;
