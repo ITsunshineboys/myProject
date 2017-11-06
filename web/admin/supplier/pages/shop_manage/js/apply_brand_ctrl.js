@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/21/021.
  */
 let applybrand = angular.module("applybrandModule", []);
-applybrand.controller("applybrand_ctrl", function ($scope, $state, Upload, _ajax) {
+applybrand.controller("applybrand_ctrl", function ($scope, $rootScope, $state, Upload, _ajax) {
     $scope.uploadDisabled = false;  // 上传按钮禁用
     $scope.startTimeIsNull = false; // 初始日期是否为空
     $scope.endTimeIsNull = false;   // 结束日期是否为空
@@ -97,7 +97,7 @@ applybrand.controller("applybrand_ctrl", function ($scope, $state, Upload, _ajax
 
     // 图片上传
     $scope.upload = function (file, valid, name, type, idx) {
-        const baseUrl = baseUrl+"";
+        const baseUrl = $rootScope.baseUrl;
         // 判断是否初始化数据
         if (file === null && valid.length === 0) {
             return false
