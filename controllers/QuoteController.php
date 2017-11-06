@@ -808,7 +808,6 @@ class QuoteController extends Controller
                         $type                   = $house['is_ordinary'];
                         $sort_id                = $house['sort_id'];
                         $effect = (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-                        var_dump($effect);exit;
                         if(!$effect){
                             $transaction->rollBack();
                             return $code;
