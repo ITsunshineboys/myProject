@@ -257,7 +257,7 @@ class ChatController extends Controller
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
-                'data'=>$data
+                'data'=>[$data]
             ]);
         }
 
@@ -302,7 +302,7 @@ class ChatController extends Controller
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
-                'data'=>$data
+                'data'=>[$data]
             ]);
         }
 
@@ -348,7 +348,7 @@ class ChatController extends Controller
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
-                'data'=>$data
+                'data'=>[$data]
             ]);
         }
     }
