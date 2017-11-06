@@ -1709,8 +1709,8 @@ class OwnerController extends Controller
 //        $redis = Yii::$app->redis; //$redis->get('key');$redis->set('k','v');
 //        $redis->get('111111');
 //        var_dump($redis->set());
+        var_dump(Effect::find()->select('toponymy')->groupBy('toponymy')->all());exit;
         return Json::encode([
-            'list' => Effect::find()->select('toponymy')->groupBy(['toponymy'])->count(),
 //           'goods'=> (new LogisticsTemplate())->find()->where(['id'=>$id])->All(),
         ]);
     }
