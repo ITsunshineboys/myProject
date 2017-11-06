@@ -4,13 +4,9 @@ namespace app\models;
 
 use app\controllers\WorkerController;
 use app\services\ModelService;
-use Codeception\Lib\Generator\Helper;
-use function PHPSTORM_META\elementType;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Exception;
-use yii\db\Query;
-
 /**
  * This is the model class for table "worker_order".
  *
@@ -351,6 +347,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
         return $water_item_data;
     }
+
+    //TODO  油漆工的详情
+    public static function painterorderView(){
+
+    }
     private static function dealOrder($order)
     {
         $worker_type_id = $order->worker_type_id;
@@ -363,6 +364,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
             case '防水工':
                 $data=self::WaterprooforderView($order->id);
                 break;
+            case '油漆工':
+                $data=self::painterorderView($order->id);
         }
 
 //        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
@@ -830,27 +833,27 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $worker_items;
     }
 
-    /**
-     * save images
-     * @param array $images
-     * @param $order_id
-     * @return bool
-     */
-    public static function saveorderimgs(array $images, $order_no)
-    {
-        $worker_order_img = new WorkerOrderImg();
-        foreach ($images as $attributes) {
-            $_model = clone $worker_order_img;
-            $_model->order_img = $attributes;
-            $_model->worker_order_no = $order_no;
-            $res = $_model->save();
-        }
-        if (!$res) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+//    /**
+//     * save images
+//     * @param array $images
+//     * @param $order_id
+//     * @return bool
+//     */
+//    public static function saveorderimgs(array $images, $order_no)
+//    {
+//        $worker_order_img = new WorkerOrderImg();
+//        foreach ($images as $attributes) {
+//            $_model = clone $worker_order_img;
+//            $_model->order_img = $attributes;
+//            $_model->worker_order_no = $order_no;
+//            $res = $_model->save();
+//        }
+//        if (!$res) {
+//            return false;
+//        } else {
+//            return true;
+//        }
+//    }
 
     /**
      * 获取时间段精确到具体每一天
@@ -957,22 +960,22 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
             switch ($type){
                 case '泥工';
-                    $res=self::saveMuditem($data,$worker_order->id);
+                    $res=self::saveMuditem($data,$worker_order->order_no);
                     break;
                 case '水电工';
-                    $res=self::savehydropoweritem($data,$worker_order->id);
+                    $res=self::savehydropoweritem($data,$worker_order->order_no);
                     break;
                 case '木工';
-                    $res=self::savecarpentryitem($data,$worker_order->id);
+                    $res=self::savecarpentryitem($data,$worker_order->order_no);
                     break;
                 case '防水工';
-                    $res=self::savewaterproofitme($data,$worker_order->id);
+                    $res=self::savewaterproofitme($data,$worker_order->order_no);
                     break;
                 case '油漆工';
-                    $res=self::savepainteritem($data,$worker_order->id);
+                    $res=self::savepainteritem($data,$worker_order->order_no);
                     break;
                 case '杂工';
-                    $res=self::savecarpentryitem($array);
+                    $res=self::savecarpentryitem($data,$worker_order->order_no);
                     break;
             }
             if(!$res){
@@ -994,7 +997,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return bool
      */
-    public static function saveMuditem(array $array,$order_id)
+    public static function saveMuditem(array $array,$order_no)
     {
 
         $mud_order = new MudWorkerOrder();
@@ -1002,7 +1005,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         foreach ($array as $attributes) {
 
             $_model = clone $mud_order;
-            $_model->order_id = $order_id;
+            $_model->order_no = $order_no;
 
             foreach (array_keys($attributes) as &$k) {
 //
@@ -1028,14 +1031,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
     }
 
-
-    public static function savewaterproofitme(array $array,$order_id){
+    /**
+     * 保存防水工条目信息
+     * @param array $array
+     * @param $order_no
+     * @return bool
+     */
+    public static function savewaterproofitme(array $array,$order_no){
         $mud_order = new WaterproofWorkerOrder();
 
         foreach ($array as $attributes) {
 
             $_model = clone $mud_order;
-            $_model->order_id = $order_id;
+            $_model->order_no = $order_no;
 
             foreach (array_keys($attributes) as &$k) {
 //
@@ -1054,6 +1062,42 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
             $res = $_model->save(false);
         }
+        if (!$res) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 保存油漆工条目信息
+     * @param array $array
+     * @param $order_no
+     * @return bool
+     */
+    public static function savepainteritem(array $array,$order_no){
+            $painter =new PaintWorkerOrder();
+            foreach ($array as $attributes) {
+
+                $_model = clone $painter;
+                $_model->order_no = $order_no;
+                foreach (array_keys($attributes) as &$k) {
+//
+                    if (preg_match('/(item_id)/', $k, $m)) {
+                        $_model->worker_item_id = $attributes[$k];
+                    }
+                    if (preg_match('/(craft)/', $k, $m)) {
+                        $_model->worker_craft_id = $attributes[$k];
+                    }
+                    if (preg_match('/(area)/', $k, $m)) {
+                        $_model->area = $attributes[$k];
+                    }
+                    if (preg_match('/(brand)/', $k, $m)) {
+                        $_model->brand = $attributes[$k];
+                    }
+                }
+                $res = $_model->save(false);
+            }
         if (!$res) {
             return false;
         } else {

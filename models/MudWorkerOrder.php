@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "mud_worker_order".
  *
  * @property integer $id
- * @property integer $order_id
+ * @property integer $order_no
  * @property integer $worker_item_id
  * @property integer $worker_craft_id
  * @property integer $area
@@ -31,8 +31,8 @@ class MudWorkerOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id','worker_item_id'], 'required'],
-            [['order_id', 'worker_item_id', 'worker_craft_id', 'area', 'guarantee', 'chip'], 'integer'],
+            [['order_no','worker_item_id'], 'required'],
+            [['worker_item_id', 'worker_craft_id', 'area', 'guarantee', 'chip'], 'integer'],
         ];
     }
 
