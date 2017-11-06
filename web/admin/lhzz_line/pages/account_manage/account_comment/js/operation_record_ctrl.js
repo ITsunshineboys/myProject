@@ -35,7 +35,7 @@ var operation_record= angular.module("operation_record",[])
             $scope.strat = true;
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/reset-user-status-logs',
+                url: baseUrl+'/mall/reset-user-status-logs',
                 params: {
                     "sort[]": "id:3"
                 }
@@ -50,7 +50,7 @@ var operation_record= angular.module("operation_record",[])
                 $scope.flag = true;
                 $http({
                     method: 'get',
-                    url: 'http://test.cdlhzz.cn:888/mall/reset-user-status-logs',
+                    url: baseUrl+'/mall/reset-user-status-logs',
                     params: {
                         "sort[]": "id:4"
                     }
@@ -62,7 +62,7 @@ var operation_record= angular.module("operation_record",[])
         };
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/reset-user-status-logs',
+            url: baseUrl+'/mall/reset-user-status-logs',
             params: {
                 user_id:+$scope.id
             }
@@ -82,7 +82,7 @@ var operation_record= angular.module("operation_record",[])
             $scope.choosePageColse = function (page) {
                 $scope.page = page;
                 console.log($scope.page);
-                $http.get('http://test.cdlhzz.cn:888/mall/reset-user-status-logs', {
+                $http.get(baseUrl+'/mall/reset-user-status-logs', {
                     params: {
                         'page': $scope.page
                     }

@@ -22,7 +22,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
     /*选项卡数字获取*/
     $http({
         method: "get",
-        url: "http://test.cdlhzz.cn:888/order/get-order-num",
+        url: baseUrl+"/order/get-order-num",
     }).then((res) => {
         $scope.listcount = res.data.data;
         if($stateParams.tabflag=='waitreceive_flag' || $stateParams.tabflag=='waitsend_flag'){
@@ -345,7 +345,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         $scope.params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
-            url: 'http://test.cdlhzz.cn:888/order/find-supplier-order-list',
+            url: baseUrl+'/order/find-supplier-order-list',
             params: $scope.params
         }).then((res) => {
             console.log(res);

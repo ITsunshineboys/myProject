@@ -30,7 +30,7 @@
         <!--授权书上传-->
         <div class="shop_img" ng-repeat="imgs in (item.images)">
             <span style="display: inline-block; min-width:56px ">{{imgs.authorization_name}}</span>
-            <img ng-src="http://test.cdlhzz.cn:888/{{imgs.image}}" alt=""/>
+            <img ng-src="{{baseUrl + '/'+ imgs.image}}" alt=""/>
         </div>
         <hr/>
         <!--申请人-->

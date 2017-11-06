@@ -35,7 +35,7 @@ var change_num= angular.module("change_num",[])
            if(valid){
                $http({
                    method: 'get',
-                   url: 'http://test.cdlhzz.cn:888/mall/user-list'
+                   url: baseUrl+'/mall/user-list'
                }).then(function successCallback(response) {
                    $scope.old_num = response.data.data.user_list.details;
                    if( JSON.stringify( $scope.old_num).indexOf('"mobile":'+$scope.new_num)!=-1) {
@@ -56,7 +56,7 @@ var change_num= angular.module("change_num",[])
                     return $.param(data)
                 },
                 method: 'post',
-                url: 'http://test.cdlhzz.cn:888/mall/reset-mobile',
+                url: baseUrl+'/mall/reset-mobile',
                 data:{
                     mobile: $scope.new_num,
                     user_id: $scope.id

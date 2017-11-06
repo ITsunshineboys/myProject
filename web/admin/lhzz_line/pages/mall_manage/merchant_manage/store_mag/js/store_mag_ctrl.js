@@ -51,7 +51,7 @@ store_mag.controller("store_mag", function ($scope, $http) {
     function firstClass() {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
         }).then(function (response) {
             $scope.firstclass = response.data.data.categories;
             $scope.firstselect = response.data.data.categories[0].id;
@@ -62,7 +62,7 @@ store_mag.controller("store_mag", function ($scope, $http) {
     $scope.subClass = function (obj) {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
             params: {pid: obj}
         }).then(function (response) {
             $scope.secondclass = response.data.data.categories;
@@ -74,7 +74,7 @@ store_mag.controller("store_mag", function ($scope, $http) {
     $scope.thirdClass = function (obj) {
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/categories-manage-admin",
+            url: baseUrl+"/mall/categories-manage-admin",
             params: {pid: obj}
         }).then(function (response) {
             $scope.thirdclass = response.data.data.categories;
@@ -190,7 +190,7 @@ store_mag.controller("store_mag", function ($scope, $http) {
         $scope.params.page = $scope.pageConfig.currentPage;
         $http({
             method: "get",
-            url: "http://test.cdlhzz.cn:888/mall/supplier-list",
+            url: baseUrl+"/mall/supplier-list",
             params: $scope.params,
         }).then(function (res) {
             // console.log(res)
@@ -220,7 +220,7 @@ store_mag.controller("store_mag", function ($scope, $http) {
     /*确认开店/闭店*/
     $scope.sureCloseStore = function () {
         tempshop_no = Number(tempshop_no)
-        let url = "http://test.cdlhzz.cn:888/mall/supplier-status-toggle";
+        let url = baseUrl+"/mall/supplier-status-toggle";
         let data = {supplier_id: tempshop_no};
         $http.post(url, data, config).then(function (res) {
             console.log(res)

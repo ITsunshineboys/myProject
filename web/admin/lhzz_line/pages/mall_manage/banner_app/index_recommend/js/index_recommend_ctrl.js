@@ -70,7 +70,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
     }
     console.log($scope.data);
     Upload.upload({
-      url:'http://test.cdlhzz.cn:888/site/upload',
+      url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -95,7 +95,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
     }
     console.log($scope.data);
     Upload.upload({
-      url:'http://test.cdlhzz.cn:888/site/upload',
+      url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -127,7 +127,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
 
 
   //后台推荐首页(admin)
-  let recommend_url="http://test.cdlhzz.cn:888/mall/recommend-admin-index";
+  let recommend_url=baseUrl+"/mall/recommend-admin-index";
   $http.get(recommend_url,{
     params:{
       'district_code':510100,
@@ -161,12 +161,12 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   };
   //批量删除确认按钮
   $scope.delete_batch_btn=function () {
-    let url='http://test.cdlhzz.cn:888/mall/recommend-delete-batch';
+    let url=baseUrl+'/mall/recommend-delete-batch';
     $http.post(url,{
       'ids':$scope.delete_batch_num.join(',')
     },config).then(function (response) {
       console.log(response)
-      let recommend_url="http://test.cdlhzz.cn:888/mall/recommend-admin-index";
+      let recommend_url=baseUrl+"/mall/recommend-admin-index";
       $http.get(recommend_url,{
         params:{
           'district_code':510100,
@@ -204,13 +204,13 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   };
   //批量停用确认按钮
   $scope.disable_batch_btn=function () {
-    let url='http://test.cdlhzz.cn:888/mall/recommend-disable-batch';
+    let url=baseUrl+'/mall/recommend-disable-batch';
     $http.post(url,{
       'ids':$scope.disable_batch_num.join(',')
     },config).then(function (response) {
       console.log("批量禁用返回");
       console.log(response);
-      let recommend_url="http://test.cdlhzz.cn:888/mall/recommend-admin-index";
+      let recommend_url=baseUrl+"/mall/recommend-admin-index";
       $http.get(recommend_url,{
         params:{
           'district_code':510100,
@@ -240,7 +240,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   $scope.recommend_shop_add_get=function () {
     $http({
       method:"GET",
-      url:"http://test.cdlhzz.cn:888/mall/goods-by-sku",
+      url:baseUrl+"/mall/goods-by-sku",
       params:{
         sku:$scope.shop_model
       }
@@ -265,7 +265,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
     console.log(valid);
     if(valid&&$scope.upload_img_src){
       $scope.variable_flag='modal';
-      let url= 'http://test.cdlhzz.cn:888/mall/recommend-add';
+      let url= baseUrl+'/mall/recommend-add';
       let params= {
         district_code:510100,
         url:$scope.recommend_shop_url,
@@ -314,7 +314,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   $scope.recommend_link_add_btn=function (vaild) {
     if(vaild && $scope.upload_link_img_src){
       $scope.link_add_modal='modal';
-      let url= 'http://test.cdlhzz.cn:888/mall/recommend-add';
+      let url= baseUrl+'/mall/recommend-add';
       let params= {
         district_code:510100,
         url:$scope.recommend_link_url,
@@ -395,7 +395,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   $scope.recommend_shop_edit_get=function () {
     $http({
       method:"GET",
-      url:"http://test.cdlhzz.cn:888/mall/goods-by-sku",
+      url:baseUrl+"/mall/goods-by-sku",
       params:{
         sku:+$scope.shop_edit_sku
       }
@@ -419,7 +419,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
         if($scope.upload_img_src==''){
           $scope.upload_img_src=$scope.recommend_shop_edit_img;
         }
-        let shop_url='http://test.cdlhzz.cn:888/mall/recommend-edit';
+        let shop_url=baseUrl+'/mall/recommend-edit';
         $http.post(shop_url,{
           id:$scope.edit_item.id,
           url:$scope.edit_item.url,
@@ -434,7 +434,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
         },config).then(function (res) {
           console.log("编辑返回");
           console.log(res);
-          let recommend_url="http://test.cdlhzz.cn:888/mall/recommend-admin-index";
+          let recommend_url=baseUrl+"/mall/recommend-admin-index";
           $http.get(recommend_url,{
             params:{
               'district_code':510100,
@@ -453,7 +453,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
         if($scope.upload_link_img_src==''){
           $scope.upload_link_img_src=$scope.link_edit_img;
         }
-        let shop_url='http://test.cdlhzz.cn:888/mall/recommend-edit';
+        let shop_url=baseUrl+'/mall/recommend-edit';
         $http.post(shop_url,{
           id:$scope.edit_item.id,
           url:$scope.link_edit_url,
@@ -467,7 +467,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
         },config).then(function (res) {
           console.log("编辑返回");
           console.log(res);
-          let recommend_url="http://test.cdlhzz.cn:888/mall/recommend-admin-index";
+          let recommend_url=baseUrl+"/mall/recommend-admin-index";
           $http.get(recommend_url,{
             params:{
               'district_code':510100,
@@ -539,7 +539,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   };
   //确认删除
   $scope.shop_del_ok=function () {
-    $http.post('http://test.cdlhzz.cn:888/mall/recommend-delete',{'id':$scope.del_ok_index.id},config)
+    $http.post(baseUrl+'/mall/recommend-delete',{'id':$scope.del_ok_index.id},config)
       .then(function (response) {
         $http.get(recommend_url,{
           params:{
@@ -568,11 +568,11 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   };
   //单个停用确认按钮
   $scope.sole_stop_btn=function () {
-    let url='http://test.cdlhzz.cn:888/mall/recommend-status-toggle';
+    let url=baseUrl+'/mall/recommend-status-toggle';
     $http.post(url,{
       id:$scope.stop_use_item.id
     },config).then(function (res) {
-      let recommend_url="http://test.cdlhzz.cn:888/mall/recommend-admin-index";
+      let recommend_url=baseUrl+"/mall/recommend-admin-index";
       $http.get(recommend_url,{
         params:{
           'district_code':510100,
@@ -594,11 +594,11 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   };
   //单个启用确认按钮
   $scope.sole_begin_btn=function () {
-    let url='http://test.cdlhzz.cn:888/mall/recommend-status-toggle';
+    let url=baseUrl+'/mall/recommend-status-toggle';
     $http.post(url,{
       id:$scope.stop_use_item.id
     },config).then(function (res) {
-      let recommend_url="http://test.cdlhzz.cn:888/mall/recommend-admin-index";
+      let recommend_url=baseUrl+"/mall/recommend-admin-index";
       $http.get(recommend_url,{
         params:{
           'district_code':510100,
@@ -620,7 +620,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
     $scope.recommend_sort=function (item) {
     console.log('排序');
     console.log(item);
-    let url='http://test.cdlhzz.cn:888/mall/recommend-sort';
+    let url=baseUrl+'/mall/recommend-sort';
     for(let i=0; i<$scope.shop_rep.length;i++){
       $scope.recommend_sort_num.push($scope.shop_rep[i].id);
     }
@@ -759,7 +759,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   };
   $scope.save_confirm=function () {
     console.log($scope.sort_order);
-    $http.post('http://test.cdlhzz.cn:888/mall/recommend-sort',{
+    $http.post(baseUrl+'/mall/recommend-sort',{
       ids:$scope.sort_order.join(',')
     },config).then(function (res) {
       console.log(res);

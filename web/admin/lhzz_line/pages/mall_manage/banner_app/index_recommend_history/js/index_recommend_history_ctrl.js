@@ -40,7 +40,7 @@ index_recommend_history.controller("index_recommend_history_ctrl", function ($sc
     };
 
     // $scope.selectValue = '全部时间'
-    $http.get('http://test.cdlhzz.cn:888/site/time-types').then(function (response) {
+    $http.get(baseUrl+'/site/time-types').then(function (response) {
         $scope.time = response.data.data.time_types;
         $scope.selectValue = response.data.data.time_types[0].value;
     }, function (error) {

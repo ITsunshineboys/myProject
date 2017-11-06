@@ -116,7 +116,7 @@ var shop_style= angular.module("freight_template",[])
                         return $.param(data)
                     },
                     method: 'POST',
-                    url: 'http://test.cdlhzz.cn:888/mall/logistics-template-add',
+                    url: baseUrl+'/mall/logistics-template-add',
                     data:{
                         name:$scope.textContent,
                         delivery_method:+$scope.test,

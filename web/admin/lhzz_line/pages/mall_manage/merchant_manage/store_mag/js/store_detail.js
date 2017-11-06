@@ -52,7 +52,7 @@ var comment= angular.module("storedetailModule",[])
             $http({
                 params:{id:storeid},
                 method:"get",
-                url:"http://test.cdlhzz.cn:888/mall/supplier-view-admin",
+                url:baseUrl+"/mall/supplier-view-admin",
             }).then(function (res) {
                 result = res.data.data.supplier_view_admin;
                 $scope.name = result.name;
@@ -89,7 +89,7 @@ var comment= angular.module("storedetailModule",[])
             $http({
                 method:"get",
                 params:$scope.params,
-                url:"http://test.cdlhzz.cn:888/mall/brand-application-list-admin"
+                url:baseUrl+"/mall/brand-application-list-admin"
             }).then((res)=>{
                 $scope.listdata = res.data.data.brand_application_list_admin.details;
                 $scope.pageConfig.totalItems = res.data.data.brand_application_list_admin.total;

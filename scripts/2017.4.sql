@@ -50,6 +50,8 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO `user` VALUES (1,'','$2y$13$oPfoskC5c0E7x87z2kQ0cebTBosxLs6Gs6BdBA8cT.bf.Q7Ir4Pf6','pjf2vsrvkk9psa10reans9q7vl','pjf2vsrvkk9psa10reans9q7vl','s5g3gcdt4lavao2i4fgoq3amhr','sqpjfv6pd5htioi0f9fg9ogt5h','',13551201821,'恒少sss','230622199507135858',10001,'uploads/2017/09/26/1506411137.jpg',1493458425,1509949890,1,6,'111','uploads/2017/08/04/1501833935.jpg','uploads/2017/08/04/1501830700.jpg',0,'13551201821爸爸爸爸本 我升级',0,20170828,450127,'广西壮族自治区-南宁市-横县',9593702,9794702,'$2y$13$q4wxMCZytBiGfj9sXsrnq.CSoWZETPqssWIzbxAhRvrOMTxfOVc66','100d855909432a20899');
+
 create table user_role (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
@@ -61,6 +63,8 @@ create table user_role (
   `reviewer_uid` int(11) NOT NULL DEFAULT 0 comment '审核人用户id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into user_role(id, user_id, role_id, review_status) values(1, 1, 1, 2);
 
 CREATE TABLE `decoration_company` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -1608,7 +1612,6 @@ CREATE TABLE `shipping_cart` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
---11.3
 CREATE TABLE `effect_material` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `effect_id` int(11) NOT NULL DEFAULT '0' COMMENT '样板id',

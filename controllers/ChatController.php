@@ -257,7 +257,7 @@ class ChatController extends Controller
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
-                'data'=>$data
+                'data'=>[$data]
             ]);
         }
 
@@ -302,7 +302,7 @@ class ChatController extends Controller
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
-                'data'=>$data
+                'data'=>[$data]
             ]);
         }
 
@@ -348,7 +348,7 @@ class ChatController extends Controller
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
-                'data'=>$data
+                'data'=>[$data]
             ]);
         }
     }
@@ -470,7 +470,31 @@ class ChatController extends Controller
         ]);
 
     }
-
+    /**
+     * 聊天中心
+     * @return array|string
+     */
+    public function actionChatView(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($u_id, $role_id) = $user;
+        $code=1000;
+        $recipient_id=(int)\Yii::$app->request->get('recipient_id');
+        if(!$recipient_id){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user_data=UserChat::userinfos($u_id,$role_id,$recipient_id);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$user_data
+        ]);
+    }
     public function actionTest(){
 
 

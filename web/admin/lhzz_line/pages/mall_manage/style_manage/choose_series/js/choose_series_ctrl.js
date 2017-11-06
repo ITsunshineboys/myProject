@@ -6,7 +6,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 	//获取一级
 	$http({
 		method: 'get',
-		url: 'http://test.cdlhzz.cn:888/mall/categories'
+		url: baseUrl+'/mall/categories'
 	}).then(function successCallback(response) {
 		$scope.details = response.data.data.categories;
 		$scope.oneColor= $scope.details[0];
@@ -16,7 +16,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 	//获取二级
 	$http({
 		method: 'get',
-		url: 'http://test.cdlhzz.cn:888/mall/categories?pid=1'
+		url: baseUrl+'/mall/categories?pid=1'
 	}).then(function successCallback(response) {
 		$scope.second = response.data.data.categories;
 		$scope.twoColor= $scope.second[0];
@@ -27,7 +27,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 	//获取三级
 	$http({
 		method: 'get',
-		url: 'http://test.cdlhzz.cn:888/mall/categories?pid=7'
+		url: baseUrl+'/mall/categories?pid=7'
 	}).then(function successCallback(response) {
 		console.log(response)
 		$scope.three = response.data.data.categories;
@@ -55,7 +55,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 		//$scope.threeColor = n;
 		$http({
 			method: 'get',
-			url: 'http://test.cdlhzz.cn:888/mall/categories?pid='+ n.id
+			url: baseUrl+'/mall/categories?pid='+ n.id
 		}).then(function successCallback(response) {
 			$scope.second = response.data.data.categories;
 			//console.log(response.data.data.categories[0].id);
@@ -63,7 +63,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 			$scope.twoColor = $scope.second[0];
 			$http({
 				method: 'get',
-				url: 'http://test.cdlhzz.cn:888/mall/categories?pid='+ $scope.second[0].id
+				url: baseUrl+'/mall/categories?pid='+ $scope.second[0].id
 			}).then(function successCallback(response) {
 				$scope.three = response.data.data.categories;
 				//console.log(response.data.data.categories[0].id);
@@ -92,7 +92,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 		$scope.twoColor = n;
 		$http({
 			method: 'get',
-			url: 'http://test.cdlhzz.cn:888/mall/categories?pid='+ n.id
+			url: baseUrl+'/mall/categories?pid='+ n.id
 		}).then(function successCallback(response) {
 			$scope.three = response.data.data.categories;
 			for(let [key,value] of $scope.three.entries()){
@@ -156,7 +156,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 		//	return $.param(data)
 		//},
 		//method: 'post',
-		//url: 'http://test.cdlhzz.cn:888/mall/categories-style-series-reset',
+		//url: baseUrl+'/mall/categories-style-series-reset',
 		//data:{
 		//	category_ids:obj,
 		//	type:'series'
@@ -165,7 +165,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 		//console.log(response)
 		//
 		//})
-		$http.post('http://test.cdlhzz.cn:888/mall/categories-style-series-reset',{
+		$http.post(baseUrl+'/mall/categories-style-series-reset',{
 			category_ids:obj,
 			type:'series'
 		},config).then(function(response){
@@ -184,7 +184,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 	//默认进页面获取三级分类所具有的系类
 	$http({
 		method: 'get',
-		url: 'http://test.cdlhzz.cn:888/mall/categories-have-style-series?type='+'series'
+		url: baseUrl+'/mall/categories-have-style-series?type='+'series'
 	}).then(function successCallback(response) {
 		console.log(response);
 		$scope.item_check = response.data.data.have_style_series_categories;

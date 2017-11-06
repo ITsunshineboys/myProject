@@ -18,7 +18,7 @@ add_style.controller("add_style",function ($scope,$http,$state,$stateParams,Uplo
 
   //风格列表所有数据
   $scope.style_arr=[];
-  $http.get('http://test.cdlhzz.cn:888/mall/style-list',{
+  $http.get(baseUrl+'/mall/style-list',{
     params:{
       size:99999
     }
@@ -67,7 +67,7 @@ add_style.controller("add_style",function ($scope,$http,$state,$stateParams,Uplo
     }
     console.log($scope.data);
     Upload.upload({
-      url:'http://test.cdlhzz.cn:888/site/upload',
+      url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       if(!response.data.data){
@@ -82,7 +82,7 @@ add_style.controller("add_style",function ($scope,$http,$state,$stateParams,Uplo
   };
 	//删除图片
 	$scope.del_img=function (item) {
-		$http.post('http://test.cdlhzz.cn:888/site/upload-delete',{
+		$http.post(baseUrl+'/site/upload-delete',{
       file_path:item
 		},config).then(function (res) {
 			console.log(res);
@@ -113,7 +113,7 @@ add_style.controller("add_style",function ($scope,$http,$state,$stateParams,Uplo
   };
   //添加成功后跳转
 	$scope.style_go=function () {
-    $http.post('http://test.cdlhzz.cn:888/mall/style-add',{
+    $http.post(baseUrl+'/mall/style-add',{
       style:$scope.style_name,// 名称
       theme:$scope.tran_arr.join(','),//标签组
       intro:$scope.style_intro,//简介

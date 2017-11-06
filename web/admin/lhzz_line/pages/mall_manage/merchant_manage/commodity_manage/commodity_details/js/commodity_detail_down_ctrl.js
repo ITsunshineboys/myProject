@@ -43,7 +43,7 @@ commodity_detail_down.controller("commodity_detail_down_ctrl",function ($scope,$
         $http({
             method: "get",
             params: {id:Number(gooddetail.id)},
-            url: "http://test.cdlhzz.cn:888/mall/goods-view",
+            url: baseUrl+"/mall/goods-view",
         }).then(function (res) {
             good_partdetail = res.data.data.goods_view;
             $scope.subtitle = good_partdetail.subtitle;
@@ -57,7 +57,7 @@ commodity_detail_down.controller("commodity_detail_down_ctrl",function ($scope,$
     function logisticsTemplate() {
         $http({
             method:"get",
-            url:"http://test.cdlhzz.cn:888/mall/logistics-template-view",
+            url:baseUrl+"/mall/logistics-template-view",
             params:{id:Number($scope.logistics_template_id)}
         }).then(function (res) {
             logistics = res.data.data.logistics_template;
@@ -124,7 +124,7 @@ commodity_detail_down.controller("commodity_detail_down_ctrl",function ($scope,$
         if(val&&!$scope.price_flag){
             $scope.savemodal = "#savesuremodal"
             // console.log($scope.price_flag)
-            let url = "http://test.cdlhzz.cn:888/mall/goods-edit-lhzz";
+            let url = baseUrl+"/mall/goods-edit-lhzz";
             let data = {
                 id:+goodid,
                 purchase_price_decoration_company:Number($scope.purchase_price_decoration_company)*100,

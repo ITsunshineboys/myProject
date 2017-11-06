@@ -8,7 +8,7 @@
              <div id="swiperList" class="swiper-container" >
                   <div  class="swiper-wrapper" >
                       <div class="swiper-slide" ng-repeat="n in datailsShop.images" id="size_img" >
-                          <img src="http://test.cdlhzz.cn:888/{{n}}" alt="" />
+                          <img src="http://test.cdlhzz.cn/{{n}}" alt="" />
                       </div>
                   </div>
                     <!-- 如果需要分页器 -->
@@ -47,7 +47,7 @@
         <!--商铺头部-->
         <div class="shop_header" >
             <div class="shop_header_child" >
-                <img src="http://test.cdlhzz.cn:888/{{datailsShop.supplier.icon}}" alt=""/>
+                <img src="http://test.cdlhzz.cn/{{datailsShop.supplier.icon}}" alt=""/>
                 <span>{{datailsShop.supplier.shop_name}}</span>
             </div>
             <div class="shop_number">
@@ -120,7 +120,7 @@
                 <div class="modal-body">
 
                     <div class="add_cart">
-                        <img src="http://test.cdlhzz.cn:888/{{datailsShop.cover_image}}" alt=""/>
+                        <img src="http://test.cdlhzz.cn/{{datailsShop.cover_image}}" alt=""/>
                     </div>
                     <div class="pic_add">
                         <span class="pic_span">￥{{datailsShop.platform_price}}</span>

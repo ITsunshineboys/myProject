@@ -39,7 +39,7 @@ banner_history.controller("banner_history_ctrl", function ($scope, $http) {
         end_time: ''                   // 自定义结束时间
     };
 
-    $http.get('http://test.cdlhzz.cn:888/site/time-types').then(function (response) {
+    $http.get(baseUrl+'/site/time-types').then(function (response) {
         $scope.time = response.data.data.time_types;
         $scope.params.time_type = response.data.data.time_types[0].value;
     }, function (error) {

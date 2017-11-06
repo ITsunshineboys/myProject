@@ -13,6 +13,7 @@ use app\models\GoodsImage;
 use app\models\Jpush;
 use app\models\GoodsCategory;
 use app\models\Series;
+use app\models\ShippingCart;
 use app\models\Style;
 use app\models\DeletedGoodsComment;
 use app\models\LogisticsTemplate;
@@ -3765,9 +3766,6 @@ class OrderController extends Controller
 
         }
 
-        /**
-         * @return string
-         */
         public  function  actionGoodsView()
         {
             $user = Yii::$app->user->identity;
@@ -3849,7 +3847,8 @@ class OrderController extends Controller
                 ->one();
             $logisticsTemplate['delivery_cost_default']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_default']*0.01);
             $logisticsTemplate['delivery_cost_delta']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_delta']*0.01);
-            $logisticsDistrict=LogisticsDistrict::find()->select('district_name')->where(['template_id'=>$Goods->logistics_template_id])->asArray()->all();
+            $logisticsDistrict=LogisticsDistrict::find()->select('district_name')->where(['template_id'=>$logisticsTemplate['id']])->asArray()->all();
+
             $after_sale=explode(',',$Goods->after_sale_services);
             $guarantee=[];
             $after=[];
@@ -3883,18 +3882,18 @@ class OrderController extends Controller
                 {
                     $after[]='换货';
                 }
-            } 
-            $str = Url::to('http://common.cdlhzz.cn/line/#!/product_details?mall_id='. $Goods->id);
+            }
+            $str = Url::to("http://".$_SERVER['SERVER_NAME']."/line/#!/product_details?mall_id=". $Goods->id);
             $filename = 'goods_line_'. $Goods->id;
             StringService::generateQrCodeImage($str, $filename);
             $qrcode=UploadForm::DIR_PUBLIC . '/goods_line_' . $Goods->id . '.png';
             return Json::encode([
-                'code'=>200,
+                'code'=>$code,
                 'msg'=>'ok',
                 'data'=>[
                     'category'=>$category,
                     'goods_name'=>$OrderGoods->goods_name,
-                     'subtitle'=>$Goods->subtitle,
+                    'subtitle'=>$Goods->subtitle,
                     'brand'=>$brand->name,
                     'series'=>$series,
                     'style'=>$style,
@@ -4247,6 +4246,42 @@ class OrderController extends Controller
             'data'=>GoodsOrder::switchMoney($freight*0.01)
         ]);
     }
+
+
+       public  function  actionDelInvalidGoods()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lists=ShippingCart::find()
+            ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
+            ->asArray()
+            ->all();
+        foreach ($lists as &$list)
+        {
+            $carts[]=$list['id'];
+        }
+        echo $_SERVER['SERVER_NAME'];exit;
+        $code=ShippingCart::DelShippingCartData($carts);
+        if ($code==200)
+        {
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
 
 
 

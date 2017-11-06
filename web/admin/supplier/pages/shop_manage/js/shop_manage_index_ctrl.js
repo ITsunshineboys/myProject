@@ -5,7 +5,7 @@ let shopmanage = angular.module("shopmanageModule", []);
 shopmanage.controller("shopmanage_ctrl", function ($scope, $state, $http, $stateParams, _ajax, Upload) {
     let result;
     let id;
-    const picprefix = "http://test.cdlhzz.cn:888/";
+    const picprefix = baseUrl+"/";
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -61,7 +61,7 @@ shopmanage.controller("shopmanage_ctrl", function ($scope, $state, $http, $state
         }
         // console.log($scope.data)
         Upload.upload({
-            url: 'http://test.cdlhzz.cn:888/site/upload',
+            url: baseUrl+'/site/upload',
             data: {'UploadForm[file]': file}
         }).then((response) => {
             if (!response.data.data) {
@@ -79,7 +79,7 @@ shopmanage.controller("shopmanage_ctrl", function ($scope, $state, $http, $state
     /*重设商家logo*/
     $scope.resetLogo = () => {
         if (!$scope.picwarning) {
-            let url = "http://test.cdlhzz.cn:888/mall/supplier-icon-reset";
+            let url = baseUrl+"/mall/supplier-icon-reset";
             let data = {id: +id, icon: $scope.classicon || result.icon};
             $http.post(url, data, config).then(function (res) {
                 console.log(res)

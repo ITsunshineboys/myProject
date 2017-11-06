@@ -17,13 +17,11 @@
             <li >销量优先</li>
             <li >
                 价格
-                <img class="up_down" src="images/mall_arrow_up.png"  ng-show=pic_flag  ng-click="changePic ()" alt=""/>
-                <img class="up_down" src="images/down.png"  ng-show=pic_strat ng-click="changePicse ()" alt=""/>
+                <img class="up_down" ng-src= '{{good_pic}}' src="images/mall_arrow_up.png"   ng-click="filterPraise ()" alt=""/>
             </li>
             <li >
                 好评率
-                <img class="up_down" src="images/mall_arrow_up.png"  ng-show= good_pra ng-click="filterPraise ()" alt=""/>
-                <img class="up_down" src="images/down.png"  ng-show= good_pra_filter ng-click="PraiseDown ()" alt=""/>
+                <img class="up_down" ng-src= '{{good_pra_up}}' src="images/mall_arrow_up.png" ng-click ="filterPicUp ()" alt=""/>
             </li>
             <li data-toggle="modal" data-target="#myModal">
                 筛选
@@ -35,7 +33,7 @@
             <div class="flex_div" >
                 <div class="item_commodity"  ng-repeat="item in detailsList " ng-click="getDetailsProduct(item)">
                     <div class="item_commodity_divimg">
-                        <img src="http://test.cdlhzz.cn:888/{{item.cover_image}}" alt="" class="img_item " />
+                        <img src="http://test.cdlhzz.cn/{{item.cover_image}}" alt="" class="img_item " />
                     </div>
                     <div class="item_commodity_comment">
                         <p class="comment_one">{{item.title}}</p>
@@ -51,11 +49,11 @@
         <!--筛选框-->
         <div class="popup_screen">
             <div class="style_popup">
-                <!-- Modal -->
+                <!-- Modal 弹框-->
                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            <!-- -->
+                            <!--风格 -->
                             <div class="modal-body">
                                 <div class="style_screen" >
                                     <!--f风格选择？-->
@@ -71,8 +69,8 @@
                                         <div class="collapse" id="collapseExample_comment">
                                             <div class="well">
                                                 <ul class="item_li">
-                                                    <li ng-repeat="item in series">
-                                                        {{item.series}}
+                                                    <li ng-repeat="item in series" ng-class="{'changeColor':check_index_series == $index}" ng-click="changeState ($index,item)">
+                                                       {{item.series}}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -91,10 +89,10 @@
                                         <div class="collapse" id="collapseExample">
                                             <div class="well">
                                                 <ul>
-                                                    <li ng-repeat="item in styles">
+                                                    <li ng-repeat="item in styles" ng-class="{'changeColor':check_index_style == $index}" ng-click="changeStyle ($index,item)">
                                                         {{item.style}}
                                                     </li>
-                                                </ul>
+                                                </ul>`
                                             </div>
                                         </div>
                                     </div>
@@ -105,9 +103,9 @@
                                         <span class="style_size">价格选择</span>
                                     </div>
                                     <div class="price_range">
-                                        <input type="text" placeholder="最低价" maxlength="2"  pattern="[1-9]\d*"/>
-                                        <span>&nbsp;----</span>
-                                        <input type="text" placeholder="最高价" maxlength="8" pattern="[1-9]\d*"/>
+                                        <input type="text" placeholder="最低价" ng-model="price_min" maxlength="2"  pattern="[1-9]\d*"/> &nbsp; &nbsp;
+                                        <span> ———</span>
+                                        <input type="text" placeholder="最高价" ng-model="price_max" maxlength="8" pattern="[1-9]\d*"/>
                                     </div>
 
 
@@ -132,8 +130,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default reset_btn" data-dismiss="modal">重置</button>
-                                <button type="button" class="btn reset_btn last_btn">完成</button>
+
+                                <button type="button" ng-click="getNull ()" class="btn btn-default reset_btn" >重置</button>
+                                <button type="button" ng-click="getMoreData ()" class="btn reset_btn last_btn"  data-dismiss="modal">完成</button>
                             </div>
                         </div>
                     </div>
@@ -147,6 +146,10 @@
                                 <h4 class="modal-title text-center brand_content">品牌选择</h4>
                             </div>
                             <div class="modal-body">
+                                <div class="div_search">
+                                    <input class="brand_search" type="text" placeholder="请输入品牌...">
+                                    <img class="img_search" src="images/mall_search.png" alt="">
+                                </div>
                                 <ul class="brands_more">
                                     <li ng-repeat="n in brands">
                                         {{item.name}}

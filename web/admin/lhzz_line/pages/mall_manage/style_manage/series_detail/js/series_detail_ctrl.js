@@ -37,7 +37,7 @@ series_detail.controller("series_detail",function ($scope,$http,$state,$statePar
 
   //系列的所有数据
   $scope.ser_arr=[];
-  $http.get('http://test.cdlhzz.cn:888/mall/series-list').then(function (res) {
+  $http.get(baseUrl+'/mall/series-list').then(function (res) {
      $scope.ser_arr=res.data.data.series_list.details;
     //判断剩余的等级
     let arr = $scope.list_ser.concat();
@@ -102,7 +102,7 @@ series_detail.controller("series_detail",function ($scope,$http,$state,$statePar
           }
         }
         console.log($scope.tran_arr);
-        $http.post('http://test.cdlhzz.cn:888/mall/series-edit',{
+        $http.post(baseUrl+'/mall/series-edit',{
           id:+$scope.items.id,
           series:$scope.ser_name,
           theme:$scope.tran_arr.join(','),

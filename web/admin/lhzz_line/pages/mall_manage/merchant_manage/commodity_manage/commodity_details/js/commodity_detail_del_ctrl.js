@@ -37,7 +37,7 @@ commodity_detail_del.controller("commodity_detail_del_ctrl",function ($scope,$ht
         $http({
             method: "get",
             params: {id:Number(goodid)},
-            url: "http://test.cdlhzz.cn:888/mall/goods-view",
+            url: baseUrl+"/mall/goods-view",
         }).then(function (res) {
             good_partdetail = res.data.data.goods_view;
             $scope.subtitle = good_partdetail.subtitle;
@@ -51,7 +51,7 @@ commodity_detail_del.controller("commodity_detail_del_ctrl",function ($scope,$ht
     function logisticsTemplate() {
         $http({
             method:"get",
-            url:"http://test.cdlhzz.cn:888/mall/logistics-template-view",
+            url:baseUrl+"/mall/logistics-template-view",
             params:{id:Number($scope.logistics_template_id)}
         }).then(function (res) {
             console.log(res);

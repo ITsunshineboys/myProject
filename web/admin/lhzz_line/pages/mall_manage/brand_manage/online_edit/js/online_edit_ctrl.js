@@ -22,7 +22,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   $scope.online_time=$scope.now_edit_list.online_time;//下架时间
   //下架数据列表  size的设置是为了获取所有数据
   $scope.cycle_arr=[];
-  $http.get('http://test.cdlhzz.cn:888/mall/brand-list-admin', {
+  $http.get(baseUrl+'/mall/brand-list-admin', {
     params: {
       status:1,
       size:9999,
@@ -45,7 +45,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
     }
     console.log($scope.data);
     Upload.upload({
-      url:'http://test.cdlhzz.cn:888/site/upload',
+      url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -70,7 +70,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
     }
     console.log($scope.data);
     Upload.upload({
-      url:'http://test.cdlhzz.cn:888/site/upload',
+      url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -91,7 +91,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   //获取一级
   $http({
     method: 'get',
-    url: 'http://test.cdlhzz.cn:888/mall/categories'
+    url: baseUrl+'/mall/categories'
   }).then(function successCallback(response) {
     $scope.details = response.data.data.categories;
     $scope.oneColor = $scope.details[0];
@@ -100,7 +100,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   //获取二级
   $http({
     method: 'get',
-    url: 'http://test.cdlhzz.cn:888/mall/categories?pid=1'
+    url: baseUrl+'/mall/categories?pid=1'
   }).then(function successCallback(response) {
     $scope.second = response.data.data.categories;
     $scope.twoColor= $scope.second[0];
@@ -110,7 +110,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   $scope.three=[];
   $http({
     method: 'get',
-    url: 'http://test.cdlhzz.cn:888/mall/categories?pid=2'
+    url: baseUrl+'/mall/categories?pid=2'
   }).then(function successCallback(response) {
     // console.log(response)
     $scope.three = response.data.data.categories;
@@ -131,13 +131,13 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
     $scope.oneColor = n;
     $http({
       method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/categories?pid='+ n.id
+      url: baseUrl+'/mall/categories?pid='+ n.id
     }).then(function successCallback(response) {
       $scope.second = response.data.data.categories;
       $scope.twoColor = $scope.second[0];
       $http({
         method: 'get',
-        url: 'http://test.cdlhzz.cn:888/mall/categories?pid='+ $scope.second[0].id
+        url: baseUrl+'/mall/categories?pid='+ $scope.second[0].id
       }).then(function successCallback(response) {
         $scope.three = response.data.data.categories;
         //console.log(response.data.data.categories[0].id);
@@ -161,7 +161,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
     $scope.twoColor = n;
     $http({
       method: 'get',
-      url: 'http://test.cdlhzz.cn:888/mall/categories?pid='+ n.id
+      url: baseUrl+'/mall/categories?pid='+ n.id
     }).then(function successCallback(response) {
       $scope.three = response.data.data.categories;
       for(let [key,value] of $scope.three.entries()){
@@ -241,7 +241,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
           $scope.ids_arr.push($scope.item_check[key].id)
         }
         console.log($scope.ids_arr);
-        $http.post('http://test.cdlhzz.cn:888/mall/brand-edit',{
+        $http.post(baseUrl+'/mall/brand-edit',{
           id:$scope.now_edit_list.id,
           name:$scope.brand_on_name_model,
           certificate:$scope.upload_img_src,
@@ -297,7 +297,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   /*下架*/
   $scope.down_shelver_ok=function () {
     console.log($scope.now_edit_list.id)
-    $http.post('http://test.cdlhzz.cn:888/mall/brand-status-toggle',{
+    $http.post(baseUrl+'/mall/brand-status-toggle',{
       id:$scope.now_edit_list.id,
       offline_reason:$scope.edit_down_shelves_reason
     },config).then(function (res) {

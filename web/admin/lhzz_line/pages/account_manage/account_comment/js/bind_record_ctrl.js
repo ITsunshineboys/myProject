@@ -34,7 +34,7 @@ var bind_record= angular.module("bind_record",[])
             console.log(1112);
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/reset-mobile-logs',
+                url: baseUrl+'/mall/reset-mobile-logs',
                 params:{
                     "sort[]":"id:3"
                 }
@@ -51,7 +51,7 @@ var bind_record= angular.module("bind_record",[])
             $scope.flag = true;
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/reset-mobile-logs',
+                url: baseUrl+'/mall/reset-mobile-logs',
                 params:{
                     "sort[]":"id:4"
                 }
@@ -64,7 +64,7 @@ var bind_record= angular.module("bind_record",[])
         //过往绑定记录开始
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/reset-mobile-logs',
+            url: baseUrl+'/mall/reset-mobile-logs',
             params:{
                 user_id:+$scope.id
             }
@@ -86,7 +86,7 @@ var bind_record= angular.module("bind_record",[])
                 // $scope.isActivePage=function (now_page) {
                 console.log($scope.page);
                 // };
-                $http.get('http://test.cdlhzz.cn:888/mall/reset-mobile-logs',{
+                $http.get(baseUrl+'/mall/reset-mobile-logs',{
                     params:{
                         'page':$scope.page
                     }

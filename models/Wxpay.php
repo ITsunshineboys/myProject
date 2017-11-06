@@ -19,8 +19,8 @@ class Wxpay  extends ActiveRecord
 {
 
 
-    const  EFFECT_NOTIFY_URL='http://common.cdlhzz.cn/order/wxpayeffect_earnstnotify';
-    const  LINEPAY_NOTIFY_URL='http://common.cdlhzz.cn/order/orderlinewxpaynotify';
+    const  EFFECT_NOTIFY_URL="http://".$_SERVER['SERVER_NAME']."/order/wxpayeffect_earnstnotify";
+    const  LINEPAY_NOTIFY_URL="http://".$_SERVER['SERVER_NAME']."/order/orderlinewxpaynotify";
     const  EFFECT_BODY='样板间申请费';
     const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
     const  ACCESS_TOKEN='access_token';
@@ -64,7 +64,7 @@ class Wxpay  extends ActiveRecord
         $jsApiParameters = $tools->GetJsApiParameters($order);
         // return $jsApiParameters;
       echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='http://common.cdlhzz.cn/line/#!/order_commodity';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='http://common.cdlhzz.cn/line/#!/pay_success';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='http://common.cdlhzz.cn/line/#!/order_commodity';};});}
+ function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='http://".$_SERVER['SERVER_NAME']."/line/#!/order_commodity';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='http://".$_SERVER['SERVER_NAME']."/line/#!/pay_success';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='http://".$_SERVER['SERVER_NAME']."line/#!/order_commodity';};});}
 </script>";
 exit;
     }
@@ -129,7 +129,7 @@ exit;
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("test");
-            $input->SetNotify_url('http://common.cdlhzz.cn/order/orderlinewxpaynotify');
+            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME']."/order/orderlinewxpaynotify");
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
