@@ -143,6 +143,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
 
 
         /*参数初始化*/
+        $scope.pageConfig.currentPage = 1;
         $scope.keyword = '';
         $scope.params = {
             page: 1,                        // 当前页数
@@ -174,6 +175,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
             {name: '操作', value: false}
         ]
         /*参数初始化*/
+        $scope.pageConfig.currentPage = 1;
         $scope.keyword = '';
         $scope.params = {
             page: 1,                        // 当前页数
@@ -206,6 +208,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
             {name: '操作', value: false}
         ]
         /*参数初始化*/
+        $scope.pageConfig.currentPage = 1;
         $scope.keyword = '';
         $scope.params = {
             page: 1,                        // 当前页数
@@ -237,6 +240,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
             {name: '操作', value: false}
         ]
         /*参数初始化*/
+        $scope.pageConfig.currentPage = 1;
         $scope.keyword = '';
         $scope.params = {
             page: 1,                        // 当前页数
