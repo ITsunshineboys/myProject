@@ -1710,7 +1710,7 @@ class OwnerController extends Controller
 //        $redis->get('111111');
 //        var_dump($redis->set());
         return Json::encode([
-            'list' => Effect::find()->groupBy(['toponymy'])->count(),
+            'list' => Effect::find()->select('toponymy')->groupBy(['toponymy'])->count(),
 //           'goods'=> (new LogisticsTemplate())->find()->where(['id'=>$id])->All(),
         ]);
     }
