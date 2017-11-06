@@ -102,7 +102,6 @@ angular.module("all_controller", ['ngCookies'])
         console.log($scope.pid);
         console.log($scope.search_flag);
         $scope.details = '';
-
         //左侧数据获取
         $http({
             method: 'get',
