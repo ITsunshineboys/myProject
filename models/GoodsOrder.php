@@ -371,6 +371,7 @@ class GoodsOrder extends ActiveRecord
             ->select($select)
             ->where($where)
             ->offset($offset)
+            ->orderBy($sort)
             ->limit($size)
             ->all();
         $arr=self::getorderstatus($OrderList);
