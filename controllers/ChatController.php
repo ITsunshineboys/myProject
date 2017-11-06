@@ -473,9 +473,6 @@ class ChatController extends Controller
 
     public function actionTest(){
 
-        $chat=new ChatService();
-       $a= $chat->getChatRecord('select+*+where+timestamp>1403164734226');
-        return json_encode($a);
 
     }
 }

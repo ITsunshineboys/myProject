@@ -43,7 +43,7 @@ class WorkerType extends \yii\db\ActiveRecord
     public static function getworkertype($parents){
 
          foreach ($parents as $k=>$chlid){
-            $data[$k]=self::find()->select('worker_type')->where(['pid'=>$chlid['id']])->asArray()->all();
+            $data[$k]=self::find()->select('worker_name')->where(['pid'=>$chlid['id']])->asArray()->all();
 
         }
         return $data;
@@ -55,10 +55,10 @@ class WorkerType extends \yii\db\ActiveRecord
      */
     public static function gettype($worker_type_id){
         return self::find()
-            ->select('worker_type')
+            ->select('worker_name')
             ->asArray()
             ->where(['id'=>$worker_type_id])
-            ->one()['worker_type'];
+            ->one()['worker_name'];
     }
     /**
      * @param $worker_type_id
@@ -66,15 +66,15 @@ class WorkerType extends \yii\db\ActiveRecord
      */
     public static function getparenttype($worker_type_id){
         return self::find()
-            ->select('worker_type')
+            ->select('worker_name')
             ->asArray()
-            ->where(['id'=>$worker_type_id])
+            ->where(['id'=>$worker_type_id,'status'=>1])
             ->andWhere(['pid'=>self::PARENT])
-            ->one()['worker_type'];
+            ->one()['worker_name'];
     }
 
     public static function parent(){
-       return self::find()->where(['pid'=>self::PARENT])->asArray()->all();
+       return self::find()->where(['pid'=>self::PARENT,'status'=>1])->asArray()->all();
     }
 
     public static function findByList()

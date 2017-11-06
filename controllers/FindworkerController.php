@@ -85,7 +85,7 @@ class FindworkerController extends Controller{
                 $parent[]=[
                       'image'=>$parents[$i]['image'],
                       'id'=>$parents[$i]['id'],
-                      $parents[$i]['worker_type']=>$data[$i],
+                      $parents[$i]['worker_name']=>$data[$i],
                   ];
             }
         return Json::encode([
@@ -239,10 +239,10 @@ class FindworkerController extends Controller{
     }
 
     /**
-     * 泥作下单生成订单
+     *下单生成订单
      * @return string
      */
-     public function actionMudGenerateOrder(){
+     public function actionGenerateOrder(){
          $user_id = \Yii::$app->user->identity;
          $code=1052;
          if(!$user_id){
@@ -259,27 +259,7 @@ class FindworkerController extends Controller{
              'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
          ]);
     }
-    /**
-     * 防水下单生成订单
-     * @return string
-     */
-    public function actionWaterproofGenerateOrder(){
-        $user_id = \Yii::$app->user->identity;
-        $code=1052;
-        if(!$user_id){
-            return Json::encode([
-                'code' => $code,
-                'msg' =>\ Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
 
-        $post=\Yii::$app->request->post();
-        $code=WorkerOrder::addorderinfo($user_id->getId(),$post);
-        return Json::encode([
-            'code' => $code,
-            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
-        ]);
-    }
     /**
      *add home images
      *@return string
