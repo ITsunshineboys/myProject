@@ -20,8 +20,8 @@ const app = angular.module("app", ["ui.router", "shop_style", "freight_template"
 // 传参：通过url的get参数stage来获取，不传则使用默认的开发域名
 let baseUrl = (function () {
     let stages = [
-        "http://test.cdlhzz.cn:888", // 开发接口域名
-        "http://v1.cdlhzz.cn:888" // 展示接口域名
+        "http://test.cdlhzz.cn", // 开发接口域名
+        "http://v1.cdlhzz.cn" // 展示接口域名
     ];
     let stage = 0;
     try {
