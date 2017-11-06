@@ -825,15 +825,10 @@ class QuoteController extends Controller
                                     $series_id     = $images['series'];
                                     $style_id      = $images['style'];
                                     $images_user   = $images['drawing_name'];
-                                    $effect_picture = (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                                    (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
                                 }
                             }
-                            if (!$effect_picture){
-                                $transaction->rollBack();
-                                return $code;
-                            }
                         }
-                        $transaction->commit();
                     } else {
                         // 案例修改
                         $house_id               = $house['id'];
