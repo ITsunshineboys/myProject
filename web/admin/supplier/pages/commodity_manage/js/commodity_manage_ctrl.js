@@ -268,7 +268,7 @@ let commodity_manage = angular.module("commodity_manage", [])
 
         //实时监听库存并修改
         $scope.change_left_number = function (id, left_num) {
-            $http.post('http://test.cdlhzz.cn:888/mall/goods-inventory-reset', {
+            $http.post(baseUrl+'/mall/goods-inventory-reset', {
                 id: +id,
                 left_number: +left_num
             }, config).then(function (res) {
@@ -325,7 +325,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //确认下架按钮
         $scope.offline_solo_btn = function () {
-            $http.post('http://test.cdlhzz.cn:888/mall/goods-status-toggle', {
+            $http.post(baseUrl+'/mall/goods-status-toggle', {
                 id: $scope.offline_id
             }, config).then(function (res) {
                 console.log(res);
@@ -347,7 +347,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //下架确认按钮
         $scope.all_off_shelf_confirm = function () {
-            $http.post('http://test.cdlhzz.cn:888/mall/goods-disable-batch', {
+            $http.post(baseUrl+'/mall/goods-disable-batch', {
                 ids: $scope.table.roles.join(',')
             }, config).then(function (res) {
                 $scope.table.roles = [];//清空全选状态
@@ -375,7 +375,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         //获取一级
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/categories'
+            url: baseUrl+'/mall/categories'
         }).then(function successCallback(response) {
             $scope.details = response.data.data.categories;
             $scope.oneColor = $scope.details[0];
@@ -383,7 +383,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         //获取二级
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/categories?pid=1'
+            url: baseUrl+'/mall/categories?pid=1'
         }).then(function successCallback(response) {
             $scope.second = response.data.data.categories;
             $scope.twoColor = $scope.second[0];
@@ -391,7 +391,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         //获取三级
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn:888/mall/categories?pid=2'
+            url: baseUrl+'/mall/categories?pid=2'
         }).then(function successCallback(response) {
             $scope.three = response.data.data.categories;
             for (let [key, value] of $scope.three.entries()) {
@@ -411,7 +411,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.oneColor = n;
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/categories?pid=' + n.id
+                url: baseUrl+'/mall/categories?pid=' + n.id
             }).then(function successCallback(response) {
                 $scope.second = response.data.data.categories;
                 //console.log(response.data.data.categories[0].id);
@@ -419,7 +419,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                 $scope.twoColor = $scope.second[0];
                 $http({
                     method: 'get',
-                    url: 'http://test.cdlhzz.cn:888/mall/categories?pid=' + $scope.second[0].id
+                    url: baseUrl+'/mall/categories?pid=' + $scope.second[0].id
                 }).then(function successCallback(response) {
                     $scope.three = response.data.data.categories;
                     //console.log(response.data.data.categories[0].id);
@@ -443,7 +443,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.twoColor = n;
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/categories?pid=' + n.id
+                url: baseUrl+'/mall/categories?pid=' + n.id
             }).then(function successCallback(response) {
                 $scope.three = response.data.data.categories;
                 for (let [key, value] of $scope.three.entries()) {
@@ -497,7 +497,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             //获取一级
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/categories'
+                url: baseUrl+'/mall/categories'
             }).then(function successCallback(response) {
                 $scope.details = response.data.data.categories;
                 $scope.oneColor = $scope.details[0];
@@ -505,7 +505,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             //获取二级
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/categories?pid=1'
+                url: baseUrl+'/mall/categories?pid=1'
             }).then(function successCallback(response) {
                 $scope.second = response.data.data.categories;
                 $scope.twoColor = $scope.second[0];
@@ -514,7 +514,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             //获取三级
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn:888/mall/categories?pid=2'
+                url: baseUrl+'/mall/categories?pid=2'
             }).then(function successCallback(response) {
                 // console.log(response)
                 $scope.three = response.data.data.categories;
@@ -558,7 +558,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //上架确认按钮
         $scope.all_on_shelf_confirm = function () {
-            $http.post('http://test.cdlhzz.cn:888/mall/goods-status-toggle', {
+            $http.post(baseUrl+'/mall/goods-status-toggle', {
                 id: +$scope.on_shelf_id
             }, config).then(function (res) {
                 $scope.down_search_value = '';//清空输入框值
@@ -589,7 +589,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //删除确认按钮
         $scope.off_del_confirm = function () {
-            $http.post('http://test.cdlhzz.cn:888/mall/goods-delete-batch', {
+            $http.post(baseUrl+'/mall/goods-delete-batch', {
                 ids: $scope.batch_del.join(',')
             }, config).then(function (res) {
                 console.log(res);
@@ -617,7 +617,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         let tablePagesWait = function () {
             $scope.paramsWait.page = $scope.ConfigWait.currentPage;//点击页数，传对应的参数
-            $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin', {
+            $http.get(baseUrl+'/mall/goods-list-admin', {
                 params: $scope.paramsWait
             }).then(function (res) {
                 console.log(res);
@@ -639,7 +639,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         // };
         //实时监听库存并修改
         $scope.change_right_number = function (id, left_num) {
-            $http.post('http://test.cdlhzz.cn:888/mall/goods-inventory-reset', {
+            $http.post(baseUrl+'/mall/goods-inventory-reset', {
                 id: +id,
                 left_number: +left_num
             }, config).then(function (res) {
@@ -651,7 +651,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         $scope.myng = $scope;
         $scope.wait_list_arr = [];
-        $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin', {
+        $http.get(baseUrl+'/mall/goods-list-admin', {
                 params: {
                     status: 1
                 }
@@ -674,7 +674,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             //监听搜索框的值为空时，返回最初的值
             $scope.$watch("off_search_content", function (newVal, oldVal) {
                 if (newVal == "") {
-                    $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin', {
+                    $http.get(baseUrl+'/mall/goods-list-admin', {
                             params: {
                                 status: 1
                             }
@@ -694,7 +694,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                 $scope.on_time_flag = false;
                 $scope.down_time_flag = true;
                 $scope.page = 1;
-                $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin', {
+                $http.get(baseUrl+'/mall/goods-list-admin', {
                     params: {
                         status: 1,
                         page: $scope.page,
@@ -713,7 +713,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                 $scope.on_time_flag = true;
                 $scope.down_time_flag = false;
                 $scope.page = 1;
-                $http.get('http://test.cdlhzz.cn:888/mall/goods-list-admin', {
+                $http.get(baseUrl+'/mall/goods-list-admin', {
                     params: {
                         status: 1,
                         page: $scope.page,
@@ -735,7 +735,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                 //  return $.param(data)
                 //},
                 method: 'POST',
-                url: 'http://test.cdlhzz.cn:888/mall/logistics-templates-supplier'
+                url: baseUrl+'/mall/logistics-templates-supplier'
             }).then(function successCallback(response) {
                 console.log(response);
                 $scope.contentMore = response.data.data.logistics_templates_supplier;
@@ -756,7 +756,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                             return $.param(data)
                         },
                         method: 'POST',
-                        url: 'http://test.cdlhzz.cn:888/mall/logistics-template-status-toggle',
+                        url: baseUrl+'/mall/logistics-template-status-toggle',
                         data: {
                             id: +$scope.id
                         }
@@ -767,7 +767,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                             //  return $.param(data)
                             //},
                             method: 'POST',
-                            url: 'http://test.cdlhzz.cn:888/mall/logistics-templates-supplier'
+                            url: baseUrl+'/mall/logistics-templates-supplier'
                         }).then(function successCallback(response) {
                             $scope.contentMore = response.data.data.logistics_templates_supplier;
                             console.log($scope.contentMore);

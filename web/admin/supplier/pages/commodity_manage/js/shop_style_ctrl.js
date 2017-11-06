@@ -20,7 +20,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       $scope.brands_arr=[];
       $scope.series_arr=[];
       $scope.styles_arr=[];
-      $http.get('http://test.cdlhzz.cn:888/mall/category-brands-styles-series',{
+      $http.get(baseUrl+'/mall/category-brands-styles-series',{
         params:{
           category_id:+$scope.category_id
         }
@@ -55,7 +55,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       $scope.pass_attrs_name=[];//名称
       $scope.pass_attrs_value=[];//值
 
-        $http.get('http://test.cdlhzz.cn:888/mall/category-attrs',{
+        $http.get(baseUrl+'/mall/category-attrs',{
             params:{
               category_id:+$scope.category_id
             }
@@ -114,7 +114,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
         }
         console.log($scope.data);
         Upload.upload({
-          url:'http://test.cdlhzz.cn:888/site/upload',
+          url:baseUrl+'/site/upload',
           data:{'UploadForm[file]':file}
         }).then(function (response) {
           console.log(response);
@@ -141,7 +141,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
         }
         console.log($scope.data);
         Upload.upload({
-          url:'http://test.cdlhzz.cn:888/site/upload',
+          url:baseUrl+'/site/upload',
           data:{'UploadForm[file]':file}
         }).then(function (response) {
           if(!response.data.data){
@@ -156,7 +156,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       };
       //删除图片
       $scope.del_img=function (item) {
-        $http.post('http://test.cdlhzz.cn:888/site/upload-delete',{
+        $http.post(baseUrl+'/site/upload-delete',{
           file_path:item
         },config).then(function (res) {
           console.log(res);
@@ -186,14 +186,14 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       };
 
       //物流模块类别
-      $http.post('http://test.cdlhzz.cn:888/mall/logistics-templates-supplier',{},config).then(function (res) {
+      $http.post(baseUrl+'/mall/logistics-templates-supplier',{},config).then(function (res) {
         console.log('物流模板');
         console.log(res);
         $scope.logistics=res.data.data.logistics_templates_supplier;
         $scope.shop_logistics=res.data.data.logistics_templates_supplier[0].id;
         //物流模块详情
         $scope.$watch('shop_logistics',function (newVal,oldVal) {
-          $http.get('http://test.cdlhzz.cn:888/mall/logistics-template-view',{
+          $http.get(baseUrl+'/mall/logistics-template-view',{
             params:{
               id:+newVal
             }
@@ -297,7 +297,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       if($scope.pass_attrs_value[0]==undefined){
         $scope.pass_attrs_value=[];
       }
-       $http.post('http://test.cdlhzz.cn:888/mall/goods-add',{
+       $http.post(baseUrl+'/mall/goods-add',{
         category_id:+$scope.category_id,      //三级分类id
         title:$scope.goods_name,              //名称
         subtitle:$scope.des_name,             //特色

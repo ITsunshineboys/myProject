@@ -83,7 +83,7 @@ frozen_money.controller("frozen_money_ctrl", function ($scope, $http, $statePara
         $http({
             method:"get",
             params:$scope.params,
-            url:"http://test.cdlhzz.cn:888/withdrawals/find-supplier-freeze-list",
+            url:baseUrl+"/withdrawals/find-supplier-freeze-list",
         }).then(function (res) {
             $scope.pageConfig.totalItems = +res.data.data.count;
             $scope.frozendetail = res.data.data.list;

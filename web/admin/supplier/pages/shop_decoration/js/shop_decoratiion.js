@@ -32,7 +32,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   /*判断类型为Banner还是推荐，请求列表接口*/
   $scope.judgment=function () {
     if($scope.b_show_table_flag){
-      $http.get('http://test.cdlhzz.cn:888/mall/recommend-admin-index-supplier',{
+      $http.get(baseUrl+'/mall/recommend-admin-index-supplier',{
         params:{
           district_code:510100,
           type:0
@@ -43,7 +43,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
         console.log(err);
       });
     }else{
-      $http.get('http://test.cdlhzz.cn:888/mall/recommend-admin-index-supplier',{
+      $http.get(baseUrl+'/mall/recommend-admin-index-supplier',{
         params:{
           district_code:510100,
           type:2
@@ -83,7 +83,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
 
 
   /*--------------------------Banner----------------------------------*/
-  $http.get('http://test.cdlhzz.cn:888/mall/recommend-admin-index-supplier',{
+  $http.get(baseUrl+'/mall/recommend-admin-index-supplier',{
     params:{
       district_code:510100,
       type:0
@@ -99,7 +99,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
     $scope.add_pass_sku=$scope.banner_add_sku;//把传过去的值重新定义，为确认按钮做判断
     //添加获取sku
     if(num===0){
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-by-sku',{
+      $http.get(baseUrl+'/mall/goods-by-sku',{
         params:{
           sku:+$scope.banner_add_sku
         }
@@ -129,7 +129,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
         $scope.banner_edit_change_error=false;
       }
       //编辑获取sku
-      $http.get('http://test.cdlhzz.cn:888/mall/goods-by-sku',{
+      $http.get(baseUrl+'/mall/goods-by-sku',{
         params:{
           sku:+$scope.banner_edit_sku
         }
@@ -163,7 +163,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
     }
     console.log($scope.data);
     Upload.upload({
-      url:'http://test.cdlhzz.cn:888/site/upload',
+      url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -208,7 +208,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
       }else{
         $scope.pass_type=2;
       }
-      $http.post('http://test.cdlhzz.cn:888/mall/recommend-add-supplier',{
+      $http.post(baseUrl+'/mall/recommend-add-supplier',{
           url:$scope.banner_add_url,
           title:$scope.banner_add_title,
           image:$scope.banner_add_img_src,
@@ -250,7 +250,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
     }
     console.log($scope.data);
     Upload.upload({
-      url:'http://test.cdlhzz.cn:888/site/upload',
+      url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -319,7 +319,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
       }else{
         $scope.edit_pass_type=2
       }
-      $http.post('http://test.cdlhzz.cn:888/mall/recommend-edit-supplier',{
+      $http.post(baseUrl+'/mall/recommend-edit-supplier',{
         id:+$scope.banner_edit_id,
         url:$scope.banner_edit_url,
         title:$scope.banner_edit_title,
@@ -385,7 +385,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
 
   };
   $scope.banner_del_confirm=function () {
-    $http.post('http://test.cdlhzz.cn:888/mall/recommend-delete-batch-supplier',{
+    $http.post(baseUrl+'/mall/recommend-delete-batch-supplier',{
       ids:$scope.delete_arr.join(',')
     },config).then(function (res) {
       console.log(res);
@@ -422,7 +422,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   };
   $scope.save_confirm=function () {
     console.log($scope.sort_order);
-    $http.post('http://test.cdlhzz.cn:888/mall/recommend-sort-supplier',{
+    $http.post(baseUrl+'/mall/recommend-sort-supplier',{
       ids:$scope.sort_order.join(',')
     },config).then(function (res) {
       console.log(res);
@@ -433,7 +433,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
 
 
   /*--------------------------推荐-----------------------------*/
-  $http.get('http://test.cdlhzz.cn:888/mall/recommend-admin-index-supplier',{
+  $http.get(baseUrl+'/mall/recommend-admin-index-supplier',{
     params:{
       district_code:510100,
       type:2

@@ -16,7 +16,7 @@ edit_card.controller("edit_card_ctrl", function ($scope,$http,$anchorScroll,$loc
         $http({
             method: "get",
             params: {role_id: 6},
-            url: "http://test.cdlhzz.cn:888/withdrawals/find-bank-card"
+            url: baseUrl+"/withdrawals/find-bank-card"
         }).then(function (res) {
             if (Object.keys(res.data.data).length == 0) {
                 return;
@@ -37,7 +37,7 @@ edit_card.controller("edit_card_ctrl", function ($scope,$http,$anchorScroll,$loc
         /*默认的情况*/
         if (val) {
             $scope.successmodal = "#edit_card"
-            let url = "http://test.cdlhzz.cn:888/withdrawals/set-bank-card";
+            let url = baseUrl+"/withdrawals/set-bank-card";
             let data =  $scope.carddetail;
             // $scope.suremodal = '#suremodal';
             $http.post(url, data, config).then(function (res) {

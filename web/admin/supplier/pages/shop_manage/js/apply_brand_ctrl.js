@@ -97,7 +97,7 @@ applybrand.controller("applybrand_ctrl", function ($scope, $state, Upload, _ajax
 
     // 图片上传
     $scope.upload = function (file, valid, name, type, idx) {
-        const baseUrl = "http://test.cdlhzz.cn:888";
+        const baseUrl = baseUrl+"";
         // 判断是否初始化数据
         if (file === null && valid.length === 0) {
             return false

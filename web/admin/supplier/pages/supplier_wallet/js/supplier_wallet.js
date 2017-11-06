@@ -43,7 +43,7 @@ angular.module('supplier_wallet_module',[])
   $scope.status_arr=[{id:0,value:'全部'},{id:1,value:'提现中'},{id:2,value:'已提现'},{id:3,value:'驳回'}];
   $scope.params.status=$scope.status_arr[0].id;
   //时间类型
-  $http.get('http://test.cdlhzz.cn:888/site/time-types').then(function (response) {
+  $http.get(baseUrl+'/site/time-types').then(function (response) {
     $scope.time = response.data.data.time_types;
     $scope.params.time_type = response.data.data.time_types[0].value;
   });
