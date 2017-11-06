@@ -807,12 +807,7 @@ class QuoteController extends Controller
                         $house_image            = $house['cur_imgSrc'];
                         $type                   = $house['is_ordinary'];
                         $sort_id                = $house['sort_id'];
-                        $effect = (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-                        if(!$effect){
-                            $transaction->rollBack();
-                            return $code;
-                        }
-
+                        (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
                         $other_id          = $house['other_id'];
                         $hall_area         = $house['hall_area'];
                         $hall_perimeter    = $house['hall_girth'];
@@ -825,12 +820,7 @@ class QuoteController extends Controller
                         $modelling_length  = $house['other_length'];
                         $flat_area         = $house['flattop_area'];
                         $balcony_area      = $house['balcony_area'];
-
-                        $decoration = (new DecorationParticulars())->plotEdit($other_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
-                        if (!$decoration){
-                            $transaction->rollBack();
-                            return $code;
-                        }
+                        (new DecorationParticulars())->plotEdit($other_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
 
                         if (!empty($house['drawing_list'])) {
                             foreach ($house['drawing_list'] as $images) {
@@ -878,12 +868,7 @@ class QuoteController extends Controller
                             $stair_id = $house['stair'];
                         }
 
-                        $effect = (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
-                        if (!$effect){
-                            $transaction->rollBack();
-                            return $code;
-                        }
-
+                        (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
                         if (!empty($house['drawing_list'])) {
                             if (!empty($house['id'])) {
                                 $images_id     = $house['id'];
@@ -955,6 +940,7 @@ class QuoteController extends Controller
                                 return $code;
                             }
                         }
+
                         if (!empty($house['delete_workers'])) {
                             $del_works_worker_data = WorksWorkerData::deleteAll(['id' => $house['delete_workers']]);
                             if (!$del_works_worker_data){
@@ -962,6 +948,7 @@ class QuoteController extends Controller
                                 return $code;
                             }
                         }
+                        
                         if (!empty($house['delete_backman'])) {
                             $del_works_backman_data = WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
                             if (!$del_works_backman_data){
