@@ -3,6 +3,9 @@
  */
 let done_detail = angular.module("done_detailModule", []);
 done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams) {
+    let store_service_score;//商家评分
+    let logistics_speed_score //物流速度
+    let shipping_score;//配送人员服务
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -21,9 +24,9 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
     $scope.send = true;
     $scope.receive = true;
     $scope.emptywarning = false;
-    let store_service_score;//商家评分
-    let logistics_speed_score //物流速度
-    let shipping_score;//配送人员服务
+    $scope.unshipped_detail = [];
+    $scope.unreceived_detail = [];
+
 
 
     /*异常记录-待发货
@@ -36,10 +39,12 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
 
     $scope.order_no = $stateParams.order_no; //订单号
     $scope.sku = $stateParams.sku;//商品编号
+    // 物流页面传参
     $scope.express_params = {
         order_no: $scope.order_no,
         sku: $scope.sku,
-        statename: "done_detail"
+        statename: "done_detail",
+        tabflag:$stateParams.tabflag
     }
 
     /*订单详情
@@ -59,11 +64,6 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
             abnormalHandle()
         })
     }
-
-
-    $scope.unshipped_detail = [];
-    $scope.unreceived_detail = [];
-
 
     /*订单异常处理*/
     function abnormalHandle() {

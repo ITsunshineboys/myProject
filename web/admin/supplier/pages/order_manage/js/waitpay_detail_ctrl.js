@@ -21,7 +21,8 @@ waitpay_detail.controller("waitpaydetail_ctrl", function ($scope, $http, $stateP
     $scope.express_params = {
         order_no:$scope.order_no,
         sku:$scope.sku,
-        statename:'waitpay_detail'
+        statename:'waitpay_detail',
+        tabflag:$stateParams.tabflag
     }
 
 

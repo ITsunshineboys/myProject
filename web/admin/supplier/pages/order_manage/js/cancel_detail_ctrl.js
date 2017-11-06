@@ -9,7 +9,9 @@ cancel_detail.controller("cancel_detail_ctrl", function ($scope, $http, $statePa
             return $.param(data)
         }
     };
+
     $scope.tabflag = $stateParams.tabflag; //页面跳转
+    console.log($scope.tabflag+'页面跳转flag');
     $scope.send = true;
     $scope.receive = true;
     $scope.plat_send = true;
@@ -31,7 +33,8 @@ cancel_detail.controller("cancel_detail_ctrl", function ($scope, $http, $statePa
     $scope.express_params = {
         order_no: $scope.order_no,
         sku: $scope.sku,
-        statename: "cancel_detail"
+        statename: "cancel_detail",
+        tabflag:$stateParams.tabflag
     }
 
     /*异常记录-待发货
@@ -60,9 +63,6 @@ cancel_detail.controller("cancel_detail_ctrl", function ($scope, $http, $statePa
             $scope.is_platform = res.data.data.is_platform;//平台是否介入
             abnormalHandle();
             $scope.is_platform == 1?$scope.show_plat = false:platAbnormalHandle();//是否显示平台记录
-            // res.data.data.is_platform==2?platAbnormalHandle():$scope.show_platform = false; //平台是否介入
-            // $scope.is_refund =
-            // platAbnormalHandle();
         })
     }
 
