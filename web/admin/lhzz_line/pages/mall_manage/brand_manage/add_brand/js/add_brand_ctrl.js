@@ -171,11 +171,25 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
   };
   //添加拥有系列的三级
   $scope.check_item = function(item){
-    if(item.complete){
-      $scope.item_check.push(item);
-    }else{
-      $scope.item_check.splice($scope.item_check.indexOf(item),1)
-    }
+
+      for(let[key,value] of $scope.item_check.entries()){
+          if(item.id==value.id){
+              $scope.item_check.splice(key,1);
+              $scope.add_three=1;
+              break;
+          }else{
+              $scope.add_three=0
+          }
+          console.log($scope.add_three);
+      }
+      if($scope.add_three!=1){
+          $scope.item_check.push(item);
+      }
+    // if(item.complete){
+    //   $scope.item_check.push(item);
+    // }else{
+    //   $scope.item_check.splice($scope.item_check.indexOf(item),1)
+    // }
     //分类提示文字
     if($scope.item_check.length<1){
       $scope.sort_check='请至少选择一个分类';
@@ -185,8 +199,15 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
   };
   //删除拥有系列的三级
   $scope.delete_item = function (item) {
-    item.complete = false;
-    $scope.item_check.splice($scope.item_check.indexOf(item),1);
+      for(let[key,value] of $scope.three.entries()){
+          // console.log(value)
+          if(item.id==value.id){
+              value.complete=false;
+          }
+      }
+      $scope.item_check.splice($scope.item_check.indexOf(item),1);
+    //item.complete = false;
+    //$scope.item_check.splice($scope.item_check.indexOf(item),1);
     //分类提示文字
     if($scope.item_check.length<1){
       $scope.sort_check='请至少选择一个分类';

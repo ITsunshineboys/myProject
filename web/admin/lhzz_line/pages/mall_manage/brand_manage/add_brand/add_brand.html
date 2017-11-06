@@ -16,7 +16,7 @@
         <div class="company_type">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>品牌名称</span>
-            <input required name="brand_title" id="brand_title"  ng-class="{'border_red':(add_brand_form.brand_title.$invalid &&submitted)||(add_brand_form.brand_title.$error.required && title_blur)}" ng-blur="title_blur=!!add_brand_form.brand_title.$error" type="text"  ng-model="brand_name_model" placeholder="请输入品牌名称">
+            <input required name="brand_title" id="brand_title" maxlength="10"  ng-class="{'border_red':(add_brand_form.brand_title.$invalid &&submitted)||(add_brand_form.brand_title.$error.required && title_blur)}" ng-blur="title_blur=!!add_brand_form.brand_title.$error" type="text"  ng-model="brand_name_model" placeholder="请输入品牌名称">
             <span id="limitword">*限1~10个字符</span>
             <p class="red_mark" ng-if="myng.brand_name_flag">
                 <span class="glyphicon glyphicon-asterisk"></span>
@@ -66,6 +66,11 @@
 
         <!--选择品牌所在分类-->
         <div class="ulright">
+            <div style="display: inline-block; vertical-align: top">
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                <span>选择品牌所在分类</span>
+            </div>
+            <div style="margin-left: 33px;display: inline-block">
             <!--一级-->
             <ul>
                 <li ng-repeat="n in details track by $index" ng-class="{'active':oneColor== n}" ng-click="getMore (n)">
@@ -96,17 +101,16 @@
                     <img ng-click="delete_item(item)" src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">
                 </li>
             </ul>
+                <p class="warning red_mark " ng-if="!!sort_check">
+                    <i class="glyphicon glyphicon-asterisk red_mark"></i>
+                    <span>请至少选择一个分类</span>
+                </p>
+            </div>
         </div>
-
-            <p class="red_mark warning" ng-if="!!sort_check">
-                <i class="glyphicon glyphicon-asterisk red_mark"></i>
-                <span>请至少选择一个分类</span>
-            </p>
-
         <!--按钮组-->
         <div class="btn_sure">
-            <button  id="save" data-toggle="{{add_modal_v}}" data-target="#down_add_modal" ng-click="add_brand_ok(add_brand_form.$valid,add_brand_form.$error.required)">确认</button>
-            <button ui-sref="brand_index({down_flag:true})">返回</button>
+            <button class="btn btn-primary"  data-toggle="{{add_modal_v}}" data-target="#down_add_modal" ng-click="add_brand_ok(add_brand_form.$valid,add_brand_form.$error.required)">确认</button>
+            <button class="btn btn-default btn_left" ui-sref="brand_index({down_flag:true})">返回</button>
         </div>
         </form>
     </div>

@@ -68,9 +68,9 @@
                     <h4 class="modal-title">下架原因</h4>
                 </div>
                 <div class="modal-body">
-                    <div ng-if="batch_down_num.length>0">下架{{batch_down_num.length}}个品牌</div>
+                    <div ng-if="table.roles.length>0" style="margin-bottom: 20px">下架{{table.roles.length}}个品牌</div>
                     <span style="vertical-align: top">下架原因（选填）</span>
-                    <textarea  ng-model="sole_down_shelves_reason" placeholder="请填写下架原因" cols="30" rows="10"></textarea>
+                    <textarea  ng-model="sole_down_shelves_reason" placeholder="请填写下架原因" cols="50" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="down_shelver_ok()">确认</button>
