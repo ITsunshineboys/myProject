@@ -970,21 +970,21 @@ class OrderController extends Controller
 
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
-         if ($sort_time==''  ||$sort_money==2)
+       if (!$sort_time && $sort_money==2)
         {
             $where.=' order by a.amount_order desc';
         }
-        if ($sort_time==''  ||$sort_money==1)
+        if (!$sort_time && $sort_money==1)
         {
-            $where.=' order by a.amount_order asc';
+            $where.=' order by  a.amount_order asc';
         }
-        if ($sort_money==''  ||$sort_time==2)
+        if (!$sort_money && $sort_time==2)
         {
-            $where.=' order by a.create_time desc';
+            $where.=' order by  a.create_time desc';
         }
-        if ($sort_money==''  ||$sort_time==1)
+        if (!$sort_money  && $sort_time==1)
         {
-            $where.=' order by a.create_time asc';
+            $where.=' order by  a.create_time asc';
         }
 
 
