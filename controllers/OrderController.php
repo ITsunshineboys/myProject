@@ -968,8 +968,24 @@ class OrderController extends Controller
                 }
            }
 
-         $sort_money=trim($request->get('sort_money'));
-         $sort_time=trim($request->get('sort_time'));
+        $sort_money=trim($request->get('sort_money',2));
+        $sort_time=trim($request->get('sort_time',2));
+         if ($sort_time==''  ||$sort_money==2)
+        {
+            $where.=' and a.amount_order desc';
+        }
+        if ($sort_time==''  ||$sort_money==1)
+        {
+            $where.=' and a.amount_order asc';
+        }
+        if ($sort_money==''  ||$sort_time==2)
+        {
+            $where.=' and a.create_time desc';
+        }
+        if ($sort_money==''  ||$sort_time==1)
+        {
+            $where.=' and a.create_time asc';
+        }
 
 
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money);
