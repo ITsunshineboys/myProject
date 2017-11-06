@@ -347,22 +347,22 @@ class GoodsOrder extends ActiveRecord
    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
     {
 
-        if (!$sort_time  ||$sort_money==2)
-        {
-            $sort='a.amount_order desc';
-        }
-        if (!$sort_time  ||$sort_money==1)
-        {
-            $sort='a.amount_order asc';
-        }
-        if (!$sort_money  ||$sort_time==2)
-        {
-            $sort='a.create_time desc';
-        }
-        if (!$sort_money  ||$sort_time==1)
-        {
-            $sort='a.create_time asc';
-        }
+        // if (!$sort_time  ||$sort_money==2)
+        // {
+        //     $sort='a.amount_order desc';
+        // }
+        // if (!$sort_time  ||$sort_money==1)
+        // {
+        //     $sort='a.amount_order asc';
+        // }
+        // if (!$sort_money  ||$sort_time==2)
+        // {
+        //     $sort='a.create_time desc';
+        // }
+        // if (!$sort_money  ||$sort_time==1)
+        // {
+        //     $sort='a.create_time asc';
+        // }
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -372,7 +372,6 @@ class GoodsOrder extends ActiveRecord
             ->where($where)
             ->offset($offset)
             ->limit($size)
-            ->orderBy('a.create_time desc')
             ->all();
         $arr=self::getorderstatus($OrderList);
         $arr=self::getorderstatus($OrderList);
@@ -428,21 +427,21 @@ class GoodsOrder extends ActiveRecord
         }
 
         if ($arr){
-            // if ($sort_money==1 && $sort_time=='')
-            // {
-            //     array_multisort($amount_order, SORT_ASC, $arr);
-            // }else if ($sort_money==2 && $sort_time=='')
-            // {
-            //     array_multisort($amount_order, SORT_DESC, $arr);
-            // }
-            // else if ($sort_money=='' && $sort_time==1)
-            // {
-            //     array_multisort($create_time, SORT_ASC, $arr);
-            // }
-            // else if ($sort_money=='' && $sort_time==2)
-            // {
-            //     array_multisort($create_time, SORT_DESC, $arr);
-            // }
+            if ($sort_money==1 && $sort_time=='')
+            {
+                array_multisort($amount_order, SORT_ASC, $arr);
+            }else if ($sort_money==2 && $sort_time=='')
+            {
+                array_multisort($amount_order, SORT_DESC, $arr);
+            }
+            else if ($sort_money=='' && $sort_time==1)
+            {
+                array_multisort($create_time, SORT_ASC, $arr);
+            }
+            else if ($sort_money=='' && $sort_time==2)
+            {
+                array_multisort($create_time, SORT_DESC, $arr);
+            }
             $count=(new Query())
                 ->from(self::tableName().' AS a')
                 ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
