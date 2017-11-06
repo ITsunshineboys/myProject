@@ -3885,7 +3885,7 @@ class OrderController extends Controller
                     $after[]='换货';
                 }
             } 
-            $str = Url::to('http://common.cdlhzz.cn/line/#!/product_details?mall_id='. $Goods->id);
+            $str = Url::to("http://".$_SERVER['SERVER_NAME']."line/#!/product_details?mall_id=". $Goods->id);
             $filename = 'goods_line_'. $Goods->id;
             StringService::generateQrCodeImage($str, $filename);
             $qrcode=UploadForm::DIR_PUBLIC . '/goods_line_' . $Goods->id . '.png';
