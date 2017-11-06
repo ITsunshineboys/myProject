@@ -1525,11 +1525,33 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         //删除小区数据
         $scope.delete_house = function (item) {
-            $http.post('/quote/plot-del',{
-                del_id:item.id
-            },config).then(function(res){
-                console.log(res)
-                tablePages()
+            let data = $scope
+            //删除小区判断
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.cur_title = '是否删除小区？'
+
+                $scope.common_house = function () {
+                    $http.post('/quote/plot-del', {
+                        del_id: item.id
+                    }, config).then(function (res) {
+                        console.log(res)
+                        $scope = data
+                        tablePages()
+                        $uibModalInstance.close()
+                        $scope.is_cancel = false
+                    }, function (error) {
+                        console.log(error)
+                    })
+                }
+                $scope.cancel_delete = function () {
+                    $uibModalInstance.close()
+                    $scope.is_cancel = false
+                }
+            }
+            //弹出保存成功模态框
+            $uibModal.open({
+                templateUrl: 'pages/intelligent/cur_model.html',
+                controller: all_modal
             })
         }
         //编辑所有页面配置
