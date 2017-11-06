@@ -1711,7 +1711,7 @@ class OwnerController extends Controller
 //        var_dump($redis->set());
         $where = ['city_code'=>'510100'];
         var_dump(Effect::find()->where($where) ->groupBy('toponymy')->asArray()->count());
-        var_dump(Effect::find()->where($where) ->groupBy('toponymy')->asArray()->all());
+        var_dump(Effect::find()->select('toponymy')->where($where) ->groupBy('toponymy')->asArray()->all());
         exit;
         return Json::encode([
 //           'goods'=> (new LogisticsTemplate())->find()->where(['id'=>$id])->All(),
