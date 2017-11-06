@@ -28,7 +28,7 @@ angular.module("all_controller", ['ngCookies'])
 
         $http({   //轮播接口调用
             method: 'get',
-            url: "http://common.cdlhzz.cn/mall/carousel"
+            url: "http://test.cdlhzz.cn/mall/carousel"
         }).then(function successCallback(response) {
             console.log(response);
             $scope.swiper_img = response.data.data.carousel;
@@ -39,7 +39,7 @@ angular.module("all_controller", ['ngCookies'])
         });
         $http({   //商品分类列表
             method: 'get',
-            url: "http://common.cdlhzz.cn/mall/categories"
+            url: "http://test.cdlhzz.cn/mall/categories"
         }).then(function successCallback (response) {
             console.log(response);
             $scope.message=response.data.data.categories;
@@ -66,7 +66,7 @@ angular.module("all_controller", ['ngCookies'])
 
         $http({   //推荐分类商品列表
             method: 'get',
-            url: "http://common.cdlhzz.cn/mall/recommend-second"
+            url: "http://test.cdlhzz.cn/mall/recommend-second"
         }).then(function successCallback (response) {
             console.log(response);
             $scope.commodity = response.data.data.recommend_second;
@@ -106,7 +106,7 @@ angular.module("all_controller", ['ngCookies'])
         //左侧数据获取
         $http({
             method: 'get',
-            url: 'http://common.cdlhzz.cn/mall/categories'
+            url: 'http://test.cdlhzz.cn/mall/categories'
         }).then(function successCallback(response) {
             $scope.star = response.data.data.categories;
             console.log(response)
@@ -114,7 +114,7 @@ angular.module("all_controller", ['ngCookies'])
         //首页列表点击分类列表传值id获取数据(一级id查去二级)
         $http({
             method: 'get',
-            url: 'http://common.cdlhzz.cn/mall/categories?pid=' + $scope.pid
+            url: 'http://test.cdlhzz.cn/mall/categories?pid=' + $scope.pid
         }).then(function successCallback(response) {
             console.log(response)
             $scope.details = response.data.data.categories;
@@ -125,7 +125,7 @@ angular.module("all_controller", ['ngCookies'])
         //首页列表点击分类列表传值id获取数据(一级id查去三级)
         $http({
             method: 'get',
-            url: 'http://common.cdlhzz.cn/mall/categories-level3?pid=' + $scope.pid
+            url: 'http://test.cdlhzz.cn/mall/categories-level3?pid=' + $scope.pid
         }).then(function successCallback(response) {
             let arr= {};
             for(let [key,value] of response.data.categories_level3.entries()){
@@ -145,7 +145,7 @@ angular.module("all_controller", ['ngCookies'])
             $scope.pid = item.id;
             $http({
                 method: 'get',
-                url: 'http://common.cdlhzz.cn/mall/categories?pid=' + item.id
+                url: 'http://test.cdlhzz.cn/mall/categories?pid=' + item.id
             }).then(function successCallback(response) {
                 $scope.details = response.data.data.categories;
                 //console.log(response.data.data.categories[0].id);
@@ -155,7 +155,7 @@ angular.module("all_controller", ['ngCookies'])
             //首页列表点击分类列表传值id获取数据(一级id查去三级)
             $http({
                 method: 'get',
-                url: 'http://common.cdlhzz.cn/mall/categories-level3?pid=' + item.id
+                url: 'http://test.cdlhzz.cn/mall/categories-level3?pid=' + item.id
             }).then(function successCallback(response) {
                 let arr= {};
                 for(let [key,value] of response.data.categories_level3.entries()){
@@ -190,7 +190,7 @@ angular.module("all_controller", ['ngCookies'])
             let arr=[];
             $http({
                 method:'get',
-                url:"http://common.cdlhzz.cn/mall/search?keyword="+$scope.data
+                url:"http://test.cdlhzz.cn/mall/search?keyword="+$scope.data
             }).then( function successCallback (response) {
                 console.log(response);
                 $scope.commoditySearch= response.data.data.search.goods;
@@ -237,8 +237,6 @@ angular.module("all_controller", ['ngCookies'])
     .controller("details_ctrl", function ($scope,$http ,$state,$stateParams) {
         $scope.id  = $stateParams.id;
         $scope.pid = $stateParams.pid;
-        console.log($scope.id);
-        console.log($scope.pid);
         $scope.brands = '';
         $scope.series = '';
         $scope.styles = '';
@@ -249,13 +247,13 @@ angular.module("all_controller", ['ngCookies'])
         $scope.show_style = true;
         $scope.show_series = true;
         $scope.search_flag_details = true; //判断搜素页面是否是从详情页面进的变量
+        $scope.staus = 'sold_number';
 
         //展示数据 默认展示
         $http({
             method:"get",
-            url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
+            url:'http://test.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
             params:{
-
                 "sort[]":"sold_number:4"
             }
         }).then(function successCallback (response) {
@@ -271,79 +269,75 @@ angular.module("all_controller", ['ngCookies'])
             $scope.mall_id = item.id;
             $state.go('product_details',{mall_id:$scope.mall_id,id:$scope.id})
         };
-        //返回上一页
-        // $scope.curGoPrev = function () {
-        //     $state.go("minute_class",{'pid':$scope.pid,'id':$scope.id,'commentThree':$scope.commentThree})
-        // };
+        $scope.good_pic_up = 2;
+        $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
+            ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png');
+        // $scope.good_pic_down = false;
+        $scope.praise_up = 2;
+        $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
+            ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
         //筛选  排序
-        //价格排序  升序
-        $scope.changePic = function () {
-            $scope.pic_strat = true;
-            $scope.pic_flag = false;
-            $http({
-                method: 'get',
-                url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id,
-                params:{
-                    "sort[]":"platform_price:3"
-                }
-
-            }).then(function successCallback(response) {
-                console.log(response);
-                $scope.detailsList = response.data.data.category_goods;
-            });
-        };
-        //价格排序  降序
-        $scope.changePicse = function () {
-            $scope.pic_flag = true;
-            $scope.pic_strat = false;
-            $http({
-                method: 'get',
-                url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id,
-                params:{
-                    "sort[]":"platform_price:4"
-                }
-
-            }).then(function successCallback(response) {
-                console.log(response);
-                $scope.detailsList = response.data.data.category_goods;
-            });
-        };
-
-        //好评率 降序排序
+        //价格排序
         $scope.filterPraise = function () {
-            $scope.good_pra = false;
-            $scope.good_pra_filter = true;
+            $scope.staus = 'platform_price';
+            $scope.praise_up = 2;
+            $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
+                ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
+            if($scope.good_pic_up == 2){
+                $scope.good_pic_up = 1;
+            }else {
+                $scope.good_pic_up = +!$scope.good_pic_up;
+            }
+
+            $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
+                ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png');
+
             $http({
                 method: 'get',
-                url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id,
+                url:'http://test.cdlhzz.cn/mall/category-goods',
                 params:{
-                    "sort[]":"favourable_comment_rate:3"
+                    category_id:+$scope.id,
+                    "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
                 }
             }).then(function successCallback(response) {
                 console.log(response);
                 $scope.detailsList = response.data.data.category_goods;
             });
         };
-        //好评率  升序
-        $scope.PraiseDown   = function () {
-            $scope.good_pra = true;
-            $scope.good_pra_filter = false;
+
+        // 好评率排序
+        $scope.filterPicUp = function () {
+            $scope.staus = 'favourable_comment_rate';
+            $scope.good_pic_up = 2;
+            $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
+                ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png');
+            if($scope.praise_up == 2){
+                $scope.praise_up = 1;
+            }else {
+                $scope.praise_up = +!$scope.praise_up;
+            }
+
+            $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
+                ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
             $http({
                 method: 'get',
-                url:'http://common.cdlhzz.cn/mall/category-goods?category_id='+$stateParams.id,
+                url:'http://test.cdlhzz.cn/mall/category-goods',
                 params:{
-                    "sort[]":"favourable_comment_rate:4"
+                    category_id:+$scope.id,
+                    "sort[]":"favourable_comment_rate:"+($scope.good_pic_up?'4':'3')
                 }
             }).then(function successCallback(response) {
                 console.log(response);
                 $scope.detailsList = response.data.data.category_goods;
             });
         };
+
+
 
         //风格  系类 品牌 接数据调用
         $http({
             method:"get",
-            url:"http://common.cdlhzz.cn/mall/category-brands-styles-series",
+            url:"http://test.cdlhzz.cn/mall/category-brands-styles-series",
             params:{
                 category_id:+$scope.id
             }
@@ -352,9 +346,7 @@ angular.module("all_controller", ['ngCookies'])
             $scope.brands = response.data.data.category_brands_styles_series.brands;
             $scope.series = response.data.data.category_brands_styles_series.series;
             $scope.styles = response.data.data.category_brands_styles_series.styles;
-            console.log($scope.brands);
-            console.log($scope.series);
-            console.log($scope.styles);
+
             // 判断是否有风格 系列 是否做展示
             //判断风格是否存在
             if($scope.styles.length > 0){
@@ -375,7 +367,54 @@ angular.module("all_controller", ['ngCookies'])
         });
 
 
-        //具体几级某个商品跳转到产品详情列表
+        // 点击风格切换选中的状态
+        $scope.changeState = function (index,item) {
+            $scope.check_index_series = index;
+            $scope.check_series_id = item.id;
+            console.log(item)
+            
+        };
+        // 点击系类切换选中的状态
+        $scope.changeStyle = function (index,item) {
+            $scope.check_index_style = index;
+            $scope.check_style_id = item.id;
+
+        };
+        $scope.price_min = '';
+        $scope.price_max = '';
+        // 点击完成进行筛选
+        $scope.getMoreData = function () {
+            $http({
+                method: 'get',
+                url:'http://test.cdlhzz.cn/mall/category-goods',
+                params:{
+                    category_id:+$scope.id,
+                    platform_price_min:+$scope.price_min,
+                    platform_price_max:+$scope.price_max,
+                    brand_id:$scope.brand_id,
+                    style_id:$scope.check_style_id,
+                    series_id:+$scope.check_series_id,
+                    "sort[]":$scope.staus+':'+($scope.good_pic_up?'4':'3')
+                }
+            }).then(function successCallback(response) {
+                console.log(response);
+                $scope.detailsList = response.data.data.category_goods;
+            });
+            console.log($scope.price_min);
+            console.log($scope.price_max);
+        };
+        // 点击重置进行清空
+        $scope.getNull = function () {
+            $scope.price_min = '';
+            $scope.price_max = '';
+            $scope.check_index_series = -1;
+            $scope.check_index_style = -1;
+        };
+        // 点击主页返回到主页
+        $scope.getHome = function () {
+            $state.go('home')
+        }
+
     })
 
     //某个 商品详细信息展示
@@ -399,7 +438,7 @@ angular.module("all_controller", ['ngCookies'])
 
         $http({
             method:'get',
-            url:"http://common.cdlhzz.cn/mall/goods-view",
+            url:"http://test.cdlhzz.cn/mall/goods-view",
             params:{
                 id:+$scope.mall_id
             }
@@ -500,7 +539,7 @@ angular.module("all_controller", ['ngCookies'])
         // 判断是否是微信浏览器打开 =======是微信浏览器打开 做分享的配置
         $http({   // 判断是否微信浏览器打开
             method: 'get',
-            url: 'http://common.cdlhzz.cn/order/iswxlogin'
+            url: 'http://test.cdlhzz.cn/order/iswxlogin'
         }).then(function successCallback(response) {
             console.log(response);
             $scope.codeWX = response.data.code;
@@ -532,7 +571,7 @@ angular.module("all_controller", ['ngCookies'])
                     //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
                     wx.onMenuShareTimeline({
                         title: '艾特魔方极力推荐产品',      // 分享标题
-                        link:  'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link:  'http://test.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         imgUrl: 'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
                         success: function () {
                             // 用户确认分享后执行的回调函数
@@ -547,7 +586,7 @@ angular.module("all_controller", ['ngCookies'])
 
                         title: '艾特魔方极力推荐产品', // 分享标题
                         desc: '艾特魔方极力推荐产品', // 分享描述
-                        link: 'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link: 'http://test.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         imgUrl: 'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -562,7 +601,7 @@ angular.module("all_controller", ['ngCookies'])
                     wx.onMenuShareQQ({
                         title: '生活家居产品', // 分享标题
                         desc: '百中挑一你值得拥有的', // 分享描述
-                        link: 'http://common.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接
+                        link: 'http://test.cdlhzz.cn/line/#!/product_details?mall_id='+$scope.mall_id, // 分享链接
                         imgUrl:'http://test.cdlhzz.cn:888/'+$scope.datailsShop.cover_image, // 分享图标
                         success: function () {
                             // 用户确认分享后执行的回调函数
@@ -615,7 +654,7 @@ angular.module("all_controller", ['ngCookies'])
             ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
         $http({
             method:"get",
-            url:'http://common.cdlhzz.cn/supplier/index?supplier_id='+$scope.supplier_id
+            url:'http://test.cdlhzz.cn/supplier/index?supplier_id='+$scope.supplier_id
         }).then(function successCallback (response) {
             console.log(response);
             $scope.swiperList = response.data.data.index.carousel;//轮播图
@@ -626,7 +665,7 @@ angular.module("all_controller", ['ngCookies'])
         });
         $http({   //店铺首页推荐列表
             method: 'get',
-            url: "http://common.cdlhzz.cn/supplier/recommend-second",
+            url: "http://test.cdlhzz.cn/supplier/recommend-second",
             params:{
                 supplier_id:+$scope.supplier_id
             }
@@ -636,7 +675,7 @@ angular.module("all_controller", ['ngCookies'])
         });
         $http({   //店铺全部商品列表
             method: 'get',
-            url: "http://common.cdlhzz.cn/supplier/goods",
+            url: "http://test.cdlhzz.cn/supplier/goods",
             params:{
                 supplier_id:+$scope.supplier_id,
                 "sort[]":"sold_number:4"
@@ -675,7 +714,7 @@ angular.module("all_controller", ['ngCookies'])
 
             $http({
                 method: 'get',
-                url:'http://common.cdlhzz.cn/supplier/goods',
+                url:'http://test.cdlhzz.cn/supplier/goods',
                 params:{
                     supplier_id:+$scope.supplier_id,
                     "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
@@ -700,7 +739,7 @@ angular.module("all_controller", ['ngCookies'])
                 ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
             $http({
                 method: 'get',
-                url:'http://common.cdlhzz.cn/supplier/goods',
+                url:'http://test.cdlhzz.cn/supplier/goods',
                 params:{
                     supplier_id:+$scope.supplier_id,
                     "sort[]":"favourable_comment_rate:"+($scope.good_pic_up?'4':'3')
@@ -715,7 +754,7 @@ angular.module("all_controller", ['ngCookies'])
         // 店铺简介
         $http({
             method: 'get',
-            url: "http://common.cdlhzz.cn/supplier/view",
+            url: "http://test.cdlhzz.cn/supplier/view",
             params:{
                 id:+$scope.supplier_id
             }
@@ -823,7 +862,7 @@ angular.module("all_controller", ['ngCookies'])
                     $scope.contentInvoice = '保存成功';
                     console.log(222222222222);
                     // 添加发票接口
-                    $http.post('http://common.cdlhzz.cn/order/orderinvoicelineadd',{
+                    $http.post('http://test.cdlhzz.cn/order/orderinvoicelineadd',{
                         invoice_type: 1,
                         invoice_header_type:1,
                         invoice_header:'发票抬头',
@@ -875,7 +914,7 @@ angular.module("all_controller", ['ngCookies'])
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '保存成功';
                     // 添加发票接口
-                    $http.post('http://common.cdlhzz.cn/order/orderinvoicelineadd',{
+                    $http.post('http://test.cdlhzz.cn/order/orderinvoicelineadd',{
                         invoice_type: 1,
                         invoice_header_type:2,
                         invoice_header:'发票抬头',
@@ -992,7 +1031,7 @@ angular.module("all_controller", ['ngCookies'])
             // 判断三级 =========== 初始化  ===========
         };
         //订单信息===>获取商品的信息
-        $http.post('http://common.cdlhzz.cn/order/getgoodsdata',{
+        $http.post('http://test.cdlhzz.cn/order/getgoodsdata',{
             goods_id:+$scope.mall_id,
             goods_num:+$scope.shopNum
         },config).then(function (response) {
@@ -1050,7 +1089,7 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.addressCode = document.getElementById("value1").value;
                 $scope.addressCode = $scope.addressCode.split('—');
                 console.log($scope.addressCode);
-                $http.post('http://common.cdlhzz.cn/order/adduseraddress',{
+                $http.post('http://test.cdlhzz.cn/order/adduseraddress',{
                     mobile:+$scope.harvestNum,
                     consignee:$scope.harvestName,
                     districtcode:$scope.addressCode[2],
@@ -1075,7 +1114,7 @@ angular.module("all_controller", ['ngCookies'])
                 // 获取订单收货信息
                 $http({
                     method: 'get',
-                    url: 'http://common.cdlhzz.cn/order/getaddress',
+                    url: 'http://test.cdlhzz.cn/order/getaddress',
                     params:{
                         address_id:+$scope.address_id
                     }
@@ -1138,7 +1177,7 @@ angular.module("all_controller", ['ngCookies'])
         if($scope.invoice_id != undefined){
             $http({
                 method: 'get',
-                url: 'http://common.cdlhzz.cn/order/getinvoicelinedata',
+                url: 'http://test.cdlhzz.cn/order/getinvoicelinedata',
                 params:{
                     invoice_id:+$scope.invoice_id
                 }
@@ -1176,7 +1215,7 @@ angular.module("all_controller", ['ngCookies'])
             if($scope.show_harvest == true && $scope.show_address == false ){
 
                 //判断收货地址是否在配送范围内
-                $http.post('http://common.cdlhzz.cn/order/judegaddress',{
+                $http.post('http://test.cdlhzz.cn/order/judegaddress',{
                     goods_id:+$scope.mall_id,
                     districtcode:110100
                 },config).then(function (response) {
@@ -1193,7 +1232,7 @@ angular.module("all_controller", ['ngCookies'])
                         // 判断是否微信浏览器打开
                         $http({
                             method: 'get',
-                            url: 'http://common.cdlhzz.cn/order/iswxlogin'
+                            url: 'http://test.cdlhzz.cn/order/iswxlogin'
                         }).then(function successCallback(response) {
                             console.log(response);
                             $scope.codeWX = response.data.code;
@@ -1202,7 +1241,7 @@ angular.module("all_controller", ['ngCookies'])
                                 // 微信接口 === 调用
                                 $http({     //获取openid 的地址
                                     method: 'get',
-                                    url: 'http://common.cdlhzz.cn/order/lineplaceorder',
+                                    url: 'http://test.cdlhzz.cn/order/lineplaceorder',
                                     params:{
                                         goods_name: $scope.title,
                                         order_price:$scope.allCost,
@@ -1232,7 +1271,7 @@ angular.module("all_controller", ['ngCookies'])
                                     }
                                 };
                                 // http://test.cdlhzz.cn:888/
-                                $http.post('http://common.cdlhzz.cn/order/alipaylinesubmit',{
+                                $http.post('http://test.cdlhzz.cn/order/alipaylinesubmit',{
                                     goods_name: $scope.title,
                                     order_price:+$scope.allCost,
                                     goods_num:+$scope.shopNum,
