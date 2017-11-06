@@ -104,6 +104,7 @@ class BasisDecorationService
         'long' =>'长',
         'wide' =>'宽',
         'high' =>'高',
+        'area' =>'面积',
     ];
 
     /**
