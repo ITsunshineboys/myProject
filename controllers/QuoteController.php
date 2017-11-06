@@ -409,7 +409,7 @@ class QuoteController extends Controller
         $district_chinese = District::findByCode((int)$request['cur_county_id']);
 
 //        $transaction = \Yii::$app->db->beginTransaction();
-        $code = 500;
+//        $code = 500;
             foreach ($request['house_informations'] as $house) {
                 if ($house['is_ordinary'] != 1) {
                     //普通户型添加
@@ -559,7 +559,7 @@ class QuoteController extends Controller
                     }
                 }
             }
-        
+
                 if ($effect_ || $effect){
 //                    $transaction->commit();
                     return Json::encode([
