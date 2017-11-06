@@ -273,6 +273,40 @@ class UserChat extends \yii\db\ActiveRecord
 
         }
     }
-
+    public static function userinfos($uid,$role_id,$recipient_id){
+        $rec_role_id=User::find()->select('last_role_id_app')->asArray()->where(['id'=>$recipient_id])->one()['last_role_id_app'];
+        $data=[];
+        if($rec_role_id==6){
+            $data['recipient']=
+                Supplier::find()
+                    ->select('id,icon,shop_name')
+                    ->asArray()
+                    ->where(['uid'=>$recipient_id])
+                    ->one();
+        }elseif($rec_role_id==7){
+            $data['recipient']=User::find()
+                ->select('id,icon,nickname')
+                ->asArray()
+                ->where(['id'=>$recipient_id])
+                ->one();
+        }
+        if($role_id==6){
+            $data['user']=Supplier::find()
+                ->select('id,icon,shop_name')
+                ->asArray()
+                ->where(['uid'=>$uid])
+                ->one();
+        }elseif($role_id==7){
+            $data['user']=User::find()
+                ->select('id,icon,nickname')
+                ->asArray()
+                ->where(['id'=>$uid])
+                ->one();
+        }
+        if(!$data){
+          return null;
+        }
+        return $data;
+    }
 }
 
