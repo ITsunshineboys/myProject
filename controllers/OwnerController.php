@@ -1322,7 +1322,7 @@ class OwnerController extends Controller
         }
         foreach ($post['list'] as &$default){
             if (empty($default['goods_price'])){
-                $default['goods_price'] = 1;
+                $default['goods_price'] = $default['price'] * 1;
             }
         }
         var_dump($post['list']);exit;
