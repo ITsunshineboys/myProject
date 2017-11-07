@@ -344,7 +344,11 @@ class ChatController extends Controller
         if( $res['news']){
             $res['news']['send_time']=date('Y-m-d',$res['news']['send_time']);
         }else{
-            $res['news']=(object)[];
+            $res['news']=[
+              'content'=>'没有更多消息',
+              'time'=>date('Y-m-m',time()),
+              'uid'=>$u_id,
+            ];
         }
 
         $data=ChatRecord::userlog($u_id,$role_id);
