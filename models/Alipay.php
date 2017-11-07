@@ -67,7 +67,7 @@ class Alipay extends  ActiveRecord
         $return_url="http://".$_SERVER['SERVER_NAME']."/line/effect_earnstsuccess_pay";
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $id=Effect::addneweffect($post);
-        if ($id==false)
+         if (!$id)
         {
             echo 1;exit;
             return false;
