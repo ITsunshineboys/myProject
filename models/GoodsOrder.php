@@ -130,7 +130,8 @@ class GoodsOrder extends ActiveRecord
         'z.freight',
         'a.return_insurance',
         'z.cover_image',
-        'z.shipping_type'
+        'z.shipping_type',
+        'a.role_id'
     ];
     const AFTER_SALE_SERVICES = [
         '提供发票',
@@ -2136,7 +2137,7 @@ class GoodsOrder extends ActiveRecord
                     break;
             }
             $GoodsOrder=self::find()
-                ->select('order_no,create_time,user_id,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
+                ->select('order_no,create_time,user_id,role_id,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
                 ->where($where)
                 ->asArray()
                 ->all();
@@ -2150,12 +2151,14 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['handle']='';
                 $sup=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one();
                 $GoodsOrder[$k]['shop_name']=$sup->nickname;
-                   if ($role=='user')
-                    {
-                        $GoodsOrder[$k]['uid']=$sup->uid;
-                    }else{
-                        $GoodsOrder[$k]['uid']=$GoodsOrder[$k]['user_id'];
-                    }
+                 if ($role=='user')
+                {
+                    $GoodsOrder[$k]['uid']=$sup->uid;
+                    $GoodsOrder[$k]['to_role_id']=6;
+                }else{
+                    $GoodsOrder[$k]['uid']=$GoodsOrder[$k]['user_id'];
+                    $GoodsOrder[$k]['to_role_id']=$GoodsOrder[$k]['role_id'];
+                }
                 $GoodsOrder[$k]['list']=OrderGoods::find()
                     ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                     ->andWhere(['order_status' =>0])
@@ -2267,13 +2270,17 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['freight']=self::switchMoney($arr[$k]['freight']*0.01);
             $supplier=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one();
             $arr[$k]['shop_name']=$supplier->nickname;
-           if ($role=='user')
+            if ($role=='user')
             {
+
                 $arr[$k]['uid']=$supplier->uid;
+                $arr[$k]['to_role_id']=6;
 
             }else
             {
+
                 $arr[$k]['uid']= $arr[$k]['user_id'];
+                $arr[$k]['to_role_id']=$arr[$k]['role_id'];
             }
             $arr_list=[];
             $arr_list['goods_name']=$arr[$k]['goods_name'];
@@ -2302,6 +2309,7 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['complete_time']);
             unset($arr[$k]['RemainingTime']);
             unset($arr[$k]['supplier_id']);
+            unset($arr[$k]['role_id']);
             $arr[$k]['list']=[$arr_list];
         }
         return $arr;
