@@ -8,7 +8,7 @@
       {
         "id":8,
         "title":"title a",
-        "image":"http://test.cdlhzz.cn/mall/images/banner1.png",
+        "image":baseUrl+"/mall/images/banner1.png",
         "url":"",
         "platform_price":100,
         "description":"说明a"
@@ -16,7 +16,7 @@
       {
         "id":9,
         "title":"title b",
-        "image":"http://test.cdlhzz.cn/mall/images/banner1.png",
+        "image":baseUrl+"/mall/images/banner1.png",
         "url":"",
         "platform_price":200,
         "description":"说明b"

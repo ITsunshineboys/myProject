@@ -1,4 +1,5 @@
 angular.module("app", ["ui.router","ngAnimate", "all_controller"])
+
     .config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider,$locationProvider) {
         $urlRouterProvider.otherwise("/");
         // $locationProvider.html5Mode(true);
@@ -39,7 +40,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
             })
 
             .state("details", {   //某个商品详细列表
-                url: "/details?id",
+                url: "/details?id&flag",
                 views: {
                     "": {templateUrl: "details.html"}
                 },
@@ -119,15 +120,17 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
             })
     }])
 
-    .run(["$rootScope","$state",function ($rootScope,$state) {
-        $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
-            $rootScope.goPrev = function (obj) {
-                if (toState.name == 'product_details') {
-                    $state.go('home')
-                }else {
-                    $state.go(fromState.name,obj)
-                }
-            }
-        })
-    }]);
+    // .run(["$rootScope","$state",function ($rootScope,$state) {
+    //     $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
+    //         document.body.scrollTop = document.documentElement.scrollTop = 0;
+    //         $rootScope.goPrev = function (obj) {
+    //             if (toState.name == 'product_details') {
+    //                 $state.go('home')
+    //             }else {
+    //                 $state.go(fromState.name,obj)
+    //             }
+    //         }
+    //     })
+    // }]);
+
+

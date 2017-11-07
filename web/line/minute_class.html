@@ -28,7 +28,7 @@
                                 <!--ng-click="getComment(item1.id)"-->
                                 <li  ng-repeat="item1 in commentThree[item.id] " >
                                     <a ui-sref="details({id:item1.id,pid:pid})">
-                                        <img src="http://test.cdlhzz.cn/{{item1.icon}}" id="img_three" alt=""/><br/>
+                                        <img src="{{baseUrl + '/'+item1.icon}}" id="img_three" alt=""/><br/>
                                         <div class="font_class">{{item1.title}}</div>
                                     </a>
                                 </li>

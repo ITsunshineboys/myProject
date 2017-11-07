@@ -3,7 +3,11 @@
 <div ng-controller="details_ctrl">
     <header>
         <div>
-            <img src="images/mall_nav_return.png" class="left_retrun" ng-click="goPrev({'pid':pid,'id':id,'commentThree':commentThree})" alt=""/>
+            <a ng-click="getRetrnUp ()" >
+                <!--ng-click="goPrev({'pid':pid,'id':id,'commentThree':commentThree})"-->
+                <img src="images/mall_nav_return.png" class="left_retrun"  alt=""/>
+            </a>
+
             <img src="images/mall_search_1.png" class="search_details" alt=""/>
             <a ui-sref="commodity_search({'search_flag_details':search_flag_details,'id':id})">
                 <input type="text" placeholder="请输入想购买的商品" />
@@ -29,11 +33,11 @@
             </li>
         </div>
         <!--商品展示列表-->
-        <div class="mall_list">
+        <div class="mall_list" ng-show="detailsList.length != 0">
             <div class="flex_div" >
                 <div class="item_commodity"  ng-repeat="item in detailsList " ng-click="getDetailsProduct(item)">
                     <div class="item_commodity_divimg">
-                        <img src="http://test.cdlhzz.cn/{{item.cover_image}}" alt="" class="img_item " />
+                        <img src="{{baseUrl + '/'+item.cover_image}}" alt="" class="img_item " />
                     </div>
                     <div class="item_commodity_comment">
                         <p class="comment_one">{{item.title}}</p>
@@ -45,7 +49,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="nullGoods" ng-show="detailsList.length == 0">
+            <span>暂无符合条件的商品</span>
+        </div>
         <!--筛选框-->
         <div class="popup_screen">
             <div class="style_popup">

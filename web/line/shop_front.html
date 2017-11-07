@@ -2,7 +2,11 @@
 <div ng-controller="shop_front_ctrl" class="back">
      <header>
          <div>
-             <img ui-sref="product_details({id:id,mall_id:mall_id,datailsShop:datailsShop})" src="images/mall_nav_return.png" class="back_return" alt=""/>
+             <a href="javascript:history.go(-1)">
+                 <!--ui-sref="product_details({id:id,mall_id:mall_id,datailsShop:datailsShop})"-->
+                 <img  src="images/mall_nav_return.png" class="back_return" alt=""/>
+             </a>
+
              <span>店铺首页</span>
              <img src="images/mall_home.png" ng-click="getHome()" class="back_home" alt=""/>
          </div>
@@ -10,7 +14,7 @@
 <section>
     <!--头部-->
     <div class="header_shop">
-        <img src="http://test.cdlhzz.cn/{{icon}}" id="shop_img_header" alt=""/>
+        <img src="{{baseUrl + '/'+icon}}" id="shop_img_header" alt=""/>
         <span>{{shop_name}}</span>
         <!--<div>-->
             <!--<p class="num">{{follower_number}}</p>-->
@@ -39,7 +43,7 @@
                                 <div id='swiperList' class="swiper-container" >
                                     <div class="swiper-wrapper">
                                         <div class="swiper-slide"  ng-repeat=" n in swiperList" >
-                                            <img src="http://test.cdlhzz.cn/{{n.image}}" ng-click="getProductMore(n)" id="size_img" alt="" />
+                                            <img src="{{baseUrl + '/'+n.image}}" ng-click="getProductMore(n)" id="size_img" alt="" />
                                         </div>
                                     </div>
                                     <!-- 如果需要分页器 -->
@@ -55,7 +59,7 @@
                             <ul >
                                 <li ng-repeat="n in recommendList" >
                                     <a ng-click="getProductMore(n)">
-                                        <img src="http://test.cdlhzz.cn/{{n.image}}" alt=""/>
+                                        <img src="{{baseUrl + '/'+n.image}}" alt=""/>
                                         <div class="title2">{{n.title}}</div>
                                         <div class="describe2">{{n.description}}</div>
                                         <div class="price2">¥{{n.show_price}}</div>
@@ -90,7 +94,7 @@
                         <div class="flex_div" >
                             <div class="item_commodity"  ng-repeat="n in supplier_goods" ng-click="allGetProdouct(n)">
                                 <div class="item_commodity_divimg">
-                                    <img src="http://test.cdlhzz.cn/{{n.cover_image}}" alt="" class="img_item " />
+                                    <img src="{{baseUrl + '/'+n.cover_image}}" alt="" class="img_item " />
                                 </div>
                                 <div class="item_commodity_comment">
                                     <p class="comment_one">{{n.title}}</p>
@@ -125,7 +129,7 @@
                 <div class="modal-body" >
                     <!--头部-->
                     <div class="header_shop">
-                        <img src="http://test.cdlhzz.cn/{{t_icon}}" alt="" class="shop_img"/>
+                        <img src="{{baseUrl + '/'+t_icon}}" alt="" class="shop_img"/>
                         <span>{{t_shop_name}}</span>
                         <!--<div>-->
                             <!--<p class="num">12k</p>-->

@@ -1,12 +1,13 @@
 
 /*��ʼ*/
 .search_box{
-    width: auto;
+    width: 32rem;
     height: 4rem;
     padding: 0 1.2rem;
     background-color: #53A7F3;
-    position: relative;
-    /*top: .5rem;*/
+    position: fixed;
+    top: 0;
+    z-index: 1000;
 }
 .icon_color{
     color: #FFFFFF;
@@ -45,6 +46,9 @@
     position: absolute;
     top:1.25rem;
     right:1.2rem;
+}
+.carousel{
+    margin-top: 4.1rem;
 }
 /*�õ�Ƭ��ʼ*/
 /*.swiper-container {*/
@@ -169,7 +173,8 @@ Pagination Styles
 .recommend_p{
     font-size: 1.4rem;
     color: #6C6C6C;
-    padding-left: 1.2rem;
+    padding-left: 1rem;
+    margin-bottom: .5rem;
 }
 .classify-box{
     margin-top: 1.5rem;
@@ -298,6 +303,7 @@ Pagination Styles
     border-right: 0.5rem solid #fff;
     border-left: 0.5rem solid #fff;
     border-bottom: 0.7rem solid #fff;
+    margin-bottom: .2rem;
 }
 .recommend2_box ul li a{
     text-decoration: none;

@@ -1,6 +1,8 @@
 angular.module("all_controller", ['ngCookies'])
+
 //首页控制器
-    .controller("mall_index_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
+    .controller("mall_index_ctrl", function ($rootScope,$scope,$http,$state,$stateParams) {  //首页控制器
+        $rootScope.baseUrl = baseUrl;
         $scope.search_flag = false;
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -28,7 +30,7 @@ angular.module("all_controller", ['ngCookies'])
 
         $http({   //轮播接口调用
             method: 'get',
-            url: "http://test.cdlhzz.cn/mall/carousel"
+            url: baseUrl+"/mall/carousel"
         }).then(function successCallback(response) {
             console.log(response);
             $scope.swiper_img = response.data.data.carousel;
@@ -39,7 +41,7 @@ angular.module("all_controller", ['ngCookies'])
         });
         $http({   //商品分类列表
             method: 'get',
-            url: "http://test.cdlhzz.cn/mall/categories"
+            url: baseUrl+"/mall/categories"
         }).then(function successCallback (response) {
             console.log(response);
             $scope.message=response.data.data.categories;
@@ -66,7 +68,7 @@ angular.module("all_controller", ['ngCookies'])
 
         $http({   //推荐分类商品列表
             method: 'get',
-            url: "http://test.cdlhzz.cn/mall/recommend-second"
+            url: baseUrl+"/mall/recommend-second"
         }).then(function successCallback (response) {
             console.log(response);
             $scope.commodity = response.data.data.recommend_second;
@@ -95,7 +97,8 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     //分类详情控制器
-    .controller("minute_class_ctrl", function ($scope,$http ,$state,$stateParams) {
+    .controller("minute_class_ctrl", function ($rootScope,$scope,$http ,$state,$stateParams) {
+        $rootScope.baseUrl = baseUrl;
         $scope.pid = $stateParams.pid;
         $scope.id = $stateParams.id;
         $scope.search_flag = true;
@@ -175,21 +178,20 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     //商品搜索
-    .controller("commodity_search_ctrl", function ($scope,$http ,$state,$stateParams) {
+    .controller("commodity_search_ctrl", function ($rootScope,$scope,$http ,$state,$stateParams) {
+        $rootScope.baseUrl = baseUrl;
         $scope.data = '';
         $scope.id =  $stateParams.id;
         $scope.pid = $stateParams.pid;
         $scope.search_flag = $stateParams.search_flag;
         $scope.search_flag_details = $stateParams.search_flag_details;
-        console.log($scope.search_flag);
-        console.log('详情变量：'+$scope.search_flag_details);
-        console.log($scope.pid);
+        c
         //判断
         $scope.getSearch = function () {
             let arr=[];
             $http({
                 method:'get',
-                url:"http://test.cdlhzz.cn/mall/search?keyword="+$scope.data
+                url:baseUrl+"/mall/search?keyword="+$scope.data
             }).then( function successCallback (response) {
                 console.log(response);
                 $scope.commoditySearch= response.data.data.search.goods;
@@ -228,12 +230,21 @@ angular.module("all_controller", ['ngCookies'])
         };
         //跳转道某个商品详情
         $scope.getBackData = function (item) {
-            $state.go("details",{'pid':$scope.pid,'id':item.id})
+            $state.go("details",{'pid':$scope.pid,'id':item.id,'flag':0})
         }
     })
 
     //某个商品的详细列表
-    .controller("details_ctrl", function ($scope,$http ,$state,$stateParams) {
+    .controller("details_ctrl", function ($rootScope,$scope,$http ,$state,$stateParams) {
+        $rootScope.baseUrl = baseUrl;
+        let flag = $stateParams.flag;
+        $scope.getRetrnUp = function () {
+            if(flag == 0){
+                history.go(-2)
+            }else{
+                history.go(-1)
+            }
+        };
         $scope.id  = $stateParams.id;
         $scope.pid = $stateParams.pid;
         $scope.brands = '';
@@ -336,7 +347,7 @@ angular.module("all_controller", ['ngCookies'])
         //风格  系类 品牌 接数据调用
         $http({
             method:"get",
-            url:"http://test.cdlhzz.cn/mall/category-brands-styles-series",
+            url:baseUrl+"/mall/category-brands-styles-series",
             params:{
                 category_id:+$scope.id
             }
@@ -417,7 +428,8 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     //某个 商品详细信息展示
-    .controller("product_details_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
+    .controller("product_details_ctrl", function ($rootScope,$scope,$http,$state,$stateParams) {  //首页控制器
+        $rootScope.baseUrl = baseUrl;
         let vm = $scope.vm = {};
         let mySwiper = new Swiper("#swiperList", {
             autoplay: 3000,
@@ -437,7 +449,7 @@ angular.module("all_controller", ['ngCookies'])
 
         $http({
             method:'get',
-            url:"http://test.cdlhzz.cn/mall/goods-view",
+            url:baseUrl+"/mall/goods-view",
             params:{
                 id:+$scope.mall_id
             }
@@ -625,7 +637,8 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     //店铺首页和全部商品
-    .controller("shop_front_ctrl", function ($scope,$http,$state,$stateParams) {  //首页控制器
+    .controller("shop_front_ctrl", function ($rootScope,$scope,$http,$state,$stateParams) {  //首页控制器
+        $rootScope.baseUrl = baseUrl;
         let vm = $scope.vm = {};
         //轮播变量
         let mySwiper = new Swiper("#swiperList", {
@@ -664,7 +677,7 @@ angular.module("all_controller", ['ngCookies'])
         });
         $http({   //店铺首页推荐列表
             method: 'get',
-            url: "http://test.cdlhzz.cn/supplier/recommend-second",
+            url: baseUrl+"/supplier/recommend-second",
             params:{
                 supplier_id:+$scope.supplier_id
             }
@@ -674,7 +687,7 @@ angular.module("all_controller", ['ngCookies'])
         });
         $http({   //店铺全部商品列表
             method: 'get',
-            url: "http://test.cdlhzz.cn/supplier/goods",
+            url: baseUrl+"/supplier/goods",
             params:{
                 supplier_id:+$scope.supplier_id,
                 "sort[]":"sold_number:4"
@@ -753,7 +766,7 @@ angular.module("all_controller", ['ngCookies'])
         // 店铺简介
         $http({
             method: 'get',
-            url: "http://test.cdlhzz.cn/supplier/view",
+            url: baseUrl+"/supplier/view",
             params:{
                 id:+$scope.supplier_id
             }
@@ -778,7 +791,8 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     //发票信息
-    .controller('invoice_ctrl',function($scope,$http,$state,$stateParams){
+    .controller('invoice_ctrl',function($rootScope,$scope,$http,$state,$stateParams){
+        $rootScope.baseUrl = baseUrl;
         $scope.harvestAddress  = $stateParams.harvestAddress;
         $scope.harvestName     = $stateParams.harvestName;
         $scope.harvestNum      = $stateParams.harvestNum;
@@ -961,7 +975,8 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     //确认订单
-    .controller('order_commodity_ctrl',function ($scope,$http,$state,$stateParams,$cookieStore,$cookies) {
+    .controller('order_commodity_ctrl',function ($rootScope,$scope,$http,$state,$stateParams,$cookieStore,$cookies) {
+        $rootScope.baseUrl = baseUrl;
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
@@ -985,12 +1000,6 @@ angular.module("all_controller", ['ngCookies'])
             $scope.regionMore = $stateParams.regionMore;
             $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
             $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
-
-            console.log($scope.invoice_name );
-            console.log($scope.invoice_id );
-            console.log($scope.harvestName);
-            console.log($scope.harvestAddress)
-
         }
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -1306,7 +1315,8 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     // 支付成功
-    .controller('pay_success_ctrl',function($scope,$http,$state,$stateParams,$interval){
+    .controller('pay_success_ctrl',function($rootScope,$scope,$http,$state,$stateParams,$interval){
+        $rootScope.baseUrl = baseUrl;
         $scope.timeOut = 5;
         $interval(function () {
             if($scope.timeOut!=0)  {
@@ -1320,24 +1330,7 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     //断网提示
-    .controller('cut_net_ctrl',function($scope,$http,$state,$stateParams){
-
+    .controller('cut_net_ctrl',function($rootScope,$scope,$http,$state,$stateParams){
+        $rootScope.baseUrl = baseUrl;
     });
 
-//=================分割 飞机线========================
-// .directive("swiper", function () {
-//     return {
-//         restrict: "EA",
-//         link: function (scope, element, attrs) {
-//             var mySwiper = new Swiper('.swiper-container', {
-//                 direction:'horizontal',
-//                 loop: true,
-//                 autoplay: 1000,
-//
-//                 // 分页器
-//                 pagination : '.swiper-pagination',
-//                 paginationClickable :true,
-//             })
-//         }
-//     }
-// });
