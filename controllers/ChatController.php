@@ -469,7 +469,7 @@ class ChatController extends Controller
         ]);
     }
     public function actionTest(){
-        $a=UserNewsRecord::find()->asArray()->all();
+        $a=ChatRecord::find()->asArray()->all();
         var_dump($a);
 
     }
