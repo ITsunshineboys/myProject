@@ -248,21 +248,11 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=UserChat::sendTextMessage($message,$send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id']);
-        if(is_numeric($data)){
-            $code=$data;
-            return Json::encode([
-                'code'=>$code,
-                'msg'=>\Yii::$app->params['errorCodes'][$code]
-            ]);
-        }else{
-            return Json::encode([
-                'code'=>200,
-                'msg'=>'ok',
-                'data'=>[$data]
-            ]);
-        }
-
+        $code=UserChat::sendTextMessage($message,$send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id']);
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
     }
     /**
      * 发送图片信息给指定用户
@@ -293,21 +283,11 @@ class ChatController extends Controller
             ]);
         }
         $filepath=FileService::upload();
-        $data=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
-        if(is_numeric($data)){
-            $code=$data;
-            return Json::encode([
-                'code'=>$code,
-                'msg'=>\Yii::$app->params['errorCodes'][$code]
-            ]);
-        }else{
-            return Json::encode([
-                'code'=>200,
-                'msg'=>'ok',
-                'data'=>[$data]
-            ]);
-        }
-
+        $code=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
     }
     /**
      * 发送语音消息
@@ -339,20 +319,12 @@ class ChatController extends Controller
             ]);
         }
         $filepath=FileService::upload();
-        $data=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
-        if(is_numeric($data)){
-            $code=$data;
+        $code=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
+
             return Json::encode([
                 'code'=>$code,
-                'msg'=>\Yii::$app->params['errorCodes'][$code]
-            ]);
-        }else{
-            return Json::encode([
-                'code'=>200,
-                'msg'=>'ok',
-                'data'=>[$data]
-            ]);
-        }
+                'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
     }
     /**
      * 用户消息中心

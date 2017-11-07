@@ -265,7 +265,7 @@ class UserChat extends \yii\db\ActiveRecord
                 return $code=500;
             }
             $trans->commit();
-            return $re;
+            return 200;
 
         } catch (Exception $e) {
             $trans->rollBack();
