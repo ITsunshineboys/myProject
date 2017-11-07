@@ -10,7 +10,6 @@ angular.module('all_controller',[])
         })
     })
     .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
-        console.log($stateParams)
         $scope.ctrlScope = $scope
         //post请求配置
         let config = {
@@ -52,6 +51,20 @@ angular.module('all_controller',[])
         $scope.cur_project = 0//0为基础装修 1为主要材料 2是其他材料 3三级分类页
         $scope.cur_operate = '编辑'//其他材料编辑两种状态 编辑/完成
         $scope.is_delete_btn = false //切换编辑状态
+        if(!!sessionStorage.getItem('materials')){
+            $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
+            if($rootScope.curState_name == 'nodata.basics_decoration'){
+                $scope.cur_item = $scope.all_goods[0]
+            }else if($rootScope.curState_name == 'nodata.main_material'){
+                $scope.cur_item = $scope.all_goods[1]
+            }else if($rootScope.curState_name == 'nodata.house_list'){
+                $scope.all_goods = []
+                sessionStorage.removeItem('materials')
+            }else{
+                $scope.cur_item = $scope.all_goods[$stateParams.index]
+            }
+        }
+        console.log($scope.all_goods)
         //请求后台数据
         $http.get('/owner/series-and-style').then(function (response) {
             console.log(response)
