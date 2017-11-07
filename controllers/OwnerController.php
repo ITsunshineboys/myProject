@@ -1313,6 +1313,8 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+
         foreach ($coefficient as $one_coefficient){
             foreach ($post['list'] as &$materials){
                 if ($one_coefficient->classify == $materials['one_title']){
@@ -1320,12 +1322,14 @@ class OwnerController extends Controller
                 }
             }
         }
+
+
         foreach ($post['list'] as &$default){
             if (empty($default['goods_price'])){
                 $default['goods_price'] = $default['price'] * 1;
             }
         }
-        var_dump($post['list']);exit;
+
         $special_offer = 0;
         $total_prices = 0;
         foreach ($post['list'] as $price){
@@ -1333,6 +1337,8 @@ class OwnerController extends Controller
            $special_offer += $price['goods_price'];
 
         }
+
+        
         $total = sprintf('%.2f', (float)$total_prices);
         $special = sprintf('%.2f', (float)$special_offer);
         return Json::encode([
