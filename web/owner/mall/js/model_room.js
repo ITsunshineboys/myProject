@@ -205,6 +205,8 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
 
     // 修改材料
     $scope.editMaterial = function (index) {
+        console.log($scope.materials);
+        return
         sessionStorage.setItem("materials", JSON.stringify($scope.materials));
         switch (index) {
             case 0:
@@ -267,16 +269,18 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                 let temp = {
                                     id: i.id,
                                     title: i.title,
-                                    three_level: {
-                                        id: obj.id,
-                                        title: obj.goods_three,
-                                        goods_detail: []
-                                    }
+                                    three_level: []
                                 };
                                 // 二级分类数组为0，则直接添加
                                 if (o.second_level.length === 0) {
                                     o.second_level.push(temp);
-                                    o.second_level[0].three_level.goods_detail.push(obj);
+                                    let tempLevel = {
+                                        id: obj.id,
+                                        title: obj.goods_three,
+                                        goods_detail: []
+                                    };
+                                    o.second_level[0].three_level.push(tempLevel);
+                                    o.second_level[0].three_level[0].goods_detail.push(obj);
                                 } else {
                                     let flag = true;
                                     // 遍历二级分类数组
@@ -284,13 +288,36 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                         // 若已有相同二级分类，则不做添加
                                         if (j.id === i.id) {
                                             flag = false;
-                                            j.three_level.goods_detail.push(obj);
+                                            let bool = true;
+                                            for(let k of j.three_level) {
+                                                // 判断三级分类是否相同,若相同则添加商品
+                                                if (k.title === obj.goods_three) {
+                                                    bool = false;
+                                                    k.goods_detail.push(obj);
+                                                    break;
+                                                }
+                                            }
+                                            if (bool) {
+                                                let tempLevel = {
+                                                    id: obj.id,
+                                                    title: obj.goods_three,
+                                                    goods_detail: []
+                                                };
+                                                j.three_level.push(tempLevel);
+                                                j.three_level[j.three_level.length - 1].goods_detail.push(obj);
+                                            }
                                             break;
                                         }
                                     }
                                     if (flag) {
                                         o.second_level.push(temp);
-                                        o.second_level[o.second_level.length - 1].three_level.goods_detail.push(obj);
+                                        let tempLevel = {
+                                            id: obj.id,
+                                            title: obj.goods_three,
+                                            goods_detail: []
+                                        };
+                                        o.second_level[o.second_level.length - 1].push(tempLevel);
+                                        o.second_level[o.second_level.length - 1].three_level[0].goods_detail.push(obj);
                                     }
                                 }
                                 break
