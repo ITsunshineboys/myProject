@@ -95,11 +95,11 @@ class PayService
     }
 
 
-     public function  FindOpenId()
+    public function  FindOpenId()
     {
         $baseUrl = urlencode("http://test.cdlhzz.cn/order/find-open-id");
         $url = $this->__CreateOauthUrlForCode($baseUrl);
-        return $url;
+        header("Location:".$url);
     }
  
     /**
