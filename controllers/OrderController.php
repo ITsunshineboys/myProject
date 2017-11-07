@@ -4048,10 +4048,15 @@ class OrderController extends Controller
          * 获取openID1-微信
          * @return string
          */
-            public function actionGetOpenId()
+         public function actionGetOpenId()
             {
                 $tools = new PayService();
-                $tools->FindOpenId();
+                $data=$tools->FindOpenId();
+                return Json::encode([
+                    'code' => 200,
+                    'msg'  => 'ok',
+                    'data' =>$data
+                ]);
             }
 
            /**
