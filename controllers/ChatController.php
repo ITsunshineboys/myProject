@@ -469,7 +469,7 @@ class ChatController extends Controller
         ]);
     }
     public function actionTest(){
-        $a=User::find()->select('username')->where(['id'=>61])->one();
+        $a=UserNewsRecord::find()->asArray()->all();
         var_dump($a);
 
     }
