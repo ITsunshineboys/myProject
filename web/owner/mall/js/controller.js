@@ -11,8 +11,8 @@ angular.module('all_controller',[])
         })
         // 微信事宜
         _ajax.get('/order/get-open-id', {}, function (res) {
-            _ajax.get(res.data, {}, function (res) {
-                alert(res.data)
+            $http.get(res.data).then(function (res) {
+                console.log(res.data.data);
             })
         })
     })
