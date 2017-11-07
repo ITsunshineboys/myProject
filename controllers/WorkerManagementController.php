@@ -424,8 +424,8 @@ class WorkerManagementController extends Controller
         $status = (int)trim(\Yii::$app->request->post('status',''));
         // 全部订单
 
-        if ($status){
-
+        if (empty($status)){
+            $worker_order = WorkerOrder::find()->select(['con_people,con_tel,order_no'])->where([])->all();
         }
 
     }
