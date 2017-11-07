@@ -39,17 +39,22 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         console.log(res, "样板间");
         let data = res.data;
         $scope.huxing = data;
-        $scope.activeObj = data[0];
-        params.particulars = data[0].particulars;
-        params.area = data[0].area;
-        params.stairway = data[0].stairway;
-        if (data[0].stairway === "1") {
-            params.stair_id = data[0].stair_id;
-        } else {
-            params.stair_id = ""
+        for (let i of data) {
+            if (i.type === '1') {
+                $scope.activeObj = angular.copy(i);
+                params.particulars = i.particulars;
+                params.area = i.area;
+                params.stairway = i.stairway;
+                if (i.stairway === "1") {
+                    params.stair_id = i.stair_id;
+                } else {
+                    params.stair_id = ""
+                }
+                params.series = i.case_picture[0].series_id;
+                params.style = i.case_picture[0].style_id;
+                break;
+            }
         }
-        params.series = data[0].case_picture[0].series_id;
-        params.style = data[0].case_picture[0].style_id;
         materials();
     });
 
@@ -77,42 +82,62 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         for (let i of tempArray) {
             i.goods = [];
             i.totalMoney = 0;
+            i.second_level = [];
             if (i.title === "辅材" || i.title === "主要材料") {
                 primary.push(i);
             } else {
                 others.push(i);
             }
         }
+        $scope.classData = data.pid;    // 材料分类;
         $scope.materials = primary.concat(others);
     });
 
     // 户型选择
     $scope.huxingFun = function (obj) {
-        $scope.activeObj = obj;
+        $scope.activeObj = angular.copy(obj);
         params.particulars = obj.particulars;
         params.area = obj.area;
-        if (obj.stairway === "1") {
-            params.stairway = obj.stairway;
-            params.stair_id = obj.stair_id;
+        if (obj.type === '1') {
+            if (obj.stairway === "1") {
+                params.stairway = obj.stairway;
+                params.stair_id = obj.stair_id;
+            } else {
+                params.stairway = obj.stairway;
+                params.stair_id = "";
+            }
+            params.series = obj.case_picture[0].series_id;
+            params.style = obj.case_picture[0].style_id;
         } else {
-            params.stairway = obj.stairway;
-            params.stair_id = "";
+            if (obj.stairway === "1") {
+                params.stairway = obj.stairway;
+                $scope.activeObj.stair_id = angular.copy($scope.stairsList[0].id);
+                params.stair_id = $scope.stairsList[0].id;
+            } else {
+                params.stairway = obj.stairway;
+                params.stair_id = "";
+            }
+            let tempArray = [{
+                series_id: $scope.seriesList[0].id,
+                style_id: $scope.styleList[0].id
+            }];
+            $scope.activeObj.case_picture = angular.copy(tempArray);
+            params.series = $scope.seriesList[0].id;
+            params.style = $scope.styleList[0].id;
         }
-        params.series = obj.case_picture[0].series_id;
-        params.style = obj.case_picture[0].style_id;
         materials();
     };
 
     // 楼梯选择
     $scope.stairsFun = function (obj) {
-        $scope.activeObj.stair_id = obj.id;
+        $scope.activeObj.stair_id = angular.copy(obj.id);
         params.stair_id = obj.id;
         materials();
     };
 
     // 系列选择
     $scope.seriesFun = function (obj) {
-        $scope.activeObj.case_picture[0].series_id = obj.id;
+        $scope.activeObj.case_picture[0].series_id = angular.copy(obj.id);
         $scope.seriesDesc = {
             intro: obj.intro,
             theme: obj.theme
@@ -123,7 +148,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
 
     // 风格选择
     $scope.styleFun = function (obj) {
-        $scope.activeObj.case_picture[0].style_id = obj.id;
+        $scope.activeObj.case_picture[0].style_id = angular.copy(obj.id);
         params.style = obj.id;
         materials();
     };
@@ -158,10 +183,28 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             street: activeObj.street,                                   // 街道
             particulars: activeObj.particulars,                         // 楼层详情
             stairway: activeObj.stairway,                               // 楼梯信息
-            stair_id: activeObj.stair_id                                // 楼梯材料id
+            stair_id: activeObj.stair_id,                               // 楼梯材料id
+            original_price: $scope.price,                               // 原价
+            sale_price: $scope.preferential,                            // 打折价
+            material: [],                                               // 商品信息
         };
         sessionStorage.setItem("payParams", JSON.stringify(payParams));
         $state.go("deposit");
+    };
+
+    // 修改材料
+    $scope.editMaterial = function (index) {
+        sessionStorage.setItem("materials", JSON.stringify($scope.materials));
+        switch (index) {
+            case 0:
+                $state.go('nodata.basics_decoration');
+                break;
+            case 1:
+                $state.go('nodata.main_material');
+                break;
+            default:
+                $state.go('nodata.other_material', {index: index})
+        }
     };
 
     // 材料
@@ -191,7 +234,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             let freightParams = {   // 运费参数集合
                 goods: []
             };
-            for (let obj of materials) {
+            for (let obj of materials) {    // 遍历材料
                 let tempObj = {
                     one_title: obj.goods_first,
                     two_title: obj.goods_second,
@@ -205,7 +248,43 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 params.list.push(tempObj);
                 freightParams.goods.push(tempFreight);
                 for (let o of $scope.materials) {
+                    // 遍历一级分类  判断分类标题是否相等
                     if (obj.goods_first === o.title) {
+                        for (let i of $scope.classData.level) {
+                            // 遍历二级分类 判断二级标题是否相等
+                            if (i.title === obj.goods_second) {
+                                let temp = {
+                                    id: i.id,
+                                    title: i.title,
+                                    three_level: {
+                                        id: obj.id,
+                                        title: obj.goods_three,
+                                        goods_detail: []
+                                    }
+                                };
+                                // 二级分类数组为0，则直接添加
+                                if (o.second_level.length === 0) {
+                                    o.second_level.push(temp);
+                                    o.second_level[0].three_level.goods_detail.push(obj);
+                                } else {
+                                    let flag = true;
+                                    // 遍历二级分类数组
+                                    for (let j of o.second_level) {
+                                        // 若已有相同二级分类，则不做添加
+                                        if (j.id === i.id) {
+                                            flag = false;
+                                            j.three_level.goods_detail.push(obj);
+                                            break;
+                                        }
+                                    }
+                                    if (flag) {
+                                        o.second_level.push(temp);
+                                        o.second_level[o.second_level.length - 1].three_level.goods_detail.push(obj);
+                                    }
+                                }
+                                break
+                            }
+                        }
                         o.goods.push(obj);
                         break;
                     }
@@ -213,7 +292,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             }
 
             for (let obj of $scope.materials) {
-                for(let o of obj.goods) {
+                for (let o of obj.goods) {
                     obj.totalMoney += parseFloat(o.goods_original_price);
                 }
             }

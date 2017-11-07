@@ -130,7 +130,7 @@
                     <div class="swiper-wrapper">
                         <div class="swiper-slide" style="height: 16rem;"
                              ng-repeat="item in roomPicture.split(',')">
-                            <img style="width: 100%;height: 100%;" ng-src="{{'http://test.cdlhzz.cn:888/' + item}}">
+                            <img style="width: 100%;height: 100%;" ng-src="{{'http://test.cdlhzz.cn/' + item}}">
                         </div>
                     </div>
                     <!-- 如果需要分页器 -->
@@ -149,7 +149,7 @@
         <div id="masonry" class="masonry clearfix">
             <!--辅材-->
             <div class="column">
-                <div class="box" ng-repeat="obj in materials" ng-if="$even == true">
+                <div class="box" ng-repeat="obj in materials" ng-if="$even == true" ng-click="editMaterial($index)">
                     <h1 class="title_p">
                         {{obj.title}}
                         <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
@@ -157,17 +157,18 @@
                     <span class="pic" ng-show="obj.goods.length != 0">{{'¥' + obj.totalMoney.toFixed(2)}}</span>
                     <ul class="decoration" ng-show="obj.goods.length != 0">
                         <li ng-repeat="data in obj.goods">
-                            <span>{{data.goods_second}}</span>
+                            <span ng-show="$parent.$index == 0">{{data.goods_second}}</span>
+                            <span ng-show="$parent.$index != 0">{{data.goods_three}}</span>
                             <br ng-show="$parent.$index != 0">
                             <span class="brand" ng-show="$parent.$index != 0">{{data.goods_brand_name}}</span>
                             <span class="pic_q">{{'¥' + data.goods_original_price}}</span>
                         </li>
                     </ul>
-                    <button class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</button>
+                    <a class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</a>
                 </div>
             </div>
             <div class="column">
-                <div class="box" ng-repeat="obj in materials" ng-if="$odd == true">
+                <div class="box" ng-repeat="obj in materials" ng-if="$odd == true" ng-click="editMaterial($index)">
                     <h1 class="title_p">
                         {{obj.title}}
                         <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
@@ -175,13 +176,14 @@
                     <span class="pic" ng-show="obj.goods.length != 0">{{'¥' + obj.totalMoney.toFixed(2)}}</span>
                     <ul class="decoration" ng-show="obj.goods.length != 0">
                         <li ng-repeat="data in obj.goods">
-                            <span>{{data.goods_second}}</span>
+                            <span ng-show="$parent.$index == 1">{{data.goods_second}}</span>
+                            <span ng-show="$parent.$index != 1">{{data.goods_three}}</span>
                             <br ng-show="$parent.$index != 1">
                             <span class="brand" ng-show="$parent.$index != 1">{{data.goods_brand_name}}</span>
                             <span class="pic_q">{{'¥' + data.goods_original_price}}</span>
                         </li>
                     </ul>
-                    <button class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</button>
+                    <a class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</a>
                 </div>
             </div>
         </div>

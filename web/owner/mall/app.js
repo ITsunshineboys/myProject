@@ -28,18 +28,18 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                     street: ''
                 }
             })
-            .state('nodata.basics_decoration',{
+            .state('nodata.basics_decoration',{ // 基础装修
                 url:'/basics_decoration',
                 templateUrl:'all_basics.html',
                 css:['css/basics.css','zui-1.7.0-dist/dist/css/zui.min.css'],
             })
-            .state('nodata.main_material',{
+            .state('nodata.main_material',{ // 主要材料
                 url:'/main_material',
                 templateUrl:'main_goods.html',
                 css:['css/main.css','zui-1.7.0-dist/dist/css/zui.min.css']
             })
-            .state('nodata.other_material',{
-                url:'/other_material',
+            .state('nodata.other_material',{    // 其他
+                url:'/other_material?index',
                 templateUrl:'other_goods.html',
                 css:'css/other.css'
             })
