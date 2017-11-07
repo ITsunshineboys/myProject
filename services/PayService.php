@@ -103,7 +103,7 @@ class PayService
         $content =Wxpay::curl($baseUrl,false,0); //请求发送短信
         if($content){
             $result = json_decode($content,true);
-            var_dump($result);
+            return $result;
         }
     }
 
