@@ -58,16 +58,23 @@ angular.module('all_controller',[])
         $scope.is_delete_btn = false //切换编辑状态
         if(!!sessionStorage.getItem('materials')){
             $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
+            for(let [key,value] of $scope.all_goods.entries()){
+                value['cost'] = value['totalMoney']
+            }
             if($rootScope.curState_name == 'nodata.basics_decoration'){
                 $scope.cur_item = $scope.all_goods[0]
+                $scope.cur_header = $scope.cur_item.title
             }else if($rootScope.curState_name == 'nodata.main_material'){
                 $scope.cur_item = $scope.all_goods[1]
+                $scope.cur_header = $scope.cur_item.title
             }else if($rootScope.curState_name == 'nodata.house_list'){
                 $scope.all_goods = []
                 sessionStorage.removeItem('materials')
             }else{
                 $scope.cur_item = $scope.all_goods[$stateParams.index]
+                $scope.cur_header = $scope.cur_item.title
             }
+            console.log($scope.cur_item)
         }
         console.log($scope.all_goods)
         //请求后台数据
@@ -208,18 +215,12 @@ angular.module('all_controller',[])
                 $state.go('nodata.basics_decoration')
                 $scope.cur_header = '基础装修'
                 $scope.inner_header = '基础装修'
-                $scope.cur_project = 0
-                $scope.is_city = false
-                $scope.is_edit = false
             } else if (item.title == '主要材料') {
                 $state.go('nodata.main_material')
                 $scope.replaced_goods = []//被替换的商品
                 $scope.goods_replaced = []//替换的商品
                 $scope.cur_header = '主材料'
                 $scope.inner_header = '主材料'
-                $scope.cur_project = 1
-                $scope.is_city = false
-                $scope.is_edit = false
             } else {
                 $state.go('nodata.other_material')
                 $scope.cur_header = item.title
@@ -228,13 +229,24 @@ angular.module('all_controller',[])
                 $scope.goods_replaced = []//替换的商品
                 $scope.all_delete_goods = []//其他材料删除的材料
                 $scope.all_add_goods = []
-                $scope.cur_project = 2
-                $scope.is_city = false
-                $scope.is_edit = true
+
             }
             $scope.have_header = true
             $scope.cur_item = item
             $scope.cur_all_goods = angular.copy($scope.all_goods)
+        }
+        if($rootScope.curState_name == 'nodata.basics_decoration'){
+            $scope.cur_project = 0
+            $scope.is_city = false
+            $scope.is_edit = false
+        }else if($rootScope.curState_name == 'nodata.main_material'){
+            $scope.cur_project = 1
+            $scope.is_city = false
+            $scope.is_edit = false
+        }else if($rootScope.curState_name == 'nodata.other_material'){
+            $scope.cur_project = 2
+            $scope.is_city = false
+            $scope.is_edit = true
         }
         //模态框详情
         $scope.get_basic_details = function (item, three_level_name, three_level_id) {
@@ -541,8 +553,48 @@ angular.module('all_controller',[])
             $scope.is_city = true
             $scope.is_edit = false
             $scope.cur_header = '智能报价'
+            let arr = []
             get_all_price()
-            $state.go('nodata.house_list')
+            if(!!sessionStorage.getItem('materials')){
+                for(let [key,value] of $scope.all_goods.entries()){
+                    arr.push({
+                        id:value.id,
+                        title:value.title,
+                        goods:[]
+                    })
+                }
+                for(let [key,value] of $scope.all_goods.entries()){
+                    for(let [key1,value1] of value.second_level.entries()){
+                        for(let [key2,value2] of value1.three_level.entries()){
+                            for(let [key3,value3] of value2.goods_detail.entries()){
+                                for(let [key4,value4] of arr.entries()){
+                                    if(value.id == value4.id){
+                                        if(value3.goods_id == undefined){
+                                            value4.goods.push({
+                                                cost:value3.cost,
+                                                goods_id:value3.id,
+                                                name:value3.name,
+                                                id:value2.id,
+                                                goods_three:value2.title,
+                                                goods_second:value1.title,
+                                                goods_first:value.title,
+                                                quantity:value3.quantity
+                                            })
+                                        }else{
+                                            value4.goods.push(value3)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                console.log(arr)
+                sessionStorage.setItem('materials',JSON.stringify(arr))
+                $state.go('modelRoom')
+            }else{
+                $state.go('nodata.house_list')
+            }
         }
         //切换编辑/完成
         $scope.switch_delete = function () {
@@ -1637,6 +1689,21 @@ angular.module('all_controller',[])
         $scope.twelve_new_construction = ''//12墙新建
         $scope.twenty_four_new_construction = ''//24墙新建
         $scope.building_scrap = false//有无建渣点
+        if(!!sessionStorage.getItem('huxing')){
+            console.log(JSON.parse(sessionStorage.getItem('huxing')))
+            $scope.area = JSON.parse(sessionStorage.getItem('huxing')).area
+            $scope.cur_series = JSON.parse(sessionStorage.getItem('huxing')).series
+            $scope.cur_style = JSON.parse(sessionStorage.getItem('huxing')).style
+        }
+        if(!!sessionStorage.getItem('backman')){
+            console.log(JSON.parse(sessionStorage.getItem('backman')))
+            $scope.twelve_dismantle = JSON.parse(sessionStorage.getItem('backman'))[0].backman_value//12墙拆除
+            $scope.twenty_four_dismantle = JSON.parse(sessionStorage.getItem('backman'))[1].backman_value//24墙拆除
+            $scope.repair = JSON.parse(sessionStorage.getItem('backman'))[2].backman_value//补烂
+            $scope.twelve_new_construction = JSON.parse(sessionStorage.getItem('backman'))[3].backman_value//12墙新建
+            $scope.twenty_four_new_construction = JSON.parse(sessionStorage.getItem('backman'))[4].backman_value//24墙新建
+            $scope.building_scrap = !!JSON.parse(sessionStorage.getItem('backman'))[5].backman_value//有无建渣点
+        }
         //请求杂工数据
         $scope.go_handyman_options = function () {
             //清理杂项原始数据
@@ -1694,112 +1761,112 @@ angular.module('all_controller',[])
                     '24_new_construction': +$scope.twenty_four_new_construction || 0,
                     'building_scrap': $scope.building_scrap,
                     'area': $scope.area,
-                    'series': $scope.cur_series.id,
-                    'style': $scope.cur_style.id,
+                    'series':(typeof $scope.cur_series === 'object')?$scope.cur_series.id:$scope.cur_series,
+                    'style': (typeof $scope.cur_style === 'object')?$scope.cur_style.id:$scope.cur_style,
                 }, config).then(function (response) {
                     console.log('杂工')
                     console.log(response)
-                    $scope.cur_goods = response.data.data.total_material.material
-                    $scope.cur_worker = response.data.data.labor_cost
-                    //整合一级
-                    for (let [key, value] of $scope.stair.entries()) {
-                        for (let [key1, value1] of response.data.data.total_material.material.entries()) {
-                            let cur_obj = {id: value.id, title: value.title, cost: 0, second_level: []}
-                            let cur_title = {title: value.title}
-                            console.log(value1.cost)
-                            if (value1.path.split(',')[0] == value.id && value1.cost != 0 && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                                $scope.all_goods.push(cur_obj)
-                            }
-                        }
-                    }
-                    //整合二级
-                    for (let [key, value] of $scope.level.entries()) {
-                        for (let [key1, value1] of  $scope.all_goods.entries())
-                            for (let [key2, value2] of response.data.data.total_material.material.entries()) {
-                                let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
-                                let cur_title = {title: value.title}
-                                if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id && value2.cost != 0 &&
-                                    JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                                    value1.second_level.push(cur_obj)
-                                }
-                            }
-                    }
-                    //整合三级
-                    for (let [key, value] of  $scope.all_goods.entries()) {
-                        for (let [key1, value1] of value.second_level.entries()) {
-                            for (let [key2, value2] of response.data.data.total_material.material.entries()) {
-                                let cur_obj = {id: value2.path.split(',')[2], title: value2.title, goods_detail: []}
-                                let cur_title = {title: value2.title}
-                                if (value2.path.split(',')[1] == value1.id && value2.path.split(',')[0] == value.id && value2.cost != 0 &&
-                                    JSON.stringify(value1.three_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                                    value1.three_level.push(cur_obj)
-                                }
-                            }
-                        }
-                    }
-                    //整合商品
-                    for (let [key, value] of  $scope.all_goods.entries()) {
-                        for (let [key1, value1] of value.second_level.entries()) {
-                            for (let [key2, value2] of value1.three_level.entries()) {
-                                for (let [key3, value3] of response.data.data.total_material.material.entries()) {
-                                    let cur_obj = {
-                                        id: value3.id,
-                                        image: value3.cover_image,
-                                        cost: value3.cost,
-                                        name: value3.name,
-                                        platform_price: value3.platform_price,
-                                        profit_rate: value3.profit_rate,
-                                        purchase_price_decoration_company: value3.purchase_price_decoration_company,
-                                        quantity: value3.quantity,
-                                        series_id: value3.series_id,
-                                        style_id: value3.style_id,
-                                        subtitle: value3.subtitle,
-                                        supplier_price: value3.supplier_price,
-                                        shop_name: value3.shop_name
-                                    }
-                                    let cur_goods = {
-                                        id: value3.id,
-                                    }
-                                    if (value3.path.split(',')[1] == value1.id && value3.path.split(',')[0] == value.id && value3.cost != 0 &&
-                                        value3.path.split(',')[2] == value2.id) {
-                                        value.cost += value3.cost
-                                        value1.cost += value3.cost
-                                        if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
-                                            value2.goods_detail.push(cur_obj)
-                                        } else {
-                                            for (let [key4, value4] of value2.goods_detail.entries()) {
-                                                if (value3.id == value4.id) {
-                                                    value4.cost += value3.cost
-                                                    value4.quantity += value3.quantity
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //工人费用
-                    let cur_worker = {worker_kind: response.data.data.labor_cost.worker_kind}
-                    let cur_worker_price = response.data.data.labor_cost.price
-                    if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
-                            JSON.stringify(cur_worker).length - 1)) == -1) {
-                        $scope.all_workers.push({
-                            worker_kind: cur_worker.worker_kind,
-                            price: cur_worker_price
-                        })
-                    } else {
-                        for (let [key, value] of $scope.all_workers.entries()) {
-                            if (cur_worker.worker_kind == value.worker_kind) {
-                                value.price += cur_worker_price
-                            }
-                        }
-                    }
-                    $scope.cur_header = '智能报价'
-                    get_all_price()
-                    $state.go('nodata.house_list')
-                    console.log($scope.all_workers)
-                    console.log($scope.all_goods)
+                    // $scope.cur_goods = response.data.data.total_material.material
+                    // $scope.cur_worker = response.data.data.labor_cost
+                    // //整合一级
+                    // for (let [key, value] of $scope.stair.entries()) {
+                    //     for (let [key1, value1] of response.data.data.total_material.material.entries()) {
+                    //         let cur_obj = {id: value.id, title: value.title, cost: 0, second_level: []}
+                    //         let cur_title = {title: value.title}
+                    //         console.log(value1.cost)
+                    //         if (value1.path.split(',')[0] == value.id && value1.cost != 0 && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
+                    //             $scope.all_goods.push(cur_obj)
+                    //         }
+                    //     }
+                    // }
+                    // //整合二级
+                    // for (let [key, value] of $scope.level.entries()) {
+                    //     for (let [key1, value1] of  $scope.all_goods.entries())
+                    //         for (let [key2, value2] of response.data.data.total_material.material.entries()) {
+                    //             let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                    //             let cur_title = {title: value.title}
+                    //             if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id && value2.cost != 0 &&
+                    //                 JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
+                    //                 value1.second_level.push(cur_obj)
+                    //             }
+                    //         }
+                    // }
+                    // //整合三级
+                    // for (let [key, value] of  $scope.all_goods.entries()) {
+                    //     for (let [key1, value1] of value.second_level.entries()) {
+                    //         for (let [key2, value2] of response.data.data.total_material.material.entries()) {
+                    //             let cur_obj = {id: value2.path.split(',')[2], title: value2.title, goods_detail: []}
+                    //             let cur_title = {title: value2.title}
+                    //             if (value2.path.split(',')[1] == value1.id && value2.path.split(',')[0] == value.id && value2.cost != 0 &&
+                    //                 JSON.stringify(value1.three_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
+                    //                 value1.three_level.push(cur_obj)
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    // //整合商品
+                    // for (let [key, value] of  $scope.all_goods.entries()) {
+                    //     for (let [key1, value1] of value.second_level.entries()) {
+                    //         for (let [key2, value2] of value1.three_level.entries()) {
+                    //             for (let [key3, value3] of response.data.data.total_material.material.entries()) {
+                    //                 let cur_obj = {
+                    //                     id: value3.id,
+                    //                     image: value3.cover_image,
+                    //                     cost: value3.cost,
+                    //                     name: value3.name,
+                    //                     platform_price: value3.platform_price,
+                    //                     profit_rate: value3.profit_rate,
+                    //                     purchase_price_decoration_company: value3.purchase_price_decoration_company,
+                    //                     quantity: value3.quantity,
+                    //                     series_id: value3.series_id,
+                    //                     style_id: value3.style_id,
+                    //                     subtitle: value3.subtitle,
+                    //                     supplier_price: value3.supplier_price,
+                    //                     shop_name: value3.shop_name
+                    //                 }
+                    //                 let cur_goods = {
+                    //                     id: value3.id,
+                    //                 }
+                    //                 if (value3.path.split(',')[1] == value1.id && value3.path.split(',')[0] == value.id && value3.cost != 0 &&
+                    //                     value3.path.split(',')[2] == value2.id) {
+                    //                     value.cost += value3.cost
+                    //                     value1.cost += value3.cost
+                    //                     if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
+                    //                         value2.goods_detail.push(cur_obj)
+                    //                     } else {
+                    //                         for (let [key4, value4] of value2.goods_detail.entries()) {
+                    //                             if (value3.id == value4.id) {
+                    //                                 value4.cost += value3.cost
+                    //                                 value4.quantity += value3.quantity
+                    //                             }
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    // //工人费用
+                    // let cur_worker = {worker_kind: response.data.data.labor_cost.worker_kind}
+                    // let cur_worker_price = response.data.data.labor_cost.price
+                    // if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
+                    //         JSON.stringify(cur_worker).length - 1)) == -1) {
+                    //     $scope.all_workers.push({
+                    //         worker_kind: cur_worker.worker_kind,
+                    //         price: cur_worker_price
+                    //     })
+                    // } else {
+                    //     for (let [key, value] of $scope.all_workers.entries()) {
+                    //         if (cur_worker.worker_kind == value.worker_kind) {
+                    //             value.price += cur_worker_price
+                    //         }
+                    //     }
+                    // }
+                    // $scope.cur_header = '智能报价'
+                    // get_all_price()
+                    // $state.go('nodata.house_list')
+                    // console.log($scope.all_workers)
+                    // console.log($scope.all_goods)
                 }, function (error) {
                     console.log(error)
                 })
