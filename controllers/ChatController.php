@@ -445,13 +445,6 @@ class ChatController extends Controller
         $new_infos=$query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-        if(!$new_infos){
-            return Json::encode([
-                'code'=>200,
-                'msg'=>'ok',
-                'data'=>null
-            ]);
-        }
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d',$info['send_time']);
              $info['image']=OrderGoods::find()
