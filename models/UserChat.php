@@ -303,13 +303,18 @@ class UserChat extends \yii\db\ActiveRecord
                 ->asArray()
                 ->where(['uid'=>$uid])
                 ->one();
-            $data['user']['hx_name']=User::find()->asArray()->select('username')->where(['id'=>$uid])->one()['username'];
+            $hx=User::find()->asArray()->select('hx_pwd,username')->where(['id'=>$uid])->one();
+            $data['user']['hx_pwd']=$hx['hx_pwd'];
+            $data['user']['hx_name']=$hx['hx_name'];
         }elseif($role_id==7){
             $data['user']=User::find()
                 ->select(['id','icon','nickname as name','username as hx_name'])
                 ->asArray()
                 ->where(['id'=>$uid])
                 ->one();
+            $hx=User::find()->asArray()->select('hx_pwd,username')->where(['id'=>$uid])->one();
+            $data['user']['hx_pwd']=$hx['hx_pwd'];
+            $data['user']['hx_name']=$hx['hx_name'];
         }
         if(!$data){
           return null;
