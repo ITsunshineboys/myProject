@@ -1048,15 +1048,15 @@ class SiteController extends Controller
         ];
 
         $user = Yii::$app->user->identity;
-        if (!$user || !$user->checkLogin()) {print_r($user);
+        if (!$user || !$user->checkLogin()) {
             return Json::encode($ret);
         }
 
         $module = trim(Yii::$app->request->get('module', ''));
-        if (!$module) {echo 'b';
+        if (!$module) {
             return Json::encode($ret);
         }
-echo $user->login_role_id, '|', $module;
+
         $ret['data']['can_access'] = Role::find()->where(['id' => $user->login_role_id, 'admin_module' => $module])->exists();
         return Json::encode($ret);
     }
