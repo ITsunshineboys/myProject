@@ -59,7 +59,7 @@ class Wxpay  extends ActiveRecord
         $input->SetGoods_tag("goods");
         $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::LINEPAY_NOTIFY_URL);
         $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($openId);
+        $input->SetOpenid($openId); 
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
         // return $jsApiParameters;
