@@ -220,7 +220,7 @@
             <input  id="stop_time"   ng-model="brand_params.end_time" ng-change='brand_time_change()' min-date="{{brand_params.start_time}}" ngc-lay-date  class="time_input" type="text"  placeholder="结束时间">
         </div>
         <!--搜索-->
-        <span class="menu" ng-click="brand_search_btn()">查询</span>
+        <button class="btn btn-default menu_right" ng-click="brand_search_btn()">查询</button>
         <div class="search_box">
             <input ng-model="myng.search_input_ok" class="search_input" type="text" placeholder="搜索商家名称或账户">
             <span class="glyphicon glyphicon-search search"></span>

@@ -82,7 +82,7 @@ section{
   font-size: 12px;
   color: #666F80;
   padding: 0;
-  border: 1px solid #ddd;
+  border: 1px solid #BFC0C2;
   border-radius: 3px;
 }
 .search_box{
@@ -94,7 +94,7 @@ section{
 .search_input{
   width: 250px;
   height: 35px;
-  border:1px solid #8D9199;
+  border:1px solid #BFC0C2;
   border-radius: 20px;
 }
 .search_input:focus{
@@ -105,13 +105,10 @@ section{
   top:50%;
   transform: translateY(-50%);
   right: 20px;
+  color: #BFC0C2;
 }
-.menu{
+.menu_right{
   float: right;
-  text-align: center;
-  border: 1px solid #666F80;
-  border-radius: 3px;
-  padding: 6px;
 }
 /*操作结束*/
 
