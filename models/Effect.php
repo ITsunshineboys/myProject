@@ -176,7 +176,6 @@ class Effect extends ActiveRecord
             $tran->commit();
             return $id;
         }catch (Exception $e){
-            var_dump($e);
             $tran->rollBack();
             return false;
         }
