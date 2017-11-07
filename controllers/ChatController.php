@@ -474,6 +474,6 @@ class ChatController extends Controller
         ]);
     }
     public function actionTest(){
-        var_dump(User::find()->select('username')->all());
+        var_dump(User::find()->select('username,mobile')->all());
     }
 }
