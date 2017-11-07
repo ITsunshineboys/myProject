@@ -1,4 +1,6 @@
-
+body{
+    color: #666F80;
+}
 header{
     height: 60px;
     line-height: 60px;
@@ -247,18 +249,8 @@ input::-webkit-inner-spin-button{
     margin-top: 40px;
     margin-bottom: 30px;
 }
-.btn_back button{
-    width:80px;
-    height:34px;
-    background-color: white;
-    border: 1px solid #5E6166;
-    margin-left: 10px;
-    border-radius: 3px;
-}
-.btn_back button:nth-child(1){
-    color:#487AF8;
-    border: 1px solid #487AF8;
-    background-color: #F2F4FF;
+.btn_left{
+    margin-left: 20px;
 }
 .border_red{
     border: 1px solid red!important;

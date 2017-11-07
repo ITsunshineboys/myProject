@@ -22,9 +22,9 @@
         <div class="operating">
             <div class="all_choose">
                 <ul class="operating_ul">
-                    <li data-toggle="modal" data-target="#on_shelves_add_modal">添加</li>
-                    <li  ng-click="checkAll()">全选</li>
-                    <li data-toggle="modal" data-target="{{prompt}}" ng-click="all_off_shelf()">下架</li>
+                    <button class="btn btn-default" data-toggle="modal" data-target="#on_shelves_add_modal">添加</button>
+                    <button class="btn btn-default btn_left" ng-click="checkAll()">全选</button>
+                    <button class="btn btn-default btn_left" data-toggle="modal" data-target="{{prompt}}" ng-click="all_off_shelf()">下架</button>
                 </ul>
                 <!--Menu-->
                 <div class="tab_tools clearfix btn_menu_right">
@@ -52,7 +52,7 @@
                             </ul>
                         </div>
                     </div>
-                    <span class="search_txt" ng-click="search_btn()">搜索</span>
+                    <button class="btn btn-default search_txt" ng-click="search_btn()">搜索</button>
                     <div class="search_box">
                         <input ng-model="myng.up_search_value" class="search_input" type="text" placeholder="搜索商品编号或名称">
                         <span class="glyphicon glyphicon-search search"></span>
@@ -259,7 +259,7 @@
                         </ul>
                     </div>
                 </div>
-                <span class="search_txt" ng-click="down_search_btn()">搜索</span>
+                <button class="btn btn-default search_txt" ng-click="down_search_btn()">搜索</button>
                 <div class="search_box">
                     <input ng-model="myng.down_search_value" class="search_input" type="text" placeholder="搜索商品编号或名称">
                     <span class="glyphicon glyphicon-search search"></span>

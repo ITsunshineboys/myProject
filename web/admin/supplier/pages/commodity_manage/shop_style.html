@@ -199,8 +199,8 @@
 
             <!--按钮-->
             <div class="btn_back">
-                <button ng-click="add_goods_confirm(form.$valid,form.$error.required)" data-toggle="modal" data-target="{{success_variable}}">确认</button>
-                <button ui-sref="commodity_manage">返回</button>
+                <button class="btn btn-primary" ng-click="add_goods_confirm(form.$valid,form.$error.required)" data-toggle="modal" data-target="{{success_variable}}">确认</button>
+                <button class="btn btn-default btn_left" ui-sref="commodity_manage">返回</button>
             </div>
 
         </form>
