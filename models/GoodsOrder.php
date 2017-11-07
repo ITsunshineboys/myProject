@@ -2021,7 +2021,6 @@ class GoodsOrder extends ActiveRecord
                     }else{
                         $GoodsStat->sold_number+=$Goods['goods_number'];
                         $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
-                        $GoodsStat->create_date=$date;
                         if ($GoodsStat->save(false))
                         {
                             $code=500;
