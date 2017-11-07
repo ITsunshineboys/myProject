@@ -1411,10 +1411,10 @@ class BasisDecorationService
                 case $one_goods['title'] == self::GOODS_NAME['closet'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']:
                     $one_goods['quantity'] = $post['bedroom'];
                     $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
-                    $materials[] = $one_goods;
                     break;
             }
         }
+        var_dump($goods);exit;
         return self::profitMargin($materials);
     }
 
