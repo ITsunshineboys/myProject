@@ -12,7 +12,7 @@ angular.module('all_controller',[])
         // 微信事宜
         _ajax.get('/order/get-open-id', {}, function (res) {
             $http.get(res.data).then(function (res) {
-                console.log(res.data.data);
+                alert(res.data.data)
             })
         })
     })
