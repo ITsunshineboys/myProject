@@ -279,10 +279,9 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $recipient_id
      * @return array|null
      */
-    public static function userinfos($uid,$role_id,$recipient_id){
-        $rec_role_id=User::find()->select('last_role_id_app')->asArray()->where(['id'=>$recipient_id])->one()['last_role_id_app'];
+    public static function userinfos($uid,$role_id,$recipient_id,$recipient_role_id){
         $data=[];
-        if($rec_role_id==6){
+        if($recipient_role_id==6){
             $data['recipient']= Supplier::find()
                     ->select(['id','icon','shop_name as name'])
                     ->asArray()
@@ -290,7 +289,7 @@ class UserChat extends \yii\db\ActiveRecord
                     ->one();
             $data['recipient']['hx_name']=User::find()->asArray()->select('username')->where(['id'=>$recipient_id])->one()['username'];
 
-        }elseif($rec_role_id==7){
+        }elseif($recipient_role_id==7){
             $data['recipient']=User::find()
                 ->select(['id','icon','nickname as name','username as hx_name'])
                 ->asArray()
