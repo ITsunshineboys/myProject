@@ -10,10 +10,8 @@ angular.module('all_controller',[])
             console.log(error)
         })
         // 微信事宜
-        _ajax.get('/order/get-open-id', {}, function (res) {
-            $http.get(res.data).then(function (res) {
-                alert(res.data.data)
-            })
+        _ajax.get('/order/get-open-id',{},function (res) {
+            alert(JSON.stringify(res))
         })
     })
     .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
