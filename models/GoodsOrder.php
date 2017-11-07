@@ -2393,6 +2393,7 @@ class GoodsOrder extends ActiveRecord
            ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
            ->select('
            a.pay_name,
+           a.supplier_id,
            z.order_status,
            z.customer_service,
            z.shipping_status,
@@ -2408,6 +2409,7 @@ class GoodsOrder extends ActiveRecord
            a.create_time,
            a.paytime,
            a.user_id,
+           a.role_id,
            a.address_id,
            a.return_insurance,
            z.goods_id,
@@ -2581,6 +2583,18 @@ class GoodsOrder extends ActiveRecord
        $output['invoicer_card']=$arr[0]['invoicer_card'];
        $output['consignee_mobile']=$arr[0]['consignee_mobile'];
        $output['invoice_header_type']=$arr[0]['invoice_header_type'];
+        if($user->last_role_id_app==6)
+       {
+           $output['uid']=$arr[0]['user_id'];
+           $output['to_role_id']=$arr[0]['role_id'];
+       }else{
+           $output['uid']=Supplier::find()
+               ->select('uid')
+               ->where(['id'=>$arr[0]['supplier_id']])
+               ->asArray()
+               ->one()['uid'];
+           $output['to_role_id']=6;
+       }
        $output['list']=$list;
 
        return $output;
