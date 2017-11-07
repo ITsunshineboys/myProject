@@ -78,8 +78,8 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     $scope.check_flag=false;
 
     $scope.table.roles=[];//清空全选状态
+    $scope.wjConfig.currentPage=1;
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
-    $scope.params.page=1;
     $scope.params.status='0';
     $scope.params.pid='0';
     $scope.params['sort[]']='offline_time:3';//下架时间，降序排序
@@ -93,6 +93,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     $scope.check_flag=false;
 
     $scope.table.roles=[];//清空全选状态
+    $scope.wjConfig.currentPage=1;
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
     $scope.params.page=1;
     $scope.params.status='1';
@@ -109,8 +110,8 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     $scope.firstselect=0;
 
     $scope.table.roles=[];//清空全选状态
+    $scope.wjConfig.currentPage=1;
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
-    $scope.params.page=1;
     $scope.params.status='1';
     $scope.params.pid='0'
     $scope.params['sort[]']='online_time:3';//上架时间，降序
@@ -125,6 +126,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     $scope.firstselect=0;
 
     $scope.table.roles=[];//清空全选状态
+    $scope.wjConfig.currentPage=1;
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
     $scope.params.page=1;
     $scope.params.status='0';
@@ -139,6 +141,7 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     $scope.on_flag=false;
     $scope.down_flag=false;
 
+    $scope.brand_Config.currentPage=1;
     $scope.brand_params.review_status=$scope.brand_types_arr[0].id;
     $scope.brand_params.start_time='';
     $scope.brand_params.end_time='';
