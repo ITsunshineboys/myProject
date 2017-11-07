@@ -1,6 +1,6 @@
 ;
 let commodity_manage = angular.module("commodity_manage", [])
-    .controller("commodity_manage_ctrl", function ($scope, $http, $state, $stateParams) {
+    .controller("commodity_manage_ctrl", function ($scope, $http, $state, $stateParams,_ajax) {
         $scope.myng = $scope;
         /*POST请求头*/
         const config = {
@@ -65,18 +65,14 @@ let commodity_manage = angular.module("commodity_manage", [])
         }
         let tablePages = function () {
             $scope.params.page = $scope.wjConfig.currentPage;//点击页数，传对应的参数
-            $http.get(baseUrl + '/mall/goods-list-admin', {
-                params: $scope.params
-            }).then(function (res) {
-                console.log(res);
+            _ajax.get('/mall/goods-list-admin', $scope.params,function (res) {
+                console.log(res)
                 if ($scope.on_flag == true) {
-                    $scope.up_list_arr = res.data.data.goods_list_admin.details;
-                } else if ($scope.down_flag == true) {
-                    $scope.down_list_arr = res.data.data.goods_list_admin.details;
-                }
-                $scope.wjConfig.totalItems = res.data.data.goods_list_admin.total;
-            }, function (err) {
-                console.log(err);
+                   $scope.up_list_arr = res.data.goods_list_admin.details;
+                   } else if ($scope.down_flag == true) {
+                    $scope.down_list_arr = res.data.goods_list_admin.details;
+                     }
+                    $scope.wjConfig.totalItems = res.data.goods_list_admin.total;
             })
         };
         $scope.params = {
@@ -268,13 +264,11 @@ let commodity_manage = angular.module("commodity_manage", [])
 
         //实时监听库存并修改
         $scope.change_left_number = function (id, left_num) {
-            $http.post(baseUrl+'/mall/goods-inventory-reset', {
+            _ajax.post('/mall/goods-inventory-reset', {
                 id: +id,
                 left_number: +left_num
-            }, config).then(function (res) {
-                console.log(res);
-            }, function (err) {
-                console.log(err);
+            },function (res) {
+              console.log(res);
             })
         };
         /*-------------------公共功能 结束---------------------------*/
@@ -325,14 +319,11 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //确认下架按钮
         $scope.offline_solo_btn = function () {
-            $http.post(baseUrl+'/mall/goods-status-toggle', {
+            _ajax.post('/mall/goods-status-toggle', {
                 id: $scope.offline_id
-            }, config).then(function (res) {
-                console.log(res);
+            },function (res) {
                 $scope.wjConfig.currentPage = 1; //页数跳转到第一页
                 tablePages();
-            }, function (err) {
-                console.log(err);
             })
         };
 
@@ -347,14 +338,12 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //下架确认按钮
         $scope.all_off_shelf_confirm = function () {
-            $http.post(baseUrl+'/mall/goods-disable-batch', {
+            _ajax.post('/mall/goods-disable-batch', {
                 ids: $scope.table.roles.join(',')
-            }, config).then(function (res) {
+            },function (res) {
                 $scope.table.roles = [];//清空全选状态
                 $scope.wjConfig.currentPage = 1; //页数跳转到第一页
                 tablePages();
-            }, function (err) {
-                console.log(err);
             })
         };
 
@@ -373,27 +362,18 @@ let commodity_manage = angular.module("commodity_manage", [])
         /*-----------添加分类--------------*/
         $scope.item_check = [];
         //获取一级
-        $http({
-            method: 'get',
-            url: baseUrl+'/mall/categories'
-        }).then(function successCallback(response) {
-            $scope.details = response.data.data.categories;
+        _ajax.get('/mall/categories',{},function (res) {
+            $scope.details = res.data.categories;
             $scope.oneColor = $scope.details[0];
         });
         //获取二级
-        $http({
-            method: 'get',
-            url: baseUrl+'/mall/categories?pid=1'
-        }).then(function successCallback(response) {
-            $scope.second = response.data.data.categories;
+        _ajax.get('/mall/categories',{pid:1},function (res) {
+            $scope.second = res.data.categories;
             $scope.twoColor = $scope.second[0];
         });
         //获取三级
-        $http({
-            method: 'get',
-            url: baseUrl+'/mall/categories?pid=2'
-        }).then(function successCallback(response) {
-            $scope.three = response.data.data.categories;
+        _ajax.get('/mall/categories',{pid:2},function (res) {
+            $scope.three = res.data.categories;
             for (let [key, value] of $scope.three.entries()) {
                 if ($scope.item_check.length == 0) {
                     value['complete'] = false
@@ -405,24 +385,15 @@ let commodity_manage = angular.module("commodity_manage", [])
                     }
                 }
             }
-        });
+        })
         //点击一级 获取相对应的二级
         $scope.getMore = function (n) {
             $scope.oneColor = n;
-            $http({
-                method: 'get',
-                url: baseUrl+'/mall/categories?pid=' + n.id
-            }).then(function successCallback(response) {
-                $scope.second = response.data.data.categories;
-                //console.log(response.data.data.categories[0].id);
-                console.log(response);
+            _ajax.get('/mall/categories',{pid:+n.id},function (res) {
+                $scope.second = res.data.categories;
                 $scope.twoColor = $scope.second[0];
-                $http({
-                    method: 'get',
-                    url: baseUrl+'/mall/categories?pid=' + $scope.second[0].id
-                }).then(function successCallback(response) {
-                    $scope.three = response.data.data.categories;
-                    //console.log(response.data.data.categories[0].id);
+                _ajax.get('/mall/categories',{pid:+ $scope.second[0].id},function (res) {
+                    $scope.three = res.data.categories;
                     for (let [key, value] of $scope.three.entries()) {
                         if ($scope.item_check.length == 0) {
                             value['complete'] = false
@@ -434,18 +405,16 @@ let commodity_manage = angular.module("commodity_manage", [])
                             }
                         }
                     }
-                });
-            });
+                })
+            })
+            $scope.threeColor='';
         };
         //点击二级 获取相对应的三级
         $scope.getMoreThree = function (n) {
             $scope.id = n;
             $scope.twoColor = n;
-            $http({
-                method: 'get',
-                url: baseUrl+'/mall/categories?pid=' + n.id
-            }).then(function successCallback(response) {
-                $scope.three = response.data.data.categories;
+            _ajax.get('/mall/categories',{pid:+n.id},function (res) {
+                $scope.three = res.data.categories;
                 for (let [key, value] of $scope.three.entries()) {
                     if ($scope.item_check.length == 0) {
                         value['complete'] = false
@@ -457,7 +426,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                         }
                     }
                 }
-            });
+            })
             $scope.threeColor='';
         };
         //添加拥有系列的三级
@@ -495,29 +464,18 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.add_confirm_red = false;//提示文字默认为false
             $scope.item_check = [];
             //获取一级
-            $http({
-                method: 'get',
-                url: baseUrl+'/mall/categories'
-            }).then(function successCallback(response) {
-                $scope.details = response.data.data.categories;
+            _ajax.get('/mall/categories',{},function (res) {
+                $scope.details = res.data.categories;
                 $scope.oneColor = $scope.details[0];
-            });
+            })
             //获取二级
-            $http({
-                method: 'get',
-                url: baseUrl+'/mall/categories?pid=1'
-            }).then(function successCallback(response) {
-                $scope.second = response.data.data.categories;
+            _ajax.get('/mall/categories',{pid:1},function (res) {
+                $scope.second = res.data.categories;
                 $scope.twoColor = $scope.second[0];
-                // console.log($scope.second)
-            });
+            })
             //获取三级
-            $http({
-                method: 'get',
-                url: baseUrl+'/mall/categories?pid=2'
-            }).then(function successCallback(response) {
-                // console.log(response)
-                $scope.three = response.data.data.categories;
+            _ajax.get('/mall/categories',{pid:2},function (res) {
+                $scope.three = res.data.categories;
                 for (let [key, value] of $scope.three.entries()) {
                     if ($scope.item_check.length == 0) {
                         value['complete'] = false
@@ -529,7 +487,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                         }
                     }
                 }
-            });
+            })
         };
         /*--------------------已上架 结束-------------------------*/
 
@@ -558,9 +516,9 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //上架确认按钮
         $scope.all_on_shelf_confirm = function () {
-            $http.post(baseUrl+'/mall/goods-status-toggle', {
+            _ajax.post('/mall/goods-status-toggle',{
                 id: +$scope.on_shelf_id
-            }, config).then(function (res) {
+            },function (res) {
                 $scope.down_search_value = '';//清空输入框值
                 $scope.params.keyword = '';
                 $scope.params['sort[]'] = 'offline_time:3';
@@ -568,8 +526,6 @@ let commodity_manage = angular.module("commodity_manage", [])
                 $scope.down_sort_time_img = 'lib/images/arrow_down.png';
                 $scope.wjConfig.currentPage = 1; //页数跳转到第一页
                 tablePages();
-            }, function (err) {
-                console.log(err)
             })
         };
 
@@ -589,14 +545,11 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         //删除确认按钮
         $scope.off_del_confirm = function () {
-            $http.post(baseUrl+'/mall/goods-delete-batch', {
+            _ajax.post('/mall/goods-delete-batch',{
                 ids: $scope.batch_del.join(',')
-            }, config).then(function (res) {
-                console.log(res);
+            },function (res) {
                 $scope.wjConfig.currentPage = 1; //页数跳转到第一页
                 tablePages();
-            }, function (err) {
-                console.log(err);
             })
         };
         //下架原因
