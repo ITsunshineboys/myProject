@@ -15,6 +15,7 @@ use vendor\wxpay\lib\WxPayUnifiedOrder;
 use vendor\wxpay\lib\WxPayApi;
 use vendor\wxpay\lib\log;
 use vendor\wxpay\lib\CLogFileHandler;
+use vendor\wxpay\lib\WxPayApi;
 class PayService
 {
 
