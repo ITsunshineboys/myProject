@@ -390,18 +390,21 @@ class ChatController extends Controller
           switch ($user_info['last_role_id_app']){
               case self::SUPPLIER_ROLE:
                   $v['nickname']=Supplier::find()->select('shop_name')->asArray()->where(['uid'=>$v['lxr']])->one()['shop_name'];
+                  $v['role_id']=$user_info['last_role_id_app'];
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
                   $v['icon']=Supplier::find()->select('icon')->asArray()->where(['uid'=>$v['lxr']])->one()['icon'];
                   $v['count']=count($all);
                   break;
               case self::OWNER_ROLE:
                   $v['nickname']=User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
+                  $v['role_id']=$user_info['last_role_id_app'];
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
                   $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
                   $v['count']=count($all);
                   break;
               case self::WORKER_ROLE:
                   $v['nickname']='工人-'.User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
+                  $v['role_id']=$user_info['last_role_id_app'];
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
                   $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
                   $v['count']=count($all);
