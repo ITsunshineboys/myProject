@@ -482,13 +482,14 @@ class ChatController extends Controller
         list($u_id, $role_id) = $user;
         $code=1000;
         $recipient_id=(int)\Yii::$app->request->get('recipient_id');
+        $recipient_role_id=(int)\Yii::$app->request->get('recipient_role_id');
         if(!$recipient_id){
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $user_data=UserChat::userinfos($u_id,$role_id,$recipient_id);
+        $user_data=UserChat::userinfos($u_id,$role_id,$recipient_id,$recipient_role_id);
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
