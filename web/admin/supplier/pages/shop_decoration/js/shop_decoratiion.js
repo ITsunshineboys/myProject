@@ -1,6 +1,6 @@
 ;
 let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngDraggable'])
-.controller('shop_decoration_ctrl',function ($scope,$http,$q,Upload) {
+.controller('shop_decoration_ctrl',function ($scope,$http,Upload,_ajax) {
   $scope.myng=$scope;
   let config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -32,27 +32,23 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   /*判断类型为Banner还是推荐，请求列表接口*/
   $scope.judgment=function () {
     if($scope.b_show_table_flag){
-      $http.get(baseUrl+'/mall/recommend-admin-index-supplier',{
-        params:{
+      $scope.params={
           district_code:510100,
           type:0
-        }
-      }).then(function (res) {
-        $scope.banner_list=res.data.data.recommend_admin_index_supplier.details;
-      },function (err) {
-        console.log(err);
+      };
+      _ajax.get('/mall/recommend-admin-index-supplier',$scope.params,function (res) {
+        console.log(res);
+          $scope.banner_list=res.data.recommend_admin_index_supplier.details;
       });
     }else{
-      $http.get(baseUrl+'/mall/recommend-admin-index-supplier',{
-        params:{
-          district_code:510100,
-          type:2
-        }
-      }).then(function (res) {
-        $scope.recommend_list=res.data.data.recommend_admin_index_supplier.details;
-      },function (err) {
-        console.log(err);
-      });
+        $scope.params={
+            district_code:510100,
+            type:2
+        };
+        _ajax.get('/mall/recommend-admin-index-supplier',$scope.params,function (res) {
+            console.log(res);
+            $scope.recommend_list=res.data.recommend_admin_index_supplier.details;
+        });
     }
   };
 
@@ -83,17 +79,13 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
 
 
   /*--------------------------Banner----------------------------------*/
-  $http.get(baseUrl+'/mall/recommend-admin-index-supplier',{
-    params:{
+  _ajax.get('/mall/recommend-admin-index-supplier',{
       district_code:510100,
       type:0
-    }
-  }).then(function (res) {
+  },function (res) {
     console.log(res);
-    $scope.banner_list=res.data.data.recommend_admin_index_supplier.details;
-  },function (err) {
-    console.log(err);
-  });
+      $scope.banner_list=res.data.recommend_admin_index_supplier.details;
+  })
   //Banner-sku获取
   $scope.banner_get_sku=function (num) {
     $scope.add_pass_sku=$scope.banner_add_sku;//把传过去的值重新定义，为确认按钮做判断
@@ -388,13 +380,8 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
 
   };
   $scope.banner_del_confirm=function () {
-    $http.post(baseUrl+'/mall/recommend-delete-batch-supplier',{
-      ids:$scope.delete_arr.join(',')
-    },config).then(function (res) {
-      console.log(res);
-      $scope.judgment();
-    },function (err) {
-      console.log(err);
+    _ajax.post('/mall/recommend-delete-batch-supplier',{ids:$scope.delete_arr.join(',')},function (res) {
+        $scope.judgment();
     })
   };
   //拖拽排序 - Banner
@@ -425,32 +412,22 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   };
   $scope.save_confirm=function () {
     console.log($scope.sort_order);
-    $http.post(baseUrl+'/mall/recommend-sort-supplier',{
-      ids:$scope.sort_order.join(',')
-    },config).then(function (res) {
-      console.log(res);
-    },function (err) {
-      console.log(err);
+    _ajax.post('/mall/recommend-sort-supplier',{ids:$scope.sort_order.join(',')},function (res) {
+        console.log(res);
     })
   };
 
 
   /*--------------------------推荐-----------------------------*/
-  $http.get(baseUrl+'/mall/recommend-admin-index-supplier',{
-    params:{
+  _ajax.get('/mall/recommend-admin-index-supplier',{
       district_code:510100,
       type:2
-    }
-  }).then(function (res) {
-    console.log(res);
-    $scope.recommend_list=res.data.data.recommend_admin_index_supplier.details;
-  },function (err) {
-    console.log(err);
-  });
+  },function (res) {
+      console.log(res);
+      $scope.recommend_list=res.data.recommend_admin_index_supplier.details;
+  })
   /*-----------------------Menu---------------------------*/
   // 分类菜单
-
-
   $scope.show_hide_menu=function () {
       $scope.show_1 = true;
       $scope.rec_1 = true;
