@@ -99,14 +99,7 @@ class PayService
     {
         $baseUrl = urlencode("http://test.cdlhzz.cn/order/find-open-id");
         $url = $this->__CreateOauthUrlForCode($baseUrl);
-        $content =Wxpay::curl($url,false,0); //请求发送短信
-        if($content){
-            $result = json_decode($content,true);
-            return $result;
-        }else{
-            //返回内容异常，以下可根据业务逻辑自行修改
-            echo "请求发送短信失败";
-        }
+        return $url;
     }
  
     /**
