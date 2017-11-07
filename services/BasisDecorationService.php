@@ -1415,6 +1415,7 @@ class BasisDecorationService
                     break;
             }
         }
+        var_dump($materials);exit;
         return self::profitMargin($materials);
     }
 
