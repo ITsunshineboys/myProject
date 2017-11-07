@@ -75,8 +75,8 @@
                                         <div class="collapse" id="collapseExample_comment">
                                             <div class="well">
                                                 <ul class="item_li">
-                                                    <li ng-repeat="item in series" ng-class="{'changeColor':check_index_series == $index}" ng-click="changeState ($index,item)">
-                                                       {{item.series}}
+                                                    <li ng-repeat="item in styles" ng-class="{'changeColor':check_index_series == $index}" ng-click="changeState ($index,item)">
+                                                       {{item.style}}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -95,10 +95,10 @@
                                         <div class="collapse" id="collapseExample">
                                             <div class="well">
                                                 <ul>
-                                                    <li ng-repeat="item in styles" ng-class="{'changeColor':check_index_style == $index}" ng-click="changeStyle ($index,item)">
-                                                        {{item.style}}
+                                                    <li ng-repeat="item in series" ng-class="{'changeColor':check_index_style == $index}" ng-click="changeStyle ($index,item)">
+                                                        {{item.series}}
                                                     </li>
-                                                </ul>`
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>

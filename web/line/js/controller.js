@@ -838,14 +838,14 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.show_harvest = true;
                 $scope.show_address = false;
             }
-            $state.go('order_commodity',({harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-                harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-                platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-                goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-                mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-                invoice_id:$scope.invoice_id
-            }))
+            // $state.go('order_commodity',({harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
+            //     harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
+            //     platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
+            //     goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
+            //     mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
+            //     regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
+            //     invoice_id:$scope.invoice_id
+            // }))
         };
         // 切换个人和单位
         $scope.choosePersonal = function () { //个人

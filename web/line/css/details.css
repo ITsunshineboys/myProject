@@ -292,3 +292,21 @@ section{
     font-size: 1.4rem;
     color: #9b9b9b;
 }
+.div_search{
+    width: 32rem;
+    position: relative;
+}
+.brand_search{
+    width: 25rem;
+    height: 3rem;
+    border-radius: .4rem;
+    border: 1px solid #9b9b9b;
+    font-size: 1.3rem;
+    padding-left: 1rem;
+    margin-left: 1rem;
+}
+.img_search{
+    position: absolute;
+    right: 7rem;
+    top:1rem;
+}
