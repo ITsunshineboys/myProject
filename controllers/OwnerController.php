@@ -1649,6 +1649,8 @@ class OwnerController extends Controller
                         $case_works_datum['cost'] = $cost * $case_works_datum['goods_quantity'];
                         $case_works_datum['name'] = $one_goods['name'];
                         $case_works_datum['quantity'] = $case_works_datum['goods_quantity'];
+                        $case_works_datum['effect_images'] = $goods['effect_images'];
+
                     }
                 }
             }
