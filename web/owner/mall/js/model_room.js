@@ -229,6 +229,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         _ajax.post("/owner/case-particulars", params, function (res) {
             console.log(res, "材料");
             let data = res.data;
+            sessionStorage.setItem("backman", JSON.stringify(data.backman_data));
             if (data === null) {
                 $scope.activeObj.type = 0;
                 return;
@@ -293,7 +294,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                         if (j.id === i.id) {
                                             flag = false;
                                             let bool = true;
-                                            for(let k of j.three_level) {
+                                            for (let k of j.three_level) {
                                                 // 判断三级分类是否相同,若相同则添加商品
                                                 if (k.title === obj.goods_three) {
                                                     bool = false;
