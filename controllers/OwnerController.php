@@ -1630,7 +1630,7 @@ class OwnerController extends Controller
             foreach ($data as $one_goods){
                 $sku [] = $one_goods['goods_code'];
             }
-            $select = "goods.id,goods.sku,goods.platform_price,goods.purchase_price_decoration_company,goods.logistics_template_id,goods_brand.name";
+            $select = "goods.id,goods.sku,goods.platform_price,goods.purchase_price_decoration_company,goods.logistics_template_id,goods_brand.name,goods.cover_image";
             $goods = Goods::findBySkuAll($sku,$select);
             if ($goods == null){
                 $code = 1061;

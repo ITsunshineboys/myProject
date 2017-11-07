@@ -425,8 +425,10 @@ class WorkerManagementController extends Controller
         // 全部订单
 
         if (empty($status)){
-            $worker_order = WorkerOrder::find()->select(['con_people,con_tel,order_no'])->where([])->all();
+            $where = [];
+            $worker_order = WorkerOrder::orderList($where);
         }
 
+        var_dump($worker_order);exit;
     }
 }

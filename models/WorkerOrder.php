@@ -1585,4 +1585,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
 //        return self::
     }
+
+    public static function orderList($where = [])
+    {
+        $select = 'worker_order.con_people,worker_order.con_tel,worker_order.order_no,worker_order.create_time,user.aite_cube_no,worker_type.worker_name,worker_order.amount,worker_order.status';
+        return self::find()
+            ->select($select)
+            ->where($where)
+            ->leftJoin('worker','worker.id = worker_order.worker_id')
+            ->leftJoin('user','user.id = worker.uid')
+            ->leftJoin('worker_type','worker_type.id = worker_order.id')
+            ->all();
+    }
 }
