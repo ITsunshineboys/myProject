@@ -67,21 +67,6 @@ angular.module('all_controller',[])
         if($rootScope.fromState_name == 'modelRoom'&&$rootScope.curState_name=='nodata.cell_search'){
             $scope.have_header = false
         }
-        //风格轮播图
-        $scope.$watch('cur_style', function (newVal, oldVal) {
-            if (newVal != '' || newVal != undefined) {
-                var mySwiper = new Swiper('.swiper-container', {
-                    direction: 'horizontal',
-                    loop: true,
-                    autoplay: 1000,
-                    observe: true,
-                    observeParents: true,
-
-                    // 如果需要分页器
-                    pagination: '.swiper-pagination'
-                })
-            }
-        })
         //切换楼梯结构
         $scope.toggleStairs = function (item) {
             $scope.nowStairs = +item.id

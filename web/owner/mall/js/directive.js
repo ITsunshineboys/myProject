@@ -1,21 +1,25 @@
 angular.module("directives", [])
-    .directive("swiper", function () {
+    .directive("swiper", function ($timeout) {
         return {
             restrict: "EA",
             link: function (scope, element, attrs) {
                 scope.$watch(scope.cur_style,function (newVal,oldVal) {
                     console.log(newVal)
                     if(newVal!=''||newVal!=undefined){
-                        var mySwiper = new Swiper('.swiper-container', {
-                            direction: 'horizontal',
-                            loop: true,
-                            autoplay: 1000,
-                            observe:true,
-                            observeParents:true,
+                        $timeout(function () {
+                            var mySwiper = new Swiper('.swiper-container', {
+                                direction: 'horizontal',
+                                loop: true,
+                                autoplay: 1000,
+                                autoplayDisableOnInteraction:false,
+                                effect:'slide',
+                                // observe:true,
+                                // observeParents:true,
 
-                            // 如果需要分页器
-                            pagination: '.swiper-pagination'
-                        })
+                                // 如果需要分页器
+                                pagination: '.swiper-pagination',
+                            })
+                        },0)
                     }
                 })
             }
@@ -49,12 +53,3 @@ angular.module("directives", [])
             }
         }
     })
-    // .directive('loading',function () {
-    //    return function () {
-    //        $('#myButton').on('click', function () {
-    //            var $btn = $(this).button('loading')
-    //            // business logic...
-    //            $btn.button('reset')
-    //        })
-    //    }
-    // })
