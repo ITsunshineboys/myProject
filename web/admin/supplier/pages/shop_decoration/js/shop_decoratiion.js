@@ -15,14 +15,14 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   $scope.b_show_table_flag=true;
   $scope.r_show_table_flag=false;
   $scope.banner_tab=function () {
-     //$scope.show_hide_menu();
+    $scope.show_hide_menu();
     $scope.b_tab_class='bottom_border';
     $scope.r_tab_class='';
     $scope.b_show_table_flag=true;
     $scope.r_show_table_flag=false;
   };
   $scope.recommend_tab=function () {
-     //$scope.show_hide_menu();
+    $scope.show_hide_menu();
     $scope.b_tab_class='';
     $scope.r_tab_class='bottom_border';
     $scope.b_show_table_flag=false;
@@ -449,120 +449,43 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   });
   /*-----------------------Menu---------------------------*/
   // 分类菜单
+
+
   $scope.show_hide_menu=function () {
-    $scope.show_1=true;$scope.rec_1=true;$scope.show_2=true;$scope.rec_2=true;
-    $scope.show_3=true;$scope.rec_3=true;$scope.show_4=true;$scope.rec_4=true;
-    $scope.show_5=true;$scope.rec_5=true;$scope.show_6=true;$scope.rec_6=true;
-    $scope.show_7=true;$scope.rec_7=true;$scope.show_8=false;$scope.rec_8=false;
-    $scope.show_9=false;$scope.rec_9=false;$scope.show_10=false;$scope.rec_10=false;
-    $scope.show_11=false;$scope.rec_11=false;$scope.show_12=false;$scope.rec_12=false;
-    $scope.show_13=false;$scope.rec_13=false;$scope.show_14=false;$scope.rec_14=false;
-    $scope.show_15=true;$scope.rec_15=true;
-  };
+      $scope.show_1 = true;
+      $scope.rec_1 = true;
+      $scope.show_2 = true;
+      $scope.rec_2 = true;
+      $scope.show_3 = true;
+      $scope.rec_3 = true;
+      $scope.show_4 = true;
+      $scope.rec_4 = true;
+      $scope.show_5 = true;
+      $scope.rec_5 = true;
+      $scope.show_6 = true;
+      $scope.rec_6 = true;
+      $scope.show_7 = true;
+      $scope.rec_7 = true;
+      $scope.show_8 = false;
+      $scope.rec_8 = false;
+      $scope.show_9 = false;
+      $scope.rec_9 = false;
+      $scope.show_10 = false;
+      $scope.rec_10 = false;
+      $scope.show_11 = false;
+      $scope.rec_11 = false;
+      $scope.show_12 = false;
+      $scope.rec_12 = false;
+      $scope.show_13 = false;
+      $scope.rec_13 = false;
+      $scope.show_14 = false;
+      $scope.rec_14 = false;
+      $scope.show_15 = true;
+      $scope.rec_15 = true;
+  }
   $scope.show_hide_menu();
-  $scope.show_a= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_1=true: $scope.show_1=false;
-    }else{
-      m===true?$scope.rec_1=true: $scope.rec_1=false;
-    }
-  };
-  $scope.show_b= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_2=true: $scope.show_2=false;
-    }else{
-      m===true?$scope.rec_2=true: $scope.rec_2=false;
-    }
-  };
-  $scope.show_c= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_3=true: $scope.show_3=false;
-    }else{
-      m===true?$scope.rec_3=true: $scope.rec_3=false;
-    }
-  };
-  $scope.show_d= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_4=true: $scope.show_4=false;
-    }else{
-      m===true?$scope.rec_4=true: $scope.rec_4=false;
-    }
-  };
-  $scope.show_e= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_5=true: $scope.show_5=false;
-    }else{
-      m===true?$scope.rec_5=true: $scope.rec_5=false;
-    }
-  };
-  $scope.show_f= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_6=true: $scope.show_6=false;
-    }else{
-      m===true?$scope.rec_6=true: $scope.rec_6=false;
-    }
-  };
-  $scope.show_g= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_7=true: $scope.show_7=false;
-    }else{
-      m===true?$scope.rec_7=true: $scope.rec_7=false;
-    }
-  };
-  $scope.show_h= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_8=true: $scope.show_8=false;
-    }else{
-      m===true?$scope.rec_8=true: $scope.rec_8=false;
-    }
-  };
-  $scope.show_i= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_9=true: $scope.show_9=false;
-    }else{
-      m===true?$scope.rec_9=true: $scope.rec_9=false;
-    }
-  };
-  $scope.show_j= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_10=true: $scope.show_10=false;
-    }else{
-      m===true?$scope.rec_10=true: $scope.rec_10=false;
-    }
-  };
-  $scope.show_k= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_11=true: $scope.show_11=false;
-    }else{
-      m===true?$scope.rec_11=true: $scope.rec_11=false;
-    }
-  };
-  $scope.show_l= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_12=true: $scope.show_12=false;
-    }else{
-      m===true?$scope.rec_12=true: $scope.rec_12=false;
-    }
-  };
-  $scope.show_m= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_13=true: $scope.show_13=false;
-    }else{
-      m===true?$scope.rec_13=true: $scope.rec_13=false;
-    }
-  };
-  $scope.show_n= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_14=true: $scope.show_14=false;
-    }else{
-      m===true?$scope.rec_14=true: $scope.rec_14=false;
-    }
-  };
-  $scope.show_o= function (m) {
-    if($scope.b_show_table_flag){
-      m===true?$scope.show_15=true: $scope.show_15=false;
-    }else{
-      m===true?$scope.rec_15=true: $scope.rec_15=false;
-    }
-  };
+    $scope.show_all = function (m) {
+        console.log(m)
+        m === true ? $scope[m] = true : $scope[m] = false;
+    };
 });
