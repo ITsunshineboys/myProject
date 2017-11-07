@@ -346,7 +346,7 @@ class ChatController extends Controller
         }else{
             $res['news']=[
                 'content'=>'没有更多消息',
-                'time'=>date('Y-m-d',time()),
+                'send_time'=>date('Y-m-d',time()),
                 'uid'=>$u_id,
                 'status'=>'1'
             ];
