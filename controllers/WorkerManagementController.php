@@ -23,6 +23,9 @@ class WorkerManagementController extends Controller
 {
 
     const ORDER_STATUS_ACCOMPLISH = 5;
+    const STATUS = [
+      'cancel' => 0,
+    ];
     /**
      * @inheritdoc
      */
@@ -413,4 +416,17 @@ class WorkerManagementController extends Controller
         }
     }
 
+    /**
+     * 工程订单列表
+     */
+    public function actionWorkOrderList()
+    {
+        $status = (int)trim(\Yii::$app->request->post('status',''));
+        // 全部订单
+
+        if ($status){
+
+        }
+
+    }
 }

@@ -1319,10 +1319,14 @@ class OwnerController extends Controller
             foreach ($post['list'] as &$materials){
                 if ($one_coefficient->classify == $materials['one_title']){
                    $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
-                }else{
-                    $materials['goods_price'] = $materials['price'] * 1;
                 }
+            }
+        }
 
+
+        foreach ($post['list'] as &$default){
+            if (empty($default['goods_price'])){
+                $default['goods_price'] = $default['price'] * 1;
             }
         }
 
@@ -1333,7 +1337,6 @@ class OwnerController extends Controller
            $special_offer += $price['goods_price'];
 
         }
-
         $total = sprintf('%.2f', (float)$total_prices);
         $special = sprintf('%.2f', (float)$special_offer);
         return Json::encode([
@@ -1643,8 +1646,10 @@ class OwnerController extends Controller
                         $cost = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
                         $case_works_datum['goods_id'] = $one_goods['id'];
                         $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
-                        $case_works_datum['goods_original_price'] = $cost * $case_works_datum['goods_quantity'];
-                        $case_works_datum['goods_brand_name'] = $one_goods['name'];
+                        $case_works_datum['cost'] = $cost * $case_works_datum['goods_quantity'];
+                        $case_works_datum['shop_name'] = $one_goods['name'];
+                        $case_works_datum['quantity'] = $case_works_datum['goods_quantity'];
+                        unset($case_works_datum['goods_quantity']);
                     }
                 }
             }
