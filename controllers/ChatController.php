@@ -345,9 +345,10 @@ class ChatController extends Controller
             $res['news']['send_time']=date('Y-m-d',$res['news']['send_time']);
         }else{
             $res['news']=[
-              'content'=>'没有更多消息',
-              'time'=>date('Y-m-m',time()),
-              'uid'=>$u_id,
+                'content'=>'没有更多消息',
+                'time'=>date('Y-m-d',time()),
+                'uid'=>$u_id,
+                'status'=>'1'
             ];
         }
 
