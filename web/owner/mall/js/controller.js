@@ -595,8 +595,11 @@ angular.module('all_controller',[])
                     params:{
                         category_id: item.id,
                     }
-                }).then(function(response){
-                    console.log(response)
+                }).then(function(res){
+                    console.log(res)
+                    $scope.all_goods_series = res.data.data.category_brands_styles_series.series
+                    $scope.all_goods_style = res.data.data.category_brands_styles_series.style
+                    $scope.all_goods_brands = res.data.data.category_brands_styles_series.brands
                 },function(error){
                     console.log(error)
                 })
