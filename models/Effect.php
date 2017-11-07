@@ -129,7 +129,7 @@ class Effect extends ActiveRecord
                 'stair_id'      => $post['stair_id'],
                 'sort_id'      => $sort_id,
             ])->execute();
-            var_dump($res);die;
+
             if(!$res){
                 $tran->rollBack();
                 return false;
@@ -176,6 +176,7 @@ class Effect extends ActiveRecord
             $tran->commit();
             return $id;
         }catch (Exception $e){
+            var_dump($e);
             $tran->rollBack();
             return false;
         }
