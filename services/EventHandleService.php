@@ -59,6 +59,7 @@ class EventHandleService
                         $user = User::find()->where(['mobile' => $data])->one();
                         if ($user) {
                             $user->username = $username;
+                            $user->hx_pwd = StringService::getUniqueStringBySalt($data);
                             if (!$user->save()) {
                                 $update = 'update ' . User::tableName() . ' set username = ' . $username;
                                 $where = ' where id = ' . $user->id . ';';
