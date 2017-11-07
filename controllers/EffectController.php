@@ -77,16 +77,25 @@ class EffectController extends Controller
         $code=1000;
         $phone  = trim($request->post('phone', ''), '');
         if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
 
             ]);
         }
         $code=Effect::addneweffect($post);
-        return json_encode([
-            'code' => $code,
-            'msg' =>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+
+        if(!$code){
+            $code=1000;
+            return Json::encode([
+                'code' =>$code,
+                'msg' =>\Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok'
 
         ]);
 
