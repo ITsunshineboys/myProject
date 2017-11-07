@@ -1319,14 +1319,10 @@ class OwnerController extends Controller
             foreach ($post['list'] as &$materials){
                 if ($one_coefficient->classify == $materials['one_title']){
                    $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
+                }else{
+                    $materials['goods_price'] = $materials['price'] * 1;
                 }
-            }
-        }
 
-
-        foreach ($post['list'] as &$default){
-            if (empty($default['goods_price'])){
-                $default['goods_price'] = $default['price'] * 1;
             }
         }
 
@@ -1338,7 +1334,6 @@ class OwnerController extends Controller
 
         }
 
-        
         $total = sprintf('%.2f', (float)$total_prices);
         $special = sprintf('%.2f', (float)$special_offer);
         return Json::encode([
