@@ -6,7 +6,6 @@ use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
 use app\models\Role;
-use app\models\District;
 use app\models\UserRole;
 use app\models\LogisticsDistrict;
 use app\models\Addressadd;
@@ -18,6 +17,7 @@ use app\services\StringService;
 use app\services\SmValidationService;
 use app\services\AuthService;
 use app\services\ModelService;
+use app\services\EventHandleService;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -172,7 +172,7 @@ class SiteController extends Controller
                 !empty($postData[$modelName]['registration_id']) && $user->registration_id = $postData[$modelName]['registration_id'];
                 $user->afterLogin();
 
-                return Json::encode([
+                echo Json::encode([
                     'code' => 200,
                     'msg' => '登录成功',
                     'data' => [
@@ -181,6 +181,21 @@ class SiteController extends Controller
                         ],
                     ],
                 ]);
+
+                $events = Yii::$app->params['events'];
+                $event = $events['async'];
+                $data = [
+                    'event' => [
+                        'name' => $events['user']['login'],
+                        'data' => [
+                            'mobile' => $user->mobile,
+                            'username' => $user->username,
+                            'registrationId' => $user->registration_id,
+                        ],
+                    ],
+                ];
+                new EventHandleService($event, $data);
+                Yii::$app->trigger($event);
             }
         }
 

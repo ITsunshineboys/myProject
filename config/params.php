@@ -97,6 +97,7 @@ return [
         '3rd' => [
             'failed' => [
                 'createHuanxinUser' => 'failed_create_huanxin_user',
+                'resetHuanxinUserPassword' => 'failed_reset_huanxin_user_password',
             ],
         ],
         'db' => [
@@ -104,6 +105,7 @@ return [
         ],
         'user' => [
             'register' => 'user_register',
+            'login' => 'user_login',
         ],
         'system' => [
             'error' => 'system_error',

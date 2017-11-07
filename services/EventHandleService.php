@@ -94,6 +94,14 @@ class EventHandleService
                 });
                 break;
 
+            // user login
+            case $events['user']['login']:
+                Yii::$app->on($events['user']['login'], function () use ($data, $events) {
+                    $newHuanXinPwd = User::generateHxPwd($data['mobile'], $data['registrationId'], $data['username']);
+                    User::resetHuanXinUserPwd($data['username'], $newHuanXinPwd);
+                });
+                break;
+
             // supplier login
             case $events['supplier']['login']:
                 Yii::$app->on($events['supplier']['login'], function () use ($data) {

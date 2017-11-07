@@ -1003,6 +1003,100 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Create huan xin user by username
+     *
+     * @param string $username username
+     * @param int $retryTimes retry times default 3
+     * @return bool
+     */
+    public static function createHuanXinUser($username, $retryTimes = self::RETYR_TIMES_CREATE_HUANXIN_USER)
+    {
+        $success = false;
+
+        $username = trim($username);
+        if (!$username) {
+            return $success;
+        }
+
+        $hxPwd = Yii::$app->params['chatOptions']['user_password_default']; // StringService::getUniqueStringBySalt(substr($username, 0, 11));
+        for ($i = 0; $i < $retryTimes; $i++) {
+            $res = (new ChatService)->createUser($username, $hxPwd);
+            if (!array_key_exists('error', $res)) {
+                $success = true;
+                break;
+            }
+        }
+
+        if (!$success) {
+            $event = Yii::$app->params['events']['3rd']['failed']['createHuanxinUser'];
+            new EventHandleService($event, $username);
+            Yii::$app->trigger($event);
+        }
+
+        return $success;
+    }
+
+    /**
+     * Reset huan xin user password
+     *
+     * @param string $username username
+     * @param string $hxPwd user huan xin password
+     * @param int $retryTimes retry times default 3
+     * @return bool
+     */
+    public static function resetHuanXinUserPwd($username, $hxPwd, $retryTimes = self::RETYR_TIMES_CREATE_HUANXIN_USER)
+    {
+        $success = false;
+
+        $username = trim($username);
+        $hxPwd = trim($hxPwd);
+        if (!$username || !$hxPwd) {
+            return $success;
+        }
+
+        for ($i = 0; $i < $retryTimes; $i++) {
+            $res = (new ChatService)->resetPassword($username, $hxPwd);
+            if (!array_key_exists('error', $res)) {
+                $success = true;
+                break;
+            }
+        }
+
+        if (!$success) {
+            $event = Yii::$app->params['events']['3rd']['failed']['resetHuanxinUserPassword'];
+            new EventHandleService($event, $username);
+            Yii::$app->trigger($event);
+        }
+
+        return $success;
+    }
+
+    /**
+     * Generate huan xin password
+     *
+     * @param string $mobile
+     * @param string $restrationId
+     * @param string $hxUsername
+     * @return string
+     */
+    public static function generateHxPwd($mobile, $restrationId, $hxUsername)
+    {
+        $salt = Yii::$app->params['security']['salt'];
+        $w = date('w');
+        $wCnt = substr_count($mobile, $w);
+        $sum = $w + $wCnt + strlen($salt) + strlen($restrationId);
+        return md5($mobile . md5(md5($restrationId) . $hxUsername) . $sum . $salt);
+    }
+
+    /**
+     * @return string 返回该AR类关联的数据表名
+     */
+    public static function tableName()
+    {
+        return 'user';
+    }
+
+    /**
      * Reset user's new mobile
      *
      * @param int $mobile mobile
@@ -1721,48 +1815,6 @@ class User extends ActiveRecord implements IdentityInterface
         $key = self::CACHE_PREFIX . $this->id;
         $cache = Yii::$app->cache;
         $cache->set($key, $this);
-    }
-
-    /**
-     * Create huan xin user by username
-     *
-     * @param string $username username
-     * @param int $retryTimes retry times default 3
-     * @return bool
-     */
-    public static function createHuanXinUser($username, $retryTimes = self::RETYR_TIMES_CREATE_HUANXIN_USER)
-    {
-        $success = false;
-
-        $username = trim($username);
-        if (!$username) {
-            return $success;
-        }
-
-        $hxPwd = StringService::getUniqueStringBySalt(substr($username, 0, 11));
-        for ($i = 0; $i < $retryTimes; $i++) {
-            $res = (new ChatService)->createUser($username, $hxPwd);
-            if (!array_key_exists('error', $res)) {
-                $success = true;
-                break;
-            }
-        }
-
-        if (!$success) {
-            $event = Yii::$app->params['events']['3rd']['failed']['createHuanxinUser'];
-            new EventHandleService($event, $username);
-            Yii::$app->trigger($event);
-        }
-
-        return $success;
-    }
-
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'user';
     }
 
     /**
