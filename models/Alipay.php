@@ -69,6 +69,7 @@ class Alipay extends  ActiveRecord
         $id=Effect::addneweffect($post);
         if ($id==false)
         {
+            echo 1;exit;
             return false;
         }
         $str=$id;
