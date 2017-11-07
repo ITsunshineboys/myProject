@@ -339,7 +339,10 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   $scope.banner_detail=function (item) {
     console.log(item);
     $scope.banner_detail_title=item.title;
+    $scope.banner_detail_from_type=item.from_type;
+    $scope.banner_detail_sku=item.sku;
     $scope.banner_detail_left_number=item.left_number;
+    $scope.banner_detail_create_time=item.create_time;
     $scope.banner_detail_supplier_price=item.supplier_price;
     $scope.banner_detail_platform_price=item.platform_price;
     $scope.banner_detail_market_price=item.market_price;

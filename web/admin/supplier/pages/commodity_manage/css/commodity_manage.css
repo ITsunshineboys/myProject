@@ -41,6 +41,7 @@ section{
   height: 60px;
   line-height: 60px;
   margin-right: 25px;
+  cursor: pointer;
 }
 .tab_blue{
   color: #5677FC;
