@@ -205,6 +205,12 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
 
     // 修改材料
     $scope.editMaterial = function (index) {
+        let huxing = {
+            area: $scope.activeObj.area,
+            series: $scope.activeObj.case_picture[0].series_id,
+            style: $scope.activeObj.case_picture[0].series_id
+        };
+        sessionStorage.setItem("huxing", JSON.stringify(huxing));
         sessionStorage.setItem("materials", JSON.stringify($scope.materials));
         switch (index) {
             case 0:
