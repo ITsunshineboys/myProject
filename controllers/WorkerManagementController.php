@@ -84,9 +84,16 @@ class WorkerManagementController extends Controller
         foreach ($worker_price as $one_cost){
             $cost += $one_cost['amount'];
         }
-        var_dump($cost);
-        $a = printf("%.2f",(float)$cost * 0.01);
-        var_dump($a);exit;
+
+        return Json::encode([
+           'code' => 200,
+           'msg' => 'ok',
+            'data' => [
+                'worker_count' => $worker_count,
+                'worker_order' => $worker_order,
+                'worker_cost' => sprintf("%.2f",(float)$cost * 0.01),
+            ]
+        ]);
     }
 
     /**
