@@ -3,7 +3,11 @@
 <div ng-controller="order_commodity_ctrl" ng-cloak>
     <header>
         <div>
-            <img src="images/mall_nav_return.png" ng-click="getProduct_details()" alt="">
+            <a href="javascript:history.go(-1)">
+                <img src="images/mall_nav_return.png" alt="">
+            </a>
+            <!--ng-click="getProduct_details()"-->
+
             <span>确认订单</span>
         </div>
     </header>
