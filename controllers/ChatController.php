@@ -475,6 +475,7 @@ class ChatController extends Controller
     }
     public function actionTest(){
         $chat=new ChatService();
+
        $a= $chat->resetPassword('53914510915189331350582011','abc');
         var_dump($a);
     }
