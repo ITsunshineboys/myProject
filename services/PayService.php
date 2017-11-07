@@ -50,7 +50,7 @@ class PayService
         //通过code获得openid
         if (!isset($_GET['code'])){
             //触发微信返回code码
-            $baseUrl = urlencode('http://common.cdlhzz.cn/order/lineplaceorder');
+            $baseUrl = urlencode('http://test.cdlhzz.cn/order/lineplaceorder');
             $url = $this->__CreateOauthUrlForCode($baseUrl);
             return $url;
 //            Header("Location: $url");
