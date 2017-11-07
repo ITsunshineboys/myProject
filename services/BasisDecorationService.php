@@ -1406,6 +1406,7 @@ class BasisDecorationService
      */
     public static function fixationFurnitureSeriesStyle($goods,$post)
     {
+        var_dump($goods);exit;
         foreach ($goods as $one_goods) {
             switch ($one_goods) {
                 case $one_goods['title'] == self::GOODS_NAME['closet'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']:

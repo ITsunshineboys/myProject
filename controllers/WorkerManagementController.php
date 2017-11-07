@@ -21,6 +21,8 @@ use yii\web\Controller;
 
 class WorkerManagementController extends Controller
 {
+
+    const ORDER_STATUS_ACCOMPLISH = 5;
     /**
      * @inheritdoc
      */
@@ -77,8 +79,14 @@ class WorkerManagementController extends Controller
         //工人订单
         $worker_order = WorkerOrder::find()->groupBy('order_no')->count('id');
         //工人总金额
-//        $worker_price = WorkerOrder::
-        var_dump($worker_order);exit;
+        $worker_price = WorkerOrder::find()->select('amount')->where(['status'=>self::ORDER_STATUS_ACCOMPLISH])->all();
+        $cost = 0;
+        foreach ($worker_price as $one_cost){
+            $cost += $one_cost['amount'];
+        }
+        var_dump($cost);
+        $a = printf("%.2f",(float)$cost * 0.01);
+        var_dump($a);exit;
     }
 
     /**
