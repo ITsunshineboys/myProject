@@ -305,7 +305,7 @@ class UserChat extends \yii\db\ActiveRecord
                 ->one();
             $hx=User::find()->asArray()->select('hx_pwd,username')->where(['id'=>$uid])->one();
             $data['user']['hx_pwd']=$hx['hx_pwd'];
-            $data['user']['hx_name']=$hx['hx_name'];
+            $data['user']['hx_name']=$hx['username'];
         }elseif($role_id==7){
             $data['user']=User::find()
                 ->select(['id','icon','nickname as name','username as hx_name'])
@@ -314,7 +314,7 @@ class UserChat extends \yii\db\ActiveRecord
                 ->one();
             $hx=User::find()->asArray()->select('hx_pwd,username')->where(['id'=>$uid])->one();
             $data['user']['hx_pwd']=$hx['hx_pwd'];
-            $data['user']['hx_name']=$hx['hx_name'];
+            $data['user']['hx_name']=$hx['username'];
         }
         if(!$data){
           return null;
