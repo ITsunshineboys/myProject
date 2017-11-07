@@ -1999,6 +1999,36 @@ class GoodsOrder extends ActiveRecord
                         $code=1000;
                         return $code;
                     }
+
+                    $date=date('Ymd',time());
+                    $GoodsStat=GoodsStat::find()
+                        ->where(['supplier_id'=>$GoodsOrder->supplier_id])
+                        ->andWhere(['create_date'=>$date])
+                        ->one();
+                    if (!$GoodsStat)
+                    {
+                        $GoodsStat=new GoodsStat();
+                        $GoodsStat->supplier_id=$GoodsOrder->supplier_id;
+                        $GoodsStat->sold_number=$Goods['goods_number'];
+                        $GoodsStat->amount_sold=$GoodsOrder->amount_order;
+                        $GoodsStat->create_date=$date;
+                        if ($GoodsStat->save(false))
+                        {
+                            $code=500;
+                            $tran->rollBack();
+                            return $code;
+                        }
+                    }else{
+                        $GoodsStat->sold_number+=$Goods['goods_number'];
+                        $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
+                        $GoodsStat->create_date=$date;
+                        if ($GoodsStat->save(false))
+                        {
+                            $code=500;
+                            $tran->rollBack();
+                            return $code;
+                        }
+                    }
                 }
                 if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                 {
