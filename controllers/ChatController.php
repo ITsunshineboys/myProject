@@ -474,8 +474,6 @@ class ChatController extends Controller
         ]);
     }
     public function actionTest(){
-        $a=ChatRecord::find()->asArray()->all();
-        var_dump($a);
-
+        var_dump(User::find()->select('username')->all());
     }
 }
