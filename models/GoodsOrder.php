@@ -347,13 +347,13 @@ class GoodsOrder extends ActiveRecord
    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
     {
 
-        if (!$sort_time && $sort_money==2)
+        if ($sort_time=='' && $sort_money==2)
         {
-            $sort='a.amount_order desc'; 
+            $sort="  (z.goods_price*z.goods_number) desc";
         }
-        if (!$sort_time  && $sort_money==1)
+        if (!$sort_time && $sort_money==1)
         {
-            $sort='a.amount_order asc';
+            $sort="  (z.goods_price*z.goods_number) asc";
         }
         if (!$sort_money && $sort_time==2)
         {
