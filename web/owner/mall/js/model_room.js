@@ -188,6 +188,17 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             sale_price: $scope.preferential,                            // 打折价
             material: [],                                               // 商品信息
         };
+        for (let obj of $scope.materials) {
+            for (let o of obj.goods) {
+                let tempObj = {
+                    goods_id: o.goods_id,
+                    count: o.quantity,
+                    price: o.cost,
+                    first_cate_id: obj.id
+                };
+                payParams.material.push(tempObj);
+            }
+        }
         sessionStorage.setItem("payParams", JSON.stringify(payParams));
         $state.go("deposit");
     };
@@ -239,11 +250,11 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                     one_title: obj.goods_first,
                     two_title: obj.goods_second,
                     three_title: obj.goods_three,
-                    price: obj.goods_original_price
+                    price: obj.cost
                 };
                 let tempFreight = {
                     goods_id: obj.id,
-                    num: obj.goods_quantity
+                    num: obj.quantity
                 };
                 params.list.push(tempObj);
                 freightParams.goods.push(tempFreight);
@@ -293,7 +304,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
 
             for (let obj of $scope.materials) {
                 for (let o of obj.goods) {
-                    obj.totalMoney += parseFloat(o.goods_original_price);
+                    obj.totalMoney += parseFloat(o.cost);
                 }
             }
 

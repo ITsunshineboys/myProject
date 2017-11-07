@@ -160,8 +160,8 @@
                             <span ng-show="$parent.$index == 0">{{data.goods_second}}</span>
                             <span ng-show="$parent.$index != 0">{{data.goods_three}}</span>
                             <br ng-show="$parent.$index != 0">
-                            <span class="brand" ng-show="$parent.$index != 0">{{data.goods_brand_name}}</span>
-                            <span class="pic_q">{{'¥' + data.goods_original_price}}</span>
+                            <span class="brand" ng-show="$parent.$index != 0">{{data.name}}</span>
+                            <span class="pic_q">{{'¥' + data.cost}}</span>
                         </li>
                     </ul>
                     <a class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</a>
@@ -179,8 +179,8 @@
                             <span ng-show="$parent.$index == 1">{{data.goods_second}}</span>
                             <span ng-show="$parent.$index != 1">{{data.goods_three}}</span>
                             <br ng-show="$parent.$index != 1">
-                            <span class="brand" ng-show="$parent.$index != 1">{{data.goods_brand_name}}</span>
-                            <span class="pic_q">{{'¥' + data.goods_original_price}}</span>
+                            <span class="brand" ng-show="$parent.$index != 1">{{data.name}}</span>
+                            <span class="pic_q">{{'¥' + data.cost}}</span>
                         </li>
                     </ul>
                     <a class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</a>
