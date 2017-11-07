@@ -1399,9 +1399,10 @@ CREATE TABLE `engineering_standard_carpentry_craft` (
 CREATE TABLE `coefficient_management` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `classify` varchar(5) DEFAULT NULL COMMENT '分类',
-  `coefficient` float(10,2) DEFAULT NULL COMMENT '系数值',
+  `coefficient` float(10,2) DEFAULT '1.00' COMMENT '系数值',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `user_freezelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
