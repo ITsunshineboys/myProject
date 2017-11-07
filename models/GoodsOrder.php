@@ -328,6 +328,33 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
+
+            $date=date('Ymd',time());
+            $GoodsStat=GoodsStat::find()
+                ->where(['supplier_id'=>$supplier_id])
+                ->andWhere(['create_date'=>$date])
+                ->one();
+            if (!$GoodsStat)
+            {
+                $GoodsStat=new GoodsStat();
+                $GoodsStat->supplier_id=$supplier_id;
+                $GoodsStat->sold_number=$goods_num;
+                $GoodsStat->amount_sold=$post['total_amount']*100;
+                $GoodsStat->create_date=$date;
+                if ($GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }else{
+                $GoodsStat->sold_number+=$goods_num;
+                $GoodsStat->amount_sold+=$post['total_amount']*100;
+                if ($GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
             $tran->commit();
             return true;
         }catch (Exception $e) {
