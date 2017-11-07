@@ -351,7 +351,7 @@ class ChatController extends Controller
 
         if(!$data){
             $data=[];
-            $res['chat_news']=[];
+            $res['chat_news']=(object)[];
         }
        foreach ($data as $k=>&$v){
 
