@@ -1632,7 +1632,6 @@ class OwnerController extends Controller
             }
             $select = "goods.id,goods.sku,goods.platform_price,goods.purchase_price_decoration_company,goods.logistics_template_id,goods_brand.name,goods.cover_image";
             $goods = Goods::findBySkuAll($sku,$select);
-            var_dump($goods);exit;
             if ($goods == null){
                 $code = 1061;
                 return Json::encode([
@@ -1650,7 +1649,7 @@ class OwnerController extends Controller
                         $case_works_datum['cost'] = $cost * $case_works_datum['goods_quantity'];
                         $case_works_datum['name'] = $one_goods['name'];
                         $case_works_datum['quantity'] = $case_works_datum['goods_quantity'];
-                        $case_works_datum['images'] = $goods['cover_image'];
+                        $case_works_datum['image'] = $goods['cover_image'];
 
                     }
                 }
