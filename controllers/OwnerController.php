@@ -1320,6 +1320,12 @@ class OwnerController extends Controller
                 }
             }
         }
+        foreach ($post['list'] as &$default){
+            if (empty($default['goods_price'])){
+                $default['goods_price'] = 1;
+            }
+        }
+        var_dump($post['list']);exit;
         $special_offer = 0;
         $total_prices = 0;
         foreach ($post['list'] as $price){
