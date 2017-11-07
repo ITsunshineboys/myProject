@@ -436,7 +436,7 @@ CREATE TABLE `goods_stat` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` int unsigned not null default 0,
   `sold_number` int unsigned not null default 0 comment '销售数量',
-  `amount_sold` int unsigned not null default 0 comment '销售额',
+  `amount_sold` bigint(20) unsigned not null default 0 comment '销售额',
   `create_date` int(8) not null DEFAULT 0,
   `ip_number` int(11) unsigned not null default 0 comment '游客数',
   `viewed_number` int(11) unsigned not null default 0 comment '访问量',

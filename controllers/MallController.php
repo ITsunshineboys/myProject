@@ -4181,7 +4181,7 @@ class MallController extends Controller
             'data' => [
                 'shop_data' => [
                     'total_sold_number' => GoodsStat::totalSoldNumber($where),
-                    'total_amount_sold' => GoodsStat::totalAmountSold($where),
+                    'total_amount_sold' => StringService::formatPrice(GoodsStat::totalAmountSold($where) / 100),
                     'total_ip_number' => GoodsStat::totalIpNumber($where),
                     'total_viewed_number' => GoodsStat::totalViewedNumber($where),
                     'total' => $paginationData['total'],
