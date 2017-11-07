@@ -1739,9 +1739,9 @@ class User extends ActiveRecord implements IdentityInterface
             return $success;
         }
 
+        $hxPwd = StringService::getUniqueStringBySalt(substr($username, 0, 11));
         for ($i = 0; $i < $retryTimes; $i++) {
-            $res = (new ChatService)->createUser($username,
-                Yii::$app->params['chatOptions']['user_password_default']);
+            $res = (new ChatService)->createUser($username, $hxPwd);
             if (!array_key_exists('error', $res)) {
                 $success = true;
                 break;
