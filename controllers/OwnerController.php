@@ -1308,7 +1308,6 @@ class OwnerController extends Controller
         $coefficient = CoefficientManagement::find()->all();
         var_dump($post);
         var_dump($coefficient);
-        exit;
         if ($coefficient == null) {
             $code = 1064;
             return Json::encode([
@@ -1323,6 +1322,7 @@ class OwnerController extends Controller
                 }
             }
         }
+        var_dump($materials);exit;
         $special_offer = 0;
         $total_prices = 0;
         foreach ($post['list'] as $price){
