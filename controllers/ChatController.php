@@ -451,7 +451,6 @@ class ChatController extends Controller
         if (!is_array($user)) {
             return $user;
         }
-        var_dump($user);die;
         list($u_id, $role_id) = $user;
         $code=1000;
         $recipient_id=(int)\Yii::$app->request->get('recipient_id');
