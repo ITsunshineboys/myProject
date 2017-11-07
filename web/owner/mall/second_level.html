@@ -3,7 +3,7 @@
         <div class="list_comment">
             <ul class="ul_item">
                 <li class="li_item" ng-repeat="item in all_three_level" ng-click="go_cur_goods(item)">
-                        <img ng-src="http://test.cdlhzz.cn:888/{{item.icon}}" alt=""/><br/>
+                        <img ng-src="{{baseUrl + item.icon}}" alt=""/><br/>
                         <span>{{item.title}}</span>
                 </li>
             </ul>

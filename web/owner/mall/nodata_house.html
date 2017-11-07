@@ -252,15 +252,15 @@
                                 <!--<a ui-sref="basics_decoration({first_level:item,second_level:level})">-->
                                 <div class="basis_item" id="bottom{{item.id}}">
                                     <p ng-if="item.title == '辅材'" class="basis_title">基础装修 <span
-                                            class="basis_title_span"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
+                                            class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
                                     </p>
                                     <p ng-if="item.title == '主要材料'" class="basis_title">{{item.title}}<span
-                                            class="basis_title_span"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
+                                            class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
                                     </p>
                                     <p ng-if="item.title != '辅材'&&item.title!='主要材料'" class="basis_title">{{item.title}}<span
-                                    class="basis_title_span"> &nbsp;&nbsp;{{item.count}}项</span>
+                                    class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.count}}项</span>
                                     </p>
-                                    <p class="pic">{{item.cost | currency:'￥'}}</p>
+                                    <p class="pic" ng-if="item.cost != 0">{{item.cost | currency:'￥'}}</p>
                                     <ul ng-if="item.title == '辅材'||item.title == '主要材料'">
                                         <li ng-repeat="item1 in item.second_level">
                                             <span class="cur_title">{{item1.title}}</span>
@@ -278,7 +278,7 @@
                                             </div>
                                         </div>
                                     </ul>
-                                    <p ng-if="item.title!='辅材'&&item.title != '主要材料'&&item.second_level[0].three_level[0].goods_detail.length==0">
+                                    <p ng-if="item.cost == 0">
                                     <button style="font-size: 28px;padding: 1.02rem 3.91rem;background: none;border: 2px dashed #E5E5E5;border-radius: 2rem;color: #53A7F3;">点击编辑</button>
                                     </p>
                                 </div>
