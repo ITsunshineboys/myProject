@@ -349,7 +349,7 @@ class GoodsOrder extends ActiveRecord
 
         if (!$sort_time && $sort_money==2)
         {
-            $sort="  'z.goods_price*z.goods_number' desc";
+            $sort='a.amount_order desc'; 
         }
         if (!$sort_time  && $sort_money==1)
         {
