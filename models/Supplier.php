@@ -562,7 +562,7 @@ class Supplier extends ActiveRecord
         $intStartTime = strtotime($startTime);
         $intEndTime = strtotime($endTime);
         $todayOrderNumber = GoodsOrder::totalOrderNumber($intStartTime, $intEndTime, $supplierId);
-        $todayAmountOrder = GoodsOrder::totalAmountOrder($intStartTime, $intEndTime, $supplierId);
+        $todayAmountOrder = StringService::formatPrice(GoodsOrder::totalAmountOrder($intStartTime, $intEndTime, $supplierId) / 100);
 
         $where = "supplier_id = {$supplierId}";
 
