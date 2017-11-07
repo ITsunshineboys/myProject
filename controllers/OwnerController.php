@@ -1306,6 +1306,9 @@ class OwnerController extends Controller
     {
         $post = Yii::$app->request->post();
         $coefficient = CoefficientManagement::find()->all();
+        var_dump($post);
+        var_dump($coefficient);
+        exit;
         if ($coefficient == null) {
             $code = 1064;
             return Json::encode([
