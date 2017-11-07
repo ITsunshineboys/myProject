@@ -1,6 +1,6 @@
 ;
 let login = angular.module("login",[]);
-login.controller("login_ctrl",function ($scope,$http,$state,$stateParams) {
+login.controller("login_ctrl",function ($scope,$http,$state,$document) {
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -126,10 +126,11 @@ login.controller("login_ctrl",function ($scope,$http,$state,$stateParams) {
         $scope.show_prompt=false;//验证码提示字
     };
     //Enter 键盘事件
-    $scope.myKeyup = function(e){
-        var keycode = window.event?e.keyCode:e.which;
-        if(keycode==13){
-            $scope.supplier_login();
-        }
-    };
+    $document.bind("keypress", function(event) {
+        $scope.$apply(function (){
+            if(event.keyCode == 13){
+                $scope.supplier_login();
+            }
+        })
+    });
   });

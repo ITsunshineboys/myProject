@@ -1,6 +1,6 @@
 ;
 let login= angular.module("login_module",[]);
-login.controller('login_ctrl',function ($scope,$http,$state) {
+login.controller('login_ctrl',function ($scope,$http,$state,$document) {
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -8,12 +8,14 @@ login.controller('login_ctrl',function ($scope,$http,$state) {
         }
     };
     //Enter 键盘事件
-    $scope.myKeyup = function(e){
-        var keycode = window.event?e.keyCode:e.which;
-        if(keycode==13){
-            $scope.login();
-        }
-    };
+    $document.bind("keypress", function(event) {
+        $scope.$apply(function (){
+            if(event.keyCode == 13){
+                $scope.login();
+            }
+        })
+    });
+
     $scope.error_flag=false;
   $scope.login=function () {
       $http.post(baseUrl+'/site/admin-login', {
