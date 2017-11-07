@@ -1586,15 +1586,34 @@ class WorkerOrder extends \yii\db\ActiveRecord
 //        return self::
     }
 
-    public static function orderList($where = [])
+    public static function orderList($where = [],$size,$page)
     {
+        $offset = ($page - 1) * $size;
+
         $select = 'worker_order.con_people,worker_order.con_tel,worker_order.order_no,worker_order.create_time,user.aite_cube_no,worker_type.worker_name,worker_order.amount,worker_order.status';
-        return self::find()
+        $details = self::find()
             ->select($select)
             ->where($where)
             ->leftJoin('worker','worker.id = worker_order.worker_id')
             ->leftJoin('user','user.id = worker.uid')
             ->leftJoin('worker_type','worker_type.id = worker_order.id')
+            ->offset($offset)
+            ->limit($size)
+            ->groupBy('order_no')
+            ->asArray()
             ->all();
+
+
+        foreach ($details as &$one_details){
+            $one_details['create_time'] = date('Y-m-d H:i',$one_details['create_time']);
+            $one_details['amount'] = sprintf('%.2f',$one_details['amount'] * 0.01);
+        }
+
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'page'  => $page,
+            'size'  => $size,
+            'details' => $details
+        ];
     }
 }

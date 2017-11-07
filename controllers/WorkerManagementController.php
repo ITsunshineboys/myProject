@@ -422,13 +422,20 @@ class WorkerManagementController extends Controller
     public function actionWorkOrderList()
     {
         $status = (int)trim(\Yii::$app->request->post('status',''));
+        $page = (int)trim(\Yii::$app->request->post('page','1'));
+        $size = (int)trim(\Yii::$app->request->post('size','12'));
         // 全部订单
-
+        $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time','')));
+        $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time','')));
+        $worker = trim(\Yii::$app->request->post('worker',''));
+        $other = trim(\Yii::$app->request->post('other',''));
         if (empty($status)){
             $where = [];
-            $worker_order = WorkerOrder::orderList($where);
+            $worker_order = WorkerOrder::orderList($where,$size,$page);
+            return Json::encode([
+                'list' => $worker_order
+            ]);
         }
 
-        var_dump($worker_order);exit;
     }
 }
