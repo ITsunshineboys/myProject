@@ -235,6 +235,7 @@ class ChatController extends Controller
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
         $res=$user_hx->getUser($to_user['username']);
+        var_dump($res);die;
         if(array_key_exists('error',$res)){
             return Json::encode([
                 'code'=>1000,
