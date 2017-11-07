@@ -205,8 +205,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
 
     // 修改材料
     $scope.editMaterial = function (index) {
-        console.log($scope.materials);
-        return
         sessionStorage.setItem("materials", JSON.stringify($scope.materials));
         switch (index) {
             case 0:
