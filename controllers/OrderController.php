@@ -4043,16 +4043,16 @@ class OrderController extends Controller
         }
     }
  
-          public function actionGetOpenId()
-        {
-            $tools = new PayService();
-            $openId = $tools->GetOpenid();
-             return Json::encode([
-                'code' => 200,
-                'msg'  => 'ok',
-                'data' =>$openId
-            ]);
-        }
+
+        /**
+         * 获取openID1-微信
+         * @return string
+         */
+            public function actionGetOpenId()
+            {
+                $tools = new PayService();
+                $tools->FindOpenId();
+            }
 
            /**
          * 获取openID2-微信

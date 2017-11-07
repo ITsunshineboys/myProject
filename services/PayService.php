@@ -93,6 +93,19 @@ class PayService
             return $url;
     }
 
+
+    public function  FindOpenId()
+    {
+        $baseUrl = urlencode("http://test.cdlhzz.cn/order/find-open-id");
+        $url = $this->__CreateOauthUrlForCode($baseUrl);
+
+        $content =Wxpay::curl($baseUrl,false,0); //请求发送短信
+        if($content){
+            $result = json_decode($content,true);
+            var_dump($result);
+        }
+    }
+
     /**
      *
      * 获取jsapi支付的参数
