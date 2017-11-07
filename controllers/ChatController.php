@@ -469,7 +469,7 @@ class ChatController extends Controller
         ]);
     }
     public function actionTest(){
-        $a=Supplier::find()->where(['id'=>79])->one();
+        $a=User::find()->select('username')->where(['id'=>61])->one();
         var_dump($a);
 
     }
