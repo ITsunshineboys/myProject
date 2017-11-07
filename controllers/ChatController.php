@@ -445,7 +445,13 @@ class ChatController extends Controller
         $new_infos=$query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-
+        if(!$new_infos){
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>null
+            ]);
+        }
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d',$info['send_time']);
              $info['image']=OrderGoods::find()
@@ -458,13 +464,7 @@ class ChatController extends Controller
                  }
          }
 
-        if(!$info){
-            return Json::encode([
-                'code'=>200,
-                'msg'=>'ok',
-                'data'=>null
-            ]);
-        }
+
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
@@ -498,10 +498,7 @@ class ChatController extends Controller
         ]);
     }
     public function actionTest(){
-       $a=User::find()->where(['mobile'=>'13551201821'])->one();
-       $a->username='14913354591625880052103055';
-       $b=$a->save(false);
-       var_dump($b);
+
 
     }
 }
