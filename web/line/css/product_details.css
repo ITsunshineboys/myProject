@@ -69,6 +69,9 @@
     background-color: #fff;
     border-bottom:.08rem solid #E9EDEE ;
 }
+.standard a{
+    display: inline-block;
+}
 .sl{
     border-top: 1px solid #E9EDEE;
     padding-top: 1rem;
@@ -89,7 +92,7 @@
     margin-left: -.6rem;
     display: inline;
 }
-.main .standard >div:nth-child(2){
+.main .standard a div img{
     position: absolute;
     right:1.53rem;
     top:1.19rem;
