@@ -311,6 +311,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 }
                 $scope.activeObj.type = 1;
                 $scope.roomPicture = data.images.effect_images;
+                sessionStorage.setItem("roomPicture", JSON.stringify($scope.roomPicture));
                 let materials = data.goods;     // 材料信息
                 let worker = data.worker_data;  // 工人信息
                 sessionStorage.setItem("worker", JSON.stringify(worker));
@@ -369,12 +370,17 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             })
         } else {
             $timeout(function () {
+                $scope.roomPicture = JSON.parse(sessionStorage.getItem("roomPicture"));
                 $scope.materials = JSON.parse(sessionStorage.getItem("materials"));
-                let worker = JSON.parse(sessionStorage.getItem("worker"));
-                console.log(worker);
                 for (let material of $scope.materials) {
                     material.second_level = [];
                 }
+                let worker = JSON.parse(sessionStorage.getItem("worker"));
+                for (let obj of worker) {
+                    workerMoney += parseFloat(obj.worker_price);
+                }
+                $scope.price = workerMoney;
+                $scope.preferential = workerMoney;
 
                 let params = {  // 系数参数集合
                     list: []
