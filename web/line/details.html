@@ -123,7 +123,7 @@
                                     </div>
                                     <div class="well">
                                         <ul>
-                                            <li ng-repeat="item in brands.splice(0,6) ">
+                                            <li ng-repeat="item in brand | limitTo:8 "  ng-class="{'changeColor':check_index_brand == $index}" ng-click="changeBrand ($index,item)">
                                                 {{item.name}}
                                             </li>
                                         </ul>
@@ -159,8 +159,8 @@
                                     <img class="img_search" src="images/mall_search.png" alt="">
                                 </div>
                                 <ul class="brands_more">
-                                    <li ng-repeat="n in brands">
-                                        {{item.name}}
+                                    <li ng-repeat="n in brand">
+                                        {{n.name}}
                                     </li>
                                 </ul>
                                 <div class="modal-footer footer_size">

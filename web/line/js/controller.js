@@ -352,7 +352,7 @@ angular.module("all_controller", ['ngCookies'])
             }
         }).then (function successCallBack (response) {
             console.log(response);
-            $scope.brands = response.data.data.category_brands_styles_series.brands;
+            $scope.brand = response.data.data.category_brands_styles_series.brands;
             $scope.series = response.data.data.category_brands_styles_series.series;
             $scope.styles = response.data.data.category_brands_styles_series.styles;
 
@@ -375,7 +375,9 @@ angular.module("all_controller", ['ngCookies'])
             }
         });
 
-
+        $scope.check_style_id = '';
+        $scope.check_brand_id = '';
+        $scope.check_series_id  = '';
         // 点击风格切换选中的状态
         $scope.changeState = function (index,item) {
             $scope.check_index_series = index;
@@ -387,7 +389,13 @@ angular.module("all_controller", ['ngCookies'])
         $scope.changeStyle = function (index,item) {
             $scope.check_index_style = index;
             $scope.check_style_id = item.id;
-
+            console.log($scope.check_style_id);
+            console.log($scope.check_index_style);
+        };
+        // 点击系类切换选中的品牌
+        $scope.changeBrand = function (index,item) {
+            $scope.check_index_brand = index;
+            $scope.check_brand_id = item.id;
         };
         $scope.price_min = '';
         $scope.price_max = '';
@@ -400,8 +408,8 @@ angular.module("all_controller", ['ngCookies'])
                     category_id:+$scope.id,
                     platform_price_min:+$scope.price_min*100,
                     platform_price_max:+$scope.price_max*100,
-                    brand_id:$scope.brand_id,
-                    style_id:$scope.check_style_id,
+                    brand_id:+$scope.check_brand_id,
+                    style_id:+$scope.check_style_id,
                     series_id:+$scope.check_series_id,
                     "sort[]":$scope.staus+':'+($scope.good_pic_up?'4':'3')
                 }
@@ -418,6 +426,10 @@ angular.module("all_controller", ['ngCookies'])
             $scope.price_max = '';
             $scope.check_index_series = -1;
             $scope.check_index_style = -1;
+            $scope.check_index_brand = -1;
+            $scope.check_style_id = '';
+            $scope.check_brand_id = '';
+            $scope.check_series_id  = '';
         };
         // 点击主页返回到主页
         $scope.getHome = function () {

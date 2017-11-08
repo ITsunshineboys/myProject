@@ -173,6 +173,9 @@ section{
     margin-left: .5rem;
     margin-bottom: .7rem;
     margin-top: .7rem;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .price_range{
     margin: 1.2rem 0;
@@ -265,23 +268,27 @@ section{
 .brands_more{
 
 }
-.brands_more ul{
+.brands_more {
 
 }
-.brands_more ul li {
+.brands_more  li {
     list-style: none;
-    width: 5.5rem;
+    width: 25rem;
     height: 2.4rem;
-    border: 1px solid #999;
+    /*border: 1px solid #999;*/
     color: #959292;
-    border-radius:0.5rem;
+    /*border-radius:0.5rem;*/
     display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     text-align: center;
     line-height: 2.4rem;
-    font-size: 1.1rem;
-    margin-left: .5rem;
+    font-size: 1.4rem;
+    margin-left: .9rem;
     margin-bottom: .7rem;
     margin-top: .7rem;
+
 }
 .nullGoods{
     text-align: center;
