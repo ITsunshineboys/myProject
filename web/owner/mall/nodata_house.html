@@ -290,7 +290,7 @@
                 <div class="special_requirements" ng-init="special_request=''">
                     <div class="shu_house_2"></div>
                     <p>特殊要求</p>
-                    <textarea class="main_text" maxlength="300" ng-model="special_request" style="padding-left:.85rem ;padding-top: .85rem;" placeholder="请输入你的要求"></textarea>
+                    <textarea class="main_text" maxlength="300" ng-model="ctrlScope.special_request" style="padding-left:.85rem ;padding-top: .85rem;" placeholder="请输入你的要求"></textarea>
                     <span style="font-size: 36px;">{{special_request.length}}/300</span>
                 </div>
 
@@ -303,7 +303,7 @@
                         <span class="three_span">未包含施工图费用，8项全场8折</span>
                     </div>
                     <!--<button>保存方案</button>-->
-                    <button type="button" class="primary_btn">申请样板间</button>
+                    <button type="button" class="primary_btn" ng-click="go_apply_case()">申请样板间</button>
                 </div>
             </div>
     </form>

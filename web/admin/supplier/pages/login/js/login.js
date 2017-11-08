@@ -1,6 +1,6 @@
 ;
 let login = angular.module("login",[]);
-login.controller("login_ctrl",function ($scope,$http,$state,$document) {
+login.controller("login_ctrl",function ($scope,$http,$state,$document,_ajax) {
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -15,20 +15,17 @@ login.controller("login_ctrl",function ($scope,$http,$state,$document) {
     $scope.rolo_value=$scope.login_rolo[0].id;
     //登录按钮
     $scope.supplier_login=function () {
-      $http.post(baseUrl+'/site/admin-login',{
+      _ajax.post('/site/admin-login',{
           role_id:$scope.rolo_value,
           username:$scope.phone_number,
           password:$scope.password_number
-      },config).then(function (res) {
+      },function (res) {
           console.log(res);
-          $scope.disabled="";
-          if(res.data.code==200){
+          if(res.code==200){
               $state.go('supplier_index')
           }else{
-            $scope.error_flag=true;
+              $scope.error_flag=true;
           }
-      },function (err) {
-          console.log(err);
       })
     }
     //忘记密码发送验证码
@@ -56,13 +53,11 @@ login.controller("login_ctrl",function ($scope,$http,$state,$document) {
                 });
             },1000);
             //获取忘记密码的验证码
-            $http.post(baseUrl+'/site/validation-code',{
+            _ajax.post('/site/validation-code',{
                 type:'forgetPassword',
                 mobile:$scope.forget_mb
-            },config).then(function (res) {
+            },function (res) {
                 console.log(res);
-            },function (err) {
-                console.log(err);
             })
         }
     };
@@ -81,30 +76,27 @@ login.controller("login_ctrl",function ($scope,$http,$state,$document) {
                 $scope.new_pw_txt='*该密码不符合规则，请重新设置';
             }else{
                 $scope.new_pw_txt='';
-                $http.post(baseUrl+'/site/admin-forget-password',{
+                _ajax.post('/site/admin-forget-password',{
                     mobile:$scope.forget_mb,
                     new_password:$scope.forget_new_pw,
                     validation_code:$scope.forget_v_code
-                },config).then(function (res) {
+                },function (res) {
                     console.log(res);
-                    if(res.data.code==200){
+                    if(res.code==200){
                         $('#forget_pw_modal').modal('hide');
                         $('#modity_success').modal('show');
-                    }
-                    else if(res.data.code==1002){
+                    }else if(res.code==1002){
                         $scope.forget_v_txt='验证码错误，请重新输入';
-                    }else if(res.data.code==1020){
+                    }else if(res.code==1020){
                         $scope.forget_v_txt='验证码超时，请重新获取';
-                    }else if(res.data.code==1010){
+                    }else if(res.code==1010){
                         $scope.forget_mb_prompt='该手机号还未注册，请联系客服400-3948-398';
-                    }else if(res.data.code==1040){
+                    }else if(res.code==1040){
                         $scope.forget_mb_prompt='该手机号还未注册商家，请联系客服400-3948-398';
                     }else{
                         $scope.forget_mb_prompt='';
                         $scope.forget_v_txt='';
                     }
-                },function (err) {
-                    console.log(err);
                 })
             }
         }

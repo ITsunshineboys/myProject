@@ -3,19 +3,8 @@
 
 // 传参：通过url的get参数stage来获取，不传则使用默认的开发域名
 let baseUrl = (function () {
-    // let stages = [
-    //     "http://test.cdlhzz.cn", // 开发接口域名
-    //     "http://v1.cdlhzz.cn" // 展示接口域名
-    // ];
-    // let stage = 0;
-    // try {
-    //     let stageParam = location.search.split("&stage=")[1].split("&")[0];
-    //     if (stages[stageParam])  {
-    //         stage = stageParam;
-    //     }
-    // } catch (e) {}
-    // return stages[stage];
-    return location.origin;
+     return location.origin;
+    // return 'http://test.cdlhzz.cn'
 })();
 
 /**
@@ -34,7 +23,7 @@ app.service('_ajax', function ($http, $state) {
             let res = response.data;
             if (res.code === 403) {
                 $state.go('login')
-            } else if (res.code === 200 || res.code === 1002) {
+            } else if (res.code === 200 ||res.code === 1001|| res.code === 1002|| res.code === 1010|| res.code === 1020|| res.code === 1040) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }
@@ -59,7 +48,7 @@ app.service('_ajax', function ($http, $state) {
             let res = response.data;
             if (res.code === 403) {
                 $state.go('login')
-            } else if (res.code === 200 || res.code === 1002) {
+            } else if (res.code === 200 ||res.code === 1001|| res.code === 1002|| res.code === 1010|| res.code === 1020|| res.code === 1040) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }
