@@ -223,7 +223,7 @@ class PayService
      *
      * @return 返回构造好的url
      */
-    private function __CreateOauthUrlForCode($redirectUrl)
+    public function __CreateOauthUrlForCode($redirectUrl)
     {
         $urlObj["appid"] = WxPayConfig::APPID;
         $urlObj["redirect_uri"] = "$redirectUrl";

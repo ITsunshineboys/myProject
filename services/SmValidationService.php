@@ -30,6 +30,14 @@ class SmValidationService
     private $_interval;
     private $_validationCodeExpire;
     private $_validationCodeMethod;
+    private $_data;
+    const VALIDATION_CODE_TEMPLATES = [
+        'register',
+        'resetPassword',
+        'forgetPassword',
+        'resetPayPassword',
+        'resetMobile',
+    ];
 
     /**
      * SmValidationService constructor.
@@ -64,6 +72,7 @@ class SmValidationService
         $this->_interval = $smParams['interval'];
         $this->_validationCodeExpire = $smParams['validationCode']['expire'];
         $this->_mobile = $data['mobile'];
+        $this->_data = $data;
         $this->send();
     }
 
@@ -80,14 +89,20 @@ class SmValidationService
             return;
         }
 
-        // generate validation code
-        $validationCodeKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE;
-        if (!($validationCode = $cache->get($validationCodeKey))) {
-            $validationCodeMethod = $this->_validationCodeMethod;
-            $validationCode = $this->$validationCodeMethod();
-            $cache->set($validationCodeKey, $validationCode, $this->_validationCodeExpire);
-            $flgKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE_FLG;
-            $cache->set($flgKey, 1);
+        $templateData = ['product' => $this->_signName];
+
+        if (in_array($this->_data['type'], self::VALIDATION_CODE_TEMPLATES)) {
+            // generate validation code
+            $validationCodeKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE;
+            if (!($validationCode = $cache->get($validationCodeKey))) {
+                $validationCodeMethod = $this->_validationCodeMethod;
+                $validationCode = $this->$validationCodeMethod();
+                $cache->set($validationCodeKey, $validationCode, $this->_validationCodeExpire);
+                $flgKey = $this->_mobile . self::SUFFIX_VALIDATION_CODE_FLG;
+                $cache->set($flgKey, 1);
+            }
+
+            $templateData['code'] = $validationCode;
         }
 
         $config = [
@@ -98,9 +113,9 @@ class SmValidationService
         $client = new Client(new App($config));
         $req = new AlibabaAliqinFcSmsNumSend;
         $req
-            ->setRecNum($this->_mobile)// 手机号码
-            ->setSmsParam(['product' => $this->_signName, 'code' => $validationCode])// 模版数据
-            ->setSmsFreeSignName($this->_signName)// 短信签名
+            ->setRecNum($this->_mobile) // 手机号码
+            ->setSmsParam(array_merge($templateData, $this->_data)) // 模版数据
+            ->setSmsFreeSignName($this->_signName) // 短信签名
             ->setSmsTemplateCode($this->_templateId); // 短信模版ID
 
         $res = $client->execute($req);
