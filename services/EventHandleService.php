@@ -59,7 +59,6 @@ class EventHandleService
                         $user = User::find()->where(['mobile' => $data])->one();
                         if ($user) {
                             $user->username = $username;
-                            $user->hx_pwd = StringService::getUniqueStringBySalt($data);
                             if (!$user->save()) {
                                 $update = 'update ' . User::tableName() . ' set username = ' . $username;
                                 $where = ' where id = ' . $user->id . ';';
@@ -98,7 +97,27 @@ class EventHandleService
             case $events['user']['login']:
                 Yii::$app->on($events['user']['login'], function () use ($data, $events) {
                     $newHuanXinPwd = User::generateHxPwd($data['mobile'], $data['registrationId'], $data['username']);
-                    User::resetHuanXinUserPwd($data['username'], $newHuanXinPwd);
+                    if (User::resetHuanXinUserPwd($data['username'], $newHuanXinPwd)) {
+                        $user = User::find()->where(['mobile' => $data['mobile']])->one();
+                        if ($user) {
+                            $user->hx_pwd_date = date('Ymd');
+                            if (!$user->save()) {
+                                $update = 'update ' . User::tableName() . ' set hx_pwd = ' . $newHuanXinPwd;
+                                $where = ' where id = ' . $user->id . ';';
+                                $data = [
+                                    'sql' => $update . $where,
+                                    'table' => User::tableName(),
+                                ];
+                                $event = $events['db']['failed'];
+                                new self($event, $data);
+                                Yii::$app->trigger($event);
+                            }
+                        } else {
+                            $event = $events['system']['error'];
+                            new self($event, 'cannot find user by mobile: ' . $data['mobile']);
+                            Yii::$app->trigger($event);
+                        }
+                    }
                 });
                 break;
 
