@@ -1550,12 +1550,19 @@ class OrderController extends Controller
                 ->one();
 
         }
-        if (!$express)
+         if (!$express)
         {
-            $code=1000;
+            $code=200;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
+                'msg' =>'ok',
+                'data'=> [
+                    'list'=>[],
+                    'shipping_type'=>'',
+                    'waybillname'=>'',
+                    'waybillnumber'=>'',
+                    'order_no'=>''
+                ]
             ]);
         }
         switch ($shipping_type){
