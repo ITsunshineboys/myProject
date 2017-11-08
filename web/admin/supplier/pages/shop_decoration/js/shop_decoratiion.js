@@ -1,6 +1,6 @@
 ;
 let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngDraggable'])
-.controller('shop_decoration_ctrl',function ($scope,$http,Upload,_ajax) {
+.controller('shop_decoration_ctrl',function ($scope,$http,$state,Upload,_ajax) {
   $scope.myng=$scope;
   let config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -96,22 +96,25 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
           sku:+$scope.banner_add_sku
         }
       }).then(function (res) {
-        if(res.data.code==1000){
-          $scope.banner_num_error=true;
-          $scope.banner_add_title='';
-          $scope.banner_add_url='';
-        }else if(res.data.code==200){
-          if(res.data.data.detail.length===0){
-            //Banner - sku错误提示
+        console.log(res);
+          if(res.data.code==200){
+              if(res.data.data.detail.length===0){
+                  //Banner - sku错误提示
+                  $scope.banner_num_error=true;
+                  $scope.banner_add_title='';
+                  $scope.banner_add_url='';
+              }else{
+                  $scope.banner_num_error=false;
+                  $scope.banner_add_title=res.data.data.detail.title;
+                  $scope.banner_add_url=res.data.data.detail.url;
+              }
+          }else if(res.data.code==1000){
             $scope.banner_num_error=true;
             $scope.banner_add_title='';
             $scope.banner_add_url='';
-          }else{
-            $scope.banner_num_error=false;
-            $scope.banner_add_title=res.data.data.detail.title;
-            $scope.banner_add_url=res.data.data.detail.url;
+         }else if(res.data.code==403){
+            $state.go('login');
           }
-        }
       },function (err) {
         console.log(err);
       })
@@ -126,23 +129,26 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
           sku:+$scope.banner_edit_sku
         }
       }).then(function (res) {
-        if(res.data.code==1000){
-          $scope.banner_edit_num_error=true;
-          $scope.banner_edit_title='';
-          $scope.banner_edit_url='';
-        }else if(res.data.code==200){
-          if(res.data.data.detail.length===0){
-            //Banner - sku错误提示
+          if(res.data.code==200){
+              if(res.data.data.detail.length===0){
+                  //Banner - sku错误提示
+                  $scope.banner_edit_num_error=true;
+                  $scope.banner_edit_title='';
+                  $scope.banner_edit_url='';
+              }else{
+                  $scope.banner_edit_num_error=false;
+                  $scope.banner_edit_title=res.data.data.detail.title;
+                  $scope.banner_edit_url=res.data.data.detail.url;
+              }
+          }else if(res.data.code==1000){
             $scope.banner_edit_num_error=true;
             $scope.banner_edit_title='';
             $scope.banner_edit_url='';
-          }else{
-            $scope.banner_edit_num_error=false;
-            $scope.banner_edit_title=res.data.data.detail.title;
-            $scope.banner_edit_url=res.data.data.detail.url;
+          }else if(res.data.code==403){
+            $state.go('login')
           }
-        }
-      },function (err) {
+         }
+      ,function (err) {
         console.log(err);
       })
     }
@@ -200,17 +206,15 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
       }else{
         $scope.pass_type=2;
       }
-      $http.post(baseUrl+'/mall/recommend-add-supplier',{
+      _ajax.post('/mall/recommend-add-supplier',{
           url:$scope.banner_add_url,
           title:$scope.banner_add_title,
           image:$scope.banner_add_img_src,
           from_type:'1',
           type:+$scope.pass_type,
           sku:+$scope.banner_add_sku
-      },config).then(function (res) {
-        $scope.judgment();
-      },function (err) {
-        console.log(err);
+      },function (res) {
+          $scope.judgment();
       })
     }else{
       $scope.submitted=true;
@@ -274,7 +278,6 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
     }
     if(sku!=$scope.banner_edit_click_sku){
       $scope.banner_edit_change_error=true;
-      console.log(111111111111111)
     }else{
       $scope.banner_edit_change_error=false;
     }
@@ -282,7 +285,6 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   $scope.banner_edit_btn=function (valid) {
     //如果有提示编码不能为空，消除提示编码错误
     if($scope.banner_edit_change_error){
-      console.log(222222222222);
       $scope.banner_edit_num_error=true;
       $scope.banner_edit_title='';
       $scope.banner_edit_url='';
@@ -303,26 +305,22 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
     }
 
     if(valid && $scope.banner_edit_img_src && !$scope.banner_edit_num_error && !$scope.banner_edit_change_error){
-      console.log(valid)
-      console.log($scope.banner_edit_num_error)
       $scope.variable_edit_modal='modal';
       if($scope.b_show_table_flag){
         $scope.edit_pass_type=0
       }else{
         $scope.edit_pass_type=2
       }
-      $http.post(baseUrl+'/mall/recommend-edit-supplier',{
-        id:+$scope.banner_edit_id,
-        url:$scope.banner_edit_url,
-        title:$scope.banner_edit_title,
-        image:$scope.banner_edit_img_src,
-        from_type:'1',
-        type:+$scope.edit_pass_type,
-        sku:+$scope.banner_edit_sku
-      },config).then(function (res) {
-        $scope.judgment();
-      },function (err) {
-        console.log(err);
+      _ajax.post('/mall/recommend-edit-supplier',{
+          id:+$scope.banner_edit_id,
+          url:$scope.banner_edit_url,
+          title:$scope.banner_edit_title,
+          image:$scope.banner_edit_img_src,
+          from_type:'1',
+          type:+$scope.edit_pass_type,
+          sku:+$scope.banner_edit_sku
+      },function (res) {
+          $scope.judgment();
       })
     }
   };
