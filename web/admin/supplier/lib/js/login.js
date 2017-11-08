@@ -1,8 +1,7 @@
 let app = angular.module("app",[]);
 app.controller("login_ctrl",function ($scope,$http) {
     let baseUrl = (function () {
-        //return location.origin;
-        return 'http://test.cdlhzz.cn'
+        return '';
     })();
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
