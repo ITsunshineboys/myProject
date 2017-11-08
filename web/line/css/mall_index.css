@@ -4,7 +4,7 @@
     width: 32rem;
     height: 4rem;
     padding: 0 1.2rem;
-    background-color: #53A7F3;
+    background-color:white;
     position: fixed;
     top: 0;
     z-index: 1000;
@@ -16,7 +16,7 @@
 }
 .address{
     font-size: 1.1rem;
-    color: #ffffff;
+    color: #222;
     position: absolute;
     top: 1.2rem;
     left: 2.5rem;
@@ -31,13 +31,13 @@
     top: 0.85rem;
     left:6rem;
     padding-left: 2.4rem;
-    background-image: url("../images/search.png");
+    background-image: url("../images/mall_popup_search.png");
     background-size:1rem;
     background-repeat: no-repeat;
     background-position: 1rem 0.7rem;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: #C8C8C8;
     border: none;
-    color:#fff;
+    color:#222;
     text-decoration: none;
 }
 .search_box .massage{

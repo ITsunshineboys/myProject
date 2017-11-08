@@ -116,7 +116,7 @@ angular.module("all_controller", ['ngCookies'])
         //首页列表点击分类列表传值id获取数据(一级id查去二级)
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn/mall/categories?pid=' + $scope.pid
+            url: 'http://test.cdlhzz.cn/mall/categories?pid='+$scope.pid
         }).then(function successCallback(response) {
             console.log(response);
             $scope.details = response.data.data.categories;
@@ -185,7 +185,6 @@ angular.module("all_controller", ['ngCookies'])
         $scope.pid = $stateParams.pid;
         $scope.search_flag = $stateParams.search_flag;
         $scope.search_flag_details = $stateParams.search_flag_details;
-        c
         //判断
         $scope.getSearch = function () {
             let arr=[];
