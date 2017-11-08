@@ -259,8 +259,8 @@ class GoodsOrder extends ActiveRecord
 //            return false;
 //        }
         $post['total_amount']=$freight*100+$return_insurance*100+$goods['platform_price']*$goods_num;
-        $address=Addressadd::findById($address_id);
-        $invoice=Invoice::findById($invoice_id);
+        $address=Addressadd::findOne($address_id);
+        $invoice=Invoice::findOne($invoice_id);
         if (! $address  || !$invoice){
             return false;
         }
@@ -580,7 +580,7 @@ class GoodsOrder extends ActiveRecord
      * @param $msg
      * @return bool
      */
-    public static function  Wxpaylinenotifydatabase($arr,$msg)
+   public static function  Wxpaylinenotifydatabase($arr,$msg)
     {
             $goods_id=$arr[0];
             $goods_num=$arr[1];
@@ -592,12 +592,19 @@ class GoodsOrder extends ActiveRecord
             $return_insurance=$arr[7];
             $order_no=$arr[8];
             $buyer_message=$arr[9];
-        $goods=(new Query())->from('goods as a')->where(['a.id'=>$goods_id])->leftJoin('logistics_template as b','b.id=a.logistics_template_id')->one();
+            $client_ip=StringService::getClientIP();
+        $goods=(new Query())
+            ->from(Goods::tableName().' as a')
+            ->where(['a.id'=>$goods_id])
+            ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
+            ->one();
         if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
             return false;
         }
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
+        $address=Addressadd::findOne($address_id);
+        $invoice=Invoice::findOne($invoice_id);
         $e = 1;
         try{
             $goods_order=new self();
@@ -613,6 +620,15 @@ class GoodsOrder extends ActiveRecord
             $goods_order->return_insurance=$return_insurance*100;
             $goods_order->pay_name=$pay_name;
             $goods_order->buyer_message=$buyer_message;
+            $goods_order->consignee=$address->consignee;
+            $goods_order->district_code=$address->district;
+            $goods_order->region=$address->region;
+            $goods_order->consignee_mobile=$address->mobile;
+            $goods_order->invoice_type=$invoice->invoice_type;
+            $goods_order->invoice_header_type=$invoice->invoice_header_type;
+            $goods_order->invoicer_card=$invoice->invoicer_card;
+            $goods_order->invoice_header=$invoice->invoice_header;
+            $goods_order->invoice_content=$invoice->invoice_content;
             $res1=$goods_order->save();
             if (!$res1){
                 $tran->rollBack();
@@ -640,7 +656,9 @@ class GoodsOrder extends ActiveRecord
                 return false;
             }
             $month=date('Ym',$time);
-            $supplier=Supplier::find()->where(['id'=>$goods['supplier_id']])->one();
+            $supplier=Supplier::find()
+                ->where(['id'=>$goods['supplier_id']])
+                ->one();
             $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
             $supplier->sales_amount_month=$supplier->sales_amount_month+$goods['platform_price']*$goods_num;
             $supplier->month=$month;
