@@ -868,10 +868,10 @@ class QuoteController extends Controller
                                     $goods_code     = $goods['good_code'];
                                     $goods_quantity = $goods['good_quantity'];
                                     $three_category_id = $goods['three_id'];
+                                    var_dump($three_category_id);exit;
                                     $a  = (new WorksData())->plotEdit($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity,$three_category_id);
                                 }
                             }
-                            var_dump($a);exit;
                         }
 
                         if (!empty($house['worker_list'])) {
