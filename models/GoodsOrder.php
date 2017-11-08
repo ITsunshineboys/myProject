@@ -583,19 +583,20 @@ class GoodsOrder extends ActiveRecord
      * @param $msg
      * @return bool
      */
-   public static function  Wxpaylinenotifydatabase($arr,$msg)
+    public static function  Wxpaylinenotifydatabase($arr,$msg)
     {
-            $goods_id=$arr[0];
-            $goods_num=$arr[1];
-            $address_id=$arr[2];
-            $pay_name=$arr[3];
-            $invoice_id=$arr[4];
-            $supplier_id=$arr[5];
-            $freight=$arr[6];
-            $return_insurance=$arr[7];
-            $order_no=$arr[8];
-            $buyer_message=$arr[9];
-            $client_ip=StringService::getClientIP();
+
+        $goods_id=$arr[0];
+        $goods_num=$arr[1];
+        $address_id=$arr[2];
+        $pay_name=$arr[3];
+        $invoice_id=$arr[4];
+        $supplier_id=$arr[5];
+        $freight=$arr[6];
+        $return_insurance=$arr[7];
+        $order_no=$arr[8];
+        $buyer_message=$arr[9];
+        $client_ip=StringService::getClientIP();
         $goods=(new Query())
             ->from(Goods::tableName().' as a')
             ->where(['a.id'=>$goods_id])
@@ -604,12 +605,16 @@ class GoodsOrder extends ActiveRecord
         if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
             return false;
         }
-        $tran = Yii::$app->db->beginTransaction();
-        $time=time();
         $address=Addressadd::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
-        $e = 1;
+        if (! $address  || !$invoice){
+            return false;
+        }
+        $time=time();
+        $tran = Yii::$app->db->beginTransaction();
         try{
+
+            $goods_order=new self();
             $goods_order=new self();
             $goods_order->order_no=$order_no;
             $goods_order->amount_order=$msg['total_fee'];
@@ -632,32 +637,35 @@ class GoodsOrder extends ActiveRecord
             $goods_order->invoicer_card=$invoice->invoicer_card;
             $goods_order->invoice_header=$invoice->invoice_header;
             $goods_order->invoice_content=$invoice->invoice_content;
-            $res1=$goods_order->save();
+            $res1=$goods_order->save(false);
             if (!$res1){
                 $tran->rollBack();
                 return false;
             }
-            $res2=Yii::$app->db->createCommand()->insert(self::ORDER_GOODS_LIST,[
-                'order_no'=> $order_no,
-                'goods_id'   =>$goods['id'],
-                'goods_number'=>$goods_num,
-                'create_time'=>time(),
-                'goods_name'=>$goods['title'],
-                'goods_price'=>$goods['platform_price'],
-                'sku'=>$goods['sku'],
-                'market_price'=>$goods['market_price'],
-                'supplier_price'=>$goods['supplier_price'],
-                'shipping_type'=>$goods['delivery_method'],
-                'order_status'=>0,
-                'shipping_status'=>0,
-                'customer_service'=>0,
-                'is_unusual'=>0,
-                'freight'=>$freight*100,
-            ])->execute();
+            $OrderGoods=new OrderGoods();
+            $OrderGoods->order_no=$order_no;
+            $OrderGoods->goods_id=$goods['id'];
+            $OrderGoods->goods_number=$goods_num;
+            $OrderGoods->create_time=time();
+            $OrderGoods->goods_name=$goods['title'];
+            $OrderGoods->goods_price=$goods['platform_price'];
+            $OrderGoods->sku=$goods['sku'];
+            $OrderGoods->market_price=$goods['market_price'];
+            $OrderGoods->supplier_price=$goods['supplier_price'];
+            $OrderGoods->shipping_type=$goods['delivery_method'];
+            $OrderGoods->cover_image=$goods['cover_image'];
+            $OrderGoods->order_status=0;
+            $OrderGoods->shipping_status=0;
+            $OrderGoods->customer_service=0;
+            $OrderGoods->is_unusual=0;
+            $OrderGoods->freight=$freight*100;
+            $res2=$OrderGoods->save(false);
+
             if (!$res2){
                 $tran->rollBack();
                 return false;
             }
+            $time=time();
             $month=date('Ym',$time);
             $supplier=Supplier::find()
                 ->where(['id'=>$goods['supplier_id']])
@@ -670,14 +678,42 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
+            $date=date('Ymd',time());
+            $GoodsStat=GoodsStat::find()
+                ->where(['supplier_id'=>$supplier_id])
+                ->andWhere(['create_date'=>$date])
+                ->one();
+            if (!$GoodsStat)
+            {
+                $GoodsStat=new GoodsStat();
+                $GoodsStat->supplier_id=$supplier_id;
+                $GoodsStat->sold_number=$goods_num;
+                $GoodsStat->amount_sold=$msg['total_fee'];
+                $GoodsStat->create_date=$date;
+                if (!$GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }else{
+
+                $GoodsStat->sold_number+=$goods_num;
+                $GoodsStat->amount_sold+=$msg['total_fee'];
+                if (!$GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+            $tran->commit();
+            return true;
         }catch (Exception $e) {
             $tran->rollBack();
+            return false;
         }
-        $tran->commit();
-        if ($e){
-            return true;
-        }
+
     }
+
 
 
    /**
