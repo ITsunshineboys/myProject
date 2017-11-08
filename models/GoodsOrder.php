@@ -573,7 +573,7 @@ class GoodsOrder extends ActiveRecord
          } catch (Exception $e) {
              $trans->rollBack();
          }
-         $trans->commit();
+         $trans->commit(); 
          return $e;
      }
 
