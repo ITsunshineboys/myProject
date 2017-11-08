@@ -706,14 +706,14 @@ class OrderController extends Controller
         $freight=trim($request->get('freight'));
         $return_insurance=trim($request->get('return_insurance'));
         $buyer_message=trim($request->get('buyer_message','0'));
-        // if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name ||! $invoice_id || !$supplier_id )
-        // {
-        //     $code=1000;
-        //     return Json::encode([
-        //         'code' => $code,
-        //         'msg'  => Yii::$app->params['errorCodes'][$code]
-        //     ]);
-        // }
+        if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name ||! $invoice_id || !$supplier_id )
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         if (!$freight)
         {
             $freight=0;
@@ -722,19 +722,19 @@ class OrderController extends Controller
         //商品描述，可空
         $body =self::WXPAY_LINE_GOODS.'-'.$subject;
         $orders=array(
-            'address_id'=>1,
-            'invoice_id'=>1,
-            'goods_id'=>1,
-            'goods_num'=>1,
-            'order_price'=>1,
-            'goods_name'=>1,
-            'pay_name'=>1,
-            'supplier_id'=>1,
-            'freight'=>1,
-            'return_insurance'=>1,
-            'body'=>1,
+            'address_id'=>$address_id,
+            'invoice_id'=>$invoice_id,
+            'goods_id'=>$goods_id,
+            'goods_num'=>$goods_num,
+            'order_price'=>$total_amount,
+            'goods_name'=>$subject,
+            'pay_name'=>$pay_name,
+            'supplier_id'=>$supplier_id,
+            'freight'=>$freight,
+            'return_insurance'=>$return_insurance,
+            'body'=>$body,
             'order_no'=>$order_no,
-            'buyer_message'=>1
+            'buyer_message'=>$buyer_message
         );
         $url=(new PayService())->GetOrderOpenid($orders);
         $code=200;
@@ -769,7 +769,6 @@ class OrderController extends Controller
                 'order_no'=> Yii::$app->session['order_no'],
                 'buyer_message'=> Yii::$app->session['buyer_message']
             );
-            var_dump($orders);exit;
             $openid=(new PayService())->GetOpenid();
             $model=new Wxpay();
             $data=$model->Wxlineapipay($orders,$openid);
