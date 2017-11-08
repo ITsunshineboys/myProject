@@ -328,7 +328,7 @@ class UserChat extends \yii\db\ActiveRecord
         foreach ($data['chat_record'] as &$v){
            $chat= ChatRecord::find()->where(['id'=>$v['id']])->one();
            $chat->status=1;
-           $a=$chat->save(false);
+           $chat->save(false);
             $send_time=date('Y-m-d',$v['send_time']);
             if($send_time==date('Y-m-d',time())){
                 $v['send_time']=date('H:i',$v['send_time']);
