@@ -327,7 +327,9 @@ class WxPayApi
             throw new WxPayException("接口URL，缺少必填参数interface_url！");
         } if(!$inputObj->IsReturn_codeSet()) {
         throw new WxPayException("返回状态码，缺少必填参数return_code！");
-    }  if(!$inputObj->IsUser_ipSet()) {
+    } if(!$inputObj->IsResult_codeSet()) {
+        throw new WxPayException("业务结果，缺少必填参数result_code！");
+    } if(!$inputObj->IsUser_ipSet()) {
         throw new WxPayException("访问接口IP，缺少必填参数user_ip！");
     } if(!$inputObj->IsExecute_time_Set()) {
         throw new WxPayException("接口耗时，缺少必填参数execute_time_！");
