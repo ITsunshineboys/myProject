@@ -4170,7 +4170,6 @@ class OrderController extends Controller
                     ]);
                 }
                 $registration_id=$supplier_user->registration_id;
-                echo $registration_id;exit;
                 $push=new Jpush();
                 $extras = [];//推送附加字段的类型
                 $m_time = '86400';//离线保留时间
