@@ -200,7 +200,11 @@ class Effect extends ActiveRecord
             $data['particulars_view']=null;
         }
         $array['particulars']=mb_substr($array['particulars'],0,4);
-        $array['address']=$array['city'].$array['district'].$array['street'];
+        if($array['district']){
+            $array['address']=$array['city'].$array['district'].$array['street'];
+        }else{
+            $array['address']=$array['city'].$array['street'];
+        }
         $array['create_time']=date('Y-m-d',$array['create_time']);
         $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
