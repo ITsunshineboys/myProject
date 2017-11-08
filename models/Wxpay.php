@@ -108,7 +108,7 @@ class Wxpay  extends ActiveRecord
         }
 
 
-           public  function WxBuy($openid){
+       public  function WxBuy($openid){
         ini_set('date.timezone','Asia/Shanghai');
         //打印输出数组信息
         function printf_info($data)
@@ -126,7 +126,7 @@ class Wxpay  extends ActiveRecord
         $input->SetBody('test');
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-        $input->SetTotal_fee(1);
+        $input->SetTotal_fee('1');
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
