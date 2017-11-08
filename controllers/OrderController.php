@@ -4333,7 +4333,7 @@ class OrderController extends Controller
 
 
 
-   public  function  actionWxTest()
+     public  function  actionWxTest()
     {
         $res=Wxpay::Wxpay();
         return Json::encode([
