@@ -32,7 +32,7 @@ CREATE TABLE `worker_craft_norm` (
   `quantity` int(11) DEFAULT '0' COMMENT '每天完成的数量',
   `worker_kind_details` varchar(20) DEFAULT NULL COMMENT '工种详情',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of worker_craft_norm
@@ -117,7 +117,7 @@ CREATE TABLE `series` (
   `creation_time` int(11) DEFAULT NULL,
   `series_grade` int(5) DEFAULT NULL COMMENT '系列等级',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of series
@@ -143,7 +143,7 @@ CREATE TABLE `style` (
   `creation_time` int(11) DEFAULT NULL,
   `images` varchar(255) DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of style
@@ -162,7 +162,7 @@ CREATE TABLE `engineering_standard_carpentry_coefficient` (
   `coefficient` int(5) DEFAULT NULL COMMENT '系数',
   `series_or_style` tinyint(4) DEFAULT NULL COMMENT '0-系数，1-风格',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of engineering_standard_carpentry_coefficient
@@ -179,7 +179,7 @@ CREATE TABLE `engineering_standard_carpentry_craft` (
   `title` varchar(255) DEFAULT NULL COMMENT '名称',
   `value` float(11,2) DEFAULT NULL COMMENT '值',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of engineering_standard_carpentry_craft
@@ -194,7 +194,7 @@ CREATE TABLE `coefficient_management` (
   `classify` varchar(5) DEFAULT NULL COMMENT '分类',
   `coefficient` float(10,2) DEFAULT '1.00' COMMENT '系数值',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of coefficient_management
@@ -234,7 +234,7 @@ CREATE TABLE `assort_goods` (
   `state` tinyint(4) DEFAULT '0' COMMENT '0-案例商品管理，1-商品管理',
   `quantity` int(11) DEFAULT NULL COMMENT '数量',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of assort_goods
@@ -268,7 +268,7 @@ CREATE TABLE `decoration_message` (
   `min_area` int(11) DEFAULT NULL,
   `max_area` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of decoration_message
@@ -288,7 +288,7 @@ CREATE TABLE `points` (
   `level` tinyint(1) DEFAULT NULL COMMENT '等级',
   `differentiate` tinyint(1) DEFAULT '0' COMMENT '0-固定，1-新添加',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of points
