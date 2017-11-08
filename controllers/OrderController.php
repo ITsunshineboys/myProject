@@ -1165,7 +1165,7 @@ class OrderController extends Controller
         }else{
             return Json::encode([
                 'code' => $data,
-                'msg' => '不支持'
+                'msg' => '收货地址异常'
             ]);
         }
     }

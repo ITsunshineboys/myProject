@@ -188,7 +188,7 @@ class LogisticsDistrict extends ActiveRecord
         if ($array){
             $a=0;
             foreach ($array AS $k =>$v ){
-                if ($array[$k]['district_code']=$districtcode){
+                if ($array[$k]['district_code']==$districtcode){
                     $a=1;
                 }
             }
