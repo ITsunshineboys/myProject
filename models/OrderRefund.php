@@ -81,7 +81,7 @@ class OrderRefund extends ActiveRecord
                 $refund_type='已退至顾客钱包';
                 break;
         }
-
+        $data=[];
         $unshipped=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
             ->asArray()
@@ -164,10 +164,7 @@ class OrderRefund extends ActiveRecord
                 'order_type'=>'退款详情-待发货',
                 'list'=>$arr1
             ];
-        }else{
-            $data[]=[];
         }
-
         $unreceived=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
             ->asArray()
@@ -250,8 +247,6 @@ class OrderRefund extends ActiveRecord
                 'order_type'=>'退款详情-待收货',
                 'list'=>$arr2
             ];
-        }else{
-            $data[]=[];
         }
         $OrderPlatform=OrderPlatForm::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku])

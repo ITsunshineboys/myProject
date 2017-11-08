@@ -1552,10 +1552,23 @@ class OrderController extends Controller
         }
         if (!$express)
         {
-            $code=1000;
+            $code=200;
+            $arr=array(
+                'time'=>date('Y-m-d H:i',time()),
+                'context'=>'无物流信息'
+            );
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
+                'msg' =>'ok',
+                'data'=> [
+                    'list'=>[
+                        $arr
+                    ],
+                    'shipping_type'=>$shipping_type,
+                    'waybillname'=>'暂无物流信息',
+                    'waybillnumber'=>'0',
+                    'order_no'=>$order_no
+                ]
             ]);
         }
         switch ($shipping_type){

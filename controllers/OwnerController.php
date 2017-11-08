@@ -1717,18 +1717,13 @@ class OwnerController extends Controller
      *
      * @return string
      */
-    public function actionTest(){
-//        $id = Yii::$app->request->get('id','');
-//        $redis = Yii::$app->redis; //$redis->get('key');$redis->set('k','v');
-//        $redis->get('111111');
-//        var_dump($redis->set());
-        $where = ['city_code'=>'510100'];
-        var_dump(Effect::find()->where($where) ->groupBy('toponymy')->asArray()->count());
-        var_dump(Effect::find()->select('toponymy')->where($where) ->groupBy('toponymy')->asArray()->all());
+    public function actionTest()
+    {
+        $goods = Goods::find()->select('sku')->where(['in',['id'],[1,3,4,210,212,220,222,224,226,228,229,255,259,281,295,296,297,309,310,314]])->asArray()->all();
+        $goods_attr = GoodsAttr::find()->where(['in',['goods_id'],[1,3,4,210,212,220,222,224,226,228,229,255,259,281,295,296,297,309,310,314]])->asArray()->all();
+        var_dump($goods);
+        var_dump($goods_attr);
         exit;
-        return Json::encode([
-//           'goods'=> (new LogisticsTemplate())->find()->where(['id'=>$id])->All(),
-        ]);
     }
 
 }

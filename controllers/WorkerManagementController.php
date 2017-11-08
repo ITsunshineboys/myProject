@@ -23,9 +23,8 @@ class WorkerManagementController extends Controller
 {
 
     const ORDER_STATUS_ACCOMPLISH = 5;
-    const STATUS = [
-      'cancel' => 0,
-    ];
+    const DEFAULT_PAGE = 1;
+    const DEFAULT_SIZE = 12;
     /**
      * @inheritdoc
      */
@@ -422,8 +421,8 @@ class WorkerManagementController extends Controller
     public function actionWorkOrderList()
     {
         $status = (int)trim(\Yii::$app->request->post('status',''));
-        $page = (int)trim(\Yii::$app->request->post('page','1'));
-        $size = (int)trim(\Yii::$app->request->post('size','12'));
+        $page = (int)trim(\Yii::$app->request->post('page',self::DEFAULT_PAGE));
+        $size = (int)trim(\Yii::$app->request->post('size',self::DEFAULT_SIZE));
         // 全部订单
         $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time','')));
         $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time','')));
