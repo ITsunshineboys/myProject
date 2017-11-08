@@ -1991,14 +1991,14 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return int
      */
-       public  static  function  orderBalanceSub($postData,$user){
+    public  static  function  orderBalanceSub($postData,$user){
         $orders=explode(',',$postData['list']);
         if(!is_array($orders))
         {
             $code=1000;
             return $code;
         }
-        if ($postData['total_amount']> $user->availableamount){
+        if ($postData['total_amount'] > $user->availableamount){
             $code=1033;
             return $code;
         }
@@ -2011,6 +2011,43 @@ class GoodsOrder extends ActiveRecord
         try{
 
             $role=Role::GetRoleByRoleId($user->last_role_id_app,$user);
+
+            switch ($user->last_role_id_app)
+            {
+                case 2:
+                    $role_number=$role->worker_type_id;
+                    break;
+                case 3:
+                    $role_number=$role->decoration_company_id;
+                    break;
+                case 4:
+                    $role_number=$role->decoration_company_id;
+                    break;
+                case 5:
+                    $role_number=$role->id;
+                    break;
+                case 6:
+                    $role_number=$role->shop_no;
+                    break;
+                case 7:
+                    $role_number=$role->aite_cube_no;
+                    break;
+            }
+
+            $access=new UserAccessdetail();
+            $access->uid=$user->id;
+            $access->role_id=$user->last_role_id_app;
+            $access->access_type=7;
+            $access->access_money=$postData['total_amount']*100;
+            $access->create_time=time();
+            $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
+            $res3=$access->save(false);
+            if ( !$res3){
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+
             foreach ($orders as $k =>$v){
                 $GoodsOrder=self::find()
                     ->where(['order_no'=>$orders[$k]])
@@ -2026,7 +2063,6 @@ class GoodsOrder extends ActiveRecord
                         $code=1000;
                         return $code;
                     }
-
                     $date=date('Ymd',time());
                     $GoodsStat=GoodsStat::find()
                         ->where(['supplier_id'=>$GoodsOrder->supplier_id])
@@ -2036,19 +2072,20 @@ class GoodsOrder extends ActiveRecord
                     {
                         $GoodsStat=new GoodsStat();
                         $GoodsStat->supplier_id=$GoodsOrder->supplier_id;
-                        $GoodsStat->sold_number=$Goods['goods_number'];
+                        $GoodsStat->sold_number=(int)$Goods['goods_number'];
                         $GoodsStat->amount_sold=$GoodsOrder->amount_order;
                         $GoodsStat->create_date=$date;
-                        if ($GoodsStat->save(false))
+                        if (!$GoodsStat->save(false))
                         {
                             $code=500;
                             $tran->rollBack();
                             return $code;
                         }
                     }else{
-                        $GoodsStat->sold_number+=$Goods['goods_number'];
+                        $GoodsStat->sold_number+=(int)$Goods['goods_number'];
                         $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
-                        if ($GoodsStat->save(false))
+                        $GoodsStat->create_date=$date;
+                        if (!$GoodsStat->save(false))
                         {
                             $code=500;
                             $tran->rollBack();
@@ -2059,9 +2096,9 @@ class GoodsOrder extends ActiveRecord
                 if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                 {
                     $code=1000;
+                    $tran->rollBack();
                     return $code;
                 }
-
 
                     $order_money=$GoodsOrder->amount_order;
                     $GoodsOrder->pay_status=1;
@@ -2097,40 +2134,7 @@ class GoodsOrder extends ActiveRecord
 
 
             }
-            switch ($user->last_role_id_app)
-            {
-                case 2:
-                    $role_number=$role->worker_type_id;
-                    break;
-                case 3:
-                    $role_number=$role->decoration_company_id;
-                    break;
-                case 4:
-                    $role_number=$role->decoration_company_id;
-                    break;
-                case 5:
-                    $role_number=$role->id;
-                    break;
-                case 6:
-                    $role_number=$role->shop_no;
-                    break;
-                case 7:
-                    $role_number=$role->aite_cube_no;
-                    break;
-            }
-            $access=new UserAccessdetail();
-            $access->uid=$user->id;
-            $access->role_id=$user->last_role_id_app;
-            $access->access_type=7;
-            $access->access_money=$postData['total_amount']*100;
-            $access->create_time=time();
-            $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
-            $res3=$access->save(false);
-            if ( !$res3){
-                $tran->rollBack();
-                $code=500;
-                return $code;
-            }
+
             $tran->commit();
         }catch (Exception $e){
             $tran->rollBack();
