@@ -1173,7 +1173,6 @@ class OwnerController extends Controller
         //材料费
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL,$select);
-        var_dump($goods);exit;
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -1718,18 +1717,10 @@ class OwnerController extends Controller
      *
      * @return string
      */
-    public function actionTest(){
-//        $id = Yii::$app->request->get('id','');
-//        $redis = Yii::$app->redis; //$redis->get('key');$redis->set('k','v');
-//        $redis->get('111111');
-//        var_dump($redis->set());
-        $where = ['city_code'=>'510100'];
-        var_dump(Effect::find()->where($where) ->groupBy('toponymy')->asArray()->count());
-        var_dump(Effect::find()->select('toponymy')->where($where) ->groupBy('toponymy')->asArray()->all());
-        exit;
-        return Json::encode([
-//           'goods'=> (new LogisticsTemplate())->find()->where(['id'=>$id])->All(),
-        ]);
+    public function actionTest()
+    {
+        $goods_attr = GoodsAttr::find()->where(['in',['goods.id'],[1,3,4,210,212,220,222,224,226,228,229,255,259,281,295,296,297,309,310,314]])->all();
+        var_dump($goods_attr);exit;
     }
 
 }
