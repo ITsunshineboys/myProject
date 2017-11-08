@@ -271,7 +271,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                     title: goods.goods_three,
                                     goods_detail: []
                                 };
-                                material.second_level[material.second_level.length - 1].push(tempLevel);
+                                material.second_level[material.second_level.length - 1].three_level.push(tempLevel);
                                 material.second_level[material.second_level.length - 1].three_level[0].goods_detail.push(goods);
                             }
                         }

@@ -80,7 +80,7 @@ angular.module('all_controller',[])
         }
         console.log($scope.all_goods)
         //请求后台数据
-        $http.get('/owner/series-and-style').then(function (response) {
+        $http.get(url+'/owner/series-and-style').then(function (response) {
             console.log(response)
             $scope.stairs_details = response.data.data.show.stairs_details;//楼梯数据
             $scope.series = response.data.data.show.series;//系列数据
@@ -141,7 +141,7 @@ angular.module('all_controller',[])
             }
         }
         //一级、二级分类
-        $http.post('/owner/classify', {}, config).then(function (response) {
+        $http.post(url+'/owner/classify', {}, config).then(function (response) {
             console.log(response)
             $scope.stair = response.data.data.pid.stair//一级
             $scope.level = response.data.data.pid.level//二级
@@ -275,7 +275,7 @@ angular.module('all_controller',[])
                 $scope.check_goods = item
             }
             console.log($scope.check_goods)
-            $http.get('/mall/goods-view', {
+            $http.get(url+'/mall/goods-view', {
                 params: {
                     id: +$scope.check_goods.id
                 }
@@ -326,7 +326,7 @@ angular.module('all_controller',[])
             $scope.cur_status = 1
             // $scope.cur_project = 1
             $scope.cur_replace_material = []//所有可以替换的商品
-            $http.get('/mall/category-goods', {
+            $http.get(url+'/mall/category-goods', {
                 params: {
                     category_id: $scope.cur_three_id,
                     style_id: $scope.cur_goods_detail.style_id,
@@ -648,7 +648,7 @@ angular.module('all_controller',[])
         $scope.go_three_item = function(){
             $scope.cur_status = 2
             $scope.cur_second_level = $scope.cur_header
-            $http.get('/mall/categories-level3',{
+            $http.get(url+'/mall/categories-level3',{
                 params:{
                     pid:$scope.cur_item.id
                 }
@@ -667,13 +667,13 @@ angular.module('all_controller',[])
         $scope.go_cur_goods = function (item) {
             $scope.cur_three_level = item.title
             $scope.cur_three_id = item.id
-            $http.get('/mall/category-goods', {
+            $http.get(url+'/mall/category-goods', {
                 params: {
                     category_id: item.id,
                 }
             }).then(function (response) {
                 console.log(response)
-                $http.get('/mall/category-brands-styles-series',{
+                $http.get(url+'/mall/category-brands-styles-series',{
                     params:{
                         category_id: item.id,
                     }
@@ -745,7 +745,7 @@ angular.module('all_controller',[])
                     value['second_level'] = []
                 }
                 //弱电
-                $q.all([$http.post('/owner/weak-current', data, config).then(function (response) {
+                $q.all([$http.post(url+'/owner/weak-current', data, config).then(function (response) {
                     console.log('弱电')
                     console.log(response)
                     //整合一级
@@ -851,7 +851,7 @@ angular.module('all_controller',[])
                 //     console.log(error)
                 // })
                 //强电
-                $http.post('/owner/strong-current', data, config).then(function (response) {
+                $http.post(url+'/owner/strong-current', data, config).then(function (response) {
                     console.log('强电')
                     console.log(response)
                     //整合一级
@@ -955,7 +955,7 @@ angular.module('all_controller',[])
                 //     console.log(error)
                 // })
                 //水路
-                $http.post('/owner/waterway', data, config).then(function (response) {
+                $http.post(url+'/owner/waterway', data, config).then(function (response) {
                     console.log('水路')
                     console.log(response)
                     //整合一级
@@ -1059,7 +1059,7 @@ angular.module('all_controller',[])
                 //     console.log(error)
                 // })
                 //防水
-                $http.post('/owner/waterproof', data, config).then(function (response) {
+                $http.post(url+'/owner/waterproof', data, config).then(function (response) {
                     console.log('防水')
                     console.log(response)
                     //整合一级
@@ -1165,7 +1165,7 @@ angular.module('all_controller',[])
                 //     console.log(error)
                 // })
                 //木作
-                $http.post('/owner/carpentry', data, config).then(function (response) {
+                $http.post(url+'/owner/carpentry', data, config).then(function (response) {
                     console.log('木作')
                     console.log(response)
                     //整合一级
@@ -1269,7 +1269,7 @@ angular.module('all_controller',[])
                 //     console.log(error)
                 // })
                 //乳胶漆
-                $http.post('/owner/coating', data, config).then(function (response) {
+                $http.post(url+'/owner/coating', data, config).then(function (response) {
                     console.log('乳胶漆')
                     console.log(response)
                     //整合一级
@@ -1373,7 +1373,7 @@ angular.module('all_controller',[])
                 //     console.log(error)
                 // })
                 //主要材料以及其他
-                $http.post('/owner/assort-facility', data, config).then(function (response) {
+                $http.post(url+'/owner/assort-facility', data, config).then(function (response) {
                     console.log('主要材料及其他')
                     console.log(response)
                     for (let [key, value] of response.data.data.goods.entries()) {
@@ -1483,7 +1483,7 @@ angular.module('all_controller',[])
                 })]).then(function () {//计算总费用
                     $q.all([
                         //泥作
-                        $http.post('/owner/mud-make', data1, config).then(function (response) {
+                        $http.post(url+'/owner/mud-make', data1, config).then(function (response) {
                             console.log('泥作')
                             console.log(response)
                             //整合一级
@@ -1613,7 +1613,7 @@ angular.module('all_controller',[])
                     }
                 }
             }
-            $q.all([$http.post('/order/calculation-freight',{
+            $q.all([$http.post(url+'/order/calculation-freight',{
                 goods:arr
             },config).then(function(res){
                 console.log(res)
@@ -1621,7 +1621,7 @@ angular.module('all_controller',[])
                 $scope.discount_price += +res.data.data
                 console.log($scope.all_price)
                 console.log($scope.discount_price)
-            }),$http.post('/owner/coefficient',{
+            }),$http.post(url+'/owner/coefficient',{
                 list:arr1
             },config).then(function (res) {
                 console.log(res)
@@ -1654,7 +1654,7 @@ angular.module('all_controller',[])
         $scope.$watch('toponymy', function (newVal, oldVal) {
             console.log(newVal)
             if (newVal != '') {
-                $http.post('/owner/search', {
+                $http.post(url+'/owner/search', {
                     str: newVal
                 }, config).then(function (response) {
                     console.log(response)
@@ -1718,6 +1718,16 @@ angular.module('all_controller',[])
         }
         //请求杂工数据
         $scope.go_handyman_options = function () {
+            if(!!sessionStorage.getItem('cur_goods')){
+                $scope.cur_goods = JSON.parse(sessionStorage.getItem('cur_goods'))
+            }
+            if(!!sessionStorage.getItem('worker')){
+                $scope.all_worker = JSON.parse(sessionStorage.getItem('worker'))
+            }
+            if(!!sessionStorage.getItem('backman')){
+                $scope.all_backman = JSON.parse(sessionStorage.getItem('backman'))
+                console.log($scope.all_backman)
+            }
             //清理杂项原始数据
             if ($scope.cur_goods != undefined && $scope.cur_worker != undefined) {
                 for (let [key, value] of $scope.all_goods.entries()) {
@@ -1755,6 +1765,24 @@ angular.module('all_controller',[])
                     }
                 }
             }
+            if(!!sessionStorage.getItem('backman')){
+                for(let [key,value] of $scope.all_backman.entries()){
+                    if(value.backman_option == '12墙拆除'){
+                        value.backman_value = $scope.twelve_dismantle
+                    }else if(value.backman_option == '24墙拆除'){
+                        value.backman_value = $scope.twenty_four_dismantle
+                    }else if(value.backman_option == '补烂'){
+                        value.backman_value = $scope.repair
+                    }else if(value.backman_option == '12墙新建'){
+                        value.backman_value = $scope.twelve_new_construction
+                    }else if(value.backman_option == '24墙新建(含双面抹灰)'){
+                        value.backman_value =  $scope.twenty_four_new_construction
+                    }else if(value.backman_option == '有无建渣点'){
+                        value.backman_value = $scope.building_scrap
+                    }
+                }
+                sessionStorage.setItem('backman',JSON.stringify($scope.all_backman))
+            }
             //保存并请求杂项数据
             if (!$scope.twelve_dismantle && !$scope.twenty_four_dismantle && !$scope.repair &&
                 !$scope.twelve_new_construction && !$scope.twenty_four_new_construction) {
@@ -1762,9 +1790,15 @@ angular.module('all_controller',[])
                 console.log($scope.all_workers)
                 get_all_price()
                 $scope.cur_header = '智能报价'
+                let index = $scope.all_worker.findIndex(function (item) {
+                    return item.worker_kind == '杂工'
+                })
+                $scope.all_worker[index].worker_price = 0
+                sessionStorage.setItem('worker',JSON.stringify($scope.all_worker))
+                sessionStorage.removeItem('cur_goods')
                 $state.go('nodata.house_list')
             } else {
-                $http.post('/owner/handyman', {
+                $http.post(url+'/owner/handyman', {
                     'province': 510000,
                     'city': 510100,
                     '12_dismantle': +$scope.twelve_dismantle || 0,
@@ -1781,6 +1815,7 @@ angular.module('all_controller',[])
                     console.log(response)
                     $scope.cur_goods = response.data.data.total_material.material
                     $scope.cur_worker = response.data.data.labor_cost
+                    sessionStorage.setItem('cur_goods',JSON.stringify($scope.cur_goods))
                     //整合一级
                     for (let [key, value] of $scope.stair.entries()) {
                         for (let [key1, value1] of response.data.data.total_material.material.entries()) {
@@ -1876,7 +1911,43 @@ angular.module('all_controller',[])
                         }
                     }
                     if(!!sessionStorage.getItem('materials')){
-
+                        let arr = []
+                            for(let [key,value] of $scope.all_goods.entries()){
+                                arr.push({
+                                    id:value.id,
+                                    title:value.title,
+                                    goods:[]
+                                })
+                            }
+                            for(let [key,value] of $scope.all_goods.entries()){
+                                for(let [key1,value1] of value.second_level.entries()){
+                                    for(let [key2,value2] of value1.three_level.entries()){
+                                        for(let [key3,value3] of value2.goods_detail.entries()){
+                                            for(let [key4,value4] of arr.entries()){
+                                                if(value.id == value4.id){
+                                                    if(value3.goods_id == undefined){
+                                                        value4.goods.push({
+                                                            cost:value3.cost,
+                                                            goods_id:value3.id,
+                                                            name:value3.name,
+                                                            id:value2.id,
+                                                            goods_three:value2.title,
+                                                            goods_second:value1.title,
+                                                            goods_first:value.title,
+                                                            quantity:value3.quantity
+                                                        })
+                                                    }else{
+                                                        value4.goods.push(value3)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            console.log(arr)
+                            sessionStorage.setItem('materials',JSON.stringify(arr))
+                        $state.go('modelRoom')
                     }else{
                         $scope.cur_header = '智能报价'
                         get_all_price()
