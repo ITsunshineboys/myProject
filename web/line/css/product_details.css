@@ -87,6 +87,7 @@
 }
 .main .standard >div:nth-child(1){
     margin-left: -.6rem;
+    display: inline;
 }
 .main .standard >div:nth-child(2){
     position: absolute;

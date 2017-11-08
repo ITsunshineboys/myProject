@@ -398,8 +398,8 @@ angular.module("all_controller", ['ngCookies'])
                 url:'http://test.cdlhzz.cn/mall/category-goods',
                 params:{
                     category_id:+$scope.id,
-                    platform_price_min:+$scope.price_min,
-                    platform_price_max:+$scope.price_max,
+                    platform_price_min:+$scope.price_min*100,
+                    platform_price_max:+$scope.price_max*100,
                     brand_id:$scope.brand_id,
                     style_id:$scope.check_style_id,
                     series_id:+$scope.check_series_id,
@@ -1030,7 +1030,6 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.harvestNum     = addresObJ.phone;
                 $scope.harvestAddress = addresObJ.address;
                 $scope.prove_city_more = addresObJ.prove +'—'+ addresObJ.prove_city+'—'+ addresObJ.prove_city_qu;
-
             }
 
             $scope.harvestMadel ='#delivery_address';
@@ -1224,8 +1223,9 @@ angular.module("all_controller", ['ngCookies'])
                 //判断收货地址是否在配送范围内
                 $http.post('http://test.cdlhzz.cn/order/judegaddress',{
                     goods_id:+$scope.mall_id,
-                    districtcode:110100
+                    districtcode:$scope.districtMore
                 },config).then(function (response) {
+                    // alert(JSON.stringify(response));
                     console.log(response);
                     $scope.code = response.data.code;
                     if($scope.code == 1000){
