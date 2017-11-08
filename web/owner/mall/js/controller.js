@@ -1,18 +1,19 @@
 angular.module('all_controller',[])
+    .controller("indexCtrl", ["$scope","_ajax", function ($scope, _ajax) {
+
+    }])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
         /*主页操作*/
         sessionStorage.clear();
         //主页推荐
-        $http.get('/owner/homepage').then(function (response) {
+        $http.get(url + '/owner/homepage').then(function (response) {
             $scope.recommend_list = response.data.data
             console.log(response)
         }, function (error) {
             console.log(error)
         })
         // 微信事宜
-        // _ajax.get('/order/get-open-id',{},function (res) {
-        //     alert(JSON.stringify(res))
-        // })
+
     })
     .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
         $scope.ctrlScope = $scope

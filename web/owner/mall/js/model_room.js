@@ -171,7 +171,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         let payParams = {
             province_code: activeObj.province_code,                     // 省编码
             city_code: activeObj.city_code,                             // 市级编码
-            // district_code: activeObj.district_code,                     // 区级编码
+            district_code: activeObj.district_code,                     // 区级编码
             bedroom: activeObj.bedroom,                                 // 卧室
             toilet: activeObj.toilet,                                   // 卫生间
             kitchen: activeObj.kitchen,                                 // 厨房
@@ -186,7 +186,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             series: activeObj.case_picture[0].series_id,                // 系列
             style: activeObj.case_picture[0].style_id,                  // 风格
             street: activeObj.street,                                   // 街道
-            // particulars: activeObj.particulars,                         // 楼层详情
+            particulars: activeObj.particulars,                         // 楼层详情
             stairway: activeObj.stairway,                               // 楼梯信息
             stair_id: activeObj.stair_id,                               // 楼梯材料id
             original_price: $scope.price,                               // 原价
