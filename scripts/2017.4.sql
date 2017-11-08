@@ -19,7 +19,7 @@ insert into role(id, name, admin_module, detail_table, detail_model) values
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` char(26) DEFAULT '' comment '环信用户名',
-  `hx_pwd` char(26) DEFAULT '' comment '环信密码',
+  `hx_pwd_date` int unsigned not null DEFAULT 0 comment '设置环信密码日期',
   `password` varchar(100) DEFAULT '',
   `authKey` varchar(30) DEFAULT '',
   `authKeyAdmin` varchar(30) DEFAULT '',
