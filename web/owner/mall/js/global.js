@@ -1,5 +1,5 @@
-const url = "http://test.cdlhzz.cn";
-// const url="http://local.test.cdlhzz.cn/";
+// const url = "http://test.cdlhzz.cn";
+const url="";
 
 //获取url中的？号后面的内容
 function GetQueryString(name) {
