@@ -125,7 +125,8 @@ section{
 }
 .style_screen{
     position: relative;
-    height: 51.8rem;
+    height: 51rem;
+
 }
 .style_size{
     font-size: 1.3rem;
