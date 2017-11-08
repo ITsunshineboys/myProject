@@ -475,9 +475,12 @@ class ChatController extends Controller
     }
     public function actionTest(){
         $chat=new ChatService();
-
-       $a= $chat->resetPassword('53914510915189331350582011','abc');
+//
+//       $a= $chat->resetPassword('53914510915189331350582011','abc');
+//        var_dump($a);
+        $time=time();
+       $a= $chat->getChatRecord("select * where timestamp< $time");
         var_dump($a);
-        var_dump(User::find()->where(['mobile'=>'13551201835'])->one());
+
     }
 }
