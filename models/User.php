@@ -1084,7 +1084,10 @@ class User extends ActiveRecord implements IdentityInterface
         $salt = Yii::$app->params['security']['salt'];
         $w = date('w');
         $wCnt = substr_count($mobile, $w);
-        $sum = $w + $wCnt + strlen($salt) + strlen($restrationId);
+        $hour = 7 + $w;
+        $minute = 13 + $wCnt;
+        $time = strtotime($hour . ':' . $minute);
+        $sum = $w + $wCnt + strlen($salt) + strlen($restrationId) + $time;
         return md5($mobile . md5(md5($restrationId) . $hxUsername) . $sum . $salt);
     }
 

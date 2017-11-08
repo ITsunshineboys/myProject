@@ -182,28 +182,30 @@ class SiteController extends Controller
                     ],
                 ]);
 
-                $events = Yii::$app->params['events'];
-                $event = $events['async'];
-                $data = [
-                    'event' => [
-                        'name' => $events['user']['login'],
-                        'data' => [
-                            'mobile' => $user->mobile,
-                            'username' => $user->username,
-                            'registrationId' => $user->registration_id,
+                if ($user->hx_pwd_date != date('Ymd')) {
+                    $events = Yii::$app->params['events'];
+                    $event = $events['async'];
+                    $data = [
+                        'event' => [
+                            'name' => $events['user']['login'],
+                            'data' => [
+                                'mobile' => $user->mobile,
+                                'username' => $user->username,
+                                'registrationId' => $user->registration_id,
+                            ],
                         ],
-                    ],
-                ];
-                new EventHandleService($event, $data);
-                Yii::$app->trigger($event);
+                    ];
+                    new EventHandleService($event, $data);
+                    Yii::$app->trigger($event);
+                }
             }
+        } else {
+            $code = 1001;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
         }
-
-        $code = 1001;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code],
-        ]);
     }
 
     /**
