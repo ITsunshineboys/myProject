@@ -303,8 +303,8 @@ class UserChat extends \yii\db\ActiveRecord
                 ->asArray()
                 ->where(['uid'=>$uid])
                 ->one();
-            $hx=User::find()->asArray()->select('hx_pwd,username')->where(['id'=>$uid])->one();
-            $data['user']['hx_pwd']=$hx['hx_pwd'];
+            $hx=User::find()->asArray()->select('hx_pwd_date,username')->where(['id'=>$uid])->one();
+            $data['user']['hx_pwd']=$hx['hx_pwd_date'];
             $data['user']['hx_name']=$hx['username'];
         }elseif($role_id==7){
             $data['user']=User::find()
@@ -312,12 +312,11 @@ class UserChat extends \yii\db\ActiveRecord
                 ->asArray()
                 ->where(['id'=>$uid])
                 ->one();
-            $hx=User::find()->asArray()->select('hx_pwd,username')->where(['id'=>$uid])->one();
-            $data['user']['hx_pwd']=$hx['hx_pwd'];
+            $hx=User::find()->asArray()->select('hx_pwd_date,username')->where(['id'=>$uid])->one();
+            $data['user']['hx_pwd']=$hx['hx_pwd_date'];
             $data['user']['hx_name']=$hx['username'];
         }
         $data['chat_record']=\Yii::$app->db->createCommand("SELECT * from chat_record where ((send_uid=$uid and to_uid=$recipient_id) or (send_uid=$recipient_id and to_uid=$uid)) and ((send_role_id=$recipient_role_id and to_role_id=$role_id) or (send_role_id=$role_id and to_role_id=$recipient_role_id))")->queryAll();
-        var_dump($data);die;
         if(!$data){
           return null;
         }
