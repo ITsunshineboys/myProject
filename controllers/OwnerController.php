@@ -1599,7 +1599,7 @@ class OwnerController extends Controller
         }
 
         $effect_where = 'effect_id = '.$effect['id'];
-        $data = WorksData::find()->asArray()->select([])->where($effect_where)->all();
+        $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where($effect_where)->all();
         if ($data == null) {
             $code = 1067;
             return Json::encode([
