@@ -358,6 +358,7 @@ class ChatController extends Controller
             $data=[];
             $res['chat_news']=null;
         }
+        var_dump($data);die;
        foreach ($data as $k=>&$v){
 
             $all=ChatRecord::find()->asArray()->where( "send_uid in ({$v['lxr']}) and to_uid =$u_id ")->andWhere(['status'=>0])->orderBy('send_time Desc')->all();
@@ -474,13 +475,7 @@ class ChatController extends Controller
         ]);
     }
     public function actionTest(){
-        $chat=new ChatService();
-//
-//       $a= $chat->resetPassword('53914510915189331350582011','abc');
-//        var_dump($a);
-        $time=time();
-       $a= $chat->getChatRecord("select * where timestamp< $time");
-        var_dump($a);
+
 
     }
 }
