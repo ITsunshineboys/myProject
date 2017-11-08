@@ -24,6 +24,7 @@ angular.module('all_controller',[])
             }
         }
         $scope.baseUrl = 'http://test.cdlhzz.cn/'
+        $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
         $scope.area = 60//房屋面积
@@ -1890,27 +1891,26 @@ angular.module('all_controller',[])
         }
         //申请样板间
         $scope.go_apply_case = function () {
-            // let obj = {
-            //     province_code:510000,
-            //     city_code:510100,
-            //     bedroom:$scope.house_bedroom,
-            //     toilet:$scope.house_toilet,
-            //     kitchen:$scope.house_kitchen,
-            //     high
-            //     window:$scope.window,
-            //     sittingRoom_diningRoom:$scope.house_hall,
-            //     area:$scope.area,
-            //     requirement
-            //     toponymy:$scope.toponymy,
-            //     series:$scope.cur_series.id,
-            //     style:$scope.cur_style.id,
-            //     street:$scope.message,
-            //     particulars:$scope.highCrtl,
-            //     stairway:$scope.choose_stairs,
-            //     stair_id:$scope.nowStairs,
-            //     original_price
-            //     sale_price
-            // }
+            let obj = {
+                province_code:510000,//省编码
+                city_code:510100,//市编码
+                bedroom:$scope.house_bedroom,//室
+                toilet:$scope.house_toilet,//卫
+                kitchen:$scope.house_kitchen,//厨
+                high:$scope.highCrtl,//层高
+                window:$scope.window,//飘窗
+                sittingRoom_diningRoom:$scope.house_hall,//厅
+                area:$scope.area,//面积
+                requirement:$scope.special_request,//特殊要求
+                toponymy:$scope.toponymy,//小区名称
+                series:$scope.cur_series.id,//系列
+                style:$scope.cur_style.id,//风格
+                street:$scope.message,//小区地址
+                stairway:$scope.choose_stairs,//是否有楼梯
+                stair_id:$scope.nowStairs,//楼梯结构
+                original_price:$scope.all_price,//原价
+                sale_price:$scope.discount_price//折扣价
+            }
             let arr = []
             for(let [key,value] of $scope.all_goods.entries()){
                 for(let [key1,value1] of value.second_level.entries()){
@@ -1926,6 +1926,9 @@ angular.module('all_controller',[])
                     }
                 }
             }
-
+            obj['material'] = arr
+            sessionStorage.setItem('payParams',JSON.stringify(obj))
+            $state.go('deposit')
+            console.log(obj)
         }
     })
