@@ -17,7 +17,6 @@ const app = angular.module("app", ["ui.router", "shop_style", "freight_template"
   /*公共结束*/
 ]);
 
-
 //路由拦截
 app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/home");
