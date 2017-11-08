@@ -1550,18 +1550,24 @@ class OrderController extends Controller
                 ->one();
 
         }
-         if (!$express)
+        if (!$express)
         {
             $code=200;
+            $arr=array(
+                'time'=>date('Y-m-d H:i',time()),
+                'context'=>'无物流信息'
+            );
             return Json::encode([
                 'code' => $code,
                 'msg' =>'ok',
                 'data'=> [
-                    'list'=>[],
-                    'shipping_type'=>'',
-                    'waybillname'=>'',
-                    'waybillnumber'=>'',
-                    'order_no'=>''
+                    'list'=>[
+                        $arr
+                    ],
+                    'shipping_type'=>$shipping_type,
+                    'waybillname'=>'暂无物流信息',
+                    'waybillnumber'=>'0',
+                    'order_no'=>$order_no
                 ]
             ]);
         }
