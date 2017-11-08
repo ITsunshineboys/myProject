@@ -289,13 +289,13 @@ class UserChat extends \yii\db\ActiveRecord
                     ->where(['uid'=>$recipient_id])
                     ->one();
             $data['recipient']['hx_name']=User::find()->asArray()->select('username')->where(['id'=>$recipient_id])->one()['username'];
-
         }elseif($recipient_role_id==7){
             $data['recipient']=User::find()
                 ->select(['id','icon','nickname as name','username as hx_name'])
                 ->asArray()
                 ->where(['id'=>$recipient_id])
                 ->one();
+
         }
         if($role_id==6){
             $data['user']=Supplier::find()
@@ -316,6 +316,8 @@ class UserChat extends \yii\db\ActiveRecord
             $data['user']['hx_pwd']=$hx['hx_pwd'];
             $data['user']['hx_name']=$hx['username'];
         }
+        $data['chat_record']=\Yii::$app->db->createCommand("SELECT * from chat_record where ((send_uid=$uid and to_uid=$recipient_id) or (send_uid=$recipient_id and to_uid=$uid)) and ((send_role_id=$recipient_role_id and to_role_id=$role_id) or (send_role_id=$role_id and to_role_id=$recipient_role_id))")->queryAll();
+        var_dump($data);die;
         if(!$data){
           return null;
         }
