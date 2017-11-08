@@ -1626,90 +1626,47 @@ class OwnerController extends Controller
             ]);
         }
 
-        if ($data != null){
-            foreach ($data as $one_goods){
+        if ($data != null) {
+            foreach ($data as $one_goods) {
                 $sku [] = $one_goods['goods_code'];
             }
             $select = "goods.id,goods.sku,goods.platform_price,goods.purchase_price_decoration_company,goods.logistics_template_id,goods_brand.name,goods.cover_image";
-            $goods = Goods::findBySkuAll($sku,$select);
-            if ($goods == null){
+            $goods  = Goods::findBySkuAll($sku, $select);
+            if ($goods == null) {
                 $code = 1061;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-            foreach ($data as &$case_works_datum){
+            foreach ($data as &$case_works_datum) {
                 foreach ($goods as $one_goods) {
 
                     if ($one_goods['sku'] == $case_works_datum['goods_code']) {
-                        $cost = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
-                        $case_works_datum['goods_id'] = $one_goods['id'];
+                        $cost                                      = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
+                        $case_works_datum['goods_id']              = $one_goods['id'];
                         $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
-                        $case_works_datum['cost'] = $cost * $case_works_datum['goods_quantity'];
-                        $case_works_datum['name'] = $one_goods['name'];
-                        $case_works_datum['quantity'] = $case_works_datum['goods_quantity'];
-                        $case_works_datum['image'] = $one_goods['cover_image'];
+                        $case_works_datum['cost']                  = $cost * $case_works_datum['goods_quantity'];
+                        $case_works_datum['name']                  = $one_goods['name'];
+                        $case_works_datum['quantity']              = $case_works_datum['goods_quantity'];
+                        $case_works_datum['image']                 = $one_goods['cover_image'];
 
                     }
                 }
             }
             //物流信息
-            foreach ($data as $logistics_id) {
-                $ids = $logistics_id['logistics_template_id'];
-            }
 
-            $logistics = LogisticsTemplate::GoodsLogisticsTemplateIds($ids,[]);
-
-            if ($logistics == null) {
-                return Json::encode([
-                    'code' =>200,
-                    'msg'=>'ok',
-                    'data'=> [
-                        'images'=> $effect,
-                        'goods'=>$data,
-                        'backman_data'=>$backman_data,
-                        'worker_data'=>$worker_data,
-                    ]
-                ]);
-            }
-
-            if ($logistics != null){
-                $new =  new LogisticsService($logistics,$data);
-                $goods_particulars = $new->minQuantity();
-                return Json::encode([
-                    'code' =>200,
-                    'msg'=>'ok',
-                    'data'=> [
-                        'images'=> $effect,
-                        'goods'=>$goods_particulars,
-                        'backman_data'=>$backman_data,
-                        'worker_data'=>$worker_data,
-                    ]
-                ]);
-            }
-            else
-            {
-                $goods_particulars = $data;
-                $goods_particulars['freight'] = 0;
-                return Json::encode([
-                    'code' =>200,
-                    'msg'=>'ok',
-                    'data'=> [
-                        'images'=> $effect,
-                        'goods'=>$goods_particulars,
-                        'backman_data'=>$backman_data,
-                        'worker_data'=>$worker_data,
-                    ]
-                ]);
-            }
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'data' => [
+                    'images' => $effect,
+                    'goods' => $data,
+                    'backman_data' => $backman_data,
+                    'worker_data' => $worker_data,
+                ]
+            ]);
         }
-
-        $code = 1000;
-        return  Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code],
-        ]);
     }
 
     /**
