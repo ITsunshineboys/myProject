@@ -250,8 +250,6 @@ class OrderRefund extends ActiveRecord
                 'order_type'=>'退款详情-待收货',
                 'list'=>$arr2
             ];
-        }else{
-            $data[]=[];
         }
         $OrderPlatform=OrderPlatForm::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku])
