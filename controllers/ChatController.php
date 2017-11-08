@@ -478,5 +478,6 @@ class ChatController extends Controller
 
        $a= $chat->resetPassword('53914510915189331350582011','abc');
         var_dump($a);
+        var_dump(User::find()->where(['mobile'=>'13551201835'])->one());
     }
 }
