@@ -119,7 +119,7 @@ return [
     ],
     'uploadPublic' => [
         'maxSize' => 5 * 1024 * 1024 , // 5M
-        'extensions' => ['png', 'jpg', 'jpeg', 'amr', 'mp3'],
+        'extensions' => ['png', 'jpg', 'jpeg', 'amr', 'mp3', 'm4a'],
     ],
     'sm' => [
         'appKey' => '23532528',
