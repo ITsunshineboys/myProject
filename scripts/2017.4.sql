@@ -1070,6 +1070,7 @@ CREATE TABLE `works_data` (
   `goods_first` varchar(20) DEFAULT NULL COMMENT '一级商品',
   `goods_second` varchar(20) DEFAULT NULL COMMENT '二级商品',
   `goods_three` varchar(20) DEFAULT NULL COMMENT '三级商品',
+  `three_category_id` int(11) DEFAULT NULL,
   `goods_code` int(10) DEFAULT NULL COMMENT '商品编码',
   `goods_quantity` int(10) DEFAULT NULL COMMENT '商品数量',
   PRIMARY KEY (`id`)
