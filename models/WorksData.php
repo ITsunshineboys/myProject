@@ -20,7 +20,7 @@ class WorksData extends ActiveRecord
         return 'works_data';
     }
 
-    public static function plotAdd($effect_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity)
+    public static function plotAdd($effect_id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity,$three_category_id)
     {
         $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
             'effect_id'=>$effect_id,
@@ -29,12 +29,13 @@ class WorksData extends ActiveRecord
             'goods_three'=>$goods_three,
             'goods_code'=>$goods_code,
             'goods_quantity'=>$goods_quantity,
+            'three_category_id' => $three_category_id
         ])->execute();
 
         return $res;
     }
 
-    public static function plotEdit($id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity)
+    public static function plotEdit($id,$goods_first,$goods_second,$goods_three,$goods_code,$goods_quantity,$three_category_id)
     {
         $res = \Yii::$app->db->createCommand()->update(self::SUP_BANK_CARD,[
             'goods_first'=>$goods_first,
@@ -42,6 +43,7 @@ class WorksData extends ActiveRecord
             'goods_three'=>$goods_three,
             'goods_code'=>$goods_code,
             'goods_quantity'=>$goods_quantity,
+            'three_id' =>$three_category_id
         ],['id'=>$id])->execute();
 
         return $res;
