@@ -108,7 +108,7 @@ class Wxpay  extends ActiveRecord
         }
 
 
-        public function Wxpay(){
+         public static function Wxpay(){
             ini_set('date.timezone','Asia/Shanghai');
             //打印输出数组信息
             function printf_info($data)
@@ -129,13 +129,15 @@ class Wxpay  extends ActiveRecord
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("test");
-            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME']."/order/orderlinewxpaynotify");
+            $input->SetNotify_url('http://test.cdlhzz.cn/order/orderlinewxpaynotify');
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
             $jsApiParameters = $tools->GetJsApiParameters($order);
             $editAddress = $tools->GetEditAddressParameters();
-            echo $jsApiParameters;
+            echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
+ function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){WeixinJSBridge.log(res.err_msg);alert(res.err_code+res.err_desc+res.err_msg);});}
+</script>";
         }
 
         private static function Queryorder($transaction_id)
