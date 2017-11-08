@@ -88,7 +88,7 @@ class PayService
             Yii::$app->session['buyer_message']=$orders['buyer_message'];
 
             //触发微信返回code码
-            $baseUrl = urlencode("http://common.cdlhzz.cn/order/wx-line-pay");
+            $baseUrl = urlencode("http://test.cdlhzz.cn/order/wx-line-pay");
             $url = $this->__CreateOauthUrlForCode($baseUrl);
             return $url;
     }
@@ -231,7 +231,7 @@ class PayService
         $urlObj["scope"] = "snsapi_base";
         $urlObj["state"] = "STATE"."#wechat_redirect";
         $bizString = $this->ToUrlParams($urlObj);
-        return "https://open.weixin.qq.com/connect/qrconnect?".$bizString;
+        return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
     }
 
     /**
