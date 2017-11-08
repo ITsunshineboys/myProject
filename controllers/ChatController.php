@@ -319,7 +319,6 @@ class ChatController extends Controller
             ]);
         }
         $filepath=FileService::upload();
-        var_dump($filepath);die;
         $code=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
 
             return Json::encode([
