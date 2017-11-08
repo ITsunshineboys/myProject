@@ -68,8 +68,8 @@ class FileService
     public static function upload()
     {
         $model = new UploadForm;
-        $model->file = UploadedFile::getInstance($model, 'file');
-
+        $a=$model->file = UploadedFile::getInstance($model, 'file');
+        var_dump($a);die;
         $code = 1000;
 
         if (!$model->file || !$model->file->extension) {
