@@ -137,12 +137,12 @@ class Goods extends ActiveRecord
             ->asArray()
             ->all();
         foreach ($goodsList as &$goods) {
-            isset($goods['platform_price']) && $goods['platform_price'] /= 100;
-            isset($goods['supplier_price']) && $goods['supplier_price'] /= 100;
-            isset($goods['market_price']) && $goods['market_price'] /= 100;
-            isset($goods['purchase_price_decoration_company']) && $goods['purchase_price_decoration_company'] /= 100;
-            isset($goods['purchase_price_manager']) && $goods['purchase_price_manager'] /= 100;
-            isset($goods['purchase_price_designer']) && $goods['purchase_price_designer'] /= 100;
+            isset($goods['platform_price']) && $goods['platform_price'] = StringService::formatPrice($goods['platform_price'] / 100);
+            isset($goods['supplier_price']) && $goods['supplier_price'] = StringService::formatPrice($goods['supplier_price'] / 100);
+            isset($goods['market_price']) && $goods['market_price'] = StringService::formatPrice($goods['market_price'] / 100);
+            isset($goods['purchase_price_decoration_company']) && $goods['purchase_price_decoration_company'] = StringService::formatPrice($goods['purchase_price_decoration_company'] / 100);
+            isset($goods['purchase_price_manager']) && $goods['purchase_price_manager'] = StringService::formatPrice($goods['purchase_price_manager'] / 100);
+            isset($goods['purchase_price_designer']) && $goods['purchase_price_designer'] = StringService::formatPrice($goods['purchase_price_designer'] / 100);
 
             if (isset($goods['create_time'])) {
                 $goods['create_time'] = $goods['create_time']
