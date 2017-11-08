@@ -1719,7 +1719,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $goods_attr = GoodsAttr::find()->where(['in',['goods.id'],[1,3,4,210,212,220,222,224,226,228,229,255,259,281,295,296,297,309,310,314]])->all();
+        $goods_attr = GoodsAttr::find()->where(['in',['goods_id'],[1,3,4,210,212,220,222,224,226,228,229,255,259,281,295,296,297,309,310,314]])->all();
         var_dump($goods_attr);exit;
     }
 
