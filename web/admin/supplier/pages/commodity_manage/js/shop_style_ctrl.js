@@ -1,13 +1,7 @@
 let shop_style_let= angular.module("shop_style",['ngFileUpload']);
-shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
+shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
       /*POST请求头*/
       $scope.myng=$scope;
-      const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-          return $.param(data)
-        }
-      };
       $scope.logistics=[];//物流模块列表
       $scope.goods_all_attrs=[];//所有属性数据
       $scope.shop_logistics=[];//物流模板默认第一项
@@ -20,77 +14,58 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       $scope.brands_arr=[];
       $scope.series_arr=[];
       $scope.styles_arr=[];
-      $http.get(baseUrl+'/mall/category-brands-styles-series',{
-        params:{
-          category_id:+$scope.category_id
-        }
-      }).then(function (res) {
-        console.log(res);
-        /*品牌、系列、风格 下拉框开始*/
-            //初始化下拉框的第一项  开始
-        $scope.brands_arr=res.data.data.category_brands_styles_series.brands;
-        if($scope.brands_arr.length>0){
-          $scope.brand_model=res.data.data.category_brands_styles_series.brands[0].id;
-        }
-        $scope.series_arr=res.data.data.category_brands_styles_series.series;
-        if($scope.series_arr.length>0){
-          $scope.series_model=res.data.data.category_brands_styles_series.series[0].id;
-        }
-        $scope.styles_arr=res.data.data.category_brands_styles_series.styles;
-        if($scope.styles_arr.length>0){
-          $scope.style_model=res.data.data.category_brands_styles_series.styles[0].id;
-        }
-            //初始化下拉框的第一项  结束
-      },function (err) {
-        console.log(err);
-      });
+    /*品牌、系列、风格 下拉框*/
+      _ajax.get('/mall/category-brands-styles-series',{category_id:+$scope.category_id},function (res) {
+          console.log(res);
+          //初始化下拉框的第一项
+          $scope.brands_arr=res.data.category_brands_styles_series.brands;
+          if($scope.brands_arr.length>0){
+              $scope.brand_model=res.data.category_brands_styles_series.brands[0].id;
+          }
+          $scope.series_arr=res.data.category_brands_styles_series.series;
+          if($scope.series_arr.length>0){
+              $scope.series_model=res.data.category_brands_styles_series.series[0].id;
+          }
+          $scope.styles_arr=res.data.category_brands_styles_series.styles;
+          if($scope.styles_arr.length>0){
+              $scope.style_model=res.data.category_brands_styles_series.styles[0].id;
+          }
+      })
      /*品牌、系列、风格 下拉框结束*/
 
       /*---------------属性获取-----------------*/
 
       $scope.goods_input_attrs=[];//普通文本框
       $scope.goods_select_attrs=[];//下拉框
-
       $scope.goods_select_value=[];//下拉框的值
       $scope.pass_attrs_name=[];//名称
       $scope.pass_attrs_value=[];//值
-
-        $http.get(baseUrl+'/mall/category-attrs',{
-            params:{
-              category_id:+$scope.category_id
+        //大后台添加的属性
+        _ajax.get('/mall/category-attrs',{category_id:+$scope.category_id},function (res) {
+            console.log(res);
+            $scope.goods_all_attrs=res.data.category_attrs;
+            //循环所有获取到的属性值，判断是普通文本框还是下拉框
+            for( let [key,value] of $scope.goods_all_attrs.entries()){
+                if(value.addition_type==1){
+                    $scope.goods_select_attrs.push(value);
+                }else{
+                    $scope.goods_input_attrs.push(value);
+                }
             }
-        }).then(function (res) {
-          console.log(res);
-          $scope.goods_all_attrs=res.data.data.category_attrs;
-          //console.log('属性');
-          //console.log($scope.goods_all_attrs);
-          //循环所有获取到的属性值，判断是普通文本框还是下拉框
-          for( let [key,value] of $scope.goods_all_attrs.entries()){
-            if(value.addition_type==1){
-              $scope.goods_select_attrs.push(value);
-            }else{
-              $scope.goods_input_attrs.push(value);
+            //循环添加名称和值
+            for(let [key,value] of $scope.goods_input_attrs.entries()){
+                $scope.attr_name=value.name;
+                $scope.attr_value=value.value;
             }
-          }
-          //循环添加名称和值
-          for(let [key,value] of $scope.goods_input_attrs.entries()){
-            $scope.attr_name=value.name;
-            $scope.attr_value=value.value;
-          }
-          //循环下拉框的value
-          for(let [key,value] of $scope.goods_select_attrs.entries()){
-            $scope.goods_select_name=value.name;//名称
-            $scope.goods_select_value=value.value;//下拉框
-            $scope.goods_select_model=$scope.goods_select_value[0];
-          }
-
-        },function (err) {
-          console.log(err)
-        });
+            //循环下拉框的value
+            for(let [key,value] of $scope.goods_select_attrs.entries()){
+                $scope.goods_select_name=value.name;//名称
+                $scope.goods_select_value=value.value;//下拉框
+                $scope.goods_select_model=$scope.goods_select_value[0];
+            }
+        })
       /*----------------自己添加的属性--------------------*/
       $scope.own_attrs_arr=[];//自定义数组
-     // $scope.attrs_name=[];//名称
-      //$scope.attrs_value=[];//内容
       //添加属性
       $scope.i=1;
       $scope.add_own_attrs=function () {
@@ -156,13 +131,9 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       };
       //删除图片
       $scope.del_img=function (item) {
-        $http.post(baseUrl+'/site/upload-delete',{
-          file_path:item
-        },config).then(function (res) {
-          console.log(res);
-          $scope.upload_img_arr.splice($scope.upload_img_arr.indexOf(item),1);
-        },function (err) {
-          console.log(err);
+        _ajax.post('/site/upload-delete',{file_path:item},function (res) {
+            console.log(res);
+            $scope.upload_img_arr.splice($scope.upload_img_arr.indexOf(item),1);
         })
       };
       //售后、保障
@@ -184,37 +155,25 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       $scope.my_supplier_price=function () {
         (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
       };
-
-      //物流模块类别
-      $http.post(baseUrl+'/mall/logistics-templates-supplier',{},config).then(function (res) {
-        console.log('物流模板');
-        console.log(res);
-        $scope.logistics=res.data.data.logistics_templates_supplier;
-        $scope.shop_logistics=res.data.data.logistics_templates_supplier[0].id;
-        //物流模块详情
-        $scope.$watch('shop_logistics',function (newVal,oldVal) {
-          $http.get(baseUrl+'/mall/logistics-template-view',{
-            params:{
-              id:+newVal
-            }
-          }).then(function (res) {
-            console.log('物流详情');
-            console.log(res);
-            $scope.logistics_method=res.data.data.logistics_template.delivery_method;//快递方式
-            $scope.district_names=res.data.data.logistics_template.district_names;//地区
-            $scope.delivery_cost_default=res.data.data.logistics_template.delivery_cost_default;//默认运费
-            $scope.delivery_number_default=res.data.data.logistics_template.delivery_number_default;//默认运费的数量
-            $scope.delivery_cost_delta=res.data.data.logistics_template.delivery_cost_delta;//增加件费用
-            $scope.delivery_number_delta=res.data.data.logistics_template.delivery_number_delta;//增加件的数量
-          },function (err) {
-            console.log(err);
+        /*---------------物流模板--------------------*/
+      _ajax.post('/mall/logistics-templates-supplier',{},function (res) {
+          console.log('物流模板');
+          console.log(res);
+          $scope.logistics=res.data.logistics_templates_supplier;
+          $scope.shop_logistics=res.data.logistics_templates_supplier[0].id;
+          //物流模块详情
+          $scope.$watch('shop_logistics',function (newVal,oldVal) {
+              _ajax.get('/mall/logistics-template-view',{id:+newVal},function (res) {
+                  console.log(res);
+                  $scope.logistics_method=res.data.logistics_template.delivery_method;//快递方式
+                  $scope.district_names=res.data.logistics_template.district_names;//地区
+                  $scope.delivery_cost_default=res.data.logistics_template.delivery_cost_default;//默认运费
+                  $scope.delivery_number_default=res.data.logistics_template.delivery_number_default;//默认运费的数量
+                  $scope.delivery_cost_delta=res.data.logistics_template.delivery_cost_delta;//增加件费用
+                  $scope.delivery_number_delta=res.data.logistics_template.delivery_number_delta;//增加件的数量
+              })
           });
-        });
-      },function (err) {
-        console.log(err)
-      });
-
-
+      })
 
   /*-----------------添加按钮-----------------------*/
   $scope.add_goods_confirm=function (valid,error) {
@@ -297,29 +256,27 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       if($scope.pass_attrs_value[0]==undefined){
         $scope.pass_attrs_value=[];
       }
-       $http.post(baseUrl+'/mall/goods-add',{
-        category_id:+$scope.category_id,      //三级分类id
-        title:$scope.goods_name,              //名称
-        subtitle:$scope.des_name,             //特色
-        brand_id:+$scope.brand_model,      //品牌
-        style_id:$scope.style_model,      //风格
-        series_id:$scope.series_model,    //系列
-        'names[]':$scope.pass_attrs_name,   // 属性名称
-        'values[]':$scope.pass_attrs_value, //属性值
-        cover_image:$scope.upload_cover_src,//封面图
-        'images[]':$scope.upload_img_arr,   //图片
-        supplier_price:+$scope.supplier_price*100,//供货价
-        platform_price:+$scope.platform_price*100,//平台价
-        market_price:+$scope.market_price*100,//市场价
-        left_number:+$scope.left_number,//库存
-        logistics_template_id:+$scope.shop_logistics,//物流模板
-        after_sale_services:$scope.after_sale_services.join(','),//售后、保障
-        description:$scope.detail_description//描述
-      },config).then(function (res) {
-        console.log('添加成功');
-        console.log(res);
-      },function (err) {
-        console.log(err);
+      _ajax.post('/mall/goods-add',{
+          category_id:+$scope.category_id,      //三级分类id
+          title:$scope.goods_name,              //名称
+          subtitle:$scope.des_name,             //特色
+          brand_id:+$scope.brand_model,      //品牌
+          style_id:$scope.style_model,      //风格
+          series_id:$scope.series_model,    //系列
+          'names[]':$scope.pass_attrs_name,   // 属性名称
+          'values[]':$scope.pass_attrs_value, //属性值
+          cover_image:$scope.upload_cover_src,//封面图
+          'images[]':$scope.upload_img_arr,   //图片
+          supplier_price:+$scope.supplier_price*100,//供货价
+          platform_price:+$scope.platform_price*100,//平台价
+          market_price:+$scope.market_price*100,//市场价
+          left_number:+$scope.left_number,//库存
+          logistics_template_id:+$scope.shop_logistics,//物流模板
+          after_sale_services:$scope.after_sale_services.join(','),//售后、保障
+          description:$scope.detail_description//描述
+      },function (res) {
+          console.log('添加成功');
+          console.log(res);
       })
     }else{
       $scope.submitted=true;

@@ -1426,7 +1426,7 @@ class MallController extends Controller
         }
 
         if (YII_DEBUG) {
-            StringService::writeLog('/tmp/cat_list_admin.log', $where);
+            StringService::writeLog('cat_list_admin', $where);
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
