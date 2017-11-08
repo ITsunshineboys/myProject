@@ -69,7 +69,7 @@ class FileService
     {
         $model = new UploadForm;
         $model->file = UploadedFile::getInstance($model, 'file');
-        var_dump($model->file->extension);die;
+
         $code = 1000;
 
         if (!$model->file || !$model->file->extension) {
