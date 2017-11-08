@@ -288,8 +288,10 @@ class UserChat extends \yii\db\ActiveRecord
                     ->asArray()
                     ->where(['uid'=>$recipient_id])
                     ->one();
+            $data['recipient']['role_id']=$recipient_role_id;
             $data['recipient']['hx_name']=User::find()->asArray()->select('username')->where(['id'=>$recipient_id])->one()['username'];
         }elseif($recipient_role_id==7){
+            $data['recipient']['role_id']=$recipient_role_id;
             $data['recipient']=User::find()
                 ->select(['id','icon','nickname as name','username as hx_name'])
                 ->asArray()
@@ -304,6 +306,7 @@ class UserChat extends \yii\db\ActiveRecord
                 ->where(['uid'=>$uid])
                 ->one();
             $hx=User::find()->asArray()->select('hx_pwd_date,username')->where(['id'=>$uid])->one();
+            $data['user']['role_id']=$role_id;
             $data['user']['hx_pwd']=$hx['hx_pwd_date'];
             $data['user']['hx_name']=$hx['username'];
         }elseif($role_id==7){
@@ -313,6 +316,7 @@ class UserChat extends \yii\db\ActiveRecord
                 ->where(['id'=>$uid])
                 ->one();
             $hx=User::find()->asArray()->select('hx_pwd_date,username')->where(['id'=>$uid])->one();
+            $data['user']['role_id']=$role_id;
             $data['user']['hx_pwd']=$hx['hx_pwd_date'];
             $data['user']['hx_name']=$hx['username'];
         }
