@@ -391,6 +391,10 @@ class GoodsOrder extends ActiveRecord
         {
             $sort='a.create_time asc';
         }
+         if (!$sort)
+        {
+            $sort=' a.create_time desc';
+        }
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
