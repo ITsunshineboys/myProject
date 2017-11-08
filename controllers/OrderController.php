@@ -1113,12 +1113,16 @@ class OrderController extends Controller
         $sku        =trim($request->post('sku',''));
         $handle_type=trim($request->post('handle_type',''));
         $reason     =trim($request->post('reason',''));
-        if (!$order_no || !$handle_type || !$reason || !$sku){
+        if (!$order_no || !$handle_type  || !$sku){
             $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+        if (!$reason)
+        {
+            $reason='';
         }
         $code=GoodsOrder::Platformadd($order_no,$handle_type,$reason,$sku);
         if ($code==200){
