@@ -332,7 +332,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $v['send_time']=$send_time;
             }
         }
-        if($data){
+        if(!$data){
           return null;
         }
         return $data;
