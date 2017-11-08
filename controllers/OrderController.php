@@ -618,6 +618,11 @@ class OrderController extends Controller
 //        $result = $alipaySevice->check($post);
 //        if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS'){
+                 $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+                    'content'=>Json::encode($post)
+                ])->execute();
+                    echo "success";
+                exit;
                 $arr=urldecode($post['passback_params']);
                 $order_no=$post['out_trade_no'];
                 $order=GoodsOrder::find()
