@@ -328,10 +328,11 @@ class UserChat extends \yii\db\ActiveRecord
             $send_time=date('Y-m-d',$v['send_time']);
             if($send_time>=$time[0] && $send_time<=$time[1]){
                 $v['send_time']=date('H:i',$v['send_time']);
+                var_dump($v['send_time']);
             }else{
                 $v['send_time']=$send_time;
             }
-        }
+        }die;
         if(!$data){
           return null;
         }
