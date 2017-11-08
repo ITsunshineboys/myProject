@@ -248,7 +248,6 @@ class UserChat extends \yii\db\ActiveRecord
             $from = $username;
             $target = [$to_user['username']];
             $re = $chat_hx->sendAudio($filepath,$from, $target_type = 'users', $target,$length);
-            var_dump($re);die;
             if($re) {
                 $chat_record = new ChatRecord();
                 $chat_record->to_uid = $to_uid;
