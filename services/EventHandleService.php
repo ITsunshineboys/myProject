@@ -96,7 +96,7 @@ class EventHandleService
             // user login
             case $events['user']['login']:
                 Yii::$app->on($events['user']['login'], function () use ($data, $events) {
-                    $newHuanXinPwd = User::generateHxPwd($data['mobile'], $data['registrationId'], $data['username']);
+                    $newHuanXinPwd = User::generateHxPwd($data['mobile'], $data['registrationId']);
                     if (User::resetHuanXinUserPwd($data['username'], $newHuanXinPwd)) {
                         $user = User::find()->where(['mobile' => $data['mobile']])->one();
                         if ($user) {

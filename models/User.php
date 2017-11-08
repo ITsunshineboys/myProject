@@ -1076,10 +1076,10 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @param string $mobile
      * @param string $restrationId
-     * @param string $hxUsername
+     * @param string $hxUsername default empty
      * @return string
      */
-    public static function generateHxPwd($mobile, $restrationId, $hxUsername)
+    public static function generateHxPwd($mobile, $restrationId, $hxUsername = '')
     {
         $salt = Yii::$app->params['security']['salt'];
         $w = date('w');
