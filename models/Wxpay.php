@@ -19,8 +19,8 @@ class Wxpay  extends ActiveRecord
 {
 
 
-    const  EFFECT_NOTIFY_URL="/order/wxpayeffect_earnstnotify";
-    const  LINEPAY_NOTIFY_URL="/order/orderlinewxpaynotify";
+    const  EFFECT_NOTIFY_URL='http://test.cdlhzz.cn/order/wxpayeffect_earnstnotify';
+    const  LINEPAY_NOTIFY_URL='http://test.cdlhzz.cn/order/orderlinewxpaynotify';
     const  EFFECT_BODY='样板间申请费';
     const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
     const  ACCESS_TOKEN='access_token';
@@ -35,7 +35,7 @@ class Wxpay  extends ActiveRecord
   /**
      *无登录-微信公众号支付接口
      */
-    public function Wxlineapipay($orders,$openid){
+   public function Wxlineapipay($orders,$openid){
         ini_set('date.timezone','Asia/Shanghai');
         //打印输出数组信息
         function printf_info($data)
@@ -57,16 +57,16 @@ class Wxpay  extends ActiveRecord
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
-        $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::LINEPAY_NOTIFY_URL);
+        $input->SetNotify_url(self::LINEPAY_NOTIFY_URL);
         $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($openId); 
+        $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
-        // return $jsApiParameters;
-      echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='http://".$_SERVER['SERVER_NAME']."/line/#!/order_commodity';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='http://".$_SERVER['SERVER_NAME']."/line/#!/pay_success';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='http://".$_SERVER['SERVER_NAME']."line/#!/order_commodity';};});}
+//        return $jsApiParameters;
+        echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
+ function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='http://test.cdlhzz.cn/line/#!/order_commodity';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='http://test.cdlhzz.cn/line/#!/pay_success';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='http://test.cdlhzz.cn/line/#!/order_commodity';};});}
 </script>";
-exit;
+        exit;
     }
         /**
          * 样板间申请支付定金
